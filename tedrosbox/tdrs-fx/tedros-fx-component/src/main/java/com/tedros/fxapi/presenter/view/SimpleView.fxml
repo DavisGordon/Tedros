@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?scenebuilder-stylesheet C:/Users/Davis Gordon/TedrosBox/CONF/custom-styles.css?>
+<?scenebuilder-stylesheet C:/Users/Davis Gordon/TedrosBox/CONF/immutable-styles.css?>
+
+<fx:root alignment="TOP_LEFT" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" type="javafx.scene.layout.StackPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+  <children>
+    <BorderPane id="BorderPane" fx:id="layout" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0">
+      <top>
+        <HBox id="t-header-box" fx:id="tHeaderBox" alignment="CENTER_LEFT" prefWidth="-1.0" snapToPixel="false">
+          <children>
+            <HBox id="t-view-title-box" fx:id="tViewTitleBox" alignment="CENTER" maxWidth="220.0" spacing="0.0" style="" HBox.hgrow="ALWAYS">
+              <children>
+                <Label id="t-title-label" fx:id="titleViewLabel" style="" text="TITLE_VIEW" textFill="#3385ff" HBox.hgrow="ALWAYS">
+                  <font>
+                    <Font size="18.0" />
+                  </font>
+                  <HBox.margin>
+                    <Insets right="10.0" />
+                  </HBox.margin>
+                </Label>
+                <Region prefHeight="0.0" prefWidth="0.0" HBox.hgrow="SOMETIMES" />
+                <Pane id="t-view-title-box-space2-color" maxWidth="5.0" prefHeight="-1.0" prefWidth="5.0" HBox.hgrow="NEVER" />
+                <Region prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="NEVER" />
+              </children>
+              <padding>
+                <Insets left="10.0" />
+              </padding>
+            </HBox>
+            <ToolBar id="t-view-toolbar" fx:id="menuToolBar" style="" HBox.hgrow="ALWAYS">
+              <items>
+                <Button id="t-last-button" fx:id="saveBtn" mnemonicParsing="false" style="" text="" textFill="BLACK" />
+              </items>
+            </ToolBar>
+          </children>
+          <padding>
+            <Insets fx:id="x1" />
+          </padding>
+        </HBox>
+      </top>
+         <left>
+            <StackPane id="t-pane" fx:id="leftContent">
+               <BorderPane.margin>
+                  <Insets top="1.0" />
+               </BorderPane.margin>
+            </StackPane>
+         </left>
+         <center>
+      <StackPane id="t-pane" fx:id="formSpace" alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0" style="" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets top="1.0" />
+               </BorderPane.margin></StackPane>
+         </center>
+    </BorderPane>
+  </children>
+</fx:root>

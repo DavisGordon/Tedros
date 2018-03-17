@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<fx:root type="javafx.scene.layout.BorderPane" id="BorderPane" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <bottom>
+    <ScrollPane fitToHeight="false" fitToWidth="false" prefHeight="180.0" prefWidth="-1.0" style="-fx-background-color: transparent;" BorderPane.alignment="BOTTOM_LEFT">
+      <content>
+        <HBox id="" fx:id="imagens" alignment="BOTTOM_LEFT" fillHeight="false" spacing="5.0">
+          <padding>
+            <Insets bottom="2.0" left="2.0" right="2.0" top="10.0" />
+          </padding>
+        </HBox>
+      </content>
+    </ScrollPane>
+  </bottom>
+  <left>
+    <StackPane fx:id="imagePane" alignment="CENTER_RIGHT" minWidth="500.0" prefHeight="-1.0" prefWidth="-1.0" BorderPane.alignment="CENTER_LEFT">
+      <children>
+        <ImageView fx:id="imageView" fitHeight="300.0" fitWidth="0.0" pickOnBounds="true" preserveRatio="true">
+          <StackPane.margin>
+            <Insets right="20.0" />
+          </StackPane.margin>
+        </ImageView>
+      </children>
+      <padding>
+        <Insets fx:id="x1" />
+      </padding>
+      <BorderPane.margin>
+        <Insets left="20.0" right="20.0" />
+      </BorderPane.margin>
+    </StackPane>
+  </left>
+  <padding>
+    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+  </padding>
+  <right>
+    <VBox alignment="CENTER_LEFT" fillWidth="true" maxHeight="300.0" maxWidth="-1.0" minWidth="150.0" prefHeight="-1.0" prefWidth="-1.0" spacing="10.0" BorderPane.alignment="CENTER_RIGHT" BorderPane.margin="$x1">
+      <children>
+        <CheckBox fx:id="repetirCheckBox" mnemonicParsing="false" text="Repetir" />
+        <CheckBox fx:id="ativarCheckBox" alignment="CENTER_RIGHT" allowIndeterminate="false" contentDisplay="RIGHT" mnemonicParsing="false" text="Ativar Imagem" textOverrun="ELLIPSIS" />
+        <Region prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS" />
+        <Button fx:id="selecioneBtn" cancelButton="false" contentDisplay="TOP" defaultButton="true" minWidth="-1.0" mnemonicParsing="false" prefHeight="-1.0" prefWidth="-1.0" text="Selecionar imagem" textAlignment="CENTER" textOverrun="ELLIPSIS" underline="false" wrapText="true" />
+      </children>
+      <padding>
+        <Insets left="40.0" right="20.0" />
+      </padding>
+    </VBox>
+  </right>
+</fx:root>

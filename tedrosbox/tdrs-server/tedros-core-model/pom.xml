@@ -1,0 +1,45 @@
+<project 	xmlns="http://maven.apache.org/POM/4.0.0" 
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  			xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- PARENT INFO -->
+	<parent>
+		<groupId>com.tedros</groupId>
+		<artifactId>tdrs-server</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	
+	<!-- MODULE INFO -->
+  	<artifactId>tedros-core-model</artifactId>
+  	<packaging>jar</packaging>
+  	
+  	<name>tedros-core-model</name>
+	<description>The tedros core entitys</description>
+	
+	<!-- DEPENDENCIES -->
+  	<dependencies>
+	  	<dependency>
+	  		<groupId>com.tedros</groupId>
+	  		<artifactId>tedros-ejb-model-base</artifactId>
+	  		<version>0.0.1-SNAPSHOT</version>
+	  		<scope>compile</scope>
+	  	</dependency>
+  
+	  	<dependency>
+		   	<groupId>org.eclipse.persistence</groupId>
+		   	<artifactId>eclipselink</artifactId>
+		   	<version>2.4.2</version>
+		   	<scope>compile</scope>
+		</dependency>
+			  
+	    <dependency>
+	      	<groupId>junit</groupId>
+	      	<artifactId>junit</artifactId>
+	      	<version>3.8.1</version>
+	      	<scope>test</scope>
+	    </dependency>
+  	</dependencies>
+  
+</project>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?scenebuilder-stylesheet ../../../../../../../../../../../TedrosBox/CONF/custom-styles.css?>
+
+<fx:root type="javafx.scene.layout.AnchorPane" id="t-message-pane" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" style="" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <children>
+    <ScrollPane disable="false" fitToHeight="true" fitToWidth="true" focusTraversable="false" layoutX="14.0" layoutY="14.0" maxWidth="-1.0" minHeight="250.0" minWidth="280.0" opacity="1.0" pannable="true" prefHeight="258.0" prefWidth="280.0" style="-fx-background-color: transparent;" visible="true">
+      <content>
+        <VBox id="t-message-form" fx:id="messageVBox" alignment="CENTER_LEFT" fillWidth="true" prefHeight="-1.0" prefWidth="-1.0" spacing="0.0" style="">
+          <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
+          </padding>
+        </VBox>
+      </content>
+    </ScrollPane>
+  </children>
+  <effect>
+    <DropShadow color="WHITE" height="35.1111111111111" radius="17.05555555555555" width="35.1111111111111" />
+  </effect>
+  <padding>
+    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+  </padding>
+</fx:root>

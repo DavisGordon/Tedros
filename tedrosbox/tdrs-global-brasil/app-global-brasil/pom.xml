@@ -1,0 +1,63 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+  	
+	<parent>
+		<groupId>com.tedros</groupId>
+		<artifactId>tdrs-global-brasil</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	
+  	<artifactId>app-global-brasil</artifactId>
+  	<name>app-global-brasil</name>
+  	<description>Views for the tedros global brazil entity</description>
+  
+  	<dependencies>
+	  	<dependency>
+	  		<groupId>com.tedros</groupId>
+	  		<artifactId>tedros-fx-component</artifactId>
+	  		<version>0.0.1-SNAPSHOT</version>
+	  	</dependency>
+	  	
+	  	<dependency>
+	  		<groupId>com.tedros</groupId>
+	  		<artifactId>tedros-global-brasil-ejb-client</artifactId>
+	  		<version>0.0.1-SNAPSHOT</version>
+	  	</dependency>
+	  	
+  	</dependencies> 
+  
+  	<!-- PROPERTIES -->
+	<properties>
+		<java.version>1.7</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+  
+  	<!-- BUILD -->
+  	<build>
+    	<plugins>
+      		<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-compiler-plugin</artifactId>
+        		<version>3.3</version>
+        		<configuration>
+          			<source>${java.version}</source>
+          			<target>${java.version}</target>
+        		</configuration>
+      		</plugin>
+  		</plugins>
+  		
+ 		<resources>
+        	<resource>
+            	<directory>src/main/resource</directory>
+        	</resource>
+        	<resource>
+        		<directory>src/main/java</directory>
+        		<includes>
+          			<include>**/*.*</include>
+        		</includes>
+      		</resource> 
+    	</resources>
+ 	</build>
+  
+</project>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<fx:root type="javafx.scene.layout.AnchorPane" id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="253.00009999999747" prefWidth="516.0000999999975" style="-fx-background-color: #dfdfdf;&#10;-fx-border-color: black black black black; &#10;-fx-background-radius: 0 20 0 20; &#10;-fx-background-insets: 0 0 0 0; &#10;-fx-border-radius: 0 20 0 20; &#10;-fx-border-insets: 0 0 0 0;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <children>
+    <Label contentDisplay="LEFT" layoutX="-25.0" layoutY="106.0" rotate="269.0" text="Confirma" textFill="#dfdfdf" textOverrun="ELLIPSIS" underline="false" wrapText="false">
+      <effect>
+        <InnerShadow height="12.936507936507937" radius="5.968253968253968" width="12.936507936507937" />
+      </effect>
+      <font>
+        <Font name="System Bold" size="30.0" />
+      </font>
+    </Label>
+    <ImageView fx:id="iconTitle" fitHeight="64.0" fitWidth="64.0" layoutX="438.0" layoutY="175.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+        <Image url="file:/C:/Desenv/Projetos/TedrosBox/IMAGES/png/ok.png" />
+      </image>
+    </ImageView>
+    <Text fx:id="messageText" layoutX="98.0" layoutY="68.0" strikethrough="false" strokeType="OUTSIDE" strokeWidth="0.0" text="Deseja realmente excluir esse registro?" textAlignment="CENTER" underline="false" wrappingWidth="320.0">
+      <font>
+        <Font size="18.0" />
+      </font>
+    </Text>
+    <Button id="messageBox" fx:id="simBtn" layoutX="140.0" layoutY="141.0" mnemonicParsing="false" text="Sim" />
+    <Button id="messageBox" fx:id="naoBtn" layoutX="317.0" layoutY="141.0" mnemonicParsing="false" text="Não" />
+    <Separator layoutX="81.0" layoutY="27.0" orientation="VERTICAL" prefHeight="200.0" />
+  </children>
+  <effect>
+    <DropShadow color="WHITE" height="35.1111111111111" radius="17.05555555555555" width="35.1111111111111" />
+  </effect>
+  <stylesheets>
+    <URL value="@../../../../../../../TedrosBox/CONF/message_box.css" />
+  </stylesheets>
+</fx:root>

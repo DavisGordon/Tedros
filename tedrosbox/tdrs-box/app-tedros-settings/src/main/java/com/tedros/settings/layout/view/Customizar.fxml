@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?scenebuilder-stylesheet C:/Users/Davis Gordon/TedrosBox/CONF/custom-styles.css?>
+
+<fx:root type="javafx.scene.layout.StackPane" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <children>
+    <BorderPane fx:id="conteudoPane" prefHeight="-1.0" prefWidth="-1.0" style="" StackPane.alignment="CENTER">
+      <center>
+        <StackPane id="" fx:id="formSpace" prefHeight="-1.0" prefWidth="-1.0" />
+      </center>
+      <top>
+        <HBox id="t-header-box" alignment="CENTER_LEFT" spacing="0.0">
+          <children>
+            <HBox id="t-view-title-box" alignment="CENTER" maxWidth="220.0" spacing="0.0" style="">
+              <children>
+                <Label id="t-view-title" style="" text="Customizar" textFill="#3385ff">
+                  <font>
+                    <Font size="18.0" />
+                  </font>
+                  <HBox.margin>
+                    <Insets right="10.0" />
+                  </HBox.margin>
+                </Label>
+                <Region prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+                <Pane id="t-view-title-box-space1-color" maxWidth="5.0" prefHeight="-1.0" prefWidth="5.0" />
+                <Pane id="t-view-title-box-space2-color" maxWidth="5.0" prefHeight="-1.0" prefWidth="5.0" />
+                <Region prefHeight="-1.0" prefWidth="-1.0" />
+              </children>
+              <padding>
+                <Insets left="10.0" />
+              </padding>
+            </HBox>
+            <ToolBar id="t-view-toolbar" style="" HBox.hgrow="ALWAYS">
+              <items>
+                <Button id="t-button" fx:id="coresBtn" mnemonicParsing="false" style="" text="Cores" />
+                <Button id="t-last-button" fx:id="fundoBtn" mnemonicParsing="false" style="" text="Fundo" />
+              </items>
+            </ToolBar>
+          </children>
+        </HBox>
+      </top>
+      <StackPane.margin>
+        <Insets fx:id="x1" />
+      </StackPane.margin>
+    </BorderPane>
+  </children>
+</fx:root>

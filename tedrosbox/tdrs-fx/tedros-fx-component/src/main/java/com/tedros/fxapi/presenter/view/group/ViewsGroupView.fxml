@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+<?scenebuilder-stylesheet C:/Users/Davis Gordon/TedrosBox/CONF/custom-styles.css?>
+
+<fx:root maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" type="javafx.scene.layout.StackPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+  <children>
+    <BorderPane id="conteudoPane" fx:id="tContentPane" prefHeight="-1.0" prefWidth="-1.0" style="" StackPane.alignment="CENTER">
+      <top>
+        <HBox id="t-header-box" alignment="CENTER_LEFT" spacing="0.0">
+          <children>
+            <HBox id="t-view-title-box" alignment="CENTER" maxWidth="220.0" spacing="0.0" style="" HBox.hgrow="ALWAYS">
+              <children>
+                <Label id="t-view-title" fx:id="tGroupTitle" style="" text="GROUP_NAME" textFill="#3385ff" HBox.hgrow="ALWAYS">
+                  <font>
+                    <Font size="18.0" />
+                  </font>
+                  <HBox.margin>
+                    <Insets right="10.0" />
+                  </HBox.margin>
+                </Label>
+                <Region prefHeight="0.0" prefWidth="0.0" HBox.hgrow="SOMETIMES" />
+                <Pane id="t-view-title-box-space2-color" maxWidth="5.0" prefHeight="-1.0" prefWidth="5.0" HBox.hgrow="NEVER" />
+                <Region prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="NEVER" />
+              </children>
+              <padding>
+                <Insets left="10.0" />
+              </padding>
+            </HBox>
+            <ToolBar id="t-view-toolbar" fx:id="tGroupToolbar" style="" HBox.hgrow="SOMETIMES" />
+                  <Region prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+          </children>
+        </HBox>
+      </top>
+      <StackPane.margin>
+        <Insets fx:id="x1" />
+      </StackPane.margin>
+    </BorderPane>
+  </children>
+</fx:root>

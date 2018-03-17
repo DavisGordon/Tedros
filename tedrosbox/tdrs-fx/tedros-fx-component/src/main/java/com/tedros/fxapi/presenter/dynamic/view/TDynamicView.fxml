@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?scenebuilder-stylesheet ../../../../../../../../../../../../../TedrosBox/CONF/custom-styles.css?>
+<?scenebuilder-stylesheet ../../../../../../../../../../../../../TedrosBox/CONF/immutable-styles.css?>
+
+<fx:root type="javafx.scene.layout.StackPane" id="" alignment="TOP_LEFT" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <children>
+    <VBox fx:id="tLayout" prefHeight="-1.0" prefWidth="-1.0">
+      <children>
+        <StackPane fx:id="tHeaderContent" prefHeight="-1.0" prefWidth="-1.0">
+          <children>
+            <VBox id="tHeaderLayout" fx:id="tHeaderVerticalLayout" prefHeight="-1.0" prefWidth="-1.0">
+              <children>
+                <HBox id="t-header-box" fx:id="tHeaderHorizontalLayout" alignment="CENTER_LEFT" prefWidth="-1.0" snapToPixel="false">
+                  <children>
+                    <HBox id="t-view-title-box" fx:id="tViewTitleLayout" alignment="CENTER" spacing="0.0" style="" HBox.hgrow="ALWAYS">
+                      <children>
+                        <Label id="t-title-label" fx:id="tViewTitle" style="" text="VIEW_TITLE" textFill="#3385ff" wrapText="true" HBox.hgrow="ALWAYS">
+                          <font>
+                            <Font size="18.0" />
+                          </font>
+                          <HBox.margin>
+                            <Insets fx:id="x1" />
+                          </HBox.margin>
+                        </Label>
+                        <Region prefHeight="0.0" prefWidth="0.0" HBox.hgrow="SOMETIMES" />
+                        <Pane id="t-view-title-box-space2-color" maxWidth="5.0" prefHeight="-1.0" prefWidth="5.0" HBox.hgrow="NEVER" />
+                        <Region prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="NEVER" />
+                      </children>
+                      <padding>
+                        <Insets left="10.0" />
+                      </padding>
+                    </HBox>
+                    <ToolBar id="t-view-toolbar" fx:id="tHeaderToolBar" />
+                    <Region prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
+                  </children>
+                  <padding>
+                    <Insets fx:id="x1" />
+                  </padding>
+                </HBox>
+              </children>
+            </VBox>
+          </children>
+        </StackPane>
+        <StackPane id="StackPane" fx:id="tContent" VBox.vgrow="ALWAYS">
+          <children>
+            <BorderPane id="t-pane" fx:id="tContentLayout" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" StackPane.alignment="TOP_LEFT" StackPane.margin="$x1">
+              <bottom>
+                <StackPane id="t-content" fx:id="tBottomContent" alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0" BorderPane.alignment="TOP_LEFT">
+                  <BorderPane.margin>
+                    <Insets fx:id="x1" />
+                  </BorderPane.margin>
+                </StackPane>
+              </bottom>
+              <center>
+                <StackPane id="t-content" fx:id="tCenterContent" alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0" style="" BorderPane.alignment="TOP_LEFT" BorderPane.margin="$x1" />
+              </center>
+              <left>
+                <StackPane id="t-content" fx:id="tLeftContent" alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="TOP_LEFT" BorderPane.margin="$x1" />
+              </left>
+              <right>
+                <StackPane id="t-content" fx:id="tRightContent" alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0" BorderPane.alignment="TOP_LEFT" BorderPane.margin="$x1" />
+              </right>
+              <top>
+                <StackPane id="t-content" fx:id="tTopContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0" BorderPane.alignment="TOP_LEFT" />
+              </top>
+            </BorderPane>
+          </children>
+          <VBox.margin>
+            <Insets top="1.0" />
+          </VBox.margin>
+        </StackPane>
+      </children>
+    </VBox>
+  </children>
+</fx:root>

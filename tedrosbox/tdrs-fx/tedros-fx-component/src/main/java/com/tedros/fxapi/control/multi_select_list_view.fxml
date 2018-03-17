@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?scenebuilder-stylesheet ../../../../../../../../../../../TedrosBox/CONF/custom-styles.css?>
+
+<fx:root type="javafx.scene.layout.BorderPane" id="" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-color: #cccccc;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <center>
+    <VBox fx:id="buttonsVbox" alignment="CENTER" maxWidth="-Infinity" prefHeight="-1.0" prefWidth="100.0" spacing="5.0">
+      <children>
+        <Button id="t-button" fx:id="addOne" mnemonicParsing="false" text="&gt;" />
+        <Button id="t-button" fx:id="addAll" mnemonicParsing="false" text="&gt;&gt;" />
+        <Button id="t-button" fx:id="remAll" mnemonicParsing="false" text="&lt;&lt;" />
+        <Button id="t-button" fx:id="remOne" mnemonicParsing="false" text="&lt;" />
+      </children>
+    </VBox>
+  </center>
+  <left>
+    <VBox prefHeight="-1.0" prefWidth="-1.0">
+      <children>
+        <Label id="t-form-control-label" fx:id="sourceLabel" text="Label" VBox.vgrow="ALWAYS">
+          <VBox.margin>
+            <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" fx:id="x1" />
+          </VBox.margin>
+        </Label>
+        <ListView fx:id="sourceListView" editable="false" orientation="VERTICAL" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS" />
+      </children>
+    </VBox>
+  </left>
+  <right>
+    <VBox prefHeight="-1.0" prefWidth="-1.0">
+      <children>
+        <Label id="t-form-control-label" fx:id="selectedLabel" text="Label" VBox.margin="$x1" VBox.vgrow="ALWAYS" />
+        <ListView fx:id="selectedListView" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS" />
+      </children>
+    </VBox>
+  </right>
+</fx:root>

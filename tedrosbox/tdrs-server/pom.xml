@@ -1,0 +1,90 @@
+<project 	xmlns="http://maven.apache.org/POM/4.0.0" 
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+			xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
+	<modelVersion>4.0.0</modelVersion>
+	<!-- PARENT INFO -->
+	<parent>
+		<groupId>com.tedros</groupId>
+		<artifactId>tedrosbox</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	
+	<!-- PROJECT -->
+  	<artifactId>tdrs-server</artifactId>
+  	<packaging>pom</packaging>
+  	
+  	<name>tedros-server</name>
+  	<description>The tedros server root project</description>
+	
+	<organization>
+		<name>Tedros</name>
+	</organization>
+  	
+  	<!-- PROPERTIES -->
+	<properties>
+		<java.version>1.7</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+  
+  	<!-- DEVELOPERS -->
+	<developers>
+		<developer>
+			<id>davis.dun</id>
+			<name>Davis Gordon Dun</name>
+			<email>tedrosbox@gmail.com</email>
+			<organization>Tedros</organization>
+		</developer>
+	</developers>
+	
+	<!-- DEPENDENCIES -->
+	<dependencies>
+		<dependency>
+	    	<groupId>junit</groupId>
+	      	<artifactId>junit</artifactId>
+	      	<version>3.8.1</version>
+	      	<scope>test</scope>
+	    </dependency>
+  	</dependencies>
+  	
+  	<!-- BUILD -->
+  	<build>
+    	<plugins>
+      		<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-compiler-plugin</artifactId>
+        		<version>3.3</version>
+        		<configuration>
+          			<source>${java.version}</source>
+          			<target>${java.version}</target>
+        		</configuration>
+      		</plugin>
+  		</plugins>
+ 	</build>
+ 
+ 	<!-- MODULES -->
+	<modules>
+		<module>tedros-core-ejb</module>
+		<module>tedros-core-ejb-client</module>
+		<module>tedros-core-ejb-ear</module>
+		<module>tedros-core-model</module>
+		<module>tedros-ejb-model-base</module>
+		<module>tedros-ejb-service-base</module>
+		<module>tedros-global-model</module>
+	</modules>
+ 
+ 	<!-- REPOSITORIES -->
+	<repositories>
+		<repository>
+			<id>oss.sonatype.org</id>
+			<name>OSS Sonatype Staging</name>
+			<url>https://oss.sonatype.org/content/groups/staging</url>
+		</repository>
+		<repository>
+			<id>apache.releases.https</id>
+			<name>Apache</name>
+			<url>https://repository.apache.org/service/local/staging/deploy/maven2</url>
+		</repository>
+  	</repositories>
+  
+</project>

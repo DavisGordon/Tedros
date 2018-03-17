@@ -1,0 +1,104 @@
+<project 	xmlns="http://maven.apache.org/POM/4.0.0" 
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  			xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
+	<modelVersion>4.0.0</modelVersion>
+	
+	<!-- PARENT INFO -->
+	<parent>
+		<groupId>com.tedros</groupId>
+		<artifactId>tdrs-server</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	
+	<!-- MODULE INFO -->
+  	<artifactId>tedros-core-ejb-ear</artifactId>
+  	<packaging>ear</packaging>
+  	
+  	<name>tedros-core-ejb-ear</name>
+  	<description>The ear project for the tedros-core-ejb</description>
+  	
+  	<!-- DEPENDENCIES -->
+  	<dependencies>
+	  	<dependency>
+	  		<groupId>com.tedros</groupId>
+	  		<artifactId>tedros-core-ejb</artifactId>
+	  		<version>0.0.1-SNAPSHOT</version>
+	  		<scope>runtime</scope>
+	  		<type>ejb</type>
+	  	</dependency>
+  	
+	  	<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.3.176</version>
+		</dependency>
+		
+	    <dependency>
+	      	<groupId>junit</groupId>
+	      	<artifactId>junit</artifactId>
+	      	<version>3.8.1</version>
+	      	<scope>test</scope>
+	    </dependency>
+  	</dependencies>
+  
+  	<build>
+    	<plugins>
+    		<plugin>
+	    		<groupId>org.apache.openejb.maven</groupId>
+	    		<artifactId>tomee-maven-plugin</artifactId>
+	    		<version>1.7.1</version>
+			    <configuration>
+			    	<tomeeVersion>1.7.2</tomeeVersion>
+			    	<tomeeClassifier>webprofile</tomeeClassifier>
+			    	<tomeeHost>localhost</tomeeHost>
+			    	<tomeeHttpPort>8080</tomeeHttpPort>
+			 		
+			 		<url>http://127.0.0.1:8080/tomee/ejb</url>
+					<server>Tomee</server>
+					<path>${project.basedir}/target/tedros-core-ejb-ear-0.0.1-SNAPSHOT.ear</path>
+					
+					<synchronization>
+				    	<extensions>
+				        	<extension>.class</extension> <!-- if you want to update each time you build with mvn compile -->
+				      	</extensions>
+				    </synchronization>
+				    <reloadOnUpdate>true</reloadOnUpdate>
+			 		<libDir>lib</libDir>
+			    	<debug>false</debug>
+		      		<debugPort>5005</debugPort>
+		      		<args>-Dfoo=bar</args>
+		      		<config>${project.basedir}/src/test/tomee/conf</config>
+			        <libs>
+			        	<lib>com.h2database:h2:1.3.176</lib>
+			        </libs> 
+		      		<apps>
+			        	<app>com.tedros:tedros-core-ejb-ear:0.0.1-SNAPSHOT:ear</app>
+			      	</apps>
+			      	<libs>
+			        	<lib>com.h2database:h2:1.3.176</lib>
+			          	<lib>remove:openjpa-</lib>
+			      	</libs>
+			   	</configuration>
+	  		</plugin>
+	  
+	      	<plugin>
+	        	<groupId>org.apache.maven.plugins</groupId>
+	        	<artifactId>maven-ear-plugin</artifactId>
+	        	<version>2.10</version>
+	        	<!-- configuring the ear plugin -->
+	        	<configuration>
+	        		<defaultLibBundleDir>lib</defaultLibBundleDir>
+	        		<outputDirectory>${tomee.webapp}</outputDirectory>
+	          		<modules>
+	            		<ejbModule>
+	              			<groupId>com.tedros</groupId>
+	              			<artifactId>tedros-core-ejb</artifactId>
+	            		</ejbModule>
+	          		</modules>
+	        	</configuration>
+	      	</plugin>
+    	</plugins>
+  	</build>
+  	
+</project>

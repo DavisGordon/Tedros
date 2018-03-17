@@ -1,0 +1,23 @@
+package com.tedros.core.style;
+
+public enum TStyleResourceName {
+
+	DEFAULT_STYLE ("default-style.properties"),
+	CUSTOM_STYLE ("custom-style.properties"),
+	PANEL_CUSTOM_STYLE ("panel-custom-style.properties"),
+	BACKGROUND_STYLE ("background-style.properties"),
+	LANGUAGE ("language.properties");
+	
+	private String prop;
+	
+	private TStyleResourceName(String prop) {
+		this.prop = prop;
+	}
+	
+	@Override
+	public String toString() {
+		return prop;
+	}
+	
+	
+}

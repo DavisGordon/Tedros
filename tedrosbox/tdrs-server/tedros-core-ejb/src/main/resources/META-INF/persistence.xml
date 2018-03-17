@@ -1,0 +1,32 @@
+<persistence 	xmlns="http://java.sun.com/xml/ns/persistence" 
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+				xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" 
+				version="2.0"
+>
+	<persistence-unit name="tedros_core_pu" >
+		
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		<jta-data-source>tedrosDataSource</jta-data-source>
+		
+		<class>com.tedros.core.security.model.TUser</class>
+		<class>com.tedros.core.security.model.TProfile</class>
+		<class>com.tedros.core.security.model.TAuthorization</class>
+		
+		<class>com.tedros.global.model.TByteEntity</class>	
+		<class>com.tedros.global.model.TFileEntity</class>
+		
+		<properties>
+	      <property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.H2Platform"/>
+	      <property name="eclipselink.ddl-generation" value="create-or-extend-tables"/>
+	      <property name="eclipselink.ddl-generation.output-mode" value="database"/>
+	      <property name="eclipselink.logging.level" value="FINE"/>
+          <property name="eclipselink.logging.exceptions" value="true"/>
+          <property name="eclipselink.logging.timestamp" value="true"/>
+          <property name="eclipselink.logging.thread" value="true"/>
+          <property name="eclipselink.logging.session" value="true"/>
+          <property name="eclipselink.logging.level.sql" value="FINE"/>
+	    </properties>
+		
+      </persistence-unit> 
+	
+</persistence>
