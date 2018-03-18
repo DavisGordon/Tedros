@@ -16,12 +16,9 @@ funciona.
 
 Abaixo alguns prints:
 
-[Tela de login]
-(img/login.png)
+![Tela de login](https://github.com/DavisGordon/Tedros/blob/master/img/login.png)
 
-[Tela Principal]
-(img/tela_principal.png)
+![Tela Principal](https://github.com/DavisGordon/Tedros/blob/master/img/tela_principal.png)
 
-[Tela de customização]
-(img/tela_configuracap.png)
+![Tela de customização](https://github.com/DavisGordon/Tedros/blob/master/img/tela_configuracap.png)
 
