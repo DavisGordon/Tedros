@@ -1,13 +1,13 @@
 # Tedros
 ## API JavaFX for desktop app development.
 
-Este projeto foi desenvolvido para ajudar no desenvolvimento de aplicações desktop com JavaFX.
-Seu objetivo é disponibilizar aos desenvolvedores uma conjunto completo de componentes em uma 
-estrutura pré-definida que facilite seu entendimento e sua responsabilidade. 
+Este projeto foi iniciado em 2013 para participar do maior evento de startup do Brasil naquele ano o Desafio Brasil 2013 patrocionado pela FGV, não ganhamos o concurso porem dentre os mais de 5000 projetos fomos uns dos mais bem posicionados chegando ate a semi-final. 
 
-Para facilitar o desenvolvimento de telas CRUD e outros tipos de telas comportamentais foi criado
-apartir do pattern MVP (Model View Presenter) outros componentes que auxiliam na estruturação, formatação 
-e nos comportamentos dos diferentes tipos de campos que uma tela pode conter, tudo baseado em anotações. 
+Hoje em dia utilizo ele basicamente para as minhas necessidades pessoais e para desenvolvimento de pequenas soluções pelas empresas por onde passo.
+
+Sua ideia é ajudar no desenvolvimento de aplicações desktop com JavaFX, disponibilizando aos desenvolvedores uma conjunto completo de componentes em uma estrutura pré-definida que facilite seu entendimento e sua responsabilidade.
+
+Para facilitar o desenvolvimento de telas CRUD e outros tipos de telas comportamentais foi criado apartir do pattern MVP (Model View Presenter) outros componentes que auxiliam na estruturação, formatação e nos comportamentos dos diferentes tipos de campos que uma tela pode conter, tudo baseado em anotações. 
 
 Em breve detalharei melhor todos os patterns utilizados os componentes e como customiza-los.
 
