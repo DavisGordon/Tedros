@@ -41,6 +41,7 @@ Para esta versão do tedros é preciso:
 4. Altere as properties abaixo nos arquivos pom.xml com o local onde se encontra o jdk e a pasta webapp do tomee acima informado.
 
 `<java.home>C:\Program Files\Java\jdk1.7.0_51</java.home>`
+
 `<tomee.webapp>C:\Desenv\Servidores\apache-tomee-webprofile-1.7.2\webapps</tomee.webapp>`
 
 (obs: estas propriedades estão replicadas em alguns arquivos pom.xml, sugiro fazer um search para identificar onde elas foram declaradas, vou corrigir futuramente, esse é o tipico problema usual do copy and paste)
