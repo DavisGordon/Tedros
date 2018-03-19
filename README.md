@@ -1,18 +1,15 @@
 # Tedros
 ## API JavaFX for desktop app development.
 
-Este projeto foi iniciado em 2013 para participar do maior evento de startup do Brasil naquele ano o Desafio Brasil 2013 patrocionado pela FGV, não ganhamos o concurso porem dentre os mais de 5000 projetos fomos uns dos mais bem posicionados chegando ate a semi-final. 
+Este projeto foi iniciado em 2013 para participar do maior evento de startup do Brasil daquele ano, o Desafio Brasil 2013, patrocionado pela FGV (Fundação Getulio Vargas), dentre os mais de 5000 projetos ficamos entre os melhores chegando a semi-final.
 
-Hoje em dia utilizo ele basicamente para as minhas necessidades pessoais e para desenvolvimento de pequenas soluções pelas empresas por onde passo.
+Sua ideia é ajudar no desenvolvimento de aplicações desktop com JavaFX, disponibilizando aos desenvolvedores um conjunto completo de componentes em uma estrutura pré-definida que facilite o desenvolvimento.
 
-Sua ideia é ajudar no desenvolvimento de aplicações desktop com JavaFX, disponibilizando aos desenvolvedores uma conjunto completo de componentes em uma estrutura pré-definida que facilite seu entendimento e sua responsabilidade.
+Para facilitar o desenvolvimento de telas CRUD e outros tipos de telas comportamentais foi criado um conjunto de componentes que auxiliam a estruturação do que deve ser exibido na view usando anotações (annotations). 
 
-Para facilitar o desenvolvimento de telas CRUD e outros tipos de telas comportamentais foi criado apartir do pattern MVP (Model View Presenter) outros componentes que auxiliam na estruturação, formatação e nos comportamentos dos diferentes tipos de campos que uma tela pode conter, tudo baseado em anotações. 
+Em breve detalharei todos os componentes e como customiza-los.
 
-Em breve detalharei melhor todos os patterns utilizados os componentes e como customiza-los.
-
-No momento so adicionarei como configurar o tedros para execução, porem fiquem a vontade para debugar e ver como
-funciona.
+No momento so foi adicionado o how-to de configuração do tedros para execução, fiquem a vontade para debugar e ver como funciona.
 
 Abaixo alguns prints:
 
@@ -22,7 +19,7 @@ Abaixo alguns prints:
 
 ![Tela de customização](https://github.com/DavisGordon/Tedros/blob/master/img/tela_configuracap.png)
 
-Configuração:
+**Configuração:**
 
 Para esta versão do tedros é preciso:
 - JDK 1.7
@@ -67,7 +64,7 @@ Se tudo tiver sido configurado de forma correta o Tedros irá descompactar a pas
 Utilize o super usuario **owner**. 
 A senha pode ser qualquer caracter alphanumerico nesta versão snapshot.
 
-Entendendo a estrutura do projeto:
+## Entendendo a estrutura do projeto:
 
 1. tedrosbox 
    - tdrs-box 
@@ -121,11 +118,11 @@ Entendendo a estrutura do projeto:
 |tedros-ejb-service-base|Projeto base a ser usado para implementação de novos serviços|
 |tedros-global-model|Projeto com as entidades globais/comuns que podem ser usadas em qualquer projeto.|
 
-Para desenvolver um novo aplicativo vamos usar o modulo tdrs-global-brasil como exemplo:
+## Para desenvolver um novo aplicativo vamos usar o modulo tdrs-global-brasil como exemplo:
 
 Neste primeiro momento não vou entrar em muitos detalhes vou apenas detalhar os pacotes de referencia, prometo melhorar a documentação.
 
-1. Entendendo os pacotes da camada de visão do projeto app-global-brasil:
+1. **Entendendo os pacotes da camada de visão do projeto app-global-brasil:**
 
 |  Pacote  |Descrição |
 |:---       |:---     |
@@ -139,7 +136,7 @@ Neste primeiro momento não vou entrar em muitos detalhes vou apenas detalhar os
 |com.tedros.global.brasil.module.pessoa.validator|pacote com validadores|
 |com.tedros.global.brasil.start|pacote com a classe AppStart.java com a configuração dos modulos e menus a serem apresentados na inicialização do tedros-box.|
 
-2. Por onde começar:
+2. **Por onde começar:**
 
 Antes dos passos abaixo crie um modulo parecido com o modulo tdrs-global-brasil porem com nomes diferentes.
 Obs. Não é preciso criar a camada de backend neste momento.
