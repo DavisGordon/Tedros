@@ -1,18 +1,14 @@
 package com.tedros.settings.security.model;
 
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.geometry.Pos;
-import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.text.TextAlignment;
-
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.core.security.model.TAuthorization;
 import com.tedros.core.security.model.TProfile;
-import com.tedros.fxapi.annotation.control.TCellCallbackFactory;
+import com.tedros.fxapi.annotation.control.TCallbackFactory;
+import com.tedros.fxapi.annotation.control.TCellFactory;
+import com.tedros.fxapi.annotation.control.TCellValueFactory;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
@@ -38,7 +34,14 @@ import com.tedros.fxapi.presenter.entity.behavior.TMainCrudViewWithListViewBehav
 import com.tedros.fxapi.presenter.entity.decorator.TMainCrudViewWithListViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.settings.security.action.TProfileCompleteTableViewAction;
+import com.tedros.settings.security.callback.CheckBoxEnableCallBack;
 import com.tedros.settings.security.process.TProfileProcess;
+
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.geometry.Pos;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.text.TextAlignment;
 
 /**
  * @author Davis Gordon
@@ -92,7 +95,8 @@ public final class TProfileModelView extends TEntityModelView<TProfile> {
 						@TTableColumn(cellValue="typeDescription", text = "#{label.permission}", resizable=true), 
 						@TTableColumn(	cellValue="enabled", 
 										text = "enabled", 
-										cellFactory=@TCellCallbackFactory(parse=true, tableCell=CheckBoxTableCell.class),
+										cellValueFactory=@TCellValueFactory(parse=true, value=@TCallbackFactory(parse=true, value=CheckBoxEnableCallBack.class)),
+										cellFactory=@TCellFactory(parse=true, tableCell=CheckBoxTableCell.class),
 										maxWidth=50
 						)
 			})
