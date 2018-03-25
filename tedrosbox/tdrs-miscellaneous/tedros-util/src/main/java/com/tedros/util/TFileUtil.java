@@ -92,7 +92,7 @@ public final class TFileUtil {
 	}
 
 	public static String getTedrosFolderPath(){
-		return System.getProperty("user.home")+"/TedrosBox/"; //arr[0] + (reference.equals(REFERENCE_FOLDER[1]) ? "Projetos/TedrosBox/" :"");
+		return System.getProperty("user.home")+"/.tedros/";
 	}
 	
 }
