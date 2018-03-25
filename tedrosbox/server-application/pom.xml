@@ -1,0 +1,111 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.tedros</groupId>
+    <artifactId>tedrosbox</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  
+  <artifactId>server-application</artifactId>
+  <name>Server application</name>
+  <description>The server application project configuration</description>
+  
+  <dependencies>
+  	<dependency>
+	    <groupId>com.h2database</groupId>
+	    <artifactId>h2</artifactId>
+	    <version>${h2.version}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>com.tedros</groupId>
+	    <artifactId>tedros-core-ejb-ear</artifactId>
+	    <type>ear</type>
+	    <version>0.0.1-SNAPSHOT</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>com.tedros</groupId>
+	    <artifactId>tedros-global-brasil-ejb-ear</artifactId>
+	    <type>ear</type>
+	    <version>0.0.1-SNAPSHOT</version>
+	</dependency>
+	
+  </dependencies>
+  
+	 <build>
+	   
+	 	<plugins>
+	 	
+			<plugin>
+			  <groupId>org.codehaus.cargo</groupId>
+			  <artifactId>cargo-maven2-plugin</artifactId>
+			  <version>${cargo.version}</version>
+			  <configuration>
+			    <container>
+			      <containerId>tomee7x</containerId>
+			      <zipUrlInstaller>
+			        <url>http://repo.maven.apache.org/maven2/org/apache/openejb/apache-tomee/${tomee.version}/apache-tomee-${tomee.version}-webprofile.zip</url>
+			      </zipUrlInstaller>
+			      <dependencies>
+		            <dependency>
+		              <groupId>com.h2database</groupId>
+	    			  <artifactId>h2</artifactId>
+		            </dependency>
+		          </dependencies>
+			    </container>
+			    <configuration>
+			      <home>${project.build.directory}/catalina-base</home>
+			      <files>
+		            <copy>
+		              <file>files/tomee.xml</file>
+		              <tofile>conf/tomee.xml</tofile>
+		              <configfile>true</configfile>
+		              <overwrite>true</overwrite>
+		            </copy>
+		          </files>
+			    </configuration>
+			    <deployables>
+			      <deployable>
+			        <groupId>com.tedros</groupId>
+			        <artifactId>tedros-global-brasil-ejb-ear</artifactId>
+			      	<type>ear</type>
+			      </deployable>
+			      <deployable>
+			        <groupId>com.tedros</groupId>
+			        <artifactId>tedros-core-ejb-ear</artifactId>
+			        <type>ear</type>
+			      </deployable>
+			    </deployables>
+			    <packager>
+			      <outputLocation>${project.build.directory}/tomcat-packaged</outputLocation>
+			    </packager>
+			  </configuration>
+			  <executions>
+			    <execution>
+			      <id>start</id>
+			      <phase>pre-integration-test</phase>
+			      <goals>
+			        <goal>start</goal>
+			      </goals>
+			    </execution>
+			    <execution>
+			      <id>stop</id>
+			      <phase>post-integration-test</phase>
+			      <goals>
+			        <goal>stop</goal>
+			      </goals>
+			    </execution>
+			    <execution>
+			      <id>package</id>
+			      <phase>post-integration-test</phase>
+			      <goals>
+			        <goal>package</goal>
+			      </goals>
+			    </execution>
+			  </executions>
+			</plugin>
+		</plugins>
+	   
+	 </build>
+</project>
