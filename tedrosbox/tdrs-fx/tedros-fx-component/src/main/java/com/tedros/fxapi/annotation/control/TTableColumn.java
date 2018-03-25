@@ -8,9 +8,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-
 import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
 import com.tedros.fxapi.annotation.parser.ITAnnotationParser;
 import com.tedros.fxapi.annotation.parser.TTableColumnParser;
@@ -25,6 +22,9 @@ import com.tedros.fxapi.builder.ITComparatorBuilder;
 import com.tedros.fxapi.builder.ITEventHandlerBuilder;
 import com.tedros.fxapi.builder.ITNodeBuilder;
 import com.tedros.fxapi.presenter.model.TModelView;
+
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 /**
  * Config a {@link TableColumn}
@@ -57,10 +57,17 @@ public @interface TTableColumn {
 	
 	/**
 	* <pre>
+	* Sets the value of the property cellFactory.
+	* </pre>
+	**/
+	public TCellFactory cellFactory() default @TCellFactory(parse = false);
+	
+	/**
+	* <pre>
 	* Sets the value of the property cellValueFactory.
 	* </pre>
 	**/
-	public TCellCallbackFactory cellFactory() default @TCellCallbackFactory(parse = false);
+	public TCellValueFactory cellValueFactory() default @TCellValueFactory(parse = false);
 	
 	/**
 	* <pre>

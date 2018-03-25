@@ -55,10 +55,17 @@ public @interface TTableNestedColumn {
 	
 	/**
 	* <pre>
+	* Sets the value of the property cellFactory.
+	* </pre>
+	**/
+	public TCellFactory cellFactory() default @TCellFactory(parse = false);
+	
+	/**
+	* <pre>
 	* Sets the value of the property cellValueFactory.
 	* </pre>
 	**/
-	public TCellCallbackFactory cellFactory() default @TCellCallbackFactory(parse = false);
+	public TCellValueFactory cellValueFactory() default @TCellValueFactory(parse = false);
 	
 	/**
 	* <pre>

@@ -129,9 +129,9 @@ public class Tedros extends Application {
 		InputStream zipFile = getClass().getResourceAsStream("TedrosBox.zip");
     	
 		//create tedros directory if is not exists
-    	File folder = new File(outputFolder+"/TedrosBox/");
+    	File folder = new File(outputFolder+"/.tedros");
     	if(folder.exists()){
-    		if(new File(outputFolder+"/TedrosBox/"+"/tedrosbox__V1.7.txt").exists())
+    		if(new File(outputFolder+"/.tedros"+"/tedrosbox__V1.7.txt").exists())
     			return;
     		TFileUtil.delete(folder);
     	}
