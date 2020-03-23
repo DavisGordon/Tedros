@@ -6,6 +6,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.core.image.TImageView;
 
+/**
+ * The module descriptor
+ * 
+ * @author Davis Gordon
+ * */
 public final class TModuleDescriptor implements Comparable<TModuleDescriptor> {
 
 	private String applicationName;

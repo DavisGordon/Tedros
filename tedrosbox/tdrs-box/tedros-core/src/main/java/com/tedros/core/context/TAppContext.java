@@ -17,8 +17,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
+ * The application context.
+ * 
  * @author davis.dun
- *
  */
 public final class TAppContext {
 	

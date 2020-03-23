@@ -8,6 +8,9 @@ import javafx.beans.property.StringProperty;
 
 import com.tedros.app.process.ITProcess;
 
+/**
+ * A holder for all process 
+ * */
 final class TedrosProcess {
 	
 	@SuppressWarnings("rawtypes")
@@ -17,7 +20,9 @@ final class TedrosProcess {
 	private TedrosProcess() {
 		
 	}
-	
+	/**
+	 * Stop all process
+	 * */
 	@SuppressWarnings("rawtypes")
 	public final static void stopAllServices(){
 		for(Class classe : moduleProcessMap.keySet()){

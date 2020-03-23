@@ -11,14 +11,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-
 import com.tedros.core.model.ITModelView;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.fxapi.annotation.TBooleanValues;
@@ -28,6 +20,14 @@ import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.builder.ITReaderHtmlBuilder;
 import com.tedros.fxapi.builder.TReaderHtmlBuilder;
 import com.tedros.fxapi.domain.THtmlConstant;
+
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 /**
  * <pre>
@@ -144,7 +144,20 @@ public @interface TReaderHtml {
 	public TBooleanValues booleanValues() default @TBooleanValues();
 	
 	
-	
+	/**
+	 * <pre>Specifies values for codes
+	 * 
+	 * Example:
+	 * <code>
+	 * @TReaderHtml(
+	 * codeValues={ <b  style='color:green'> @TCodeValue(code="1", value="#{label.identity}")</b>, <b  style='color:red'> @TCodeValue(code="2", value="#{label.cpf}")</b>})
+	 * 	
+	 * @THorizontalRadioGroup(required=true, alignment=Pos.CENTER_LEFT, spacing=4, 
+	 * radioButtons={ <b  style='color:green'> @TRadioButtonField(text = "#{label.identity}", userData = "1")</b>, <b  style='color:red'> @TRadioButtonField(text = "#{label.cpf}", userData = "2")</b>})
+	 * private SimpleStringProperty tipo;
+	 * </code><pre>
+	 *  
+	 * */
 	public TCodeValue[] codeValues() default @TCodeValue(code="", value="");
 	
 	/**

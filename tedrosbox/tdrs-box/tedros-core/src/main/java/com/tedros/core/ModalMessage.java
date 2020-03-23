@@ -14,7 +14,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-
+/**
+ * Opens a modal text message
+ * 
+ * @author Davis Gordon
+ * */
 public class ModalMessage extends VBox{
 	
     /** Drag offsets for window dragging */
@@ -42,14 +46,18 @@ public class ModalMessage extends VBox{
         explPane.setCenter(explanation);
         BorderPane.setMargin(explanation, new Insets(5, 5, 5, 5));
 
+        TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+        
         // create title
-        Label title = new Label("Aviso");
+        Label title = new Label("warning");//new Label(iEngine.getString("#{tedros.warning}"));
         title.setId("title");
         title.setMaxWidth(Double.MAX_VALUE);
         title.setAlignment(Pos.CENTER);
         getChildren().add(title);
         
-        Button cancelBtn = new Button("Fechar");
+        
+        
+        Button cancelBtn = new Button("close"/*iEngine.getString("#{tedros.close}")*/);
         cancelBtn.setId("cancelButton");
         cancelBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent actionEvent) {

@@ -12,15 +12,15 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 
 /**
- * BreadcrumbBar
+ * The TedrosBox BreadcrumbBar
  */
-public class BreadcrumbBar extends HBox {
+public class TedrosBoxBreadcrumbBar extends HBox {
 
     private String path;
     private String deliminator = "/";
     private List<Button> buttons = new ArrayList<Button>();
 
-    public BreadcrumbBar() {
+    public TedrosBoxBreadcrumbBar() {
         super(0);
         getStyleClass().setAll("breadcrumb-bar");
         setFillHeight(true);

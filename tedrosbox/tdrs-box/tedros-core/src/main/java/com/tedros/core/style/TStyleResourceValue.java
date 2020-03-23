@@ -11,6 +11,9 @@ import org.apache.commons.lang3.StringUtils;
 import com.tedros.util.TFileUtil;
 import com.tedros.util.TedrosFolderEnum;
 
+/**
+ * The enum with possible values for style resources
+ * */
 public enum TStyleResourceValue {
 	
 	MAIN_COLOR,

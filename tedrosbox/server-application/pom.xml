@@ -81,6 +81,7 @@
 			      <outputLocation>${project.build.directory}/tomcat-packaged</outputLocation>
 			    </packager>
 			  </configuration>
+			  <!--  -->
 			  <executions>
 			    <execution>
 			      <id>start</id>
@@ -104,6 +105,7 @@
 			      </goals>
 			    </execution>
 			  </executions>
+			  
 			</plugin>
 		</plugins>
 	   

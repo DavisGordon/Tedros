@@ -5,7 +5,7 @@ import javafx.util.Duration;
 
 import com.tedros.ejb.base.info.ITAppInfo;
 /**
- * A simple process interface  
+ * A process contract.  
  * 
  * @author Davis Gordon
  * */
@@ -22,17 +22,17 @@ public interface ITProcess<V> extends Worker<V> {
 	void startProcess();
 	
 	/**
-	 * Return true if the process are scheduled.
+	 * Returns true if the process are scheduled.
 	 * */
 	boolean isScheduled();
 	
 	/**
-	 * Set schedule information.
+	 * Schedule the process
 	 * */
 	void setScheduled(Duration atEveryTime, boolean repeat);
 	
 	/**
-	 * Set informations about the process.
+	 * Sets informations about the process.
 	 * */
 	void setProcessInfo(String processName, ITAppInfo moduleInfo);
 	
@@ -47,32 +47,32 @@ public interface ITProcess<V> extends Worker<V> {
 	void setAutoStart(boolean autoStart);
 	
 	/**
-	 * Return true if the process are set to auto start.
+	 * Returns true if the process are set to auto start.
 	 * */
 	boolean isAutoStart();
 	
 	/**
-	 * Return the process name
+	 * Returns the process name
 	 * */
 	public String getProcessName();
 	
 	/**
-	 * Set a name to the process.
+	 * Sets a name to the process.
 	 * */
 	public void setProcessName(String processName);
 	
 	/**
-	 * Return {@link ITAppInfo} with module information 
+	 * Returns {@link ITAppInfo} with module information 
 	 * */
 	public ITAppInfo getModuleInfo();
 			
 	/**
-	 * Set {@link ITAppInfo} with module information
+	 * Sets {@link ITAppInfo} with module information
 	 * */
 	public void setModuleInfo(ITAppInfo moduleInfo);
 	
 	/**
-	 * Return the process id
+	 * Returns the process id
 	 * */
 	public String getProcessId();
 	

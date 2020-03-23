@@ -1,6 +1,7 @@
 package com.tedros.core.model;
 
 import java.util.Map;
+
 import java.util.Set;
 
 import com.tedros.core.module.TListenerRepository;
@@ -12,23 +13,42 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.SetChangeListener;
 
+/**
+ * The model view 
+ * */
 public interface ITModelView<M extends ITModel> {
 	
+	/**
+	 * Removes all listener
+	 * */
 	public void removeAllListener();
 	
+	/**
+	 * Removes the listener
+	 * */
 	public <T> T removeListener(String listenerId);
 	
+	/**
+	 * Returns all listeners key
+	 * */
 	public Map<String, Set<String>> getListenerKeys();
 	
+	/**
+	 * Returns the listener repository
+	 * */
 	public TListenerRepository getListenerRepository();
 	
 	/**
+	 * Adds a {@link InvalidationListener} on the repository 
+	 * 
 	 * @param fieldName
 	 * @param invalidationListener
 	 */
 	public void addListener(final String fieldName, InvalidationListener invalidationListener);
 	
 	/**
+	 * Adds a {@link ChangeListener} on the repository
+	 * 
 	 * @param fieldName
 	 * @param changeListener
 	 */
@@ -36,24 +56,30 @@ public interface ITModelView<M extends ITModel> {
 	public void addListener(final String fieldName, ChangeListener changeListener);
 	
 	/**
+	 * Adds a {@link MapChangeListener} on the repository
+	 * 
 	 * @param fieldName
 	 * @param changeListener
 	 */
 	@SuppressWarnings("rawtypes")
-	public void addListener(final String fieldName, final MapChangeListener changeListener);
+	public void addListener(final String fieldName, final MapChangeListener mapChangeListener);
 	
 	/**
+	 * Adds a {@link SetChangeListener} on the repository
+	 * 
 	 * @param fieldName
 	 * @param changeListener
 	 */
 	@SuppressWarnings("rawtypes")
-	public void addListener(final String fieldName, final SetChangeListener changeListener);
+	public void addListener(final String fieldName, final SetChangeListener setChangeListener);
 
 	/**
+	 * Adds a {@link ListChangeListener} on the repository
+	 * 
 	 * @param fieldName
 	 * @param changeListener
 	 */
 	@SuppressWarnings("rawtypes")
-	public void addListener(final String fieldName, final ListChangeListener changeListener);
+	public void addListener(final String fieldName, final ListChangeListener listChangeListener);
 
 }

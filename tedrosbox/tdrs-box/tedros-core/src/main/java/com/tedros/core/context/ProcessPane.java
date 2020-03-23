@@ -13,11 +13,13 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import com.tedros.app.process.ITProcess;
+import com.tedros.core.TInternationalizationEngine;
 
 public class ProcessPane extends BorderPane {
 	
 	private VBox processVBox;
 	private ScrollPane processLayer;
+	private TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
 	
 	public ProcessPane() {
 		
@@ -63,17 +65,17 @@ public class ProcessPane extends BorderPane {
 				@Override
 				public void changed(ObservableValue<? extends State> arg0, State arg1, State state) {
 					if(state.equals(State.READY))
-						processStatus.setText("Pronto para uso");
+						processStatus.setText(iEngine.getString("#{tedros.process.state.ready}"));
 					if(state.equals(State.RUNNING))
-						processStatus.setText("Em execu��o");
+						processStatus.setText(iEngine.getString("#{tedros.process.state.running}"));
 					if(state.equals(State.FAILED))
-						processStatus.setText("Falhou");
+						processStatus.setText(iEngine.getString("#{tedros.process.state.failed}"));
 					if(state.equals(State.CANCELLED))
-						processStatus.setText("Cancelado");
+						processStatus.setText(iEngine.getString("#{tedros.process.state.cancelled}"));
 					if(state.equals(State.SCHEDULED))
-						processStatus.setText("Agendado");
+						processStatus.setText(iEngine.getString("#{tedros.process.state.scheduled}"));
 					if(state.equals(State.SUCCEEDED))
-						processStatus.setText("Executado com sucesso");
+						processStatus.setText(iEngine.getString("#{tedros.process.state.succeeded}"));
 				}
 			});
 			

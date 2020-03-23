@@ -10,9 +10,9 @@ import javafx.beans.value.ObservableValue;
 
 import com.tedros.app.process.ITProcess;
 /**
- * Gerenciador de processos globais
- * @author Davis Gordon
+ * The process manager
  * 
+ * @author Davis Gordon
  * */
 @SuppressWarnings({ "rawtypes" })
 public final class TedrosProcessManager {
@@ -21,20 +21,23 @@ public final class TedrosProcessManager {
 		
 	}
 	
+	/**
+	 * Returns the process instance of the class.
+	 * */
 	public static final ITProcess getProcess(Class classe){
 		if(!TedrosProcess.moduleProcessMap.containsKey(classe))
 			return null;
 		return TedrosProcess.moduleProcessMap.get(classe);
 	}
 	/**
-	 * {@link StringProperty} com as mensagens de todos os processos em execu��o
+	 * The global process string property with messages of the all process in execution.
 	 * */
 	public static final StringProperty globalProcessStringProperty(){
 		return TedrosProcess.globalProcessStringProperty;
 	}
 	
 	/**
-	 * MessageProperty do processo para bind.
+	 * messageProperty of the process to bind.
 	 * */
 	public static final ReadOnlyStringProperty processMessageProperty(Class classe){
 		if(!TedrosProcess.moduleProcessMap.containsKey(classe))
@@ -43,7 +46,7 @@ public final class TedrosProcessManager {
 	}
 	
 	/**
-	 * ValueProperty do processo para bind.
+	 * valueProperty of the process to bind.
 	 * */
 	public static final ReadOnlyObjectProperty processValueProperty(Class classe){
 		if(!TedrosProcess.moduleProcessMap.containsKey(classe))
@@ -52,7 +55,7 @@ public final class TedrosProcessManager {
 	}
 	
 	/**
-	 * ProgressProperty do processo para bind.
+	 * progressProperty of the process to bind.
 	 * */
 	public static final ReadOnlyDoubleProperty processProgressProperty(Class classe){
 		if(!TedrosProcess.moduleProcessMap.containsKey(classe))
@@ -61,7 +64,7 @@ public final class TedrosProcessManager {
 	}
 	
 	/**
-	 * StateProperty do processo para bind.
+	 * stateProperty of the process to bind.
 	 * */
 	public static final ReadOnlyObjectProperty processStateProperty(Class classe){
 		if(!TedrosProcess.moduleProcessMap.containsKey(classe))
@@ -70,7 +73,7 @@ public final class TedrosProcessManager {
 	}
 	
 	/**
-	 * RunningProperty do processo para bind.
+	 * runningProperty of the process to bind.
 	 * */
 	public static final ReadOnlyBooleanProperty processRunningProperty(Class classe){
 		if(!TedrosProcess.moduleProcessMap.containsKey(classe))
@@ -79,7 +82,7 @@ public final class TedrosProcessManager {
 	}
 	
 	/**
-	 * TitleProperty do processo para bind.
+	 * titleProperty of the process to bind
 	 * */
 	public static final ReadOnlyStringProperty processTitleProperty(Class classe){
 		if(!TedrosProcess.moduleProcessMap.containsKey(classe))
@@ -88,7 +91,7 @@ public final class TedrosProcessManager {
 	}
 	
 	/**
-	 * TitleProperty do processo para bind.
+	 * totalWorkProperty of the process to bind
 	 * */
 	public static final ReadOnlyDoubleProperty processTotalWorkProperty(Class classe){
 		if(!TedrosProcess.moduleProcessMap.containsKey(classe))
@@ -98,7 +101,11 @@ public final class TedrosProcessManager {
 	
 	
 	/**
-	 * Adiciona um processo do tipo {@link ITProcess} na lista de execu��o
+	 * <pre>Creates an instance of the process class and add it in the pool.
+	 * 
+	 * Will be started from scheduler if the process is scheduled 
+	 * or will be started if the process is to be auto start.
+	 * </pre>
 	 * @throws IllegalAccessException 
 	 * @throws InstantiationException 
 	 * */
@@ -124,21 +131,21 @@ public final class TedrosProcessManager {
 		
 	}
 	/**
-	 * Cancela a execu��o do processo
+	 * Stop the process
 	 * */
 	public static final void stopProcess(Class classe){
 		if(TedrosProcess.moduleProcessMap.containsKey(classe))
 			TedrosProcess.moduleProcessMap.get(classe).stopProcess();
 	}
 	/**
-	 * Inicializa o processo
+	 * Start the process
 	 * */
 	public static final void startProcess(Class classe){
 		if(TedrosProcess.moduleProcessMap.containsKey(classe))
 			TedrosProcess.moduleProcessMap.get(classe).startProcess();
 	}
 	/**
-	 * Cancela a execu��o e depois remove o processo da lista de processos
+	 * Stop and remove the process
 	 * */
 	public static final void removeProcess(Class classe){
 		if(!TedrosProcess.moduleProcessMap.containsKey(classe))

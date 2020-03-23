@@ -8,7 +8,9 @@ import com.tedros.core.presenter.view.ITView;
 import javafx.scene.Node;
 
 /**
- * A tmodule is the main class to build a module.   
+ * A module of an application   
+ * 
+ * @author Davis Gordon
  * */
 public abstract class TModule extends InternalView implements ITModule {
 	

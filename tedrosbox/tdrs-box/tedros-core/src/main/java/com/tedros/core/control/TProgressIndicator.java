@@ -11,31 +11,29 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
 /**
- * DESCRIÇÃO DA CLASSE
+ * Progress indicator
  *
  * @author Davis Gordon
- *
  */
 public class TProgressIndicator {
 
 	private Region veil;
 	private ProgressIndicator progressIndicator;
 	
-	public TProgressIndicator(final StackPane pane) {
+	public TProgressIndicator(final Pane pane) {
 		initialize();
-        StackPane.setMargin(progressIndicator, new Insets(50));
-        StackPane.setAlignment(progressIndicator, Pos.CENTER);
-        pane.getChildren().addAll(veil, progressIndicator);
-	}
-	
-	public TProgressIndicator(final BorderPane pane) {
-		initialize();
-		BorderPane.setMargin(progressIndicator, new Insets(50));
-		BorderPane.setAlignment(progressIndicator, Pos.CENTER);
+		if(pane instanceof StackPane){
+			StackPane.setMargin(progressIndicator, new Insets(50));
+			StackPane.setAlignment(progressIndicator, Pos.CENTER);
+		}else if(pane instanceof BorderPane){
+			BorderPane.setMargin(progressIndicator, new Insets(50));
+			BorderPane.setAlignment(progressIndicator, Pos.CENTER);
+		}
         pane.getChildren().addAll(veil, progressIndicator);
 	}
 	
