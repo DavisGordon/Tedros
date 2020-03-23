@@ -9,6 +9,8 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 /**
+ * A builder of {@link TEntry}
+ * 
  * @author Davis Gordon
  *
  */

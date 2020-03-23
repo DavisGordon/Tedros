@@ -13,8 +13,9 @@ import javafx.collections.MapChangeListener;
 import javafx.collections.SetChangeListener;
 
 /**
+ * A listener repository
+ * 
  * @author Davis Gordon
- *
  */
 public class TListenerRepository {
 	
@@ -24,16 +25,25 @@ public class TListenerRepository {
 		repository = new HashMap<>();
 	}
 	
+	/**
+	 * Returns the listener by the key 
+	 * */
 	@SuppressWarnings("unchecked")
 	public <T> T getListener(String key){
 		return (T) repository.get(key);
 	}
 	
+	/**
+	 * Removes the listener by the key 
+	 * */
 	@SuppressWarnings("unchecked")
 	public <T> T removeListener(String key){
 		return (T) repository.remove(key);
 	}
 	
+	/**
+	 * Adds the listener to the repository  
+	 * */
 	public void addListener(String key, Object listener) throws TKeyAlreadyExistException, IllegalArgumentException{
 		
 		if(!(listener instanceof ChangeListener 

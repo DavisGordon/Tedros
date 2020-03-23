@@ -11,6 +11,9 @@ import java.util.logging.Logger;
 import com.tedros.util.TFileUtil;
 import com.tedros.util.TedrosFolderEnum;
 
+/**
+ * The Logger manager
+ * */
 public class TLoggerManager {
 
 	static private ConsoleHandler consoleHandler;

@@ -6,6 +6,11 @@ import com.tedros.core.TSecurityDescriptor;
 import com.tedros.core.presenter.ITPresenter;
 import com.tedros.core.presenter.view.ITView;
 
+/**
+ * The view Context.
+ * 
+ * @author Davis Gordon
+ * */
 @SuppressWarnings("rawtypes")
 public final class TViewContext {
 

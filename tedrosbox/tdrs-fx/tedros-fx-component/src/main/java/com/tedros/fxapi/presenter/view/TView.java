@@ -26,18 +26,18 @@ extends StackPane implements ITView<P>{
 	
 	public TView(P presenter) {
 		this.presenter = presenter;
-		tInitialisePresenter();
+		tInitializePresenter();
 	}
 	
 	public TView(P presenter, URL fxmlURL) {
 		this.presenter = presenter;
 		this.fxmlURL = fxmlURL;
 		tLoadFXML();
-		tInitialisePresenter();
+		tInitializePresenter();
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void tInitialisePresenter(){
+	public void tInitializePresenter(){
 		if(this.presenter == null)
 			throw new IllegalStateException();
 		this.presenter.setView(this);

@@ -1,7 +1,13 @@
 package com.tedros.core.context;
 
+/**
+ * Tedros core utility
+ * */
 public final class TedrosCoreUtil {
 
+	/**
+	 * Return true if the class or the super class implements the interface
+	 * */
 	@SuppressWarnings("rawtypes")
 	public static boolean isImplemented(Class<?> from, Class<?> interfaceType){
 		if(from == interfaceType)

@@ -17,6 +17,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
+ * App descriptor
+ * 
  * @author Davis Gordon
  *
  */

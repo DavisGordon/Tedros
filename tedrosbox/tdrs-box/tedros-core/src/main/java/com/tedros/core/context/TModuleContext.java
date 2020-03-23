@@ -13,8 +13,9 @@ import com.tedros.core.TModuleDescriptor;
 import com.tedros.core.presenter.view.ITView;
 
 /**
+ * The module context.
+ * 
  * @author Davis Gordon
- *
  */
 public final class TModuleContext implements Comparable<TModuleContext>{
 	

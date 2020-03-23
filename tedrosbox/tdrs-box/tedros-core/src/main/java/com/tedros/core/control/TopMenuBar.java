@@ -5,7 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 
 /**
- * BreadcrumbBar
+ * TopMenu Bar
  */
 public class TopMenuBar extends HBox {
     

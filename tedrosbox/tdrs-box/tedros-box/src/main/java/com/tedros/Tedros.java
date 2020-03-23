@@ -16,9 +16,9 @@ import com.tedros.core.TModule;
 import com.tedros.core.context.Page;
 import com.tedros.core.context.Pages;
 import com.tedros.core.context.TedrosContext;
-import com.tedros.core.context.WindowButtons;
-import com.tedros.core.control.BreadcrumbBar;
-import com.tedros.core.control.WindowResizeButton;
+import com.tedros.core.context.TedroxBoxHeaderButton;
+import com.tedros.core.control.TedrosBoxBreadcrumbBar;
+import com.tedros.core.control.TedrosBoxResizeBar;
 import com.tedros.core.logging.TLoggerManager;
 import com.tedros.fxapi.modal.TModalPane;
 import com.tedros.fxapi.presenter.TPresenter;
@@ -88,13 +88,13 @@ public class Tedros extends Application {
     private Page currentPage;
     private String currentPagePath;
     
-    private BreadcrumbBar breadcrumbBar;
+    private TedrosBoxBreadcrumbBar breadcrumbBar;
     private Stack<Page> history;
     private Stack<Page> forwardHistory;
     private boolean changingPage;
     private double mouseDragOffsetX;
     private double mouseDragOffsetY;
-    private WindowResizeButton windowResizeButton;
+    private TedrosBoxResizeBar windowResizeButton;
     public boolean fromForwardOrBackButton;
     private StackPane modalMessage;
     private TModalPane tModalPane;
@@ -200,7 +200,7 @@ public class Tedros extends Application {
         
         getStage().initStyle(StageStyle.UNDECORATED);
         // create window resize button
-        windowResizeButton = new WindowResizeButton(getStage(), 1020, 600);
+        windowResizeButton = new TedrosBoxResizeBar(getStage(), 1020, 600);
         // create root
         root = new BorderPane() {
             @Override protected void layoutChildren() {
@@ -279,7 +279,7 @@ public class Tedros extends Application {
         toolBar.setMaxHeight(50);
         GridPane.setConstraints(toolBar, 0, 0);
         // add close min max
-        final WindowButtons windowButtons = new WindowButtons(getStage());
+        final TedroxBoxHeaderButton windowButtons = new TedroxBoxHeaderButton(getStage());
         toolBar.getItems().add(windowButtons);
         // add window header double clicking
         toolBar.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -356,7 +356,7 @@ public class Tedros extends Application {
 		});
         
         // Inicio breadcrumbar
-        breadcrumbBar = new BreadcrumbBar();
+        breadcrumbBar = new TedrosBoxBreadcrumbBar();
         //breadcrumbBar.getChildren().add(0, menuPane);
         breadcrumbBar.getChildren().add(0, expandCollapseButton);
         

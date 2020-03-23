@@ -13,8 +13,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
+ * The app loader.
+ * 
  * @author davis.dun
- *
  */
 abstract class TedrosAppLoader {
 

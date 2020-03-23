@@ -4,18 +4,43 @@
 package com.tedros.core.annotation.security;
 
 /**
+ * Authorizations types which can be defined
+ * 
  * @author Davis Gordon
- *
  */
 public enum TAuthorizationType {
 	
-	APP_ACCESS ("#{tedros.security.app_access}"), 
+	/**
+	 * Defines the access to an app
+	 * */
+	APP_ACCESS ("#{tedros.security.app_access}"),
+	/**
+	 * Defines the access to a module
+	 * */
 	MODULE_ACCESS ("#{tedros.security.module_access}"),
+	/**
+	 * Defines the access to a view
+	 * */
 	VIEW_ACCESS ("#{tedros.security.view_access}"),
-	EDIT ("#{tedros.security.edit}"), 
-	READ ("#{tedros.security.read}"), 
-	SAVE ("#{tedros.security.save}"), 
-	DELETE ("#{tedros.security.delete}"), 
+	/**
+	 * Define the allow for the edit action 
+	 * */
+	EDIT ("#{tedros.security.edit}"),
+	/**
+	 * Define the allow for the read action 
+	 * */
+	READ ("#{tedros.security.read}"),
+	/**
+	 * Define the allow for the save action 
+	 * */
+	SAVE ("#{tedros.security.save}"),
+	/**
+	 * Define the allow for the delete action 
+	 * */
+	DELETE ("#{tedros.security.delete}"),
+	/**
+	 * Define the allow for the new action 
+	 * */
 	NEW ("#{tedros.security.new}");
 	
 	private String value;

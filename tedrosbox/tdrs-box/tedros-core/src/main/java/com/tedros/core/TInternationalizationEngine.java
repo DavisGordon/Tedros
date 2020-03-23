@@ -13,6 +13,13 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.util.TStripTagUtil;
 
+/**
+ * The Internationalization engine, responsable to return 
+ * the value of a key from the resource bundle of an application 
+ * by the language selectd at the login stage.
+ * 
+ * @author Davis Gordon
+ * */
 public class TInternationalizationEngine {
 	
 	public static final String GLOBAL_UUID = "TGLOBAL";  
@@ -53,18 +60,31 @@ public class TInternationalizationEngine {
 			currentUUID = GLOBAL_UUID;
 	}
 	
+	/**
+	 * Return an new instance of the TInternationalizationEngine 
+	 * to the application identified by your unique identification.
+	 * */
 	public  static TInternationalizationEngine getInstance(String appUID){
 		return new TInternationalizationEngine(appUID);
 	}
 	
+	/**
+	 * Return the locale used by the context
+	 * */
 	public static Locale getLocale() {
 		return TedrosContext.getLocale();
 	}
 	
+	/**
+	 * Set the current app unique identification in use.
+	 * */
 	public void setCurrentUUID(String currentUUID) {
 		this.currentUUID = currentUUID;
 	}
 	
+	/**
+	 * Return the value of the key
+	 * */
 	public String getString(String key){
 		String value = find(currentUUID, key);
 		
@@ -79,6 +99,9 @@ public class TInternationalizationEngine {
 		return value;
 	}
 	
+	/**
+	 * Search  the key between the resource bundles and return the value 
+	 * */
 	public String find(String uuid, String key){
 		
 		if(!tStripTagUtil.isTagPresent(key))
@@ -113,19 +136,25 @@ public class TInternationalizationEngine {
 		return value;
 	}
 	
-	
+	/**
+	 * Returns a formatted string using the value of the key and arguments. 
+	 * */
 	public String getFormatedString(String key, Object... args){
 		return String.format(getString(key), args);
 	}
 	
-
+	/**
+	 * Adds a resource bundle identified by the app unique identifier 
+	 * */
 	public static void addResourceBundles(String appUUID, ClassLoader classLoader, String... bundles) {
 		for (String bundle : bundles) {
 			addResourceBundle(appUUID, bundle, classLoader);
 		}
 	}
 	
-	
+	/**
+	 * Adds a resource bundle identified by the app unique identifier 
+	 * */
 	public static void addResourceBundle(String appUUID, String bundle, ClassLoader classLoader) {
 		
 		if(appUUID==null)
@@ -147,6 +176,9 @@ public class TInternationalizationEngine {
 		return map;
 	}
 	
+	/**
+	 * Reloads the resource bundles  
+	 * */
 	public static void reloadBundles(){
 		bundles.clear();
 		for (ResourceDescriptor descriptor : resources) {
@@ -154,6 +186,9 @@ public class TInternationalizationEngine {
 		}
 	}
 	
+	/**
+	 * Return the resouce bundle associated by the given app unique identifier
+	 * */
 	public static ResourceBundle getLoadedResourceBundle(String appUUID, String bundle){
 		
 		if(appUUID==null)

@@ -1,5 +1,8 @@
 package com.tedros.core.style;
 
+/**
+ * The enum with all external tedros resources names
+ * */
 public enum TStyleResourceName {
 
 	DEFAULT_STYLE ("default-style.properties"),

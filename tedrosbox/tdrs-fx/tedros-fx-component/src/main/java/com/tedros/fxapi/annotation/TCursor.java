@@ -2,6 +2,9 @@ package com.tedros.fxapi.annotation;
 
 import javafx.scene.Cursor;
 
+/**
+ * The cursor types enum
+ * */
 public enum TCursor {
 	
 	DEFAULT (Cursor.DEFAULT),
