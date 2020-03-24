@@ -17,7 +17,7 @@ Below some prints:
 
 ![Main Screen](https://github.com/DavisGordon/Tedros/blob/master/img/tela_principal.png)
 
-![Customization screen] (https://github.com/DavisGordon/Tedros/blob/master/img/tela_configuracap.png)
+![Customization screen](https://github.com/DavisGordon/Tedros/blob/master/img/tela_configuracap.png)
 
 **Configuration:**
 
