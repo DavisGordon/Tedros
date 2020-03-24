@@ -1,4 +1,3 @@
-
 # Tedros
 ## JavaFX API for desktop app development.
 
@@ -14,11 +13,11 @@ At the moment only the how-to configuration of the tedros for execution has been
 
 Below some prints:
 
-! [Login screen] (https://github.com/DavisGordon/Tedros/blob/master/img/login.png)
+![Login screen] (https://github.com/DavisGordon/Tedros/blob/master/img/login.png)
 
-! [Main Screen] (https://github.com/DavisGordon/Tedros/blob/master/img/tela_principal.png)
+![Main Screen] (https://github.com/DavisGordon/Tedros/blob/master/img/tela_principal.png)
 
-! [Customization screen] (https://github.com/DavisGordon/Tedros/blob/master/img/tela_configuracap.png)
+![Customization screen] (https://github.com/DavisGordon/Tedros/blob/master/img/tela_configuracap.png)
 
 **Configuration:**
 
@@ -41,27 +40,27 @@ For this version of tedros you need:
 
 4. Change the properties below in the pom.xml files with the location of the jdk and the tomee webapp folder above.
 
-`&lt;java.home&gt; C: \ Program Files \ Java \ jdk1.7.0_51 &lt;/java.home&gt;`
+`<java.home>C:\Program Files\Java\jdk1.7.0_51</java.home>`
 
-`&lt;tomee.webapp&gt; C: \ Develop \ Servers \ apache-tomee-webprofile-1.7.2 \ webapps &lt;/tomee.webapp&gt;`
+`<tomee.webapp>C:\Develop\Servers\apache-tomee-webprofile-1.7.2\webapps</tomee.webapp>`
 
 (note: these properties are replicated in some pom.xml files, I suggest doing a search to identify where they were declared, I will correct them in the future, this is the typical usual copy and paste problem)
 
 5. Add the Tomee server to the IDE, in eclipse use the Apache Tomcat 7 option.
 
-6. With the right mouse button on the tedrosbox project select the option: `Run as&gt; Maven build`, and execute the goal` clean install` in the Goals field.
+6. With the right mouse button on the tedrosbox project select the option: `Run as> Maven build`, and execute the goal` clean install` in the Goals field.
 
 7. Boot the server configured above by the IDE
 
-8. With the right mouse button on the tedros-global-brasil-ejb-ear project select the option: `Run as&gt; Maven build`, and execute the goal` tomee: deploy` in the Goals field.
+8. With the right mouse button on the tedros-global-brasil-ejb-ear project select the option: `Run as> Maven build`, and execute the goal` tomee: deploy` in the Goals field.
 
-9. With the right mouse button on the tedros-core-ejb-ear project select the option: `Run as&gt; Maven build`, and run in the Goals field the goal` tomee: deploy`
+9. With the right mouse button on the tedros-core-ejb-ear project select the option: `Run as> Maven build`, and run in the Goals field the goal` tomee: deploy`
 
 10. Open the Tedros.java file that contains the main method.
 
 11. Run the Tedros.java file as a java application.
 
-If everything has been set up correctly, Tedros will unzip the TedrosBox folder in your user&#39;s folder with the necessary layout settings and then the login screen will appear.
+If everything has been configured correctly, Tedros will unzip the folder TedrosBox in your user's folder with the necessary layout settings and then the login screen will be displayed.
 
 Use the super user ** owner **.
 The password can be any alphanumeric character in this snapshot version.
@@ -93,8 +92,8 @@ The password can be any alphanumeric character in this snapshot version.
      - tedros-ejb-service-base
      - tedros-global-model
      
-| Project | Description |
-|: --- |: --- |
+| Project |Description |
+|:---       |:---      |
 | tedrosbox | Parent project |
 | tdrs-box | Application manager module |
 | app-tedros-settings | Application for customizing tedros |
@@ -104,11 +103,11 @@ The password can be any alphanumeric character in this snapshot version.
 | tdrs-fx | Module with customized JAVAFX APIs |
 | tedros-fx-component | Design with customized JAVAFX APIs |
 | tdrs-global-brasil | Example module of an application with backend in EJB. |
-| app-global-brasil | Project with the application&#39;s JAVAFX view layer |
+| app-global-brasil | Project with the application's JAVAFX view layer |
 | tedros-global-brasil-ejb | Ejb project with the service, business and application persistence layer. |
 | tedros-global-brasil-ejb-client | Project with the service interfaces to be used by the vision layer |
 | tedros-global-brasil-ejb-ear | Ear project to be used in deploying the application server |
-| tedros-global-brasil-model | Project with the project&#39;s jpa entities |
+| tedros-global-brasil-model | Project with the project's jpa entities |
 | tdrs-miscellaneous | Utility module |
 | tedros-util | Project with utilitarian classes |
 | tdrs-server | Base backend module |
@@ -124,27 +123,27 @@ The password can be any alphanumeric character in this snapshot version.
 
 In this first moment I will not go into many details, I will only detail the reference packages, I promise to improve the documentation.
 
-1. ** Understanding the app-global-brasil project vision layer packages: **
+1. **Understanding the app-global-brasil project vision layer packages:**
 
 | Package | Description |
-|: --- |: --- |
-| com.tedros.global.brasil.module.pessoa | package with the class that inherits from TModule responsible for initializing the view |
-| com.tedros.global.brasil.module.pessoa.form | package with custom forms (not being used in this implementation is just an example) |
-| com.tedros.global.brasil.module.pessoa.icon | package with classes that will display application icons in the tedros box menu |
-| com.tedros.global.brasil.module.pessoa.model | package with models to be used to generate forms in views |
-| com.tedros.global.brasil.module.pessoa.process | package with the processes to be used for communication with the backend |
-| com.tedros.global.brasil.module.pessoa.table | package with customized components to be used in TableViews (not being used in this implementation) |
-| com.tedros.global.brasil.module.pessoa.trigger | package with triggers to be executed in some fields of the screen |
-| com.tedros.global.brasil.module.pessoa.validator | package with validators |
-| com.tedros.global.brasil.start | package with the AppStart.java class with the configuration of the modules and menus to be presented when tedros-box starts.
+|:---       |:---     |
+|com.tedros.global.brasil.module.pessoa|package with the class that inherits from TModule responsible for initializing the view|
+|com.tedros.global.brasil.module.pessoa.form|package with custom forms (not being used in this implementation is just an example)|
+|com.tedros.global.brasil.module.pessoa.icon|package with classes that will display application icons in the tedros box menu|
+|com.tedros.global.brasil.module.pessoa.model|package with models to be used to generate forms in views|
+|com.tedros.global.brasil.module.pessoa.process|package with the processes to be used for communication with the backend|
+|com.tedros.global.brasil.module.pessoa.table|package with customized components to be used in TableViews (not being used in this implementation)|
+|com.tedros.global.brasil.module.pessoa.trigger|package with triggers to be executed in some fields of the screen|
+|com.tedros.global.brasil.module.pessoa.validator|package with validators|
+|com.tedros.global.brasil.start|package with the AppStart.java class with the configuration of the modules and menus to be presented when tedros-box starts.|
 
 2. ** Where to start: **
 
 Before the steps below create a module similar to the tdrs-global-brasil module but with different names.
 Note It is not necessary to create the backend layer at this time.
 
-- Set up an entity that implements ITModel or inherits from TEntity, put its attributes, example Pessoa.java class, but at this point it doesn&#39;t have to be a jpa entity so don&#39;t worry about putting jpa annotations.
-- Build your model view class example PessoaModelView.java, this class must contain the attributes of the class you created above (the same names), with the difference of their type compare the Pessoa.java class with the PessoaModelView.java class. The PessoaModelView.class class will serve as a model for the generation of forms and to serve as a bind between the javafx screen components, generated by the annotations, with the entity&#39;s attributes.
+- Set up an entity that implements ITModel or inherits from TEntity, put its attributes, example Pessoa.java class, but at this point it doesn't have to be a jpa entity so don't worry about putting jpa annotations.
+- Build your model view class example PessoaModelView.java, this class must contain the attributes of the class you created above (the same names), with the difference of their type compare the Pessoa.java class with the PessoaModelView.java class. The PessoaModelView.class class will serve as a model for the generation of forms and to serve as a bind between the javafx screen components, generated by the annotations, with the entity's attributes.
 
 - Assemble your module for such a look at the class CadastroDePessoaModule.java
 
