@@ -52,9 +52,9 @@ For this version of tedros you need:
 
 7. Boot the server configured above by the IDE
 
-8. With the right mouse button on the tedros-global-brasil-ejb-ear project select the option: `Run as> Maven build`, and execute the goal` tomee: deploy` in the Goals field.
+8. With the right mouse button on the tedros-global-brasil-ejb-ear project select the option: `Run as> Maven build`, and execute the goal` tomee:deploy` in the Goals field.
 
-9. With the right mouse button on the tedros-core-ejb-ear project select the option: `Run as> Maven build`, and run in the Goals field the goal` tomee: deploy`
+9. With the right mouse button on the tedros-core-ejb-ear project select the option: `Run as> Maven build`, and run in the Goals field the goal` tomee:deploy`
 
 10. Open the Tedros.java file that contains the main method.
 
