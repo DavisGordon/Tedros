@@ -13,9 +13,9 @@ At the moment only the how-to configuration of the tedros for execution has been
 
 Below some prints:
 
-![Login screen] (https://github.com/DavisGordon/Tedros/blob/master/img/login.png)
+![Login screen](https://github.com/DavisGordon/Tedros/blob/master/img/login.png)
 
-![Main Screen] (https://github.com/DavisGordon/Tedros/blob/master/img/tela_principal.png)
+![Main Screen](https://github.com/DavisGordon/Tedros/blob/master/img/tela_principal.png)
 
 ![Customization screen] (https://github.com/DavisGordon/Tedros/blob/master/img/tela_configuracap.png)
 
@@ -62,7 +62,7 @@ For this version of tedros you need:
 
 If everything has been configured correctly, Tedros will unzip the folder TedrosBox in your user's folder with the necessary layout settings and then the login screen will be displayed.
 
-Use the super user ** owner **.
+Use the super user **owner**.
 The password can be any alphanumeric character in this snapshot version.
 
 ## Understanding the project structure:
@@ -137,7 +137,7 @@ In this first moment I will not go into many details, I will only detail the ref
 |com.tedros.global.brasil.module.pessoa.validator|package with validators|
 |com.tedros.global.brasil.start|package with the AppStart.java class with the configuration of the modules and menus to be presented when tedros-box starts.|
 
-2. ** Where to start: **
+2. **Where to start:**
 
 Before the steps below create a module similar to the tdrs-global-brasil module but with different names.
 Note It is not necessary to create the backend layer at this time.
@@ -157,4 +157,4 @@ PS. There is a lot to document yet so go debugging and questioning, feel free.
 
 Any problems or doubts do not hesitate to contact me by e-mail davis.dun@gmail.com
 
-Good fun! :]
+Have fun! :]
