@@ -183,9 +183,9 @@ extends TBehavior<M, TDynaPresenter<M>> {
 							if(!runWhenModelProcessSucceeded(process))
 								return;
 							
-							/*TODO: DEVERÁ SER VERIFICADO OUTRA ABORDAGEM, POIS DEIXAR IMPLICITO QUE TODO RESULTADO
-							 * DEVERÁ RETORNAR UMA ENTIDADE NA PRIMEIRA POSIÇÃO CAUSA MUITA CONFUSÃO
-							 * DEVERÁ SER ANALISADO  
+							/*TODO: DEVERA SER VERIFICADO OUTRA ABORDAGEM, POIS DEIXAR IMPLICITO QUE TODO RESULTADO
+							 * DEVERA RETORNAR UMA ENTIDADE NA PRIMEIRA POSIÇÃO CAUSA MUITA CONFUSÃO
+							 * DEVERA SER ANALISADO  
 							 * */
 							final List<TResult<E>> resultados = process.getValue();
 							if(resultados.isEmpty())
