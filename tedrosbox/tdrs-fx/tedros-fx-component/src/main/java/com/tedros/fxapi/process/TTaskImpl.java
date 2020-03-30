@@ -8,6 +8,13 @@ import com.tedros.app.process.ITTask;
 
 import javafx.concurrent.Task;
 
+/**<pre>
+ * A custom Task impl
+ * </pre>
+ * 
+ * @author Davis Gordon
+ * 
+ * */
 public abstract class TTaskImpl<V> extends Task<V> implements ITTask<V> {
 
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:");

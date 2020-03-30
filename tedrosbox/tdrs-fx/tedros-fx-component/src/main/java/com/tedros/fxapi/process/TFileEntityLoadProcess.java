@@ -13,6 +13,12 @@ import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.global.model.TFileEntity;
 import com.tedros.util.TResourceUtil;
 
+/**
+ * A process to load a file from application server
+ * 
+ * 
+ * @author Davis Gordon
+ * */
 public class TFileEntityLoadProcess extends TProcess<TResult<TFileEntity>>{
 	
 	private TFileEntityService service;

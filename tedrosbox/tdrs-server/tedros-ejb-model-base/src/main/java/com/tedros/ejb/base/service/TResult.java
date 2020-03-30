@@ -2,10 +2,23 @@ package com.tedros.ejb.base.service;
 
 import java.io.Serializable;
 
+/**
+ * A Service result.
+ * 
+ *  @author Davis Gordon
+ * 
+ * */
+
 public class TResult<E> implements Serializable {
 
 	private static final long serialVersionUID = -7635310661063307949L;
 	
+	/**
+	 * SUCESS(1),
+	 * ERROR(-1),
+	 * OUTDATED(-2),
+	 * WARNING(0);
+	 * */
 	public enum EnumResult {
 		SUCESS(1),
 		ERROR(-1),
