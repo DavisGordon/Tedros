@@ -15,6 +15,12 @@ import org.apache.commons.lang3.RandomStringUtils;
 import com.tedros.app.process.ITProcess;
 import com.tedros.ejb.base.info.ITAppInfo;
 
+/**
+ * The Tedros process ia a JavaFX Service 
+ * and can be used to running process in background.
+ * 
+ * @author Davis Gordon
+ * */
 public abstract class TProcess<V> extends Service<V> implements ITProcess<V> {
 	
 	private boolean autoStart = false;
@@ -29,7 +35,12 @@ public abstract class TProcess<V> extends Service<V> implements ITProcess<V> {
 		processID = String.valueOf(Calendar.getInstance().getTimeInMillis())+RandomStringUtils.randomAlphanumeric(4);		
 	}
 	
+	/**
+	 * <pre>Create the task to be executed</pre>
+	 * @return TTaskImpl 
+	 * */
 	protected abstract TTaskImpl<V> createTask();
+	
 	
 	@Override
 	public String getProcessId() {

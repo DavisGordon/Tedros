@@ -17,6 +17,12 @@ import com.tedros.ejb.base.service.TResult;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.util.TResourceUtil;
 
+/**
+ * A process to help the use of combobox 
+ * and others components which need filter a list of domain.
+ * 
+ * @author Davis Gordon
+ * */
 public abstract class TOptionsProcess extends TProcess<List<TResult<Object>>>{
 	
 	private Class<? extends ITEntity> entityType;
@@ -37,7 +43,7 @@ public abstract class TOptionsProcess extends TProcess<List<TResult<Object>>>{
 			service = (ITEjbService<?>) ctx.lookup(serviceJndiName);
 			objects = new HashMap<>();
 		} catch (Exception e) {
-			throw new TProcessException(e, e.getMessage(), "N�o foi possivel conectar com o servi�o solicitado!");
+			throw new TProcessException(e, e.getMessage(), "The service is not available!");
 		}
 	}
 	
@@ -47,7 +53,7 @@ public abstract class TOptionsProcess extends TProcess<List<TResult<Object>>>{
 			setAutoStart(true);
 			objects = new HashMap<>();
 		} catch (Exception e) {
-			throw new TProcessException(e, e.getMessage(), "N�o foi possivel conectar com o servi�o solicitado!");
+			throw new TProcessException(e, e.getMessage(), "The service is not available!");
 		}
 	}
 	

@@ -18,6 +18,11 @@ import com.tedros.util.TColorUtil;
 import com.tedros.util.TFileUtil;
 import com.tedros.util.TedrosFolderEnum;
 
+/**
+ * Process to save the custom styles defined by the user.
+ * 
+ * @author Davis Gordon
+ * */
 public class TedrosSettingProcess extends TModelProcess<PainelModel>{
 	
 	private NumberFormat numberFormat;

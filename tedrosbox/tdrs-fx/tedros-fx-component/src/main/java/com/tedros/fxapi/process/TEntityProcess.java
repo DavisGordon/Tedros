@@ -19,9 +19,27 @@ import com.tedros.ejb.base.service.TResult.EnumResult;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.util.TResourceUtil;
 
+
+/**
+ * <pre>Process with basic CRUD tasks.
+ * 
+ * Two application server types can be used, Apache TomEE and JBOSS EAP / WildFly.
+ * The application server endpoint can be configured at remote-config.properties
+ * located at ..\.tedros\CONF in the USER folder.</pre>
+ * 
+ * @author Davis Gordon
+ * 
+ * */
 public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<TResult<E>>>{
 
+	/**
+	 * Constant for TomEE
+	 * */
 	public static final int SERVER_TYPE_TOMEE = 1; 
+	
+	/**
+	 * Constant for JBoss
+	 * */
 	public static final int SERVER_TYPE_JBOSS_EAPx = 2;
 	
 	private static final int SAVE = 1; 
@@ -39,15 +57,31 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 	
 	private int serverType;
 	
+	/**
+	 * Return an ejb service
+	 * 
+	 * @return {@link ITEjbService}
+	 * */
 	public ITEjbService<E> getService(){
 		return service;
 	}
 	
+	/**
+	 * Define the server application endpoint to be used.
+	 * 
+	 * @param serverType - 1 for tomee and 2 for jboss
+	 * */
 	public void setServerType(int serverType) {
 		this.serverType = serverType;
 	}
 		
-	
+	/**
+	 * Constructor
+	 * 
+	 * @param entityType - The entity class
+	 * @param serviceJndiName - The ejb service jndi name 
+	 * @param remoteMode - false for local services and true to use configured endpoint
+	 * */
 	public TEntityProcess(Class<E> entityType, String serviceJndiName, boolean remoteMode) throws TProcessException {
 		init(entityType, serviceJndiName, remoteMode);
 	}
@@ -73,36 +107,67 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 		} 
 	}
 	
+	/**
+	 * <pre>Constructor
+	 * 
+	 * Use remote server 
+	 * </pre>
+	 * @param entityType - The entity class
+	 * @param serviceJndiName - The ejb service jndi name 
+	 * @param serverType - 1 for tomee and 2 for jboss
+	 * */
 	public TEntityProcess(Class<E> entityType, String serviceJndiName, int serverType) throws TProcessException {
 		init(entityType, serviceJndiName, true);
 	}
 	
+	/**
+	 * <pre>Add an entity to save </pre>
+	 * @param entidade - The entity to save
+	 * */
 	public void save(E entidade){
 		values.add(entidade);
 		operation = SAVE;
 	}
-	
+	/**
+	 * <pre>Add an entity to delete</pre>
+	 * @param entidade 
+	 * */
 	public void delete(E entidade){
 		values.add(entidade);
 		operation = DELETE;
 	}
-	
+	/**
+	 * <pre>Add an entity to find</pre>
+	 * @param entidade 
+	 * */
 	public void find(E entidade){
 		values.add(entidade);
 		operation = FIND;
 	}
-	
+	/**
+	 * <pre>Add an entity to search</pre>
+	 * @param entidade 
+	 * */
 	public void search(E entidade){
 		values.add(entidade);
 		operation = SEARCH;
 	}
-	
+	/**
+	 * <pre>List all entitys</pre>
+	 * */
 	public void list(){
 		operation = LIST;
 	}
-	
+	/**
+	 * <pre>Execute the operation</pre>
+	 * @param resultList 
+	 * */
 	public abstract void execute(List<TResult<E>> resultList);
 	
+	/**
+	 * <pre>Create the task to be executed</pre>
+	 * @return TTaskImpl 
+	 * */
 	@Override
 	protected TTaskImpl<List<TResult<E>>> createTask() {
 		
@@ -185,10 +250,10 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 			String url = "jnp://{0}:1099";
 			String ip = "127.0.0.1";
 			
-			/*if(prop!=null){
+			if(prop!=null){
 				url = prop.getProperty("url");
 				ip = prop.getProperty("server_ip");
-			}*/	
+			}
 			
 			String serviceURL = MessageFormat.format(url, ip);
 			
