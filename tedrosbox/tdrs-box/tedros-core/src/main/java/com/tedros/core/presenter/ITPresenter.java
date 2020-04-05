@@ -6,7 +6,9 @@ import com.tedros.core.presenter.view.ITView;
 import javafx.beans.property.BooleanProperty;
 
 /**
- * The presenter
+ * The presenter responsable to load the view.
+ * 
+ * @author Davis Gordon
  * */
 @SuppressWarnings("rawtypes")
 public interface ITPresenter<V extends ITView> {

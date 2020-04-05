@@ -25,11 +25,11 @@
 	  		<version>0.0.1-SNAPSHOT</version>
 	  	</dependency>
 	  	
-	  	<dependency>
+	  	<!-- <dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-core</artifactId>
 	  		<version>0.0.1-SNAPSHOT</version>
-	  	</dependency>
+	  	</dependency> -->
 	  	
 	    <dependency>
 	      <groupId>junit</groupId>
