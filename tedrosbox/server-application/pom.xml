@@ -45,7 +45,7 @@
 			    <container>
 			      <containerId>tomee7x</containerId>
 			      <zipUrlInstaller>
-			        <url>http://repo.maven.apache.org/maven2/org/apache/openejb/apache-tomee/${tomee.version}/apache-tomee-${tomee.version}-webprofile.zip</url>
+			        <url>https://repo.maven.apache.org/maven2/org/apache/openejb/apache-tomee/${tomee.version}/apache-tomee-${tomee.version}-webprofile.zip</url>
 			      </zipUrlInstaller>
 			      <dependencies>
 		            <dependency>
@@ -58,7 +58,7 @@
 			      <home>${project.build.directory}/catalina-base</home>
 			      <files>
 		            <copy>
-		              <file>files/tomee.xml</file>
+		              <file>${project.basedir}/files/tomee.xml</file>
 		              <tofile>conf/tomee.xml</tofile>
 		              <configfile>true</configfile>
 		              <overwrite>true</overwrite>
@@ -107,6 +107,20 @@
 			  </executions>
 			  
 			</plugin>
+			
+			<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-compiler-plugin</artifactId>
+        		<version>3.3</version>
+        		<configuration>
+          			<source>${java.version}</source>
+          			<target>${java.version}</target>
+          			<compilerArgs>
+                       <arg>-Dhttps.protocols=TLSv1.2</arg>
+                    </compilerArgs>
+        		</configuration>
+      		</plugin>
+			
 		</plugins>
 	   
 	 </build>

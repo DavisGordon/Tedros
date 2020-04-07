@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 import com.tedros.app.process.ITProcess;
 
 /**
- * This annotation sets the start up class of the application
+ * Define the start up class of the application
  * 
  * @author davis.dun
  * */
