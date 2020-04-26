@@ -46,19 +46,13 @@ Para esta versão do tedros é preciso:
 
 (obs: estas propriedades estão replicadas em alguns arquivos pom.xml, sugiro fazer um search para identificar onde elas foram declaradas, vou corrigir futuramente, esse é o tipico problema usual do copy and paste)
 
-5. Adicione o servidor Tomee na IDE, no eclipse use a opção Apache Tomcat 7.
+5. Com o botão direito do mouse sobre o projeto tedrosbox selecione a opção: `Run as >Maven build`, e execute no campo Goals: `clean install`
 
-6. Com o botão direito do mouse sobre o projeto tedrosbox selecione a opção: `Run as >Maven build`, e execute no campo Goals o goal `clean install`
+6. Com o botão direito do mouse sobre o projeto server-application selecione a opção: `Run as >Maven build`, e execute no campo Goals: `cargo:run`
 
-7. Inicialize o servidor configurado acima pela IDE
+7. Abra o arquivo Tedros.java que contem o metodo main.
 
-8. Com o botão direito do mouse sobre o projeto tedros-global-brasil-ejb-ear selecione a opção: `Run as >Maven build`, e execute no campo Goals o goal `tomee:deploy`
-
-9. Com o botão direito do mouse sobre o projeto tedros-core-ejb-ear selecione a opção: `Run as >Maven build`, e execute no campo Goals o goal `tomee:deploy`
-
-10. Abra o arquivo Tedros.java que contem o metodo main.
-
-11. Execute o arquivo Tedros.java como java application.
+8. Execute o arquivo Tedros.java como java application.
 
 Se tudo tiver sido configurado de forma correta o Tedros irá descompactar a pasta TedrosBox na pasta do seu usuario com as configurações de layout necessarias e logo em seguida será apresentada a tela de login.
 
