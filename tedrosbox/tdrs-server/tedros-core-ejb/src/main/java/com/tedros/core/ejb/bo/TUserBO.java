@@ -1,27 +1,30 @@
 package com.tedros.core.ejb.bo;
 
-import javax.persistence.EntityManager;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 
 import com.tedros.core.ejb.eao.TUserEao;
 import com.tedros.core.security.model.TProfile;
 import com.tedros.core.security.model.TUser;
 import com.tedros.ejb.base.bo.TGenericBO;
 
-public final class TUserBO extends TGenericBO<TUser> {
+@RequestScoped
+public class TUserBO extends TGenericBO<TUser> {
 	
-	private TUserEao eao = new TUserEao();
+	@Inject
+	private TUserEao eao;
 	
 	@Override
 	public TUserEao getEao() {
 		return eao;
 	}
 
-	public TUser getUserByLoginPassword(EntityManager em, String login, String password) {
-		return eao.getUserByLoginPassword(em, login, password);
+	public TUser getUserByLoginPassword(String login, String password) {
+		return eao.getUserByLoginPassword(login, password);
 	}
 	
-	public void saveActiveProfile(EntityManager em, TProfile profile, Long userId) throws Exception{
-		eao.saveActiveProfile(em, profile, userId);
+	public void saveActiveProfile(TProfile profile, Long userId) throws Exception{
+		eao.saveActiveProfile(profile, userId);
 	}
 
 }

@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -17,16 +19,22 @@ import com.tedros.ejb.base.entity.ITEntity;
 
 public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 	
+	@PersistenceContext(unitName = "tedros_core_pu", type=PersistenceContextType.TRANSACTION)
+    private EntityManager em;
 	
-	public E find(EntityManager em, E entity)throws Exception{
+	public EntityManager getEntityManager() {
+		return em;
+	}
+	
+	public E find(E entity)throws Exception{
 		
-		List<E> results = findAll(em, entity);
+		List<E> results = findAll(entity);
 		
 		return (results!=null && results.size()>0) ? results.get(0) : null;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<E> findAll(EntityManager em, E entity)throws Exception{
+	public List<E> findAll(E entity)throws Exception{
 		
 		ReadAllQuery query = new ReadAllQuery(entity.getClass());
 		query.setExampleObject(entity);
@@ -40,27 +48,27 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 	
 	
 	
-	public void beforePersist(EntityManager em, E entity)throws Exception{
+	public void beforePersist(E entity)throws Exception{
 		
 	}
 	
-	public void afterPersist(EntityManager em, E entity)throws Exception{
+	public void afterPersist(E entity)throws Exception{
 		
 	}
 	
-	public void beforeRemove(EntityManager em, E entity)throws Exception{
+	public void beforeRemove(E entity)throws Exception{
 		
 	}
 	
-	public void afterRemove(EntityManager em, E entity)throws Exception{
+	public void afterRemove(E entity)throws Exception{
 		
 	}
 	
-	public void beforeMerge(EntityManager em, E entity)throws Exception{
+	public void beforeMerge(E entity)throws Exception{
 		
 	}
 	
-	public void afterMerge(EntityManager em, E entity)throws Exception{
+	public void afterMerge(E entity)throws Exception{
 		
 	}
 	
@@ -68,24 +76,24 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 	/**
 	 * Persiste uma entity
 	 * */
-	public void persist(EntityManager em, E entity)throws Exception{
-		beforePersist(em, entity);
+	public void persist(E entity)throws Exception{
+		beforePersist(entity);
 		if(entity.isNew())
 			entity.setInsertDate(new Date());
 		else
 			entity.setLastUpdate(new Date());
 		em.persist(entity);
-		afterPersist(em, entity);
+		afterPersist(entity);
 	}
 	
-	public E merge(EntityManager em, E entity)throws Exception{
-		beforeMerge(em, entity);
+	public E merge(E entity)throws Exception{
+		beforeMerge(entity);
 		if(entity.isNew())
 			entity.setInsertDate(new Date());
 		else
 			entity.setLastUpdate(new Date());
 		E e = em.merge(entity);
-		afterMerge(em, e);
+		afterMerge(e);
 		return e;
 	}
 	
@@ -93,16 +101,16 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 	/**
 	 * Remove uma entity
 	 * */
-	public void remove(EntityManager em, E entity)throws Exception{
-		beforeRemove(em, entity);
+	public void remove(E entity)throws Exception{
+		beforeRemove(entity);
 		em.remove(entity);
-		afterRemove(em, entity);
+		afterRemove(entity);
 	}
 	/**
 	 * Retorna uma lista com todas as entitys persistidas
 	 * */
 	@SuppressWarnings("unchecked")
-	public List<E> listAll(EntityManager em, Class<? extends ITEntity> entity)throws Exception{
+	public List<E> listAll(Class<? extends ITEntity> entity)throws Exception{
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<E> cq = (CriteriaQuery<E>) cb.createQuery(entity);
 		Root<E> root = (Root<E>) cq.from(entity);
@@ -113,7 +121,7 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 	 * Retorna uma lista paginada
 	 * */
 	@SuppressWarnings("unchecked")
-	public List<E> pageAll(EntityManager em, Class<? extends ITEntity> entity, int firstResult, int maxResult)throws Exception{
+	public List<E> pageAll(Class<? extends ITEntity> entity, int firstResult, int maxResult)throws Exception{
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<E> cq = (CriteriaQuery<E>) cb.createQuery(entity);
 		Root<E> root = (Root<E>) cq.from(entity);
@@ -126,7 +134,7 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 	/**
 	 * Retorna a quantidade de registros cadastrados
 	 * */
-	public Long countAll(EntityManager em, Class<? extends ITEntity> entity)throws Exception{
+	public Long countAll(Class<? extends ITEntity> entity)throws Exception{
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Long> cq = (CriteriaQuery<Long>) cb.createQuery(Long.class);
 		cq.select(cb.count(cq.from(entity)));

@@ -11,6 +11,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.tedros.fxapi.form.ITFilterForm;
 import com.tedros.fxapi.form.TDefaultFilterForm;
 import com.tedros.fxapi.process.TFilterProcess;
 
@@ -23,14 +24,10 @@ import com.tedros.fxapi.process.TFilterProcess;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface TFilter  {
-	public TFilterTableView tableView();
-	public String title() default "Filtrar";
-	public String searchBtnTitle() default "Pesquisar";
-	public String cleanBtnTitle() default "Limpar";
 	@SuppressWarnings("rawtypes")
-	public Class formClass() default TDefaultFilterForm.class;
+	public Class<? extends ITFilterForm> formClass() default TDefaultFilterForm.class;
 	public Class<? extends TFilterProcess> filterProcessClass();
 	
-	public String componentId() default "";
+	public String fields();
 	
 }

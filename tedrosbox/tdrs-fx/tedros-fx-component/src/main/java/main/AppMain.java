@@ -41,7 +41,7 @@ import javafx.util.Duration;
  * @author Davis Gordon
  *
  */
-public class Main extends Application {
+public class AppMain extends Application {
 
 	protected Stage stage;
 	protected Scene scene;

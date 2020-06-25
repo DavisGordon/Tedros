@@ -45,7 +45,7 @@
 	<!-- BUILD -->
 	<build>
     	<plugins>
-    		<plugin>
+    		 <plugin>
 	    		<groupId>org.apache.openejb.maven</groupId>
 	    		<artifactId>tomee-maven-plugin</artifactId>
 	    		<version>1.7.1</version>

@@ -3,7 +3,7 @@
  */
 package com.tedros.core.ejb.eao;
 
-import javax.persistence.EntityManager;
+import javax.enterprise.context.RequestScoped;
 
 import com.tedros.core.security.model.TAuthorization;
 import com.tedros.core.security.model.TProfile;
@@ -13,10 +13,11 @@ import com.tedros.ejb.base.eao.TGenericEAO;
  * @author Davis Gordon
  *
  */
+@RequestScoped
 public class TProfileEao extends TGenericEAO<TProfile> {
 	
 	@Override
-	public void beforePersist(EntityManager em, TProfile entity) throws Exception {
+	public void beforePersist(TProfile entity) throws Exception {
 		setProfileAuthorization(entity);
 	}
 
@@ -27,7 +28,7 @@ public class TProfileEao extends TGenericEAO<TProfile> {
 	}
 	
 	@Override
-	public void beforeMerge(EntityManager em, TProfile entity) throws Exception {
+	public void beforeMerge(TProfile entity) throws Exception {
 		setProfileAuthorization(entity);
 	}
 

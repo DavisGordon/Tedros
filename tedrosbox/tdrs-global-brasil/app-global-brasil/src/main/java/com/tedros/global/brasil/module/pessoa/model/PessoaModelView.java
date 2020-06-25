@@ -17,6 +17,7 @@ import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
+import com.tedros.fxapi.annotation.control.TVerticalRadioGroup;
 import com.tedros.fxapi.annotation.effect.TDropShadow;
 import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TDetailView;
@@ -37,6 +38,7 @@ import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
+import com.tedros.fxapi.builder.DateTimeFormatBuilder;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TStyleParameter;
@@ -100,27 +102,54 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	@TLabel(text="#{label.name}")
 	@TTextField(maxLength=60, required = true, textInputControl=@TTextInputControl(promptText="#{label.name}", parse = true), 
 				control=@TControl(tooltip="#{label.name}", parse = true))
-	@THBox(	pane=@TPane(children={"nome","sobreNome","apelido"}), spacing=10, fillHeight=true, 
-	   		hgrow=@THGrow(priority={@TPriority(field="nome", priority=Priority.ALWAYS), 
-			   				   		@TPriority(field="sobreNome", priority=Priority.ALWAYS),
-			   				   		@TPriority(field="apelido", priority=Priority.ALWAYS) }))
+	@THBox(	pane=@TPane(children={"nome","profissao","dataNascimento"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="nome", priority=Priority.ALWAYS), 
+						@TPriority(field="profissao", priority=Priority.ALWAYS), 
+   				   		@TPriority(field="dataNascimento", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty nome;
 	
 	/**
-	 * A text input description for the person last name
+	 * A text area input description for the person observation
 	 * */
 	@TReaderHtml
-	@TLabel(text="#{label.lastname}")
-	@TTextField(maxLength=60)
-	private SimpleStringProperty sobreNome;
+	@TLabel(text="#{label.observation}")
+	@TTextAreaField(control=@TControl(prefWidth=250, prefHeight=50, parse = true), maxLength=400, prefRowCount=4)
+	@THBox(	pane=@TPane(children={"observacao","tipoVoluntario","statusVoluntario"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="observacao", priority=Priority.ALWAYS), 
+   				   		@TPriority(field="tipoVoluntario", priority=Priority.ALWAYS),
+   				   		@TPriority(field="statusVoluntario", priority=Priority.ALWAYS) }))
+	private SimpleStringProperty observacao;
 	
-	/**
-	 * A text input description for the person nick name
-	 * */
-	@TReaderHtml
-	@TLabel(text="#{label.nickname}")
-	@TTextField(maxLength=60)
-	private SimpleStringProperty apelido;
+	@TReaderHtml(codeValues={@TCodeValue(code = "1", value = "Cozinha - Preparar comida"), 
+			@TCodeValue(code = "2", value = "Cozinha - Preparar marmita"),
+			@TCodeValue(code = "3", value = "Entrega")})
+	@TLabel(text="Voluntario na")
+	@TVerticalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
+	radioButtons = {@TRadioButtonField(text="Cozinha - Preparar comida", userData="1"), 
+					@TRadioButtonField(text="Cozinha - Preparar marmita", userData="2"),
+					@TRadioButtonField(text="Entrega", userData="3")
+	})
+	private SimpleStringProperty tipoVoluntario;
+	
+	@TReaderHtml(codeValues={@TCodeValue(code = "1", value = "Aguardando"), 
+			@TCodeValue(code = "2", value = "Contactado"),
+			@TCodeValue(code = "3", value = "Voluntario"),
+			@TCodeValue(code = "4", value = "Voluntario Ativo"),
+			@TCodeValue(code = "5", value = "Voluntario problematico"),
+			@TCodeValue(code = "6", value = "Desligado")
+	})
+	@TLabel(text="Situação")
+	@TVerticalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
+	radioButtons = {@TRadioButtonField(text="Aguardando", userData="1"), 
+					@TRadioButtonField(text="Contactado", userData="2"),
+					@TRadioButtonField(text="Voluntario", userData="3"),
+					@TRadioButtonField(text="Voluntario Ativo", userData="4"),
+					@TRadioButtonField(text="Voluntario problematico", userData="5"),
+					@TRadioButtonField(text="Desligado ", userData="6")
+	})
+	
+	private SimpleStringProperty statusVoluntario;
+	
 	
 	/**
 	 * A text input description for the person occupation
@@ -136,9 +165,6 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	@TReaderHtml
 	@TLabel(text="#{label.birthdate}")
 	@TDatePickerField(required = false)
-	@THBox(pane=@TPane(	children={"dataNascimento","sexo"}), spacing=10, fillHeight=true, 
-	   					hgrow=@THGrow(priority={@TPriority(field="dataNascimento", priority=Priority.ALWAYS), 
-	   											@TPriority(field="sexo", priority=Priority.ALWAYS)}))
 	private SimpleObjectProperty<Date> dataNascimento;
 	
 	/**
@@ -149,27 +175,33 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	@THorizontalRadioGroup(required=true, spacing=4, 
 			radioButtons={	@TRadioButtonField(text = "#{label.female}", userData = "F"), 
 							@TRadioButtonField(text = "#{label.male}", userData = "M")})
+	@THBox(pane=@TPane(	children={"sexo","insertDate","lastUpdate"}), spacing=10, fillHeight=true, 
+		hgrow=@THGrow(priority={@TPriority(field="sexo", priority=Priority.ALWAYS),
+								@TPriority(field="insertDate", priority=Priority.ALWAYS), 
+								@TPriority(field="lastUpdate", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty sexo;
 	
-	/**
-	 * A text area input description for the person observation
-	 * */
 	@TReaderHtml
-	@TLabel(text="#{label.observation}")
-	@TTextAreaField(control=@TControl(prefWidth=250, prefHeight=50, parse = true), maxLength=400, prefRowCount=4)
-	private SimpleStringProperty observacao;
+	@TLabel(text="Cadastrado em")
+	@TDatePickerField(required = false, node=@TNode(parse = true, disable=true), dateFormat=DateTimeFormatBuilder.class)
+	private SimpleObjectProperty<Date> insertDate;
+	
+	@TReaderHtml
+	@TLabel(text="Alterado em")
+	@TDatePickerField(required = false, node=@TNode(parse = true, disable=true), dateFormat=DateTimeFormatBuilder.class)
+	private SimpleObjectProperty<Date> lastUpdate;
 	
 	/**
 	 * A descripton for the personal additional data sub title and the field box
 	 * */
-	@TTextReaderHtml(text="#{label.additionaldata}", 
+	/*@TTextReaderHtml(text="#{label.additionaldata}", 
 			htmlTemplateForControlValue="<h2 style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
 	@TText(	text="#{label.additionaldata}", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 			node=@TNode(id="t-form-title-text", parse = true))
-	private SimpleStringProperty textoDetail;
+	*/private SimpleStringProperty textoDetail;
 	
 	/**
 	 * A descripton to build a tab pane with detail views to edit the collections of person documents, contacts and address.
@@ -294,22 +326,6 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 		this.nome = nome;
 	}
 
-	public SimpleStringProperty getSobreNome() {
-		return sobreNome;
-	}
-
-	public void setSobreNome(SimpleStringProperty sobreNome) {
-		this.sobreNome = sobreNome;
-	}
-
-	public SimpleStringProperty getApelido() {
-		return apelido;
-	}
-
-	public void setApelido(SimpleStringProperty apelido) {
-		this.apelido = apelido;
-	}
-
 	public SimpleStringProperty getProfissao() {
 		return profissao;
 	}
@@ -377,6 +393,62 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 
 	public void setTextoDetail(SimpleStringProperty textoDetail) {
 		this.textoDetail = textoDetail;
+	}
+
+	/**
+	 * @return the tipoVoluntario
+	 */
+	public SimpleStringProperty getTipoVoluntario() {
+		return tipoVoluntario;
+	}
+
+	/**
+	 * @param tipoVoluntario the tipoVoluntario to set
+	 */
+	public void setTipoVoluntario(SimpleStringProperty tipoVoluntario) {
+		this.tipoVoluntario = tipoVoluntario;
+	}
+
+	/**
+	 * @return the statusVoluntario
+	 */
+	public SimpleStringProperty getStatusVoluntario() {
+		return statusVoluntario;
+	}
+
+	/**
+	 * @param statusVoluntario the statusVoluntario to set
+	 */
+	public void setStatusVoluntario(SimpleStringProperty statusVoluntario) {
+		this.statusVoluntario = statusVoluntario;
+	}
+
+	/**
+	 * @return the insertDate
+	 */
+	public SimpleObjectProperty<Date> getInsertDate() {
+		return insertDate;
+	}
+
+	/**
+	 * @param insertDate the insertDate to set
+	 */
+	public void setInsertDate(SimpleObjectProperty<Date> insertDate) {
+		this.insertDate = insertDate;
+	}
+
+	/**
+	 * @return the lastUpdate
+	 */
+	public SimpleObjectProperty<Date> getLastUpdate() {
+		return lastUpdate;
+	}
+
+	/**
+	 * @param lastUpdate the lastUpdate to set
+	 */
+	public void setLastUpdate(SimpleObjectProperty<Date> lastUpdate) {
+		this.lastUpdate = lastUpdate;
 	}
 
 

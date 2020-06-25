@@ -8,7 +8,7 @@ import javafx.scene.web.WebView;
 
 public class PocWebEngine {
 	
-	public PocWebEngine(Main main ) {
+	public PocWebEngine(AppMain main ) {
 		
 		final WebView wv = new WebView();
 		

@@ -16,10 +16,12 @@ import com.tedros.core.TModule;
 import com.tedros.core.context.Page;
 import com.tedros.core.context.Pages;
 import com.tedros.core.context.TedrosContext;
+import com.tedros.core.context.TedrosProcessManager;
 import com.tedros.core.context.TedroxBoxHeaderButton;
 import com.tedros.core.control.TedrosBoxBreadcrumbBar;
 import com.tedros.core.control.TedrosBoxResizeBar;
 import com.tedros.core.logging.TLoggerManager;
+import com.tedros.core.server.local.TTomeeServerService;
 import com.tedros.fxapi.modal.TModalPane;
 import com.tedros.fxapi.presenter.TPresenter;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
@@ -642,6 +644,8 @@ public class Tedros extends Application {
 		TInternationalizationEngine.addResourceBundle(null, "TLabels", TPresenter.class.getClassLoader());
         init(primaryStage);
         primaryStage.show();
+        
+       // TedrosProcessManager.addProcess(TTomeeServerService.class);
     }
     public static void main(String[] args) { 
     	launch(args); 

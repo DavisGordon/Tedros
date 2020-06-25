@@ -9,7 +9,7 @@ package com.tedros.global.brasil.ejb.eao;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
+import javax.enterprise.context.RequestScoped;
 import javax.persistence.Query;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,10 +25,11 @@ import com.tedros.global.brasil.model.Pessoa;
  * @author Davis Gordon
  *
  */
-public final class PessoaEAO extends TGenericEAO<Pessoa> {
+@RequestScoped
+public class PessoaEAO extends TGenericEAO<Pessoa> {
 
 	@SuppressWarnings("unchecked")
-	public List<Pessoa> pesquisar(EntityManager em, String nome, Date dataNascimento, String tipo, String tipoDocumento, String numero){
+	public List<Pessoa> pesquisar(String nome, Date dataNascimento, String tipo, String tipoDocumento, String numero){
 		
 		StringBuffer sbf = new StringBuffer("select distinct e from Pessoa e left join e.documentos d where 1=1 ");
 		
@@ -49,7 +50,7 @@ public final class PessoaEAO extends TGenericEAO<Pessoa> {
 		
 		sbf.append("order by e.nome");
 		
-		Query qry = em.createQuery(sbf.toString());
+		Query qry = getEntityManager().createQuery(sbf.toString());
 		
 		if(StringUtils.isNotBlank(nome))
 			qry.setParameter("nome", "%"+nome+"%");
@@ -69,24 +70,58 @@ public final class PessoaEAO extends TGenericEAO<Pessoa> {
 		return qry.getResultList();
 	}
 	
+public boolean isPessoaContatoExiste(String nome, String email, String telefone){
+		
+		StringBuffer sbf = new StringBuffer("select distinct e from Pessoa e left join e.contatos d where 1=1 ");
+		
+		if(StringUtils.isNotBlank(nome))
+			sbf.append("and e.nome = :nome and ");
+		
+		if(StringUtils.isNotBlank(email))
+			sbf.append(" (d.tipo = '1' and d.descricao = :email) ");
+		
+		if(StringUtils.isNotBlank(telefone)){
+			if(StringUtils.isNotBlank(email))
+				sbf.append(" or ");
+			sbf.append(" (d.tipo = '2' and d.descricao = :telefone) ");
+		}
+		
+		
+		Query qry = getEntityManager().createQuery(sbf.toString());
+		
+		if(StringUtils.isNotBlank(nome))
+			qry.setParameter("nome",nome);
+		
+		if(StringUtils.isNotBlank(email))
+			qry.setParameter("email", email);
+		
+		if(StringUtils.isNotBlank(telefone))
+			qry.setParameter("telefone", telefone);
+		
+		List<Pessoa> lst = qry.getResultList();
+		
+		return lst!=null && lst.size() > 0;
+	}
+
+	
 	
 	@Override
-	public void beforePersist(EntityManager em, Pessoa entidade)	throws Exception {
-		childsReference(em, entidade);
+	public void beforePersist(Pessoa entidade)	throws Exception {
+		childsReference(entidade);
 	}
 	
 	@Override
-	public void beforeMerge(EntityManager em, Pessoa entidade) throws Exception {
-		childsReference(em, entidade);
+	public void beforeMerge(Pessoa entidade) throws Exception {
+		childsReference(entidade);
 	}
 	
 	@Override
-	public void beforeRemove(EntityManager em, Pessoa entidade) throws Exception {
-		childsReference(em, entidade);
+	public void beforeRemove(Pessoa entidade) throws Exception {
+		childsReference(entidade);
 	}
 	
 	
-	public void childsReference(EntityManager em, Pessoa entidade)throws Exception {
+	public void childsReference(Pessoa entidade)throws Exception {
 		
 		if(entidade.getContatos()!=null){
 			for(final Contato e : entidade.getContatos())

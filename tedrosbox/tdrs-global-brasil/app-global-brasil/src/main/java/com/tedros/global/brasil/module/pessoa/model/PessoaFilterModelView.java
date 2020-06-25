@@ -30,7 +30,13 @@ import com.tedros.fxapi.annotation.control.TValidator;
 import com.tedros.fxapi.annotation.filter.TFilter;
 import com.tedros.fxapi.annotation.filter.TFilterTableColumn;
 import com.tedros.fxapi.annotation.filter.TFilterTableView;
+import com.tedros.fxapi.annotation.presenter.TBehavior;
+import com.tedros.fxapi.annotation.presenter.TDecorator;
+import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
+import com.tedros.fxapi.presenter.entity.behavior.TMainCrudViewWithListViewBehavior;
+import com.tedros.fxapi.presenter.entity.decorator.TMainCrudViewWithListViewDecorator;
 import com.tedros.fxapi.presenter.filter.TFilterModelView;
 import com.tedros.global.brasil.model.Pessoa;
 import com.tedros.global.brasil.module.pessoa.form.PessoaFilterForm;
@@ -45,7 +51,8 @@ import com.tedros.global.brasil.module.pessoa.validator.DocumentoValidator;
  * @author Davis Gordon
  *
  */
-@TFilter( 	filterProcessClass = TPessoaFilterProcess.class, 
+
+/*@TFilter( 	filterProcessClass = TPessoaFilterProcess.class, 
 			formClass = PessoaFilterForm.class,
 			tableView = 
 			@TFilterTableView(
@@ -53,7 +60,7 @@ import com.tedros.global.brasil.module.pessoa.validator.DocumentoValidator;
 							@TFilterTableColumn(columnName = "Nome", fieldName = "nome", order=1),
 							@TFilterTableColumn(columnName = "Tipo da Pessoa", fieldName = "tipo", order=2, tableCellClass=TipoPessoaTableCell.class),
 							@TFilterTableColumn(columnName = "Aniversario", fieldName = "dataNascimento", datePattern="dd/MM", order=3)
-							}))
+							}))*/
 public class PessoaFilterModelView extends TFilterModelView<Pessoa> {
 	
 	

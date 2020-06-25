@@ -6,7 +6,8 @@
  */
 package com.tedros.global.brasil.ejb.bo;
 
-import javax.persistence.EntityManager;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 
 import com.tedros.ejb.base.bo.TGenericBO;
 import com.tedros.ejb.base.eao.ITGenericEAO;
@@ -21,17 +22,19 @@ import com.tedros.global.brasil.model.Contato;
  * @author Davis Gordon
  *
  */
-public final class ContatoBO extends TGenericBO<Contato> {
+@RequestScoped
+public class ContatoBO extends TGenericBO<Contato> {
 
-	private ContatoEAO eao = new ContatoEAO();
+	@Inject
+	private ContatoEAO eao;;
 	
 	@Override
 	public ITGenericEAO<Contato> getEao() {
 		return eao;
 	}
 	
-	public void excluirTodos(EntityManager em, final Long idPessoa)throws Exception{
-		eao.excluirTodos(em, idPessoa);
+	public void excluirTodos(final Long idPessoa)throws Exception{
+		eao.excluirTodos(idPessoa);
 	}
 
 }

@@ -23,6 +23,7 @@ import javafx.scene.text.TextBuilder;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.tedros.core.model.ITModelView;
 import com.tedros.fxapi.control.TAccordion;
 import com.tedros.fxapi.control.validator.TFieldResult;
 import com.tedros.fxapi.control.validator.TValidatorResult;
@@ -53,9 +54,10 @@ public class TMessageBox extends StackPane {
     @SuppressWarnings({"unchecked"})
 	public TMessageBox(TValidatorException e) {
     	
-    	List<TValidatorResult<?>> results = (List<TValidatorResult<?>>) e.getValidatorResults();
+    	List<TValidatorResult<ITModelView>> results = (List<TValidatorResult<ITModelView>>) e.getValidatorResults();
     	List<String> messages = new ArrayList<>(0);
     	for(TValidatorResult<?> result : results){
+    		messages.add("* "+result.getModelView().getDisplayProperty().getValue());
     		for(TFieldResult TFieldResult: result.getFields()){
     			if(StringUtils.isNotBlank(TFieldResult.getFieldLabel())){
     				messages.add(TFieldResult.getFieldLabel()+": "+TFieldResult.getMessage());

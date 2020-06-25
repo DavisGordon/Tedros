@@ -11,11 +11,13 @@ import java.util.List;
 
 import javax.ejb.Singleton;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 
 import com.tedros.ejb.base.service.TEjbService;
 import com.tedros.ejb.base.service.TResult;
 import com.tedros.ejb.base.service.TResult.EnumResult;
 import com.tedros.global.brasil.ejb.bo.PessoaBO;
+import com.tedros.global.brasil.model.Contato;
 import com.tedros.global.brasil.model.Pessoa;
 
 /**
@@ -28,7 +30,8 @@ import com.tedros.global.brasil.model.Pessoa;
 @Stateless(name = "TPessoaService")
 public class PessoaService extends TEjbService<Pessoa> implements IPessoaService {
 	
-	private PessoaBO bo = new PessoaBO();
+	@Inject
+	private PessoaBO bo;
 	
 	@Override
 	public PessoaBO getBussinesObject() {
@@ -38,7 +41,7 @@ public class PessoaService extends TEjbService<Pessoa> implements IPessoaService
 	@SuppressWarnings("rawtypes")
 	public TResult pesquisar(String nome, Date dataNascimento, String tipo, String tipoDocumento, String numero){
 		try{
-			List<Pessoa> list = getBussinesObject().pesquisar(getEntityManager(), nome, dataNascimento, tipo, tipoDocumento, numero);
+			List<Pessoa> list = getBussinesObject().pesquisar(nome, dataNascimento, tipo, tipoDocumento, numero);
 			return new TResult<List<Pessoa>>(EnumResult.SUCESS, list);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -47,5 +50,25 @@ public class PessoaService extends TEjbService<Pessoa> implements IPessoaService
 		
 	}
 
+	public TResult<Pessoa> saveFromSite(Pessoa entidade) {
+		
+		
+		String email = null;
+		String tel = null;
+		if(entidade.getContatos()!=null){
+			for(Contato c : entidade.getContatos()){
+				if(c.getTipo()!=null && c.getTipo().equals("1"))
+					email = c.getDescricao();
+				if(c.getTipo()!=null && c.getTipo().equals("2"))
+					tel = c.getDescricao();
+			}
+		}
+		
+		if(bo.isPessoaContatoExiste(entidade.getNome(), email, tel)){
+			return new TResult<Pessoa>(EnumResult.WARNING);
+		}
+		
+		return super.save(entidade);
+	}
 	
 }
