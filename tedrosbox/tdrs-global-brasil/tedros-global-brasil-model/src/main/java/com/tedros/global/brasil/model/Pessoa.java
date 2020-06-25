@@ -45,14 +45,14 @@ public class Pessoa extends TEntity {
 	@Column(length=60, nullable = false)
 	private String nome;
 	
-	@Column(name="sobre_nome", length=60, nullable = true)
-	private String sobreNome;
-	
-	@Column(length=60, nullable = true)
-	private String apelido;
-	
 	@Column(length=80, nullable = true)
 	private String profissao;
+	
+	@Column(length=1, nullable = true)
+	private String tipoVoluntario;
+	
+	@Column(length=1, nullable = true)
+	private String statusVoluntario;
 	
 	@Column(name = "data_nascimento", nullable = true)
 	@Temporal(TemporalType.DATE)
@@ -162,22 +162,6 @@ public class Pessoa extends TEntity {
 		this.sexo = sexo;
 	}
 
-	public final String getSobreNome() {
-		return sobreNome;
-	}
-
-	public final void setSobreNome(String sobreNome) {
-		this.sobreNome = sobreNome;
-	}
-
-	public final String getApelido() {
-		return apelido;
-	}
-
-	public final void setApelido(String apelido) {
-		this.apelido = apelido;
-	}
-
 	public final String getProfissao() {
 		return profissao;
 	}
@@ -192,6 +176,34 @@ public class Pessoa extends TEntity {
 
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
+	}
+
+	/**
+	 * @return the tipoVoluntario
+	 */
+	public String getTipoVoluntario() {
+		return tipoVoluntario;
+	}
+
+	/**
+	 * @param tipoVoluntario the tipoVoluntario to set
+	 */
+	public void setTipoVoluntario(String tipoVoluntario) {
+		this.tipoVoluntario = tipoVoluntario;
+	}
+
+	/**
+	 * @return the statusVoluntario
+	 */
+	public String getStatusVoluntario() {
+		return statusVoluntario;
+	}
+
+	/**
+	 * @param statusVoluntario the statusVoluntario to set
+	 */
+	public void setStatusVoluntario(String statusVoluntario) {
+		this.statusVoluntario = statusVoluntario;
 	}
 	
 }

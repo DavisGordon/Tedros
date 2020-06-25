@@ -8,6 +8,7 @@ import com.tedros.core.module.TListenerRepository;
 import com.tedros.ejb.base.model.ITModel;
 
 import javafx.beans.InvalidationListener;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
@@ -17,6 +18,13 @@ import javafx.collections.SetChangeListener;
  * The model view 
  * */
 public interface ITModelView<M extends ITModel> {
+	
+	/**
+	 * <pre>
+	 * Get the value to display in components.
+	 * </pre>
+	 * */
+	public SimpleStringProperty getDisplayProperty();
 	
 	/**
 	 * Removes all listener

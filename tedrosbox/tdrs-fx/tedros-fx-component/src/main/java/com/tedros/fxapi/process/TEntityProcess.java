@@ -99,6 +99,7 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 				if (remoteMode)	initRemote();	else initLocal();				
 				
 				ctx = new InitialContext(p);
+				
 				service = (ITEjbService<E>) ctx.lookup(serviceJndiName);
 				values = new ArrayList<>();
 			}
@@ -233,7 +234,7 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 		Properties prop = TResourceUtil.getPropertiesFromConfFolder("remote-config.properties");
 		
 		if(serverType == 1){
-			String url = "http://{0}:8080/tomee/ejb";
+			String url = "http://{0}:8081/tomee/ejb";
 			String ip = "127.0.0.1";
 			
 			if(prop!=null){
@@ -285,6 +286,8 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 		p.put("openejb.jndiname.format ", " {ejbName}/{interfaceClass}");
 		p.put("openejb.descriptors.output ", " true");
 		p.put("openejb.validation.output.level ", " verbose");
+		
+		p.put("openejb.deployments.classpath.ear", "true");
 	}
 	
 	

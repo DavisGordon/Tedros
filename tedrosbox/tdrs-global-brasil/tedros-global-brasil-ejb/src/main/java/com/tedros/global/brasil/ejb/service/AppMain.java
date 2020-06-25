@@ -12,7 +12,7 @@ import com.tedros.ejb.base.service.TResult;
 import com.tedros.global.brasil.model.Documento;
 import com.tedros.global.brasil.model.Pessoa;
 
-public class Main {
+public class AppMain {
 
 	@SuppressWarnings({"unused", "unchecked", "deprecation"})
 	public static void main(String[] args) {

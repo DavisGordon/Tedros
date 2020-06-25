@@ -44,7 +44,7 @@
   
   	<build>
     	<plugins>
-    		<plugin>
+    		 <plugin>
 	    		<groupId>org.apache.openejb.maven</groupId>
 	    		<artifactId>tomee-maven-plugin</artifactId>
 	    		<version>1.7.1</version>
@@ -60,7 +60,7 @@
 					
 					<synchronization>
 				    	<extensions>
-				        	<extension>.class</extension> <!-- if you want to update each time you build with mvn compile -->
+				        	<extension>.class</extension><!--  if you want to update each time you build with mvn compile -->
 				      	</extensions>
 				    </synchronization>
 				    <reloadOnUpdate>true</reloadOnUpdate>
@@ -80,7 +80,7 @@
 			          	<lib>remove:openjpa-</lib>
 			      	</libs>
 			   	</configuration>
-	  		</plugin>
+	  		</plugin> 
 	  
 	      	<plugin>
 	        	<groupId>org.apache.maven.plugins</groupId>

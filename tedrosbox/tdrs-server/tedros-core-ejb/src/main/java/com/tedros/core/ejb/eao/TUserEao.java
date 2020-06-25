@@ -3,7 +3,7 @@
  */
 package com.tedros.core.ejb.eao;
 
-import javax.persistence.EntityManager;
+import javax.enterprise.context.RequestScoped;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -15,18 +15,19 @@ import com.tedros.ejb.base.eao.TGenericEAO;
  * @author Davis Gordon
  *
  */
+@RequestScoped
 public class TUserEao extends TGenericEAO<TUser> {
 	
-	public void saveActiveProfile(EntityManager em, TProfile profile, Long userId) throws Exception{
+	public void saveActiveProfile(TProfile profile, Long userId) throws Exception{
 		TUser user = new TUser();
 		user.setId(userId);
-		user = this.find(em, user);
+		user = this.find(user);
 		user.setActiveProfile(profile);
-		persist(em, user);
+		persist(user);
 	}
 	
-	public TUser getUserByLoginPassword(EntityManager em, String login, String password){
-		Query qry = em.createQuery("select e from TUser e where e.login = :login and e.password = :password and e.active = :active");
+	public TUser getUserByLoginPassword(String login, String password){
+		Query qry = getEntityManager().createQuery("select e from TUser e where e.login = :login and e.password = :password and e.active = :active");
 		qry.setParameter("login", login);
 		qry.setParameter("password", password);
 		qry.setParameter("active", "T");

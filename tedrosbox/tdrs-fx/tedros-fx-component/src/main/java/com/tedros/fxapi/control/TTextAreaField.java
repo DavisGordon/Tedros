@@ -39,7 +39,7 @@ public class TTextAreaField extends TRequiredTextArea {
 		else{
 			final String selectedText  = getSelectedText();
 			final int selectedTextLenght = (selectedText!=null) ? selectedText.length() : 0;
-			final int textLenght = getText().length();
+			final int textLenght = getText()!=null ? getText().length() : 0;
 			final int maxLenghtValue = maxLength.get();
 			
 			while( (textLenght - selectedTextLenght) + selection.length() > maxLenghtValue)

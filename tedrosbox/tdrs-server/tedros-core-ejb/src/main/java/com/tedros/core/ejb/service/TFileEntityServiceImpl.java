@@ -2,33 +2,26 @@ package com.tedros.core.ejb.service;
 
 import javax.ejb.Singleton;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.Query;
 
+import com.tedros.core.ejb.bo.TFileEntityBO;
 import com.tedros.ejb.base.bo.ITGenericBO;
-import com.tedros.ejb.base.bo.TGenericBO;
-import com.tedros.ejb.base.eao.ITGenericEAO;
-import com.tedros.ejb.base.eao.TGenericEAO;
 import com.tedros.ejb.base.service.TEjbService;
 import com.tedros.ejb.base.service.TResult;
 import com.tedros.ejb.base.service.TResult.EnumResult;
 import com.tedros.global.model.TByteEntity;
 import com.tedros.global.model.TFileEntity;
 
+
 @Singleton
-@Stateless(name = "TFileEntityService")
+@Stateless(name="TFileEntityService")
 public class TFileEntityServiceImpl extends TEjbService<TFileEntity> implements	TFileEntityService {
 
+	@Inject
+	private TFileEntityBO bo;
 	
-	private TGenericBO<TFileEntity> bo = new TGenericBO<TFileEntity>(){
-
-		private TGenericEAO<TFileEntity> eao = new TGenericEAO<>();
-		
-		@Override
-		public ITGenericEAO<TFileEntity> getEao() {
-			return eao;
-		}
-		
-	};
+	
 	
 	@Override
 	public ITGenericBO<TFileEntity> getBussinesObject() {

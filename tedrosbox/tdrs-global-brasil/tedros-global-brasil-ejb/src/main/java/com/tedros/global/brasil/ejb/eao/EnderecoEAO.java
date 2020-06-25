@@ -6,7 +6,7 @@
  */
 package com.tedros.global.brasil.ejb.eao;
 
-import javax.persistence.EntityManager;
+import javax.enterprise.context.RequestScoped;
 import javax.persistence.Query;
 
 import com.tedros.ejb.base.eao.TGenericEAO;
@@ -20,18 +20,19 @@ import com.tedros.global.brasil.model.Endereco;
  * @author Davis Gordon
  *
  */
-public final class EnderecoEAO extends TGenericEAO<Endereco> {
+@RequestScoped
+public class EnderecoEAO extends TGenericEAO<Endereco> {
 
 	private static String SCHEMA = DomainSchema.tedros_global_brasil;
 	
-	public void excluirTodos(EntityManager em, final Long idPessoa)throws Exception{
+	public void excluirTodos(final Long idPessoa)throws Exception{
 	
-		Query qry = em.createNativeQuery("delete from "+SCHEMA+"."+DomainTables.endereco+
+		Query qry = getEntityManager().createNativeQuery("delete from "+SCHEMA+"."+DomainTables.endereco+
 				" where id in (select ende_id from "+SCHEMA+"."+DomainTables.pessoa_endereco+" where pess_id = "+idPessoa+" )");
 		//qry.setParameter("id", idPessoa);
 		qry.executeUpdate();
 		
-		qry = em.createNativeQuery("delete from "+SCHEMA+"."+DomainTables.pessoa_endereco+
+		qry = getEntityManager().createNativeQuery("delete from "+SCHEMA+"."+DomainTables.pessoa_endereco+
 				" where pess_id = "+idPessoa);
 		//qry.setParameter("id", idPessoa);
 		qry.executeUpdate();

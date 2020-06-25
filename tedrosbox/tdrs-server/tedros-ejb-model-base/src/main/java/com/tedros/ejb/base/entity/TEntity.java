@@ -29,11 +29,11 @@ public abstract class TEntity implements ITEntity {
 	private Integer versionNum;
 	
 	@Column(name = "last_update", nullable = true)
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastUpdate;
 	
 	@Column(name = "insert_date", nullable = true)
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date insertDate;
 	
 	public boolean isNew(){

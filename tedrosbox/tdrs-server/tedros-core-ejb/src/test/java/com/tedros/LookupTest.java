@@ -1,8 +1,8 @@
-package com.tedros.core.ejb.service;
+package com.tedros;
 
 import java.util.Properties;
 
-public class Main {
+public class LookupTest {
 
 	@SuppressWarnings({"unused"})
 	public static void main(String[] args) {

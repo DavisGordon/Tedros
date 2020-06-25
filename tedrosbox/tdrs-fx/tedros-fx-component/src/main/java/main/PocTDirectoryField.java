@@ -6,9 +6,9 @@ import com.tedros.fxapi.control.TDirectoryField;
 
 public class PocTDirectoryField {
 	
-	private Main main;
+	private AppMain main;
 	
-	public PocTDirectoryField(Main main) {
+	public PocTDirectoryField(AppMain main) {
 		this.main = main;
 		
 		TDirectoryField field = new TDirectoryField(main.stage);

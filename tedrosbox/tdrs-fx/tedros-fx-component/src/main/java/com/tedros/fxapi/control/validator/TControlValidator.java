@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.model.ITModelView;
 import com.tedros.fxapi.annotation.control.TLabel;
+import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
 import com.tedros.fxapi.annotation.control.TValidator;
 import com.tedros.fxapi.annotation.form.TDetailView;
 import com.tedros.fxapi.descriptor.TFieldDescriptor;
@@ -110,7 +111,7 @@ public final class TControlValidator<E extends ITModelView> {
 				continue;
 			}
 			
-			if (annotation instanceof TDetailView){
+			if (annotation instanceof TDetailView || annotation instanceof TModelViewCollectionType){
 				//final TDetailView tAnnotation = (TDetailView) annotation;
 				final TControlValidator validator = new TControlValidator();
 				List<ITModelView> lst = null;

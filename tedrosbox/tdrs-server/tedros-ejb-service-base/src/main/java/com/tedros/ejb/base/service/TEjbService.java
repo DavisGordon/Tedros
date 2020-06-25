@@ -2,8 +2,6 @@ package com.tedros.ejb.base.service;
 
 import java.util.List;
 
-import javax.annotation.Resource;
-import javax.ejb.SessionContext;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
@@ -16,10 +14,9 @@ import com.tedros.ejb.base.bo.ITGenericBO;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.service.TResult.EnumResult;
 
+@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
 public abstract class TEjbService<E extends ITEntity> implements ITEjbService<E> {
 
-	@Resource
-    SessionContext sessionContext;
 	
 	@PersistenceContext(unitName = "tedros_core_pu", type=PersistenceContextType.TRANSACTION)
     private EntityManager em;
@@ -47,7 +44,7 @@ public abstract class TEjbService<E extends ITEntity> implements ITEjbService<E>
 	
 	public TResult<List<E>> findAll(E entity)throws Exception{
 		try{
-			List<E> list = getBussinesObject().findAll(getEntityManager(), entity);
+			List<E> list = getBussinesObject().findAll(entity);
 			return new TResult<List<E>>(EnumResult.SUCESS, list);
 			
 		}catch(Exception e){
@@ -57,15 +54,14 @@ public abstract class TEjbService<E extends ITEntity> implements ITEjbService<E>
 	}
 
 	private E internalFind(E entidade) throws Exception {
-		entidade = getBussinesObject().find(getEntityManager(), entidade);
+		entidade = getBussinesObject().find(entidade);
 		return entidade;
 	}
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public TResult<E> save(E entidade) {
 		try{
-			E e = getBussinesObject().save(getEntityManager(), entidade);
+			E e = getBussinesObject().save(entidade);
 			return new TResult<E>(EnumResult.SUCESS, e);
 		}catch(Exception e){
 			return processException(entidade, e);
@@ -73,11 +69,10 @@ public abstract class TEjbService<E extends ITEntity> implements ITEjbService<E>
 	}
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public TResult<E> remove(E entidade) {
 		try{
 			entidade = internalFind(entidade);
-			getBussinesObject().remove(getEntityManager(), entidade);
+			getBussinesObject().remove(entidade);
 			return new TResult<E>(EnumResult.SUCESS);
 			
 		}catch(Exception e){
@@ -89,7 +84,7 @@ public abstract class TEjbService<E extends ITEntity> implements ITEjbService<E>
 	public TResult<List<E>> listAll(Class<? extends ITEntity> entidade) {
 		
 		try{
-			List<E> list = getBussinesObject().listAll(getEntityManager(), entidade);
+			List<E> list = getBussinesObject().listAll(entidade);
 			return new TResult<List<E>>(EnumResult.SUCESS, list);
 			
 		}catch(Exception e){
@@ -101,7 +96,7 @@ public abstract class TEjbService<E extends ITEntity> implements ITEjbService<E>
 	@Override
 	public TResult<List<E>> pageAll(Class<? extends ITEntity> entidade, int firstResult, int maxResult) {
 		try{
-			List<E> list = getBussinesObject().pageAll(getEntityManager(), entidade, firstResult, maxResult);
+			List<E> list = getBussinesObject().pageAll(entidade, firstResult, maxResult);
 			return new TResult<List<E>>(EnumResult.SUCESS, list);
 			
 		}catch(Exception e){
@@ -113,7 +108,7 @@ public abstract class TEjbService<E extends ITEntity> implements ITEjbService<E>
 	@Override
 	public TResult<Long> countAll(Class<? extends ITEntity> entidade) {
 		try{
-			Long count  = getBussinesObject().countAll(getEntityManager(), entidade);
+			Long count  = getBussinesObject().countAll(entidade);
 			return new TResult<Long>(EnumResult.SUCESS, count);
 			
 		}catch(Exception e){
