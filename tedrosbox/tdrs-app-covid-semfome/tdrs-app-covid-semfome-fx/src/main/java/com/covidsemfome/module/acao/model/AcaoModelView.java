@@ -15,6 +15,8 @@ import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
+import com.tedros.fxapi.annotation.control.TLabelPosition;
+import com.tedros.fxapi.annotation.control.TLongField;
 import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
@@ -73,6 +75,9 @@ import javafx.scene.text.TextAlignment;
 
 public class AcaoModelView extends TEntityModelView<Acao> {
 	
+	@TReaderHtml
+	@TLabel(text="Codigo:", position=TLabelPosition.LEFT)
+	@TLongField(maxLength=6,node=@TNode(parse = true, disable=true) )
 	private SimpleLongProperty id;
 	
 	@TTextReaderHtml(text="Cadastrar acão", 
@@ -85,9 +90,9 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	private SimpleStringProperty textoCadastro;
 	
 	@TReaderHtml
-	@TLabel(text="Titulo")
+	@TLabel(text="Titulo/Local")
 	@TTextField(maxLength=100, 
-	textInputControl=@TTextInputControl(promptText="Titulo", parse = true),
+	textInputControl=@TTextInputControl(promptText="Insira um titulo ou o local", parse = true),
 	required=true)
 	private SimpleStringProperty titulo;
 	
@@ -152,6 +157,7 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	@TLabel(text="Observação")
 	@TTextAreaField(maxLength=600, control=@TControl(prefWidth=250, prefHeight=100, parse = true))
 	private SimpleStringProperty observacao;
+	
 	
 
 	public AcaoModelView(Acao entity) {

@@ -360,6 +360,13 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	}
 	
 	/**
+	 * Register a property
+	 * */
+	protected void registerProperty(String fieldName, ObservableValue value){
+		propertys.put(fieldName, value);
+	}
+	
+	/**
 	 * <pre>
 	 * </pre>
 	 * */

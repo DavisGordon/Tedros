@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.covidsemfome.ejb.service.IVoluntarioService;
+import com.covidsemfome.ejb.service.IPessoaService;
 import com.covidsemfome.model.Pessoa;
 import com.tedros.ejb.base.service.TResult;
 import com.tedros.fxapi.exception.TProcessException;
@@ -26,7 +26,7 @@ import com.tedros.fxapi.process.TFilterProcess;
 public class TPessoaFilterProcess extends TFilterProcess {
 
 	public TPessoaFilterProcess() throws TProcessException {
-		super(Pessoa.class, "VoluntarioServiceRemote", true);
+		super(Pessoa.class, "IPessoaServiceRemote", true);
 	}
 	
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -40,7 +40,7 @@ public class TPessoaFilterProcess extends TFilterProcess {
 		Date dataNascimento = (objects.containsKey("dataNascimento")) ? (Date) objects.get("dataNascimento") :  null;;
 		
 		List<TResult<Object>> resultados = new ArrayList<>();
-		TResult result = ((IVoluntarioService)getService()).pesquisar(nome, dataNascimento, tipo, tipoDocumento, numero);
+		TResult result = ((IPessoaService)getService()).pesquisar(nome, dataNascimento, tipo, tipoDocumento, numero);
 		resultados.add(result);
 		return resultados;
 	}

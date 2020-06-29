@@ -5,13 +5,9 @@ package br.com.covidsemfome.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.covidsemfome.ejb.service.IVoluntarioService;
+import com.covidsemfome.ejb.service.IPessoaService;
 import com.covidsemfome.model.Contato;
 import com.covidsemfome.model.Pessoa;
 import com.tedros.ejb.base.service.TResult;
@@ -61,7 +57,7 @@ public class VoluntarioServlet extends HttpServlet {
 			ServiceLocator loc = ServiceLocator.getInstance();
 	
 			try {
-				IVoluntarioService service = (IVoluntarioService) loc.lookup("TVoluntarioServiceRemote");
+				IPessoaService service = (IPessoaService) loc.lookup("IPessoaServiceRemote");
 				
 				List<Contato> lst = new ArrayList();			
 				if(email!=null){

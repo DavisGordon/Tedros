@@ -220,6 +220,10 @@ public class Acao extends TEntity {
 		return EqualsBuilder.reflectionEquals(this, obj, false);
 	}
 
+	@Override
+	public String toString() {
+		return titulo;
+	}
 	/**
 	 * @return the voluntarios
 	 */

@@ -3,11 +3,15 @@
  */
 package com.covidsemfome.model;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -39,6 +43,13 @@ public class Voluntario extends TEntity {
 
 	@Column(length=60 )
 	private String status;
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(	name=DomainTables.vol_tipoajuda,
+				schema=DomainSchema.riosemfome,
+				joinColumns= @JoinColumn(name="vol_id"),
+				inverseJoinColumns= @JoinColumn(name="tip_id"))
+	private Set<TipoAjuda> tiposAjuda;
 
 	/**
 	 * @return the pessoa
@@ -80,6 +91,20 @@ public class Voluntario extends TEntity {
 	 */
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	/**
+	 * @return the tiposAjuda
+	 */
+	public Set<TipoAjuda> getTiposAjuda() {
+		return tiposAjuda;
+	}
+
+	/**
+	 * @param tiposAjuda the tiposAjuda to set
+	 */
+	public void setTiposAjuda(Set<TipoAjuda> tiposAjuda) {
+		this.tiposAjuda = tiposAjuda;
 	}
 
 }

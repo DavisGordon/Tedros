@@ -1,6 +1,7 @@
 package com.covidsemfome.start;
 
 import com.covidsemfome.module.acao.AcaoModule;
+import com.covidsemfome.module.acao.AcaoVoluntarioModule;
 import com.covidsemfome.module.acao.icon.AcaoIconImageView;
 import com.covidsemfome.module.acao.icon.AcaoMenuIconImageView;
 import com.covidsemfome.module.doador.DoadorModule;
@@ -9,6 +10,8 @@ import com.covidsemfome.module.doador.icon.DoadorMenuIconImageView;
 import com.covidsemfome.module.pessoa.CadastroDePessoaModule;
 import com.covidsemfome.module.pessoa.icon.PessoaIconImageView;
 import com.covidsemfome.module.pessoa.icon.PessoaMenuIconImageView;
+import com.covidsemfome.module.voluntario.CadastroTipoAjudaModule;
+import com.covidsemfome.module.voluntario.CadastroVoluntarioModule;
 import com.tedros.core.annotation.TApplication;
 import com.tedros.core.annotation.TModule;
 import com.tedros.core.annotation.TResourceBundle;
@@ -26,15 +29,22 @@ module = {	@TModule(type=DoadorModule.class, name="#{label.donor}", menu="#{app.
 					icon=DoadorIconImageView.class, menuIcon=DoadorMenuIconImageView.class),
 			@TModule(type=CadastroDePessoaModule.class, name="#{label.person}", menu="#{menu.pessoa}", 
 					icon=PessoaIconImageView.class, menuIcon=PessoaMenuIconImageView.class),
-			@TModule(type=AcaoModule.class, name="Painel do voluntário", menu="Ação", 
-			icon=AcaoIconImageView.class, menuIcon=AcaoMenuIconImageView.class)})
+			@TModule(type=AcaoModule.class, name="Ação", menu="Painel do voluntário", 
+					icon=AcaoIconImageView.class, menuIcon=AcaoMenuIconImageView.class),
+			@TModule(type=AcaoVoluntarioModule.class, name="Voluntarios inscritos", menu="Painel do voluntário"/*, 
+					icon=AcaoIconImageView.class, menuIcon=AcaoMenuIconImageView.class*/),
+			@TModule(type=CadastroVoluntarioModule.class, name="Cadastrar Voluntários", menu="Painel do voluntário"/*, 
+					icon=AcaoIconImageView.class, menuIcon=AcaoMenuIconImageView.class*/),
+			@TModule(type=CadastroTipoAjudaModule.class, name="Cadastrar Tipo Ajuda", menu="Painel do voluntário"/*, 
+					icon=AcaoIconImageView.class, menuIcon=AcaoMenuIconImageView.class*/)
+})
 @TResourceBundle(resourceName={"CovidLabels"})
 @TSecurity(id="APP_COVIDSEMFOME", appName = "#{app.name}", allowedAccesses=TAuthorizationType.APP_ACCESS)
 public class AppStart implements ITApplication {
 
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub 
 		
 	}
 	

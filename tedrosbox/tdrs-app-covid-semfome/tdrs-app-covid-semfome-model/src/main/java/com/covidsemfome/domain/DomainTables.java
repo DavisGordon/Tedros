@@ -1,7 +1,7 @@
 package com.covidsemfome.domain;
 
 public interface DomainTables {
-
+	final static String tipoajuda = "tipoajuda";
 	final static String doador = "doador";
 	final static String doacao = "doacao";
 	final static String pessoa = "pessoa";
@@ -16,6 +16,7 @@ public interface DomainTables {
 	final static String file = "file";
 	final static String acao = "acao";
 	final static String voluntario = "voluntario";
+	static final String vol_tipoajuda = "vol_tipoajuda";
 }
 
 
