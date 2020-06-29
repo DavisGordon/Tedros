@@ -22,6 +22,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.covidsemfome.ejb.service.IAcaoService;
 import com.covidsemfome.ejb.service.IAutUserService;
+import com.covidsemfome.ejb.service.IPessoaService;
 import com.covidsemfome.ejb.service.IVoluntarioService;
 import com.covidsemfome.model.Acao;
 import com.covidsemfome.model.Contato;
@@ -98,7 +99,7 @@ public class PainelApi {
 					if(c.getTipo().equals("2"))
 						c.setDescricao(tel);
 			
-			IVoluntarioService serv = loc.lookup("TVoluntarioServiceRemote");
+			IPessoaService serv = loc.lookup("IPessoaServiceRemote");
 			TResult<Pessoa> res = serv.save(p);
 			loc.close();
 			
@@ -143,7 +144,7 @@ public class PainelApi {
 		ServiceLocator loc =  ServiceLocator.getInstance();
 		
 		try {
-			IVoluntarioService serv = loc.lookup("TVoluntarioServiceRemote");
+			IVoluntarioService serv = loc.lookup("IVoluntarioServiceRemote");
 			TResult<List<Acao>> res = serv.participarEmAcao(covidUserBean.getUser().getPessoa(), id);
 			loc.close();
 			System.out.println(covidUserBean.getUser().getPessoa().getNome()+ " participando com sucesso a acao "+id.toString());
@@ -163,7 +164,7 @@ public class PainelApi {
 		ServiceLocator loc =  ServiceLocator.getInstance();
 		
 		try {
-			IVoluntarioService serv = loc.lookup("TVoluntarioServiceRemote");
+			IVoluntarioService serv = loc.lookup("IVoluntarioServiceRemote");
 			TResult<List<Acao>> res = serv.sairDaAcao(covidUserBean.getUser().getPessoa(), id);
 			loc.close();
 			System.out.println(covidUserBean.getUser().getPessoa().getNome()+ " saiu com sucesso da acao "+id.toString());

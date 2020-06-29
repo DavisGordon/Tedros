@@ -74,7 +74,7 @@ import javafx.scene.text.TextAlignment;
 			behavior = @TBehavior(type = TMainCrudViewWithListViewBehavior.class), 
 			decorator = @TDecorator(type = TMainCrudViewWithListViewDecorator.class, 
 									viewTitle="#{view.person.name}", listTitle="#{label.select}"))
-@TSecurity(	id="T_APP_GLOBAL_BRASIL_CAP_PESSOA_PESSOA_FORM", 
+@TSecurity(	id="COVSEMFOME_CADPESS_FORM", 
 			appName = "#{app.name}", moduleName = "#{label.person}", viewName = "#{view.person.name}",
 			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 							TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})

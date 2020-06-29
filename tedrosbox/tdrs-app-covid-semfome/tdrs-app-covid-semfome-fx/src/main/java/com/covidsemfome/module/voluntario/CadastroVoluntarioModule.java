@@ -4,9 +4,9 @@
  * TODOS OS DIREITOS RESERVADOS
  * 13/01/2014
  */
-package com.covidsemfome.module.pessoa;
+package com.covidsemfome.module.voluntario;
 
-import com.covidsemfome.module.pessoa.model.PessoaModelView;
+import com.covidsemfome.module.voluntario.model.VoluntarioModelView;
 import com.tedros.core.TModule;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
@@ -14,18 +14,18 @@ import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 
 
 /**
- * The person crud module
+ * The voluntario crud module
  *
  * @author Davis Gordon
  *
  */
-@TSecurity(	id="COVSEMFOME_CADPESS_MODULE", appName = "#{app.name}", moduleName = "#{label.person}", 
+@TSecurity(	id="COVSEMFOME_CADVOL_MODULE", appName = "#{app.name}", moduleName = "Painel do voluntário", 
 			allowedAccesses=TAuthorizationType.MODULE_ACCESS)
-public class CadastroDePessoaModule extends TModule{
+public class CadastroVoluntarioModule extends TModule{
 
 	@Override
 	public void tStart() {
-		TDynaView<PessoaModelView> view = new TDynaView<>(this, PessoaModelView.class);
+		TDynaView<VoluntarioModelView> view = new TDynaView<>(this, VoluntarioModelView.class);
 		tShowView(view);
 	}
 }

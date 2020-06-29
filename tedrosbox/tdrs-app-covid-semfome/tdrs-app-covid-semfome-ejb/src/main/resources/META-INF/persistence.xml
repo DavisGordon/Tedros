@@ -19,6 +19,7 @@
 		<class>com.covidsemfome.model.User</class>
 		<class>com.covidsemfome.model.Acao</class>
 		<class>com.covidsemfome.model.Voluntario</class>
+		<class>com.covidsemfome.model.TipoAjuda</class>
 		
 		<properties>
 		

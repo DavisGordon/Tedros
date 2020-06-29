@@ -4,11 +4,11 @@
  * TODOS OS DIREITOS RESERVADOS
  * 14/01/2014
  */
-package com.covidsemfome.module.pessoa.process;
+package com.covidsemfome.module.voluntario.process;
 
 import java.util.List;
 
-import com.covidsemfome.model.Pessoa;
+import com.covidsemfome.model.TipoAjuda;
 import com.tedros.ejb.base.service.TResult;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.process.TEntityProcess;
@@ -19,15 +19,15 @@ import com.tedros.fxapi.process.TEntityProcess;
  * @author Davis Gordon
  *
  */
-public class TPessoaProcess extends TEntityProcess<Pessoa> {
+public class TipoAjudaProcess extends TEntityProcess<TipoAjuda> {
 
-	public TPessoaProcess() throws TProcessException {
-		super(Pessoa.class, "IPessoaServiceRemote", true);
+	public TipoAjudaProcess() throws TProcessException {
+		super(TipoAjuda.class, "ITipoAjudaServiceRemote", true);
 	}
 
 
 	@Override
-	public void execute(List<TResult<Pessoa>> resultados) {
+	public void execute(List<TResult<TipoAjuda>> resultados) {
 		
 	}
 
