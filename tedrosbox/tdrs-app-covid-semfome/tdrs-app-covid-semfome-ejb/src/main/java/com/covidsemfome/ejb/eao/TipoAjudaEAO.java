@@ -6,7 +6,10 @@
  */
 package com.covidsemfome.ejb.eao;
 
+import java.util.List;
+
 import javax.enterprise.context.RequestScoped;
+import javax.persistence.Query;
 
 import com.covidsemfome.model.TipoAjuda;
 import com.tedros.ejb.base.eao.TGenericEAO;
@@ -20,6 +23,13 @@ import com.tedros.ejb.base.eao.TGenericEAO;
 @RequestScoped
 public class TipoAjudaEAO extends TGenericEAO<TipoAjuda> {
 
-	
+	public List<TipoAjuda> listar(String tipo){
+		StringBuffer sbf = new StringBuffer("select distinct e from TipoAjuda e where e.status = :status and e.tipoPessoa = :tipo order by e.id ");
+		Query qry = getEntityManager().createQuery(sbf.toString());
+		qry.setParameter("tipo", tipo);
+		qry.setParameter("status", "ATIVADO");
+		List<TipoAjuda> lst = qry.getResultList();
+		return lst;
+	}
 	
 }

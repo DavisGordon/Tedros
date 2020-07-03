@@ -24,7 +24,7 @@
 		<properties>
 		
 		  <property name="javax.persistence.retrieveMode" value="BYPASS"/>
-	      
+	      <property name="javax.persistence.storeMode" value="BYPASS"/>
 	      <property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.H2Platform"/>
 	      <property name="eclipselink.ddl-generation" value="create-or-extend-tables"/>
 	      <property name="eclipselink.ddl-generation.output-mode" value="database"/>

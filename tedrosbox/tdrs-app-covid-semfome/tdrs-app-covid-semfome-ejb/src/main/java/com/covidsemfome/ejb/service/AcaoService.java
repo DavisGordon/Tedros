@@ -29,7 +29,6 @@ public class AcaoService extends TEjbService<Acao> implements IAcaoService{
 
 	@Override
 	public ITGenericBO<Acao> getBussinesObject() {
-		// TODO Auto-generated method stub
 		return bo;
 	}
 	@TransactionAttribute(value = TransactionAttributeType.REQUIRED)

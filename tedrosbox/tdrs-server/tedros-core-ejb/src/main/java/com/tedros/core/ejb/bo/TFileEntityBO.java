@@ -26,5 +26,9 @@ public class TFileEntityBO extends TGenericBO<TFileEntity> {
 	public ITGenericEAO<TFileEntity> getEao() {
 		return eao;
 	}
+	
+	public void loadBytes(final TFileEntity entity) {
+		eao.loadBytes(entity);
+	}
 
 }

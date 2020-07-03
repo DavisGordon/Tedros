@@ -23,12 +23,9 @@ public class VoluntarioBO extends TGenericBO<Voluntario> {
 	@Inject
 	private VoluntarioEAO eao;
 	
-	@Inject
-	private AcaoBO acaoBO;
-
+	
 	@Override
 	public ITGenericEAO<Voluntario> getEao() {
-		// TODO Auto-generated method stub
 		return eao;
 	}
 	
@@ -36,17 +33,7 @@ public class VoluntarioBO extends TGenericBO<Voluntario> {
 		return eao.recuperar(acao, pess);
 	}
 	
-	public void participarEmAcao(Pessoa pessoa, Long acaoId) throws Exception{
-		Acao acao = new Acao();
-		acao.setId(acaoId);
-		acao = acaoBO.find(acao);
-		
-		Voluntario v = new Voluntario();
-		v.setAcao(acao);
-		v.setPessoa(pessoa);
-		save(v);
-		eao.getEntityManager().flush();
-	}
+	
 	
 	public void sairDaAcao(Pessoa pessoa, Long acaoId) throws Exception{
 		Acao acao = new Acao();
@@ -55,7 +42,6 @@ public class VoluntarioBO extends TGenericBO<Voluntario> {
 		Voluntario v  = recuperar(acao, pessoa);
 		
 		remove(v);
-		eao.getEntityManager().flush();
 	}
 
 }

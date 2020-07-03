@@ -3,6 +3,7 @@ package com.tedros.ejb.base.eao;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -24,6 +25,12 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 	
 	public EntityManager getEntityManager() {
 		return em;
+	}
+	
+	@PostConstruct
+	protected void init(){
+		getEntityManager().setProperty("javax.persistence.cache.retrieveMode", "BYPASS");
+		getEntityManager().setProperty("javax.persistence.cache.storeMode", "BYPASS");
 	}
 	
 	public E find(E entity)throws Exception{
@@ -103,6 +110,9 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 	 * */
 	public void remove(E entity)throws Exception{
 		beforeRemove(entity);
+		if(!em.contains(entity)){
+			entity = (E) em.find(entity.getClass(), entity.getId());
+		}
 		em.remove(entity);
 		afterRemove(entity);
 	}

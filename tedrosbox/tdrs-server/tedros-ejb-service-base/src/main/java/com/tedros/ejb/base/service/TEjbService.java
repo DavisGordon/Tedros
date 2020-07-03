@@ -4,11 +4,7 @@ import java.util.List;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.OptimisticLockException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 
 import com.tedros.ejb.base.bo.ITGenericBO;
 import com.tedros.ejb.base.entity.ITEntity;
@@ -18,20 +14,11 @@ import com.tedros.ejb.base.service.TResult.EnumResult;
 public abstract class TEjbService<E extends ITEntity> implements ITEjbService<E> {
 
 	
-	@PersistenceContext(unitName = "tedros_core_pu", type=PersistenceContextType.TRANSACTION)
-    private EntityManager em;
-	
-	public EntityManager getEntityManager() {
-		return em;
-	}
-	
 	public abstract ITGenericBO<E> getBussinesObject();
 	
-	public EntityTransaction getTransaction(){
-		return getEntityManager().getTransaction();
-	}
 	
 	@Override
+	
 	public TResult<E> find(E entidade) {
 		try{
 			entidade = internalFind(entidade);
@@ -129,5 +116,7 @@ public abstract class TEjbService<E extends ITEntity> implements ITEjbService<E>
 			return new TResult<E>(EnumResult.ERROR, e.getMessage());
 		}
 	}
+	
+	
 
 }

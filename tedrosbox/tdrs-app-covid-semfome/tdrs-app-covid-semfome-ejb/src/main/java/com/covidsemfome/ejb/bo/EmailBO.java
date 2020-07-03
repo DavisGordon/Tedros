@@ -8,6 +8,7 @@ import java.io.File;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 
+import com.covidsemfome.model.Contato;
 import com.covidsemfome.model.Pessoa;
 import com.tedros.util.TEmailUtil;
 import com.tedros.util.TFileUtil;
@@ -37,6 +38,24 @@ public class EmailBO {
 		
 		//Envia email de boas vindas
 		util.sent(true, emailAccount, p.getLoginName(), "Bem vindo a ONG Covid Sem Fome", content, true);
+				
+	}
+	
+	public void enviarEmailNovoVoluntario(Pessoa p){
+		
+		String cel = "";
+		for(Contato c : p.getContatos())
+			if(c.getTipo().equals("2"))
+				cel = c.getDescricao();
+		
+		
+		String content = "Um novo cadastro acaba de ser realizado pelo site. "
+				+ "<br>Nome: "+p.getNome() 
+				+ "<br>Email: "+p.getLoginName()
+				+ "<br>Cel/Tel: "+cel;
+		
+		//Envia email de boas vindas
+		util.sent(true, emailAccount,"davis.dun@gmail.com", "[Covid Sem Fome] Novo cadastro de voluntário realizado pelo site", content, true);
 				
 	}
 

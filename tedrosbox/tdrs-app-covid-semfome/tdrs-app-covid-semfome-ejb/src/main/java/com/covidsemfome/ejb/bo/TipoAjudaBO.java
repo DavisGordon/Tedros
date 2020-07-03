@@ -6,6 +6,8 @@
  */
 package com.covidsemfome.ejb.bo;
 
+import java.util.List;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
@@ -31,5 +33,8 @@ public class TipoAjudaBO extends TGenericBO<TipoAjuda> {
 		return eao;
 	}
 	
+	public List<TipoAjuda> listar(String tipo){
+		return eao.listar(tipo);
+	}
 
 }
