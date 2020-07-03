@@ -3,7 +3,6 @@
  */
 package com.covidsemfome.ejb.service;
 
-import javax.ejb.Singleton;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
@@ -20,7 +19,6 @@ import com.tedros.ejb.base.service.TResult.EnumResult;
  * @author Davis Gordon
  *
  */
-@Singleton
 @Stateless(name="IAutUserService")
 public class AutUserService extends TEjbService<User> implements IAutUserService {
 

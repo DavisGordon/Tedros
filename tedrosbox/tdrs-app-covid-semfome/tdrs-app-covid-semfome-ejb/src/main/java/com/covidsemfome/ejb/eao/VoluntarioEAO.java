@@ -28,4 +28,24 @@ public class VoluntarioEAO extends TGenericEAO<Voluntario> {
 		return (Voluntario) qry.getSingleResult();
 	}
 	
+	@Override
+	public void afterRemove(Voluntario entity) throws Exception {
+		flush();
+	}
+
+	@Override
+	public void afterPersist(Voluntario entity) throws Exception {
+		flush();
+	}
+	
+	@Override
+	public void afterMerge(Voluntario entity) throws Exception {
+		flush();
+	}
+	
+	private void flush() {
+		super.getEntityManager().flush();
+	}
+	
+	
 }

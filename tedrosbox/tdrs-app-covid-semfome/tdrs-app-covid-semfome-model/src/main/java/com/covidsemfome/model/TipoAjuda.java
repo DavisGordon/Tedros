@@ -3,8 +3,11 @@
  */
 package com.covidsemfome.model;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -22,6 +25,11 @@ import com.tedros.ejb.base.entity.TEntity;
 @Table(name = DomainTables.tipoajuda, schema = DomainSchema.riosemfome)
 public class TipoAjuda extends TEntity {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8223281647325887233L;
+
 	@Column(length=60)
 	private String descricao;
 	
@@ -30,7 +38,7 @@ public class TipoAjuda extends TEntity {
 	
 	@Column(length=2)
 	private String tipoPessoa;
-
+	
 	/**
 	 * @return the descricao
 	 */
@@ -82,4 +90,5 @@ public class TipoAjuda extends TEntity {
 	public boolean equals(Object obj) {
 		return EqualsBuilder.reflectionEquals(this, obj, false);
 	}
+
 }

@@ -5,6 +5,7 @@ package com.covidsemfome.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +15,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.covidsemfome.domain.DomainSchema;
 import com.covidsemfome.domain.DomainTables;
@@ -44,7 +48,10 @@ public class Voluntario extends TEntity {
 	@Column(length=60 )
 	private String status;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {
+	        CascadeType.PERSIST,
+	        CascadeType.MERGE
+	    })
 	@JoinTable(	name=DomainTables.vol_tipoajuda,
 				schema=DomainSchema.riosemfome,
 				joinColumns= @JoinColumn(name="vol_id"),
@@ -105,6 +112,16 @@ public class Voluntario extends TEntity {
 	 */
 	public void setTiposAjuda(Set<TipoAjuda> tiposAjuda) {
 		this.tiposAjuda = tiposAjuda;
+	}
+	
+	@Override
+	public int hashCode() {
+		return HashCodeBuilder.reflectionHashCode(this, false);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return EqualsBuilder.reflectionEquals(this, obj, false);
 	}
 
 }

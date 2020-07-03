@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import com.covidsemfome.ejb.bo.EmailBO;
@@ -41,6 +43,7 @@ public class PessoaService extends TEjbService<Pessoa> implements IPessoaService
 	}
 	
 	@Override
+	@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
 	public TResult<Pessoa> remove(Pessoa entidade) {
 		
 		List<User> lst = userBO.recuperar(entidade);
@@ -79,10 +82,9 @@ public class PessoaService extends TEjbService<Pessoa> implements IPessoaService
 		}
 		
 	}
-
+	
+	@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
 	public TResult<Pessoa> saveFromSite(Pessoa entidade) {
-		
-		
 		String email = null;
 		String tel = null;
 		if(entidade.getContatos()!=null){
@@ -101,7 +103,7 @@ public class PessoaService extends TEjbService<Pessoa> implements IPessoaService
 		TResult<Pessoa>  res = super.save(entidade);
 		
 		emailBO.enviarEmailBoasVindas(entidade);
-		
+		emailBO.enviarEmailNovoVoluntario(entidade);
 		
 		return res;
 	}

@@ -103,9 +103,48 @@
     			$('#frm').ajaxForm( { beforeSubmit: validate, success: showResponse  } ); 
     			 
     			carregarDadosPessoais();
-    			carregarAcoes();
+    			ltpf();
     			
     		});
+    		var tpf;
+    		var tpj;
+    		function ltpf(){
+    			$.ajax
+    		    ({ 
+    		        url: '../api/painel/tiposAjuda/PF',
+    		        type: 'get',
+    		        dataType:'json',
+    		        headers : {'Content-Type' : 'application/json'},
+    		        success: function(result)
+    		        {
+    		        	if(result.code == "200"){
+    		        		tpf = result.data;
+    		        	}else{
+    		        		alert(result.message);
+    		        	}
+    		        	ltpj();
+    		    	}
+    			}); 
+    		}
+    		
+    		function ltpj(){
+    			$.ajax
+    		    ({ 
+    		        url: '../api/painel/tiposAjuda/PJ',
+    		        type: 'get',
+    		        dataType:'json',
+    		        headers : {'Content-Type' : 'application/json'},
+    		        success: function(result)
+    		        {
+    		        	if(result.code == "200"){
+    		        		tpj = result.data;
+    		        	}else{
+    		        		alert(result.message);
+    		        	}
+    		        	carregarAcoes();
+    		    	}
+    			}); 
+    		}
     		
     		function logout(){
     			$.ajax
@@ -195,24 +234,72 @@
     			if(result.code == "200"){
 	        		 if(result.data){
 	        			 var content = "";
-	        			 
+	        			 var frms = [];
 	        			$.each(result.data, function(index,obj){
-	        				 
+	        				
+	        				frms.push('frm'+index);
+	        				
 	        				content += ('<header>');
 	        				content += ('<h1>' + obj.titulo + '</h1>');
 	        				content += ('<p>' + obj.data + ', ' + obj.status + ', Inscritos(' + obj.qtdVoluntariosInscritos + '), Max(' + obj.qtdMaxVoluntarios + '), Min(' + obj.qtdMinVoluntarios + ')</p>');
 	        				content += ('</header>');
 	        				content += ('<p>' + obj.descricao + '</p>');
-	        				if(obj.status=='Agendada'){
-								if(!obj.inscrito){
-	                           	 content += ('<a id="pa'+obj.id+'" href="javascript: participar(\'pa'+obj.id+'\', '+ obj.id +')" class="button fit small wide smooth-scroll-middle">Participar</a>');
-	                            }else{
-	                           	 content += ('<a id="pa'+obj.id+'" href="javascript: sair(\'pa'+obj.id+'\', '+ obj.id +')" class="button fit small wide smooth-scroll-middle">Sair da ação</a>');
+	        				
+	        				if(obj.status=='Agendada' && (tpf || tpj)){
+	        					content += ('<div class="content">');
+		        				content += ('<h2>Quero participar</h2>');
+		        				content += ('<form name="frm'+index+'" id="frm'+index+'" method="post" action="../api/painel/acao/participar/"><p>');
+		        				content += ('<input type="hidden" name="id" id="id" value="'+obj.id+'" /> ');
+	        					content += ('<div class="fields">');
+		        				if(tpf){
+			        				content += ('<div class="field half"><h3>Como pessoa fisica:</h3>');
+			        				
+			        				$.each(tpf, function(index2,obj2){
+			        					var chk = '';
+			        					$.each(obj.tiposAjuda, function(index3,obj3){
+			        						if(obj2.id==obj3.id){
+			        							chk = 'checked';
+			        						}
+			        					});
+			        					content += ('<input type="checkbox" '+chk+' name="tiposAjuda" id="tiposAjudapf'+obj.id+'_'+index2+'" value="'+obj2.id+'" /> ');
+			        					content += ('<label for="tiposAjudapf'+obj.id+'_'+index2+'">'+obj2.descricao+'</label><hr>');
+			        				});
+			        				content += ('</p></div>');
+		        				}
+		        				if(tpj){
+			        				content += ('		<div class="field half"><h3>Como pessoa juridica:</h3><p>');
+			        				$.each(tpj, function(index2,obj2){
+			        					var chk = '';
+			        					$.each(obj.tiposAjuda, function(index3,obj3){
+			        						if(obj2.id==obj3.id){
+			        							chk = 'checked';
+			        						}
+			        					});
+			        					content += ('<input type="checkbox" '+chk+' name="tiposAjuda" id="tiposAjudapj'+obj.id+'_'+index2+'" value="'+obj2.id+'" />');
+			        					content += ('<label for="tiposAjudapj'+obj.id+'_'+index2+'">'+obj2.descricao+'</label><hr>');
+			        				});
+			        				content += ('</p></div>');
+		        				}
+		        				content += ('	</div>');
+		        				content += ('	<ul class="actions">');
+		        				content += ('		<li><input type="submit" name="submit" id="submit" value="Participar" /></li>');
+		        				
+		        				if(obj.inscrito){
+	                           		content += ('<li><a id="pa'+obj.id+'" href="javascript: sair(\'pa'+obj.id+'\', '+ obj.id +')" class="button fit small wide smooth-scroll-middle">Sair da ação</a></li>');
 	                            }
+		        				
+		        				content += ('</ul>');
+		        				content += ('</form>');
+		        				content += ('</div>');
 	        				}
                             content += ('<hr />');
 	        				});
+		        					
 	        			 $("#acoesContent").html(content);
+	        			 
+	        			 frms.forEach(function(value){
+	        				 $('#'+value).ajaxForm( { beforeSubmit: validateTpa, success: showResponseTpa  } );
+	        			 });
 	        		 }
 	        	}else{
 	        		alert(result.message);
@@ -240,7 +327,16 @@
 	        	}
     		}
     		
-    		function validate(formData, jqForm, options) { 
+    		function validateTpa(formData, jqForm, options) { 
+    		    
+    		    var form = jqForm[0]; 
+    		    if (form.tiposAjuda[0]=='') { 
+    		        alert('Por favor selecionar uma forma de como deseja ajudar.'); 
+    		        return false; 
+    		    } 
+    		}
+    		
+			function validate(formData, jqForm, options) { 
     		    
     		    var form = jqForm[0]; 
     		    if ((!form.name.value || !form.email.value || $('#voluntario').fieldValue()[0]=='')) { 
@@ -257,6 +353,19 @@
 	        		alert(result.message);
 	        	}
     		} 
+    		
+    		function showResponseTpa(result, statusText, xhr, $form)  { 
+    			if(result.code == "200"){
+    				processarAcoes(result);
+    		    	alert("Obrigado sua intenção em ajudar foi registrada e em breve entraremos em contato ou se desejar entre em contato conosco!");
+    			}else{
+	        		alert(result.message);
+	        	}
+    		} 
+    		
+    		
+    		
+    		
     		
     		</script>
 

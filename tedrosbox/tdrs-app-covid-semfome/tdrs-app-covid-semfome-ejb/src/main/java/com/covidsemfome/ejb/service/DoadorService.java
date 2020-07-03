@@ -9,8 +9,6 @@ package com.covidsemfome.ejb.service;
 import java.util.Date;
 import java.util.List;
 
-import javax.ejb.Remote;
-import javax.ejb.Singleton;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
@@ -25,8 +23,7 @@ import com.tedros.ejb.base.service.TResult.EnumResult;
  *
  * @author Davis Gordon
  *
- */
-@Singleton
+ **/
 @Stateless(name="TDoadorService")
 public class DoadorService extends TEjbService<Doador> implements IDoadorService {
 	

@@ -23,10 +23,12 @@ import javax.ws.rs.core.MediaType;
 import com.covidsemfome.ejb.service.IAcaoService;
 import com.covidsemfome.ejb.service.IAutUserService;
 import com.covidsemfome.ejb.service.IPessoaService;
-import com.covidsemfome.ejb.service.IVoluntarioService;
+import com.covidsemfome.ejb.service.ITipoAjudaService;
+import com.covidsemfome.ejb.service.IVoluntarioController;
 import com.covidsemfome.model.Acao;
 import com.covidsemfome.model.Contato;
 import com.covidsemfome.model.Pessoa;
+import com.covidsemfome.model.TipoAjuda;
 import com.covidsemfome.model.Voluntario;
 import com.covidsemfome.rest.model.AcaoModel;
 import com.covidsemfome.rest.model.RestModel;
@@ -135,17 +137,34 @@ public class PainelApi {
 		}
 	}
 	
-	
-	
-	@POST
-	@Path("/acao/participar/{id}")
-	public RestModel<List<AcaoModel>> participar(@PathParam("id") Long id){
+	@GET
+	@Path("/tiposAjuda/{tipo}")
+	public RestModel<List<TipoAjuda>> listaTiposAjuda(@PathParam("tipo") String tipo){
 		
 		ServiceLocator loc =  ServiceLocator.getInstance();
 		
 		try {
-			IVoluntarioService serv = loc.lookup("IVoluntarioServiceRemote");
-			TResult<List<Acao>> res = serv.participarEmAcao(covidUserBean.getUser().getPessoa(), id);
+			ITipoAjudaService serv = loc.lookup("ITipoAjudaServiceRemote");
+			TResult<List<TipoAjuda>> res = serv.listar(tipo);
+			loc.close();
+			System.out.println( "Tipo ajuda para "+tipo+" recuperado com sucesso!");
+			return new RestModel<>(res.getValue(), "200", "OK");
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return new RestModel<>(null, "500", ERROR);
+		}
+	}
+	
+	@POST
+	@Path("/acao/participar/")
+	public RestModel<List<AcaoModel>> participar(@FormParam("id") Long id, @FormParam("tiposAjuda") List<Long> tiposAjuda){
+		
+		ServiceLocator loc =  ServiceLocator.getInstance();
+		
+		try {
+			IVoluntarioController serv = loc.lookup("IVoluntarioControllerRemote");
+			TResult<List<Acao>> res = serv.participarEmAcao(covidUserBean.getUser().getPessoa(), id, tiposAjuda);
 			loc.close();
 			System.out.println(covidUserBean.getUser().getPessoa().getNome()+ " participando com sucesso a acao "+id.toString());
 			return processarAcoes(res);
@@ -164,7 +183,7 @@ public class PainelApi {
 		ServiceLocator loc =  ServiceLocator.getInstance();
 		
 		try {
-			IVoluntarioService serv = loc.lookup("IVoluntarioServiceRemote");
+			IVoluntarioController serv = loc.lookup("IVoluntarioControllerRemote");
 			TResult<List<Acao>> res = serv.sairDaAcao(covidUserBean.getUser().getPessoa(), id);
 			loc.close();
 			System.out.println(covidUserBean.getUser().getPessoa().getNome()+ " saiu com sucesso da acao "+id.toString());
@@ -211,18 +230,21 @@ public class PainelApi {
 					Integer qtdVolIns = acao.getVoluntarios()!=null 
 							? acao.getVoluntarios().size() 
 									: 0;
-							
+					List<TipoAjuda> lst2 = new ArrayList<>();
 					if(acao.getVoluntarios()!=null)
 						for(Voluntario v : acao.getVoluntarios())
 							if(v.getPessoa().getId().equals(pessoa.getId())){
 								inscrito = true;
+								for(TipoAjuda t : v.getTiposAjuda())
+									if(t.getStatus().equals("ATIVADO"))
+										lst2.add(t);
 								break;
 							}
 					
 					AcaoModel model = new AcaoModel(acao.getId(), acao.getTitulo(), acao.getDescricao(), 
 							formataDataHora(acao.getData()), acao.getStatus(), acao.getObservacao(), 
 							acao.getQtdMinVoluntarios(), acao.getQtdMaxVoluntarios(), qtdVolIns, 
-							inscrito);
+							inscrito, lst2);
 					models.add(model);
 					
 				}

@@ -1,8 +1,8 @@
 package com.tedros.core.ejb.service;
 
-import javax.ejb.Remote;
-import javax.ejb.Singleton;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import com.tedros.core.ejb.bo.TUserBO;
@@ -14,7 +14,6 @@ import com.tedros.ejb.base.service.TResult;
 import com.tedros.ejb.base.service.TResult.EnumResult;
 
 
-@Singleton
 @Stateless(name="TUserService")
 public class TUserServiceImpl extends TEjbService<TUser>	implements	TUserService {
 
@@ -36,7 +35,7 @@ public class TUserServiceImpl extends TEjbService<TUser>	implements	TUserService
 			return new TResult<TUser>(EnumResult.ERROR, e.getMessage());
 		}
 	}
-	
+	@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
 	public TResult<TUser> saveActiveProfile(TProfile profile, Long userId) {
 		try{
 			bo.saveActiveProfile(profile, userId);

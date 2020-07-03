@@ -3,6 +3,10 @@
  */
 package com.covidsemfome.rest.model;
 
+import java.util.List;
+
+import com.covidsemfome.model.TipoAjuda;
+
 /**
  * @author Davis Gordon
  *
@@ -28,13 +32,13 @@ public class AcaoModel {
 	private Integer qtdVoluntariosInscritos;
 	
 	private boolean inscrito;
+	
+	private List<TipoAjuda> tiposAjuda;
 
-	
-	
 	public AcaoModel(Long id, String titulo, String descricao, 
 			String data, String status, String observacao, 
 			Integer qtdMinVoluntarios,  Integer qtdMaxVoluntarios, Integer qtdVoluntariosInscritos,
-			boolean inscrito) {
+			boolean inscrito, List<TipoAjuda> tiposAjuda) {
 		
 		this.id = id;
 		this.titulo = titulo;
@@ -46,6 +50,7 @@ public class AcaoModel {
 		this.qtdMaxVoluntarios = qtdMaxVoluntarios;
 		this.qtdVoluntariosInscritos = qtdVoluntariosInscritos;
 		this.inscrito = inscrito;
+		this.tiposAjuda = tiposAjuda;
 		
 	}
 
@@ -187,5 +192,19 @@ public class AcaoModel {
 	 */
 	public void setInscrito(boolean inscrito) {
 		this.inscrito = inscrito;
+	}
+
+	/**
+	 * @return the tiposAjuda
+	 */
+	public List<TipoAjuda> getTiposAjuda() {
+		return tiposAjuda;
+	}
+
+	/**
+	 * @param tiposAjuda the tiposAjuda to set
+	 */
+	public void setTiposAjuda(List<TipoAjuda> tiposAjuda) {
+		this.tiposAjuda = tiposAjuda;
 	}
 }
