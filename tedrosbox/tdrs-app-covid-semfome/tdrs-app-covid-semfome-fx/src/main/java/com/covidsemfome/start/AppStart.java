@@ -1,7 +1,7 @@
 package com.covidsemfome.start;
 
 import com.covidsemfome.module.acao.AcaoModule;
-import com.covidsemfome.module.acao.AcaoVoluntarioModule;
+import com.covidsemfome.module.acao.MailingModule;
 import com.covidsemfome.module.acao.icon.AcaoIconImageView;
 import com.covidsemfome.module.acao.icon.AcaoMenuIconImageView;
 import com.covidsemfome.module.doador.DoadorModule;
@@ -31,7 +31,7 @@ module = {	@TModule(type=DoadorModule.class, name="#{label.donor}", menu="#{app.
 					icon=PessoaIconImageView.class, menuIcon=PessoaMenuIconImageView.class),
 			@TModule(type=AcaoModule.class, name="Ação", menu="Painel do voluntário", 
 					icon=AcaoIconImageView.class, menuIcon=AcaoMenuIconImageView.class),
-			@TModule(type=AcaoVoluntarioModule.class, name="Voluntarios inscritos", menu="Painel do voluntário"/*, 
+			@TModule(type=MailingModule.class, name="Mailing", menu="Painel do voluntário"/*, 
 					icon=AcaoIconImageView.class, menuIcon=AcaoMenuIconImageView.class*/),
 			@TModule(type=CadastroVoluntarioModule.class, name="Cadastrar Voluntários", menu="Painel do voluntário"/*, 
 					icon=AcaoIconImageView.class, menuIcon=AcaoMenuIconImageView.class*/),

@@ -3,7 +3,7 @@
  */
 package com.covidsemfome.module.acao;
 
-import com.covidsemfome.module.acao.model.AcaoVoluntarioModelView;
+import com.covidsemfome.module.acao.model.MailingModelView;
 import com.tedros.core.TModule;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
@@ -13,16 +13,16 @@ import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
  * @author Davis Gordon
  *
  */
-@TSecurity(	id="COVSEMFOME_ACAOVOL_MODULE", appName = "#{app.name}", moduleName = "Voluntários Inscritos", 
+@TSecurity(	id="COVSEMFOME_MAIL_MODULE", appName = "#{app.name}", moduleName = "Mailing", 
 allowedAccesses=TAuthorizationType.MODULE_ACCESS)
-public class AcaoVoluntarioModule extends TModule {
+public class MailingModule extends TModule {
 
 	/* (non-Javadoc)
 	 * @see com.tedros.core.ITModule#tStart()
 	 */
 	@Override
 	public void tStart() {
-		TDynaView<AcaoVoluntarioModelView> view = new TDynaView<>(this, AcaoVoluntarioModelView.class);
+		TDynaView<MailingModelView> view = new TDynaView<>(this, MailingModelView.class);
 		tShowView(view);
 	}
 

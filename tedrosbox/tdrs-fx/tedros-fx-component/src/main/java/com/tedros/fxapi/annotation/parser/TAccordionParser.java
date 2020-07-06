@@ -59,12 +59,10 @@ public class TAccordionParser extends TAnnotationParser<TAccordion, Accordion> {
 				titledPane.setContent(layout);
 				callParser(tTitledPane, titledPane, getComponentDescriptor());
 				object.getPanes().add(titledPane);
-				
-			}/*else{
-			TODO: content()	
-			}*/
+				if(titledPane.getId()!=null && annotation.expandedPane().equals(titledPane.getId()))
+					object.setExpandedPane(titledPane);
+			}
 		}
-		
 		super.parse(annotation, object, "panes");
 	}
 }

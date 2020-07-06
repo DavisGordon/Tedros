@@ -14,28 +14,35 @@ import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBuilder;
 import javafx.scene.control.Label;
 import javafx.scene.control.LabelBuilder;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.VBoxBuilder;
+import javafx.scene.web.WebView;
+import javafx.scene.web.WebViewBuilder;
 
 /**
  * @author Davis Gordon
  *
  */
-public class AcaoVoluntarioDecorator<M extends TEntityModelView> extends TDynaViewCrudBaseDecorator<M> {
+public class MailingDecorator<M extends TEntityModelView> extends TDynaViewCrudBaseDecorator<M> {
 
 	private VBox 		tListViewLayout;
     private Label 		tListViewTitle;
     private ListView<M> tListView;
-    
+     
     private double hideWidth = 4;
     private double listViewMaxWidth = 250;
     private double listViewMinWidth = 250;
-  
+    
     @SuppressWarnings("unchecked")
 	public void decorate() {
 		
@@ -62,21 +69,20 @@ public class AcaoVoluntarioDecorator<M extends TEntityModelView> extends TDynaVi
 			buildTBreadcrumbForm();
 		
 		buildColapseButton(null);
-		//buildNewButton(null);
-		//buildDeleteButton(null);
-		buildSaveButton(null);
 		buildCancelButton(null);
-		//buildModesRadioButton(null, null);
+		buildSaveButton(null);
+		
+		buildModesRadioButton(null, "Ver email");
+		
 		
 		// add the buttons at the header tool bar
 		addItemInTHeaderToolBar(gettColapseButton(), gettSaveButton(), gettCancelButton());
 		
 		// add the mode radio buttons
-		//addItemInTHeaderHorizontalLayout(gettEditModeRadio(), gettReadModeRadio());
+		addItemInTHeaderHorizontalLayout(gettEditModeRadio(), gettReadModeRadio());
 		
 		// set padding at rigth in left content pane
 		addPaddingInTLeftContent(0, 4, 0, 0);
-		
 		
 		// build the list view
 		tListView = new ListView<>();

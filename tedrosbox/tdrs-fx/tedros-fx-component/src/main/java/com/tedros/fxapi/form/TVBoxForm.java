@@ -36,6 +36,7 @@ extends VBox implements ITModelForm<M> {
 	@SuppressWarnings("rawtypes")
 	private ITPresenter presenter;
 	
+	
 	public TVBoxForm(M modelView) {
 		this.formEngine = new TFormEngine<M, TVBoxForm<M>>(this, modelView);
 		this.triggerLoader = new TTriggerLoader<M, TVBoxForm<M>>(this);

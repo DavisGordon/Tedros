@@ -5,37 +5,45 @@ package com.covidsemfome.module.acao.model;
 
 import java.util.Date;
 
-import com.covidsemfome.model.Acao;
+import com.covidsemfome.model.Mailing;
 import com.covidsemfome.model.Voluntario;
-import com.covidsemfome.module.acao.behavior.AcaoVoluntarioBehavior;
-import com.covidsemfome.module.acao.decorator.AcaoVoluntarioDecorator;
-import com.covidsemfome.module.acao.process.AcaoProcess;
+import com.covidsemfome.module.acao.behavior.MailingAction;
+import com.covidsemfome.module.acao.behavior.MailingBehavior;
+import com.covidsemfome.module.acao.decorator.MailingDecorator;
+import com.covidsemfome.module.acao.form.EmailTemplateForm;
+import com.covidsemfome.module.acao.process.MailingProcess;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
+import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
+import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
+import com.tedros.fxapi.annotation.control.TValidator;
 import com.tedros.fxapi.annotation.effect.TDropShadow;
 import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TForm;
+import com.tedros.fxapi.annotation.layout.TAccordion;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
+import com.tedros.fxapi.annotation.layout.TTitledPane;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEntityProcess;
-import com.tedros.fxapi.annotation.reader.TDetailReader;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
+import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.builder.DateTimeFormatBuilder;
@@ -57,18 +65,18 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TFormReaderHtml
-@TForm(name = "Voluntários inscritos", showBreadcrumBar=false)
-@TEntityProcess(process = AcaoProcess.class, entity=Acao.class)
+@TForm(name = "Mailing", showBreadcrumBar=false, form=EmailTemplateForm.class)
+@TEntityProcess(process = MailingProcess.class, entity=Mailing.class)
 @TPresenter(type = TDynaPresenter.class,
-			behavior = @TBehavior(type = AcaoVoluntarioBehavior.class), 
-			decorator = @TDecorator(type = AcaoVoluntarioDecorator.class, 
-									viewTitle="Voluntarios inscritos", listTitle="Acão"))
-@TSecurity(	id="COVSEMFOME_ACAOVOL_FORM", 
-			appName = "#{app.name}", moduleName = "Voluntários Inscritos", viewName = "Voluntarios inscritos",
-			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
-							TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
+			behavior = @TBehavior(type = MailingBehavior.class, 
+									saveAction=MailingAction.class, saveAllModels=false), 
+			decorator = @TDecorator(type = MailingDecorator.class, 
+									viewTitle="Mailing", listTitle="Acão", saveButtonText="Enviar email"))
+@TSecurity(	id="COVSEMFOME_MAIL_FORM", 
+			appName = "#{app.name}", moduleName = "Mailing", viewName = "Mailing",
+			allowedAccesses={TAuthorizationType.VIEW_ACCESS})
 
-public class AcaoVoluntarioModelView extends TEntityModelView<Acao> {
+public class MailingModelView extends TEntityModelView<Mailing> {
 	
 	private SimpleLongProperty id;
 	
@@ -82,39 +90,89 @@ public class AcaoVoluntarioModelView extends TEntityModelView<Acao> {
 	private SimpleStringProperty textoCadastro;
 	
 	@TReaderHtml
-	@TLabel(text="Titulo")
-	@TTextField(maxLength=100, 
-	textInputControl=@TTextInputControl(promptText="Titulo", parse = true),
-	required=true)
-	@THBox(	pane=@TPane(children={"titulo","data"}), spacing=10, fillHeight=true,
+	@TLabel(text="Titulo/Local")
+	@TTextField(node = @TNode(parse = true, disable=true))
+	@THBox(	pane=@TPane(children={"titulo","data","status"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="titulo", priority=Priority.ALWAYS), 
-   				   		@TPriority(field="data", priority=Priority.NEVER) }))
+   				   		@TPriority(field="data", priority=Priority.NEVER),
+   				   	@TPriority(field="status", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty titulo;
 	
-	@TReaderHtml
 	@TLabel(text="Data e Hora")
-	@TDatePickerField(required = false, dateFormat=DateTimeFormatBuilder.class)
+	@TDatePickerField( dateFormat=DateTimeFormatBuilder.class, node = @TNode(parse = true, disable=true))
 	private SimpleObjectProperty<Date> data;
 	
-	@TTextReaderHtml(text="Voluntários", 
-			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
-			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
-			cssForHtmlBox="", cssForContentValue="")
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
-	@TText(text="Voluntários", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
-	node=@TNode(id="t-form-title-text", parse = true))
-	private SimpleStringProperty textoCadastro2;
+	@TLabel(text="Status")
+	@THorizontalRadioGroup(required=true, alignment=Pos.CENTER_LEFT, spacing=4, 
+	node = @TNode(parse = true, disable=true),
+			radioButtons={
+					@TRadioButtonField(text = "Agendada", userData = "Agendada"),
+					@TRadioButtonField(text = "Cancelada", userData = "Cancelada"), 
+					@TRadioButtonField(text = "Executada", userData = "Executada")
+					})
+	private SimpleStringProperty status;
 	
-	@TDetailReader(label=@TLabel(text="Voluntários"))
+	@TLabel(text="Descricão")
+	@TTextAreaField(control=@TControl(prefWidth=250, prefHeight=50, parse = true))
+	private SimpleStringProperty descricao;
+	
+	@TAccordion(expandedPane="eem",
+			panes={
+					@TTitledPane(text="Voluntários inscritos", fields={"voluntarios"}),
+					@TTitledPane(text="Enviar email",node=@TNode(id="eem",parse = true), expanded=true, fields={"destino","tituloEmail", "conteudo","tituloBoxEmail","textoChaves"})})
 	@TTableView(editable=true,
 			columns = { @TTableColumn(cellValue="nome", text = "Nome", prefWidth=100)
 			})
 	@TModelViewCollectionType(entityClass=Voluntario.class, modelViewClass=VoluntarioTableView.class)
 	private ITObservableList<VoluntarioTableView> voluntarios;
+	
+	@TLabel(text="Destino:")
+	@TValidator(validatorClass = MailingDestinoValidator.class, associatedFieldsName={"emails"})
+	@THorizontalRadioGroup(required=true, alignment=Pos.CENTER_LEFT, spacing=4, 
+			radioButtons={
+					@TRadioButtonField(text = "Todos os voluntários", userData = "1"),
+					@TRadioButtonField(text = "Não inscritos", userData = "2"), 
+					@TRadioButtonField(text = "Somente Inscritos", userData = "3")
+					})
+	@THBox(	pane=@TPane(children={"destino","emails"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="destino", priority=Priority.ALWAYS), 
+   				   		@TPriority(field="emails", priority=Priority.ALWAYS)}))
+	private SimpleStringProperty destino;
+
+	@TLabel(text="Para")
+	@TTextField(textInputControl=@TTextInputControl(promptText="Insira os emails separados por virgula", parse = true))
+	private SimpleStringProperty emails;
+	
+	
+	@TLabel(text="Titulo")
+	@TTextField(required=true)
+	private SimpleStringProperty tituloEmail;
+	
+	@TLabel(text="Conteudo")
+	@TTextAreaField(required=true, wrapText=true, control=@TControl(prefWidth=250, prefHeight=150, parse = true))
+	private SimpleStringProperty conteudo;
+	
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
+	@TText(text="Chaves para substituição, insira a chave desejada para inserir uma informação. ex: #NOME# será substituido pelo nome do voluntário.", 
+	wrappingWidth=650,
+	font=@TFont(size=12), textAlignment=TextAlignment.LEFT, 
+	node=@TNode(id="t-label", parse = true))
+	private SimpleStringProperty tituloBoxEmail;
+	
+	//@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
+	@TText(text="#NOME# #TITULOACAO# #DESCRICAOACAO# #STATUSACAO# #DATAACAO# #QTDINSCRITOS# #QTDMINVOL# #QTDMAXVOL# #LINKPAINEL# #LINKSITE#", 
+			wrappingWidth=650,
+			font=@TFont(size=12), textAlignment=TextAlignment.LEFT, 
+	node=@TNode(id="t-label", parse = true))
+	private SimpleStringProperty textoChaves;
 
 
-	public AcaoVoluntarioModelView(Acao entity) {
+	public MailingModelView(Mailing entity) {
 		super(entity);
+		tituloEmail.setValue("[Covid Sem Fome] "+getModel().getTitulo());
+		conteudo.setValue("Olá #NOME#,<br> precisamos da sua ajuda para a campanha a ser realizada no dia #DATAACAO# e já temos #QTDINSCRITOS# inscrito(s) e precisamos de #QTDMINVOL#, você pode se inscrever pelo #LINKPAINEL# em nosso site. <br><br> "
+		+getModel().getDescricao()+"<br><br>Equipe Covid Sem Fome<br>#LINKSITE#");
+		
 	}
 	
 	@Override
@@ -123,8 +181,8 @@ public class AcaoVoluntarioModelView extends TEntityModelView<Acao> {
 		//	tl.stop();
 	}
 	
-	public AcaoVoluntarioModelView() {
-		super(new Acao());
+	public MailingModelView() {
+		super(new Mailing());
 	}
 
 	@Override
@@ -145,8 +203,8 @@ public class AcaoVoluntarioModelView extends TEntityModelView<Acao> {
 
 	
 	
-	public AcaoVoluntarioModelView getNewInstance(){
-		return new AcaoVoluntarioModelView(new Acao());
+	public MailingModelView getNewInstance(){
+		return new MailingModelView(new Mailing());
 	}
 	
 	@Override
@@ -162,10 +220,10 @@ public class AcaoVoluntarioModelView extends TEntityModelView<Acao> {
 	@Override
 	public boolean equals(Object obj) {
 		
-		if(obj == null || !(obj instanceof AcaoVoluntarioModelView))
+		if(obj == null || !(obj instanceof MailingModelView))
 			return false;
 		
-		AcaoVoluntarioModelView p = (AcaoVoluntarioModelView) obj;
+		MailingModelView p = (MailingModelView) obj;
 		
 		if(getId()!=null && getId().getValue()!=null &&  p.getId()!=null && p.getId().getValue()!=null){
 			if(!(getId().getValue().equals(Long.valueOf(0)) && p.getId().getValue().equals(Long.valueOf(0))))
@@ -235,18 +293,118 @@ public class AcaoVoluntarioModelView extends TEntityModelView<Acao> {
 		this.voluntarios = voluntarios;
 	}
 
+	
+
 	/**
-	 * @return the textoCadastro2
+	 * @return the status
 	 */
-	public SimpleStringProperty getTextoCadastro2() {
-		return textoCadastro2;
+	public SimpleStringProperty getStatus() {
+		return status;
 	}
 
 	/**
-	 * @param textoCadastro2 the textoCadastro2 to set
+	 * @param status the status to set
 	 */
-	public void setTextoCadastro2(SimpleStringProperty textoCadastro2) {
-		this.textoCadastro2 = textoCadastro2;
+	public void setStatus(SimpleStringProperty status) {
+		this.status = status;
+	}
+
+	/**
+	 * @return the descricao
+	 */
+	public SimpleStringProperty getDescricao() {
+		return descricao;
+	}
+
+	/**
+	 * @param descricao the descricao to set
+	 */
+	public void setDescricao(SimpleStringProperty descricao) {
+		this.descricao = descricao;
+	}
+
+	/**
+	 * @return the tituloBoxEmail
+	 */
+	public SimpleStringProperty getTituloBoxEmail() {
+		return tituloBoxEmail;
+	}
+
+	/**
+	 * @param tituloBoxEmail the tituloBoxEmail to set
+	 */
+	public void setTituloBoxEmail(SimpleStringProperty tituloBoxEmail) {
+		this.tituloBoxEmail = tituloBoxEmail;
+	}
+
+	/**
+	 * @return the tituloEmail
+	 */
+	public SimpleStringProperty getTituloEmail() {
+		return tituloEmail;
+	}
+
+	/**
+	 * @param tituloEmail the tituloEmail to set
+	 */
+	public void setTituloEmail(SimpleStringProperty tituloEmail) {
+		this.tituloEmail = tituloEmail;
+	}
+
+	/**
+	 * @return the conteudo
+	 */
+	public SimpleStringProperty getConteudo() {
+		return conteudo;
+	}
+
+	/**
+	 * @param conteudo the conteudo to set
+	 */
+	public void setConteudo(SimpleStringProperty conteudo) {
+		this.conteudo = conteudo;
+	}
+
+	/**
+	 * @return the textoChaves
+	 */
+	public SimpleStringProperty getTextoChaves() {
+		return textoChaves;
+	}
+
+	/**
+	 * @param textoChaves the textoChaves to set
+	 */
+	public void setTextoChaves(SimpleStringProperty textoChaves) {
+		this.textoChaves = textoChaves;
+	}
+
+	/**
+	 * @return the destino
+	 */
+	public SimpleStringProperty getDestino() {
+		return destino;
+	}
+
+	/**
+	 * @param destino the destino to set
+	 */
+	public void setDestino(SimpleStringProperty destino) {
+		this.destino = destino;
+	}
+
+	/**
+	 * @return the emails
+	 */
+	public SimpleStringProperty getEmails() {
+		return emails;
+	}
+
+	/**
+	 * @param emails the emails to set
+	 */
+	public void setEmails(SimpleStringProperty emails) {
+		this.emails = emails;
 	}
 
 
