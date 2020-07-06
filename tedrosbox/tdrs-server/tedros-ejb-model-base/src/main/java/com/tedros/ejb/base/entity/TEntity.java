@@ -36,6 +36,17 @@ public abstract class TEntity implements ITEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date insertDate;
 	
+	public TEntity() {
+	}
+	
+	public TEntity(Long id, Integer versionNum, Date lastUpdate, Date insertDate) {
+		super();
+		this.id = id;
+		this.versionNum = versionNum;
+		this.lastUpdate = lastUpdate;
+		this.insertDate = insertDate;
+	}
+	
 	public boolean isNew(){
 		return null==getId();
 	}

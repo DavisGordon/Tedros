@@ -77,6 +77,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	private Class<? extends TEntityProcess> entityProcessClass;
 	
 	private TDynaViewCrudBaseDecorator<M> decorator;
+
+	private boolean saveAllModels;
 	
 	@SuppressWarnings("unchecked")
 	public void load(){
@@ -105,7 +107,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			
 			//final TForm tForm = presenter.getFormAnnotation();
 			final TBehavior tBehavior = presenter.getPresenterAnnotation().behavior();
-		
+			
+			saveAllModels = tBehavior.saveAllModels();
+			
 			// set the custom behavior actions
 			if(tBehavior.saveAction()!=TPresenterAction.class)
 				saveAction = tBehavior.saveAction().newInstance();
@@ -441,6 +445,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		if(saveAction!=null)
 			saveAction.runAfter(presenter);
 	}
+	
+	
 
 	@SuppressWarnings("unchecked")
 	private void runSaveEntityProcess(final ObservableList<String> mensagens)
@@ -448,7 +454,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		//recupera a lista de models views
 		//final ObservableList<M> modelsViewsList = this.decorator.gettListView().getItems(); 
 		
-		final ObservableList<M> modelsViewsList = (ObservableList<M>) ((getModels()!=null) 
+		final ObservableList<M> modelsViewsList = (ObservableList<M>) ((saveAllModels && getModels()!=null) 
 				? getModels() 
 						: getModelView()!=null 
 						? FXCollections.observableList(Arrays.asList(getModelView())) 
@@ -481,9 +487,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 						E entity = (E) result.getValue();
 						if(entity!=null){
 							try {
-								//listView.getItems().set(index, modelViewClass.getConstructor(entityClass).newInstance(entityClass.newInstance()));
+								String msg = result.isPriorityMessage() 
+										? result.getMessage()
+												: iEngine.getFormatedString("#{tedros.fxapi.message.save}", model.getDisplayProperty().getValue());
 								model.reload(entity);
-								mensagens.add(iEngine.getFormatedString("#{tedros.fxapi.message.save}", model.getDisplayProperty().getValue()));
+								mensagens.add(msg);
 							} catch (Exception e) 
 							{	
 								mensagens.add(iEngine.getString("#{tedros.fxapi.message.error.save}")+"\n"+e.getMessage());
@@ -493,6 +501,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 						if(result.getResult().getValue() == EnumResult.ERROR.getValue()){
 							System.out.println(result.getMessage());
 							mensagens.add(result.getMessage());
+						}
+						if(result.getResult().getValue() == EnumResult.OUTDATED.getValue()){
+							System.out.println(result.getMessage());
+							mensagens.add(iEngine.getString("#{tedros.fxapi.message.outdate}"));
 						}
 					}	
 				}

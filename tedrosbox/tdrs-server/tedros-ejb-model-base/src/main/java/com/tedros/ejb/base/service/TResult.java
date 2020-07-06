@@ -36,9 +36,9 @@ public class TResult<E> implements Serializable {
 		}
 	}
 	
+	private boolean priorityMessage = false;
 	private EnumResult result;
 	private String message;
-	private String errorMessage;
 	private E value;
 	
 	public TResult() {
@@ -54,23 +54,23 @@ public class TResult<E> implements Serializable {
 		this.message = message;
 	}
 	
-	public TResult(EnumResult result, String message, String errorMessage) {
+	public TResult(EnumResult result, String message, boolean priorityMessage) {
 		this.result = result;
 		this.message = message;
-		this.errorMessage = errorMessage;
-	}
-	
-	public TResult(EnumResult result, String message, String errorMessage, E value) {
-		this.result = result;
-		this.message = message;
-		this.errorMessage = errorMessage;
-		this.value = value;
+		this.priorityMessage = priorityMessage;
 	}
 	
 	public TResult(EnumResult result, String message, E value) {
 		this.result = result;
 		this.message = message;
 		this.value = value;
+	}
+	
+	public TResult(EnumResult result, String message, E value, boolean priorityMessage) {
+		this.result = result;
+		this.message = message;
+		this.value = value;
+		this.priorityMessage = priorityMessage;
 	}
 	
 	public TResult(EnumResult result, E value) {
@@ -90,17 +90,26 @@ public class TResult<E> implements Serializable {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	public String getErrorMessage() {
-		return errorMessage;
-	}
-	public void setErrorMessage(String errorMessage) {
-		this.errorMessage = errorMessage;
-	}
+	
 	public E getValue() {
 		return value;
 	}
 	public void setValue(E value) {
 		this.value = value;
+	}
+
+	/**
+	 * @return the priorityMessage
+	 */
+	public boolean isPriorityMessage() {
+		return priorityMessage;
+	}
+
+	/**
+	 * @param priorityMessage the priorityMessage to set
+	 */
+	public void setPriorityMessage(boolean priorityMessage) {
+		this.priorityMessage = priorityMessage;
 	}
 	
 	

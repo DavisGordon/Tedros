@@ -69,6 +69,31 @@ public class Acao extends TEntity {
 	
 	@OneToMany(mappedBy="acao", fetch=FetchType.EAGER)
 	private List<Voluntario> voluntarios;
+	
+	public Acao() {
+		
+	}
+
+	public Acao(Long id, Integer versionNum, Date lastUpdate, Date insertDate, String titulo, String descricao,
+			Date data, String status, String observacao, Integer qtdMinVoluntarios, Integer qtdMaxVoluntarios,
+			BigDecimal vlrPrevisto, BigDecimal vlrArrecadado, BigDecimal vlrExecutado, List<Voluntario> voluntarios) {
+		super(id, versionNum, lastUpdate, insertDate);
+		this.titulo = titulo;
+		this.descricao = descricao;
+		this.data = data;
+		this.status = status;
+		this.observacao = observacao;
+		this.qtdMinVoluntarios = qtdMinVoluntarios;
+		this.qtdMaxVoluntarios = qtdMaxVoluntarios;
+		this.vlrPrevisto = vlrPrevisto;
+		this.vlrArrecadado = vlrArrecadado;
+		this.vlrExecutado = vlrExecutado;
+		this.voluntarios = voluntarios;
+	}
+
+
+
+
 
 	/**
 	 * @return the titulo

@@ -3,7 +3,7 @@ package com.covidsemfome.module.acao.behavior;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import com.covidsemfome.module.acao.decorator.AcaoVoluntarioDecorator;
+import com.covidsemfome.module.acao.decorator.MailingDecorator;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.service.TResult;
@@ -13,8 +13,6 @@ import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.modal.TMessageBox;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
-import com.tedros.fxapi.presenter.entity.behavior.TMainCrudViewWithListViewBehavior;
-import com.tedros.fxapi.presenter.entity.decorator.TMainCrudViewWithListViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.process.TEntityProcess;
@@ -33,15 +31,15 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
 
-public class AcaoVoluntarioBehavior<M extends TEntityModelView, E extends ITEntity>
+public class MailingBehavior<M extends TEntityModelView, E extends ITEntity>
 extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M, E> {
 	
-	private AcaoVoluntarioDecorator<M> decorator;
+	private MailingDecorator<M> decorator;
 	
 	@Override
 	public void load() {
 		super.load();
-		this.decorator = (AcaoVoluntarioDecorator<M>) getPresenter().getDecorator();
+		this.decorator = (MailingDecorator<M>) getPresenter().getDecorator();
 		initialize();
 	}
 		
@@ -68,15 +66,15 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 				}
 			});
 			
+			
+			
 			configColapseButton();
-			//configNewButton();
 			configSaveButton();
-			//configDeleteButton();
 			configListView();
 			configListViewCallBack();
-			//configModesRadio();
+			configModesRadio();
 			configCancelButton();
-			//setDisableModelActionButtons(true);
+			setDisableModelActionButtons(true);
 			this.decorator.showScreenSaver();
 			
 			// processo para listagem dos models
@@ -129,6 +127,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		}
 		
 	}
+	
 	
 	/**
 	 * Perform this action when a mode radio change listener is triggered.

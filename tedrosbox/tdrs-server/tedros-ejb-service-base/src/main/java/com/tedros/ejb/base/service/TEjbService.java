@@ -111,7 +111,7 @@ public abstract class TEjbService<E extends ITEntity> implements ITEjbService<E>
 			
 			String message = (result.getValue()==null) ? "REMOVED" : "OUTDATED";
 			
-			return new TResult<E>(EnumResult.OUTDATED, message, e.getMessage(), result.getValue());
+			return new TResult<E>(EnumResult.OUTDATED, message, result.getValue());
 		}else{
 			return new TResult<E>(EnumResult.ERROR, e.getMessage());
 		}

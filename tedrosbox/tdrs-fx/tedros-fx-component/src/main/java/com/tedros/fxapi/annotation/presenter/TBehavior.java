@@ -84,5 +84,13 @@ public @interface TBehavior {
 	@SuppressWarnings("rawtypes")
 	public Class<? extends TPresenterAction> cancelAction() default TPresenterAction.class;
 	
-	
+	/**
+	 * <pre>
+	 * Process the save action for all changed entity's if false only the current 
+	 * entity in edition is processed.
+	 * 
+	 * Default: true
+	 * </pre>
+	 * */
+	public boolean saveAllModels() default true;
 }

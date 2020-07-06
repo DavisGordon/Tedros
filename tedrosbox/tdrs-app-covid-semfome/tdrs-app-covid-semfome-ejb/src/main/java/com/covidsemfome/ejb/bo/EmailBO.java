@@ -33,6 +33,10 @@ public class EmailBO {
 	}
 	
 	
+	public void enviar(boolean debug, String to, String subject, String content, boolean html){
+		util.sent(debug, emailAccount, to, subject, content, html);
+	}
+	
 	public void enviarEmailBoasVindas(Pessoa p){
 		String content = gerarMsgBoasVindas(p.getNome());
 		
