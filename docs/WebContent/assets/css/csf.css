@@ -65,3 +65,13 @@
   max-height: 0;
   transition: max-height 0.2s ease-out;
 }
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+#map {
+        width: 400px;
+        height: 400px;
+        background-color: grey;
+      }
