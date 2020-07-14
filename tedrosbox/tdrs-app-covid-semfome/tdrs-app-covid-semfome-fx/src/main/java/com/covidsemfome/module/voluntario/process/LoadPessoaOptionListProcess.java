@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.covidsemfome.model.Pessoa;
-import com.tedros.ejb.base.service.TResult;
+import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.process.TOptionsProcess;
 
@@ -18,7 +18,7 @@ import com.tedros.fxapi.process.TOptionsProcess;
 public class LoadPessoaOptionListProcess extends TOptionsProcess {
 
 	public LoadPessoaOptionListProcess() throws TProcessException {
-		super(Pessoa.class, "IPessoaServiceRemote",true);
+		super(Pessoa.class, "IPessoaControllerRemote",true);
 		// TODO Auto-generated constructor stub
 	}
 

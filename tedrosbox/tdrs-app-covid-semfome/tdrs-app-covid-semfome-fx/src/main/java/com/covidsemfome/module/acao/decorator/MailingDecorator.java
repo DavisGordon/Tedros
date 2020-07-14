@@ -68,7 +68,7 @@ public class MailingDecorator<M extends TEntityModelView> extends TDynaViewCrudB
 		if(isShowBreadcrumBar())
 			buildTBreadcrumbForm();
 		
-		buildColapseButton(null);
+		//buildColapseButton(null);
 		buildCancelButton(null);
 		buildSaveButton(null);
 		
@@ -76,7 +76,7 @@ public class MailingDecorator<M extends TEntityModelView> extends TDynaViewCrudB
 		
 		
 		// add the buttons at the header tool bar
-		addItemInTHeaderToolBar(gettColapseButton(), gettSaveButton(), gettCancelButton());
+		addItemInTHeaderToolBar(gettSaveButton(), gettCancelButton());
 		
 		// add the mode radio buttons
 		addItemInTHeaderHorizontalLayout(gettEditModeRadio(), gettReadModeRadio());

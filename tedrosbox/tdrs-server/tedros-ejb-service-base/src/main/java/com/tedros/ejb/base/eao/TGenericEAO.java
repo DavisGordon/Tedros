@@ -30,7 +30,7 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 	@PostConstruct
 	protected void init(){
 		getEntityManager().setProperty("javax.persistence.cache.retrieveMode", "BYPASS");
-		getEntityManager().setProperty("javax.persistence.cache.storeMode", "BYPASS");
+		//getEntityManager().setProperty("javax.persistence.cache.storeMode", "BYPASS");
 	}
 	
 	public E find(E entity)throws Exception{

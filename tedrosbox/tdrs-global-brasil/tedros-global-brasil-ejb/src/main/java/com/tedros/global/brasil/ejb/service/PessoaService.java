@@ -13,9 +13,9 @@ import javax.ejb.Singleton;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.ejb.base.service.TEjbService;
-import com.tedros.ejb.base.service.TResult;
-import com.tedros.ejb.base.service.TResult.EnumResult;
 import com.tedros.global.brasil.ejb.bo.PessoaBO;
 import com.tedros.global.brasil.model.Contato;
 import com.tedros.global.brasil.model.Pessoa;
@@ -68,7 +68,7 @@ public class PessoaService extends TEjbService<Pessoa> implements IPessoaService
 			return new TResult<Pessoa>(EnumResult.WARNING);
 		}
 		
-		return super.save(entidade);
+		return null;//super.save(entidade);
 	}
 	
 }

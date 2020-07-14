@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.covidsemfome.model.TipoAjuda;
-import com.tedros.ejb.base.service.TResult;
+import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.process.TOptionsProcess;
 
@@ -18,7 +18,7 @@ import com.tedros.fxapi.process.TOptionsProcess;
 public class LoadTipoAjudaOptionListProcess extends TOptionsProcess {
 
 	public LoadTipoAjudaOptionListProcess() throws TProcessException {
-		super(TipoAjuda.class, "ITipoAjudaServiceRemote", true);
+		super(TipoAjuda.class, "ITipoAjudaControllerRemote", true);
 	}
 
 	/* (non-Javadoc)

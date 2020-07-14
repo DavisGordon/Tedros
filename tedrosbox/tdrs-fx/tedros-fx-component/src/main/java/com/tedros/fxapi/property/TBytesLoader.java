@@ -1,14 +1,14 @@
 package com.tedros.fxapi.property;
 
+import com.tedros.ejb.base.result.TResult;
+import com.tedros.fxapi.exception.TProcessException;
+import com.tedros.fxapi.process.TFileEntityLoadProcess;
+import com.tedros.global.model.TFileEntity;
+
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker.State;
-
-import com.tedros.ejb.base.service.TResult;
-import com.tedros.fxapi.exception.TProcessException;
-import com.tedros.fxapi.process.TFileEntityLoadProcess;
-import com.tedros.global.model.TFileEntity;
 
 public final class TBytesLoader {
 	

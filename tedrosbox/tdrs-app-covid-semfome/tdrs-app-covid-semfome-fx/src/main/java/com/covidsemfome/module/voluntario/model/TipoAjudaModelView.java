@@ -53,14 +53,14 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TFormReaderHtml
-@TForm(name = "Cadastrar tipo ajuda", showBreadcrumBar=true)
+@TForm(name = "Cadastrar tipos de ajuda", showBreadcrumBar=true)
 @TEntityProcess(process = TipoAjudaProcess.class, entity=TipoAjuda.class)
 @TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = TMainCrudViewWithListViewBehavior.class), 
 			decorator = @TDecorator(type = TMainCrudViewWithListViewDecorator.class, 
-									viewTitle="Cadastrar Tipo Ajuda", listTitle="#{label.select}"))
+									viewTitle="Tipos de ajuda voluntariado", listTitle="#{label.select}"))
 @TSecurity(	id="COVSEMFOME_CADTIPOAJUDA_FORM", 
-			appName = "#{app.name}", moduleName = "Painel do voluntário", viewName = "Cadastrar Tipo Ajuda",
+			appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Cadastrar Tipos de Ajuda",
 			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 							TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 
@@ -72,7 +72,7 @@ public class TipoAjudaModelView extends TEntityModelView<TipoAjuda> {
 	@TTextReaderHtml(text="Tipo de Ajuda", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
-			cssForHtmlBox="", cssForContentValue="")
+			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
 	@TText(text="Tipo de Ajuda", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 	node=@TNode(id="t-form-title-text", parse = true))

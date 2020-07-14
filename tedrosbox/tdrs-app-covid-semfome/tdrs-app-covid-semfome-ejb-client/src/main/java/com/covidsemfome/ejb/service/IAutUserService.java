@@ -7,8 +7,8 @@ import javax.ejb.Remote;
 
 import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.User;
+import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.service.ITEjbService;
-import com.tedros.ejb.base.service.TResult;
 
 /**
  * @author Davis Gordon

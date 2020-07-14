@@ -22,7 +22,7 @@ public class PessoaIconImageView extends TImageView {
 
 	@Override
 	public String getImagePathName() {
-		return "com/covidsemfome/module/pessoa/icon/icon.png";
+		return "com/covidsemfome/module/pessoa/icon/icone5.png";
 	}
 
 }

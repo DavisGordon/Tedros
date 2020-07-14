@@ -4,8 +4,8 @@ import javax.ejb.Remote;
 
 import com.tedros.core.security.model.TProfile;
 import com.tedros.core.security.model.TUser;
+import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.service.ITEjbService;
-import com.tedros.ejb.base.service.TResult;
 
 @Remote
 public interface TUserService extends ITEjbService<TUser>{

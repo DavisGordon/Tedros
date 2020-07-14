@@ -6,17 +6,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-import javafx.scene.paint.Color;
-
 import com.tedros.core.style.TStyleResourceName;
 import com.tedros.core.style.TStyleResourceValue;
-import com.tedros.ejb.base.service.TResult;
-import com.tedros.ejb.base.service.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.fxapi.process.TModelProcess;
 import com.tedros.settings.layout.model.PainelModel;
 import com.tedros.util.TColorUtil;
 import com.tedros.util.TFileUtil;
 import com.tedros.util.TedrosFolderEnum;
+
+import javafx.scene.paint.Color;
 
 /**
  * Process to save the custom styles defined by the user.

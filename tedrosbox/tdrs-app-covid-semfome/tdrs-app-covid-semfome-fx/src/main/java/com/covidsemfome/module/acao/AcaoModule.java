@@ -13,7 +13,7 @@ import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
  * @author Davis Gordon
  *
  */
-@TSecurity(	id="COVSEMFOME_ACAO_MODULE", appName = "#{app.name}", moduleName = "Painel do voluntário", 
+@TSecurity(	id="COVSEMFOME_ACAO_MODULE", appName = "#{app.name}", moduleName = "Gerenciar Campanha", 
 allowedAccesses=TAuthorizationType.MODULE_ACCESS)
 public class AcaoModule extends TModule {
 

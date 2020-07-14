@@ -10,6 +10,14 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import com.tedros.ejb.base.entity.ITEntity;
+import com.tedros.ejb.base.result.TResult;
+import com.tedros.fxapi.annotation.control.TComboBoxField;
+import com.tedros.fxapi.control.TItem;
+import com.tedros.fxapi.domain.TOptionProcessType;
+import com.tedros.fxapi.presenter.model.TModelView;
+import com.tedros.fxapi.process.TOptionsProcess;
+
 import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,14 +26,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
-
-import com.tedros.ejb.base.entity.ITEntity;
-import com.tedros.ejb.base.service.TResult;
-import com.tedros.fxapi.annotation.control.TComboBoxField;
-import com.tedros.fxapi.control.TItem;
-import com.tedros.fxapi.domain.TOptionProcessType;
-import com.tedros.fxapi.presenter.model.TModelView;
-import com.tedros.fxapi.process.TOptionsProcess;
 
 
 /**

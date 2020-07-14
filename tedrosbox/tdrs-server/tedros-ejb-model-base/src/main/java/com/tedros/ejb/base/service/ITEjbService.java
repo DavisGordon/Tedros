@@ -9,38 +9,32 @@ public interface ITEjbService<E extends ITEntity> {
 	/**
 	 * Retorna uma entidade pelo seu id
 	 * */
-	@SuppressWarnings("rawtypes")
-	public TResult find(E entidade);
+	public E find(E entidade)throws Exception ;
 	
 	/**
 	 * Pesquisa pelos atributos preenchidos
 	 * */
-	public TResult<List<E>> findAll(E entity)throws Exception;
+	public List<E> findAll(E entity)throws Exception;
 	
 	/**
 	 * Salva uma entidade
 	 * */
-	@SuppressWarnings("rawtypes")
-	public TResult save(E entidade);
+	public E save(E entidade)throws Exception;
 	/**
 	 * Remove uma entidade
 	 * */
-	@SuppressWarnings("rawtypes")
-	public TResult remove(E entidade);
+	public void remove(E entidade)throws Exception;
 	/**
 	 * Retorna uma lista com todas as entidades persistidas
 	 * */
-	@SuppressWarnings("rawtypes")
-	public TResult listAll(Class<? extends ITEntity> entidadeClass);
+	public List<E> listAll(Class<? extends ITEntity> entidadeClass)throws Exception;
 	/**
 	 * Retorna uma lista paginada
 	 * */
-	@SuppressWarnings("rawtypes")
-	public TResult pageAll(Class<? extends ITEntity> entidade, int firstResult, int maxResult);
+	public List<E> pageAll(Class<? extends ITEntity> entidade, int firstResult, int maxResult)throws Exception;
 	/**
 	 * Retorna a quantidade de registros cadastrados
 	 * */
-	@SuppressWarnings("rawtypes")
-	public TResult countAll(Class<? extends ITEntity> entidade);
+	public Long countAll(Class<? extends ITEntity> entidade)throws Exception;
 	
 }

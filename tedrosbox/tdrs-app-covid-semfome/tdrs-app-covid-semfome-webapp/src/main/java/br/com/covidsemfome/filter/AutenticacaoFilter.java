@@ -18,10 +18,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.covidsemfome.ejb.service.IAutUserService;
+import com.covidsemfome.ejb.controller.IAutUserController;
 import com.covidsemfome.model.User;
-import com.tedros.ejb.base.service.TResult;
-import com.tedros.ejb.base.service.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.result.TResult.EnumResult;
 
 import br.com.covidsemfome.bean.CovidUserBean;
 import br.com.covidsemfome.ejb.service.ServiceLocator;
@@ -88,7 +88,7 @@ public class AutenticacaoFilter implements Filter {
 		    ServiceLocator loc = ServiceLocator.getInstance();
 			
 			try {
-				IAutUserService serv = loc.lookup("IAutUserServiceRemote");
+				IAutUserController serv = loc.lookup("IAutUserControllerRemote");
 				TResult<Boolean> res = serv.validar(key.trim());
 				
 				if(res.getResult().equals(EnumResult.SUCESS)){

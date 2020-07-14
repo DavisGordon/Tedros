@@ -11,18 +11,18 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tedros.ejb.base.entity.ITEntity;
+import com.tedros.ejb.base.result.TResult;
+import com.tedros.fxapi.annotation.control.TPickListField;
+import com.tedros.fxapi.domain.TOptionProcessType;
+import com.tedros.fxapi.presenter.model.TModelView;
+import com.tedros.fxapi.process.TOptionsProcess;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker.State;
-
-import com.tedros.ejb.base.entity.ITEntity;
-import com.tedros.ejb.base.service.TResult;
-import com.tedros.fxapi.annotation.control.TPickListField;
-import com.tedros.fxapi.domain.TOptionProcessType;
-import com.tedros.fxapi.presenter.model.TModelView;
-import com.tedros.fxapi.process.TOptionsProcess;
 
 
 /**

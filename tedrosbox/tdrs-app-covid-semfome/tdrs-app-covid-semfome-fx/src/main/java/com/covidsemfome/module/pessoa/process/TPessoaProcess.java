@@ -9,7 +9,7 @@ package com.covidsemfome.module.pessoa.process;
 import java.util.List;
 
 import com.covidsemfome.model.Pessoa;
-import com.tedros.ejb.base.service.TResult;
+import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.process.TEntityProcess;
 
@@ -22,7 +22,7 @@ import com.tedros.fxapi.process.TEntityProcess;
 public class TPessoaProcess extends TEntityProcess<Pessoa> {
 
 	public TPessoaProcess() throws TProcessException {
-		super(Pessoa.class, "IPessoaServiceRemote", true);
+		super(Pessoa.class, "IPessoaControllerRemote", true);
 	}
 
 

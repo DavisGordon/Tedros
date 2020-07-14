@@ -4,8 +4,8 @@ import java.util.Date;
 
 import javax.ejb.Remote;
 
+import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.service.ITEjbService;
-import com.tedros.ejb.base.service.TResult;
 import com.tedros.global.brasil.model.Pessoa;
 
 @Remote

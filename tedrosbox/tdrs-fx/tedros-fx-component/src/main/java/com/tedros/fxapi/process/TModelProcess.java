@@ -2,7 +2,7 @@ package com.tedros.fxapi.process;
 
 import java.util.List;
 
-import com.tedros.ejb.base.service.TResult;
+import com.tedros.ejb.base.result.TResult;
 
 
 /**

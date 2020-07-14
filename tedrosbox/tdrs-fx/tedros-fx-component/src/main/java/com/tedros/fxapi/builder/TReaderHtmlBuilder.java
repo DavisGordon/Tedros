@@ -91,9 +91,12 @@ implements ITReaderHtmlBuilder<TReaderHtml, Property> {
 					System.out.println(html);
 					System.out.println("**************************************");
 					System.out.println(fieldName);*/
-					
-					String newValue = iEngine.getString(getValue(tAnnotation, arg2));
-					engine.executeScript("document.getElementById('"+fieldName+"').innerHTML = '"+newValue+"'");
+					try{
+						String newValue = iEngine.getString(getValue(tAnnotation, arg2));
+						engine.executeScript("if(document.getElementById('"+fieldName+"')) document.getElementById('"+fieldName+"').innerHTML = '"+newValue+"'");
+					}catch(Exception e){
+						System.err.println("WARNING: ERROR ON TReaderHtmlBuilder line 98 The listeners still active after read mode was changed to edit mode. "+e.getMessage());
+					}
 				};
 			}
 		};

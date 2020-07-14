@@ -19,13 +19,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.covidsemfome.ejb.service.IAutUserService;
+import com.covidsemfome.ejb.controller.IAutUserController;
+import com.covidsemfome.ejb.controller.IPessoaController;
 import com.covidsemfome.ejb.service.IPessoaService;
 import com.covidsemfome.model.Contato;
 import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.User;
-import com.tedros.ejb.base.service.TResult;
-import com.tedros.ejb.base.service.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.util.TEncriptUtil;
 
 import br.com.covidsemfome.bean.CovidUserBean;
@@ -77,7 +78,7 @@ public class PainelServlet extends HttpServlet {
 		    ServiceLocator loc = ServiceLocator.getInstance();
 			
 			try {
-				IAutUserService serv = loc.lookup("IAutUserServiceRemote");
+				IAutUserController serv = loc.lookup("IAutUserControllerRemote");
 				TResult<Boolean> res = serv.validar(key.trim());
 				
 				if(res.getResult().equals(EnumResult.SUCESS)){
@@ -127,7 +128,7 @@ public class PainelServlet extends HttpServlet {
 			ServiceLocator loc = ServiceLocator.getInstance();
 	
 			try {
-				IPessoaService service = (IPessoaService) loc.lookup("IPessoaServiceRemote");
+				IPessoaController service = (IPessoaController) loc.lookup("IPessoaControllerRemote");
 				
 				List<Contato> lst = new ArrayList();			
 				if(email!=null){

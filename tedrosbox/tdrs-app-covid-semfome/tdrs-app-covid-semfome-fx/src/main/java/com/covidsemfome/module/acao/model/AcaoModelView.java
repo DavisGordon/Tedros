@@ -62,14 +62,14 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TFormReaderHtml
-@TForm(name = "Cadastro de Ação", showBreadcrumBar=false)
+@TForm(name = "Ação / Campanha", showBreadcrumBar=false)
 @TEntityProcess(process = AcaoProcess.class, entity=Acao.class)
 @TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = TMainCrudViewWithListViewBehavior.class), 
 			decorator = @TDecorator(type = TMainCrudViewWithListViewDecorator.class, 
-									viewTitle="Ações", listTitle="#{label.select}"))
+									viewTitle="Ação / Campanha", listTitle="#{label.select}"))
 @TSecurity(	id="COVSEMFOME_ACAO_FORM", 
-			appName = "#{app.name}", moduleName = "Painel do voluntário", viewName = "Ação",
+			appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Ação / Campanha",
 			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 							TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 
@@ -80,12 +80,12 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	@TLongField(maxLength=6,node=@TNode(parse = true, disable=true) )
 	private SimpleLongProperty id;
 	
-	@TTextReaderHtml(text="Cadastrar acão", 
+	@TTextReaderHtml(text="Ação / Campanha", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
-			cssForHtmlBox="", cssForContentValue="")
+			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
-	@TText(text="Cadastrar acão", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
+	@TText(text="Ação / Campanha", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 	node=@TNode(id="t-form-title-text", parse = true))
 	private SimpleStringProperty textoCadastro;
 	
@@ -98,7 +98,7 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	
 	@TReaderHtml
 	@TLabel(text="Data e Hora")
-	@TDatePickerField(required = false, dateFormat=DateTimeFormatBuilder.class)
+	@TDatePickerField(required = true, dateFormat=DateTimeFormatBuilder.class)
 	@THBox(	pane=@TPane(children={"data","status"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="data", priority=Priority.ALWAYS), 
    				   		@TPriority(field="status", priority=Priority.ALWAYS) }))
@@ -150,7 +150,7 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	
 	@TReaderHtml
 	@TLabel(text="Descricão")
-	@TTextAreaField(maxLength=2000, control=@TControl(prefWidth=250, prefHeight=150, parse = true))
+	@TTextAreaField(required=true, maxLength=2000, control=@TControl(prefWidth=250, prefHeight=150, parse = true))
 	private SimpleStringProperty descricao;
 	
 	@TReaderHtml

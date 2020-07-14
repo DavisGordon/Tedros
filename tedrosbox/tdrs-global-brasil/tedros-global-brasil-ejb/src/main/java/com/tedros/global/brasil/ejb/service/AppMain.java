@@ -7,8 +7,8 @@ import java.util.Properties;
 
 import javax.naming.InitialContext;
 
+import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.service.ITEjbService;
-import com.tedros.ejb.base.service.TResult;
 import com.tedros.global.brasil.model.Documento;
 import com.tedros.global.brasil.model.Pessoa;
 
@@ -35,9 +35,9 @@ public class AppMain {
 			
 			d.setDataEmissao(new Date(2017,01,04));
 			
-			TResult<List<Pessoa>> l = myBean.findAll(pe);
+			List<Pessoa> l = myBean.findAll(pe);
 			
-			System.out.println(l.getResult());
+			System.out.println(l.size());
 			
 			
 			

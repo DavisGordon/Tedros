@@ -90,5 +90,10 @@ public class TipoAjuda extends TEntity {
 	public boolean equals(Object obj) {
 		return EqualsBuilder.reflectionEquals(this, obj, false);
 	}
+	
+	@Override
+	public String toString() {
+		return descricao;
+	}
 
 }

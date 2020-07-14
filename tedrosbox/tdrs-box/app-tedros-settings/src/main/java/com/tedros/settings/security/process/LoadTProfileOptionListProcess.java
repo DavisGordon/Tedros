@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.tedros.core.security.model.TProfile;
-import com.tedros.ejb.base.service.TResult;
+import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.process.TOptionsProcess;
 
@@ -18,7 +18,7 @@ import com.tedros.fxapi.process.TOptionsProcess;
 public class LoadTProfileOptionListProcess extends TOptionsProcess {
 
 	public LoadTProfileOptionListProcess() throws TProcessException {
-		super(TProfile.class, "TProfileServiceRemote", true);
+		super(TProfile.class, "TProfileControllerRemote", true);
 	}
 
 	/* (non-Javadoc)

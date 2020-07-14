@@ -5,7 +5,6 @@ package com.covidsemfome.model;
 
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -48,10 +47,7 @@ public class Voluntario extends TEntity {
 	@Column(length=60 )
 	private String status;
 	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = {
-	        CascadeType.PERSIST,
-	        CascadeType.MERGE
-	    })
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(	name=DomainTables.vol_tipoajuda,
 				schema=DomainSchema.riosemfome,
 				joinColumns= @JoinColumn(name="vol_id"),

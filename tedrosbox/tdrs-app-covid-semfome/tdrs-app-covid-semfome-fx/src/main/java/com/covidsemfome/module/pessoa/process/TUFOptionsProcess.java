@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.tedros.ejb.base.entity.ITEntity;
-import com.tedros.ejb.base.service.TResult;
+import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.process.TOptionsProcess;
 

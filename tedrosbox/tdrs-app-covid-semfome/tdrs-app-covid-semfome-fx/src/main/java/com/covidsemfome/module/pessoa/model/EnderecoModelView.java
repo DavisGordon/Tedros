@@ -10,13 +10,17 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.covidsemfome.model.Endereco;
 import com.tedros.fxapi.annotation.TCodeValue;
+import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TMaskField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
-import com.tedros.fxapi.annotation.control.TVerticalRadioGroup;
 import com.tedros.fxapi.annotation.form.TForm;
+import com.tedros.fxapi.annotation.layout.THBox;
+import com.tedros.fxapi.annotation.layout.THGrow;
+import com.tedros.fxapi.annotation.layout.TPane;
+import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
@@ -32,6 +36,7 @@ import com.tedros.fxapi.util.TPropertyUtil;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
+import javafx.scene.layout.Priority;
 
 /**
  * DESCRIÇÃO DA CLASSE
@@ -54,17 +59,20 @@ public class EnderecoModelView extends TEntityModelView<Endereco> {
 			@TCodeValue(code = "2", value = "#{label.work}"),
 			@TCodeValue(code = "3", value = "#{label.other}")})
 	@TLabel(text="Tipo")
-	@TVerticalRadioGroup(required=true, alignment=Pos.TOP_LEFT, spacing=4,
+	@THorizontalRadioGroup(required=true, alignment=Pos.TOP_LEFT, spacing=4,
 			radioButtons = {@TRadioButtonField(text="#{label.house}", userData="1"), 
-							@TRadioButtonField(text="#{label.job}", userData="2"),
+							@TRadioButtonField(text="#{label.work}", userData="2"),
 							@TRadioButtonField(text="#{label.other}", userData="3")
 			})
-	
+	@THBox(	pane=@TPane(children={"tipo","caixaPostal","cep"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="tipo", priority=Priority.ALWAYS), 
+   				   		@TPriority(field="caixaPostal", priority=Priority.NEVER),
+   				   		@TPriority(field="cep", priority=Priority.ALWAYS) }))
 	private SimpleStringProperty tipo;
 	
 	@TReaderHtml
 	@TLabel(text="Caixa Postal")
-	@TTextField(maxLength=60, control=@TControl(prefWidth=350, parse = true))
+	@TTextField(maxLength=60, control=@TControl(minWidth=80, parse = true))
 	private SimpleStringProperty caixaPostal;
 	
 	@TReaderHtml
@@ -79,7 +87,11 @@ public class EnderecoModelView extends TEntityModelView<Endereco> {
 	
 	@TReaderHtml
 	@TLabel(text="Tipo Logradouro")
-	@TTextField(maxLength=100, textInputControl=@TTextInputControl(promptText="Rua, Avenida, Pra�a...", parse = true), control=@TControl(prefWidth=350, parse = true))
+	@TTextField(maxLength=100, textInputControl=@TTextInputControl(promptText="Rua, Avenida...", parse = true), control=@TControl(prefWidth=350, parse = true))
+	@THBox(	pane=@TPane(children={"tipoLogradouro","logradouro","bairro"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="tipoLogradouro", priority=Priority.ALWAYS), 
+   				   		@TPriority(field="logradouro", priority=Priority.ALWAYS),
+   				   		@TPriority(field="bairro", priority=Priority.ALWAYS) }))
 	private SimpleStringProperty tipoLogradouro;
 	
 	@TReaderHtml

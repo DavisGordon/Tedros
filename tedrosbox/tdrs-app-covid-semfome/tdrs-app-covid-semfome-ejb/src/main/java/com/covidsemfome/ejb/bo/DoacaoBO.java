@@ -6,11 +6,15 @@
  */
 package com.covidsemfome.ejb.bo;
 
+import java.util.Date;
+import java.util.List;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import com.covidsemfome.ejb.eao.DoacaoEAO;
 import com.covidsemfome.model.Doacao;
+import com.covidsemfome.model.TipoAjuda;
 import com.tedros.ejb.base.bo.TGenericBO;
 import com.tedros.ejb.base.eao.ITGenericEAO;
 
@@ -31,8 +35,8 @@ public class DoacaoBO extends TGenericBO<Doacao> {
 		return eao;
 	}
 	
-	public void excluirTodos(final Long idPessoa)throws Exception{
-		eao.excluirTodos(idPessoa);
+	public List<Doacao> pesquisar(String nome, Date dataInicio, Date dataFim, Long acaoId, TipoAjuda tipoAjuda){
+		return eao.pesquisar(nome, dataInicio, dataFim, acaoId, tipoAjuda);
 	}
 
 }

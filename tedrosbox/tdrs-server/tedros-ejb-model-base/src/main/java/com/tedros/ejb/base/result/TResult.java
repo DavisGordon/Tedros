@@ -1,4 +1,4 @@
-package com.tedros.ejb.base.service;
+package com.tedros.ejb.base.result;
 
 import java.io.Serializable;
 
@@ -54,7 +54,7 @@ public class TResult<E> implements Serializable {
 		this.message = message;
 	}
 	
-	public TResult(EnumResult result, String message, boolean priorityMessage) {
+	public TResult(EnumResult result, boolean priorityMessage, String message) {
 		this.result = result;
 		this.message = message;
 		this.priorityMessage = priorityMessage;
@@ -66,7 +66,7 @@ public class TResult<E> implements Serializable {
 		this.value = value;
 	}
 	
-	public TResult(EnumResult result, String message, E value, boolean priorityMessage) {
+	public TResult(EnumResult result, boolean priorityMessage, String message, E value) {
 		this.result = result;
 		this.message = message;
 		this.value = value;
