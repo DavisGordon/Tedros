@@ -5,7 +5,10 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -23,34 +26,40 @@ public class Doacao extends TEntity {
 
 	private static final long serialVersionUID = -1610507713559488026L;
 	
-	@Column(length=20, nullable = false)
-	private String tipo;
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="TAJUDA_ID", nullable=false)
+	private TipoAjuda tipoAjuda;
 	
 	@Column(nullable = true)
 	private BigDecimal valor;
+	
+	@Column(nullable = true)
+	private Integer quantidade;
 	
 	@Column(name = "data", nullable = true)
 	@Temporal(TemporalType.DATE)
 	private Date data;
 	
-
-	@Column(name = "observacao", length=300, nullable = true)
+	@Column(name = "observacao", length=2000, nullable = true)
 	private String observacao;
 	
 	
-	@OneToOne
-	@JoinColumn(name = "doa_id", referencedColumnName = "id")
-	private Doador doador;
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="pess_id", nullable=false)
+	private Pessoa pessoa;
+	
+	@ManyToOne(targetEntity=Acao.class)
+	@JoinColumn(name="acao_id")
+	private Acao acao;
 
 	public Doacao() {
 	
 	}
 	
 	
-	
 	@Override
 	public String toString() {
-		return "{"+((getId()!=null) ? String.valueOf(getId())+", " :  "") + (tipo!=null?tipo+", ":"") + (valor!=null?valor+", ":"")+"} " ;
+		return "{"+((getId()!=null) ? String.valueOf(getId())+", " :  "") + (tipoAjuda!=null?tipoAjuda+", ":"") + (valor!=null?valor+", ":"")+"} " ;
 	}
 	
 	@Override
@@ -72,24 +81,23 @@ public class Doacao extends TEntity {
 		
 		return false;
 	}
-	
 
-	public String getObservacao() {
-		return observacao;
+
+
+	/**
+	 * @return the tipoAjuda
+	 */
+	public TipoAjuda getTipoAjuda() {
+		return tipoAjuda;
 	}
 
-	public void setObservacao(String observacao) {
-		this.observacao = observacao;
-	}
-	
-	
 
-	public String getTipo() {
-		return tipo;
-	}
 
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
+	/**
+	 * @param tipoAjuda the tipoAjuda to set
+	 */
+	public void setTipoAjuda(TipoAjuda tipoAjuda) {
+		this.tipoAjuda = tipoAjuda;
 	}
 
 
@@ -113,6 +121,24 @@ public class Doacao extends TEntity {
 
 
 	/**
+	 * @return the quantidade
+	 */
+	public Integer getQuantidade() {
+		return quantidade;
+	}
+
+
+
+	/**
+	 * @param quantidade the quantidade to set
+	 */
+	public void setQuantidade(Integer quantidade) {
+		this.quantidade = quantidade;
+	}
+
+
+
+	/**
 	 * @return the data
 	 */
 	public Date getData() {
@@ -131,20 +157,55 @@ public class Doacao extends TEntity {
 
 
 	/**
-	 * @return the doador
+	 * @return the observacao
 	 */
-	public Doador getDoador() {
-		return doador;
+	public String getObservacao() {
+		return observacao;
 	}
 
 
 
 	/**
-	 * @param doador the doador to set
+	 * @param observacao the observacao to set
 	 */
-	public void setDoador(Doador doador) {
-		this.doador = doador;
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
 	}
+
+
+	/**
+	 * @return the pessoa
+	 */
+	public Pessoa getPessoa() {
+		return pessoa;
+	}
+
+
+	/**
+	 * @param pessoa the pessoa to set
+	 */
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
+	}
+
+
+	/**
+	 * @return the acao
+	 */
+	public Acao getAcao() {
+		return acao;
+	}
+
+
+	/**
+	 * @param acao the acao to set
+	 */
+	public void setAcao(Acao acao) {
+		this.acao = acao;
+	}
+
+
+
 	
 	
 

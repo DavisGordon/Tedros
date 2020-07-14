@@ -28,6 +28,17 @@ import com.tedros.ejb.base.eao.TGenericEAO;
 @RequestScoped
 public class PessoaEAO extends TGenericEAO<Pessoa> {
 	
+	public List<Pessoa> estrategicoEmail(){
+		
+		StringBuffer sbf = new StringBuffer("select distinct e from Pessoa e where e.tipoVoluntario = :tipo ");
+		
+		Query qry = getEntityManager().createQuery(sbf.toString());
+		
+		qry.setParameter("tipo", "3");
+		
+		return (List<Pessoa>) qry.getResultList();
+	}
+	
 	public Pessoa recuperar(String loginName, String password){
 		
 		StringBuffer sbf = new StringBuffer("select distinct e from Pessoa e where 1=1 ");
@@ -92,37 +103,17 @@ public class PessoaEAO extends TGenericEAO<Pessoa> {
 		return qry.getResultList();
 	}
 	
-	public boolean isPessoaContatoExiste(String nome, String email, String telefone){
+	public boolean isLoginExiste(String email){
 		
-		StringBuffer sbf = new StringBuffer("select distinct e from Pessoa e left join e.contatos d where 1=1 ");
-		
-		if(StringUtils.isNotBlank(nome))
-			sbf.append("and e.nome = :nome and ");
-		
-		if(StringUtils.isNotBlank(email))
-			sbf.append(" (d.tipo = '1' and d.descricao = :email) ");
-		
-		if(StringUtils.isNotBlank(telefone)){
-			if(StringUtils.isNotBlank(email))
-				sbf.append(" or ");
-			sbf.append(" (d.tipo = '2' and d.descricao = :telefone) ");
-		}
-		
+		StringBuffer sbf = new StringBuffer("select count(e) from Pessoa e where e.loginName = :loginName ");
 		
 		Query qry = getEntityManager().createQuery(sbf.toString());
 		
-		if(StringUtils.isNotBlank(nome))
-			qry.setParameter("nome",nome);
+		qry.setParameter("loginName", email);
 		
-		if(StringUtils.isNotBlank(email))
-			qry.setParameter("email", email);
+		Long total = (Long) qry.getSingleResult();
 		
-		if(StringUtils.isNotBlank(telefone))
-			qry.setParameter("telefone", telefone);
-		
-		List<Pessoa> lst = qry.getResultList();
-		
-		return lst!=null && lst.size() > 0;
+		return total > 0;
 	}
 
 	

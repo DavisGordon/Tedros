@@ -39,17 +39,12 @@ import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEntityProcess;
-import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
-import com.tedros.fxapi.annotation.reader.TReaderHtml;
-import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.builder.DateTimeFormatBuilder;
 import com.tedros.fxapi.collections.ITObservableList;
-import com.tedros.fxapi.domain.THtmlConstant;
-import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
@@ -64,32 +59,26 @@ import javafx.scene.text.TextAlignment;
  * @author Davis Gordon
  *
  */
-@TFormReaderHtml
 @TForm(name = "Mailing", showBreadcrumBar=false, form=EmailTemplateForm.class)
 @TEntityProcess(process = MailingProcess.class, entity=Mailing.class)
 @TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = MailingBehavior.class, 
-									saveAction=MailingAction.class, saveAllModels=false), 
+									saveAction=MailingAction.class, saveAllModels=false, saveOnlyChangedModels=false), 
 			decorator = @TDecorator(type = MailingDecorator.class, 
-									viewTitle="Mailing", listTitle="Acão", saveButtonText="Enviar email"))
+									viewTitle="Mailing", listTitle="Acão / Campanha", saveButtonText="Enviar email"))
 @TSecurity(	id="COVSEMFOME_MAIL_FORM", 
-			appName = "#{app.name}", moduleName = "Mailing", viewName = "Mailing",
+			appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Mailing",
 			allowedAccesses={TAuthorizationType.VIEW_ACCESS})
 
 public class MailingModelView extends TEntityModelView<Mailing> {
 	
 	private SimpleLongProperty id;
 	
-	@TTextReaderHtml(text="Acão", 
-			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
-			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
-			cssForHtmlBox="", cssForContentValue="")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
-	@TText(text="Acão", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
+	@TText(text="Acão / Campanha", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 	node=@TNode(id="t-form-title-text", parse = true))
 	private SimpleStringProperty textoCadastro;
 	
-	@TReaderHtml
 	@TLabel(text="Titulo/Local")
 	@TTextField(node = @TNode(parse = true, disable=true))
 	@THBox(	pane=@TPane(children={"titulo","data","status"}), spacing=10, fillHeight=true,
@@ -113,7 +102,7 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 	private SimpleStringProperty status;
 	
 	@TLabel(text="Descricão")
-	@TTextAreaField(control=@TControl(prefWidth=250, prefHeight=50, parse = true))
+	@TTextAreaField( wrapText=true, control=@TControl(prefWidth=250, prefHeight=50, parse = true))
 	private SimpleStringProperty descricao;
 	
 	@TAccordion(expandedPane="eem",
@@ -152,14 +141,16 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 	@TTextAreaField(required=true, wrapText=true, control=@TControl(prefWidth=250, prefHeight=150, parse = true))
 	private SimpleStringProperty conteudo;
 	
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), 
+			style="-fx-background-color: #FFFFFF", parse = true))
 	@TText(text="Chaves para substituição, insira a chave desejada para inserir uma informação. ex: #NOME# será substituido pelo nome do voluntário.", 
 	wrappingWidth=650,
 	font=@TFont(size=12), textAlignment=TextAlignment.LEFT, 
 	node=@TNode(id="t-label", parse = true))
 	private SimpleStringProperty tituloBoxEmail;
 	
-	//@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), 
+			style="-fx-background-color: #FFFFFF", parse = true))
 	@TText(text="#NOME# #TITULOACAO# #DESCRICAOACAO# #STATUSACAO# #DATAACAO# #QTDINSCRITOS# #QTDMINVOL# #QTDMAXVOL# #LINKPAINEL# #LINKSITE#", 
 			wrappingWidth=650,
 			font=@TFont(size=12), textAlignment=TextAlignment.LEFT, 
@@ -170,7 +161,7 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 	public MailingModelView(Mailing entity) {
 		super(entity);
 		tituloEmail.setValue("[Covid Sem Fome] "+getModel().getTitulo());
-		conteudo.setValue("Olá #NOME#,<br> precisamos da sua ajuda para a campanha a ser realizada no dia #DATAACAO# e já temos #QTDINSCRITOS# inscrito(s) e precisamos de #QTDMINVOL#, você pode se inscrever pelo #LINKPAINEL# em nosso site. <br><br> "
+		conteudo.setValue("Olá #NOME#,<br> precisamos da sua ajuda para a campanha a ser realizada no dia #DATAACAO#, temos #QTDINSCRITOS# inscrito(s) e precisamos de #QTDMINVOL#, você pode se inscrever pelo #LINKPAINEL# em nosso site. <br><br> "
 		+getModel().getDescricao()+"<br><br>Equipe Covid Sem Fome<br>#LINKSITE#");
 		
 	}

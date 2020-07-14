@@ -93,4 +93,13 @@ public @interface TBehavior {
 	 * </pre>
 	 * */
 	public boolean saveAllModels() default true;
+	
+	/**
+	 * <pre>
+	 * Process the save action only if the model is changed.
+	 * 
+	 * Default: true
+	 * </pre>
+	 * */
+	public boolean saveOnlyChangedModels() default true;
 }

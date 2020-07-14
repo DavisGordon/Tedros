@@ -4,14 +4,14 @@
  * TODOS OS DIREITOS RESERVADOS
  * 14/01/2014
  */
-package com.covidsemfome.module.doador.process;
+package com.covidsemfome.module.doacao.process;
 
 import java.util.List;
 
-import com.tedros.ejb.base.service.TResult;
+import com.covidsemfome.model.Doacao;
+import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.process.TEntityProcess;
-import com.covidsemfome.model.Doador;
 
 /**
  * The CRUD Process
@@ -19,15 +19,15 @@ import com.covidsemfome.model.Doador;
  * @author Davis Gordon
  *
  */
-public class DoadorProcess extends TEntityProcess<Doador> {
+public class DoacaoProcess extends TEntityProcess<Doacao> {
 
-	public DoadorProcess() throws TProcessException {
-		super(Doador.class, "TDoadorServiceRemote", true);
+	public DoacaoProcess() throws TProcessException {
+		super(Doacao.class, "IDoacaoControllerRemote", true);
 	}
 
 
 	@Override
-	public void execute(List<TResult<Doador>> resultados) {
+	public void execute(List<TResult<Doacao>> resultados) {
 		
 	}
 

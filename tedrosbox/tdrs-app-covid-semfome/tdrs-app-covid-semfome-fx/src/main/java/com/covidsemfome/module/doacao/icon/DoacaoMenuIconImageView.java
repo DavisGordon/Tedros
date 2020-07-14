@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.covidsemfome.module.doador.icon;
+package com.covidsemfome.module.doacao.icon;
 
 import com.tedros.core.image.TImageView;
 
@@ -10,15 +10,15 @@ import com.tedros.core.image.TImageView;
  * @author Davis Gordon
  *
  */
-public class DoadorMenuIconImageView extends TImageView {
+public class DoacaoMenuIconImageView extends TImageView {
 	
-	public DoadorMenuIconImageView() {
+	public DoacaoMenuIconImageView() {
 		
 	}
 	
    @Override
 	public String getImagePathName() {
-		return "menu_icon.png";
+	   return "com/covidsemfome/module/doacao/icon/menu_icon3.png";
 	}
 
 }

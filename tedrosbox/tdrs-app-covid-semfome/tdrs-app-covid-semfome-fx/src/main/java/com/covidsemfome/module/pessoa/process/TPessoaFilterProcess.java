@@ -13,7 +13,7 @@ import java.util.Map;
 
 import com.covidsemfome.ejb.service.IPessoaService;
 import com.covidsemfome.model.Pessoa;
-import com.tedros.ejb.base.service.TResult;
+import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.process.TFilterProcess;
 
@@ -26,7 +26,7 @@ import com.tedros.fxapi.process.TFilterProcess;
 public class TPessoaFilterProcess extends TFilterProcess {
 
 	public TPessoaFilterProcess() throws TProcessException {
-		super(Pessoa.class, "IPessoaServiceRemote", true);
+		super(Pessoa.class, "IPessoaControllerRemote", true);
 	}
 	
 	@SuppressWarnings({"rawtypes", "unchecked"})

@@ -15,11 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.covidsemfome.ejb.service.IPessoaService;
+import com.covidsemfome.ejb.controller.IPessoaController;
 import com.covidsemfome.model.Contato;
 import com.covidsemfome.model.Pessoa;
-import com.tedros.ejb.base.service.TResult;
-import com.tedros.ejb.base.service.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.util.TEncriptUtil;
 
 import br.com.covidsemfome.ejb.service.ServiceLocator;
@@ -43,7 +43,6 @@ public class VoluntarioServlet extends HttpServlet {
 		String email = request.getParameter("email");
 		String pass = request.getParameter("pass");
 		String tel = request.getParameter("telefone");
-		String voluntario = request.getParameter("voluntario");
 		
 		resp.setContentType("text/html");
 		
@@ -51,13 +50,13 @@ public class VoluntarioServlet extends HttpServlet {
 
 		if(StringUtils.isAnyBlank(nome, email, pass)){
 			resp.setStatus(resp.SC_BAD_REQUEST);
-			out.println("Por favor informar o seu nome, email, senha e o local que pretende se voluntariar.");
+			out.println("Por favor informar o seu nome, email e senha.");
 		}else{
 		
 			ServiceLocator loc = ServiceLocator.getInstance();
 	
 			try {
-				IPessoaService service = (IPessoaService) loc.lookup("IPessoaServiceRemote");
+				IPessoaController service = (IPessoaController) loc.lookup("IPessoaControllerRemote");
 				
 				List<Contato> lst = new ArrayList();			
 				if(email!=null){
@@ -80,8 +79,9 @@ public class VoluntarioServlet extends HttpServlet {
 				pess.setLoginName(email);
 				pess.setPassword(TEncriptUtil.encript(pass));
 				pess.getContatos().addAll(lst);
-				pess.setTipoVoluntario(voluntario);
+				pess.setTipoVoluntario("1");
 				pess.setStatusVoluntario("1");
+				pess.setStatus("ATIVADO");
 				
 				TResult<Pessoa> res = service.saveFromSite(pess);
 							

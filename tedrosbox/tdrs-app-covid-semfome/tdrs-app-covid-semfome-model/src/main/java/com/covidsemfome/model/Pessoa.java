@@ -57,6 +57,7 @@ public class Pessoa extends TEntity {
 	@Column(length=1, nullable = true)
 	private String tipoVoluntario;
 	
+	
 	@Column(length=1, nullable = true)
 	private String statusVoluntario;
 	
@@ -69,6 +70,9 @@ public class Pessoa extends TEntity {
 	
 	@Column(length=1000)
 	private String observacao;
+	
+	@Column(length=12, nullable = true)
+	private String status;
 	
 	@OneToMany(mappedBy="pessoa", fetch = FetchType.EAGER, orphanRemoval=true, cascade={CascadeType.ALL})
 	private Set<Documento> documentos;
@@ -239,5 +243,20 @@ public class Pessoa extends TEntity {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	/**
+	 * @return the status
+	 */
+	public String getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	
 }

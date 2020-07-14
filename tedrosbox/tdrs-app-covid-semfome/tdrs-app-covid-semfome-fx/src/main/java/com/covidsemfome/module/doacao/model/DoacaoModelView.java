@@ -1,18 +1,33 @@
-package com.covidsemfome.module.doador.model;
+package com.covidsemfome.module.doacao.model;
 
 import java.util.Date;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.covidsemfome.model.Acao;
 import com.covidsemfome.model.Doacao;
-import com.tedros.fxapi.annotation.TCodeValue;
+import com.covidsemfome.model.Pessoa;
+import com.covidsemfome.model.TipoAjuda;
+import com.covidsemfome.module.acao.model.AcaoModelView;
+import com.covidsemfome.module.doacao.process.DoacaoProcess;
+import com.covidsemfome.module.pessoa.model.PessoaModelView;
+import com.covidsemfome.module.voluntario.model.TipoAjudaModelView;
+import com.covidsemfome.module.voluntario.process.LoadAcaoOptionListProcess;
+import com.covidsemfome.module.voluntario.process.LoadPessoaOptionListProcess;
+import com.covidsemfome.module.voluntario.process.LoadTipoAjudaOptionListProcess;
+import com.tedros.core.annotation.security.TAuthorizationType;
+import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.control.TBigDecimalField;
+import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
-import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
+import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TRadioButtonField;
+import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
+import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
+import com.tedros.fxapi.annotation.effect.TDropShadow;
+import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
@@ -21,51 +36,103 @@ import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
+import com.tedros.fxapi.annotation.process.TEntityProcess;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
+import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
+import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.annotation.text.TFont;
+import com.tedros.fxapi.annotation.text.TText;
+import com.tedros.fxapi.annotation.view.TEntityCrudViewWithListView;
+import com.tedros.fxapi.domain.THtmlConstant;
+import com.tedros.fxapi.domain.TOptionProcessType;
+import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
-import com.tedros.fxapi.presenter.entity.behavior.TDetailCrudViewWithListViewBehavior;
-import com.tedros.fxapi.presenter.entity.decorator.TDetailCrudViewWithListViewDecorator;
+import com.tedros.fxapi.presenter.entity.behavior.TMainCrudViewWithListViewBehavior;
+import com.tedros.fxapi.presenter.entity.decorator.TMainCrudViewWithListViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
+import javafx.scene.text.TextAlignment;
 
-@TForm(showBreadcrumBar=true, name = "#{form.donation.name}")
 @TFormReaderHtml
-@TPresenter(type = TDynaPresenter.class,
-behavior = @TBehavior(type = TDetailCrudViewWithListViewBehavior.class), 
-decorator = @TDecorator(type = TDetailCrudViewWithListViewDecorator.class, viewTitle="#{form.donation.name}", listTitle="#{label.select}"))
+@TForm(name = "Doação", showBreadcrumBar=false)
+@TEntityProcess(process = DoacaoProcess.class, entity=Doacao.class)
+@TEntityCrudViewWithListView(listViewMinWidth=380,
+presenter=@TPresenter(type = TDynaPresenter.class,
+			behavior = @TBehavior(type = TMainCrudViewWithListViewBehavior.class), 
+			decorator = @TDecorator(type = TMainCrudViewWithListViewDecorator.class, 
+									viewTitle="Doação", listTitle="#{label.select}")))
+@TSecurity(	id="COVSEMFOME_DOACAO_FORM", 
+			appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Doação",
+			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
+							TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class DoacaoModelView extends TEntityModelView<Doacao>{
 	
 	private SimpleLongProperty id;
 	
-	@TLabel(text="#{label.tipo}")
-	@TReaderHtml(codeValues={@TCodeValue(code = "Dinheiro", value = "Dinheiro"), 
-			@TCodeValue(code = "Cesta basica", value = "Cesta basica"),
-			@TCodeValue(code = "Comida", value = "Comida")})
-	@THorizontalRadioGroup(required=true, alignment=Pos.CENTER_LEFT, spacing=4, 
-	radioButtons={
-			@TRadioButtonField(text = "Dinheiro", userData = "Dinheiro"),
-			@TRadioButtonField(text = "Cesta basica", userData = "Cesta basica"), 
-			@TRadioButtonField(text = "Comida", userData = "Comida")
-			})
-	@THBox(	pane=@TPane(children={"tipo","valor","data"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="tipo", priority=Priority.ALWAYS), 
-						@TPriority(field="valor", priority=Priority.ALWAYS), 
-   				   		@TPriority(field="data", priority=Priority.ALWAYS)}))
-	private SimpleStringProperty tipo;
+	private SimpleStringProperty displayText;
 	
+	@TTextReaderHtml(text="Doação", 
+			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
+			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
+			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
+	@TText(text="Pessoa e tipo ajuda", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
+	node=@TNode(id="t-form-title-text", parse = true))
+	private SimpleStringProperty textoCadastro;
+	
+	@TReaderHtml
+	@TLabel(text="Pessoa")
+	@TComboBoxField(firstItemTex="Selecione uma Pessoa...", required=true, 
+			control=@TControl(parse = true, minWidth=250),
+			optionsList=@TOptionsList(optionsProcessClass = LoadPessoaOptionListProcess.class, 
+			entityClass=Pessoa.class, optionModelViewClass=PessoaModelView.class, optionProcessType=TOptionProcessType.LIST_ALL ))
+	@THBox(	pane=@TPane(children={"pessoa","tipoAjuda"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="pessoa", priority=Priority.ALWAYS),
+   				   		@TPriority(field="tipoAjuda", priority=Priority.ALWAYS) }))
+	private SimpleObjectProperty<Pessoa> pessoa;
+	
+	
+	@TReaderHtml
+	@TLabel(text="Tipo ajuda")
+	@TComboBoxField(firstItemTex="Selecione a forma de doação...", required=true, 
+			control=@TControl(parse = true, minWidth=270),
+			optionsList=@TOptionsList(optionsProcessClass = LoadTipoAjudaOptionListProcess.class, 
+			entityClass=TipoAjuda.class, optionModelViewClass=TipoAjudaModelView.class, optionProcessType=TOptionProcessType.LIST_ALL ))
+	private SimpleObjectProperty<TipoAjuda> tipoAjuda;
+	
+	@TReaderHtml
+	@TLabel(text="Ação")
+	@TComboBoxField(firstItemTex="Selecione uma ação...", 
+			control=@TControl(parse = true, minWidth=280),
+			optionsList=@TOptionsList(optionsProcessClass = LoadAcaoOptionListProcess.class, 
+			entityClass=Acao.class, optionModelViewClass=AcaoModelView.class, optionProcessType=TOptionProcessType.LIST_ALL ))
+	private SimpleObjectProperty<Acao> acao;
+	
+	@TReaderHtml
+	@TLabel(text="Quantidade")
+	@TNumberSpinnerField(maxValue = 1000000)
+	@THBox(	pane=@TPane(children={"quantidade","valor","data"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="quantidade", priority=Priority.ALWAYS), 
+   				   		@TPriority(field="valor", priority=Priority.ALWAYS),
+   				   		@TPriority(field="data", priority=Priority.ALWAYS) }))
+	private SimpleIntegerProperty quantidade;
 	
 	@TReaderHtml
 	@TLabel(text = "Valor")
 	@TBigDecimalField(textInputControl=@TTextInputControl(promptText="Valor", parse = true))
 	private SimpleDoubleProperty valor;
+	
 	
 	@TReaderHtml
 	@TLabel(text="Data")
@@ -80,28 +147,78 @@ public class DoacaoModelView extends TEntityModelView<Doacao>{
 	
 	public DoacaoModelView(Doacao entidade) {
 		super(entidade);
+		buildListener();
+		buldDisplayText(entidade);
+	}
+	
+	@Override
+	public void reload(Doacao model) {
+		super.reload(model);
+		buildListener();
+		buldDisplayText(model);
+	}
+	
+	private void buldDisplayText(Doacao entidade) {
+		if(!entidade.isNew()){
+			String str =  ((pessoa.getValue()!=null) 
+					? pessoa.getValue().getNome() 
+							: "")  + ((tipoAjuda.getValue()!=null) 
+					? " ("+tipoAjuda.getValue().getDescricao()+")"
+						: "");
+			displayText.setValue(str);
+		}
+	}
+	
+	private void buildListener() {
+		ChangeListener<Pessoa> pessListener = super.getListenerRepository().getListener("displayText");
+		if(pessListener==null){
+			pessListener = new ChangeListener<Pessoa>(){
+		
+				@Override
+				public void changed(ObservableValue arg0, Pessoa arg1, Pessoa arg2) {
+					String str =  arg2.getNome() + ((tipoAjuda.getValue()!=null) 
+							? " ("+tipoAjuda.getValue().getDescricao()+")"
+							: "");
+					displayText.setValue(str);
+				}
+				
+			};
+			super.addListener("displayText", pessListener);
+		}else
+			pessoa.removeListener(pessListener);
+		
+		pessoa.addListener(pessListener);
+		
+		ChangeListener<TipoAjuda> taListener = super.getListenerRepository().getListener("displayText1");
+		if(taListener==null){
+			taListener = new ChangeListener<TipoAjuda>(){
+				@Override
+				public void changed(ObservableValue arg0, TipoAjuda arg1, TipoAjuda arg2) {
+					String str =  ((pessoa.getValue()!=null) 
+							? pessoa.getValue().getNome() 
+									: "") 
+							+ " ("+arg2.getDescricao()+")";
+					displayText.setValue(str);
+				}
+				
+			};
+			super.addListener("displayText1", taListener);
+		}else
+			tipoAjuda.removeListener(taListener);
+		
+		tipoAjuda.addListener(taListener);
 	}
 	
 	@Override
 	public String toString() {
-		String tipo = getTipoDescricao(); 
+		String tipo = ""; 
 		if(tipo.equals(""))
 			return (getValor()!=null)? getValor().getValue().toString() : "";
 		else
 			return (tipo+": "+getValor()!=null)? getValor().getValue().toString() : "";
 	}
 	
-	public String getTipoDescricao(){
-		/*if(TPropertyUtil.isStringValueNotBlank(getTipo())){
-			if(getTipo().equals("1"))
-				return "Identidade";
-			if(getTipo().equals("2"))
-				return "CPF";
-			if(getTipo().equals("3"))
-				return "CNPJ";
-		}*/
-		return getTipo().getValue();
-	}
+	
 		
 	@Override
 	public int hashCode() {
@@ -121,48 +238,105 @@ public class DoacaoModelView extends TEntityModelView<Doacao>{
 				return getId().getValue().equals(p.getId().getValue());
 		}	
 		return false;
-	/*	String str1 = getTipo()!=null && getTipo().getValue()!=null ? getTipo().getValue() : "";
-		str1 += getNumero()!=null && getNumero().getValue()!=null ? getNumero().getValue() : "";
-		
-		String str2 = p.getTipo()!=null && p.getTipo().getValue()!=null ? p.getTipo().getValue() : "";
-		str2 += p.getNumero()!=null && p.getNumero().getValue()!=null ? p.getNumero().getValue() : "";
-		
-		return str1.equals(str2);*/
 	}
 
-
-	public SimpleStringProperty getTipo() {
-		return tipo;
-	}
-
-
-	public void setTipo(SimpleStringProperty tipo) {
-		this.tipo = tipo;
-	}
-
-
-
-
-	public SimpleStringProperty getObservacao() {
-		return observacao;
-	}
-
-
-	public void setObservacao(SimpleStringProperty observacao) {
-		this.observacao = observacao;
-	}
-	
 	@Override
-	public SimpleStringProperty getDisplayProperty() {
-		return tipo;
+	public void setId(SimpleLongProperty id) {
+		this.id = id;
 	}
 
-	public final SimpleLongProperty getId() {
+	@Override
+	public SimpleLongProperty getId() {
 		return id;
 	}
 
-	public final void setId(SimpleLongProperty id) {
-		this.id = id;
+	@Override
+	public SimpleStringProperty getDisplayProperty() {
+		return this.displayText;
+	}
+
+	/**
+	 * @return the displayText
+	 */
+	public SimpleStringProperty getDisplayText() {
+		return displayText;
+	}
+
+	/**
+	 * @param displayText the displayText to set
+	 */
+	public void setDisplayText(SimpleStringProperty displayText) {
+		this.displayText = displayText;
+	}
+
+	/**
+	 * @return the textoCadastro
+	 */
+	public SimpleStringProperty getTextoCadastro() {
+		return textoCadastro;
+	}
+
+	/**
+	 * @param textoCadastro the textoCadastro to set
+	 */
+	public void setTextoCadastro(SimpleStringProperty textoCadastro) {
+		this.textoCadastro = textoCadastro;
+	}
+
+	/**
+	 * @return the acao
+	 */
+	public SimpleObjectProperty<Acao> getAcao() {
+		return acao;
+	}
+
+	/**
+	 * @param acao the acao to set
+	 */
+	public void setAcao(SimpleObjectProperty<Acao> acao) {
+		this.acao = acao;
+	}
+
+	/**
+	 * @return the pessoa
+	 */
+	public SimpleObjectProperty<Pessoa> getPessoa() {
+		return pessoa;
+	}
+
+	/**
+	 * @param pessoa the pessoa to set
+	 */
+	public void setPessoa(SimpleObjectProperty<Pessoa> pessoa) {
+		this.pessoa = pessoa;
+	}
+
+	/**
+	 * @return the tipoAjuda
+	 */
+	public SimpleObjectProperty<TipoAjuda> getTipoAjuda() {
+		return tipoAjuda;
+	}
+
+	/**
+	 * @param tipoAjuda the tipoAjuda to set
+	 */
+	public void setTipoAjuda(SimpleObjectProperty<TipoAjuda> tipoAjuda) {
+		this.tipoAjuda = tipoAjuda;
+	}
+
+	/**
+	 * @return the quantidade
+	 */
+	public SimpleIntegerProperty getQuantidade() {
+		return quantidade;
+	}
+
+	/**
+	 * @param quantidade the quantidade to set
+	 */
+	public void setQuantidade(SimpleIntegerProperty quantidade) {
+		this.quantidade = quantidade;
 	}
 
 	/**
@@ -192,5 +366,20 @@ public class DoacaoModelView extends TEntityModelView<Doacao>{
 	public void setData(SimpleObjectProperty<Date> data) {
 		this.data = data;
 	}
+
+	/**
+	 * @return the observacao
+	 */
+	public SimpleStringProperty getObservacao() {
+		return observacao;
+	}
+
+	/**
+	 * @param observacao the observacao to set
+	 */
+	public void setObservacao(SimpleStringProperty observacao) {
+		this.observacao = observacao;
+	}
+
 
 }

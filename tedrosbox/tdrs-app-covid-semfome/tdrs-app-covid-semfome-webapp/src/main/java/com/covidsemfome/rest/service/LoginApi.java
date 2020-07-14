@@ -7,12 +7,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.covidsemfome.ejb.service.IAutUserService;
+import com.covidsemfome.ejb.controller.IAutUserController;
 import com.covidsemfome.model.User;
 import com.covidsemfome.rest.model.LoginModel;
 import com.covidsemfome.rest.model.RestModel;
-import com.tedros.ejb.base.service.TResult;
-import com.tedros.ejb.base.service.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.result.TResult.EnumResult;
 
 import br.com.covidsemfome.ejb.service.ServiceLocator;
 
@@ -30,7 +30,7 @@ public class LoginApi {
 		ServiceLocator loc =  ServiceLocator.getInstance();
 		
 		try {
-			IAutUserService serv = loc.lookup("IAutUserServiceRemote");
+			IAutUserController serv = loc.lookup("IAutUserControllerRemote");
 			TResult<User> res = serv.login(model.getEmail(), model.getPass());
 			loc.close();
 			

@@ -5,8 +5,8 @@ import java.util.Date;
 import javax.ejb.Remote;
 
 import com.covidsemfome.model.Pessoa;
+import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.service.ITEjbService;
-import com.tedros.ejb.base.service.TResult;
 
 @Remote
 public interface IPessoaService extends ITEjbService<Pessoa>{

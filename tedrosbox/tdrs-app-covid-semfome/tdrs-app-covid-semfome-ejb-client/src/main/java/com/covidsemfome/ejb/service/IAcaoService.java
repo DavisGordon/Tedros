@@ -10,7 +10,6 @@ import javax.ejb.Remote;
 
 import com.covidsemfome.model.Acao;
 import com.tedros.ejb.base.service.ITEjbService;
-import com.tedros.ejb.base.service.TResult;
 
 /**
  * @author Davis Gordon
@@ -20,5 +19,5 @@ import com.tedros.ejb.base.service.TResult;
 @Remote
 public interface IAcaoService extends ITEjbService<Acao> {
 
-	public TResult<List<Acao>> listAcoesParaExibirNoPainel();
+	public List<Acao> listAcoesParaExibirNoPainel();
 }

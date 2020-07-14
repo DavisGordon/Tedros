@@ -6,10 +6,14 @@
  */
 package com.covidsemfome.ejb.eao;
 
+import java.util.Date;
+import java.util.List;
+
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.Query;
 
 import com.covidsemfome.model.Doacao;
+import com.covidsemfome.model.TipoAjuda;
 import com.tedros.ejb.base.eao.TGenericEAO;
 
 /**
@@ -21,10 +25,10 @@ import com.tedros.ejb.base.eao.TGenericEAO;
 @RequestScoped
 public class DoacaoEAO extends TGenericEAO<Doacao> {
 
-	public void excluirTodos(final Long idPessoa)throws Exception{
+	public List<Doacao> pesquisar(String nome, Date dataInicio, Date dataFim, Long acaoId, TipoAjuda tipoAjuda){
 		Query qry = getEntityManager().createQuery("delete from Documento where pessoa.id = :id");
-		qry.setParameter("id", idPessoa);
-		qry.executeUpdate();
+		//qry.setParameter("id", idPessoa);
+		return null;
 	}
 	
 }

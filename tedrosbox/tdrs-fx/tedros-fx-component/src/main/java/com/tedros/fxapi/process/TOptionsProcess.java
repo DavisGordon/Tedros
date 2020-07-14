@@ -11,9 +11,9 @@ import java.util.Properties;
 
 import javax.naming.InitialContext;
 
+import com.tedros.ejb.base.controller.ITEjbController;
 import com.tedros.ejb.base.entity.ITEntity;
-import com.tedros.ejb.base.service.ITEjbService;
-import com.tedros.ejb.base.service.TResult;
+import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.util.TResourceUtil;
 
@@ -26,7 +26,7 @@ import com.tedros.util.TResourceUtil;
 public abstract class TOptionsProcess extends TProcess<List<TResult<Object>>>{
 	
 	private Class<? extends ITEntity> entityType;
-	private ITEjbService<?> service;
+	private ITEjbController<?> service;
 	private Properties p;
 	private InitialContext ctx;
 	private Map<String, Object> objects;
@@ -40,7 +40,7 @@ public abstract class TOptionsProcess extends TProcess<List<TResult<Object>>>{
 			setAutoStart(true);
 			if (remoteMode)	initRemote();	else initLocal();
 			ctx = new InitialContext(p);
-			service = (ITEjbService<?>) ctx.lookup(serviceJndiName);
+			service = (ITEjbController<?>) ctx.lookup(serviceJndiName);
 			objects = new HashMap<>();
 		} catch (Exception e) {
 			throw new TProcessException(e, e.getMessage(), "The service is not available!");
@@ -57,7 +57,7 @@ public abstract class TOptionsProcess extends TProcess<List<TResult<Object>>>{
 		}
 	}
 	
-	public ITEjbService<?> getService(){
+	public ITEjbController<?> getService(){
 		return service;
 	}
 	

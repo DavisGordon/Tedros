@@ -6,6 +6,7 @@
  */
 package com.covidsemfome.ejb.service;
 
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
@@ -19,8 +20,9 @@ import com.tedros.ejb.base.service.TEjbService;
  * @author Davis Gordon
  *
  */
+@Local
 @Stateless(name="IVoluntarioService")
-public class VoluntarioService extends TEjbService<Voluntario> implements IVoluntarioService {
+public class VoluntarioService extends TEjbService<Voluntario>  {
 	
 	@Inject
 	private VoluntarioBO bo;

@@ -9,14 +9,14 @@ package com.covidsemfome.ejb.service;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import com.covidsemfome.ejb.bo.DoadorBO;
-import com.covidsemfome.model.Doador;
+import com.covidsemfome.ejb.bo.DoacaoBO;
+import com.covidsemfome.model.Doacao;
+import com.covidsemfome.model.TipoAjuda;
 import com.tedros.ejb.base.service.TEjbService;
-import com.tedros.ejb.base.service.TResult;
-import com.tedros.ejb.base.service.TResult.EnumResult;
 
 /**
  * DESCRIÇÃO DA CLASSE
@@ -24,27 +24,20 @@ import com.tedros.ejb.base.service.TResult.EnumResult;
  * @author Davis Gordon
  *
  **/
-@Stateless(name="TDoadorService")
-public class DoadorService extends TEjbService<Doador> implements IDoadorService {
+@Local
+@Stateless(name="DoacaoService")
+public class DoacaoService extends TEjbService<Doacao> {
 	
 	@Inject
-	private DoadorBO bo;
+	private DoacaoBO bo;
 	
 	@Override
-	public DoadorBO getBussinesObject() {
+	public DoacaoBO getBussinesObject() {
 		return bo;
 	}
 	
-	@SuppressWarnings("rawtypes")
-	public TResult pesquisar(String nome, Date dataNascimento){
-		try{
-			List<Doador> list = getBussinesObject().pesquisar(nome, dataNascimento);
-			return new TResult<List<Doador>>(EnumResult.SUCESS, list);
-		}catch(Exception e){
-			e.printStackTrace();
-			return new TResult<List<Doador>>(EnumResult.ERROR, e.getMessage());
-		}
-		
+	public List<Doacao> pesquisar(String nome, Date dataInicio, Date dataFim, Long acaoId, TipoAjuda tipoAjuda){
+		return getBussinesObject().pesquisar(nome, dataInicio, dataFim, acaoId, tipoAjuda);
 	}
 
 	

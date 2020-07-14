@@ -6,8 +6,8 @@ import javax.ejb.Local;
 import javax.ejb.Remote;
 
 import com.covidsemfome.model.TipoAjuda;
+import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.service.ITEjbService;
-import com.tedros.ejb.base.service.TResult;
 
 @Local
 @Remote

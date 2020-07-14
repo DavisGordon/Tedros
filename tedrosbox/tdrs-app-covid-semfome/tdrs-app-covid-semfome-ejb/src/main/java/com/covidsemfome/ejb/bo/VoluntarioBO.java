@@ -33,7 +33,9 @@ public class VoluntarioBO extends TGenericBO<Voluntario> {
 		return eao.recuperar(acao, pess);
 	}
 	
-	
+	public boolean isVoluntario(Pessoa pess){
+		return eao.isVoluntario(pess);
+	}
 	
 	public void sairDaAcao(Pessoa pessoa, Long acaoId) throws Exception{
 		Acao acao = new Acao();

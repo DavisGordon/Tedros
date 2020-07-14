@@ -12,8 +12,8 @@ import com.tedros.core.context.TEntryBuilder;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.model.ITModel;
-import com.tedros.ejb.base.service.TResult;
-import com.tedros.ejb.base.service.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.control.action.TPresenterAction;
@@ -79,6 +79,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	private TDynaViewCrudBaseDecorator<M> decorator;
 
 	private boolean saveAllModels;
+	private boolean saveOnlyChangedModel;
 	
 	@SuppressWarnings("unchecked")
 	public void load(){
@@ -109,6 +110,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			final TBehavior tBehavior = presenter.getPresenterAnnotation().behavior();
 			
 			saveAllModels = tBehavior.saveAllModels();
+			saveOnlyChangedModel = tBehavior.saveOnlyChangedModels();
 			
 			// set the custom behavior actions
 			if(tBehavior.saveAction()!=TPresenterAction.class)
@@ -470,7 +472,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			
 			final M model = modelsViewsList.get(x);
 			
-			if(!model.isChanged())
+			if(saveOnlyChangedModel && !model.isChanged())
 				continue;
 			
 			final TEntityProcess process  = createEntityProcess();
@@ -631,9 +633,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				@Override
 				public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 					if(arg2.equals(1)){
+						getView().tHideModal();	
 						startRemoveProcess(true);
-					}
-					getView().tHideModal();	
+					}else
+						getView().tHideModal();	
 				}
 			});
 			
@@ -673,9 +676,24 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 									if(resultados.isEmpty())
 										return;
 									TResult result = resultados.get(0);
-									if(result.getResult().getValue() == EnumResult.ERROR.getValue())
+									if(result.getResult().equals(EnumResult.ERROR))
 										System.out.println(result.getMessage());
-									if(result.getResult().getValue() != EnumResult.ERROR.getValue()){
+									if(result.getResult().equals(EnumResult.WARNING)){
+										E entity = (E) result.getValue();
+										if(entity!=null){
+											selected.reload(entity);
+										}else{
+											remove();
+											removeAllListenerFromModelView();
+											setModelView(null);
+											clearForm();
+											decorator.showScreenSaver();
+										}
+										final TMessageBox tMessageBox = new TMessageBox();
+										tMessageBox.tAddMessage(result.getMessage());
+										getView().tShowModal(tMessageBox, true);
+									}
+									if(result.getResult().equals(EnumResult.SUCESS)){
 										remove();
 										removeAllListenerFromModelView();
 										setModelView(null);

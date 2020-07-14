@@ -6,6 +6,7 @@ package com.covidsemfome.ejb.service;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -14,19 +15,18 @@ import javax.inject.Inject;
 import com.covidsemfome.ejb.bo.EmailBO;
 import com.covidsemfome.ejb.bo.PessoaBO;
 import com.covidsemfome.ejb.bo.UserBO;
-import com.covidsemfome.model.Contato;
+import com.covidsemfome.ejb.bo.VoluntarioBO;
 import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.User;
 import com.tedros.ejb.base.service.TEjbService;
-import com.tedros.ejb.base.service.TResult;
-import com.tedros.ejb.base.service.TResult.EnumResult;
 
 /**
  * @author Davis Gordon
  *
  */
+@Local
 @Stateless(name="IPessoaService")
-public class PessoaService extends TEjbService<Pessoa> implements IPessoaService {
+public class PessoaService extends TEjbService<Pessoa>  {
 
 	@Inject
 	private PessoaBO bo;
@@ -37,75 +37,62 @@ public class PessoaService extends TEjbService<Pessoa> implements IPessoaService
 	@Inject
 	private UserBO userBO;
 	
+	@Inject
+	private VoluntarioBO volunBO;
+	
 	@Override
 	public PessoaBO getBussinesObject() {
 		return bo;
 	}
 	
-	@Override
 	@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
-	public TResult<Pessoa> remove(Pessoa entidade) {
+	public Pessoa desativar(Pessoa entidade) throws Exception {
 		
 		List<User> lst = userBO.recuperar(entidade);
 		
-		try{
-			if(lst!=null && !lst.isEmpty())
-				for(User u : lst)
-					userBO.remove(u);
-			
-			return super.remove(entidade);
-		}catch(Exception e){
-			e.printStackTrace();
-			return new TResult<Pessoa>(EnumResult.ERROR, e.getMessage());
-		}
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public TResult recuperar(String loginName, String password){
-		try{
-			Pessoa pess = getBussinesObject().recuperar(loginName, password);
-			return new TResult<Pessoa>(EnumResult.SUCESS, pess);
-		}catch(Exception e){
-			e.printStackTrace();
-			return new TResult<Pessoa>(EnumResult.ERROR, e.getMessage());
-		}
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public TResult pesquisar(String nome, Date dataNascimento, String tipo, String tipoDocumento, String numero){
-		try{
-			List<Pessoa> list = getBussinesObject().pesquisar(nome, dataNascimento, tipo, tipoDocumento, numero);
-			return new TResult<List<Pessoa>>(EnumResult.SUCESS, list);
-		}catch(Exception e){
-			e.printStackTrace();
-			return new TResult<List<Pessoa>>(EnumResult.ERROR, e.getMessage());
-		}
+		if(lst!=null && !lst.isEmpty())
+			for(User u : lst)
+				userBO.remove(u);
 		
+		entidade.setStatus("DESATIVADO");
+		return save(entidade);
 	}
 	
 	@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
-	public TResult<Pessoa> saveFromSite(Pessoa entidade) {
-		String email = null;
-		String tel = null;
-		if(entidade.getContatos()!=null){
-			for(Contato c : entidade.getContatos()){
-				if(c.getTipo()!=null && c.getTipo().equals("1"))
-					email = c.getDescricao();
-				if(c.getTipo()!=null && c.getTipo().equals("2"))
-					tel = c.getDescricao();
-			}
-		}
+	public void remove(Pessoa entidade) throws Exception {
 		
-		if(bo.isPessoaContatoExiste(entidade.getNome(), email, tel)){
-			return new TResult<Pessoa>(EnumResult.WARNING);
-		}
+		List<User> lst = userBO.recuperar(entidade);
 		
-		TResult<Pessoa>  res = super.save(entidade);
+		if(lst!=null && !lst.isEmpty())
+			for(User u : lst)
+				userBO.remove(u);
 		
+		super.remove(entidade);
+	}
+	
+	@TransactionAttribute(value = TransactionAttributeType.SUPPORTS)
+	public boolean isVoluntario(Pessoa entidade) throws Exception {	
+		return volunBO.isVoluntario(entidade);
+	}
+	
+	@TransactionAttribute(value = TransactionAttributeType.SUPPORTS)
+	public boolean isLoginEmUso(Pessoa entidade) throws Exception {	
+		return bo.isLoginExiste(entidade.getLoginName());
+	}
+	
+	@TransactionAttribute(value = TransactionAttributeType.SUPPORTS)
+	public Pessoa recuperar(String loginName, String password){
+		return getBussinesObject().recuperar(loginName, password);
+	}
+	@TransactionAttribute(value = TransactionAttributeType.SUPPORTS)
+	public List<Pessoa> pesquisar(String nome, Date dataNascimento, String tipo, String tipoDocumento, String numero){
+		return getBussinesObject().pesquisar(nome, dataNascimento, tipo, tipoDocumento, numero);
+	}
+	
+	@TransactionAttribute(value = TransactionAttributeType.SUPPORTS)
+	public void enviarEmailCadastrado(Pessoa entidade) throws Exception {
 		emailBO.enviarEmailBoasVindas(entidade);
 		emailBO.enviarEmailNovoVoluntario(entidade);
-		
-		return res;
 	}
 
 }

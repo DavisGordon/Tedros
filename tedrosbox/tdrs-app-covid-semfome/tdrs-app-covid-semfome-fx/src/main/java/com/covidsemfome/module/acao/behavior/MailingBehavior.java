@@ -6,7 +6,7 @@ import java.util.List;
 import com.covidsemfome.module.acao.decorator.MailingDecorator;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.ejb.base.entity.ITEntity;
-import com.tedros.ejb.base.service.TResult;
+import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.domain.TViewMode;
@@ -62,13 +62,11 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 					final ListView<M> listView = decorator.gettListView();
 					listView.getSelectionModel().clearSelection();
 					setDisableModelActionButtons(true);
-					colapseAction();
 				}
 			});
 			
 			
 			
-			configColapseButton();
 			configSaveButton();
 			configListView();
 			configListViewCallBack();
@@ -191,7 +189,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	                		decorator.gettBreadcrumbForm().tEntryListProperty().clear();
 	                	
 	                	selectedItemAction(new_val);
-	                	decorator.hideListContent();
+	                	//decorator.hideListContent();
 	                	setDisableModelActionButtons(false);
 	            }	
 	        });

@@ -12,10 +12,10 @@ import javax.naming.InitialContext;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.tedros.ejb.base.controller.ITEjbController;
 import com.tedros.ejb.base.entity.ITEntity;
-import com.tedros.ejb.base.service.ITEjbService;
-import com.tedros.ejb.base.service.TResult;
-import com.tedros.ejb.base.service.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.util.TResourceUtil;
 
@@ -49,7 +49,7 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 	private static final int SEARCH = 5;
 	
 	private Class<E> entityType;
-	private ITEjbService<E> service;
+	private ITEjbController<E> service;
 	private Properties p;
 	private InitialContext ctx;
 	private List<E> values;
@@ -60,9 +60,9 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 	/**
 	 * Return an ejb service
 	 * 
-	 * @return {@link ITEjbService}
+	 * @return {@link ITEjbController}
 	 * */
-	public ITEjbService<E> getService(){
+	public ITEjbController<E> getService(){
 		return service;
 	}
 	
@@ -100,7 +100,7 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 				
 				ctx = new InitialContext(p);
 				
-				service = (ITEjbService<E>) ctx.lookup(serviceJndiName);
+				service = (ITEjbController<E>) ctx.lookup(serviceJndiName);
 				values = new ArrayList<>();
 			}
 		} catch (Exception e) {

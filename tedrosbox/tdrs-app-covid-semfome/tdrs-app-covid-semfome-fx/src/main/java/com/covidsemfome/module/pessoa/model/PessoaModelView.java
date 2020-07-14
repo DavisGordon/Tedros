@@ -10,12 +10,15 @@ import com.covidsemfome.module.pessoa.process.TPessoaProcess;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.TCodeValue;
+import com.tedros.fxapi.annotation.TObservableValue;
 import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
+import com.tedros.fxapi.annotation.control.TLabelPosition;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TPasswordField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TTab;
 import com.tedros.fxapi.annotation.control.TTabPane;
@@ -35,6 +38,7 @@ import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEntityProcess;
+import com.tedros.fxapi.annotation.property.TReadOnlyBooleanProperty;
 import com.tedros.fxapi.annotation.reader.TDetailReaderHtml;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
@@ -75,13 +79,29 @@ import javafx.scene.text.TextAlignment;
 			decorator = @TDecorator(type = TMainCrudViewWithListViewDecorator.class, 
 									viewTitle="#{view.person.name}", listTitle="#{label.select}"))
 @TSecurity(	id="COVSEMFOME_CADPESS_FORM", 
-			appName = "#{app.name}", moduleName = "#{label.person}", viewName = "#{view.person.name}",
+			appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "#{view.person.name}",
 			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 							TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 
 public class PessoaModelView extends TEntityModelView<Pessoa>{
 	
+	/*@TReaderHtml
+	@TLabel(text="Codigo do registro:", position=TLabelPosition.LEFT)
+	@TLongField(maxLength=6,node=@TNode(parse = true, disable=true) )
+	@THBox(	pane=@TPane(children={"id","status"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="id", priority=Priority.NEVER), 
+   				   		@TPriority(field="status", priority=Priority.ALWAYS)}))*/
 	private SimpleLongProperty id;
+	
+	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "Ativado"), 
+			@TCodeValue(code = "DESATIVADO", value = "Desativado")
+	})
+	@TLabel(text="Status", position=TLabelPosition.LEFT)
+	@THorizontalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
+	radioButtons = {@TRadioButtonField(text="Ativado", userData="ATIVADO"), 
+					@TRadioButtonField(text="Desativado", userData="DESATIVADO")
+	})
+	private SimpleStringProperty status;
 	
 	/**
 	 * A descripton for the title and the field box
@@ -89,7 +109,7 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	@TTextReaderHtml(text="#{form.person.title}", 
 					htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 					cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
-					cssForHtmlBox="", cssForContentValue="")
+					cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
 	@TText(	text="#{form.person.title}", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 			node=@TNode(id="t-form-title-text", parse = true))
@@ -113,21 +133,22 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	 * */
 	@TReaderHtml
 	@TLabel(text="#{label.observation}")
-	@TTextAreaField(control=@TControl(prefWidth=250, prefHeight=50, parse = true), maxLength=400, prefRowCount=4)
+	@TTextAreaField(control=@TControl(prefWidth=250, prefHeight=50, parse = true), wrapText=true, maxLength=400, prefRowCount=4)
 	@THBox(	pane=@TPane(children={"observacao","tipoVoluntario","statusVoluntario"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="observacao", priority=Priority.ALWAYS), 
    				   		@TPriority(field="tipoVoluntario", priority=Priority.ALWAYS),
    				   		@TPriority(field="statusVoluntario", priority=Priority.ALWAYS) }))
 	private SimpleStringProperty observacao;
 	
-	@TReaderHtml(codeValues={@TCodeValue(code = "1", value = "Cozinha - Preparar comida"), 
-			@TCodeValue(code = "2", value = "Cozinha - Preparar marmita"),
-			@TCodeValue(code = "3", value = "Entrega")})
-	@TLabel(text="Voluntario na")
+	@TReaderHtml(codeValues={@TCodeValue(code = "1", value = "Operacional"), 
+			@TCodeValue(code = "2", value = "Estrategico"), 
+			@TCodeValue(code = "3", value = "Estrategico (Receber emails)")
+			})
+	@TLabel(text="Tipo voluntário")
 	@TVerticalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
-	radioButtons = {@TRadioButtonField(text="Cozinha - Preparar comida", userData="1"), 
-					@TRadioButtonField(text="Cozinha - Preparar marmita", userData="2"),
-					@TRadioButtonField(text="Entrega", userData="3")
+	radioButtons = {@TRadioButtonField(text="Operacional", userData="1"), 
+					@TRadioButtonField(text="Estrategico", userData="2"),
+					@TRadioButtonField(text="Estrategico (Receber emails)", userData="3")
 	})
 	private SimpleStringProperty tipoVoluntario;
 	
@@ -147,7 +168,6 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 					@TRadioButtonField(text="Voluntario problematico", userData="5"),
 					@TRadioButtonField(text="Desligado ", userData="6")
 	})
-	
 	private SimpleStringProperty statusVoluntario;
 	
 	
@@ -166,6 +186,22 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	@TLabel(text="#{label.birthdate}")
 	@TDatePickerField(required = false)
 	private SimpleObjectProperty<Date> dataNascimento;
+	
+	@TReaderHtml
+	@TLabel(text="Email (Login no painel)")
+	@TTextField(maxLength=80)
+	@THBox(pane=@TPane(	children={"loginName","password"}), spacing=10, fillHeight=true, 
+	hgrow=@THGrow(priority={@TPriority(field="loginName", priority=Priority.NEVER),
+							@TPriority(field="password", priority=Priority.NEVER)}))
+	private SimpleStringProperty loginName;
+	
+	@TLabel(text="Password")
+	@TPasswordField(required=true, 
+					node=@TNode(focusedProperty=@TReadOnlyBooleanProperty(
+												observableValue=@TObservableValue(addListener=TEncriptPasswordChangeListener.class), 
+												parse = true), 
+								parse = true))
+	private SimpleStringProperty password;
 	
 	/**
 	 * A radio group description for the person sex
@@ -233,31 +269,25 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	@TModelViewCollectionType(entityClass=Endereco.class, modelViewClass=EnderecoModelView.class)
 	private ITObservableList<EnderecoModelView> enderecos;
 	
-	/* Used to test if the listener was removed after been used, need to remove comment in the line 365 at TListenerHelp  
-	 * 
-	@TIgnoreField
-	private Timeline tl;
+	private SimpleStringProperty lastPassword;
 	
-	@TIgnoreField
-	private EventHandler<ActionEvent> eh;
-	*/
 	public PessoaModelView(Pessoa entidade) {
 		super(entidade);
-		/* Used to test if the listener was removed after been used, need to remove comment in the line 365 at TListenerHelp 
-		eh = new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-            	nome.setValue(UUID.randomUUID().toString());
-            	//textoCadastro.setValue(RandomStringUtils.randomAlphanumeric(10));
-            	documentos.add(new DocumentoModelView(new Documento(RandomStringUtils.randomAlphanumeric(6), "1")));		
-            }
-        };
+		copyPassword();
 		
-		tl = TimelineBuilder.create().keyFrames(
-	            new KeyFrame(Duration.millis(10000), eh))
-	        .cycleCount(Animation.INDEFINITE)
-	        .build();
-		
-		tl.play();*/
+	}
+	
+	private void copyPassword() {
+		if(password!=null && password.getValue()!=null)
+			lastPassword.setValue(password.getValue());
+		else
+			lastPassword.setValue("");
+	}
+	
+	@Override
+	public void reload(Pessoa model) {
+		super.reload(model);
+		copyPassword();
 	}
 	
 	@Override
@@ -384,6 +414,7 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 
 	@Override
 	public SimpleStringProperty getDisplayProperty() {
+		//System.out.println("Versao: "+getModel().getVersionNum());
 		return getNome();
 	}
 
@@ -449,6 +480,62 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	 */
 	public void setLastUpdate(SimpleObjectProperty<Date> lastUpdate) {
 		this.lastUpdate = lastUpdate;
+	}
+
+	/**
+	 * @return the status
+	 */
+	public SimpleStringProperty getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(SimpleStringProperty status) {
+		this.status = status;
+	}
+
+	/**
+	 * @return the loginName
+	 */
+	public SimpleStringProperty getLoginName() {
+		return loginName;
+	}
+
+	/**
+	 * @param loginName the loginName to set
+	 */
+	public void setLoginName(SimpleStringProperty loginName) {
+		this.loginName = loginName;
+	}
+
+	/**
+	 * @return the password
+	 */
+	public SimpleStringProperty getPassword() {
+		return password;
+	}
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(SimpleStringProperty password) {
+		this.password = password;
+	}
+
+	/**
+	 * @return the lastPassword
+	 */
+	public SimpleStringProperty getLastPassword() {
+		return lastPassword;
+	}
+
+	/**
+	 * @param lastPassword the lastPassword to set
+	 */
+	public void setLastPassword(SimpleStringProperty lastPassword) {
+		this.lastPassword = lastPassword;
 	}
 
 

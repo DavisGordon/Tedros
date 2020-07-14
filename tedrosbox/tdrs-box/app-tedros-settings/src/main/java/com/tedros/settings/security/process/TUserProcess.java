@@ -8,7 +8,7 @@ import java.util.List;
 import com.tedros.core.ejb.service.TUserService;
 import com.tedros.core.security.model.TProfile;
 import com.tedros.core.security.model.TUser;
-import com.tedros.ejb.base.service.TResult;
+import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.process.TEntityProcess;
 
@@ -25,7 +25,7 @@ public class TUserProcess extends TEntityProcess<TUser> {
 	private Long userId;
 	
 	public TUserProcess() throws TProcessException {
-		super(TUser.class, "TUserServiceRemote", true);
+		super(TUser.class, "TUserControllerRemote", true);
 	} 
 
 	/* (non-Javadoc)

@@ -20,11 +20,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.covidsemfome.ejb.service.IAcaoService;
-import com.covidsemfome.ejb.service.IAutUserService;
-import com.covidsemfome.ejb.service.IPessoaService;
-import com.covidsemfome.ejb.service.ITipoAjudaService;
-import com.covidsemfome.ejb.service.IVoluntarioController;
+import com.covidsemfome.ejb.controller.IAcaoController;
+import com.covidsemfome.ejb.controller.IAutUserController;
+import com.covidsemfome.ejb.controller.IPessoaController;
+import com.covidsemfome.ejb.controller.ITipoAjudaController;
+import com.covidsemfome.ejb.controller.IVoluntarioController;
 import com.covidsemfome.model.Acao;
 import com.covidsemfome.model.Contato;
 import com.covidsemfome.model.Pessoa;
@@ -33,8 +33,8 @@ import com.covidsemfome.model.Voluntario;
 import com.covidsemfome.rest.model.AcaoModel;
 import com.covidsemfome.rest.model.RestModel;
 import com.covidsemfome.rest.model.UserModel;
-import com.tedros.ejb.base.service.TResult;
-import com.tedros.ejb.base.service.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.result.TResult.EnumResult;
 
 import br.com.covidsemfome.bean.CovidUserBean;
 import br.com.covidsemfome.ejb.service.ServiceLocator;
@@ -61,7 +61,7 @@ public class PainelApi {
 		ServiceLocator loc =  ServiceLocator.getInstance();
 		
 		try {
-			IAutUserService serv = loc.lookup("IAutUserServiceRemote");
+			IAutUserController serv = loc.lookup("IAutUserControllerRemote");
 			TResult<Boolean> res = serv.logout(covidUserBean.getUser().getPessoa());
 			loc.close();
 			
@@ -101,7 +101,7 @@ public class PainelApi {
 					if(c.getTipo().equals("2"))
 						c.setDescricao(tel);
 			
-			IPessoaService serv = loc.lookup("IPessoaServiceRemote");
+			IPessoaController serv = loc.lookup("IPessoaControllerRemote");
 			TResult<Pessoa> res = serv.save(p);
 			loc.close();
 			
@@ -144,7 +144,7 @@ public class PainelApi {
 		ServiceLocator loc =  ServiceLocator.getInstance();
 		
 		try {
-			ITipoAjudaService serv = loc.lookup("ITipoAjudaServiceRemote");
+			ITipoAjudaController serv = loc.lookup("ITipoAjudaControllerRemote");
 			TResult<List<TipoAjuda>> res = serv.listar(tipo);
 			loc.close();
 			System.out.println( "Tipo ajuda para "+tipo+" recuperado com sucesso!");
@@ -203,7 +203,7 @@ public class PainelApi {
 		ServiceLocator loc =  ServiceLocator.getInstance();
 		
 		try {
-			IAcaoService serv = loc.lookup("IAcaoServiceRemote");
+			IAcaoController serv = loc.lookup("IAcaoControllerRemote");
 			TResult<List<Acao>> res = serv.listAcoesParaExibirNoPainel();
 			loc.close();
 			
@@ -258,13 +258,7 @@ public class PainelApi {
 	
 	private String formataDataHora(Date data){
 		String pattern = "dd/MM/yyyy 'às' HH:mm";
-
-		// Create an instance of SimpleDateFormat used for formatting 
-		// the string representation of date according to the chosen pattern
 		DateFormat df = new SimpleDateFormat(pattern);
-
-		// Using DateFormat format method we can create a string 
-		// representation of a date with the defined format.
 		return df.format(data);
 	}
 	

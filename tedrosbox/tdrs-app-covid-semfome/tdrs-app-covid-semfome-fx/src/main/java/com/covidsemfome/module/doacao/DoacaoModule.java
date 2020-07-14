@@ -4,9 +4,9 @@
  * TODOS OS DIREITOS RESERVADOS
  * 13/01/2014
  */
-package com.covidsemfome.module.doador;
+package com.covidsemfome.module.doacao;
 
-import com.covidsemfome.module.doador.model.DoadorModelView;
+import com.covidsemfome.module.doacao.model.DoacaoModelView;
 import com.tedros.core.TModule;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
@@ -19,13 +19,13 @@ import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
  * @author Davis Gordon
  *
  */
-@TSecurity(	id="APP_COVIDSEMFOME_DOADOR", appName = "#{app.name}", moduleName = "#{label.donor}", 
+@TSecurity(	id="COVSEMFOME_DOACAO_MODULE", appName = "#{app.name}", moduleName = "Gerenciar Campanha", 
 			allowedAccesses=TAuthorizationType.MODULE_ACCESS)
-public class DoadorModule extends TModule{
+public class DoacaoModule extends TModule{
 
 	@Override
 	public void tStart() {
-		TDynaView<DoadorModelView> view = new TDynaView<>(this, DoadorModelView.class);
+		TDynaView<DoacaoModelView> view = new TDynaView<>(this, DoacaoModelView.class);
 		tShowView(view);
 	}
 }

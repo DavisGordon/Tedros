@@ -5,6 +5,7 @@ package com.covidsemfome.ejb.service;
 
 import java.util.List;
 
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
@@ -13,20 +14,20 @@ import org.apache.commons.lang.StringUtils;
 import com.covidsemfome.ejb.bo.EmailBO;
 import com.covidsemfome.ejb.bo.MailingBO;
 import com.covidsemfome.ejb.bo.PessoaBO;
+import com.covidsemfome.ejb.exception.MailingWarningException;
 import com.covidsemfome.model.Mailing;
 import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.Voluntario;
 import com.tedros.ejb.base.bo.ITGenericBO;
 import com.tedros.ejb.base.service.TEjbService;
-import com.tedros.ejb.base.service.TResult;
-import com.tedros.ejb.base.service.TResult.EnumResult;
 
 /**
  * @author Davis Gordon
  *
  */
+@Local
 @Stateless(name="IMailingService")
-public class MailingService extends TEjbService<Mailing> implements IMailingService{
+public class MailingService extends TEjbService<Mailing> {
 	
 	@Inject
 	private MailingBO bo;
@@ -42,8 +43,7 @@ public class MailingService extends TEjbService<Mailing> implements IMailingServ
 		return bo;
 	}
 	
-	@Override
-	public TResult<Mailing> save(Mailing m) {
+	public void enviar(Mailing m) {
 		
 		try{
 			String msg = "";
@@ -77,7 +77,7 @@ public class MailingService extends TEjbService<Mailing> implements IMailingServ
 				case "2": // Nao inscritos
 					List<Pessoa> lst2 = pessBO.listAll(Pessoa.class);
 					if(lst2.size() == m.getVoluntarios().size())
-						return new TResult<>(EnumResult.WARNING, "Todos os voluntários estão inscritos para a ação!", m, true);
+						throw new MailingWarningException("Todos os voluntários estão inscritos para a ação!");
 					for (Pessoa p : lst2) {
 						boolean enviar = true;
 						List<Voluntario> vLst = m.getVoluntarios();
@@ -103,20 +103,19 @@ public class MailingService extends TEjbService<Mailing> implements IMailingServ
 							msg = enviar(m, msg, v.getPessoa());
 						}
 					}else{
-						return new TResult<>(EnumResult.WARNING, "Não há voluntários inscritos para a ação!", m, true);
+						throw new MailingWarningException("Não há voluntários inscritos para a ação!");
 					}
 					
 					break;
 				}
 			}
 			
-			if(msg.isEmpty())
-				return new TResult<>(EnumResult.SUCESS, "Emails enviado com sucesso!", m, true);
-			else
-				return new TResult<>(EnumResult.WARNING, "Houve um problema no envio de mailing para os seguintes destinatarios: "+msg, m, true);
+			if(!msg.isEmpty())
+				throw new MailingWarningException("Houve um problema no envio de mailing para os seguintes destinatarios: "+msg);
+		
 		}catch(Exception e){
 			e.printStackTrace();
-			return new TResult<>(EnumResult.ERROR, "Um erro impediu o envio de email para este mailing!", m, true);
+			throw new MailingWarningException("Um erro impediu o envio de email para este mailing!");
 		}
 		
 	}
@@ -132,21 +131,6 @@ public class MailingService extends TEjbService<Mailing> implements IMailingServ
 		return msg;
 	}
 	
-	/*@Override
-	public TResult<List<Mailing>> listAll(Class<? extends ITEntity> entidade) {
-		try{
-			List<Mailing> lst1 = new ArrayList<>();
-			List<Acao> lst = acaoBO.listAll(Acao.class);
-			for (Acao acao : lst) {
-				lst1.add((Mailing) acao);
-			}
-			return new TResult<>(EnumResult.SUCESS, lst1);
-			
-		}catch(Exception e){
-			e.printStackTrace();
-			return new TResult<>(EnumResult.ERROR, e.getMessage());
-		}
-		
-	}*/
+	
 
 }

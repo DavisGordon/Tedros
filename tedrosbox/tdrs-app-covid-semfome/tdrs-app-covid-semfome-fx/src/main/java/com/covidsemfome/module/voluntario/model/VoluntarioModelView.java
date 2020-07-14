@@ -68,15 +68,15 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TFormReaderHtml
-@TForm(name = "Cadastrar voluntário", showBreadcrumBar=true)
+@TForm(name = "Voluntário inscrito na campanha ", showBreadcrumBar=true)
 @TEntityProcess(process = VoluntarioProcess.class, entity=Voluntario.class)
 @TEntityCrudViewWithListView(listViewMinWidth=350,
 		presenter=@TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = TMainCrudViewWithListViewBehavior.class), 
 			decorator = @TDecorator(type = TMainCrudViewWithListViewDecorator.class, 
-									viewTitle="Cadastrar voluntario", listTitle="#{label.select}")))
+									viewTitle="Voluntário inscrito", listTitle="#{label.select}")))
 @TSecurity(	id="COVSEMFOME_CADVOL_FORM", 
-			appName = "#{app.name}", moduleName = "Painel do voluntário", viewName = "Cadastrar Voluntário",
+			appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Voluntários inscritos na campanha",
 			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 							TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 
@@ -86,17 +86,17 @@ public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 	
 	private SimpleStringProperty displayText;
 	
-	@TTextReaderHtml(text="Ação e pessoa", 
+	@TTextReaderHtml(text="Ação/Campanha e pessoa", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
-			cssForHtmlBox="", cssForContentValue="")
+			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
-	@TText(text="Ação e pessoa", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
+	@TText(text="Ação/Campanha e pessoa", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 	node=@TNode(id="t-form-title-text", parse = true))
 	private SimpleStringProperty textoCadastro;
 	
 	@TReaderHtml
-	@TLabel(text="Ação")
+	@TLabel(text="Ação/Campanha")
 	@TComboBoxField(firstItemTex="Selecione uma ação...", required=true, 
 			control=@TControl(parse = true, minWidth=400),
 			optionsList=@TOptionsList(optionsProcessClass = LoadAcaoOptionListProcess.class, 

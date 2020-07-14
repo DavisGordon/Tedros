@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.covidsemfome.model.Acao;
-import com.tedros.ejb.base.service.TResult;
+import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.process.TOptionsProcess;
 
@@ -18,7 +18,7 @@ import com.tedros.fxapi.process.TOptionsProcess;
 public class LoadAcaoOptionListProcess extends TOptionsProcess {
 
 	public LoadAcaoOptionListProcess() throws TProcessException {
-		super(Acao.class, "IAcaoServiceRemote",true);
+		super(Acao.class, "IAcaoControllerRemote",true);
 		// TODO Auto-generated constructor stub
 	}
 

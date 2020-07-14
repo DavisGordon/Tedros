@@ -9,7 +9,7 @@ package com.covidsemfome.module.acao.process;
 import java.util.List;
 
 import com.covidsemfome.model.Mailing;
-import com.tedros.ejb.base.service.TResult;
+import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.process.TEntityProcess;
 
@@ -22,7 +22,7 @@ import com.tedros.fxapi.process.TEntityProcess;
 public class MailingProcess extends TEntityProcess<Mailing> {
 
 	public MailingProcess() throws TProcessException {
-		super(Mailing.class, "IMailingServiceRemote", true);
+		super(Mailing.class, "IMailingControllerRemote", true);
 	}
 
 
