@@ -24,4 +24,5 @@ public interface IAutUserController extends ITEjbController<User> {
 	public TResult<User> login(String loginName, String pass );
 	
 	public TResult<User> recuperar(String key);
+	
 }

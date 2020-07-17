@@ -25,8 +25,6 @@ public class AutUserController extends TEjbController<User> implements IAutUserC
 	@EJB
 	private AutUserService serv;
 	
-	
-	
 	public TResult<Boolean> validar(String key){
 		try{
 			boolean v = serv.validar(key);
@@ -77,6 +75,8 @@ public class AutUserController extends TEjbController<User> implements IAutUserC
 	public ITEjbService<User> getService() {
 		return serv;
 	}
+
+	
 
 }
 

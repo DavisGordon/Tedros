@@ -24,6 +24,7 @@ public class AutUserService extends TEjbService<User>  {
 	@Inject
 	private UserBO bo;
 	
+	
 	@Override
 	public ITGenericBO<User> getBussinesObject() {
 		return bo;

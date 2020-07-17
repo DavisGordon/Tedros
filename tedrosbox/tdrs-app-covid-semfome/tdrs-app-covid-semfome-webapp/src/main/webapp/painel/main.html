@@ -23,19 +23,19 @@
 							<br><br>
 							
 							<ul class="actions stacked">
-								<li><a href="#acoes" class="button fit small wide smooth-scroll-middle">Participar em acão</a></li>
+								<li><a href="#acaoId" class="button fit small wide smooth-scroll-middle">Participar em acão</a></li>
 								<li><a href="#volun" class="button fit small wide smooth-scroll-middle">Meus dados pessoais</a></li>
 								<li><a href="javascript: logout()" class="button fit small primary wide smooth-scroll-middle">Sair</a></li>
 							</ul>
 							
 						</div>
 						<div class="image">
-							<img src="../images/gallery/fulls/11.jpg" alt="" />
+							<img src="../images/13.jpg" alt="" />
 						</div>
 					</section>
 					
 					<!-- Definition List -->
-					<section class="wrapper style1 align-left" id="acoes">
+					<section class="wrapper style1 align-left" id="acaoId">
 						<div class="inner">
 							<header>
 								<h2>Acões</h2>
@@ -72,16 +72,6 @@
 														<input type="radio" id="f" name="sexo"value="F"  />
 														<label for="f">Feminino</label>
 													</div>
-													<div class="field">
-														<label for="voluntario">Desejo voluntariar-me para:</label>
-														<select name="voluntario" id="voluntario">
-															<option value="">- Selecione -</option>
-															<option value="1">Cozinha - Preparar comida</option>
-															<option value="2">Cozinha - Preparar marmita</option>
-															<option value="3">Entrega</option>
-														</select>
-													</div>
-													
 												</div>
 												<ul class="actions">
 													<li><input type="submit" name="submit" id="submit" value="Enviar" /></li>
@@ -322,8 +312,6 @@
 	        			 if(result.data.sexo && result.data.sexo=='F'){
 	        				 $("#f").prop("checked", true);
 	        			 }
-	        			 $('#voluntario option[value='+result.data.tipoVoluntario+']').attr('selected','selected');
-	        			 
 	        		 }
 	        	}else{
 	        		alert(result.message);
@@ -342,8 +330,8 @@
 			function validate(formData, jqForm, options) { 
     		    
     		    var form = jqForm[0]; 
-    		    if ((!form.name.value || !form.email.value || $('#voluntario').fieldValue()[0]=='')) { 
-    		        alert('Por favor informar o seu nome, email e o no que pretende se voluntariar.'); 
+    		    if (!form.name.value || !form.email.value ) { 
+    		        alert('Por favor informar o seu nome e email.'); 
     		        return false; 
     		    } 
     		}

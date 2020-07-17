@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.persistence.NoResultException;
 
 import com.covidsemfome.ejb.service.PessoaService;
 import com.covidsemfome.ejb.service.exception.PessoaContatoExistException;
@@ -15,6 +16,7 @@ import com.covidsemfome.model.Pessoa;
 import com.tedros.ejb.base.controller.TEjbController;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.util.TEncriptUtil;
 
 /**
  * @author Davis Gordon
@@ -29,6 +31,79 @@ public class PessoaController extends TEjbController<Pessoa> implements IPessoaC
 	@Override
 	public PessoaService getService() {
 		return serv;
+	}
+	
+	@Override
+	public TResult<Boolean> defpass(String key, String pass) {
+		try{
+			
+			Pessoa p = new Pessoa();
+			p.setNewPassKey(key);
+			
+			p = serv.find(p);
+			if(p==null)
+				return new TResult<>(EnumResult.WARNING, "A chave informada não confere!");
+			
+			
+			p.setPassword(TEncriptUtil.encript(pass));
+			p.setNewPassKey(null);
+			
+			p = serv.save(p);
+			
+			return new TResult<>(EnumResult.SUCESS, true);
+			
+		}catch(NoResultException e){
+			return new TResult<>(EnumResult.WARNING, "A chave informada não confere!");
+		}catch(Exception e){
+			e.printStackTrace();
+			return new TResult<>(EnumResult.ERROR, e.getMessage());
+		}
+	}
+	
+	@Override
+	public TResult<Boolean> validateNewPassKey(String key) {
+		try{
+			
+			Pessoa p = new Pessoa();
+			p.setNewPassKey(key);
+			
+			p = serv.find(p);
+			if(p!=null)
+				return new TResult<>(EnumResult.SUCESS, true);
+			else
+				return new TResult<>(EnumResult.WARNING, "A chave informada não confere!");
+			
+		}catch(NoResultException e){
+			return new TResult<>(EnumResult.WARNING, "A chave informada não confere!");
+		}catch(Exception e){
+			e.printStackTrace();
+			return new TResult<>(EnumResult.ERROR, e.getMessage());
+		}
+	}
+	
+	@Override
+	public TResult<Boolean> newPass(String email) {
+		
+		try{
+			
+			Pessoa p = new Pessoa();
+			p.setLoginName(email);
+			
+			p = serv.find(p);
+			if(p==null)
+				return new TResult<>(EnumResult.WARNING, "O email informado não confere!");
+			
+			String key = serv.newPass(p);
+			serv.enviarEmailNewPass(p, key);
+			
+			return new TResult<>(EnumResult.SUCESS, true);
+			
+		}catch(NoResultException e){
+			return new TResult<>(EnumResult.WARNING, "O email informado não confere!");
+		}catch(Exception e){
+			e.printStackTrace();
+			return new TResult<>(EnumResult.ERROR, e.getMessage());
+		}
 	}
 	
 	@Override
@@ -93,5 +168,9 @@ public class PessoaController extends TEjbController<Pessoa> implements IPessoaC
 			return new TResult<>(EnumResult.ERROR, e.getMessage());
 		}
 	}
+
+	
+
+	
 
 }

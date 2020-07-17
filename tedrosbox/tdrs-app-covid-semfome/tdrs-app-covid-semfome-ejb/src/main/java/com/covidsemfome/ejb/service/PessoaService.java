@@ -5,6 +5,7 @@ package com.covidsemfome.ejb.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
@@ -43,6 +44,15 @@ public class PessoaService extends TEjbService<Pessoa>  {
 	@Override
 	public PessoaBO getBussinesObject() {
 		return bo;
+	}
+	
+	public String newPass(Pessoa pess) throws Exception{
+		
+		String key = UUID.randomUUID().toString();
+		pess.setNewPassKey(key);
+		save(pess);
+		
+		return key;
 	}
 	
 	@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
@@ -95,4 +105,8 @@ public class PessoaService extends TEjbService<Pessoa>  {
 		emailBO.enviarEmailNovoVoluntario(entidade);
 	}
 
+	@TransactionAttribute(value = TransactionAttributeType.SUPPORTS)
+	public void enviarEmailNewPass(Pessoa entidade, String key) throws Exception {
+		emailBO.enviarEmailNewPass(entidade, key);
+	}
 }
