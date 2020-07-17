@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.ejb.Remote;
 
 import com.covidsemfome.model.Pessoa;
+import com.covidsemfome.model.User;
 import com.tedros.ejb.base.controller.ITEjbController;
 import com.tedros.ejb.base.result.TResult;
 
@@ -18,5 +19,9 @@ public interface IPessoaController extends ITEjbController<Pessoa>{
 	
 	public TResult recuperar(String loginName, String password);
 	
+	public TResult<Boolean> newPass(String email);
 	
+	public TResult<Boolean> validateNewPassKey(String key);
+
+	public TResult<Boolean> defpass(String email, String pass);
 }

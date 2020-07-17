@@ -85,15 +85,13 @@ public class PainelApi {
 	public RestModel<UserModel> alterUser(@FormParam("name") String  name, 
 			@FormParam("telefone") String  tel,
 			@FormParam("email") String  email,
-			@FormParam("sexo") String  sexo,
-			@FormParam("voluntario") String  voluntario){
+			@FormParam("sexo") String  sexo){
 	
 		ServiceLocator loc =  ServiceLocator.getInstance();
 		try{
 			Pessoa p = covidUserBean.getUser().getPessoa();
 			p.setNome(name);
 			p.setSexo(sexo);
-			p.setTipoVoluntario(voluntario);
 			p.setLoginName(email);
 			
 			if(p.getContatos()!=null && tel!=null && !tel.isEmpty())

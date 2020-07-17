@@ -55,6 +55,14 @@ public class EmailBO {
 				
 	}
 	
+	public void enviarEmailNewPass(Pessoa p, String key){
+		
+		String content = "Olá "+p.getNome()+", para definir uma nova senha clique <a href=\""+host+"defpass/defpass.html?k="+key+"\">aqui</a>";
+		
+		util.sent(true, emailAccount, p.getLoginName(), "[Covid Sem Fome] Definir nova senha", content, true);
+				
+	}
+	
 	public void enviarEmailNovoVoluntario(Pessoa p){
 		
 		String cel = "";

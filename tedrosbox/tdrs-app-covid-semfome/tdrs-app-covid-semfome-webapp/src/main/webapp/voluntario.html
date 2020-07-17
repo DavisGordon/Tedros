@@ -34,6 +34,7 @@
 								<ul class="actions stacked">
 									<li><input type="submit" name="submit" id="submit" value="Acessar painel" /></li>
 									<li><a href="index.html#volun" class="button fit small">Fazer cadastro</a></li>
+									<li>Para definir uma nova senha clique <a href="javascript: newpass()" >aqui</a></li>
 								</ul>
 							</form>
 						</div>
@@ -80,6 +81,33 @@
     		        {
     		        	if(result.code == "200"){
     		        		location.href = 'painel/main.html?c='+result.data;
+    		        	}else{
+    		        		alert(result.message);
+    		        	}
+    		        
+    		    	}
+    			});
+    		    
+    		    return false;
+    		}
+    		
+    		function newpass() { 
+   			 
+    		    var email  = document.getElementById("email")
+    		    if (!email.value) { 
+    		        alert('Por favor informar o email.'); 
+    		        return false; 
+    		    } 
+    		    $.ajax
+    		    ({ 
+    		        url: 'api/auth/newpass/'+email.value,
+    		        type: 'get',
+    		        dataType:'json',
+    		        headers : {'Content-Type' : 'application/json'},
+    		        success: function(result)
+    		        {
+    		        	if(result.code == "200"){
+    		        		alert("Um email foi enviado com as instrucões para definir uma nova senha.")
     		        	}else{
     		        		alert(result.message);
     		        	}
