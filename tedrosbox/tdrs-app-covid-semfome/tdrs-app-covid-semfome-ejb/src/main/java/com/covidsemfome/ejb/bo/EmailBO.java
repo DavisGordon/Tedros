@@ -30,9 +30,10 @@ public class EmailBO {
 	@Inject
 	private PessoaBO pessBO;
 	
-	private String host = "http://localhost:8080/tdrs-app-covid-semfome-webapp/";
-	private String emailAccount = "tedrosbox@gmail.com";
-	private String passAccount = "$tdrs#221978@";
+	//private String host = "http://localhost:8080/tdrs-app-covid-semfome-webapp/";
+	private String host = "http://191.252.202.67:8080/tdrs-app-covid-semfome-webapp/";
+	private String emailAccount = "";
+	private String passAccount = "";
 	
 	private TEmailUtil util;
 	
@@ -129,7 +130,8 @@ public class EmailBO {
 
 	private String gerarMsgBoasVindas(String nome) {
 		
-		File htmlTemplate = new File("C:/usr/covidsemfome/email_boasvindas.html");
+		//File htmlTemplate = new File("C:/usr/covidsemfome/email_boasvindas.html");
+		File htmlTemplate = new File("/home/csf/email_boasvindas.html");
 		
 		if(!htmlTemplate.isFile())
 			throw new RuntimeException("TEMPLATE DE EMAIL NAO ENCONTRADO") ;

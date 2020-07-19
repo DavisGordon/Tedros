@@ -73,7 +73,7 @@
 			  <configuration>
 			  	<archive>
 			      <manifest>
-			        <mainClass>com.tedros.Tedros</mainClass>
+			        <mainClass>com.tedros.Main</mainClass>
 			      </manifest>
 			    </archive>
 			    <descriptorRefs>

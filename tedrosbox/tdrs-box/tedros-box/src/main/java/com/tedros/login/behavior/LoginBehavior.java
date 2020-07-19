@@ -9,7 +9,7 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import com.tedros.Tedros;
+import com.tedros.Main;
 import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.security.model.TProfile;
@@ -334,7 +334,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 		
 		TedrosContext.setLocale(new Locale(language));
 		TedrosContext.searchApps();
-		Tedros.getTedros().buildApplicationMenu();
+		Main.getTedros().buildApplicationMenu();
 		TedrosContext.hideModal();
 	}
 	
