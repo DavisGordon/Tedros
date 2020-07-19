@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -75,9 +77,11 @@ import javafx.util.Duration;
  * 
  * @author Davis Gordon
  * */
-public class Tedros extends Application {
+public class Main extends Application {
 	
-	private static Tedros tedros;
+	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	
+	private static Main tedros;
 	//private Stage stage;
     private Scene scene;
     private BorderPane root;
@@ -109,8 +113,8 @@ public class Tedros extends Application {
     private boolean expandedTollBar = true;
     
     
-    public Tedros(){
-    	
+    public Main(){
+    	LOGGER.setLevel(Level.ALL);
         history = new Stack<Page>();
         forwardHistory = new Stack<Page>();
         changingPage = false;
@@ -118,34 +122,41 @@ public class Tedros extends Application {
         mouseDragOffsetY = 0.0D;
         fromForwardOrBackButton = false;
         try {
-			checkAndBuildTedrosBoxFolder();
+        	String outputFolder = System.getProperty("user.home");
+        	boolean extract = checkAndBuildTedrosBoxFolder(outputFolder);
 			TLoggerManager.setup();
+			if(extract)
+				extractZip(outputFolder);
 		} catch (IOException e) {
 			e.printStackTrace();
+			LOGGER.severe(e.toString());
 		}
     }
     
-    private void checkAndBuildTedrosBoxFolder() throws IOException{
+    private boolean checkAndBuildTedrosBoxFolder(String outputFolder) throws IOException{
 		
-		String outputFolder = System.getProperty("user.home");
-		InputStream zipFile = getClass().getResourceAsStream("TedrosBox.zip");
-    	
 		//create tedros directory if is not exists
     	File folder = new File(outputFolder+"/.tedros");
-    	if(folder.exists()){
+    	if(folder.exists()){ 
     		if(new File(outputFolder+"/.tedros"+"/tedrosbox__V1.7.txt").exists())
-    			return;
+    			return false;
     		TFileUtil.delete(folder);
     	}
     	folder.mkdir();
-		TZipUtil.unZip(zipFile, outputFolder);
+    	new File(outputFolder+"/.tedros/LOG").mkdir();
+    	return true;
+	}
+
+	private void extractZip(String outputFolder) {
+		InputStream zipFile = getClass().getResourceAsStream("TedrosBox.zip");
+    	TZipUtil.unZip(zipFile, outputFolder);
 	}
     
     private Stage getStage(){
     	return TedrosContext.getStage();
     }
 
-    public static Tedros getTedros(){
+    public static Main getTedros(){
         return tedros;
     }
     
