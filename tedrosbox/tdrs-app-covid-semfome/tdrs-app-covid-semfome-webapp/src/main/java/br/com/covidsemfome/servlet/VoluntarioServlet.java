@@ -89,10 +89,14 @@ public class VoluntarioServlet extends HttpServlet {
 					System.out.println("sucesso");
 					resp.setStatus(HttpServletResponse.SC_OK);
 					out.println("Obrigado por se cadastrar agora voce tem acesso a um painel feito para te ajudar a agendar suas ações como voluntário.");
-				}else{
+				}else if(res.getResult().equals(EnumResult.WARNING)){
 					//System.out.println(res.getErrorMessage());
 					resp.setStatus(HttpServletResponse.SC_ACCEPTED);	
 					out.println("Entre no painel com seu email e senha.");
+				}else if(res.getResult().equals(EnumResult.ERROR)){
+					//System.out.println(res.getErrorMessage());
+					resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);	
+					out.println(res.getMessage());
 				}
 		
 				

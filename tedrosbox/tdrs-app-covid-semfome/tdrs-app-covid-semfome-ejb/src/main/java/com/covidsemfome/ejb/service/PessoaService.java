@@ -17,9 +17,11 @@ import com.covidsemfome.ejb.bo.EmailBO;
 import com.covidsemfome.ejb.bo.PessoaBO;
 import com.covidsemfome.ejb.bo.UserBO;
 import com.covidsemfome.ejb.bo.VoluntarioBO;
+import com.covidsemfome.ejb.exception.EmailBusinessException;
 import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.User;
 import com.tedros.ejb.base.service.TEjbService;
+import com.tedros.util.TSentEmailException;
 
 /**
  * @author Davis Gordon
@@ -100,13 +102,13 @@ public class PessoaService extends TEjbService<Pessoa>  {
 	}
 	
 	@TransactionAttribute(value = TransactionAttributeType.SUPPORTS)
-	public void enviarEmailCadastrado(Pessoa entidade) throws Exception {
+	public void enviarEmailCadastrado(Pessoa entidade) throws TSentEmailException, EmailBusinessException {
 		emailBO.enviarEmailBoasVindas(entidade);
 		emailBO.enviarEmailNovoVoluntario(entidade);
 	}
 
 	@TransactionAttribute(value = TransactionAttributeType.SUPPORTS)
-	public void enviarEmailNewPass(Pessoa entidade, String key) throws Exception {
+	public void enviarEmailNewPass(Pessoa entidade, String key) throws TSentEmailException {
 		emailBO.enviarEmailNewPass(entidade, key);
 	}
 }

@@ -9,7 +9,11 @@ import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.inject.Named;
 
+import com.covidsemfome.ejb.exception.EmailBusinessException;
+import com.covidsemfome.ejb.producer.Item;
 import com.covidsemfome.ejb.service.AcaoService;
 import com.covidsemfome.ejb.service.TipoAjudaService;
 import com.covidsemfome.ejb.service.VoluntarioService;
@@ -21,6 +25,7 @@ import com.tedros.ejb.base.controller.TEjbController;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.ejb.base.service.ITEjbService;
+import com.tedros.util.TSentEmailException;
 
 /**
  * @author Davis Gordon
@@ -38,6 +43,9 @@ public class VoluntarioController extends TEjbController<Voluntario> implements 
 	@EJB(beanName="IAcaoService")
 	private AcaoService aServ;
  
+	@Inject
+	@Named("errorMsg")
+	private Item<String> errorMsg;
 	
 	public TResult<List<Acao>> participarEmAcao(Pessoa pessoa, Long acaoId, List<Long> tiposAjuda){
 		
@@ -70,9 +78,9 @@ public class VoluntarioController extends TEjbController<Voluntario> implements 
 			List<Acao> lst = aServ.listAcoesParaExibirNoPainel();
 			return new TResult<>(EnumResult.SUCESS, "", lst);
 			
-		}catch(Exception e){
+		}catch(Exception | TSentEmailException | EmailBusinessException e){
 			e.printStackTrace();
-			return new TResult<>(EnumResult.ERROR, e.getMessage());
+			return new TResult<>(EnumResult.ERROR, errorMsg.getValue());
 		}
 	}
 	
@@ -88,9 +96,9 @@ public class VoluntarioController extends TEjbController<Voluntario> implements 
 			
 			List<Acao> lst = aServ.listAcoesParaExibirNoPainel();
 			return new TResult<>(EnumResult.SUCESS, "", lst);
-		}catch(Exception e){
+		}catch(Exception | TSentEmailException | EmailBusinessException e){
 			e.printStackTrace();
-			return new TResult<>(EnumResult.ERROR, e.getMessage());
+			return new TResult<>(EnumResult.ERROR, errorMsg.getValue());
 		}
 	}
 

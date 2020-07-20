@@ -40,9 +40,10 @@ public class AutUserController extends TEjbController<User> implements IAutUserC
 		try {
 			User u = serv.login(loginName, pass);
 			return new TResult<User>(EnumResult.SUCESS, "Olá "+u.getPessoa().getNome(), u);
-		} catch(UserNotFoundException e){
-			return new TResult<User>(EnumResult.WARNING, "Email ou senha não conferem!");
 		}catch (Exception e) {
+			if(e.getCause() instanceof UserNotFoundException)
+				return new TResult<User>(EnumResult.WARNING, "Email ou senha não conferem!");
+			
 			e.printStackTrace();
 			return new TResult<User>(EnumResult.ERROR, e.getMessage());
 		}

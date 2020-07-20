@@ -621,7 +621,7 @@
 		<script type="text/javascript">
 		$(document).ready(function() { 
 		    // bind form using ajaxForm 
-		    $('#frm').ajaxForm( { beforeSubmit: validate, success: showResponse  } ); 
+		    $('#frm').ajaxForm( { beforeSubmit: validate, success: showResponse, error: showResponse  } ); 
 		});
 		
 		function validate(formData, jqForm, options) { 
@@ -659,8 +659,11 @@
 		    // if the ajaxForm method was passed an Options Object with the dataType 
 		    // property set to 'json' then the first argument to the success callback 
 		    // is the json data object returned by the server 
-		 
-		    alert(responseText); 
+		 	if(responseText instanceof Object)
+		    	alert(responseText.responseText); 
+		 	else
+		 		alert(responseText); 
+		    
 		    if(xhr.status==200 || xhr.status==202){
 		    	location.href = 'voluntario.html';
 		    }else {

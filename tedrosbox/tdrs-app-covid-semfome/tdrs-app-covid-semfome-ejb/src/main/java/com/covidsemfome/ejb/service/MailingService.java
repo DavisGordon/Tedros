@@ -20,6 +20,7 @@ import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.Voluntario;
 import com.tedros.ejb.base.bo.ITGenericBO;
 import com.tedros.ejb.base.service.TEjbService;
+import com.tedros.util.TSentEmailException;
 
 /**
  * @author Davis Gordon
@@ -58,7 +59,7 @@ public class MailingService extends TEjbService<Mailing> {
 				for (String to : arr) {
 					try{
 						emailBO.enviar(false, to, m.getTituloEmail(), content, true);
-					}catch(Exception e){
+					}catch(Exception | TSentEmailException e){
 						e.printStackTrace();
 						msg += to + ", ";
 					}
@@ -124,7 +125,7 @@ public class MailingService extends TEjbService<Mailing> {
 		String content = m.getHtml().replaceAll("#NOME#", p.getNome());
 		try{
 			emailBO.enviar(false, p.getLoginName(), m.getTituloEmail(), content, true);
-		}catch(Exception e){
+		}catch(Exception | TSentEmailException e){
 			e.printStackTrace();
 			msg += p.getNome() + ", ";
 		}
