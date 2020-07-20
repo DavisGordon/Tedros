@@ -103,7 +103,9 @@ public class LoginApi {
 				return new RestModel<String>(res.getValue().getKey(), "200", res.getMessage());
 			}else{
 				//System.out.println(res.getErrorMessage());
-				return new RestModel<String>("", "404", res.getResult().equals(EnumResult.WARNING) ? res.getMessage()  : ERROR );
+				return new RestModel<String>("", "404", res.getResult().equals(EnumResult.WARNING) 
+						? res.getMessage()  
+								: ERROR );
 			}
 			
 		} catch (NamingException e) {

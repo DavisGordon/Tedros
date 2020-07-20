@@ -33,10 +33,12 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 		//getEntityManager().setProperty("javax.persistence.cache.storeMode", "BYPASS");
 	}
 	
+	@SuppressWarnings("unchecked")
 	public E find(E entity)throws Exception{
 		
-		List<E> results = findAll(entity);
-		
+		ReadAllQuery query = new ReadAllQuery(entity.getClass());
+		query.setExampleObject(entity);
+		List<E> results = (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
 		return (results!=null && results.size()>0) ? results.get(0) : null;
 	}
 	
@@ -108,13 +110,16 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 	/**
 	 * Remove uma entity
 	 * */
+	@SuppressWarnings("unchecked")
 	public void remove(E entity)throws Exception{
 		beforeRemove(entity);
 		if(!em.contains(entity)){
 			entity = (E) em.find(entity.getClass(), entity.getId());
 		}
-		em.remove(entity);
-		afterRemove(entity);
+		if(entity!=null){
+			em.remove(entity);
+			afterRemove(entity);
+		}
 	}
 	/**
 	 * Retorna uma lista com todas as entitys persistidas

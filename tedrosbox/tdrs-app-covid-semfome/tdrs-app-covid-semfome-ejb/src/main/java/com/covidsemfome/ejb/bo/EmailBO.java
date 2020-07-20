@@ -11,13 +11,17 @@ import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import com.covidsemfome.ejb.exception.EmailBusinessException;
+import com.covidsemfome.ejb.producer.Item;
 import com.covidsemfome.model.Acao;
 import com.covidsemfome.model.Contato;
 import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.TipoAjuda;
 import com.covidsemfome.model.Voluntario;
 import com.tedros.util.TEmailUtil;
+import com.tedros.util.TSentEmailException;
 import com.tedros.util.TFileUtil;
 
 /**
@@ -30,41 +34,52 @@ public class EmailBO {
 	@Inject
 	private PessoaBO pessBO;
 	
-	//private String host = "http://localhost:8080/tdrs-app-covid-semfome-webapp/";
-	private String host = "http://191.252.202.67:8080/tdrs-app-covid-semfome-webapp/";
-	private String emailAccount = "";
-	private String passAccount = "";
+	@Inject
+	@Named("host")
+	private Item<String> host;
+	
+	@Inject
+	@Named("emailUser")
+	private Item<String> emailAccount;
+	
+	@Inject
+	@Named("emailPass")
+	private Item<String> passAccount;
+	
+	@Inject
+	@Named("emailTemplatePath")
+	private Item<String> templPath;
 	
 	private TEmailUtil util;
 	
 	@PostConstruct
 	public void init(){
 		util = TEmailUtil.getInstance("smtp.gmail.com", "587", "javax.net.ssl.SSLSocketFactory", 
-				"true", "587", emailAccount, passAccount);
+				"true", "587", emailAccount.getValue(), passAccount.getValue());
 	}
 	
 	
-	public void enviar(boolean debug, String to, String subject, String content, boolean html){
-		util.sent(debug, emailAccount, to, subject, content, html);
+	public void enviar(boolean debug, String to, String subject, String content, boolean html) throws TSentEmailException{
+		util.sent(debug, emailAccount.getValue(), to, subject, content, html);
 	}
 	
-	public void enviarEmailBoasVindas(Pessoa p){
+	public void enviarEmailBoasVindas(Pessoa p) throws TSentEmailException, EmailBusinessException{
 		String content = gerarMsgBoasVindas(p.getNome());
 		
 		//Envia email de boas vindas
-		util.sent(true, emailAccount, p.getLoginName(), "Bem vindo a ONG Covid Sem Fome", content, true);
+		util.sent(true, emailAccount.getValue(), p.getLoginName(), "Bem vindo a ONG Covid Sem Fome", content, true);
 				
 	}
 	
-	public void enviarEmailNewPass(Pessoa p, String key){
+	public void enviarEmailNewPass(Pessoa p, String key) throws TSentEmailException{
 		
 		String content = "Olá "+p.getNome()+", para definir uma nova senha clique <a href=\""+host+"defpass/defpass.html?k="+key+"\">aqui</a>";
 		
-		util.sent(true, emailAccount, p.getLoginName(), "[Covid Sem Fome] Definir nova senha", content, true);
+		util.sent(true, emailAccount.getValue(), p.getLoginName(), "[Covid Sem Fome] Definir nova senha", content, true);
 				
 	}
 	
-	public void enviarEmailNovoVoluntario(Pessoa p){
+	public void enviarEmailNovoVoluntario(Pessoa p) throws TSentEmailException, EmailBusinessException{
 		
 		String cel = "";
 		for(Contato c : p.getContatos())
@@ -78,12 +93,14 @@ public class EmailBO {
 				+ "<br>Cel/Tel: "+cel;
 		
 		String to = pessBO.estrategicoEmail();
+		if(to.isEmpty())
+			throw new EmailBusinessException("Não foi identificado nenhum voluntário estrategico para envio de email.");
 		
-		util.sent(true, emailAccount, to, "[Covid Sem Fome] Novo cadastro de voluntário realizado pelo site", content, true);
+		util.sent(true, emailAccount.getValue(), to, "[Covid Sem Fome] Novo cadastro de voluntário realizado pelo site", content, true);
 				
 	}
 	
-	public void enviarEmailParticiparAcao(Voluntario v){
+	public void enviarEmailParticiparAcao(Voluntario v) throws TSentEmailException, EmailBusinessException{
 		
 		Pessoa p = v.getPessoa();
 		
@@ -105,12 +122,14 @@ public class EmailBO {
 				+ "<hr>Tipo de ajuda:"+tajs;
 		
 		String to = pessBO.estrategicoEmail();
+		if(to.isEmpty())
+			throw new EmailBusinessException("Não foi identificado nenhum voluntário estrategico para envio de email.");
 		
-		util.sent(true, emailAccount, to, "[Covid Sem Fome] Voluntário para ação "+v.getAcao().getTitulo(), content, true);
+		util.sent(true, emailAccount.getValue(), to, "[Covid Sem Fome] Voluntário para ação "+v.getAcao().getTitulo(), content, true);
 				
 	}
 	
-	public void enviarEmailSairAcao(Pessoa p, Acao a){
+	public void enviarEmailSairAcao(Pessoa p, Acao a) throws TSentEmailException, EmailBusinessException{
 		
 		String cel = "";
 		for(Contato c : p.getContatos())
@@ -123,22 +142,24 @@ public class EmailBO {
 				+ "<br>Cel/Tel: "+cel;
 		
 		String to = pessBO.estrategicoEmail();
+		if(to.isEmpty())
+			throw new EmailBusinessException("Não foi identificado nenhum voluntário estrategico para envio de email.");
 		
-		util.sent(true, emailAccount, to, "[Covid Sem Fome] Voluntário saiu da ação "+a.getTitulo(), content, true);
+		util.sent(true, emailAccount.getValue(), to, "[Covid Sem Fome] Voluntário saiu da ação "+a.getTitulo(), content, true);
 				
 	}
 
-	private String gerarMsgBoasVindas(String nome) {
+	private String gerarMsgBoasVindas(String nome) throws EmailBusinessException {
 		
 		//File htmlTemplate = new File("C:/usr/covidsemfome/email_boasvindas.html");
-		File htmlTemplate = new File("/home/csf/email_boasvindas.html");
+		File htmlTemplate = new File(templPath.getValue());
 		
 		if(!htmlTemplate.isFile())
-			throw new RuntimeException("TEMPLATE DE EMAIL NAO ENCONTRADO") ;
+			throw new EmailBusinessException("TEMPLATE DE EMAIL NAO ENCONTRADO") ;
 		
 		String msg = TFileUtil.readFile(htmlTemplate);
 		msg = msg.replaceAll("#NOME#", nome);
-		msg = msg.replaceAll("#HOST#", host);
+		msg = msg.replaceAll("#HOST#", host.getValue());
 		
 		return msg;
 	}

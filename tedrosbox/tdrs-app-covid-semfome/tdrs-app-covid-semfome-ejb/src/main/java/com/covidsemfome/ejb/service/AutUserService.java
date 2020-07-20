@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import com.covidsemfome.ejb.bo.UserBO;
+import com.covidsemfome.ejb.exception.UserNotFoundException;
 import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.User;
 import com.tedros.ejb.base.bo.ITGenericBO;

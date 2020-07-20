@@ -8,8 +8,12 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.NoResultException;
 
+import com.covidsemfome.ejb.exception.EmailBusinessException;
+import com.covidsemfome.ejb.producer.Item;
 import com.covidsemfome.ejb.service.PessoaService;
 import com.covidsemfome.ejb.service.exception.PessoaContatoExistException;
 import com.covidsemfome.model.Pessoa;
@@ -17,6 +21,7 @@ import com.tedros.ejb.base.controller.TEjbController;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.util.TEncriptUtil;
+import com.tedros.util.TSentEmailException;
 
 /**
  * @author Davis Gordon
@@ -27,6 +32,10 @@ public class PessoaController extends TEjbController<Pessoa> implements IPessoaC
 
 	@EJB
 	private PessoaService serv;
+	
+	@Inject
+	@Named("errorMsg")
+	private Item<String> errorMsg;
 	
 	@Override
 	public PessoaService getService() {
@@ -98,12 +107,13 @@ public class PessoaController extends TEjbController<Pessoa> implements IPessoaC
 			
 			return new TResult<>(EnumResult.SUCESS, true);
 			
-		}catch(NoResultException e){
-			return new TResult<>(EnumResult.WARNING, "O email informado não confere!");
+		}catch(TSentEmailException e){
+			e.printStackTrace();
+			return new TResult<>(EnumResult.ERROR, errorMsg.getValue());
 		}catch(Exception e){
 			e.printStackTrace();
 			return new TResult<>(EnumResult.ERROR, e.getMessage());
-		}
+		} 
 	}
 	
 	@Override
@@ -163,9 +173,12 @@ public class PessoaController extends TEjbController<Pessoa> implements IPessoaC
 			
 		}catch(PessoaContatoExistException e){
 			return new TResult<Pessoa>(EnumResult.WARNING);
+		} catch (TSentEmailException | EmailBusinessException  e) {
+			e.printStackTrace();
+			return new TResult<>(EnumResult.ERROR, errorMsg.getValue());
 		}catch(Exception e){
 			e.printStackTrace();
-			return new TResult<>(EnumResult.ERROR, e.getMessage());
+			return new TResult<>(EnumResult.ERROR, errorMsg.getValue());
 		}
 	}
 

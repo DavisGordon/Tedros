@@ -16,6 +16,35 @@
   	<name>tdrs-app-covid-semfome-ejb</name>
 	<description>The app ejb service</description>
 	
+	<profiles>
+		<profile>
+		  <id>prod</id>
+		  <properties>
+		    <srv.host>http://191.252.202.67:8080/tdrs-app-covid-semfome-webapp/</srv.host>
+		    <csf.email>covidsemfome@gmail.com</csf.email>
+		    <srv.email.user>tedrosbox@gmail.com</srv.email.user>
+		    <srv.email.pass>$tdrs#221978@</srv.email.pass>
+		    <srv.email.smtp.host>smtp.gmail.com</srv.email.smtp.host>
+		    <srv.email.smtp.port>587</srv.email.smtp.port>
+		    <srv.email.smtp.socket.port>587</srv.email.smtp.socket.port>
+		    <srv.email.template.path>/home/csf/email_boasvindas.html</srv.email.template.path>
+		  </properties>
+		</profile>
+		<profile>
+		  <id>des</id>
+		  <properties>
+		    <srv.host>http://localhost:8080/tdrs-app-covid-semfome-webapp/</srv.host>
+		    <csf.email>covidsemfome@gmail.com</csf.email>
+		    <srv.email.user>tedrosbox@gmail.com</srv.email.user>
+		    <srv.email.pass>$tdrs#221978@</srv.email.pass>
+		    <srv.email.smtp.host>smtp.gmail.com</srv.email.smtp.host>
+		    <srv.email.smtp.port>587</srv.email.smtp.port>
+		    <srv.email.smtp.socket.port>587</srv.email.smtp.socket.port>
+		    <srv.email.template.path>C://usr//covidsemfome//email_boasvindas.html</srv.email.template.path>
+		  </properties>
+		</profile>
+	</profiles>
+	
 	<!-- DEPENDENCIES -->
     <dependencies>
 	  	<dependency>
@@ -79,7 +108,27 @@
           			<ejbVersion>3.0</ejbVersion>
         		</configuration>
       		</plugin>
+      		<plugin>
+			 <groupId>org.apache.maven.plugins</groupId>
+			 <artifactId>maven-resources-plugin</artifactId>
+			 <version>2.5</version>
+			 <configuration>
+			   <!-- specify UTF-8, ISO-8859-1 or any other file encoding -->
+			   <encoding>UTF-8</encoding>
+			 </configuration>
+			</plugin>
   		</plugins>
+  		
+  		<resources>
+        	<resource>
+            	<directory>src/main/resources</directory>
+            	<filtering>true</filtering>
+            	<includes>
+          			<include>**/*.*</include>
+        		</includes>
+        	</resource>
+    	</resources>
+  		
  	</build>
     
 </project>

@@ -28,6 +28,7 @@ import com.tedros.ejb.base.eao.TGenericEAO;
 @RequestScoped
 public class PessoaEAO extends TGenericEAO<Pessoa> {
 	
+	@SuppressWarnings("unchecked")
 	public List<Pessoa> estrategicoEmail(){
 		
 		StringBuffer sbf = new StringBuffer("select distinct e from Pessoa e where e.tipoVoluntario = :tipo ");

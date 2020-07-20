@@ -21,9 +21,13 @@ public class TEmailUtil {
 	private final Session session;
 	
 	public static void main(String[] args) {
-		TEmailUtil.getInstance("smtp.gmail.com", "587", "javax.net.ssl.SSLSocketFactory", 
-				"true", "587", "tedrosbox@gmail.com", "$tdrs#221978@")
-		.sent(true, "tedrosbox@gmail.com", "davis.dun@gmail.com", "subject", "content", true);
+		try {
+			TEmailUtil.getInstance("smtp.gmail.com", "587", "javax.net.ssl.SSLSocketFactory", 
+					"true", "587", "tedrosbox@gmail.com", "$tdrs#221978@")
+			.sent(true, "tedrosbox@gmail.com", "davis.dun@gmail.com", "subject", "content", true);
+		} catch (TSentEmailException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static TEmailUtil getInstance(String smtpHost, String smtpSocketPort, String smtpSocketClass, 
@@ -58,7 +62,7 @@ public class TEmailUtil {
 	  	    
 	}
 	
-	  public void sent(boolean debug, String from, String to, String subject, String content, boolean html) {
+	  public void sent(boolean debug, String from, String to, String subject, String content, boolean html) throws TSentEmailException {
 	   
 	 
 	    /** Ativa Debug para sessão */
@@ -84,7 +88,7 @@ public class TEmailUtil {
 	      Transport.send(message);
 	 
 	     } catch (MessagingException e) {
-	        throw new RuntimeException(e);
+	        throw new TSentEmailException(e);
 	    }
 	  }
 	}

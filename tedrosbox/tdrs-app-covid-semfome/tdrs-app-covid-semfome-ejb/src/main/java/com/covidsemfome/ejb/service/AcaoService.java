@@ -13,11 +13,13 @@ import javax.inject.Inject;
 
 import com.covidsemfome.ejb.bo.AcaoBO;
 import com.covidsemfome.ejb.bo.EmailBO;
+import com.covidsemfome.ejb.exception.EmailBusinessException;
 import com.covidsemfome.model.Acao;
 import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.Voluntario;
 import com.tedros.ejb.base.bo.ITGenericBO;
 import com.tedros.ejb.base.service.TEjbService;
+import com.tedros.util.TSentEmailException;
 
 /**
  * @author Davis Gordon
@@ -42,11 +44,11 @@ public class AcaoService extends TEjbService<Acao> {
 		return bo.listAcoesDoDiaAnteriorEmDiante();
 	}
 	@TransactionAttribute(value = TransactionAttributeType.SUPPORTS)
-	public void enviarEmailSairAcao(Pessoa p, Acao a){
+	public void enviarEmailSairAcao(Pessoa p, Acao a) throws TSentEmailException, EmailBusinessException{
 		emailBO.enviarEmailSairAcao(p, a);
 	}
 	@TransactionAttribute(value = TransactionAttributeType.SUPPORTS)
-	public void enviarEmailParticiparAcao(Voluntario v){
+	public void enviarEmailParticiparAcao(Voluntario v) throws TSentEmailException, EmailBusinessException{
 		emailBO.enviarEmailParticiparAcao(v);
 	}
 	
