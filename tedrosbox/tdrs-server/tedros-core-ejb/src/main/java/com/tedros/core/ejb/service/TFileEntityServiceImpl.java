@@ -4,10 +4,10 @@ import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import com.tedros.common.model.TFileEntity;
 import com.tedros.core.ejb.bo.TFileEntityBO;
 import com.tedros.ejb.base.bo.ITGenericBO;
 import com.tedros.ejb.base.service.TEjbService;
-import com.tedros.global.model.TFileEntity;
 
 @Local
 @Stateless(name="TFileEntityService")

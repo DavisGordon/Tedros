@@ -13,9 +13,9 @@ import javax.inject.Named;
 import javax.persistence.NoResultException;
 
 import com.covidsemfome.ejb.exception.EmailBusinessException;
+import com.covidsemfome.ejb.exception.PessoaContatoExistException;
 import com.covidsemfome.ejb.producer.Item;
 import com.covidsemfome.ejb.service.PessoaService;
-import com.covidsemfome.ejb.service.exception.PessoaContatoExistException;
 import com.covidsemfome.model.Pessoa;
 import com.tedros.ejb.base.controller.TEjbController;
 import com.tedros.ejb.base.result.TResult;

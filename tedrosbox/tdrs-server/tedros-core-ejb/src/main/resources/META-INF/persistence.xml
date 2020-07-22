@@ -12,8 +12,8 @@
 		<class>com.tedros.core.security.model.TProfile</class>
 		<class>com.tedros.core.security.model.TAuthorization</class>
 		
-		<class>com.tedros.global.model.TByteEntity</class>	
-		<class>com.tedros.global.model.TFileEntity</class>
+		<class>com.tedros.common.model.TByteEntity</class>	
+		<class>com.tedros.common.model.TFileEntity</class>
 		
 		<properties>
 	      <property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.H2Platform"/>

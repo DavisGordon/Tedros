@@ -3,12 +3,12 @@ package com.tedros.core.ejb.controller;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.tedros.common.model.TFileEntity;
 import com.tedros.core.ejb.service.TFileEntityServiceImpl;
 import com.tedros.ejb.base.controller.TEjbController;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.ejb.base.service.ITEjbService;
-import com.tedros.global.model.TFileEntity;
 
 
 @Stateless(name="TFileEntityController")

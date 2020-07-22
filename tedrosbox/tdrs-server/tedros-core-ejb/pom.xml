@@ -36,7 +36,7 @@
   	
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
-	  		<artifactId>tedros-global-model</artifactId>
+	  		<artifactId>tedros-common-model</artifactId>
 	  		<version>0.0.1-SNAPSHOT</version>
 	  	</dependency>
   		
