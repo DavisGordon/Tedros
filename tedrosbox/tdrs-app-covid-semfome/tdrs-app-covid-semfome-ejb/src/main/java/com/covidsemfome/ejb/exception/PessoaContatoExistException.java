@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.covidsemfome.ejb.service.exception;
+package com.covidsemfome.ejb.exception;
 
 /**
  * @author Davis Gordon

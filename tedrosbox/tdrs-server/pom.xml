@@ -70,7 +70,7 @@
 		<module>tedros-core-model</module>
 		<module>tedros-ejb-model-base</module>
 		<module>tedros-ejb-service-base</module>
-		<module>tedros-global-model</module>
+		<module>tedros-common-model</module>
 	</modules>
  
  	<!-- REPOSITORIES -->

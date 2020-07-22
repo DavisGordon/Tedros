@@ -6,9 +6,9 @@ package com.tedros.core.ejb.eao;
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.Query;
 
+import com.tedros.common.model.TByteEntity;
+import com.tedros.common.model.TFileEntity;
 import com.tedros.ejb.base.eao.TGenericEAO;
-import com.tedros.global.model.TByteEntity;
-import com.tedros.global.model.TFileEntity;
 
 /**
  * @author Davis Gordon

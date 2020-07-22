@@ -52,7 +52,7 @@
 		<module>tedros-box</module>
 		<module>tedros-box-app-base</module>
 		<module>tedros-core</module>
-		<module>app-tedros-settings</module>
+		<module>tedros-box-app-settings</module>
 	</modules>
 
 

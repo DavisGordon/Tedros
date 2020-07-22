@@ -57,7 +57,6 @@
 	<modules>
 		<module>tdrs-box</module>
 		<module>tdrs-fx</module>
-		<module>tdrs-global-brasil</module>
 		<module>tdrs-app-covid-semfome</module>
 		<module>tdrs-miscellaneous</module>
 		<module>tdrs-server</module>

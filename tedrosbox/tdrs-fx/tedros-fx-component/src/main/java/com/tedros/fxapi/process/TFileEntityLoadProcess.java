@@ -7,10 +7,10 @@ import java.util.Properties;
 
 import javax.naming.InitialContext;
 
+import com.tedros.common.model.TFileEntity;
 import com.tedros.core.ejb.service.TFileEntityService;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.exception.TProcessException;
-import com.tedros.global.model.TFileEntity;
 import com.tedros.util.TResourceUtil;
 
 /**

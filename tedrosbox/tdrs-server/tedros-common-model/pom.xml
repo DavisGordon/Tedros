@@ -1,8 +1,8 @@
 <project 	xmlns="http://maven.apache.org/POM/4.0.0" 
 			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   			xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
->
-	<modelVersion>4.0.0</modelVersion>
+ >
+ 	<modelVersion>4.0.0</modelVersion>
 	
 	<!-- PARENT INFO -->
 	<parent>
@@ -12,39 +12,33 @@
 	</parent>
 	
 	<!-- MODULE INFO -->
-  	<artifactId>tedros-core-ejb-client</artifactId>
+  	<artifactId>tedros-common-model</artifactId>
   	<packaging>jar</packaging>
-  	
-  	<name>tedros-core-ejb-client</name>
-  	<description>The ejb client project for the tedros-core-ejb</description>  
-	
+
+  	<name>tedros-global-model</name>
+  	<description>The tedros global entitys</description>
+
 	<!-- DEPENDENCIES -->
-  	<dependencies>
+ 	<dependencies>  
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
-	  		<artifactId>tedros-core-model</artifactId>
+	  		<artifactId>tedros-ejb-model-base</artifactId>
 	  		<version>0.0.1-SNAPSHOT</version>
+	  		<scope>compile</scope>
 	  	</dependency>
-  	
+	  
 	  	<dependency>
-	  		<groupId>com.tedros</groupId>
-	  		<artifactId>tedros-common-model</artifactId>
-	  		<version>0.0.1-SNAPSHOT</version>
-	  	</dependency>
-	  	
-	  	<dependency>
-			<groupId>org.apache.openejb</groupId>
-			<artifactId>openejb-client</artifactId>
-			<version>4.5.2</version>
+		   	<groupId>org.eclipse.persistence</groupId>
+		   	<artifactId>eclipselink</artifactId>
+		   	<version>2.4.2</version>
+		   	<scope>compile</scope>
 		</dependency>
-	  	
-	  	
+		
 	    <dependency>
-	    	<groupId>junit</groupId>
+	      	<groupId>junit</groupId>
 	      	<artifactId>junit</artifactId>
 	      	<version>3.8.1</version>
 	      	<scope>test</scope>
 	    </dependency>
-  	</dependencies>	
- 	
+  	</dependencies>
 </project>

@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.covidsemfome.ejb.service.IPessoaService;
+import com.covidsemfome.ejb.controller.IPessoaController;
 import com.covidsemfome.model.Pessoa;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.exception.TProcessException;
@@ -40,7 +40,7 @@ public class TPessoaFilterProcess extends TFilterProcess {
 		Date dataNascimento = (objects.containsKey("dataNascimento")) ? (Date) objects.get("dataNascimento") :  null;;
 		
 		List<TResult<Object>> resultados = new ArrayList<>();
-		TResult result = ((IPessoaService)getService()).pesquisar(nome, dataNascimento, tipo, tipoDocumento, numero);
+		TResult result = ((IPessoaController)getService()).pesquisar(nome, dataNascimento, tipo, tipoDocumento, numero);
 		resultados.add(result);
 		return resultados;
 	}
