@@ -96,7 +96,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			if(tEjbService!=null){
 				this.remoteMode = tEjbService.remoteMode();
 				this.serviceName = tEjbService.serviceName();
-				this.entityClass = (Class<E>) tEjbService.entity();
+				this.entityClass = (Class<E>) tEjbService.model();
 			}
 			// set the crud process
 			if(tEntityProcess!=null){
@@ -471,7 +471,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		for(int x=0; x<modelsViewsList.size(); x++){
 			
 			final M model = modelsViewsList.get(x);
-			
+			//TODO: VERIFICAR PQ ISCHANGED NAO FUNCIONA MAIS
 			if(saveOnlyChangedModel && !model.isChanged())
 				continue;
 			

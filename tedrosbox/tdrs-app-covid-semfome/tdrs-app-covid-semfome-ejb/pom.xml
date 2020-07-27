@@ -22,8 +22,8 @@
 		  <properties>
 		    <srv.host>http://191.252.202.67:8080/tdrs-app-covid-semfome-webapp/</srv.host>
 		    <csf.email>covidsemfome@gmail.com</csf.email>
-		    <srv.email.user>x@gmail.com</srv.email.user>
-		    <srv.email.pass>8@</srv.email.pass>
+		    <srv.email.user>tedrosbox@gmail.com</srv.email.user>
+		    <srv.email.pass>$tdrs#221978@</srv.email.pass>
 		    <srv.email.smtp.host>smtp.gmail.com</srv.email.smtp.host>
 		    <srv.email.smtp.port>587</srv.email.smtp.port>
 		    <srv.email.smtp.socket.port>587</srv.email.smtp.socket.port>
@@ -38,8 +38,8 @@
 		  <properties>
 		    <srv.host>http://localhost:8080/tdrs-app-covid-semfome-webapp/</srv.host>
 		    <csf.email>covidsemfome@gmail.com</csf.email>
-		    <srv.email.user>x@gmail.com</srv.email.user>
-		    <srv.email.pass>8@</srv.email.pass>
+		    <srv.email.user>tedrosbox@gmail.com</srv.email.user>
+		    <srv.email.pass>$tdrs#221978@</srv.email.pass>
 		    <srv.email.smtp.host>smtp.gmail.com</srv.email.smtp.host>
 		    <srv.email.smtp.port>587</srv.email.smtp.port>
 		    <srv.email.smtp.socket.port>587</srv.email.smtp.socket.port>

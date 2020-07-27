@@ -26,6 +26,11 @@ public @interface TDecorator {
 	public String saveButtonText() default TAnnotationDefaultValue.TVIEW_saveButtonText;
 	
 	/**
+	 * Set the search button text
+	 * */
+	public String searchButtonText() default TAnnotationDefaultValue.TVIEW_searchButtonText;
+	
+	/**
 	 * Set the delete button text
 	 * */
 	public String deleteButtonText() default TAnnotationDefaultValue.TVIEW_deleteButtonText;
@@ -36,9 +41,38 @@ public @interface TDecorator {
 	public String editButtonText() default TAnnotationDefaultValue.TVIEW_editButtonText;
 	
 	/**
-	 * Set the edit button text
+	 * Set the cancel button text
 	 * */
 	public String cancelButtonText() default TAnnotationDefaultValue.TVIEW_cancelButtonText;
+	
+	/**
+	 * <pre>
+	 * Set the clean button text
+	 * </pre>
+	 * */
+	public String cleanButtonText() default TAnnotationDefaultValue.TVIEW_cleanButtonText;
+
+	/**
+	 * <pre>
+	 * Set the excel button text
+	 * </pre>
+	 * */
+	public String excelButtonText() default TAnnotationDefaultValue.TVIEW_excelButtonText;
+
+	/**
+	 * <pre>
+	 * Set the word button text
+	 * </pre>
+	 * */
+	public String wordButtonText() default TAnnotationDefaultValue.TVIEW_wordButtonText;
+
+	/**
+	 * <pre>
+	 * Set the PDF button text
+	 * </pre>
+	 * */
+	public String pdfButtonText() default TAnnotationDefaultValue.TVIEW_pdfButtonText;
+
 	
 	/**
 	 * Set the view title text
@@ -68,4 +102,5 @@ public @interface TDecorator {
 	 * */
 	public String readerModeTitle() default TAnnotationDefaultValue.TVIEW_readerModeTitle;
 
+	
 }

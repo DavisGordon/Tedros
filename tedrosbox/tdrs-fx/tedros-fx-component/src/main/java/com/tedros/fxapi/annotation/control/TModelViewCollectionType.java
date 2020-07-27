@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import com.tedros.ejb.base.entity.TEntity;
+import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.presenter.model.TModelView;
 
 /**
@@ -24,9 +25,9 @@ public @interface TModelViewCollectionType {
 	public Class<? extends TModelView> modelViewClass();
 	
 	/**
-	 * The entity type
+	 * The model or entity type
 	 * */
-	public Class<? extends TEntity> entityClass();
+	public Class<? extends ITModel> modelClass();
 	
 	/**
 	 * <pre>

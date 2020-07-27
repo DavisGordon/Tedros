@@ -83,7 +83,39 @@ public @interface TBehavior {
 	 * */
 	@SuppressWarnings("rawtypes")
 	public Class<? extends TPresenterAction> cancelAction() default TPresenterAction.class;
-	
+
+	/**
+	 * <pre>
+	 * Specifies an action to the search event dispatched from the search button;
+	 * </pre>
+	 * */
+	@SuppressWarnings("rawtypes")
+	public Class<? extends TPresenterAction> searchAction() default TPresenterAction.class;
+
+	/**
+	 * <pre>
+	 * Specifies an action to the clean event dispatched from the clean button;
+	 * </pre>
+	 * */
+	@SuppressWarnings("rawtypes")
+	public Class<? extends TPresenterAction> cleanAction() default TPresenterAction.class;
+
+	/**
+	 * <pre>
+	 * Specifies an action to the excel event dispatched from the excel button;
+	 * </pre>
+	 * */
+	@SuppressWarnings("rawtypes")
+	public Class<? extends TPresenterAction> excelAction() default TPresenterAction.class;
+
+	/**
+	 * <pre>
+	 * Specifies an action to the pdf event dispatched from the pdf button;
+	 * </pre>
+	 * */
+	@SuppressWarnings("rawtypes")
+	public Class<? extends TPresenterAction> pdfAction() default TPresenterAction.class;
+
 	/**
 	 * <pre>
 	 * Process the save action for all changed entity's if false only the current 
@@ -102,4 +134,5 @@ public @interface TBehavior {
 	 * </pre>
 	 * */
 	public boolean saveOnlyChangedModels() default true;
+
 }

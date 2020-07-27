@@ -8,8 +8,8 @@ public enum TedrosFolderEnum {
 	CONF_FOLDER 		("CONF/"),
 	DATA_FILE_FOLDER 	("DATA_FILE/"),
 	MODULE_FOLDER 		("MODULE/"),
-	LOG_FOLDER			("LOG/");
-	//USER_FOLDER			("LOCAL/");
+	LOG_FOLDER			("LOG/"),
+	EXPORT_FOLDER			("EXPORT/");
 	
 	private String folder;
 	

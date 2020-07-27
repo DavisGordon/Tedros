@@ -336,9 +336,9 @@ public class TFileField extends StackPane {
     	try {
     		long size = FileUtils.sizeOf(file);
     		if(maxFileSize!=null && maxFileSize < size)
-    			showModal("O tamanho maximo permitido � "+maxFileSize+" bytes");
+    			showModal("O tamanho maximo permitido é "+maxFileSize+" bytes");
     		else if(minFileSize!=null && minFileSize > FileUtils.sizeOf(file))
-    			showModal("O tamanho minimo permitido � "+minFileSize+" bytes");
+    			showModal("O tamanho minimo permitido é "+minFileSize+" bytes");
     		else{
 	    		if(showFilePath)
 	    			filePathLabel.setText(file.getAbsolutePath());

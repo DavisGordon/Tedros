@@ -41,7 +41,15 @@ public enum TAuthorizationType {
 	/**
 	 * Define the allow for the new action 
 	 * */
-	NEW ("#{tedros.security.new}");
+	NEW ("#{tedros.security.new}"),
+	/**
+	 * Define the allow for the export action 
+	 * */
+	EXPORT ("#{tedros.security.export}"),
+	/**
+	 * Define the allow for the search action 
+	 * */
+	SEARCH ("#{tedros.security.search}");
 	
 	private String value;
 	

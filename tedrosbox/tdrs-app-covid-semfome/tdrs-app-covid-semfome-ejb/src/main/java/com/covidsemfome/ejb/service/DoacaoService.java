@@ -36,7 +36,7 @@ public class DoacaoService extends TEjbService<Doacao> {
 		return bo;
 	}
 	
-	public List<Doacao> pesquisar(String nome, Date dataInicio, Date dataFim, Long acaoId, TipoAjuda tipoAjuda){
+	public List<Doacao> pesquisar(String nome, Date dataInicio, Date dataFim, String acaoId, List<TipoAjuda> tipoAjuda){
 		return getBussinesObject().pesquisar(nome, dataInicio, dataFim, acaoId, tipoAjuda);
 	}
 

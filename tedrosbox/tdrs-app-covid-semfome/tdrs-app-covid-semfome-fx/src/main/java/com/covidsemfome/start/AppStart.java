@@ -12,6 +12,7 @@ import com.covidsemfome.module.doacao.icon.DoacaoMenuIconImageView;
 import com.covidsemfome.module.pessoa.CadastroDePessoaModule;
 import com.covidsemfome.module.pessoa.icon.PessoaIconImageView;
 import com.covidsemfome.module.pessoa.icon.PessoaMenuIconImageView;
+import com.covidsemfome.module.report.DoacaoReportModule;
 import com.covidsemfome.module.voluntario.CadastroTipoAjudaModule;
 import com.covidsemfome.module.voluntario.CadastroVoluntarioModule;
 import com.covidsemfome.module.voluntario.icon.TipoAjudaIconImageView;
@@ -43,7 +44,10 @@ module = {
 			@TModule(type=DoacaoModule.class, name="Doação", menu="Gerenciar Campanha", 
 					icon=DoacaoIconImageView.class, menuIcon=DoacaoMenuIconImageView.class),
 			@TModule(type=MailingModule.class, name="Mailing", menu="Gerenciar Campanha", 
-					icon=MailingIconImageView.class, menuIcon=MailingMenuIconImageView.class)
+					icon=MailingIconImageView.class, menuIcon=MailingMenuIconImageView.class),
+			@TModule(type=DoacaoReportModule.class, name="Doações", menu="Relatorios"/*, 
+			icon=MailingIconImageView.class, menuIcon=MailingMenuIconImageView.class*/)
+
 })
 @TResourceBundle(resourceName={"CovidLabels"})
 @TSecurity(id="APP_COVIDSEMFOME", appName = "#{app.name}", allowedAccesses=TAuthorizationType.APP_ACCESS)

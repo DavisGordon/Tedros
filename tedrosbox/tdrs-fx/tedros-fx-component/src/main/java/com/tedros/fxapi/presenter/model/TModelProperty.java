@@ -484,7 +484,7 @@ public abstract class TModelProperty<M extends ITModel> implements ITModelView<M
 							if(annotation instanceof TModelViewCollectionType ){
 								TModelViewCollectionType tAnnotation = (TModelViewCollectionType) annotation;
 								modelViewClass = tAnnotation.modelViewClass();
-								entityClass = tAnnotation.entityClass();
+								entityClass = tAnnotation.modelClass();
 							}
 						
 						// ObservableList.class
