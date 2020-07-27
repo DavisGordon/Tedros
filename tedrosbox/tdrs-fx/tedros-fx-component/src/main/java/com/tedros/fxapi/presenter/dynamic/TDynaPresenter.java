@@ -11,6 +11,7 @@ import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.process.TEntityProcess;
 import com.tedros.fxapi.annotation.process.TModelProcess;
+import com.tedros.fxapi.annotation.process.TReportProcess;
 import com.tedros.fxapi.exception.TErrorType;
 import com.tedros.fxapi.presenter.TPresenter;
 import com.tedros.fxapi.presenter.behavior.ITBehavior;
@@ -31,6 +32,7 @@ public class TDynaPresenter<M extends TModelView>	extends TPresenter<TDynaView<M
 	
 	private Class<? extends ITModel> modelClass;
 	
+	private TReportProcess tReportProcess;
 	private TModelProcess tModelProcess;
 	private TEntityProcess tEntityProcess;
 	private TEjbService tEjbService;
@@ -136,6 +138,7 @@ public class TDynaPresenter<M extends TModelView>	extends TPresenter<TDynaView<M
 		tEjbService = (TEjbService) this.modelViewClass.getAnnotation(TEjbService.class);
 		tModelProcess = (TModelProcess) this.modelViewClass.getAnnotation(TModelProcess.class);
 		tEntityProcess = (TEntityProcess) this.modelViewClass.getAnnotation(TEntityProcess.class);
+		tReportProcess = (TReportProcess) this.modelViewClass.getAnnotation(TReportProcess.class);
 		tForm = (TForm) this.modelViewClass.getAnnotation(TForm.class);
 		
 		//loadView();
@@ -199,6 +202,10 @@ public class TDynaPresenter<M extends TModelView>	extends TPresenter<TDynaView<M
 		return tEntityProcess;
 	}
 
+	public TReportProcess getReportProcessAnnotation() {
+		return tReportProcess;
+	}
+	
 	public TEjbService getEjbServiceAnnotation() {
 		return tEjbService;
 	}

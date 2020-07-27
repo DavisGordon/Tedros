@@ -6,6 +6,7 @@
  */
 package com.covidsemfome.ejb.bo;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,8 +36,24 @@ public class DoacaoBO extends TGenericBO<Doacao> {
 		return eao;
 	}
 	
-	public List<Doacao> pesquisar(String nome, Date dataInicio, Date dataFim, Long acaoId, TipoAjuda tipoAjuda){
-		return eao.pesquisar(nome, dataInicio, dataFim, acaoId, tipoAjuda);
+	public List<Doacao> pesquisar(String nome, Date dataInicio, Date dataFim, String acaoId, List<TipoAjuda> tipoAjuda){
+		List<Long> acoes = null;
+		List<Long> tipos = null;
+		if(acaoId!=null){
+			acoes = new ArrayList<>();
+			String[] arr = acaoId.split(",");
+			for (String s : arr) {
+				acoes.add(Long.valueOf(s));
+			}
+		}
+		
+		if(tipoAjuda!=null){
+			tipos = new ArrayList<>();
+			for(TipoAjuda t : tipoAjuda)
+				tipos.add(t.getId());
+		}
+		
+		return eao.pesquisar(nome, dataInicio, dataFim, acoes, tipos);
 	}
 
 }

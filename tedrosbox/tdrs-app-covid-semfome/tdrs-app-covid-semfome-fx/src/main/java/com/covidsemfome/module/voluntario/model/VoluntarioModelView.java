@@ -127,7 +127,7 @@ public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 			optionsList=@TOptionsList(entityClass=TipoAjuda.class,
 						optionModelViewClass=TipoAjudaModelView.class, 
 						optionsProcessClass=LoadTipoAjudaOptionListProcess.class))
-	@TModelViewCollectionType(entityClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=true)
+	@TModelViewCollectionType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=true)
 	private ITObservableList<TipoAjudaModelView> tiposAjuda;
 	
 	

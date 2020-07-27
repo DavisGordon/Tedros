@@ -112,7 +112,7 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 	@TTableView(editable=true,
 			columns = { @TTableColumn(cellValue="nome", text = "Nome", prefWidth=100)
 			})
-	@TModelViewCollectionType(entityClass=Voluntario.class, modelViewClass=VoluntarioTableView.class)
+	@TModelViewCollectionType(modelClass=Voluntario.class, modelViewClass=VoluntarioTableView.class)
 	private ITObservableList<VoluntarioTableView> voluntarios;
 	
 	@TLabel(text="Destino:")

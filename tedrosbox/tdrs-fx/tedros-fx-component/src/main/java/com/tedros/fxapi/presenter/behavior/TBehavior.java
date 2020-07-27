@@ -101,6 +101,8 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 	
 	@Override
 	public  void setModelView(TModelView modelView) {
+		/*if(this.model!=null)
+			this.model.removeAllListener();*/
 		this.model = modelView;
 	}
 

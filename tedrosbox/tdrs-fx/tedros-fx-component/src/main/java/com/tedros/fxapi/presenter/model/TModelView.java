@@ -462,7 +462,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 						x = 1;
 					*/
 					
-					// recupera o campo equivalente na entidade
+					// recupera o campo equivalente no model
 					Field entityField = null;
 					for (final Field f : modelFields) {
 						if(f.getName().equals(propertyFieldName)){
@@ -493,7 +493,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 							if(annotation instanceof TModelViewCollectionType ){
 								TModelViewCollectionType tAnnotation = (TModelViewCollectionType) annotation;
 								modelViewClass = tAnnotation.modelViewClass();
-								entityClass = tAnnotation.entityClass();
+								entityClass = tAnnotation.modelClass();
 							}
 						
 						// ObservableList.class
@@ -510,7 +510,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 							if(obj!=null){
 								for(Object o : (Collection) obj){
 									//if(o instanceof TModelView){
-									if(o instanceof ITEntity){
+									if(o instanceof ITModel){
 										if(modelViewClass==null || entityClass==null)
 											throw new Exception("\n\nT_ERROR "
 													+ "\nType: "+TErrorType.COLLECTION_CONFIGURATION
@@ -522,7 +522,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 											String error = "\n\nT_ERROR\nType: "+TErrorType.BUILD
 													+ "\nModel View class: "+modelViewClass.getName()+".class"
 													+ "\nModel View constructor argument type: "+entityClass.getName()+".class"
-													+ "\nEntity to bind: "+o.getClass().getName()+".class"
+													+ "\nModel to bind: "+o.getClass().getName()+".class"
 													+ "\n\n-Check the configuration of the field "+propertyFieldName+" at "+getClass().getName()+".java\n\n";
 											
 											LOGGER.severe(error);

@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import com.tedros.ejb.base.entity.ITEntity;
+import com.tedros.ejb.base.model.ITModel;
 
 
 @Retention(RetentionPolicy.RUNTIME)
@@ -19,10 +20,10 @@ import com.tedros.ejb.base.entity.ITEntity;
 public @interface TEjbService {
 	/**
 	 * <pre>
-	 * The {@link ITEntity} to be process. 
+	 * The {@link ITModel} to be process. 
 	 * </pre>
 	 * */
-	public Class<? extends ITEntity> entity();
+	public Class<? extends ITModel> model();
 	
 	/**
 	 * <pre>

@@ -57,7 +57,8 @@ extends TBehavior<M, TDynaPresenter<M>> {
 			TSecurityDescriptor securityDescriptor = new TSecurityDescriptor(modelViewSecurity);
 			userAuthorizations = new ArrayList<>();
 			for(TAuthorizationType type : new TAuthorizationType[]{	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
-																	TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW}){
+																	TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW, 
+																	TAuthorizationType.EXPORT, TAuthorizationType.SEARCH}){
 				if(TedrosContext.isUserAuthorized(securityDescriptor, type))
 					userAuthorizations.add(type);
 			}

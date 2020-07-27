@@ -6,12 +6,14 @@
  */
 package com.tedros.ejb.base.model;
 
+import java.io.Serializable;
+
 /**
  * DESCRIÇÃO DA CLASSE
  *
  * @author davis.dun
  *
  */
-public interface ITModel {
+public interface ITModel extends Serializable{
 
 }

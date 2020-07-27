@@ -258,15 +258,15 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 						content = @TContent(detailView=@TDetailView(field="enderecos", formTitle="#{label.address}", 
 																	listTitle = "Endereco", propertyType=ITObservableList.class, 
 																	entityClass=Endereco.class, entityModelViewClass=EnderecoModelView.class)))})
-	@TModelViewCollectionType(entityClass=Documento.class, modelViewClass=DocumentoModelView.class)
+	@TModelViewCollectionType(modelClass=Documento.class, modelViewClass=DocumentoModelView.class)
 	private ITObservableList<DocumentoModelView> documentos;
 	
 	@TDetailReaderHtml(label=@TLabel(text="#{label.contacts}"), entityClass=Contato.class, modelViewClass=ContatoModelView.class)
-	@TModelViewCollectionType(entityClass=Contato.class, modelViewClass=ContatoModelView.class)
+	@TModelViewCollectionType(modelClass=Contato.class, modelViewClass=ContatoModelView.class)
 	private ITObservableList<ContatoModelView> contatos;
 	
 	@TDetailReaderHtml(label=@TLabel(text="#{label.address}"), entityClass=Endereco.class, modelViewClass=EnderecoModelView.class)
-	@TModelViewCollectionType(entityClass=Endereco.class, modelViewClass=EnderecoModelView.class)
+	@TModelViewCollectionType(modelClass=Endereco.class, modelViewClass=EnderecoModelView.class)
 	private ITObservableList<EnderecoModelView> enderecos;
 	
 	private SimpleStringProperty lastPassword;

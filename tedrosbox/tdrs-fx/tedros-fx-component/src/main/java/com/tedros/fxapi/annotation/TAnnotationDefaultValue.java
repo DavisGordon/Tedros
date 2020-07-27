@@ -11,6 +11,8 @@ public interface TAnnotationDefaultValue {
 	public final static String TVIEW_editButtonText = "#{tedros.fxapi.button.edit}";
 	public final static String TVIEW_cancelButtonText = "#{tedros.fxapi.button.cancel}";
 	public final static String TVIEW_deleteButtonText = "#{tedros.fxapi.button.delete}";
+	public final static String TVIEW_searchButtonText = "#{tedros.fxapi.button.search}";
+	public static final String TVIEW_cleanButtonText = "#{tedros.fxapi.button.clean}";
 	public final static String TVIEW_viewTitle = "tedros.fxapi.view.title";
 	public final static String TVIEW_listTitle = "tedros.fxapi.view.list.title";
 	public final static String TVIEW_masterTitle = "Primary data";
@@ -28,7 +30,9 @@ public interface TAnnotationDefaultValue {
 	public final static int DEFAULT_INT_VALUE_IDENTIFICATION = -99229922;
 	public static final String TVIEW_editModeTitle = "#{tedros.fxapi.radio-button.edit}";
 	public static final String TVIEW_readerModeTitle = "#{tedros.fxapi.radio-button.read}";
-	
+	public static final String TVIEW_excelButtonText = "Excel";
+	public static final String TVIEW_wordButtonText = "Word";
+	public static final String TVIEW_pdfButtonText = "PDF";
 			
 	
 }

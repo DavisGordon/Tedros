@@ -115,7 +115,7 @@ public class TUserModelView extends TEntityModelView<TUser> {
 			optionsList=@TOptionsList(entityClass=TProfile.class,
 						optionModelViewClass=TProfileModelView.class, 
 						optionsProcessClass=LoadTProfileOptionListProcess.class))
-	@TModelViewCollectionType(entityClass=TProfile.class, modelViewClass=TProfileModelView.class, required=true)
+	@TModelViewCollectionType(modelClass=TProfile.class, modelViewClass=TProfileModelView.class, required=true)
 	private ITObservableList<TProfileModelView> profiles;
 	
 	private SimpleStringProperty lastPassword;

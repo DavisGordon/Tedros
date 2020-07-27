@@ -74,7 +74,10 @@ public class TMessageBox extends StackPane {
     	load(Arrays.asList(e.getMessage()));
 	}
     
-    private void loadMap(Map<String, String> messages) {
+    public TMessageBox(String msg) {
+    	load(Arrays.asList(msg));
+	}
+	private void loadMap(Map<String, String> messages) {
 		try{
 	    	loadFXML();
 	        

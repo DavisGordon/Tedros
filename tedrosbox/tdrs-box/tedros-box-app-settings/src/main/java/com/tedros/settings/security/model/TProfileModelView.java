@@ -100,7 +100,7 @@ public final class TProfileModelView extends TEntityModelView<TProfile> {
 										maxWidth=50
 						)
 			})
-	@TModelViewCollectionType(entityClass=TAuthorization.class, modelViewClass=TAuthorizationTableView.class)
+	@TModelViewCollectionType(modelClass=TAuthorization.class, modelViewClass=TAuthorizationTableView.class)
 	private ITObservableList<TAuthorizationTableView> autorizations;
 
 	public TProfileModelView(TProfile entity) {
