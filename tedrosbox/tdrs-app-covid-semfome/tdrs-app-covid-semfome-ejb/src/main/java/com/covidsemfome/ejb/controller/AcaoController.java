@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 
 import com.covidsemfome.ejb.service.AcaoService;
 import com.covidsemfome.model.Acao;
@@ -20,6 +22,7 @@ import com.tedros.ejb.base.service.ITEjbService;
  *
  */
 @Stateless(name="IAcaoController")
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class AcaoController extends TEjbController<Acao> implements IAcaoController{
 	
 	@EJB

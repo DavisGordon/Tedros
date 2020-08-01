@@ -3,6 +3,7 @@
  */
 package com.covidsemfome.ejb.bo;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -36,5 +37,18 @@ public class AcaoBO extends TGenericBO<Acao> {
 		cal.add(Calendar.DATE, -1);
 		Date data = cal.getTime();
 		return eao.listAcoes(data);
+	}
+	
+	public List<Acao> pesquisar(String ids, String titulo, Date dataInicio, Date dataFim, String status){
+		
+		List<Long> idsl = null;
+		if(ids!=null){
+			idsl = new ArrayList<>();
+			String[] arr = ids.split(",");
+			for(String i : arr)
+				idsl.add(Long.valueOf(i));
+		}
+		
+		return eao.pesquisar(idsl, titulo, dataInicio, dataFim, status);
 	}
 }

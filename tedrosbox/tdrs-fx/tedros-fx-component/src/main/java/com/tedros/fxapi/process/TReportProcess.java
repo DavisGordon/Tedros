@@ -118,10 +118,10 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 	}
 	
 	protected String getDestFile(){
-		String pattern = "ddMMyyyyHHmmss";
+		String pattern = "dd-MM-yyyy HH-mm-ss";
 		DateFormat df = new SimpleDateFormat(pattern);
 		String k = df.format(new Date());
-		return folderPath +"\\"+ reportName+"-"+ k +(action.equals(TReportProcessEnum.EXPORT_PDF) ? ".pdf" : ".xls");
+		return folderPath + reportName+" "+ k +(action.equals(TReportProcessEnum.EXPORT_PDF) ? ".pdf" : ".xls");
 	}
 
 	protected TResult<M> runExportPdf() throws JRException {
@@ -191,6 +191,20 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 	 */
 	protected void setFolderPath(String folderPath) {
 		this.folderPath = folderPath;
+	}
+
+	/**
+	 * @return the model
+	 */
+	protected M getModel() {
+		return model;
+	}
+
+	/**
+	 * @return the action
+	 */
+	protected TReportProcessEnum getAction() {
+		return action;
 	}
 
 	

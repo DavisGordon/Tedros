@@ -2,6 +2,8 @@ package com.tedros.core.ejb.controller;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 
 import com.tedros.common.model.TFileEntity;
 import com.tedros.core.ejb.service.TFileEntityServiceImpl;
@@ -12,6 +14,7 @@ import com.tedros.ejb.base.service.ITEjbService;
 
 
 @Stateless(name="TFileEntityController")
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class TFileEntityControllerImpl extends TEjbController<TFileEntity> implements	TFileEntityController {
 
 	@EJB

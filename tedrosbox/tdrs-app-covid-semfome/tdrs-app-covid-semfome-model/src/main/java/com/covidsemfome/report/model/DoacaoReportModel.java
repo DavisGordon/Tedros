@@ -3,6 +3,7 @@
  */
 package com.covidsemfome.report.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +32,27 @@ public class DoacaoReportModel implements ITReportModel<DoacaoItemModel> {
 	private List<TipoAjuda> tiposAjuda;
 	
 	private List<DoacaoItemModel> result;
+	
+	public BigDecimal getTotalValor(){
+		BigDecimal t = new BigDecimal(0);
+		
+		if(result!=null)
+			for (DoacaoItemModel i : result) {
+				if(i.getValor()!=null)
+					t = t.add(i.getValor());
+			}
+		return t;
+	}
+	
+	public Long getTotalQuantidade(){
+		Long t = 0L;
+		if(result!=null)
+			for (DoacaoItemModel i : result) {
+				if(i.getQuantidade()!=null)
+					t  += i.getQuantidade();
+			}
+		return t;
+	}
 
 	/**
 	 * @return the nome

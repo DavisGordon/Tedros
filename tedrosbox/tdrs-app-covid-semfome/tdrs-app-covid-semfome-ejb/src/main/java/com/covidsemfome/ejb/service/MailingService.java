@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.apache.commons.lang.StringUtils;
@@ -28,6 +30,7 @@ import com.tedros.util.TSentEmailException;
  */
 @Local
 @Stateless(name="IMailingService")
+@TransactionAttribute(value = TransactionAttributeType.NEVER)
 public class MailingService extends TEjbService<Mailing> {
 	
 	@Inject

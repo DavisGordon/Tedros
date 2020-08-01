@@ -98,7 +98,7 @@ public class EditarFundoView extends StackPane {
 						prop.setProperty("ativar", ativar);
 						prop.store(fos, "background styles");
 						
-						StringBuffer sbf = new StringBuffer("#t-tedros-color { -fx-background-size: auto; -fx-background-image: url(\"../IMAGES/FUNDO/"+imageName+"\"); -fx-background-repeat: "+repeat+"; }");
+						StringBuffer sbf = new StringBuffer("#t-tedros-color { -fx-background-size: cover; -fx-background-image: url(\"../IMAGES/FUNDO/"+imageName+"\"); -fx-background-repeat: "+repeat+"; }");
 						if(css.exists()){
 							css.delete();
 							css.createNewFile();

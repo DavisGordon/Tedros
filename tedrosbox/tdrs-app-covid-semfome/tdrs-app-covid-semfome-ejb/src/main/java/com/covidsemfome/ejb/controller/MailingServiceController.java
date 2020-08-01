@@ -5,6 +5,8 @@ package com.covidsemfome.ejb.controller;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 
 import com.covidsemfome.ejb.exception.MailingWarningException;
 import com.covidsemfome.ejb.service.MailingService;
@@ -19,6 +21,7 @@ import com.tedros.ejb.base.service.ITEjbService;
  *
  */
 @Stateless(name="IMailingController")
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class MailingServiceController extends TEjbController<Mailing> implements IMailingController{
 	
 	@EJB

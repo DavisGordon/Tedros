@@ -19,6 +19,10 @@ import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.control.TTrigger;
 import com.tedros.fxapi.annotation.control.TValidator;
 import com.tedros.fxapi.annotation.form.TForm;
+import com.tedros.fxapi.annotation.layout.THBox;
+import com.tedros.fxapi.annotation.layout.THGrow;
+import com.tedros.fxapi.annotation.layout.TPane;
+import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
@@ -35,6 +39,7 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
+import javafx.scene.layout.Priority;
 
 @TForm(showBreadcrumBar=true, name = "#{form.document.name}")
 @TFormReaderHtml
@@ -67,6 +72,11 @@ public class DocumentoModelView extends TEntityModelView<Documento>{
 	@TMaskField(required=true, textInputControl=@TTextInputControl(promptText="Identidade, Cpf ou Cnpj", parse = true),
 	mask="######################")
 	@TValidator(validatorClass = DocumentoValidator.class, associatedFieldsName={"tipo"})
+	@THBox(	pane=@TPane(children={"numero","dataEmissao","dataValidade","orgaoEmissor"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="numero", priority=Priority.ALWAYS), 
+   				   		@TPriority(field="dataEmissao", priority=Priority.ALWAYS), 
+   				   		@TPriority(field="dataValidade", priority=Priority.ALWAYS), 
+   				   		@TPriority(field="orgaoEmissor", priority=Priority.ALWAYS) }))
 	private SimpleStringProperty numero;
 	
 	@TReaderHtml

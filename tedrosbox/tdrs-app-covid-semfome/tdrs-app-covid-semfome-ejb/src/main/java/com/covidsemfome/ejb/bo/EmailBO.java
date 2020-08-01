@@ -67,7 +67,7 @@ public class EmailBO {
 		String content = gerarMsgBoasVindas(p.getNome());
 		
 		//Envia email de boas vindas
-		util.sent(true, emailAccount.getValue(), p.getLoginName(), "Bem vindo a ONG Covid Sem Fome", content, true);
+		util.sent(false, emailAccount.getValue(), p.getLoginName(), "Bem vindo a ONG Covid Sem Fome", content, true);
 				
 	}
 	
@@ -75,7 +75,7 @@ public class EmailBO {
 		
 		String content = "Olá "+p.getNome()+", para definir uma nova senha clique <a href=\""+host+"defpass/defpass.html?k="+key+"\">aqui</a>";
 		
-		util.sent(true, emailAccount.getValue(), p.getLoginName(), "[Covid Sem Fome] Definir nova senha", content, true);
+		util.sent(false, emailAccount.getValue(), p.getLoginName(), "[Covid Sem Fome] Definir nova senha", content, true);
 				
 	}
 	
@@ -145,7 +145,7 @@ public class EmailBO {
 		if(to.isEmpty())
 			throw new EmailBusinessException("Não foi identificado nenhum voluntário estrategico para envio de email.");
 		
-		util.sent(true, emailAccount.getValue(), to, "[Covid Sem Fome] Voluntário saiu da ação "+a.getTitulo(), content, true);
+		util.sent(false, emailAccount.getValue(), to, "[Covid Sem Fome] Voluntário saiu da ação "+a.getTitulo(), content, true);
 				
 	}
 

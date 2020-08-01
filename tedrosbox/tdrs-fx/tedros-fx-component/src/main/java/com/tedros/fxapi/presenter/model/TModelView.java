@@ -613,7 +613,8 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 								property.setValue(new Boolean(literal));
 							}else
 								property.setValue(obj);
-						}
+						}else
+							property.setValue(null);
 							
 						
 						// gera os ChangeListener(s)

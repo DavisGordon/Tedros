@@ -35,6 +35,7 @@ import com.tedros.util.TUrlUtil;
 import com.tedros.util.TedrosClassLoader;
 import com.tedros.util.TedrosFolderEnum;
 
+import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -87,6 +88,8 @@ public final class TedrosContext {
 	private static SimpleDateFormat sdf;
 	
 	private static Locale locale;	
+	
+	private static Application main;
 	
 	/**
 	 * Start the context
@@ -539,6 +542,18 @@ public final class TedrosContext {
 	public static void setLocale(Locale locale) {
 		TedrosContext.locale = locale;
 		TInternationalizationEngine.reloadBundles();
+	}
+
+	public static void openDocument(String path) {
+		TedrosContext.main.getHostServices().showDocument(path);
+		
+	}
+
+	/**
+	 * @param main the main to set
+	 */
+	public static void setMain(Application main) {
+		TedrosContext.main = main;
 	}
 	
 }

@@ -8,7 +8,7 @@ import javax.ejb.TransactionAttributeType;
 import com.tedros.ejb.base.bo.ITGenericBO;
 import com.tedros.ejb.base.entity.ITEntity;
 
-@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public abstract class TEjbService<E extends ITEntity> implements ITEjbService<E> {
 
 	
@@ -31,11 +31,13 @@ public abstract class TEjbService<E extends ITEntity> implements ITEjbService<E>
 	}
 
 	@Override
+	@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
 	public E save(E entidade) throws Exception {
 		return getBussinesObject().save(entidade);
 	}
 
 	@Override
+	@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
 	public void remove(E entidade) throws Exception {
 		entidade = internalFind(entidade);
 		getBussinesObject().remove(entidade);
