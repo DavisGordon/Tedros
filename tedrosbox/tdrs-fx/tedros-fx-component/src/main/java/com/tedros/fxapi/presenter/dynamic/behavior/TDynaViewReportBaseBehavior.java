@@ -1,5 +1,6 @@
 package com.tedros.fxapi.presenter.dynamic.behavior;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,7 +44,7 @@ import javafx.scene.control.ToggleGroup;
 
 
 @SuppressWarnings("rawtypes")
-public abstract class TDynaViewReportBaseBehavior<M extends TModelView, E extends ITModel> 
+public abstract class TDynaViewReportBaseBehavior<M extends TModelView, E extends ITReportModel> 
 extends TDynaViewSimpleBaseBehavior<M, E> {
 	
 	private ListChangeListener<Node> formListChangeListener;
@@ -360,6 +361,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 						if(result.getResult().getValue() == EnumResult.SUCESS.getValue()){
 							String msg = iEngine.getFormatedString("#{tedros.fxapi.message.export}", result.getMessage());
 							getView().tShowModal(new TMessageBox(msg), true);
+							TedrosContext.openDocument(result.getMessage());
 						}
 						if(result.getResult().getValue() == EnumResult.ERROR.getValue()){
 							System.out.println(result.getMessage());
@@ -412,14 +414,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 						E entity = (E) result.getValue();
 						if(entity!=null){
 							try {
-								String msg = result.isPriorityMessage() 
-										? result.getMessage()
-												: iEngine.getFormatedString("#{tedros.fxapi.message.search}");
 								model.reload(entity);
-								mensagens.add(msg);
-								
-								setDisableModelActionButtons(false);
-								
+								if(entity!=null && !entity.getResult().isEmpty())
+									setDisableModelActionButtons(false);
 							} catch (Exception e) 
 							{	
 								mensagens.add(iEngine.getString("#{tedros.fxapi.message.error}")+"\n"+e.getMessage());
@@ -448,13 +445,14 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	public void cleanAction() {
 		final TDynaPresenter<M> presenter = getPresenter();
 		if(cleanAction==null || (cleanAction!=null && cleanAction.runBefore(presenter))){
-			try{
-				final TModelView<E> mv = getModelView();
-				if(mv!=null){
-					mv.reload(modelClass.newInstance());
-					setDisableModelActionButtons(true);
-				}
-			}catch(Exception e){
+			setDisableModelActionButtons(true);
+			try {
+				super.removeAllListenerFromModelView();
+				M model = (M) getModelViewClass().getConstructor(modelClass).newInstance(modelClass.newInstance());
+				setModelView(model);
+				showForm(TViewMode.EDIT);
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+					| NoSuchMethodException | SecurityException e) {
 				e.printStackTrace();
 			}
 		}

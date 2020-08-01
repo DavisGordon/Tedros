@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 
 import com.covidsemfome.ejb.service.TipoAjudaService;
 import com.covidsemfome.model.TipoAjuda;
@@ -25,6 +27,7 @@ import com.tedros.ejb.base.service.ITEjbService;
  *
  */
 @Stateless(name="ITipoAjudaController")
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class TipoAjudaController extends TEjbController<TipoAjuda> implements ITipoAjudaController {
 	
 	@EJB

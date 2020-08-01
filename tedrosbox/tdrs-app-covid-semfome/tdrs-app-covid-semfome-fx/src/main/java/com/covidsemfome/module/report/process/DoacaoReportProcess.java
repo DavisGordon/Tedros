@@ -19,6 +19,8 @@ public class DoacaoReportProcess extends TReportProcess<DoacaoReportModel> {
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		InputStream logoIs = getClass().getResourceAsStream("logo.png");
 		params.put("logo", logoIs);
+		params.put("totalQtd", getModel().getTotalQuantidade());
+		params.put("totalValor", getModel().getTotalValor());
 		return params;
 	}
 	

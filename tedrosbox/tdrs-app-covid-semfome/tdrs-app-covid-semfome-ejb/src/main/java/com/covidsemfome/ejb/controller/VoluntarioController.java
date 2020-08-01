@@ -9,6 +9,8 @@ import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -32,6 +34,7 @@ import com.tedros.util.TSentEmailException;
  *
  */
 @Stateless(name="IVoluntarioController")
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class VoluntarioController extends TEjbController<Voluntario> implements IVoluntarioController {
 	
 	@EJB(beanName="IVoluntarioService")

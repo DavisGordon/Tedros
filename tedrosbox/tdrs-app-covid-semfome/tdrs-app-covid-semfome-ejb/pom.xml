@@ -20,7 +20,7 @@
 		<profile>
 		  <id>prod</id>
 		  <properties>
-		    <srv.host>http://191.252.202.67:8080/tdrs-app-covid-semfome-webapp/</srv.host>
+		    <srv.host>http://www.covidsemfome.com.br/</srv.host>
 		    <csf.email>covidsemfome@gmail.com</csf.email>
 		    <srv.email.user>tedrosbox@gmail.com</srv.email.user>
 		    <srv.email.pass>$tdrs#221978@</srv.email.pass>

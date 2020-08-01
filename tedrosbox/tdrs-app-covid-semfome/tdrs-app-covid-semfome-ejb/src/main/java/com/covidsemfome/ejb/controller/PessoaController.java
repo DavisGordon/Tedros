@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.NoResultException;
@@ -28,6 +30,7 @@ import com.tedros.util.TSentEmailException;
  *
  */
 @Stateless(name="IPessoaController")
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class PessoaController extends TEjbController<Pessoa> implements IPessoaController {
 
 	@EJB

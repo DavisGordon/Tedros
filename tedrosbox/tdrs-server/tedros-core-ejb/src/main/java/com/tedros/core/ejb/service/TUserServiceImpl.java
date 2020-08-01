@@ -14,6 +14,7 @@ import com.tedros.ejb.base.service.TEjbService;
 
 @Local
 @Stateless(name="TUserService")
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class TUserServiceImpl extends TEjbService<TUser> {
 
 	@Inject

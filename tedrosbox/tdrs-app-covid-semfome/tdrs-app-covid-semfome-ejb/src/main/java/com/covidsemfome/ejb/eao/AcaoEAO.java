@@ -9,10 +9,12 @@ import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.Query;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.persistence.config.CacheUsage;
 import org.eclipse.persistence.config.QueryHints;
 
 import com.covidsemfome.model.Acao;
+import com.covidsemfome.model.Voluntario;
 import com.tedros.ejb.base.eao.TGenericEAO;
 import com.tedros.ejb.base.entity.ITEntity;
 
@@ -23,6 +25,53 @@ import com.tedros.ejb.base.entity.ITEntity;
 @RequestScoped
 public class AcaoEAO extends TGenericEAO<Acao> {
 
+
+	public List<Acao> pesquisar(List<Long> idsl, String titulo, Date dataInicio, Date dataFim, String status){
+	
+		StringBuffer sbf = new StringBuffer("select e from Acao e where 1=1 ");
+		
+		if(idsl!=null)
+			sbf.append("and e.id in :ids ");
+
+		
+		if(StringUtils.isNotBlank(titulo))
+			sbf.append("and lower(e.titulo) like :titulo ");
+		
+		if(dataInicio!=null && dataFim==null)
+			sbf.append("and e.data = :data ");
+		
+		if(dataInicio!=null && dataFim!=null)
+			sbf.append("and e.data >= :dataInicio and e.data <= :dataFim ");
+		
+		if(StringUtils.isNotBlank(status))
+			sbf.append("and e.status = :status ");
+		
+		sbf.append("order by e.data desc ");
+		
+		Query qry = getEntityManager().createQuery(sbf.toString());
+		
+		if(idsl!=null)
+			qry.setParameter("ids", idsl);
+		
+		if(StringUtils.isNotBlank(titulo))
+			qry.setParameter("titulo", "%"+titulo.toLowerCase()+"%");
+		
+		if(dataInicio!=null && dataFim==null)
+			qry.setParameter("data", dataInicio);
+		
+		if(dataInicio!=null && dataFim!=null){
+			qry.setParameter("dataInicio", dataInicio);
+			qry.setParameter("dataFim", dataFim);
+		}
+		
+		if(StringUtils.isNotBlank(status))
+			qry.setParameter("status", status);
+		
+		qry.setHint(QueryHints.CACHE_USAGE, CacheUsage.DoNotCheckCache);
+		List<Acao> lst = qry.getResultList();
+		return refresh(lst);
+	}
+	
 	@Override
 	public List<Acao> listAll(Class<? extends ITEntity> entity) throws Exception {
 		List<Acao> lst = super.listAll(entity);
@@ -43,7 +92,13 @@ public class AcaoEAO extends TGenericEAO<Acao> {
 	private List<Acao> refresh(List<Acao> lst) {
 		if(lst!=null)
 			for (Acao acao : lst) {
-				getEntityManager().refresh(acao);
+				//getEntityManager().refresh(acao);
+				StringBuffer sbf = new StringBuffer("select distinct e from Voluntario e join e.acao a where a.id = :id ");
+				
+				Query qry = getEntityManager().createQuery(sbf.toString());
+				qry.setParameter("id", acao.getId());
+				List<Voluntario> l = qry.getResultList();
+				acao.setVoluntarios(l);
 			}
 		return lst;
 	}

@@ -3,6 +3,7 @@
  */
 package com.covidsemfome.ejb.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -27,6 +28,7 @@ import com.tedros.util.TSentEmailException;
  */
 @Local
 @Stateless(name="IAcaoService")
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class AcaoService extends TEjbService<Acao> {
 	
 	@Inject
@@ -43,15 +45,18 @@ public class AcaoService extends TEjbService<Acao> {
 	public List<Acao> listAcoesParaExibirNoPainel(){
 		return bo.listAcoesDoDiaAnteriorEmDiante();
 	}
-	@TransactionAttribute(value = TransactionAttributeType.SUPPORTS)
+	@TransactionAttribute(value = TransactionAttributeType.NEVER)
 	public void enviarEmailSairAcao(Pessoa p, Acao a) throws TSentEmailException, EmailBusinessException{
 		emailBO.enviarEmailSairAcao(p, a);
 	}
-	@TransactionAttribute(value = TransactionAttributeType.SUPPORTS)
+	@TransactionAttribute(value = TransactionAttributeType.NEVER)
 	public void enviarEmailParticiparAcao(Voluntario v) throws TSentEmailException, EmailBusinessException{
 		emailBO.enviarEmailParticiparAcao(v);
 	}
 	
+	public List<Acao> pesquisar(String ids, String titulo, Date dataInicio, Date dataFim, String status){
+		return bo.pesquisar(ids, titulo, dataInicio, dataFim, status);
+	}
 	
 
 }

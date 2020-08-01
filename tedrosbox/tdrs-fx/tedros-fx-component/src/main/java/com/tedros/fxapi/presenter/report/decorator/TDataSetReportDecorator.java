@@ -9,8 +9,7 @@ import com.tedros.fxapi.presenter.model.TModelView;
 public class TDataSetReportDecorator<M extends TModelView> 
 extends TDynaViewReportBaseDecorator<M> {
 	
-	 @SuppressWarnings("unchecked")
-	public void decorate() {
+	 public void decorate() {
 		
 		// get the model view annotation array 
 		final TPresenter tPresenter = getPresenter().getPresenterAnnotation();

@@ -13,6 +13,8 @@ import com.covidsemfome.module.pessoa.CadastroDePessoaModule;
 import com.covidsemfome.module.pessoa.icon.PessoaIconImageView;
 import com.covidsemfome.module.pessoa.icon.PessoaMenuIconImageView;
 import com.covidsemfome.module.report.DoacaoReportModule;
+import com.covidsemfome.module.report.icon.RelatoriosIconImageView;
+import com.covidsemfome.module.report.icon.RelatoriosMenuIconImageView;
 import com.covidsemfome.module.voluntario.CadastroTipoAjudaModule;
 import com.covidsemfome.module.voluntario.CadastroVoluntarioModule;
 import com.covidsemfome.module.voluntario.icon.TipoAjudaIconImageView;
@@ -45,8 +47,8 @@ module = {
 					icon=DoacaoIconImageView.class, menuIcon=DoacaoMenuIconImageView.class),
 			@TModule(type=MailingModule.class, name="Mailing", menu="Gerenciar Campanha", 
 					icon=MailingIconImageView.class, menuIcon=MailingMenuIconImageView.class),
-			@TModule(type=DoacaoReportModule.class, name="Doações", menu="Relatorios"/*, 
-			icon=MailingIconImageView.class, menuIcon=MailingMenuIconImageView.class*/)
+			@TModule(type=DoacaoReportModule.class, name="Relatórios", menu="Relatorios", 
+			icon=RelatoriosIconImageView.class, menuIcon=RelatoriosMenuIconImageView.class)
 
 })
 @TResourceBundle(resourceName={"CovidLabels"})

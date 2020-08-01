@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 
 import com.covidsemfome.ejb.service.DoacaoService;
 import com.covidsemfome.model.Doacao;
@@ -14,6 +16,7 @@ import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 
 @Stateless(name="IDoacaoReportController")
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class DoacaoReportController implements IDoacaoReportController {
 
 	@EJB

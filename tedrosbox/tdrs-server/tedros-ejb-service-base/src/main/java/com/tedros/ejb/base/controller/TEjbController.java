@@ -2,6 +2,8 @@ package com.tedros.ejb.base.controller;
 
 import java.util.List;
 
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.OptimisticLockException;
 
 import com.tedros.ejb.base.entity.ITEntity;
@@ -9,6 +11,7 @@ import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.ejb.base.service.ITEjbService;
 
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public abstract class TEjbController<E extends ITEntity> implements ITEjbController<E> {
 
 	

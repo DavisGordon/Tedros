@@ -29,6 +29,7 @@ import com.tedros.util.TSentEmailException;
  */
 @Local
 @Stateless(name="IPessoaService")
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class PessoaService extends TEjbService<Pessoa>  {
 
 	@Inject
@@ -48,6 +49,7 @@ public class PessoaService extends TEjbService<Pessoa>  {
 		return bo;
 	}
 	
+	@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
 	public String newPass(Pessoa pess) throws Exception{
 		
 		String key = UUID.randomUUID().toString();
@@ -82,32 +84,32 @@ public class PessoaService extends TEjbService<Pessoa>  {
 		super.remove(entidade);
 	}
 	
-	@TransactionAttribute(value = TransactionAttributeType.SUPPORTS)
+	@TransactionAttribute(value = TransactionAttributeType.NEVER)
 	public boolean isVoluntario(Pessoa entidade) throws Exception {	
 		return volunBO.isVoluntario(entidade);
 	}
 	
-	@TransactionAttribute(value = TransactionAttributeType.SUPPORTS)
+	@TransactionAttribute(value = TransactionAttributeType.NEVER)
 	public boolean isLoginEmUso(Pessoa entidade) throws Exception {	
 		return bo.isLoginExiste(entidade.getLoginName());
 	}
 	
-	@TransactionAttribute(value = TransactionAttributeType.SUPPORTS)
+	@TransactionAttribute(value = TransactionAttributeType.NEVER)
 	public Pessoa recuperar(String loginName, String password){
 		return getBussinesObject().recuperar(loginName, password);
 	}
-	@TransactionAttribute(value = TransactionAttributeType.SUPPORTS)
+	@TransactionAttribute(value = TransactionAttributeType.NEVER)
 	public List<Pessoa> pesquisar(String nome, Date dataNascimento, String tipo, String tipoDocumento, String numero){
 		return getBussinesObject().pesquisar(nome, dataNascimento, tipo, tipoDocumento, numero);
 	}
 	
-	@TransactionAttribute(value = TransactionAttributeType.SUPPORTS)
+	@TransactionAttribute(value = TransactionAttributeType.NEVER)
 	public void enviarEmailCadastrado(Pessoa entidade) throws TSentEmailException, EmailBusinessException {
 		emailBO.enviarEmailBoasVindas(entidade);
 		emailBO.enviarEmailNovoVoluntario(entidade);
 	}
 
-	@TransactionAttribute(value = TransactionAttributeType.SUPPORTS)
+	@TransactionAttribute(value = TransactionAttributeType.NEVER)
 	public void enviarEmailNewPass(Pessoa entidade, String key) throws TSentEmailException {
 		emailBO.enviarEmailNewPass(entidade, key);
 	}

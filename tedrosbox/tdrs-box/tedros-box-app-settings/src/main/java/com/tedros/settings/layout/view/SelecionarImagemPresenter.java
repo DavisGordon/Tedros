@@ -106,7 +106,8 @@ public class SelecionarImagemPresenter {
 	}
 
 	private void buildImageViewIcon(final String file) {
-		final ImageView imgView = new ImageView(new Image(TedrosContext.getBackGroundImageInputStream(file)));
+		InputStream is = TedrosContext.getBackGroundImageInputStream(file);
+		final ImageView imgView = new ImageView(new Image(is));
 		imgView.fitHeightProperty().setValue(150);
 		imgView.fitWidthProperty().setValue(200);
 		imgView.setCursor(Cursor.HAND);
@@ -118,6 +119,11 @@ public class SelecionarImagemPresenter {
 			}
 		});
 		this.view.imagens.getChildren().add(0,imgView);
+		try {
+			is.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private static void configureFileChooser(final FileChooser fileChooser){                           
@@ -137,11 +143,12 @@ public class SelecionarImagemPresenter {
     	try {
     		String imagePath = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.BACKGROUND_IMAGES_FOLDER.getFolder()+file.getName();
     		File image = new File(imagePath);
-            ImageIO.write(SwingFXUtils.fromFXImage(new Image(new FileInputStream(file)),null), "png", image);
+    		FileInputStream fi = new FileInputStream(file);
+            ImageIO.write(SwingFXUtils.fromFXImage(new Image(fi),null), "png", image);
             this.view.imageView.setImage(new Image(TUrlUtil.getURL(imagePath).toExternalForm()));
             this.view.imageView.setUserData(file.getName());
             buildImageViewIcon(file.getName());
-            
+            fi.close();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }

@@ -17,6 +17,7 @@ import javax.persistence.TemporalType;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.eclipse.persistence.annotations.FetchGroup;
 
 import com.covidsemfome.domain.DomainSchema;
 import com.covidsemfome.domain.DomainTables;

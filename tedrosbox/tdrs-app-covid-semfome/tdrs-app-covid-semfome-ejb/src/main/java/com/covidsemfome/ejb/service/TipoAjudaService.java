@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import com.covidsemfome.ejb.bo.TipoAjudaBO;
@@ -24,6 +26,7 @@ import com.tedros.ejb.base.service.TEjbService;
  */
 @Local
 @Stateless(name="ITipoAjudaService")
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class TipoAjudaService extends TEjbService<TipoAjuda> {
 	
 	@Inject

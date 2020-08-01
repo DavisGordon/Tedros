@@ -32,7 +32,7 @@ public class DoacaoEAO extends TGenericEAO<Doacao> {
 		StringBuffer sbf = new StringBuffer("select e from Doacao e inner join e.pessoa p inner join e.tipoAjuda t left join e.acao a where 1=1 ");
 		
 		if(StringUtils.isNotBlank(nome))
-			sbf.append("and p.nome like :nome ");
+			sbf.append("and lower(p.nome) like :nome ");
 		
 		if(dataInicio!=null && dataFim==null)
 			sbf.append("and e.data = :data ");
@@ -51,7 +51,7 @@ public class DoacaoEAO extends TGenericEAO<Doacao> {
 		Query qry = getEntityManager().createQuery(sbf.toString());
 		
 		if(StringUtils.isNotBlank(nome))
-			qry.setParameter("nome", nome);
+			qry.setParameter("nome", "%"+nome.toLowerCase()+"%");
 		
 		if(dataInicio!=null && dataFim==null)
 			qry.setParameter("data", dataInicio);

@@ -14,6 +14,7 @@ import org.eclipse.persistence.config.QueryHints;
 
 import com.covidsemfome.model.Acao;
 import com.covidsemfome.model.Mailing;
+import com.covidsemfome.model.Voluntario;
 import com.tedros.ejb.base.eao.TGenericEAO;
 import com.tedros.ejb.base.entity.ITEntity;
 
@@ -36,7 +37,12 @@ public class MailingEAO extends TGenericEAO<Mailing> {
 		List<Acao> lst = qry.getResultList();
 		if(lst!=null)
 			for (Acao e : lst) {
-				getEntityManager().refresh(e);
+				StringBuffer sbf2 = new StringBuffer("select distinct e from Voluntario e join e.acao a where a.id = :id ");
+				
+				Query qry2 = getEntityManager().createQuery(sbf2.toString());
+				qry2.setParameter("id", e.getId());
+				List<Voluntario> l = qry2.getResultList();
+				e.setVoluntarios(l);
 				res.add(new Mailing(e.getId(), e.getVersionNum(), e.getLastUpdate(), e.getInsertDate(), 
 						 e.getTitulo(), e.getDescricao(), e.getData(), e.getStatus(), e.getObservacao(), e.getQtdMinVoluntarios(), 
 						 e.getQtdMaxVoluntarios(), e.getVlrPrevisto(), e.getVlrArrecadado(), e.getVlrExecutado(), e.getVoluntarios()));

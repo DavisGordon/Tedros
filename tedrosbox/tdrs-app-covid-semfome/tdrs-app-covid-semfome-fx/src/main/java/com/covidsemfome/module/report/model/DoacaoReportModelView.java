@@ -12,7 +12,8 @@ import com.covidsemfome.report.model.DoacaoItemModel;
 import com.covidsemfome.report.model.DoacaoReportModel;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
-import com.tedros.fxapi.annotation.TObservableValue;
+import com.tedros.fxapi.annotation.control.TCallbackFactory;
+import com.tedros.fxapi.annotation.control.TCellValueFactory;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
@@ -36,7 +37,6 @@ import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TReportProcess;
-import com.tedros.fxapi.annotation.property.TObjectProperty;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
@@ -123,10 +123,11 @@ public class DoacaoReportModelView extends TModelView<DoacaoReportModel>{
 			private SimpleStringProperty texto3;
 	
 	@TTableView(editable=true, 
-			columns = { @TTableColumn(cellValue="data", text = "Data", prefWidth=100),
-						@TTableColumn(cellValue="tipoAjuda", text = "Tipo Ajuda", prefWidth=70, resizable=true), 
-						@TTableColumn(cellValue="quantidade", text = "Quantidade", prefWidth=70, resizable=true), 
-						@TTableColumn(cellValue="valor", text = "Valor", prefWidth=70, resizable=true),
+			columns = { @TTableColumn(cellValue="data", text = "Data", prefWidth=30, resizable=true,
+						cellValueFactory=@TCellValueFactory(parse=true, value=@TCallbackFactory(parse=true, value=DoacaoDateCellCallBack.class))),
+						@TTableColumn(cellValue="tipoAjuda", text = "Tipo Ajuda", prefWidth=100, resizable=true), 
+						@TTableColumn(cellValue="quantidade", text = "Qtd.",prefWidth=10, resizable=true), 
+						@TTableColumn(cellValue="valor", text = "Valor", prefWidth=30, resizable=true),
 						@TTableColumn(cellValue="pessoa", text = "Doador", resizable=true), 
 						@TTableColumn(cellValue="acao", text = "Acão", resizable=true)
 			})

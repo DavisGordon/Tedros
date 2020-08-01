@@ -110,10 +110,10 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 					htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 					cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 					cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
+	/*@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
 	@TText(	text="#{form.person.title}", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 			node=@TNode(id="t-form-title-text", parse = true))
-	private SimpleStringProperty textoCadastro;
+	*/private SimpleStringProperty textoCadastro;
 	
 	/**
 	 * A text input description for the person name and a horizontal box with name, last name and nick name

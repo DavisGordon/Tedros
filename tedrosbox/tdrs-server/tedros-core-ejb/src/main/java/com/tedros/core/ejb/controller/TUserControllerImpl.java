@@ -2,6 +2,8 @@ package com.tedros.core.ejb.controller;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 
 import com.tedros.core.ejb.service.TUserServiceImpl;
 import com.tedros.core.security.model.TProfile;
@@ -13,6 +15,7 @@ import com.tedros.ejb.base.service.ITEjbService;
 
 
 @Stateless(name="TUserController")
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class TUserControllerImpl extends TEjbController<TUser>	implements	TUserController {
 
 	@EJB

@@ -197,7 +197,7 @@ public class Main extends Application {
 
     @SuppressWarnings({"rawtypes", "unchecked" })
 	private void init(Stage primaryStage) {
-    	
+    	TedrosContext.setMain(this);
     	TedrosContext.setStage(primaryStage);
     	
     	tedros = this;
