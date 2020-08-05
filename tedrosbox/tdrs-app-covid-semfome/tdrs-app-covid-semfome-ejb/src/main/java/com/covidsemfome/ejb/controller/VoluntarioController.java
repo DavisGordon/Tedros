@@ -13,6 +13,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityExistsException;
 
 import com.covidsemfome.ejb.exception.EmailBusinessException;
 import com.covidsemfome.ejb.producer.Item;
@@ -58,7 +59,6 @@ public class VoluntarioController extends TEjbController<Voluntario> implements 
 			acao.setId(acaoId);
 			
 			acao = aServ.find(acao);
-			excluirVol(pessoa, acao);
 			
 			Set<TipoAjuda> tiposAjudaSet = new HashSet<>();
 			for (Long id : tiposAjuda) {
@@ -69,12 +69,17 @@ public class VoluntarioController extends TEjbController<Voluntario> implements 
 				tiposAjudaSet.add(tpRes);
 			}
 			
-			Voluntario v = new Voluntario();
-			v.setAcao(acao);
-			v.setPessoa(pessoa);
-			v.setTiposAjuda(tiposAjudaSet);
+			Voluntario v = getVoluntario(acao, pessoa);
 			
-			v = serv.save(v);
+			if(v==null){
+				v = new Voluntario();
+				v.setAcao(acao);
+				v.setPessoa(pessoa);
+				acao.getVoluntarios().add(v);
+			}
+			
+			v.setTiposAjuda(tiposAjudaSet);
+			aServ.save(acao);
 			
 			aServ.enviarEmailParticiparAcao(v);
 			
@@ -93,42 +98,96 @@ public class VoluntarioController extends TEjbController<Voluntario> implements 
 			acao.setId(acaoId);
 			
 			acao = aServ.find(acao);
-			excluirVol(pessoa, acao);
 			
-			aServ.enviarEmailSairAcao(pessoa, acao);
+			Voluntario v = getVoluntario(acao, pessoa);
+			if(v!=null){
+				acao.getVoluntarios().remove(v);
+				aServ.save(acao);
+				aServ.enviarEmailSairAcao(pessoa, acao);
+			}
 			
 			List<Acao> lst = aServ.listAcoesParaExibirNoPainel();
+			
 			return new TResult<>(EnumResult.SUCESS, "", lst);
+			
 		}catch(Exception | TSentEmailException | EmailBusinessException e){
 			e.printStackTrace();
 			return new TResult<>(EnumResult.ERROR, errorMsg.getValue());
 		}
 	}
 
-	private void excluirVol(Pessoa pessoa, Acao acao) throws Exception {
-		Voluntario v = new Voluntario();
-		v.setAcao(acao);
-		v.setPessoa(pessoa);
-		
-		v = serv.find(v);
-		
-		if(v!=null)
-			remove(v);
-	}
-	
-	
 
 	@Override
 	public TResult<Voluntario> save(Voluntario entidade) {
 		
 		try{
+			
+			Acao acao = aServ.find(entidade.getAcao());
+			
 			if(!entidade.isNew()){
-				serv.remove(entidade);
-				entidade.setId(null);
+				Voluntario v = null;
+				for(Voluntario v1 : acao.getVoluntarios() )
+					if(v1.getId().equals(entidade.getId())){
+						v = v1;
+						break;
+					}
+				acao.getVoluntarios().remove(v);
 			}
 			
-			Voluntario  v = serv.save(entidade);
+			Pessoa pessoa = entidade.getPessoa();
+			Voluntario v = getVoluntario(acao, pessoa);
+			if(v!=null){
+				return new TResult<>(EnumResult.WARNING, true, "Um registro já existe para a pessoa e ação selecionados!", entidade);
+			}
+				
+			acao.getVoluntarios().add(entidade);
+			
+			acao = aServ.save(acao);
+			
+			v = getVoluntario(acao, pessoa);
+			
 			return new TResult<>(EnumResult.SUCESS, v);
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return new TResult<>(EnumResult.ERROR, e.getMessage());
+		}
+	}
+
+	/**
+	 * @param acao
+	 * @param pessoa
+	 * @return
+	 */
+	private Voluntario getVoluntario(Acao acao, Pessoa pessoa) {
+		Voluntario v = null;
+		for(Voluntario v1 : acao.getVoluntarios() )
+			if(v1.getPessoa().getId().equals(pessoa.getId())){
+				v = v1;
+				break;
+			}
+		return v;
+	}
+	
+	@Override
+	public TResult<Voluntario> remove(Voluntario entidade) {
+		try{
+			
+			Acao acao = aServ.find(entidade.getAcao());
+			
+			if(!entidade.isNew()){
+				Voluntario v = null;
+				for(Voluntario v1 : acao.getVoluntarios() )
+					if(v1.getId().equals(entidade.getId())){
+						v = v1;
+						break;
+					}
+				acao.getVoluntarios().remove(v);
+				acao = aServ.save(acao);
+			}
+			
+			
+			return new TResult<>(EnumResult.SUCESS);
 			
 		}catch(Exception e){
 			e.printStackTrace();

@@ -117,7 +117,7 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 	
 	@TLabel(text="Destino:")
 	@TValidator(validatorClass = MailingDestinoValidator.class, associatedFieldsName={"emails"})
-	@THorizontalRadioGroup(required=true, alignment=Pos.CENTER_LEFT, spacing=4, 
+	@THorizontalRadioGroup(required=false, alignment=Pos.CENTER_LEFT, spacing=4, 
 			radioButtons={
 					@TRadioButtonField(text = "Todos os voluntários", userData = "1"),
 					@TRadioButtonField(text = "Não inscritos", userData = "2"), 

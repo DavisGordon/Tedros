@@ -79,7 +79,7 @@ public class VoluntarioServlet extends HttpServlet {
 				pess.setLoginName(email);
 				pess.setPassword(TEncriptUtil.encript(pass));
 				pess.getContatos().addAll(lst);
-				pess.setTipoVoluntario("1");
+				pess.setTipoVoluntario("5");
 				pess.setStatusVoluntario("1");
 				pess.setStatus("ATIVADO");
 				

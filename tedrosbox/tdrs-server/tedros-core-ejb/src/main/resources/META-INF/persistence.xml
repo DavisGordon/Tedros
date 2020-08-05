@@ -19,12 +19,12 @@
 	      <property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.H2Platform"/>
 	      <property name="eclipselink.ddl-generation" value="create-or-extend-tables"/>
 	      <property name="eclipselink.ddl-generation.output-mode" value="database"/>
-	      <property name="eclipselink.logging.level" value="FINE"/>
+	      <property name="eclipselink.logging.level" value="OFF"/>
           <property name="eclipselink.logging.exceptions" value="true"/>
           <property name="eclipselink.logging.timestamp" value="true"/>
           <property name="eclipselink.logging.thread" value="true"/>
           <property name="eclipselink.logging.session" value="true"/>
-          <property name="eclipselink.logging.level.sql" value="FINE"/>
+          <property name="eclipselink.logging.level.sql" value="OFF"/>
 	    </properties>
 		
       </persistence-unit> 
