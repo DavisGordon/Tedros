@@ -4,9 +4,12 @@
 package com.covidsemfome.report.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.covidsemfome.model.Acao;
+import com.covidsemfome.model.Voluntario;
 import com.tedros.ejb.base.model.ITModel;
 
 /**
@@ -44,6 +47,8 @@ public class AcaoItemModel implements ITModel {
 	
 	private Integer totalInscritos;
 	
+	private List<VoluntarioItemModel> voluntarios;
+	
 	public AcaoItemModel(Acao acao) {
 		this.id = acao.getId();
 		this.titulo = acao.getTitulo();
@@ -57,6 +62,12 @@ public class AcaoItemModel implements ITModel {
 		this.vlrArrecadado = acao.getVlrArrecadado();
 		this.vlrExecutado = acao.getVlrExecutado();
 		this.totalInscritos = acao.getVoluntarios()!=null ? acao.getVoluntarios().size() : 0;
+		this.voluntarios = new ArrayList<>();
+		if(acao.getVoluntarios()!=null)
+			for(Voluntario v : acao.getVoluntarios())
+				this.voluntarios.add(new VoluntarioItemModel(v));
+		
+		
 	}
 
 	/**

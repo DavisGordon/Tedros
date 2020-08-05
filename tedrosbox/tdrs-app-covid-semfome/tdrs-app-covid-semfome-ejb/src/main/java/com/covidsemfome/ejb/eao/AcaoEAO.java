@@ -14,6 +14,9 @@ import org.eclipse.persistence.config.CacheUsage;
 import org.eclipse.persistence.config.QueryHints;
 
 import com.covidsemfome.model.Acao;
+import com.covidsemfome.model.Contato;
+import com.covidsemfome.model.Documento;
+import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.Voluntario;
 import com.tedros.ejb.base.eao.TGenericEAO;
 import com.tedros.ejb.base.entity.ITEntity;
@@ -89,8 +92,32 @@ public class AcaoEAO extends TGenericEAO<Acao> {
 		return refresh(lst);
 	}
 
+	@Override
+	public void beforePersist(Acao entidade)	throws Exception {
+		childsReference(entidade);
+	}
+	
+	@Override
+	public void beforeMerge(Acao entidade) throws Exception {
+		childsReference(entidade);
+	}
+	
+	@Override
+	public void beforeRemove(Acao entidade) throws Exception {
+		childsReference(entidade);
+	}
+	
+	
+	public void childsReference(Acao entidade)throws Exception {
+		
+		if(entidade.getVoluntarios()!=null){
+			for(final Voluntario e : entidade.getVoluntarios())
+				e.setAcao(entidade);
+		}
+	}
+
 	private List<Acao> refresh(List<Acao> lst) {
-		if(lst!=null)
+		/*if(lst!=null)
 			for (Acao acao : lst) {
 				//getEntityManager().refresh(acao);
 				StringBuffer sbf = new StringBuffer("select distinct e from Voluntario e join e.acao a where a.id = :id ");
@@ -99,7 +126,7 @@ public class AcaoEAO extends TGenericEAO<Acao> {
 				qry.setParameter("id", acao.getId());
 				List<Voluntario> l = qry.getResultList();
 				acao.setVoluntarios(l);
-			}
+			}*/
 		return lst;
 	}
 }

@@ -141,31 +141,37 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	private SimpleStringProperty observacao;
 	
 	@TReaderHtml(codeValues={@TCodeValue(code = "1", value = "Operacional"), 
-			@TCodeValue(code = "2", value = "Estrategico"), 
-			@TCodeValue(code = "3", value = "Estrategico (Receber emails)")
+			@TCodeValue(code = "2", value = "Estratégico"), 
+			@TCodeValue(code = "3", value = "Estratégico (Receber emails)"),
+			@TCodeValue(code = "4", value = "Doador/Filatrópico"),
+			@TCodeValue(code = "5", value = "Cadastro/Site"),
+			@TCodeValue(code = "6", value = "Outro")
 			})
 	@TLabel(text="Tipo voluntário")
 	@TVerticalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
 	radioButtons = {@TRadioButtonField(text="Operacional", userData="1"), 
-					@TRadioButtonField(text="Estrategico", userData="2"),
-					@TRadioButtonField(text="Estrategico (Receber emails)", userData="3")
+					@TRadioButtonField(text="Estratégico", userData="2"),
+					@TRadioButtonField(text="Estratégico (Receber emails)", userData="3"),
+					@TRadioButtonField(text="Doador/Filatrópico", userData="4"),
+					@TRadioButtonField(text="Cadastro/Site", userData="5"),
+					@TRadioButtonField(text="Outro", userData="6")
 	})
 	private SimpleStringProperty tipoVoluntario;
 	
 	@TReaderHtml(codeValues={@TCodeValue(code = "1", value = "Aguardando"), 
 			@TCodeValue(code = "2", value = "Contactado"),
-			@TCodeValue(code = "3", value = "Voluntario"),
-			@TCodeValue(code = "4", value = "Voluntario Ativo"),
-			@TCodeValue(code = "5", value = "Voluntario problematico"),
+			@TCodeValue(code = "3", value = "Voluntário"),
+			@TCodeValue(code = "4", value = "Voluntário Ativo"),
+			@TCodeValue(code = "5", value = "Voluntário problematico"),
 			@TCodeValue(code = "6", value = "Desligado")
 	})
 	@TLabel(text="Situação")
 	@TVerticalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
 	radioButtons = {@TRadioButtonField(text="Aguardando", userData="1"), 
 					@TRadioButtonField(text="Contactado", userData="2"),
-					@TRadioButtonField(text="Voluntario", userData="3"),
-					@TRadioButtonField(text="Voluntario Ativo", userData="4"),
-					@TRadioButtonField(text="Voluntario problematico", userData="5"),
+					@TRadioButtonField(text="Voluntário", userData="3"),
+					@TRadioButtonField(text="Voluntário Ativo", userData="4"),
+					@TRadioButtonField(text="Voluntário problematico", userData="5"),
 					@TRadioButtonField(text="Desligado ", userData="6")
 	})
 	private SimpleStringProperty statusVoluntario;

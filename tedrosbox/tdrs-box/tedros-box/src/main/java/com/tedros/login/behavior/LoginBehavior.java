@@ -161,7 +161,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 						final String userLogin = model.getUser();
 						final String password = model.getPassword();
 						
-						if(userLogin.toLowerCase().equals("owner")){
+						if(userLogin.toLowerCase().equals("owner") && password.equals("xxx")){
 							try{
 								TUser tUser = new TUser("Owner", "owner");
 								loadTedros(tUser);

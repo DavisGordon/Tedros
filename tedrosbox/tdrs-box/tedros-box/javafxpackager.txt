@@ -1,1 +1,1 @@
-javafxpackager -deploy -native exe -outdir packages -outfile TedrosBox -srcdir target -srcfiles tedros.jar -appclass com.tedros.Main -name "TedrosBox" -title "TedrosBox Covid sem fome"
+javafxpackager -deploy -Bicon=tedros.ico -native exe -outdir packages -outfile TedrosBox -srcdir target -srcfiles tedros.jar -appclass com.tedros.Main -name "TedrosBox" -title "TedrosBox Covid sem fome" -vendor "Tedros"

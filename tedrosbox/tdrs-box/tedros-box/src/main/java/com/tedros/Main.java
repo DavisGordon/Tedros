@@ -136,7 +136,7 @@ public class Main extends Application {
 		//create tedros directory if is not exists
     	File folder = new File(outputFolder+"/.tedros");
     	if(folder.exists()){ 
-    		if(new File(outputFolder+"/.tedros"+"/tedrosbox__V1.7.txt").exists())
+    		if(new File(outputFolder+"/.tedros"+"/tedrosbox__V2.0.txt").exists())
     			return false;
     		TFileUtil.delete(folder);
     	}

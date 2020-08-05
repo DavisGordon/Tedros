@@ -4,9 +4,11 @@
 package com.covidsemfome.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -68,7 +70,7 @@ public class Acao extends TEntity {
 	@Column(nullable = true)
 	private BigDecimal vlrExecutado;
 	
-	@OneToMany(mappedBy="acao", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="acao", fetch=FetchType.EAGER, orphanRemoval=true, cascade={CascadeType.ALL})
 	private List<Voluntario> voluntarios;
 	
 	public Acao() {
@@ -254,6 +256,8 @@ public class Acao extends TEntity {
 	 * @return the voluntarios
 	 */
 	public List<Voluntario> getVoluntarios() {
+		if(voluntarios==null)
+			voluntarios = new ArrayList<>();
 		return voluntarios;
 	}
 
