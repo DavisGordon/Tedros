@@ -204,13 +204,7 @@ public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 	
 	private String formataDataHora(Date data){
 		String pattern = "dd/MM/yyyy 'às' HH:mm";
-
-		// Create an instance of SimpleDateFormat used for formatting 
-		// the string representation of date according to the chosen pattern
 		DateFormat df = new SimpleDateFormat(pattern);
-
-		// Using DateFormat format method we can create a string 
-		// representation of a date with the defined format.
 		return df.format(data);
 	}
 

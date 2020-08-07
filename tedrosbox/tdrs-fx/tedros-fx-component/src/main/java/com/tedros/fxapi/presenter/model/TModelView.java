@@ -678,17 +678,22 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	}
 
 	@SuppressWarnings("rawtypes")
+	protected boolean isClassAModel(Class clazz) {
+		return TReflectionUtil.isImplemented(clazz, ITModel.class);
+	}
+	
+	@SuppressWarnings("rawtypes")
 	protected boolean isClassAnEntity(Class clazz) {
 		return TReflectionUtil.isImplemented(clazz, ITEntity.class);
 	}
 
 	@SuppressWarnings("rawtypes")
-	protected boolean isClassAnFileModel(Class clazz) {
+	protected boolean isClassAFileModel(Class clazz) {
 		return TReflectionUtil.isImplemented(clazz, ITFileModel.class);
 	}
 
 	@SuppressWarnings("rawtypes")
-	protected boolean isClassAnFileEntity(Class clazz) {
+	protected boolean isClassAFileEntity(Class clazz) {
 		return TReflectionUtil.isImplemented(clazz, ITFileEntity.class);
 	}
 

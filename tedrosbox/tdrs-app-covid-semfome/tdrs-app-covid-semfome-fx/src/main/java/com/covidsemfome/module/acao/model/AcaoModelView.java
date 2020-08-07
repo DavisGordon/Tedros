@@ -3,6 +3,8 @@
  */
 package com.covidsemfome.module.acao.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.covidsemfome.model.Acao;
@@ -40,6 +42,7 @@ import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
+import com.tedros.fxapi.annotation.view.TEntityCrudViewWithListView;
 import com.tedros.fxapi.builder.DateTimeFormatBuilder;
 import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TStyleParameter;
@@ -53,6 +56,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
@@ -64,21 +69,23 @@ import javafx.scene.text.TextAlignment;
 @TFormReaderHtml
 @TForm(name = "Ação / Campanha", showBreadcrumBar=false)
 @TEntityProcess(process = AcaoProcess.class, entity=Acao.class)
-@TPresenter(type = TDynaPresenter.class,
+@TEntityCrudViewWithListView(listViewMinWidth=350,
+presenter=@TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = TMainCrudViewWithListViewBehavior.class), 
 			decorator = @TDecorator(type = TMainCrudViewWithListViewDecorator.class, 
-									viewTitle="Ação / Campanha", listTitle="#{label.select}"))
+									viewTitle="Ação / Campanha", listTitle="#{label.select}")))
 @TSecurity(	id="COVSEMFOME_ACAO_FORM", 
 			appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Ação / Campanha",
 			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 							TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
-
 public class AcaoModelView extends TEntityModelView<Acao> {
 	
 	@TReaderHtml
 	@TLabel(text="Codigo:", position=TLabelPosition.LEFT)
 	@TLongField(maxLength=6,node=@TNode(parse = true, disable=true) )
 	private SimpleLongProperty id;
+	
+	private SimpleStringProperty displayText = new SimpleStringProperty();
 	
 	@TTextReaderHtml(text="Ação / Campanha", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
@@ -162,12 +169,95 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 
 	public AcaoModelView(Acao entity) {
 		super(entity);
+		buildListener();
+		loadDisplayText(entity);
+	}
+	
+	@Override
+	public void reload(Acao model) {
+		super.reload(model);
+		buildListener();
+		loadDisplayText(model);
+	}
+
+	/**
+	 * @param model
+	 */
+	private void loadDisplayText(Acao model) {
+		if(!model.isNew()){
+			String str = (id.getValue()==null ? "" : "(ID: "+id.getValue().toString()+") " ) 
+					+ (titulo.getValue()!=null ? titulo.getValue() : "") 
+					+ (data.getValue()!=null ? " em "+formataDataHora(data.getValue()) : "");
+			displayText.setValue(str);
+		}
+	}
+	
+	private void buildListener() {
+		
+		ChangeListener idListener =  super.getListenerRepository().getListener("displayText");
+		if(idListener==null){
+			idListener = new ChangeListener<Long>(){
+		
+				public void changed(ObservableValue arg0, Long arg1, Long arg2) {
+					String str = (arg2==null ? "" : "(ID: "+arg2.toString()+") " ) 
+							+ (titulo.getValue()!=null ? titulo.getValue() : "") 
+							+ (data.getValue()!=null ? " em "+formataDataHora(data.getValue()) : "");
+					displayText.setValue(str);
+				}
+			};
+			super.addListener("displayText", idListener);
+		}else
+			id.removeListener(idListener);
+		
+		id.addListener(idListener);
+		
+		ChangeListener<String> tituloListener = super.getListenerRepository().getListener("displayText1");
+		if(tituloListener==null){
+			tituloListener = new ChangeListener<String>(){
+				@Override
+				public void changed(ObservableValue arg0, String arg1, String arg2) {
+					String str = (id.getValue()==null ? "" : "(ID: "+id.getValue().toString()+") " ) 
+							+ (arg2!=null ? arg2 : "") 
+							+ (data.getValue()!=null ? " em "+formataDataHora(data.getValue()) : "");
+					displayText.setValue(str);
+				}
+				
+			};
+			super.addListener("displayText1", tituloListener);
+		}else
+			titulo.removeListener(tituloListener);
+		
+		titulo.addListener(tituloListener);
+		
+		ChangeListener<Date> dataListener = super.getListenerRepository().getListener("displayText2");
+		if(dataListener==null){
+			dataListener = new ChangeListener<Date>(){
+				@Override
+				public void changed(ObservableValue arg0, Date arg1, Date arg2) {
+					String str = (id.getValue()==null ? "" : "(ID: "+id.getValue().toString()+") " ) 
+							+ (titulo.getValue()!=null ? titulo.getValue() : "") 
+							+ (arg2!=null ? " em "+formataDataHora(arg2) : "");
+					displayText.setValue(str);
+				}
+				
+			};
+			super.addListener("displayText2", dataListener);
+		}else
+			data.removeListener(dataListener);
+		
+		data.addListener(dataListener);
+		
+	}
+	
+	private String formataDataHora(Date data){
+		String pattern = "dd/MM/yyyy";
+		DateFormat df = new SimpleDateFormat(pattern);
+		return df.format(data);
 	}
 	
 	@Override
 	public void removeAllListener() {
 		super.removeAllListener();
-		//	tl.stop();
 	}
 	
 	public AcaoModelView() {
@@ -187,7 +277,7 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 
 	@Override
 	public SimpleStringProperty getDisplayProperty() {
-		return titulo;
+		return displayText;
 	}
 
 	
@@ -377,6 +467,20 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	 */
 	public void setTextoCadastro(SimpleStringProperty textoCadastro) {
 		this.textoCadastro = textoCadastro;
+	}
+
+	/**
+	 * @return the displayText
+	 */
+	public SimpleStringProperty getDisplayText() {
+		return displayText;
+	}
+
+	/**
+	 * @param displayText the displayText to set
+	 */
+	public void setDisplayText(SimpleStringProperty displayText) {
+		this.displayText = displayText;
 	}
 
 

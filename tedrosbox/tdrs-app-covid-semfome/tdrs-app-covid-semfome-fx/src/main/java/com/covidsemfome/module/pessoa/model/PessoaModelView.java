@@ -13,7 +13,6 @@ import com.tedros.fxapi.annotation.TCodeValue;
 import com.tedros.fxapi.annotation.TObservableValue;
 import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
-import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TLabelPosition;
@@ -26,8 +25,6 @@ import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.control.TVerticalRadioGroup;
-import com.tedros.fxapi.annotation.effect.TDropShadow;
-import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TDetailView;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.THBox;
@@ -45,8 +42,7 @@ import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
-import com.tedros.fxapi.annotation.text.TFont;
-import com.tedros.fxapi.annotation.text.TText;
+import com.tedros.fxapi.annotation.view.TEntityCrudViewWithListView;
 import com.tedros.fxapi.builder.DateTimeFormatBuilder;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.domain.THtmlConstant;
@@ -59,9 +55,10 @@ import com.tedros.fxapi.presenter.model.TEntityModelView;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
-import javafx.scene.text.TextAlignment;
 
 /**
  * The person model view
@@ -74,10 +71,11 @@ import javafx.scene.text.TextAlignment;
 @TFormReaderHtml
 @TForm(name = "#{form.person.title}", showBreadcrumBar=true)
 @TEntityProcess(process = TPessoaProcess.class, entity=Pessoa.class)
-@TPresenter(type = TDynaPresenter.class,
+@TEntityCrudViewWithListView(listViewMinWidth=350,
+presenter=@TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = TMainCrudViewWithListViewBehavior.class), 
 			decorator = @TDecorator(type = TMainCrudViewWithListViewDecorator.class, 
-									viewTitle="#{view.person.name}", listTitle="#{label.select}"))
+									viewTitle="#{view.person.name}", listTitle="#{label.select}")))
 @TSecurity(	id="COVSEMFOME_CADPESS_FORM", 
 			appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "#{view.person.name}",
 			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
@@ -92,6 +90,8 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	hgrow=@THGrow(priority={@TPriority(field="id", priority=Priority.NEVER), 
    				   		@TPriority(field="status", priority=Priority.ALWAYS)}))*/
 	private SimpleLongProperty id;
+	
+	private SimpleStringProperty displayText;
 	
 	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "Ativado"), 
 			@TCodeValue(code = "DESATIVADO", value = "Desativado")
@@ -279,8 +279,10 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	
 	public PessoaModelView(Pessoa entidade) {
 		super(entidade);
+		buildListener();
+		loadDisplayText(entidade);
 		copyPassword();
-		
+	
 	}
 	
 	private void copyPassword() {
@@ -293,7 +295,60 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	@Override
 	public void reload(Pessoa model) {
 		super.reload(model);
+		buildListener();
+		loadDisplayText(model);
 		copyPassword();
+	}
+	
+	/**
+	 * @param model
+	 */
+	private void loadDisplayText(Pessoa model) {
+		if(!model.isNew()){
+			String str = (nome.getValue()!=null ? nome.getValue() : "") 
+					+ (tipoVoluntario.getValue()!=null ? " ("+PessoaFieldValueUtil.getDescricaoTipo(tipoVoluntario.getValue())+")" : "");
+			displayText.setValue(str);
+		}
+	}
+
+	
+
+	private void buildListener() {
+		
+		ChangeListener<String> nomeListener = super.getListenerRepository().getListener("displayText1");
+		if(nomeListener==null){
+			nomeListener = new ChangeListener<String>(){
+				@Override
+				public void changed(ObservableValue arg0, String arg1, String arg2) {
+					String str = (arg2!=null ? arg2 : "") 
+							+ (tipoVoluntario.getValue()!=null ? " ("+PessoaFieldValueUtil.getDescricaoTipo(tipoVoluntario.getValue())+")" : "");
+					displayText.setValue(str);
+				}
+				
+			};
+			super.addListener("displayText1", nomeListener);
+		}else
+			nome.removeListener(nomeListener);
+		
+		nome.addListener(nomeListener);
+		
+		ChangeListener<String> tipoListener = super.getListenerRepository().getListener("displayText2");
+		if(tipoListener==null){
+			tipoListener = new ChangeListener<String>(){
+				@Override
+				public void changed(ObservableValue arg0, String arg1, String arg2) {
+					String str = (nome.getValue()!=null ? nome.getValue() : "") 
+							+ (arg2!=null ? " ("+PessoaFieldValueUtil.getDescricaoTipo(arg2)+")" : "");
+					displayText.setValue(str);
+				}
+				
+			};
+			super.addListener("displayText2", tipoListener);
+		}else
+			tipoVoluntario.removeListener(tipoListener);
+		
+		tipoVoluntario.addListener(tipoListener);
+		
 	}
 	
 	@Override
@@ -420,8 +475,7 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 
 	@Override
 	public SimpleStringProperty getDisplayProperty() {
-		//System.out.println("Versao: "+getModel().getVersionNum());
-		return getNome();
+		return displayText;
 	}
 
 	public SimpleStringProperty getTextoDetail() {
@@ -542,6 +596,20 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	 */
 	public void setLastPassword(SimpleStringProperty lastPassword) {
 		this.lastPassword = lastPassword;
+	}
+
+	/**
+	 * @return the displayText
+	 */
+	public SimpleStringProperty getDisplayText() {
+		return displayText;
+	}
+
+	/**
+	 * @param displayText the displayText to set
+	 */
+	public void setDisplayText(SimpleStringProperty displayText) {
+		this.displayText = displayText;
 	}
 
 

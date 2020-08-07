@@ -62,13 +62,16 @@ class TCompatibleTypesHelper<M extends ITModel> {
 		boolean compatible = compatibleTypes.get(propertyFieldType).contains(typeToVerify); 
 		
 		if(!compatible && propertyFieldType == TSimpleFileEntityProperty.class)
-			compatible = tModelView.isClassAnFileEntity(typeToVerify);
+			compatible = tModelView.isClassAFileEntity(typeToVerify);
 		
 		if(!compatible && propertyFieldType == TSimpleFileModelProperty.class)
-			compatible = tModelView.isClassAnFileModel(typeToVerify);
+			compatible = tModelView.isClassAFileModel(typeToVerify);
 		
 		if(!compatible && tModelView.isClassAnEntity(typeToVerify))
 			compatible = compatibleTypes.get(propertyFieldType).contains(TEntity.class);
+		
+		if(!compatible && tModelView.isClassAModel(typeToVerify))
+			compatible = compatibleTypes.get(propertyFieldType).contains(ITModel.class);
 		
 		return compatible; 
 	}

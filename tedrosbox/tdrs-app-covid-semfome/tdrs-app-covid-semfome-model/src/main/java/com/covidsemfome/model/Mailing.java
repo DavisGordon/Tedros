@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.tedros.ejb.base.model.TItemModel;
+
 /**
  * @author Davis Gordon
  *
@@ -22,7 +24,7 @@ public class Mailing extends Acao {
 	
 	private String conteudo;
 	
-	private String destino;
+	private TItemModel<String> destino;
 	
 	private String emails;
 	
@@ -69,14 +71,14 @@ public class Mailing extends Acao {
 	/**
 	 * @return the destino
 	 */
-	public String getDestino() {
+	public TItemModel<String> getDestino() {
 		return destino;
 	}
 
 	/**
 	 * @param destino the destino to set
 	 */
-	public void setDestino(String destino) {
+	public void setDestino(TItemModel<String> destino) {
 		this.destino = destino;
 	}
 

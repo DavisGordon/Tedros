@@ -3,6 +3,8 @@
  */
 package com.covidsemfome.ejb.producer;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -27,12 +29,21 @@ import com.covidsemfome.ejb.domain.DomainMsg;
 public class ResourceProducer {
 	
 	private Properties p;
+	private Properties smtpProp;
 	
 	@PostConstruct
 	void init(){
 		p = new Properties();
 		try {
-			p.load(loadContent("META-INF/resource.properties"));
+			InputStream is = loadContent("META-INF/resource.properties");
+			p.load(is);
+			is.close();
+			String smtpResPath = p.getProperty("srv.email.resource.path");
+			File f = new File(smtpResPath);
+			FileInputStream fis = new FileInputStream(f);
+			smtpProp = new Properties();
+			smtpProp.load(fis);
+			fis.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -84,35 +95,35 @@ public class ResourceProducer {
 	@RequestScoped
 	@Named("emailUser")
 	public Item<String> getEmailUser(){
-		return new Item<>(p.getProperty("srv.email.user"));
+		return new Item<>(smtpProp.getProperty("srv.email.user"));
 	}
 	
 	@Produces
 	@RequestScoped
 	@Named("emailPass")
 	public Item<String> getEmailPass(){
-		return new Item<>(p.getProperty("srv.email.pass"));
+		return new Item<>(smtpProp.getProperty("srv.email.pass"));
 	}
 	
 	@Produces
 	@RequestScoped
 	@Named("emailSmtpHost")
 	public Item<String> getEmailSmtpHost(){
-		return new Item<>(p.getProperty("srv.email.smtp.host"));
+		return new Item<>(smtpProp.getProperty("srv.email.smtp.host"));
 	}
 	
 	@Produces
 	@RequestScoped
 	@Named("emailSmtpPort")
 	public Item<String> getEmailSmtpPort(){
-		return new Item<>(p.getProperty("srv.email.smtp.port"));
+		return new Item<>(smtpProp.getProperty("srv.email.smtp.port"));
 	}
 	
 	@Produces
 	@RequestScoped
 	@Named("emailSmtpSocketPort")
 	public Item<String> getEmailSmtpSocketPort(){
-		return new Item<>(p.getProperty("srv.email.smtp.socket.port"));
+		return new Item<>(smtpProp.getProperty("srv.email.smtp.socket.port"));
 	}
 	
 	@Produces

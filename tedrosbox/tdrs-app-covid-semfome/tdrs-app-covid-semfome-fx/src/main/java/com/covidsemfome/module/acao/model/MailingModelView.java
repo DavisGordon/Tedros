@@ -14,6 +14,8 @@ import com.covidsemfome.module.acao.form.EmailTemplateForm;
 import com.covidsemfome.module.acao.process.MailingProcess;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
+import com.tedros.ejb.base.model.TItemModel;
+import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
@@ -74,6 +76,12 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 	
 	private SimpleLongProperty id;
 	
+	@TAccordion(expandedPane="eem",
+			panes={	@TTitledPane(text="Dados da Acão / Campanha", 
+					fields={"textoCadastro","titulo","data","status","descricao"}),
+					
+					@TTitledPane(text="Voluntários inscritos", fields={"voluntarios"}),
+					@TTitledPane(text="Email",node=@TNode(id="eem",parse = true), expanded=true, fields={"destino","emails","tituloEmail", "conteudo","tituloBoxEmail","textoChaves"})})
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
 	@TText(text="Acão / Campanha", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 	node=@TNode(id="t-form-title-text", parse = true))
@@ -102,31 +110,25 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 	private SimpleStringProperty status;
 	
 	@TLabel(text="Descricão")
-	@TTextAreaField( wrapText=true, control=@TControl(prefWidth=250, prefHeight=50, parse = true))
+	@TTextAreaField( wrapText=true, control=@TControl(prefWidth=220, prefHeight=50, parse = true))
 	private SimpleStringProperty descricao;
 	
-	@TAccordion(expandedPane="eem",
-			panes={
-					@TTitledPane(text="Voluntários inscritos", fields={"voluntarios"}),
-					@TTitledPane(text="Enviar email",node=@TNode(id="eem",parse = true), expanded=true, fields={"destino","tituloEmail", "conteudo","tituloBoxEmail","textoChaves"})})
 	@TTableView(editable=true,
-			columns = { @TTableColumn(cellValue="nome", text = "Nome", prefWidth=100)
+			columns = { @TTableColumn(cellValue="nome", text = "Nome", prefWidth=70),
+					@TTableColumn(cellValue="email", text = "Email", prefWidth=100),
+			@TTableColumn(cellValue="tipoVoluntario", text = "Tipo", prefWidth=60),
+			@TTableColumn(cellValue="statusVoluntario", text = "Status", prefWidth=60)
 			})
 	@TModelViewCollectionType(modelClass=Voluntario.class, modelViewClass=VoluntarioTableView.class)
 	private ITObservableList<VoluntarioTableView> voluntarios;
 	
 	@TLabel(text="Destino:")
 	@TValidator(validatorClass = MailingDestinoValidator.class, associatedFieldsName={"emails"})
-	@THorizontalRadioGroup(required=false, alignment=Pos.CENTER_LEFT, spacing=4, 
-			radioButtons={
-					@TRadioButtonField(text = "Todos os voluntários", userData = "1"),
-					@TRadioButtonField(text = "Não inscritos", userData = "2"), 
-					@TRadioButtonField(text = "Somente Inscritos", userData = "3")
-					})
-	@THBox(	pane=@TPane(children={"destino","emails"}), spacing=10, fillHeight=true,
+	@TComboBoxField(items=DestinoItensBuilder.class)
+	/*@THBox(	pane=@TPane(children={"destino","emails"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="destino", priority=Priority.ALWAYS), 
-   				   		@TPriority(field="emails", priority=Priority.ALWAYS)}))
-	private SimpleStringProperty destino;
+   				   		@TPriority(field="emails", priority=Priority.ALWAYS)}))*/
+	private SimpleObjectProperty<TItemModel<String>> destino;
 
 	@TLabel(text="Para")
 	@TTextField(textInputControl=@TTextInputControl(promptText="Insira os emails separados por virgula", parse = true))
@@ -373,14 +375,14 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 	/**
 	 * @return the destino
 	 */
-	public SimpleStringProperty getDestino() {
+	public SimpleObjectProperty<TItemModel<String>> getDestino() {
 		return destino;
 	}
 
 	/**
 	 * @param destino the destino to set
 	 */
-	public void setDestino(SimpleStringProperty destino) {
+	public void setDestino(SimpleObjectProperty<TItemModel<String>> destino) {
 		this.destino = destino;
 	}
 
