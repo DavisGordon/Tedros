@@ -94,7 +94,7 @@ public class DoacaoModelView extends TEntityModelView<Doacao>{
 	@TReaderHtml
 	@TLabel(text="Pessoa")
 	@TComboBoxField(firstItemTex="Selecione uma Pessoa...", required=true, 
-			control=@TControl(parse = true, minWidth=250),
+			control=@TControl(parse = true, minWidth=300),
 			optionsList=@TOptionsList(optionsProcessClass = LoadPessoaOptionListProcess.class, 
 			entityClass=Pessoa.class, optionModelViewClass=PessoaModelView.class, optionProcessType=TOptionProcessType.LIST_ALL ))
 	@THBox(	pane=@TPane(children={"pessoa","tipoAjuda"}), spacing=10, fillHeight=true,

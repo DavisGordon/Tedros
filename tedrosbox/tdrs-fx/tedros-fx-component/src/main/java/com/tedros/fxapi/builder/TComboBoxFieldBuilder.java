@@ -81,8 +81,11 @@ implements ITControlBuilder<com.tedros.fxapi.control.TComboBoxField, Property<Ob
                     protected void updateItem(Object obj, boolean bln) {
                         super.updateItem(obj, bln);
                         if(obj != null){
-                            setText(obj.toString());
-                        }else{
+        					if(obj instanceof TModelView)
+        						setText(((TModelView)obj).getDisplayProperty().getValue());
+        					else
+        						setText(obj.toString());
+        				}else{
                             setText(null);
                         }
                     }

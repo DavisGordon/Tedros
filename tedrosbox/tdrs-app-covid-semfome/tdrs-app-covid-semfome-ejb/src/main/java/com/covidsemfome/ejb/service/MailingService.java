@@ -3,6 +3,7 @@
  */
 package com.covidsemfome.ejb.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -68,21 +69,25 @@ public class MailingService extends TEjbService<Mailing> {
 					}
 				}
 			}
-
-			if(StringUtils.isNotBlank(m.getDestino())){
-				switch (m.getDestino()) {
+			String dest = m.getDestino() == null ? "" : m.getDestino().getKey();
+			if(StringUtils.isNotBlank(dest)){
+				
+				List<Pessoa> lstp;
+				List<Pessoa> lstd;
+				
+				switch (dest) {
 				case "1": // Todos
-					List<Pessoa> lst = pessBO.listAll(Pessoa.class);
-					for (Pessoa p : lst) 
+					 lstp = pessBO.listAll(Pessoa.class);
+					for (Pessoa p : lstp) 
 						msg = enviar(m, msg, p);
 					
 					break;
 
 				case "2": // Nao inscritos
-					List<Pessoa> lst2 = pessBO.listAll(Pessoa.class);
-					if(lst2.size() == m.getVoluntarios().size())
+					lstp = pessBO.listAll(Pessoa.class);
+					if(lstp.size() == m.getVoluntarios().size())
 						throw new MailingWarningException("Todos os voluntários estão inscritos para a ação!");
-					for (Pessoa p : lst2) {
+					for (Pessoa p : lstp) {
 						boolean enviar = true;
 						List<Voluntario> vLst = m.getVoluntarios();
 						if(vLst!=null && !vLst.isEmpty()){
@@ -111,12 +116,74 @@ public class MailingService extends TEjbService<Mailing> {
 					}
 					
 					break;
+					
+				case "4": // operacionais
+					lstp = pessBO.listAll(Pessoa.class);
+					lstd = new ArrayList<>();
+					for (Pessoa p : lstp){
+						if(p.getTipoVoluntario()!=null && p.getTipoVoluntario().equals("1"))
+							lstd.add(p);
+					}
+					if(lstd.isEmpty())
+						throw new MailingWarningException("Não há voluntários operacionais cadastrados!");
+					
+					for (Pessoa p : lstd) 		
+						msg = enviar(m, msg, p);
+					
+					break;
+				
+				case "5": // estrategicos
+					lstp = pessBO.listAll(Pessoa.class);
+					lstd = new ArrayList<>();
+					for (Pessoa p : lstp) {
+						if(p.getTipoVoluntario()!=null && (p.getTipoVoluntario().equals("2") || p.getTipoVoluntario().equals("3")))
+							lstd.add(p);
+					}
+					if(lstd.isEmpty())
+						throw new MailingWarningException("Não há voluntários estratėgicos cadastrados!");
+					
+					for (Pessoa p : lstd) 		
+						msg = enviar(m, msg, p);
+					
+					break;
+					
+				case "6": // doadores
+					lstp = pessBO.listAll(Pessoa.class);
+					lstd = new ArrayList<>();
+					for (Pessoa p : lstp) {
+						if(p.getTipoVoluntario()!=null && p.getTipoVoluntario().equals("4"))
+							lstd.add(p);
+					}
+					if(lstd.isEmpty())
+						throw new MailingWarningException("Não há doadores cadastrados!");
+					
+					for (Pessoa p : lstd) 		
+						msg = enviar(m, msg, p);
+					
+					break;
+				
+				case "7": // cadastrado site e outros
+					lstp = pessBO.listAll(Pessoa.class);
+					lstd = new ArrayList<>();
+					for (Pessoa p : lstp) {
+						if(p.getTipoVoluntario()!=null && (p.getTipoVoluntario().equals("5") || p.getTipoVoluntario().equals("6")))
+							lstd.add(p);
+					}
+					if(lstd.isEmpty())
+						throw new MailingWarningException("Não há pessoas "+ m.getDestino().getValue()+" cadastrados!");
+					
+					for (Pessoa p : lstd) 		
+						msg = enviar(m, msg, p);
+					
+					break;
 				}
 			}
 			
 			if(!msg.isEmpty())
 				throw new MailingWarningException("Houve um problema no envio de mailing para os seguintes destinatarios: "+msg);
 		
+		}catch(MailingWarningException e){
+			throw e;
 		}catch(Exception e){
 			e.printStackTrace();
 			throw new MailingWarningException("Um erro impediu o envio de email para este mailing!");

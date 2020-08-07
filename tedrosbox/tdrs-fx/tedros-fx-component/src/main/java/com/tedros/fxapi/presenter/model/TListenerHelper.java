@@ -174,7 +174,7 @@ class TListenerHelper<M extends ITModel> {
 		
 		//TSimpleFileEntityProperty
 		if(propertyFieldType == TSimpleFileEntityProperty.class){
-			if(tModelView.isClassAnFileEntity(entidadeFieldType)){
+			if(tModelView.isClassAFileEntity(entidadeFieldType)){
 				
 				InvalidationListener invalidationListener = new InvalidationListener() {
 					@Override
@@ -201,7 +201,7 @@ class TListenerHelper<M extends ITModel> {
 		
 		//TSimpleFileModelProperty
 		if(propertyFieldType == TSimpleFileModelProperty.class){
-			if(tModelView.isClassAnFileModel(entidadeFieldType)){
+			if(tModelView.isClassAFileModel(entidadeFieldType)){
 				InvalidationListener invalidationListener = new InvalidationListener() {
 					@Override
 					public void invalidated(Observable arg0) {
@@ -224,7 +224,7 @@ class TListenerHelper<M extends ITModel> {
 		// ObjectProperty
 		if(ObjectProperty.class.isAssignableFrom(propertyFieldType)){
 			// ITEntity
-			if(tModelView.isClassAnEntity(entidadeFieldType)){
+			if(tModelView.isClassAModel(entidadeFieldType)){
 				
 				ChangeListener<Object> changeListener = new ChangeListener<Object>() {
 					@Override
