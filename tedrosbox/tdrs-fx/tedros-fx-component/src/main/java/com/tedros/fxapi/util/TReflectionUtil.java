@@ -88,6 +88,18 @@ public final class TReflectionUtil {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static Method getMethod(Class clazz, String fieldName, Class fieldType){
+		Method method = null;
+		try {
+			method = clazz.getMethod(fieldName, fieldType);
+		} catch (NoSuchMethodException e) {
+			if(clazz != Object.class)
+				method = getMethod(clazz.getSuperclass(), fieldName, fieldType);
+		}
+		return method;
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Method getSetterMethod(Class clazz, String fieldName, Class fieldType){
 		Method method = null;
 		try {
@@ -95,6 +107,18 @@ public final class TReflectionUtil {
 		} catch (NoSuchMethodException e) {
 			if(clazz != Object.class)
 				method = getSetterMethod(clazz.getSuperclass(), fieldName, fieldType);
+		}
+		return method;
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static Method getGetterMethod(Class clazz, String fieldName, Class fieldType){
+		Method method = null;
+		try {
+			method = clazz.getMethod("get"+StringUtils.capitalize(fieldName), fieldType);
+		} catch (NoSuchMethodException e) {
+			if(clazz != Object.class)
+				method = getGetterMethod(clazz.getSuperclass(), fieldName, fieldType);
 		}
 		return method;
 	}

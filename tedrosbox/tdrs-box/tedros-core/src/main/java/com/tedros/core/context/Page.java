@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 
+@SuppressWarnings("restriction")
 public abstract class Page extends TreeItem<String> {
 
     protected Page(String name) {

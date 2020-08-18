@@ -10,7 +10,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
@@ -18,8 +17,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;
-import org.scannotation.AnnotationDB;
-import org.scannotation.ClasspathUrlFinder;
+import org.reflections.Reflections;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 
 import com.tedros.core.ModalMessage;
 import com.tedros.core.TInternationalizationEngine;
@@ -31,7 +31,6 @@ import com.tedros.core.security.model.TUser;
 import com.tedros.core.style.TStyleResourceValue;
 import com.tedros.util.TClassUtil;
 import com.tedros.util.TFileUtil;
-import com.tedros.util.TUrlUtil;
 import com.tedros.util.TedrosClassLoader;
 import com.tedros.util.TedrosFolderEnum;
 
@@ -83,7 +82,7 @@ public final class TedrosContext {
 	private static boolean PAGE_SWAPVIEWS;
 	private static boolean showContextInitializationErrorMessages;
 	
-	private static AnnotationDB annotationDb;
+	private static Reflections annotationDb;
 	
 	private static SimpleDateFormat sdf;
 	
@@ -104,29 +103,19 @@ public final class TedrosContext {
 		
 		LOGGER.info("Start load language definition.");
 		Properties languageProp = new Properties();
-		FileInputStream input = null;
-		try{
-			input = new FileInputStream(TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+"language.properties");
-		}catch(IOException e){
-			LOGGER.severe(e.toString());
-		}
 		
-		if(input !=null){
-			try{
+		try {
+			try(FileInputStream input = new FileInputStream(TFileUtil.getTedrosFolderPath()
+					+TedrosFolderEnum.CONF_FOLDER.getFolder()+"language.properties")){
 				languageProp.load(input);
-				input.close();
 				locale = new Locale(languageProp.getProperty("language"));
-			}catch(IOException e){
+			}
+		}catch(IOException e){
 				LOGGER.severe(e.toString());
 				locale = Locale.ENGLISH;
-			}
-		}else{
-			locale = Locale.ENGLISH;
 		}
 		
 		LOGGER.info("Finish load language definition.");
-		
-		
 		
 		sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		contextStringProperty = new SimpleStringProperty("");
@@ -164,17 +153,8 @@ public final class TedrosContext {
 	/**
 	 * Return a {@link Set} of class with this specific annotation type. 
 	 * */
-	public static Set<Class> getClassesAnnotatedWith(Class<? extends Annotation> annotationClass){
-		Set<Class> ret = new HashSet<>();
-		Set<String> paths = annotationDb.getAnnotationIndex().get(annotationClass.getName());
-		for (String path : paths) {
-			try {
-				ret.add(loadClass(path));
-			} catch (MalformedURLException | ClassNotFoundException e) {
-				LOGGER.severe(e.toString());
-			}
-		}
-		return ret;
+	public static Set<Class<?>> getClassesAnnotatedWith(Class<? extends Annotation> annotationClass){
+		return annotationDb.getTypesAnnotatedWith(annotationClass);
 	}
 	
 	/**
@@ -190,23 +170,25 @@ public final class TedrosContext {
 		LOGGER.info("Starting load application list to context.");
 		
 		try {
+			String[] packages = null;
+			Properties p = new Properties();
+			try(InputStream input = TedrosContext.class.getClassLoader().getResourceAsStream("app-packages.properties")){
+					p.load(input);
+					if(p.containsKey("packages"))
+						packages = ((String)p.get("packages")).split(",");
+			}
 			
-			// get all class with @TApplication annotation
-			URL[] urls = ClasspathUrlFinder.findClassPaths();
 			
-			for (URL url : urls)
-				LOGGER.info(url.toString());
+			annotationDb = (packages!=null) 
+					? new Reflections(new ConfigurationBuilder()
+							.forPackages(packages))
+						: new Reflections();
+
+			getClassesAnnotatedWith(TApplication.class)
+			.forEach(c -> TedrosAppManager.getInstance().addApplication(c));
 			
-			annotationDb = new AnnotationDB();
-			annotationDb.scanArchives(urls);
-			annotationDb.setScanFieldAnnotations(false);
-			annotationDb.setScanMethodAnnotations(false);
-			annotationDb.setScanParameterAnnotations(false);
-			
-			for (Class appStarterClass : getClassesAnnotatedWith(TApplication.class))
-				TedrosAppManager.getInstance().addApplication(appStarterClass);
-			
-		} catch (IOException e1 ) {
+		} catch (Exception e1 ) {
+			e1.printStackTrace();
 			updateInitializationErrorMessage(e1.getMessage());
 			LOGGER.severe(e1.toString());
 		}
@@ -308,7 +290,7 @@ public final class TedrosContext {
 	public static URL getExternalURLFile(TedrosFolderEnum tedrosFolderEnum, String fileName){
 		try {
 			String path = TFileUtil.getTedrosFolderPath()+tedrosFolderEnum.getFolder()+fileName;
-			return TUrlUtil.getURL(path);
+			return new File(path).toPath().toUri().toURL();//TUrlUtil.getURL(path);
 		} catch (MalformedURLException e) {
 			LOGGER.severe(e.toString());
 			return null;

@@ -424,7 +424,7 @@ public final class CalendarView extends Control {
     }
 
     @Override
-    protected String getUserAgentStylesheet() {
+	public String getUserAgentStylesheet() {
         return getClass().getResource("CalendarView.css").toExternalForm();
     }
 }

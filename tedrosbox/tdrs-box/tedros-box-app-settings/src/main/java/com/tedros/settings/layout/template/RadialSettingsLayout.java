@@ -184,14 +184,14 @@ public class RadialSettingsLayout extends AbstractSettingsLayout implements Synt
 		/* Radius */
 		final SliderTextField radiusPercentField = new SliderTextField(0, 120, (null!=customRadius) 
 				? (radiusPercentage) 
-						? Integer.valueOf(customRadius) 
-								: Integer.valueOf(customRadius) > 120 
-								? 120 : Integer.valueOf(customRadius) 
+						? Integer.valueOf(customRadius.replace("deg", "")) 
+								: Integer.valueOf(customRadius.replace("deg", "")) > 120 
+								? 120 : Integer.valueOf(customRadius.replace("deg", "")) 
 				: 0
 				, "%");
 		radiusPercent.bindBidirectional(radiusPercentField.valueProperty());
 		
-		final SliderTextField radiusPixelField = new SliderTextField(0, 300, (null!=customRadius) ? Integer.valueOf(customRadius) : 0, "px");
+		final SliderTextField radiusPixelField = new SliderTextField(0, 300, (null!=customRadius) ? Integer.valueOf(customRadius.replace("deg", "")) : 0, "px");
 		radiusPixel.bindBidirectional(radiusPixelField.valueProperty());
 		
 		final StackPane radiusContainer = StackPaneBuilder.create().alignment(Pos.TOP_LEFT).build();

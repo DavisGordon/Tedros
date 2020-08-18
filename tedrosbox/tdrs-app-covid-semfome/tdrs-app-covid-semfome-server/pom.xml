@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.tedros</groupId>
     <artifactId>tdrs-app-covid-semfome</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>8-2.2</version>
   </parent>
   
   <artifactId>tdrs-app-covid-semfome-server</artifactId>
@@ -18,7 +18,7 @@
 	   <groupId>com.tedros</groupId>
   		<artifactId>tdrs-app-covid-semfome-webapp</artifactId>
 	    <type>war</type>
-	    <version>0.0.1-SNAPSHOT</version>
+	    <version>8-1.0</version>
 	</dependency>
 	
 	

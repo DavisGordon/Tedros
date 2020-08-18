@@ -136,7 +136,7 @@ public class Main extends Application {
 		//create tedros directory if is not exists
     	File folder = new File(outputFolder+"/.tedros");
     	if(folder.exists()){ 
-    		if(new File(outputFolder+"/.tedros"+"/tedrosbox__V2.2.txt").exists())
+    		if(new File(outputFolder+"/.tedros"+"/tedrosbox__V8.0.txt").exists())
     			return false;
     		TFileUtil.delete(folder);
     	}
@@ -186,16 +186,17 @@ public class Main extends Application {
 			scene.getStylesheets().add(backgroundCssUrl);
 		}
 		scene.getStylesheets().add(customStyleCssUrl);
-    	com.sun.javafx.css.StyleManager.getInstance().reloadStylesheets(scene);
+    	com.sun.javafx.css.StyleManager.getInstance().addUserAgentStylesheet(scene, customStyleCssUrl);//reloadStylesheets(scene);
     	root.setId("t-tedros-color");
     }
 
+	@SuppressWarnings("restriction")
 	private void removeCss(String url) {
 		if(scene.getStylesheets().contains(url))
 			scene.getStylesheets().remove(url);
 	}
 
-    @SuppressWarnings({"rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked", "restriction" })
 	private void init(Stage primaryStage) {
     	TedrosContext.setMain(this);
     	TedrosContext.setStage(primaryStage);
@@ -221,9 +222,7 @@ public class Main extends Application {
                 windowResizeButton.setLayoutY(getHeight() - windowResizeButton.getLayoutBounds().getHeight());
             }
         };
-        root.getStyleClass().add("application");
-        
-        root.setId("t-tedros-color");
+       
         
         layerPane.setDepthTest(DepthTest.DISABLE);
         layerPane.getChildren().add(root);
@@ -233,18 +232,23 @@ public class Main extends Application {
         if(is3dSupported)
             scene.setCamera(new PerspectiveCamera());
         
-     
+        final String defaultStyleCssUrl = TedrosContext.getExternalURLFile(TedrosFolderEnum.CSS_CASPIAN_FOLDER, "caspian.css").toExternalForm();
+        final String defaultStyleCssUrl2 = TedrosContext.getExternalURLFile(TedrosFolderEnum.CSS_CASPIAN_FOLDER, "caspian-no-transparency.css").toExternalForm();
+        final String defaultStyleCssUrl3 = TedrosContext.getExternalURLFile(TedrosFolderEnum.CSS_CASPIAN_FOLDER, "highcontrast.css").toExternalForm();
+
+        
         final String customStyleCssUrl = TedrosContext.getExternalURLFile(TedrosFolderEnum.CONF_FOLDER, "custom-styles.css").toExternalForm();
     	final String immutableStylesCssUrl = TedrosContext.getExternalURLFile(TedrosFolderEnum.CONF_FOLDER, "immutable-styles.css").toExternalForm();
-    	 
-    	scene.getStylesheets().addAll(customStyleCssUrl, immutableStylesCssUrl);
-    
+
+    	scene.setUserAgentStylesheet(defaultStyleCssUrl);
+    	scene.getStylesheets().addAll(customStyleCssUrl, immutableStylesCssUrl, defaultStyleCssUrl2, defaultStyleCssUrl3);
+
     	File backgroundCss = new File(TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+"background-image.css");
-		if(backgroundCss.exists()){
+		if(backgroundCss.exists())
 			scene.getStylesheets().addAll(TedrosContext.getExternalURLFile(TedrosFolderEnum.CONF_FOLDER, "background-image.css").toExternalForm());
-		}
 		
-        
+		root.getStyleClass().add("application");
+		root.setId("t-tedros-color");
         // create modal dimmer, to dim screen when showing modal dialogs
         modalMessage = new StackPane();
         modalMessage.setId("t-modal-dimmer");
@@ -319,6 +323,7 @@ public class Main extends Application {
         
         menuTree = new TreeView();
         menuTree.setId("t-tedros-menu-tree");
+        menuTree.setStyle("-fx-background-color: transparent;");
         menuTree.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         //menuTree.setRoot(pages.getRoot());
         menuTree.setShowRoot(false);
@@ -337,8 +342,9 @@ public class Main extends Application {
         
         // create left split pane
         leftSplitPane = new BorderPane();
+        leftSplitPane.setStyle("-fx-background-color: transparent;");
         BorderPane leftMenuPane = new BorderPane();
-        leftMenuPane.setStyle("-fx-effect: dropshadow( three-pass-box , #000000 , 9, 0.1 , 0 , 4); -fx-text-fill: #FFFFFF; ");
+        leftMenuPane.setStyle("-fx-effect: dropshadow( three-pass-box , #000000 , 9, 0.1 , 0 , 4); -fx-text-fill: #FFFFFF; -fx-background-color: transparent;");
         leftMenuPane.setCenter(menuTree);
         
         leftSplitPane.setCenter(leftMenuPane);
@@ -383,25 +389,27 @@ public class Main extends Application {
             }
         };
         pageArea.setId("t-app-area");
+        pageArea.setStyle("-fx-background-color: transparent;");
         // create right split pane
         BorderPane rightSplitPane = new BorderPane();
         rightSplitPane.setTop(pageToolBar);
         rightSplitPane.setCenter(pageArea);
         splitPane = new SplitPane();
         splitPane.setId("t-tedros-splitpane");
+        splitPane.setStyle("-fx-background-color: transparent;");
         splitPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         GridPane.setConstraints(splitPane, 0, 1);
            
         
         rightSplitPane.setMinWidth(300);
-        rightSplitPane.setStyle("-fx-effect: dropshadow( three-pass-box , #000000 , 9, 0.1 , 0 , 4); -fx-text-fill: #FFFFFF; ");
+        rightSplitPane.setStyle("-fx-effect: dropshadow( three-pass-box , #000000 , 9, 0.1 , 0 , 4); -fx-text-fill: #FFFFFF; -fx-background-color: transparent;");
         
         splitPane.getItems().addAll(leftSplitPane, rightSplitPane);
         splitPane.setDividerPosition(0, 0.099);
         
         root.setTop(toolBar);
         root.setCenter(splitPane);
-        
+        root.setStyle("-fx-background-color: transparent;");
         // add window resize button so its on top
         windowResizeButton.setManaged(false);
        
@@ -543,9 +551,10 @@ public class Main extends Application {
                     scrollPane.setMinWidth(725);
                     scrollPane.setStyle("-fx-background-color: transparent; -fx-padding: 20 20 20 20;");
                     content = scrollPane;
-                }else
+                }else {
                 	content = view;
-                
+                	content.setStyle("-fx-background-color: transparent;");
+                }
                 pageArea.getChildren().setAll(content);
                 TedrosContext.setView(view);
             }

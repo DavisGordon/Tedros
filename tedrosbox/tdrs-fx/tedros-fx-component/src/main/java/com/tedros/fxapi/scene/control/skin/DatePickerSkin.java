@@ -34,6 +34,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBoxBase;
@@ -251,6 +252,7 @@ public final class DatePickerSkin extends HBox implements Skin<DatePicker> {
 	        imageView.setCursor(Cursor.HAND);
 
 	        setSpacing(5);
+	        setPadding(new Insets(0, 5, 0, 0));
 	        imageView.visibleProperty().bind(disabledProperty().not());
 			
 		} catch (IOException e) {

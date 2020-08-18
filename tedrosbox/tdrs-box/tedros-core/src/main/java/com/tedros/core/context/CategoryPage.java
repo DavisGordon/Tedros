@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.tedros.util.TedrosFolderEnum;
+
 import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
@@ -22,7 +24,8 @@ public class CategoryPage extends Page {
         getChildren().addAll(Arrays.asList(pages));
     }
 
-    @Override public Node createModule() {
+    @SuppressWarnings("restriction")
+	@Override public Node createModule() {
         // split children
         List<InternalViewPage> directChildren = new ArrayList<InternalViewPage>();
         List<CategoryPage> categoryChildren = new ArrayList<CategoryPage>();
@@ -34,6 +37,7 @@ public class CategoryPage extends Page {
                 categoryChildren.add((CategoryPage)page);
             }
         }
+        
         // create main column
         VBox main = new VBox(8) {
             // stretch to allways fill height of scrollpane
@@ -44,7 +48,9 @@ public class CategoryPage extends Page {
                 );
             }
         };
+        
         main.getStyleClass().add("t-category-page");
+        main.setStyle("-fx-background-color: transparent;");
         // create header
         Label header = new Label(getName());
         header.setMaxWidth(Double.MAX_VALUE);
@@ -73,12 +79,15 @@ public class CategoryPage extends Page {
             TilePane directChildFlow = new TilePane(8,8);
             directChildFlow.setPrefColumns(1);
             directChildFlow.getStyleClass().add("t-category-page-flow");
+            directChildFlow.setStyle("-fx-background-color: transparent;");
+
             addAllCategoriesTiles(categoryPage, directChildFlow);
             main.getChildren().add(directChildFlow);
         }
         // wrap in scroll pane
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.getStyleClass().add("noborder-scroll-pane");
+        scrollPane.setStyle("-fx-background-color: transparent;");
         scrollPane.setFitToWidth(true);
         scrollPane.setContent(main);
         return scrollPane;

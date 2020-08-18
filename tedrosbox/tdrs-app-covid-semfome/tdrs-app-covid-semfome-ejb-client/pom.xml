@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.tedros</groupId>
 		<artifactId>tdrs-app-covid-semfome</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<version>8-2.2</version>
 	</parent>
 	
 	<!-- MODULE INFO -->  
@@ -21,7 +21,7 @@
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tdrs-app-covid-semfome-model</artifactId>
-	  		<version>1.0-SNAPSHOT</version>
+	  		<version>8-2.2</version>
 	  		<scope>compile</scope>
 	  	</dependency>
 	  	

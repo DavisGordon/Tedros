@@ -11,7 +11,7 @@ public class LoginDecorator extends TDynaViewCrudBaseDecorator<LoginModelView> {
 		
 		TDynaView<LoginModelView> view = getView();
 		
-		view.setMaxSize(550, 450);
+		view.setMaxSize(550, 470);
 		
 		setViewTitle(null);
 		addItemInTCenterContent(view.gettFormSpace());

@@ -16,7 +16,7 @@ public class SecurityIconImageView extends TImageView {
 	 */
 	@Override
 	public String getImagePathName() {
-		return "com/tedros/settings/security/icon/icon.png";
+		return "com/tedros/settings/security/icon/user.png";
 	}
 
 }
