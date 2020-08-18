@@ -32,34 +32,10 @@ public class EditarFundoView extends StackPane {
 	
 	@FXML public Label viewTitleLabel;
     @FXML public Button aplicarBtn;
-    @FXML private Button radialBtn;
-    @FXML private Button imagemBtn;
     @FXML private StackPane formSpace;
     final private SelecionarImagemView selecionarImagemView;
-    final private Node gradientPane;
     final private SimpleStringProperty backgroundStyleProperty = new SimpleStringProperty();
     
-    private enum Radial{
-		FOCUS_ANGLE("focus-angle"),
-		FOCUS_DISTANCE("focus-distance"),
-		CENTER("center"),
-		RADIUS("radius"),
-		REPEAT("repeat"),
-		REFLECT("reflect"),
-		COLOR_STOP("#");
-		
-		private String atr;
-		
-		private Radial(String atr){
-			this.atr = atr;
-			
-		}
-		
-		@Override
-		public String toString() {
-			return atr;
-		}
-	}
     
     
 	//public EditarFundoView(final TedrosTemplate template) throws Exception {
@@ -70,7 +46,6 @@ public class EditarFundoView extends StackPane {
         fxmlLoader.setController(this);
         fxmlLoader.load();
 		
-        this.gradientPane = new GradientBuilderApp().build(backgroundStyleProperty);
         this.selecionarImagemView = new SelecionarImagemView();
         
         this.viewTitleLabel.setText(TInternationalizationEngine.getInstance(TConstant.UUI).getString("#{label.background}"));
@@ -86,99 +61,29 @@ public class EditarFundoView extends StackPane {
 			public void handle(ActionEvent arg0) {
 				try {
 					File css = new File(TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+"background-image.css");
-					if(scroll.getContent().equals(selecionarImagemView)){
-						String propFilePath = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+TStyleResourceName.BACKGROUND_STYLE;
-						String imageName = (String) selecionarImagemView.imageView.getUserData();
-						String repeat = selecionarImagemView.repetirCheckBox.isSelected() ? "repeat" : "no-repeat";
-						String ativar = selecionarImagemView.ativarCheckBox.isSelected() ? "true" : "false";
-						FileOutputStream fos = new FileOutputStream(propFilePath);
-						Properties prop = new Properties();
-						prop.setProperty("image", imageName);
-						prop.setProperty("repeat", repeat);
-						prop.setProperty("ativar", ativar);
-						prop.store(fos, "background styles");
-						
-						StringBuffer sbf = new StringBuffer("#t-tedros-color { -fx-background-size: cover; -fx-background-image: url(\"../IMAGES/FUNDO/"+imageName+"\"); -fx-background-repeat: "+repeat+"; }");
-						if(css.exists()){
-							css.delete();
-							css.createNewFile();
-						}
-						TFileUtil.saveFile(sbf.toString(), css);
-					}else{
-						final String backgroundCssStyle = backgroundStyleProperty.getValue();
-						StringBuffer sbf = new StringBuffer("#t-tedros-color { "+backgroundCssStyle+" }");
-						if(css.exists()){
-							css.delete();
-							css.createNewFile();
-						}
-						TFileUtil.saveFile(sbf.toString(), css);
-						
-						try {
-							final String radial = backgroundCssStyle.replaceAll(TemplateStyleId.BACKGROUND_COLOR.toString(), "");
-							String focusAngle = null;
-							String focusDistance = null;
-							String center = null;
-							String radius = null;
-							String reflect = null;
-							String repeat = null;
-							String colorStop = null;
-							
-							if(radial.contains(Radial.FOCUS_ANGLE.toString()))
-								focusAngle = StringUtils.substringBetween(radial, Radial.FOCUS_ANGLE.toString(), ",");
-							if(radial.contains(Radial.FOCUS_DISTANCE.toString()))
-								focusDistance = StringUtils.substringBetween(radial, Radial.FOCUS_DISTANCE.toString(), ",");
-							if(radial.contains(Radial.CENTER.toString()))
-								center = StringUtils.substringBetween(radial, Radial.CENTER.toString(), ",");
-							if(radial.contains(Radial.RADIUS.toString()))
-								radius = StringUtils.substringBetween(radial, Radial.RADIUS.toString(), ",");
-							if(radial.contains(Radial.REFLECT.toString()))
-								reflect = Radial.REFLECT.name().toLowerCase();
-							if(radial.contains(Radial.REPEAT.toString()))
-								repeat = Radial.REPEAT.name().toLowerCase();
-							
-							if(radial.contains(Radial.COLOR_STOP.toString()))
-								colorStop = StringUtils.substringBetween(radial, Radial.COLOR_STOP.toString(), ")");
-							
-							String propFilePath = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+TStyleResourceName.BACKGROUND_STYLE;
-							FileOutputStream fos = new FileOutputStream(propFilePath);
-							Properties prop = new Properties();
-							
-							if(null!=focusAngle) prop.setProperty(Radial.FOCUS_ANGLE.name(), focusAngle);
-							if(null!=focusDistance) prop.setProperty(Radial.FOCUS_DISTANCE.name(), focusDistance);
-							if(null!=center) prop.setProperty(Radial.CENTER.name(), center);
-							if(null!=radius) prop.setProperty(Radial.RADIUS.name(), radius);
-							if(null!=reflect) prop.setProperty(Radial.REFLECT.name(), reflect);
-							if(null!=repeat) prop.setProperty(Radial.REPEAT.name(), repeat);
-							if(null!=colorStop) prop.setProperty(Radial.COLOR_STOP.name(), colorStop);
-							
-							prop.store(fos, "background-style");
-							
-						} catch (Exception  e1) {
-							e1.printStackTrace();
-						}
+					String propFilePath = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+TStyleResourceName.BACKGROUND_STYLE;
+					String imageName = (String) selecionarImagemView.imageView.getUserData();
+					String repeat = selecionarImagemView.repetirCheckBox.isSelected() ? "repeat" : "no-repeat";
+					String ativar = selecionarImagemView.ativarCheckBox.isSelected() ? "true" : "false";
+					FileOutputStream fos = new FileOutputStream(propFilePath);
+					Properties prop = new Properties();
+					prop.setProperty("image", imageName);
+					prop.setProperty("repeat", repeat);
+					prop.setProperty("ativar", ativar);
+					prop.store(fos, "background styles");
+					
+					StringBuffer sbf = new StringBuffer("#t-tedros-color { -fx-background-size: cover; -fx-background-image: url(\"../IMAGES/FUNDO/"+imageName+"\"); -fx-background-repeat: "+repeat+"; }");
+					if(css.exists()){
+						css.delete();
+						css.createNewFile();
 					}
+					TFileUtil.saveFile(sbf.toString(), css);
 					TedrosContext.reloadStyle();
 				} catch (FileNotFoundException  e1) {
 					e1.printStackTrace();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			}
-		});
-        
-        radialBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				scroll.setContent(gradientPane);
-			}
-		});
-        
-        imagemBtn.setText(TInternationalizationEngine.getInstance(TConstant.UUI).getString("#{label.image}"));
-        imagemBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				
-				scroll.setContent(selecionarImagemView);
 			}
 		});
         

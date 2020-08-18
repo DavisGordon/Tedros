@@ -329,58 +329,79 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 		/*int x = 0;
 		if(key.equals("items"))
 			x = 0;*/
-		Class paramClass = getGenericParamClass();
-		Class targetClass = paramClass == Object.class ? targetObject.getClass() : paramClass;
-		final Method method = getTargetMethod(key, targetClass);
-		try{
-			if(method!=null){
-				if(value instanceof Double[])
-					method.invoke(targetObject, ((Double[])value)[0], ((Double[])value)[1]);
-				else
-					method.invoke((T)targetObject,  TTypeAnalyserParserDelegate.parse(value, componentDescriptor));
-			}else if(!key.equals(componentDescriptor.getAnnotationPropertyInExecution())){
-				final Method method2 = getTargetMethod(componentDescriptor.getAnnotationPropertyInExecution(), targetClass);
-				if(method2!=null){
-					Object obj = method2.invoke(targetObject);
-					if(obj !=null){
-						final Method method3 = getTargetMethod(key, targetClass);
-						if(method3!=null)
-							method.invoke(targetObject, TTypeAnalyserParserDelegate.parse(obj, componentDescriptor));
+		try {
+			Class paramClass = getGenericParamClass();
+			Class targetClass = paramClass == Object.class ? targetObject.getClass() : paramClass;
+			Object targetValue = TTypeAnalyserParserDelegate.parse(value, componentDescriptor);
+			final Method method = getTargetMethod(key, targetClass);
+			try{
+				if(method!=null){
+					if(value instanceof Double[])
+						method.invoke(targetObject, ((Double[])value)[0], ((Double[])value)[1]);
+					else
+						method.invoke((T)targetObject,  targetValue);
+				}else if(!key.equals(componentDescriptor.getAnnotationPropertyInExecution())){
+					final Method method2 = getTargetMethod(componentDescriptor.getAnnotationPropertyInExecution(), targetClass);
+					if(method2!=null){
+						Object obj = method2.invoke(targetObject);
+						if(obj !=null){
+							final Method method3 = getTargetMethod(key, targetClass);
+							if(method3!=null)
+								method.invoke(targetObject, TTypeAnalyserParserDelegate.parse(obj, componentDescriptor));
+						}
 					}
+					
 				}
-				
+			}catch(Exception e){
+				System.out.println("Warning: Error trying parse an annotation.");
+				System.out.println("annotation: "+TReflectionUtil.getAnnotationFullName(annotation)+", object: " + targetObject.getClass().getSimpleName()
+									+", method: "+method.getName() + ", value: "+value.toString()+", form: "+componentDescriptor.getForm().getClass().getSimpleName());
+				System.out.println("Message: "+e.getMessage());
 			}
-		}catch(Exception e){
+		}catch(Exception e) {
 			System.out.println("Warning: Error trying parse an annotation.");
 			System.out.println("annotation: "+TReflectionUtil.getAnnotationFullName(annotation)+", object: " + targetObject.getClass().getSimpleName()
-								+", method: "+method.getName() + ", value: "+value.toString()+", form: "+componentDescriptor.getForm().getClass().getSimpleName());
+								+ ", value: "+value.toString()+", form: "+componentDescriptor.getForm().getClass().getSimpleName());
 			System.out.println("Message: "+e.getMessage());
 		}
 	}
 	
+	/*private static Method getTargetMethod(String key, Class clazz, Object value){
+		
+		
+		
+		Method prop = TReflectionUtil.getMethod(clazz, key, value.getClass());
+		Method set = TReflectionUtil.getSetterMethod(clazz, key, value.getClass());
+		if(set==null)
+			set = TReflectionUtil.getGetterMethod(clazz, key, value.getClass());
+		return (set!=null && prop!=null) ? set : ((set!=null) ? set : prop);
+	}
+	*/
 	private static Method getTargetMethod(String key, Class clazz){
+		
 		
 		Method prop = null;
 		Method set = null;
+		do {
+			for(Method m : clazz.getDeclaredMethods()){
+				if(m.getName().equals(key)){
+					prop = m;
+				}
+				if(m.getName().equals(SET+StringUtils.capitalize(key))){
+					if(key.equals("alignment") && m.getParameterTypes().length>1)
+						continue;
+					set = m;
+					break;
+				}
+				
+				if(m.getName().equals(GET+StringUtils.capitalize(key)))
+					set = m;
+			}
+			clazz = clazz.getSuperclass();
+		}while(clazz!=Object.class && (prop==null && set==null));
 		
-		for(Method m : clazz.getDeclaredMethods()){
-			if(m.getName().equals(key)){
-				prop = m;
-			}
-			
-			if(m.getName().equals(SET+StringUtils.capitalize(key))){
-				if(key.equals("alignment") && m.getParameterTypes().length>1)
-					continue;
-				set = m;
-				break;
-			}
-			
-			if(m.getName().equals(GET+StringUtils.capitalize(key)))
-				set = m;
-		}
 		return (set!=null && prop!=null) ? set : ((set!=null) ? set : prop);
 	}
-	
 	
 	private Annotation getDefaultSetting(A annotation) {
 		List<Annotation> typeAnnotations = componentDescriptor.getModelViewAnnotationList();

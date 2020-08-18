@@ -20,6 +20,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.SwipeEvent;
 import javafx.scene.input.TouchEvent;
 import javafx.scene.input.ZoomEvent;
+import javafx.event.EventType;
 
 import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
 import com.tedros.fxapi.annotation.TCursor;
@@ -41,7 +42,6 @@ import com.tedros.fxapi.builder.ITNodeBuilder;
 import com.tedros.fxapi.builder.NullContextMenuEventBuilder;
 import com.tedros.fxapi.builder.NullDragEventBuilder;
 import com.tedros.fxapi.builder.NullEventDispatcher;
-import com.tedros.fxapi.builder.NullEventType;
 import com.tedros.fxapi.builder.NullInputMethodEventBuilder;
 import com.tedros.fxapi.builder.NullInputMethodRequests;
 import com.tedros.fxapi.builder.NullKeyEventBuilder;
@@ -1250,7 +1250,7 @@ public @interface TNode {
 	*  
 	* </pre>
 	**/
-	public TEventHandler eventHandler() default @TEventHandler(eventType = NullEventType.class, parse = false);
+	public TEventHandler eventHandler() default @TEventHandler(eventType = EventType.class, parse = false);
 	
 	
 	

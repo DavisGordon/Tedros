@@ -390,10 +390,10 @@ public class NumberSpinner extends TRequiredNumberField {
     }
 
     @Override
-    protected String getUserAgentStylesheet() {
+	public String getUserAgentStylesheet() {
     	return getCSS();
     }
-
+    
 	private String getCSS() {
 		return NumberSpinner.class.getResource("NumberSpinner.css").toExternalForm();
 	}

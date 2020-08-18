@@ -307,7 +307,7 @@ public class DatePicker extends ComboBoxBase<Date> {
 
 
     @Override
-    protected String getUserAgentStylesheet() {
+	public String getUserAgentStylesheet() {
         return DatePicker.class.getResource("DatePicker.css").toExternalForm();
     }
 

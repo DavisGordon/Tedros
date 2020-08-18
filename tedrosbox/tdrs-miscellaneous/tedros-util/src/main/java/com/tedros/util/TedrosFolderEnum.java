@@ -6,6 +6,7 @@ public enum TedrosFolderEnum {
 	IMAGES_FOLDER 		("IMAGES/"),
 	BACKGROUND_IMAGES_FOLDER ("IMAGES/FUNDO/"),
 	CONF_FOLDER 		("CONF/"),
+	CSS_CASPIAN_FOLDER 		("css/caspian/"),
 	DATA_FILE_FOLDER 	("DATA_FILE/"),
 	MODULE_FOLDER 		("MODULE/"),
 	LOG_FOLDER			("LOG/"),

@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.tedros</groupId>
 		<artifactId>tdrs-box</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>8-1.0</version>
 	</parent>
 	
 	<!-- MODULE INFO -->
@@ -23,27 +23,29 @@
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-box-app-base</artifactId>
-	  		<version>0.0.1-SNAPSHOT</version>
+	  		<version>8-1.0</version>
 	  	</dependency>
 	  	
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-core-ejb-client</artifactId>
-	  		<version>0.0.1-SNAPSHOT</version>
+	  		<version>8-1.0</version>
 	  		<scope>compile</scope>
 	  	</dependency>
 	  	
-	  	<dependency>
+	  	 <dependency>
 	  		<groupId>com.oracle</groupId>
 	  		<artifactId>jfxrt</artifactId>
-	  		<version>1.7.0_80</version>
-		</dependency>
+	  		<version>1.8.0_261</version>
+		</dependency> 
 		
+		<!-- https://mvnrepository.com/artifact/org.scannotation/scannotation -->
 		<dependency>
-			<groupId>net.sf.scannotation</groupId>
-			<artifactId>scannotation</artifactId>
-			<version>1.0.2</version>
+		    <groupId>org.reflections</groupId>
+		    <artifactId>reflections</artifactId>
+		    <version>0.9.12</version>
 		</dependency>
+
 		
 	  
 	  	<dependency>
@@ -61,6 +63,15 @@
   	</dependencies>
   	
   	 <build>
+  	 	<plugins>
+		    <plugin>    
+		        <artifactId>maven-compiler-plugin</artifactId>
+		        <configuration>
+		            <source>${java.version}</source>
+          			<target>${java.version}</target>
+		        </configuration>
+		    </plugin>
+		</plugins>
     	<resources>
         	<resource>
             	<directory>src/main/resources</directory>

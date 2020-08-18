@@ -6,14 +6,21 @@
  */
 package com.tedros.core.control;
 
+import com.tedros.core.context.TedrosContext;
+
+import javafx.animation.FadeTransition;
 import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 
 /**
  * Progress indicator
@@ -23,7 +30,8 @@ import javafx.scene.layout.StackPane;
 public class TProgressIndicator {
 
 	private Region veil;
-	private ProgressIndicator progressIndicator;
+	private ImageView progressIndicator;
+	private FadeTransition ft;
 	
 	public TProgressIndicator(final Pane pane) {
 		initialize();
@@ -52,10 +60,33 @@ public class TProgressIndicator {
 		veil = new Region();
 		veil.setVisible(false);
 		veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4)");
-		progressIndicator = new ProgressIndicator();
+		progressIndicator = new ImageView();
 		progressIndicator.setVisible(false);
-		progressIndicator.setMaxSize(50, 50);
-        progressIndicator.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
+		//progressIndicator.setMaxSize(50, 50);
+        
+        Image img = new Image(TedrosContext.getImageInputStream("logo-tedros.png"));
+        
+        progressIndicator.setImage(img);
+        
+        ft = new FadeTransition(Duration.millis(1000), progressIndicator);
+        ft.setFromValue(1.0);
+        ft.setToValue(0.3);
+        ft.setCycleCount(FadeTransition.INDEFINITE);
+        ft.setAutoReverse(true);
+        
+        progressIndicator.visibleProperty().addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
+				if(arg2)
+					ft.play();
+				else
+					ft.stop();
+			}
+        	
+        });
+    
+        
 	}
 	
 }

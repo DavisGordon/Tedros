@@ -24,7 +24,7 @@ public final class TUrlUtil {
 	 * Return an URL
 	 * */
 	public static URL getURL(String path) throws MalformedURLException{
-		return new URL("file:"+path); 
+		return new URL("file:/"+path); 
 	}
 	
 	/**

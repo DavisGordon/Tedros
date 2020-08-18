@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.tedros</groupId>
 		<artifactId>tdrs-box</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>8-1.0</version>
 	</parent>
 	
 	<!-- MODULE INFO -->
@@ -25,21 +25,21 @@
 	  	 <!-- <dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>app-global-brasil</artifactId>
-	  		<version>0.0.1-SNAPSHOT</version>
+	  		<version>8-1.0</version>
 	  		<scope>runtime</scope>
 	  	</dependency> -->
 	  	
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tdrs-app-covid-semfome-fx</artifactId>
-	  		<version>1.0-SNAPSHOT</version>
+	  		<version>8-2.2</version>
 	  		<scope>runtime</scope>
 	  	</dependency>
 	  	 
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-box-app-settings</artifactId>
-	  		<version>0.0.1-SNAPSHOT</version>
+	  		<version>8-1.0</version>
 	  		<scope>compile</scope>
 	  	</dependency>
 	  	
@@ -48,7 +48,7 @@
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-fx-component</artifactId>
-	  		<version>0.0.1-SNAPSHOT</version>
+	  		<version>8-1.0</version>
 	  		<scope>compile</scope>
 	  	</dependency>
 	  	

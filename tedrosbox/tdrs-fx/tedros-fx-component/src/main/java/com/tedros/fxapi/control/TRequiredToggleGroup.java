@@ -24,6 +24,7 @@ import com.tedros.fxapi.effect.TEffectUtil;
  * @author Davis Gordon
  *
  */
+@SuppressWarnings("restriction")
 public abstract class TRequiredToggleGroup extends ToggleGroup implements ITField, ITComponent {
 
 	private SimpleBooleanProperty requirementAccomplishedProperty;
