@@ -1,0 +1,826 @@
+
+#t-form {
+	-fx-background-color: rgba(0,0,0,0.19);
+	-fx-padding: 8 8 8 8;
+	-fx-spacing: 8;
+}
+
+#t-message-form {
+	-fx-background-color: rgba(0,0,0,1);
+	-fx-padding: 20 5 5 5;
+	-fx-spacing: 8;
+}
+
+#t-reader {
+	-fx-background-color: rgba(255,255,255,1);
+	-fx-padding: 8 8 5 8;
+	-fx-spacing: 8;
+}
+
+#t-pane {
+	-fx-background-color: rgba(26,26,26,0.36);
+	-fx-padding: 10 8 8 8;
+	-fx-spacing: 8;
+}
+
+#t-message-pane {
+	-fx-background-color: rgba(26,26,26,1);
+	-fx-border-color: rgba(0,0,0,1); 
+	-fx-border-width: 1.2;
+	/*
+	-fx-background-color: rgba(26,26,26,1);
+	-fx-border-color: black black black black; 
+	-fx-background-radius: 0 20 0 20; 
+	-fx-background-insets: 0 0 0 0; 
+	-fx-border-radius: 0 20 0 20; 
+	-fx-border-insets: 0 0 0 0;
+	*/
+}
+
+#t-form-scroll{
+	-fx-background-color: rgba(26,26,26,0.36);
+	-fx-padding: 10 10 10 10;
+}
+
+#t-form-title-text{
+	-fx-font: 22px Tahoma;
+	-fx-fill: #ffffff;
+	-fx-text-fill: #ffffff;
+}
+
+#t-form-item-text{
+	-fx-font: 15px Tahoma;
+	-fx-fill: #ffffff;
+	-fx-text-fill: #ffffff;
+}
+
+#t-form-pane { 
+	-fx-background-size: auto; 
+	/*-fx-background-image: url("../IMAGES/logo-tedros.png"); */
+	-fx-opacity: 0.6;
+	-fx-background-repeat: no-repeat; 
+	-fx-background-position: center;
+	-fx-background-color: rgba(26,26,26,0.36);
+	-fx-padding: 20 20 20 20;
+	-fx-spacing: 8;
+}
+
+#t-reader-label{
+	-fx-text-fill: #000000; 
+	-fx-fill: #000000; 
+	-fx-font: "Helvetica";
+	-fx-font-size: 1.29em;
+    -fx-font-weight: bold;
+}
+
+#t-reader-text{
+	-fx-text-fill: #4d4d4d; 
+	-fx-fill: #4d4d4d; 
+	-fx-font: "Helvetica";
+	-fx-font-size: 1.2em;
+    -fx-font-weight: bold;
+}
+
+#t-form-control-label{
+	-fx-text-fill: #ffffff; 
+	-fx-font: "Helvetica";
+	-fx-font-size: 1.13em;
+    -fx-font-weight: bold;
+}
+
+#t-button{
+	-fx-text-fill: #ffffff;
+	-fx-font-size: 1.28em;
+	-fx-background-color: rgba(179,26,26,0.68);
+	-fx-background-radius: 0;
+	-fx-background-insets: 0;
+	-fx-padding: 3px 6px 4px 6px;
+	-fx-border-color: transparent transparent transparent #ffffff , transparent transparent transparent transparent;
+}
+
+#t-last-button{
+	-fx-text-fill: #ffffff;
+	-fx-font-size: 1.28em;
+	-fx-background-color: rgba(179,26,26,0.68);
+	-fx-background-radius: 0;
+	-fx-background-insets: 0;
+	-fx-padding: 3px 6px 4px 6px;
+	-fx-border-color: transparent #ffffff transparent #ffffff , transparent #ffffff transparent transparent;
+}
+#t-button:hover {
+	-fx-text-fill: #ffffff;
+	-fx-font-size: 1.28em;
+	-fx-background-color: null;
+	-fx-cursor: hand;
+}
+#t-last-button:hover {
+	-fx-text-fill: #ffffff;
+	-fx-font-size: 1.28em;
+	-fx-background-color: null;
+	-fx-cursor: hand;
+}
+#t-button:focused {
+	-fx-background-color: rgba(179,26,26,0.68);
+}
+#t-last-button:focused {
+	-fx-background-color: rgba(179,26,26,0.68);
+}
+
+#t-fieldset{
+    -fx-border-color: #1a1a1a;
+    -fx-border-width:2px;
+    -fx-border-style:solid; 
+	-fx-background-color: transparent;
+}
+
+#t-fieldset-legend{
+	-fx-text-fill: #ffffff; 
+	-fx-font: "Helvetica";
+	-fx-font-size: 1.13em;
+    -fx-font-weight: bold;
+}
+
+#t-fieldset-legend-pane{
+	-fx-background-color: rgba(26,26,26,1);
+	-fx-padding: 0 0 5 0;
+}
+
+.check-box {
+	-fx-text-fill: #ffffff;
+	-fx-font-size: 1.13em;
+}
+
+.choice-box {
+	-fx-text-fill: #ffffff;
+	-fx-font-size: 1.13em;
+	-fx-background-color: #f2f2f2; 
+	-fx-background-radius: 2 10 0 0;
+	-fx-border-color: transparent transparent transparent transparent;
+	-fx-border-width: 0.1em 0.1em 0.1em 0.1em;
+	-fx-border-radius: 2 10 0 0;
+}
+
+.text-input {
+	-fx-text-fill: #000000;
+	-fx-font-size: 1.01em;
+	-fx-background-color: #f2f2f2;
+	-fx-background-radius: 3 0 0 0;
+	-fx-border-radius: 3 0 0 0;
+	-fx-border-color: #993300 #993300 #993300 #993300;	
+}
+
+.slider .axis {
+    -fx-tick-label-font: 0.833333em System; 
+}
+
+.slider {
+    -fx-skin: "com.sun.javafx.scene.control.skin.SliderSkin";
+}
+
+.slider .thumb {
+    -fx-background-color:
+        derive(-fx-color,-36%),
+        derive(-fx-color,73%),
+        linear-gradient(to bottom, derive(-fx-color,-19%),derive(-fx-color,61%));
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 1.0em; 
+    -fx-padding: 0.583333em; 
+}
+
+.slider:focused .thumb {
+    -fx-color: -fx-focused-base;
+    -fx-background-color:
+        -fx-focus-color,
+        derive(-fx-color,-36%),
+        derive(-fx-color,73%),
+        linear-gradient(to bottom, derive(-fx-color,-19%),derive(-fx-color,61%));
+    -fx-background-insets: -1.4, 0, 1, 2;
+    -fx-background-radius: 1.0em; 
+}
+
+.slider .thumb:hover {
+    -fx-color: -fx-hover-base;
+}
+
+.slider:vertical .track {
+    -fx-background-color:
+        -fx-shadow-highlight-color,
+        derive(-fx-color,-22%),
+        linear-gradient(to right, derive(-fx-color,-15.5%), derive(-fx-color,34%) 30%, derive(-fx-color,68%));
+    -fx-background-insets: 0 -1 0 1, 0, 1;
+}
+
+.slider .axis {
+    -fx-tick-mark-stroke: ladder(-fx-background, derive(-fx-background,30%) 40%, derive(-fx-background,-30%) 41%);
+    -fx-tick-label-font: 1.13em System; 
+    -fx-tick-label-fill: #ffffff;
+}
+
+.slider:disabled {
+    -fx-opacity: -fx-disabled-opacity;
+}
+
+.required {
+	-fx-background-color: #f2f2f2;
+	-fx-border-color: #993300 #993300 #993300;
+	-fx-border-width: 1 1 1 3;
+}
+.required-ok {
+	-fx-background-color: #f2f2f2;
+	-fx-border-color: #993300 #993300 #993300 green;
+	-fx-border-width: 1 1 1 3;
+}
+
+.required-not-ok {
+	-fx-background-color: yellow;
+	-fx-border-color: #993300 #993300 #993300 red;
+	-fx-border-width: 1 1 1 3;
+}
+
+.combo-box-base{
+	-fx-text-fill: #000000;
+	-fx-font-size: 1.01em;
+	-fx-background-color: #f2f2f2;
+	-fx-border-radius: 2 5 0 0;
+	-fx-border-color: #993300 #993300 #993300 #993300;	
+	-fx-background-radius: 2 5 0 0;
+	-fx-border-width: 0.1em 0.1em 0.1em 0.1em;
+}
+
+.combo-box-base > .arrow-button {
+	-fx-background-color: #f2f2f2; 
+	-fx-background-radius: 2 5 0 0;
+	-fx-border-color: null; 	
+	-fx-border-width: 0em; 
+	-fx-effect: null;
+}
+
+.combo-box-base > .arrow-button:hover {
+	-fx-background-color: #f2f2f2; 
+	-fx-background-radius: 2 5 0 0;
+	-fx-border-color: null; 	
+	-fx-border-width: 0em;
+	-fx-effect: dropshadow(three-pass-box, #000000 , 2, 0.05 , 0 , 2 );
+}
+
+.accordion .titled-pane .first-titled-pane .title{
+	-fx-border-color: transparent transparent lightslategrey transparent; 
+	-fx-border-width: 0em 0em 0.1em 0em;
+}
+
+.titled-pane .title{
+	-fx-background-color: rgba(26,26,26,0.36);
+	-fx-background-radius: 0 0 0 0;
+	-fx-border-color: lightslategrey transparent lightslategrey transparent; 	
+	-fx-border-width: 0.01em 0em 0.1em 0em;
+	-fx-padding: 4 10 4 10;
+	-fx-alignment: center_left;
+}
+
+.titled-pane{
+	-fx-text-fill: #ffffff;
+	-fx-font-size: 1.34em;
+}
+
+.titled-pane .content {
+	-fx-background-color: transparent; 
+	-fx-background-radius: 0 0 0 0;
+	-fx-border-color: transparent transparent transparent transparent; 	
+	-fx-border-width: 0em 0.2em 0.2em 0.2em;
+	-fx-border-radius: 0 0 0 0;
+}
+
+/*#### POPUP ####*/
+#t-popup {
+    -fx-background-color: #ffff4d; 
+	-fx-effect: dropshadow( two-pass-box , black, 10, 0.2 , 0 , 0 ); 
+	-fx-background-radius: 0 8 8 8;	
+}
+
+#t-popup-label{
+	-fx-font-family: "Helvetica"; 
+	-fx-font-size: 1.2em; 
+	-fx-text-fill: white; 
+	-fx-font-weight: bold;
+	-fx-font-smoothing-type:lcd;
+	-fx-effect: dropshadow(three-pass-box, #000000 , 8, 0.4 , 0 , 2 );
+}
+
+/*#### BARRA POPUP ####*/
+
+#t-popup-toolbar {
+    -fx-background-color: transparent; 
+	-fx-background-radius: 0 8 0 0;
+	-fx-border-color: transparent transparent transparent transparent; 	
+	-fx-border-width: 0.1em;
+	-fx-border-radius: 0 5 0 0;
+}
+
+#t-popup-toolbar  .HBox {
+    -fx-background-color: transparent;
+}
+
+.t-popup-content  {
+    -fx-background-color: #ffff4d; 
+	-fx-background-radius: 0 5 5 5;
+	-fx-border-color: transparent transparent transparent transparent; 	
+	-fx-border-width: 0.1em;
+	-fx-border-radius: 0 5 5 5;
+}
+
+/*#### MODAIS ####*/
+
+/*#### TEDROS TOPO ####*/
+#t-main-toolbar {
+	-fx-background-color: radial-gradient(focus-angle 105deg , focus-distance -3% , center -11% 48% , radius 120% , transparent 30% , rgb(0,0,0,0));
+	-fx-background-size: cover;
+	-fx-border-color: transparent transparent lightslategrey  transparent;
+	-fx-border-width: 0.9;
+    -fx-border-insets: 0, 0 0 1 0;
+}
+
+/*#### APP NAME ####*/
+#t-app-name{
+	-fx-font: Arial;
+	-fx-font-size: 22;
+	-fx-font-weight: bold;
+	-fx-font-smoothing-type:lcd;
+	-fx-text-fill: #ffffff;
+}
+/*#### BARRA NAVEGA��O - BREADCRUMBAR ####*/
+#t-tedros-toolbar {
+	-fx-font-size: 1.4em;
+	-fx-text-fill: #FFFFFF;
+	-fx-background-color: transparent; 
+    -fx-spacing: 0;
+}
+#t-tedros-toolbar .HBox {
+    -fx-fill-height: true;
+    -fx-alignment: center-left;
+}
+#t-tedros-toolbar .button {
+    -fx-background-color: null;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 3px 6px 4px 6px;
+    -fx-border-color: transparent #706350 transparent #D3CDC2 , transparent #D3CDC2 transparent transparent;
+    -fx-border-insets: 0, 0 1 0 1;
+}
+#t-tedros-toolbar .button:hover {
+    -fx-background-color: rgba(255,255,255,0.4);
+}
+#t-tedros-toolbar .button:focused, #t-tedros-toolbar #SettingsButton:focused  {
+    -fx-border-color: -fx-focus-color;
+    -fx-border-width: 0.9;
+}
+
+#t-tedros-toolbar .breadcrumb-bar {
+    -fx-padding: 0;
+	-fx-text-fill: #FFFFFF;
+}
+#t-tedros-toolbar .breadcrumb-bar .button {
+	-fx-text-fill: #FFFFFF;
+    -fx-padding: 0 3 0 3;
+    -fx-border-color: null;
+    -fx-border-insets: 0;
+    /*-fx-border-image-source: url("../IMAGES/crumb.png");*/
+    -fx-border-image-slice: 1 10 1 10 fill;
+    -fx-border-image-width: 1 10 1 10;
+    -fx-border-image-repeat: stretch;
+}
+#t-tedros-toolbar .breadcrumb-bar .button:focused {
+    /*-fx-border-image-source: url("../IMAGES/crumb-focused.png");*/
+}
+#t-tedros-toolbar .breadcrumb-bar .button:hover {
+    -fx-background-color: null;
+   /* -fx-border-image-source: url("../IMAGES/crumb-hover.png");*/
+}
+#t-tedros-toolbar .breadcrumb-bar .expand-button {
+    -fx-border-image-width: 0 0 0 0;
+    -fx-border-image-repeat: stretch;
+/*     -fx-border-image-source: url("../IMAGES/crumb-selected.png"); */
+    -fx-border-color: transparent transparent transparent rgba(255,255,255,0.3) , transparent transparent transparent transparent;
+    -fx-border-insets: 0 0 1 0, 1;
+}
+#t-tedros-toolbar .breadcrumb-bar .config-button {
+    -fx-border-image-width: 0 0 0 0;
+    -fx-border-image-repeat: stretch;
+/*     -fx-border-image-source: url("../IMAGES/crumb-selected.png"); */
+    -fx-border-color: transparent rgba(255,255,255,0.3) transparent #6e737d  , transparent transparent transparent rgba(255,255,255,0.3);
+    -fx-border-insets: 0 0 1 0, 1;
+}
+#t-tedros-toolbar .breadcrumb-bar .only-button {
+    -fx-border-image-width: 0 0 0 0;
+    -fx-border-image-repeat: stretch;
+/*     -fx-border-image-source: url("../IMAGES/crumb-selected.png"); */
+    -fx-border-color: transparent #6e737d transparent rgba(255,255,255,0.3) , transparent rgba(255,255,255,0.3) transparent transparent;
+    -fx-border-insets: 0 0 1 0, 1;
+}
+#t-tedros-toolbar .breadcrumb-bar .only-button:hover {
+/*     -fx-border-image-source: url("../IMAGES/crumb-selected.png"); */
+    -fx-border-image-insets: 0 0 1 0;
+}
+#t-tedros-toolbar .breadcrumb-bar .only-button:focused {
+    -fx-border-color: #f0f8ff;
+    -fx-border-width: 0.9;
+}
+#t-tedros-toolbar .breadcrumb-bar .first-button {
+    -fx-border-image-insets: 0 -5 1 0;
+    -fx-border-image-width: 0 10 0 0;
+    -fx-border-image-repeat: stretch;
+    -fx-padding: 0 3 0 6;
+}
+#t-tedros-toolbar .breadcrumb-bar .first-button:focused {
+    -fx-border-color: transparent transparent transparent #f0f8ff;
+    -fx-border-width: 0.9;
+}
+#t-tedros-toolbar .breadcrumb-bar .middle-button {
+    -fx-border-image-insets: 0 -5 1 -4;
+}
+#t-tedros-toolbar .breadcrumb-bar .last-button {
+    -fx-border-image-insets: 0 0 0 -4;
+    -fx-border-image-width: 0 0 0 10;
+    -fx-border-image-repeat: stretch;
+/*     -fx-border-image-source: url("../IMAGES/crumb-selected.png"); */
+    -fx-border-color: transparent #6e737d transparent transparent , transparent rgba(255,255,255,0.2) transparent transparent;
+    -fx-border-insets: 0 0 1 0, 1;
+}
+#t-tedros-toolbar .breadcrumb-bar .last-button:hover {
+/*     -fx-border-image-source: url("../IMAGES/crumb-selected.png"); */
+}
+#t-tedros-toolbar .breadcrumb-bar .last-button:focused {
+    -fx-border-color: transparent #f0f8ff transparent transparent;
+    -fx-border-width: 0.9;
+}
+
+/*#### MODULOS ####*/
+#t-tedros-menu-tree .tree-view {
+-fx-padding: 1;
+-fx-background-color: transparent;
+-fx-background-insets: 0,1;
+-fx-text-fill: #ffffff;
+-fx-font-size: 1.3em;
+}
+#t-tedros-menu-tree .tree-view:focused {
+    -fx-background-color: transparent; 
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+#t-tedros-menu-tree .tree-cell {
+	-fx-cursor: hand;
+    -fx-indent: 10;
+	-fx-text-fill: #ffffff;
+    -fx-background-color: transparent;
+	-fx-border-color: transparent transparent #000000 transparent;
+	-fx-border-width: 0.3;
+}
+#t-tedros-menu-tree .tree-cell:hover {
+    -fx-background-color: rgba(26,26,26,0.36);
+    -fx-text-fill: #ffffff;
+	-fx-font-weight: bold;
+}
+
+#t-tedros-menu-tree .tree-cell:odd:hover {
+    -fx-background-color: rgba(26,26,26,0.36);
+    -fx-text-fill: #ffffff;
+	-fx-font-weight: bold;
+}
+#t-tedros-menu-tree .tree-cell:odd {
+    -fx-background-color: transparent;
+}
+#t-tedros-menu-tree .tree-cell:filled:selected:focused, #t-tedros-menu-tree .tree-cell:filled:selected {
+    -fx-background: #666666;
+    -fx-background-color: -fx-selection-bar;
+    -fx-text-fill: -fx-selection-bar-text;
+	-fx-font-weight: bold;
+}
+#t-tedros-menu-tree:focused .tree-cell:filled:selected {
+    /*-fx-background: -fx-accent;*/
+	-fx-background: #51647D;
+	-fx-font-weight: bold;
+}
+/*#### MODULOS CATEGORIAS ####*/
+/* Page Styles */
+.t-main-page-header {
+    -fx-font-size: 1.3em;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 2px 0;
+    -fx-border-color: transparent transparent #AAAAAA transparent;
+    -fx-border-insets: 0 0 8px 0;
+    -fx-text-fill: #0072aa;
+}
+/* Category Page Styles */
+.t-category-page {
+    -fx-background-color: transparent;
+    -fx-background-repeat: repeat repeat;
+    -fx-background-position: left top;
+    -fx-padding: 8px;
+}
+.t-category-page .t-main-page-header {
+    -fx-padding: 8px 0 10px 0;
+    -fx-border-color: null;
+    -fx-font-size: 2.3em;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(white, #ffffff);
+    -fx-effect: innershadow( three-pass-box , #6d9c8b , 0, 0.0 , 0 , -1 );
+}
+.t-category-header {
+    -fx-padding: 8px 0 10px 0;
+    -fx-background-color: rgba(0,0,0,0.12);
+    -fx-background-insets: 4 -8 4 -8;
+    -fx-border-color: rgba(255,255,255,0.2) transparent rgba(255,255,255,0.2) transparent;
+    -fx-border-insets: 3 -8 3 -8;
+
+    -fx-padding: 8px 0 10px 0;
+    -fx-font-size: 1.2em;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(white, #ffffff);
+}
+.t-category-header .text {
+    -fx-effect: innershadow( three-pass-box , rgba(255,255,255,0.7) , 0, 0.0 , 0 , -1 );
+}
+.t-category-page-flow {
+    -fx-padding: 10 0 10 0;
+}
+/*#### MODULO ICONE ####*/
+
+/** TAB PANE **/
+.tab-pane 
+{
+-fx-skin: "com.sun.javafx.scene.control.skin.TabPaneSkin";
+-fx-tab-min-height: 2em;
+-fx-tab-max-height: 2em;
+}
+.tab .tab-label 
+{
+-fx-skin: "com.sun.javafx.scene.control.skin.LabelSkin";
+-fx-background-color: transparent;    
+-fx-alignment: CENTER;
+-fx-text-fill: #ffffff;
+-fx-font-size: 1.4em;
+-fx-font-weight: bold;
+}
+
+.tab *.tab-label Text {
+-fx-effect: dropshadow(two-pass-box , rgba(255, 255, 255, 0.4), 1, 0.0 , 0, 1);
+}
+.tab-content-area 
+{
+-fx-background-color: transparent;
+-fx-padding: 0.0em;
+}
+.tab {
+-fx-background-insets: 0, 1, 2;
+-fx-background-radius: 10 10 0 0, 9 9 0 0;
+-fx-padding: 0.083333em 0.5em 0.083333em 0.5em;
+-fx-spacing: 8;
+-fx-border-radius: 10 10 0 0, 9 9 0 0;
+-fx-border-color: lightslategrey lightslategrey transparent lightslategrey, lightslategrey lightslategrey transparent lightslategrey;
+-fx-background-color: rgba(26,26,26,0.36);
+}
+
+.tab:hover 
+{
+-fx-color: -fx-hover-base;
+-fx-background-color: rgba(0,0,0,0.2);
+}
+.tab:selected 
+{
+-fx-background-color: rgba(26,26,26,1);
+}
+.tab:disabled 
+{
+-fx-opacity: -fx-disabled-opacity;
+}
+.tab:disabled:hover 
+{
+-fx-color: -fx-base;
+-fx-opacity: -fx-disabled-opacity;
+}
+.tab-pane *.tab-header-background 
+{
+-fx-border-width: 2;
+-fx-border-color: transparent transparent #ffffff transparent;
+-fx-background-color: transparent;
+-fx-effect: innershadow(two-pass-box , rgba(0,0,0,0.6) , 4, 0.0 , 0 , 0);
+}
+
+.tab-pane *.tab-header-area 
+{
+-fx-background-color: radial-gradient(focus-angle 105deg , focus-distance -3% , center -11% 48% , radius 120% , transparent 30% , rgb(0,0,0,0));
+-fx-background-size: cover;
+-fx-border-color: transparent transparent lightslategrey  transparent;
+-fx-border-width: 0.9;
+-fx-border-insets: 0, 0 0 1 0;
+}
+
+.tab-pane .headers-region 
+{
+-fx-effect: dropshadow(two-pass-box , rgba(0,0,0,0.6) , 4, 0.0 , 0, 0);
+}
+
+.tab-close-button 
+{
+-fx-background-color: -fx-mark-color;
+-fx-shape: "M 0,0 H1 L 4,3 7,0 H8 V1 L 5,4 8,7 V8 H7 L 4,5 1,8 H0 V7 L 3,4 0,1 Z";
+-fx-scale-shape: false;
+-fx-effect: dropshadow(two-pass-box , rgba(255, 255, 255, 0.4), 1, 0.0 , 0, 1);
+}
+.tab-close-button:hover 
+{
+-fx-background-color: derive(-fx-mark-color, -30%);
+}
+/* CONTROL BUTTONS */
+.control-buttons-tab 
+{
+-fx-background-color: -fx-tab-border-color, -fx-inner-border, -fx-body-color;
+-fx-background-insets: 0, 1, 2;
+-fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
+-fx-padding: 0.083333em 0.25em 0.083333em 0.25em; 
+}
+.tab-down-button 
+{
+-fx-background-color: transparent;
+-fx-padding: 0.0em 0.416667em 0.0em 0.416667em; 
+}
+.tab-down-button:hover 
+{
+-fx-background-color: -fx-body-color;
+-fx-color: -fx-hover-base;
+}
+.tab-down-button .arrow 
+{
+-fx-background-color: -fx-mark-highlight-color, -fx-mark-color;
+-fx-background-insets: 1 0 -1 0, 0;
+-fx-padding: 0.238083em 0.416667em 0.238083em 0.416667em; 
+-fx-shape: "M 0 0 H 7 L 3.5 4 z";
+}
+/* FLOATING TABS CUSTOMISATION */
+.tab-pane.floating *.tab-header-background {
+-fx-background-color: transparent;
+}
+.tab-pane.floating *.tab-header-area 
+{
+-fx-background-color: transparent;
+}
+.tab-pane.floating *.tab-content-area 
+{
+-fx-background-color: transparent;
+-fx-background-insets: 0, 1;
+-fx-background-radius: 5, 4;
+}
+.tab-pane.floating *.tab 
+{
+-fx-background-color: -fx-tab-border-color, -fx-inner-border, -fx-body-color;
+-fx-background-insets: 0, 1, 2;
+-fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
+}
+.tab-pane.floating *.tab:selected 
+{
+-fx-background-color: -fx-tab-border-color, -fx-control-inner-background;
+-fx-background-insets: 0 0 -1 0, 1 1 -1 1;
+-fx-background-radius: 5 5 0 0, 4 4 0 0;
+}
+
+/*** Formulario ***/
+
+#t-view-title-box {
+	-fx-border-color: transparent;
+	-fx-background-color: rgba(26,26,26,0.36);
+}
+#t-view-title {
+	-fx-font: Arial;
+	-fx-font-size: 1.4em;
+	-fx-font-weight: bold;
+	-fx-font-smoothing-type:lcd;
+	-fx-text-fill: #ffffff;
+	-fx-padding: 5 5 5 5;
+}
+#t-view-title-box-space1-color{
+	-fx-background-color: transparent;
+}
+#t-view-title-box-space2-color{
+	-fx-background-color: #ffffff;
+}
+
+#t-label{
+	-fx-text-fill: #ffffff;
+}
+
+.t-text-color{
+	-fx-text-fill: #ffffff;
+}
+
+#t-image-pane{
+	-fx-background-color: rgba(26,26,26,0.36);
+	-fx-padding: 5 10 5 10;
+}
+
+#t-title-label{
+	-fx-font: Arial;
+	-fx-font-size: 1.1em;
+	-fx-font-weight: bold;
+	-fx-font-smoothing-type:lcd;
+	-fx-text-fill: #ffffff;
+	-fx-padding: 5 5 5 5;
+}
+
+.t-content-background-color{
+	-fx-background-color: rgba(26,26,26,0.36);
+}
+
+#t-header-box {
+	-fx-background-color: rgba(26,26,26,0.36);
+	-fx-background-size: cover;
+	-fx-border-color: transparent transparent lightslategrey  transparent;
+	-fx-border-width: 0.9;
+    -fx-border-insets: 0, 0 0 1 0;
+}
+
+#t-module-icon {
+	-fx-background-color: rgba(26,26,26,0.36);
+	-fx-background-size: cover;
+	-fx-border-color: lightslategrey lightslategrey lightslategrey  lightslategrey;
+	-fx-border-width: 0.9;
+	-fx-cursor: hand;
+	-fx-padding: 5 10 5 10;
+	-fx-background-radius: 0 10 0 10;
+	-fx-background-insets: 0 0 0 0;
+	-fx-border-radius: 0 8 0 8;
+	-fx-border-insets: 0 0 0 0;
+}
+
+#t-module-name{
+	-fx-text-fill: #ffffff;
+	-fx-font-size: 1.4em;
+	-fx-font-weight: bold;
+	-fx-font-smoothing-type:lcd;
+}
+
+#t-conversation-pane{
+	-fx-border-color: rgba(26,26,26,0.36) rgba(26,26,26,0.36) rgba(26,26,26,0.36) rgba(26,26,26,0.36);
+    -fx-border-width: 14 10 10 14;
+}
+
+#t-context-menu{
+	-fx-background-color: rgba(26,26,26,0.36);
+	-fx-background-size: cover;
+	-fx-border-color: transparent transparent lightslategrey  transparent;
+	-fx-border-width: 0.9;
+    -fx-border-insets: 0, 0 0 1 0;
+}
+#t-menu-item-box{
+	-fx-background-color: rgba(255,255,255,0.95);
+}
+
+.context-menu {
+    -fx-skin: "com.sun.javafx.scene.control.skin.ContextMenuSkin";
+    -fx-background-color: rgba(179,26,26,0.68);
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 0 6 6 6, 0 5 5 5, 0 4 4 4;
+/*    -fx-padding: 0.666667em 0.083333em 0.666667em 0.083333em;  8 1 8 1 */
+    -fx-padding: 0.333333em 0.083333em 0.666667em 0.083333em; /* 4 1 8 1 */
+}
+
+.menu-item {
+	-fx-skin: null;
+	-fx-text-fill: #ffffff;
+	-fx-font-size: 1.28em;
+	-fx-background-color: rgba(179,26,26,0.68);
+	-fx-background-color:transparent;
+	-fx-background-radius: 0;
+	-fx-background-insets: 0;
+}
+
+.menu-item .label {
+    -fx-text-fill: #ffffff;
+}
+
+.menu-item:focused {
+     -fx-background-color: rgba(255,255,255,0.8);
+}
+
+.menu-item:focused .label {
+    -fx-text-fill: #000000;
+}
+
+.menu-bar {
+    -fx-text-fill: #ffffff;
+	-fx-background-color: rgba(26,26,26,0.36);
+	-fx-background-radius: 0 0 0 0;
+	-fx-background-insets: 0 0 0 0;
+	-fx-border-color: transparent #706350 transparent #D3CDC2 , transparent #D3CDC2 transparent transparent;
+}
+
+.menu:hover{
+    -fx-background-color: rgba(255,255,255,0.4);
+}
+
+.menu:focused{
+    -fx-background-color: rgba(255,255,255,0.4);
+}
+
+.menu:selected{
+    -fx-background-color: rgba(255,255,255,0.4);
+}
+
