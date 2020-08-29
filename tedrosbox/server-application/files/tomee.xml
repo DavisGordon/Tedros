@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tomee>
+  <!-- see http://tomee.apache.org/containers-and-resources.html -->
+
+  <!-- activate next line to be able to deploy applications in apps -->
+  <Deployments dir="apps" />
+  
+  <Resource id="tedrosDataSource" type="DataSource">
+  JdbcDriver org.h2.Driver
+  JdbcUrl jdbc:h2:tcp://localhost/~/.tedros/DATA/db;INIT=RUNSCRIPT FROM '~/.tedros/CONF/init.sql';MVCC=true;LOCK_TIMEOUT=50000
+  UserName tdrs
+  Password xpto
+  JtaManaged true
+  PoolPreparedStatements true
+  DefaultAutoCommit true
+</Resource>
+
+</tomee>
