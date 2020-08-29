@@ -36,7 +36,7 @@
 			    <container>
 			      <containerId>tomee7x</containerId>
 			      <zipUrlInstaller>
-			        <url>https://repo.maven.apache.org/maven2/org/apache/openejb/apache-tomee/${tomee.version}/apache-tomee-${tomee.version}-jaxrs.zip</url>
+			        <url>https://repo.maven.apache.org/maven2/org/apache/tomee/apache-tomee/${tomee.version}/apache-tomee-${tomee.version}-microprofile.zip</url>
 			      </zipUrlInstaller>
 			     
 			    </container>
@@ -114,9 +114,9 @@
         		<configuration>
           			<source>${java.version}</source>
           			<target>${java.version}</target>
-          			<compilerArgs>
+          			<!-- <compilerArgs>
                        <arg>-Dhttps.protocols=TLSv1.2</arg>
-                    </compilerArgs>
+                    </compilerArgs> -->
         		</configuration>
       		</plugin>
 			

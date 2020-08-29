@@ -22,7 +22,7 @@ import com.tedros.fxapi.process.TEntityProcess;
 public class MailingProcess extends TEntityProcess<Mailing> {
 
 	public MailingProcess() throws TProcessException {
-		super(Mailing.class, "IMailingControllerRemote", true);
+		super(Mailing.class, "IMailingControllerRemote");
 	}
 
 

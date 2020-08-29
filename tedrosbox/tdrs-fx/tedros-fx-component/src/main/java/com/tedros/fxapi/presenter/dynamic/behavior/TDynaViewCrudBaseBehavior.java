@@ -35,12 +35,14 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.beans.value.WeakChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.WeakEventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -80,6 +82,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 
 	private boolean saveAllModels;
 	private boolean saveOnlyChangedModel;
+
+	private boolean skipConfigBreadcrumb;
 	
 	@SuppressWarnings("unchecked")
 	public void load(){
@@ -112,6 +116,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			saveAllModels = tBehavior.saveAllModels();
 			saveOnlyChangedModel = tBehavior.saveOnlyChangedModels();
 			
+			if(this.decorator.isShowBreadcrumBar())
+				configBreadcrumbForm();
+			
 			// set the custom behavior actions
 			if(tBehavior.saveAction()!=TPresenterAction.class)
 				saveAction = tBehavior.saveAction().newInstance();
@@ -128,14 +135,48 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			if(tBehavior.changeModeAction()!=TPresenterAction.class)
 				changeModeAction = tBehavior.changeModeAction().newInstance();
 			
-			// set the form settings
-			//setFormName((tForm!=null) ? tForm.name() : "@TForm(name='SET A NAME')");
+			ChangeListener<TModelView> mvcl = (a0, old_, new_) -> {
+				processModelView(new_);
+			};
 			
+			super.getListenerRepository().addListener("setmodelviewCL", mvcl);
+			super.modelViewProperty().addListener(new WeakChangeListener(mvcl));
 			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		
+	}
+
+	public void processModelView(TModelView model) {
+		if(model== null) {
+			super.clearForm();
+			setDisableModelActionButtons(true);
+			this.decorator.showScreenSaver();
+			return;
+		}
+			
+		if(!selectMode()) {
+			if(decorator.isShowBreadcrumBar() && decorator.gettBreadcrumbForm()!=null)
+				decorator.gettBreadcrumbForm().tEntryListProperty().clear();
+			showForm(getViewMode());
+			setDisableModelActionButtons(false);
+			runAfterBuildForm();
+		}
+	}
+	
+	protected void runAfterBuildForm() {
+		
+		
+	}
+
+	public void setDisableModelActionButtons(boolean flag) {
+		if(decorator.gettCancelButton()!=null)
+			decorator.gettCancelButton().setDisable(flag);
+		if(decorator.gettSaveButton()!=null && isUserAuthorized(TAuthorizationType.SAVE))
+			decorator.gettSaveButton().setDisable(flag);
+		if(decorator.gettDeleteButton()!=null && isUserAuthorized(TAuthorizationType.DELETE))
+			decorator.gettDeleteButton().setDisable(flag);
 	}
 	
 	/**
@@ -143,14 +184,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * */
 	public void configColapseButton() {
 		final Button colapseButton = this.decorator.gettColapseButton();
-		if(colapseButton!=null){
-			colapseButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					colapseAction();
-				}
-			});
-		}
+		EventHandler<ActionEvent> eh = e -> colapseAction();
+		super.getListenerRepository().addListener("colapseButtonClickEH", eh);
+		colapseButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
 	}
 	
 	/**
@@ -159,12 +195,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	public void configNewButton() {
 		if(isUserAuthorized(TAuthorizationType.NEW)){
 			final Button newButton = this.decorator.gettNewButton();
-			newButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					newAction();
-				}
-			});
+			EventHandler<ActionEvent> eh = e -> newAction();
+			super.getListenerRepository().addListener("newButtonClickEH", eh);
+			newButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
 		}
 	}
 	
@@ -174,12 +207,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	public void configSaveButton() {
 		if(isUserAuthorized(TAuthorizationType.SAVE)){
 			final Button saveButton = this.decorator.gettSaveButton();
-			saveButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					saveAction();
-				}
-			});
+			EventHandler<ActionEvent> eh = e -> saveAction();
+			super.getListenerRepository().addListener("saveButtonClickEH", eh);
+			saveButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
 		}
 	}
 	
@@ -189,12 +219,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	public void configDeleteButton() {
 		if(isUserAuthorized(TAuthorizationType.DELETE)){
 			final Button removeButton = this.decorator.gettDeleteButton();
-			removeButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					deleteAction();
-				}
-			});
+			EventHandler<ActionEvent> eh = e -> deleteAction();
+			super.getListenerRepository().addListener("deleteButtonClickEH", eh);
+			removeButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
 		}
 	}
 	
@@ -204,12 +231,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	public void configEditButton() {
 		if(isUserAuthorized(TAuthorizationType.EDIT)){
 			final Button editButton = this.decorator.gettEditButton();
-			editButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					editAction();
-				}
-			});
+			EventHandler<ActionEvent> eh = e -> editAction();
+			super.getListenerRepository().addListener("editButtonClickEH", eh);
+			editButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
 		}
 	}
 	
@@ -218,12 +242,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * */
 	public void configCancelButton() {
 		final Button cancelButton = this.decorator.gettCancelButton();
-		cancelButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				cancelAction();
-			}
-		});
+		EventHandler<ActionEvent> eh = e -> cancelAction();
+		super.getListenerRepository().addListener("cancelButtonClickEH", eh);
+		cancelButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
 	}
 	
 	/**
@@ -238,12 +259,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		editRadio.setToggleGroup(radioGroup);
 		readRadio.setToggleGroup(radioGroup);
 		
-		radioGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-			@Override
-			public void changed(ObservableValue<? extends Toggle> arg0, Toggle arg1, Toggle arg2) {
-				changeModeAction();
-			}
-		});
+		ChangeListener<Toggle> listener = (a0, a1, a2) -> changeModeAction();
+		super.getListenerRepository().addListener("modesRadioCL", listener);
+		radioGroup.selectedToggleProperty().addListener(new WeakChangeListener<Toggle>(listener));
 		
 		modeBtnDisableProperty = new SimpleBooleanProperty();
 		modeBtnVisibleProperty = new SimpleBooleanProperty(true);
@@ -252,6 +270,15 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		editRadio.visibleProperty().bindBidirectional(modeBtnVisibleProperty);
 		readRadio.disableProperty().bindBidirectional(modeBtnDisableProperty);
 		readRadio.visibleProperty().bindBidirectional(modeBtnVisibleProperty);
+		
+		ChangeListener<Boolean> invCL = (a0, a1, a2) -> {
+			editRadio.disableProperty().unbindBidirectional(modeBtnDisableProperty);
+			editRadio.visibleProperty().unbindBidirectional(modeBtnVisibleProperty);
+			readRadio.disableProperty().unbindBidirectional(modeBtnDisableProperty);
+			readRadio.visibleProperty().unbindBidirectional(modeBtnVisibleProperty);
+		};
+		getListenerRepository().addListener("invalidateModeUnBind", invCL);
+		invalidateProperty().addListener(new WeakChangeListener<>(invCL));
 		
 		if(isUserNotAuthorized(TAuthorizationType.EDIT))
 			editRadio.setDisable(true);
@@ -307,6 +334,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * Config the breadcrumbbar to navigate between forms.
 	 * */
 	public void configBreadcrumbForm() {
+		
+		if(isSkipConfigBreadcrumb())
+			return;
 		
 		final TDynaView<M> view = getView();
 		
@@ -392,13 +422,12 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * */
 	public void selectedItemAction(M new_val) {
 		final TDynaPresenter<M> presenter = getPresenter();
-		setModelView(new_val);
+		presenter.setModelView(new_val);
 		if(selectedItemAction==null || (selectedItemAction!=null && selectedItemAction.runBefore(presenter))){
 			if(new_val==null)
 				return;
 			
-			if(!selectMode())
-				showForm(getViewMode());
+			setModelView(new_val);
 			
 		}
 		if(selectedItemAction!=null)
@@ -471,7 +500,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		for(int x=0; x<modelsViewsList.size(); x++){
 			
 			final M model = modelsViewsList.get(x);
-			//TODO: VERIFICAR PQ ISCHANGED NAO FUNCIONA MAIS
 			if(saveOnlyChangedModel && !model.isChanged())
 				continue;
 			
@@ -489,10 +517,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 						E entity = (E) result.getValue();
 						if(entity!=null){
 							try {
+								model.reload(entity);
 								String msg = result.isPriorityMessage() 
 										? result.getMessage()
 												: iEngine.getFormatedString("#{tedros.fxapi.message.save}", model.getDisplayProperty().getValue());
-								model.reload(entity);
+						
 								mensagens.add(msg);
 							} catch (Exception e) 
 							{	
@@ -527,9 +556,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			try{
 				final Class<E> entityClass = getEntityClass();
 				final M model = (M) getModelViewClass().getConstructor(entityClass).newInstance(entityClass.newInstance());
-				setModelView(model);
-				setNewEntity(model);
-				editEntity(model);
+				
+				if(processNewEntityBeforeBuildForm(model)) {
+					setModelView(model);
+				}
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -541,8 +571,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	/**
 	 * Called by the newAction() method to perform a custom behavior 
 	 * like add the new item in a {@link ListView} or {@link TableView}.  
+	 * @return TODO
 	 * */
-	public abstract void setNewEntity(M model);
+	public abstract boolean processNewEntityBeforeBuildForm(M model);
 	
 	/**
 	 * Perform this action when edit button onAction is triggered.
@@ -564,27 +595,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	public void editEntity(TModelView model) {
 		showForm(TViewMode.EDIT);
 	}
-	/**
-	 * Called by the editAction()
-	 * *
-	public void editEntity(TModelView model) {
-		if(this.decorator.isShowBreadcrumBar())
-			showFormInMainPresenter(model);
-		else
-			showForm(TMode.EDIT);
-	}
 	
-	private void showFormInMainPresenter(TModelView model) {
-		
-		final TDynaPresenter presenter = getModulePresenter();
-		
-		ITModelForm form =  ((TDynaViewCrudBaseBehavior)presenter.getBehavior()).isReaderModeSelected() // check in the main behavior  
-				? TReaderFormBuilder.create(model).build() 
-						: TFormBuilder.create(model).build();
-		
-		form.settPresenter(presenter);
-		presenter.getBehavior().setForm(form);
-	}*/
 
 	public TDynaPresenter getModulePresenter() {
 				
@@ -598,6 +609,25 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		return presenter;
 	}
 	
+	public String canInvalidate() {
+		final ObservableList<M> models = getModels();
+		
+		boolean unsaved = false;
+		if(models!=null)
+			for(M i : models) {
+				if(i.isChanged()) {
+					unsaved = true;
+					break;
+				}
+			};
+		
+		if(unsaved) {
+			return iEngine.getFormatedString("#{tedros.fxapi.message.invalidate}");
+		}else
+			return null;
+	}
+	
+	
 	/**
 	 * Perform this action when cancel button onAction is triggered.
 	 * */
@@ -605,15 +635,83 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		final TDynaPresenter<M> presenter = getPresenter();
 		if(cancelAction==null || (cancelAction!=null && cancelAction.runBefore(presenter))){
 			try{
-				clearForm();
-				setModelView(null);
-				decorator.showScreenSaver();
+				final M model = getModelView();
+				if(model.isChanged()) {
+				
+					String message = iEngine.getFormatedString("#{tedros.fxapi.message.cancel}");
+					
+					final TConfirmMessageBox confirm = new TConfirmMessageBox(message);
+					confirm.gettConfirmProperty().addListener(new ChangeListener<Number>() {
+						@SuppressWarnings("unchecked")
+						@Override
+						public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+							if(arg2.equals(1)){
+								if(model.getModel() instanceof ITEntity && ((ITEntity)model.getModel()).isNew()) {
+									getView().tHideModal();	
+									remove();
+									
+									if(cancelAction!=null)
+										cancelAction.runAfter(presenter);
+								}else{
+									try{
+										final TEntityProcess process = createEntityProcess();
+										process.findById((ITEntity) model.getModel());
+										process.stateProperty().addListener(new ChangeListener<State>() {
+											@Override
+											public void changed(ObservableValue<? extends State> arg0, State arg1, State arg2) {
+													if(arg2.equals(State.SUCCEEDED)){
+														List<TResult<E>> resultados = (List<TResult<E>>) process.getValue();
+														if(resultados.isEmpty())
+															return;
+														TResult result = resultados.get(0);
+														if(result.getResult().equals(EnumResult.ERROR))
+															System.out.println(result.getMessage());
+														else{
+															E entity = (E) result.getValue();
+															if(entity!=null)
+																model.reload(entity);
+														}
+														setModelView(null);
+													}	
+													final TDynaPresenter<M> presenter = getPresenter();
+													if(cancelAction!=null)
+														cancelAction.runAfter(presenter);
+											}
+										});
+										getView().tHideModal();	
+										runProcess(process);
+									}catch(Throwable e){
+										e.printStackTrace();
+										getView().tHideModal();	
+										getView().tShowModal(new TMessageBox(e), true);
+									}
+								}
+							}else
+								getView().tHideModal();	
+							
+						}
+					});
+					
+					getView().tShowModal(confirm, false);
+				}else{
+					if(model.getModel() instanceof ITEntity && ((ITEntity)model.getModel()).isNew()) {
+						getView().tHideModal();	
+						remove();
+					}else{
+						setModelView(null);
+						getView().tHideModal();	
+					}
+					
+					if(cancelAction!=null)
+						cancelAction.runAfter(presenter);
+				
+				}
+				
 			}catch(Exception e){
 				e.printStackTrace();
 			}
 		}
-		if(cancelAction!=null)
-			cancelAction.runAfter(presenter);
+		
 	}
 	
 	
@@ -642,10 +740,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			
 			getView().tShowModal(confirm, false);
 		}
-		
-		if(deleteAction!=null)
-			deleteAction.runAfter(presenter);
-		
 	}
 	
 	/**
@@ -686,8 +780,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 											remove();
 											removeAllListenerFromModelView();
 											setModelView(null);
-											clearForm();
-											decorator.showScreenSaver();
 										}
 										final TMessageBox tMessageBox = new TMessageBox();
 										tMessageBox.tAddMessage(result.getMessage());
@@ -697,10 +789,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 										remove();
 										removeAllListenerFromModelView();
 										setModelView(null);
-										clearForm();
-										decorator.showScreenSaver();
 									}
 								}	
+								final TDynaPresenter<M> presenter = getPresenter();
+								if(deleteAction!=null)
+									deleteAction.runAfter(presenter);
 						}
 					});
 					runProcess(process);
@@ -712,16 +805,15 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				remove();
 				removeAllListenerFromModelView();
 				setModelView(null);
-				clearForm();
-				decorator.showScreenSaver();
 			}
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public TEntityProcess createEntityProcess() throws Throwable {
 		
 		if((StringUtils.isNotBlank(serviceName)) && this.entityProcessClass == TEntityProcess.class){
-			return new TEntityProcess(entityClass, this.serviceName, this.remoteMode) {
+			return new TEntityProcess(entityClass, this.serviceName) {
 				@Override
 				public void execute(List resultList) {
 				}
@@ -738,8 +830,18 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * Called by the startRemoveProcess() method to perform a custom behavior 
 	 * like remove a item from a {@link ListView} or {@link TableView}.  
 	 * */
-	public abstract void remove();
+	public void remove() {
+		if(getModels()!=null) {
+			int index = getModels().indexOf(getModelView());
+			remove(index);
+		}
+	}
 	
+	public void remove(int index) {
+		if(getModels()!=null) {
+			getModels().remove(index);
+		}
+	}
 	/**
 	 * Perform this action when a mode radio change listener is triggered.
 	 * */
@@ -747,6 +849,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		final TDynaPresenter<M> presenter = getPresenter();
 		if(changeModeAction==null || (changeModeAction!=null && changeModeAction.runBefore(presenter))){
 			if(getModelView()!=null){
+				if(decorator.isShowBreadcrumBar() && decorator.gettBreadcrumbForm()!=null)
+					decorator.gettBreadcrumbForm().tEntryListProperty().clear();
 				showForm(null);
 			}
 		}
@@ -909,6 +1013,20 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * */
 	public Class<E> getEntityClass() {
 		return entityClass;
+	}
+
+	/**
+	 * @return the skipConfigBreadcrumb
+	 */
+	public boolean isSkipConfigBreadcrumb() {
+		return skipConfigBreadcrumb;
+	}
+
+	/**
+	 * @param skipConfigBreadcrumb the skipConfigBreadcrumb to set
+	 */
+	public void setSkipConfigBreadcrumb(boolean skipConfigBreadcrumb) {
+		this.skipConfigBreadcrumb = skipConfigBreadcrumb;
 	}
 	
 }

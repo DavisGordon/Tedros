@@ -31,7 +31,9 @@ public class TedrosSettingBehavior extends TDynaViewCrudBaseBehavior<PainelModel
 		setSkipRequiredValidation(true);
 		
 		newAction();
-		
+	}
+	
+	protected void runAfterBuildForm() {
 		TedrosSettingDecorator decorator = (TedrosSettingDecorator) getPresenter().getDecorator();
 		
 		final TDefaultForm<PainelModelView> defaultForm = (TDefaultForm<PainelModelView>) getForm();
@@ -39,6 +41,9 @@ public class TedrosSettingBehavior extends TDynaViewCrudBaseBehavior<PainelModel
 		defaultForm.setAlignment(Pos.TOP_LEFT);
 		defaultForm.setPadding(new Insets(0));
 		defaultForm.tAddAssociatedObject(ExampleBehavior.class.getSimpleName(), decorator.getExamplePresenter().getBehavior());
+		
+
+		((PainelModelView)getModelView()).loadSavedValues();
 	}
 	
 
@@ -56,8 +61,8 @@ public class TedrosSettingBehavior extends TDynaViewCrudBaseBehavior<PainelModel
 
 
 	@Override
-	public void setNewEntity(PainelModelView model) {
-		((PainelModelView)getModelView()).loadSavedValues();
+	public boolean processNewEntityBeforeBuildForm(PainelModelView model) {
+		return true;
 	}
 
 }

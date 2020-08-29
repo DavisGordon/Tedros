@@ -3,69 +3,55 @@
  */
 package com.covidsemfome.rest.model;
 
+import java.util.HashMap;
+
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author Davis Gordon
  *
  */
-public class RestModel<T> {
+@XmlRootElement 
+public class RestModel<T>  extends HashMap<String, Object> {
 	
-	private T data;
-	
-	private String code;
-	
-	private String message;
-	
-	public RestModel(){
-		
-	}
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2277098289635034074L;
 	
 	public RestModel(T data, String code, String message){
-		this.data = data;
-		this.code = code;
-		this.message = message;
+		this.put("data", data);
+		this.put("code", code);
+		this.put("message", message);
 	}
 
 	/**
 	 * @return the data
 	 */
+	@SuppressWarnings("unchecked")
 	public T getData() {
-		return data;
+		return (T) this.get("data");
 	}
 
-	/**
-	 * @param data the data to set
-	 */
-	public void setData(T data) {
-		this.data = data;
-	}
+	
 
 	/**
 	 * @return the code
 	 */
 	public String getCode() {
-		return code;
+		return (String) get("code");
 	}
 
-	/**
-	 * @param code the code to set
-	 */
-	public void setCode(String code) {
-		this.code = code;
-	}
+	
 
 	/**
 	 * @return the message
 	 */
 	public String getMessage() {
-		return message;
+		return (String) get("message");
 	}
 
-	/**
-	 * @param message the message to set
-	 */
-	public void setMessage(String message) {
-		this.message = message;
-	}
+	
 	
 	
 

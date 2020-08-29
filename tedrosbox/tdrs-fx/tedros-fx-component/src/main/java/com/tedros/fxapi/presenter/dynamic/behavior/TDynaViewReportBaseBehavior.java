@@ -387,7 +387,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		//recupera a lista de models views
 		//final ObservableList<M> modelsViewsList = this.decorator.gettListView().getItems(); 
 		
-		final ObservableList<M> modelsViewsList =  (ObservableList<M>) (getModelView()!=null 
+		final ObservableList modelsViewsList =  (ObservableList) (getModelView()!=null 
 						? FXCollections.observableList(Arrays.asList(getModelView()))
 								: null);
 						
@@ -399,7 +399,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		// salva os models views
 		for(int x=0; x<modelsViewsList.size(); x++){
 			
-			final M model = modelsViewsList.get(x);
+			final M model = (M) modelsViewsList.get(x);
 			
 			runningProcess  = createProcess();
 			runningProcess.search((ITReportModel) model.getModel());

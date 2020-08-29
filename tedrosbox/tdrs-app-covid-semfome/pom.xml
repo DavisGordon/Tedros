@@ -20,7 +20,7 @@
   	
   	<!-- PROPERTIES -->
 	<properties>
-		<java.version>1.7</java.version>
+		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	
@@ -80,6 +80,6 @@
     <module>tdrs-app-covid-semfome-model</module>
     <module>tdrs-app-covid-semfome-fx</module>
     <module>tdrs-app-covid-semfome-webapp</module>
-    <module>tdrs-app-covid-semfome-server</module>
-  </modules>
+<!--     <module>tdrs-app-covid-semfome-server</module>
+ -->  </modules>
 </project>

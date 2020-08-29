@@ -14,20 +14,16 @@ public abstract class TEjbService<E extends ITEntity> implements ITEjbService<E>
 	
 	public abstract ITGenericBO<E> getBussinesObject();
 	
-	
-	@Override
+	public E findById(E entidade)throws Exception{
+		return getBussinesObject().findById(entidade);
+	}
 	
 	public E find(E entidade) throws Exception {
-		return entidade = internalFind(entidade);
+		return getBussinesObject().find(entidade);
 	}
 	
 	public List<E> findAll(E entity)throws Exception{
 		return getBussinesObject().findAll(entity);
-	}
-
-	private E internalFind(E entidade) throws Exception {
-		entidade = getBussinesObject().find(entidade);
-		return entidade;
 	}
 
 	@Override
@@ -39,7 +35,6 @@ public abstract class TEjbService<E extends ITEntity> implements ITEjbService<E>
 	@Override
 	@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
 	public void remove(E entidade) throws Exception {
-		entidade = internalFind(entidade);
 		getBussinesObject().remove(entidade);
 	}
 

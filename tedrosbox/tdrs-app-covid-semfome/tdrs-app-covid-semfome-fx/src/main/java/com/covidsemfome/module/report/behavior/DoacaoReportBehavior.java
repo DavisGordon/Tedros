@@ -218,10 +218,11 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 			this.decorator.hideListContent();
 	}
 	
-	public void setNewEntity(M model) {
+	public boolean processNewEntityBeforeBuildForm(M model) {
 		final ListView<M> list = this.decorator.gettListView();
 		list.getItems().add(model);
 		list.selectionModelProperty().get().select(list.getItems().size()-1);
+		return false;
 	}
 	
 	public void editEntity(TModelView model) {

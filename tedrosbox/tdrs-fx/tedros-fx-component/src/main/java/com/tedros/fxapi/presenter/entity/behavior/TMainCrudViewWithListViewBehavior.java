@@ -3,12 +3,10 @@ package com.tedros.fxapi.presenter.entity.behavior;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.control.action.TPresenterAction;
-import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.modal.TMessageBox;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
@@ -19,9 +17,9 @@ import com.tedros.fxapi.process.TEntityProcess;
 import com.tedros.fxapi.util.TEntityListViewCallback;
 
 import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
+import javafx.beans.WeakInvalidationListener;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.value.WeakChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker.State;
@@ -48,9 +46,6 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	public void initialize() {
 		try{
 			
-			if(this.decorator.isShowBreadcrumBar())
-				configBreadcrumbForm();
-			
 			setCancelAction(new TPresenterAction<TDynaPresenter<M>>() {
 
 				@Override
@@ -63,7 +58,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 					final ListView<M> listView = decorator.gettListView();
 					listView.getSelectionModel().clearSelection();
 					setDisableModelActionButtons(true);
-					colapseAction();
+					showListView();
 				}
 			});
 			
@@ -75,53 +70,57 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 			configListViewCallBack();
 			configModesRadio();
 			configCancelButton();
-			setDisableModelActionButtons(true);
-			this.decorator.showScreenSaver();
 			
 			// processo para listagem dos models
 			final TEntityProcess<E> process  = (TEntityProcess<E>) createEntityProcess();
 			if(process!=null){
-				process.list();
-				process.stateProperty().addListener(new ChangeListener<State>() {
+				
+				ChangeListener<State> prcl = (arg0, arg1, arg2) -> {
 					
-					public void changed(ObservableValue<? extends State> arg0,
-							State arg1, State arg2) {
+					if(arg2.equals(State.SUCCEEDED)){
 						
-							if(arg2.equals(State.SUCCEEDED)){
-								List<?> resultados = process.getValue();
-								if(resultados.isEmpty())
-									return;
-								TResult result = (TResult<?>) resultados.get(0);
-								if(result.getValue()!=null && result.getValue() instanceof List<?>){
-									ObservableList<M> models = getModels();
-									if(models==null)
-										models = FXCollections.observableArrayList();
-									for(E e : (List<E>) result.getValue()){
-										try {
-											M model = (M) getModelViewClass().getConstructor(getEntityClass()).newInstance(e);
-											models.add(model);
-										} catch (InstantiationException
-												| IllegalAccessException
-												| IllegalArgumentException
-												| InvocationTargetException
-												| NoSuchMethodException
-												| SecurityException e1) 
-										{
-											e1.printStackTrace();
-										}
+						List<?> resultados = process.getValue();
+						
+						if(!resultados.isEmpty()) {
+						
+							TResult result = (TResult<?>) resultados.get(0);
+							if(result.getValue()!=null && result.getValue() instanceof List<?>){
+								ObservableList<M> models = getModels();
+								if(models==null)
+									models = FXCollections.observableArrayList();
+								for(E e : (List<E>) result.getValue()){
+									try {
+										M model = (M) getModelViewClass().getConstructor(getEntityClass()).newInstance(e);
+										models.add(model);
+									} catch (InstantiationException
+											| IllegalAccessException
+											| IllegalArgumentException
+											| InvocationTargetException
+											| NoSuchMethodException
+											| SecurityException e1) 
+									{
+										e1.printStackTrace();
 									}
-									setModelViewList(models);
-									loadListView();
 								}
-							}	
+								setModelViewList(models);
+								loadListView();
+							}
+						}
 					}
-				});
+				};
+				
+				super.getListenerRepository().addListener("processloadlistviewCL", prcl);
+				
+				process.list();
+				process.stateProperty().addListener(new WeakChangeListener(prcl));
 				process.startProcess();
 			}else{
 				System.err.println("\nWARNING: Cannot create a process for the "+getModelViewClass().getSimpleName()+", check the @TCrudForm(processClass,serviceName) properties");
 				loadListView();
 			}
-		
+			
+			
+			
 		}catch(Throwable e){
 			getView().tShowModal(new TMessageBox(e), true);
 			e.printStackTrace();
@@ -129,26 +128,6 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		
 	}
 	
-	/**
-	 * Perform this action when a mode radio change listener is triggered.
-	 * */
-	@SuppressWarnings("unchecked")
-	@Override
-	public void changeModeAction() {
-		final TPresenterAction changeModeAction =  getChangeModeAction();
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(changeModeAction==null || (changeModeAction!=null && changeModeAction.runBefore(presenter))){
-			if(getModelView()!=null){
-				if(decorator.isShowBreadcrumBar())
-					decorator.gettBreadcrumbForm().tEntryListProperty().clear();
-				showForm(null);
-			}
-		}
-		
-		if(changeModeAction!=null)
-			changeModeAction.runAfter(presenter);
-		
-	}
 	
 	@SuppressWarnings("unchecked")
 	private void loadListView() {
@@ -157,6 +136,9 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		listView.setItems((ObservableList<M>) (models==null ? FXCollections.observableArrayList() : models));
 		listView.setEditable(true);
 		listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+		super.getListenerRepository().removeListener("processloadlistviewCL");
+		final M mv = getPresenter().getModelView();
+		processModelView(mv);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -176,67 +158,56 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	}	
 	
 	protected void configListView() {
+		
+		ChangeListener<M> chl = (a0, old_, new_) -> {
+			if(new_==null) {
+				setModelView(null);
+				showListView();
+			}else{
+				selectedItemAction(new_);
+				hideListView();
+			}
+		};
+		
+		super.getListenerRepository().addListener("listviewselecteditemviewCL", chl);
+		
 		this.decorator.gettListView()
 		.getSelectionModel()
 		.selectedItemProperty()
-		.addListener(
-				new ChangeListener<M>() {
-	                public void changed(final ObservableValue<? extends M> ov, final M old_val, final M new_val) {
-	                	if(isUserAuthorized(TAuthorizationType.EDIT))
-	                		setViewMode(TViewMode.EDIT);
-	                	else if(isUserAuthorized(TAuthorizationType.READ))
-	                		setViewMode(TViewMode.READER);
-	                	
-	                	if(decorator.isShowBreadcrumBar())
-	                		decorator.gettBreadcrumbForm().tEntryListProperty().clear();
-	                	
-	                	selectedItemAction(new_val);
-	                	decorator.hideListContent();
-	                	setDisableModelActionButtons(false);
-	            }	
-	        });
+		.addListener(new WeakChangeListener<>(chl));
 		
-		this.decorator.gettListView().getSelectionModel().selectedItemProperty().addListener(new InvalidationListener() {
-			@Override
-			public void invalidated(Observable arg0) {
-				setDisableModelActionButtons(true);
-			}
-		});
 	}
 	
 	public void remove() {
 		final ListView<M> listView = this.decorator.gettListView();
-		final int selectedIndex = listView.getSelectionModel().getSelectedIndex();
-		listView.getItems().remove(selectedIndex);
+		int index = getModels().indexOf(getModelView());
 		listView.getSelectionModel().clearSelection();
-		setDisableModelActionButtons(true);
+		super.remove(index);
 	}
 		
 	public void colapseAction() {
 		final StackPane pane = (StackPane) ((TDynaView) getView()).gettContentLayout().getLeft();
 		if(!pane.isVisible())
-			this.decorator.showListContent();
+			showListView();
 		else
-			this.decorator.hideListContent();
+			hideListView();
+	}
+
+	public void hideListView() {
+		this.decorator.hideListContent();
+	}
+
+	public void showListView() {
+		this.decorator.showListContent();
 	}
 	
-	public void setNewEntity(M model) {
+	public boolean processNewEntityBeforeBuildForm(M model) {
 		final ListView<M> list = this.decorator.gettListView();
 		list.getItems().add(model);
 		list.selectionModelProperty().get().select(list.getItems().size()-1);
+		return false;
 	}
 	
-	public void editEntity(TModelView model) {
-		
-	}
 	
-	public void setDisableModelActionButtons(boolean flag) {
-		if(decorator.gettCancelButton()!=null)
-			decorator.gettCancelButton().setDisable(flag);
-		if(decorator.gettSaveButton()!=null && isUserAuthorized(TAuthorizationType.SAVE))
-			decorator.gettSaveButton().setDisable(flag);
-		if(decorator.gettDeleteButton()!=null && isUserAuthorized(TAuthorizationType.DELETE))
-			decorator.gettDeleteButton().setDisable(flag);
-	}
 		
 }

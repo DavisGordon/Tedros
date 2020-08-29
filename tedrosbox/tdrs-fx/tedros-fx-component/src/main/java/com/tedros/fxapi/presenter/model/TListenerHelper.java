@@ -25,6 +25,7 @@ import com.tedros.fxapi.util.TReflectionUtil;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.WeakInvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.FloatProperty;
@@ -38,13 +39,13 @@ import javafx.beans.property.SetProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.beans.value.WeakChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
-import main.references.Model;
 
 class TListenerHelper<M extends ITModel> {
 	
@@ -89,26 +90,6 @@ class TListenerHelper<M extends ITModel> {
 	}
 	
 	
-	protected <T> ChangeListener<T> buildListener(final String fieldName){
-		String key = buildKeyForField(fieldName);
-		ChangeListener<T> listener = new ChangeListener<T>() {
-			@Override
-			public void changed(ObservableValue<? extends T> arg0, T arg1, T arg2) {
-				
-				Method m = TReflectionUtil.getSetterMethod(Model.class, fieldName, arg2.getClass());
-				try {
-					m.invoke(tModelView.model, arg2);
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					e.printStackTrace();
-				}
-			}
-		};
-		
-		tListenerRepository.addListener(key, listener);
-		
-		return listener;
-	}
-	
 	protected <T> T removeListener(String listenerId){
 		return this.tListenerRepository.removeListener(listenerId);
 	}
@@ -131,32 +112,53 @@ class TListenerHelper<M extends ITModel> {
 				x=1;*/
 			
 			for(String key : listenerKeys.get(fieldName)){
+			
+				Object listenerObj = tListenerRepository.removeListener(key);
+				if (listenerObj instanceof WeakChangeListener || listenerObj instanceof WeakInvalidationListener)
+					continue;
+				
 				Method m = TReflectionUtil.getGetterMethod(this.tModelView.getClass(), fieldName);
 				if(m == null)
 					continue;
 				try {
 					Object fieldPropertyObj = m.invoke(this.tModelView);
-					Object listenerObj = tListenerRepository.removeListener(key);
 					
-					if(fieldPropertyObj instanceof Property && listenerObj instanceof ChangeListener)
+					/*if(fieldPropertyObj instanceof Property && listenerObj instanceof ChangeListener)
 						((Property) fieldPropertyObj).removeListener((ChangeListener) listenerObj);
 					else 
 						if(fieldPropertyObj instanceof Property && listenerObj instanceof InvalidationListener)
 							((Property) fieldPropertyObj).removeListener((InvalidationListener) listenerObj);
-					else					
+					else*/					
 						if(listenerObj instanceof ListChangeListener && (fieldPropertyObj instanceof ListProperty || fieldPropertyObj instanceof ITObservableList)){
-							if(fieldPropertyObj instanceof ListProperty)
-								((ListProperty)fieldPropertyObj).removeListener((ListChangeListener) listenerObj);
-							else
-								((ITObservableList)fieldPropertyObj).removeListener((ListChangeListener) listenerObj);
+							if(fieldPropertyObj instanceof ListProperty) {
+								ListProperty l = (ListProperty) fieldPropertyObj;
+								l.removeListener((ListChangeListener) listenerObj);
+								l.forEach(i -> {
+									if(i instanceof TModelView)
+										((TModelView)i).removeAllListener();
+								});
+							} else {
+								ITObservableList l = (ITObservableList) fieldPropertyObj;
+								l.removeListener((ListChangeListener) listenerObj);
+								l.forEach(i -> {
+									if(i instanceof TModelView)
+										((TModelView)i).removeAllListener();
+								});
+								
+							}
 						}	
 					else
-						if(listenerObj instanceof SetChangeListener && fieldPropertyObj instanceof SetProperty)
-							((SetProperty)fieldPropertyObj).removeListener((SetChangeListener) listenerObj);
-					else
-						if(listenerObj instanceof MapChangeListener && fieldPropertyObj instanceof MapProperty)
+						if(listenerObj instanceof SetChangeListener && fieldPropertyObj instanceof SetProperty) {
+							SetProperty l = (SetProperty) fieldPropertyObj;
+							l.removeListener((SetChangeListener) listenerObj);
+							l.forEach(i -> {
+								if(i instanceof TModelView)
+									((TModelView)i).removeAllListener();
+							});
+						}else
+						if(listenerObj instanceof MapChangeListener && fieldPropertyObj instanceof MapProperty) {
 							((MapProperty)fieldPropertyObj).removeListener((MapChangeListener) listenerObj);
-					
+						}
 					
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 					e.printStackTrace();
@@ -164,6 +166,7 @@ class TListenerHelper<M extends ITModel> {
 			}
 		}
 		listenerKeys.clear();
+		tListenerRepository.clear();
 	}
 	
 	/**
@@ -193,7 +196,7 @@ class TListenerHelper<M extends ITModel> {
 					}
 				};
 				
-				addListener(fieldName, invalidationListener);	
+				setInvalidationListener(property, fieldName, invalidationListener, entityFieldValue);	
 				
 				return;
 			}
@@ -214,7 +217,7 @@ class TListenerHelper<M extends ITModel> {
 					}
 				};
 				
-				addListener(fieldName, invalidationListener);
+				setInvalidationListener(property, fieldName, invalidationListener, entityFieldValue);
 				
 				return;
 			}
@@ -648,7 +651,13 @@ class TListenerHelper<M extends ITModel> {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void setChangeListener(final Property property, final String fieldName, ChangeListener changeListener, Object entityFieldValue) {
-		property.addListener(changeListener);
+		property.addListener(new WeakChangeListener(changeListener));
+		addListener(fieldName, changeListener);
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void setInvalidationListener(final Property property, final String fieldName, InvalidationListener changeListener, Object entityFieldValue) {
+		property.addListener(new WeakInvalidationListener(changeListener));
 		addListener(fieldName, changeListener);
 	}
 	

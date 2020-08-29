@@ -22,7 +22,7 @@ import com.tedros.fxapi.process.TEntityProcess;
 public class TipoAjudaProcess extends TEntityProcess<TipoAjuda> {
 
 	public TipoAjudaProcess() throws TProcessException {
-		super(TipoAjuda.class, "ITipoAjudaControllerRemote", true);
+		super(TipoAjuda.class, "ITipoAjudaControllerRemote");
 	}
 
 

@@ -7,9 +7,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.covidsemfome.model.Acao;
 import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.TipoAjuda;
@@ -206,16 +203,6 @@ public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 		String pattern = "dd/MM/yyyy 'às' HH:mm";
 		DateFormat df = new SimpleDateFormat(pattern);
 		return df.format(data);
-	}
-
-	@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this, false);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return EqualsBuilder.reflectionEquals(this, obj, false);
 	}
 
 	@Override

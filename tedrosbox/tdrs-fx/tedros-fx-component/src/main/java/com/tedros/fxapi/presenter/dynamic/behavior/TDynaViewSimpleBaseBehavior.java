@@ -9,6 +9,7 @@ import com.tedros.core.TSecurityDescriptor;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.core.context.TedrosContext;
+import com.tedros.core.presenter.view.ITView;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
@@ -85,6 +86,14 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		if(tModelProcess!=null){
 			this.modelProcessClass = tModelProcess.type();
 		}
+	}
+	
+	public boolean invalidate() {
+		ITView v = getView();
+		if(v!=null && v.gettProgressIndicator()!=null) 
+			v.gettProgressIndicator().removeBind();
+		return super.invalidate();
+		
 	}
 	
 	public void configProgressIndicator(final ITProcess<?> process) {

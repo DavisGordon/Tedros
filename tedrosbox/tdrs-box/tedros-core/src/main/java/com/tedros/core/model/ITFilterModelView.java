@@ -5,6 +5,7 @@ import com.tedros.ejb.base.model.ITModel;
 /**
  * Filter model view 
  * */
+@Deprecated
 public interface ITFilterModelView<M extends ITModel> extends ITModelView<M>{
 
 	/**

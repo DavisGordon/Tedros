@@ -169,14 +169,36 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 	}
 
 	@Override
-	public void stop() {
+	public boolean invalidate() {
 		if(groupViewItemList!=null){
 			for (ITGroupViewItem itGroupViewItem : groupViewItemList) {
 				ITView view = itGroupViewItem.getViewInstance(getModule());
-				if(view!=null)
-					view.gettPresenter().stop();
+				if(view!=null) {
+					if(!view.gettPresenter().invalidate()) {
+						return false;
+					}
+				}
 			}
 		}
+		return true;
+	}
+	
+	@Override
+	public String canInvalidate() {
+		
+		if(groupViewItemList!=null){
+			for (ITGroupViewItem itGroupViewItem : groupViewItemList) {
+				ITView view = itGroupViewItem.getViewInstance(getModule());
+				if(view!=null) {
+					String msg = view.gettPresenter().canInvalidate();
+					if(msg!=null) {
+						return msg;
+					}
+				}
+			}
+		}
+		return null;
+	
 	}
 
 	public ITModule getModule() {

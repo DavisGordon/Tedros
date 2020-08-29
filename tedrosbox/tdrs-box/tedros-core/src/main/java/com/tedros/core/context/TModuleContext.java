@@ -63,11 +63,13 @@ public final class TModuleContext implements Comparable<TModuleContext>{
 		this.viewContexts.add(ctx);
 	}
 	
-	public void stopModule(){
+	public boolean stopModule(){
 		for (TViewContext tViewContext : viewContexts) {
-			tViewContext.stop();
+			if(!tViewContext.stop())
+				return false;
 		}
 		viewContexts.clear();
+		return true;
 	}
 	
 	public void starModule(){
@@ -99,6 +101,15 @@ public final class TModuleContext implements Comparable<TModuleContext>{
 
 	public TViewContext getCurrentViewContext() {
 		return currentViewContext;
+	}
+
+	public String canStop() {
+		for (TViewContext tViewContext : viewContexts) {
+			String msg = tViewContext.canStop();
+			if(msg!=null)
+				return msg;
+		}
+		return null;
 	}
 
 }

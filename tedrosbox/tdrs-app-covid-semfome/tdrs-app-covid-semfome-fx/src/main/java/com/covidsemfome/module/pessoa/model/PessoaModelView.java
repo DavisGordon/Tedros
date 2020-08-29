@@ -369,29 +369,7 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 		return (getNome()!=null)? getNome().getValue() : "";	
 	}
 		
-	@Override
-	public int hashCode() {
-		return reflectionHashCode(this, null);
-	}
 	
-	@Override
-	public boolean equals(Object obj) {
-		
-		if(obj == null || !(obj instanceof PessoaModelView))
-			return false;
-		
-		PessoaModelView p = (PessoaModelView) obj;
-		
-		if(getId()!=null && getId().getValue()!=null &&  p.getId()!=null && p.getId().getValue()!=null){
-			if(!(getId().getValue().equals(Long.valueOf(0)) && p.getId().getValue().equals(Long.valueOf(0))))
-				return getId().getValue().equals(p.getId().getValue());
-		}	
-		
-		if(getNome()!=null && getNome().getValue()!=null &&  p.getNome()!=null && p.getNome().getValue()!=null)
-			return getNome().getValue().equals(p.getNome().getValue());
-		
-		return false;
-	}
 
 	public SimpleLongProperty getId() {
 		return id;

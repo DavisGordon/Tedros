@@ -13,8 +13,8 @@ public class BackgroundBehavior extends TDynaViewCrudBaseBehavior<BackgroundImag
 	}
 
 	@Override
-	public void setNewEntity(BackgroundImageModelView model) {
-		// TODO Auto-generated method stub
+	public boolean processNewEntityBeforeBuildForm(BackgroundImageModelView model) {
+		return true;
 
 	}
 

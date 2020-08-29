@@ -12,11 +12,20 @@ public abstract class TGenericBO<E extends ITEntity> implements ITGenericBO<E> {
 	/**
 	 * Retorna uma entidade pelo seu id
 	 * */
+	public E findById(E entidade)throws Exception{
+		return getEao().findById(entidade);
+	}
+	
+	/**
+	 * Retorna a primeira entidade pesquisada com os atributos preenchidos
+	 * */
 	public E find(E entidade)throws Exception{
 		return getEao().find(entidade);
 	}
 	
-	
+	/**
+	 * Pesquisa pelos atributos preenchidos
+	 * */
 	public List<E> findAll(E entidade)throws Exception{
 		return getEao().findAll(entidade);
 	}

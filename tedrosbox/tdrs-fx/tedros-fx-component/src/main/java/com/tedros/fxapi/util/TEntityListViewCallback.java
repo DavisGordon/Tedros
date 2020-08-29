@@ -1,9 +1,9 @@
 package com.tedros.fxapi.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
+
+import com.tedros.fxapi.exception.TException;
+import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -11,9 +11,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
-
-import com.tedros.fxapi.exception.TException;
-import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 /**
  *<pre>
@@ -43,30 +40,37 @@ public class TEntityListViewCallback<M extends TEntityModelView> implements Call
             public void updateItem(final M item, boolean empty) {
         		super.updateItem(item, empty);
             	
-        		if (item != null) {
+        		if (item == null) {
+        			setId(ITEM_CSS_ID);
+                	textProperty().unbind();
+        			setText(null);
+        			setGraphic(null);
+        		}else {
+        			//if(empty) {
+	        			if(item.getDisplayProperty()==null)
+	        				throw new RuntimeException(new TException("The method getDisplayProperty must return a not null value!"));
+	        			
+	                	textProperty().bind(item.getDisplayProperty());
+	                	
+	                	validateNew(item);
+	                	
+	                	item.lastHashCodeProperty().addListener(new ChangeListener<Number>() {
+							@Override
+							public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+								if(!validateNew(item))
+									setId(CHANGED_ITEM_CSS_ID);
+							}
+						});
+	                	
+	                	item.loadedProperty().addListener(new ChangeListener<Number>() {
+							@Override
+							public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+								setId(ITEM_CSS_ID);
+							}
+						});
         			
-        			if(item.getDisplayProperty()==null)
-        				throw new RuntimeException(new TException("The method getDisplayProperty must return a not null value!"));
-        			
-                	textProperty().bind(item.getDisplayProperty());
+                }/**/
                 	
-                	validateNew(item);
-                		
-                	item.lastHashCodeProperty().addListener(new ChangeListener<Number>() {
-						@Override
-						public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-							if(!validateNew(item))
-								setId(CHANGED_ITEM_CSS_ID);
-						}
-					});
-                	
-                	item.loadedProperty().addListener(new ChangeListener<Number>() {
-						@Override
-						public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-							setId(ITEM_CSS_ID);
-						}
-					});
-                }
             }
 
 			private boolean validateNew(final M item) {

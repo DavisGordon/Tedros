@@ -33,13 +33,21 @@ public abstract class TModule extends InternalView implements ITModule {
 			view.tLoad();
 	}
 	
-	@Override
-	public void tStop() {
+	public String canStop() {
 		TModuleContext context = TedrosAppManager.getInstance().getModuleContext(this);
+		return context.canStop();
+	}
+	
+	@Override
+	public boolean tStop() {
+		TModuleContext context = TedrosAppManager.getInstance().getModuleContext(this);
+		boolean flag = true;
 		if(context!=null){
-			context.stopModule();
+			flag = context.stopModule();
 			//TedrosAppManager.getInstance().getAppContext(this).removeModuleContext(this);
 			context = null;
 		}
+		
+		return flag;
 	}
 }

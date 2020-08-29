@@ -22,7 +22,7 @@ import com.tedros.fxapi.process.TEntityProcess;
 public class VoluntarioProcess extends TEntityProcess<Voluntario> {
 
 	public VoluntarioProcess() throws TProcessException {
-		super(Voluntario.class, "IVoluntarioControllerRemote", true);
+		super(Voluntario.class, "IVoluntarioControllerRemote");
 	}
 
 

@@ -21,30 +21,45 @@
   	<!-- DEPENDENCIES -->
   	<dependencies>
 	  	<dependency>
-		   <groupId>org.eclipse.persistence</groupId>
-		   <artifactId>eclipselink</artifactId>
-		   <version>2.4.2</version>
-		   <scope>compile</scope>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>eclipselink</artifactId>
+			<version>${eclipselink.version}</version>
+			<scope>compile</scope>
 		</dependency>
 		
 		<dependency>
 		   	<groupId>commons-io</groupId>
 		   	<artifactId>commons-io</artifactId>
-		   	<version>2.4</version>
+		   	<version>${commons.io.version}</version>
 		</dependency>
 	  
 	  	<dependency>
 	  		<groupId>org.apache.commons</groupId>
 	  		<artifactId>commons-lang3</artifactId>
-	  		<version>3.4</version>
+	  		<version>${commons.lang.version}</version>
 	  	</dependency>
 	  	
 	    <dependency>
 	    	<groupId>junit</groupId>
 	      	<artifactId>junit</artifactId>
-	      	<version>3.8.1</version>
+	      	<version>${junit.version}</version>
 	      	<scope>test</scope>
 	    </dependency>
   	</dependencies>
+  	
+  	<build>
+    	<plugins>
+      		<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-compiler-plugin</artifactId>
+        		<version>3.3</version>
+        		<configuration>
+          			<source>${java.version}</source>
+          			<target>${java.version}</target>
+        		</configuration>
+      		</plugin>
+  		</plugins>
+ 	</build>
+  	
     
 </project>

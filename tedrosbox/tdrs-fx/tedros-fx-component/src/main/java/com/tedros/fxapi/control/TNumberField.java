@@ -117,8 +117,13 @@ public abstract class TNumberField<N extends Number> extends TRequiredNumberFiel
 	@Override 
 	public void replaceText(int start, int end, String text) {
 		// aceita backspace 
-		if(text.equals(""))
-			super.replaceText(start, end, text);
+		if(text.equals("")) {
+			try {
+				super.replaceText(start, end, text);
+			}catch(IllegalArgumentException e) {
+				
+			}
+		}
         // nao aceita caracteres, somente numero e '.' (ponto) 
         if( (isNumberWithDecimal() && !text.equals(".") && !text.matches("[0-9]")) 
         		|| (!isNumberWithDecimal() && (text.equals(".") || !text.matches("[0-9]"))))

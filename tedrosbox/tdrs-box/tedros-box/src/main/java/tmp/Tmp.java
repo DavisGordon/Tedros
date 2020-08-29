@@ -75,7 +75,7 @@ public class Tmp {
  
             AudioInputStream ais = new AudioInputStream(line);
  
-            System.out.println("Start recording...");
+            System.out.println("Start ...");
  
             // start recording
             AudioSystem.write(ais, fileType, wavFile);

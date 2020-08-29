@@ -25,11 +25,7 @@ public class CustomizarModule extends TModule {
 		
 	}
 
-	@Override
-	public void tStop() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 
 }

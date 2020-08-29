@@ -3,9 +3,6 @@
  */
 package com.covidsemfome.module.voluntario.model;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.covidsemfome.model.TipoAjuda;
 import com.covidsemfome.module.voluntario.process.TipoAjudaProcess;
 import com.tedros.core.annotation.security.TAuthorizationType;
@@ -186,14 +183,4 @@ public class TipoAjudaModelView extends TEntityModelView<TipoAjuda> {
 		return descricao;
 	}
 	
-	@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this, false);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return EqualsBuilder.reflectionEquals(this, obj, false);
-	}
-
 }

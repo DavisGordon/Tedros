@@ -1,7 +1,5 @@
 package com.tedros.settings.security.model;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.core.security.model.TAuthorization;
@@ -107,28 +105,7 @@ public final class TProfileModelView extends TEntityModelView<TProfile> {
 		super(entity);
 	}
 	
-	@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this, false);
-	}
 	
-	@Override
-	public boolean equals(Object obj) {
-		if(obj == null || !(obj instanceof TProfileModelView))
-			return false;
-		
-		TProfileModelView p = (TProfileModelView) obj;
-		
-		if(getId()!=null && getId().getValue()!=null &&  p.getId()!=null && p.getId().getValue()!=null){
-			if(!(getId().getValue().equals(Long.valueOf(0)) && p.getId().getValue().equals(Long.valueOf(0))))
-				return getId().getValue().equals(p.getId().getValue());
-		}	
-		
-		if(getName()!=null && getName().getValue()!=null &&  p.getName()!=null && p.getName().getValue()!=null)
-			return getName().getValue().equals(p.getName().getValue());
-		
-		return false;
-	}
 
 	/* (non-Javadoc)
 	 * @see com.tedros.fxapi.presenter.model.TModelView#setId(javafx.beans.property.SimpleLongProperty)

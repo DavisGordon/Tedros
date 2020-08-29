@@ -8,6 +8,9 @@ package com.tedros.settings.layout.model;
 
 import javafx.scene.paint.Color;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.tedros.ejb.base.model.ITModel;
 
 /**
@@ -205,7 +208,15 @@ public class PainelModel implements ITModel {
 	}
 	
 	
+	@Override
+	public int hashCode() {
+		return HashCodeBuilder.reflectionHashCode(this, false);
+	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		return EqualsBuilder.reflectionEquals(this, obj, false);
+	}
 	
 	
 	

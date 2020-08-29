@@ -18,11 +18,19 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 	public abstract ITEjbService<E> getService();
 	
 	
-	@Override
+	public TResult<E> findById(E entidade) {
+		try{
+			entidade = getService().findById(entidade);
+			return new TResult<E>(EnumResult.SUCESS, entidade);
+		}catch(Exception e){
+			e.printStackTrace();
+			return new TResult<E>(EnumResult.ERROR, e.getMessage());
+		}
+	}
 	
 	public TResult<E> find(E entidade) {
 		try{
-			entidade = internalFind(entidade);
+			entidade = getService().find(entidade);
 			return new TResult<E>(EnumResult.SUCESS, entidade);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -41,11 +49,6 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 		}
 	}
 
-	private E internalFind(E entidade) throws Exception {
-		entidade = getService().find(entidade);
-		return entidade;
-	}
-
 	@Override
 	public TResult<E> save(E entidade) {
 		try{
@@ -59,7 +62,6 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 	@Override
 	public TResult<E> remove(E entidade) {
 		try{
-			entidade = internalFind(entidade);
 			getService().remove(entidade);
 			return new TResult<E>(EnumResult.SUCESS);
 			

@@ -290,30 +290,6 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	public String toString() {
 		return (getTitulo()!=null)? getTitulo().getValue() : "";	
 	}
-		
-	@Override
-	public int hashCode() {
-		return reflectionHashCode(this, null);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		
-		if(obj == null || !(obj instanceof AcaoModelView))
-			return false;
-		
-		AcaoModelView p = (AcaoModelView) obj;
-		
-		if(getId()!=null && getId().getValue()!=null &&  p.getId()!=null && p.getId().getValue()!=null){
-			if(!(getId().getValue().equals(Long.valueOf(0)) && p.getId().getValue().equals(Long.valueOf(0))))
-				return getId().getValue().equals(p.getId().getValue());
-		}	
-		
-		if(getTitulo()!=null && getTitulo().getValue()!=null &&  p.getTitulo()!=null && p.getTitulo().getValue()!=null)
-			return getTitulo().getValue().equals(p.getTitulo().getValue());
-		
-		return false;
-	}
 
 	/**
 	 * @return the titulo

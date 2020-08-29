@@ -6,6 +6,7 @@ import java.lang.reflect.Proxy;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.beans.value.WeakChangeListener;
 
 import com.tedros.fxapi.presenter.model.TModelView;
 
@@ -31,13 +32,12 @@ public class TFXCollections {
 		                    	final String name = method.getName(); 
 		                    	if(name.length()==3 && name.equals("get")){
 		                    		obj = method.invoke(list, args);
-		                    		if(obj instanceof TModelView)
-		                    			((TModelView<?>)obj).lastHashCodeProperty().addListener(new ChangeListener<Number>() {
-		                    				@Override
-		                    				public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-		                    					list.tBuildHashCodeProperty();
-		                    				}
-		                    			});
+		                    		if(obj instanceof TModelView) {
+		                    			ChangeListener<Number> l = (arg0, arg1, arg2) -> list.tBuildHashCodeProperty();
+		                    			TModelView<?>  mv = (TModelView<?>) obj;
+		                    			mv.addListener("lastHashCodeProperty", l);
+		                    			mv.lastHashCodeProperty().addListener(new WeakChangeListener<>(l));
+		                    		}
 		                    	}else
 		                    		obj = method.invoke(list, args);
 		                    	list.tBuildHashCodeProperty();

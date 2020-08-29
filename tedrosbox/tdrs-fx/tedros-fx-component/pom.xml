@@ -30,37 +30,37 @@
 	  	 <dependency>
 	  		<groupId>com.oracle</groupId>
 	  		<artifactId>jfxrt</artifactId>
-	  		<version>1.8.0_261</version>
+	  		<version>${javafx.version}</version>
 		</dependency> 
 				
 		<dependency>
 		   	<groupId>commons-io</groupId>
 		   	<artifactId>commons-io</artifactId>
-		   	<version>2.4</version>
+		   	<version>${commons.io.version}</version>
 		</dependency>
 		
 		<dependency>
 		  	<groupId>commons-logging</groupId>
 		  	<artifactId>commons-logging</artifactId>
-		  	<version>1.2</version>
+		  	<version>${commons.logging.version}</version>
 		</dependency>
 		
 		<dependency>
 		  	<groupId>org.apache.commons</groupId>
 		  	<artifactId>commons-collections4</artifactId>
-		  	<version>4.0</version>
+		  	<version>${commons-collections.version}</version>
 		</dependency>
 	  
 	  	<dependency>
 	  		<groupId>org.apache.commons</groupId>
 	  		<artifactId>commons-lang3</artifactId>
-	  		<version>3.4</version>
+	  		<version>${commons.lang.version}</version>
 	  	</dependency>
 	  
 	    <dependency>
 	      	<groupId>junit</groupId>
 	      	<artifactId>junit</artifactId>
-	      	<version>3.8.1</version>
+	      	<version>${junit.version}</version>
 	      	<scope>test</scope>
 	    </dependency>
 	    <dependency>
@@ -73,6 +73,18 @@
   	</dependencies>
   	
   	<build>
+    	<plugins>
+      		<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-compiler-plugin</artifactId>
+        		<version>3.3</version>
+        		<configuration>
+          			<source>${java.version}</source>
+          			<target>${java.version}</target>
+        		</configuration>
+      		</plugin>
+  		</plugins>
+
     	<resources>
         	<resource>
             	<directory>src/main/resources</directory>
@@ -86,30 +98,5 @@
     	</resources>
 	</build>
   	
-  	<!-- <build>
-    	<resources>
-        	<resource>
-            	<directory>src/main/resources</directory>
-        	</resource>
-        	<resource>
-        		<directory>src/main/java</directory>
-        		<includes>
-          			<include>**/*.java</include>
-          			<include>**/*.fxml</include>
-          			<include>**/*.properties</include>
-          			<include>**/*.jpg</include>
-          			<include>**/*.png</include>
-          			<include>**/*.gif</include>
-          			<include>**/*.txt</include>
-          			<include>**/*.html</include>
-        		</includes>
-        		<excludes>
-        			<exclude>main</exclude>
-        			<exclude>main.references</exclude>
-        			<exclude>main.skin</exclude>
-        		</excludes>
-      		</resource>
-    	</resources>
-	</build> -->
   
 </project>
