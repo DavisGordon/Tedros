@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -46,7 +47,7 @@ import br.com.covidsemfome.ejb.service.ServiceLocator;
 @Singleton
 
 @Path("/painel")
-@Produces(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON + "; charset=UTF-8")
 public class PainelApi {
 	
 	private static String ERROR = "Desculpe estamos há resolver um problema tecnico em breve voltaremos.";
@@ -54,16 +55,28 @@ public class PainelApi {
 	
 	@Inject @Any
 	private CovidUserBean covidUserBean;
+
+	@EJB
+	private IPessoaController pessServ;
+	
+	@EJB
+	private IAutUserController autServ;
+	
+	@EJB
+	private ITipoAjudaController taServ;
+	
+	@EJB 
+	private IVoluntarioController volServ;
+
+	@EJB 
+	private IAcaoController aServ;
 	
 	@GET
 	@Path("/logout")
 	public RestModel<String> logout(){
-		ServiceLocator loc =  ServiceLocator.getInstance();
 		
 		try {
-			IAutUserController serv = loc.lookup("IAutUserControllerRemote");
-			TResult<Boolean> res = serv.logout(covidUserBean.getUser().getPessoa());
-			loc.close();
+			TResult<Boolean> res = autServ.logout(covidUserBean.getUser().getPessoa());
 			
 			if(res.getResult().equals(EnumResult.SUCESS)){
 				System.out.println(covidUserBean.getUser().getPessoa().getNome() +" removido da sessao com sucesso");
@@ -73,7 +86,7 @@ public class PainelApi {
 				return new RestModel<String>("", "404", res.getResult().equals(EnumResult.WARNING) ? res.getMessage()  : ERROR );
 			}
 			
-		} catch (NamingException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new RestModel<String>("", "500", ERROR);
 		}
@@ -87,7 +100,6 @@ public class PainelApi {
 			@FormParam("email") String  email,
 			@FormParam("sexo") String  sexo){
 	
-		ServiceLocator loc =  ServiceLocator.getInstance();
 		try{
 			Pessoa p = covidUserBean.getUser().getPessoa();
 			p.setNome(name);
@@ -99,13 +111,11 @@ public class PainelApi {
 					if(c.getTipo().equals("2"))
 						c.setDescricao(tel);
 			
-			IPessoaController serv = loc.lookup("IPessoaControllerRemote");
-			TResult<Pessoa> res = serv.save(p);
-			loc.close();
-			
+			TResult<Pessoa> res = pessServ.save(p);
 			
 			UserModel m = new UserModel(p.getId(), p.getNome(), p.getLoginName(), tel, p.getSexo(), p.getTipoVoluntario());
 			return new RestModel<>(m, "200", "OK");
+			
 		}catch(Exception e){
 			e.printStackTrace();
 			return new RestModel<>(null, "500", ERROR);
@@ -138,13 +148,9 @@ public class PainelApi {
 	@GET
 	@Path("/tiposAjuda/{tipo}")
 	public RestModel<List<TipoAjuda>> listaTiposAjuda(@PathParam("tipo") String tipo){
-		
-		ServiceLocator loc =  ServiceLocator.getInstance();
-		
+				
 		try {
-			ITipoAjudaController serv = loc.lookup("ITipoAjudaControllerRemote");
-			TResult<List<TipoAjuda>> res = serv.listar(tipo);
-			loc.close();
+			TResult<List<TipoAjuda>> res = taServ.listar(tipo);
 			System.out.println( "Tipo ajuda para "+tipo+" recuperado com sucesso!");
 			return new RestModel<>(res.getValue(), "200", "OK");
 			
@@ -157,13 +163,9 @@ public class PainelApi {
 	@POST
 	@Path("/acao/participar/")
 	public RestModel<List<AcaoModel>> participar(@FormParam("id") Long id, @FormParam("tiposAjuda") List<Long> tiposAjuda){
-		
-		ServiceLocator loc =  ServiceLocator.getInstance();
-		
+				
 		try {
-			IVoluntarioController serv = loc.lookup("IVoluntarioControllerRemote");
-			TResult<List<Acao>> res = serv.participarEmAcao(covidUserBean.getUser().getPessoa(), id, tiposAjuda);
-			loc.close();
+			TResult<List<Acao>> res = volServ.participarEmAcao(covidUserBean.getUser().getPessoa(), id, tiposAjuda);
 			System.out.println(covidUserBean.getUser().getPessoa().getNome()+ " participando com sucesso a acao "+id.toString());
 			return processarAcoes(res);
 			
@@ -177,13 +179,9 @@ public class PainelApi {
 	@DELETE
 	@Path("/acao/sair/{id}")
 	public RestModel<List<AcaoModel>> sairAcao(@PathParam("id") Long id){
-		
-		ServiceLocator loc =  ServiceLocator.getInstance();
-		
+				
 		try {
-			IVoluntarioController serv = loc.lookup("IVoluntarioControllerRemote");
-			TResult<List<Acao>> res = serv.sairDaAcao(covidUserBean.getUser().getPessoa(), id);
-			loc.close();
+			TResult<List<Acao>> res = volServ.sairDaAcao(covidUserBean.getUser().getPessoa(), id);
 			System.out.println(covidUserBean.getUser().getPessoa().getNome()+ " saiu com sucesso da acao "+id.toString());
 			return processarAcoes(res);
 			
@@ -197,17 +195,13 @@ public class PainelApi {
 	@GET
 	@Path("/acoes")
 	public RestModel<List<AcaoModel>> getAcoes(){
-		
-		ServiceLocator loc =  ServiceLocator.getInstance();
-		
+				
 		try {
-			IAcaoController serv = loc.lookup("IAcaoControllerRemote");
-			TResult<List<Acao>> res = serv.listAcoesParaExibirNoPainel();
-			loc.close();
+			TResult<List<Acao>> res = aServ.listAcoesParaExibirNoPainel();
 			
 			return processarAcoes(res);
 			
-		} catch (NamingException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new RestModel<>(null, "500", ERROR);
 		}
@@ -217,8 +211,6 @@ public class PainelApi {
 		if(res.getResult().equals(EnumResult.SUCESS)){
 			
 			List<AcaoModel> models = new ArrayList<>();
-			
-			
 			List<Acao> lst = res.getValue();
 			Pessoa pessoa = covidUserBean.getUser().getPessoa();
 			if(lst!=null && !lst.isEmpty())

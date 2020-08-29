@@ -2,8 +2,6 @@ package com.covidsemfome.module.pessoa.model;
 
 import java.util.Date;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.covidsemfome.model.Documento;
 import com.covidsemfome.module.pessoa.trigger.TDocumentoTrigger;
 import com.covidsemfome.module.pessoa.validator.DocumentoValidator;
@@ -125,34 +123,7 @@ public class DocumentoModelView extends TEntityModelView<Documento>{
 		return "";
 	}
 		
-	@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this, false);
-	}
 	
-	@Override
-	public boolean equals(Object obj) {
-		
-		if(obj == null || !(obj instanceof DocumentoModelView))
-			return false;
-		
-		DocumentoModelView p = (DocumentoModelView) obj;
-		
-		if(getId()!=null && getId().getValue()!=null &&  p.getId()!=null && p.getId().getValue()!=null){
-			if(!(getId().getValue().equals(Long.valueOf(0)) && p.getId().getValue().equals(Long.valueOf(0))))
-				return getId().getValue().equals(p.getId().getValue());
-		}	
-		
-		String str1 = getTipo()!=null && getTipo().getValue()!=null ? getTipo().getValue() : "";
-		str1 += getNumero()!=null && getNumero().getValue()!=null ? getNumero().getValue() : "";
-		
-		String str2 = p.getTipo()!=null && p.getTipo().getValue()!=null ? p.getTipo().getValue() : "";
-		str2 += p.getNumero()!=null && p.getNumero().getValue()!=null ? p.getNumero().getValue() : "";
-		
-		return str1.equals(str2);
-	}
-
-
 	public SimpleStringProperty getTipo() {
 		return tipo;
 	}

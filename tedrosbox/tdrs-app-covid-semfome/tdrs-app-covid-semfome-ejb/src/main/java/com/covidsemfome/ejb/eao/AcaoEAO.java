@@ -72,13 +72,13 @@ public class AcaoEAO extends TGenericEAO<Acao> {
 		
 		qry.setHint(QueryHints.CACHE_USAGE, CacheUsage.DoNotCheckCache);
 		List<Acao> lst = qry.getResultList();
-		return refresh(lst);
+		return lst;
 	}
 	
 	@Override
 	public List<Acao> listAll(Class<? extends ITEntity> entity) throws Exception {
-		List<Acao> lst = super.listAll(entity);
-		return refresh(lst); 
+		List<Acao> lst = super.listAll(entity, false);
+		return lst; 
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -89,7 +89,7 @@ public class AcaoEAO extends TGenericEAO<Acao> {
 		qry.setParameter("data", data);
 		qry.setHint(QueryHints.CACHE_USAGE, CacheUsage.DoNotCheckCache);
 		List<Acao> lst = qry.getResultList();
-		return refresh(lst);
+		return lst;
 	}
 
 	@Override
@@ -116,17 +116,5 @@ public class AcaoEAO extends TGenericEAO<Acao> {
 		}
 	}
 
-	private List<Acao> refresh(List<Acao> lst) {
-		/*if(lst!=null)
-			for (Acao acao : lst) {
-				//getEntityManager().refresh(acao);
-				StringBuffer sbf = new StringBuffer("select distinct e from Voluntario e join e.acao a where a.id = :id ");
-				
-				Query qry = getEntityManager().createQuery(sbf.toString());
-				qry.setParameter("id", acao.getId());
-				List<Voluntario> l = qry.getResultList();
-				acao.setVoluntarios(l);
-			}*/
-		return lst;
-	}
+	
 }

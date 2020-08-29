@@ -266,8 +266,8 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleViewModel,
 	}
 
 	@Override
-	public void setNewEntity(ExampleViewModel model) {
-		// TODO Auto-generated method stub
+	public boolean processNewEntityBeforeBuildForm(ExampleViewModel model) {
+		return true;
 		
 	}
 

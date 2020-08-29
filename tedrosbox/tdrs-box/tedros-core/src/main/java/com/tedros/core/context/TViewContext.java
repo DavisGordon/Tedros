@@ -34,11 +34,14 @@ public final class TViewContext {
 		return view;
 	}
 	
-	public void  stop(){
-		getPresenter().stop();
-		moduleContext = null;
-		view = null;
-		tEntry.clear();
+	public boolean stop(){
+		if(getPresenter().invalidate()) {
+			moduleContext = null;
+			view = null;
+			tEntry.clear();
+			return true;
+		} else
+			return false;
 	}
 	
 	public TModuleContext getModuleContext() {
@@ -67,5 +70,9 @@ public final class TViewContext {
 
 	public TSecurityDescriptor getSecurityDescriptor() {
 		return securityDescriptor;
+	}
+
+	public String canStop() {
+		return getPresenter().canInvalidate();
 	}
 }

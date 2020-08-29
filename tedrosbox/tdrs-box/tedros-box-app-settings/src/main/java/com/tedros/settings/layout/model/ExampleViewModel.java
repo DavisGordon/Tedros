@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
+import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -21,6 +22,10 @@ import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.layout.TFieldSet;
+import com.tedros.fxapi.annotation.layout.THBox;
+import com.tedros.fxapi.annotation.layout.THGrow;
+import com.tedros.fxapi.annotation.layout.TPane;
+import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
@@ -49,6 +54,9 @@ public class ExampleViewModel extends TEntityModelView<EntityExampleForm> {
 	@TReader
 	@TLabel(text="Code:")
 	@TLongField(zeroValidation=TZeroValidation.GREATHER_THAN_ZERO, maxLength=3,	control=@TControl(maxSize=@TSize(width=100, height=30), parse = true), textInputControl=@TTextInputControl(editable=false, parse = true))
+	@THBox(	pane=@TPane(children={"id","longField"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="id", priority=Priority.ALWAYS), 
+   				   		@TPriority(field="longField", priority=Priority.ALWAYS) }))
 	private SimpleLongProperty id;
 	
 	@TReader
@@ -66,7 +74,8 @@ public class ExampleViewModel extends TEntityModelView<EntityExampleForm> {
 	@TReader(wrappingWidth=600)
 	@TLabel(text="About:", control=@TControl(prefWidth=500, parse = true))
 	@TTextAreaField(textInputControl=@TTextInputControl(promptText="About", parse = true), 
-	control=@TControl(tooltip="Digite um texto", parse = true), prefColumnCount=25, prefRowCount=3, required=true, wrapText=true)
+	control=@TControl(tooltip="Digite um texto", parse = true), prefColumnCount=25, prefRowCount=2, 
+	required=true, wrapText=true)
 	private SimpleStringProperty textField;
 
 	@TReader(label=@TLabel(text="Check"), booleanValues=@TBooleanValues(falseValue="No", trueValue="Yes"))

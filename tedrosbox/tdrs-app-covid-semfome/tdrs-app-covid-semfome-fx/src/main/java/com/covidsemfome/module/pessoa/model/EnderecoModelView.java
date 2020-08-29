@@ -6,8 +6,6 @@
  */
 package com.covidsemfome.module.pessoa.model;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.covidsemfome.model.Endereco;
 import com.tedros.fxapi.annotation.TCodeValue;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
@@ -142,26 +140,7 @@ public class EnderecoModelView extends TEntityModelView<Endereco> {
 		//return tDes+tLog+logr+compl+bair+cida+esta+cep;
 		return tDes+tLog+logr+compl+bair+cida+cep;
 	}
-		
-	@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this, false);
-	}
 	
-	@Override
-	public boolean equals(Object obj) {
-		
-		if(obj == null || !(obj instanceof EnderecoModelView))
-			return false;
-		
-		EnderecoModelView p = (EnderecoModelView) obj;
-		
-		if(getId()!=null && getId().getValue()!=null &&  p.getId()!=null && p.getId().getValue()!=null)
-			if(!(getId().getValue().equals(Long.valueOf(0)) && p.getId().getValue().equals(Long.valueOf(0))))
-				return getId().getValue().equals(p.getId().getValue());
-		
-		return getEnderecoCompleto().equals(p.getEnderecoCompleto());
-	}
 	
 	public SimpleStringProperty getTipo() {
 		return tipo;

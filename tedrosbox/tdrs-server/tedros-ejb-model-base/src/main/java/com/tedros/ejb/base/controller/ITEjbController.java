@@ -11,6 +11,12 @@ public interface ITEjbController<E extends ITEntity> {
 	 * Retorna uma entidade pelo seu id
 	 * */
 	@SuppressWarnings("rawtypes")
+	public TResult findById(E entidade)throws Exception;
+	
+	/**
+	 * Retorna a primeira entidade pesquisada com os atributos preenchidos
+	 * */
+	@SuppressWarnings("rawtypes")
 	public TResult find(E entidade);
 	
 	/**

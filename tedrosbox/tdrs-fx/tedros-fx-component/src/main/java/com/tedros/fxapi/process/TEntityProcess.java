@@ -12,7 +12,9 @@ import javax.naming.InitialContext;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.tedros.core.service.remote.ServiceLocator;
 import com.tedros.ejb.base.controller.ITEjbController;
+import com.tedros.ejb.base.controller.ITEjbReportController;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
@@ -47,78 +49,26 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 	private static final int FIND = 3;
 	private static final int LIST = 4;
 	private static final int SEARCH = 5;
+	private static final int FINDBYID = 6;
 	
 	private Class<E> entityType;
-	private ITEjbController<E> service;
-	private Properties p;
-	private InitialContext ctx;
 	private List<E> values;
 	private int operation;
 	
-	private int serverType;
+	private String serviceJndiName;
 	
-	/**
-	 * Return an ejb service
-	 * 
-	 * @return {@link ITEjbController}
-	 * */
-	public ITEjbController<E> getService(){
-		return service;
-	}
-	
-	/**
-	 * Define the server application endpoint to be used.
-	 * 
-	 * @param serverType - 1 for tomee and 2 for jboss
-	 * */
-	public void setServerType(int serverType) {
-		this.serverType = serverType;
-	}
-		
 	/**
 	 * Constructor
 	 * 
 	 * @param entityType - The entity class
 	 * @param serviceJndiName - The ejb service jndi name 
-	 * @param remoteMode - false for local services and true to use configured endpoint
 	 * */
-	public TEntityProcess(Class<E> entityType, String serviceJndiName, boolean remoteMode) throws TProcessException {
-		init(entityType, serviceJndiName, remoteMode);
-	}
-
-	@SuppressWarnings({"unchecked"})
-	private void init(Class<E> entityType, String serviceJndiName, boolean remoteMode) throws TProcessException {
-		
-		this.serverType = SERVER_TYPE_TOMEE;
+	public TEntityProcess(Class<E> entityType, String serviceJndiName) throws TProcessException {
+		setAutoStart(true);
+		this.values = new ArrayList<>();
 		this.entityType = entityType;
+		this.serviceJndiName = serviceJndiName;
 		
-		try {
-			
-			if(StringUtils.isNotBlank(serviceJndiName)){
-				setAutoStart(true);
-				if (remoteMode)	initRemote();	else initLocal();				
-				
-				ctx = new InitialContext(p);
-				
-				service = (ITEjbController<E>) ctx.lookup(serviceJndiName);
-				values = new ArrayList<>();
-			}
-		} catch (Exception e) {
-			throw new TProcessException(e, e.getMessage(), "Was not possible to connect to the remote server: "+serviceJndiName);
-		} 
-	}
-	
-	/**
-	 * <pre>Constructor
-	 * 
-	 * Use remote server 
-	 * </pre>
-	 * @param entityType - The entity class
-	 * @param serviceJndiName - The ejb service jndi name 
-	 * @param serverType - 1 for tomee and 2 for jboss
-	 * */
-	public TEntityProcess(Class<E> entityType, String serviceJndiName, int serverType) throws TProcessException {
-		init(entityType, serviceJndiName, true);
 	}
 	
 	/**
@@ -136,6 +86,14 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 	public void delete(E entidade){
 		values.add(entidade);
 		operation = DELETE;
+	}
+	/**
+	 * <pre>Add an entity to find by id</pre>
+	 * @param entidade 
+	 * */
+	public void findById(E entidade){
+		values.add(entidade);
+		operation = FINDBYID;
 	}
 	/**
 	 * <pre>Add an entity to find</pre>
@@ -185,6 +143,8 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
         		List<TResult<E>> resultList = new ArrayList<>();
         		try {
 	        		execute(resultList);
+	        		ServiceLocator loc = ServiceLocator.getInstance();
+	        		ITEjbController<E> service = (ITEjbController<E>) loc.lookup(serviceJndiName);
 	        		if(service!=null){
 		        		switch (operation) {
 							case SAVE :
@@ -194,6 +154,10 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 							case DELETE :
 								for (E entity : values)
 									resultList.add(service.remove(entity));
+								break;
+							case FINDBYID :
+								for (E entity : values)
+									resultList.add(service.findById(entity));
 								break;
 							case FIND :
 								for (E entity : values)
@@ -217,6 +181,7 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 						}
 		        		values.clear();
 	        		}
+	        		loc.close();
         		} catch (Exception e) {
 					setException(e);
 					e.printStackTrace();
@@ -226,70 +191,5 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
         	}
 		};
 	}
-	
-	
-
-	private void initRemote() {
-		
-		Properties prop = TResourceUtil.getPropertiesFromConfFolder("remote-config.properties");
-		
-		if(serverType == 1){
-			String url = "http://{0}:8081/tomee/ejb";
-			String ip = "127.0.0.1";
-			
-			if(prop!=null){
-				url = prop.getProperty("url");
-				ip = prop.getProperty("server_ip");
-			}	
-			
-			String serviceURL = MessageFormat.format(url, ip);
-			
-			p = new Properties();
-			p.put("java.naming.factory.initial", "org.apache.openejb.client.RemoteInitialContextFactory");
-			p.put("java.naming.provider.url", serviceURL);
-		}else{
-			String url = "jnp://{0}:1099";
-			String ip = "127.0.0.1";
-			
-			if(prop!=null){
-				url = prop.getProperty("url");
-				ip = prop.getProperty("server_ip");
-			}
-			
-			String serviceURL = MessageFormat.format(url, ip);
-			
-			p = new Properties(); 
-			p.put(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory"); 
-			p.put(Context.URL_PKG_PREFIXES, "org.jboss.naming:org.jnp.interfaces"); 
-			p.put(Context.PROVIDER_URL, serviceURL); 
-			 
-		}
-	}
-
-	private void initLocal() {
-		p = new Properties();
-		p.put("java.naming.factory.initial", "org.apache.openejb.client.LocalInitialContextFactory");
-		
-		p.put("tedrosDataSource", "new://Resource?type=DataSource");
-		p.put("tedrosDataSource.UserName", "tdrs");
-		p.put("tedrosDataSource.Password", "xpto");
-		p.put("tedrosDataSource.JdbcDriver", "org.h2.Driver");
-		p.put("tedrosDataSource.JdbcUrl", "jdbc:h2:file:C:/Tedros/box/data/db;");
-		p.put("tedrosDataSource.JtaManaged", "true");
-		
-		// change some logging
-		p.put("log4j.category.OpenEJB.options ", " debug");
-		p.put("log4j.category.OpenEJB.startup ", " debug");
-		p.put("log4j.category.OpenEJB.startup.config ", " debug");
-		
-		// set some openejb flags
-		p.put("openejb.jndiname.format ", " {ejbName}/{interfaceClass}");
-		p.put("openejb.descriptors.output ", " true");
-		p.put("openejb.validation.output.level ", " verbose");
-		
-		p.put("openejb.deployments.classpath.ear", "true");
-	}
-	
-	
 
 }

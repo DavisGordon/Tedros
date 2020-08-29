@@ -41,9 +41,10 @@ public interface ITPresenter<V extends ITView> {
 	public void initialize();
 	
 	/**
-	 * Stops the presenter
+	 * invalidate the presenter
+	 * @return 
 	 * */
-	public void stop();
+	public boolean invalidate();
 	
 	/**
 	 * Returns the module of this presenter
@@ -54,5 +55,7 @@ public interface ITPresenter<V extends ITView> {
 	 * Sets the module of this presenter
 	 * */
 	public void setModule(ITModule module);
+
+	public String canInvalidate();
 	
 }

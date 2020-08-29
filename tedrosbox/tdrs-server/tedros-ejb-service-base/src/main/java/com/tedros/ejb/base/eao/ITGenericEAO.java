@@ -13,6 +13,11 @@ public interface ITGenericEAO<E extends ITEntity> {
 	/**
 	 * Retorna uma entidade pelo seu id
 	 * */
+	public E findById(E entidade)throws Exception;
+	
+	/**
+	 * Retorna a primeira entidade pesquisada com os atributos preenchidos
+	 * */
 	public E find(E entidade)throws Exception;
 	
 	/**

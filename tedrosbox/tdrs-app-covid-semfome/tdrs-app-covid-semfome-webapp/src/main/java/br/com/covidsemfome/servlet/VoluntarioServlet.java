@@ -3,11 +3,17 @@
  */
 package br.com.covidsemfome.servlet;
 
+import static javax.servlet.http.HttpServletResponse.SC_ACCEPTED;
+import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
+import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,20 +27,16 @@ import com.covidsemfome.model.Pessoa;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.util.TEncriptUtil;
-
-import br.com.covidsemfome.ejb.service.ServiceLocator;
-
 /**
  * @author Davis Gordon
  *
  */
 public class VoluntarioServlet extends HttpServlet {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3035965625139672187L;
 	
+	@EJB
+	private IPessoaController service;
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
@@ -49,16 +51,13 @@ public class VoluntarioServlet extends HttpServlet {
 		PrintWriter out = resp.getWriter();
 
 		if(StringUtils.isAnyBlank(nome, email, pass)){
-			resp.setStatus(resp.SC_BAD_REQUEST);
+			resp.setStatus(SC_BAD_REQUEST);
 			out.println("Por favor informar o seu nome, email e senha.");
 		}else{
-		
-			ServiceLocator loc = ServiceLocator.getInstance();
 	
 			try {
-				IPessoaController service = (IPessoaController) loc.lookup("IPessoaControllerRemote");
 				
-				List<Contato> lst = new ArrayList();			
+				List<Contato> lst = new ArrayList<>();			
 				if(email!=null){
 					Contato cont1 = new Contato();
 					cont1.setDescricao(email);
@@ -87,25 +86,23 @@ public class VoluntarioServlet extends HttpServlet {
 							
 				if(res.getResult().equals(EnumResult.SUCESS)){
 					System.out.println("sucesso");
-					resp.setStatus(HttpServletResponse.SC_OK);
+					resp.setStatus(SC_OK);
 					out.println("Obrigado por se cadastrar agora voce tem acesso a um painel feito para te ajudar a agendar suas ações como voluntário.");
 				}else if(res.getResult().equals(EnumResult.WARNING)){
 					//System.out.println(res.getErrorMessage());
-					resp.setStatus(HttpServletResponse.SC_ACCEPTED);	
+					resp.setStatus(SC_ACCEPTED);	
 					out.println("Entre no painel com seu email e senha.");
 				}else if(res.getResult().equals(EnumResult.ERROR)){
 					//System.out.println(res.getErrorMessage());
-					resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);	
+					resp.setStatus(SC_INTERNAL_SERVER_ERROR);	
 					out.println(res.getMessage());
 				}
 		
 				
 			} catch (Exception e) {
 				e.printStackTrace();
-				resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				resp.sendError(SC_INTERNAL_SERVER_ERROR);
 				out.println("Não foi possivel realizar seu cadastro mas pode realiza-lo atraves do whatsup (21) 99606-1825 / Pedro Borges");
-			}finally{
-				loc.close();
 			}
 		
 		}

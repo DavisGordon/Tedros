@@ -33,6 +33,7 @@ import com.tedros.login.model.Login;
 import com.tedros.login.model.LoginModelView;
 import com.tedros.settings.security.model.TProfileModelView;
 import com.tedros.settings.security.process.TUserProcess;
+import com.tedros.util.TEncriptUtil;
 import com.tedros.util.TFileUtil;
 import com.tedros.util.TedrosFolderEnum;
 
@@ -174,8 +175,8 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 						
 						final TUserProcess process  = (TUserProcess) createEntityProcess();
 						process.setLogin(userLogin);
-						//process.setPassword(TEncriptUtil.encript(password));
-						process.setPassword(password);
+						process.setPassword(TEncriptUtil.encript(password));
+						//process.setPassword(password);
 						process.stateProperty().addListener(new ChangeListener<State>() {
 							@Override
 							public void changed(ObservableValue<? extends State> arg0, State arg1, State arg2) {
@@ -313,7 +314,8 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 	}
 
 	@Override
-	public void setNewEntity(LoginModelView model) {
+	public boolean processNewEntityBeforeBuildForm(LoginModelView model) {
+		return true;
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package com.covidsemfome.rest.service;
 
-import javax.naming.NamingException;
+import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -18,37 +18,37 @@ import com.covidsemfome.rest.model.RestModel;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 
-import br.com.covidsemfome.ejb.service.ServiceLocator;
-
 @Path("/auth")
 @Produces(MediaType.APPLICATION_JSON)
 public class LoginApi {
 	
-	private static String ERROR = "Desculpe estamos há resolver um problema tecnico em breve voltaremos.";
+	private static String ERROR = "Desculpe estamos há resolver um problema técnico e em breve voltaremos.";
+	
+	@EJB
+	private IPessoaController pessServ;
+	
+	@EJB
+	private IAutUserController autServ;
 	
 	@GET
 	@Path("/newpass/{email}")
 	public RestModel<String> newPass(@PathParam("email") String email){
 		
-		ServiceLocator loc =  ServiceLocator.getInstance();
 		
 		try {
-			IPessoaController serv = loc.lookup("IPessoaControllerRemote");
-			TResult<Boolean> res = serv.newPass(email);
-			loc.close();
+			TResult<Boolean> res = pessServ.newPass(email);
 			
 			if(res.getResult().equals(EnumResult.SUCESS)){
 				System.out.println("sucesso");
 				
 				return new RestModel<String>("", "200", "Email enviado");
 			}else{
-				//System.out.println(res.getErrorMessage());
 				return new RestModel<String>("", "404", res.getResult().equals(EnumResult.WARNING) 
 						? res.getMessage()  
 								: ERROR );
 			}
 			
-		} catch (NamingException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new RestModel<String>("", "500", ERROR);
 		}
@@ -62,23 +62,19 @@ public class LoginApi {
 			@FormParam("pass") String  pass,
 			@FormParam("passConf") String  passConf){
 		
-		ServiceLocator loc =  ServiceLocator.getInstance();
 		
 		try {
-			IPessoaController serv = loc.lookup("IPessoaControllerRemote");
-			TResult<Boolean> res = serv.defpass(key, pass);
-			loc.close();
+			TResult<Boolean> res = pessServ.defpass(key, pass);
 			
 			if(res.getResult().equals(EnumResult.SUCESS)){
 				System.out.println("sucesso");
 				
 				return new RestModel<String>("", "200", res.getMessage());
 			}else{
-				//System.out.println(res.getErrorMessage());
 				return new RestModel<String>("", "404", res.getResult().equals(EnumResult.WARNING) ? res.getMessage()  : ERROR );
 			}
 			
-		} catch (NamingException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new RestModel<String>("", "500", ERROR);
 		}
@@ -90,25 +86,20 @@ public class LoginApi {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public RestModel<String> login(LoginModel model){
 		
-		ServiceLocator loc =  ServiceLocator.getInstance();
-		
 		try {
-			IAutUserController serv = loc.lookup("IAutUserControllerRemote");
-			TResult<User> res = serv.login(model.getEmail(), model.getPass());
-			loc.close();
+			TResult<User> res = autServ.login(model.getEmail(), model.getPass());
 			
 			if(res.getResult().equals(EnumResult.SUCESS)){
 				System.out.println("sucesso");
 				
 				return new RestModel<String>(res.getValue().getKey(), "200", res.getMessage());
 			}else{
-				//System.out.println(res.getErrorMessage());
 				return new RestModel<String>("", "404", res.getResult().equals(EnumResult.WARNING) 
 						? res.getMessage()  
 								: ERROR );
 			}
 			
-		} catch (NamingException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new RestModel<String>("", "500", ERROR);
 		}

@@ -2,8 +2,6 @@ package com.covidsemfome.module.report.model;
 
 import java.util.Date;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.covidsemfome.module.report.process.AcaoReportProcess;
 import com.covidsemfome.report.model.AcaoItemModel;
 import com.covidsemfome.report.model.AcaoReportModel;
@@ -134,26 +132,6 @@ public class AcoesReportModelView extends TModelView<AcaoReportModel>{
 		super(entidade);
 	}
 	
-	@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this, false);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		
-		if(obj == null || !(obj instanceof AcoesReportModelView))
-			return false;
-		
-		AcoesReportModelView p = (AcoesReportModelView) obj;
-		
-		if(getId()!=null && getId().getValue()!=null &&  p.getId()!=null && p.getId().getValue()!=null){
-			if(!(getId().getValue().equals(Long.valueOf(0)) && p.getId().getValue().equals(Long.valueOf(0))))
-				return getId().getValue().equals(p.getId().getValue());
-		}	
-		return false;
-	}
-
 	
 	
 	@Override

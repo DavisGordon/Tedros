@@ -8,7 +8,7 @@ import com.tedros.fxapi.exception.TProcessException;
 public class TDisabledCrudProcess extends TEntityProcess {
 
 	public TDisabledCrudProcess() throws TProcessException {
-		super(null, "", false);
+		super(null, "");
 		
 	}
 

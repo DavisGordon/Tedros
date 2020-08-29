@@ -22,7 +22,7 @@ import com.tedros.fxapi.process.TEntityProcess;
 public class DoacaoProcess extends TEntityProcess<Doacao> {
 
 	public DoacaoProcess() throws TProcessException {
-		super(Doacao.class, "IDoacaoControllerRemote", true);
+		super(Doacao.class, "IDoacaoControllerRemote");
 	}
 
 

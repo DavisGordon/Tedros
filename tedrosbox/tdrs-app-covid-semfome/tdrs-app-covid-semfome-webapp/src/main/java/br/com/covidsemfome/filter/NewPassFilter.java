@@ -5,6 +5,7 @@ package br.com.covidsemfome.filter;
 
 import java.io.IOException;
 
+import javax.ejb.EJB;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -19,8 +20,6 @@ import com.covidsemfome.ejb.controller.IPessoaController;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 
-import br.com.covidsemfome.ejb.service.ServiceLocator;
-
 /**
  * @author Davis Gordon
  *
@@ -29,13 +28,15 @@ import br.com.covidsemfome.ejb.service.ServiceLocator;
 public class NewPassFilter implements Filter {
 	
 	private static String PARAM = "k";
+	
+	@EJB
+	private IPessoaController serv;
 
 	/* (non-Javadoc)
 	 * @see javax.servlet.Filter#destroy()
 	 */
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -47,18 +48,13 @@ public class NewPassFilter implements Filter {
 			throws IOException, ServletException {
 		
 		HttpServletRequest httpRequest = (HttpServletRequest) req;
-		
 	    
 		String key = httpRequest.getParameter(PARAM);
 		
 	    if(key!=null && !key.trim().equals("")){
-	    	
-		    ServiceLocator loc = ServiceLocator.getInstance();
-			
+	    				
 			try {
-				IPessoaController serv = loc.lookup("IPessoaControllerRemote");
 				TResult<Boolean> res = serv.validateNewPassKey(key.trim());
-				loc.close();
 				if(res.getResult().equals(EnumResult.SUCESS)){
 					chain.doFilter(req, resp);
 				}else if(res.getResult().equals(EnumResult.WARNING)){
@@ -80,7 +76,6 @@ public class NewPassFilter implements Filter {
 	 */
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
-		// TODO Auto-generated method stub
 
 	}
 

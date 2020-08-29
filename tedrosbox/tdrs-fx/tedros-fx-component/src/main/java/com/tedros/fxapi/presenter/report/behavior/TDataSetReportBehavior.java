@@ -51,5 +51,10 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewReportBaseBehavior<
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public String canInvalidate() {
+		return null;
+	}
 		
 }

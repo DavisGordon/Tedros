@@ -1,14 +1,9 @@
 package com.tedros.fxapi.presenter.behavior;
 
-import javafx.collections.ObservableList;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.control.ScrollPaneBuilder;
-import javafx.scene.layout.Region;
-
 import com.tedros.core.ITModule;
 import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.context.TedrosAppManager;
+import com.tedros.core.module.TListenerRepository;
 import com.tedros.core.presenter.ITPresenter;
 import com.tedros.core.presenter.view.ITView;
 import com.tedros.fxapi.annotation.form.TForm;
@@ -18,17 +13,91 @@ import com.tedros.fxapi.form.TFormBuilder;
 import com.tedros.fxapi.form.TReaderFormBuilder;
 import com.tedros.fxapi.presenter.model.TModelView;
 
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.WeakChangeListener;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.control.ScrollPaneBuilder;
+import javafx.scene.layout.Region;
+
 @SuppressWarnings("rawtypes")
 public abstract class TBehavior<M extends TModelView, P extends ITPresenter> implements ITBehavior<M, P> {
 	
 	private P presenter;
 	private ITModelForm<M> form;
-	private TModelView model;
+	private SimpleObjectProperty<TModelView> modelViewProperty;
 	private ObservableList<M> models;
 	private TViewMode tMode;
+	private TListenerRepository listenerRepository;
+	private SimpleBooleanProperty invalidateProperty;
+	
 	
 	protected TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
 	
+	public TBehavior() {
+		modelViewProperty = new SimpleObjectProperty<>();
+		invalidateProperty = new SimpleBooleanProperty(false);
+		listenerRepository = new TListenerRepository();
+		
+		ChangeListener<Boolean> invCL = (a0, a1, a2) -> {
+			if(a2) {
+				removeAllListenerFromModelView();
+				removeAllListenerFromModelViewList();
+				listenerRepository.clear();
+			}
+		};
+		listenerRepository.addListener("invalidateModelAndRepo", invCL);
+		invalidateProperty.addListener(new WeakChangeListener<>(invCL));
+		
+	}
+
+
+	/**
+	 * @return the invalidateProperty
+	 */
+	public Boolean getInvalidate() {
+		return invalidateProperty.getValue();
+	}
+
+
+	/**
+	 * @return the invalidateProperty
+	 */
+	public SimpleBooleanProperty invalidateProperty() {
+		return invalidateProperty;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.behavior.ITBehavior#invalidate()
+	 */
+	@Override
+	public boolean invalidate() {
+		this.invalidateProperty.setValue(true);
+		return true;
+	}
+
+	
+
+	/**
+	 * @param invalidateProperty the invalidateProperty to set
+	 */
+	public void setInvalidate(boolean v) {
+		this.invalidateProperty.setValue(v);
+	}
+
+
+	/**
+	 * @return the listenerRepository
+	 */
+	public TListenerRepository getListenerRepository() {
+		return listenerRepository;
+	}
+
+
 	@Override
 	public P getPresenter() {
 		return presenter;
@@ -96,22 +165,24 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 	
 	@SuppressWarnings("unchecked")
 	public <V extends ITView> V getView(){
-		return (V) this.presenter.getView();
+		return  this.presenter==null ? null : (V) this.presenter.getView();
 	}
 	
 	@Override
 	public  void setModelView(TModelView modelView) {
-		/*if(this.model!=null)
-			this.model.removeAllListener();*/
-		this.model = modelView;
+		this.modelViewProperty.setValue(modelView);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends TModelView> T getModelView() {
-		return (T) model;
+		return (T) modelViewProperty.getValue();
 	}
 
+	public SimpleObjectProperty<TModelView> modelViewProperty() {
+		return modelViewProperty;
+	}
+	
 	@Override
 	public void setModelViewList(ObservableList<M> models) {
 		this.models = models;
@@ -134,8 +205,8 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 	
 	@Override
 	public void removeAllListenerFromModelView() {
-		if(this.model!=null)
-			this.model.removeAllListener();
+		if(this.modelViewProperty.getValue()!=null)
+			this.modelViewProperty.getValue().removeAllListener();
 	}
 	
 	@Override
@@ -148,8 +219,8 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T removeListenerFromModelView(String listenerId) {
-		if(this.model!=null)
-			return (T) this.model.removeListener(listenerId);
+		if(this.modelViewProperty.getValue()!=null)
+			return (T) this.modelViewProperty.getValue().removeListener(listenerId);
 		return null;
 	}
 	

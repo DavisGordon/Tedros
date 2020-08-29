@@ -165,7 +165,12 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 		tituloEmail.setValue("[Covid Sem Fome] "+getModel().getTitulo());
 		conteudo.setValue("Olá #NOME#,<br> precisamos da sua ajuda para a campanha a ser realizada no dia #DATAACAO#, temos #QTDINSCRITOS# inscrito(s) e precisamos de #QTDMINVOL#, você pode se inscrever pelo #LINKPAINEL# em nosso site. <br><br> "
 		+getModel().getDescricao()+"<br><br>Equipe Covid Sem Fome<br>#LINKSITE#");
-		
+	
+	}
+	
+	@Override
+	public boolean isChanged() {
+		return false;
 	}
 	
 	@Override
@@ -205,29 +210,7 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 		return (getTitulo()!=null)? getTitulo().getValue() : "";	
 	}
 		
-	@Override
-	public int hashCode() {
-		return reflectionHashCode(this, null);
-	}
 	
-	@Override
-	public boolean equals(Object obj) {
-		
-		if(obj == null || !(obj instanceof MailingModelView))
-			return false;
-		
-		MailingModelView p = (MailingModelView) obj;
-		
-		if(getId()!=null && getId().getValue()!=null &&  p.getId()!=null && p.getId().getValue()!=null){
-			if(!(getId().getValue().equals(Long.valueOf(0)) && p.getId().getValue().equals(Long.valueOf(0))))
-				return getId().getValue().equals(p.getId().getValue());
-		}	
-		
-		if(getTitulo()!=null && getTitulo().getValue()!=null &&  p.getTitulo()!=null && p.getTitulo().getValue()!=null)
-			return getTitulo().getValue().equals(p.getTitulo().getValue());
-		
-		return false;
-	}
 
 	/**
 	 * @return the titulo
@@ -242,7 +225,6 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 	public void setTitulo(SimpleStringProperty titulo) {
 		this.titulo = titulo;
 	}
-
 
 	/**
 	 * @return the textoCadastro

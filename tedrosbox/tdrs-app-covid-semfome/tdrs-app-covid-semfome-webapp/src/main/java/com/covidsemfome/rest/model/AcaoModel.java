@@ -3,7 +3,10 @@
  */
 package com.covidsemfome.rest.model;
 
+import java.io.Serializable;
 import java.util.List;
+
+import javax.xml.bind.annotation.XmlRootElement;
 
 import com.covidsemfome.model.TipoAjuda;
 
@@ -11,7 +14,13 @@ import com.covidsemfome.model.TipoAjuda;
  * @author Davis Gordon
  *
  */
-public class AcaoModel {
+@XmlRootElement 
+public class AcaoModel implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 353649682659937359L;
 
 	private Long id;
 	

@@ -24,19 +24,19 @@
 	  	 <dependency>
 	  		<groupId>com.oracle</groupId>
 	  		<artifactId>jfxrt</artifactId>
-	  		<version>1.8.0_261</version>
+	  		<version>${javafx.version}</version>
 		</dependency>
 		
 		<dependency>
 	  		<groupId>org.apache.commons</groupId>
 	  		<artifactId>commons-lang3</artifactId>
-	  		<version>3.4</version>
+	  		<version>${commons.lang.version}</version>
 	  	</dependency>
 	  	
 	  	<dependency>
 	  		<groupId>org.apache.commons</groupId>
 	  		<artifactId>commons-compress</artifactId>
-	  		<version>1.14</version>
+	  		<version>1.20</version>
 	  	</dependency>
 	  	
 	  	<dependency>
@@ -71,9 +71,23 @@
 	    <dependency>
 	     	<groupId>junit</groupId>
 	      	<artifactId>junit</artifactId>
-	      	<version>3.8.1</version>
+	      	<version>${junit.version}</version>
 	      	<scope>test</scope>
 	    </dependency>
   	</dependencies>
+  	
+  	<build>
+    	<plugins>
+      		<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-compiler-plugin</artifactId>
+        		<version>3.3</version>
+        		<configuration>
+          			<source>${java.version}</source>
+          			<target>${java.version}</target>
+        		</configuration>
+      		</plugin>
+  		</plugins>
+ 	</build>
     
 </project>

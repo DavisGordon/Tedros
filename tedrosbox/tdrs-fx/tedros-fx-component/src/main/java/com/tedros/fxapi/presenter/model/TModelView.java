@@ -8,7 +8,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -56,6 +56,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
+import javafx.collections.WeakListChangeListener;
 
 
 /**
@@ -102,14 +103,14 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	private static final Logger 			LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
 	private static final String 			FORM = "form";
-	private static final String 			LASTHASHCODE = "lastHashCode";
+	/*private static final String 			LASTHASHCODE = "lastHashCode";
 	private static final String 			LOADEDPROPERTY = "loadedProperty";
 	private static final String 			COMPATIBLETYPES = "compatibleTypes";
 	private static final String 			LASTHASHCODEPROPERTY = "lastHashCodeProperty";
 	private static final String 			DETAILSOBSERVABLELIST = "detailsObservableList";
 	
 	private static final List<String> 		INTERNAL_FIELDS = Arrays.asList(LASTHASHCODE, LASTHASHCODEPROPERTY, FORM, LOADEDPROPERTY, COMPATIBLETYPES, DETAILSOBSERVABLELIST);
-	
+	*/
 	
 	protected	final static String 		SET = "set";
 	protected	final static String 		GET = "get";
@@ -126,6 +127,8 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	
 	private Map<String, Object> propertys = new HashMap<>();
 	
+	private String modelViewId;
+	
 	/**
 	 * <pre>
 	 * Bind the propertys of this model view with the fields of the given model. 
@@ -136,7 +139,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		LOGGER.setLevel(Level.FINEST);
 		
 		LOGGER.log(Level.FINEST, "Begin wrap the model " + model.getClass().getSimpleName() + " by the "+this.getClass().getSimpleName());
-		
+		this.modelViewId = UUID.randomUUID().toString(); 
 		this.model = model;
 		if(this.model==null)
 			return;
@@ -147,15 +150,17 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		loadFields();
 		
 		buildLastHashCode();
-		lastHashCodeProperty.addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> arg0,
-					Number arg1, Number arg2) {
-				changed = true;
-			}
-		});
+		buildLastHashCodeListener();
 	}
 	
+	public String getModelViewId() {
+		return modelViewId;
+	}
+
+	public void setModelViewId(String modelViewId) {
+		this.modelViewId = modelViewId;
+	}
+
 	/**
 	 * <pre>
 	 * Set the id value
@@ -237,40 +242,62 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	public void reload(M model) {
 		
 		LOGGER.log(Level.FINEST, "Reloading model " + model.getClass().getSimpleName() + " by the "+this.getClass().getSimpleName());
-		
+		//this.removeAllListener();
 		this.model = model;
 		loadFields();
 		buildLastHashCode();
 		loadedProperty().setValue(Calendar.getInstance().getTimeInMillis());
+		buildLastHashCodeListener();
 		changed = false;
+	}
+
+	private void buildLastHashCodeListener() {
+		ChangeListener<Number> listener =  getListenerRepository().getListener("lastHashCodeProperty");
+		if(listener==null){
+			listener = new ChangeListener<Number>() {
+				@Override
+				public void changed(ObservableValue<? extends Number> arg0,
+						Number arg1, Number arg2) {
+					changed = true;
+				}
+			};
+			addListener("lastHashCodeProperty", listener);
+		}else
+			lastHashCodeProperty.removeListener(listener);
+		
+		lastHashCodeProperty.addListener(listener);
 	}
 	
 	@Override
 	public int hashCode() {
-		return reflectionHashCode(this, null);
+		return reflectionHashCode(new String[]{});
 	}
 	/**
 	 * <pre>
-	 * To be called by hashCode methods.
+	 * To be called by hashCode methods. 
+	 * The hashCode are built over the ITModel object instead this TModelView object
+	 * the reason is because we need to know when the model is changed and we do this
+	 * observing the hashcode value. 
+	 * 
 	 * 
 	 *	Example:
 	 *	public class ExampleModelView extends TModelView&lt;ExampleModel&gt;{
 	 *		...
 	 *		<i>@</i>Override
 	 *		public int hashCode() {
-	 *			return reflectionHashCode(this, null);
+	 *			return reflectionHashCode("someFieldToBeExcluded");
 	 *		}
 	 *	}
 	 * 
 	 * </pre>
+	 * @param excludeFields
 	 * */
-	public int reflectionHashCode(Object obj , Collection<String> excludeFields){
-		if(excludeFields!=null && excludeFields.size()>0){
-			List<String> exclude = INTERNAL_FIELDS; 
-			exclude.addAll(excludeFields);
-			return HashCodeBuilder.reflectionHashCode(obj, exclude);
+	@Transient
+	public int reflectionHashCode(String... excludeFields){
+		if(excludeFields!=null && excludeFields.length>0){
+			return HashCodeBuilder.reflectionHashCode(model, excludeFields);
 		}else
-			return HashCodeBuilder.reflectionHashCode(obj, INTERNAL_FIELDS);
+			return HashCodeBuilder.reflectionHashCode(model);
 	}
 	  
 	/**
@@ -279,7 +306,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	 * </pre>
 	 * */
 	@Transient
-	public int lastHashCode() {
+	public int getLastHashCode() {
 		return lastHashCode;
 	}
 	/**
@@ -340,13 +367,9 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		
 		TModelView p = (TModelView) obj;
 		
-		if(getId()!=null && getId().getValue()!=null &&  p.getId()!=null && p.getId().getValue()!=null){
-			if(!(getId().getValue().equals(Long.valueOf(0)) && p.getId().getValue().equals(Long.valueOf(0))))
-				return getId().getValue().equals(p.getId().getValue());
+		if(getModelViewId()!=null && p.getModelViewId()!=null){
+			return getModelViewId().equals(p.getModelViewId());
 		}	
-		
-		if(getDisplayProperty()!=null && getDisplayProperty().getValue()!=null &&  p.getDisplayProperty()!=null && p.getDisplayProperty().getValue()!=null)
-			return getDisplayProperty().getValue().equals(p.getDisplayProperty().getValue());
 		
 		return false;
 	}
@@ -700,7 +723,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	@Transient
 	protected void buildLastHashCode() {
 		setLastHashCode(hashCode());
-		lastHashCodeProperty().setValue(lastHashCode());
+		lastHashCodeProperty().setValue(getLastHashCode());
 		this.model.toString();
 	}
 

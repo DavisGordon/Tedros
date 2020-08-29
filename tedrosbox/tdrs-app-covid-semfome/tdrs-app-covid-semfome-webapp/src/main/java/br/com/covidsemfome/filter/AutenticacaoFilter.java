@@ -5,6 +5,7 @@ package br.com.covidsemfome.filter;
 
 import java.io.IOException;
 
+import javax.ejb.EJB;
 import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 import javax.servlet.Filter;
@@ -24,7 +25,6 @@ import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 
 import br.com.covidsemfome.bean.CovidUserBean;
-import br.com.covidsemfome.ejb.service.ServiceLocator;
 
 /**
  * @author Davis Gordon
@@ -36,6 +36,9 @@ public class AutenticacaoFilter implements Filter {
 	@Inject @Any
 	private CovidUserBean covidUserBean;
 	
+	@EJB
+	private IAutUserController serv;
+	
 	private static String PARAM = "c";
 
 	/* (non-Javadoc)
@@ -43,7 +46,6 @@ public class AutenticacaoFilter implements Filter {
 	 */
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -55,15 +57,7 @@ public class AutenticacaoFilter implements Filter {
 			throws IOException, ServletException {
 		
 		HttpServletRequest httpRequest = (HttpServletRequest) req;
-		
-	    /*Enumeration<String> headerNames = httpRequest.getHeaderNames();
-
-	    if (headerNames != null) {
-	            while (headerNames.hasMoreElements()) {
-	            		String n = headerNames.nextElement();
-	                    System.out.println(n+": " + httpRequest.getHeader(n));
-	            }
-	    }*/
+	
 		String key = httpRequest.getParameter(PARAM);
 		if(key==null){
 			Cookie[] cks = httpRequest.getCookies();
@@ -85,10 +79,7 @@ public class AutenticacaoFilter implements Filter {
 		
 	    if(key!=null && !key.trim().equals("")){
 	    	
-		    ServiceLocator loc = ServiceLocator.getInstance();
-			
-			try {
-				IAutUserController serv = loc.lookup("IAutUserControllerRemote");
+	    	try {
 				TResult<Boolean> res = serv.validar(key.trim());
 				
 				if(res.getResult().equals(EnumResult.SUCESS)){
@@ -99,15 +90,11 @@ public class AutenticacaoFilter implements Filter {
 						covidUserBean.getUser().setId(u.getId());
 						covidUserBean.getUser().setPessoa(u.getPessoa());
 						
-						loc.close();
-						
 						chain.doFilter(req, resp);
 					}else{
-						loc.close();
 						((HttpServletResponse)resp).sendRedirect(httpRequest.getContextPath() + "/voluntario.html");
 					}
 				}else{
-					loc.close();
 					((HttpServletResponse)resp).sendRedirect(httpRequest.getContextPath() + "/500.html");
 				}
 			}catch(Exception e){
@@ -124,7 +111,6 @@ public class AutenticacaoFilter implements Filter {
 	 */
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
-		// TODO Auto-generated method stub
 
 	}
 

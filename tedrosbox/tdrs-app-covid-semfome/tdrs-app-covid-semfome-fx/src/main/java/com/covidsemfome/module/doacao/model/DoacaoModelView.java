@@ -218,28 +218,6 @@ public class DoacaoModelView extends TEntityModelView<Doacao>{
 			return (tipo+": "+getValor()!=null)? getValor().getValue().toString() : "";
 	}
 	
-	
-		
-	@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this, false);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		
-		if(obj == null || !(obj instanceof DoacaoModelView))
-			return false;
-		
-		DoacaoModelView p = (DoacaoModelView) obj;
-		
-		if(getId()!=null && getId().getValue()!=null &&  p.getId()!=null && p.getId().getValue()!=null){
-			if(!(getId().getValue().equals(Long.valueOf(0)) && p.getId().getValue().equals(Long.valueOf(0))))
-				return getId().getValue().equals(p.getId().getValue());
-		}	
-		return false;
-	}
-
 	@Override
 	public void setId(SimpleLongProperty id) {
 		this.id = id;

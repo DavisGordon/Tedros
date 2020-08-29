@@ -4,7 +4,9 @@ package com.tedros;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,11 +19,15 @@ import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.TModule;
 import com.tedros.core.context.Page;
 import com.tedros.core.context.Pages;
+import com.tedros.core.context.TModuleContext;
+import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.context.TedroxBoxHeaderButton;
 import com.tedros.core.control.TedrosBoxBreadcrumbBar;
 import com.tedros.core.control.TedrosBoxResizeBar;
 import com.tedros.core.logging.TLoggerManager;
+import com.tedros.fxapi.modal.TConfirmMessageBox;
+import com.tedros.fxapi.modal.TConfirmObjectMessageBox;
 import com.tedros.fxapi.modal.TModalPane;
 import com.tedros.fxapi.presenter.TPresenter;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
@@ -489,7 +495,15 @@ public class Main extends Application {
 			}
     		
 			@Override
-			public void tStop() {
+			public boolean tStop() {
+				TModuleContext context = TedrosAppManager.getInstance().getModuleContext(this);
+				boolean flag = true;
+				if(context!=null){
+					flag = context.stopModule();
+					context = null;
+				}
+				
+				return flag;
 			}			
 		};
 		
@@ -517,8 +531,43 @@ public class Main extends Application {
     	TedrosContext.setPageProperty(page, true, false, true);
     }
 
+    private void goToPage(Page page, boolean addHistory, boolean force, boolean swapViews) {
+    	if(page == null)
+            return;
+        if(!force && page == currentPage)
+            return;
+    	Node view = TedrosContext.getView();
+    	ITModule m = null;
+    	if(view != null && view instanceof ITModule)
+    		m = (ITModule) view;
+    	else if(view != null && view instanceof ScrollPane && ((ScrollPane)view).getContent() instanceof ITModule)
+    		m = (ITModule) ((ScrollPane)view).getContent();
+    	
+    	if(m!=null) {
+	    	String msg = m.canStop();
+	    	if(msg==null) {
+	    		callPage(page, addHistory, force, swapViews);
+	    	}else {
+	    		
+	    		ChangeListener<Number> chl = (a0, a1, a2) -> {
+	    			TedrosContext.hideModal();
+	    			if(a2.equals(1)) {
+	    				callPage(page, addHistory, force, swapViews);
+	    			}else {
+	    				menuTree.getSelectionModel().select(currentPage);
+	    			}
+	    		};
+	    		
+	    		TConfirmMessageBox confirm = new TConfirmMessageBox(msg);
+	    		confirm.gettConfirmProperty().addListener(chl);
+	    		TedrosContext.showModal(confirm);
+	    	}
+    	}else
+    		callPage(page, addHistory, force, swapViews);
+    }
+    
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	private void goToPage(Page page, boolean addHistory, boolean force, boolean swapViews){
+	private void callPage(Page page, boolean addHistory, boolean force, boolean swapViews){
         if(page == null)
             return;
         if(!force && page == currentPage)
@@ -529,6 +578,7 @@ public class Main extends Application {
             if(view == null)
                 view = new Region();
             if(force || view != TedrosContext.getView()){
+            	boolean change = true;
                 Iterator i = pageArea.getChildren().iterator();
                 do{
                     if(!i.hasNext())
@@ -536,9 +586,18 @@ public class Main extends Application {
                     Node child = (Node)i.next();
                     if(child instanceof ScrollPane){
                     	if(((ScrollPane) child).getContent() instanceof TModule)
-                    		((ITModule)((ScrollPane) child).getContent()).tStop();
+                    		if(!((ITModule)((ScrollPane) child).getContent()).tStop()){
+                    			change = false;
+                    			break;
+                    		}
                     }
                 } while(true);
+                
+                if(!change) {
+                	changingPage = false;
+                	return;
+                }
+                	
                 Node content;
                 if(view instanceof ITModule){
                 	

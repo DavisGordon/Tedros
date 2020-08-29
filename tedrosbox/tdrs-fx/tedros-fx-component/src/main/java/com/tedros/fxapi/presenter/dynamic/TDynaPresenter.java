@@ -231,8 +231,19 @@ public class TDynaPresenter<M extends TModelView>	extends TPresenter<TDynaView<M
 	}
 
 	@Override
-	public void stop() {
-		behavior.removeAllListenerFromModelView();
-		behavior.removeAllListenerFromModelViewList();
+	public boolean invalidate() {
+		if(behavior.invalidate()) {
+			if(modelView!=null) {
+				modelView.removeAllListener();
+				modelView = null;
+			}
+			return true;
+		}else
+			return false;
+	}
+
+	@Override
+	public String canInvalidate() {
+		return behavior.canInvalidate();
 	}
 }

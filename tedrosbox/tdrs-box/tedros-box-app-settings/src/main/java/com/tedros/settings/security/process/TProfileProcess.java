@@ -17,7 +17,7 @@ import com.tedros.fxapi.process.TEntityProcess;
 public class TProfileProcess extends TEntityProcess<TProfile> {
 
 	public TProfileProcess() throws TProcessException {
-		super(TProfile.class, "TProfileControllerRemote", true);
+		super(TProfile.class, "TProfileControllerRemote");
 	}
 
 	/* (non-Javadoc)

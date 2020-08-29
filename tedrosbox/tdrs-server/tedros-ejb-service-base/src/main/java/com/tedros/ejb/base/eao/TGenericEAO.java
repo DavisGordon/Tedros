@@ -10,6 +10,7 @@ import javax.persistence.PersistenceContextType;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 
 import org.eclipse.persistence.jpa.JpaEntityManager;
@@ -31,6 +32,11 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 	protected void init(){
 		getEntityManager().setProperty("javax.persistence.cache.retrieveMode", "BYPASS");
 		//getEntityManager().setProperty("javax.persistence.cache.storeMode", "BYPASS");
+	}
+	
+	@SuppressWarnings("unchecked")
+	public E findById(E entity)throws Exception{
+		return (E) em.find(entity.getClass(), entity.getId());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -130,6 +136,22 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 		CriteriaQuery<E> cq = (CriteriaQuery<E>) cb.createQuery(entity);
 		Root<E> root = (Root<E>) cq.from(entity);
 		cq.select(root);
+		return em.createQuery(cq).getResultList();
+	}
+	/**
+	 * Retorna uma lista com todas as entitys persistidas
+	 * */
+	@SuppressWarnings("unchecked")
+	public List<E> listAll(Class<? extends ITEntity> entity, boolean asc )throws Exception{
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<E> cq = (CriteriaQuery<E>) cb.createQuery(entity);
+		Root<E> root = (Root<E>) cq.from(entity);
+		cq.select(root);
+		if(asc)
+			cq.orderBy(cb.asc(root.get("id")));
+		else
+			cq.orderBy(cb.desc(root.get("id")));
+		
 		return em.createQuery(cq).getResultList();
 	}
 	/**

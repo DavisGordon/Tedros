@@ -17,13 +17,15 @@ public interface ITModule {
 	/**
 	 * Executed when the user swap to other module
 	 * */
-	public void tStop();
+	public boolean tStop();
 	
 	/**
 	 * Show the view inside the module
 	 * */
 	@SuppressWarnings("rawtypes")
 	public void tShowView(ITView view);
+
+	public String canStop();
 	
 
 }

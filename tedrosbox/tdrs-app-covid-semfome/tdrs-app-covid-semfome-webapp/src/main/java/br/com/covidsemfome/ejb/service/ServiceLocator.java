@@ -21,7 +21,7 @@ public class ServiceLocator {
 	
 	private final Properties p ;
 	
-	private String url = "http://{0}:8081/tomee/ejb";
+	private String url = "http://{0}:8080/tomee/ejb";
 	private String ip = "127.0.0.1";
 	
 	private ServiceLocator(){

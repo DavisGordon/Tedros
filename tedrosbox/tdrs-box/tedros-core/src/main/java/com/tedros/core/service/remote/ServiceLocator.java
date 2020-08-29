@@ -21,24 +21,24 @@ public class ServiceLocator {
 	
 	private InitialContext ctx;
 	
-	private static final Properties p;
-	private static final Properties prop;
+	private static final Properties P;
+	private static final Properties PROP;
 	
-	private static String url = "http://{0}:8080/tomee/ejb";
-	private static String ip = "127.0.0.1";
+	private static String URL = "http://{0}:8080/tomee/ejb";
+	private static String IP = "127.0.0.1";
 	
 	static{
-		prop = TResourceUtil.getPropertiesFromConfFolder("remote-config.properties");
-		if(prop!=null){
-			url = prop.getProperty("url");
-			ip = prop.getProperty("server_ip");
+		PROP = TResourceUtil.getPropertiesFromConfFolder("remote-config.properties");
+		if(PROP!=null){
+			URL = PROP.getProperty("url");
+			IP = PROP.getProperty("server_ip");
 		}
 		
-		String serviceURL = MessageFormat.format(url, ip);
+		String serviceURL = MessageFormat.format(URL, IP);
 		
-		p = new Properties();
-		p.put("java.naming.factory.initial", "org.apache.openejb.client.RemoteInitialContextFactory");
-		p.put("java.naming.provider.url", serviceURL); 
+		P = new Properties();
+		P.put("java.naming.factory.initial", "org.apache.openejb.client.RemoteInitialContextFactory");
+		P.put("java.naming.provider.url", serviceURL); 
 	}
 	
 	private ServiceLocator(){
@@ -52,7 +52,7 @@ public class ServiceLocator {
 	
 	@SuppressWarnings("unchecked")
 	public <E> E lookup(String jndi) throws NamingException{
-		ctx = new InitialContext(p);
+		ctx = new InitialContext(P);
 		return (E) ctx.lookup(jndi);
 	}
 	

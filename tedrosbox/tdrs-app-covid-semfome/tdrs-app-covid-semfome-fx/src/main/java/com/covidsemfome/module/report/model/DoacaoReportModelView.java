@@ -2,8 +2,6 @@ package com.covidsemfome.module.report.model;
 
 import java.util.Date;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.covidsemfome.model.TipoAjuda;
 import com.covidsemfome.module.report.process.DoacaoReportProcess;
 import com.covidsemfome.module.voluntario.model.TipoAjudaModelView;
@@ -138,27 +136,6 @@ public class DoacaoReportModelView extends TModelView<DoacaoReportModel>{
 	public DoacaoReportModelView(DoacaoReportModel entidade) {
 		super(entidade);
 	}
-	
-	@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this, false);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		
-		if(obj == null || !(obj instanceof DoacaoReportModelView))
-			return false;
-		
-		DoacaoReportModelView p = (DoacaoReportModelView) obj;
-		
-		if(getId()!=null && getId().getValue()!=null &&  p.getId()!=null && p.getId().getValue()!=null){
-			if(!(getId().getValue().equals(Long.valueOf(0)) && p.getId().getValue().equals(Long.valueOf(0))))
-				return getId().getValue().equals(p.getId().getValue());
-		}	
-		return false;
-	}
-
 	
 	
 	@Override

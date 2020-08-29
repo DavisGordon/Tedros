@@ -3,9 +3,6 @@
  */
 package com.tedros.settings.security.model;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.core.security.model.TProfile;
@@ -228,15 +225,7 @@ public class TUserModelView extends TEntityModelView<TUser> {
 		this.profilesText = profilesText;
 	}
 	
-	@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this, false);
-	}
 	
-	@Override
-	public boolean equals(Object obj) {
-		return EqualsBuilder.reflectionEquals(this, obj, false);
-	}
 
 	public SimpleStringProperty getLastPassword() {
 		return lastPassword;
