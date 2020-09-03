@@ -9,14 +9,13 @@ import com.tedros.fxapi.annotation.view.TEntityCrudViewWithListView;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
+import com.tedros.fxapi.presenter.paginator.TPaginator;
 
 import javafx.scene.control.Label;
-import javafx.scene.control.LabelBuilder;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.VBoxBuilder;
 
 @SuppressWarnings("rawtypes")
 public class TMainCrudViewWithListViewDecorator<M extends TEntityModelView> 
@@ -25,13 +24,13 @@ extends TDynaViewCrudBaseDecorator<M> {
 	private VBox 		tListViewLayout;
     private Label 		tListViewTitle;
     private ListView<M> tListView;
+    private TPaginator tPaginator;
     
     private double hideWidth = 4;
     private double listViewMaxWidth = 250;
     private double listViewMinWidth = 250;
   
-    @SuppressWarnings("unchecked")
-	public void decorate() {
+    public void decorate() {
 		
 		// get the model view annotation array 
 		final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
@@ -47,6 +46,8 @@ extends TDynaViewCrudBaseDecorator<M> {
 		if(tAnnotation!=null){
 			listViewMaxWidth = tAnnotation.listViewMaxWidth();
 			listViewMinWidth = tAnnotation.listViewMinWidth();
+			if(tAnnotation.paginator().show())
+				tPaginator = new TPaginator(tAnnotation.paginator().showSearchField());
 		}
 		
 		final TForm tForm = this.getPresenter().getFormAnnotation();
@@ -80,17 +81,26 @@ extends TDynaViewCrudBaseDecorator<M> {
 		tListView.setMinWidth(listViewMinWidth);
 		
 		// build the label for the list view
-		tListViewTitle = LabelBuilder.create()
-				.text(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_listTitle : tPresenter.decorator().listTitle()))
-				.id("t-title-label")
-				.maxWidth(listViewMaxWidth)
-				.build();
+		tListViewTitle = new Label(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_listTitle : tPresenter.decorator().listTitle()));
+		tListViewTitle.setId("t-title-label");
+		tListViewTitle.maxWidth(listViewMaxWidth);
+		
+		
 		
 		// build the list view box
-		tListViewLayout = VBoxBuilder.create()
-				.children(Arrays.asList(tListViewTitle, tListView))
-				.maxWidth(listViewMaxWidth+2)
-				.build();
+		tListViewLayout = new VBox();
+		tListViewLayout.maxWidth(listViewMaxWidth+2);
+		
+		if(tPaginator!=null) {
+			tPaginator.setMaxWidth(listViewMaxWidth);
+			tPaginator.setMinWidth(listViewMinWidth);
+			tListViewLayout.getChildren().addAll(Arrays.asList(tListViewTitle, tListView, tPaginator));
+			
+			//VBox.setVgrow(tPaginator, Priority.ALWAYS);
+		}else
+			tListViewLayout.getChildren().addAll(Arrays.asList(tListViewTitle, tListView));
+
+		
 		
 		VBox.setVgrow(tListView, Priority.ALWAYS);
 		// add the list view box at the left 
@@ -107,6 +117,8 @@ extends TDynaViewCrudBaseDecorator<M> {
 		tListView.setMaxWidth(hideWidth);
 		pane.setVisible(false);
 		tListView.layout();
+		if(tPaginator!=null)
+			tListViewLayout.getChildren().remove(tPaginator);
 	}
 	
 	public void showListContent() {
@@ -117,6 +129,10 @@ extends TDynaViewCrudBaseDecorator<M> {
 		tListView.setMaxWidth(listViewMaxWidth);
 		pane.setVisible(true);
 		tListView.layout();
+		if(tPaginator!=null)
+			tListViewLayout.getChildren().add(tPaginator);
+		
+		
 	}
 	
 	public VBox gettListViewLayout() {
@@ -157,6 +173,20 @@ extends TDynaViewCrudBaseDecorator<M> {
 
 	public void setListViewMinWidth(double listViewMinWidth) {
 		this.listViewMinWidth = listViewMinWidth;
+	}
+
+	/**
+	 * @return the tPaginator
+	 */
+	public TPaginator gettPaginator() {
+		return tPaginator;
+	}
+
+	/**
+	 * @param tPaginator the tPaginator to set
+	 */
+	public void settPaginator(TPaginator tPaginator) {
+		this.tPaginator = tPaginator;
 	}
 
 }

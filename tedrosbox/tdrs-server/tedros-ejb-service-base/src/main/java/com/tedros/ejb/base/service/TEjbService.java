@@ -52,6 +52,16 @@ public abstract class TEjbService<E extends ITEntity> implements ITEjbService<E>
 	public Long countAll(Class<? extends ITEntity> entidade) throws Exception {
 		return getBussinesObject().countAll(entidade);
 	}
+
+	@Override
+	public List<E> findAll(E entity, int firstResult, int maxResult) throws Exception {
+		return getBussinesObject().findAll(entity, firstResult, maxResult);
+	}
+
+	@Override
+	public int countFindAll(E entity) throws Exception {
+		return getBussinesObject().countFindAll(entity);
+	}
 	
 	
 	

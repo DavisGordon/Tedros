@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
@@ -29,6 +30,8 @@ public @interface TEntityCrudViewWithListView {
 	
 	public double listViewMaxWidth() default 250;
 	public double listViewMinWidth() default 250;
+	
+	public TPaginator paginator() default @TPaginator(entityClass = ITEntity.class, serviceName = "");
 	
 	public TPresenter presenter() default @TPresenter(	behavior = @TBehavior(type = TMainCrudViewWithListViewBehavior.class), 
 														decorator = @TDecorator(type = TMainCrudViewWithListViewDecorator.class), 
