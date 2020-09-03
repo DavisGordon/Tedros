@@ -5,7 +5,7 @@ import java.util.List;
 import com.tedros.ejb.base.eao.ITGenericEAO;
 import com.tedros.ejb.base.entity.ITEntity;
 
-public abstract class TGenericBO<E extends ITEntity> implements ITGenericBO<E> {
+public abstract  class TGenericBO<E extends ITEntity> implements ITGenericBO<E> {
 
 	public abstract ITGenericEAO<E> getEao();
 	
@@ -63,6 +63,16 @@ public abstract class TGenericBO<E extends ITEntity> implements ITGenericBO<E> {
 	 * */
 	public Long countAll(Class<? extends ITEntity> entidade)throws Exception{
 		return getEao().countAll(entidade);
+	}
+
+	@Override
+	public List<E> findAll(E entity, int firstResult, int maxResult) throws Exception {
+		return getEao().findAll(entity, firstResult, maxResult);
+	}
+
+	@Override
+	public int countFindAll(E entity) throws Exception {
+		return getEao().countFindAll(entity);
 	}
 	
 	

@@ -44,10 +44,11 @@ public interface ITEjbController<E extends ITEntity> {
 	 * */
 	@SuppressWarnings("rawtypes")
 	public TResult pageAll(Class<? extends ITEntity> entidade, int firstResult, int maxResult);
+	
 	/**
-	 * Retorna a quantidade de registros cadastrados
+	 * Retorna uma pesquisa paginada
 	 * */
 	@SuppressWarnings("rawtypes")
-	public TResult countAll(Class<? extends ITEntity> entidade);
-	
+	public TResult findAll(E entity, int firstResult, int maxResult)throws Exception;
+
 }

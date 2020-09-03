@@ -44,6 +44,18 @@ public interface ITGenericEAO<E extends ITEntity> {
 	 * Retorna uma lista paginada
 	 * */	
 	public List<E> pageAll(Class<? extends ITEntity> entidade, int firstResult, int maxResult)throws Exception;
+	
+	/**
+	 * Retorna uma pesquisa paginada
+	 * */
+	public List<E> findAll(E entity, int firstResult, int maxResult)throws Exception;
+
+	
+	/**
+	 * Retorna a quantidade de registros encontrados
+	 * */
+	public int countFindAll(E entity)throws Exception;
+	
 	/**
 	 * Retorna a quantidade de registros cadastrados
 	 * */

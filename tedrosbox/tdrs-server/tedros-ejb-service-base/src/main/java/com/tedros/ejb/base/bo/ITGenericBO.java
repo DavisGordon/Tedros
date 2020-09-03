@@ -44,6 +44,17 @@ public interface ITGenericBO<E extends ITEntity> {
 	 * */
 	public List<E> pageAll(Class<? extends ITEntity> entidade, int firstResult, int maxResult)throws Exception;
 	/**
+	 * Retorna uma pesquisa paginada
+	 * */
+	public List<E> findAll(E entity, int firstResult, int maxResult)throws Exception;
+
+	/**
+	 * Retorna a quantidade de registros encontrados
+	 * */
+	public int countFindAll(E entity)throws Exception;
+	
+	
+	/**
 	 * Retorna a quantidade de registros cadastrados
 	 * */
 	public Long countAll(Class<? extends ITEntity> entidade)throws Exception;

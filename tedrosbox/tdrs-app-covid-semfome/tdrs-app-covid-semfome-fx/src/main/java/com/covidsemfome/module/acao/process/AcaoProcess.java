@@ -6,6 +6,7 @@
  */
 package com.covidsemfome.module.acao.process;
 
+import java.util.Date;
 import java.util.List;
 
 import com.covidsemfome.model.Acao;
@@ -23,6 +24,16 @@ public class AcaoProcess extends TEntityProcess<Acao> {
 
 	public AcaoProcess() throws TProcessException {
 		super(Acao.class, "IAcaoControllerRemote");
+		
+		/*for(int i=0; i<=500; i++) {
+			Acao a = new Acao();
+			a.setTitulo("Acao teste "+i);
+			a.setData(new Date());
+			a.setDescricao("precisamos da sua ajuda para a campanha a ser realizada no dia 13/08/2020 às 00:00, temos 3 inscrito(s) e precisamos de 4");
+			a.setStatus("Agendada");
+			super.save(a);
+		}*/
+		
 	}
 
 

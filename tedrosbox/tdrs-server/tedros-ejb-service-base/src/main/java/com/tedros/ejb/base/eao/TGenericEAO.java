@@ -168,6 +168,37 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 		qry.setMaxResults(maxResult);
 		return qry.getResultList();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<E> findAll(E entity, int firstResult, int maxResult)throws Exception{
+		
+		ReadAllQuery query = new ReadAllQuery(entity.getClass());
+		query.setExampleObject(entity);
+		// Query by example policy section adds like and greaterThan 
+		QueryByExamplePolicy policy = new QueryByExamplePolicy();
+		policy.addSpecialOperation(String.class, "like");
+		query.setQueryByExamplePolicy(policy);
+		query.setFirstResult(firstResult);
+		query.setMaxRows(maxResult);
+		
+		return (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public int countFindAll(E entity)throws Exception{
+		
+		ReadAllQuery query = new ReadAllQuery(entity.getClass());
+		query.setExampleObject(entity);
+		// Query by example policy section adds like and greaterThan 
+		QueryByExamplePolicy policy = new QueryByExamplePolicy();
+		policy.addSpecialOperation(String.class, "like");
+		query.setQueryByExamplePolicy(policy);
+		
+		List<E> lst = (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
+		
+		return lst.size();
+	}
+	
 	/**
 	 * Retorna a quantidade de registros cadastrados
 	 * */

@@ -1,6 +1,8 @@
 package com.tedros.ejb.base.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -84,26 +86,40 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 	}
 
 	@Override
-	public TResult<List<E>> pageAll(Class<? extends ITEntity> entidade, int firstResult, int maxResult) {
+	public TResult<Map<String, Object>> pageAll(Class<? extends ITEntity> entidade, int firstResult, int maxResult) {
 		try{
+			Long count  = getService().countAll(entidade);
+			
 			List<E> list = getService().pageAll(entidade, firstResult, maxResult);
-			return new TResult<List<E>>(EnumResult.SUCESS, list);
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("total", count);
+			map.put("list", list);
+			
+			return new TResult<>(EnumResult.SUCESS, map);
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			return new TResult<List<E>>(EnumResult.ERROR, e.getMessage());
+			return new TResult<>(EnumResult.ERROR, e.getMessage());
 		}
 	}
 
 	@Override
-	public TResult<Long> countAll(Class<? extends ITEntity> entidade) {
+	public TResult<Map<String, Object>> findAll(E entidade, int firstResult, int maxResult) {
 		try{
-			Long count  = getService().countAll(entidade);
-			return new TResult<Long>(EnumResult.SUCESS, count);
+			Long count  = (long) getService().countFindAll(entidade);
+			
+			List<E> list = getService().findAll(entidade, firstResult, maxResult);
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("total", count);
+			map.put("list", list);
+			
+			return new TResult<>(EnumResult.SUCESS, map);
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			return new TResult<Long>(EnumResult.ERROR, e.getMessage());
+			return new TResult<>(EnumResult.ERROR, e.getMessage());
 		}
 	}
 	
