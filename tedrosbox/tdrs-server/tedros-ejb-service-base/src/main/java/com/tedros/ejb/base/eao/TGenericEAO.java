@@ -176,10 +176,10 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 		query.setExampleObject(entity);
 		// Query by example policy section adds like and greaterThan 
 		QueryByExamplePolicy policy = new QueryByExamplePolicy();
-		policy.addSpecialOperation(String.class, "like");
+		policy.addSpecialOperation(String.class, "containsAnyKeyWords");
 		query.setQueryByExamplePolicy(policy);
 		query.setFirstResult(firstResult);
-		query.setMaxRows(maxResult);
+		query.setMaxRows(maxResult+firstResult);
 		
 		return (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
 	}
@@ -191,7 +191,7 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 		query.setExampleObject(entity);
 		// Query by example policy section adds like and greaterThan 
 		QueryByExamplePolicy policy = new QueryByExamplePolicy();
-		policy.addSpecialOperation(String.class, "like");
+		policy.addSpecialOperation(String.class, "containsAnyKeyWords");
 		query.setQueryByExamplePolicy(policy);
 		
 		List<E> lst = (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
