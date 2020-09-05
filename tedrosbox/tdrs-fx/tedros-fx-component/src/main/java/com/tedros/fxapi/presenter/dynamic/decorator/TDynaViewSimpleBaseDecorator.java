@@ -95,7 +95,8 @@ implements ITDecorator<TDynaPresenter<M>>{
 	 * */
 	public void addItemInTLeftContent(Node item) {		 
 		final ITDynaView<M> view = getView();
-		view.gettLeftContent().getChildren().add(item);
+		if(!view.gettLeftContent().getChildren().contains(item))
+			view.gettLeftContent().getChildren().add(item);
 	}
 
 	/**

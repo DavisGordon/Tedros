@@ -1,6 +1,8 @@
 package com.tedros.fxapi.presenter.entity.behavior;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -13,6 +15,7 @@ import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.view.TEntityCrudViewWithListView;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.control.action.TPresenterAction;
+import com.tedros.fxapi.exception.TException;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.modal.TMessageBox;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
@@ -40,6 +43,7 @@ public class TMainCrudViewWithListViewBehavior<M extends TEntityModelView, E ext
 extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M, E> {
 	
 	private String paginatorServiceName;
+	private String searchFieldName;
 	
 	private TMainCrudViewWithListViewDecorator<M> decorator;
 		
@@ -84,6 +88,9 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 			if(tAnnotation!=null){
 				tPagAnn = tAnnotation.paginator();
 				this.paginatorServiceName = tPagAnn.serviceName();
+				this.searchFieldName = tPagAnn.searchFieldName();
+				if(tPagAnn.showSearchField() && StringUtils.isBlank(this.searchFieldName))
+					throw new TException("The property searchFieldName in TPaginator annotation is required when showSearhField is true.");
 			}
 			
 			if(tPagAnn!=null && tPagAnn.show()) {
@@ -98,8 +105,10 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 						
 							Map<String, Object> result =  resultados.getValue();
 							ObservableList<M> models = getModels();
-							if(models==null)
+							if(models==null) {
 								models = FXCollections.observableArrayList();
+								setModelViewList(models);
+							}
 							
 							for(E e : (List<E>) result.get("list")){
 								try {
@@ -115,8 +124,9 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 									e1.printStackTrace();
 								}
 							}
-							setModelViewList(models);
-							loadListView((long)result.get("total"));
+							
+							loadListView();
+							processPagination((long)result.get("total"));
 							getListenerRepository().removeListener("processloadlistviewCL");
 						}
 					}
@@ -143,8 +153,10 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 								TResult result = (TResult<?>) resultados.get(0);
 								if(result.getValue()!=null && result.getValue() instanceof List<?>){
 									ObservableList<M> models = getModels();
-									if(models==null)
+									if(models==null) {
 										models = FXCollections.observableArrayList();
+										setModelViewList(models);
+									}
 									for(E e : (List<E>) result.getValue()){
 										try {
 											M model = (M) getModelViewClass().getConstructor(getEntityClass()).newInstance(e);
@@ -159,11 +171,16 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 											e1.printStackTrace();
 										}
 									}
+								}
+							}else{
+								ObservableList<M> models = getModels();
+								if(models==null) {
+									models = FXCollections.observableArrayList();
 									setModelViewList(models);
-									loadListView(null);
-									getListenerRepository().removeListener("processloadlistviewCL");
 								}
 							}
+							loadListView();
+							getListenerRepository().removeListener("processloadlistviewCL");
 						}
 					};
 					
@@ -174,7 +191,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 					process.startProcess();
 				}else{
 					System.err.println("\nWARNING: Cannot create a process for the "+getModelViewClass().getSimpleName()+", check the @TCrudForm(processClass,serviceName) properties");
-					loadListView(null);
+					loadListView();
 				}
 			
 			} 
@@ -186,9 +203,12 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		
 	}
 	
+	private void processPagination(Long totalRows) {
+		this.decorator.gettPaginator().reload(totalRows);
+	}
 	
 	@SuppressWarnings("unchecked")
-	private void loadListView(Long totalRows) {
+	private void loadListView() {
 		final ObservableList<M> models = getModels();
 		final ListView<M> listView = this.decorator.gettListView();
 		listView.setItems((ObservableList<M>) (models==null ? FXCollections.observableArrayList() : models));
@@ -200,23 +220,19 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		
 		if(this.decorator.gettPaginator()!=null) {
 			ChangeListener<TPagination> chl = (a0, a1, a2) -> {
-				/*TMessageBox tMessageBox = new TMessageBox();
-				tMessageBox.tAddMessage(String.valueOf(a2));
-				getView().tShowModal(tMessageBox, true);*/
 				try {
 					paginate(a2);
-				} catch (TProcessException e) {
+				} catch (Throwable e) {
 					e.printStackTrace();
 				}
 			};
-		
-			this.decorator.gettPaginator().reload(totalRows);
 			this.decorator.gettPaginator().paginationProperty().addListener(chl);
 		}
 		
 	}
 	
-	private void paginate(TPagination pagination) throws TProcessException {
+	@SuppressWarnings("unchecked")
+	private void paginate(TPagination pagination) throws TException {
 		final String id = UUID.randomUUID().toString();
 		TPaginationProcess<E> process = new TPaginationProcess<E>(super.getEntityClass(), this.paginatorServiceName) {};
 		ChangeListener<State> prcl = (arg0, arg1, arg2) -> {
@@ -229,10 +245,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 				
 					Map<String, Object> result =  resultados.getValue();
 					ObservableList<M> models = getModels();
-					if(models==null)
-						models = FXCollections.observableArrayList();
-					else
-						models.clear();
+					models.clear();
 					
 					for(E e : (List<E>) result.get("list")){
 						try {
@@ -248,17 +261,43 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 							e1.printStackTrace();
 						}
 					}
-					setModelViewList(models);
-					loadListView((long)result.get("total"));
+					processPagination((long)result.get("total"));
 					getListenerRepository().removeListener(id);
 				}
 			}
 		};
 		
 		super.getListenerRepository().addListener(id, prcl);
-		if(StringUtils.isNotBlank(pagination.getSearch()))
-			process.findAll(null, pagination);
-		else
+		if(StringUtils.isNotBlank(pagination.getSearch())) {
+			
+			try {
+				Class target = super.getEntityClass();
+				E entity = super.getEntityClass().newInstance();
+				Method setter = null;
+				do {
+					try {
+						Field f = super.getEntityClass().getDeclaredField(this.searchFieldName);
+						setter = target.getMethod("set"+StringUtils.capitalize(searchFieldName), f.getType());
+						break;
+					} catch (NoSuchFieldException | SecurityException e) {
+						target = target.getSuperclass();
+					} catch (NoSuchMethodException e) {
+						break;
+					}
+				}while(target != Object.class);
+				
+				if(setter==null)
+					throw new TException("The setter method was not found for the field "+this.searchFieldName+" declared in TPaginator annotation.");
+				
+				setter.invoke(entity, pagination.getSearch().toUpperCase());
+				process.findAll(entity, pagination);
+				
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				throw new TException("An error occurred while trying paginate ", e);
+			}
+			
+			
+		}else
 			process.pageAll(pagination);
 		
 		process.stateProperty().addListener(new WeakChangeListener(prcl));
@@ -310,8 +349,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	}
 		
 	public void colapseAction() {
-		final StackPane pane = (StackPane) ((TDynaView) getView()).gettContentLayout().getLeft();
-		if(!pane.isVisible())
+		if(!this.decorator.isListContentVisible())
 			showListView();
 		else
 			hideListView();
@@ -332,6 +370,11 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		return false;
 	}
 	
-	
+	@Override
+	public boolean invalidate() {
+		if(this.decorator.gettPaginator()!=null)
+			this.decorator.gettPaginator().invalidate();
+		return super.invalidate();
+	}
 		
 }

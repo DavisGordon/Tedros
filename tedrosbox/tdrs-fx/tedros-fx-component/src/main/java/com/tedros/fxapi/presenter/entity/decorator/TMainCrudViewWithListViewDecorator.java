@@ -7,12 +7,15 @@ import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.view.TEntityCrudViewWithListView;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
+import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.presenter.paginator.TPaginator;
 
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -24,6 +27,8 @@ extends TDynaViewCrudBaseDecorator<M> {
 	private VBox 		tListViewLayout;
     private Label 		tListViewTitle;
     private ListView<M> tListView;
+    
+    private Accordion tPaginatorAccordion;
     private TPaginator tPaginator;
     
     private double hideWidth = 4;
@@ -92,9 +97,15 @@ extends TDynaViewCrudBaseDecorator<M> {
 		tListViewLayout.maxWidth(listViewMaxWidth+2);
 		
 		if(tPaginator!=null) {
+			
+			tPaginatorAccordion = new Accordion();
+			tPaginatorAccordion.autosize();
+			
+			TitledPane tp = new TitledPane(iEngine.getString("#{tedros.fxapi.label.pagination}"), tPaginator);
+			tPaginatorAccordion.getPanes().add(tp);
 			tPaginator.setMaxWidth(listViewMaxWidth);
 			tPaginator.setMinWidth(listViewMinWidth);
-			tListViewLayout.getChildren().addAll(Arrays.asList(tListViewTitle, tListView, tPaginator));
+			tListViewLayout.getChildren().addAll(Arrays.asList(tListViewTitle, tListView, tPaginatorAccordion));
 			
 			//VBox.setVgrow(tPaginator, Priority.ALWAYS);
 		}else
@@ -109,29 +120,18 @@ extends TDynaViewCrudBaseDecorator<M> {
 		
 	}
 	
+    public boolean isListContentVisible() {
+    	final ITDynaView<M> view = getView();
+		return view.gettLeftContent().getChildren().contains(tListViewLayout);
+    }
+    
 	public void hideListContent() {
-		final StackPane pane = (StackPane) ((TDynaView) getView()).gettContentLayout().getLeft();
-		((TDynaView) getView()).gettContentLayout().managedProperty().bind(pane.visibleProperty());
-		tListViewTitle.setMaxWidth(hideWidth);
-		tListView.setMinWidth(hideWidth);
-		tListView.setMaxWidth(hideWidth);
-		pane.setVisible(false);
-		tListView.layout();
-		if(tPaginator!=null)
-			tListViewLayout.getChildren().remove(tPaginator);
+		final ITDynaView<M> view = getView();
+		view.gettLeftContent().getChildren().remove(tListViewLayout);
 	}
 	
 	public void showListContent() {
-		final StackPane pane = (StackPane) ((TDynaView) getView()).gettContentLayout().getLeft();
-		((TDynaView) getView()).gettContentLayout().managedProperty().bind(pane.visibleProperty());
-		tListViewTitle.setMaxWidth(listViewMaxWidth);
-		tListView.setMinWidth(listViewMinWidth);
-		tListView.setMaxWidth(listViewMaxWidth);
-		pane.setVisible(true);
-		tListView.layout();
-		if(tPaginator!=null)
-			tListViewLayout.getChildren().add(tPaginator);
-		
+		addItemInTLeftContent(tListViewLayout);
 		
 	}
 	
@@ -187,6 +187,13 @@ extends TDynaViewCrudBaseDecorator<M> {
 	 */
 	public void settPaginator(TPaginator tPaginator) {
 		this.tPaginator = tPaginator;
+	}
+
+	/**
+	 * @return the tPaginatorAccordion
+	 */
+	public Accordion gettPaginatorAccordion() {
+		return tPaginatorAccordion;
 	}
 
 }
