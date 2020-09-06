@@ -44,8 +44,8 @@ public abstract class TEjbService<E extends ITEntity> implements ITEjbService<E>
 	}
 	
 	@Override
-	public List<E> pageAll(Class<? extends ITEntity> entidade, int firstResult, int maxResult) throws Exception {
-		return getBussinesObject().pageAll(entidade, firstResult, maxResult);
+	public List<E> pageAll(E entidade, int firstResult, int maxResult, boolean orderByAsc) throws Exception {
+		return getBussinesObject().pageAll(entidade, firstResult, maxResult, orderByAsc);
 	}
 
 	@Override
@@ -54,13 +54,13 @@ public abstract class TEjbService<E extends ITEntity> implements ITEjbService<E>
 	}
 
 	@Override
-	public List<E> findAll(E entity, int firstResult, int maxResult) throws Exception {
-		return getBussinesObject().findAll(entity, firstResult, maxResult);
+	public List<E> findAll(E entity, int firstResult, int maxResult, boolean orderByAsc, boolean containsAnyKeyWords) throws Exception {
+		return getBussinesObject().findAll(entity, firstResult, maxResult, orderByAsc, containsAnyKeyWords);
 	}
 
 	@Override
-	public int countFindAll(E entity) throws Exception {
-		return getBussinesObject().countFindAll(entity);
+	public Integer countFindAll(E entity, boolean containsAnyKeyWords) throws Exception {
+		return getBussinesObject().countFindAll(entity, containsAnyKeyWords);
 	}
 	
 	

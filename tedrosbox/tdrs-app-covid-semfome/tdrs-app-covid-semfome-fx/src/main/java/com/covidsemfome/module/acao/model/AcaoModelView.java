@@ -43,6 +43,7 @@ import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.annotation.view.TEntityCrudViewWithListView;
+import com.tedros.fxapi.annotation.view.TOption;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.builder.DateTimeFormatBuilder;
 import com.tedros.fxapi.domain.THtmlConstant;
@@ -72,7 +73,10 @@ import javafx.scene.text.TextAlignment;
 @TEntityProcess(process = AcaoProcess.class, entity=Acao.class)
 @TEntityCrudViewWithListView(listViewMinWidth=350,
 paginator=@TPaginator(entityClass = Acao.class, serviceName = "IAcaoControllerRemote",
-			show=true, showSearchField=true, searchFieldName="titulo"),
+			show=true, showSearchField=true, searchFieldName="titulo",
+			orderBy = {@TOption(text = "Codigo", value = "id"), 
+					@TOption(text = "Titulo", value = "titulo"), 
+					@TOption(text = "Data", value = "data")}),
 presenter=@TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = TMainCrudViewWithListViewBehavior.class), 
 			decorator = @TDecorator(type = TMainCrudViewWithListViewDecorator.class, 

@@ -2,6 +2,7 @@ package com.tedros.ejb.base.eao;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
@@ -10,12 +11,14 @@ import javax.persistence.PersistenceContextType;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 
+import org.eclipse.persistence.expressions.ExpressionBuilder;
 import org.eclipse.persistence.jpa.JpaEntityManager;
 import org.eclipse.persistence.queries.QueryByExamplePolicy;
 import org.eclipse.persistence.queries.ReadAllQuery;
+import org.eclipse.persistence.queries.ReportQuery;
+import org.eclipse.persistence.queries.ReportQueryResult;
 
 import com.tedros.ejb.base.entity.ITEntity;
 
@@ -158,25 +161,44 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 	 * Retorna uma lista paginada
 	 * */
 	@SuppressWarnings("unchecked")
-	public List<E> pageAll(Class<? extends ITEntity> entity, int firstResult, int maxResult)throws Exception{
+	public List<E> pageAll(E entity, int firstResult, int maxResult, boolean orderByAsc)throws Exception{
 		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<E> cq = (CriteriaQuery<E>) cb.createQuery(entity);
-		Root<E> root = (Root<E>) cq.from(entity);
+		CriteriaQuery<E> cq = (CriteriaQuery<E>) cb.createQuery(entity.getClass());
+		Root<E> root = (Root<E>) cq.from(entity.getClass());
 		cq.select(root);
+		
+		if(entity.getOrderBy()!=null && !entity.getOrderBy().isEmpty()) {
+			for(String f : entity.getOrderBy())
+				if(orderByAsc)
+					cq.orderBy(cb.asc(root.get(f)));
+				else
+					cq.orderBy(cb.desc(root.get(f)));
+		}
+		
 		TypedQuery<E> qry = em.createQuery(cq);
 		qry.setFirstResult(firstResult);
 		qry.setMaxResults(maxResult);
+		
 		return qry.getResultList();
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<E> findAll(E entity, int firstResult, int maxResult)throws Exception{
+	public List<E> findAll(E entity, int firstResult, int maxResult, boolean orderByAsc, boolean containsAnyKeyWords)throws Exception{
 		
 		ReadAllQuery query = new ReadAllQuery(entity.getClass());
 		query.setExampleObject(entity);
 		// Query by example policy section adds like and greaterThan 
 		QueryByExamplePolicy policy = new QueryByExamplePolicy();
-		policy.addSpecialOperation(String.class, "containsAnyKeyWords");
+		
+		policy.addSpecialOperation(String.class, (containsAnyKeyWords) ? "containsAnyKeyWords" : "like");
+		
+		if(entity.getOrderBy()!=null && !entity.getOrderBy().isEmpty()) {
+			for(String f : entity.getOrderBy())
+				if(orderByAsc)
+					query.addAscendingOrdering(f);
+				else
+					query.addDescendingOrdering(f);
+		}
 		query.setQueryByExamplePolicy(policy);
 		query.setFirstResult(firstResult);
 		query.setMaxRows(maxResult+firstResult);
@@ -184,19 +206,21 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 		return (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public int countFindAll(E entity)throws Exception{
-		
-		ReadAllQuery query = new ReadAllQuery(entity.getClass());
+	public Integer countFindAll(E entity, boolean containsAnyKeyWords)throws Exception{
+		ExpressionBuilder eb = new ExpressionBuilder();
+		ReportQuery query = new ReportQuery(entity.getClass(), eb);
 		query.setExampleObject(entity);
 		// Query by example policy section adds like and greaterThan 
 		QueryByExamplePolicy policy = new QueryByExamplePolicy();
-		policy.addSpecialOperation(String.class, "containsAnyKeyWords");
+		policy.addSpecialOperation(String.class, (containsAnyKeyWords) ? "containsAnyKeyWords" : "like");
 		query.setQueryByExamplePolicy(policy);
 		
-		List<E> lst = (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
+		query.addCount();
 		
-		return lst.size();
+		//List<E> lst = (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
+		ReportQueryResult res = (ReportQueryResult) ((Vector)((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query)).get(0);
+		Integer total = (Integer) res.get("COUNT");
+		return  total;
 	}
 	
 	/**

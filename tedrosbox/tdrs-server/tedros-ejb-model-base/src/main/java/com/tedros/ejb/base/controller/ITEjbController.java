@@ -43,12 +43,12 @@ public interface ITEjbController<E extends ITEntity> {
 	 * Retorna uma lista paginada
 	 * */
 	@SuppressWarnings("rawtypes")
-	public TResult pageAll(Class<? extends ITEntity> entidade, int firstResult, int maxResult);
+	public TResult pageAll(E entidade, int firstResult, int maxResult, boolean orderByAsc);
 	
 	/**
 	 * Retorna uma pesquisa paginada
 	 * */
 	@SuppressWarnings("rawtypes")
-	public TResult findAll(E entity, int firstResult, int maxResult)throws Exception;
+	public TResult findAll(E entity, int firstResult, int maxResult, boolean orderByAsc, boolean containsAnyKeyWords)throws Exception;
 
 }

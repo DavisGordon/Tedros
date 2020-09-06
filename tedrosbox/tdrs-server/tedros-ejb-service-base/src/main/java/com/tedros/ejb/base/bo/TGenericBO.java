@@ -55,8 +55,8 @@ public abstract  class TGenericBO<E extends ITEntity> implements ITGenericBO<E> 
 	/**
 	 * Retorna uma lista paginada
 	 * */
-	public List<E> pageAll(Class<? extends ITEntity> entidade, int firstResult, int maxResult)throws Exception{
-		return getEao().pageAll(entidade, firstResult, maxResult);
+	public List<E> pageAll(E entidade, int firstResult, int maxResult, boolean orderByAsc)throws Exception{
+		return getEao().pageAll(entidade, firstResult, maxResult, orderByAsc);
 	}
 	/**
 	 * Retorna a quantidade de registros cadastrados
@@ -66,13 +66,13 @@ public abstract  class TGenericBO<E extends ITEntity> implements ITGenericBO<E> 
 	}
 
 	@Override
-	public List<E> findAll(E entity, int firstResult, int maxResult) throws Exception {
-		return getEao().findAll(entity, firstResult, maxResult);
+	public List<E> findAll(E entity, int firstResult, int maxResult, boolean orderByAsc, boolean containsAnyKeyWords) throws Exception {
+		return getEao().findAll(entity, firstResult, maxResult, orderByAsc, containsAnyKeyWords);
 	}
 
 	@Override
-	public int countFindAll(E entity) throws Exception {
-		return getEao().countFindAll(entity);
+	public Integer countFindAll(E entity, boolean containsAnyKeyWords) throws Exception {
+		return getEao().countFindAll(entity, containsAnyKeyWords);
 	}
 	
 	

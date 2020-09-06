@@ -17,7 +17,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 @SuppressWarnings("rawtypes")
@@ -51,8 +50,13 @@ extends TDynaViewCrudBaseDecorator<M> {
 		if(tAnnotation!=null){
 			listViewMaxWidth = tAnnotation.listViewMaxWidth();
 			listViewMinWidth = tAnnotation.listViewMinWidth();
-			if(tAnnotation.paginator().show())
-				tPaginator = new TPaginator(tAnnotation.paginator().showSearchField());
+			if(tAnnotation.paginator().show()) {
+				tPaginator = new TPaginator(tAnnotation.paginator().showSearchField(), tAnnotation.paginator().showOrderBy());
+				if(tAnnotation.paginator().showOrderBy())
+					for(com.tedros.fxapi.annotation.view.TOption o : tAnnotation.paginator().orderBy())
+						tPaginator.addOrderByOption(o.text(), o.value());
+			}
+			
 		}
 		
 		final TForm tForm = this.getPresenter().getFormAnnotation();

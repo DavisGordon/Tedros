@@ -12,6 +12,10 @@ public @interface TPaginator {
 	public boolean show() default false;
 	public boolean showSearchField() default false;
 	public String searchFieldName() default "";
+	
 	public String serviceName();
 	public Class<? extends ITEntity> entityClass();
+	
+	public boolean showOrderBy() default true;
+	public TOption[] orderBy() default {@TOption(text="Codigo", value="id")};
 }
