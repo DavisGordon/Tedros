@@ -133,10 +133,16 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 				};
 				
 				super.getListenerRepository().addListener("processloadlistviewCL", prcl);
+				try {
+					E entity = super.getEntityClass().newInstance();
+					process.pageAll(entity, this.decorator.gettPaginator().getPagination());
+					process.stateProperty().addListener(new WeakChangeListener(prcl));
+					process.startProcess();
+				} catch (InstantiationException | IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
-				process.pageAll(this.decorator.gettPaginator().getPagination());
-				process.stateProperty().addListener(new WeakChangeListener(prcl));
-				process.startProcess();
 			} else {
 				// processo para listagem dos models
 				final TEntityProcess<E> process  = (TEntityProcess<E>) createEntityProcess();
@@ -297,8 +303,16 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 			}
 			
 			
-		}else
-			process.pageAll(pagination);
+		}else {
+			try {
+				E entity = super.getEntityClass().newInstance();
+				process.pageAll(entity, pagination);
+			} catch (InstantiationException | IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
 		
 		process.stateProperty().addListener(new WeakChangeListener(prcl));
 		process.startProcess();

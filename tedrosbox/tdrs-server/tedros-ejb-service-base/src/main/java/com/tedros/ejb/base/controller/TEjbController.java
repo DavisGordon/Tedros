@@ -86,11 +86,11 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 	}
 
 	@Override
-	public TResult<Map<String, Object>> pageAll(Class<? extends ITEntity> entidade, int firstResult, int maxResult) {
+	public TResult<Map<String, Object>> pageAll(E entidade, int firstResult, int maxResult, boolean orderByAsc) {
 		try{
-			Long count  = getService().countAll(entidade);
+			Long count  = getService().countAll(entidade.getClass());
 			
-			List<E> list = getService().pageAll(entidade, firstResult, maxResult);
+			List<E> list = getService().pageAll(entidade, firstResult, maxResult, orderByAsc);
 			
 			Map<String, Object> map = new HashMap<>();
 			map.put("total", count);
@@ -105,14 +105,14 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 	}
 
 	@Override
-	public TResult<Map<String, Object>> findAll(E entidade, int firstResult, int maxResult) {
+	public TResult<Map<String, Object>> findAll(E entidade, int firstResult, int maxResult, boolean orderByAsc, boolean containsAnyKeyWords) {
 		try{
-			Long count  = (long) getService().countFindAll(entidade);
+			Number count  =  getService().countFindAll(entidade, containsAnyKeyWords);
 			
-			List<E> list = getService().findAll(entidade, firstResult, maxResult);
+			List<E> list = getService().findAll(entidade, firstResult, maxResult, orderByAsc, containsAnyKeyWords);
 			
 			Map<String, Object> map = new HashMap<>();
-			map.put("total", count);
+			map.put("total", count.longValue());
 			map.put("list", list);
 			
 			return new TResult<>(EnumResult.SUCESS, map);

@@ -9,7 +9,10 @@ import java.util.UUID;
 import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.module.TListenerRepository;
 import com.tedros.fxapi.control.TButton;
+import com.tedros.fxapi.control.TComboBoxField;
+import com.tedros.fxapi.control.THorizontalRadioGroup;
 import com.tedros.fxapi.control.TLabel;
+import com.tedros.fxapi.control.TOption;
 import com.tedros.fxapi.control.TSlider;
 import com.tedros.fxapi.control.TTextField;
 
@@ -23,11 +26,14 @@ import javafx.event.WeakEventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
@@ -44,6 +50,8 @@ public class TPaginator extends BorderPane {
 	private TButton searchButton;
 	private TButton clearButton;
 	private TTextField search = null;
+	private TComboBoxField<TOption<String>> orderBy;
+	private THorizontalRadioGroup orderByType;
 	private ToolBar toolbar;
 	private TLabel label;
 	
@@ -51,7 +59,7 @@ public class TPaginator extends BorderPane {
 	
 	private TListenerRepository repo;
 	
-	public TPaginator(boolean showSearch) {
+	public TPaginator(boolean showSearch, boolean showOrderBy) {
 		
 		setId("t-header-box");
 		
@@ -89,6 +97,7 @@ public class TPaginator extends BorderPane {
 		HBox.setMargin(label, new Insets(0, 5, 0, 15));
 		pane.setAlignment(Pos.CENTER_LEFT);
 		pane.getChildren().addAll(title, label);
+		
 		VBox box = new VBox();
 		box.getChildren().add(pane);
 		
@@ -123,10 +132,57 @@ public class TPaginator extends BorderPane {
 			HBox.setHgrow(search, Priority.ALWAYS);
 			h1.getChildren().addAll(search, searchButton, clearButton);
 			
-			//HBox.setMargin(h1, new Insets(10, 0, 10, 8));
 			box.getChildren().add(h1);
-			
 		}
+		
+		if(showOrderBy) {
+
+			orderBy = new TComboBoxField<>();
+			orderBy.setPromptText("Ordenar por:");
+			ChangeListener<TOption<String>> eh = (a0, a1, a2) ->{
+				lastButton = null;
+				paginationProperty.setValue(buildPagination(0));
+			};
+			repo.addListener("orderBy", eh);
+			orderBy.valueProperty().addListener(new WeakChangeListener<>(eh));
+			
+			HBox h1 = new HBox();
+			h1.setId("t-view-toolbar");
+			h1.setAlignment(Pos.BOTTOM_LEFT);
+			h1.setPadding(new Insets(10, 0, 0, 0));
+			HBox.setHgrow(orderBy, Priority.ALWAYS);
+			orderBy.setMinWidth(200);
+			h1.getChildren().addAll(orderBy);
+			
+			orderByType = new THorizontalRadioGroup();
+			ChangeListener<Toggle> eh1 = (a0, a1, a2) ->{
+				lastButton = null;
+				paginationProperty.setValue(buildPagination(0));
+			};
+			repo.addListener("orderByType", eh1);
+			orderByType.selectedToggleProperty().addListener(new WeakChangeListener<>(eh1));
+			
+			RadioButton ascRadioBtn = new RadioButton(iEngine.getString("Acendente")); 
+			RadioButton descRadioBtn = new RadioButton(iEngine.getString("Decrecente")); 
+			ascRadioBtn.setSelected(true);
+			ascRadioBtn.setUserData(true);
+			descRadioBtn.setUserData(false);
+			orderByType.addRadioButton(ascRadioBtn);
+			orderByType.addRadioButton(descRadioBtn);
+			
+			HBox h2 = new HBox();
+			h2.setId("t-view-toolbar");
+			h2.setAlignment(Pos.BOTTOM_LEFT);
+			h2.setPadding(new Insets(10, 0, 0, 0));
+			HBox.setHgrow(orderByType, Priority.ALWAYS);
+			h2.getChildren().addAll(orderByType);
+			
+			box.getChildren().addAll(h1, h2);
+		}
+		
+		
+		
+		
 		BorderPane.setMargin(box, new Insets(10, 8, 10, 8) );
 		BorderPane.setMargin(slider, new Insets(0, 15, 0, 15) );
 		setTop(box);
@@ -145,7 +201,9 @@ public class TPaginator extends BorderPane {
 		paginationProperty = new SimpleObjectProperty<>();
 	}
 	
-	
+	public void addOrderByOption(String text, String field) {
+		orderBy.getItems().add(new TOption<>(text, field));
+	}
 	
 	public void reload(long totalRows) {
 		removeBtnEvent();
@@ -211,7 +269,9 @@ public class TPaginator extends BorderPane {
 	}
 	
 	private TPagination buildPagination(int start){
-		return new TPagination(search!=null ? search.getText() : null, start, (int) slider.getValue());
+		String orderBy = this.orderBy!=null && this.orderBy.getValue()!=null ? this.orderBy.getValue().getValue() : null;
+		boolean orderAsc = this.orderByType!=null ? (boolean) this.orderByType.getSelectedToggle().getUserData() : true;
+		return new TPagination(search!=null ? search.getText() : null, orderBy, orderAsc, start, (int) slider.getValue());
 	}
 	
 	public TPagination getPagination(){

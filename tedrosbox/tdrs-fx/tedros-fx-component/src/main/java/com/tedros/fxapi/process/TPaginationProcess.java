@@ -2,7 +2,10 @@ package com.tedros.fxapi.process;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.core.service.remote.ServiceLocator;
 import com.tedros.ejb.base.controller.ITEjbController;
@@ -59,20 +62,23 @@ public abstract class TPaginationProcess<E extends ITEntity> extends TProcess<TR
 	
 	/**
 	 * <pre>Add a pagination </pre>
+	 * @param entidade - The entity to page
 	 * @param pagination - The pagination data
 	 * */
-	public void pageAll(TPagination pagination){
+	public void pageAll(E entidade, TPagination pagination){
 		operation = PAGEALL;
+		value = entidade;
 		this.pagination = pagination;
 	}
 	
 	/**
 	 * <pre>Add an entity to find </pre>
 	 * @param entidade - The entity to find
+	 * @param pagination - the pagination info
 	 * */
 	public void findAll(E entidade, TPagination pagination){
-		value = entidade;
 		operation = FINDALL;
+		value = entidade;
 		this.pagination = pagination;
 	}
 	
@@ -99,12 +105,16 @@ public abstract class TPaginationProcess<E extends ITEntity> extends TProcess<TR
 	        		ServiceLocator loc = ServiceLocator.getInstance();
 	        		ITEjbController<E> service = (ITEjbController<E>) loc.lookup(serviceJndiName);
 	        		if(service!=null){
+	        			if(StringUtils.isNotBlank(pagination.getOrderBy())) {
+	        				value.setOrderBy(new ArrayList<>());
+	        				value.addOrderBy(pagination.getOrderBy());
+	        			}
 		        		switch (operation) {
 							case FINDALL :
-								result = service.findAll(value, pagination.getStart(), pagination.getTotalRows());
+								result = service.findAll(value, pagination.getStart(), pagination.getTotalRows(), pagination.isOrderByAsc(), true);
 								break;
 							case PAGEALL :
-								result = service.pageAll(entityType, pagination.getStart(), pagination.getTotalRows());
+								result = service.pageAll(value, pagination.getStart(), pagination.getTotalRows(), pagination.isOrderByAsc());
 								break;
 						}
 	        		}

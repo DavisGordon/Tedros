@@ -1,6 +1,8 @@
 package com.tedros.ejb.base.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -10,11 +12,12 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 
 @MappedSuperclass
-public abstract class TEntity implements ITEntity {
+public  class TEntity implements ITEntity {
 
 	private static final long serialVersionUID = 4360077147058078710L;
 	
@@ -36,7 +39,11 @@ public abstract class TEntity implements ITEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date insertDate;
 	
+	@Transient
+	private List<String> orderBy;
+	
 	public TEntity() {
+		addOrderBy("id");
 	}
 	
 	public TEntity(Long id, Integer versionNum, Date lastUpdate, Date insertDate) {
@@ -45,6 +52,7 @@ public abstract class TEntity implements ITEntity {
 		this.versionNum = versionNum;
 		this.lastUpdate = lastUpdate;
 		this.insertDate = insertDate;
+		addOrderBy("id");
 	}
 	
 	public boolean isNew(){
@@ -81,6 +89,24 @@ public abstract class TEntity implements ITEntity {
 
 	public void setInsertDate(Date insertDate) {
 		this.insertDate = insertDate;
+	}
+
+	@Override
+	public List<String> getOrderBy() {
+		return orderBy;
+	}
+
+	@Override
+	public void addOrderBy(String fieldName) {
+		if(orderBy==null)
+			orderBy = new ArrayList<>();
+		orderBy.add(fieldName);
+		
+	}
+
+	@Override
+	public void setOrderBy(List<String> orders) {
+		this.orderBy = orders;
 	}
 
 		
