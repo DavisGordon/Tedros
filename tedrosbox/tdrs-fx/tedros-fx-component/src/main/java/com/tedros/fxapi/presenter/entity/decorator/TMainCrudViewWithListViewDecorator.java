@@ -8,7 +8,6 @@ import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.view.TEntityCrudViewWithListView;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
-import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.presenter.paginator.TPaginator;
 
@@ -30,20 +29,20 @@ extends TDynaViewCrudBaseDecorator<M> {
     private Accordion tPaginatorAccordion;
     private TPaginator tPaginator;
     
-    private double hideWidth = 4;
     private double listViewMaxWidth = 250;
     private double listViewMinWidth = 250;
   
     public void decorate() {
-		
+		configFormSpace();
+		configViewTitle();
+		configBreadcrumBar();
+		configAllButtons();
+		configListView();
+	}
+
+	protected void configListView() {
 		// get the model view annotation array 
 		final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-		
-		// get the view
-		final TDynaView<M> view = getPresenter().getView();
-		
-		addItemInTCenterContent(view.gettFormSpace());
-		setViewTitle(null);
 		
 		// get the list view settings
 		TEntityCrudViewWithListView tAnnotation = getPresenter().getModelViewClass().getAnnotation(TEntityCrudViewWithListView.class);
@@ -58,30 +57,6 @@ extends TDynaViewCrudBaseDecorator<M> {
 			}
 			
 		}
-		
-		final TForm tForm = this.getPresenter().getFormAnnotation();
-		setShowBreadcrumBar((tForm!=null) ? tForm.showBreadcrumBar() : false);
-		
-		if(isShowBreadcrumBar())
-			buildTBreadcrumbForm();
-		
-		buildColapseButton(null);
-		buildNewButton(null);
-		buildDeleteButton(null);
-		buildSaveButton(null);
-		buildCancelButton(null);
-		buildModesRadioButton(null, null);
-		
-		// add the buttons at the header tool bar
-		addItemInTHeaderToolBar(gettColapseButton(), gettNewButton(), gettDeleteButton(), gettSaveButton(), gettCancelButton());
-		
-		// add the mode radio buttons
-		addItemInTHeaderHorizontalLayout(gettEditModeRadio(), gettReadModeRadio());
-		
-		// set padding at rigth in left content pane
-		addPaddingInTLeftContent(0, 4, 0, 0);
-		
-		
 		// build the list view
 		tListView = new ListView<>();
 		tListView.setCache(false);
@@ -121,7 +96,40 @@ extends TDynaViewCrudBaseDecorator<M> {
 		// add the list view box at the left 
 		
 		addItemInTLeftContent(tListViewLayout);
+	}
+
+	protected void configAllButtons() {
+		buildColapseButton(null);
+		buildNewButton(null);
+		buildDeleteButton(null);
+		buildSaveButton(null);
+		buildCancelButton(null);
+		buildModesRadioButton(null, null);
 		
+		// add the buttons at the header tool bar
+		addItemInTHeaderToolBar(gettColapseButton(), gettNewButton(), gettDeleteButton(), gettSaveButton(), gettCancelButton());
+		
+		// add the mode radio buttons
+		addItemInTHeaderHorizontalLayout(gettEditModeRadio(), gettReadModeRadio());
+		
+		// set padding at rigth in left content pane
+		addPaddingInTLeftContent(0, 4, 0, 0);
+	}
+
+	protected void configBreadcrumBar() {
+		final TForm tForm = this.getPresenter().getFormAnnotation();
+		setShowBreadcrumBar((tForm!=null) ? tForm.showBreadcrumBar() : false);
+		
+		if(isShowBreadcrumBar())
+			buildTBreadcrumbForm();
+	}
+
+	protected void configViewTitle() {
+		setViewTitle(null);
+	}
+
+	protected void configFormSpace() {
+		addItemInTCenterContent(getPresenter().getView().gettFormSpace());
 	}
 	
     public boolean isListContentVisible() {
