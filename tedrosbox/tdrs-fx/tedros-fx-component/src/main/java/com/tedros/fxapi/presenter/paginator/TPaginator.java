@@ -62,6 +62,7 @@ public class TPaginator extends BorderPane {
 	public TPaginator(boolean showSearch, boolean showOrderBy) {
 		
 		setId("t-header-box");
+		paginationProperty = new SimpleObjectProperty<>();
 		
 		TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
 		
@@ -138,7 +139,7 @@ public class TPaginator extends BorderPane {
 		if(showOrderBy) {
 
 			orderBy = new TComboBoxField<>();
-			orderBy.setPromptText("Ordenar por:");
+			orderBy.setPromptText(iEngine.getString("#{tedros.fxapi.label.orderby}"));
 			ChangeListener<TOption<String>> eh = (a0, a1, a2) ->{
 				lastButton = null;
 				paginationProperty.setValue(buildPagination(0));
@@ -162,8 +163,8 @@ public class TPaginator extends BorderPane {
 			repo.addListener("orderByType", eh1);
 			orderByType.selectedToggleProperty().addListener(new WeakChangeListener<>(eh1));
 			
-			RadioButton ascRadioBtn = new RadioButton(iEngine.getString("Acendente")); 
-			RadioButton descRadioBtn = new RadioButton(iEngine.getString("Decrecente")); 
+			RadioButton ascRadioBtn = new RadioButton(iEngine.getString("#{tedros.fxapi.label.orderby.asc}")); 
+			RadioButton descRadioBtn = new RadioButton(iEngine.getString("#{tedros.fxapi.label.orderby.desc}")); 
 			ascRadioBtn.setSelected(true);
 			ascRadioBtn.setUserData(true);
 			descRadioBtn.setUserData(false);
@@ -198,7 +199,7 @@ public class TPaginator extends BorderPane {
 		sp.setStyle("-fx-background-color: transparent;");
 		setBottom(sp);
 		
-		paginationProperty = new SimpleObjectProperty<>();
+		
 	}
 	
 	public void addOrderByOption(String text, String field) {

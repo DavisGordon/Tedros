@@ -45,7 +45,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	private String paginatorServiceName;
 	private String searchFieldName;
 	
-	private TMainCrudViewWithListViewDecorator<M> decorator;
+	protected TMainCrudViewWithListViewDecorator<M> decorator;
 		
 	@Override
 	public void load() {
@@ -58,30 +58,17 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	public void initialize() {
 		try{
 			
-			setCancelAction(new TPresenterAction<TDynaPresenter<M>>() {
-
-				@Override
-				public boolean runBefore(TDynaPresenter<M> presenter) {
-					return true;
-				}
-
-				@Override
-				public void runAfter(TDynaPresenter<M> presenter) {
-					final ListView<M> listView = decorator.gettListView();
-					listView.getSelectionModel().clearSelection();
-					setDisableModelActionButtons(true);
-					showListView();
-				}
-			});
-			
+			configCancelAction();
 			configColapseButton();
 			configNewButton();
 			configSaveButton();
 			configDeleteButton();
-			configListView();
-			configListViewCallBack();
+			
 			configModesRadio();
 			configCancelButton();
+			
+			configListViewChangeListener();
+			configListViewCallBack();
 			
 			TPaginator tPagAnn = null;
 			TEntityCrudViewWithListView tAnnotation = getPresenter().getModelViewClass().getAnnotation(TEntityCrudViewWithListView.class);
@@ -208,6 +195,24 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		}
 		
 	}
+
+	protected void configCancelAction() {
+		setCancelAction(new TPresenterAction<TDynaPresenter<M>>() {
+
+			@Override
+			public boolean runBefore(TDynaPresenter<M> presenter) {
+				return true;
+			}
+
+			@Override
+			public void runAfter(TDynaPresenter<M> presenter) {
+				final ListView<M> listView = decorator.gettListView();
+				listView.getSelectionModel().clearSelection();
+				setDisableModelActionButtons(true);
+				showListView();
+			}
+		});
+	}
 	
 	private void processPagination(Long totalRows) {
 		this.decorator.gettPaginator().reload(totalRows);
@@ -282,7 +287,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 				Method setter = null;
 				do {
 					try {
-						Field f = super.getEntityClass().getDeclaredField(this.searchFieldName);
+						Field f = target.getDeclaredField(this.searchFieldName);
 						setter = target.getMethod("set"+StringUtils.capitalize(searchFieldName), f.getType());
 						break;
 					} catch (NoSuchFieldException | SecurityException e) {
@@ -334,16 +339,10 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		}
 	}	
 	
-	protected void configListView() {
+	protected void configListViewChangeListener() {
 		
 		ChangeListener<M> chl = (a0, old_, new_) -> {
-			if(new_==null) {
-				setModelView(null);
-				showListView();
-			}else{
-				selectedItemAction(new_);
-				hideListView();
-			}
+			processListViewSelectedItem(new_);
 		};
 		
 		super.getListenerRepository().addListener("listviewselecteditemviewCL", chl);
@@ -353,6 +352,16 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		.selectedItemProperty()
 		.addListener(new WeakChangeListener<>(chl));
 		
+	}
+
+	protected void processListViewSelectedItem(M new_) {
+		if(new_==null) {
+			setModelView(null);
+			showListView();
+		}else{
+			selectedItemAction(new_);
+			hideListView();
+		}
 	}
 	
 	public void remove() {

@@ -46,15 +46,6 @@ public class TListenerRepository {
 	 * */
 	public void addListener(String key, Object listener) throws TKeyAlreadyExistException, IllegalArgumentException{
 		
-		/*if(!(listener instanceof ChangeListener 
-				|| listener instanceof InvalidationListener 
-				|| listener instanceof SetChangeListener 
-				|| listener instanceof ListChangeListener 
-				|| listener instanceof MapChangeListener))
-			throw new IllegalArgumentException("TERROR: the argument passed is not a valid listener: "
-					+ "ChangeListener, InvalidationListener, SetChangeListener, ListChangeListener or MapChangeListener.");
-			*/
-		
 		if(repository.containsKey(key))
 			throw new TKeyAlreadyExistException();
 		

@@ -1,129 +1,55 @@
 package com.covidsemfome.module.acao.behavior;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-
-import com.covidsemfome.module.acao.decorator.MailingDecorator;
+import com.covidsemfome.model.Mailing;
+import com.covidsemfome.module.acao.model.MailingModelView;
 import com.tedros.core.annotation.security.TAuthorizationType;
-import com.tedros.ejb.base.entity.ITEntity;
-import com.tedros.ejb.base.result.TResult;
-import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.control.action.TPresenterAction;
-import com.tedros.fxapi.domain.TViewMode;
-import com.tedros.fxapi.modal.TMessageBox;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
-import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
-import com.tedros.fxapi.presenter.model.TEntityModelView;
-import com.tedros.fxapi.presenter.model.TModelView;
-import com.tedros.fxapi.process.TEntityProcess;
-import com.tedros.fxapi.util.TEntityListViewCallback;
+import com.tedros.fxapi.presenter.entity.behavior.TMainCrudViewWithListViewBehavior;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Worker.State;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.layout.StackPane;
-import javafx.util.Callback;
 
-public class MailingBehavior<M extends TEntityModelView, E extends ITEntity>
-extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M, E> {
+public class MailingBehavior
+extends TMainCrudViewWithListViewBehavior<MailingModelView, Mailing> {
 	
-	private MailingDecorator<M> decorator;
 	
 	@Override
 	public void load() {
 		super.load();
-		this.decorator = (MailingDecorator<M>) getPresenter().getDecorator();
-		initialize();
+		setDisableModelActionButtons(true);
+		
 	}
+	@Override
+	public void configColapseButton(){
 		
-	@SuppressWarnings("unchecked")
-	public void initialize() {
-		try{
-			
-			if(this.decorator.isShowBreadcrumBar())
-				configBreadcrumbForm();
-			
-			setCancelAction(new TPresenterAction<TDynaPresenter<M>>() {
+	}
+	
+	@Override
+	public void configNewButton() {
+		
+	}
+	@Override
+	public void configDeleteButton() {
+		
+	}
+	
+	
 
-				@Override
-				public boolean runBefore(TDynaPresenter<M> presenter) {
-					return true;
-				}
+	protected void configCancelAction() {
+		setCancelAction(new TPresenterAction<TDynaPresenter<MailingModelView>>() {
 
-				@Override
-				public void runAfter(TDynaPresenter<M> presenter) {
-					final ListView<M> listView = decorator.gettListView();
-					listView.getSelectionModel().clearSelection();
-					setDisableModelActionButtons(true);
-				}
-			});
-			
-			
-			
-			configSaveButton();
-			configListView();
-			configListViewCallBack();
-			configModesRadio();
-			configCancelButton();
-			setDisableModelActionButtons(true);
-			this.decorator.showScreenSaver();
-			
-			// processo para listagem dos models
-			final TEntityProcess<E> process  = (TEntityProcess<E>) createEntityProcess();
-			if(process!=null){
-				process.list();
-				process.stateProperty().addListener(new ChangeListener<State>() {
-					
-					public void changed(ObservableValue<? extends State> arg0,
-							State arg1, State arg2) {
-						
-							if(arg2.equals(State.SUCCEEDED)){
-								List<?> resultados = process.getValue();
-								if(resultados.isEmpty())
-									return;
-								TResult result = (TResult<?>) resultados.get(0);
-								if(result.getValue()!=null && result.getValue() instanceof List<?>){
-									ObservableList<M> models = getModels();
-									if(models==null)
-										models = FXCollections.observableArrayList();
-									for(E e : (List<E>) result.getValue()){
-										try {
-											M model = (M) getModelViewClass().getConstructor(getEntityClass()).newInstance(e);
-											models.add(model);
-										} catch (InstantiationException
-												| IllegalAccessException
-												| IllegalArgumentException
-												| InvocationTargetException
-												| NoSuchMethodException
-												| SecurityException e1) 
-										{
-											e1.printStackTrace();
-										}
-									}
-									setModelViewList(models);
-									loadListView();
-								}
-							}	
-					}
-				});
-				process.startProcess();
-			}else{
-				System.err.println("\nWARNING: Cannot create a process for the "+getModelViewClass().getSimpleName()+", check the @TCrudForm(processClass,serviceName) properties");
-				loadListView();
+			@Override
+			public boolean runBefore(TDynaPresenter<MailingModelView> presenter) {
+				return true;
 			}
-		
-		}catch(Throwable e){
-			getView().tShowModal(new TMessageBox(e), true);
-			e.printStackTrace();
-		}
-		
+
+			@Override
+			public void runAfter(TDynaPresenter<MailingModelView> presenter) {
+				final ListView<MailingModelView> listView = decorator.gettListView();
+				listView.getSelectionModel().clearSelection();
+				setDisableModelActionButtons(true);
+			}
+		});
 	}
 	
 	
@@ -134,7 +60,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	@Override
 	public void changeModeAction() {
 		final TPresenterAction changeModeAction =  getChangeModeAction();
-		final TDynaPresenter<M> presenter = getPresenter();
+		final TDynaPresenter<MailingModelView> presenter = getPresenter();
 		if(changeModeAction==null || (changeModeAction!=null && changeModeAction.runBefore(presenter))){
 			if(getModelView()!=null){
 				if(decorator.isShowBreadcrumBar())
@@ -148,32 +74,9 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		
 	}
 	
-	@SuppressWarnings("unchecked")
-	private void loadListView() {
-		final ObservableList<M> models = getModels();
-		final ListView<M> listView = this.decorator.gettListView();
-		listView.setItems((ObservableList<M>) (models==null ? FXCollections.observableArrayList() : models));
-		listView.setEditable(true);
-		listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-	}
 	
-	@SuppressWarnings("unchecked")
-	private void configListViewCallBack() {
-		TBehavior tBehavior = getPresenter().getPresenterAnnotation().behavior();
-		try {
-			Callback<ListView<M>, ListCell<M>> callBack = (Callback<ListView<M>, ListCell<M>>) 
-					((tBehavior!=null) 
-							? tBehavior.listViewCallBack().newInstance() 
-									: new TEntityListViewCallback<M>());
-			
-			final ListView<M> listView = this.decorator.gettListView();
-			listView.setCellFactory(callBack);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}	
 	
-	protected void configListView() {
+	/*protected void configListView() {
 		this.decorator.gettListView()
 		.getSelectionModel()
 		.selectedItemProperty()
@@ -200,32 +103,26 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 				setDisableModelActionButtons(true);
 			}
 		});
-	}
+	}*/
 	
 	public void remove() {
-		final ListView<M> listView = this.decorator.gettListView();
+		final ListView<MailingModelView> listView = this.decorator.gettListView();
 		final int selectedIndex = listView.getSelectionModel().getSelectedIndex();
 		listView.getItems().remove(selectedIndex);
 		listView.getSelectionModel().clearSelection();
 		setDisableModelActionButtons(true);
 	}
 		
-	public void colapseAction() {
-		final StackPane pane = (StackPane) ((TDynaView) getView()).gettContentLayout().getLeft();
-		if(!pane.isVisible())
-			this.decorator.showListContent();
-		else
-			this.decorator.hideListContent();
-	}
 	
-	public boolean processNewEntityBeforeBuildForm(M model) {
-		final ListView<M> list = this.decorator.gettListView();
+	
+	public boolean processNewEntityBeforeBuildForm(MailingModelView model) {
+		final ListView<MailingModelView> list = this.decorator.gettListView();
 		list.getItems().add(model);
 		list.selectionModelProperty().get().select(list.getItems().size()-1);
 		return false;
 	}
 	
-	public void editEntity(TModelView model) {
+	public void editEntity(MailingModelView model) {
 		
 	}
 	
