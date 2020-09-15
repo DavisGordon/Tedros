@@ -25,21 +25,21 @@ import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
-import com.tedros.fxapi.presenter.entity.decorator.TDetailCrudViewWithListViewDecorator;
+import com.tedros.fxapi.presenter.entity.decorator.TDetailCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.util.TEntityListViewCallback;
 
 @SuppressWarnings({ "rawtypes" })
-public class TDetailCrudViewWithListViewBehavior<M extends TEntityModelView, E extends ITEntity>
+public class TDetailCrudViewBehavior<M extends TEntityModelView, E extends ITEntity>
 extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M, E> {
 	
-	private TDetailCrudViewWithListViewDecorator<M> decorator;
+	private TDetailCrudViewDecorator<M> decorator;
 
 	public void load() {
 		super.setSkipConfigBreadcrumb(true);
 		super.load();
-		this.decorator = (TDetailCrudViewWithListViewDecorator<M>) getPresenter().getDecorator();
+		this.decorator = (TDetailCrudViewDecorator<M>) getPresenter().getDecorator();
 		initialize();
 	}
 	

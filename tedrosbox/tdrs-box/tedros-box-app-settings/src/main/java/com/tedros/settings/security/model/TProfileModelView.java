@@ -28,8 +28,8 @@ import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
-import com.tedros.fxapi.presenter.entity.behavior.TMainCrudViewWithListViewBehavior;
-import com.tedros.fxapi.presenter.entity.decorator.TMainCrudViewWithListViewDecorator;
+import com.tedros.fxapi.presenter.entity.behavior.TMasterCrudViewBehavior;
+import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.settings.security.action.TProfileCompleteTableViewAction;
 import com.tedros.settings.security.callback.CheckBoxEnableCallBack;
@@ -47,10 +47,10 @@ import javafx.scene.text.TextAlignment;
 @TForm(name="#{security.profile.form.name}")
 @TPresenter(type=TDynaPresenter.class,
 			modelClass=TProfile.class,
-			decorator=@TDecorator(	type=TMainCrudViewWithListViewDecorator.class, 
+			decorator=@TDecorator(	type=TMasterCrudViewDecorator.class, 
 									viewTitle="#{security.profile.view.title}", 
 									listTitle="#{security.profile.list.title}"), 
-			behavior=@TBehavior(type=TMainCrudViewWithListViewBehavior.class,
+			behavior=@TBehavior(type=TMasterCrudViewBehavior.class,
 								newAction=TProfileCompleteTableViewAction.class, 
 								editAction=TProfileCompleteTableViewAction.class, 
 								selectedItemAction=TProfileCompleteTableViewAction.class))

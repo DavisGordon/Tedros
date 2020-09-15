@@ -21,7 +21,6 @@ import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
-import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEntityProcess;
@@ -34,9 +33,6 @@ import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TStyleParameter;
-import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
-import com.tedros.fxapi.presenter.entity.behavior.TMainCrudViewWithListViewBehavior;
-import com.tedros.fxapi.presenter.entity.decorator.TMainCrudViewWithListViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.beans.property.SimpleLongProperty;
@@ -50,18 +46,13 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TFormReaderHtml
-@TForm(name = "Cadastrar tipos de ajuda", showBreadcrumBar=true)
+@TForm(name = "Cadastrar tipos de ajuda")
 @TEntityProcess(process = TipoAjudaProcess.class, entity=TipoAjuda.class)
-@TPresenter(type = TDynaPresenter.class,
-			behavior = @TBehavior(type = TMainCrudViewWithListViewBehavior.class), 
-			decorator = @TDecorator(type = TMainCrudViewWithListViewDecorator.class, 
-									viewTitle="Tipos de ajuda voluntariado", listTitle="#{label.select}"))
+@TPresenter(decorator = @TDecorator(viewTitle="Tipos de ajuda voluntariado"))
 @TSecurity(	id="COVSEMFOME_CADTIPOAJUDA_FORM", 
 			appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Cadastrar Tipos de Ajuda",
 			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 							TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
-
-
 public class TipoAjudaModelView extends TEntityModelView<TipoAjuda> {
 
 	private SimpleLongProperty id;

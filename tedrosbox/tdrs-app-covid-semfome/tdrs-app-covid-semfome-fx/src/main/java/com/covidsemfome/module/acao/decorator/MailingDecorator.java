@@ -4,13 +4,13 @@
 package com.covidsemfome.module.acao.decorator;
 
 import com.covidsemfome.module.acao.model.MailingModelView;
-import com.tedros.fxapi.presenter.entity.decorator.TMainCrudViewWithListViewDecorator;
+import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 
 /**
  * @author Davis Gordon
  *
  */
-public class MailingDecorator extends TMainCrudViewWithListViewDecorator<MailingModelView> {
+public class MailingDecorator extends TMasterCrudViewDecorator<MailingModelView> {
 
 	public void decorate() {
 		

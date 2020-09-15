@@ -5,14 +5,12 @@ package com.covidsemfome.module.acao.model;
 
 import java.util.Date;
 
-import com.covidsemfome.model.Acao;
 import com.covidsemfome.model.Mailing;
 import com.covidsemfome.model.Voluntario;
 import com.covidsemfome.module.acao.behavior.MailingAction;
 import com.covidsemfome.module.acao.behavior.MailingBehavior;
 import com.covidsemfome.module.acao.decorator.MailingDecorator;
 import com.covidsemfome.module.acao.form.EmailTemplateForm;
-import com.covidsemfome.module.acao.process.MailingProcess;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.ejb.base.model.TItemModel;
@@ -40,17 +38,17 @@ import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.layout.TTitledPane;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
+import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
-import com.tedros.fxapi.annotation.process.TEntityProcess;
+import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
-import com.tedros.fxapi.annotation.view.TEntityCrudViewWithListView;
+import com.tedros.fxapi.annotation.view.TOption;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.builder.DateTimeFormatBuilder;
 import com.tedros.fxapi.collections.ITObservableList;
-import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.beans.property.SimpleLongProperty;
@@ -65,18 +63,20 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TForm(name = "Mailing", showBreadcrumBar=false, form=EmailTemplateForm.class)
-@TEntityProcess(process = MailingProcess.class, entity=Mailing.class)
-@TEntityCrudViewWithListView(listViewMinWidth=350,
-paginator=@TPaginator(entityClass = Mailing.class, serviceName = "IMailingControllerRemote",
-			show=true, showSearchField=true, searchFieldName="titulo"),
-presenter=@TPresenter(type = TDynaPresenter.class,
-			behavior = @TBehavior(type = MailingBehavior.class, 
-									saveAction=MailingAction.class, saveAllModels=false, saveOnlyChangedModels=false), 
-			decorator = @TDecorator(type = MailingDecorator.class, 
-									viewTitle="Mailing", listTitle="Acão / Campanha", saveButtonText="Enviar email")))
+@TEjbService(serviceName = "IMailingControllerRemote", model=Mailing.class)
+@TListViewPresenter(listViewMinWidth=350, listViewMaxWidth=350,
+	paginator=@TPaginator(entityClass = Mailing.class, serviceName = "IMailingControllerRemote",
+		show=true, showSearchField=true, searchFieldName="titulo",
+		orderBy = {@TOption(text = "Codigo", value = "id"), 
+					@TOption(text = "Titulo", value = "titulo"), 
+					@TOption(text = "Data", value = "data")}),
+	presenter=@TPresenter(behavior = @TBehavior(type = MailingBehavior.class, 
+		saveAction=MailingAction.class, saveAllModels=false, saveOnlyChangedModels=false), 
+		decorator = @TDecorator(type = MailingDecorator.class, 
+			viewTitle="Mailing", listTitle="Acão / Campanha", saveButtonText="Enviar email")))
 @TSecurity(	id="COVSEMFOME_MAIL_FORM", 
-			appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Mailing",
-			allowedAccesses={TAuthorizationType.VIEW_ACCESS})
+	appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Mailing",
+	allowedAccesses={TAuthorizationType.VIEW_ACCESS})
 
 public class MailingModelView extends TEntityModelView<Mailing> {
 	

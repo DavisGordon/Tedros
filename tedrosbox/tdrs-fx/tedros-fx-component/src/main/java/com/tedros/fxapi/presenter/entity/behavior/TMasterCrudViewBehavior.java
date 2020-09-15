@@ -12,15 +12,13 @@ import org.apache.commons.lang3.StringUtils;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
-import com.tedros.fxapi.annotation.view.TEntityCrudViewWithListView;
+import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.exception.TException;
-import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.modal.TMessageBox;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
-import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
-import com.tedros.fxapi.presenter.entity.decorator.TMainCrudViewWithListViewDecorator;
+import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.presenter.paginator.TPagination;
 import com.tedros.fxapi.process.TEntityProcess;
@@ -35,22 +33,21 @@ import javafx.concurrent.Worker.State;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
 
 @SuppressWarnings({ "rawtypes" })
-public class TMainCrudViewWithListViewBehavior<M extends TEntityModelView, E extends ITEntity>
+public class TMasterCrudViewBehavior<M extends TEntityModelView, E extends ITEntity>
 extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M, E> {
 	
 	private String paginatorServiceName;
 	private String searchFieldName;
 	
-	protected TMainCrudViewWithListViewDecorator<M> decorator;
+	protected TMasterCrudViewDecorator<M> decorator;
 		
 	@Override
 	public void load() {
 		super.load();
-		this.decorator = (TMainCrudViewWithListViewDecorator<M>) getPresenter().getDecorator();
+		this.decorator = (TMasterCrudViewDecorator<M>) getPresenter().getDecorator();
 		initialize();
 	}
 		
@@ -71,7 +68,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 			configListViewCallBack();
 			
 			TPaginator tPagAnn = null;
-			TEntityCrudViewWithListView tAnnotation = getPresenter().getModelViewClass().getAnnotation(TEntityCrudViewWithListView.class);
+			TListViewPresenter tAnnotation = getPresenter().getModelViewClass().getAnnotation(TListViewPresenter.class);
 			if(tAnnotation!=null){
 				tPagAnn = tAnnotation.paginator();
 				this.paginatorServiceName = tPagAnn.serviceName();

@@ -35,8 +35,8 @@ import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
-import com.tedros.fxapi.presenter.entity.behavior.TMainCrudViewWithListViewBehavior;
-import com.tedros.fxapi.presenter.entity.decorator.TMainCrudViewWithListViewDecorator;
+import com.tedros.fxapi.presenter.entity.behavior.TMasterCrudViewBehavior;
+import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.settings.security.action.TEncriptPasswordChangeListener;
 import com.tedros.settings.security.process.LoadTProfileOptionListProcess;
@@ -55,8 +55,8 @@ import javafx.scene.text.TextAlignment;
 @TForm(name="#{security.user.form.name}")
 @TFormReaderHtml
 @TPresenter(type=TDynaPresenter.class, 
-			decorator=@TDecorator(type = TMainCrudViewWithListViewDecorator.class, viewTitle="#{security.user.view.title}", listTitle="#{security.user.list.title}"),
-			behavior=@TBehavior(type=TMainCrudViewWithListViewBehavior.class))
+			decorator=@TDecorator(type = TMasterCrudViewDecorator.class, viewTitle="#{security.user.view.title}", listTitle="#{security.user.list.title}"),
+			behavior=@TBehavior(type=TMasterCrudViewBehavior.class))
 @TEntityProcess(entity=TUser.class, process = TUserProcess.class)
 @TSecurity(	id="T_CUSTOM_SECURITY_USER", 
 			appName="#{settings.app.name}", 

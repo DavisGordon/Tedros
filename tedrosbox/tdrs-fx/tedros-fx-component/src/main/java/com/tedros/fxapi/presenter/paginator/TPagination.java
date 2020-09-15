@@ -4,6 +4,8 @@
 package com.tedros.fxapi.presenter.paginator;
 
 /**
+ * Pagination data 
+ * 
  * @author Davis Gordon
  *
  */

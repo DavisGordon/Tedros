@@ -19,10 +19,8 @@ import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
 
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBuilder;
 import javafx.scene.control.Control;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.RadioButtonBuilder;
 import javafx.scene.control.ToolBar;
 
 @SuppressWarnings("rawtypes")
@@ -111,27 +109,28 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildModesRadioButton(String editRadiotext, String readRadioText) {
 		
 		final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-		if(editRadiotext==null)		
-			tEditModeRadio = RadioButtonBuilder.create()
-			.text(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_editModeTitle : tPresenter.decorator().editModeTitle()))
-			.id("t-title-label")
-			.build();
-		else
-			tEditModeRadio = RadioButtonBuilder.create()
-			.text(iEngine.getString(editRadiotext))
-			.id("t-title-label")
-			.build();
-		
-		if(readRadioText==null)	
-			tReadModeRadio = RadioButtonBuilder.create()
-			.text(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_readerModeTitle : tPresenter.decorator().readerModeTitle()))
-			.id("t-title-label")
-			.build();
-		else
-			tReadModeRadio = RadioButtonBuilder.create()
-			.text(iEngine.getString(readRadioText))
-			.id("t-title-label")
-			.build();
+		if(editRadiotext==null) {		
+			tEditModeRadio = new RadioButton();
+			tEditModeRadio.setText(iEngine.getString(tPresenter==null
+					? TAnnotationDefaultValue.TVIEW_editModeTitle 
+							: tPresenter.decorator().editModeTitle()));
+			tEditModeRadio.setId("t-title-label");
+		}else {
+			tEditModeRadio = new RadioButton();
+			tEditModeRadio.setText(iEngine.getString(editRadiotext));
+			tEditModeRadio.setId("t-title-label");
+		}
+		if(readRadioText==null)	{
+			tReadModeRadio = new RadioButton();
+			tReadModeRadio.setText(iEngine.getString(tPresenter==null 
+					? TAnnotationDefaultValue.TVIEW_readerModeTitle 
+							: tPresenter.decorator().readerModeTitle()));
+			tReadModeRadio.setId("t-title-label");
+		}else {
+			tReadModeRadio = new RadioButton();
+			tReadModeRadio.setText(iEngine.getString(readRadioText));
+			tReadModeRadio.setId("t-title-label");
+		}
 		
 		if(isUserNotAuthorized(TAuthorizationType.EDIT))
 			tEditModeRadio.setDisable(true);
@@ -155,15 +154,16 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildEditButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tEditButton = ButtonBuilder.create()
-					.text(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_editButtonText : tPresenter.decorator().editButtonText()))
-					.id("t-button")
-					.build();
-		}else
-			tEditButton = ButtonBuilder.create()
-			.text(iEngine.getString(text))
-			.id("t-button")
-			.build();
+			tEditButton = new Button();
+			tEditButton.setText(iEngine.getString(tPresenter==null 
+					? TAnnotationDefaultValue.TVIEW_editButtonText 
+							: tPresenter.decorator().editButtonText()));
+			tEditButton.setId("t-button");
+		}else{
+			tEditButton = new Button();
+			tEditButton.setText(iEngine.getString(text));
+			tEditButton.setId("t-button");
+		}
 		
 		if(isUserNotAuthorized(TAuthorizationType.EDIT))
 			tEditButton.setDisable(true);
@@ -185,15 +185,16 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildCancelButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tCancelButton = ButtonBuilder.create()
-					.text(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_cancelButtonText : tPresenter.decorator().cancelButtonText()))
-					.id("t-button")
-					.build();
-		}else
-			tCancelButton = ButtonBuilder.create()
-			.text(iEngine.getString(text))
-			.id("t-button")
-			.build();
+			tCancelButton = new Button();
+			tCancelButton.setText(iEngine.getString(tPresenter==null 
+					? TAnnotationDefaultValue.TVIEW_cancelButtonText 
+							: tPresenter.decorator().cancelButtonText()));
+			tCancelButton.setId("t-button");
+		}else {
+			tCancelButton = new Button();
+			tCancelButton.setText(iEngine.getString(text));
+			tCancelButton.setId("t-button");
+		}
 	}
 	
 	/**
@@ -212,15 +213,16 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildSaveButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tSaveButton = ButtonBuilder.create()
-					.text(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_saveButtonText : tPresenter.decorator().saveButtonText()))
-					.id("t-button")
-					.build();
-		}else
-			tSaveButton = ButtonBuilder.create()
-			.text(iEngine.getString(text))
-			.id("t-button")
-			.build();
+			tSaveButton = new Button();
+			tSaveButton.setText(iEngine.getString(tPresenter==null 
+					? TAnnotationDefaultValue.TVIEW_saveButtonText 
+							: tPresenter.decorator().saveButtonText()));
+			tSaveButton.setId("t-button");
+		}else {
+			tSaveButton = new Button();
+			tSaveButton.setText(iEngine.getString(text));
+			tSaveButton.setId("t-button");
+		}
 		
 		if(isUserNotAuthorized(TAuthorizationType.SAVE))
 			tSaveButton.setDisable(true);
@@ -242,15 +244,16 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildDeleteButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tDeleteButton = ButtonBuilder.create()
-					.text(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_deleteButtonText : tPresenter.decorator().deleteButtonText()))
-					.id("t-button")
-					.build();
-		}else
-			tDeleteButton = ButtonBuilder.create()
-			.text(iEngine.getString(text))
-			.id("t-button")
-			.build();
+			tDeleteButton = new Button();
+			tDeleteButton.setText(iEngine.getString(tPresenter==null 
+					? TAnnotationDefaultValue.TVIEW_deleteButtonText 
+							: tPresenter.decorator().deleteButtonText()));
+			tDeleteButton.setId("t-button");
+		}else {
+			tDeleteButton = new Button();
+			tDeleteButton.setText(iEngine.getString(text));
+			tDeleteButton.setId("t-button");
+		}
 		
 		if(isUserNotAuthorized(TAuthorizationType.DELETE))
 			tDeleteButton.setDisable(true);
@@ -272,15 +275,16 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildNewButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tNewButton = ButtonBuilder.create()
-					.text(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_newButtonText : tPresenter.decorator().newButtonText()))
-					.id("t-button")
-					.build();
-		}else
-			tNewButton = ButtonBuilder.create()
-			.text(iEngine.getString(text))
-			.id("t-button")
-			.build();
+			tNewButton = new Button();
+			tNewButton.setText(iEngine.getString(tPresenter==null 
+					? TAnnotationDefaultValue.TVIEW_newButtonText 
+							: tPresenter.decorator().newButtonText()));
+			tNewButton.setId("t-button");
+		}else {
+			tNewButton = new Button();
+			tNewButton.setText(iEngine.getString(text));
+			tNewButton.setId("t-button");
+		}
 		
 		if(isUserNotAuthorized(TAuthorizationType.NEW))
 			tNewButton.setDisable(true);
@@ -296,10 +300,11 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	 * </p>
 	 * */
 	public void buildColapseButton(String text) {
-		tColapseButton = ButtonBuilder.create()
-				.text(iEngine.getString(StringUtils.isBlank(text) ? TAnnotationDefaultValue.TVIEW_colapse : text))
-				.id("t-button")
-				.build();
+		tColapseButton = new Button();
+		tColapseButton.setText(iEngine.getString(StringUtils.isBlank(text) 
+				? TAnnotationDefaultValue.TVIEW_colapse 
+						: text));
+		tColapseButton.setId("t-button");
 	}
 
 	// getters and setters

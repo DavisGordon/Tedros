@@ -16,7 +16,6 @@ import com.covidsemfome.module.pessoa.model.PessoaModelView;
 import com.covidsemfome.module.voluntario.process.LoadAcaoOptionListProcess;
 import com.covidsemfome.module.voluntario.process.LoadPessoaOptionListProcess;
 import com.covidsemfome.module.voluntario.process.LoadTipoAjudaOptionListProcess;
-import com.covidsemfome.module.voluntario.process.VoluntarioProcess;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
@@ -28,10 +27,10 @@ import com.tedros.fxapi.annotation.control.TPickListField;
 import com.tedros.fxapi.annotation.effect.TDropShadow;
 import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TForm;
-import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
+import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
-import com.tedros.fxapi.annotation.process.TEntityProcess;
+import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.reader.TColumnReader;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
@@ -41,15 +40,12 @@ import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
-import com.tedros.fxapi.annotation.view.TEntityCrudViewWithListView;
+import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TOptionProcessType;
 import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.domain.TViewMode;
-import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
-import com.tedros.fxapi.presenter.entity.behavior.TMainCrudViewWithListViewBehavior;
-import com.tedros.fxapi.presenter.entity.decorator.TMainCrudViewWithListViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.beans.property.SimpleLongProperty;
@@ -66,16 +62,14 @@ import javafx.scene.text.TextAlignment;
  */
 @TFormReaderHtml
 @TForm(name = "Voluntário inscrito na campanha ", showBreadcrumBar=true)
-@TEntityProcess(process = VoluntarioProcess.class, entity=Voluntario.class)
-@TEntityCrudViewWithListView(listViewMinWidth=350,
-		presenter=@TPresenter(type = TDynaPresenter.class,
-			behavior = @TBehavior(type = TMainCrudViewWithListViewBehavior.class), 
-			decorator = @TDecorator(type = TMainCrudViewWithListViewDecorator.class, 
-									viewTitle="Voluntário inscrito", listTitle="#{label.select}")))
+@TEjbService(serviceName = "IVoluntarioControllerRemote", model=Voluntario.class)
+@TListViewPresenter(listViewMinWidth=350, listViewMaxWidth=350,
+	paginator=@TPaginator(entityClass = Voluntario.class, serviceName = "IVoluntarioControllerRemote", show=true),
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Voluntário inscrito")))
 @TSecurity(	id="COVSEMFOME_CADVOL_FORM", 
-			appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Voluntários inscritos na campanha",
-			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
-							TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
+	appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Voluntários inscritos na campanha",
+	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
+					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 
 public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 

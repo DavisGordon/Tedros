@@ -31,8 +31,8 @@ import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
-import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
+import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEntityProcess;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
@@ -42,15 +42,11 @@ import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
-import com.tedros.fxapi.annotation.view.TEntityCrudViewWithListView;
 import com.tedros.fxapi.annotation.view.TOption;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.builder.DateTimeFormatBuilder;
 import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TStyleParameter;
-import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
-import com.tedros.fxapi.presenter.entity.behavior.TMainCrudViewWithListViewBehavior;
-import com.tedros.fxapi.presenter.entity.decorator.TMainCrudViewWithListViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.beans.property.SimpleDoubleProperty;
@@ -71,20 +67,17 @@ import javafx.scene.text.TextAlignment;
 @TFormReaderHtml
 @TForm(name = "Ação / Campanha", showBreadcrumBar=false)
 @TEntityProcess(process = AcaoProcess.class, entity=Acao.class)
-@TEntityCrudViewWithListView(listViewMinWidth=350,
-paginator=@TPaginator(entityClass = Acao.class, serviceName = "IAcaoControllerRemote",
-			show=true, showSearchField=true, searchFieldName="titulo",
-			orderBy = {@TOption(text = "Codigo", value = "id"), 
+@TListViewPresenter(listViewMinWidth=350, listViewMaxWidth=350,
+	paginator=@TPaginator(entityClass = Acao.class, serviceName = "IAcaoControllerRemote",
+		show=true, showSearchField=true, searchFieldName="titulo",
+		orderBy = {@TOption(text = "Codigo", value = "id"), 
 					@TOption(text = "Titulo", value = "titulo"), 
 					@TOption(text = "Data", value = "data")}),
-presenter=@TPresenter(type = TDynaPresenter.class,
-			behavior = @TBehavior(type = TMainCrudViewWithListViewBehavior.class), 
-			decorator = @TDecorator(type = TMainCrudViewWithListViewDecorator.class, 
-									viewTitle="Ação / Campanha", listTitle="#{label.select}")))
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Ação / Campanha")))
 @TSecurity(	id="COVSEMFOME_ACAO_FORM", 
-			appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Ação / Campanha",
-			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
-							TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
+	appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Ação / Campanha",
+	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
+					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class AcaoModelView extends TEntityModelView<Acao> {
 	
 	@TReaderHtml

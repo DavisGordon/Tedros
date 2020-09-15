@@ -367,16 +367,11 @@ public class Main extends Application {
         expandCollapseButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				if(expandedTollBar){
-            		splitPane.setDividerPosition(0, 0.0038);
-            		expandedTollBar = false;
-            	}else{
-            		splitPane.setDividerPosition(0, 0.197);
-            		expandedTollBar = true;
-            	}
-				
+				colapseMenuBar();
 			}
 		});
+        
+        
         
         // Inicio breadcrumbar
         breadcrumbBar = new TedrosBoxBreadcrumbBar();
@@ -610,9 +605,13 @@ public class Main extends Application {
                     scrollPane.setMinWidth(725);
                     scrollPane.setStyle("-fx-background-color: transparent; -fx-padding: 20 20 20 20;");
                     content = scrollPane;
+                    this.expandedTollBar = true;
+                    colapseMenuBar();
                 }else {
                 	content = view;
                 	content.setStyle("-fx-background-color: transparent;");
+                	this.expandedTollBar = false;
+                    colapseMenuBar();
                 }
                 pageArea.getChildren().setAll(content);
                 TedrosContext.setView(view);
@@ -724,7 +723,17 @@ public class Main extends Application {
         
        // TedrosProcessManager.addProcess(TTomeeServerService.class);
     }
-    public static void main(String[] args) { 
+    public void colapseMenuBar() {
+		if(expandedTollBar){
+			splitPane.setDividerPosition(0, 0.0038);
+			expandedTollBar = false;
+		}else{
+			splitPane.setDividerPosition(0, 0.197);
+			expandedTollBar = true;
+		}
+	}
+
+	public static void main(String[] args) { 
     	launch(args); 
     }
 	

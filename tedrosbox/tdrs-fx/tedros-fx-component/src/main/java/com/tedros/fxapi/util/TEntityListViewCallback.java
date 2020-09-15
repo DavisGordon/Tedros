@@ -2,8 +2,10 @@ package com.tedros.fxapi.util;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.fxapi.exception.TException;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
+import com.tedros.fxapi.presenter.model.TModelView;
 
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -24,7 +26,7 @@ import javafx.util.Callback;
  * */
 
 @SuppressWarnings("rawtypes")
-public class TEntityListViewCallback<M extends TEntityModelView> implements Callback<ListView<M>, ListCell<M>> {
+public class TEntityListViewCallback<M extends TModelView> implements Callback<ListView<M>, ListCell<M>> {
 
 	public static String ITEM_CSS_ID = "t-listcell-item";
 	public static String NEW_ITEM_EMPTY_CSS_ID = "t-listcell-new-empty-item"; 
@@ -74,7 +76,7 @@ public class TEntityListViewCallback<M extends TEntityModelView> implements Call
             }
 
 			private boolean validateNew(final M item) {
-				if(item.getEntity().isNew()){
+				if(item.getModel() instanceof ITEntity && ((ITEntity)item.getModel()).isNew()){
 					if(StringUtils.isBlank(item.getDisplayProperty().getValue()))
 						setId(NEW_ITEM_EMPTY_CSS_ID);
 					else

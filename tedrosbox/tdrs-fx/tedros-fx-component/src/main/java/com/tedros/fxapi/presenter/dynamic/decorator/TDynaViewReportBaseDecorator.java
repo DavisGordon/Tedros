@@ -203,8 +203,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 			.id("t-button")
 			.build();
 		
-		if(isUserNotAuthorized(TAuthorizationType.DELETE))
-			tCleanButton.setDisable(true);
+		
 	}
 
 	/**

@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.tedros.ejb.base.entity.ITEntity;
+import com.tedros.ejb.base.controller.ITEjbController;
 import com.tedros.ejb.base.model.ITModel;
 
 
@@ -26,9 +26,9 @@ public @interface TEjbService {
 	public Class<? extends ITModel> model();
 	
 	/**
-	 * <pre>
-	 * The EJB service name
-	 * </pre>
+	 * The ejb jndi name to lookup the service, this must implement ITEjbController
+	 * 
+	 * @see ITEjbController
 	 * */
 	public String serviceName();
 	

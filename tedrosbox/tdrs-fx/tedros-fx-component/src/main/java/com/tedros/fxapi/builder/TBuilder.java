@@ -23,7 +23,7 @@ public abstract class TBuilder implements ITBuilder {
 		this.componentDescriptor = annotationDescriptor;
 		
 		try{
-			if(this.componentDescriptor.getForm().gettPresenter()!=null){
+			if(this.componentDescriptor.getForm()!=null && this.componentDescriptor.getForm().gettPresenter()!=null){
 				ITModule module = this.componentDescriptor.getForm().gettPresenter().getModule();
 				if(module !=null && TedrosAppManager.getInstance().getModuleContext(module)!=null){
 					String uuid = TedrosAppManager.getInstance().getModuleContext(module).getAppContext().getAppDescriptor().getUniversalUniqueIdentifier();

@@ -5,20 +5,21 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javafx.scene.control.ListView;
-import javafx.util.Callback;
-
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.presenter.behavior.ITBehavior;
+import com.tedros.fxapi.presenter.entity.behavior.TMasterCrudViewBehavior;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.util.TEntityListViewCallback;
+
+import javafx.scene.control.ListView;
+import javafx.util.Callback;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value=ElementType.ANNOTATION_TYPE)
 public @interface TBehavior {
 	
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITBehavior> type();
+	public Class<? extends ITBehavior> type() default TMasterCrudViewBehavior.class;
 	
 	/**
 	 *<pre>
@@ -118,6 +119,22 @@ public @interface TBehavior {
 
 	/**
 	 * <pre>
+	 * Specifies an action to the select event dispatched from the select button;
+	 * </pre>
+	 * */
+	@SuppressWarnings("rawtypes")
+	public Class<? extends TPresenterAction> selectAction() default TPresenterAction.class;
+
+	/**
+	 * <pre>
+	 * Specifies an action to the modal close event dispatched from the close button;
+	 * </pre>
+	 * */
+	@SuppressWarnings("rawtypes")
+	public Class<? extends TPresenterAction> closeAction() default TPresenterAction.class;
+	
+	/**
+	 * <pre>
 	 * Process the save action for all changed entity's if false only the current 
 	 * entity in edition is processed.
 	 * 
@@ -135,4 +152,7 @@ public @interface TBehavior {
 	 * */
 	public boolean saveOnlyChangedModels() default true;
 
+	
+
+	
 }

@@ -2,18 +2,11 @@ package com.covidsemfome.module.doacao.model;
 
 import java.util.Date;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.covidsemfome.model.Acao;
 import com.covidsemfome.model.Doacao;
 import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.TipoAjuda;
-import com.covidsemfome.module.acao.model.AcaoModelView;
-import com.covidsemfome.module.doacao.process.DoacaoProcess;
-import com.covidsemfome.module.pessoa.model.PessoaModelView;
 import com.covidsemfome.module.voluntario.model.TipoAjudaModelView;
-import com.covidsemfome.module.voluntario.process.LoadAcaoOptionListProcess;
-import com.covidsemfome.module.voluntario.process.LoadPessoaOptionListProcess;
 import com.covidsemfome.module.voluntario.process.LoadTipoAjudaOptionListProcess;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
@@ -21,6 +14,7 @@ import com.tedros.fxapi.annotation.control.TBigDecimalField;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
+import com.tedros.fxapi.annotation.control.TFindItemField;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
 import com.tedros.fxapi.annotation.control.TOptionsList;
@@ -33,10 +27,10 @@ import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
-import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
+import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
-import com.tedros.fxapi.annotation.process.TEntityProcess;
+import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
@@ -44,13 +38,10 @@ import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
-import com.tedros.fxapi.annotation.view.TEntityCrudViewWithListView;
+import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TOptionProcessType;
 import com.tedros.fxapi.domain.TStyleParameter;
-import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
-import com.tedros.fxapi.presenter.entity.behavior.TMainCrudViewWithListViewBehavior;
-import com.tedros.fxapi.presenter.entity.decorator.TMainCrudViewWithListViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.beans.property.SimpleDoubleProperty;
@@ -66,16 +57,14 @@ import javafx.scene.text.TextAlignment;
 
 @TFormReaderHtml
 @TForm(name = "Doação", showBreadcrumBar=false)
-@TEntityProcess(process = DoacaoProcess.class, entity=Doacao.class)
-@TEntityCrudViewWithListView(listViewMinWidth=380,
-presenter=@TPresenter(type = TDynaPresenter.class,
-			behavior = @TBehavior(type = TMainCrudViewWithListViewBehavior.class), 
-			decorator = @TDecorator(type = TMainCrudViewWithListViewDecorator.class, 
-									viewTitle="Doação", listTitle="#{label.select}")))
+@TEjbService(serviceName = "IDoacaoControllerRemote", model=Doacao.class)
+@TListViewPresenter(listViewMinWidth=380, listViewMaxWidth=380,
+	paginator=@TPaginator(entityClass = Doacao.class, serviceName = "IDoacaoControllerRemote", show=true),
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Doação")))
 @TSecurity(	id="COVSEMFOME_DOACAO_FORM", 
-			appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Doação",
-			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
-							TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
+	appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Doação",
+	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
+					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class DoacaoModelView extends TEntityModelView<Doacao>{
 	
 	private SimpleLongProperty id;
@@ -93,10 +82,8 @@ public class DoacaoModelView extends TEntityModelView<Doacao>{
 	
 	@TReaderHtml
 	@TLabel(text="Pessoa")
-	@TComboBoxField(firstItemTex="Selecione uma Pessoa...", required=true, 
-			control=@TControl(parse = true, minWidth=300),
-			optionsList=@TOptionsList(optionsProcessClass = LoadPessoaOptionListProcess.class, 
-			entityClass=Pessoa.class, optionModelViewClass=PessoaModelView.class, optionProcessType=TOptionProcessType.LIST_ALL ))
+	@TFindItemField(modelClass = Pessoa.class, modelViewClass = PessoaFindModelView.class,
+	width=300, height=50)
 	@THBox(	pane=@TPane(children={"pessoa","tipoAjuda"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="pessoa", priority=Priority.ALWAYS),
    				   		@TPriority(field="tipoAjuda", priority=Priority.ALWAYS) }))
@@ -113,10 +100,7 @@ public class DoacaoModelView extends TEntityModelView<Doacao>{
 	
 	@TReaderHtml
 	@TLabel(text="Ação")
-	@TComboBoxField(firstItemTex="Selecione uma ação...", 
-			control=@TControl(parse = true, minWidth=280),
-			optionsList=@TOptionsList(optionsProcessClass = LoadAcaoOptionListProcess.class, 
-			entityClass=Acao.class, optionModelViewClass=AcaoModelView.class, optionProcessType=TOptionProcessType.LIST_ALL ))
+	@TFindItemField(modelClass = Acao.class, modelViewClass = AcaoFindModelView.class)
 	private SimpleObjectProperty<Acao> acao;
 	
 	@TReaderHtml
