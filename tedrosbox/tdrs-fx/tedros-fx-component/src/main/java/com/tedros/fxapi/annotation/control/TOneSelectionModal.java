@@ -1,9 +1,31 @@
-package com.tedros.fxapi.annotation.layout;
+/**
+ * TEDROS  
+ * 
+ * TODOS OS DIREITOS RESERVADOS
+ * 08/11/2013
+ */
+package com.tedros.fxapi.annotation.control;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import com.tedros.ejb.base.model.ITModel;
+import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
+import com.tedros.fxapi.annotation.layout.TPane;
+import com.tedros.fxapi.annotation.layout.TVBoxMargin;
+import com.tedros.fxapi.annotation.layout.TVGrow;
+import com.tedros.fxapi.annotation.parser.ITAnnotationParser;
+import com.tedros.fxapi.annotation.parser.TVBoxParser;
+import com.tedros.fxapi.annotation.scene.TNode;
+import com.tedros.fxapi.annotation.scene.layout.TRegion;
+import com.tedros.fxapi.builder.ITFieldBuilder;
+import com.tedros.fxapi.builder.TOneSelectionModalBuilder;
+import com.tedros.fxapi.builder.TTextFieldBuilder;
+import com.tedros.fxapi.control.TRequiredTextField;
+import com.tedros.fxapi.domain.TViewMode;
+import com.tedros.fxapi.presenter.model.TModelView;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -11,61 +33,29 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
-import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
-import com.tedros.fxapi.annotation.parser.ITAnnotationParser;
-import com.tedros.fxapi.annotation.parser.TVBoxParser;
-import com.tedros.fxapi.annotation.scene.TNode;
-import com.tedros.fxapi.annotation.scene.layout.TRegion;
-import com.tedros.fxapi.builder.ITLayoutBuilder;
-import com.tedros.fxapi.builder.TVBoxBuilder;
-import com.tedros.fxapi.domain.TViewMode;
-
-
 /**
  * <pre>
- * Build a {@link VBox} layout.
+ * Build a {@link com.tedros.fxapi.control.TSelectionModal} component.
  * 
- * Example:
+ * This component opens a modal that allows a user to search and select items. 
  * 
- * <i>@</i><strong>TVBox</strong>(pane=<i>@</i>TPane(children={"<strong style="color:red;">passField"</strong>, "<strong style="color:blue;">integerField</strong>", "<strong style="color:green;">bigIntegerField</strong>"}), fillHeight=true, 
- *			vgrow=<i>@</i>TVGrow(priority=<i>@</i>TPriority(field="bigIntegerField", priority=Priority.ALWAYS)),
- *			spacing=10)
- *  <i>@</i>TLabel(text="Password:", control=<i>@</i>TControl(prefWidth=500))
- *  <i>@</i>TPasswordField(required=true, maxLength=6)
- *  private SimpleStringProperty <strong style="color:red;">passField;</strong>
- *		
- *  <i>@</i>TLabel(text="Number field", control=<i>@</i>TControl(prefWidth=500))
- *  <i>@</i>TIntegerField(zeroValidation=TZeroValidation.MORE_THAN_ZERO, control=<i>@</i>TControl(tooltip="Max val: "+Integer.MAX_VALUE))
- *  private SimpleIntegerProperty <strong style="color:blue;">integerField</strong>;
- *		
- *  <i>@</i>TLabel(text="Big number field:", control=<i>@</i>TControl(prefWidth=500))
- *  <i>@</i>TBigIntegerField(zeroValidation=TZeroValidation.MORE_THAN_ZERO, control=<i>@</i>TControl(tooltip="Max val: infinito"))
- *  private SimpleObjectProperty&gt;BigInteger&lt; <strong style="color:green;">bigIntegerField</strong>;
- * 
- * 
- * Oracle documentation:
- * 
- * VBox lays out its children in a single vertical column. If the vbox has a border and/or padding set, then the contents will be layed out within those insets.
- *
- * VBox will resize children (if resizable) to their preferred heights and uses its fillWidth property to determine whether to resize their widths to fill its own width or keep their widths to their preferred (fillWidth defaults to true). The alignment of the content is controlled by the alignment property, which defaults to Pos.TOP_LEFT.
- * If a vbox is resized larger than its preferred height, by default it will keep children to their preferred heights, leaving the extra space unused. If an application wishes to have one or more children be allocated that extra space it may optionally set a vgrow constraint on the child. See "Optional Layout Constraints" for details.
- * 
- * VBox lays out each managed child regardless of the child's visible property value; unmanaged children are ignored.
- * 
+ *  Must be used with SimpleObjectProperty 
  * </pre>
- **/
+ * @author Davis Gordon
+ *
+ */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.ANNOTATION_TYPE,ElementType.FIELD})
-public @interface TVBox {
+@Target(ElementType.FIELD)
+public @interface TOneSelectionModal  {
 	
 	/**
 	 *<pre>
-	 * The builder of type {@link ITLayoutBuilder} for this component.
+	 * The builder of type {@link ITFieldBuilder} for this component.
 	 * 
-	 *  Default value: {@link TVBoxBuilder}
+	 *  Default value: {@link TTextFieldBuilder}
 	 *</pre> 
 	 * */
-	public Class<? extends ITLayoutBuilder<VBox>> builder() default TVBoxBuilder.class;
+	public Class<? extends ITFieldBuilder> builder() default TOneSelectionModalBuilder.class;
 	
 	/**
 	 * <pre>
@@ -76,6 +66,31 @@ public @interface TVBox {
 	 * */
 	@SuppressWarnings("rawtypes")
 	public Class<? extends ITAnnotationParser>[] parser() default {TVBoxParser.class};
+	 
+	
+	/**
+	 * The model view class with the fields to search. 
+	 * This class  must be annotated with @TSelectionModalPresenter
+	 * */
+	@SuppressWarnings("rawtypes")
+	public Class<? extends TModelView> modelViewClass();
+	
+	/**
+	 * The model or entity type
+	 * */
+	public Class<? extends ITModel> modelClass();
+	
+	/**
+	 * The list view width 
+	 * @default 220
+	 * */
+	public double width() default 220;
+	/**
+	 * The list view height 
+	 * @default 30
+	 * */
+	public double height() default 30;
+	
 	
 	/**
 	 * <pre>
@@ -145,7 +160,7 @@ public @interface TVBox {
 	
 	/**
 	* <pre>
-	* Specifies the view mode to use this compent.
+	* Specifies the view mode to use this component.
 	* 
 	* Set to TMode.READER will build this component only when the user set the view to Reader mode.
 	* 
@@ -154,5 +169,21 @@ public @interface TVBox {
 	* </pre>
 	**/
 	public TViewMode[] mode() default {TViewMode.EDIT, TViewMode.READER};
+	
+	/**
+	 * <pre>
+	 * {@link TRequiredTextField} Class
+	 * 
+	 * Sets the value of the property required.
+	 * 
+	 * Property description:
+	 * 
+	 * Determines with this control will be required.
+	 * 
+	 * Default value: false.
+	 * </pre>
+	 * */
+	public boolean required() default false;
+	
 	
 }

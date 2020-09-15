@@ -5,17 +5,13 @@ import com.covidsemfome.module.pessoa.model.PessoaFieldValueUtil;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TLabelPosition;
+import com.tedros.fxapi.annotation.control.TLongField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
-import com.tedros.fxapi.annotation.control.TVerticalRadioGroup;
 import com.tedros.fxapi.annotation.form.TForm;
-import com.tedros.fxapi.annotation.layout.THBox;
-import com.tedros.fxapi.annotation.layout.THGrow;
-import com.tedros.fxapi.annotation.layout.TPane;
-import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.presenter.TSelectionModalPresenter;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.scene.control.TControl;
@@ -27,13 +23,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
-import javafx.scene.layout.Priority;
 
 /**
- * The person model view
- * 
- * An entity model view class wraps an entity and is responsable 
- * for descript how the crud view and the fields must be build and exposed.
  * 
  * @author Davis Gordon
  * */
@@ -48,6 +39,8 @@ import javafx.scene.layout.Priority;
 		allowsMultipleSelections = false)
 public class PessoaFindModelView extends TEntityModelView<Pessoa>{
 	
+	@TLabel(text="Codigo:", position=TLabelPosition.LEFT)
+	@TLongField(maxLength=6 )
 	private SimpleLongProperty id;
 	
 	private SimpleStringProperty displayText;
@@ -67,23 +60,9 @@ public class PessoaFindModelView extends TEntityModelView<Pessoa>{
 	@TLabel(text="#{label.name}")
 	@TTextField(maxLength=60, required = true, textInputControl=@TTextInputControl(promptText="#{label.name}", parse = true), 
 				control=@TControl(tooltip="#{label.name}", parse = true))
-	@THBox(	pane=@TPane(children={"nome","profissao","dataNascimento"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="nome", priority=Priority.ALWAYS), 
-						@TPriority(field="profissao", priority=Priority.ALWAYS), 
-   				   		@TPriority(field="dataNascimento", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty nome;
 	
 	
-	
-	@TLabel(text="Tipo voluntário")
-	@TVerticalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
-	radioButtons = {@TRadioButtonField(text="Operacional", userData="1"), 
-					@TRadioButtonField(text="Estratégico", userData="2"),
-					@TRadioButtonField(text="Estratégico (Receber emails)", userData="3"),
-					@TRadioButtonField(text="Doador/Filatrópico", userData="4"),
-					@TRadioButtonField(text="Cadastro/Site", userData="5"),
-					@TRadioButtonField(text="Outro", userData="6")
-	})
 	private SimpleStringProperty tipoVoluntario;
 	
 	

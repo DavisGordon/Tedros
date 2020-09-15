@@ -4,11 +4,10 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.beans.value.WeakChangeListener;
-
 import com.tedros.fxapi.presenter.model.TModelView;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.WeakChangeListener;
 
 public class TFXCollections {
 	

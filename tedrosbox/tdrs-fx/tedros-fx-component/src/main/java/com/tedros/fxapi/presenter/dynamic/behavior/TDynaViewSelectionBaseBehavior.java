@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.tedros.core.ITModule;
+import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.TModule;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.context.TedrosContext;
@@ -47,6 +48,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
@@ -59,7 +61,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	
 	private TPresenterAction<TDynaPresenter<M>> cleanAction;
 	private TPresenterAction<TDynaPresenter<M>> searchAction;
-	private TPresenterAction<TDynaPresenter<M>> selectAction;
 	private TPresenterAction<TDynaPresenter<M>> selectedItemAction;
 	private TPresenterAction<TDynaPresenter<M>> cancelAction;
 	private TPresenterAction<TDynaPresenter<M>> closeAction;
@@ -108,8 +109,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				searchAction = tBehavior.searchAction().newInstance();
 			if(tBehavior.cleanAction()!=TPresenterAction.class)
 				cleanAction = tBehavior.cleanAction().newInstance();
-			if(tBehavior.selectAction()!=TPresenterAction.class)
-				selectAction = tBehavior.excelAction().newInstance();
 			if(tBehavior.selectedItemAction()!=TPresenterAction.class)
 				selectedItemAction = tBehavior.selectedItemAction().newInstance();
 			if(tBehavior.cancelAction()!=TPresenterAction.class)
@@ -128,7 +127,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	    	ITFieldBuilder controlBuilder = (ITFieldBuilder) arrControl[1];
 	    	((ITBuilder) controlBuilder).setComponentDescriptor(new TComponentDescriptor(null, model, null));
 	    	TableView tableView = (TableView) ((ITControlBuilder) controlBuilder).build(tableViewAnn, this.searchResultList);
-			decorator.setTableView(tableView);
+	    	tableView.setTooltip(new Tooltip(TInternationalizationEngine
+					.getInstance(null)
+					.getString("#{tedros.fxapi.label.double.click.select}")));
+	    	
+	    	decorator.setTableView(tableView);
 			
 			tableView.setTableMenuButtonVisible(true);
 			
@@ -408,23 +411,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			cancelAction.runAfter(presenter);
 	}
 
-	/**
-	 * Perform this action when select button onAction is triggered.
-	 * */
-	public void selectAction() {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(selectAction==null || (selectAction!=null && selectAction.runBefore(presenter))){
-			try{
-				closeModal();
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-		}
-		
-		if(selectAction!=null)
-			selectAction.runAfter(presenter);
-		
-	}
 	
 	private void closeModal() {
 		super.invalidate();
@@ -432,8 +418,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		.getModuleContext((TModule)TedrosContext.getView()).getCurrentViewContext()
 		.getPresenter().getView().tHideModal();
 	}
-	
-	
 	
 	
 	/**
@@ -505,20 +489,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 */
 	public void setSearchAction(TPresenterAction<TDynaPresenter<M>> searchAction) {
 		this.searchAction = searchAction;
-	}
-
-	/**
-	 * @return the selectAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getSelectAction() {
-		return selectAction;
-	}
-
-	/**
-	 * @param selectAction the selectAction to set
-	 */
-	public void setSelectAction(TPresenterAction<TDynaPresenter<M>> selectAction) {
-		this.selectAction = selectAction;
 	}
 
 	/**

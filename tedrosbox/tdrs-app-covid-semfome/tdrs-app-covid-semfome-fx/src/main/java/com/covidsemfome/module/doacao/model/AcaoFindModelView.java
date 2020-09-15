@@ -20,7 +20,6 @@ import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
-import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
@@ -47,7 +46,6 @@ import javafx.scene.layout.Priority;
  * @author Davis Gordon
  *
  */
-@TForm(name = "Ação / Campanha")
 @TSelectionModalPresenter(
 		paginator=@TPaginator(entityClass = Acao.class, modelViewClass=AcaoItemTableView.class, 
 			serviceName = "IAcaoControllerRemote"),
