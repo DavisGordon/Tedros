@@ -35,7 +35,7 @@ import javafx.util.Callback;
  *
  */
 @SuppressWarnings("rawtypes")
-public class TFindItem extends VBox {
+public class TSelectionModal extends VBox {
 
 	
 	private ITObservableList<TModelView> tSelectedItems;
@@ -59,7 +59,7 @@ public class TFindItem extends VBox {
 	 * 
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public TFindItem(ITObservableList items,  boolean selectMultipleItem, double width, double height) {
+	public TSelectionModal(ITObservableList items,  boolean selectMultipleItem, double width, double height) {
 		this.tSelectedItems = items;
 		this.width = width;
 		this.height = height;

@@ -11,22 +11,22 @@ import com.covidsemfome.model.Acao;
 import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.TipoAjuda;
 import com.covidsemfome.model.Voluntario;
-import com.covidsemfome.module.acao.model.AcaoModelView;
-import com.covidsemfome.module.pessoa.model.PessoaModelView;
-import com.covidsemfome.module.voluntario.process.LoadAcaoOptionListProcess;
-import com.covidsemfome.module.voluntario.process.LoadPessoaOptionListProcess;
-import com.covidsemfome.module.voluntario.process.LoadTipoAjudaOptionListProcess;
+import com.covidsemfome.module.doacao.model.AcaoFindModelView;
+import com.covidsemfome.module.doacao.model.PessoaFindModelView;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
-import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
-import com.tedros.fxapi.annotation.control.TOptionsList;
-import com.tedros.fxapi.annotation.control.TPickListField;
+import com.tedros.fxapi.annotation.control.TMultipleSelectionModal;
+import com.tedros.fxapi.annotation.control.TOneSelectionModal;
 import com.tedros.fxapi.annotation.effect.TDropShadow;
 import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TForm;
+import com.tedros.fxapi.annotation.layout.THBox;
+import com.tedros.fxapi.annotation.layout.THGrow;
+import com.tedros.fxapi.annotation.layout.TPane;
+import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
@@ -37,13 +37,11 @@ import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.reader.TTableReaderHtml;
 import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
-import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.domain.THtmlConstant;
-import com.tedros.fxapi.domain.TOptionProcessType;
 import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
@@ -54,6 +52,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
+import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
 /**
@@ -88,21 +87,17 @@ public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 	
 	@TReaderHtml
 	@TLabel(text="Ação/Campanha")
-	@TComboBoxField(firstItemTex="Selecione uma ação...", required=true, 
-			control=@TControl(parse = true, minWidth=400),
-			optionsList=@TOptionsList(optionsProcessClass = LoadAcaoOptionListProcess.class, 
-			entityClass=Acao.class, optionModelViewClass=AcaoModelView.class, optionProcessType=TOptionProcessType.LIST_ALL ))
+	@TOneSelectionModal(modelClass = Acao.class, modelViewClass = AcaoFindModelView.class)
+	@THBox(	pane=@TPane(children={"acao","pessoa"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="acao", priority=Priority.ALWAYS),
+   				   		@TPriority(field="pessoa", priority=Priority.ALWAYS) }))
 	private SimpleObjectProperty<Acao> acao;
 	
 	@TReaderHtml
 	@TLabel(text="Pessoa")
-	@TComboBoxField(firstItemTex="Selecione uma Pessoa...", required=true, 
-			control=@TControl(parse = true, minWidth=400),
-			optionsList=@TOptionsList(optionsProcessClass = LoadPessoaOptionListProcess.class, 
-			entityClass=Pessoa.class, optionModelViewClass=PessoaModelView.class, optionProcessType=TOptionProcessType.LIST_ALL ))
-	private SimpleObjectProperty<Pessoa> pessoa;
-	
-	
+	@TOneSelectionModal(modelClass = Pessoa.class, modelViewClass = PessoaFindModelView.class,
+	width=300, height=50)
+	private SimpleObjectProperty<Pessoa> pessoa;	
 	
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
 	@TText(text="Tipo de Ajuda", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
@@ -113,11 +108,7 @@ public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 	@TTableReaderHtml(label=@TLabel(text="Tipo de Ajuda:"), 
 		column = { 	@TColumnReader(field = "descricao", name = "Descricao"), 
 					@TColumnReader(field = "tipoPessoa", name = "Tipo pessoa")})
-	@TPickListField(selectedLabel="#{label.selected}", 
-			sourceLabel="Tipo Ajuda", required=true,
-			optionsList=@TOptionsList(entityClass=TipoAjuda.class,
-						optionModelViewClass=TipoAjudaModelView.class, 
-						optionsProcessClass=LoadTipoAjudaOptionListProcess.class))
+	@TMultipleSelectionModal(modelClass = TipoAjuda.class, modelViewClass = TipoAjudaFindModelView.class, width=350)
 	@TModelViewCollectionType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=true)
 	private ITObservableList<TipoAjudaModelView> tiposAjuda;
 	
@@ -129,7 +120,7 @@ public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 			String str =  ((pessoa.getValue()!=null) 
 					? pessoa.getValue().getNome() + " na "
 							: "")  + ((acao.getValue()!=null) 
-					? "acão do dia "+formataDataHora(acao.getValue().getData())
+					? "ação do dia "+formataDataHora(acao.getValue().getData())
 						: "");
 			displayText.setValue(str);
 		}
@@ -144,7 +135,7 @@ public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 			String str =  ((pessoa.getValue()!=null) 
 					? pessoa.getValue().getNome() + " na "
 							: "")  + ((acao.getValue()!=null) 
-					? "acão do dia "+formataDataHora(acao.getValue().getData())
+					? "ação do dia "+formataDataHora(acao.getValue().getData())
 						: "");
 			displayText.setValue(str);
 		}
@@ -159,8 +150,8 @@ public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 		
 				@Override
 				public void changed(ObservableValue arg0, Pessoa arg1, Pessoa arg2) {
-					String str =  arg2.getNome() + ((acao.getValue()!=null) 
-							? " na acão do dia "+formataDataHora(acao.getValue().getData())
+					String str = (arg2!=null ? arg2.getNome() : "") + ((acao.getValue()!=null) 
+							? " na ação do dia "+formataDataHora(acao.getValue().getData())
 							: "");
 					displayText.setValue(str);
 				}
@@ -180,7 +171,7 @@ public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 					String str =  ((pessoa.getValue()!=null) 
 							? pessoa.getValue().getNome() + " na "
 									: "") 
-							+ "acão do dia "+formataDataHora(arg2.getData());
+							+ (arg2!=null ? "ação do dia "+formataDataHora(arg2.getData()) : "");
 					displayText.setValue(str);
 				}
 				

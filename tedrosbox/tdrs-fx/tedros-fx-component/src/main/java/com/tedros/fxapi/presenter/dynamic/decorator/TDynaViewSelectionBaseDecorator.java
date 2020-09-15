@@ -1,5 +1,6 @@
 package com.tedros.fxapi.presenter.dynamic.decorator;
 
+import com.tedros.core.TInternationalizationEngine;
 import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
@@ -11,6 +12,7 @@ import com.tedros.fxapi.presenter.paginator.TPaginator;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 
 @SuppressWarnings("rawtypes")
 public abstract class TDynaViewSelectionBaseDecorator<M extends TModelView> 
@@ -49,6 +51,9 @@ extends TDynaViewSimpleBaseDecorator<M> {
 		tListView.autosize();
 		tListView.setMaxWidth(listViewMaxWidth);
 		tListView.setMinWidth(listViewMinWidth);
+		tListView.setTooltip(new Tooltip(TInternationalizationEngine
+				.getInstance(null)
+				.getString("#{tedros.fxapi.label.double.click.remove}")));
 		
     }
 

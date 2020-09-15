@@ -14,9 +14,9 @@ import com.tedros.fxapi.annotation.control.TBigDecimalField;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
-import com.tedros.fxapi.annotation.control.TFindItemField;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
+import com.tedros.fxapi.annotation.control.TOneSelectionModal;
 import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
@@ -82,7 +82,7 @@ public class DoacaoModelView extends TEntityModelView<Doacao>{
 	
 	@TReaderHtml
 	@TLabel(text="Pessoa")
-	@TFindItemField(modelClass = Pessoa.class, modelViewClass = PessoaFindModelView.class,
+	@TOneSelectionModal(modelClass = Pessoa.class, modelViewClass = PessoaFindModelView.class,
 	width=300, height=50)
 	@THBox(	pane=@TPane(children={"pessoa","tipoAjuda"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="pessoa", priority=Priority.ALWAYS),
@@ -100,7 +100,7 @@ public class DoacaoModelView extends TEntityModelView<Doacao>{
 	
 	@TReaderHtml
 	@TLabel(text="Ação")
-	@TFindItemField(modelClass = Acao.class, modelViewClass = AcaoFindModelView.class)
+	@TOneSelectionModal(modelClass = Acao.class, modelViewClass = AcaoFindModelView.class)
 	private SimpleObjectProperty<Acao> acao;
 	
 	@TReaderHtml
@@ -160,7 +160,7 @@ public class DoacaoModelView extends TEntityModelView<Doacao>{
 		
 				@Override
 				public void changed(ObservableValue arg0, Pessoa arg1, Pessoa arg2) {
-					String str =  arg2.getNome() + ((tipoAjuda.getValue()!=null) 
+					String str = (arg2!=null ? arg2.getNome() : "") + ((tipoAjuda.getValue()!=null) 
 							? " ("+tipoAjuda.getValue().getDescricao()+")"
 							: "");
 					displayText.setValue(str);
