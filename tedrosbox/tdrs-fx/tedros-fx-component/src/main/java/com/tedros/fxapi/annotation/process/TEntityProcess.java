@@ -19,7 +19,7 @@ import com.tedros.ejb.base.entity.ITEntity;
  * @see {@link TModelProcess}
  * </p>
  * <code><br><br>
- * 		@TEntityCrudViewWithListView
+ * 		@TListViewPresenter
  * 		@TEntityProcess(process=ProjetoProcess.class, entity=Projeto.class)<br>
  * 		public class ProjetoModelView extends TEntityModelView<Projeto> {<br> 			
  * 			private SimpleLongProperty id;<br>
@@ -40,6 +40,13 @@ public @interface TEntityProcess {
 	public Class<? extends ITEntity> entity();
 	
 	/**
+	 * The ejb jndi name to lookup the service, this must implement ITEjbController
+	 * 
+	 * @see ITEjbController
+	 * *
+	public String serviceName();*/
+	
+	/**
 	 * <pre>
 	 * The {@link com.tedros.fxapi.process.TEntityProcess} to be executed.
 	 * 
@@ -47,5 +54,6 @@ public @interface TEntityProcess {
 	 * </pre>
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends com.tedros.fxapi.process.TEntityProcess> process();
+	public Class<? extends com.tedros.fxapi.process.TEntityProcess> process()/* 
+	default com.tedros.fxapi.process.TEntityProcess.class*/;
 }

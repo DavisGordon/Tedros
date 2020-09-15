@@ -4,8 +4,8 @@ import java.util.Arrays;
 
 import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
 import com.tedros.fxapi.annotation.form.TForm;
+import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
-import com.tedros.fxapi.annotation.view.TEntityCrudViewWithListView;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
@@ -19,7 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.VBoxBuilder;
 
 @SuppressWarnings("rawtypes")
-public class TDetailCrudViewWithListViewDecorator<M extends TEntityModelView> 
+public class TDetailCrudViewDecorator<M extends TEntityModelView> 
 extends TDynaViewCrudBaseDecorator<M>
  {
 	
@@ -48,7 +48,7 @@ extends TDynaViewCrudBaseDecorator<M>
 		setViewTitle(null);
 		
 		// get the list view settings
-		TEntityCrudViewWithListView tAnnotation = getPresenter().getModelViewClass().getAnnotation(TEntityCrudViewWithListView.class);
+		TListViewPresenter tAnnotation = getPresenter().getModelViewClass().getAnnotation(TListViewPresenter.class);
 		if(tAnnotation!=null){
 			listViewMaxWidth = tAnnotation.listViewMaxWidth();
 			listViewMinWidth = tAnnotation.listViewMinWidth();

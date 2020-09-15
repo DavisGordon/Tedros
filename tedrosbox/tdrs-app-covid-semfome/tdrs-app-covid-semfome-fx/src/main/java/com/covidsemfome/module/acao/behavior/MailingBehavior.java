@@ -5,12 +5,12 @@ import com.covidsemfome.module.acao.model.MailingModelView;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
-import com.tedros.fxapi.presenter.entity.behavior.TMainCrudViewWithListViewBehavior;
+import com.tedros.fxapi.presenter.entity.behavior.TMasterCrudViewBehavior;
 
 import javafx.scene.control.ListView;
 
 public class MailingBehavior
-extends TMainCrudViewWithListViewBehavior<MailingModelView, Mailing> {
+extends TMasterCrudViewBehavior<MailingModelView, Mailing> {
 	
 	
 	@Override

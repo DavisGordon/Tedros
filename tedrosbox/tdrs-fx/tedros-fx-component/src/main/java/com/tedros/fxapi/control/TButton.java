@@ -5,12 +5,12 @@ import javafx.scene.control.Button;
 public class TButton extends Button {
 
 	public TButton() {
-		getStyleClass().add("t-button");
+		setId("t-button");
 	}
 	
 	public TButton(String text) {
 		setText(text);
-		getStyleClass().add("t-button");
+		setId("t-button");
 	}
 	
 	public TButton(String id, String text) {

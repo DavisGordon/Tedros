@@ -7,13 +7,14 @@ import java.lang.annotation.Target;
 
 import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
 import com.tedros.fxapi.presenter.decorator.ITDecorator;
+import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value=ElementType.ANNOTATION_TYPE)
 public @interface TDecorator {
 	
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITDecorator> type();
+	public Class<? extends ITDecorator> type() default TMasterCrudViewDecorator.class;
 	
 	/**
 	 * Set the new button text
@@ -46,6 +47,13 @@ public @interface TDecorator {
 	public String cancelButtonText() default TAnnotationDefaultValue.TVIEW_cancelButtonText;
 	
 	/**
+	 * Set the modal close button text
+	 * */
+	public String closeButtonText() default TAnnotationDefaultValue.TVIEW_closeButtonText;
+	
+	
+	
+	/**
 	 * <pre>
 	 * Set the clean button text
 	 * </pre>
@@ -73,6 +81,12 @@ public @interface TDecorator {
 	 * */
 	public String pdfButtonText() default TAnnotationDefaultValue.TVIEW_pdfButtonText;
 
+	/**
+	 * <pre>
+	 * Set the Select button text
+	 * </pre>
+	 * */
+	public String selectButtonText() default TAnnotationDefaultValue.TVIEW_selectButtonText;
 	
 	/**
 	 * Set the view title text
@@ -101,6 +115,8 @@ public @interface TDecorator {
 	 * </pre>
 	 * */
 	public String readerModeTitle() default TAnnotationDefaultValue.TVIEW_readerModeTitle;
+
+	
 
 	
 }

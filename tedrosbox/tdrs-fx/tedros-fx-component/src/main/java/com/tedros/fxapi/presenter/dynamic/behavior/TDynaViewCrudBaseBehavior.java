@@ -453,7 +453,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			
 			try{
 				boolean flag = true;
-				if(getEntityProcessClass()!=null){
+				if(getEntityProcessClass()!=null || (StringUtils.isNotBlank(this.serviceName) && this.entityClass!=null)){
 					runSaveEntityProcess(mensagens);
 					flag = false;
 				}else if(getModelProcessClass()!=null){
@@ -462,7 +462,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				}
 				
 				if(flag){
-					throw new TException("Error: No process configuration found in "+getModelViewClass().getSimpleName()+" model view class, use @TEntityProcess or @TModelProcess to do that.");
+					throw new TException("Error: No process configuration found in "+getModelViewClass().getSimpleName()+" model view class, use @TEntityProcess, @TEjbService or @TModelProcess to do that.");
 				}
 				
 			}catch(TValidatorException e){
@@ -812,7 +812,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	@SuppressWarnings("unchecked")
 	public TEntityProcess createEntityProcess() throws Throwable {
 		
-		if((StringUtils.isNotBlank(serviceName)) && this.entityProcessClass == TEntityProcess.class){
+		if((StringUtils.isNotBlank(serviceName)) && this.entityClass!=null && (this.entityProcessClass==null || this.entityProcessClass == TEntityProcess.class)){
 			return new TEntityProcess(entityClass, this.serviceName) {
 				@Override
 				public void execute(List resultList) {

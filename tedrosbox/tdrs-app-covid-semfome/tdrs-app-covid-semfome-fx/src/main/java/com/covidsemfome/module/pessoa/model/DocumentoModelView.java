@@ -28,8 +28,8 @@ import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
-import com.tedros.fxapi.presenter.entity.behavior.TDetailCrudViewWithListViewBehavior;
-import com.tedros.fxapi.presenter.entity.decorator.TDetailCrudViewWithListViewDecorator;
+import com.tedros.fxapi.presenter.entity.behavior.TDetailCrudViewBehavior;
+import com.tedros.fxapi.presenter.entity.decorator.TDetailCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.util.TPropertyUtil;
 
@@ -39,11 +39,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
 
-@TForm(showBreadcrumBar=true, name = "#{form.document.name}")
 @TFormReaderHtml
+@TForm(showBreadcrumBar=true, name = "#{form.document.name}")
 @TPresenter(type = TDynaPresenter.class,
-behavior = @TBehavior(type = TDetailCrudViewWithListViewBehavior.class), 
-decorator = @TDecorator(type = TDetailCrudViewWithListViewDecorator.class, viewTitle="#{view.document.name}", listTitle="#{label.select}"))
+behavior = @TBehavior(type = TDetailCrudViewBehavior.class), 
+decorator = @TDecorator(type = TDetailCrudViewDecorator.class, viewTitle="#{view.document.name}"))
 public class DocumentoModelView extends TEntityModelView<Documento>{
 	
 	private SimpleLongProperty id;

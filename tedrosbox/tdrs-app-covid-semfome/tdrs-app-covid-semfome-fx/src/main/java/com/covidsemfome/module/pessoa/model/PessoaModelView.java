@@ -6,7 +6,6 @@ import com.covidsemfome.model.Contato;
 import com.covidsemfome.model.Documento;
 import com.covidsemfome.model.Endereco;
 import com.covidsemfome.model.Pessoa;
-import com.covidsemfome.module.pessoa.process.TPessoaProcess;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.TCodeValue;
@@ -31,10 +30,10 @@ import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
-import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
+import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
-import com.tedros.fxapi.annotation.process.TEntityProcess;
+import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.property.TReadOnlyBooleanProperty;
 import com.tedros.fxapi.annotation.reader.TDetailReaderHtml;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
@@ -42,14 +41,12 @@ import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
-import com.tedros.fxapi.annotation.view.TEntityCrudViewWithListView;
+import com.tedros.fxapi.annotation.view.TOption;
+import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.builder.DateTimeFormatBuilder;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TStyleParameter;
-import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
-import com.tedros.fxapi.presenter.entity.behavior.TMainCrudViewWithListViewBehavior;
-import com.tedros.fxapi.presenter.entity.decorator.TMainCrudViewWithListViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.beans.property.SimpleLongProperty;
@@ -70,25 +67,20 @@ import javafx.scene.layout.Priority;
  * */
 @TFormReaderHtml
 @TForm(name = "#{form.person.title}", showBreadcrumBar=true)
-@TEntityProcess(process = TPessoaProcess.class, entity=Pessoa.class)
-@TEntityCrudViewWithListView(listViewMinWidth=350,
-presenter=@TPresenter(type = TDynaPresenter.class,
-			behavior = @TBehavior(type = TMainCrudViewWithListViewBehavior.class), 
-			decorator = @TDecorator(type = TMainCrudViewWithListViewDecorator.class, 
-									viewTitle="#{view.person.name}", listTitle="#{label.select}")))
+@TEjbService(serviceName = "IPessoaControllerRemote", model=Pessoa.class)
+@TListViewPresenter(listViewMinWidth=350, listViewMaxWidth=350,
+	paginator=@TPaginator(entityClass = Pessoa.class, serviceName = "IPessoaControllerRemote",
+			show=true, showSearchField=true, searchFieldName="nome",
+			orderBy = {	@TOption(text = "Codigo", value = "id"), 
+						@TOption(text = "Nome", value = "nome")}),
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{view.person.name}")))
 @TSecurity(	id="COVSEMFOME_CADPESS_FORM", 
-			appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "#{view.person.name}",
-			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
-							TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
+	appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "#{view.person.name}",
+	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
+					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 
 public class PessoaModelView extends TEntityModelView<Pessoa>{
 	
-	/*@TReaderHtml
-	@TLabel(text="Codigo do registro:", position=TLabelPosition.LEFT)
-	@TLongField(maxLength=6,node=@TNode(parse = true, disable=true) )
-	@THBox(	pane=@TPane(children={"id","status"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="id", priority=Priority.NEVER), 
-   				   		@TPriority(field="status", priority=Priority.ALWAYS)}))*/
 	private SimpleLongProperty id;
 	
 	private SimpleStringProperty displayText;

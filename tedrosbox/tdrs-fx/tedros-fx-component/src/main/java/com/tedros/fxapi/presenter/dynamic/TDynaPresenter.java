@@ -8,6 +8,8 @@ import javafx.collections.ObservableList;
 import com.tedros.core.ITModule;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.annotation.form.TForm;
+import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
+import com.tedros.fxapi.annotation.presenter.TSelectionModalPresenter;
 import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.process.TEntityProcess;
 import com.tedros.fxapi.annotation.process.TModelProcess;
@@ -20,6 +22,11 @@ import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.util.TReflectionUtil;
 
+/**
+ * Responsible to hold and control the objects to build and invalidate the view.
+ * 
+ *  @author Davis Gordon
+ * */
 @SuppressWarnings("rawtypes")
 public class TDynaPresenter<M extends TModelView>	extends TPresenter<TDynaView<M>> {
 	
@@ -118,9 +125,20 @@ public class TDynaPresenter<M extends TModelView>	extends TPresenter<TDynaView<M
 			Annotation annotation = (Annotation) arr[0];
 			tPresenter = TReflectionUtil.getTPresenter(annotation);
 		}else{
-			for (Annotation ann : modelAnnotations) 
-				if(ann instanceof com.tedros.fxapi.annotation.presenter.TPresenter)
+			for (Annotation ann : modelAnnotations) {
+				if(ann instanceof com.tedros.fxapi.annotation.presenter.TPresenter) {
 					tPresenter = (com.tedros.fxapi.annotation.presenter.TPresenter) ann;
+					break;
+				}
+				if(ann instanceof TListViewPresenter) {
+					tPresenter = ((TListViewPresenter) ann).presenter();
+					break;
+				}
+				if(ann instanceof TSelectionModalPresenter) {
+					tPresenter = ((TSelectionModalPresenter) ann).presenter();
+					break;
+				}
+			}
 		}
 		
 		if(tPresenter==null)

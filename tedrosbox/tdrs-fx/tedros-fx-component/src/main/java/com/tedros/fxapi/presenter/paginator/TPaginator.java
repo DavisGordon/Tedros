@@ -33,7 +33,6 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
@@ -181,9 +180,6 @@ public class TPaginator extends BorderPane {
 			box.getChildren().addAll(h1, h2);
 		}
 		
-		
-		
-		
 		BorderPane.setMargin(box, new Insets(10, 8, 10, 8) );
 		BorderPane.setMargin(slider, new Insets(0, 15, 0, 15) );
 		setTop(box);
@@ -203,7 +199,9 @@ public class TPaginator extends BorderPane {
 	}
 	
 	public void addOrderByOption(String text, String field) {
-		orderBy.getItems().add(new TOption<>(text, field));
+		orderBy.getItems().add(new TOption<>(TInternationalizationEngine
+				.getInstance(null)
+				.getString(text), field));
 	}
 	
 	public void reload(long totalRows) {
