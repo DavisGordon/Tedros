@@ -3,19 +3,14 @@
   <information>
     <title>TedrosBox Covid sem fome</title>
     <vendor>Tedros</vendor>
-    <description>Sample JavaFX 2.0 application.</description>
+    <description>TedrosBox</description>
     <offline-allowed/>
+  <shortcut><desktop/></shortcut>
   </information>
   <resources>
-    <jfx:javafx-runtime version="2.2+" href="http://javadl.sun.com/webapps/download/GetFile/javafx-latest/windows-i586/javafx2.jnlp"/>
-  </resources>
-  <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="tedros.jar" size="55713800" download="eager" />
+    <jar href="tedros-box-8-1.0-jar-with-dependencies.jar" size="61051250" download="null" />
   </resources>
-  <applet-desc  width="0" height="0" main-class="com.javafx.main.NoJavaFXFallback"  name="TedrosBox" >
-    <param name="requiredFXVersion" value="2.2+"/>
-  </applet-desc>
   <jfx:javafx-desc  width="0" height="0" main-class="com.tedros.Main"  name="TedrosBox" />
   <update check="background"/>
 </jnlp>

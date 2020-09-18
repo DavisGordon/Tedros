@@ -72,14 +72,14 @@ public class VoluntariosReportModelView extends TModelView<VoluntarioReportModel
 					@TTitledPane(text="Resultado", node=@TNode(id="resultado",parse = true),
 						fields={"texto3","result"})})	
 	@TLabel(text="Titulo / Local")
-	@TTextField(textInputControl=@TTextInputControl(promptText="Insira parte ou o nome completo da pessoa", parse = true))
+	@TTextField(textInputControl=@TTextInputControl(promptText="Insira parte ou o titulo completo da ação", parse = true))
 	@THBox(	pane=@TPane(children={"titulo","ids"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="titulo", priority=Priority.ALWAYS),
    				   		@TPriority(field="ids", priority=Priority.SOMETIMES) }))
 	private SimpleStringProperty titulo;
 	
 	@TLabel(text="Codigo da Ação")
-	@TTextField(textInputControl=@TTextInputControl(promptText="Insira os codigos separados por virgula", parse = true))
+	@TTextField(textInputControl=@TTextInputControl(promptText="Insira os codigos da ação separados por virgula", parse = true))
 	private SimpleStringProperty ids;
 	
 	@TLabel(text="Status")

@@ -16,7 +16,6 @@ import com.tedros.fxapi.util.TEntityListViewCallback;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.collections.WeakListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -35,8 +34,9 @@ import javafx.util.Callback;
  *
  */
 @SuppressWarnings("rawtypes")
-public class TSelectionModal extends VBox {
+public class TSelectionModal extends TModalRequired {
 
+	
 	
 	private ITObservableList<TModelView> tSelectedItems;
 	
@@ -58,7 +58,7 @@ public class TSelectionModal extends VBox {
 	/**
 	 * 
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"unchecked" })
 	public TSelectionModal(ITObservableList items,  boolean selectMultipleItem, double width, double height) {
 		this.tSelectedItems = items;
 		this.width = width;
@@ -189,20 +189,17 @@ public class TSelectionModal extends VBox {
 	}
 
 	/**
-	 * @param tSelectedItems the tSelectedItems to set
-	 
-	public void settSelectedItems(ObservableList<TModelView> tSelectedItems) {
-		this.tSelectedItems = tSelectedItems;
-		//boolean disable = !(this.tSelectedItems!=null && !this.tSelectedItems.isEmpty());
-			
-		
-	}
-*/
-	/**
 	 * @param tModelViewClass the tModelViewClass to set
 	 */
 	public void settModelViewClass(Class<? extends TModelView> tModelViewClass) {
 		this.tModelViewClass = tModelViewClass;
+	}
+
+	/**
+	 * @return the tSelectedItems
+	 */
+	public ITObservableList<TModelView> gettSelectedItems() {
+		return tSelectedItems;
 	}
 	
 	

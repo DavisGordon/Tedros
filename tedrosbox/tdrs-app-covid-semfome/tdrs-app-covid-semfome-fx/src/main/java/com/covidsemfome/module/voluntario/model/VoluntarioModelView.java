@@ -43,7 +43,6 @@ import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TStyleParameter;
-import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.beans.property.SimpleLongProperty;
@@ -76,18 +75,19 @@ public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 	
 	private SimpleStringProperty displayText;
 	
-	@TTextReaderHtml(text="Ação/Campanha e pessoa", 
+	@TTextReaderHtml(text="Voluntário na Ação/Campanha", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
-	@TText(text="Ação/Campanha e pessoa", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
+	@TText(text="Selecione a ação o voluntário e o tipo de ajuda", font=@TFont(size=8), textAlignment=TextAlignment.LEFT, 
 	node=@TNode(id="t-form-title-text", parse = true))
 	private SimpleStringProperty textoCadastro;
 	
 	@TReaderHtml
 	@TLabel(text="Ação/Campanha")
-	@TOneSelectionModal(modelClass = Acao.class, modelViewClass = AcaoFindModelView.class)
+	@TOneSelectionModal(modelClass = Acao.class, modelViewClass = AcaoFindModelView.class, 
+	width=300, height=50, required=true)
 	@THBox(	pane=@TPane(children={"acao","pessoa"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="acao", priority=Priority.ALWAYS),
    				   		@TPriority(field="pessoa", priority=Priority.ALWAYS) }))
@@ -96,19 +96,14 @@ public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 	@TReaderHtml
 	@TLabel(text="Pessoa")
 	@TOneSelectionModal(modelClass = Pessoa.class, modelViewClass = PessoaFindModelView.class,
-	width=300, height=50)
+	width=300, height=50, required=true)
 	private SimpleObjectProperty<Pessoa> pessoa;	
 	
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Tipo de Ajuda", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
-		node=@TNode(id="t-form-title-text", parse = true), mode=TViewMode.EDIT)
-	private SimpleStringProperty tipoAjudaText;
-	
-	
+	@TLabel(text="Tipos de Ajuda")
 	@TTableReaderHtml(label=@TLabel(text="Tipo de Ajuda:"), 
 		column = { 	@TColumnReader(field = "descricao", name = "Descricao"), 
 					@TColumnReader(field = "tipoPessoa", name = "Tipo pessoa")})
-	@TMultipleSelectionModal(modelClass = TipoAjuda.class, modelViewClass = TipoAjudaFindModelView.class, width=350)
+	@TMultipleSelectionModal(modelClass = TipoAjuda.class, modelViewClass = TipoAjudaFindModelView.class, width=350, required=true)
 	@TModelViewCollectionType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=true)
 	private ITObservableList<TipoAjudaModelView> tiposAjuda;
 	
@@ -284,20 +279,6 @@ public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 	 */
 	public void setDisplayText(SimpleStringProperty displayText) {
 		this.displayText = displayText;
-	}
-
-	/**
-	 * @return the tipoAjudaText
-	 */
-	public SimpleStringProperty getTipoAjudaText() {
-		return tipoAjudaText;
-	}
-
-	/**
-	 * @param tipoAjudaText the tipoAjudaText to set
-	 */
-	public void setTipoAjudaText(SimpleStringProperty tipoAjudaText) {
-		this.tipoAjudaText = tipoAjudaText;
 	}
 
 }

@@ -2,7 +2,6 @@ package com.tedros.fxapi.effect;
 
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
-import javafx.scene.effect.LightingBuilder;
 import javafx.scene.effect.Shadow;
 import javafx.scene.paint.Color;
 
@@ -20,21 +19,16 @@ public final class TEffectUtil {
 		light.setElevation(45);
 		light.setColor(Color.web("#ffbdbf"));
 		
-		return LightingBuilder.create().diffuseConstant(1.4761904761904763)
-		.specularConstant(0.5222222222222221)
-		.specularExponent(20)
-		.surfaceScale(1.5)
-		.bumpInput(new Shadow())
-		.light(light)
-		.build();
+		Lighting ltg = new  Lighting();
+		ltg.setDiffuseConstant(1.4761904761904763);
+		ltg.setSpecularConstant(0.5222222222222221);
+		ltg.setSpecularExponent(20);
+		ltg.setSurfaceScale(1.5);
+		ltg.setBumpInput(new Shadow());
+		ltg.setLight(light);
+
+		return ltg;
 		
-		/*
-		return ColorAdjustBuilder.create()
-				 .hue(-0.15267175572519087)
-				 .saturation(0)
-				 .brightness(0)
-				 .contrast(0)
-				 .build();*/
 	}
 	
 	
