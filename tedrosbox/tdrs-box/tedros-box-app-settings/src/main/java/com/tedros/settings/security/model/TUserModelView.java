@@ -88,10 +88,10 @@ public class TUserModelView extends TEntityModelView<TUser> {
 	
 	@TLabel(text="#{label.password}:")
 	@TPasswordField(required=true, 
-					node=@TNode(focusedProperty=@TReadOnlyBooleanProperty(
-												observableValue=@TObservableValue(addListener=TEncriptPasswordChangeListener.class), 
-												parse = true), 
-								parse = true))
+		node=@TNode(focusedProperty=@TReadOnlyBooleanProperty(
+				observableValue=@TObservableValue(addListener=TEncriptPasswordChangeListener.class), 
+				parse = true), 
+		parse = true))
 	private SimpleStringProperty password;
 	
 	@TReaderHtml

@@ -56,8 +56,17 @@ public class TMessageBox extends StackPane {
     	
     	List<TValidatorResult<ITModelView>> results = (List<TValidatorResult<ITModelView>>) e.getValidatorResults();
     	List<String> messages = new ArrayList<>(0);
+    	
     	for(TValidatorResult<?> result : results){
-    		messages.add("* "+result.getModelView().getDisplayProperty().getValue());
+    		
+    		String itemName = result.getModelView().getDisplayProperty()!=null 
+    				? result.getModelView().getDisplayProperty().getValue()
+    				 : null;
+    		
+    		
+    		if(itemName != null)
+    			messages.add("* "+itemName);
+    		
     		for(TFieldResult TFieldResult: result.getFields()){
     			if(StringUtils.isNotBlank(TFieldResult.getFieldLabel())){
     				messages.add(TFieldResult.getFieldLabel()+": "+TFieldResult.getMessage());

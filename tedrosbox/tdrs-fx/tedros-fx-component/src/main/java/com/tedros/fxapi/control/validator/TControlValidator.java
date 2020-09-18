@@ -91,13 +91,17 @@ public final class TControlValidator<E extends ITModelView> {
 				continue;
 			}
 			
-			Object value = propertyGetMethod.invoke(modelView);
 			
-			validateRequiredField(label, value, result, annotation);
 			
 			if(annotation instanceof TValidator){
+				
+				Object value = propertyGetMethod.invoke(modelView);
+				validateRequiredField(label, value, result, annotation);
+				
 				TValidator tAnnotation = (TValidator) annotation;
-				com.tedros.fxapi.control.validator.TValidator validator = tAnnotation.validatorClass().getConstructor(String.class, Object.class).newInstance(label, value);
+				com.tedros.fxapi.control.validator.TValidator validator = tAnnotation.validatorClass()
+						.getConstructor(String.class, Object.class).newInstance(label, value);
+				
 				if(tAnnotation.associatedFieldsName().length>0){
 					for(String fName : tAnnotation.associatedFieldsName()){
 						final Method associatedFieldGetMethod = modelView.getClass().getMethod(GET+StringUtils.capitalize(fName));
@@ -143,6 +147,9 @@ public final class TControlValidator<E extends ITModelView> {
 				continue;
 				*/
 			}
+		
+			Object value = propertyGetMethod.invoke(modelView);
+			validateRequiredField(label, value, result, annotation);
 		}
 		
 	}

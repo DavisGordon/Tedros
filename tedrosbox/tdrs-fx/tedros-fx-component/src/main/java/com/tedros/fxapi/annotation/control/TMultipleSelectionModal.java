@@ -17,6 +17,7 @@ import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TVBoxMargin;
 import com.tedros.fxapi.annotation.layout.TVGrow;
 import com.tedros.fxapi.annotation.parser.ITAnnotationParser;
+import com.tedros.fxapi.annotation.parser.TRequiredModalParser;
 import com.tedros.fxapi.annotation.parser.TVBoxParser;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.layout.TRegion;
@@ -61,11 +62,11 @@ public @interface TMultipleSelectionModal  {
 	 * <pre>
 	 * The parser class for this annotation
 	 * 
-	 * Default value: {TVBoxParser.class}
+	 * Default value: {TVBoxParser.class, TRequiredModalParser.class}
 	 * </pre>
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITAnnotationParser>[] parser() default {TVBoxParser.class};
+	public Class<? extends ITAnnotationParser>[] parser() default {TVBoxParser.class, TRequiredModalParser.class};
 	 
 	
 	/**

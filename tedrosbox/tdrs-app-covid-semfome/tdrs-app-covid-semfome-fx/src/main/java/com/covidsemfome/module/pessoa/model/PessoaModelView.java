@@ -23,9 +23,11 @@ import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
+import com.tedros.fxapi.annotation.control.TValidator;
 import com.tedros.fxapi.annotation.control.TVerticalRadioGroup;
 import com.tedros.fxapi.annotation.form.TDetailView;
 import com.tedros.fxapi.annotation.form.TForm;
+import com.tedros.fxapi.annotation.layout.TFieldSet;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
@@ -41,6 +43,7 @@ import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.annotation.scene.layout.TRegion;
 import com.tedros.fxapi.annotation.view.TOption;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.builder.DateTimeFormatBuilder;
@@ -185,22 +188,6 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	@TDatePickerField(required = false)
 	private SimpleObjectProperty<Date> dataNascimento;
 	
-	@TReaderHtml
-	@TLabel(text="Email (Login no painel)")
-	@TTextField(maxLength=80)
-	@THBox(pane=@TPane(	children={"loginName","password"}), spacing=10, fillHeight=true, 
-	hgrow=@THGrow(priority={@TPriority(field="loginName", priority=Priority.NEVER),
-							@TPriority(field="password", priority=Priority.NEVER)}))
-	private SimpleStringProperty loginName;
-	
-	@TLabel(text="Password")
-	@TPasswordField(required=true, 
-					node=@TNode(focusedProperty=@TReadOnlyBooleanProperty(
-												observableValue=@TObservableValue(addListener=TEncriptPasswordChangeListener.class), 
-												parse = true), 
-								parse = true))
-	private SimpleStringProperty password;
-	
 	/**
 	 * A radio group description for the person sex
 	 * */
@@ -224,6 +211,21 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	@TLabel(text="Alterado em")
 	@TDatePickerField(required = false, node=@TNode(parse = true, disable=true), dateFormat=DateTimeFormatBuilder.class)
 	private SimpleObjectProperty<Date> lastUpdate;
+	
+	@TReaderHtml
+	@TLabel(text="Email (Login no painel)")
+	@TTextField(maxLength=80)
+	@TFieldSet(fields = { "loginName", "password" }, region=@TRegion(maxWidth=400,
+			parse = true),
+	legend = "Credenciais para acesso ao painel do voluntário ")
+	@TValidator(validatorClass = CredenciaisPainelValidator.class, associatedFieldsName={"password"})
+	private SimpleStringProperty loginName;
+	
+	@TLabel(text="Password")
+	@TPasswordField(node=@TNode(focusedProperty=@TReadOnlyBooleanProperty(
+			observableValue=@TObservableValue(addListener=TEncriptPasswordChangeListener.class), parse = true), 
+		parse = true))
+	private SimpleStringProperty password;
 	
 	/**
 	 * A descripton for the personal additional data sub title and the field box

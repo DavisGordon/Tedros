@@ -6,7 +6,7 @@
                 url : 'TedrosBox.jnlp'
             },
             {
-                javafx : '2.2+'
+                javafx : '8.0+'
             },
             {}
         );
@@ -15,22 +15,23 @@
 </script>
 
 <script>
-    function javafxEmbed() {
+    function javafxEmbedcom.tedros() {
         dtjava.embed(
             {
+                id : 'com.tedros',
                 url : 'TedrosBox.jnlp',
                 placeholder : 'javafx-app-placeholder',
-                width : 0,
-                height : 0
+                width : '0',
+                height : '0'
             },
             {
-                javafx : '2.2+'
+                javafx : '8.0+'
             },
             {}
         );
     }
     <!-- Embed FX application into web page once page is loaded -->
-    dtjava.addOnloadCallback(javafxEmbed);
+    dtjava.addOnloadCallback(javafxEmbedcom.tedros);
 </script>
 
 </head><body>

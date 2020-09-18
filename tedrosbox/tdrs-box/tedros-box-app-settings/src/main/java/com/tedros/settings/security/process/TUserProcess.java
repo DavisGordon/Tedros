@@ -7,11 +7,10 @@ import java.util.List;
 
 import javax.naming.NamingException;
 
-import com.tedros.core.ejb.service.TUserService;
+import com.tedros.core.ejb.controller.TUserController;
 import com.tedros.core.security.model.TProfile;
 import com.tedros.core.security.model.TUser;
 import com.tedros.core.service.remote.ServiceLocator;
-import com.tedros.ejb.base.controller.ITEjbController;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.process.TEntityProcess;
@@ -41,9 +40,9 @@ public class TUserProcess extends TEntityProcess<TUser> {
 	@Override
 	public void execute(List<TResult<TUser>> resultList) {
 		ServiceLocator loc = ServiceLocator.getInstance();
-		TUserService service;
+		TUserController service;
 		try {
-			service = (TUserService) loc.lookup(SERV_NAME);
+			service = (TUserController) loc.lookup(SERV_NAME);
 		
 			if(login!=null && password!=null){
 				resultList.add(service.login(login, password));

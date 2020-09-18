@@ -55,6 +55,7 @@ public class TProfileCompleteTableViewAction extends TPresenterAction<TDynaPrese
 								&& authorizationType.name().equals(tAuthorization.getType().getValue()))
 						{
 							authorization = tAuthorization;
+							break;
 						}
 					}
 					
