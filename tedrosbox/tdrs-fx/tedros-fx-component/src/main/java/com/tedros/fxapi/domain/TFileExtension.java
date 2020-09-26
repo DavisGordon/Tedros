@@ -24,7 +24,8 @@ public enum TFileExtension {
 	ALL_MICROSOFT_WORD ("*.doc", "*.docx", "*.docm", "*.dot", "*.dotx", "*.dotm"),
 	ALL_MICROSOFT_EXCEL ("*.xls", "*.xlsx", "*.xlsm", "*.xlt", "*.xltx", "*.xltm"),
 	TXT ("*.txt"), 
-	PDF ("*.pdf");
+	PDF ("*.pdf"), 
+	CSV ("*.csv");
 	
 	private String[] extension;
 	

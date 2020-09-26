@@ -8,17 +8,15 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.tedros.ejb.base.entity.TEntity;
 import com.covidsemfome.domain.DomainSchema;
 import com.covidsemfome.domain.DomainTables;
+import com.tedros.ejb.base.entity.TEntity;
 
 @Entity
 @Table(name = DomainTables.doacao, schema = DomainSchema.riosemfome)

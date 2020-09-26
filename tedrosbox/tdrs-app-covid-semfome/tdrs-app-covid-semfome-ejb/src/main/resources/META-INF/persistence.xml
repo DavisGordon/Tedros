@@ -18,6 +18,17 @@
 		<class>com.covidsemfome.model.Acao</class>
 		<class>com.covidsemfome.model.Voluntario</class>
 		<class>com.covidsemfome.model.TipoAjuda</class>
+		<class>com.covidsemfome.model.Cozinha</class>
+		<class>com.covidsemfome.model.Entrada</class>
+		<class>com.covidsemfome.model.EntradaItem</class>
+		<class>com.covidsemfome.model.Estoque</class>
+		<class>com.covidsemfome.model.EstoqueConfig</class>
+		<class>com.covidsemfome.model.EstoqueItem</class>
+		<class>com.covidsemfome.model.Producao</class>
+		<class>com.covidsemfome.model.ProducaoInsumo</class>
+		<class>com.covidsemfome.model.Produto</class>
+		<class>com.tedros.common.model.TFileEntity</class>
+		<class>com.tedros.common.model.TByteEntity</class>
 		
 		<properties>
 		
@@ -26,12 +37,12 @@
 	      <property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.H2Platform"/>
 	      <property name="eclipselink.ddl-generation" value="create-or-extend-tables"/>
 	      <property name="eclipselink.ddl-generation.output-mode" value="database"/>
-	      <property name="eclipselink.logging.level" value="OFF"/>
+	      <property name="eclipselink.logging.level" value="FINE"/>
           <property name="eclipselink.logging.exceptions" value="true"/>
           <property name="eclipselink.logging.timestamp" value="true"/>
           <property name="eclipselink.logging.thread" value="true"/>
           <property name="eclipselink.logging.session" value="true"/>
-          <property name="eclipselink.logging.level.sql" value="OFF"/>
+          <property name="eclipselink.logging.level.sql" value="FINE"/>
            <property name="eclipselink.logging.parameters" value="true"/>
           
          <!--  <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>

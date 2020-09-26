@@ -328,7 +328,8 @@ public class TFileField extends StackPane {
 		fileChooser.setTitle("Selecionar arquivo");
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home"))); 
         for(String ext : extensions){
-        	fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(ext, ext));
+        	if(ext!=null)
+        		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(ext, ext));
         }
     }
 	

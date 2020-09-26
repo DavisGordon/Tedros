@@ -1,9 +1,14 @@
 package com.tedros.fxapi.annotation.parser;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.tedros.fxapi.annotation.control.TFileField;
 import com.tedros.fxapi.control.action.TActionEvent;
+import com.tedros.fxapi.domain.TFileExtension;
 
 public class TFileFieldParser extends TAnnotationParser<TFileField, com.tedros.fxapi.control.TFileField> {
 	
@@ -29,7 +34,10 @@ public class TFileFieldParser extends TAnnotationParser<TFileField, com.tedros.f
 		TTextInputControlParse.getInstance().setComponentDescriptor(getComponentDescriptor());
 		TTextInputControlParse.getInstance().parse(tAnnotation.textInputControl(), control.getFileNameField());
 		
-		String[] extensions = tAnnotation.extensions().getExtension();
+		String[] extensions = new String[tAnnotation.extensions().length];
+		for(TFileExtension e : tAnnotation.extensions())
+			extensions = ArrayUtils.addAll(extensions, e.getExtension());
+		
 		if(tAnnotation.moreExtensions()!=null && tAnnotation.moreExtensions().length>0)
 			extensions = ArrayUtils.addAll(extensions, tAnnotation.moreExtensions());
 		control.setExtensions(extensions);
