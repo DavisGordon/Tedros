@@ -180,7 +180,7 @@ public @interface TFileField {
 	 * Defines the valid file extensions.
 	 * </pre>
 	 * */
-	public TFileExtension extensions() default TFileExtension.ALL_FILES;
+	public TFileExtension[] extensions() default {TFileExtension.ALL_FILES};
 	
 	/**
 	 * <pre>

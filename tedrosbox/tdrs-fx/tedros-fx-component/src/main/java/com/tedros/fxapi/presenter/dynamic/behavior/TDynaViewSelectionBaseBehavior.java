@@ -161,7 +161,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		}
 		
 	}
-	;
+	
 	@SuppressWarnings("unchecked")
 	public void configSelectedListView() {
 		ListView listView = this.decorator.gettListView();

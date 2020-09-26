@@ -33,6 +33,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	private Button tDeleteButton;
 	private Button tEditButton;
 	private Button tCancelButton;
+	private Button tImportButton;
 	
     private RadioButton tEditModeRadio;
     private RadioButton tReadModeRadio;
@@ -196,7 +197,33 @@ extends TDynaViewSimpleBaseDecorator<M> {
 			tCancelButton.setId("t-button");
 		}
 	}
-	
+	/**
+	 * <p>
+	 * Build a button for the import action.<br><br>
+	 * 
+	 * If the parameter was null this will use the text set up
+	 * in @{@link TPresenter}{decorator= @{@link TDecorator}{importButtonText=''}} 
+	 * but if the given {@link TModelView} was not annotated with {@link TPresenter} 
+	 * or with a custom view annotation which contains a {@link TPresenter} 
+	 * a default string (TAnnotationDefaultValue.TVIEW_importButtonText) will be used.<br><br> 
+	 * 
+	 * This will initialize with "t-button" id.
+	 * </p>
+	 * */
+	public void buildImportButton(String text) {
+		if(text==null){
+			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
+			tImportButton = new Button();
+			tImportButton.setText(iEngine.getString(tPresenter==null 
+					? TAnnotationDefaultValue.TVIEW_importButtonText 
+							: tPresenter.decorator().importButtonText()));
+			tImportButton.setId("t-button");
+		}else {
+			tImportButton = new Button();
+			tImportButton.setText(iEngine.getString(text));
+			tImportButton.setId("t-button");
+		}
+	}
 	/**
 	 * <p>
 	 * Build a button for the save action.<br><br>
@@ -391,6 +418,13 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	 * */
 	public void setShowBreadcrumBar(boolean showBreadcrumBar) {
 		this.showBreadcrumBar = showBreadcrumBar;
+	}
+
+	/**
+	 * @return the tImportButton
+	 */
+	public Button gettImportButton() {
+		return tImportButton;
 	}
 
 	

@@ -229,7 +229,10 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 		if(parserMethod!=null){
 			try{
 				Object object = parserMethod.invoke(tAnnotation);
-				Class<? extends ITAnnotationParser>[] parsers = (object instanceof Class[]) ? (Class<? extends ITAnnotationParser>[]) object : new Class[]{(Class<? extends ITAnnotationParser>)object};
+				Class<? extends ITAnnotationParser>[] parsers = (object instanceof Class[]) 
+						? (Class<? extends ITAnnotationParser>[]) object 
+								: new Class[]{(Class<? extends ITAnnotationParser>)object};
+						
 				for (Class<? extends ITAnnotationParser> clazz : parsers) {
 					Method m = clazz.getMethod("getInstance");
 					ITAnnotationParser parser = (ITAnnotationParser) m.invoke(clazz);
@@ -237,7 +240,9 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 					try{
 						parser.parse(tAnnotation, control);
 					}catch(ClassCastException e){
-						final Method method = getTargetMethod(componentDescriptor.getAnnotationPropertyInExecution(), getGenericParamClass(componentDescriptor.getParserClassInExecution(),1));
+						final Method method = getTargetMethod(componentDescriptor.getAnnotationPropertyInExecution(), 
+								getGenericParamClass(componentDescriptor.getParserClassInExecution(),1));
+						
 						Object obj = method.invoke(control);
 						if(obj !=null){
 							parser.parse(tAnnotation, obj);

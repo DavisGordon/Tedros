@@ -36,6 +36,7 @@ public interface TAnnotationDefaultValue {
 	public static final String TVIEW_wordButtonText = "Word";
 	public static final String TVIEW_pdfButtonText = "PDF";
 	public static final String TVIEW_selected = "#{tedros.fxapi.label.selected}";
+	public static final String TVIEW_importButtonText = "#{tedros.fxapi.button.import}";
 	
 	
 			

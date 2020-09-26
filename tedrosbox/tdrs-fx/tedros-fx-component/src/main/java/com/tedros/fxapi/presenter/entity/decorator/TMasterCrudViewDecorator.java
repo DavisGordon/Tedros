@@ -31,8 +31,11 @@ extends TDynaViewCrudBaseDecorator<M> {
     
     private double listViewMaxWidth = 250;
     private double listViewMinWidth = 250;
+    
+    private TPresenter tPresenter;
   
     public void decorate() {
+    	tPresenter = getPresenter().getPresenterAnnotation();
 		configFormSpace();
 		configViewTitle();
 		configBreadcrumBar();
@@ -41,8 +44,7 @@ extends TDynaViewCrudBaseDecorator<M> {
 	}
 
 	protected void configListView() {
-		// get the model view annotation array 
-		final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
+		
 		
 		// get the list view settings
 		TListViewPresenter tAnnotation = getPresenter().getModelViewClass().getAnnotation(TListViewPresenter.class);
@@ -106,8 +108,11 @@ extends TDynaViewCrudBaseDecorator<M> {
 		buildCancelButton(null);
 		buildModesRadioButton(null, null);
 		
-		// add the buttons at the header tool bar
-		addItemInTHeaderToolBar(gettColapseButton(), gettNewButton(), gettDeleteButton(), gettSaveButton(), gettCancelButton());
+		if(tPresenter.decorator().buildImportButton()) {
+			buildImportButton(null);
+			addItemInTHeaderToolBar(gettColapseButton(),gettImportButton(), gettNewButton(), gettDeleteButton(), gettSaveButton(), gettCancelButton());
+		}else// add the buttons at the header tool bar
+			addItemInTHeaderToolBar(gettColapseButton(), gettNewButton(), gettDeleteButton(), gettSaveButton(), gettCancelButton());
 		
 		// add the mode radio buttons
 		addItemInTHeaderHorizontalLayout(gettEditModeRadio(), gettReadModeRadio());

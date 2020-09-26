@@ -99,7 +99,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 					if(modelView.getClass().getSimpleName().contains("TUserModelView"))
 						x=1;*/
 						
-					webView = WebViewBuilder.create().build();
+					webView = new WebView();
 					form.tAddFormItem(webView);
 					webView.setDisable(true);
 					

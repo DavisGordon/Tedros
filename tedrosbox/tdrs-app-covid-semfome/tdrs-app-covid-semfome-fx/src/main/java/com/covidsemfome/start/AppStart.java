@@ -6,12 +6,14 @@ import com.covidsemfome.module.acao.icon.AcaoIconImageView;
 import com.covidsemfome.module.acao.icon.AcaoMenuIconImageView;
 import com.covidsemfome.module.acao.icon.MailingIconImageView;
 import com.covidsemfome.module.acao.icon.MailingMenuIconImageView;
+import com.covidsemfome.module.cozinha.CozinhaModule;
 import com.covidsemfome.module.doacao.DoacaoModule;
 import com.covidsemfome.module.doacao.icon.DoacaoIconImageView;
 import com.covidsemfome.module.doacao.icon.DoacaoMenuIconImageView;
 import com.covidsemfome.module.pessoa.CadastroDePessoaModule;
 import com.covidsemfome.module.pessoa.icon.PessoaIconImageView;
 import com.covidsemfome.module.pessoa.icon.PessoaMenuIconImageView;
+import com.covidsemfome.module.produto.ProdutoModule;
 import com.covidsemfome.module.report.DoacaoReportModule;
 import com.covidsemfome.module.report.icon.RelatoriosIconImageView;
 import com.covidsemfome.module.report.icon.RelatoriosMenuIconImageView;
@@ -48,7 +50,11 @@ module = {
 			@TModule(type=MailingModule.class, name="Mailing", menu="Gerenciar Campanha", 
 					icon=MailingIconImageView.class, menuIcon=MailingMenuIconImageView.class),
 			@TModule(type=DoacaoReportModule.class, name="Relatórios", menu="Relatorios", 
-			icon=RelatoriosIconImageView.class, menuIcon=RelatoriosMenuIconImageView.class)
+				icon=RelatoriosIconImageView.class, menuIcon=RelatoriosMenuIconImageView.class),
+			@TModule(type=CozinhaModule.class, name="Cozinha", menu="Administrativo"/*, 
+			icon=RelatoriosIconImageView.class, menuIcon=RelatoriosMenuIconImageView.class*/),
+			@TModule(type=ProdutoModule.class, name="Produto", menu="Administrativo"/*, 
+			icon=RelatoriosIconImageView.class, menuIcon=RelatoriosMenuIconImageView.class*/)
 
 })
 @TResourceBundle(resourceName={"CovidLabels"})

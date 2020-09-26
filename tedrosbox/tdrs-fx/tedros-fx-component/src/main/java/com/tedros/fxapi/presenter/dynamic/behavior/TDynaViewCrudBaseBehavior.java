@@ -6,10 +6,12 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.core.ITModule;
+import com.tedros.core.TModule;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.context.TEntry;
 import com.tedros.core.context.TEntryBuilder;
 import com.tedros.core.context.TedrosAppManager;
+import com.tedros.core.context.TedrosContext;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.ejb.base.result.TResult;
@@ -51,6 +53,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.StackPaneBuilder;
 
 
@@ -65,12 +68,15 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	private BooleanProperty modeBtnVisibleProperty;
 
 	private TPresenterAction<TDynaPresenter<M>> newAction;
+	private TPresenterAction<TDynaPresenter<M>> importAction;
 	private TPresenterAction<TDynaPresenter<M>> saveAction;
 	private TPresenterAction<TDynaPresenter<M>> deleteAction;
 	private TPresenterAction<TDynaPresenter<M>> changeModeAction;
 	private TPresenterAction<TDynaPresenter<M>> selectedItemAction;
 	private TPresenterAction<TDynaPresenter<M>> editAction;
 	private TPresenterAction<TDynaPresenter<M>> cancelAction;
+	
+	private Class<? extends TModelView> importFileModelViewClass;
 	
 	private boolean remoteMode;
 	private String serviceName;
@@ -115,6 +121,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			
 			saveAllModels = tBehavior.saveAllModels();
 			saveOnlyChangedModel = tBehavior.saveOnlyChangedModels();
+			importFileModelViewClass = tBehavior.importFileModelViewClass();
+			
+			if(decorator.gettImportButton()!=null && importFileModelViewClass==TModelView.class)
+				throw new RuntimeException("The property importFileModelViewClass in TBehavior is required for import action");
 			
 			if(this.decorator.isShowBreadcrumBar())
 				configBreadcrumbForm();
@@ -124,6 +134,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				saveAction = tBehavior.saveAction().newInstance();
 			if(tBehavior.newAction()!=TPresenterAction.class)
 				newAction = tBehavior.newAction().newInstance();
+			if(tBehavior.importAction()!=TPresenterAction.class)
+				importAction = tBehavior.importAction().newInstance();
 			if(tBehavior.deleteAction()!=TPresenterAction.class)
 				deleteAction = tBehavior.deleteAction().newInstance();
 			if(tBehavior.selectedItemAction()!=TPresenterAction.class)
@@ -175,6 +187,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			decorator.gettCancelButton().setDisable(flag);
 		if(decorator.gettSaveButton()!=null && isUserAuthorized(TAuthorizationType.SAVE))
 			decorator.gettSaveButton().setDisable(flag);
+		if(decorator.gettImportButton()!=null && isUserAuthorized(TAuthorizationType.SAVE))
+			decorator.gettImportButton().setDisable(!flag);
 		if(decorator.gettDeleteButton()!=null && isUserAuthorized(TAuthorizationType.DELETE))
 			decorator.gettDeleteButton().setDisable(flag);
 	}
@@ -187,6 +201,18 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		EventHandler<ActionEvent> eh = e -> colapseAction();
 		super.getListenerRepository().addListener("colapseButtonClickEH", eh);
 		colapseButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
+	}
+	
+	/**
+	 * Config the edit button;
+	 * */
+	public void configImportButton() {
+		if(isUserAuthorized(TAuthorizationType.SAVE)){
+			final Button importButton = this.decorator.gettImportButton();
+			EventHandler<ActionEvent> eh = e -> importAction();
+			super.getListenerRepository().addListener("importButtonClickEH", eh);
+			importButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
+		}
 	}
 	
 	/**
@@ -546,6 +572,30 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		}
 	}
 	
+	/**
+	 * Perform this action when import button onAction is triggered.
+	 * */
+	public void importAction() {
+		final TDynaPresenter<M> presenter = getPresenter();
+		if(importAction==null || (importAction!=null && importAction.runBefore(presenter))){
+			try{
+				StackPane pane = new StackPane();
+				TDynaView view = new TDynaView(importFileModelViewClass);
+				pane.setMaxSize(950, 600);
+				pane.getChildren().add(view);
+				pane.setId("t-tedros-color");
+				pane.setStyle("-fx-effect: dropshadow( three-pass-box , white , 4 , 0.4 , 0 , 0 );");
+				view.tLoad();
+				TedrosAppManager.getInstance()
+				.getModuleContext((TModule)TedrosContext.getView()).getCurrentViewContext()
+				.getPresenter().getView().tShowModal(pane, false);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		if(importAction!=null)
+			importAction.runAfter(presenter);
+	}
 		
 	/**
 	 * Perform this action when new button onAction is triggered.

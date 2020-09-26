@@ -24,6 +24,12 @@
 	  		<version>8-1.0</version>
 	  		<scope>compile</scope>
 	  	</dependency>
+	  	
+	  	<dependency>
+	  		<groupId>com.tedros</groupId>
+	  		<artifactId>tedros-common-model</artifactId>
+	  		<version>8-1.0</version>
+	  	</dependency>
 	  
 	  	<dependency>
 		   	<groupId>org.eclipse.persistence</groupId>

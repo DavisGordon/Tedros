@@ -30,13 +30,13 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 /**
+ * Open a modal to search and select items
+ * 
  * @author Davis Gordon
  *
  */
 @SuppressWarnings("rawtypes")
 public class TSelectionModal extends TModalRequired {
-
-	
 	
 	private ITObservableList<TModelView> tSelectedItems;
 	
@@ -106,7 +106,6 @@ public class TSelectionModal extends TModalRequired {
 			int index = tListView.getSelectionModel().getSelectedIndex();
 			tListView.getSelectionModel().clearSelection();
 			tListView.getItems().remove(index);
-			//tSelectedItems.remove(index);
 		};
 		repo.addListener("rev", rev);
 		tRemoveButton.setOnAction(new WeakEventHandler<>(rev));
@@ -120,7 +119,6 @@ public class TSelectionModal extends TModalRequired {
 	}
 	
 	private void buildListView() {
-    	// build the list view
 		tListView = new ListView<>();
 		tListView.setCache(false);
 		tListView.autosize();
@@ -131,7 +129,7 @@ public class TSelectionModal extends TModalRequired {
 		
     }
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "unchecked" })
 	public void configSelectedListView() {
 		tListView.setItems(tSelectedItems);
 		tListView.setEditable(true);
@@ -143,7 +141,6 @@ public class TSelectionModal extends TModalRequired {
 		
 		ListChangeListener<TModelView> icl = (o) -> {
 			boolean disable = o.getList().isEmpty();
-			//tRemoveButton.setDisable(disable);
 			tClearButton.setDisable(disable);
 		};
 		repo.addListener("icl", icl);

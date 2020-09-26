@@ -5,10 +5,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.presenter.behavior.ITBehavior;
 import com.tedros.fxapi.presenter.entity.behavior.TMasterCrudViewBehavior;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
+import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.util.TEntityListViewCallback;
 
 import javafx.scene.control.ListView;
@@ -135,6 +137,14 @@ public @interface TBehavior {
 	
 	/**
 	 * <pre>
+	 * Specifies an action to the import event dispatched from the import button;
+	 * </pre>
+	 * */
+	@SuppressWarnings("rawtypes")
+	public Class<? extends TPresenterAction> importAction() default TPresenterAction.class;
+	
+	/**
+	 * <pre>
 	 * Process the save action for all changed entity's if false only the current 
 	 * entity in edition is processed.
 	 * 
@@ -152,7 +162,18 @@ public @interface TBehavior {
 	 * */
 	public boolean saveOnlyChangedModels() default true;
 
+	/**
+	 * <pre>
+	 * Specifies an action to the action event dispatched from the action button;
+	 * </pre>
+	 * */
+	@SuppressWarnings("rawtypes")
+	public Class<? extends TPresenterAction>  actionAction() default TPresenterAction.class;
+
 	
+	public Class<? extends TModelView> importFileModelViewClass() default TModelView.class;
+	
+	public Class<? extends ITModel> importFileModelClass() default ITModel.class;
 
 	
 }

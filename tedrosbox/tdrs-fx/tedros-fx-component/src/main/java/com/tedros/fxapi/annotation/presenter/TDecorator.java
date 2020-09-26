@@ -89,6 +89,13 @@ public @interface TDecorator {
 	public String selectButtonText() default TAnnotationDefaultValue.TVIEW_selectButtonText;
 	
 	/**
+	 * <pre>
+	 * Set the Import button text
+	 * </pre>
+	 * */
+	public String importButtonText() default TAnnotationDefaultValue.TVIEW_importButtonText;
+	
+	/**
 	 * Set the view title text
 	 * */
 	public String viewTitle() default TAnnotationDefaultValue.TVIEW_viewTitle;
@@ -115,6 +122,17 @@ public @interface TDecorator {
 	 * </pre>
 	 * */
 	public String readerModeTitle() default TAnnotationDefaultValue.TVIEW_readerModeTitle;
+
+	/**
+	 * <pre>
+	 * Build the import button if true
+	 * 
+	 * Default value: false
+	 * </pre>
+	 * */
+	public boolean buildImportButton() default false;
+
+	
 
 	
 
