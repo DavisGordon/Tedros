@@ -5,11 +5,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.tedros.ejb.base.model.ITModel;
+import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.presenter.behavior.ITBehavior;
 import com.tedros.fxapi.presenter.entity.behavior.TMasterCrudViewBehavior;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
+import com.tedros.fxapi.presenter.model.TImportModelView;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.util.TEntityListViewCallback;
 
@@ -170,10 +171,37 @@ public @interface TBehavior {
 	@SuppressWarnings("rawtypes")
 	public Class<? extends TPresenterAction>  actionAction() default TPresenterAction.class;
 
+	/**
+	 * <pre>
+	 * The import model view class, must be configured to build the import view properly
+	 * with the correct ejb service (@TEjbService) decorator of type TImportFileModalDecorator.class
+	 * and behavior of type TImportFileModalBehavior.class. The ejb service must implement ITEjbImportController
+	 * 
+	 * This import model view must set the properties importedEntityClass and importedModelViewClass 
+	 * in your TBehavior
+	 * 
+	 * Example:
+	 * <code>
+	 * @TEjbService(serviceName = "IProdutoImportControllerRemote", model=ProdutoImport.class)
+	 * @TPresenter(decorator = @TDecorator(type=TImportFileModalDecorator.class, viewTitle="Importar produtos"),
+	 *		behavior = @TBehavior(type=TImportFileModalBehavior.class, 
+	 *		importedEntityClass=Produto.class, importedModelViewClass=ProdutoModelView.class))
+	 * public class ProdutoImportModelView extends TImportModelView&ltProdutoImport&gt {
+	 * </code>
+	 * 
+	 * */
+	public Class<? extends TImportModelView> importModelViewClass() default TImportModelView.class;
 	
-	public Class<? extends TModelView> importFileModelViewClass() default TModelView.class;
+	/**
+	 * The entity object type returned by the import process. 
+	 * This must be set in a TImportModelView type.
+	 * */
+	public Class<? extends ITEntity> importedEntityClass() default ITEntity.class;
 	
-	public Class<? extends ITModel> importFileModelClass() default ITModel.class;
-
+	/**
+	 * The model view type to be built with the result of the import process. 
+	 * This must be set in a TImportModelView type.
+	 * */
+	public Class<? extends TModelView> importedModelViewClass() default TModelView.class;
 	
 }

@@ -1,17 +1,23 @@
 package com.tedros.fxapi.presenter.modal.behavior;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
+import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.model.ITImportModel;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.fxapi.annotation.presenter.TBehavior;
+import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.exception.TValidatorException;
 import com.tedros.fxapi.modal.TMessageBox;
+import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewActionBaseBehavior;
+import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewActionBaseDecorator;
 import com.tedros.fxapi.presenter.modal.decorator.TImportFileModalDecorator;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.process.TImportProcess;
@@ -26,6 +32,9 @@ import javafx.concurrent.Worker.State;
 public class TImportFileModalBehavior<M extends TModelView, E extends ITModel>
 extends TDynaViewActionBaseBehavior<M, E> {
 	
+	private Class<? extends ITEntity> entityClass;
+	private Class<? extends TModelView> modelViewClass;
+	
 	private TImportFileModalDecorator<M> decorator;
 		
 	@Override
@@ -37,6 +46,12 @@ extends TDynaViewActionBaseBehavior<M, E> {
 		
 	public void initialize() {
 		
+		final TDynaPresenter<M> presenter = getPresenter();
+		final TBehavior tBehavior = presenter.getPresenterAnnotation().behavior();
+		
+		this.entityClass = tBehavior.importedEntityClass();
+		this.modelViewClass = tBehavior.importedModelViewClass();
+				
 		configActionButton();
 		configCloseButton();
 		configModesRadio();
@@ -64,9 +79,8 @@ extends TDynaViewActionBaseBehavior<M, E> {
 				
 					ITImportModel result =  resultados.getValue();
 					
-					M model;
 					try {
-						model = (M) getModelViewClass().getConstructor(result.getClass()).newInstance(result);
+						M model = (M) getModelViewClass().getConstructor(result.getClass()).newInstance(result);
 						setModelView(model);
 						showForm(TViewMode.EDIT);
 					} catch (Throwable e) {
@@ -92,6 +106,7 @@ extends TDynaViewActionBaseBehavior<M, E> {
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void processAction() throws TValidatorException, Exception {
 		
@@ -110,7 +125,7 @@ extends TDynaViewActionBaseBehavior<M, E> {
 				
 				if(arg2.equals(State.SUCCEEDED)){
 					
-					TResult<String> result = (TResult<String>) process.getValue();
+					TResult result = (TResult) process.getValue();
 					
 					if(result != null) {
 					
@@ -123,6 +138,18 @@ extends TDynaViewActionBaseBehavior<M, E> {
 						getView().tShowModal(tMessageBox, true);	
 							
 						if(result.getResult().equals(EnumResult.SUCESS)) {
+							
+							List<ITEntity> lst = (List) result.getValue();
+							for(ITEntity e : lst ) {
+								try {
+									M model =  (M) modelViewClass.getConstructor(entityClass).newInstance(e);
+									getModels().add((M) model);
+								} catch (Throwable t) {
+									t.printStackTrace();
+								}
+							}
+							setModelViewList(null);
+							
 							invalidate();
 							closeAction();
 						}

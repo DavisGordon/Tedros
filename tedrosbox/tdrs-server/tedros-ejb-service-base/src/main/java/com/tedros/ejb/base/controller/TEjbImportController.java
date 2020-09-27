@@ -27,7 +27,7 @@ public abstract class TEjbImportController<E extends ITEntity> implements ITEjbI
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			return new TResult<List<E>>(EnumResult.ERROR, e.getMessage());
+			return new TResult<String>(EnumResult.ERROR,true, e.getMessage());
 		}
 	}
 
@@ -35,12 +35,12 @@ public abstract class TEjbImportController<E extends ITEntity> implements ITEjbI
 	@SuppressWarnings("rawtypes")
 	public TResult importFile(ITFileEntity entity) {
 		try{
-			getService().importFile(entity);;
-			return new TResult<List<E>>(EnumResult.SUCESS);
+			List<E> res = getService().importFile(entity);
+			return new TResult<List<E>>(EnumResult.SUCESS, res);
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			return new TResult<List<E>>(EnumResult.ERROR, e.getMessage());
+			return new TResult<String>(EnumResult.ERROR,true, e.getMessage());
 		}
 	}
 	

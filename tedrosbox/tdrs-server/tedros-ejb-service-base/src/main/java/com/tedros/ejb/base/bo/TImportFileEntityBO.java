@@ -8,12 +8,14 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.enterprise.context.RequestScoped;
 
@@ -200,7 +202,7 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 	}
 	
 	
-	public void importFile(final ITFileEntity entity) {
+	public List<E> importFile(final ITFileEntity entity) {
 
 		Class<E> clazz = this.getEntityClass();
 		
@@ -216,6 +218,7 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 		String sheetName = eRule.xlsSheetName();
 		boolean hasHeader = eRule.forceFirstRowAsColumnNameHeader();
 		
+		List<E> res = new ArrayList<>();
 		
 		String ext = entity.getFileExtension();
 		ByteArrayInputStream is = new ByteArrayInputStream(entity.getByteEntity().getBytes());
@@ -293,13 +296,16 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 								columns.forEach((idx, f) -> {
 									Cell cell = r.getCell(idx);
 									TFieldImportRule rule = f.getAnnotation(TFieldImportRule.class);
+									Class<? extends Number> numClass = rule.numberType();
 									try {
 										Method setter = clazz.getMethod("set"+StringUtils.capitalize(f.getName()), f.getType());
 										
 										if(isTypeOf(f.getType(), Number.class)) {
 											
 											String value = getCellDataAsString(cell);
-											Object num = f.getType().getConstructor(String.class).newInstance(value);
+											Object num = numClass == Number.class 
+													? f.getType().getConstructor(String.class).newInstance(value)
+															: numClass.getConstructor(String.class).newInstance(value);
 											setter.invoke(model,  num);
 											
 										}else if(f.getType() == Date.class) {
@@ -311,37 +317,37 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 											
 										}else if(f.getType() == String.class) {
 											String value = getCellDataAsString(cell);
+											value = prepareNumberValue(numClass, value);
 											setter.invoke(model, value);
 										}else {
 											throw new RuntimeException("Incompatible type");
 										}
 										
-										getBusinessObject().save(model);
-										
-										
 									} catch (NoSuchMethodException | SecurityException | 
 											IllegalAccessException | IllegalArgumentException | 
 											InvocationTargetException | InstantiationException e) {
-										// TODO Auto-generated catch block
 										e.printStackTrace();
+										throw new RuntimeException(e);
 									} catch (ParseException e) {
-										// erro ao converter a data
 										e.printStackTrace();
+										throw new RuntimeException(e);
 									} catch (Exception e) {
-										// TODO Auto-generated catch block
 										e.printStackTrace();
+										throw new RuntimeException(e);
 									}
 								});
-								
-							}else
-								getBusinessObject().save(modelProcess);
-								
+								E saved = getBusinessObject().save(model);
+								res.add(saved);
+							}else {
+								E saved = getBusinessObject().save(modelProcess);
+								res.add(saved);
+							}
 						} catch (InstantiationException | IllegalAccessException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
+							throw new RuntimeException(e);
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
+							throw new RuntimeException(e);
 						}
 						
 					}
@@ -350,6 +356,7 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 			}
 		}catch(Exception e){
 		    e.printStackTrace();
+		    throw new RuntimeException(e);
 		}finally{
 			try {
 				is.close();
@@ -358,12 +365,63 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 			}
 		}
 	
+		return res;
 	
 	}
-	
-	protected abstract E processXlsRow(Row r);
 
-	private static boolean isTypeOf(Class<?> from, Class<?> type){
+	
+	protected  String prepareNumberValue(Class<? extends Number> numClass, String value)
+			throws RuntimeException {
+		if(numClass!=Number.class && StringUtils.isNotBlank(value)) {
+			if((numClass==Integer.class || numClass==Long.class || numClass==Short.class
+					|| numClass==AtomicInteger.class || numClass==BigInteger.class) 
+					&& (value.contains(".") || value.contains(","))) {
+				if(value.contains(".") && !value.contains(","))
+					value = StringUtils.substringBeforeLast(value, ".").replaceAll("\\.", "");
+				else if(!value.contains(".") && value.contains(","))
+					value = StringUtils.substringBeforeLast(value, ",").replaceAll(",", "");
+				else if(value.contains(".") && value.contains(",")) {
+					int d = value.lastIndexOf(".");
+					int c = value.lastIndexOf(",");
+					String t = (d>c) ? "." : ",";
+					value = StringUtils.substringBeforeLast(value, t).replaceAll("\\.", "").replaceAll(",", "");
+				}
+			}else{
+				if(value.contains(".") && !value.contains(",")) {
+					int t  = StringUtils.countMatches(value, ".");
+					if (t>1) 
+						value = value.replaceAll("\\.", "");
+				}else if(!value.contains(".") && value.contains(",")) {
+					int t  = StringUtils.countMatches(value, ",");
+					String r = (t>1) ? "" : ".";
+					value = value.replaceAll(",", r);
+				}else if(value.contains(".") && value.contains(",")) {
+					int d = value.lastIndexOf(".");
+					int c = value.lastIndexOf(",");
+					if(d>c) 
+						value = value.replaceAll(",", "");
+					else
+						value = value.replaceAll("\\.", "").replaceAll(",", ".");
+				}
+			}
+			Number n;
+			try {
+				n = numClass.getConstructor(String.class).newInstance(value);
+			} catch (InstantiationException | IllegalAccessException | InvocationTargetException
+					| NoSuchMethodException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+			value = n.toString();
+		}
+		return value;
+	}
+	
+	protected E processXlsRow(Row r) {
+		return null;
+	}
+
+	protected static boolean isTypeOf(Class<?> from, Class<?> type){
 		while(from != type){
 			if(from ==null || from == Object.class)
 				return false;
@@ -373,7 +431,7 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 	}
 	
 
-	private String getCellDataAsString(Cell cell){
+	protected String getCellDataAsString(Cell cell){
 		
 	     switch(cell.getCellType()){
 	        case STRING : return cell.getStringCellValue();

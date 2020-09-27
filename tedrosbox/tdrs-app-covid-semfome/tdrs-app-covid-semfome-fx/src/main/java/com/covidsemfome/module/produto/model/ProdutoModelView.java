@@ -30,6 +30,7 @@ import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.layout.Priority;
 
 /**
@@ -45,7 +46,7 @@ import javafx.scene.layout.Priority;
 			orderBy = {	@TOption(text = "Codigo", value = "codigo"), 
 						@TOption(text = "Nome", value = "nome")}),
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Produto", buildImportButton=true),
-	behavior=@TBehavior(importFileModelViewClass=ProdutoImportModelView.class)))
+	behavior=@TBehavior(importModelViewClass=ProdutoImportModelView.class)))
 @TSecurity(	id="COVSEMFOME_CADPROD_FORM", 
 	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Produto",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
@@ -54,6 +55,8 @@ public class ProdutoModelView extends TEntityModelView<Produto> {
 
 	
 	private SimpleLongProperty id;
+	
+	private SimpleStringProperty displayText = new SimpleStringProperty();
 
 	@TReaderHtml
 	@TLabel(text="Codigo")
@@ -102,6 +105,52 @@ public class ProdutoModelView extends TEntityModelView<Produto> {
 	
 	public ProdutoModelView(Produto entity) {
 		super(entity);
+		buildListener();
+		loadDisplayText(entity);
+	}
+	
+	@Override
+	public void reload(Produto model) {
+		super.reload(model);
+		buildListener();
+		loadDisplayText(model);
+	}
+	
+	private void loadDisplayText(Produto model) {
+		if(!model.isNew()){
+			String str = (codigo.getValue()==null ? "" : "(COD: "+codigo.getValue()+") " ) 
+					+ (nome.getValue()!=null ? nome.getValue() : "");
+			displayText.setValue(str);
+		}
+	}
+	
+	private void buildListener() {
+		
+		ChangeListener<String> idListener =  super.getListenerRepository().getListener("displayText");
+		if(idListener==null){
+			idListener = (arg0, arg1, arg2) -> {
+					String str = (arg2==null ? "" : "(COD: "+arg2.toString()+") " ) 
+							+ (nome.getValue()!=null ? nome.getValue() : "");
+					displayText.setValue(str);
+				};
+			super.addListener("displayText", idListener);
+		}else
+			codigo.removeListener(idListener);
+		
+		codigo.addListener(idListener);
+		
+		ChangeListener<String> tituloListener = super.getListenerRepository().getListener("displayText1");
+		if(tituloListener==null){
+			tituloListener = (arg0, arg1, arg2)-> {
+					String str = (codigo.getValue()==null ? "" : "(COD: "+codigo.getValue().toString()+") " ) 
+							+ (arg2!=null ? arg2 : "");
+					displayText.setValue(str);
+				};
+			super.addListener("displayText1", tituloListener);
+		}else
+			nome.removeListener(tituloListener);
+		
+		nome.addListener(tituloListener);
 	}
 
 	@Override
@@ -116,7 +165,7 @@ public class ProdutoModelView extends TEntityModelView<Produto> {
 
 	@Override
 	public SimpleStringProperty getDisplayProperty() {
-		return nome;
+		return displayText;
 	}
 
 	/**
@@ -201,6 +250,20 @@ public class ProdutoModelView extends TEntityModelView<Produto> {
 	 */
 	public void setMedida(SimpleStringProperty medida) {
 		this.medida = medida;
+	}
+
+	/**
+	 * @return the displayText
+	 */
+	public SimpleStringProperty getDisplayText() {
+		return displayText;
+	}
+
+	/**
+	 * @param displayText the displayText to set
+	 */
+	public void setDisplayText(SimpleStringProperty displayText) {
+		this.displayText = displayText;
 	}
 
 }

@@ -18,6 +18,7 @@ import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.process.TEjbService;
+import com.tedros.fxapi.collections.TFXCollections;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.exception.TException;
@@ -121,7 +122,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			
 			saveAllModels = tBehavior.saveAllModels();
 			saveOnlyChangedModel = tBehavior.saveOnlyChangedModels();
-			importFileModelViewClass = tBehavior.importFileModelViewClass();
+			importFileModelViewClass = tBehavior.importModelViewClass();
 			
 			if(decorator.gettImportButton()!=null && importFileModelViewClass==TModelView.class)
 				throw new RuntimeException("The property importFileModelViewClass in TBehavior is required for import action");
@@ -191,6 +192,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			decorator.gettImportButton().setDisable(!flag);
 		if(decorator.gettDeleteButton()!=null && isUserAuthorized(TAuthorizationType.DELETE))
 			decorator.gettDeleteButton().setDisable(flag);
+		if(decorator.gettEditModeRadio()!=null && isUserAuthorized(TAuthorizationType.EDIT))
+			decorator.gettEditModeRadio().setDisable(flag);
+		if(decorator.gettReadModeRadio()!=null && isUserAuthorized(TAuthorizationType.READ))
+			decorator.gettReadModeRadio().setDisable(flag);
+		
 	}
 	
 	/**
@@ -580,7 +586,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		if(importAction==null || (importAction!=null && importAction.runBefore(presenter))){
 			try{
 				StackPane pane = new StackPane();
-				TDynaView view = new TDynaView(importFileModelViewClass);
+				if(getModels()==null)
+					setModelViewList(TFXCollections.iTObservableList());
+				TDynaView view = new TDynaView(importFileModelViewClass, getModels());
 				pane.setMaxSize(950, 600);
 				pane.getChildren().add(view);
 				pane.setId("t-tedros-color");
