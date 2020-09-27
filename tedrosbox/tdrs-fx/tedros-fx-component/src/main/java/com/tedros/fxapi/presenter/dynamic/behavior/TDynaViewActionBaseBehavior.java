@@ -77,8 +77,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			//final TForm tForm = presenter.getFormAnnotation();
 			final TBehavior tBehavior = presenter.getPresenterAnnotation().behavior();
 			
-			
-			
 			// set the custom behavior actions
 			if(tBehavior.actionAction()!=TPresenterAction.class)
 				actionAction = tBehavior.actionAction().newInstance();

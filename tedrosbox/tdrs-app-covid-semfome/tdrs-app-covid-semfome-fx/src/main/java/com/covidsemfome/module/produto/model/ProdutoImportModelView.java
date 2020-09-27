@@ -5,7 +5,6 @@ package com.covidsemfome.module.produto.model;
 
 import com.covidsemfome.model.Produto;
 import com.covidsemfome.model.ProdutoImport;
-import com.tedros.ejb.base.entity.ITFileEntity;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TFileField;
 import com.tedros.fxapi.annotation.control.TLabel;
@@ -15,7 +14,6 @@ import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEjbService;
-import com.tedros.fxapi.annotation.reader.TReader;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
@@ -26,7 +24,7 @@ import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.modal.behavior.TImportFileModalBehavior;
 import com.tedros.fxapi.presenter.modal.decorator.TImportFileModalDecorator;
-import com.tedros.fxapi.presenter.model.TModelView;
+import com.tedros.fxapi.presenter.model.TImportModelView;
 import com.tedros.fxapi.property.TSimpleFileEntityProperty;
 
 import javafx.beans.property.SimpleLongProperty;
@@ -39,10 +37,10 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TEjbService(serviceName = "IProdutoImportControllerRemote", model=ProdutoImport.class)
-@TPresenter(decorator = @TDecorator(viewTitle="Importar produtos", type=TImportFileModalDecorator.class),
-behavior=@TBehavior(type=TImportFileModalBehavior.class, 
-importFileModelViewClass=ProdutoImportModelView.class, importFileModelClass=ProdutoImport.class))
-public class ProdutoImportModelView extends TModelView<ProdutoImport> {
+@TPresenter(decorator = @TDecorator(type=TImportFileModalDecorator.class, viewTitle="Importar produtos"),
+			behavior = @TBehavior(type=TImportFileModalBehavior.class, 
+			importedEntityClass=Produto.class, importedModelViewClass=ProdutoModelView.class))
+public class ProdutoImportModelView extends TImportModelView<ProdutoImport> {
 
 	@TTextReaderHtml(text="Especificação de arquivo para importação", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",

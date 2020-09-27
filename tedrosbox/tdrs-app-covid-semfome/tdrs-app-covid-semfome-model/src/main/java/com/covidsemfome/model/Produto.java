@@ -32,7 +32,7 @@ public class Produto extends TEntity {
 
 	@Column(length=10, nullable = false)
 	@TFieldImportRule(required = true, 
-		description = "Codigo do produto", column = "Codigo")
+		description = "Codigo do produto", column = "Codigo", numberType=Integer.class)
 	private String codigo;
 	
 	@Column(length=60, nullable = false)

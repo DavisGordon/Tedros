@@ -1,5 +1,7 @@
 package com.tedros.ejb.base.service;
 
+import java.util.List;
+
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.entity.ITFileEntity;
 import com.tedros.ejb.base.model.ITImportModel;
@@ -14,5 +16,5 @@ public interface ITEjbImportService<E extends ITEntity> {
 	/**
 	 * Importa o arquivo
 	 * */
-	public void importFile(final ITFileEntity entity);
+	public List<E> importFile(final ITFileEntity entity);
 }

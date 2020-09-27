@@ -55,4 +55,9 @@ public @interface TFieldImportRule {
 	 * A max length if applicable
 	 * */
 	int maxLength() default -1;
+	
+	/**
+	 * For number values specify the correct type
+	 * */
+	Class<? extends Number> numberType() default Number.class;
 }

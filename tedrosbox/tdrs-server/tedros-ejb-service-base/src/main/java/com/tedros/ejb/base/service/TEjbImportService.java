@@ -1,5 +1,7 @@
 package com.tedros.ejb.base.service;
 
+import java.util.List;
+
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
@@ -21,8 +23,8 @@ public abstract class TEjbImportService<E extends ITEntity> implements ITEjbImpo
 
 	@Override
 	@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
-	public void importFile(ITFileEntity entity) {
-		getBusinessObject().importFile(entity);
+	public List<E> importFile(ITFileEntity entity) {
+		return getBusinessObject().importFile(entity);
 	}
 	
 }
