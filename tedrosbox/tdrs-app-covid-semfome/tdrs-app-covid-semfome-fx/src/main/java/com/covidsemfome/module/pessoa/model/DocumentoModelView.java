@@ -23,11 +23,11 @@ import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
+import com.tedros.fxapi.annotation.presenter.TDetailListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.scene.control.TControl;
-import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.entity.behavior.TDetailCrudViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TDetailCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
@@ -41,9 +41,9 @@ import javafx.scene.layout.Priority;
 
 @TFormReaderHtml
 @TForm(showBreadcrumBar=true, name = "#{form.document.name}")
-@TPresenter(type = TDynaPresenter.class,
-behavior = @TBehavior(type = TDetailCrudViewBehavior.class), 
-decorator = @TDecorator(type = TDetailCrudViewDecorator.class, viewTitle="#{view.document.name}"))
+@TDetailListViewPresenter(presenter=@TPresenter(
+		behavior = @TBehavior(type = TDetailCrudViewBehavior.class), 
+		decorator = @TDecorator(type = TDetailCrudViewDecorator.class, viewTitle="#{view.document.name}")))
 public class DocumentoModelView extends TEntityModelView<Documento>{
 	
 	private SimpleLongProperty id;

@@ -10,6 +10,17 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import com.tedros.core.TInternationalizationEngine;
+import com.tedros.fxapi.control.action.TActionEvent;
+import com.tedros.fxapi.domain.TFileExtension;
+import com.tedros.fxapi.exception.TProcessException;
+import com.tedros.fxapi.property.TBytesLoader;
+import com.tedros.util.TUrlUtil;
+
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -36,17 +47,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import com.tedros.fxapi.control.action.TActionEvent;
-import com.tedros.fxapi.domain.TFileExtension;
-import com.tedros.fxapi.exception.TProcessException;
-import com.tedros.fxapi.modal.TModalPane;
-import com.tedros.fxapi.property.TBytesLoader;
-import com.tedros.util.TUrlUtil;
 
 /**
  * DESCRIÇÃO DA CLASSE
@@ -86,7 +86,6 @@ public class TFileField extends StackPane {
 	
 	private boolean showImage;
 	private boolean showFilePath;
-	private final TModalPane modal;
 	
 	private TActionEvent openAction;
 	private TActionEvent cleanAction;
@@ -97,14 +96,18 @@ public class TFileField extends StackPane {
 	private EventHandler<ActionEvent> openEventHandler;
 	private EventHandler<ActionEvent> downloadEventHandler;
 	
+	TInternationalizationEngine iEngine;
+	
 	public TFileField(final Stage stage) throws IOException {	
 		appStage = stage;
-		modal = new TModalPane(this);
 		initialize();
 		buildListeners();
 	}
 
 	private void initialize() {
+		
+		iEngine = TInternationalizationEngine.getInstance(null);
+		
 		fileProperty = new SimpleObjectProperty<>();
 		fileChooser = new FileChooser();
 		selectButton = new Button();
@@ -129,9 +132,9 @@ public class TFileField extends StackPane {
 		toolbar.setMaxWidth(Double.MAX_VALUE);
 		toolbar.autosize();
 		
-		selectButton.setText("Selecionar");
-		openButton.setText("Abrir");
-		cleanButton.setText("Limpar");
+		selectButton.setText(iEngine.getString("#{tedros.fxapi.button.select}"));
+		openButton.setText(iEngine.getString("#{tedros.fxapi.button.open}"));
+		cleanButton.setText(iEngine.getString("#{tedros.fxapi.button.clean}"));
 		
 		setAlignment(toolbar, Pos.CENTER_LEFT);
 		
@@ -149,10 +152,15 @@ public class TFileField extends StackPane {
 		toolbar.getItems().addAll(fileNameField, selectButton, openButton, cleanButton);
 		
 		vBox.setAlignment(Pos.CENTER_LEFT);
-		
+		Label l = new Label();
+		l.setText("grhhgt yhjv yjjytg bjjhg ujhtv hjytresawtg jkk uh bj  jv");
+		l.getStyleClass().add("chat-bubble");
 		HBox hBox = new HBox();
 		HBox.setHgrow(toolbar, Priority.ALWAYS);
 		hBox.getChildren().add(toolbar);
+		
+		
+		
 		vBox.getChildren().addAll(boxImageLabelSpace, hBox);
 		getChildren().add(vBox);
 	}
@@ -267,7 +275,7 @@ public class TFileField extends StackPane {
 	                try {
 	                    java.lang.Runtime.getRuntime().exec(cmdArray);
 	                } catch (Exception e) {
-	                	showModal("Não foi possivel abrir o arquivo! Erro:"+e.getMessage());
+	                	showModal(iEngine.getFormatedString("#{tedros.fxapi.message.cannot.open.file}", e.getMessage()));
 	                }
 				}else{
 					if(byteArrayProperty!=null && byteArrayProperty.getValue()!=null && fileNameField!=null && fileNameField.getText()!=null){
@@ -287,7 +295,7 @@ public class TFileField extends StackPane {
 							String[] cmdArray = {"explorer.exe", file.getAbsolutePath()};
 							java.lang.Runtime.getRuntime().exec(cmdArray);
 						} catch (Exception e) {
-							showModal("Não foi possivel abrir o arquivo! Erro:"+e.getMessage());
+							showModal(iEngine.getFormatedString("#{tedros.fxapi.message.cannot.open.file}", e.getMessage()));
 						}
 					}
 				}
@@ -303,12 +311,12 @@ public class TFileField extends StackPane {
 	}
 	
 	private void setLoadByteAction() {
-		openButton.setText("Carregar");
+		openButton.setText(iEngine.getString("#{tedros.fxapi.button.load}"));
 		openButton.setOnAction(downloadEventHandler);
 	}
 	
 	private void setOpenAction() {
-		openButton.setText("Abrir");
+		openButton.setText(iEngine.getString("#{tedros.fxapi.button.open}"));
 		openButton.setOnAction(openEventHandler);
 	}
 	
@@ -319,13 +327,16 @@ public class TFileField extends StackPane {
 						"-fx-font-size: 1.0em; "+
 						"-fx-font-weight: bold; "+
 						"-fx-font-smoothing-type:lcd; "+
-						"-fx-text-fill: #ffffff; "+
+						"-fx-text-fill: #000000; "+
 						"-fx-padding: 2 5 5 2; ");
-		modal.showModal(label, true);
+		
+		PopOver p = new PopOver(label);
+		p.show(selectButton);
 	}
 	
 	private static void configureFileChooser(final FileChooser fileChooser, String[] extensions){
-		fileChooser.setTitle("Selecionar arquivo");
+		
+		fileChooser.setTitle(TInternationalizationEngine.getInstance(null).getString("#{tedros.fxapi.label.select.file}"));
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home"))); 
         for(String ext : extensions){
         	if(ext!=null)
@@ -337,9 +348,9 @@ public class TFileField extends StackPane {
     	try {
     		long size = FileUtils.sizeOf(file);
     		if(maxFileSize!=null && maxFileSize < size)
-    			showModal("O tamanho maximo permitido é "+maxFileSize+" bytes");
+    			showModal(iEngine.getFormatedString("#{tedros.fxapi.message.file.max.size}", maxFileSize.toString()));
     		else if(minFileSize!=null && minFileSize > FileUtils.sizeOf(file))
-    			showModal("O tamanho minimo permitido é "+minFileSize+" bytes");
+    			showModal(iEngine.getFormatedString("#{tedros.fxapi.message.file.min.size}", minFileSize.toString()));
     		else{
 	    		if(showFilePath)
 	    			filePathLabel.setText(file.getAbsolutePath());
@@ -443,10 +454,18 @@ public class TFileField extends StackPane {
 	
 	private void showHideImageSpace(){
 		if(!showImage && !showFilePath){
-			vBox.getChildren().remove(boxImageLabelSpace);
+			removeBoxImageSpace();
 		}else if(!vBox.getChildren().contains(boxImageLabelSpace)){
-			vBox.getChildren().add(0, boxImageLabelSpace);
+			addBoxImageSpace();
 		}
+	}
+
+	private void addBoxImageSpace() {
+		vBox.getChildren().add(0, boxImageLabelSpace);
+	}
+
+	private void removeBoxImageSpace() {
+		vBox.getChildren().remove(boxImageLabelSpace);
 	}
 
 	private void removeImageView() {
@@ -597,13 +616,13 @@ public class TFileField extends StackPane {
 					double iH = image.getHeight();
 					String msg = "";
 					if(maxImageWidth!=null && iW>maxImageWidth)
-						msg += "A imagem precisa ser menor que "+maxImageWidth+" de largura\n";
+						msg += iEngine.getFormatedString("#{tedros.fxapi.message.image.min.width}", maxImageWidth.toString()) + "\n";
 					if(minImageWidth!=null && iW<minImageWidth)
-						msg += "A imagem precisa ser maior que "+minImageWidth+" de largura\n";
+						msg += iEngine.getFormatedString("#{tedros.fxapi.message.image.max.width}", minImageWidth.toString()) + "\n";
 					if(maxImageHeight!=null && iH>maxImageHeight)
-						msg += "A imagem precisa ser menor que "+maxImageHeight+" de altura\n";
+						msg += iEngine.getFormatedString("#{tedros.fxapi.message.image.min.height}", maxImageHeight.toString()) + "\n";
 					if(minImageHeight!=null && iH>minImageHeight)
-						msg += "A imagem precisa ser maior que "+minImageHeight+" de altura\n";
+						msg += iEngine.getFormatedString("#{tedros.fxapi.message.image.max.height}", minImageHeight.toString()) + "\n";
 					
 					if(StringUtils.isNotBlank(msg)){
 						showModal(msg);

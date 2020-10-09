@@ -1,29 +1,24 @@
 package com.tedros.fxapi.annotation.parser;
 
-import javafx.collections.ObservableList;
+import org.apache.commons.lang3.StringUtils;
+
+import com.tedros.fxapi.annotation.control.TContent;
+import com.tedros.fxapi.annotation.control.TTab;
+import com.tedros.fxapi.annotation.control.TTabPane;
+import com.tedros.fxapi.descriptor.TComponentDescriptor;
+import com.tedros.fxapi.form.TComponentBuilder;
+import com.tedros.fxapi.form.TFieldBox;
+
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.control.ScrollPaneBuilder;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.HBoxBuilder;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBoxBuilder;
-
-import org.apache.commons.lang3.StringUtils;
-
-import com.tedros.core.ITModule;
-import com.tedros.ejb.base.entity.ITEntity;
-import com.tedros.fxapi.annotation.control.TContent;
-import com.tedros.fxapi.annotation.control.TTab;
-import com.tedros.fxapi.annotation.control.TTabPane;
-import com.tedros.fxapi.annotation.form.TDetailView;
-import com.tedros.fxapi.descriptor.TComponentDescriptor;
-import com.tedros.fxapi.form.TComponentBuilder;
-import com.tedros.fxapi.presenter.view.TView;
+import javafx.scene.layout.VBox;
 
 public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
 
@@ -42,7 +37,7 @@ public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void parse(TTabPane annotation, final TabPane object, String... byPass) throws Exception {
-		
+		TFieldBox fb = (TFieldBox) object.getUserData();
 		TTab[] tabs = annotation.tabs();		
 		for (TTab tTab : tabs) {
 			
@@ -53,72 +48,40 @@ public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
 				String[] fields =  tContent.detailForm().fields();
 				Orientation orientation = tContent.detailForm().orientation();
 				Pane pane = (orientation.equals(Orientation.HORIZONTAL)) 
-						? HBoxBuilder.create()
-							.alignment(Pos.CENTER_LEFT)
-							.fillHeight(true)
-							.build()
-								: VBoxBuilder.create()
-									.alignment(Pos.CENTER_LEFT)
-									.fillWidth(true)
-									.build();
+						? buildHBox()
+								: buildVBox();
 						
 				for (String field : fields) {
 					if(StringUtils.isBlank(field))
 						continue;
 					
 					Node node = null;
-					
-					if(getComponentDescriptor().getFieldBoxMap().containsKey(field)){
-						node = getComponentDescriptor().getFieldBoxMap().get(field);
-					}else{
-						final TComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), field);
-						node = TComponentBuilder.getField(descriptor);
+					if(fb!=null && fb.gettControlFieldName().equals(field)) {
+						node = fb;
+					}else {
+						if(getComponentDescriptor().getFieldBoxMap().containsKey(field)){
+							node = getComponentDescriptor().getFieldBoxMap().get(field);
+						}else{
+							final TComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), field);
+							node = TComponentBuilder.getField(descriptor);
+						}
 					}
-					
 					if(node!=null)
 						pane.getChildren().add(node);
 				}
 				
-				ScrollPane scroll = ScrollPaneBuilder.create()
-						.content(pane)
-						.fitToWidth(true)
-						.maxHeight(Double.MAX_VALUE)
-						.maxWidth(Double.MAX_VALUE)
-						.vbarPolicy(ScrollBarPolicy.AS_NEEDED)
-						.hbarPolicy(ScrollBarPolicy.AS_NEEDED)
-						.id("t-form-scroll")
-						.build();
+				ScrollPane scroll = new ScrollPane();
+				scroll.setContent(pane);
+				scroll.setFitToWidth(true);
+				scroll.maxHeight(Double.MAX_VALUE);
+				scroll.maxWidth(Double.MAX_VALUE);
+				scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+				scroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+				scroll.setId("t-form-scroll");
 				scroll.layout();
 				
 				tab.setContent(scroll);
 				
-				
-			}else if(!(tContent.detailView().entityClass() == ITEntity.class)){
-				TDetailView tDetailView = tContent.detailView();
-				Class detailViewClass = tDetailView.viewClass();
-				
-				try {
-					final TComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), tDetailView.field());
-					
-					ITModule module = getComponentDescriptor().getForm().gettPresenter().getModule();
-					
-					if(module==null){
-						final TView view = (TView) detailViewClass.getConstructor(Class.class, Class.class, ObservableList.class)
-								.newInstance(tDetailView.entityModelViewClass(), tDetailView.entityClass(), descriptor.getFieldValue());
-						
-						view.gettPresenter().loadView();					
-						tab.setContent(view);
-					}else{
-						final TView view = (TView) detailViewClass.getConstructor(ITModule.class, Class.class, Class.class, ObservableList.class)
-								.newInstance(module, tDetailView.entityModelViewClass(), tDetailView.entityClass(), descriptor.getFieldValue());
-						
-						view.gettPresenter().loadView();					
-						tab.setContent(view);
-					}
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
 				
 			}
 			
@@ -128,6 +91,20 @@ public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
 		
 		super.parse(annotation, object, "tabs");
 		
+	}
+
+	private VBox buildVBox() {
+		VBox b = new VBox();
+		b.setAlignment(Pos.CENTER_LEFT);
+		b.setFillWidth(true);
+		return b;
+	}
+
+	private HBox buildHBox() {
+		HBox b = new HBox();
+		b.setAlignment(Pos.CENTER_LEFT);
+		b.setFillHeight(true);
+		return b;
 	}
 	
 }

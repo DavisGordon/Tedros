@@ -29,11 +29,9 @@ import com.tedros.ejb.base.entity.ITFileEntity;
 import com.tedros.ejb.base.model.ITFileModel;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
-import com.tedros.fxapi.annotation.form.TDetailView;
 import com.tedros.fxapi.chart.TAreaChartField;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.collections.TFXCollections;
-import com.tedros.fxapi.descriptor.TFieldDescriptor;
 import com.tedros.fxapi.exception.TErrorType;
 import com.tedros.fxapi.exception.TException;
 import com.tedros.fxapi.property.TSimpleFileModelProperty;
@@ -41,7 +39,6 @@ import com.tedros.fxapi.util.TPropertyUtil;
 import com.tedros.fxapi.util.TReflectionUtil;
 
 import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -388,34 +385,6 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		propertys.put(fieldName, value);
 	}
 	
-	/**
-	 * <pre>
-	 * </pre>
-	 * */
-	@Transient
-	private TDetailInfo buildDetailInfo(final TFieldDescriptor tFieldDescriptor) throws Exception {
-		final String fieldName = tFieldDescriptor.getFieldName();
-		final Method modelViewGetMethod = getClass().getMethod(GET+StringUtils.capitalize(fieldName));
-		for (final Annotation annotation : (List<Annotation>) tFieldDescriptor.getAnnotations()) {
-			if (annotation instanceof TDetailView) {
-				TDetailView tAnnotation = (TDetailView) annotation; 				
-				final Observable attrProperty = (Observable) modelViewGetMethod.invoke(this);
-				return new TDetailInfo(tAnnotation.formTitle(), tAnnotation.listTitle(), attrProperty, tAnnotation.entityModelViewClass(), tAnnotation.entityClass(), tAnnotation.formClass());
-				
-				/*TODO: VALIDAR E ARRANCAR
-				if(tAnnotation.propertyType() == ObservableList.class ){
-					final ObservableList<?> attrProperty = (ObservableList<?>) modelViewGetMethod.invoke(this);
-					return new TDetailInfo(tAnnotation.formTitle(), tAnnotation.listTitle(), attrProperty, tAnnotation.entityModelViewClass(), tAnnotation.entityClass(), tAnnotation.formClass());
-				}
-				if(tAnnotation.propertyType() == ITObservableList.class ){
-					final ITObservableList<?> attrProperty = (ITObservableList<?>) modelViewGetMethod.invoke(this);
-					return new TDetailInfo(tAnnotation.formTitle(), tAnnotation.listTitle(), attrProperty, tAnnotation.entityModelViewClass(), tAnnotation.entityClass(), tAnnotation.formClass());
-				}
-				*/
-			}
-		}
-		return null;
-	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private void loadFields() {

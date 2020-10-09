@@ -15,8 +15,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.covidsemfome.domain.DomainSchema;
@@ -28,15 +28,12 @@ import com.tedros.ejb.base.entity.TEntity;
  *
  */
 @Entity
-@Table(name = DomainTables.entrada_item, schema = DomainSchema.riosemfome)
+@Table(name = DomainTables.entrada_item, schema = DomainSchema.riosemfome, 
+uniqueConstraints= {@UniqueConstraint(name="entradaProdUnIdx",columnNames = { "prod_id", "ent_id" })})
 public class EntradaItem extends TEntity {
 
 	private static final long serialVersionUID = -3216481324029671441L;
 
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="coz_id", nullable=false)
-	private Cozinha cozinha;
-	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="prod_id", nullable=false)
 	private Produto produto;
@@ -58,14 +55,37 @@ public class EntradaItem extends TEntity {
 	@JoinColumn(name = "ent_id", referencedColumnName = "id")
 	private Entrada entrada;
 	
+	public EntradaItem() {
+		
+	}
+	
+	public EntradaItem(Produto p) {
+		this.produto = p;
+	}
+	
 	@Override
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this, false);
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
-		return EqualsBuilder.reflectionEquals(this, obj, false);
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EntradaItem other = (EntradaItem) obj;
+		if (produto == null) {
+			if (other.produto != null)
+				return false;
+		} else if (!produto.equals(other.produto))
+			return false;
+		return true;
 	}
 
 	/**
@@ -139,20 +159,6 @@ public class EntradaItem extends TEntity {
 	}
 
 	/**
-	 * @return the cozinha
-	 */
-	public Cozinha getCozinha() {
-		return cozinha;
-	}
-
-	/**
-	 * @param cozinha the cozinha to set
-	 */
-	public void setCozinha(Cozinha cozinha) {
-		this.cozinha = cozinha;
-	}
-
-	/**
 	 * @return the entrada
 	 */
 	public Entrada getEntrada() {
@@ -164,7 +170,20 @@ public class EntradaItem extends TEntity {
 	 */
 	public void setEntrada(Entrada entrada) {
 		this.entrada = entrada;
+		if(entrada!=null)
+			this.data = entrada.getData();
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "EntradaItem [" + (produto != null ? "produto=" + produto + ", " : "")
+				+ (quantidade != null ? "quantidade=" + quantidade : "") + "]";
+	}
+
+	
 
 	
 	

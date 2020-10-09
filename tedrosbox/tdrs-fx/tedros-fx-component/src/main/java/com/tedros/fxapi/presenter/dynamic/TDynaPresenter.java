@@ -3,11 +3,11 @@ package com.tedros.fxapi.presenter.dynamic;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 
-import javafx.collections.ObservableList;
-
 import com.tedros.core.ITModule;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.annotation.form.TForm;
+import com.tedros.fxapi.annotation.presenter.TDetailListViewPresenter;
+import com.tedros.fxapi.annotation.presenter.TDetailTableViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TSelectionModalPresenter;
 import com.tedros.fxapi.annotation.process.TEjbService;
@@ -21,6 +21,8 @@ import com.tedros.fxapi.presenter.decorator.ITDecorator;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.util.TReflectionUtil;
+
+import javafx.collections.ObservableList;
 
 /**
  * Responsible to hold and control the objects to build and invalidate the view.
@@ -136,6 +138,14 @@ public class TDynaPresenter<M extends TModelView>	extends TPresenter<TDynaView<M
 				}
 				if(ann instanceof TSelectionModalPresenter) {
 					tPresenter = ((TSelectionModalPresenter) ann).presenter();
+					break;
+				}
+				if(ann instanceof TDetailTableViewPresenter) {
+					tPresenter = ((TDetailTableViewPresenter) ann).presenter();
+					break;
+				}
+				if(ann instanceof TDetailListViewPresenter) {
+					tPresenter = ((TDetailListViewPresenter) ann).presenter();
 					break;
 				}
 			}

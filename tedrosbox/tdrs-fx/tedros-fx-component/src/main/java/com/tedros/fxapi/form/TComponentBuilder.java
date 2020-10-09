@@ -144,6 +144,10 @@ public final class TComponentBuilder {
 			Node layout = ((ITLayoutBuilder) layoutBuilder).build(layoutAnnotation, fieldBox);
 			checkAsLoaded(descriptor, fieldBox);
 			return layout;
+		} else if(layoutBuilder!=null && controlBuilder==null){
+			TFieldBox fieldBox = TFieldBoxBuilder.build(null, descriptor);
+			Node layout = ((ITLayoutBuilder) layoutBuilder).build(layoutAnnotation, fieldBox);
+			return layout;
 		}else{
 			return buildFieldBox(buildControl(descriptor, modelView, modelViewGetMethod, controlBuilder, controlAnnotation), descriptor);
 		}

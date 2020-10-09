@@ -10,9 +10,11 @@ import com.covidsemfome.module.cozinha.CozinhaModule;
 import com.covidsemfome.module.doacao.DoacaoModule;
 import com.covidsemfome.module.doacao.icon.DoacaoIconImageView;
 import com.covidsemfome.module.doacao.icon.DoacaoMenuIconImageView;
+import com.covidsemfome.module.estoque.EstoqueConfigModule;
 import com.covidsemfome.module.pessoa.CadastroDePessoaModule;
 import com.covidsemfome.module.pessoa.icon.PessoaIconImageView;
 import com.covidsemfome.module.pessoa.icon.PessoaMenuIconImageView;
+import com.covidsemfome.module.produto.EntradaProdutoModule;
 import com.covidsemfome.module.produto.ProdutoModule;
 import com.covidsemfome.module.report.DoacaoReportModule;
 import com.covidsemfome.module.report.icon.RelatoriosIconImageView;
@@ -54,6 +56,10 @@ module = {
 			@TModule(type=CozinhaModule.class, name="Cozinha", menu="Administrativo"/*, 
 			icon=RelatoriosIconImageView.class, menuIcon=RelatoriosMenuIconImageView.class*/),
 			@TModule(type=ProdutoModule.class, name="Produto", menu="Administrativo"/*, 
+			icon=RelatoriosIconImageView.class, menuIcon=RelatoriosMenuIconImageView.class*/),
+			@TModule(type=EntradaProdutoModule.class, name="Entrada de Produto", menu="Administrativo"/*, 
+			icon=RelatoriosIconImageView.class, menuIcon=RelatoriosMenuIconImageView.class*/),
+			@TModule(type=EstoqueConfigModule.class, name="Configurar estoque", menu="Administrativo"/*, 
 			icon=RelatoriosIconImageView.class, menuIcon=RelatoriosMenuIconImageView.class*/)
 
 })

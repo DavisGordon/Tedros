@@ -7,24 +7,28 @@
 package com.covidsemfome.module.pessoa.model;
 
 import com.covidsemfome.model.Contato;
+import com.covidsemfome.module.pessoa.table.TipoContatoTableCell;
 import com.covidsemfome.module.pessoa.trigger.TTipoContatoTrigger;
 import com.tedros.fxapi.annotation.TCodeValue;
+import com.tedros.fxapi.annotation.control.TCellFactory;
+import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TMaskField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
+import com.tedros.fxapi.annotation.control.TTableColumn;
+import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.control.TTrigger;
-import com.tedros.fxapi.annotation.control.TVerticalRadioGroup;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
+import com.tedros.fxapi.annotation.presenter.TDetailTableViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.domain.TViewMode;
-import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
-import com.tedros.fxapi.presenter.entity.behavior.TDetailCrudViewBehavior;
-import com.tedros.fxapi.presenter.entity.decorator.TDetailCrudViewDecorator;
+import com.tedros.fxapi.presenter.entity.behavior.TDetailFieldBehavior;
+import com.tedros.fxapi.presenter.entity.decorator.TDetailFieldDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.util.TPropertyUtil;
 
@@ -40,9 +44,14 @@ import javafx.geometry.Pos;
  */
 @TFormReaderHtml
 @TForm(showBreadcrumBar=true, name = "Editar contato")
-@TPresenter(type = TDynaPresenter.class,
-behavior = @TBehavior(type = TDetailCrudViewBehavior.class), 
-decorator = @TDecorator(type = TDetailCrudViewDecorator.class, viewTitle="Contatos"))
+@TDetailTableViewPresenter(
+		presenter=@TPresenter(behavior=@TBehavior(type=TDetailFieldBehavior.class),
+				decorator = @TDecorator(type=TDetailFieldDecorator.class, viewTitle="Contatos")
+				),
+		tableView=@TTableView(editable=true, 
+			columns = { @TTableColumn(cellValue="tipo", text = "Tipo", resizable=true,
+			cellFactory=@TCellFactory(parse = true, tableCell=TipoContatoTableCell.class)), 
+						@TTableColumn(cellValue="descricao", text = "Descrição.", resizable=true)}))
 public class ContatoModelView extends TEntityModelView<Contato> {
 	
 	private SimpleLongProperty id;
@@ -52,7 +61,7 @@ public class ContatoModelView extends TEntityModelView<Contato> {
 			@TCodeValue(code = "3", value = "#{label.housenumber}"),
 			@TCodeValue(code = "4", value = "#{label.worknumber}")})
 	@TLabel(text = "Tipo")
-	@TVerticalRadioGroup(required=true, alignment=Pos.TOP_LEFT, spacing=4, 
+	@THorizontalRadioGroup(required=true, alignment=Pos.TOP_LEFT, spacing=4, 
 			radioButtons = {@TRadioButtonField(text="#{label.email}", userData="1"), 
 							@TRadioButtonField(text="#{label.celnumber}", userData="2"),
 							@TRadioButtonField(text="#{label.housenumber}", userData="3"),

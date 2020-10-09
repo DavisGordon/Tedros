@@ -1,22 +1,18 @@
 package com.tedros.fxapi.presenter.entity.decorator;
 
-import java.util.Arrays;
-
 import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
+import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.scene.control.Label;
-import javafx.scene.control.LabelBuilder;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.VBoxBuilder;
 
 @SuppressWarnings("rawtypes")
 public class TDetailCrudViewDecorator<M extends TEntityModelView> 
@@ -27,12 +23,9 @@ extends TDynaViewCrudBaseDecorator<M>
     private Label 		tListViewTitle;
     private ListView<M> tListView;
     
-    private double hideWidth = 4;
     private double listViewMaxWidth = 250;
     private double listViewMinWidth = 250;
  
-	
-	@SuppressWarnings("unchecked")
 	public void decorate() {
 		
 		// get the model view annotation array 
@@ -57,13 +50,17 @@ extends TDynaViewCrudBaseDecorator<M>
 		buildColapseButton(null);
 		buildNewButton(null);
 		buildDeleteButton(null);
-		buildEditButton(null);
-		buildCancelButton(null);
+		if(tForm.showBreadcrumBar())
+			buildEditButton(null);
+		//buildCancelButton(null);
 		buildModesRadioButton(null, null);
 		
 		// add the buttons at the header tool bar
-		addItemInTHeaderToolBar(gettColapseButton(), gettNewButton(), gettDeleteButton(), gettEditButton(), gettCancelButton());
-		
+		if(tForm.showBreadcrumBar())
+			addItemInTHeaderToolBar(gettColapseButton(), gettNewButton(), gettDeleteButton(), gettEditButton());
+		else
+			addItemInTHeaderToolBar(gettColapseButton(), gettNewButton(), gettDeleteButton());
+
 		// add the mode radio buttons
 		addItemInTHeaderHorizontalLayout(gettEditModeRadio(), gettReadModeRadio());
 		
@@ -80,17 +77,15 @@ extends TDynaViewCrudBaseDecorator<M>
 		
 		
 		// build the label for the list view
-		tListViewTitle = LabelBuilder.create()
-				.text(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_listTitle : tPresenter.decorator().listTitle()))
-				.id("t-title-label")
-				.maxWidth(listViewMaxWidth)
-				.build();
+		tListViewTitle = new Label();
+		tListViewTitle.setText(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_listTitle : tPresenter.decorator().listTitle()));
+		tListViewTitle.setId("t-title-label");
+		tListViewTitle.maxWidth(listViewMaxWidth);
 		
 		// build the list view box
-		tListViewLayout = VBoxBuilder.create()
-				.children(Arrays.asList(tListViewTitle, tListView))
-				.maxWidth(listViewMaxWidth+2)
-				.build();
+		tListViewLayout = new VBox();
+		tListViewLayout.getChildren().addAll(tListViewTitle, tListView);
+		tListViewLayout.maxWidth(listViewMaxWidth+2);
 		
 		VBox.setVgrow(tListView, Priority.ALWAYS);
 		// add the list view box at the left 
@@ -100,27 +95,20 @@ extends TDynaViewCrudBaseDecorator<M>
 	}
 	
 	
-	
+	public boolean isListContentVisible() {
+    	final ITDynaView<M> view = getView();
+		return view.gettLeftContent().getChildren().contains(tListViewLayout);
+    }
+    
 	public void hideListContent() {
-		final StackPane pane = (StackPane) ((TDynaView) getView()).gettContentLayout().getLeft();
-		((TDynaView) getView()).gettContentLayout().managedProperty().bind(pane.visibleProperty());
-		tListViewTitle.setMaxWidth(hideWidth);
-		tListView.setMinWidth(hideWidth);
-		tListView.setMaxWidth(hideWidth);
-		pane.setVisible(false);
-		tListView.layout();
+		final ITDynaView<M> view = getView();
+		view.gettLeftContent().getChildren().remove(tListViewLayout);
 	}
 	
 	public void showListContent() {
-		final StackPane pane = (StackPane) ((TDynaView) getView()).gettContentLayout().getLeft();
-		((TDynaView) getView()).gettContentLayout().managedProperty().bind(pane.visibleProperty());
-		tListViewTitle.setMaxWidth(listViewMaxWidth);
-		tListView.setMinWidth(listViewMinWidth);
-		tListView.setMaxWidth(listViewMaxWidth);
-		pane.setVisible(true);
-		tListView.layout();
+		addItemInTLeftContent(tListViewLayout);
+		
 	}
-
 	
 	public VBox gettListViewLayout() {
 		return tListViewLayout;

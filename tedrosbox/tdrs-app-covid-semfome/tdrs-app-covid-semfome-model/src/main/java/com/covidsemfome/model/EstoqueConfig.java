@@ -24,7 +24,7 @@ import com.tedros.ejb.base.entity.TEntity;
  */
 @Entity
 @Table(name = DomainTables.estoque_config, schema = DomainSchema.riosemfome, 
-uniqueConstraints= {@UniqueConstraint(columnNames = { "COZ_ID" })})
+uniqueConstraints= {@UniqueConstraint(name="cozProdUnIdx",columnNames = { "COZ_ID", "PROD_ID" })})
 public class EstoqueConfig extends TEntity {
 
 	private static final long serialVersionUID = 5992191290923951701L;

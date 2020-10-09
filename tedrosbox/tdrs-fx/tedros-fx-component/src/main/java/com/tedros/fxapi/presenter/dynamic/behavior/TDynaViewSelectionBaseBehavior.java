@@ -245,6 +245,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	/**
 	 * Perform this action when a model is selected.
 	 * */
+	@SuppressWarnings("unchecked")
 	public void selectedItemAction(TModelView new_val) {
 		final TDynaPresenter<M> presenter = getPresenter();
 		if(selectedItemAction==null || (selectedItemAction!=null && selectedItemAction.runBefore(presenter))){
@@ -439,6 +440,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			getView().gettFormSpace().getChildren().removeListener(formListChangeListener);
 	}
 	
+	@SuppressWarnings("unlikely-arg-type")
 	public synchronized void addFormListChangeListener() {
 		if(formListChangeListener!=null && !getView().gettFormSpace().getChildren().contains(formListChangeListener)){
 			getView().gettFormSpace().getChildren().addListener(formListChangeListener);
