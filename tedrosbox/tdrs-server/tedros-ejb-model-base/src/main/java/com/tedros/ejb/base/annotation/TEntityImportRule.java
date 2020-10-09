@@ -43,14 +43,23 @@ public @interface TEntityImportRule {
 	
 	/**
 	 * <pre>
-	 * Force the usage of the first row of the file as column name header,
-	 * the file column names must match with the field names of the entity or with the 
-	 * column property in the TFieldImportRule annotation of the field.
+	 * Specify if the file to import has a header and his type.  
 	 * 
-	 * If false the import process assume the has no header and the first row will
-	 * be used as data to create the entity.  
+	 * Any type different of THeaderType.COLUMN_INDEX force the usage of 
+	 * the first row of the file as column name header. 
+	 * 
+	 * For THeaderType.FIELD_NAME the file must have the first row with 
+	 * columns named as the field names of the entity.
+	 *  
+	 * For THeaderType.COLUMN_NAME the file must have the first row with 
+	 * columns named as same value of the property column in the 
+	 * TFieldImportRule annotation of the correspondent entity field.
+	 * 
+	 * For THeaderType.COLUMN_INDEX the import process assume the has no header and the first row will
+	 * be used as data to create an entity and  the property column in the TFieldImportRule must have
+	 * the file column index to be used to identify the correspondent data.
 	 * </pre>
-	 * @default true
+	 * @default THeaderType.COLUMN_NAME
 	 * */
-	boolean forceFirstRowAsColumnNameHeader() default true;
+	THeaderType header() default THeaderType.COLUMN_NAME;
 }

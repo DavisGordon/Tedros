@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.ejb.EJBException;
+import javax.ejb.EJBTransactionRolledbackException;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.OptimisticLockException;
@@ -25,8 +27,7 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 			entidade = getService().findById(entidade);
 			return new TResult<E>(EnumResult.SUCESS, entidade);
 		}catch(Exception e){
-			e.printStackTrace();
-			return new TResult<E>(EnumResult.ERROR, e.getMessage());
+			return processException(entidade, e);
 		}
 	}
 	
@@ -35,8 +36,7 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 			entidade = getService().find(entidade);
 			return new TResult<E>(EnumResult.SUCESS, entidade);
 		}catch(Exception e){
-			e.printStackTrace();
-			return new TResult<E>(EnumResult.ERROR, e.getMessage());
+			return processException(entidade, e);
 		}
 	}
 	
@@ -46,8 +46,7 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 			return new TResult<List<E>>(EnumResult.SUCESS, list);
 			
 		}catch(Exception e){
-			e.printStackTrace();
-			return new TResult<List<E>>(EnumResult.ERROR, e.getMessage());
+			return processException(entity, e);
 		}
 	}
 
@@ -80,8 +79,7 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 			return new TResult<List<E>>(EnumResult.SUCESS, list);
 			
 		}catch(Exception e){
-			e.printStackTrace();
-			return new TResult<List<E>>(EnumResult.ERROR, e.getMessage());
+			return processException(null, e);
 		}
 	}
 
@@ -99,8 +97,7 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 			return new TResult<>(EnumResult.SUCESS, map);
 			
 		}catch(Exception e){
-			e.printStackTrace();
-			return new TResult<>(EnumResult.ERROR, e.getMessage());
+			return processException(entidade, e);
 		}
 	}
 
@@ -118,21 +115,25 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 			return new TResult<>(EnumResult.SUCESS, map);
 			
 		}catch(Exception e){
-			e.printStackTrace();
-			return new TResult<>(EnumResult.ERROR, e.getMessage());
+			return processException(entidade, e);
 		}
 	}
 	
-	public TResult<E> processException(E entidade, Exception e) {
+	@SuppressWarnings("unchecked")
+	public <T> T processException(E entidade, Exception e) {
 		e.printStackTrace();
-		if(e instanceof OptimisticLockException){
+		if(e instanceof OptimisticLockException || e.getCause() instanceof OptimisticLockException){
 			TResult<E> result = find(entidade);
 			
 			String message = (result.getValue()==null) ? "REMOVED" : "OUTDATED";
 			
-			return new TResult<E>(EnumResult.OUTDATED, message, result.getValue());
+			return (T) new TResult(EnumResult.OUTDATED, message, result.getValue());
+		}else if(e instanceof EJBTransactionRolledbackException) {
+			return (T) new TResult(EnumResult.ERROR,true, e.getCause().getMessage());
+		}else if(e instanceof EJBException) {
+			return (T) new TResult(EnumResult.ERROR,true, e.getCause().getMessage());
 		}else{
-			return new TResult<E>(EnumResult.ERROR, e.getMessage());
+			return (T) new TResult(EnumResult.ERROR, e.getMessage());
 		}
 	}
 	

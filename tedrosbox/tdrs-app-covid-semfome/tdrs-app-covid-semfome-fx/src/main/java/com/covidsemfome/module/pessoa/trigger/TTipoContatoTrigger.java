@@ -1,7 +1,7 @@
 package com.covidsemfome.module.pessoa.trigger;
 
+import com.tedros.fxapi.control.THorizontalRadioGroup;
 import com.tedros.fxapi.control.TMaskField;
-import com.tedros.fxapi.control.TVerticalRadioGroup;
 import com.tedros.fxapi.control.trigger.TTrigger;
 import com.tedros.fxapi.form.TFieldBox;
 
@@ -14,7 +14,7 @@ public class TTipoContatoTrigger extends TTrigger {
 
 	@Override
 	public void run() {
-		TVerticalRadioGroup vRadio = (TVerticalRadioGroup) getSource().gettControl();
+		THorizontalRadioGroup vRadio = (THorizontalRadioGroup) getSource().gettControl();
 		if(vRadio==null || vRadio.getSelectedToggle()==null || vRadio.getSelectedToggle().getUserData()==null)
 			return;
 		

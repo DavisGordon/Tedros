@@ -173,6 +173,22 @@ public @interface TBehavior {
 
 	/**
 	 * <pre>
+	 * Specifies an action to the add event dispatched from the add button;
+	 * </pre>
+	 * */
+	@SuppressWarnings("rawtypes")
+	public Class<? extends TPresenterAction> addAction() default TPresenterAction.class;
+	
+	/**
+	 * <pre>
+	 * Specifies an action to the remove event dispatched from the remove button;
+	 * </pre>
+	 * */
+	@SuppressWarnings("rawtypes")
+	public Class<? extends TPresenterAction> removeAction() default TPresenterAction.class;
+	
+	/**
+	 * <pre>
 	 * The import model view class, must be configured to build the import view properly
 	 * with the correct ejb service (@TEjbService) decorator of type TImportFileModalDecorator.class
 	 * and behavior of type TImportFileModalBehavior.class. The ejb service must implement ITEjbImportController
@@ -203,5 +219,7 @@ public @interface TBehavior {
 	 * This must be set in a TImportModelView type.
 	 * */
 	public Class<? extends TModelView> importedModelViewClass() default TModelView.class;
+
+	
 	
 }

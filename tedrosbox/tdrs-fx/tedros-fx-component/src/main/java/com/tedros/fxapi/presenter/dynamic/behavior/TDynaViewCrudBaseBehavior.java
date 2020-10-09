@@ -55,7 +55,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.StackPaneBuilder;
 
 
 @SuppressWarnings("rawtypes")
@@ -210,7 +209,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	}
 	
 	/**
-	 * Config the edit button;
+	 * Config the import button;
 	 * */
 	public void configImportButton() {
 		if(isUserAuthorized(TAuthorizationType.SAVE)){
@@ -378,7 +377,12 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		tBreadcrumbForm.tEntryListProperty().bindContentBidirectional(entryList);
 		
 		int index = view.gettHeaderVerticalLayout().getChildren().size();
-		view.gettHeaderVerticalLayout().getChildren().add(index, StackPaneBuilder.create().id("t-header-box").children(this.decorator.gettBreadcrumbFormToolBar()).build());
+		
+		StackPane sp = new StackPane();
+		sp.setId("t-header-box");
+		sp.getChildren().add(this.decorator.gettBreadcrumbFormToolBar());
+		
+		view.gettHeaderVerticalLayout().getChildren().add(index, sp);
 		
 		formListChangeListener = new ListChangeListener<Node>(){
 			
@@ -581,6 +585,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	/**
 	 * Perform this action when import button onAction is triggered.
 	 * */
+	@SuppressWarnings("unchecked")
 	public void importAction() {
 		final TDynaPresenter<M> presenter = getPresenter();
 		if(importAction==null || (importAction!=null && importAction.runBefore(presenter))){
@@ -1039,6 +1044,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			getView().gettFormSpace().getChildren().removeListener(formListChangeListener);
 	}
 	
+	@SuppressWarnings("unlikely-arg-type")
 	public synchronized void addFormListChangeListener() {
 		if(formListChangeListener!=null && !getView().gettFormSpace().getChildren().contains(formListChangeListener)){
 			getView().gettFormSpace().getChildren().addListener(formListChangeListener);

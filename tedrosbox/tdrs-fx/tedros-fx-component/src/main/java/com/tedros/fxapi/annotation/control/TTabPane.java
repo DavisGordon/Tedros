@@ -12,7 +12,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
-import com.tedros.fxapi.annotation.form.TDetailView;
 import com.tedros.fxapi.annotation.parser.ITAnnotationParser;
 import com.tedros.fxapi.annotation.parser.TTabPaneParser;
 import com.tedros.fxapi.annotation.property.TBooleanProperty;
@@ -50,29 +49,21 @@ import javafx.scene.control.TabPane.TabClosingPolicy;
  * 
  * <i>@</i><strong>TTabPane</strong>(tabs = {
  * <i>@</i>TTab(text="#{label.documents}", closable=false,
- *       content = <i>@</i>TContent(detailView=<i>@</i>TDetailView(field="<strong style="color:red;">documents</strong>",
- *                                                   formTitle="#{label.document}",
- *                                                   listTitle = "#{label.document}", 
- *                                                   propertyType=ITObservableList.class, 
- *                                                   entityClass=Document.class, 
- *                                                   entityModelViewClass=DocumentModelView.class))),
- *                            
+ * 		 content = <i>@</i>TContent(detailForm = <i>@</i>TDetailForm(fields= {"<strong style="color:red;">documents</strong>"}))),
+ *                          
  * <i>@</i>TTab(text="#{label.contacts}", closable=false, 
- *       content = <i>@</i>TContent(detailView=<i>@</i>TDetailView(field="<strong style="color:green;">contacts</strong>", 
- *                                                   formTitle="#{label.contact}",
- *                                                   listTitle = "#{label.contacts}", 
- *                                                   propertyType=ITObservableList.class, 
- *                                                   entityClass=Contact.class, 
- *                                                   entityModelViewClass=ContactModelView.class)))})
- *  <i>@</i>TModelViewCollectionType(entityClass=Document.class, modelViewClass=DocumentModelView.class)
- *  private ITObservableList&lt;DocumentModelView&gt; <strong style="color:red;">documents</strong>;
+ *       content = <i>@</i>TContent(detailForm = <i>@</i>TDetailForm(fields= {"<strong style="color:green;">contacts</strong>"}))))
+ *  <i>@</i><b>TDetailListField</b>(entityModelViewClass = DocumentModelView.class, entityClass = Document.class)
+ *  <i>@</i><b>TModelViewCollectionType</b>(entityClass=Document.class, modelViewClass=DocumentModelView.class)
+ *  private <b>ITObservableList</b>&lt;DocumentModelView&gt; <strong style="color:red;">documents</strong>;
  *  
- *  <i>@</i>TModelViewCollectionType(entityClass=Contact.class, modelViewClass=ContactModelView.class)
- *  private ITObservableList&lt;ContactModelView&gt; <strong style="color:green;">contacts</strong>;
+ *  <i>@</i><b>TDetailListField</b>(entityModelViewClass = ContactModelView.class, entityClass = Contact.class)
+ *  <i>@</i><b>TModelViewCollectionType</b>(entityClass=Contact.class, modelViewClass=ContactModelView.class)
+ *  private <b>ITObservableList</b>&lt;ContactModelView&gt; <strong style="color:green;">contacts</strong>;
  * 
  * </pre>
  * 
- * @see {@link TDetailView}, {@link TTab}, {@link TModelViewCollectionType}
+ * @see {@link TDetailListField}, {@link TTab}, {@link TModelViewCollectionType}
  *
  */
 @Retention(RetentionPolicy.RUNTIME)

@@ -33,7 +33,15 @@ import com.tedros.ejb.base.entity.TEntity;
 public class Estoque extends TEntity {
 
 	private static final long serialVersionUID = -457987996337666023L;
-
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="entrada_id", nullable=true)
+	private Entrada entradaRef;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="coz_id", nullable=true)
+	private Producao producaoRef;;
+	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="coz_id", nullable=false)
 	private Cozinha cozinha;
@@ -113,6 +121,34 @@ public class Estoque extends TEntity {
 	 */
 	public void setItens(List<EstoqueItem> itens) {
 		this.itens = itens;
+	}
+
+	/**
+	 * @return the entradaRef
+	 */
+	public Entrada getEntradaRef() {
+		return entradaRef;
+	}
+
+	/**
+	 * @param entradaRef the entradaRef to set
+	 */
+	public void setEntradaRef(Entrada entradaRef) {
+		this.entradaRef = entradaRef;
+	}
+
+	/**
+	 * @return the producaoRef
+	 */
+	public Producao getProducaoRef() {
+		return producaoRef;
+	}
+
+	/**
+	 * @param producaoRef the producaoRef to set
+	 */
+	public void setProducaoRef(Producao producaoRef) {
+		this.producaoRef = producaoRef;
 	}
 
 	

@@ -34,6 +34,10 @@ public class Entrada extends TEntity {
 
 	private static final long serialVersionUID = -7490687024751537584L;
 
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="coz_id", nullable=false)
+	private Cozinha cozinha;
+	
 	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date data;
@@ -113,5 +117,24 @@ public class Entrada extends TEntity {
 	 */
 	public void setItens(List<EntradaItem> itens) {
 		this.itens = itens;
+		if(itens!=null)
+			this.itens.forEach(e -> {
+				if(e.getEntrada()==null)
+					e.setEntrada(this);
+			});
+	}
+
+	/**
+	 * @return the cozinha
+	 */
+	public Cozinha getCozinha() {
+		return cozinha;
+	}
+
+	/**
+	 * @param cozinha the cozinha to set
+	 */
+	public void setCozinha(Cozinha cozinha) {
+		this.cozinha = cozinha;
 	}
 }

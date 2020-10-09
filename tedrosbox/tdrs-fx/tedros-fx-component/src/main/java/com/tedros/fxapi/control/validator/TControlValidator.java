@@ -11,10 +11,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.model.ITModelView;
+import com.tedros.ejb.base.entity.ITFileEntity;
+import com.tedros.ejb.base.model.ITFileModel;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
 import com.tedros.fxapi.annotation.control.TValidator;
-import com.tedros.fxapi.annotation.form.TDetailView;
 import com.tedros.fxapi.descriptor.TFieldDescriptor;
 import com.tedros.fxapi.domain.TZeroValidation;
 import com.tedros.fxapi.util.TReflectionUtil;
@@ -115,7 +116,7 @@ public final class TControlValidator<E extends ITModelView> {
 				continue;
 			}
 			
-			if (annotation instanceof TDetailView || annotation instanceof TModelViewCollectionType){
+			if (annotation instanceof TModelViewCollectionType){
 				//final TDetailView tAnnotation = (TDetailView) annotation;
 				final TControlValidator validator = new TControlValidator();
 				List<ITModelView> lst = null;
@@ -157,9 +158,9 @@ public final class TControlValidator<E extends ITModelView> {
 	private void validateRequiredField(final String fieldLabel, final Object valueObject, final TValidatorResult<E> result, final Annotation annotation) throws IllegalAccessException,
 			InvocationTargetException {
 		
-		
+		TZeroValidation zeroValidation = TReflectionUtil.getValue(annotation, ZEROVALIDATION);
 		Boolean isRequired = TReflectionUtil.getValue(annotation, REQUIRED);
-		if(isRequired!=null && isRequired){
+		if((isRequired!=null && isRequired) || (zeroValidation!=null && !zeroValidation.equals(TZeroValidation.NONE))){
 			
 			if(valueObject==null){
 				fieldRequiredMessage(fieldLabel, result);
@@ -187,9 +188,14 @@ public final class TControlValidator<E extends ITModelView> {
 					return;
 				}
 				
-				if(propertyValue instanceof Number){
+				if(propertyValue instanceof ITFileModel && ((ITFileModel)propertyValue).getFileSize()==0){
+					fieldRequiredMessage(fieldLabel, result);
+					return;
+				}else if(propertyValue instanceof ITFileEntity && ((ITFileEntity)propertyValue).getFileSize()==0){
+					fieldRequiredMessage(fieldLabel, result);
+					return;
+				}else if(propertyValue instanceof Number){
 					Double number = ((Number)propertyValue).doubleValue();
-					TZeroValidation zeroValidation = TReflectionUtil.getValue(annotation, ZEROVALIDATION);
 					if(zeroValidation!=null && zeroValidation.equals(TZeroValidation.MINOR_THAN_ZERO) && number>=0)
 						minorThanZeroMessage(fieldLabel, result);
 					else if( zeroValidation==null || (zeroValidation!=null && zeroValidation.equals(TZeroValidation.GREATHER_THAN_ZERO) && number<=0))

@@ -1,21 +1,7 @@
 package com.tedros.fxapi.presenter.entity.behavior;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.beans.value.WeakChangeListener;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.layout.StackPane;
-import javafx.util.Callback;
-
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
-import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.form.ITModelForm;
 import com.tedros.fxapi.form.TFormBuilder;
@@ -24,11 +10,19 @@ import com.tedros.fxapi.modal.TMessageBox;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
-import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.entity.decorator.TDetailCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.util.TEntityListViewCallback;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.WeakChangeListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.util.Callback;
 
 @SuppressWarnings({ "rawtypes" })
 public class TDetailCrudViewBehavior<M extends TEntityModelView, E extends ITEntity>
@@ -46,29 +40,12 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	public void initialize() {
 		try{
 			
-			/*setCancelAction(new TPresenterAction<TDynaPresenter<M>>() {
-
-				@Override
-				public boolean runBefore(TDynaPresenter<M> presenter) {
-					return true;
-				}
-
-				@Override
-				public void runAfter(TDynaPresenter<M> presenter) {
-					final ListView<M> listView = decorator.gettListView();
-					listView.getSelectionModel().clearSelection();
-					setDisableModelActionButtons(true);
-					colapseAction();
-				}
-			});*/
-			
-			//this.decorator.gettListView().getItems().addAll(getModels());
-			
 			configColapseButton();
 			configNewButton();
 			configDeleteButton();
-			configEditButton();
-			configCancelButton();
+			if(this.decorator.gettEditButton()!=null)
+				configEditButton();
+			
 			configModesRadio();
 			
 			configListView();
@@ -137,8 +114,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	}
 	
 	public void colapseAction() {
-		final StackPane pane = (StackPane) ((TDynaView) getView()).gettContentLayout().getLeft();
-		if(!pane.isVisible())
+		if(!this.decorator.isListContentVisible())
 			showListView();
 		else
 			hideListView();

@@ -3,19 +3,20 @@ package com.tedros.fxapi.property;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import com.tedros.core.module.TListenerRepository;
+import com.tedros.ejb.base.model.ITFileModel;
+import com.tedros.ejb.base.model.TFileModel;
+
 import javafx.beans.property.ReadOnlyLongProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
-import com.tedros.ejb.base.model.ITFileModel;
-import com.tedros.ejb.base.model.TFileModel;
+import javafx.beans.value.WeakChangeListener;
 
 public class TSimpleFileModelProperty<T extends ITFileModel> extends SimpleObjectProperty<T> {
 	
@@ -26,7 +27,8 @@ public class TSimpleFileModelProperty<T extends ITFileModel> extends SimpleObjec
 	private SimpleObjectProperty<byte[]> bytesProperty;
 	private SimpleStringProperty filePathProperty;
 	
-	private TSimpleFileModelProperty<T> _this;
+	private TListenerRepository repo;
+	
 	
 	public TSimpleFileModelProperty() {
 		super();
@@ -49,7 +51,7 @@ public class TSimpleFileModelProperty<T extends ITFileModel> extends SimpleObjec
 	}
 	
 	private void initialize(){
-		_this = this;
+		this.repo = new TListenerRepository();
 		this.fileProperty = new SimpleObjectProperty<>();
 		this.fileNameProperty = new SimpleStringProperty();
 		this.fileExtensionProperty = new SimpleStringProperty();
@@ -62,47 +64,43 @@ public class TSimpleFileModelProperty<T extends ITFileModel> extends SimpleObjec
 	}
 
 	private void buildListeners() {
-		this.fileNameProperty.addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
-				_this.getValue().setFileName(arg2);
-				fileExtensionProperty.setValue(_this.getValue().getFileExtension());
-				_this.fireValueChangedEvent();
-			}
-		});
 		
-		this.filePathProperty.addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
-				_this.getValue().setFilePath(arg2);
-				_this.fireValueChangedEvent();
-			}
-		});
+		ChangeListener<String> flnCL = (arg0, arg1, arg2) -> {
+				getValue().setFileName(arg2);
+				fileExtensionProperty.setValue(getValue().getFileExtension());
+				fireValueChangedEvent();
+			};
+		repo.addListener("flnCL", flnCL);
+		this.fileNameProperty.addListener(new WeakChangeListener<String>(flnCL));
 		
+		ChangeListener<String> flpCL = (arg0, arg1, arg2) -> {
+			getValue().setFilePath(arg2);
+			fireValueChangedEvent();
+		};
+		repo.addListener("flpCL", flpCL);
+		this.filePathProperty.addListener(new WeakChangeListener<String>(flpCL));
 		
-		this.bytesProperty.addListener(new ChangeListener<byte[]>() {
-			@Override
-			public void changed(ObservableValue<? extends byte[]> arg0, byte[] arg1, byte[] arg2) {
-				_this.getValue().getByteModel().setBytes(arg2);
-				_this.fireValueChangedEvent();
-			}
-		});		
+		ChangeListener<byte[]> bpCL = (arg0, arg1, arg2) -> {
+			getValue().getByteModel().setBytes(arg2);
+			fireValueChangedEvent();
+		};
+		repo.addListener("bpCL", bpCL);
+		this.bytesProperty.addListener(new WeakChangeListener<byte[]>(bpCL));		
 		
-		this.fileProperty.addListener(new ChangeListener<File>() {
-			@Override
-			public void changed(ObservableValue<? extends File> arg0, File arg1, File arg2) {
-				try {
-					_this.getValue().setFile(arg2);
-					fileNameProperty.setValue(arg2==null ? null : _this.getValue().getFileName());
-					filePathProperty.setValue(arg2==null ? null : _this.getValue().getFilePath());
-					bytesProperty.setValue(arg2==null ? null : _this.getValue().getByteModel().getBytes());
-					fileSizeProperty.setValue(arg2==null ? null : _this.getValue().getFileSize());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				_this.fireValueChangedEvent();
+		ChangeListener<File> fCL = (arg0, arg1, arg2) -> {
+			try {
+				getValue().setFile(arg2);
+				fileNameProperty.setValue(arg2==null ? null : getValue().getFileName());
+				filePathProperty.setValue(arg2==null ? null : getValue().getFilePath());
+				bytesProperty.setValue(arg2==null ? null : getValue().getByteModel().getBytes());
+				fileSizeProperty.setValue(arg2==null ? null : getValue().getFileSize());
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		});
+			fireValueChangedEvent();
+		};
+		repo.addListener("fCL", fCL);
+		this.fileProperty.addListener(new WeakChangeListener<File>(fCL));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -206,6 +204,10 @@ public class TSimpleFileModelProperty<T extends ITFileModel> extends SimpleObjec
 	@Override
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this, false);
+	}
+
+	public void invalidate() {
+		repo.clear();
 	}
 
 }

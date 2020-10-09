@@ -21,11 +21,11 @@ import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
+import com.tedros.fxapi.annotation.presenter.TDetailListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.scene.control.TControl;
-import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.entity.behavior.TDetailCrudViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TDetailCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
@@ -44,9 +44,9 @@ import javafx.scene.layout.Priority;
  */
 @TFormReaderHtml
 @TForm(showBreadcrumBar=true, name = "Editar endereço")
-@TPresenter(type = TDynaPresenter.class,
+@TDetailListViewPresenter(presenter=@TPresenter(
 behavior = @TBehavior(type = TDetailCrudViewBehavior.class), 
-decorator = @TDecorator(type = TDetailCrudViewDecorator.class, viewTitle="Endereços"))
+decorator = @TDecorator(type = TDetailCrudViewDecorator.class, viewTitle="Endereços")))
 public class EnderecoModelView extends TEntityModelView<Endereco> {
 	
 	private SimpleLongProperty id;

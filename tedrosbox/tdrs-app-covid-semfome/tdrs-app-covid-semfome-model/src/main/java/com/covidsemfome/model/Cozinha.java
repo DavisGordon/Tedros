@@ -85,6 +85,14 @@ public class Cozinha extends TEntity {
 		this.telefone = telefone;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return (nome != null ? nome : "");
+	}
+
 	
 	
 }

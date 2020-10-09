@@ -3,8 +3,10 @@
  */
 package com.tedros.ejb.base.bo;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,11 +16,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.enterprise.context.RequestScoped;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -28,9 +32,11 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
+import com.tedros.ejb.base.annotation.TCaseSensitive;
 import com.tedros.ejb.base.annotation.TEntityImportRule;
 import com.tedros.ejb.base.annotation.TFieldImportRule;
 import com.tedros.ejb.base.annotation.TFileType;
+import com.tedros.ejb.base.annotation.THeaderType;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.entity.ITFileEntity;
 import com.tedros.ejb.base.model.ITImportModel;
@@ -62,7 +68,7 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 		TFileType[] types = eRule.fileType();
 		int totalCols = eRule.totalColumn();
 		String sheetName = eRule.xlsSheetName();
-		boolean forceH = eRule.forceFirstRowAsColumnNameHeader();
+		THeaderType header = eRule.header();
 		boolean xls = false;
 		boolean csv = false;
 		StringBuilder sb = new StringBuilder();
@@ -102,18 +108,15 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 		sb.append("<b>");
 		sb.append("Column Header required at first row: ");
 		sb.append("</b>");
-		sb.append(forceH);
+		sb.append(!header.equals(THeaderType.COLUMN_INDEX));
 		sb.append("<br>");
 		
 		sb.append("<hr>");
 		
-		List<TFieldImportRule> lst = new ArrayList<>();
-		for(Field f : clazz.getDeclaredFields()) {
-			TFieldImportRule fRule = f.getAnnotation(TFieldImportRule.class);
-			if(fRule!=null) {
-				lst.add(fRule);
-			}
-		}
+		List<Field> lst = new ArrayList<>();
+		for(Field f : clazz.getDeclaredFields())
+			if(f.isAnnotationPresent(TFieldImportRule.class))
+				lst.add(f);
 		
 		if(lst.isEmpty())
 			throw new RuntimeException("The entity "+clazz.getSimpleName()+ 
@@ -125,25 +128,31 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 			sb2.append("table { border-collapse: collapse;}");
 			sb2.append("table, th, td { border: 1px solid black;}");
 			sb2.append("</style>");
-			sb2.append("<h2>Excel file exampe:</h2><br>");
+			sb2.append("<h2>Excel file exampe:</h2>");
 			sb2.append("<table>");
-			if(forceH) {
+			if(!header.equals(THeaderType.COLUMN_INDEX)) {
 				sb2.append("<tr>");
-				for(TFieldImportRule fRule : lst) {
-					String column = fRule.column();
+				for(Field f : lst) {
+					TFieldImportRule fRule = f.getAnnotation(TFieldImportRule.class);
+					String column = (header.equals(THeaderType.COLUMN_NAME)) 
+							? fRule.column()
+									: f.getName();
 					sb2.append("<th>"+column+"</th>");
 				}
 				sb2.append("</tr>");
 			}
 			sb2.append("<tr>");
-			for(TFieldImportRule fRule : lst) {
+			for(Field f : lst) {
+				TFieldImportRule fRule = f.getAnnotation(TFieldImportRule.class);
 				
 				String desc = fRule.description();
-				String cDtEx = fRule.columnDateExample();
+				String cDtEx = fRule.example();
 				
-				sb2.append("<td>"+desc);
+				sb2.append("<td>");
 				if(StringUtils.isNotBlank(cDtEx))
-					sb2.append(" (example: "+cDtEx+")");
+					sb2.append(cDtEx);
+				else
+					sb2.append(desc);
 				sb2.append("</td>");
 			}
 			sb2.append("</tr>");
@@ -152,46 +161,65 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 		}
 	
 		if(csv) {
-			sb2.append("<h2>Csv file exampe:</h2><br>");
-			if(forceH) {
-				for(TFieldImportRule fRule : lst) {
-					String column = fRule.column();
+			sb2.append("<h2>Csv file exampe:</h2>");
+			if(!header.equals(THeaderType.COLUMN_INDEX)) {
+				for(Field f : lst) {
+					TFieldImportRule fRule = f.getAnnotation(TFieldImportRule.class);
+					
+					String column = (header.equals(THeaderType.COLUMN_NAME)) 
+							? fRule.column()
+									: f.getName();
 					sb2.append("<i>"+column+"</i><b>;</b>");
 				}
 				sb2.append("<br>");
 			}
-			for(TFieldImportRule fRule : lst) {
+			for(Field f : lst) {
+				TFieldImportRule fRule = f.getAnnotation(TFieldImportRule.class);
 				
 				String desc = fRule.description();
-				String cDtEx = fRule.columnDateExample();
+				String cDtEx = fRule.example();
 				
-				sb2.append(desc);
 				if(StringUtils.isNotBlank(cDtEx))
-					sb2.append(" (example: "+cDtEx+")");
+					sb2.append(cDtEx);
+				else
+					sb2.append(desc);
+				
 				sb2.append("<b>;</b>");
 			}
 			sb2.append("<hr>");
 		}
 		
-		
+		int index = 0;
 		sb2.append("<b>The file columns definition:</b><br><br>");
-		for(TFieldImportRule fRule : lst) {
-			
+		for(Field f : lst) {
+			TFieldImportRule fRule = f.getAnnotation(TFieldImportRule.class);
 			String desc = fRule.description();
 			String column = fRule.column();
-			String cDtEx = fRule.columnDateExample();
+			String cDtEx = fRule.example();
+			String[] pVal = fRule.possibleValues();
 			int maxLen = fRule.maxLength();
 			boolean req = fRule.required();
 
 			sb2.append("[<b>"+desc+"</b>]<br>");
-			sb2.append("Column index/name: "+column+"<br>");
+			
+			if(header.equals(THeaderType.COLUMN_INDEX))
+				sb2.append("Column index: "+(StringUtils.isNotBlank(column) 
+						? column 
+								: index)+"<br>");
+			else
+				sb2.append("Column Header Name: "+(header.equals(THeaderType.COLUMN_NAME)
+						? fRule.column() 
+								: f.getName())+"<br>");
+			
 			if(StringUtils.isNotBlank(cDtEx))
-				sb2.append("Date example: "+cDtEx+"<br>");
+				sb2.append("Example: "+cDtEx+"<br>");
 			if(maxLen>0)
 				sb2.append("Max length: "+maxLen+"<br>");
+			if(pVal.length>0)
+				sb2.append("Possible values: "+ArrayUtils.toString(pVal)+"<br>");
 			sb2.append("Required: "+req+"<br>");
 			sb2.append("<hr>");
-			
+			index++;
 		}
 		
 		sb.append(sb2);
@@ -216,7 +244,7 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 		TFileType[] types = eRule.fileType();
 		int totalCols = eRule.totalColumn();
 		String sheetName = eRule.xlsSheetName();
-		boolean hasHeader = eRule.forceFirstRowAsColumnNameHeader();
+		THeaderType header = eRule.header();
 		
 		List<E> res = new ArrayList<>();
 		
@@ -225,99 +253,60 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 
 		try {
 			
-			
 			if(ext.toLowerCase().equals("xls") || ext.toLowerCase().equals("xlsx")) {
-				 
-				Workbook wb = WorkbookFactory.create(is);
-				Sheet sht;
-				if(StringUtils.isNotBlank(sheetName)) {
-					sht = NumberUtils.isParsable(sheetName) 
-							? wb.getSheetAt(Integer.valueOf(sheetName))
-									: wb.getSheet(sheetName);
-				}else
-					sht = wb.getSheetAt(0);
+				processExcelFile(clazz, sheetName, header, res, is);
+			}else if(ext.toLowerCase().equals("csv")) {
 				
 				Map<Integer, Field> columns = new HashMap<>();
 				List<Field> reqFields = new ArrayList<>();
-				int index = 0;
-				for(Field f : clazz.getDeclaredFields()) {
-					
-					TFieldImportRule fRule = f.getAnnotation(TFieldImportRule.class);
-					
-					if(fRule!=null) {
-						
-						if(fRule.required())
-							reqFields.add(f);
-						
-						if(hasHeader) {
-							String column = StringUtils.isBlank(fRule.column()) 
-									?  f.getName()
-											: fRule.column();
-							sht.getRow(0).forEach(cell ->{
-								if(column.toLowerCase().trim()
-										.equals(cell.getStringCellValue().toLowerCase().trim())) {
-									columns.put(cell.getColumnIndex(), f);
-								}
-						       
-						    });
-						}else {
-							try {
-								int column = StringUtils.isBlank(fRule.column()) 
-										?  index
-												: Integer.valueOf(fRule.column());
-								columns.put(column, f);
-							}catch(NumberFormatException e) {
-								throw new RuntimeException("Cannot import the file, the field "+f.getName()+" in the entity "+clazz.getSimpleName()
-								+" have the property column as "+fRule.column()+" in the TFieldImportRule but expected a number as the file index column."
-										+ " If the file have a header column set to true the forceFirstRowAsColumnNameHeader property in the TEntityImportRule",e);
-							}
-						}
-						index++;
-					}
-				}
 				
-				if(hasHeader)
-					for(Field f : reqFields) {
-						if(!columns.containsValue(f)) {
-							TFieldImportRule r = f.getAnnotation(TFieldImportRule.class);
-							throw new TBusinessException("Cannot import the file the required column "+r.column()+" not found!");
-						}
-					}
 				
-				sht.forEach(r -> {
-					if(!hasHeader || (hasHeader && r.getRowNum()>0)) {
-						try {
+				try(BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"))) {
+					int row = 0;
+				    for(String line; (line = br.readLine()) != null; ) {
+				        
+				    	String[] rowCols = line.split(";");
+				    	
+				    	if(row==0) {
+				    		prepareHeaderAndFields(clazz, header, rowCols, columns, reqFields);
+				    		if(!header.equals(THeaderType.COLUMN_INDEX)) {
+				    			row++;
+				    			continue;
+				    		}
+				    	}
+				    	
+				    	try {
 							
-							E modelProcess = processXlsRow(r);
+							E modelProcess = processCsvRow(rowCols);
 							
 							if(modelProcess==null) {
 								final E model = clazz.newInstance();
 								
 								columns.forEach((idx, f) -> {
-									Cell cell = r.getCell(idx);
+									String value = rowCols[idx];
 									TFieldImportRule rule = f.getAnnotation(TFieldImportRule.class);
 									Class<? extends Number> numClass = rule.numberType();
 									try {
 										Method setter = clazz.getMethod("set"+StringUtils.capitalize(f.getName()), f.getType());
 										
 										if(isTypeOf(f.getType(), Number.class)) {
-											
-											String value = getCellDataAsString(cell);
 											Object num = numClass == Number.class 
 													? f.getType().getConstructor(String.class).newInstance(value)
 															: numClass.getConstructor(String.class).newInstance(value);
 											setter.invoke(model,  num);
 											
 										}else if(f.getType() == Date.class) {
-											
-											String value = getCellDataAsString(cell);
 											String pattern = rule.datePattern();
 											Date data = DateUtils.parseDate(value, pattern);
 											setter.invoke(model, data);
 											
 										}else if(f.getType() == String.class) {
-											String value = getCellDataAsString(cell);
-											value = prepareNumberValue(numClass, value);
+											if(numClass!=Number.class)
+												value = prepareNumberValue(numClass, value);
+											if(!rule.caseSensitive().equals(TCaseSensitive.NONE))
+												value = rule.caseSensitive().equals(TCaseSensitive.LOWER) 
+												? value.toLowerCase(Locale.ROOT)
+														: value.toUpperCase(Locale.ROOT);
 											setter.invoke(model, value);
 										}else {
 											throw new RuntimeException("Incompatible type");
@@ -349,10 +338,10 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 							e.printStackTrace();
 							throw new RuntimeException(e);
 						}
-						
-					}
-				});
-				
+				    	row++;
+				    }
+				    // line is not visible here.
+				}
 			}
 		}catch(Exception e){
 		    e.printStackTrace();
@@ -367,6 +356,158 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 	
 		return res;
 	
+	}
+
+	protected E processCsvRow(String[] rowCols) {
+		return null;
+	}
+
+	private void processExcelFile(Class<E> clazz, String sheetName, THeaderType header, List<E> res,
+			ByteArrayInputStream is) throws IOException {
+		Workbook wb = WorkbookFactory.create(is);
+		Sheet sht;
+		if(StringUtils.isNotBlank(sheetName)) {
+			sht = NumberUtils.isParsable(sheetName) 
+					? wb.getSheetAt(Integer.valueOf(sheetName))
+							: wb.getSheet(sheetName);
+		}else
+			sht = wb.getSheetAt(0);
+		
+		List<String> row0Cols = new ArrayList<>();
+		if(!header.equals(THeaderType.COLUMN_INDEX)) {
+			sht.getRow(0).forEach(cell ->{
+		       row0Cols.add(cell.getColumnIndex(), cell.getStringCellValue().toLowerCase().trim());
+		    });
+		}
+		
+		Map<Integer, Field> columns = new HashMap<>();
+		List<Field> reqFields = new ArrayList<>();
+		
+		prepareHeaderAndFields(clazz, header, row0Cols.toArray(new String[row0Cols.size()]), columns, reqFields);
+		
+		sht.forEach(r -> {
+			if(header.equals(THeaderType.COLUMN_INDEX) 
+					|| (!header.equals(THeaderType.COLUMN_INDEX) && r.getRowNum()>0)) {
+				try {
+					
+					E modelProcess = processXlsRow(r);
+					
+					if(modelProcess==null) {
+						final E model = clazz.newInstance();
+						
+						columns.forEach((idx, f) -> {
+							Cell cell = r.getCell(idx);
+							TFieldImportRule rule = f.getAnnotation(TFieldImportRule.class);
+							Class<? extends Number> numClass = rule.numberType();
+							try {
+								Method setter = clazz.getMethod("set"+StringUtils.capitalize(f.getName()), f.getType());
+								
+								if(isTypeOf(f.getType(), Number.class)) {
+									
+									String value = getCellDataAsString(cell);
+									Object num = numClass == Number.class 
+											? f.getType().getConstructor(String.class).newInstance(value)
+													: numClass.getConstructor(String.class).newInstance(value);
+									setter.invoke(model,  num);
+									
+								}else if(f.getType() == Date.class) {
+									
+									String value = getCellDataAsString(cell);
+									String pattern = rule.datePattern();
+									Date data = DateUtils.parseDate(value, pattern);
+									setter.invoke(model, data);
+									
+								}else if(f.getType() == String.class) {
+									String value = getCellDataAsString(cell);
+									if(numClass!=Number.class)
+										value = prepareNumberValue(numClass, value);
+									if(!rule.caseSensitive().equals(TCaseSensitive.NONE))
+										value = rule.caseSensitive().equals(TCaseSensitive.LOWER) 
+										? value.toLowerCase(Locale.ROOT)
+												: value.toUpperCase(Locale.ROOT);
+									setter.invoke(model, value);
+								}else {
+									throw new RuntimeException("Incompatible type");
+								}
+								
+							} catch (NoSuchMethodException | SecurityException | 
+									IllegalAccessException | IllegalArgumentException | 
+									InvocationTargetException | InstantiationException e) {
+								e.printStackTrace();
+								throw new RuntimeException(e);
+							} catch (ParseException e) {
+								e.printStackTrace();
+								throw new RuntimeException(e);
+							} catch (Exception e) {
+								e.printStackTrace();
+								throw new RuntimeException(e);
+							}
+						});
+						E saved = getBusinessObject().save(model);
+						res.add(saved);
+					}else {
+						E saved = getBusinessObject().save(modelProcess);
+						res.add(saved);
+					}
+				} catch (InstantiationException | IllegalAccessException e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				} catch (Exception e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
+				
+			}
+		});
+	}
+
+	private void prepareHeaderAndFields(Class<E> clazz, THeaderType header, String[] row0Cols,
+			Map<Integer, Field> columns, List<Field> reqFields) {
+		int index = 0;
+		for(Field f : clazz.getDeclaredFields()) {
+			
+			TFieldImportRule fRule = f.getAnnotation(TFieldImportRule.class);
+			
+			if(fRule!=null) {
+				
+				if(fRule.required())
+					reqFields.add(f);
+				
+				if(!header.equals(THeaderType.COLUMN_INDEX)) {
+					String column = header.equals(THeaderType.FIELD_NAME) 
+							?  f.getName()
+									: fRule.column();
+							
+					for(String cell : row0Cols) {
+						if(column.toLowerCase().trim()
+								.equals(cell.toLowerCase().trim())) {
+							columns.put(index, f);
+						}
+					}
+					
+				}else {
+					try {
+						int column = StringUtils.isBlank(fRule.column()) 
+								?  index
+										: Integer.valueOf(fRule.column());
+						columns.put(column, f);
+					}catch(NumberFormatException e) {
+						throw new RuntimeException("Cannot import the file, the field "+f.getName()+" in the entity "+clazz.getSimpleName()
+						+" have the property column as "+fRule.column()+" in the TFieldImportRule but expected a number as the file index column."
+								+ " If the file have a header column change the property header in the TEntityImportRule",e);
+					}
+				}
+				index++;
+			}
+		}
+		
+		if(!header.equals(THeaderType.COLUMN_INDEX))
+			for(Field f : reqFields) {
+				if(!columns.containsValue(f)) {
+					TFieldImportRule r = f.getAnnotation(TFieldImportRule.class);
+					throw new TBusinessException("Cannot import the file the required column "+r.column()+" not found!");
+				}
+			}
 	}
 
 	
@@ -440,5 +581,6 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 	        default :return  "";
 	    }
 	}
+	
 
 }

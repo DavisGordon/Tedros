@@ -15,6 +15,7 @@ import javafx.collections.ObservableList;
  * @author Davis Gordon
  *
  */
+@SuppressWarnings("rawtypes")
 public class UnidadeMedidaBuilder extends TBuilder implements ITGenericBuilder<ObservableList> {
 
 	/**
@@ -26,7 +27,7 @@ public class UnidadeMedidaBuilder extends TBuilder implements ITGenericBuilder<O
 	@Override
 	public ObservableList<String> build() {
 		return FXCollections.observableList(
-				Arrays.asList("Kg", "gr","Lt", "ml", "UNID", "PCT" )
+				Arrays.asList("KG", "GR","LT", "ML", "UNID", "PCT" )
 				);
 	}
 

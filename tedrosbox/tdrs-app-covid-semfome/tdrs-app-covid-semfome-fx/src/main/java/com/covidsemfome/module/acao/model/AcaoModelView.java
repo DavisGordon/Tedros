@@ -48,6 +48,7 @@ import com.tedros.fxapi.builder.DateTimeFormatBuilder;
 import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
+import com.tedros.util.TDateUtil;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -194,17 +195,15 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	
 	private void buildListener() {
 		
-		ChangeListener idListener =  super.getListenerRepository().getListener("displayText");
+		ChangeListener<Number> idListener = super.getListenerRepository().getListener("displayText");
 		if(idListener==null){
-			idListener = new ChangeListener<Long>(){
-		
-				public void changed(ObservableValue arg0, Long arg1, Long arg2) {
+			idListener = (arg0, arg1, arg2) -> {
 					String str = (arg2==null ? "" : "(ID: "+arg2.toString()+") " ) 
 							+ (titulo.getValue()!=null ? titulo.getValue() : "") 
 							+ (data.getValue()!=null ? " em "+formataDataHora(data.getValue()) : "");
 					displayText.setValue(str);
-				}
-			};
+				};
+			
 			super.addListener("displayText", idListener);
 		}else
 			id.removeListener(idListener);
@@ -213,16 +212,12 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 		
 		ChangeListener<String> tituloListener = super.getListenerRepository().getListener("displayText1");
 		if(tituloListener==null){
-			tituloListener = new ChangeListener<String>(){
-				@Override
-				public void changed(ObservableValue arg0, String arg1, String arg2) {
+			tituloListener = (arg0, arg1, arg2) -> {
 					String str = (id.getValue()==null ? "" : "(ID: "+id.getValue().toString()+") " ) 
 							+ (arg2!=null ? arg2 : "") 
 							+ (data.getValue()!=null ? " em "+formataDataHora(data.getValue()) : "");
 					displayText.setValue(str);
-				}
-				
-			};
+				};
 			super.addListener("displayText1", tituloListener);
 		}else
 			titulo.removeListener(tituloListener);
@@ -231,16 +226,13 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 		
 		ChangeListener<Date> dataListener = super.getListenerRepository().getListener("displayText2");
 		if(dataListener==null){
-			dataListener = new ChangeListener<Date>(){
-				@Override
-				public void changed(ObservableValue arg0, Date arg1, Date arg2) {
+			dataListener = (arg0, arg1, arg2) -> {
 					String str = (id.getValue()==null ? "" : "(ID: "+id.getValue().toString()+") " ) 
 							+ (titulo.getValue()!=null ? titulo.getValue() : "") 
 							+ (arg2!=null ? " em "+formataDataHora(arg2) : "");
 					displayText.setValue(str);
-				}
+				};
 				
-			};
 			super.addListener("displayText2", dataListener);
 		}else
 			data.removeListener(dataListener);
@@ -250,9 +242,7 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	}
 	
 	private String formataDataHora(Date data){
-		String pattern = "dd/MM/yyyy";
-		DateFormat df = new SimpleDateFormat(pattern);
-		return df.format(data);
+		return TDateUtil.getFormatedDate(data, TDateUtil.DDMMYYYY);
 	}
 	
 	@Override

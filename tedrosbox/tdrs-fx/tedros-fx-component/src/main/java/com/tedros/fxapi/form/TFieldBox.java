@@ -39,6 +39,9 @@ public class TFieldBox extends StackPane implements ITField {
 		this.label = label;
 		this.control = control;
 		
+		if(this.label==null && control==null)
+			return;
+		
 		if(this.label==null){
 			getChildren().add(control);
 			return;

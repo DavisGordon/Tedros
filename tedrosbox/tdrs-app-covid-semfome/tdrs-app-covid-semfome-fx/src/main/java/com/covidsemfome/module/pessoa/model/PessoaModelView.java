@@ -12,6 +12,7 @@ import com.tedros.fxapi.annotation.TCodeValue;
 import com.tedros.fxapi.annotation.TObservableValue;
 import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
+import com.tedros.fxapi.annotation.control.TDetailListField;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TLabelPosition;
@@ -25,7 +26,7 @@ import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.control.TValidator;
 import com.tedros.fxapi.annotation.control.TVerticalRadioGroup;
-import com.tedros.fxapi.annotation.form.TDetailView;
+import com.tedros.fxapi.annotation.form.TDetailForm;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.TFieldSet;
 import com.tedros.fxapi.annotation.layout.THBox;
@@ -105,10 +106,7 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 					htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 					cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 					cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
-	/*@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
-	@TText(	text="#{form.person.title}", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
-			node=@TNode(id="t-form-title-text", parse = true))
-	*/private SimpleStringProperty textoCadastro;
+	private SimpleStringProperty textoCadastro;
 	
 	/**
 	 * A text input description for the person name and a horizontal box with name, last name and nick name
@@ -228,44 +226,29 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	private SimpleStringProperty password;
 	
 	/**
-	 * A descripton for the personal additional data sub title and the field box
-	 * */
-	/*@TTextReaderHtml(text="#{label.additionaldata}", 
-			htmlTemplateForControlValue="<h2 style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
-			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
-			cssForHtmlBox="", cssForContentValue="")
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(	text="#{label.additionaldata}", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
-			node=@TNode(id="t-form-title-text", parse = true))
-	*/private SimpleStringProperty textoDetail;
-	
-	/**
-	 * A descripton to build a tab pane with detail views to edit the collections of person documents, contacts and address.
+	 * Build a tab pane with detail views to edit the collections of person documents, contacts and address.
 	 * */
 	@TDetailReaderHtml(	label=@TLabel(text="#{label.document}"), 
 						entityClass=Documento.class, 
 						modelViewClass=DocumentoModelView.class)
 	@TTabPane(tabs = {
 				@TTab(	text = "#{label.documents}", closable=false,
-						content = @TContent(detailView=@TDetailView(field="documentos", formTitle="#{label.document}", 
-																	listTitle = "#{label.document}", propertyType=ITObservableList.class, 
-																	entityClass=Documento.class, entityModelViewClass=DocumentoModelView.class))),
+						content = @TContent(detailForm = @TDetailForm(fields= {"documentos"}))),
 				@TTab(	text = "#{label.contacts}", closable=false, 
-				  		content = @TContent(detailView=@TDetailView(field="contatos", formTitle="#{label.contact}", 
-				  													listTitle = "#{label.contacts}", propertyType=ITObservableList.class, 
-				  													entityClass=Contato.class, entityModelViewClass=ContatoModelView.class))),
+				  		content = @TContent(detailForm = @TDetailForm(fields= {"contatos"}))),
 				@TTab(	text = "#{label.address}", closable=false, 
-						content = @TContent(detailView=@TDetailView(field="enderecos", formTitle="#{label.address}", 
-																	listTitle = "Endereco", propertyType=ITObservableList.class, 
-																	entityClass=Endereco.class, entityModelViewClass=EnderecoModelView.class)))})
+						content = @TContent(detailForm = @TDetailForm(fields= {"enderecos"})))})
+	@TDetailListField(entityModelViewClass = DocumentoModelView.class, entityClass = Documento.class)
 	@TModelViewCollectionType(modelClass=Documento.class, modelViewClass=DocumentoModelView.class)
 	private ITObservableList<DocumentoModelView> documentos;
 	
 	@TDetailReaderHtml(label=@TLabel(text="#{label.contacts}"), entityClass=Contato.class, modelViewClass=ContatoModelView.class)
+	@TDetailListField(entityModelViewClass = ContatoModelView.class, entityClass = Contato.class)
 	@TModelViewCollectionType(modelClass=Contato.class, modelViewClass=ContatoModelView.class)
 	private ITObservableList<ContatoModelView> contatos;
 	
 	@TDetailReaderHtml(label=@TLabel(text="#{label.address}"), entityClass=Endereco.class, modelViewClass=EnderecoModelView.class)
+	@TDetailListField(entityModelViewClass = EnderecoModelView.class, entityClass = Endereco.class)
 	@TModelViewCollectionType(modelClass=Endereco.class, modelViewClass=EnderecoModelView.class)
 	private ITObservableList<EnderecoModelView> enderecos;
 	
@@ -450,13 +433,6 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 		return displayText;
 	}
 
-	public SimpleStringProperty getTextoDetail() {
-		return textoDetail;
-	}
-
-	public void setTextoDetail(SimpleStringProperty textoDetail) {
-		this.textoDetail = textoDetail;
-	}
 
 	/**
 	 * @return the tipoVoluntario

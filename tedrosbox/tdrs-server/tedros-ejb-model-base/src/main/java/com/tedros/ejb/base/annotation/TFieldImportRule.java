@@ -37,12 +37,12 @@ public @interface TFieldImportRule {
 	String description();
 	
 	/**
-	 * The pattern for Date column
+	 * An example of the data
 	 * */
-	String columnDateExample() default "";
+	String example() default "";
 	
 	/**
-	 * The convert date pattern
+	 * The  date pattern
 	 * */
 	String datePattern() default "";
 	
@@ -60,4 +60,15 @@ public @interface TFieldImportRule {
 	 * For number values specify the correct type
 	 * */
 	Class<? extends Number> numberType() default Number.class;
+	
+	/**
+	 * An array of possible values 
+	 * */
+	String[] possibleValues() default {};
+	
+	/**
+	 * The string convert case sensitive
+	 * @default TCaseSensitive.NONE
+	 * */
+	TCaseSensitive caseSensitive() default TCaseSensitive.NONE;
 }

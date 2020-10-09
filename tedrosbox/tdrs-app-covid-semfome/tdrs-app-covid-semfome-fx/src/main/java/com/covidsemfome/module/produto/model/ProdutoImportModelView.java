@@ -5,6 +5,7 @@ package com.covidsemfome.module.produto.model;
 
 import com.covidsemfome.model.Produto;
 import com.covidsemfome.model.ProdutoImport;
+import com.tedros.common.model.TFileEntity;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TFileField;
 import com.tedros.fxapi.annotation.control.TLabel;
@@ -55,8 +56,9 @@ public class ProdutoImportModelView extends TImportModelView<ProdutoImport> {
 	private SimpleStringProperty rules;
 	
 	@TLabel(text="Arquivo")
-	@TFileField(extensions= {TFileExtension.ALL_MICROSOFT_EXCEL, TFileExtension.CSV}, required=true)
-	private TSimpleFileEntityProperty file;
+	@TFileField(extensions= {TFileExtension.CSV}, moreExtensions= {"*.xls", "*.xlsx"},
+	showFilePath=true, required=true)
+	private TSimpleFileEntityProperty<TFileEntity> file;
 	
 	public ProdutoImportModelView(ProdutoImport model) {
 		super(model);
@@ -84,14 +86,14 @@ public class ProdutoImportModelView extends TImportModelView<ProdutoImport> {
 	/**
 	 * @return the file
 	 */
-	public TSimpleFileEntityProperty getFile() {
+	public TSimpleFileEntityProperty<TFileEntity> getFile() {
 		return file;
 	}
 
 	/**
 	 * @param file the file to set
 	 */
-	public void setFile(TSimpleFileEntityProperty file) {
+	public void setFile(TSimpleFileEntityProperty<TFileEntity> file) {
 		this.file = file;
 	}
 

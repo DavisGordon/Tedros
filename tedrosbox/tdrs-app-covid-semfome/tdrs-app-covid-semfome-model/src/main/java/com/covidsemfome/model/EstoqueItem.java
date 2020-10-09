@@ -9,8 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.covidsemfome.domain.DomainSchema;
@@ -22,7 +22,8 @@ import com.tedros.ejb.base.entity.TEntity;
  *
  */
 @Entity
-@Table(name = DomainTables.estoque_item, schema = DomainSchema.riosemfome)
+@Table(name = DomainTables.estoque_item, schema = DomainSchema.riosemfome, 
+uniqueConstraints= {@UniqueConstraint(name="estoqueProdUnIdx",columnNames = { "prod_id", "est_id" })})
 public class EstoqueItem extends TEntity {
 
 	
@@ -47,15 +48,38 @@ public class EstoqueItem extends TEntity {
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="est_id", nullable=false)
 	private Estoque estoque;
+	
+	public EstoqueItem() {
+		
+	}
+	
+	public EstoqueItem(Produto p) {
+		this.produto = p;
+	}
 
 	@Override
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this, false);
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
-		return EqualsBuilder.reflectionEquals(this, obj, false);
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EstoqueItem other = (EstoqueItem) obj;
+		if (produto == null) {
+			if (other.produto != null)
+				return false;
+		} else if (!produto.equals(other.produto))
+			return false;
+		return true;
 	}
 
 	/**
@@ -112,6 +136,26 @@ public class EstoqueItem extends TEntity {
 	 */
 	public void setQtdCalculado(Integer qtdCalculado) {
 		this.qtdCalculado = qtdCalculado;
+	}
+	
+	public Integer sumQuantidade(Integer qtd) {
+		if(this.qtdCalculado==null)
+			this.qtdCalculado = qtd;
+		else
+			this.qtdCalculado = this.qtdCalculado + qtd;
+		
+		return this.qtdCalculado;
+	}
+	
+	public Integer subtractQuantidade(Integer qtd) {
+		if(this.qtdCalculado==null)
+			this.qtdCalculado = qtd;
+		else {
+			this.qtdCalculado = (this.qtdCalculado - qtd < 0) 
+					? 0 
+							: this.qtdCalculado - qtd;
+		}
+		return this.qtdCalculado;
 	}
 
 	/**
