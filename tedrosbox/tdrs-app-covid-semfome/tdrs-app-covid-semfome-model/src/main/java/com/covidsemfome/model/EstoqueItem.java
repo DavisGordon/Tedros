@@ -157,7 +157,17 @@ public class EstoqueItem extends TEntity {
 		}
 		return this.qtdCalculado;
 	}
-
+	
+	public Integer getVlrAjustado() {
+		if(this.qtdAjuste==null)
+			this.qtdAjuste = 0;
+		
+		return  (this.qtdCalculado == null) 
+					? this.qtdAjuste 
+							: this.qtdCalculado + this.qtdAjuste;
+		
+	}
+	
 	/**
 	 * @return the qtdAjuste
 	 */

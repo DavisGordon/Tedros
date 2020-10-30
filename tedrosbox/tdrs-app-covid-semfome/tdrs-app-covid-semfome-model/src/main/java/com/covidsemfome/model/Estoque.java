@@ -3,6 +3,7 @@
  */
 package com.covidsemfome.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class Estoque extends TEntity {
 	private Entrada entradaRef;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="coz_id", nullable=true)
+	@JoinColumn(name="producao_id", nullable=true)
 	private Producao producaoRef;;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
@@ -149,6 +150,13 @@ public class Estoque extends TEntity {
 	 */
 	public void setProducaoRef(Producao producaoRef) {
 		this.producaoRef = producaoRef;
+	}
+
+	public void addItem(EstoqueItem item) {
+		if(itens==null)
+			itens = new ArrayList<>();
+		item.setEstoque(this);
+		itens.add(item);
 	}
 
 	
