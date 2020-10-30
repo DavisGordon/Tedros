@@ -13,6 +13,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import com.covidsemfome.ejb.bo.EstoqueBO;
+import com.covidsemfome.model.Entrada;
 import com.covidsemfome.model.Estoque;
 import com.tedros.ejb.base.service.TEjbService;
 
@@ -35,5 +36,9 @@ public class EstoqueService extends TEjbService<Estoque> {
 		return bo;
 	}
 	
+	@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
+	public void gerarEstoque(Entrada entrada) throws Exception {
+		bo.gerarEstoque(entrada);
+	}
 
 }

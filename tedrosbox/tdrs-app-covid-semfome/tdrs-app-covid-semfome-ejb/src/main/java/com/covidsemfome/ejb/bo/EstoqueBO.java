@@ -68,13 +68,12 @@ public class EstoqueBO extends TGenericBO<Estoque> {
 			// Cozinha nao foi alterada
 			Estoque ex = new Estoque();
 			
-			if(!entrada.isNew()) {
-				ex.setEntradaRef(entrada);
-				ex.setCozinha(entrada.getCozinha());
-			}
+			ex.setEntradaRef(entrada);
+			ex.setCozinha(entrada.getCozinha());
+			
 			
 			// estoque gerado para as cozinha da entrada
-			final Estoque estRef = (!entrada.isNew()) ? eao.find(ex) : null;
+			Estoque estRef = (!entrada.isNew()) ? eao.find(ex) : null;
 			
 			if(estRef!=null) {
 				// Alteracao da entrada, isto é, possui entrada e estoque na base
@@ -94,60 +93,167 @@ public class EstoqueBO extends TGenericBO<Estoque> {
 				List<EntradaItem> iEntRetSav = ListUtils.retainAll(iEntSaved, iEntAtual);
 				
 				final Map<Produto, Integer> values = new HashMap<>();
-				prods.forEach(p -> {
-					
+				for(Produto p : prods) {
+					// item novo
 					EntradaItem ei = new EntradaItem(p);
 					if(iEntNew!=null && iEntNew.contains(ei)) {
 						ei = iEntNew.get(iEntNew.indexOf(ei));
 						//recupera estoque item 
-						EstoqueItem estItemAtual = new EstoqueItem(p);
-						if(iEstAtual.contains(estItemAtual)) {
-							estItemAtual = iEstAtual.get(iEstAtual.indexOf(estItemAtual));
-						}else {
-							estItemAtual.setEstoque(estRef);
-							
-						}
+						EstoqueItem estItemAtual = getEstoqueItemAtual(estRef, iEstAtual, p);
 						//recupera estoque config 
-						EstoqueConfig ec = null;
-						if(eCon!=null && !eCon.isEmpty()) {
-							for(EstoqueConfig e : eCon) {
-								if(e.getProduto().getCodigo().equals(p.getCodigo())) {
-									ec = e;
-									break;
-								}
-							}
-						}
+						EstoqueConfig ec = getEstoqueConfig(eCon, p);
 						
 						Integer qtd = ei.getQuantidade();
-						Integer qtdCalc = estItemAtual.sumQuantidade(qtd);
 						
-						if(ec==null) {
+						if(estAnterior!=null) {
+							//recupera estoque item anterior
+							EstoqueItem estItemAnt = new EstoqueItem(p);
+							if(estAnterior.getItens().contains(estItemAnt)) {
+								estItemAnt = estAnterior.getItens().get(estAnterior.getItens().indexOf(estItemAnt));
+								estItemAtual.sumQuantidade(estItemAnt.getVlrAjustado() + qtd);
+							}
+						}else if(ec!=null) {
+						
+						estItemAtual.sumQuantidade(qtd + ec.getQtdInicial());
+							
+						} else {
+							Integer qtdCalc = estItemAtual.sumQuantidade(qtd);
 							ec = new EstoqueConfig();
 							ec.setProduto(p);
 							ec.setCozinha(entrada.getCozinha());
 							ec.setQtdInicial(qtdCalc);
 							ec.setQtdMinima(10);
+							estConBO.save(ec);
 						}
 						
+						estItemAtual.setQtdMinima(ec.getQtdMinima());
 						
+						values.put(p, qtd);
 					}
 					
+					// item retido
+					EntradaItem eirt = new EntradaItem(p);
+					if(iEntRetSav!=null && iEntRetSav.contains(eirt)) {
+						eirt = iEntRetSav.get(iEntRetSav.indexOf(eirt));
+						//recupera estoque item 
+						EstoqueItem estItemAtual = getEstoqueItemAtual(estRef, iEstAtual, p);
+						//recupera estoque config 
+						EstoqueConfig ec = getEstoqueConfig(eCon, p);
+						
+						EntradaItem eia = new EntradaItem(p);
+						eia = iEntAtual.get(iEntAtual.indexOf(eia));
+						
+						if(eia.getQuantidade().equals(eirt.getQuantidade()))
+							continue;
+						
+						Integer qtd = eia.getQuantidade() - eirt.getQuantidade();
+						
+						if(ec==null){
+							Integer qtdCalc = estItemAtual.sumQuantidade(qtd);
+							ec = new EstoqueConfig();
+							ec.setProduto(p);
+							ec.setCozinha(entrada.getCozinha());
+							ec.setQtdInicial(qtdCalc);
+							ec.setQtdMinima(10);
+							estConBO.save(ec);
+						}else
+							estItemAtual.sumQuantidade(qtd);
+						
+						estItemAtual.setQtdMinima(ec.getQtdMinima());
+						
+						values.put(p, qtd);
+					}
 					
-				});
+					//itens removidos
+					EntradaItem eir = new EntradaItem(p);
+					if(iEntRem!=null && iEntRem.contains(eir)) {
+						eir = iEntRem.get(iEntRem.indexOf(eir));
+						//recupera estoque item 
+						EstoqueItem estItemAtual = new EstoqueItem(p);
+						if(iEstAtual.contains(estItemAtual)) {
+							estItemAtual = iEstAtual.get(iEstAtual.indexOf(estItemAtual));
+							Integer qtd = eir.getQuantidade();
+							estItemAtual.subtractQuantidade(qtd);
+							values.put(p, qtd * -1);
+						}
+					}
+					
+				}
 				
 				
 			}else {
 				// Primeira vez que a entrada é processada
-				//estRef = eao.getUltimo(entrada.getCozinha());
+				estRef = eao.getUltimo(entrada.getCozinha());
 			
-				/*if(estRef==null) {
+				if(estRef==null) {
 					estRef = ex;
+					List<EntradaItem> iEntAtual = entrada.getItens();
+					for(Produto p : prods) {
+						
+						// item novo
+						EntradaItem ei = new EntradaItem(p);
+						if(iEntAtual!=null && iEntAtual.contains(ei)) {
+							ei = iEntAtual.get(iEntAtual.indexOf(ei));
+							//recupera estoque item 
+							EstoqueItem estItemAtual = new EstoqueItem();
+							
+							//recupera estoque config 
+							EstoqueConfig ec = getEstoqueConfig(eCon, p);
+							
+							Integer qtd = ei.getQuantidade();
+							
+							if(ec!=null) {
+							
+								estItemAtual.sumQuantidade(qtd + ec.getQtdInicial());
+								estItemAtual.setQtdInicial(ec.getQtdInicial());
+							} else {
+								Integer qtdCalc = estItemAtual.sumQuantidade(qtd);
+								ec = new EstoqueConfig();
+								ec.setProduto(p);
+								ec.setCozinha(entrada.getCozinha());
+								ec.setQtdInicial(qtdCalc);
+								ec.setQtdMinima(10);
+								estConBO.save(ec);
+							}
+							estItemAtual.setProduto(p);
+							estItemAtual.setQtdMinima(ec.getQtdMinima());
+							estRef.addItem(estItemAtual);
+							
+						}
+						
+					}
 					
-				}*/
+					super.save(estRef);
+					
+				}
 			}
 		}else {
 			//cozinha alterada
 		}
+	}
+
+	private EstoqueItem getEstoqueItemAtual(Estoque estRef, List<EstoqueItem> iEstAtual, Produto p) {
+		EstoqueItem estItemAtual = new EstoqueItem(p);
+		if(iEstAtual.contains(estItemAtual)) {
+			estItemAtual = iEstAtual.get(iEstAtual.indexOf(estItemAtual));
+		}else {
+			estItemAtual.setEstoque(estRef);
+			iEstAtual.add(estItemAtual);
+		}
+		return estItemAtual;
+	}
+
+	private EstoqueConfig getEstoqueConfig(List<EstoqueConfig> eCon, Produto p) {
+		EstoqueConfig ec = null;
+		if(eCon!=null && !eCon.isEmpty()) {
+			for(EstoqueConfig e : eCon) {
+				if(e.getProduto().getCodigo().equals(p.getCodigo())) {
+					ec = e;
+					break;
+				}
+			}
+		}
+		return ec;
 	}
 	public static void main(String[] args) {
 		
