@@ -23,6 +23,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import com.covidsemfome.domain.DomainSchema;
 import com.covidsemfome.domain.DomainTables;
 import com.tedros.ejb.base.entity.TEntity;
+import com.tedros.util.TDateUtil;
 
 /**
  * @author Davis Gordon
@@ -136,5 +137,15 @@ public class Entrada extends TEntity {
 	 */
 	public void setCozinha(Cozinha cozinha) {
 		this.cozinha = cozinha;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return (tipo != null ? tipo + " para ": "")
+				+ (cozinha != null ? cozinha  : "")
+				+ (data != null ? " em " + TDateUtil.getFormatedDate(data, TDateUtil.DDMMYYYY)  : "")  ;
 	}
 }

@@ -35,11 +35,11 @@ public class Estoque extends TEntity {
 
 	private static final long serialVersionUID = -457987996337666023L;
 	
-	@ManyToOne(fetch=FetchType.EAGER)
+	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
 	@JoinColumn(name="entrada_id", nullable=true)
 	private Entrada entradaRef;
 	
-	@ManyToOne(fetch=FetchType.EAGER)
+	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
 	@JoinColumn(name="producao_id", nullable=true)
 	private Producao producaoRef;;
 	

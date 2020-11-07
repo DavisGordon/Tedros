@@ -11,6 +11,7 @@ import com.covidsemfome.module.doacao.DoacaoModule;
 import com.covidsemfome.module.doacao.icon.DoacaoIconImageView;
 import com.covidsemfome.module.doacao.icon.DoacaoMenuIconImageView;
 import com.covidsemfome.module.estoque.EstoqueConfigModule;
+import com.covidsemfome.module.estoque.EstoqueModule;
 import com.covidsemfome.module.pessoa.CadastroDePessoaModule;
 import com.covidsemfome.module.pessoa.icon.PessoaIconImageView;
 import com.covidsemfome.module.pessoa.icon.PessoaMenuIconImageView;
@@ -60,6 +61,8 @@ module = {
 			@TModule(type=EntradaProdutoModule.class, name="Entrada de Produto", menu="Administrativo"/*, 
 			icon=RelatoriosIconImageView.class, menuIcon=RelatoriosMenuIconImageView.class*/),
 			@TModule(type=EstoqueConfigModule.class, name="Configurar estoque", menu="Administrativo"/*, 
+			icon=RelatoriosIconImageView.class, menuIcon=RelatoriosMenuIconImageView.class*/),
+			@TModule(type=EstoqueModule.class, name="Estoque", menu="Administrativo"/*, 
 			icon=RelatoriosIconImageView.class, menuIcon=RelatoriosMenuIconImageView.class*/)
 
 })

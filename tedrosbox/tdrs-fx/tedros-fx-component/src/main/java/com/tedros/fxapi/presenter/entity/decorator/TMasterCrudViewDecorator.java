@@ -2,8 +2,11 @@ package com.tedros.fxapi.presenter.entity.decorator;
 
 import java.util.Arrays;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
 import com.tedros.fxapi.annotation.form.TForm;
+import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
@@ -11,6 +14,7 @@ import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.presenter.paginator.TPaginator;
 
+import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -101,21 +105,47 @@ extends TDynaViewCrudBaseDecorator<M> {
 	}
 
 	protected void configAllButtons() {
-		buildColapseButton(null);
-		buildNewButton(null);
-		buildDeleteButton(null);
-		buildSaveButton(null);
-		buildCancelButton(null);
-		buildModesRadioButton(null, null);
+		TDecorator tDeco = tPresenter.decorator();
+		Node[] nodes = new Node[0];
 		
-		if(tPresenter.decorator().buildImportButton()) {
+		if(tDeco.buildCollapseButton()) {
+			buildColapseButton(null);
+			nodes = ArrayUtils.add(nodes, gettColapseButton());
+		}
+		if(tDeco.buildImportButton()) {
 			buildImportButton(null);
-			addItemInTHeaderToolBar(gettColapseButton(),gettImportButton(), gettNewButton(), gettDeleteButton(), gettSaveButton(), gettCancelButton());
-		}else// add the buttons at the header tool bar
-			addItemInTHeaderToolBar(gettColapseButton(), gettNewButton(), gettDeleteButton(), gettSaveButton(), gettCancelButton());
+			nodes = ArrayUtils.add(nodes, gettImportButton());
+		}
+		
+		if(tDeco.buildNewButton()) {
+			buildNewButton(null);
+			nodes = ArrayUtils.add(nodes, gettNewButton());
+		}
+		
+		if(tDeco.buildDeleteButton()) {
+			buildDeleteButton(null);
+			nodes = ArrayUtils.add(nodes, gettDeleteButton());
+		}
+		
+		if(tDeco.buildSaveButton()) {
+			buildSaveButton(null);
+			nodes = ArrayUtils.add(nodes, gettSaveButton());
+		}
+		
+		if(tDeco.buildCancelButton()) {
+			buildCancelButton(null);
+			nodes = ArrayUtils.add(nodes, gettCancelButton());
+		}
+		
+		if(nodes.length>0)
+			addItemInTHeaderToolBar(nodes);
 		
 		// add the mode radio buttons
-		addItemInTHeaderHorizontalLayout(gettEditModeRadio(), gettReadModeRadio());
+		if(tDeco.buildModesRadioButton()) {
+			buildModesRadioButton(null, null);
+			addItemInTHeaderHorizontalLayout(gettEditModeRadio(), gettReadModeRadio());
+		}
+		
 		
 		// set padding at rigth in left content pane
 		addPaddingInTLeftContent(0, 4, 0, 0);

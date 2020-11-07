@@ -4,8 +4,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import javafx.util.Callback;
-
 import com.tedros.fxapi.annotation.TCursor;
 import com.tedros.fxapi.annotation.TDepthTest;
 import com.tedros.fxapi.annotation.listener.TChangeListener;
@@ -20,6 +18,8 @@ import com.tedros.fxapi.domain.TPoint3D;
 import com.tedros.fxapi.form.TConverter;
 import com.tedros.fxapi.form.TFontBuilder;
 import com.tedros.fxapi.util.TReflectionUtil;
+
+import javafx.util.Callback;
 
 public class TTypeAnalyserParserDelegate {
 	

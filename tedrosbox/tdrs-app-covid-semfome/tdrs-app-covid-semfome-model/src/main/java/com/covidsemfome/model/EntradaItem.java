@@ -75,10 +75,10 @@ public class EntradaItem extends TEntity {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
+		/*if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
-			return false;
+			return false;*/
 		EntradaItem other = (EntradaItem) obj;
 		if (produto == null) {
 			if (other.produto != null)

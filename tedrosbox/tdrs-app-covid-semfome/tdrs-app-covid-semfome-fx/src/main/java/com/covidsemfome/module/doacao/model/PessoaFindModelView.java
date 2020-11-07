@@ -4,7 +4,6 @@ import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.module.pessoa.model.PessoaFieldValueUtil;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TLabelPosition;
 import com.tedros.fxapi.annotation.control.TLongField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TTableColumn;
@@ -16,6 +15,7 @@ import com.tedros.fxapi.annotation.presenter.TSelectionModalPresenter;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.view.TPaginator;
+import com.tedros.fxapi.domain.TLabelPosition;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.beans.property.SimpleLongProperty;

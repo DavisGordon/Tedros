@@ -1,4 +1,4 @@
-package com.tedros.fxapi.annotation.control;
+package com.tedros.fxapi.domain;
 
 /**
  * Specifies a label position

@@ -11,8 +11,8 @@ import javafx.scene.layout.VBox;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.tedros.fxapi.annotation.control.TLabelPosition;
 import com.tedros.fxapi.control.ITField;
+import com.tedros.fxapi.domain.TLabelPosition;
 
 /**
  * <pre>
