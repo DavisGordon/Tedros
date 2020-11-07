@@ -18,13 +18,13 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TLabelDefaultSetting;
-import com.tedros.fxapi.annotation.control.TLabelPosition;
 import com.tedros.fxapi.annotation.parser.TAnnotationParser;
 import com.tedros.fxapi.annotation.reader.TByteArrayReader;
 import com.tedros.fxapi.annotation.reader.TDetailReader;
 import com.tedros.fxapi.annotation.reader.TReader;
 import com.tedros.fxapi.annotation.reader.TReaderDefaultSetting;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
+import com.tedros.fxapi.domain.TLabelPosition;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.util.TReflectionUtil;
 

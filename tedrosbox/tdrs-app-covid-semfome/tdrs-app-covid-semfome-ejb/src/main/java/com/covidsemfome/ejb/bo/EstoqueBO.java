@@ -7,6 +7,7 @@
 package com.covidsemfome.ejb.bo;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -184,48 +185,53 @@ public class EstoqueBO extends TGenericBO<Estoque> {
 			}else {
 				// Primeira vez que a entrada é processada
 				estRef = eao.getUltimo(entrada.getCozinha());
-			
-				if(estRef==null) {
-					estRef = ex;
-					List<EntradaItem> iEntAtual = entrada.getItens();
-					for(Produto p : prods) {
-						
-						// item novo
-						EntradaItem ei = new EntradaItem(p);
-						if(iEntAtual!=null && iEntAtual.contains(ei)) {
-							ei = iEntAtual.get(iEntAtual.indexOf(ei));
-							//recupera estoque item 
-							EstoqueItem estItemAtual = new EstoqueItem();
-							
-							//recupera estoque config 
-							EstoqueConfig ec = getEstoqueConfig(eCon, p);
-							
-							Integer qtd = ei.getQuantidade();
-							
-							if(ec!=null) {
-							
-								estItemAtual.sumQuantidade(qtd + ec.getQtdInicial());
-								estItemAtual.setQtdInicial(ec.getQtdInicial());
-							} else {
-								Integer qtdCalc = estItemAtual.sumQuantidade(qtd);
-								ec = new EstoqueConfig();
-								ec.setProduto(p);
-								ec.setCozinha(entrada.getCozinha());
-								ec.setQtdInicial(qtdCalc);
-								ec.setQtdMinima(10);
-								estConBO.save(ec);
-							}
-							estItemAtual.setProduto(p);
-							estItemAtual.setQtdMinima(ec.getQtdMinima());
-							estRef.addItem(estItemAtual);
-							
-						}
-						
+				List<EstoqueItem> itens = (estRef==null) ? null : estRef.getItens();
+				ex.setData(new Date());
+				List<EntradaItem> iEntAtual = entrada.getItens();
+				for(Produto p : prods) {
+					Integer qtd = 0;
+					Integer qtdInic = 0;
+					// item novo
+					EntradaItem ei = new EntradaItem(p);
+					if(iEntAtual!=null && iEntAtual.contains(ei)) {
+						ei = iEntAtual.get(iEntAtual.indexOf(ei));
+						qtd = ei.getQuantidade();
 					}
-					
-					super.save(estRef);
-					
+					// estoque item 
+					EstoqueItem estItemAtual = new EstoqueItem();
+					boolean firstTime = true;
+					if(itens!=null) {
+						EstoqueItem eItem = new EstoqueItem(p);
+						if(itens.contains(eItem)) {
+							eItem = itens.get(itens.indexOf(eItem));
+							qtdInic = eItem.getVlrAjustado();
+							qtd += qtdInic;
+							firstTime = false;
+						}
+					}
+					//recupera estoque config 
+					EstoqueConfig ec = getEstoqueConfig(eCon, p);
+					if(ec!=null) {
+						if(firstTime) {
+							qtdInic = ec.getQtdInicial();
+							qtd += qtdInic;
+						}
+						estItemAtual.sumQuantidade(qtd);
+						estItemAtual.setQtdInicial(qtdInic);
+					} else {
+						qtdInic = estItemAtual.sumQuantidade(qtd);
+						ec = new EstoqueConfig();
+						ec.setProduto(p);
+						ec.setCozinha(entrada.getCozinha());
+						ec.setQtdInicial(qtdInic);
+						ec.setQtdMinima(10);
+						estConBO.save(ec);
+					}
+					estItemAtual.setProduto(p);
+					estItemAtual.setQtdMinima(ec.getQtdMinima());
+					ex.addItem(estItemAtual);
 				}
+				super.save(ex);
 			}
 		}else {
 			//cozinha alterada

@@ -203,9 +203,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * */
 	public void configColapseButton() {
 		final Button colapseButton = this.decorator.gettColapseButton();
-		EventHandler<ActionEvent> eh = e -> colapseAction();
-		super.getListenerRepository().addListener("colapseButtonClickEH", eh);
-		colapseButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
+		if(colapseButton!=null) {
+			EventHandler<ActionEvent> eh = e -> colapseAction();
+			super.getListenerRepository().addListener("colapseButtonClickEH", eh);
+			colapseButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
+		}
 	}
 	
 	/**
@@ -214,9 +216,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	public void configImportButton() {
 		if(isUserAuthorized(TAuthorizationType.SAVE)){
 			final Button importButton = this.decorator.gettImportButton();
-			EventHandler<ActionEvent> eh = e -> importAction();
-			super.getListenerRepository().addListener("importButtonClickEH", eh);
-			importButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
+			if(importButton!=null) {
+				EventHandler<ActionEvent> eh = e -> importAction();
+				super.getListenerRepository().addListener("importButtonClickEH", eh);
+				importButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
+			}
 		}
 	}
 	
@@ -226,9 +230,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	public void configNewButton() {
 		if(isUserAuthorized(TAuthorizationType.NEW)){
 			final Button newButton = this.decorator.gettNewButton();
-			EventHandler<ActionEvent> eh = e -> newAction();
-			super.getListenerRepository().addListener("newButtonClickEH", eh);
-			newButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
+			if(newButton!=null) {
+				EventHandler<ActionEvent> eh = e -> newAction();
+				super.getListenerRepository().addListener("newButtonClickEH", eh);
+				newButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
+			}
 		}
 	}
 	
@@ -238,9 +244,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	public void configSaveButton() {
 		if(isUserAuthorized(TAuthorizationType.SAVE)){
 			final Button saveButton = this.decorator.gettSaveButton();
-			EventHandler<ActionEvent> eh = e -> saveAction();
-			super.getListenerRepository().addListener("saveButtonClickEH", eh);
-			saveButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
+			if(saveButton!=null) {
+				EventHandler<ActionEvent> eh = e -> saveAction();
+				super.getListenerRepository().addListener("saveButtonClickEH", eh);
+				saveButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
+			}
 		}
 	}
 	
@@ -250,9 +258,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	public void configDeleteButton() {
 		if(isUserAuthorized(TAuthorizationType.DELETE)){
 			final Button removeButton = this.decorator.gettDeleteButton();
-			EventHandler<ActionEvent> eh = e -> deleteAction();
-			super.getListenerRepository().addListener("deleteButtonClickEH", eh);
-			removeButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
+			if(removeButton!=null) {
+				EventHandler<ActionEvent> eh = e -> deleteAction();
+				super.getListenerRepository().addListener("deleteButtonClickEH", eh);
+				removeButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
+			}
 		}
 	}
 	
@@ -273,9 +283,12 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * */
 	public void configCancelButton() {
 		final Button cancelButton = this.decorator.gettCancelButton();
-		EventHandler<ActionEvent> eh = e -> cancelAction();
-		super.getListenerRepository().addListener("cancelButtonClickEH", eh);
-		cancelButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
+		if(cancelButton!=null) {
+			EventHandler<ActionEvent> eh = e -> cancelAction();
+			super.getListenerRepository().addListener("cancelButtonClickEH", eh);
+			cancelButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
+		}
+		
 	}
 	
 	/**
@@ -283,10 +296,14 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * */
 	public void configModesRadio() {
 		
-		radioGroup = new ToggleGroup();
+		
 		final RadioButton editRadio = this.decorator.gettEditModeRadio();
 		final RadioButton readRadio = this.decorator.gettReadModeRadio();
 		
+		if(editRadio==null && readRadio==null)
+			return;
+		
+		radioGroup = new ToggleGroup();
 		editRadio.setToggleGroup(radioGroup);
 		readRadio.setToggleGroup(radioGroup);
 		

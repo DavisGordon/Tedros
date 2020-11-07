@@ -27,6 +27,13 @@
 	  		<scope>compile</scope>
 	  	</dependency>
 	  
+	  <dependency>
+	  		<groupId>com.tedros</groupId>
+	  		<artifactId>tedros-util</artifactId>
+	  		<version>8-1.0</version>
+	  		<scope>compile</scope>
+	  	</dependency>
+	  
 	  	<dependency>
 		   	<groupId>org.eclipse.persistence</groupId>
 		   	<artifactId>eclipselink</artifactId>

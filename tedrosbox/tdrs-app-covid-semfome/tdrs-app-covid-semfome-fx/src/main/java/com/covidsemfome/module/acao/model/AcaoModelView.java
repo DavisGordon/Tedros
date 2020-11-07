@@ -3,8 +3,6 @@
  */
 package com.covidsemfome.module.acao.model;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.covidsemfome.model.Acao;
@@ -17,7 +15,6 @@ import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TLabelPosition;
 import com.tedros.fxapi.annotation.control.TLongField;
 import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
@@ -46,6 +43,7 @@ import com.tedros.fxapi.annotation.view.TOption;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.builder.DateTimeFormatBuilder;
 import com.tedros.fxapi.domain.THtmlConstant;
+import com.tedros.fxapi.domain.TLabelPosition;
 import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.util.TDateUtil;
@@ -56,7 +54,6 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;

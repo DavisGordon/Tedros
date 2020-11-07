@@ -132,9 +132,58 @@ public @interface TDecorator {
 	 * */
 	public boolean buildImportButton() default false;
 
-	
+	/**
+	 * <pre>
+	 * Build the New button
+	 * 
+	 * Default value: true
+	 * </pre>
+	 * */
+	public boolean buildNewButton() default true;
 
-	
+	/**
+	 * <pre>
+	 * Build the Save button
+	 * 
+	 * Default value: true
+	 * </pre>
+	 * */
+	public boolean buildSaveButton() default true;
 
+	/**
+	 * <pre>
+	 * Build the Delete button
+	 * 
+	 * Default value: true
+	 * </pre>
+	 * */
+	public boolean buildDeleteButton() default true;
+	
+	/**
+	 * <pre>
+	 * Build the Cancel button
+	 * 
+	 * Default value: true
+	 * </pre>
+	 * */
+	public boolean buildCancelButton() default true;
+	
+	/**
+	 * <pre>
+	 * Build the Collapse button
+	 * 
+	 * Default value: true
+	 * </pre>
+	 * */
+	public boolean buildCollapseButton() default true;
+	
+	/**
+	 * <pre>
+	 * Build the Modes Radio button
+	 * 
+	 * Default value: true
+	 * </pre>
+	 * */
+	public boolean buildModesRadioButton() default true;
 	
 }

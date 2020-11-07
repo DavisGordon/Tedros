@@ -27,7 +27,6 @@ import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TIntegerField;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TLabelDefaultSetting;
-import com.tedros.fxapi.annotation.control.TLabelPosition;
 import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
 import com.tedros.fxapi.annotation.control.TPasswordField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
@@ -37,6 +36,7 @@ import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.domain.TLabelPosition;
 import com.tedros.fxapi.domain.TZeroValidation;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 

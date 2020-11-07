@@ -7,9 +7,10 @@
 package com.covidsemfome.module.pessoa.model;
 
 import com.covidsemfome.model.Contato;
-import com.covidsemfome.module.pessoa.table.TipoContatoTableCell;
+import com.covidsemfome.module.pessoa.table.TipoContatoCallback;
 import com.covidsemfome.module.pessoa.trigger.TTipoContatoTrigger;
 import com.tedros.fxapi.annotation.TCodeValue;
+import com.tedros.fxapi.annotation.control.TCallbackFactory;
 import com.tedros.fxapi.annotation.control.TCellFactory;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
@@ -50,7 +51,7 @@ import javafx.geometry.Pos;
 				),
 		tableView=@TTableView(editable=true, 
 			columns = { @TTableColumn(cellValue="tipo", text = "Tipo", resizable=true,
-			cellFactory=@TCellFactory(parse = true, tableCell=TipoContatoTableCell.class)), 
+			cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=TipoContatoCallback.class))), 
 						@TTableColumn(cellValue="descricao", text = "Descrição.", resizable=true)}))
 public class ContatoModelView extends TEntityModelView<Contato> {
 	

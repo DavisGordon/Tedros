@@ -6,8 +6,6 @@
  */
 package com.covidsemfome.module.pessoa.table;
 
-import javafx.beans.property.SimpleStringProperty;
-
 import com.tedros.core.TInternationalizationEngine;
 import com.tedros.fxapi.control.TTableCell;
 
@@ -17,15 +15,17 @@ import com.tedros.fxapi.control.TTableCell;
  * @author Davis Gordon
  *
  */
-public class TipoContatoTableCell<S, T> extends TTableCell<S, T> {
+public class TipoContatoTableCell extends TTableCell{
 
-	@Override
+	
 	public String processItem(Object item) {
 		TInternationalizationEngine iEn = TInternationalizationEngine.getInstance(null);
-		SimpleStringProperty tipo = (SimpleStringProperty) item;
 		
-		if(tipo.get()!=null )
-			switch(tipo.get()) {
+		
+		if(item!=null) {
+			String tipo = (String) item;
+		
+			switch(tipo) {
 			case "1":
 				return iEn.getString("#{label.email}");
 			case "2":
@@ -35,9 +35,10 @@ public class TipoContatoTableCell<S, T> extends TTableCell<S, T> {
 			case "4":
 				return iEn.getString("#{label.worknumber}");
 			}
-		
+		}
 		
 		return ""; 
 	}
-	
+
+
 }

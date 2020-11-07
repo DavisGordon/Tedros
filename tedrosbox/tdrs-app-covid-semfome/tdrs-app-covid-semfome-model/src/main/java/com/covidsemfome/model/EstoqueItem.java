@@ -36,7 +36,7 @@ public class EstoqueItem extends TEntity {
 	@Column(nullable = false)
 	private Integer qtdMinima;
 	
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private Integer qtdInicial;
 	
 	@Column(nullable = false)
@@ -69,8 +69,6 @@ public class EstoqueItem extends TEntity {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
-			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		EstoqueItem other = (EstoqueItem) obj;
@@ -194,6 +192,15 @@ public class EstoqueItem extends TEntity {
 	 */
 	public void setEstoque(Estoque estoque) {
 		this.estoque = estoque;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "EstoqueItem [" + (produto != null ? "produto=" + produto + ", " : "")
+				+ (getVlrAjustado() != null ? "getVlrAjustado()=" + getVlrAjustado() : "") + "]";
 	}
 	
 }
