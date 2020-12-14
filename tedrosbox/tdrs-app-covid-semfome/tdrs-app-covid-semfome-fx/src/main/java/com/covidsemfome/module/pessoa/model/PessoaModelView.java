@@ -13,11 +13,16 @@ import com.tedros.fxapi.annotation.TObservableValue;
 import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TDetailListField;
+import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
 import com.tedros.fxapi.annotation.control.TPasswordField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
+import com.tedros.fxapi.annotation.control.TShowField;
+import com.tedros.fxapi.annotation.control.TShowField.TField;
+import com.tedros.fxapi.annotation.effect.TDropShadow;
+import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.control.TTab;
 import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
@@ -44,14 +49,16 @@ import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.scene.layout.TRegion;
+import com.tedros.fxapi.annotation.text.TFont;
+import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.annotation.view.TOption;
 import com.tedros.fxapi.annotation.view.TPaginator;
-import com.tedros.fxapi.builder.DateTimeFormatBuilder;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TLabelPosition;
 import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
+import com.tedros.util.TDateUtil;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -60,6 +67,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
+import javafx.scene.text.TextAlignment;
 
 /**
  * The person model view
@@ -79,7 +87,7 @@ import javafx.scene.layout.Priority;
 						@TOption(text = "Nome", value = "nome")}),
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{view.person.name}")))
 @TSecurity(	id="COVSEMFOME_CADPESS_FORM", 
-	appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "#{view.person.name}",
+	appName = "#{app.name}", moduleName = "Administrativo", viewName = "#{view.person.name}",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 
@@ -106,6 +114,9 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 					htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 					cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 					cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
+	@TText(text="#{form.person.title}", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
+	node=@TNode(id="t-form-title-text", parse = true))
 	private SimpleStringProperty textoCadastro;
 	
 	/**
@@ -126,7 +137,7 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	 * */
 	@TReaderHtml
 	@TLabel(text="#{label.observation}")
-	@TTextAreaField(control=@TControl(prefWidth=250, prefHeight=50, parse = true), wrapText=true, maxLength=400, prefRowCount=4)
+	@TTextAreaField(control=@TControl(prefWidth=250, prefHeight=130, parse = true), wrapText=true, maxLength=400, prefRowCount=4)
 	@THBox(	pane=@TPane(children={"observacao","tipoVoluntario","statusVoluntario"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="observacao", priority=Priority.ALWAYS), 
    				   		@TPriority(field="tipoVoluntario", priority=Priority.ALWAYS),
@@ -202,20 +213,19 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	
 	@TReaderHtml
 	@TLabel(text="Cadastrado em")
-	@TDatePickerField(required = false, node=@TNode(parse = true, disable=true), dateFormat=DateTimeFormatBuilder.class)
+	@TShowField(fields= {@TField(pattern=TDateUtil.DDMMYYYY_HHMM)})
 	private SimpleObjectProperty<Date> insertDate;
 	
 	@TReaderHtml
 	@TLabel(text="Alterado em")
-	@TDatePickerField(required = false, node=@TNode(parse = true, disable=true), dateFormat=DateTimeFormatBuilder.class)
+	@TShowField(fields= {@TField(pattern=TDateUtil.DDMMYYYY_HHMM)})
 	private SimpleObjectProperty<Date> lastUpdate;
 	
 	@TReaderHtml
 	@TLabel(text="Email (Login no painel)")
 	@TTextField(maxLength=80)
-	@TFieldSet(fields = { "loginName", "password" }, region=@TRegion(maxWidth=400,
-			parse = true),
-	legend = "Credenciais para acesso ao painel do voluntário ")
+	@TFieldSet(fields = { "loginName", "password" }, region=@TRegion(maxWidth=400, parse = true),
+		legend = "Credenciais para acesso ao painel do voluntário ")
 	@TValidator(validatorClass = CredenciaisPainelValidator.class, associatedFieldsName={"password"})
 	private SimpleStringProperty loginName;
 	

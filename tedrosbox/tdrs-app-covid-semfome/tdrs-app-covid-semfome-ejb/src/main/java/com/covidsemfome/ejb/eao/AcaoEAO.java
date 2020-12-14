@@ -14,9 +14,6 @@ import org.eclipse.persistence.config.CacheUsage;
 import org.eclipse.persistence.config.QueryHints;
 
 import com.covidsemfome.model.Acao;
-import com.covidsemfome.model.Contato;
-import com.covidsemfome.model.Documento;
-import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.Voluntario;
 import com.tedros.ejb.base.eao.TGenericEAO;
 import com.tedros.ejb.base.entity.ITEntity;
@@ -29,6 +26,7 @@ import com.tedros.ejb.base.entity.ITEntity;
 public class AcaoEAO extends TGenericEAO<Acao> {
 
 
+	@SuppressWarnings("unchecked")
 	public List<Acao> pesquisar(List<Long> idsl, String titulo, Date dataInicio, Date dataFim, String status){
 	
 		StringBuffer sbf = new StringBuffer("select e from Acao e where 1=1 ");

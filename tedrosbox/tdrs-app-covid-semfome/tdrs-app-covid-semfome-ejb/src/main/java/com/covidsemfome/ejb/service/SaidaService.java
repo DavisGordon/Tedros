@@ -12,8 +12,8 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
-import com.covidsemfome.ejb.bo.ProducaoBO;
-import com.covidsemfome.model.Producao;
+import com.covidsemfome.ejb.bo.SaidaBO;
+import com.covidsemfome.model.Saida;
 import com.tedros.ejb.base.service.TEjbService;
 
 /**
@@ -23,15 +23,15 @@ import com.tedros.ejb.base.service.TEjbService;
  *
  */
 @Local
-@Stateless(name="ProducaoService")
+@Stateless(name="SaidaService")
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
-public class ProducaoService extends TEjbService<Producao> {
+public class SaidaService extends TEjbService<Saida> {
 	
 	@Inject
-	private ProducaoBO bo;
+	private SaidaBO bo;
 	
 	@Override
-	public ProducaoBO getBussinesObject() {
+	public SaidaBO getBussinesObject() {
 		return bo;
 	}
 	

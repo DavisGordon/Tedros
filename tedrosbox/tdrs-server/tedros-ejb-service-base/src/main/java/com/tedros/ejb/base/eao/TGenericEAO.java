@@ -39,7 +39,9 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 	
 	@SuppressWarnings("unchecked")
 	public E findById(E entity)throws Exception{
-		return (E) em.find(entity.getClass(), entity.getId());
+		E e = (E) em.find(entity.getClass(), entity.getId());
+		afterFind(e);
+		return e;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -48,7 +50,9 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 		ReadAllQuery query = new ReadAllQuery(entity.getClass());
 		query.setExampleObject(entity);
 		List<E> results = (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
-		return (results!=null && results.size()>0) ? results.get(0) : null;
+		E e = (results!=null && results.size()>0) ? results.get(0) : null;
+		afterFind(e);
+		return e;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -90,6 +94,21 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 		
 	}
 	
+	public void afterFind(E entity)throws Exception{
+		
+	}
+	
+	public void afterListAll(List<E> lst)throws Exception{
+		
+	}
+	
+	public void afterFindAll(List<E> lst)throws Exception{
+		
+	}
+	
+	public void afterPageAll(List<E> lst)throws Exception{
+		
+	}
 	
 	/**
 	 * Persiste uma entity
@@ -139,7 +158,9 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 		CriteriaQuery<E> cq = (CriteriaQuery<E>) cb.createQuery(entity);
 		Root<E> root = (Root<E>) cq.from(entity);
 		cq.select(root);
-		return em.createQuery(cq).getResultList();
+		List<E> lst = em.createQuery(cq).getResultList();
+		afterListAll(lst);
+		return lst;
 	}
 	/**
 	 * Retorna uma lista com todas as entitys persistidas
@@ -155,7 +176,9 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 		else
 			cq.orderBy(cb.desc(root.get("id")));
 		
-		return em.createQuery(cq).getResultList();
+		List<E> lst = em.createQuery(cq).getResultList();
+		afterListAll(lst);
+		return lst;
 	}
 	/**
 	 * Retorna uma lista paginada
@@ -179,7 +202,9 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 		qry.setFirstResult(firstResult);
 		qry.setMaxResults(maxResult);
 		
-		return qry.getResultList();
+		List<E> lst = qry.getResultList();
+		afterPageAll(lst);
+		return lst;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -203,9 +228,12 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 		query.setFirstResult(firstResult);
 		query.setMaxRows(maxResult+firstResult);
 		
-		return (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
+		List<E> lst = (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
+		afterFindAll(lst);
+		return lst;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public Integer countFindAll(E entity, boolean containsAnyKeyWords)throws Exception{
 		ExpressionBuilder eb = new ExpressionBuilder();
 		ReportQuery query = new ReportQuery(entity.getClass(), eb);

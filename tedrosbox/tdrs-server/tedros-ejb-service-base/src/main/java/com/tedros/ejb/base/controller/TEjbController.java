@@ -127,13 +127,13 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 			
 			String message = (result.getValue()==null) ? "REMOVED" : "OUTDATED";
 			
-			return (T) new TResult(EnumResult.OUTDATED, message, result.getValue());
+			return (T) new TResult<>(EnumResult.OUTDATED, message, result.getValue());
 		}else if(e instanceof EJBTransactionRolledbackException) {
-			return (T) new TResult(EnumResult.ERROR,true, e.getCause().getMessage());
+			return (T) new TResult<>(EnumResult.ERROR,true, e.getCause().getMessage());
 		}else if(e instanceof EJBException) {
-			return (T) new TResult(EnumResult.ERROR,true, e.getCause().getMessage());
+			return (T) new TResult<>(EnumResult.ERROR,true, e.getCause().getMessage());
 		}else{
-			return (T) new TResult(EnumResult.ERROR, e.getMessage());
+			return (T) new TResult<>(EnumResult.ERROR, e.getMessage());
 		}
 	}
 	

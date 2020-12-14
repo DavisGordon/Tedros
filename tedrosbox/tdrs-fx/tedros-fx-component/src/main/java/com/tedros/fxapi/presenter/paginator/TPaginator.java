@@ -60,7 +60,7 @@ public class TPaginator extends BorderPane {
 	
 	public TPaginator(boolean showSearch, boolean showOrderBy) {
 		
-		setId("t-header-box");
+		setId("t-form");
 		paginationProperty = new SimpleObjectProperty<>();
 		
 		TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
@@ -127,10 +127,10 @@ public class TPaginator extends BorderPane {
 			search.setMaxHeight(searchButton.getHeight());
 			//search.setMaxWidth(100);
 			
-			HBox h1 = new HBox();
+			ToolBar h1 = new ToolBar();
 			h1.setId("t-view-toolbar");
-			HBox.setHgrow(search, Priority.ALWAYS);
-			h1.getChildren().addAll(search, searchButton, clearButton);
+			//HBox.setHgrow(search, Priority.ALWAYS);
+			h1.getItems().addAll(search, searchButton, clearButton);
 			
 			box.getChildren().add(h1);
 		}
@@ -169,6 +169,7 @@ public class TPaginator extends BorderPane {
 			descRadioBtn.setUserData(false);
 			orderByType.addRadioButton(ascRadioBtn);
 			orderByType.addRadioButton(descRadioBtn);
+			THorizontalRadioGroup.setMargin(ascRadioBtn, new Insets(0, 5, 0, 0));
 			
 			HBox h2 = new HBox();
 			h2.setId("t-view-toolbar");

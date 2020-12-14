@@ -6,10 +6,13 @@
  */
 package com.covidsemfome.ejb.bo;
 
+import java.util.List;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import com.covidsemfome.ejb.eao.EstoqueConfigEAO;
+import com.covidsemfome.model.Cozinha;
 import com.covidsemfome.model.EstoqueConfig;
 import com.tedros.ejb.base.bo.TGenericBO;
 
@@ -30,5 +33,8 @@ public class EstoqueConfigBO extends TGenericBO<EstoqueConfig> {
 		return eao;
 	}
 	
+	public List<EstoqueConfig> list(Cozinha coz){
+		return eao.list(coz);
+	}
 
 }

@@ -18,6 +18,7 @@ import com.tedros.util.TDateUtil;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -77,7 +78,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 	private void init() throws Exception {
 		
 		pane = layout.getValue().newInstance();
-		
+		super.setAlignment(Pos.TOP_CENTER);
 		super.getChildren().add(pane);
 		if(value instanceof ListProperty) {
 			ListProperty lst = (ListProperty) value;
@@ -99,13 +100,13 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 				pane.getChildren().add(fb);
 				switch(layout) {
 				case FLOWPANE:
-					((FlowPane)pane).setMargin(fb, new Insets(10));
+					((FlowPane)pane).setMargin(fb, new Insets(0, 10, 0, 0));
 					break;
 				case HBOX:
-					((HBox)pane).setMargin(fb, new Insets(10));
+					((HBox)pane).setMargin(fb, new Insets(0, 10, 0, 0));
 					break;
 				case VBOX:
-					((VBox)pane).setMargin(fb, new Insets(10));
+					((VBox)pane).setMargin(fb, new Insets(0, 0, 10, 0));
 					break;
 				
 				}
@@ -118,7 +119,12 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 	}
 	
 	private TFieldBox buildFieldBox(String value, TShowFieldValue f) {
-		TLabel l = StringUtils.isNotBlank(f.getLabel()) ? new TLabel(TInternationalizationEngine.getInstance(null).getString(f.getLabel())) : null;
+		TLabel l = StringUtils.isNotBlank(f.getLabel()) 
+				? new TLabel(TInternationalizationEngine.getInstance(null).getString(f.getLabel())) 
+						: null;
+		if(l!=null)
+			l.setId("t-form-control-label");
+		
 		Node c = buildNode(value);
 		return new TFieldBox(f.getName(), l, c, f.getLabelPosition());
 		
@@ -126,6 +132,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 
 	private Node buildNode(String value) {
 		TLabel c = new TLabel(value);
+		c.setId("t-form-item-text");
 		return c;
 	}
 

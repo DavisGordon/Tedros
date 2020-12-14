@@ -53,8 +53,8 @@ public class TFieldBox extends StackPane implements ITField {
 		if(position == TLabelPosition.TOP || position == TLabelPosition.DEFAULT){
 			try{
 				VBox box = new VBox(3);
-				VBox.setVgrow(this.control, Priority.ALWAYS);
-				box.setAlignment(Pos.CENTER_LEFT);
+				//VBox.setVgrow(this.control, Priority.ALWAYS);
+				box.setAlignment(Pos.TOP_LEFT);
 				box.getChildren().addAll(this.label, this.control);
 				getChildren().add(box);
 			}catch(NullPointerException e){
@@ -64,8 +64,8 @@ public class TFieldBox extends StackPane implements ITField {
 		
 		if(position == TLabelPosition.BOTTOM){
 			VBox box = new VBox(3);
-			VBox.setVgrow(this.control, Priority.ALWAYS);
-			box.setAlignment(Pos.CENTER_LEFT);
+			//VBox.setVgrow(this.control, Priority.ALWAYS);
+			box.setAlignment(Pos.TOP_LEFT);
 			box.getChildren().addAll(this.control, this.label);
 			getChildren().add(box);
 		}
@@ -73,7 +73,7 @@ public class TFieldBox extends StackPane implements ITField {
 		if(position == TLabelPosition.RIGHT){
 			HBox box = new HBox(8);
 			HBox.setHgrow(this.control, Priority.ALWAYS);
-			box.setAlignment(Pos.CENTER_LEFT);
+			box.setAlignment(Pos.TOP_LEFT);
 			box.getChildren().addAll(this.control, this.label);
 			getChildren().add(box);
 		}
@@ -81,7 +81,7 @@ public class TFieldBox extends StackPane implements ITField {
 		if(position == TLabelPosition.LEFT){
 			HBox box = new HBox(8);
 			HBox.setHgrow(this.control, Priority.ALWAYS);
-			box.setAlignment(Pos.CENTER_LEFT);
+			box.setAlignment(Pos.TOP_LEFT);
 			box.getChildren().addAll(this.label, this.control);
 			getChildren().add(box);
 		}

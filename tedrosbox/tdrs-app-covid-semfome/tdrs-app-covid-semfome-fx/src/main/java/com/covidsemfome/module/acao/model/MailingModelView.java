@@ -15,12 +15,11 @@ import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.ejb.base.model.TItemModel;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
-import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
-import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
-import com.tedros.fxapi.annotation.control.TRadioButtonField;
+import com.tedros.fxapi.annotation.control.TShowField;
+import com.tedros.fxapi.annotation.control.TShowField.TField;
 import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
@@ -47,9 +46,9 @@ import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.annotation.view.TOption;
 import com.tedros.fxapi.annotation.view.TPaginator;
-import com.tedros.fxapi.builder.DateTimeFormatBuilder;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
+import com.tedros.util.TDateUtil;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -94,25 +93,18 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 	private SimpleStringProperty textoCadastro;
 	
 	@TLabel(text="Titulo/Local")
-	@TTextField(node = @TNode(parse = true, disable=true))
+	@TShowField()
 	@THBox(	pane=@TPane(children={"titulo","data","status"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="titulo", priority=Priority.ALWAYS), 
    				   		@TPriority(field="data", priority=Priority.NEVER),
    				   	@TPriority(field="status", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty titulo;
 	
-	@TLabel(text="Data e Hora")
-	@TDatePickerField( dateFormat=DateTimeFormatBuilder.class, node = @TNode(parse = true, disable=true))
+	@TShowField(fields= {@TField(label="Data e Hora", pattern=TDateUtil.DDMMYYYY_HHMM)})
 	private SimpleObjectProperty<Date> data;
 	
 	@TLabel(text="Status")
-	@THorizontalRadioGroup(required=true, alignment=Pos.CENTER_LEFT, spacing=4, 
-	node = @TNode(parse = true, disable=true),
-			radioButtons={
-					@TRadioButtonField(text = "Agendada", userData = "Agendada"),
-					@TRadioButtonField(text = "Cancelada", userData = "Cancelada"), 
-					@TRadioButtonField(text = "Executada", userData = "Executada")
-					})
+	@TShowField()
 	private SimpleStringProperty status;
 	
 	@TLabel(text="Descricão")
@@ -131,9 +123,6 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 	@TLabel(text="Destino:")
 	@TValidator(validatorClass = MailingDestinoValidator.class, associatedFieldsName={"emails"})
 	@TComboBoxField(items=DestinoItensBuilder.class)
-	/*@THBox(	pane=@TPane(children={"destino","emails"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="destino", priority=Priority.ALWAYS), 
-   				   		@TPriority(field="emails", priority=Priority.ALWAYS)}))*/
 	private SimpleObjectProperty<TItemModel<String>> destino;
 
 	@TLabel(text="Para")

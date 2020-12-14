@@ -5,25 +5,14 @@ package com.covidsemfome.module.estoque.model;
 
 import com.covidsemfome.model.EstoqueItem;
 import com.covidsemfome.model.Produto;
-import com.tedros.fxapi.annotation.control.TCellFactory;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
-import com.tedros.fxapi.annotation.control.TShowField;
-import com.tedros.fxapi.annotation.control.TTableColumn;
-import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
-import com.tedros.fxapi.annotation.presenter.TBehavior;
-import com.tedros.fxapi.annotation.presenter.TDecorator;
-import com.tedros.fxapi.annotation.presenter.TDetailTableViewPresenter;
-import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
-import com.tedros.fxapi.presenter.entity.behavior.TDetailFieldBehavior;
-import com.tedros.fxapi.presenter.entity.decorator.TDetailFieldDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.beans.property.SimpleIntegerProperty;
@@ -31,9 +20,7 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Priority;
-import javafx.util.converter.IntegerStringConverter;
 
 /**
  * @author Davis Gordon
@@ -41,19 +28,6 @@ import javafx.util.converter.IntegerStringConverter;
  */
 @TFormReaderHtml
 @TForm(name = "Itens")
-@TDetailTableViewPresenter(
-		presenter=@TPresenter(behavior=@TBehavior(type=TDetailFieldBehavior.class),
-				decorator = @TDecorator(type=TDetailFieldDecorator.class, viewTitle="Itens")
-				),
-		tableView=@TTableView(editable=true, 
-			columns = { @TTableColumn(cellValue="produto", text = "Produto", prefWidth=50, resizable=true), 
-						@TTableColumn(cellValue="qtdMinima", text = "Qtd.Min", prefWidth=20, resizable=true),
-						@TTableColumn(cellValue="qtdInicial", text = "Qtd. Inicial", resizable=true), 
-						@TTableColumn(cellValue="qtdCalculado", text = "Qtd. Calculado", resizable=true), 
-						@TTableColumn(cellValue="qtdAjuste", text = "Ajuste", resizable=true,
-								cellFactory=@TCellFactory(parse = true, tableCell=TextFieldTableCell.class, stringConverter=IntegerStringConverter.class),
-								onEditCommit=EstoqueItemVlrAjusteEHBuilder.class), 
-						@TTableColumn(cellValue="vlrAjustado", text = "Total", resizable=true)}))
 public class EstoqueItemModelView extends TEntityModelView<EstoqueItem> {
 
 	private SimpleLongProperty id;
@@ -62,13 +36,11 @@ public class EstoqueItemModelView extends TEntityModelView<EstoqueItem> {
 	
 	@TReaderHtml
 	@TLabel(text="Produto")
-	@TShowField
 	private SimpleObjectProperty<Produto> produto;
 	
 	
 	@TReaderHtml
 	@TLabel(text="Qtd. Min")
-	@TShowField
 	@THBox(	pane=@TPane(children={"qtdMinima","qtdInicial","qtdCalculado", "qtdAjuste", "vlrAjustado"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="qtdMinima", priority=Priority.ALWAYS), 
 		   		@TPriority(field="qtdInicial", priority=Priority.ALWAYS), 
@@ -79,22 +51,18 @@ public class EstoqueItemModelView extends TEntityModelView<EstoqueItem> {
 	
 	@TReaderHtml
 	@TLabel(text="Qtd. Inicial")
-	@TShowField
 	private SimpleIntegerProperty qtdInicial;
 	
 	@TReaderHtml
 	@TLabel(text="Qtd. Calculado")
-	@TShowField
 	private SimpleIntegerProperty qtdCalculado;
 	
 	@TReaderHtml
 	@TLabel(text="Qtd. Ajuste")
-	@TNumberSpinnerField(maxValue = 1000000)
 	private SimpleIntegerProperty qtdAjuste;
 	
 	@TReaderHtml
 	@TLabel(text="Total")
-	@TShowField
 	private SimpleIntegerProperty vlrAjustado = new SimpleIntegerProperty();
 	
 	
@@ -120,10 +88,7 @@ public class EstoqueItemModelView extends TEntityModelView<EstoqueItem> {
 					produto.getValue().getNome());
 			displayText.setValue(str);
 		}
-		
-		
 		vlrAjustado.setValue(model.getVlrAjustado());
-		
 	}
 		
 	

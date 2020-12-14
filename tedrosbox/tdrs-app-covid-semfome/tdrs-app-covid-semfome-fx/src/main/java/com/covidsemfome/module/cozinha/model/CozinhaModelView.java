@@ -6,11 +6,14 @@ package com.covidsemfome.module.cozinha.model;
 import com.covidsemfome.model.Cozinha;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
+import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TMaskField;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
+import com.tedros.fxapi.annotation.effect.TDropShadow;
+import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
@@ -21,12 +24,20 @@ import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
+import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
+import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.annotation.text.TFont;
+import com.tedros.fxapi.annotation.text.TText;
+import com.tedros.fxapi.domain.THtmlConstant;
+import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
+import javafx.scene.text.TextAlignment;
 
 /**
  * @author Davis Gordon
@@ -44,6 +55,15 @@ public class CozinhaModelView extends TEntityModelView<Cozinha> {
 
 	private SimpleLongProperty id;
 
+	@TTextReaderHtml(text="Cozinha", 
+			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
+			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
+			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
+	@TText(text="Cozinha", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
+	node=@TNode(id="t-form-title-text", parse = true))
+	private SimpleStringProperty header;
+	
 	@TReaderHtml
 	@TLabel(text="#{label.name}")
 	@TTextField(maxLength=60, required = true, textInputControl=@TTextInputControl(promptText="#{label.name}", parse = true), 
@@ -125,6 +145,20 @@ public class CozinhaModelView extends TEntityModelView<Cozinha> {
 	 */
 	public void setTelefone(SimpleStringProperty telefone) {
 		this.telefone = telefone;
+	}
+
+	/**
+	 * @return the header
+	 */
+	public SimpleStringProperty getHeader() {
+		return header;
+	}
+
+	/**
+	 * @param header the header to set
+	 */
+	public void setHeader(SimpleStringProperty header) {
+		this.header = header;
 	}
 
 }

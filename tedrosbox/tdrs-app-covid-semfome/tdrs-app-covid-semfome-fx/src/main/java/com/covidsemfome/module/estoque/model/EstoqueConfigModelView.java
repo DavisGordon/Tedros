@@ -9,10 +9,13 @@ import com.covidsemfome.module.produto.model.ProdutoFindModelView;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
+import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
 import com.tedros.fxapi.annotation.control.TOneSelectionModal;
 import com.tedros.fxapi.annotation.control.TOptionsList;
+import com.tedros.fxapi.annotation.effect.TDropShadow;
+import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
@@ -26,7 +29,13 @@ import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
+import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
+import com.tedros.fxapi.annotation.scene.TNode;
+import com.tedros.fxapi.annotation.text.TFont;
+import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.annotation.view.TPaginator;
+import com.tedros.fxapi.domain.THtmlConstant;
+import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.domain.TZeroValidation;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
@@ -35,10 +44,12 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
+import javafx.scene.text.TextAlignment;
 
 @TFormReaderHtml
-@TForm(name = "Configurar estoque")
+@TForm(name = "Estoque inicial")
 @TEjbService(serviceName = "IEstoqueConfigControllerRemote", model=EstoqueConfig.class)
 @TListViewPresenter(
 	paginator=@TPaginator(entityClass = EstoqueConfig.class, serviceName = "IEstoqueConfigControllerRemote",
@@ -54,6 +65,15 @@ public class EstoqueConfigModelView extends TEntityModelView<EstoqueConfig> {
 	private SimpleLongProperty id;
 	
 	private SimpleStringProperty displayText;
+	
+	@TTextReaderHtml(text="Configuração de Estoque", 
+			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
+			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
+			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
+	@TText(text="Definir produto em Estoque", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
+	node=@TNode(id="t-form-title-text", parse = true))
+	private SimpleStringProperty header;
 	
 	@TReaderHtml
 	@TLabel(text="Produto")
@@ -234,6 +254,20 @@ public class EstoqueConfigModelView extends TEntityModelView<EstoqueConfig> {
 	@Override
 	public SimpleStringProperty getDisplayProperty() {
 		return displayText;
+	}
+
+	/**
+	 * @return the header
+	 */
+	public SimpleStringProperty getHeader() {
+		return header;
+	}
+
+	/**
+	 * @param header the header to set
+	 */
+	public void setHeader(SimpleStringProperty header) {
+		this.header = header;
 	}
 
 }

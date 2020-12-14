@@ -12,10 +12,10 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
 import com.covidsemfome.ejb.service.EntradaService;
-import com.covidsemfome.ejb.service.EstoqueService;
 import com.covidsemfome.model.Entrada;
 import com.tedros.ejb.base.controller.TEjbController;
 import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.ejb.base.service.ITEjbService;
 
 /**
@@ -31,24 +31,24 @@ public class EntradaController extends TEjbController<Entrada> implements IEntra
 	@EJB
 	private EntradaService serv;
 	
-	@EJB
-	private EstoqueService estServ;
-	
 	@Override
 	public ITEjbService<Entrada> getService() {
 		return serv;
 	}
 	
 	@Override
-	public TResult<Entrada> save(Entrada entidade) {
+	public TResult<Entrada> save(Entrada entrada) {
 		
 		try{
-			estServ.gerarEstoque(entidade);
-			TResult<Entrada> res = super.save(entidade);
-			return res;
+			Entrada entSaved = null;
+			if(!entrada.isNew()) 
+				entSaved = serv.findById(entrada);
+					
+			Entrada res = serv.save(entrada, entSaved);
+			
+			return new TResult<>(EnumResult.SUCESS, res);
 		}catch(Exception e) {
-			return processException(entidade, e);
+			return processException(entrada, e);
 		}
 	}
-
 }
