@@ -24,8 +24,8 @@
 		<class>com.covidsemfome.model.Estoque</class>
 		<class>com.covidsemfome.model.EstoqueConfig</class>
 		<class>com.covidsemfome.model.EstoqueItem</class>
-		<class>com.covidsemfome.model.Producao</class>
-		<class>com.covidsemfome.model.ProducaoInsumo</class>
+		<class>com.covidsemfome.model.Saida</class>
+		<class>com.covidsemfome.model.SaidaItem</class>
 		<class>com.covidsemfome.model.Produto</class>
 		<class>com.tedros.common.model.TFileEntity</class>
 		<class>com.tedros.common.model.TByteEntity</class>

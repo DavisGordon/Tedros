@@ -35,20 +35,20 @@ public class Estoque extends TEntity {
 
 	private static final long serialVersionUID = -457987996337666023L;
 	
-	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="entrada_id", nullable=true)
 	private Entrada entradaRef;
 	
-	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
-	@JoinColumn(name="producao_id", nullable=true)
-	private Producao producaoRef;;
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="saida_id", nullable=true)
+	private Saida saidaRef;;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="coz_id", nullable=false)
 	private Cozinha cozinha;
 	
 	@Column(nullable = false)
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date data;
 	
 	@Column(length=1000, nullable = true)
@@ -138,25 +138,27 @@ public class Estoque extends TEntity {
 		this.entradaRef = entradaRef;
 	}
 
-	/**
-	 * @return the producaoRef
-	 */
-	public Producao getProducaoRef() {
-		return producaoRef;
-	}
-
-	/**
-	 * @param producaoRef the producaoRef to set
-	 */
-	public void setProducaoRef(Producao producaoRef) {
-		this.producaoRef = producaoRef;
-	}
+	
 
 	public void addItem(EstoqueItem item) {
 		if(itens==null)
 			itens = new ArrayList<>();
 		item.setEstoque(this);
 		itens.add(item);
+	}
+
+	/**
+	 * @return the saidaRef
+	 */
+	public Saida getSaidaRef() {
+		return saidaRef;
+	}
+
+	/**
+	 * @param saidaRef the saidaRef to set
+	 */
+	public void setSaidaRef(Saida saidaRef) {
+		this.saidaRef = saidaRef;
 	}
 
 	

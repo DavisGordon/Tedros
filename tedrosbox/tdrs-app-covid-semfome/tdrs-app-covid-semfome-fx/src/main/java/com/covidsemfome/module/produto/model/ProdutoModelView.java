@@ -7,10 +7,13 @@ import com.covidsemfome.model.Produto;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
+import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
+import com.tedros.fxapi.annotation.effect.TDropShadow;
+import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
@@ -23,15 +26,23 @@ import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
+import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
+import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.annotation.text.TFont;
+import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.annotation.view.TOption;
 import com.tedros.fxapi.annotation.view.TPaginator;
+import com.tedros.fxapi.domain.THtmlConstant;
+import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
+import javafx.scene.text.TextAlignment;
 
 /**
  * @author Davis Gordon
@@ -58,6 +69,15 @@ public class ProdutoModelView extends TEntityModelView<Produto> {
 	
 	private SimpleStringProperty displayText = new SimpleStringProperty();
 
+	@TTextReaderHtml(text="Produto", 
+			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
+			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
+			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
+	@TText(text="Produto", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
+	node=@TNode(id="t-form-title-text", parse = true))
+	private SimpleStringProperty header;
+	
 	@TReaderHtml
 	@TLabel(text="Codigo")
 	@TTextField(maxLength=20, required = true, 
@@ -264,6 +284,20 @@ public class ProdutoModelView extends TEntityModelView<Produto> {
 	 */
 	public void setDisplayText(SimpleStringProperty displayText) {
 		this.displayText = displayText;
+	}
+
+	/**
+	 * @return the header
+	 */
+	public SimpleStringProperty getHeader() {
+		return header;
+	}
+
+	/**
+	 * @param header the header to set
+	 */
+	public void setHeader(SimpleStringProperty header) {
+		this.header = header;
 	}
 
 }

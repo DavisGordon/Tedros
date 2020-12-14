@@ -46,7 +46,8 @@ implements ITLayoutBuilder<HBox> {
 	public HBox build(Annotation tAnnotation, TFieldBox fieldBox) throws Exception {
 		THBox thBox = (THBox) tAnnotation;
 		HBox node = new HBox();
-		node.getChildren().add(fieldBox);
+		node.setUserData(fieldBox);
+		//node.getChildren().add(fieldBox);
 		callParser(thBox, node);
 		return node;
 	}

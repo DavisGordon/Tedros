@@ -57,7 +57,7 @@ import javafx.scene.text.TextAlignment;
 			decorator = @TDecorator(type = TDataSetReportDecorator.class, 
 									viewTitle="Relatório de Voluntários"))
 @TSecurity(	id="COVSEMFOME_VOLUNREP_FORM", 
-			appName = "#{app.name}", moduleName = "Relatórios", viewName = "Relatório de Voluntários",
+			appName = "#{app.name}", moduleName = "Administrativo", viewName = "Relatório de Voluntários",
 			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EXPORT, TAuthorizationType.SEARCH})
 public class VoluntariosReportModelView extends TModelView<VoluntarioReportModel>{
 	
@@ -93,7 +93,7 @@ public class VoluntariosReportModelView extends TModelView<VoluntarioReportModel
 	private SimpleStringProperty status;
 			
 	
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
+	//@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
 	@TText(text="Data ou Periodo da ação:", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 	node=@TNode(id="t-form-title-text", parse = true))
 	@THBox(	pane=@TPane(children={"texto2","dataInicio","dataFim"}), spacing=10, fillHeight=true,
@@ -114,7 +114,7 @@ public class VoluntariosReportModelView extends TModelView<VoluntarioReportModel
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
 	@TText(text="Resultado", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 			node=@TNode(id="t-form-title-text", parse = true))
-			private SimpleStringProperty texto3;
+	private SimpleStringProperty texto3;
 	
 	@TTableView(editable=true, 
 			columns = { @TTableColumn(cellValue="id", text = "Codigo", prefWidth=20, resizable=true), 

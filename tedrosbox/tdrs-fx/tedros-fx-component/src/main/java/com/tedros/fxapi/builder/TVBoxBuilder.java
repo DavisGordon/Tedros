@@ -46,7 +46,8 @@ implements ITLayoutBuilder<VBox> {
 	public VBox build(Annotation tAnnotation, TFieldBox fieldBox) throws Exception {
 		TVBox tvBox = (TVBox) tAnnotation;
 		VBox node = new VBox();
-		node.getChildren().add(fieldBox);
+		node.setUserData(fieldBox);
+		//node.getChildren().add(fieldBox);
 		callParser(tvBox, node);
 		return node;
 	}

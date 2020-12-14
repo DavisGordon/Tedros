@@ -4,7 +4,6 @@
 package com.covidsemfome.model;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,8 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -30,7 +27,7 @@ import com.tedros.ejb.base.entity.TEntity;
 @Entity
 @Table(name = DomainTables.entrada_item, schema = DomainSchema.riosemfome, 
 uniqueConstraints= {@UniqueConstraint(name="entradaProdUnIdx",columnNames = { "prod_id", "ent_id" })})
-public class EntradaItem extends TEntity {
+public class EntradaItem extends TEntity implements EstocavelItem {
 
 	private static final long serialVersionUID = -3216481324029671441L;
 
@@ -44,10 +41,6 @@ public class EntradaItem extends TEntity {
 	@Column(nullable = true)
 	private BigDecimal valorUnitario;
 
-	@Column(nullable = true)
-	@Temporal(TemporalType.DATE)
-	private Date data;
-	
 	@Column(length=15, nullable = true)
 	private String unidadeMedida;
 	
@@ -88,30 +81,34 @@ public class EntradaItem extends TEntity {
 		return true;
 	}
 
-	/**
-	 * @return the produto
+	/* (non-Javadoc)
+	 * @see com.covidsemfome.model.EstocavelItem#getProduto()
 	 */
+	@Override
 	public Produto getProduto() {
 		return produto;
 	}
 
-	/**
-	 * @param produto the produto to set
+	/* (non-Javadoc)
+	 * @see com.covidsemfome.model.EstocavelItem#setProduto(com.covidsemfome.model.Produto)
 	 */
+	@Override
 	public void setProduto(Produto produto) {
 		this.produto = produto;
 	}
 
-	/**
-	 * @return the quantidade
+	/* (non-Javadoc)
+	 * @see com.covidsemfome.model.EstocavelItem#getQuantidade()
 	 */
+	@Override
 	public Integer getQuantidade() {
 		return quantidade;
 	}
 
-	/**
-	 * @param quantidade the quantidade to set
+	/* (non-Javadoc)
+	 * @see com.covidsemfome.model.EstocavelItem#setQuantidade(java.lang.Integer)
 	 */
+	@Override
 	public void setQuantidade(Integer quantidade) {
 		this.quantidade = quantidade;
 	}
@@ -130,20 +127,7 @@ public class EntradaItem extends TEntity {
 		this.valorUnitario = valorUnitario;
 	}
 
-	/**
-	 * @return the data
-	 */
-	public Date getData() {
-		return data;
-	}
-
-	/**
-	 * @param data the data to set
-	 */
-	public void setData(Date data) {
-		this.data = data;
-	}
-
+	
 	/**
 	 * @return the unidadeMedida
 	 */
@@ -170,8 +154,6 @@ public class EntradaItem extends TEntity {
 	 */
 	public void setEntrada(Entrada entrada) {
 		this.entrada = entrada;
-		if(entrada!=null)
-			this.data = entrada.getData();
 	}
 
 	/* (non-Javadoc)

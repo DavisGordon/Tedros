@@ -14,7 +14,7 @@ import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 
 
 /**
- * The voluntario crud module
+ * Tipos de Ajuda module
  *
  * @author Davis Gordon
  *

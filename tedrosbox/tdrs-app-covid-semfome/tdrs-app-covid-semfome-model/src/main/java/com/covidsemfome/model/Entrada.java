@@ -31,7 +31,7 @@ import com.tedros.util.TDateUtil;
  */
 @Entity
 @Table(name = DomainTables.entrada, schema = DomainSchema.riosemfome)
-public class Entrada extends TEntity {
+public class Entrada extends TEntity implements Estocavel{
 
 	private static final long serialVersionUID = -7490687024751537584L;
 
@@ -40,7 +40,7 @@ public class Entrada extends TEntity {
 	private Cozinha cozinha;
 	
 	@Column(nullable = false)
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date data;
 	
 	@Column(nullable = false)

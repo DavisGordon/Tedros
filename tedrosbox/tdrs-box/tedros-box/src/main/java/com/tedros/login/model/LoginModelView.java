@@ -1,11 +1,5 @@
 package com.tedros.login.model;
 
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.geometry.Pos;
-import javafx.scene.text.TextAlignment;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -31,6 +25,12 @@ import com.tedros.login.behavior.LoginBehavior;
 import com.tedros.login.decorator.LoginDecorator;
 import com.tedros.settings.security.model.TProfileModelView;
 import com.tedros.settings.security.process.TUserProcess;
+
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.geometry.Pos;
+import javafx.scene.text.TextAlignment;
 
 
 @TPresenter(modelClass=Login.class, behavior=@TBehavior(type=LoginBehavior.class), 

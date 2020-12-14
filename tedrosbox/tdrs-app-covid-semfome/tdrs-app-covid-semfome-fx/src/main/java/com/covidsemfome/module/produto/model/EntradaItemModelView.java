@@ -3,13 +3,10 @@
  */
 package com.covidsemfome.module.produto.model;
 
-import java.util.Date;
-
 import com.covidsemfome.model.EntradaItem;
 import com.covidsemfome.model.Produto;
 import com.tedros.fxapi.annotation.control.TBigDecimalField;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
-import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
 import com.tedros.fxapi.annotation.control.TOneSelectionModal;
@@ -27,7 +24,6 @@ import com.tedros.fxapi.annotation.presenter.TDetailTableViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
-import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.domain.TZeroValidation;
 import com.tedros.fxapi.presenter.entity.behavior.TDetailFieldBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TDetailFieldDecorator;
@@ -72,11 +68,10 @@ public class EntradaItemModelView extends TEntityModelView<EntradaItem> {
 	@TReaderHtml
 	@TLabel(text="Quantidade")
 	@TNumberSpinnerField(maxValue = 1000000, minValue=0, zeroValidation=TZeroValidation.GREATHER_THAN_ZERO)
-	@THBox(	pane=@TPane(children={"quantidade","unidadeMedida","valorUnitario", "data"}), spacing=10, fillHeight=true,
+	@THBox(	pane=@TPane(children={"quantidade","unidadeMedida","valorUnitario"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="quantidade", priority=Priority.ALWAYS), 
 		   		@TPriority(field="unidadeMedida", priority=Priority.ALWAYS), 
-		   		@TPriority(field="valorUnitario", priority=Priority.ALWAYS), 
-		   		@TPriority(field="data", priority=Priority.ALWAYS)}))
+		   		@TPriority(field="valorUnitario", priority=Priority.ALWAYS)}))
 	private SimpleIntegerProperty quantidade;
 	
 	@TReaderHtml
@@ -88,12 +83,6 @@ public class EntradaItemModelView extends TEntityModelView<EntradaItem> {
 	@TLabel(text = "Valor")
 	@TBigDecimalField(textInputControl=@TTextInputControl(promptText="Valor", parse = true))
 	private SimpleDoubleProperty valorUnitario;
-	
-	@TReaderHtml
-	@TLabel(text="Data")
-	@TDatePickerField(node=@TNode(parse = true, disable=true))
-	private SimpleObjectProperty<Date> data;
-	
 	
 	public EntradaItemModelView(EntradaItem entity) {
 		super(entity);
@@ -221,22 +210,6 @@ public class EntradaItemModelView extends TEntityModelView<EntradaItem> {
 	 */
 	public void setValorUnitario(SimpleDoubleProperty valorUnitario) {
 		this.valorUnitario = valorUnitario;
-	}
-
-
-	/**
-	 * @return the data
-	 */
-	public SimpleObjectProperty<Date> getData() {
-		return data;
-	}
-
-
-	/**
-	 * @param data the data to set
-	 */
-	public void setData(SimpleObjectProperty<Date> data) {
-		this.data = data;
 	}
 
 

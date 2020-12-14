@@ -34,6 +34,8 @@ import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
+import com.tedros.fxapi.annotation.layout.TVBox;
+import com.tedros.fxapi.annotation.layout.TVGrow;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
@@ -47,6 +49,7 @@ import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.annotation.view.TOption;
 import com.tedros.fxapi.annotation.view.TPaginator;
+import com.tedros.fxapi.builder.DateTimeFormatBuilder;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TStyleParameter;
@@ -94,12 +97,21 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 	private SimpleStringProperty textoCadastro;
 	
 	@TReaderHtml
-	@TLabel(text="Data")
-	@TDatePickerField(required = true)
-	@TTrigger(triggerClass = EntradaDataTrigger.class, targetFieldName = "itens")
-	@THBox(	pane=@TPane(children={"data","tipo", "cozinha"}), spacing=10, fillHeight=false,
+	@TLabel(text="Doador")
+	@TOneSelectionModal(modelClass = Pessoa.class, modelViewClass = PessoaFindModelView.class,
+	width=300, height=50)
+	@TValidator(validatorClass = EntradaDoadorValidator.class, associatedFieldsName="tipo")
+	@THBox(	pane=@TPane(children={"data","tipo", "doador"}), spacing=10, fillHeight=false,
 	hgrow=@THGrow(priority={@TPriority(field="data", priority=Priority.NEVER), 
-   				   		@TPriority(field="tipo", priority=Priority.ALWAYS), 
+		   		@TPriority(field="tipo", priority=Priority.NEVER), 
+   				   		@TPriority(field="doador", priority=Priority.ALWAYS) }))
+	private SimpleObjectProperty<Pessoa> doador;
+	
+	@TReaderHtml
+	@TLabel(text="Data e Hora")
+	@TDatePickerField(required = true, dateFormat=DateTimeFormatBuilder.class)
+	@TVBox(	pane=@TPane(children={"data", "cozinha"}), spacing=10, fillWidth=false,
+	vgrow=@TVGrow(priority={@TPriority(field="data", priority=Priority.NEVER), 
    				   		@TPriority(field="cozinha", priority=Priority.ALWAYS) }))
 	private SimpleObjectProperty<Date> data;
 	
@@ -120,12 +132,7 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 	optionModelViewClass=CozinhaModelView.class, optionsProcessClass=CozinhaOptionProcess.class))
 	private SimpleObjectProperty<Cozinha> cozinha;
 	
-	@TReaderHtml
-	@TLabel(text="Doador")
-	@TOneSelectionModal(modelClass = Pessoa.class, modelViewClass = PessoaFindModelView.class,
-	width=300, height=50)
-	@TValidator(validatorClass = EntradaDoadorValidator.class, associatedFieldsName="tipo")
-	private SimpleObjectProperty<Pessoa> doador;
+	
 	
 	
 	@TDetailReaderHtml(	label=@TLabel(text="Produtos"), 
@@ -210,7 +217,7 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 	}
 	
 	private String formataDataHora(Date data){
-		return TDateUtil.getFormatedDate(data, TDateUtil.DDMMYYYY);
+		return TDateUtil.getFormatedDate(data, TDateUtil.DDMMYYYY_HHMM);
 	}
 	
 	

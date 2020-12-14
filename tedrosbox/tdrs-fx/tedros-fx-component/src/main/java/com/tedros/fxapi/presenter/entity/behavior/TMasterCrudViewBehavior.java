@@ -393,7 +393,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	
 	@Override
 	public boolean invalidate() {
-		if(this.decorator.gettPaginator()!=null)
+		if(this.decorator!=null && this.decorator.gettPaginator()!=null)
 			this.decorator.gettPaginator().invalidate();
 		return super.invalidate();
 	}

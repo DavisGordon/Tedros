@@ -26,22 +26,25 @@ public class TPaneParser extends TAnnotationParser<TPane, Pane> {
 
 	@Override
 	public void parse(TPane annotation, final Pane object, String... byPass) throws Exception {
+		
+		TFieldBox fb = (TFieldBox) object.getUserData();
 		for(String field : annotation.children()){
 			if(StringUtils.isBlank(field))
 				continue;
 			
 			Node node = null;
 			
-			if( ((TFieldBox) object.getChildren().get(0)).gettControlFieldName().equals(field) )
-				continue;
+			if( fb.gettControlFieldName().equals(field) ) {
+				node = fb;
+			}else {
 			
-			if(getComponentDescriptor().getFieldBoxMap().containsKey(field)){
-				node = getComponentDescriptor().getFieldBoxMap().get(field);
-			}else{
-				final TComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), field);
-				node = TComponentBuilder.getField(descriptor);
+				if(getComponentDescriptor().getFieldBoxMap().containsKey(field)){
+					node = getComponentDescriptor().getFieldBoxMap().get(field);
+				}else{
+					final TComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), field);
+					node = TComponentBuilder.getField(descriptor);
+				}
 			}
-			
 			if(node!=null)
 				object.getChildren().add(node);
 		}

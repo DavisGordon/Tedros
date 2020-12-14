@@ -16,8 +16,8 @@ public interface DomainTables {
 	final static String estoque_item = "estoque_item";
 	final static String estoque_config = "estoque_config";
 	final static String entrada_item = "entrada_item";
-	final static String producao_insumo = "producao_insumo";
-	final static String producao = "producao";
+	final static String saida_item = "saida_item";
+	final static String saida = "saida";
 	final static String entrada = "entrada";
 	final static String user = "user";
 	final static String uf = "uf";

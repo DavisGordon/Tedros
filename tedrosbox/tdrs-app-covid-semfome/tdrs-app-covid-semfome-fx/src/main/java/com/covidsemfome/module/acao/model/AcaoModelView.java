@@ -15,9 +15,9 @@ import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TLongField;
 import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
+import com.tedros.fxapi.annotation.control.TShowField;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
@@ -80,7 +80,7 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	
 	@TReaderHtml
 	@TLabel(text="Codigo:", position=TLabelPosition.LEFT)
-	@TLongField(maxLength=6,node=@TNode(parse = true, disable=true) )
+	@TShowField()
 	private SimpleLongProperty id;
 	
 	private SimpleStringProperty displayText = new SimpleStringProperty();

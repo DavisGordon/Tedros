@@ -6,11 +6,12 @@ import com.covidsemfome.model.Cozinha;
 import com.covidsemfome.model.Entrada;
 import com.covidsemfome.model.Estoque;
 import com.covidsemfome.model.EstoqueItem;
-import com.covidsemfome.model.Producao;
+import com.covidsemfome.model.Saida;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.control.TCallbackFactory;
 import com.tedros.fxapi.annotation.control.TCellFactory;
+import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
 import com.tedros.fxapi.annotation.control.TShowField;
@@ -18,7 +19,10 @@ import com.tedros.fxapi.annotation.control.TShowField.TField;
 import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
+import com.tedros.fxapi.annotation.effect.TDropShadow;
+import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TForm;
+import com.tedros.fxapi.annotation.layout.TFieldSet;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
@@ -30,22 +34,30 @@ import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.reader.TDetailReaderHtml;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
+import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
+import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.annotation.scene.layout.TRegion;
+import com.tedros.fxapi.annotation.text.TFont;
+import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.collections.ITObservableList;
+import com.tedros.fxapi.domain.THtmlConstant;
+import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.util.TDateUtil;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
+import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
+import javafx.scene.text.TextAlignment;
 
 @TFormReaderHtml
 @TForm(name = "Estoque")
 @TEjbService(serviceName = "IEstoqueControllerRemote", model=Estoque.class)
-@TListViewPresenter(
+@TListViewPresenter(listViewMinWidth=400,
 	paginator=@TPaginator(entityClass = Estoque.class, serviceName = "IEstoqueControllerRemote",
 		show=true),
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Estoque", 
@@ -53,8 +65,8 @@ import javafx.scene.layout.Priority;
 	)))
 @TSecurity(	id="COVSEMFOME_ESTOQUE_FORM", 
 	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Estoque",
-	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
-					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
+	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, 
+			TAuthorizationType.READ, TAuthorizationType.SAVE})
 public class EstoqueModelView extends TEntityModelView<Estoque> {
 
 	
@@ -62,24 +74,36 @@ public class EstoqueModelView extends TEntityModelView<Estoque> {
 	
 	private SimpleStringProperty displayText;
 	
+	@TTextReaderHtml(text="Estoque", 
+			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
+			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
+			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-pane", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
+	@TText(text="Estoque", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
+	node=@TNode(id="t-form-title-text", parse = true))
+	private SimpleStringProperty header;
+	
 	@TReaderHtml
-	@TLabel(text="Entrada")
-	@TShowField(fields= {@TField(name = "data", label="Data"), @TField(name = "tipo", label="Tipo")})
-	@THBox(	pane=@TPane(children={"entradaRef","producaoRef","data","cozinha"}), spacing=10, fillHeight=true,
+	@TLabel(text="Local de produção:")
+	@THBox(	pane=@TPane(children={"entradaRef","saidaRef","data","cozinha"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="entradaRef", priority=Priority.NEVER), 
-		   		@TPriority(field="producaoRef", priority=Priority.NEVER),
-		   		@TPriority(field="data", priority=Priority.NEVER), 
-			   		@TPriority(field="cozinha", priority=Priority.NEVER)}))
+		   		@TPriority(field="saidaRef", priority=Priority.NEVER),
+		   		@TPriority(field="data", priority=Priority.ALWAYS), 
+			   		@TPriority(field="cozinha", priority=Priority.ALWAYS)}))
+	@TShowField(fields= {@TField(name = "nome", label="Cozinha da"), @TField(name = "telefone", label="Tel:", pattern="(99) #9999-9999")})
+	private SimpleObjectProperty<Cozinha> cozinha;
+	
+	@TReaderHtml
+	@TShowField(fields= {@TField(name = "data", label="Data"), @TField(name = "tipo", label="Tipo")})
+	@TFieldSet(fields = { "entradaRef" }, legend = "Entrada", region=@TRegion(maxWidth=200, parse = true))
 	private SimpleObjectProperty<Entrada> entradaRef;
 	
-	@TLabel(text="Producao")
-	@TShowField(fields= {@TField(name = "data", label="Data"), @TField(name = "acao", label="Acao")})
-	private SimpleObjectProperty<Producao> producaoRef;
-	
 	@TReaderHtml
-	@TLabel(text="Cozinha:")
-	@TShowField(fields= {@TField(name = "nome"), @TField(name = "telefone", label="Tel:", pattern="(99) #9999-9999")})
-	private SimpleObjectProperty<Cozinha> cozinha;
+	@TFieldSet(fields = { "saidaRef" }, legend = "Saida", region=@TRegion(maxWidth=300, parse = true))
+	@TShowField(fields= {@TField(name = "data", label="Data"), @TField(name = "acao", label="Ação")})
+	private SimpleObjectProperty<Saida> saidaRef;
+	
+	
 	
 	@TReaderHtml
 	@TLabel(text="Data e Hora")
@@ -88,7 +112,7 @@ public class EstoqueModelView extends TEntityModelView<Estoque> {
 	
 	@TReaderHtml
 	@TLabel(text="Observação")
-	@TTextAreaField(maxLength=600, control=@TControl(prefWidth=250, prefHeight=100, parse = true))
+	@TTextAreaField(maxLength=600, wrapText=true, control=@TControl(prefWidth=250, prefHeight=100, parse = true))
 	private SimpleStringProperty observacao;
 	
 	@TDetailReaderHtml(	label=@TLabel(text="Produtos"), 
@@ -108,15 +132,12 @@ public class EstoqueModelView extends TEntityModelView<Estoque> {
 	
 	public EstoqueModelView(Estoque entity) {
 		super(entity);
-		buildListener();
 		loadDisplayText(entity);
 	}
 	
 	@Override
 	public void reload(Estoque model) {
 		super.reload(model);
-		buildListener();
-		loadDisplayText(model);
 	}
 
 	/**
@@ -125,47 +146,11 @@ public class EstoqueModelView extends TEntityModelView<Estoque> {
 	private void loadDisplayText(Estoque model) {
 		if(!model.isNew()){
 			String str = (id.getValue()==null ? "" : "(ID: "+id.getValue().toString()+") " )
-					+ (cozinha.getValue()!=null ? " ("+cozinha.getValue()+")" : "") 
-					+ (data.getValue()!=null ? " em "+formataDataHora(data.getValue()) : "");
+					+ (entradaRef.getValue()!=null ? entradaRef.getValue() : "")
+					+ (saidaRef.getValue()!=null ? saidaRef.getValue() : "");
 			displayText.setValue(str);
 		}
 	}
-	
-	private String formataDataHora(Date data){
-		return TDateUtil.getFormatedDate(data, TDateUtil.DDMMYYYY);
-	}
-	
-	private void buildListener() {
-		
-		/*ChangeListener<Produto> idListener = super.getListenerRepository().getListener("displayText");
-		if(idListener==null){
-			idListener = (arg0, arg1, arg2) -> {
-					String str = (arg2==null ? "" : arg2.toString() ) 
-							+ (cozinha.getValue()!=null ? " ("+cozinha.getValue()+")" : "") ;
-					displayText.setValue(str);
-				};
-			
-			super.addListener("displayText", idListener);
-		}else
-			produto.removeListener(idListener);
-		
-		produto.addListener(idListener);*/
-		
-		ChangeListener<Cozinha> tituloListener = super.getListenerRepository().getListener("displayText1");
-		if(tituloListener==null){
-			tituloListener = (arg0, arg1, arg2) -> {
-					String str = /*(produto.getValue()==null ? "" : produto.getValue().toString() )  
-							+*/ (arg2!=null ? " ("+arg2+")" : "") ;
-					displayText.setValue(str);
-				};
-			super.addListener("displayText1", tituloListener);
-		}else
-			cozinha.removeListener(tituloListener);
-		
-		cozinha.addListener(tituloListener);
-		
-	}
-	
 	
 	/**
 	 * @return the id
@@ -230,20 +215,6 @@ public class EstoqueModelView extends TEntityModelView<Estoque> {
 	}
 
 	/**
-	 * @return the producaoRef
-	 */
-	public SimpleObjectProperty<Producao> getProducaoRef() {
-		return producaoRef;
-	}
-
-	/**
-	 * @param producaoRef the producaoRef to set
-	 */
-	public void setProducaoRef(SimpleObjectProperty<Producao> producaoRef) {
-		this.producaoRef = producaoRef;
-	}
-
-	/**
 	 * @return the data
 	 */
 	public SimpleObjectProperty<Date> getData() {
@@ -283,6 +254,34 @@ public class EstoqueModelView extends TEntityModelView<Estoque> {
 	 */
 	public void setItens(ITObservableList<EstoqueItemModelView> itens) {
 		this.itens = itens;
+	}
+
+	/**
+	 * @return the header
+	 */
+	public SimpleStringProperty getHeader() {
+		return header;
+	}
+
+	/**
+	 * @param header the header to set
+	 */
+	public void setHeader(SimpleStringProperty header) {
+		this.header = header;
+	}
+
+	/**
+	 * @return the saidaRef
+	 */
+	public SimpleObjectProperty<Saida> getSaidaRef() {
+		return saidaRef;
+	}
+
+	/**
+	 * @param saidaRef the saidaRef to set
+	 */
+	public void setSaidaRef(SimpleObjectProperty<Saida> saidaRef) {
+		this.saidaRef = saidaRef;
 	}
 
 }

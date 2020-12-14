@@ -9,8 +9,8 @@ package com.covidsemfome.ejb.bo;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import com.covidsemfome.ejb.eao.ProducaoEAO;
-import com.covidsemfome.model.Producao;
+import com.covidsemfome.ejb.eao.SaidaEAO;
+import com.covidsemfome.model.Saida;
 import com.tedros.ejb.base.bo.TGenericBO;
 
 /**
@@ -20,13 +20,13 @@ import com.tedros.ejb.base.bo.TGenericBO;
  *
  */
 @RequestScoped
-public class ProducaoBO extends TGenericBO<Producao> {
+public class SaidaBO extends TGenericBO<Saida> {
 
 	@Inject
-	private ProducaoEAO eao;
+	private SaidaEAO eao;
 	
 	@Override
-	public ProducaoEAO getEao() {
+	public SaidaEAO getEao() {
 		return eao;
 	}
 	
