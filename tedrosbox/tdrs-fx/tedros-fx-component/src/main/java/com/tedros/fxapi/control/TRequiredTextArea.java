@@ -6,6 +6,7 @@
  */
 package com.tedros.fxapi.control;
 
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -30,6 +31,11 @@ public abstract class TRequiredTextArea extends TextArea implements ITField, ITC
     private ChangeListener<String> requiredListener;
     private SimpleBooleanProperty requiredProperty;
 	private String t_componentId; 
+	
+	@Override
+	public Observable tValueProperty() {
+		return textProperty();
+	}
     
 	public void setRequired(boolean required){
     	

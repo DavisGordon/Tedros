@@ -58,6 +58,17 @@ public class Estoque extends TEntity {
 			orphanRemoval=true, cascade={CascadeType.ALL})
 	private List<EstoqueItem> itens;
 
+	public Estoque() {
+		
+	}
+	
+	public Estoque(Estocavel estocavel) {
+		if(estocavel instanceof Entrada)
+			setEntradaRef((Entrada) estocavel);
+		else
+			setSaidaRef((Saida) estocavel);
+	}
+	
 	@Override
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this, false);

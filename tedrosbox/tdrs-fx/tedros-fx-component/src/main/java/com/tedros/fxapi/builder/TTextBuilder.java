@@ -26,18 +26,6 @@ public class TTextBuilder
 extends TBuilder 
 implements ITControlBuilder<Text, SimpleStringProperty>, ITReaderBuilder<Text, SimpleStringProperty> {
 	
-	private static TTextBuilder instance;
-	
-	private TTextBuilder(){
-		
-	}
-	
-	public static TTextBuilder getInstance(){
-		if(instance==null)
-			instance = new TTextBuilder();
-		return instance;
-	}
-
 	@Override
 	public Text build(Annotation annotation, final SimpleStringProperty property) throws Exception {
 		TText tAnnotation = (TText) annotation;

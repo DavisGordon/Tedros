@@ -71,7 +71,7 @@ public class DoacaoReportModelView extends TModelView<DoacaoReportModel>{
 	@TAccordion(expandedPane="filtro", node=@TNode(id="repdoaacc",parse = true),
 			panes={
 					@TTitledPane(text="Filtros", node=@TNode(id="filtro",parse = true), expanded=true,
-							fields={"texto1","nome","acaoId","texto2","dataInicio","dataFim","tiposAjuda"}),
+							fields={"texto1","nome","texto2","tiposAjuda"}),
 					@TTitledPane(text="Resultado", node=@TNode(id="resultado",parse = true),
 						fields={"texto3","result"})})
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))

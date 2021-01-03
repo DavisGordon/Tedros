@@ -3,6 +3,9 @@ package com.tedros.fxapi.control;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -12,11 +15,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.ColorAdjustBuilder;
 import javafx.util.Duration;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 
 public abstract class TNumberField<N extends Number> extends TRequiredNumberField {
 	
@@ -50,7 +49,7 @@ public abstract class TNumberField<N extends Number> extends TRequiredNumberFiel
 				
 				final Class<?> clazz = getNumberClassType();
 				
-				if(StringUtils.isNotBlank(new_value) && NumberUtils.isNumber(new_value)){
+				if(StringUtils.isNotBlank(new_value) && NumberUtils.isCreatable(new_value)){
 					
 					try{
 						parseNumber(new_value, clazz);
@@ -149,7 +148,7 @@ public abstract class TNumberField<N extends Number> extends TRequiredNumberFiel
 		if(text.equals(""))
 			super.replaceSelection(text);
     	
-    	if(!NumberUtils.isNumber(text))
+    	if(!NumberUtils.isCreatable(text))
     		return;
     	
     	if(!isNumberWithDecimal())
@@ -203,11 +202,12 @@ public abstract class TNumberField<N extends Number> extends TRequiredNumberFiel
 	}
 	
 	private ColorAdjust buildNumberParseExceptionEffect() {
-		return ColorAdjustBuilder.create()
-				 .hue(0.33587786259541996)
-				 .saturation(0.6870229007633586)
-				 .brightness(0.03053435114503822)
-				 .contrast(-0.030534351145038108).build();
+		ColorAdjust ca = new ColorAdjust();
+		ca.setHue(0.33587786259541996);
+		ca.setSaturation(0.6870229007633586);
+		ca.setBrightness(0.03053435114503822);
+		ca.setContrast(-0.030534351145038108);
+		return ca;
 	}
 	
 	/**

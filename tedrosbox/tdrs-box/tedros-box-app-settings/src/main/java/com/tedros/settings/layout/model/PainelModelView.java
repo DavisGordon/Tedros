@@ -51,7 +51,7 @@ public class PainelModelView extends TModelView<PainelModel> {
 					@TTitledPane(text="#{settings.layout.fieldtitle}", fields={"campoCorTitulo", "campoTamTitulo"}),
 					@TTitledPane(text="#{settings.layout.field}", fields={"campoCorTexto", "campoCorFundo", "campoCorBorda", "campoTamTexto", "campoTextoNegrito"}),
 					@TTitledPane(text="#{settings.layout.form}", fields={"formCorFundo", "formOpacidade"}),
-					@TTitledPane(text="#{settings.layout.reader}", fields={"readerCorTituloCampo", "readerTamTituloCampo", "readerCorTexto", "readerTamTexto", "readerCorFundo", "readerOpacidade"})
+					@TTitledPane(text="#{settings.layout.reader}", fields={"readerCorTituloCampo", "readerCorTexto", "readerCorFundo"})
 			})
 	@TLabel(text="#{label.text}", position=TLabelPosition.LEFT, control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField

@@ -17,7 +17,6 @@ import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.exception.TValidatorException;
-import com.tedros.fxapi.form.ITModelForm;
 import com.tedros.fxapi.modal.TMessageBox;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDetailFieldBaseDecorator;
@@ -104,7 +103,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 					selectedItemAction(new_);
 				}
 			};
-			super.getListenerRepository().addListener("tvmclkeh", ev);
+			super.getListenerRepository().add("tvmclkeh", ev);
 			tableView.setOnMouseClicked(new WeakEventHandler<>(ev));
 			
 			ChangeListener<TModelView> mvcl = (a0, old_, new_) -> {
@@ -112,7 +111,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 					decorator.gettRemoveButton().setDisable(!getModels().contains(new_));
 			};
 			
-			super.getListenerRepository().addListener("setmodelviewCL", mvcl);
+			super.getListenerRepository().add("setmodelviewCL", mvcl);
 			super.modelViewProperty().addListener(new WeakChangeListener(mvcl));
 			
 			
@@ -279,10 +278,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		
 		setViewMode(mode);
 		
-		ITModelForm<M> form = (mode!=null) 
-				? buildForm(mode)
-						:  buildForm(TViewMode.EDIT);
-		setForm(form);
+		if (mode!=null) 
+			buildForm(mode);
+		else
+			buildForm(TViewMode.EDIT);
 	}
 	
 

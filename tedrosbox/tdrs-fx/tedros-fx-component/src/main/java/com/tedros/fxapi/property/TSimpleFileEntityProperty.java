@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.tedros.core.module.TListenerRepository;
+import com.tedros.core.module.TObjectRepository;
 import com.tedros.ejb.base.entity.ITFileEntity;
 import com.tedros.fxapi.annotation.reader.TFileReader;
 import com.tedros.fxapi.control.TFileField;
@@ -35,7 +35,7 @@ public class TSimpleFileEntityProperty<T extends ITFileEntity> extends SimpleObj
 	private SimpleObjectProperty<byte[]> bytesProperty;
 	private SimpleLongProperty bytesEntityIdProperty;
 
-	private TListenerRepository repo;
+	private TObjectRepository repo;
 	
 	
 	public TSimpleFileEntityProperty() {
@@ -60,7 +60,7 @@ public class TSimpleFileEntityProperty<T extends ITFileEntity> extends SimpleObj
 	
 	private void initialize(){
 		
-		this.repo = new TListenerRepository();
+		this.repo = new TObjectRepository();
 		this.fileNameProperty = new SimpleStringProperty();
 		this.fileExtensionProperty = new SimpleStringProperty();
 		this.fileSizeProperty = new SimpleLongProperty();
@@ -84,21 +84,21 @@ public class TSimpleFileEntityProperty<T extends ITFileEntity> extends SimpleObj
 			
 			fireValueChangedEvent();
 		};
-		repo.addListener("flnCL", flnCL);
+		repo.add("flnCL", flnCL);
 		this.fileNameProperty.addListener(new WeakChangeListener<String>(flnCL));
 		
 		ChangeListener<byte[]> bpCL = (arg0, arg1, arg2) -> {
 			getValue().getByteEntity().setBytes(arg2);
 			fireValueChangedEvent();
 		};
-		repo.addListener("bpCL", bpCL);
+		repo.add("bpCL", bpCL);
 		this.bytesProperty.addListener(new WeakChangeListener<byte[]>(bpCL));		
 		
 		ChangeListener<Number> fsCL = (arg0, arg1, arg2) -> {
 			getValue().setFileSize((Long)arg2);
 			fireValueChangedEvent();
 		};
-		repo.addListener("fsCL", fsCL);
+		repo.add("fsCL", fsCL);
 		this.fileSizeProperty.addListener(new WeakChangeListener<Number>(fsCL));
 	}
 

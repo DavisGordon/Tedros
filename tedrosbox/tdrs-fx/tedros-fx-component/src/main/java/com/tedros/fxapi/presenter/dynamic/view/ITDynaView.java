@@ -71,5 +71,6 @@ public interface ITDynaView<M extends TModelView>  extends ITView<TDynaPresenter
 	public void settLeftContent(StackPane tLeftContent);
 
 	public StackPane gettFormSpace();
+	
 
 }

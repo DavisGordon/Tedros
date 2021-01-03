@@ -8,6 +8,15 @@ import java.util.List;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.tedros.fxapi.annotation.TIgnoreField;
+import com.tedros.fxapi.util.TReflectionUtil;
+
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.Node;
+
 /**
  * <pre>
  * The field descriptor class, contais all necessary information about the field.  
@@ -18,14 +27,47 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class TFieldDescriptor {
 	
 	private final Field field;
-	private boolean loaded;
+	private boolean hasParent;
+	private BooleanProperty componentLoaded = new SimpleBooleanProperty(false);
+	private BooleanProperty layoutLoaded = new SimpleBooleanProperty(false);
+	private BooleanProperty loaded = new SimpleBooleanProperty(false);
+	private Boolean ignorable;
+	private Object[] arrControl;
+	private Object[] arrLayout;
+	private int order;
+	private Node layout;
+	private Node component;
 	
 	/**
 	 * Initialize this object
 	 * */
 	public TFieldDescriptor(Field field) {
 		this.field = field;
+		List<Annotation> lst = this.getAnnotations();
+		arrControl = TReflectionUtil.getControlBuilder(lst);
+		arrLayout = TReflectionUtil.getLayoutBuilder(lst);
+		this.hasParent = false;
+		if(this.hasLayout() && this.hasControl())
+			this.loaded.bind(BooleanBinding.booleanExpression(componentLoaded).and(layoutLoaded));
+		else if(!this.hasLayout() && this.hasControl())
+			this.loaded.bind(componentLoaded);
+		else if(this.hasLayout() && !this.hasControl())
+			this.loaded.bind(layoutLoaded);
 	}
+	
+	public boolean isIgnorable(){
+		if(ignorable==null) {
+			ignorable = false;
+			for (Annotation annotation : this.getAnnotations())
+				if(annotation instanceof TIgnoreField) {
+					ignorable = true;
+					break;
+				}
+		}
+		return ignorable;
+	}
+	
+	
 	
 	/**
 	 * <pre>
@@ -56,17 +98,14 @@ public class TFieldDescriptor {
 	 * 
 	 * @return {@link Boolean}
 	 * */
-	public boolean isLoaded() {
-		return loaded;
+	public synchronized boolean isLoaded() {
+		return loaded.get();
 	}
 
-	/**
-	 * <pre>
-	 * Set if the field was loaded/builded into a node.
-	 * </pre>
-	 * */
-	public void setLoaded(boolean loaded) {
-		this.loaded = loaded;
+	
+	
+	public ReadOnlyBooleanProperty loadedProperty() {
+		return this.loaded;
 	}
 
 	/**
@@ -99,6 +138,123 @@ public class TFieldDescriptor {
 	@Override
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this, true);
+	}
+
+	/**
+	 * @return the arrControl
+	 */
+	public Object[] getArrControl() {
+		return arrControl;
+	}
+
+	/**
+	 * @return the arrLayout
+	 */
+	public Object[] getArrLayout() {
+		return arrLayout;
+	}
+	
+	public boolean hasControl() {
+		return arrControl!=null;
+	}
+	
+	public boolean hasLayout() {
+		return arrLayout!=null;
+	}
+
+	/**
+	 * @return the order
+	 */
+	public int getOrder() {
+		return order;
+	}
+
+	/**
+	 * @param order the order to set
+	 */
+	public void setOrder(int order) {
+		this.order = order;
+	}
+
+
+	/**
+	 * @return the componentLoaded
+	 */
+	public ReadOnlyBooleanProperty componentLoadedProperty() {
+		return componentLoaded;
+	}
+
+	/**
+	 * @param componentLoaded the componentLoaded to set
+	 */
+	public void setComponentLoaded(boolean loaded) {
+		this.componentLoaded.setValue(loaded);
+	}
+
+	public boolean isComponentLoaded() {
+		return componentLoaded.get();
+	}
+	
+	/**
+	 * @return the layoutLoaded
+	 */
+	public ReadOnlyBooleanProperty layoutLoadedProperty() {
+		return layoutLoaded;
+	}
+
+	/**
+	 * @param loaded the layoutLoaded to set
+	 */
+	public void setLayoutLoaded(boolean loaded) {
+		this.layoutLoaded.setValue(loaded);
+	}
+
+	public boolean isLayoutLoaded() {
+		return layoutLoaded.get();
+	}
+
+	/**
+	 * @return the layout
+	 */
+	public Node getLayout() {
+		return layout;
+	}
+
+	/**
+	 * @param layout the layout to set
+	 */
+	public void setLayout(Node layout) {
+		this.layout = layout;
+		this.layoutLoaded.setValue(layout!=null);
+	}
+
+	/**
+	 * @return the component
+	 */
+	public Node getComponent() {
+		return component;
+	}
+
+	/**
+	 * @param component the component to set
+	 */
+	public void setComponent(Node component) {
+		this.component = component;
+		this.componentLoaded.setValue(component!=null);
+	}
+
+	/**
+	 * @return the hasParent
+	 */
+	public boolean hasParent() {
+		return hasParent;
+	}
+
+	/**
+	 * @param hasParent the hasParent to set
+	 */
+	public void setHasParent(boolean hasParent) {
+		this.hasParent = hasParent;
 	}
 	
 }

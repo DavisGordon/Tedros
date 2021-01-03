@@ -7,7 +7,7 @@ package com.tedros.fxapi.presenter.paginator;
 import java.util.UUID;
 
 import com.tedros.core.TInternationalizationEngine;
-import com.tedros.core.module.TListenerRepository;
+import com.tedros.core.module.TObjectRepository;
 import com.tedros.fxapi.control.TButton;
 import com.tedros.fxapi.control.TComboBoxField;
 import com.tedros.fxapi.control.THorizontalRadioGroup;
@@ -56,7 +56,7 @@ public class TPaginator extends BorderPane {
 	
 	private SimpleObjectProperty<TPagination> paginationProperty;
 	
-	private TListenerRepository repo;
+	private TObjectRepository repo;
 	
 	public TPaginator(boolean showSearch, boolean showOrderBy) {
 		
@@ -65,7 +65,7 @@ public class TPaginator extends BorderPane {
 		
 		TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
 		
-		repo = new TListenerRepository();
+		repo = new TObjectRepository();
 		label = new TLabel();
 		label.setId("t-title-label");
 		lastButton = null;
@@ -85,7 +85,7 @@ public class TPaginator extends BorderPane {
 				lastButton = null;
 				paginationProperty.setValue(buildPagination(0));
 		};
-		repo.addListener("slider", ehs);
+		repo.add("slider", ehs);
 		slider.valueProperty().addListener(new WeakChangeListener<>(ehs));
 		
 		TLabel title = new TLabel(iEngine.getString("#{tedros.fxapi.label.current.page}") + ":") ;
@@ -109,7 +109,7 @@ public class TPaginator extends BorderPane {
 				lastButton = null;
 				paginationProperty.setValue(buildPagination(0));
 			};
-			repo.addListener("searchbtn", eh);
+			repo.add("searchbtn", eh);
 			searchButton.setOnAction(new WeakEventHandler<>(eh));
 			
 			clearButton = new TButton();
@@ -120,7 +120,7 @@ public class TPaginator extends BorderPane {
 				search.setText("");
 				paginationProperty.setValue(buildPagination(0));
 			};
-			repo.addListener("clearhbtn", eh1);
+			repo.add("clearhbtn", eh1);
 			clearButton.setOnAction(new WeakEventHandler<>(eh1));
 			
 			search = new TTextField();
@@ -143,7 +143,7 @@ public class TPaginator extends BorderPane {
 				lastButton = null;
 				paginationProperty.setValue(buildPagination(0));
 			};
-			repo.addListener("orderBy", eh);
+			repo.add("orderBy", eh);
 			orderBy.valueProperty().addListener(new WeakChangeListener<>(eh));
 			
 			HBox h1 = new HBox();
@@ -159,7 +159,7 @@ public class TPaginator extends BorderPane {
 				lastButton = null;
 				paginationProperty.setValue(buildPagination(0));
 			};
-			repo.addListener("orderByType", eh1);
+			repo.add("orderByType", eh1);
 			orderByType.selectedToggleProperty().addListener(new WeakChangeListener<>(eh1));
 			
 			RadioButton ascRadioBtn = new RadioButton(iEngine.getString("#{tedros.fxapi.label.orderby.asc}")); 
@@ -253,7 +253,7 @@ public class TPaginator extends BorderPane {
 			label.setText(lastButton);
 			paginationProperty.setValue(buildPagination(i));
 		};
-		repo.addListener(eId, eh);
+		repo.add(eId, eh);
 		p1.setOnAction(eh);
 		
 		return p1;
@@ -263,7 +263,7 @@ public class TPaginator extends BorderPane {
 		
 		for(Node node : toolbar.getItems()) {
 			TButton b = (TButton) node;
-			EventHandler<ActionEvent> e =  repo.removeListener((String) b.getUserData());
+			EventHandler<ActionEvent> e =  repo.remove((String) b.getUserData());
 			b.removeEventHandler(ActionEvent.ACTION, e);
 		}
 	}

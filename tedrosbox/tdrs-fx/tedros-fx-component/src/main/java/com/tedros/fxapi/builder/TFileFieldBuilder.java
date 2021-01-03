@@ -29,17 +29,6 @@ import com.tedros.fxapi.property.TBytesLoader;
 public final class TFileFieldBuilder extends TBuilder 
 implements ITFileBuilder<com.tedros.fxapi.control.TFileField> {
 
-	private static TFileFieldBuilder instance;
-	
-	private TFileFieldBuilder(){
-		
-	}
-	
-	public static  TFileFieldBuilder getInstance(){
-		if(instance==null)
-			instance = new TFileFieldBuilder();
-		return instance;	
-	}
 	
 	public com.tedros.fxapi.control.TFileField build(final Annotation annotation, final Property<String> fileNameProperty, final Property<byte[]> byteArrayProperty) throws Exception {
 		TFileField tAnnotation = (TFileField) annotation;

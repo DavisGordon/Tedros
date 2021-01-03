@@ -8,19 +8,6 @@ import com.tedros.fxapi.annotation.property.TReadOnlyBooleanProperty;
 
 public class TReadOnlyBooleanPropertyParser extends TAnnotationParser<TReadOnlyBooleanProperty, ReadOnlyBooleanProperty>{
 	
-	private static TReadOnlyBooleanPropertyParser instance;
-	
-	private TReadOnlyBooleanPropertyParser(){
-		
-	}
-	
-	public static TReadOnlyBooleanPropertyParser getInstance(){
-		if(instance==null)
-			instance = new TReadOnlyBooleanPropertyParser();
-		return instance;
-		
-	}
-	
 	@Override
 	public void parse(TReadOnlyBooleanProperty annotation, ReadOnlyBooleanProperty object, String... byPass) throws Exception {
 		if(annotation.observable().addListener()!=TInvalidationListener.class)

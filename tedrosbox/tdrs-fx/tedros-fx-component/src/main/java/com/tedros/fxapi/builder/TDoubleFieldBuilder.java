@@ -17,15 +17,4 @@ import javafx.beans.property.Property;
  */
 public final class TDoubleFieldBuilder extends  TNumberFieldBuilder<com.tedros.fxapi.control.TDoubleField, Property<Double>> {
 
-	private static TDoubleFieldBuilder instance;
-	
-	private TDoubleFieldBuilder() {
-		
-	}
-	
-	public static TDoubleFieldBuilder getInstance(){
-		if(instance==null)
-			instance = new TDoubleFieldBuilder();
-		return instance;
-	}
 }

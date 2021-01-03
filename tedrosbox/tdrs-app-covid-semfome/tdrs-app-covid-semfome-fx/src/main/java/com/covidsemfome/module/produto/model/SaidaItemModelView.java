@@ -40,7 +40,7 @@ import javafx.scene.layout.Priority;
 @TFormReaderHtml
 @TForm(name = "Adicionar insumo")
 @TDetailTableViewPresenter(
-		presenter=@TPresenter(behavior=@TBehavior(type=TDetailFieldBehavior.class),
+		presenter=@TPresenter(behavior=@TBehavior(type=TDetailFieldBehavior.class, addAction=SaidaItemAddAction.class),
 				decorator = @TDecorator(type=TDetailFieldDecorator.class, viewTitle="Itens")
 				),
 		tableView=@TTableView(editable=true, 
@@ -93,7 +93,7 @@ public class SaidaItemModelView extends TEntityModelView<SaidaItem> {
 	
 	private void buildListener() {
 		
-		ChangeListener<Produto> idListener =  super.getListenerRepository().getListener("displayText");
+		ChangeListener<Produto> idListener =  super.getListenerRepository().get("displayText");
 		if(idListener==null){
 			idListener = (arg0, arg1, produto) -> {
 	

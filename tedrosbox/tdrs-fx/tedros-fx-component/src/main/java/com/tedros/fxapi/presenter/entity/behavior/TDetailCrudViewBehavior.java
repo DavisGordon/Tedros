@@ -98,7 +98,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 			}
 		};
 		
-		super.getListenerRepository().addListener("listviewselecteditemviewCL", chl);
+		super.getListenerRepository().add("listviewselecteditemviewCL", chl);
 		
 		this.decorator.gettListView()
 		.getSelectionModel()
@@ -139,9 +139,9 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	public void setForm(ITModelForm form) {
 		final TDynaPresenter presenter = (TDynaPresenter) getModulePresenter();
 		if( ((TDynaViewCrudBaseDecorator) presenter.getDecorator()).gettBreadcrumbForm()!=null){
-			removeFormListChangeListener();
+			removeBreadcrumbFormChangeListener();
 			super.setForm(form);
-			addFormListChangeListener();
+			addBreadcrumbFormChangeListener();
 		}else
 			super.setForm(form);
 	}
@@ -168,9 +168,9 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		
 		form.settPresenter(presenter);
 		
-		//behavior.removeFormListChangeListener();
+		//removeBreadcrumbFormChangeListener();
 		presenter.getBehavior().setForm(form);
-		//behavior.addFormListChangeListener();
+		//addBreadcrumbFormChangeListener();
 	}
 
 	public void setDisableModelActionButtons(boolean flag) {
@@ -182,16 +182,18 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 			decorator.gettDeleteButton().setDisable(flag);
 	}
 	
-	public void removeFormListChangeListener() {
+	@Override
+	public void removeBreadcrumbFormChangeListener() {
 		final TDynaPresenter presenter = getModulePresenter();
 		final TDynaViewCrudBaseBehavior behavior = (TDynaViewCrudBaseBehavior)presenter.getBehavior();
-		behavior.removeFormListChangeListener();
+		behavior.removeBreadcrumbFormChangeListener();
 	}
 	
-	public void addFormListChangeListener() {
+	@Override
+	public void addBreadcrumbFormChangeListener() {
 		final TDynaPresenter presenter = getModulePresenter();
 		final TDynaViewCrudBaseBehavior behavior = (TDynaViewCrudBaseBehavior)presenter.getBehavior();
-		behavior.addFormListChangeListener();
+		behavior.addBreadcrumbFormChangeListener();
 	}
 	
 }

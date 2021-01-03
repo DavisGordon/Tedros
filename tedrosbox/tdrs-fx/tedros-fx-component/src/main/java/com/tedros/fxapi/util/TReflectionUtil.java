@@ -278,7 +278,7 @@ public final class TReflectionUtil {
 	public static Object[] getLayoutBuilder(List<Annotation> list) {
 		return getBuilder(list, ITLayoutBuilder.class);
 	}
-		
+	
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private static Object[] getBuilder(List<Annotation> list, Class... builderInterface) {
 		for (Annotation annotation : list) {
@@ -288,11 +288,9 @@ public final class TReflectionUtil {
 					Class clazz = (Class) method.invoke(annotation);
 					if(isImplemented(clazz, builderInterface)){
 						try{
-							Method m = clazz.getMethod("getInstance");
-							if(m != null)
-								return new Object[]{annotation, m.invoke(null)};
-						}catch(NoSuchMethodException e){
-							System.err.println("ERROR: The class "+clazz.getSimpleName()+" must implement the 'public static "+clazz.getSimpleName()+" getInstance()'");
+							return new Object[]{annotation, clazz.newInstance()};
+						}catch( InstantiationException e){
+							//System.err.println("ERROR: The class "+clazz.getSimpleName()+" must implement the 'public static "+clazz.getSimpleName()+" getInstance()'");
 							e.printStackTrace();
 						}
 						
@@ -399,108 +397,6 @@ public final class TReflectionUtil {
 		return fieldsList;
 	}
 	
-	/*public static Map<String, Object> readFilterSettings(final Class<? extends TFilterModelView> filterViewClass){
-		for(final Annotation annotation : filterViewClass.getAnnotations())
-		    if(annotation instanceof TFilter)
-				return readAnnotation(annotation);
-		return null;
-	}*/
 	
-	/*public static int getTotalControls(Object model){
-		int total = 0;
-		for (final Field field : model.getClass().getDeclaredFields()) {
-			for(final Annotation annotation : field.getDeclaredAnnotations()){
-				if(annotation instanceof TTextField || annotation instanceof TTextAreaField
-						|| annotation instanceof TIntegerField || annotation instanceof TLongField
-						|| annotation instanceof TDoubleField || annotation instanceof TBigDecimalField
-						|| annotation instanceof TBigIntegerField || annotation instanceof TVerticalRadioGroup
-						|| annotation instanceof THorizontalRadioGroup
-						|| annotation instanceof TCheckBoxField || annotation instanceof TComboBoxField
-						|| annotation instanceof TDatePickerField 
-						|| annotation instanceof TPasswordField || annotation instanceof TSliderField
-						|| annotation instanceof TPickListField 
-						|| annotation instanceof TFileField || annotation instanceof TListFileField 
-						|| annotation instanceof TColorPickerField || annotation instanceof TDirectoryField
-						|| annotation instanceof TNumberSpinnerField || annotation instanceof  TMaskField)
-				{
-					total++;
-				}
-			}
-		}
-		return total;
-	}*/
-	
-	/*public static int getTotalReaders(Object model){
-		int total = 0;
-		for (final Field field : model.getClass().getDeclaredFields()) {
-			for(final Annotation annotation : field.getDeclaredAnnotations()){
-				if(annotation instanceof TReader || annotation instanceof TDetailReader || annotation instanceof TByteArrayReader)
-				{
-					total++;
-				}
-			}
-		}
-		return total;
-	}*/
-	
-	/*public static final TReaderDefaultSetting getReaderDefaultSettings(final ITModelView<?> modelView) {
-		for(final Annotation annotation : modelView.getClass().getAnnotations()){
-		    if(annotation instanceof TReaderDefaultSetting){
-		    	return (TReaderDefaultSetting) annotation;
-		    }
-		}
-		return null;
-	}*/
-	
-	/*public static final Map<String, Annotation> getAnnotationDefaultSettings(final Object object) {
-		Map<String, Annotation> list = new HashMap<>();
-		for(final Annotation annotation : object.getClass().getAnnotations()){
-		    if(getAnnotationName(annotation).toLowerCase().contains("DefaultSetting")){
-		    	list.put(getAnnotationName(annotation), annotation);
-		    }
-		}
-		return list;
-	}*/
-	
-	/*public static final TNodeDefaultSetting getNodeDefaultSettings(final Object object) {
-		for(final Annotation annotation : object.getClass().getAnnotations()){
-		    if(annotation instanceof TNodeDefaultSetting){
-		    	return (TNodeDefaultSetting) annotation;
-		    }
-		}
-		return null;
-	}
-	
-	public static final TControlDefaultSetting getControlDefaultSettings(final Object object) {
-		for(final Annotation annotation : object.getClass().getAnnotations()){
-		    if(annotation instanceof TControlDefaultSetting){
-		    	return (TControlDefaultSetting) annotation;
-		    }
-		}
-		return null;
-	}*/
-	
-	/*@SuppressWarnings({"unchecked", "rawtypes"})
-	public static final TView getViewSettings(final ITModelView modelView) {
-		return getViewSettings((Class<? extends ITModelView<?>>)modelView.getClass());
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public static final TView getViewSettings(Class<? extends ITModelView> modelViewClass) {
-		for(final Annotation annotation : modelViewClass.getAnnotations()){
-		    if(annotation instanceof TView){
-		    	return (TView) annotation;
-		    }
-		}
-		return null;
-	}*/
-	
-	/*public static final TLabelDefaultSetting geTLabelDefaultSetting(final ITModelView<?> modelView) {
-		for(final Annotation annotation : modelView.getClass().getAnnotations()){
-		    if(annotation instanceof TLabelDefaultSetting)
-				return (TLabelDefaultSetting) annotation;	
-		}
-		return null;
-	}*/
 	
 }

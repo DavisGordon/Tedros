@@ -83,7 +83,7 @@ public class ProdutoFindModelView extends TEntityModelView<Produto>{
 	
 	private void buildListener() {
 		
-		ChangeListener<String> idListener =  super.getListenerRepository().getListener("displayText");
+		ChangeListener<String> idListener =  super.getListenerRepository().get("displayText");
 		if(idListener==null){
 			idListener = (arg0, arg1, arg2) -> {
 					String str = (arg2==null ? "" : "(COD: "+arg2.toString()+") " ) 
@@ -96,7 +96,7 @@ public class ProdutoFindModelView extends TEntityModelView<Produto>{
 		
 		codigo.addListener(idListener);
 		
-		ChangeListener<String> tituloListener = super.getListenerRepository().getListener("displayText1");
+		ChangeListener<String> tituloListener = super.getListenerRepository().get("displayText1");
 		if(tituloListener==null){
 			tituloListener = (arg0, arg1, arg2)-> {
 					String str = (codigo.getValue()==null ? "" : "(COD: "+codigo.getValue().toString()+") " ) 

@@ -6,7 +6,7 @@ import java.util.Map;
 import com.tedros.fxapi.form.ITModelForm;
 import com.tedros.fxapi.form.TFieldBox;
 
-public abstract class TTrigger {
+public abstract class TTrigger<T> {
 
 	private TFieldBox source;
 	private TFieldBox target;
@@ -36,7 +36,7 @@ public abstract class TTrigger {
 		return associatedFields.get(fieldName);
 	}
 	
-	public abstract void run();
+	public abstract void run(T value);
 
 	public TFieldBox getSource() {
 		return source;

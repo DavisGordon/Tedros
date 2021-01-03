@@ -8,8 +8,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.covidsemfome.model.EntradaItem;
+import com.covidsemfome.model.EstocavelItem;
 import com.covidsemfome.model.Estoque;
 import com.covidsemfome.model.EstoqueItem;
+import com.covidsemfome.model.SaidaItem;
 import com.tedros.ejb.base.entity.TEntity;
 import com.tedros.util.TDateUtil;
 
@@ -20,6 +23,9 @@ import com.tedros.util.TDateUtil;
 public class EstoqueModel extends TEntity {
 
 	private static final long serialVersionUID = -457987996337666023L;
+	
+	
+	private String estocavelLabel;
 	
 	private String  origem;
 	
@@ -39,16 +45,35 @@ public class EstoqueModel extends TEntity {
 	 * @param itens
 	 */
 	public EstoqueModel(Estoque m) {
+		
 		setId(m.getId());
-		this.origem = m.getEntradaRef()!=null ? m.getEntradaRef().toString() : m.getSaidaRef().toString();
+		
+		boolean entrada =  m.getEntradaRef()!=null;
+		this.estocavelLabel = entrada ? "Entrada" : "Saida";
+		this.origem = entrada ? m.getEntradaRef().toString() : m.getSaidaRef().toString();
 		this.cozinha = m.getCozinha().toString();
 		this.dataHora = TDateUtil.getFormatedDate(m.getData(), TDateUtil.DDMMYYYY_HHMM);
 		this.observacao = m.getObservacao();
 		
+		List<? extends EstocavelItem> estocavelItens = entrada
+				? m.getEntradaRef().getItens() 
+						: m.getSaidaRef().getItens();
 		
 		this.itens = new ArrayList<>();
-		for(EstoqueItem i : m.getItens())
-			itens.add(new EstoqueItemModel(i));
+		for(EstoqueItem i : m.getItens()) {
+			
+			EstocavelItem item = entrada 
+					? new EntradaItem(i.getProduto()) 
+							: new SaidaItem(i.getProduto());
+			int qtd = 0;
+			int idx = estocavelItens.indexOf(item);
+			if(idx!=-1) {
+				item = estocavelItens.get(idx);
+				qtd = item.getQuantidade();
+			}
+			itens.add(new EstoqueItemModel(i, qtd));
+			
+		}
 		
 		Collections.sort(itens, new Comparator<EstoqueItemModel>() {
 			@Override
@@ -125,6 +150,20 @@ public class EstoqueModel extends TEntity {
 	 */
 	public void setItens(List<EstoqueItemModel> itens) {
 		this.itens = itens;
+	}
+
+	/**
+	 * @return the estocavelLabel
+	 */
+	public String getEstocavelLabel() {
+		return estocavelLabel;
+	}
+
+	/**
+	 * @param estocavelLabel the estocavelLabel to set
+	 */
+	public void setEstocavelLabel(String estocavelLabel) {
+		this.estocavelLabel = estocavelLabel;
 	}
 
 	

@@ -23,18 +23,6 @@ public final class TMaskFieldBuilder
 extends TBuilder
 implements ITControlBuilder<com.tedros.fxapi.control.TMaskField, Property<String>> {
 	
-	private static TMaskFieldBuilder instance;
-	
-	private TMaskFieldBuilder(){
-		
-	}
-	
-	public static  TMaskFieldBuilder getInstance(){
-		if(instance==null)
-			instance = new TMaskFieldBuilder();
-		return instance;	
-	}
-
 	public com.tedros.fxapi.control.TMaskField build(final Annotation annotation, final Property<String> attrProperty) throws Exception {
 		TMaskField tAnnotation = (TMaskField) annotation;
 		final com.tedros.fxapi.control.TMaskField control = new com.tedros.fxapi.control.TMaskField(tAnnotation.mask());

@@ -24,18 +24,6 @@ public class TDetailListFieldlBuilder
 extends TBuilder
 implements ITControlBuilder<com.tedros.fxapi.control.TDetailListField, ITObservableList> {
 
-	private static TDetailListFieldlBuilder instance;
-	
-	private TDetailListFieldlBuilder(){
-		
-	}
-	
-	public static TDetailListFieldlBuilder getInstance(){
-		if(instance==null)
-			instance = new TDetailListFieldlBuilder();
-		return instance;
-	}
-	
 	
 	@SuppressWarnings({ "unchecked" })
 	public com.tedros.fxapi.control. TDetailListField build(final Annotation annotation, final ITObservableList attrProperty) throws Exception {

@@ -21,6 +21,8 @@ public class EstoqueItemModel implements ITModel {
 	
 	private String produto;
 	
+	private Integer qtdEstocavel;
+	
 	private Integer qtdMinima;
 	
 	private Integer qtdInicial;
@@ -32,6 +34,7 @@ public class EstoqueItemModel implements ITModel {
 	private Integer vlrAjustado;
 
 	/**
+	 * @param qtd 
 	 * @param produto
 	 * @param qtdMinima
 	 * @param qtdInicial
@@ -39,7 +42,7 @@ public class EstoqueItemModel implements ITModel {
 	 * @param qtdAjuste
 	 * @param vlrAjustado
 	 */
-	public EstoqueItemModel(EstoqueItem m) {
+	public EstoqueItemModel(EstoqueItem m, int qtd) {
 		this.nome = m.getProduto().getNome();
 		this.produto = m.getProduto().toString();
 		this.qtdMinima = m.getQtdMinima();
@@ -47,6 +50,7 @@ public class EstoqueItemModel implements ITModel {
 		this.qtdCalculado = m.getQtdCalculado();
 		this.qtdAjuste = m.getQtdAjuste();
 		this.vlrAjustado = m.getVlrAjustado();
+		this.qtdEstocavel = qtd;
 	}
 
 	/**
@@ -145,6 +149,20 @@ public class EstoqueItemModel implements ITModel {
 	 */
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	/**
+	 * @return the qtdEstocavel
+	 */
+	public Integer getQtdEstocavel() {
+		return qtdEstocavel;
+	}
+
+	/**
+	 * @param qtdEstocavel the qtdEstocavel to set
+	 */
+	public void setQtdEstocavel(Integer qtdEstocavel) {
+		this.qtdEstocavel = qtdEstocavel;
 	}
 	
 	

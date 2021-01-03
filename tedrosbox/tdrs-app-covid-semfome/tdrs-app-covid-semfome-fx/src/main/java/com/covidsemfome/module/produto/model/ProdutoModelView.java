@@ -56,10 +56,10 @@ import javafx.scene.text.TextAlignment;
 			show=true, showSearchField=true, searchFieldName="nome",
 			orderBy = {	@TOption(text = "Codigo", value = "codigo"), 
 						@TOption(text = "Nome", value = "nome")}),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Produto", buildImportButton=true),
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Produtos", buildImportButton=true),
 	behavior=@TBehavior(importModelViewClass=ProdutoImportModelView.class)))
 @TSecurity(	id="COVSEMFOME_CADPROD_FORM", 
-	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Produto",
+	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Produtos",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class ProdutoModelView extends TEntityModelView<Produto> {
@@ -73,8 +73,8 @@ public class ProdutoModelView extends TEntityModelView<Produto> {
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
-	@TText(text="Produto", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
+	@TText(text="Dados do Produto", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 	node=@TNode(id="t-form-title-text", parse = true))
 	private SimpleStringProperty header;
 	
@@ -146,7 +146,7 @@ public class ProdutoModelView extends TEntityModelView<Produto> {
 	
 	private void buildListener() {
 		
-		ChangeListener<String> idListener =  super.getListenerRepository().getListener("displayText");
+		ChangeListener<String> idListener =  super.getListenerRepository().get("displayText");
 		if(idListener==null){
 			idListener = (arg0, arg1, arg2) -> {
 					String str = (arg2==null ? "" : "(COD: "+arg2.toString()+") " ) 
@@ -159,7 +159,7 @@ public class ProdutoModelView extends TEntityModelView<Produto> {
 		
 		codigo.addListener(idListener);
 		
-		ChangeListener<String> tituloListener = super.getListenerRepository().getListener("displayText1");
+		ChangeListener<String> tituloListener = super.getListenerRepository().get("displayText1");
 		if(tituloListener==null){
 			tituloListener = (arg0, arg1, arg2)-> {
 					String str = (codigo.getValue()==null ? "" : "(COD: "+codigo.getValue().toString()+") " ) 

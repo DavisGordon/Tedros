@@ -21,8 +21,6 @@ import com.tedros.fxapi.annotation.control.TPasswordField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TShowField;
 import com.tedros.fxapi.annotation.control.TShowField.TField;
-import com.tedros.fxapi.annotation.effect.TDropShadow;
-import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.control.TTab;
 import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
@@ -78,7 +76,7 @@ import javafx.scene.text.TextAlignment;
  * @author Davis Gordon
  * */
 @TFormReaderHtml
-@TForm(name = "#{form.person.title}", showBreadcrumBar=true)
+@TForm(name = "Editar pessoa", showBreadcrumBar=true)
 @TEjbService(serviceName = "IPessoaControllerRemote", model=Pessoa.class)
 @TListViewPresenter(listViewMinWidth=350, listViewMaxWidth=350,
 	paginator=@TPaginator(entityClass = Pessoa.class, serviceName = "IPessoaControllerRemote",
@@ -114,8 +112,8 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 					htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 					cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 					cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
-	@TText(text="#{form.person.title}", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
+	@TText(text="Dados da pessoa", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 	node=@TNode(id="t-form-title-text", parse = true))
 	private SimpleStringProperty textoCadastro;
 	
@@ -302,7 +300,7 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 
 	private void buildListener() {
 		
-		ChangeListener<String> nomeListener = super.getListenerRepository().getListener("displayText1");
+		ChangeListener<String> nomeListener = super.getListenerRepository().get("displayText1");
 		if(nomeListener==null){
 			nomeListener = new ChangeListener<String>(){
 				@Override
@@ -319,7 +317,7 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 		
 		nome.addListener(nomeListener);
 		
-		ChangeListener<String> tipoListener = super.getListenerRepository().getListener("displayText2");
+		ChangeListener<String> tipoListener = super.getListenerRepository().get("displayText2");
 		if(tipoListener==null){
 			tipoListener = new ChangeListener<String>(){
 				@Override

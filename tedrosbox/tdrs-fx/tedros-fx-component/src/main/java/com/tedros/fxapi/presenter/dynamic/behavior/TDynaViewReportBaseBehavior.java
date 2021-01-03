@@ -2,23 +2,19 @@ package com.tedros.fxapi.presenter.dynamic.behavior;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.List;
 
 import com.tedros.core.ITModule;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.context.TedrosContext;
-import com.tedros.ejb.base.model.ITModel;
 import com.tedros.ejb.base.model.ITReportModel;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
-import com.tedros.fxapi.control.TDirectoryField;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.exception.TException;
 import com.tedros.fxapi.exception.TValidatorException;
-import com.tedros.fxapi.form.ITModelForm;
 import com.tedros.fxapi.modal.TMessageBox;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewReportBaseDecorator;
@@ -555,14 +551,16 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		
 		setViewMode(mode);
 		
-		ITModelForm<M> form = (mode!=null) 
-				? buildForm(mode)
-						: radioGroup!=null 
-						?  (isReaderModeSelected() 
-								? buildForm(TViewMode.READER) 
-										: buildForm(TViewMode.EDIT))
-								: buildForm(TViewMode.EDIT);
-		setForm(form);
+		if (mode!=null) 
+			buildForm(mode);
+		else if (radioGroup!=null) {
+			if (isReaderModeSelected())
+				buildForm(TViewMode.READER);
+			else
+				buildForm(TViewMode.EDIT);
+		}else 
+			buildForm(TViewMode.EDIT);
+		
 	}
 	
 	/**

@@ -20,23 +20,5 @@ import javafx.beans.property.Property;
  * */
 public class TBigIntegerFieldBuilder extends TNumberFieldBuilder<com.tedros.fxapi.control.TBigIntegerField, Property<BigInteger>> {
 
-	private static TBigIntegerFieldBuilder instance;	
-	
-	private TBigIntegerFieldBuilder(){
-		
-	}
-	
-	/**
-	 * <pre>
-	 * Return a {@link TBigIntegerFieldBuilder} instance.
-	 * </pre>
-	 * */
-	public static TBigIntegerFieldBuilder getInstance(){
-		if(instance==null)
-			instance = new TBigIntegerFieldBuilder();
-		return instance;
-	}
-	
-
 	
 }

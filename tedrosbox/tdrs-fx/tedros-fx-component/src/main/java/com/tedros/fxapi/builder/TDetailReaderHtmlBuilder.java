@@ -47,18 +47,6 @@ implements ITReaderHtmlBuilder<TDetailReaderHtml, Object> {
 
 	private static final String DIV = "<div id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' >"+THtmlConstant.CONTENT+"</div>";
 	
-	private static TDetailReaderHtmlBuilder instance;
-	
-	private TDetailReaderHtmlBuilder(){
-		
-	}
-	
-	public static TDetailReaderHtmlBuilder getInstance(){
-		if(instance==null)
-			instance = new TDetailReaderHtmlBuilder();
-		return instance;
-	}
-	
 	@SuppressWarnings("unchecked")
 	public THtmlReader build(final TDetailReaderHtml tAnnotation, final Object fieldObject) throws Exception {
 		

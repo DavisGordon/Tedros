@@ -8,19 +8,6 @@ import com.tedros.fxapi.annotation.property.TReadOnlyStringProperty;
 
 public class TReadOnlyStringPropertyParser extends TAnnotationParser<TReadOnlyStringProperty, ReadOnlyStringProperty>{
 	
-	private static TReadOnlyStringPropertyParser instance;
-	
-	private TReadOnlyStringPropertyParser(){
-		
-	}
-	
-	public static TReadOnlyStringPropertyParser getInstance(){
-		if(instance==null)
-			instance = new TReadOnlyStringPropertyParser();
-		return instance;
-		
-	}
-	
 	@Override
 	public void parse(TReadOnlyStringProperty annotation, ReadOnlyStringProperty object, String... byPass) throws Exception {
 		if(annotation.observable().addListener()!=TInvalidationListener.class)

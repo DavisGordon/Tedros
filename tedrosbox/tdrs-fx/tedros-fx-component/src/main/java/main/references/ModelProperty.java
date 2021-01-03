@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import com.tedros.core.module.TListenerRepository;
+import com.tedros.core.module.TObjectRepository;
 import com.tedros.fxapi.util.TReflectionUtil;
 
 import javafx.animation.Animation;
@@ -100,7 +100,7 @@ public class ModelProperty {
 		return list;
 	}
 	
-	private TListenerRepository repository = new TListenerRepository();
+	private TObjectRepository repository = new TObjectRepository();
 	
 	private <T> ChangeListener<T> buildListener(final String fieldName){
 		String key = buildKeyForField(fieldName);
@@ -119,7 +119,7 @@ public class ModelProperty {
 			}
 		};
 		
-		repository.addListener(key, listener);
+		repository.add(key, listener);
 		
 		return listener;
 	}
@@ -132,7 +132,7 @@ public class ModelProperty {
 				 try {
 					Property property = (Property) m.invoke(this);
 					
-					Object obj = repository.removeListener(key);
+					Object obj = repository.remove(key);
 					
 					if(obj instanceof ChangeListener)
 						property.removeListener((ChangeListener) obj);

@@ -40,17 +40,6 @@ extends TBuilder
 implements ITControlBuilder<com.tedros.fxapi.control.TComboBoxField, Property<Object>> {
 	
 	private static final String T_ITENTITY_WARNING = "\n\nError: To TComboBoxField field for ITEntity values is necessary set the optionsList propertie.\nEx: @TComboBoxField(optionsList=@TOptionsList(optionsProcessClass=GrupoOptionProcess.class, optionModelViewClass=GrupoModelView.class, entityClass=Grupo.class)\n\n";
-	private static TComboBoxFieldBuilder instance;
-	
-	private TComboBoxFieldBuilder(){
-		
-	}
-	
-	public static TComboBoxFieldBuilder getInstance(){
-		if(instance==null)
-			instance = new TComboBoxFieldBuilder();
-		return instance;
-	}
 	
 	@SuppressWarnings({"unchecked"})
 	public com.tedros.fxapi.control.TComboBoxField build(final Annotation annotation, final Property<Object> attrProperty) throws Exception {

@@ -5,17 +5,24 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
-import javafx.scene.Node;
-import javafx.scene.control.Toggle;
-
 import com.tedros.core.model.ITModelView;
 import com.tedros.fxapi.annotation.control.TTrigger;
+import com.tedros.fxapi.control.ITTriggeredable;
 import com.tedros.fxapi.descriptor.TFieldDescriptor;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.exception.TErrorType;
+
+import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.beans.value.WeakChangeListener;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
+import javafx.collections.SetChangeListener;
+import javafx.collections.WeakListChangeListener;
+import javafx.collections.WeakSetChangeListener;
+import javafx.scene.Node;
 
 public class TTriggerLoader<M extends ITModelView<?>, F extends ITModelForm<M>> {
 
@@ -28,12 +35,12 @@ public class TTriggerLoader<M extends ITModelView<?>, F extends ITModelForm<M>> 
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void buildTriggers() throws Exception {
-		
+		int idx = 0;
 		for(final TFieldDescriptor tFieldDescriptor : this.form.gettFieldDescriptorList()){
 		
 			 
 			final String fieldName = tFieldDescriptor.getFieldName();
-			
+			idx++;
 			for (final Annotation annotation : (List<Annotation>) tFieldDescriptor.getAnnotations()) {
 				if (!(annotation instanceof TTrigger))
 					continue;
@@ -72,205 +79,40 @@ public class TTriggerLoader<M extends ITModelView<?>, F extends ITModelForm<M>> 
 				
 				final Node sourceControl = source.gettControl();
 				
-				if(sourceControl.getClass() == com.tedros.fxapi.control.TVerticalRadioGroup.class){
-					com.tedros.fxapi.control.TVerticalRadioGroup control = (com.tedros.fxapi.control.TVerticalRadioGroup) sourceControl;
-					control.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-						@Override
-						public void changed(ObservableValue<? extends Toggle> arg0, Toggle arg1, Toggle new_toggle) {
-							trigger.run();
-						}
-					});
-				}
-				
-				if(sourceControl.getClass() == com.tedros.fxapi.control.THorizontalRadioGroup.class){
-					final com.tedros.fxapi.control.THorizontalRadioGroup control = (com.tedros.fxapi.control.THorizontalRadioGroup) sourceControl;
-					control.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-						@Override
-						public void changed(ObservableValue<? extends Toggle> arg0, Toggle arg1, Toggle new_toggle) {
-							trigger.run();
-						}
-					});
-				}
-				
-				if(sourceControl.getClass() == com.tedros.fxapi.control.TPickListField.class){
-					com.tedros.fxapi.control.TPickListField control = (com.tedros.fxapi.control.TPickListField) sourceControl;
-					control.getSelectedList().addListener(new ListChangeListener() {
-						@Override
-						public void onChanged(Change arg0) {
-							trigger.run();
-						}
+				final Observable ob = tAnnotation.triggerFieldBox() 
+						? source.tValueProperty()
+								: ((ITTriggeredable) sourceControl).tValueProperty();
 						
-					});
-				}
-				
-				if(sourceControl.getClass() == com.tedros.fxapi.control.TTextField.class){
-					com.tedros.fxapi.control.TTextField control = (com.tedros.fxapi.control.TTextField) sourceControl;
-					control.textProperty().addListener(new ChangeListener<String>() {
-						@Override
-						public void changed(ObservableValue<? extends String> arg0,
-								String arg1, String arg2) {
-							trigger.run();
-						}
-					});
-				}
-				
-				if(sourceControl.getClass() == com.tedros.fxapi.control.TMaskField.class){
-					com.tedros.fxapi.control.TMaskField control = (com.tedros.fxapi.control.TMaskField) sourceControl;
-					control.textProperty().addListener(new ChangeListener<String>() {
-						@Override
-						public void changed(ObservableValue<? extends String> arg0,
-								String arg1, String arg2) {
-							trigger.run();
-						}
-					});
-				}
-				
-				if(sourceControl.getClass() == com.tedros.fxapi.control.TBigIntegerField.class){
-					com.tedros.fxapi.control.TBigIntegerField control = (com.tedros.fxapi.control.TBigIntegerField) sourceControl;
-					control.textProperty().addListener(new ChangeListener<String>() {
-						@Override
-						public void changed(ObservableValue<? extends String> arg0,
-								String arg1, String arg2) {
-							trigger.run();
-						}
-					});
-				}
-				
-				if(sourceControl.getClass() == com.tedros.fxapi.control.TBigDecimalField.class){
-					com.tedros.fxapi.control.TBigDecimalField control = (com.tedros.fxapi.control.TBigDecimalField) sourceControl;
-					control.textProperty().addListener(new ChangeListener<String>() {
-						@Override
-						public void changed(ObservableValue<? extends String> arg0,
-								String arg1, String arg2) {
-							trigger.run();
-						}
-					});
-				}
-				
-				if(sourceControl.getClass() == com.tedros.fxapi.control.TDoubleField.class){
-					com.tedros.fxapi.control.TDoubleField control = (com.tedros.fxapi.control.TDoubleField) sourceControl;
-					control.textProperty().addListener(new ChangeListener<String>() {
-						@Override
-						public void changed(ObservableValue<? extends String> arg0,
-								String arg1, String arg2) {
-							trigger.run();
-						}
-					});
-				}
-				
-				if(sourceControl.getClass() == com.tedros.fxapi.control.TLongField.class){
-					com.tedros.fxapi.control.TLongField control = (com.tedros.fxapi.control.TLongField) sourceControl;
-					control.textProperty().addListener(new ChangeListener<String>() {
-						@Override
-						public void changed(ObservableValue<? extends String> arg0,
-								String arg1, String arg2) {
-							trigger.run();
-						}
-					});
-				}
-				
-				if(sourceControl.getClass() == com.tedros.fxapi.control.TIntegerField.class){
-					com.tedros.fxapi.control.TIntegerField control = (com.tedros.fxapi.control.TIntegerField) sourceControl;
-					control.textProperty().addListener(new ChangeListener<String>() {
-						@Override
-						public void changed(ObservableValue<? extends String> arg0,
-								String arg1, String arg2) {
-							trigger.run();
-						}
-					});
-				}
-				
-				if(sourceControl.getClass() == com.tedros.fxapi.control.TTextAreaField.class){
-					com.tedros.fxapi.control.TTextAreaField control = (com.tedros.fxapi.control.TTextAreaField) sourceControl;
-					control.textProperty().addListener(new ChangeListener<String>() {
-						@Override
-						public void changed(ObservableValue<? extends String> arg0,
-								String arg1, String arg2) {
-							trigger.run();
-						}
-					});
-				}
-				
-				if(sourceControl.getClass() == com.tedros.fxapi.control.TPasswordField.class){
-					com.tedros.fxapi.control.TPasswordField control = (com.tedros.fxapi.control.TPasswordField) sourceControl;
-					control.textProperty().addListener(new ChangeListener<String>() {
-						@Override
-						public void changed(ObservableValue<? extends String> arg0,
-								String arg1, String arg2) {
-							trigger.run();
-						}
-					});
-				}
-				
-				
-				if(sourceControl.getClass() == com.tedros.fxapi.control.TNumberSpinnerField.class){
-					com.tedros.fxapi.control.TNumberSpinnerField control = (com.tedros.fxapi.control.TNumberSpinnerField) sourceControl;
-					control.textProperty().addListener(new ChangeListener<String>() {
-						@Override
-						public void changed(ObservableValue<? extends String> arg0,
-								String arg1, String arg2) {
-							trigger.run();
-						}
-					});
-				}
-				
-				if(sourceControl.getClass() == com.tedros.fxapi.control.TCheckBoxField.class){
-					com.tedros.fxapi.control.TCheckBoxField control = (com.tedros.fxapi.control.TCheckBoxField) sourceControl;
-					control.selectedProperty().addListener(new ChangeListener<Boolean>() {
-						@Override
-						public void changed(ObservableValue<? extends Boolean> arg0,
-								Boolean arg1, Boolean arg2) {
-							trigger.run();
-						}
-					});
-				}
-				
-				if(sourceControl.getClass() == com.tedros.fxapi.control.TComboBoxField.class){
-					com.tedros.fxapi.control.TComboBoxField control = (com.tedros.fxapi.control.TComboBoxField) sourceControl;
-					control.valueProperty().addListener(new ChangeListener<Object>() {
-						@Override
-						public void changed(ObservableValue<? extends Object> arg0,
-								Object arg1, Object arg2) {
-							trigger.run();
-						}
-					});
-				}
-				
-				if(sourceControl.getClass() == com.tedros.fxapi.control.TSlider.class){
-					com.tedros.fxapi.control.TSlider control = (com.tedros.fxapi.control.TSlider) sourceControl;
-					control.valueProperty().addListener(new ChangeListener<Object>() {
-						@Override
-						public void changed(ObservableValue<? extends Object> arg0,
-								Object arg1, Object arg2) {
-							trigger.run();
-						}
-					});
-				}
-				
-				if(sourceControl.getClass() == com.tedros.fxapi.control.TDatePickerField.class){
-					com.tedros.fxapi.control.TDatePickerField control = (com.tedros.fxapi.control.TDatePickerField) sourceControl;
-					control.valueProperty().addListener(new ChangeListener<Object>() {
-						@Override
-						public void changed(ObservableValue<? extends Object> arg0,
-								Object arg1, Object arg2) {
-							trigger.run();
-						}
-					});
-				}
-				
-				if(sourceControl.getClass() == com.tedros.fxapi.control.TColorPickerField.class){
-					com.tedros.fxapi.control.TColorPickerField control = (com.tedros.fxapi.control.TColorPickerField) sourceControl;
-					control.valueProperty().addListener(new ChangeListener<Object>() {
-						@Override
-						public void changed(ObservableValue<? extends Object> arg0,
-								Object arg1, Object arg2) {
-							trigger.run();
-						}
-					});
+				String key =  "trigger"+idx+"_"+fieldName;
+						
+				if(ob instanceof ObservableValue) {
+					final ChangeListener l = (obs, old, value) -> {
+						trigger.run(value);
+					};
+					this.form.gettObjectRepository().add(key, l);
+					ObservableValue obt = (ObservableValue) ob;
+					obt.addListener(new WeakChangeListener<>(l));
+					
+				} else 
+				if(ob instanceof ObservableList) {
+					final ListChangeListener l = (value) -> {
+						trigger.run(value);
+					};
+					this.form.gettObjectRepository().add(key, l);
+					ObservableList obt = (ObservableList) ob;
+					obt.addListener(new WeakListChangeListener<>(l));
+				} else 
+				if(ob instanceof ObservableSet) {
+					final SetChangeListener l = (value) -> {
+						trigger.run(value);
+					};
+					this.form.gettObjectRepository().add(key, l);
+					ObservableSet obt = (ObservableSet) ob;
+					obt.addListener(new WeakSetChangeListener<>(l));
 				}
 				
 				if(tAnnotation.runAfterFormBuild())
-					trigger.run();
+					trigger.run(null);
 				
 			}
 		}

@@ -40,11 +40,11 @@ public class EntradaController extends TEjbController<Entrada> implements IEntra
 	public TResult<Entrada> save(Entrada entrada) {
 		
 		try{
-			Entrada entSaved = null;
+			Entrada entradaOld = null;
 			if(!entrada.isNew()) 
-				entSaved = serv.findById(entrada);
+				entradaOld = serv.findById(entrada);
 					
-			Entrada res = serv.save(entrada, entSaved);
+			Entrada res = serv.save(entrada, entradaOld);
 			
 			return new TResult<>(EnumResult.SUCESS, res);
 		}catch(Exception e) {

@@ -14,15 +14,11 @@ import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
 import com.tedros.fxapi.annotation.control.TOneSelectionModal;
 import com.tedros.fxapi.annotation.control.TOptionsList;
-import com.tedros.fxapi.annotation.effect.TDropShadow;
-import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
-import com.tedros.fxapi.annotation.layout.TVBox;
-import com.tedros.fxapi.annotation.layout.TVGrow;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
@@ -49,7 +45,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
 @TFormReaderHtml
-@TForm(name = "Estoque inicial")
+@TForm(name = "Estoque inicial", showBreadcrumBar=true)
 @TEjbService(serviceName = "IEstoqueConfigControllerRemote", model=EstoqueConfig.class)
 @TListViewPresenter(
 	paginator=@TPaginator(entityClass = EstoqueConfig.class, serviceName = "IEstoqueConfigControllerRemote",
@@ -70,7 +66,7 @@ public class EstoqueConfigModelView extends TEntityModelView<EstoqueConfig> {
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
 	@TText(text="Definir produto em Estoque", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 	node=@TNode(id="t-form-title-text", parse = true))
 	private SimpleStringProperty header;
@@ -89,11 +85,6 @@ public class EstoqueConfigModelView extends TEntityModelView<EstoqueConfig> {
 	@TLabel(text="Cozinha:")
 	@TComboBoxField(required=true, optionsList=@TOptionsList(entityClass=Cozinha.class, 
 	optionModelViewClass=CozinhaModelView.class, optionsProcessClass=CozinhaOptionProcess.class))
-	@TVBox(	pane=@TPane(children={"cozinha", "quantidade", "valorUnitario","data"}), spacing=10, 
-	vgrow=@TVGrow(priority={@TPriority(field="quantidade", priority=Priority.ALWAYS), 
-		   		@TPriority(field="cozinha", priority=Priority.ALWAYS), 
-   				   		@TPriority(field="valorUnitario", priority=Priority.ALWAYS),
-   				   		@TPriority(field="data", priority=Priority.ALWAYS) }))
 	private SimpleObjectProperty<Cozinha> cozinha;
 	
 	
@@ -101,8 +92,8 @@ public class EstoqueConfigModelView extends TEntityModelView<EstoqueConfig> {
 	@TLabel(text="Quantidade Minima")
 	@TNumberSpinnerField(maxValue = 1000000, minValue=0, zeroValidation=TZeroValidation.GREATHER_THAN_ZERO)
 	@THBox(	pane=@TPane(children={"qtdMinima","qtdInicial"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="qtdMinima", priority=Priority.ALWAYS), 
-		   		@TPriority(field="qtdInicial", priority=Priority.ALWAYS)}))
+	hgrow=@THGrow(priority={@TPriority(field="qtdMinima", priority=Priority.NEVER), 
+		   		@TPriority(field="qtdInicial", priority=Priority.NEVER)}))
 	private SimpleIntegerProperty qtdMinima;
 	
 	
@@ -137,7 +128,7 @@ public class EstoqueConfigModelView extends TEntityModelView<EstoqueConfig> {
 	
 	private void buildListener() {
 		
-		ChangeListener<Produto> idListener = super.getListenerRepository().getListener("displayText");
+		ChangeListener<Produto> idListener = super.getListenerRepository().get("displayText");
 		if(idListener==null){
 			idListener = (arg0, arg1, arg2) -> {
 					String str = (arg2==null ? "" : arg2.toString() ) 
@@ -151,7 +142,7 @@ public class EstoqueConfigModelView extends TEntityModelView<EstoqueConfig> {
 		
 		produto.addListener(idListener);
 		
-		ChangeListener<Cozinha> tituloListener = super.getListenerRepository().getListener("displayText1");
+		ChangeListener<Cozinha> tituloListener = super.getListenerRepository().get("displayText1");
 		if(tituloListener==null){
 			tituloListener = (arg0, arg1, arg2) -> {
 					String str = (produto.getValue()==null ? "" : produto.getValue().toString() )  

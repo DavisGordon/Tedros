@@ -30,18 +30,6 @@ public final class TByteArrayReaderBuilder
 extends TBuilder 
 implements ITReaderBuilder<Node, SimpleObjectProperty>{
 
-	private static TByteArrayReaderBuilder instance;
-	
-	private TByteArrayReaderBuilder(){
-		
-	}
-	
-	public static TByteArrayReaderBuilder getInstance(){
-		if(instance==null)
-			instance = new TByteArrayReaderBuilder();
-		return instance;
-	}
-		
 	@SuppressWarnings("unchecked")
 	@Override
 	public Node build(Annotation annotation, SimpleObjectProperty property) throws Exception {

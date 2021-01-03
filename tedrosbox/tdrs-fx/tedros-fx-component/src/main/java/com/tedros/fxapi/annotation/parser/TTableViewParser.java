@@ -23,21 +23,9 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
-@SuppressWarnings({ "rawtypes", "restriction" })
+@SuppressWarnings({ "rawtypes" })
 public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 
-	private static TTableViewParser instance;
-	
-	private TTableViewParser(){
-		
-	}
-	
-	public static  TTableViewParser getInstance(){
-		if(instance==null)
-			instance = new TTableViewParser();
-		return instance;	
-	}
-	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void parse(TTableView annotation, TableView tableView, String... byPass) throws Exception {
@@ -260,7 +248,7 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 	 */
 	private ObservableValue getModelViewProperty(CellDataFeatures p, String cv) {
 		try {
-			 return  ((TModelView) p.getValue()).getProperty(cv);
+			 return  (ObservableValue) ((TModelView) p.getValue()).getProperty(cv);
 		 }catch(Exception e) {
 			 throw new RuntimeException("ERROR: cellValue: "+cv, e);
 		 }

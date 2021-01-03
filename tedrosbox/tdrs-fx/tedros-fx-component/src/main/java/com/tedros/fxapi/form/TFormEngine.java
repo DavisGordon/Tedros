@@ -12,24 +12,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.scene.Node;
-import javafx.scene.layout.Pane;
-import javafx.scene.web.WebView;
-import javafx.scene.web.WebViewBuilder;
-
 import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.core.model.ITModelView;
+import com.tedros.core.module.TObjectRepository;
 import com.tedros.fxapi.annotation.TDebugConfig;
 import com.tedros.fxapi.builder.ITReaderHtmlBuilder;
 import com.tedros.fxapi.descriptor.TFieldDescriptor;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.reader.THtmlReader;
 import com.tedros.fxapi.util.TReflectionUtil;
+
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.WeakChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
+import javafx.scene.Node;
+import javafx.scene.layout.Pane;
+import javafx.scene.web.WebView;
 
 /**
  * DESCRIÇÃO DA CLASSE
@@ -46,6 +48,8 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	private final Map<String, Object> associatedObjectsMap;
 	private ObservableList<Node> fields;
 	private WebView webView;
+	private SimpleBooleanProperty loaded = new SimpleBooleanProperty(false);
+	private TObjectRepository tObjectRepository = new TObjectRepository();
 	
 	public TFormEngine(final F form, final M modelView) {
 		this.form = form;
@@ -53,7 +57,6 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 			this.form.setId("t-form");
 		this.modelView = modelView;
 		this.associatedObjectsMap = new HashMap<>(0);
-		setEditMode();
 	}
 	
 	public TFormEngine(final F form, final M modelView, boolean readerMode) {
@@ -74,7 +77,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 			System.out.println("[TFormEngine][ReadeMode][initialized]");
 		
 		resetForm();
-		this.modelViewLoader = new TModelViewLoader<M>(modelView, this.form);
+		buildModelViewLoader();
 		
 		try {
 			if(StringUtils.isBlank(this.form.getId()))
@@ -103,14 +106,10 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 					form.tAddFormItem(webView);
 					webView.setDisable(true);
 					
-					ChangeListener<Number> hListener = new ChangeListener<Number>() {
-						@Override
-						public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-							webView.setPrefHeight((double) arg2);
-						}
-					};
+					ChangeListener<Number> hListener = (arg0, arg1, arg2) -> webView.setPrefHeight((double) arg2);
+					this.tObjectRepository.add("webviewformchl", hListener);
 					
-					((Pane)this.form).heightProperty().addListener(hListener);
+					((Pane)this.form).heightProperty().addListener(new WeakChangeListener(hListener));
 										
 					if(modelView.getClass().getAnnotations()!=null){
 						Object[] arrReaderHtml = TReflectionUtil.getReaderHtmlBuilder(Arrays.asList(modelView.getClass().getAnnotations()));	
@@ -129,7 +128,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 						if(node instanceof THtmlReader){
 							if(webView==null){
 								sbf = new StringBuffer();
-								webView = WebViewBuilder.create().build();
+								webView = new WebView();
 								form.tAddFormItem(webView);
 							}
 							THtmlReader htmlReader = (THtmlReader) node;
@@ -149,24 +148,35 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 		}
 	}
 
+	private void buildModelViewLoader() {
+		this.modelViewLoader = new TModelViewLoader<M>(modelView, this.form);
+		this.loaded.bind(this.modelViewLoader.allLoadedProperty());
+	}
+
 	public void setEditMode(){
 		mode = TViewMode.EDIT;
 		if(TDebugConfig.detailParseExecution)
 			System.out.println("[TFormEngine][EditMode][initialized]");
 		
 		resetForm();
-		this.modelViewLoader = new TModelViewLoader<M>(modelView, this.form);
+		buildModelViewLoader();
 		
 		try {
 			if(StringUtils.isBlank(this.form.getId()))
 				this.form.setId("t-form");
-			fields = this.modelViewLoader.getControls();
-			for(Node node : fields)
-				form.tAddFormItem(node);
+			//fields = this.modelViewLoader.getControls();
+			this.modelViewLoader.getControls(form.getChildren());
+			
+			/*for(Node node : fields)
+				form.tAddFormItem(node);*/
 			initializeForm();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public ReadOnlyBooleanProperty loadedProperty() {
+		return loaded;
 	}
 	
 	public void reloadForm(){
@@ -178,7 +188,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	
 	public TFieldBox getFieldBox(String fieldName){
 		if(modelViewLoader!=null)
-			return modelViewLoader.getFieldBox(fieldName);
+			return (TFieldBox) modelViewLoader.geFieldBox(fieldName);
 		return null;
 		
 	}
@@ -188,8 +198,8 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	}
 	
 	
-	public ObservableMap<String, TFieldBox> getFieldBoxMap() {
-		return (modelViewLoader!=null) ? modelViewLoader.getFieldBoxMap() : null;
+	public Map<String, TFieldBox> getFieldBoxMap() {
+		return (modelViewLoader!=null) ? modelViewLoader.getFieldBoxMap(): null;
 	}
 	
 	public M getModelView() {
@@ -217,7 +227,9 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	}
 
 	private void resetForm() {
-		
+		this.tObjectRepository.clear();
+		this.loaded.unbind();
+		this.loaded.setValue(false);
 		this.modelViewLoader = null;
 		if(form.getChildren()!=null){
 			try{
@@ -241,6 +253,13 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	 */
 	public ObservableList<Node> getFields() {
 		return fields;
+	}
+
+	/**
+	 * @return the tObjectRepository
+	 */
+	public TObjectRepository getObjectRepository() {
+		return tObjectRepository;
 	}
 	
 }

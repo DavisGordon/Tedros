@@ -10,7 +10,6 @@ import java.lang.annotation.Annotation;
 
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.form.TComponentBuilder;
-import com.tedros.fxapi.form.TFieldBox;
 import com.tedros.fxapi.html.THtmlFieldSetGenerator;
 import com.tedros.fxapi.layout.TFieldSet;
 import com.tedros.fxapi.reader.THtmlReader;
@@ -29,24 +28,10 @@ public class TFieldSetBuilder
 extends TBuilder 
 implements ITLayoutBuilder<TFieldSet> {
 	
-	private static TFieldSetBuilder instance;
-	
-	private TFieldSetBuilder(){
-		
-	}
-	
-	public static TFieldSetBuilder getInstance(){
-		if(instance==null)
-			instance = new TFieldSetBuilder();
-		return instance;
-	}
-
 	@Override
-	public TFieldSet build(Annotation annotation, TFieldBox fieldBox) throws Exception {
+	public TFieldSet build(Annotation annotation) throws Exception {
 		com.tedros.fxapi.annotation.layout.TFieldSet tAnnotation = (com.tedros.fxapi.annotation.layout.TFieldSet) annotation;
 		TFieldSet node = new TFieldSet(tAnnotation.layoutType());
-		if(!tAnnotation.skipAnnotatedField())
-			node.setUserData(fieldBox);
 		callParser(tAnnotation, node);
 		return node;
 	}

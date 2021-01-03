@@ -36,18 +36,6 @@ public final class TPickListFieldBuilder
 extends TBuilder
 implements ITControlBuilder<com.tedros.fxapi.control.TPickListField, ObservableList> {
 
-	private static TPickListFieldBuilder instance;
-	
-	private TPickListFieldBuilder(){
-		
-	}
-	
-	public static  TPickListFieldBuilder getInstance(){
-		if(instance==null)
-			instance = new TPickListFieldBuilder();
-		return instance;	
-	}
-	
 	@SuppressWarnings("unchecked")
 	public com.tedros.fxapi.control.TPickListField build(final Annotation annotation, final ObservableList attrProperty) throws Exception {
 		TPickListField tAnnotation = (TPickListField) annotation;

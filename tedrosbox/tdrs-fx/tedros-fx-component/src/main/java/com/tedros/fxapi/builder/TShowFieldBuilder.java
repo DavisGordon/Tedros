@@ -29,17 +29,6 @@ public class TShowFieldBuilder
 extends TBuilder
 implements ITControlBuilder<TShowField, Property> {
 
-	private static TShowFieldBuilder instance;
-	
-	private TShowFieldBuilder(){
-		
-	}
-	
-	public static TShowFieldBuilder getInstance(){
-		if(instance==null)
-			instance = new TShowFieldBuilder();
-		return instance;
-	}
 	
 	public TShowField build(final Annotation annotation, final Property attrProperty) throws Exception {
 		com.tedros.fxapi.annotation.control.TShowField tAnnotation = 

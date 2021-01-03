@@ -12,8 +12,6 @@ import com.tedros.fxapi.annotation.control.TMaskField;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
-import com.tedros.fxapi.annotation.effect.TDropShadow;
-import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
@@ -44,11 +42,11 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TFormReaderHtml
-@TForm(name = "Cozinha")
+@TForm(name = "Configurar local para produção das refeições", showBreadcrumBar=true)
 @TEjbService(serviceName = "ICozinhaControllerRemote", model=Cozinha.class)
-@TPresenter(decorator = @TDecorator(viewTitle="Cozinha"))
+@TPresenter(decorator = @TDecorator(viewTitle="Local de produção"))
 @TSecurity(	id="COVSEMFOME_CADCOZ_FORM", 
-	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Cozinha",
+	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Local de produção",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class CozinhaModelView extends TEntityModelView<Cozinha> {
@@ -59,8 +57,8 @@ public class CozinhaModelView extends TEntityModelView<Cozinha> {
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
-	@TText(text="Cozinha", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form",  parse = true))
+	@TText(text="Dados da Cozinha", font=@TFont(size=22), textAlignment=TextAlignment.LEFT,
 	node=@TNode(id="t-form-title-text", parse = true))
 	private SimpleStringProperty header;
 	
@@ -70,7 +68,7 @@ public class CozinhaModelView extends TEntityModelView<Cozinha> {
 				control=@TControl(tooltip="#{label.name}", parse = true))
 	@THBox(	pane=@TPane(children={"nome","telefone"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="nome", priority=Priority.ALWAYS), 
-						@TPriority(field="telefone", priority=Priority.ALWAYS)}))
+						@TPriority(field="telefone", priority=Priority.NEVER)}))
 	private SimpleStringProperty nome;
 	
 	@TReaderHtml

@@ -8,19 +8,18 @@ package com.tedros.fxapi.builder;
 
 import java.lang.annotation.Annotation;
 
-import javafx.scene.Node;
-import javafx.scene.control.Accordion;
-
 import com.tedros.core.style.TStyleResourceValue;
 import com.tedros.fxapi.annotation.layout.TAccordion;
 import com.tedros.fxapi.annotation.layout.TTitledPane;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.domain.TLayoutType;
 import com.tedros.fxapi.form.TComponentBuilder;
-import com.tedros.fxapi.form.TFieldBox;
 import com.tedros.fxapi.html.THtmlAccordionGenerator;
 import com.tedros.fxapi.html.THtmlLayoutGenerator;
 import com.tedros.fxapi.reader.THtmlReader;
+
+import javafx.scene.Node;
+import javafx.scene.control.Accordion;
 
 
 /**
@@ -33,24 +32,12 @@ public class TAccordionBuilder
 extends TBuilder 
 implements ITLayoutBuilder<Accordion> {
 	
-	private static TAccordionBuilder instance;
-	
-	private TAccordionBuilder(){
-		
-	}
-	
-	public static TAccordionBuilder getInstance(){
-		if(instance==null)
-			instance = new TAccordionBuilder();
-		return instance;
-	}
 
 	@Override
-	public Accordion build(Annotation annotation, TFieldBox fieldBox) throws Exception {
+	public Accordion build(Annotation annotation) throws Exception {
 		TAccordion tAnnotation = (TAccordion) annotation;
 		Accordion node = new Accordion();
 		node.autosize();
-		node.setUserData(fieldBox);
 		callParser(tAnnotation, node);
 		return node;
 	}

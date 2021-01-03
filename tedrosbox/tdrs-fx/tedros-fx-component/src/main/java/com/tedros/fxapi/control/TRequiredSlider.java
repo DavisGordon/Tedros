@@ -6,6 +6,7 @@
  */
 package com.tedros.fxapi.control;
 
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -30,6 +31,11 @@ public abstract class TRequiredSlider extends Slider implements ITField, ITCompo
     private ChangeListener<Number> requiredListener;
     private SimpleObjectProperty<TZeroValidation> zeroValidationProperty;
 	private String t_componentId; 
+	
+	@Override
+	public Observable tValueProperty() {
+		return valueProperty();
+	}
     
 	public void setZeroValidation(TZeroValidation zeroValidation){
     	

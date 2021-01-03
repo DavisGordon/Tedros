@@ -6,6 +6,7 @@
  */
 package com.tedros.fxapi.control;
 
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -29,6 +30,11 @@ public abstract class TRequiredColorPicker extends ColorPicker implements ITFiel
     private SimpleBooleanProperty requiredProperty;
 	private String t_componentId; 
     
+	@Override
+	public Observable tValueProperty() {
+		return valueProperty();
+	}
+	
 	public void setRequired(boolean required){
     	
 		if(this.requiredProperty == null)

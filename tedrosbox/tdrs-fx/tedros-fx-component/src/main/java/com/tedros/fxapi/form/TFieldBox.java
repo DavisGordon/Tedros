@@ -1,5 +1,6 @@
 package com.tedros.fxapi.form;
 
+import javafx.beans.Observable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -86,6 +87,11 @@ public class TFieldBox extends StackPane implements ITField {
 			getChildren().add(box);
 		}
 		
+	}
+	
+	@Override
+	public Observable tValueProperty() {
+		return super.getChildren();
 	}
 	
 	/**

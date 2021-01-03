@@ -32,17 +32,6 @@ public final class TFileReaderBuilder
 extends TBuilder 
 implements ITReaderBuilder<Node, TSimpleFileEntityProperty>{
 
-	private static TFileReaderBuilder instance;
-	
-	private TFileReaderBuilder(){
-		
-	}
-	
-	public static TFileReaderBuilder getInstance(){
-		if(instance==null)
-			instance = new TFileReaderBuilder();
-		return instance;
-	}
 		
 	@Override
 	public Node build(Annotation annotation, TSimpleFileEntityProperty property) throws Exception {

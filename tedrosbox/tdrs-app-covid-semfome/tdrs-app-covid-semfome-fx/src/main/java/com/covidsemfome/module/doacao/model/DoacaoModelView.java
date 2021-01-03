@@ -154,7 +154,7 @@ public class DoacaoModelView extends TEntityModelView<Doacao>{
 	}
 	
 	private void buildListener() {
-		ChangeListener<Pessoa> pessListener = super.getListenerRepository().getListener("displayText");
+		ChangeListener<Pessoa> pessListener = super.getListenerRepository().get("displayText");
 		if(pessListener==null){
 			pessListener = new ChangeListener<Pessoa>(){
 		
@@ -173,7 +173,7 @@ public class DoacaoModelView extends TEntityModelView<Doacao>{
 		
 		pessoa.addListener(pessListener);
 		
-		ChangeListener<TipoAjuda> taListener = super.getListenerRepository().getListener("displayText1");
+		ChangeListener<TipoAjuda> taListener = super.getListenerRepository().get("displayText1");
 		if(taListener==null){
 			taListener = new ChangeListener<TipoAjuda>(){
 				@Override

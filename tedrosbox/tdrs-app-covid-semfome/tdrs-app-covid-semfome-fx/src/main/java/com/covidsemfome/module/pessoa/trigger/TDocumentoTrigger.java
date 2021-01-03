@@ -7,14 +7,16 @@ import com.tedros.fxapi.control.TTextField;
 import com.tedros.fxapi.control.trigger.TTrigger;
 import com.tedros.fxapi.form.TFieldBox;
 
-public class TDocumentoTrigger extends TTrigger {
+import javafx.scene.control.Toggle;
+
+public class TDocumentoTrigger extends TTrigger<Toggle> {
 
 	public TDocumentoTrigger(TFieldBox source, TFieldBox target) {
 		super(source, target);
 	}
 
 	@Override
-	public void run() {
+	public void run(Toggle toogle) {
 		THorizontalRadioGroup tipoDoc = (THorizontalRadioGroup) getSource().gettControl();
 		
 		if(tipoDoc==null)

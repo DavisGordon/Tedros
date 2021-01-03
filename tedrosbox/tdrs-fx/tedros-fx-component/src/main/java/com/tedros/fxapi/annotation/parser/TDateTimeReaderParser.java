@@ -17,15 +17,5 @@ import com.tedros.fxapi.reader.TDateTimeReader;
  */
 public final class TDateTimeReaderParser extends TAnnotationParser<TReader, TDateTimeReader> {
 
-	private static TDateTimeReaderParser instance;
 	
-	private TDateTimeReaderParser() {
-		
-	}
-	
-	public static TDateTimeReaderParser getInstance(){
-		if(instance==null)
-			instance = new TDateTimeReaderParser();
-		return instance;	
-	}	
 }

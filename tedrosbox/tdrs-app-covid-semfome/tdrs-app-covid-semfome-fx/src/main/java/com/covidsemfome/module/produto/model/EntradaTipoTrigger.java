@@ -8,11 +8,13 @@ import com.tedros.fxapi.control.TSelectionModal;
 import com.tedros.fxapi.control.trigger.TTrigger;
 import com.tedros.fxapi.form.TFieldBox;
 
+import javafx.scene.control.Toggle;
+
 /**
  * @author Davis Gordon
  *
  */
-public class EntradaTipoTrigger extends TTrigger {
+public class EntradaTipoTrigger extends TTrigger<Toggle> {
 
 	/**
 	 * @param source
@@ -20,27 +22,25 @@ public class EntradaTipoTrigger extends TTrigger {
 	 */
 	public EntradaTipoTrigger(TFieldBox source, TFieldBox target) {
 		super(source, target);
-		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)
 	 * @see com.tedros.fxapi.control.trigger.TTrigger#run()
 	 */
 	@Override
-	public void run() {
+	public void run(Toggle value) {
 		THorizontalRadioGroup tipo =  (THorizontalRadioGroup) getSource().gettControl();
 		TFieldBox box = getTarget();
-		TSelectionModal  sm = (TSelectionModal) box.gettControl();
-		String data = (tipo.getSelectedToggle()!=null) 
-				? (String) tipo.getSelectedToggle().getUserData() :
-					null;
-		
-		if(data!=null && data.equals("Compras")) {
-			sm.gettSelectedItems().clear();
-			box.setVisible(false);
+		if(tipo.getSelectedToggle()!=null){
+			String data = (String) tipo.getSelectedToggle().getUserData();
+			if(data.equals("Compras")) {
+				TSelectionModal  sm = (TSelectionModal) box.gettControl();
+				sm.gettSelectedItems().clear();
+				box.setVisible(false);
+			}else
+				box.setVisible(true);
 		}else
-			box.setVisible(true);
-	
+			box.setVisible(false);
 	
 	}
 

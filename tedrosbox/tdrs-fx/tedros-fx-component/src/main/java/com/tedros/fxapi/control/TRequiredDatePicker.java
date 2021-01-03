@@ -8,6 +8,7 @@ package com.tedros.fxapi.control;
 
 import java.util.Date;
 
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -29,6 +30,11 @@ public abstract class TRequiredDatePicker extends DatePicker implements ITField,
     private ChangeListener<Date> requiredListener;
     private SimpleBooleanProperty requiredProperty;
 	private String t_componentId; 
+	
+	@Override
+	public Observable tValueProperty() {
+		return valueProperty();
+	}
     
 	public void setRequired(boolean required){
     	

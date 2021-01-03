@@ -12,27 +12,17 @@ import com.tedros.fxapi.domain.TFileExtension;
 
 public class TFileFieldParser extends TAnnotationParser<TFileField, com.tedros.fxapi.control.TFileField> {
 	
-	private static TFileFieldParser instance;
-	
-	private TFileFieldParser(){
-		
-	}
-	
-	public static  TFileFieldParser getInstance(){
-		if(instance==null)
-			instance = new TFileFieldParser();
-		return instance;	
-	}
-	
 	@Override
 	public void parse(TFileField tAnnotation, com.tedros.fxapi.control.TFileField control, String...byPass) throws Exception {
 		
 		super.parse(tAnnotation, control, "openAction","loadAction", "imageClickAction", "cleanAction", "selectAction", "control", "textInputControl", "extensions", "moreExtensions");
 		
-		TControlParser.getInstance().setComponentDescriptor(getComponentDescriptor());
-		TControlParser.getInstance().parse(tAnnotation.control(), control.getFileNameField());
-		TTextInputControlParse.getInstance().setComponentDescriptor(getComponentDescriptor());
-		TTextInputControlParse.getInstance().parse(tAnnotation.textInputControl(), control.getFileNameField());
+		TControlParser cp = new TControlParser();
+		TTextInputControlParse ticp = new TTextInputControlParse();
+		cp.setComponentDescriptor(getComponentDescriptor());
+		cp.parse(tAnnotation.control(), control.getFileNameField());
+		ticp.setComponentDescriptor(getComponentDescriptor());
+		ticp.parse(tAnnotation.textInputControl(), control.getFileNameField());
 		
 		String[] extensions = new String[tAnnotation.extensions().length];
 		for(TFileExtension e : tAnnotation.extensions())

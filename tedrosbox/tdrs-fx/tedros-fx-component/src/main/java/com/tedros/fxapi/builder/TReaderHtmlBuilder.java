@@ -8,7 +8,6 @@ package com.tedros.fxapi.builder;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -41,19 +40,12 @@ public class TReaderHtmlBuilder
 extends TBuilder
 implements ITReaderHtmlBuilder<TReaderHtml, Property> {
 
-	private static TStripTagUtil tStripTagUtil;
-	private static TReaderHtmlBuilder instance;
+	private final TStripTagUtil tStripTagUtil;
 	
-	private TReaderHtmlBuilder(){
+	public TReaderHtmlBuilder(){
 		tStripTagUtil = new TStripTagUtil();
 	}
 	
-	public static TReaderHtmlBuilder getInstance(){
-		if(instance==null)
-			instance = new TReaderHtmlBuilder();
-		return instance;
-	}
-
 	@SuppressWarnings("unchecked")
 	public THtmlReader build(final TReaderHtml tAnnotation, Property property) throws Exception {
 		

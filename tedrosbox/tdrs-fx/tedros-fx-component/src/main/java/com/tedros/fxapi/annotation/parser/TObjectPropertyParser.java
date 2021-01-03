@@ -9,19 +9,6 @@ import com.tedros.fxapi.annotation.property.TObjectProperty;
 @SuppressWarnings("rawtypes")
 public class TObjectPropertyParser extends TAnnotationParser<TObjectProperty, ObjectProperty>{
 	
-	private static TObjectPropertyParser instance;
-	
-	private TObjectPropertyParser(){
-		
-	}
-	
-	public static TObjectPropertyParser getInstance(){
-		if(instance==null)
-			instance = new TObjectPropertyParser();
-		return instance;
-		
-	}
-	
 	@Override
 	public void parse(TObjectProperty annotation, ObjectProperty object, String... byPass) throws Exception {
 		if(annotation.observable().addListener()!=TInvalidationListener.class)

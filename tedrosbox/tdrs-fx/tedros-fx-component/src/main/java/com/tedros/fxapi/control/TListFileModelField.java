@@ -2,6 +2,7 @@ package com.tedros.fxapi.control;
 
 import java.io.ByteArrayInputStream;
 
+import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -57,6 +58,11 @@ public class TListFileModelField extends Pane implements ITField, ITComponent{
 		this.t_simpleFileModelObservableList = tSimpleFileModelObservableList;
 		this.t_orientationProperty.setValue(orientation);
 		build();
+	}
+	
+	@Override
+	public Observable tValueProperty() {
+		return t_simpleFileModelObservableList;
 	}
 	
 	/**

@@ -23,7 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.tedros.core.model.ITModelView;
-import com.tedros.core.module.TListenerRepository;
+import com.tedros.core.module.TObjectRepository;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.entity.ITFileEntity;
 import com.tedros.ejb.base.model.ITFileModel;
@@ -39,6 +39,7 @@ import com.tedros.fxapi.util.TPropertyUtil;
 import com.tedros.fxapi.util.TReflectionUtil;
 
 import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -98,16 +99,6 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	
 	private static final Logger 			LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
-	private static final String 			FORM = "form";
-	/*private static final String 			LASTHASHCODE = "lastHashCode";
-	private static final String 			LOADEDPROPERTY = "loadedProperty";
-	private static final String 			COMPATIBLETYPES = "compatibleTypes";
-	private static final String 			LASTHASHCODEPROPERTY = "lastHashCodeProperty";
-	private static final String 			DETAILSOBSERVABLELIST = "detailsObservableList";
-	
-	private static final List<String> 		INTERNAL_FIELDS = Arrays.asList(LASTHASHCODE, LASTHASHCODEPROPERTY, FORM, LOADEDPROPERTY, COMPATIBLETYPES, DETAILSOBSERVABLELIST);
-	*/
-	
 	protected	final static String 		SET = "set";
 	protected	final static String 		GET = "get";
 	
@@ -121,7 +112,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	private 	TListenerHelper<M> 			tListenerHelper;
 	private 	TCompatibleTypesHelper<M>	tCompatibleTypesHelper;
 	
-	private Map<String, Object> propertys = new HashMap<>();
+	private Map<String, Observable> propertys = new HashMap<>();
 	
 	private String modelViewId;
 	
@@ -248,7 +239,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	}
 
 	private void buildLastHashCodeListener() {
-		ChangeListener<Number> listener =  getListenerRepository().getListener("lastHashCodeProperty");
+		ChangeListener<Number> listener =  getListenerRepository().get("lastHashCodeProperty");
 		if(listener==null){
 			listener = new ChangeListener<Number>() {
 				@Override
@@ -374,14 +365,14 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	 * Return the {@link ObservableValue} created to the field name. 
 	 * */
 	@SuppressWarnings("rawtypes")
-	public ObservableValue getProperty(String fieldName) {
-		return (ObservableValue) propertys.get(fieldName);
+	public Observable getProperty(String fieldName) {
+		return  propertys.get(fieldName);
 	}
 	
 	/**
 	 * Register a property
 	 * */
-	protected void registerProperty(String fieldName, ObservableValue value){
+	protected void registerProperty(String fieldName, Observable value){
 		propertys.put(fieldName, value);
 	}
 	
@@ -492,7 +483,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 							
 							final ObservableList property = (ObservableList) propertyObj; 
 							
-							final ListChangeListener listener = (ListChangeListener) tListenerHelper.tListenerRepository.getListener(propertyFieldName); 
+							final ListChangeListener listener = (ListChangeListener) tListenerHelper.tObjectRepository.get(propertyFieldName); 
 									
 							if(listener!=null){
 								property.removeListener(listener);
@@ -541,7 +532,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 									? (SetChangeListener)changeListenersRepository.get(entidadeSetMethod.getName())
 											:null;*/
 							
-							final SetChangeListener listener = (SetChangeListener) tListenerHelper.tListenerRepository.getListener(propertyFieldName);
+							final SetChangeListener listener = (SetChangeListener) tListenerHelper.tObjectRepository.get(propertyFieldName);
 							//END
 									
 							if(listener!=null){
@@ -566,7 +557,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 								//TODO: TESTAR LISTENER REPO - BEGIN
 								// final MapChangeListener listener = (MapChangeListener)changeListenersRepository.get(entidadeSetMethod.getName());
 								
-								final MapChangeListener listener = (MapChangeListener)	tListenerHelper.tListenerRepository.getListener(propertyFieldName);
+								final MapChangeListener listener = (MapChangeListener)	tListenerHelper.tObjectRepository.get(propertyFieldName);
 								//END
 								
 								if(listener!=null){
@@ -721,7 +712,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	}
 
 	@Override
-	public TListenerRepository getListenerRepository() {
+	public TObjectRepository getListenerRepository() {
 		return tListenerHelper.getListenerRepository();
 	}
 	

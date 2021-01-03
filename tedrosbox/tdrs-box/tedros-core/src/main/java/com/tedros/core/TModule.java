@@ -5,7 +5,9 @@ import com.tedros.core.context.TModuleContext;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.presenter.view.ITView;
 
+import javafx.animation.FadeTransition;
 import javafx.scene.Node;
+import javafx.util.Duration;
 
 /**
  * A module of an application   
@@ -29,8 +31,14 @@ public abstract class TModule extends InternalView implements ITModule {
 		if(context != null)
 			context.addOpenedView(view);
 		getChildren().add((Node)view);
-		if(!view.gettPresenter().isViewLoaded())
+		
+		FadeTransition ft = new FadeTransition(Duration.millis(800), (Node) view);
+	    ft.setFromValue(0.5);
+	    ft.setToValue(1);
+	    ft.play();
+	    if(!view.gettPresenter().isViewLoaded()) {
 			view.tLoad();
+		}
 	}
 	
 	public String canStop() {
@@ -44,10 +52,8 @@ public abstract class TModule extends InternalView implements ITModule {
 		boolean flag = true;
 		if(context!=null){
 			flag = context.stopModule();
-			//TedrosAppManager.getInstance().getAppContext(this).removeModuleContext(this);
 			context = null;
 		}
-		
 		return flag;
 	}
 }

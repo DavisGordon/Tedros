@@ -18,16 +18,5 @@ import javafx.scene.text.Text;
  */
 public final class TTextParser extends TAnnotationParser<Annotation, Text> {
 
-	private static TTextParser instance;
-	
-	private TTextParser() {
-		
-	}
-	
-	public static TTextParser getInstance(){
-		if(instance==null)
-			instance = new TTextParser();
-		return instance;	
-	}	
 		
 }

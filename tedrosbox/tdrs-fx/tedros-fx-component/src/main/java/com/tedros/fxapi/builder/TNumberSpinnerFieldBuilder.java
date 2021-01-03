@@ -24,17 +24,6 @@ public final class TNumberSpinnerFieldBuilder
 extends TBuilder
 implements ITControlBuilder<com.tedros.fxapi.control.TNumberSpinnerField, Property> {
 
-	private static TNumberSpinnerFieldBuilder instance;
-	
-	private TNumberSpinnerFieldBuilder(){
-		
-	}
-	
-	public static  TNumberSpinnerFieldBuilder getInstance(){
-		if(instance==null)
-			instance = new TNumberSpinnerFieldBuilder();
-		return instance;	
-	}
 
 	@SuppressWarnings({"unchecked"})
 	public com.tedros.fxapi.control.TNumberSpinnerField build(final Annotation annotation, final Property attrProperty) throws Exception {

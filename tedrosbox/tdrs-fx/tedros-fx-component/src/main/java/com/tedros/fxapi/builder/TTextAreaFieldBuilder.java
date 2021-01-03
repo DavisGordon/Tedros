@@ -23,18 +23,6 @@ public final class TTextAreaFieldBuilder
 extends TBuilder
 implements ITControlBuilder<com.tedros.fxapi.control.TTextAreaField, Property<String>> {
 
-	private static TTextAreaFieldBuilder instance;
-	
-	private TTextAreaFieldBuilder(){
-		
-	}
-	
-	public static TTextAreaFieldBuilder getInstance(){
-		if(instance==null)
-			instance = new TTextAreaFieldBuilder();
-		return instance;
-	}
-
 	public com.tedros.fxapi.control.TTextAreaField build(final Annotation annotation, final Property<String> attrProperty) throws Exception {
 		TTextAreaField tAnnotation = (TTextAreaField) annotation;
 		final com.tedros.fxapi.control.TTextAreaField control = new com.tedros.fxapi.control.TTextAreaField();

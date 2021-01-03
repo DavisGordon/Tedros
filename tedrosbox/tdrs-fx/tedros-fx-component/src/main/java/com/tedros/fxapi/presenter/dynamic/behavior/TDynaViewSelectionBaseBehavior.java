@@ -25,7 +25,6 @@ import com.tedros.fxapi.collections.TFXCollections;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.domain.TViewMode;
-import com.tedros.fxapi.form.ITModelForm;
 import com.tedros.fxapi.modal.TMessageBox;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewSelectionBaseDecorator;
@@ -142,7 +141,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 					selectedItemAction(new_);
 				}
 			};
-			super.getListenerRepository().addListener("tvmclkeh", ev);
+			super.getListenerRepository().add("tvmclkeh", ev);
 			tableView.setOnMouseClicked(new WeakEventHandler<>(ev));
 			
 			if(this.decorator.gettPaginator()!=null) {
@@ -180,7 +179,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				listView.getSelectionModel().clearSelection();
 			}
 		};
-		super.getListenerRepository().addListener("lvmclkeh", ev);
+		super.getListenerRepository().add("lvmclkeh", ev);
 		listView.setOnMouseClicked(new WeakEventHandler<>(ev));
 	}
 	
@@ -322,7 +321,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 					}
 					
 					processPagination((long)result.get("total"));
-					getListenerRepository().removeListener(id);
+					getListenerRepository().remove(id);
 					
 					if(searchAction!=null){
 						searchAction.runAfter(getPresenter());
@@ -330,7 +329,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				}
 			}
 		};
-		super.getListenerRepository().addListener(id, prcl);
+		super.getListenerRepository().add(id, prcl);
 		process.stateProperty().addListener(new WeakChangeListener(prcl));
 		process.findAll((ITEntity) super.getModelView().getModel(), pagination);
 		runProcess(process);
@@ -428,10 +427,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		
 		setViewMode(mode);
 		
-		ITModelForm<M> form = (mode!=null) 
-				? buildForm(mode)
-						:  buildForm(TViewMode.EDIT);
-		setForm(form);
+		if(mode!=null) 
+			buildForm(mode);
+		else
+			buildForm(TViewMode.EDIT);
 	}
 	
 
