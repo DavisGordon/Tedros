@@ -17,7 +17,6 @@ import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.domain.TLayoutType;
 import com.tedros.fxapi.form.TComponentBuilder;
-import com.tedros.fxapi.form.TFieldBox;
 import com.tedros.fxapi.html.THtmlLayoutGenerator;
 import com.tedros.fxapi.reader.THtmlReader;
 
@@ -36,22 +35,10 @@ public class TTabPaneBuilder
 extends TBuilder
 implements ITLayoutBuilder<TabPane> {
 
-	private static TTabPaneBuilder instance;
 	
-	private TTabPaneBuilder(){
-		
-	}
-	
-	public static TTabPaneBuilder getInstance(){
-		if(instance==null)
-			instance = new TTabPaneBuilder();
-		return instance;
-	}
-	
-	public TabPane build(final Annotation annotation, TFieldBox fieldBox) throws Exception {
+	public TabPane build(final Annotation annotation) throws Exception {
 		final TabPane tabPane = new TabPane();
 		tabPane.autosize();
-		tabPane.setUserData(fieldBox);
 		callParser(annotation, tabPane);
 		return tabPane;
 	}

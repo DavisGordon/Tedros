@@ -23,18 +23,6 @@ public final class TPasswordFieldBuilder
 extends TBuilder
 implements ITControlBuilder<com.tedros.fxapi.control.TPasswordField, Property<String>> {
 
-	private static TPasswordFieldBuilder instance;
-	
-	private TPasswordFieldBuilder(){
-		
-	}
-	
-	public static  TPasswordFieldBuilder getInstance(){
-		if(instance==null)
-			instance = new TPasswordFieldBuilder();
-		return instance;	
-	}
-
 	public com.tedros.fxapi.control.TPasswordField build(final Annotation annotation, final Property<String> attrProperty) throws Exception {
 		TPasswordField tAnnotation = (TPasswordField) annotation;
 		final com.tedros.fxapi.control.TPasswordField control = new com.tedros.fxapi.control.TPasswordField();

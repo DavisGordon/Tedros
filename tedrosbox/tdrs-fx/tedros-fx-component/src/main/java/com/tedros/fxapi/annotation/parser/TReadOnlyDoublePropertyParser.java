@@ -8,18 +8,6 @@ import com.tedros.fxapi.annotation.property.TReadOnlyDoubleProperty;
 
 public class TReadOnlyDoublePropertyParser extends TAnnotationParser<TReadOnlyDoubleProperty, ReadOnlyDoubleProperty>{
 	
-	private static TReadOnlyDoublePropertyParser instance;
-	
-	private TReadOnlyDoublePropertyParser(){
-		
-	}
-	
-	public static TReadOnlyDoublePropertyParser getInstance(){
-		if(instance==null)
-			instance = new TReadOnlyDoublePropertyParser();
-		return instance;
-		
-	}
 	
 	@Override
 	public void parse(TReadOnlyDoubleProperty annotation, ReadOnlyDoubleProperty object, String... byPass) throws Exception {

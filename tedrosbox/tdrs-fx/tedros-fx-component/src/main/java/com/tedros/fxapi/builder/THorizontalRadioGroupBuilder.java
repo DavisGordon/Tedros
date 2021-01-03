@@ -33,22 +33,10 @@ import javafx.scene.control.Tooltip;
  * @author Davis Gordon
  *
  */
-@SuppressWarnings({ "rawtypes", "restriction" })
+@SuppressWarnings({ "rawtypes" })
 public final class THorizontalRadioGroupBuilder extends TBuilder 
 implements ITControlBuilder<com.tedros.fxapi.control.THorizontalRadioGroup, Property>{
 
-	private static THorizontalRadioGroupBuilder instance;
-	
-	private THorizontalRadioGroupBuilder(){
-		
-	}
-	
-	public static  THorizontalRadioGroupBuilder getInstance(){
-		if(instance==null)
-			instance = new THorizontalRadioGroupBuilder();
-		return instance;	
-	}
-	
 	@SuppressWarnings({"unchecked"})
 	public com.tedros.fxapi.control.THorizontalRadioGroup build(final Annotation annotation, final Property attrProperty) throws Exception {
 		THorizontalRadioGroup tAnnotation = (THorizontalRadioGroup) annotation;

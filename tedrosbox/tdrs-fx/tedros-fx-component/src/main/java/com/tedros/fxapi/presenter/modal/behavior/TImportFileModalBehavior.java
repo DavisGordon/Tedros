@@ -10,15 +10,12 @@ import com.tedros.ejb.base.model.ITModel;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
-import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.exception.TValidatorException;
 import com.tedros.fxapi.modal.TMessageBox;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewActionBaseBehavior;
-import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewActionBaseDecorator;
-import com.tedros.fxapi.presenter.modal.decorator.TImportFileModalDecorator;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.process.TImportProcess;
 
@@ -35,12 +32,10 @@ extends TDynaViewActionBaseBehavior<M, E> {
 	private Class<? extends ITEntity> entityClass;
 	private Class<? extends TModelView> modelViewClass;
 	
-	private TImportFileModalDecorator<M> decorator;
 		
 	@Override
 	public void load() {
 		super.load();
-		this.decorator = (TImportFileModalDecorator<M>) getDecorator();
 		initialize();
 	}
 		
@@ -65,6 +60,7 @@ extends TDynaViewActionBaseBehavior<M, E> {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected void loadEntity() throws Throwable {
 		
 		final String id = UUID.randomUUID().toString();
@@ -89,7 +85,7 @@ extends TDynaViewActionBaseBehavior<M, E> {
 				}
 			}
 		};
-		super.getListenerRepository().addListener(id, prcl);
+		super.getListenerRepository().add(id, prcl);
 		process.stateProperty().addListener(new WeakChangeListener(prcl));
 		process.getImportRules();
 		runProcess(process);
@@ -158,7 +154,7 @@ extends TDynaViewActionBaseBehavior<M, E> {
 				}
 			};
 			
-			super.getListenerRepository().addListener(id, prcl);
+			super.getListenerRepository().add(id, prcl);
 			process.stateProperty().addListener(new WeakChangeListener(prcl));
 			process.importFile((ITImportModel) getModelView().getModel());
 			runProcess(process);

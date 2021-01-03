@@ -94,7 +94,7 @@ public class EstoqueItemModelView extends TEntityModelView<EstoqueItem> {
 	
 	private void buildListener() {
 		
-		ChangeListener<Number> idListener = super.getListenerRepository().getListener("vlrajuste2");
+		ChangeListener<Number> idListener = super.getListenerRepository().get("vlrajuste2");
 		if(idListener==null){
 			idListener = (arg0, arg1, vlr) -> {
 				vlrAjustado.setValue(super.getModel().getVlrAjustado());

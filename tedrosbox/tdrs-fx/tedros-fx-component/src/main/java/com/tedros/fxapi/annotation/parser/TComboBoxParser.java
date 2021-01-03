@@ -12,12 +12,6 @@ import javafx.scene.control.ComboBox;
 @SuppressWarnings("rawtypes")
 public class TComboBoxParser extends TAnnotationParser<TComboBoxField, ComboBox> {
 
-	private static TComboBoxParser instance;
-
-	private TComboBoxParser(){
-		
-	}
-	
 	@Override
 	@SuppressWarnings("unchecked")
 	public void parse(TComboBoxField annotation, ComboBox object, String... byPass)
@@ -31,10 +25,4 @@ public class TComboBoxParser extends TAnnotationParser<TComboBoxField, ComboBox>
 		}
 	}
 	
-	
-	public static TComboBoxParser getInstance(){
-		if(instance==null)
-			instance = new TComboBoxParser();
-		return instance;
-	}
 }

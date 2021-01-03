@@ -192,7 +192,7 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	
 	private void buildListener() {
 		
-		ChangeListener<Number> idListener = super.getListenerRepository().getListener("displayText");
+		ChangeListener<Number> idListener = super.getListenerRepository().get("displayText");
 		if(idListener==null){
 			idListener = (arg0, arg1, arg2) -> {
 					String str = (arg2==null ? "" : "(ID: "+arg2.toString()+") " ) 
@@ -207,7 +207,7 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 		
 		id.addListener(idListener);
 		
-		ChangeListener<String> tituloListener = super.getListenerRepository().getListener("displayText1");
+		ChangeListener<String> tituloListener = super.getListenerRepository().get("displayText1");
 		if(tituloListener==null){
 			tituloListener = (arg0, arg1, arg2) -> {
 					String str = (id.getValue()==null ? "" : "(ID: "+id.getValue().toString()+") " ) 
@@ -221,7 +221,7 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 		
 		titulo.addListener(tituloListener);
 		
-		ChangeListener<Date> dataListener = super.getListenerRepository().getListener("displayText2");
+		ChangeListener<Date> dataListener = super.getListenerRepository().get("displayText2");
 		if(dataListener==null){
 			dataListener = (arg0, arg1, arg2) -> {
 					String str = (id.getValue()==null ? "" : "(ID: "+id.getValue().toString()+") " ) 

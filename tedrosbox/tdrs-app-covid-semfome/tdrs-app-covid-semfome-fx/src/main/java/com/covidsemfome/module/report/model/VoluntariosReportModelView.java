@@ -63,14 +63,14 @@ public class VoluntariosReportModelView extends TModelView<VoluntarioReportModel
 	
 	private SimpleLongProperty id;
 	
-	private SimpleStringProperty displayText;
-	
 	@TAccordion(expandedPane="filtro", node=@TNode(id="repdoaacc",parse = true),
 			panes={
 					@TTitledPane(text="Filtros", node=@TNode(id="filtro",parse = true), expanded=true,
-							fields={"titulo","ids","status","texto2","dataInicio","dataFim"}),
+							fields={"titulo","status","texto2"}),
 					@TTitledPane(text="Resultado", node=@TNode(id="resultado",parse = true),
 						fields={"texto3","result"})})	
+	private SimpleStringProperty displayText;
+	
 	@TLabel(text="Titulo / Local")
 	@TTextField(textInputControl=@TTextInputControl(promptText="Insira parte ou o titulo completo da ação", parse = true))
 	@THBox(	pane=@TPane(children={"titulo","ids"}), spacing=10, fillHeight=true,

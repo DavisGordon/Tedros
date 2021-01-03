@@ -21,18 +21,6 @@ public class TCheckBoxFieldBuilder
 extends TBuilder 
 implements ITControlBuilder<com.tedros.fxapi.control.TCheckBoxField, Property<Boolean>> {
 	
-	private static TCheckBoxFieldBuilder instance;
-	
-	private TCheckBoxFieldBuilder(){
-		
-	}
-	
-	public static TCheckBoxFieldBuilder getInstance(){
-		if(instance==null)
-			instance = new TCheckBoxFieldBuilder();
-		return instance;
-	}
-	
 	public com.tedros.fxapi.control.TCheckBoxField build(final Annotation annotation, final Property<Boolean> attrProperty) throws Exception {
 		final com.tedros.fxapi.control.TCheckBoxField control = new com.tedros.fxapi.control.TCheckBoxField();
 		callParser(annotation, control);

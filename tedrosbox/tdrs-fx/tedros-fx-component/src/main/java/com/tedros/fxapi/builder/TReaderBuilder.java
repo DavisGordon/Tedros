@@ -50,18 +50,6 @@ public class TReaderBuilder
 extends TBuilder
 implements ITReaderBuilder<TTextReader, Property> {
 
-	private static TReaderBuilder instance;
-	
-	private TReaderBuilder(){
-		
-	}
-	
-	public static TReaderBuilder getInstance(){
-		if(instance==null)
-			instance = new TReaderBuilder();
-		return instance;
-	}
-	
 	public TTextReader build(final Annotation annotation, final Property attrProperty) throws Exception {
 		TReader tAnnotation = (TReader) annotation;
 		TTextReader<?> reader = generateReader(tAnnotation, attrProperty); 

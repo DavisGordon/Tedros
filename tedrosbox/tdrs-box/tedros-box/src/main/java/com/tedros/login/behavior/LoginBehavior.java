@@ -23,6 +23,9 @@ import com.tedros.fxapi.control.TTextField;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.exception.TValidatorException;
+import com.tedros.fxapi.form.ITForm;
+import com.tedros.fxapi.form.ITModelForm;
+import com.tedros.fxapi.form.TBuildFormStatus;
 import com.tedros.fxapi.form.TFieldBox;
 import com.tedros.fxapi.modal.TMessageBox;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
@@ -41,6 +44,7 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.beans.value.WeakChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -118,7 +122,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 				LoginModelView model = new LoginModelView(login);
 				setViewMode(TViewMode.EDIT);
 				setModelView(model);
-				editEntity(model);
+				//editEntity(model);
 				return false;
 			}
 
@@ -267,6 +271,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 
 			@Override
 			public boolean runBefore(TDynaPresenter<LoginModelView> presenter) {
+				
 				if(profileComboBox.isDisable()){
 					Platform.exit();
 				}else{
@@ -286,27 +291,47 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 		configSaveButton();
 		configCancelButton();
 		
+		ChangeListener<TBuildFormStatus> chl = (ob, o, n) -> {
+			if(n!=null && n.equals(TBuildFormStatus.FINISHED))
+				getControls(super.getForm());
+		};
+		super.getListenerRepository().add("buildForm", chl);
+		super.buildFormStatusProperty().addListener(new WeakChangeListener<>(chl));
 		newAction();
-		getControls();
 	}
 
+	/*@SuppressWarnings("rawtypes")
+	@Override
+	protected void runAfterBuildForm(ITModelForm form) {
+		
+		if(!form.isLoaded()) {
+			ChangeListener<Boolean> chl = (ob, o, n) -> {
+				if(n)
+					getControls(super.getForm());
+			};
+			super.getListenerRepository().add("loadedForm", chl);
+			form.tLoadedProperty().addListener(new WeakChangeListener<>(chl));
+		}else
+			getControls(form);
+
+	}*/
+
 	@SuppressWarnings("unchecked")
-	public void getControls() {
-		TFieldBox userFieldBox = getForm().gettFieldBox("user");//  language
+	private void getControls(ITForm form) {
+		TFieldBox userFieldBox = form.gettFieldBox("user");//  language
 		userTextField = (TTextField) userFieldBox.gettControl();
 		
-		TFieldBox passwordFieldBox = getForm().gettFieldBox("password");// password 
+		TFieldBox passwordFieldBox = form.gettFieldBox("password");// password 
 		passwordField = (TPasswordField) passwordFieldBox.gettControl();
 		
-		TFieldBox tFieldBox = getForm().gettFieldBox("language");// password language
+		TFieldBox tFieldBox = form.gettFieldBox("language");// password language
 		languageComboBox = (TComboBoxField<String>) tFieldBox.gettControl();
 		
-		TFieldBox profileFieldBox = getForm().gettFieldBox("profile");//  language
+		TFieldBox profileFieldBox = form.gettFieldBox("profile");//  language
 		profileComboBox = (TComboBoxField<TProfileModelView>) profileFieldBox.gettControl();
 		
-		TFieldBox profileTextFieldBox = getForm().gettFieldBox("profileText");//  language
+		TFieldBox profileTextFieldBox = form.gettFieldBox("profileText");//  language
 		profileText = (Text) profileTextFieldBox.gettControl();
-
 	}
 	
 	@Override

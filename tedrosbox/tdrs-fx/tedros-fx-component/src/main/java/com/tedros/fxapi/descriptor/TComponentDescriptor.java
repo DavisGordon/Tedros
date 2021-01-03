@@ -3,20 +3,29 @@ package com.tedros.fxapi.descriptor;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
-
+import com.sun.javafx.collections.MappingChange.Map;
 import com.tedros.core.model.ITModelView;
+import com.tedros.core.module.TObjectRepository;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.parser.ITAnnotationParser;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.form.ITForm;
 import com.tedros.fxapi.form.TFieldBox;
 import com.tedros.fxapi.util.TReflectionUtil;
+
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.BooleanExpression;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
+import javafx.scene.Node;
 
 /**
  * <pre>
@@ -31,15 +40,17 @@ public class TComponentDescriptor {
 	
 	private final ITForm form;
 	private final ITModelView modelView;
+	private BooleanProperty loaded = new SimpleBooleanProperty(false);
 	private final List<TFieldDescriptor> fieldDescriptorList;
 	private final List<String> fieldsNameList;
 	private final List<Annotation> modelViewAnnotationList;
-	private final ObservableMap<String, TFieldBox> fieldBoxMap;
+	private final ObservableMap<String, Node> components;
+	private final java.util.Map<String, TFieldBox> fieldBoxMap;
 	private TFieldDescriptor fieldDescriptor;
 	private TViewMode mode;
 	private String annotationPropertyInExecution;
 	private Class<? extends ITAnnotationParser> parserClassInExecution;
-	
+	private TObjectRepository repo = new TObjectRepository();
 	/**
 	 * <pre>
 	 * Initialize a new {@link TComponentDescriptor}
@@ -49,11 +60,24 @@ public class TComponentDescriptor {
 		this.form = form;
 		this.modelView = modelView;
 		this.modelViewAnnotationList = Arrays.asList(this.modelView.getClass().getAnnotations());
-		this.fieldBoxMap = FXCollections.observableHashMap();
+		this.components = FXCollections.observableHashMap();
+		this.fieldBoxMap = new HashMap<>();
 		this.fieldDescriptorList = TReflectionUtil.getFieldDescriptorList(this.modelView);
 		this.fieldsNameList = new ArrayList<>(0);
 		this.mode = mode;
 		loadFieldNameList(); 
+		
+		BooleanExpression be = null;
+		for (final TFieldDescriptor fd : fieldDescriptorList) {
+			if(fd.hasLayout() || fd.hasControl()) {
+				if(be==null)
+					be = BooleanBinding.booleanExpression(fd.loadedProperty());
+				else
+					be = be.and(fd.loadedProperty());
+			}
+		}
+		if(be!=null)
+			this.loaded.bind(be);
 	}
 	
 	/**
@@ -67,6 +91,7 @@ public class TComponentDescriptor {
 		this.form = componentDescriptor.getForm();
 		this.modelView = componentDescriptor.getModelView();
 		this.modelViewAnnotationList = componentDescriptor.getModelViewAnnotationList();
+		this.components = componentDescriptor.getComponents();
 		this.fieldBoxMap = componentDescriptor.getFieldBoxMap();
 		this.fieldDescriptorList = componentDescriptor.getFieldDescriptorList();
 		this.mode = componentDescriptor.getMode();
@@ -79,6 +104,27 @@ public class TComponentDescriptor {
 				}
 			}
 		}
+	}
+	
+	public  TFieldDescriptor getFieldDescriptor(String fieldName) {
+		if(fieldName==null)
+			return null;
+		
+		for (final TFieldDescriptor fd : fieldDescriptorList) {
+			if(fd.getFieldName().equals(fieldName)){
+				return fd;
+			}
+		}
+		
+		return null;
+	}
+	
+	public boolean isLoaded() {
+		return loaded.get();
+	}
+
+	public ReadOnlyBooleanProperty loadedProperty() {
+		return this.loaded;
 	}
 	
 	/**
@@ -164,15 +210,15 @@ public class TComponentDescriptor {
 
 	/**
 	 * <pre>
-	 * Return a {@link Map} of <{@link String}, {@link TFieldBox}> with all components builded at the present moment.
+	 * Return a {@link Map} of <{@link String}, {@link Node}> with all components builded at the present moment.
 	 * 
 	 * The key value represents the field name in the model view.
 	 * </pre>
 	 * 
-	 * @return {@link Map} of <{@link String}, {@link TFieldBox}>
+	 * @return {@link Map} of <{@link String}, {@link Node}>
 	 * */
-	public final ObservableMap<String, TFieldBox> getFieldBoxMap() {
-		return fieldBoxMap;
+	public final ObservableMap<String, Node> getComponents() {
+		return components;
 	}
 
 	/**
@@ -182,7 +228,7 @@ public class TComponentDescriptor {
 	 * 
 	 * @return {@link TFieldDescriptor}
 	 * */
-	public final TFieldDescriptor getFieldDescriptor() {
+	public synchronized final TFieldDescriptor getFieldDescriptor() {
 		return fieldDescriptor;
 	}
 
@@ -276,6 +322,16 @@ public class TComponentDescriptor {
 	private void loadFieldNameList() {
 		for(final TFieldDescriptor f : fieldDescriptorList)
 			fieldsNameList.add(f.getFieldName());
+	}
+
+	public TFieldBox getFieldBox(String field) {
+		return this.fieldBoxMap.get(field);
+	}
+	/**
+	 * @return the fieldBoxMap
+	 */
+	public java.util.Map<String, TFieldBox> getFieldBoxMap() {
+		return fieldBoxMap;
 	}
 	
 }

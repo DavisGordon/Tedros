@@ -24,21 +24,6 @@ public class TDatePickerFieldBuilder
 extends TBuilder
 implements ITControlBuilder<com.tedros.fxapi.control.TDatePickerField, Property<Date>> {
 	
-	private static TDatePickerFieldBuilder instance;	
-	
-	private TDatePickerFieldBuilder(){
-		
-	}
-	/**
-	 * <pre>
-	 * Return a {@link TDatePickerFieldBuilder} instance.
-	 * </pre>
-	 * */
-	public static TDatePickerFieldBuilder getInstance(){
-		if(instance==null)
-			instance = new TDatePickerFieldBuilder();
-		return instance;
-	}
 	
 	public com.tedros.fxapi.control.TDatePickerField build(final Annotation annotation, final Property<Date> attrProperty) throws Exception {
 		final TDatePickerField tAnnotation = (TDatePickerField) annotation;

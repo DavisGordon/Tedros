@@ -19,8 +19,6 @@ import com.tedros.fxapi.annotation.control.TShowField.TField;
 import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
-import com.tedros.fxapi.annotation.effect.TDropShadow;
-import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.TFieldSet;
 import com.tedros.fxapi.annotation.layout.THBox;
@@ -55,12 +53,12 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
 @TFormReaderHtml
-@TForm(name = "Estoque")
+@TForm(name = "Estoque gerado automaticamente", showBreadcrumBar=true)
 @TEjbService(serviceName = "IEstoqueControllerRemote", model=Estoque.class)
 @TListViewPresenter(listViewMinWidth=400,
 	paginator=@TPaginator(entityClass = Estoque.class, serviceName = "IEstoqueControllerRemote",
 		show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Estoque", 
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Ver Estoque", 
 		buildNewButton=false, buildDeleteButton=false, buildCollapseButton=false
 	)))
 @TSecurity(	id="COVSEMFOME_ESTOQUE_FORM", 
@@ -78,9 +76,8 @@ public class EstoqueModelView extends TEntityModelView<Estoque> {
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-pane", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
-	@TText(text="Estoque", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
-	node=@TNode(id="t-form-title-text", parse = true))
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
+	/*@TText(text="Estoque", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, node=@TNode(id="t-form-title-text", parse = true))*/
 	private SimpleStringProperty header;
 	
 	@TReaderHtml

@@ -8,7 +8,9 @@ package com.tedros.core.control;
 
 import com.tedros.core.context.TedrosContext;
 
+import javafx.animation.Animation.Status;
 import javafx.animation.FadeTransition;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -45,10 +47,21 @@ public class TProgressIndicator {
         pane.getChildren().addAll(veil, progressIndicator);
 	}
 	
-	public void bind(final ReadOnlyBooleanProperty property){
+	public void bind(final BooleanBinding bb){
 		removeBind();
-		veil.visibleProperty().bind(property);
-		progressIndicator.visibleProperty().bind(property);
+		veil.visibleProperty().bind(bb);
+		progressIndicator.visibleProperty().bind(bb);
+		if(bb.get() && !ft.getStatus().equals(Status.RUNNING))
+			ft.play();
+	}
+	
+	public void bind(ReadOnlyBooleanProperty bb) {
+		removeBind();
+		veil.visibleProperty().bind(bb);
+		progressIndicator.visibleProperty().bind(bb);
+		if(bb.get() && !ft.getStatus().equals(Status.RUNNING))
+			ft.play();
+		
 	}
 	
 	public void removeBind(){
@@ -68,7 +81,7 @@ public class TProgressIndicator {
         
         progressIndicator.setImage(img);
         
-        ft = new FadeTransition(Duration.millis(1000), progressIndicator);
+        ft = new FadeTransition(Duration.millis(2000), progressIndicator);
         ft.setFromValue(1.0);
         ft.setToValue(0.3);
         ft.setCycleCount(FadeTransition.INDEFINITE);
@@ -85,8 +98,5 @@ public class TProgressIndicator {
 			}
         	
         });
-    
-        
 	}
-	
 }

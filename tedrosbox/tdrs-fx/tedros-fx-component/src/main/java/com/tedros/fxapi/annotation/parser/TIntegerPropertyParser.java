@@ -9,19 +9,6 @@ import com.tedros.fxapi.annotation.property.TIntegerProperty;
 
 public class TIntegerPropertyParser extends TAnnotationParser<TIntegerProperty, IntegerProperty>{
 	
-	private static TIntegerPropertyParser instance;
-	
-	private TIntegerPropertyParser(){
-		
-	}
-	
-	public static TIntegerPropertyParser getInstance(){
-		if(instance==null)
-			instance = new TIntegerPropertyParser();
-		return instance;
-		
-	}
-	
 	@Override
 	public void parse(TIntegerProperty annotation, IntegerProperty object, String... byPass) throws Exception {
 		if(annotation.observable().addListener()!=TInvalidationListener.class)

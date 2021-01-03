@@ -39,18 +39,12 @@ public class TTextReaderHtmlBuilder
 extends TBuilder
 implements ITReaderHtmlBuilder<TTextReaderHtml, SimpleStringProperty> {
 
-	private static TStripTagUtil tStripTagUtil;
-	private static TTextReaderHtmlBuilder instance;
+	private final TStripTagUtil tStripTagUtil;
 	
-	private TTextReaderHtmlBuilder(){
+	public TTextReaderHtmlBuilder(){
 		tStripTagUtil = new TStripTagUtil();
 	}
 	
-	public static TTextReaderHtmlBuilder getInstance(){
-		if(instance==null)
-			instance = new TTextReaderHtmlBuilder();
-		return instance;
-	}
 	
 	@SuppressWarnings("rawtypes")
 	public THtmlReader build(final TTextReaderHtml tAnnotation, SimpleStringProperty property) throws Exception {

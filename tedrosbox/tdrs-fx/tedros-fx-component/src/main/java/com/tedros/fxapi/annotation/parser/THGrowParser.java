@@ -1,46 +1,34 @@
 package com.tedros.fxapi.annotation.parser;
 
-import javafx.scene.Node;
-import javafx.scene.layout.HBox;
-
 import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPriority;
-import com.tedros.fxapi.form.TFieldBox;
+import com.tedros.fxapi.descriptor.TFieldDescriptor;
+
+import javafx.scene.layout.HBox;
 
 public class THGrowParser extends TAnnotationParser<THGrow, HBox> {
-
-	private static THGrowParser instance;
-	
-	private THGrowParser() {
-		
-	}
-	
-	public static THGrowParser getInstance() {
-		if(instance==null)
-			instance = new THGrowParser();
-		return instance;
-	}
 
 	@Override
 	public void parse(THGrow annotation, HBox object, String... byPass) throws Exception {
 		
 		if(annotation.priority().length>0){
+			String currField = getComponentDescriptor().getFieldDescriptor().getFieldName();
 			TPriority[] arr = annotation.priority();
 			for (TPriority tPriority : arr) {
 				if(StringUtils.isBlank(tPriority.field()))
 					continue;
-				for(Node fb : object.getChildren()){
-					if(fb instanceof TFieldBox){
-						TFieldBox f = (TFieldBox) fb;
-						if(tPriority.field().equals(f.gettControlFieldName()))
-							HBox.setHgrow(fb, tPriority.priority());
-					}
-				}	
+				TFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor(tPriority.field());
+				if(fd!=null) {
+					if(currField.equals(tPriority.field()))
+						HBox.setHgrow(fd.getComponent(), tPriority.priority());
+					else if(fd.hasLayout())
+						HBox.setHgrow(fd.getLayout(), tPriority.priority());
+					else
+						HBox.setHgrow(fd.getComponent(), tPriority.priority());
+				}
 			}
-			
 		}
 	}
-	
 }

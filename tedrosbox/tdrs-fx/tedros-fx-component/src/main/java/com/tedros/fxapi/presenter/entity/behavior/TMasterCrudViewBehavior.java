@@ -112,12 +112,12 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 							
 							loadListView();
 							processPagination((long)result.get("total"));
-							getListenerRepository().removeListener("processloadlistviewCL");
+							getListenerRepository().remove("processloadlistviewCL");
 						}
 					}
 				};
 				
-				super.getListenerRepository().addListener("processloadlistviewCL", prcl);
+				super.getListenerRepository().add("processloadlistviewCL", prcl);
 				try {
 					E entity = super.getEntityClass().newInstance();
 					process.pageAll(entity, this.decorator.gettPaginator().getPagination());
@@ -171,11 +171,11 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 								}
 							}
 							loadListView();
-							getListenerRepository().removeListener("processloadlistviewCL");
+							getListenerRepository().remove("processloadlistviewCL");
 						}
 					};
 					
-					super.getListenerRepository().addListener("processloadlistviewCL", prcl);
+					super.getListenerRepository().add("processloadlistviewCL", prcl);
 					
 					process.list();
 					process.stateProperty().addListener(new WeakChangeListener(prcl));
@@ -223,7 +223,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		listView.setItems((ObservableList<M>) (models==null ? FXCollections.observableArrayList() : models));
 		listView.setEditable(true);
 		listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		super.getListenerRepository().removeListener("processloadlistviewCL");
+		super.getListenerRepository().remove("processloadlistviewCL");
 		final M mv = getPresenter().getModelView();
 		processModelView(mv);
 		
@@ -271,12 +271,12 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 						}
 					}
 					processPagination((long)result.get("total"));
-					getListenerRepository().removeListener(id);
+					getListenerRepository().remove(id);
 				}
 			}
 		};
 		
-		super.getListenerRepository().addListener(id, prcl);
+		super.getListenerRepository().add(id, prcl);
 		if(StringUtils.isNotBlank(pagination.getSearch())) {
 			
 			try {
@@ -343,7 +343,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 			processListViewSelectedItem(new_);
 		};
 		
-		super.getListenerRepository().addListener("listviewselecteditemviewCL", chl);
+		super.getListenerRepository().add("listviewselecteditemviewCL", chl);
 		
 		this.decorator.gettListView()
 		.getSelectionModel()

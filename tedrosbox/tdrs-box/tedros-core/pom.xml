@@ -39,6 +39,7 @@
 	  		<version>${javafx.version}</version>
 		</dependency> 
 		
+	
 		<!-- https://mvnrepository.com/artifact/org.scannotation/scannotation -->
 		<dependency>
 		    <groupId>org.reflections</groupId>
@@ -46,12 +47,10 @@
 		    <version>0.9.12</version>
 		</dependency>
 
-		
-	  
-	  	<dependency>
+		<dependency>
 	  		<groupId>org.apache.commons</groupId>
 	  		<artifactId>commons-lang3</artifactId>
-	  		<version>3.4</version>
+	  		<version>${commons.lang.version}</version>
 	  	</dependency>
 	  
 	    <dependency>

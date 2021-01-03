@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import com.tedros.core.module.TListenerRepository;
+import com.tedros.core.module.TObjectRepository;
 import com.tedros.ejb.base.entity.ITFileEntity;
 import com.tedros.ejb.base.model.ITFileModel;
 import com.tedros.ejb.base.model.ITModel;
@@ -51,14 +51,14 @@ class TListenerHelper<M extends ITModel> {
 	
 	private 	TModelView<M> 				tModelView;
 	protected 	Map<String, Set<String>> 	listenerKeys 		= new HashMap<>();
-	protected 	TListenerRepository 		tListenerRepository = new TListenerRepository();
+	protected 	TObjectRepository 		tObjectRepository = new TObjectRepository();
 	
 	/**
 	 * Constructor
 	 * */
 	protected TListenerHelper(TModelView<M> tModelView) {
 		this.tModelView = tModelView;
-		tListenerRepository = new TListenerRepository();
+		tObjectRepository = new TObjectRepository();
 	}
 	
 	/**
@@ -91,15 +91,15 @@ class TListenerHelper<M extends ITModel> {
 	
 	
 	protected <T> T removeListener(String listenerId){
-		return this.tListenerRepository.removeListener(listenerId);
+		return this.tObjectRepository.remove(listenerId);
 	}
 		
 	protected Map<String, Set<String>> getListenerKeys() {
 		return listenerKeys;
 	}
 	
-	protected TListenerRepository getListenerRepository() {
-		return tListenerRepository;
+	protected TObjectRepository getListenerRepository() {
+		return tObjectRepository;
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -113,7 +113,7 @@ class TListenerHelper<M extends ITModel> {
 			
 			for(String key : listenerKeys.get(fieldName)){
 			
-				Object listenerObj = tListenerRepository.removeListener(key);
+				Object listenerObj = tObjectRepository.remove(key);
 				if (listenerObj instanceof WeakChangeListener || listenerObj instanceof WeakInvalidationListener)
 					continue;
 				
@@ -166,7 +166,7 @@ class TListenerHelper<M extends ITModel> {
 			}
 		}
 		listenerKeys.clear();
-		tListenerRepository.clear();
+		tObjectRepository.clear();
 	}
 	
 	/**
@@ -666,7 +666,7 @@ class TListenerHelper<M extends ITModel> {
 	 * @param invalidationListener
 	 */
 	protected void addListener(final String fieldName, InvalidationListener invalidationListener) {
-		tListenerRepository.addListener(buildKeyForField(fieldName), invalidationListener);
+		tObjectRepository.add(buildKeyForField(fieldName), invalidationListener);
 	}
 	
 	/**
@@ -675,7 +675,7 @@ class TListenerHelper<M extends ITModel> {
 	 */
 	@SuppressWarnings("rawtypes")
 	protected void addListener(final String fieldName, ChangeListener changeListener) {
-		tListenerRepository.addListener(this.buildKeyForField(fieldName), changeListener);
+		tObjectRepository.add(this.buildKeyForField(fieldName), changeListener);
 	}
 	
 	/**
@@ -684,7 +684,7 @@ class TListenerHelper<M extends ITModel> {
 	 */
 	@SuppressWarnings("rawtypes")
 	protected void addListener(final String fieldName, final MapChangeListener changeListener) {
-		tListenerRepository.addListener(this.buildKeyForField(fieldName), changeListener);
+		tObjectRepository.add(this.buildKeyForField(fieldName), changeListener);
 	}
 	
 	/**
@@ -693,7 +693,7 @@ class TListenerHelper<M extends ITModel> {
 	 */
 	@SuppressWarnings("rawtypes")
 	protected void addListener(final String fieldName, final SetChangeListener changeListener) {
-		tListenerRepository.addListener(this.buildKeyForField(fieldName), changeListener);
+		tObjectRepository.add(this.buildKeyForField(fieldName), changeListener);
 	}
 
 	/**
@@ -702,7 +702,7 @@ class TListenerHelper<M extends ITModel> {
 	 */
 	@SuppressWarnings("rawtypes")
 	protected void addListener(final String fieldName, final ListChangeListener changeListener) {
-		tListenerRepository.addListener(this.buildKeyForField(fieldName), changeListener);
+		tObjectRepository.add(this.buildKeyForField(fieldName), changeListener);
 	}
 
 }

@@ -24,17 +24,6 @@ public class TMultipleSelectionModalBuilder
 extends TBuilder
 implements ITControlBuilder<com.tedros.fxapi.control.TSelectionModal, ITObservableList> {
 
-	private static TMultipleSelectionModalBuilder instance;
-	
-	private TMultipleSelectionModalBuilder(){
-		
-	}
-	
-	public static TMultipleSelectionModalBuilder getInstance(){
-		if(instance==null)
-			instance = new TMultipleSelectionModalBuilder();
-		return instance;
-	}
 	
 	public TSelectionModal build(final Annotation annotation, final ITObservableList attrProperty) throws Exception {
 		TMultipleSelectionModal tAnnotation = (TMultipleSelectionModal) annotation;

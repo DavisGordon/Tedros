@@ -16,20 +16,12 @@ import com.tedros.util.TStripTagUtil;
 public class TPageReaderHtmlBuilder extends TBuilder implements
 		ITReaderHtmlBuilder<TFormReaderHtml, StringBuffer> {
 	
-	private static TPageReaderHtmlBuilder instance;
+	private final TStripTagUtil tStripTagUtil;
 	
-	private TStripTagUtil tStripTagUtil;
-	
-	private TPageReaderHtmlBuilder(){
+	public TPageReaderHtmlBuilder(){
 		tStripTagUtil = new TStripTagUtil();
 	}
 
-	public static TPageReaderHtmlBuilder getInstance(){
-		if(instance==null)
-			instance = new TPageReaderHtmlBuilder();
-		return instance;
-	}
-	
 	@Override
 	public THtmlReader build(TFormReaderHtml tAnnotation, StringBuffer sbf)
 			throws Exception {

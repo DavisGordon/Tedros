@@ -136,16 +136,77 @@ public class EstoqueItem extends TEntity {
 		this.qtdCalculado = qtdCalculado;
 	}
 	
-	public Integer sumQuantidade(Integer qtd) {
+	public Integer calcularESomar(EstocavelItem estocavel, EstoqueItem anterior) {
+		this.setQtdInicial(anterior.getVlrAjustado());
+		if(estocavel instanceof EntradaItem) {
+			this.addQuantidade(estocavel.getQuantidade());
+			return estocavel.getQuantidade();
+		} else {
+			 this.addQuantidade(anterior.getVlrAjustado() - estocavel.getQuantidade());
+			 return estocavel.getQuantidade() * -1;
+		}
+	}
+	
+	public Integer calcularESomar(EstocavelItem estocavel, EstoqueConfig config) {
+		this.setQtdInicial(config.getQtdInicial());
+		if(estocavel instanceof EntradaItem) {
+			this.addQuantidade(config.getQtdInicial() + estocavel.getQuantidade());
+			return estocavel.getQuantidade();
+		} else {
+			this.addQuantidade(config.getQtdInicial() - estocavel.getQuantidade());
+			return estocavel.getQuantidade() * -1;
+		}
+	}
+	
+	public Integer somar(EstocavelItem atual, EstocavelItem retido) {
+		return this.addQuantidade(calcular(atual, retido));
+	}
+	
+	public Integer calcular(EstocavelItem atual, EstocavelItem retido) {
+		if(atual instanceof EntradaItem) {
+			return atual.getQuantidade() - retido.getQuantidade();
+		} else {
+			return (atual.getQuantidade() - retido.getQuantidade()) * -1;
+		}
+	}
+	
+	public Integer somar(EstocavelItem estocavel) {
+		this.setQtdInicial(0);
+		return this.addQuantidade(calcular(estocavel));
+	}
+	
+	public Integer calcular(EstocavelItem estocavel) {
+		if(estocavel instanceof EntradaItem) {
+			return estocavel.getQuantidade();
+		} else {
+			return estocavel.getQuantidade() * -1;
+		}
+	}
+	
+	public Integer calcularESubtrair(EstocavelItem estocavel) {
+		this.setQtdInicial(0);
+		if(estocavel instanceof EntradaItem) {
+			this.remQuantidade(estocavel.getQuantidade());
+			return estocavel.getQuantidade() * -1;
+		} else {
+			this.addQuantidade(estocavel.getQuantidade());
+			return estocavel.getQuantidade();
+		}
+	}
+	
+	public Integer addQuantidade(Integer qtd) {
 		if(this.qtdCalculado==null)
 			this.qtdCalculado = qtd;
 		else
-			this.qtdCalculado = this.qtdCalculado + qtd;
+			this.qtdCalculado += qtd;
+		
+		if(this.qtdCalculado<0)
+			this.qtdCalculado = 0;
 		
 		return this.qtdCalculado;
 	}
 	
-	public Integer subtractQuantidade(Integer qtd) {
+	public Integer remQuantidade(Integer qtd) {
 		if(this.qtdCalculado==null)
 			this.qtdCalculado = qtd;
 		else {

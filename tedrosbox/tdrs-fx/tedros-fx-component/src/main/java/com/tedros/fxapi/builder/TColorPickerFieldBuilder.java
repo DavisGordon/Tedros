@@ -24,17 +24,6 @@ public final class TColorPickerFieldBuilder
 extends TBuilder
 implements ITControlBuilder<com.tedros.fxapi.control.TColorPickerField, Property<Color>> {
 	
-	private static TColorPickerFieldBuilder instance;
-	
-	private TColorPickerFieldBuilder(){
-		
-	}
-	
-	public static TColorPickerFieldBuilder getInstance(){
-		if(instance==null)
-			instance = new TColorPickerFieldBuilder();
-		return instance;
-	}
 	
 	public com.tedros.fxapi.control.TColorPickerField build(final Annotation annotation, final Property<Color> attrProperty) throws Exception {
 		final TColorPickerField tAnnotation = (TColorPickerField) annotation;

@@ -61,7 +61,7 @@ import javafx.scene.layout.StackPane;
 public abstract class TDynaViewCrudBaseBehavior<M extends TModelView, E extends ITModel> 
 extends TDynaViewSimpleBaseBehavior<M, E> {
 	
-	private ListChangeListener<Node> formListChangeListener;
+	private ChangeListener<ITModelForm<M>> breadcrumbFormChangeListener;
 	
 	private ToggleGroup radioGroup;
 	private BooleanProperty modeBtnDisableProperty;
@@ -151,8 +151,16 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				processModelView(new_);
 			};
 			
-			super.getListenerRepository().addListener("setmodelviewCL", mvcl);
+			super.getListenerRepository().add("setmodelviewCL", mvcl);
 			super.modelViewProperty().addListener(new WeakChangeListener(mvcl));
+			
+			ChangeListener<ITModelForm<M>> abfchl = (ob, o, form) -> {
+				if(form!=null)
+					runAfterBuildForm(form);
+			};
+			super.getListenerRepository().add("afterBuildFormChl", abfchl);
+			super.formProperty().addListener(new WeakChangeListener(abfchl));
+			
 			
 		}catch(Exception e){
 			e.printStackTrace();
@@ -162,6 +170,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 
 	public void processModelView(TModelView model) {
 		if(model== null) {
+			if(decorator.isShowBreadcrumBar() && decorator.gettBreadcrumbForm()!=null)
+				decorator.gettBreadcrumbForm().tEntryListProperty().clear();
 			super.clearForm();
 			setDisableModelActionButtons(true);
 			this.decorator.showScreenSaver();
@@ -173,11 +183,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				decorator.gettBreadcrumbForm().tEntryListProperty().clear();
 			showForm(getViewMode());
 			setDisableModelActionButtons(false);
-			runAfterBuildForm();
+			
 		}
 	}
 	
-	protected void runAfterBuildForm() {
+	protected void runAfterBuildForm(ITModelForm<M> form) {
 		
 		
 	}
@@ -205,7 +215,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		final Button colapseButton = this.decorator.gettColapseButton();
 		if(colapseButton!=null) {
 			EventHandler<ActionEvent> eh = e -> colapseAction();
-			super.getListenerRepository().addListener("colapseButtonClickEH", eh);
+			super.getListenerRepository().add("colapseButtonClickEH", eh);
 			colapseButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
 		}
 	}
@@ -218,7 +228,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			final Button importButton = this.decorator.gettImportButton();
 			if(importButton!=null) {
 				EventHandler<ActionEvent> eh = e -> importAction();
-				super.getListenerRepository().addListener("importButtonClickEH", eh);
+				super.getListenerRepository().add("importButtonClickEH", eh);
 				importButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
 			}
 		}
@@ -232,7 +242,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			final Button newButton = this.decorator.gettNewButton();
 			if(newButton!=null) {
 				EventHandler<ActionEvent> eh = e -> newAction();
-				super.getListenerRepository().addListener("newButtonClickEH", eh);
+				super.getListenerRepository().add("newButtonClickEH", eh);
 				newButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
 			}
 		}
@@ -246,7 +256,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			final Button saveButton = this.decorator.gettSaveButton();
 			if(saveButton!=null) {
 				EventHandler<ActionEvent> eh = e -> saveAction();
-				super.getListenerRepository().addListener("saveButtonClickEH", eh);
+				super.getListenerRepository().add("saveButtonClickEH", eh);
 				saveButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
 			}
 		}
@@ -260,7 +270,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			final Button removeButton = this.decorator.gettDeleteButton();
 			if(removeButton!=null) {
 				EventHandler<ActionEvent> eh = e -> deleteAction();
-				super.getListenerRepository().addListener("deleteButtonClickEH", eh);
+				super.getListenerRepository().add("deleteButtonClickEH", eh);
 				removeButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
 			}
 		}
@@ -273,7 +283,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		if(isUserAuthorized(TAuthorizationType.EDIT)){
 			final Button editButton = this.decorator.gettEditButton();
 			EventHandler<ActionEvent> eh = e -> editAction();
-			super.getListenerRepository().addListener("editButtonClickEH", eh);
+			super.getListenerRepository().add("editButtonClickEH", eh);
 			editButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
 		}
 	}
@@ -285,7 +295,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		final Button cancelButton = this.decorator.gettCancelButton();
 		if(cancelButton!=null) {
 			EventHandler<ActionEvent> eh = e -> cancelAction();
-			super.getListenerRepository().addListener("cancelButtonClickEH", eh);
+			super.getListenerRepository().add("cancelButtonClickEH", eh);
 			cancelButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
 		}
 		
@@ -308,7 +318,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		readRadio.setToggleGroup(radioGroup);
 		
 		ChangeListener<Toggle> listener = (a0, a1, a2) -> changeModeAction();
-		super.getListenerRepository().addListener("modesRadioCL", listener);
+		super.getListenerRepository().add("modesRadioCL", listener);
 		radioGroup.selectedToggleProperty().addListener(new WeakChangeListener<Toggle>(listener));
 		
 		modeBtnDisableProperty = new SimpleBooleanProperty();
@@ -325,7 +335,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			readRadio.disableProperty().unbindBidirectional(modeBtnDisableProperty);
 			readRadio.visibleProperty().unbindBidirectional(modeBtnVisibleProperty);
 		};
-		getListenerRepository().addListener("invalidateModeUnBind", invCL);
+		getListenerRepository().add("invalidateModeUnBind", invCL);
 		invalidateProperty().addListener(new WeakChangeListener<>(invCL));
 		
 		if(isUserNotAuthorized(TAuthorizationType.EDIT))
@@ -401,66 +411,55 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		
 		view.gettHeaderVerticalLayout().getChildren().add(index, sp);
 		
-		formListChangeListener = new ListChangeListener<Node>(){
+		breadcrumbFormChangeListener = new ChangeListener<ITModelForm<M>>(){
 			
-			public void onChanged(javafx.collections.ListChangeListener.Change<? extends Node> change) {
-				if(change.next() && change.getAddedSize()>=1){
-					removeFormListChangeListener();
-					List added = change.getAddedSubList();
-					Object obj = added.get(0);
-					if(obj instanceof ScrollPane){
-						ScrollPane scroll = (ScrollPane) obj;
-						Node node = scroll.getContent();
-						if(node instanceof ITForm){
-							ITForm form = (ITForm) scroll.getContent();
-							
-							TDynaPresenter formPresenter = (TDynaPresenter) form.gettPresenter();
-							TEntry<Object> entry = TEntryBuilder.create()
-									.addEntry(TBreadcrumbForm.TBUTTON_TITLE, formPresenter.getBehavior().getFormName())
-									.addEntry(TBreadcrumbForm.TFORM, form)
-									.build();
-							
-							if(!entryList.contains(entry)){
-								entryList.add(entry);
-							}else{
-								tBreadcrumbForm.tRemoveEntryListChangeListener();
-								
-								final int i = entryList.indexOf(entry);
-								entryList.remove(entry);
-								entryList.add(i, entry);
-								
-								tBreadcrumbForm.tBuildBreadcrumbar(false);
-								tBreadcrumbForm.tAddEntryListChangeListener();
-								
-								final TDynaPresenter presenter = getModulePresenter();
-								final TDynaViewCrudBaseBehavior behavior = (TDynaViewCrudBaseBehavior)presenter.getBehavior();
-								behavior.removeFormListChangeListener();
-								
-								setForm((ITModelForm) form);
-								
-								behavior.addFormListChangeListener();
-							}
-							
-							addFormListChangeListener();
-							
-						}else{
-							addFormListChangeListener();
-							removeAllButtons(entryList, tBreadcrumbForm);
-						}
-					}else{
-						addFormListChangeListener();
-						removeAllButtons(entryList, tBreadcrumbForm);
-					}
+			@Override
+			public void changed(ObservableValue<? extends ITModelForm<M>> arg0, ITModelForm<M> arg1,
+					ITModelForm<M> form) {
+				
+				if(form!=null) {
 						
-				}
+					TDynaPresenter formPresenter = (TDynaPresenter) form.gettPresenter();
+					TEntry<Object> entry = TEntryBuilder.create()
+							.addEntry(TBreadcrumbForm.TBUTTON_TITLE, formPresenter.getBehavior().getFormName())
+							.addEntry(TBreadcrumbForm.TFORM, form)
+							.build();
+					
+					if(!entryList.contains(entry)){
+						entryList.add(entry);
+					}else{
+						tBreadcrumbForm.tRemoveEntryListChangeListener();
+						
+						final int i = entryList.indexOf(entry);
+						entryList.remove(entry);
+						entryList.add(i, entry);
+						
+						tBreadcrumbForm.tBuildBreadcrumbar(false);
+						tBreadcrumbForm.tAddEntryListChangeListener();
+						
+						final TDynaPresenter presenter = getModulePresenter();
+						final TDynaViewCrudBaseBehavior behavior = (TDynaViewCrudBaseBehavior)presenter.getBehavior();
+						behavior.removeBreadcrumbFormChangeListener();
+						
+						setForm((ITModelForm) form);
+						
+						behavior.addBreadcrumbFormChangeListener();
+					}
+					
+					//addBreadcrumbFormChangeListener();
+				}/*else{
+					//addBreadcrumbFormChangeListener();
+					removeAllButtons(entryList, tBreadcrumbForm);
+				}*/
 			}
 
 			private void removeAllButtons(final ObservableList<TEntry<Object>> formItemList, final TBreadcrumbForm tBreadcrumbForm) {
 				formItemList.clear();
 			}
+
 		};
 		
-		addFormListChangeListener();
+		addBreadcrumbFormChangeListener();
 	}
 	
 	// ACTIONS
@@ -947,14 +946,24 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		
 		setViewMode(mode);
 		
-		ITModelForm<M> form = (mode!=null) 
+		if (mode!=null) 
+			buildForm(mode);
+		else if (radioGroup!=null) {
+			if (isReaderModeSelected())
+				buildForm(TViewMode.READER);
+			else
+				buildForm(TViewMode.EDIT);
+		}else 
+			buildForm(TViewMode.EDIT);
+		
+		/*ITModelForm<M> form = (mode!=null) 
 				? buildForm(mode)
 						: radioGroup!=null 
 						?  (isReaderModeSelected() 
 								? buildForm(TViewMode.READER) 
 										: buildForm(TViewMode.EDIT))
 								: buildForm(TViewMode.EDIT);
-		setForm(form);
+		setForm(form);*/
 	}
 	
 	/**
@@ -1056,15 +1065,14 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		return modeBtnVisibleProperty;
 	}
 
-	public synchronized void removeFormListChangeListener() {
-		if(formListChangeListener!=null)
-			getView().gettFormSpace().getChildren().removeListener(formListChangeListener);
+	public synchronized void removeBreadcrumbFormChangeListener() {
+		if(breadcrumbFormChangeListener!=null)
+			formProperty().removeListener(breadcrumbFormChangeListener);
 	}
 	
-	@SuppressWarnings("unlikely-arg-type")
-	public synchronized void addFormListChangeListener() {
-		if(formListChangeListener!=null && !getView().gettFormSpace().getChildren().contains(formListChangeListener)){
-			getView().gettFormSpace().getChildren().addListener(formListChangeListener);
+	public synchronized void addBreadcrumbFormChangeListener() {
+		if(breadcrumbFormChangeListener!=null){
+			formProperty().addListener(breadcrumbFormChangeListener);
 		}
 	}
 	

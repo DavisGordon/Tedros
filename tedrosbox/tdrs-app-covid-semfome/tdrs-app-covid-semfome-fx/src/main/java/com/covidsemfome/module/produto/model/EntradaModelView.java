@@ -30,10 +30,12 @@ import com.tedros.fxapi.annotation.control.TValidator;
 import com.tedros.fxapi.annotation.effect.TDropShadow;
 import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TForm;
+import com.tedros.fxapi.annotation.layout.TAccordion;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
+import com.tedros.fxapi.annotation.layout.TTitledPane;
 import com.tedros.fxapi.annotation.layout.TVBox;
 import com.tedros.fxapi.annotation.layout.TVGrow;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
@@ -87,17 +89,24 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 	
 	private SimpleStringProperty displayText = new SimpleStringProperty();
 	
+	@TAccordion(expandedPane="main", node=@TNode(id="estocavelAcc",parse = true),
+			panes={
+					@TTitledPane(text="Principal", node=@TNode(id="main",parse = true), expanded=true,
+							fields={"textoCadastro", "doador"}),
+					@TTitledPane(text="Detalhe", node=@TNode(id="detail",parse = true),
+						fields={"itens"})})
 	@TTextReaderHtml(text="Entrada de produtos", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
-	@TText(text="Entrada de produtos", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form",parse = true))
+	@TText(text="Informar entrada de produtos", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 	node=@TNode(id="t-form-title-text", parse = true))
 	private SimpleStringProperty textoCadastro;
 	
 	@TReaderHtml
 	@TLabel(text="Doador")
+	@TFieldBox(node=@TNode(parse = true))
 	@TOneSelectionModal(modelClass = Pessoa.class, modelViewClass = PessoaFindModelView.class,
 	width=300, height=50)
 	@TValidator(validatorClass = EntradaDoadorValidator.class, associatedFieldsName="tipo")
@@ -131,8 +140,6 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 	@TComboBoxField(required=true, optionsList=@TOptionsList(entityClass=Cozinha.class, 
 	optionModelViewClass=CozinhaModelView.class, optionsProcessClass=CozinhaOptionProcess.class))
 	private SimpleObjectProperty<Cozinha> cozinha;
-	
-	
 	
 	
 	@TDetailReaderHtml(	label=@TLabel(text="Produtos"), 
@@ -170,7 +177,7 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 
 	private void buildListener() {
 		
-		ChangeListener<Number> idListener = super.getListenerRepository().getListener("displayText");
+		ChangeListener<Number> idListener = super.getListenerRepository().get("displayText");
 		if(idListener==null){
 			idListener = (arg0, arg1, arg2) -> {
 					String str = (arg2==null ? "" : "(ID: "+arg2.toString()+") " ) 
@@ -185,7 +192,7 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 		
 		id.addListener(idListener);
 		
-		ChangeListener<String> tituloListener = super.getListenerRepository().getListener("displayText1");
+		ChangeListener<String> tituloListener = super.getListenerRepository().get("displayText1");
 		if(tituloListener==null){
 			tituloListener = (arg0, arg1, arg2) -> {
 					String str = (id.getValue()==null ? "" : "(ID: "+id.getValue().toString()+") " ) 
@@ -199,7 +206,7 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 		
 		tipo.addListener(tituloListener);
 		
-		ChangeListener<Date> dataListener = super.getListenerRepository().getListener("displayText2");
+		ChangeListener<Date> dataListener = super.getListenerRepository().get("displayText2");
 		if(dataListener==null){
 			dataListener = (arg0, arg1, arg2) -> {
 					String str = (id.getValue()==null ? "" : "(ID: "+id.getValue().toString()+") " ) 

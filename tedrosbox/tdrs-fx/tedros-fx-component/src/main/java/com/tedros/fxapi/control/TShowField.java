@@ -15,6 +15,7 @@ import com.tedros.fxapi.util.TMaskUtil;
 import com.tedros.fxapi.util.TReflectionUtil;
 import com.tedros.util.TDateUtil;
 
+import javafx.beans.Observable;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
 import javafx.geometry.Insets;
@@ -73,6 +74,10 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 		}
 	}
 	
+	@Override
+	public Observable tValueProperty() {
+		return value;
+	}
 
 	@SuppressWarnings("rawtypes")
 	private void init() throws Exception {

@@ -5,9 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TTab;
 import com.tedros.fxapi.annotation.control.TTabPane;
-import com.tedros.fxapi.descriptor.TComponentDescriptor;
-import com.tedros.fxapi.form.TComponentBuilder;
-import com.tedros.fxapi.form.TFieldBox;
+import com.tedros.fxapi.descriptor.TFieldDescriptor;
 
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -22,22 +20,9 @@ import javafx.scene.layout.VBox;
 
 public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
 
-	private static TTabPaneParser instance;
-	
-	private TTabPaneParser() {
-		
-	}
-	
-	public static TTabPaneParser getInstance() {
-		if(instance==null)
-			instance = new TTabPaneParser();
-		return instance;
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void parse(TTabPane annotation, final TabPane object, String... byPass) throws Exception {
-		TFieldBox fb = (TFieldBox) object.getUserData();
+		
 		TTab[] tabs = annotation.tabs();		
 		for (TTab tTab : tabs) {
 			
@@ -54,20 +39,7 @@ public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
 				for (String field : fields) {
 					if(StringUtils.isBlank(field))
 						continue;
-					
-					Node node = null;
-					if(fb!=null && fb.gettControlFieldName().equals(field)) {
-						node = fb;
-					}else {
-						if(getComponentDescriptor().getFieldBoxMap().containsKey(field)){
-							node = getComponentDescriptor().getFieldBoxMap().get(field);
-						}else{
-							final TComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), field);
-							node = TComponentBuilder.getField(descriptor);
-						}
-					}
-					if(node!=null)
-						pane.getChildren().add(node);
+					addNode(pane, field);
 				}
 				
 				ScrollPane scroll = new ScrollPane();
@@ -81,8 +53,6 @@ public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
 				scroll.layout();
 				
 				tab.setContent(scroll);
-				
-				
 			}
 			
 			TAnnotationParser.callParser(tTab, tab, getComponentDescriptor());
@@ -92,6 +62,27 @@ public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
 		super.parse(annotation, object, "tabs");
 		
 	}
+	
+
+	private void addNode(final Pane object, String field) {
+		TFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor();
+		if(fd.hasParent())
+			return;
+		Node node = null;
+		if(fd.getFieldName().equals(field)) {
+			node = fd.getComponent();
+		}else {
+			fd = getComponentDescriptor().getFieldDescriptor(field);
+			fd.setHasParent(true);
+			 node = fd.hasLayout() 
+					 ? fd.getLayout()
+							 : fd.getComponent();
+		}
+		
+		if(node!=null && !object.getChildren().contains(node))
+			object.getChildren().add(node);
+	}
+	
 
 	private VBox buildVBox() {
 		VBox b = new VBox();

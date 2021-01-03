@@ -30,18 +30,6 @@ public class TOneSelectionModalBuilder
 extends TBuilder
 implements ITControlBuilder<com.tedros.fxapi.control.TSelectionModal, Property> {
 
-	private static TOneSelectionModalBuilder instance;
-	
-	private TOneSelectionModalBuilder(){
-		
-	}
-	
-	public static TOneSelectionModalBuilder getInstance(){
-		if(instance==null)
-			instance = new TOneSelectionModalBuilder();
-		return instance;
-	}
-	
 	
 	@SuppressWarnings({ "unchecked" })
 	public TSelectionModal build(final Annotation annotation, final Property attrProperty) throws Exception {

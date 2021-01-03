@@ -6,6 +6,7 @@
  */
 package com.tedros.fxapi.control;
 
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -24,7 +25,6 @@ import com.tedros.fxapi.effect.TEffectUtil;
  * @author Davis Gordon
  *
  */
-@SuppressWarnings("restriction")
 public abstract class TRequiredToggleGroup extends ToggleGroup implements ITField, ITComponent {
 
 	private SimpleBooleanProperty requirementAccomplishedProperty;
@@ -32,6 +32,11 @@ public abstract class TRequiredToggleGroup extends ToggleGroup implements ITFiel
     private ChangeListener<Toggle> requiredListener;
     private SimpleBooleanProperty requiredProperty;
 	private String t_componentId; 
+	
+	@Override
+	public Observable tValueProperty() {
+		return selectedToggleProperty();
+	}
     
     abstract Pane getBox();
     

@@ -8,18 +8,6 @@ import com.tedros.fxapi.annotation.property.TStringProperty;
 
 public class TStringPropertyParser extends TAnnotationParser<TStringProperty, StringProperty>{
 	
-	private static TStringPropertyParser instance;
-	
-	private TStringPropertyParser(){
-		
-	}
-	
-	public static TStringPropertyParser getInstance(){
-		if(instance==null)
-			instance = new TStringPropertyParser();
-		return instance;
-		
-	}
 	
 	@Override
 	public void parse(TStringProperty annotation, StringProperty object, String... byPass) throws Exception {

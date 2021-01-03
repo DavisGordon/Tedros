@@ -68,5 +68,6 @@ public interface ITView<P extends ITPresenter>{
 	 * Loads the view
 	 * */
 	public void tLoad();
+
 		
 }

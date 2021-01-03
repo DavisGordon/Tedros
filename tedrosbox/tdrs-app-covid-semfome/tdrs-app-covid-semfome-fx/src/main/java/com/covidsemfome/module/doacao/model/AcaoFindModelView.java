@@ -13,12 +13,14 @@ import com.tedros.fxapi.annotation.control.TCellValueFactory;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
+import com.tedros.fxapi.annotation.control.TLabelDefaultSetting;
 import com.tedros.fxapi.annotation.control.TLongField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
+import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
@@ -27,6 +29,7 @@ import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.presenter.TSelectionModalPresenter;
+import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.builder.DateTimeFormatBuilder;
 import com.tedros.fxapi.domain.TLabelPosition;
@@ -46,6 +49,8 @@ import javafx.scene.layout.Priority;
  * @author Davis Gordon
  *
  */
+@TForm(name = "Selecionar Ação / Campanha")
+@TLabelDefaultSetting(font=@TFont(size=12))
 @TSelectionModalPresenter(
 		paginator=@TPaginator(entityClass = Acao.class, modelViewClass=AcaoItemTableView.class, 
 			serviceName = "IAcaoControllerRemote"),
@@ -72,13 +77,13 @@ public class AcaoFindModelView extends TEntityModelView<Acao> {
 	@TTextField(maxLength=100, 
 	textInputControl=@TTextInputControl(promptText="Insira um titulo ou o local", parse = true),
 	required=false)
+	@THBox(	pane=@TPane(children={"titulo","data"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="titulo", priority=Priority.SOMETIMES), 
+   				   		@TPriority(field="data", priority=Priority.NEVER) }))
 	private SimpleStringProperty titulo;
 	
 	@TLabel(text="Data e Hora")
 	@TDatePickerField(required = false, dateFormat=DateTimeFormatBuilder.class)
-	@THBox(	pane=@TPane(children={"data","status"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="data", priority=Priority.ALWAYS), 
-   				   		@TPriority(field="status", priority=Priority.ALWAYS) }))
 	private SimpleObjectProperty<Date> data;
 	
 	@TLabel(text="Status")
@@ -117,7 +122,7 @@ public class AcaoFindModelView extends TEntityModelView<Acao> {
 	
 	private void buildListener() {
 		
-		ChangeListener idListener =  super.getListenerRepository().getListener("displayText");
+		ChangeListener idListener =  super.getListenerRepository().get("displayText");
 		if(idListener==null){
 			idListener = new ChangeListener<Long>(){
 		
@@ -134,7 +139,7 @@ public class AcaoFindModelView extends TEntityModelView<Acao> {
 		
 		id.addListener(idListener);
 		
-		ChangeListener<String> tituloListener = super.getListenerRepository().getListener("displayText1");
+		ChangeListener<String> tituloListener = super.getListenerRepository().get("displayText1");
 		if(tituloListener==null){
 			tituloListener = new ChangeListener<String>(){
 				@Override
@@ -152,7 +157,7 @@ public class AcaoFindModelView extends TEntityModelView<Acao> {
 		
 		titulo.addListener(tituloListener);
 		
-		ChangeListener<Date> dataListener = super.getListenerRepository().getListener("displayText2");
+		ChangeListener<Date> dataListener = super.getListenerRepository().get("displayText2");
 		if(dataListener==null){
 			dataListener = new ChangeListener<Date>(){
 				@Override

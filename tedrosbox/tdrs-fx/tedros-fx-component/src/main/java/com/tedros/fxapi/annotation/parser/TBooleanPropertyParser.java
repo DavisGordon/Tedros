@@ -7,20 +7,7 @@ import com.tedros.fxapi.annotation.listener.TInvalidationListener;
 import com.tedros.fxapi.annotation.property.TBooleanProperty;
 
 public class TBooleanPropertyParser extends TAnnotationParser<TBooleanProperty, BooleanProperty>{
-	
-	private static TBooleanPropertyParser instance;
-	
-	private TBooleanPropertyParser(){
-		
-	}
-	
-	public static TBooleanPropertyParser getInstance(){
-		if(instance==null)
-			instance = new TBooleanPropertyParser();
-		return instance;
-		
-	}
-	
+
 	@Override
 	public void parse(TBooleanProperty annotation, BooleanProperty object, String... byPass) throws Exception {
 		if(annotation.observable().addListener()!=TInvalidationListener.class)

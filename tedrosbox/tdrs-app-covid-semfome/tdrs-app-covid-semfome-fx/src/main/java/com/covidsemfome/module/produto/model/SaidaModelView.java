@@ -26,10 +26,12 @@ import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.effect.TDropShadow;
 import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TForm;
+import com.tedros.fxapi.annotation.layout.TAccordion;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
+import com.tedros.fxapi.annotation.layout.TTitledPane;
 import com.tedros.fxapi.annotation.layout.TVBox;
 import com.tedros.fxapi.annotation.layout.TVGrow;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
@@ -84,14 +86,21 @@ public class SaidaModelView extends TEntityModelView<Saida> {
 	
 	private SimpleStringProperty displayText = new SimpleStringProperty();
 	
+	@TAccordion(expandedPane="main", node=@TNode(id="estocavelAcc",parse = true),
+			panes={
+					@TTitledPane(text="Principal", node=@TNode(id="main",parse = true), expanded=true,
+							fields={"textoCadastro", "observacao"}),
+					@TTitledPane(text="Detalhe", node=@TNode(id="detail",parse = true),
+						fields={"itens"})})
 	@TTextReaderHtml(text="Saida de Produtos", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
-	@TText(text="Produtos usados na ação", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form",parse = true))
+	@TText(text="Informar produtos usados na ação/campanha", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 	node=@TNode(id="t-form-title-text", parse = true))
 	private SimpleStringProperty textoCadastro;
+	
 	
 	@TReaderHtml
 	@TLabel(text="Observação")
@@ -160,7 +169,7 @@ public class SaidaModelView extends TEntityModelView<Saida> {
 
 	private void buildListener() {
 		
-		ChangeListener<Number> idListener = super.getListenerRepository().getListener("displayText");
+		ChangeListener<Number> idListener = super.getListenerRepository().get("displayText");
 		if(idListener==null){
 			idListener = (arg0, arg1, arg2) -> {
 					String str = (arg2==null ? "" : "(ID: "+arg2.toString()+") " ) 
@@ -175,7 +184,7 @@ public class SaidaModelView extends TEntityModelView<Saida> {
 		
 		id.addListener(idListener);
 		
-		ChangeListener<Acao> tituloListener = super.getListenerRepository().getListener("displayText1");
+		ChangeListener<Acao> tituloListener = super.getListenerRepository().get("displayText1");
 		if(tituloListener==null){
 			tituloListener = (arg0, arg1, arg2) -> {
 					String str = (id.getValue()==null ? "" : "(ID: "+id.getValue().toString()+") " ) 
@@ -189,7 +198,7 @@ public class SaidaModelView extends TEntityModelView<Saida> {
 		
 		acao.addListener(tituloListener);
 		
-		ChangeListener<Date> dataListener = super.getListenerRepository().getListener("displayText2");
+		ChangeListener<Date> dataListener = super.getListenerRepository().get("displayText2");
 		if(dataListener==null){
 			dataListener = (arg0, arg1, arg2) -> {
 					String str = (id.getValue()==null ? "" : "(ID: "+id.getValue().toString()+") " ) 

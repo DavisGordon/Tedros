@@ -2,7 +2,7 @@ package com.tedros.fxapi.presenter.behavior;
 
 import javafx.collections.ObservableList;
 
-import com.tedros.core.module.TListenerRepository;
+import com.tedros.core.module.TObjectRepository;
 import com.tedros.core.presenter.ITPresenter;
 import com.tedros.core.presenter.view.ITView;
 import com.tedros.fxapi.domain.TViewMode;
@@ -28,7 +28,7 @@ public interface ITBehavior<M extends TModelView, P extends ITPresenter> {
 	
 	public <T extends TModelView> T getModelView();
 	
-	public TListenerRepository getListenerRepository();
+	public TObjectRepository getListenerRepository();
 	
 	/**
 	 * Set the form mode. 
@@ -49,6 +49,8 @@ public interface ITBehavior<M extends TModelView, P extends ITPresenter> {
 	public String getFormName();
 	
 	public void setForm(ITModelForm form);
+	
+	public ITModelForm<M> getForm();
 	
 	public String getApplicationUUID();
 	

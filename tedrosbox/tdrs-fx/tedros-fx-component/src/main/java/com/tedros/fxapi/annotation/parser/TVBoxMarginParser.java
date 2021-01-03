@@ -11,17 +11,6 @@ import com.tedros.fxapi.annotation.layout.TVBoxMargin;
 
 public class TVBoxMarginParser extends TAnnotationParser<TVBoxMargin, VBox> {
 
-	private static TVBoxMarginParser instance;
-	
-	private TVBoxMarginParser() {
-		
-	}
-	
-	public static TVBoxMarginParser getInstance() {
-		if(instance==null)
-			instance = new TVBoxMarginParser();
-		return instance;
-	}
 
 	@Override
 	public void parse(TVBoxMargin annotation, VBox object, String... byPass) throws Exception {
@@ -29,14 +18,22 @@ public class TVBoxMarginParser extends TAnnotationParser<TVBoxMargin, VBox> {
 		if(annotation.margin().length>0){
 			TMargin[] arr = annotation.margin();
 			for (TMargin tMargin : arr) {
-				if(StringUtils.isBlank(tMargin.field()))
+				String field = tMargin.field();
+				if(StringUtils.isBlank(field))
 					continue;
-				if(getComponentDescriptor().getFieldBoxMap().containsKey(tMargin.field())){
-					Node node = getComponentDescriptor().getFieldBoxMap().get(tMargin.field());
+				if(getComponentDescriptor().getComponents().containsKey(field)){
+					Node node = getComponentDescriptor().getComponents().get(field);
 					VBox.setMargin(node, (Insets) TTypeAnalyserParserDelegate.parse(tMargin.insets(), getComponentDescriptor()));
 				}else{
-					System.out.println("Warning: TVBoxMarginParser cant find the fieldBox for the field "+tMargin.field()+" at fieldBox list, maybe they was not builded yet!");
+					System.out.println("[WARNING]" + getClass().getSimpleName()+
+							": Component not found for "+field+" field, maybe they didnt loaded yet.");
 				}
+				/*if(getComponentDescriptor().getFieldBoxMap().containsKey(tMargin.field())){
+					Node node = getComponentDescriptor().getFieldBoxMap().get(tMargin.field());
+					
+				}else{
+					System.out.println("Warning: TVBoxMarginParser cant find the fieldBox for the field "+tMargin.field()+" at fieldBox list, maybe they was not builded yet!");
+				}*/
 					
 			}
 			

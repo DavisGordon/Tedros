@@ -20,21 +20,4 @@ import javafx.beans.property.Property;
  * */
 public class TBigDecimalFieldBuilder extends TNumberFieldBuilder<com.tedros.fxapi.control.TBigDecimalField, Property<BigDecimal>> {
 
-
-	private static TBigDecimalFieldBuilder instance;
-	
-	private TBigDecimalFieldBuilder(){
-		
-	}
-	
-	/**
-	 * <pre>
-	 * Return a {@link TBigDecimalFieldBuilder} instance.
-	 * </pre>
-	 * */
-	public static TBigDecimalFieldBuilder getInstance(){
-		if(instance==null)
-			instance = new TBigDecimalFieldBuilder();
-		return instance;
-	}
 }

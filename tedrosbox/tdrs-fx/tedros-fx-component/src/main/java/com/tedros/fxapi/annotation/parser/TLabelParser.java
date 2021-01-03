@@ -18,15 +18,4 @@ import com.tedros.fxapi.annotation.control.TLabel;
  */
 public final class TLabelParser extends TAnnotationParser<TLabel, Labeled>{
 	
-	private static TLabelParser instance;
-	
-	private TLabelParser(){
-		
-	}
-	
-	public static TLabelParser getInstance(){
-		if(instance==null)
-			instance = new TLabelParser();
-		return instance;	
-	}
 }

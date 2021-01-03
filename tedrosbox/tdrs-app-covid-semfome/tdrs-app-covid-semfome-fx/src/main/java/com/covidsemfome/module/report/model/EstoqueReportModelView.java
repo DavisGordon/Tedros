@@ -39,7 +39,6 @@ import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.collections.ITObservableList;
-import com.tedros.fxapi.domain.TLabelPosition;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.presenter.report.behavior.TDataSetReportBehavior;
@@ -67,18 +66,19 @@ public class EstoqueReportModelView extends TModelView<EstoqueReportModel>{
 	
 	private SimpleLongProperty id;
 	
-	private SimpleStringProperty displayText;
-	
 	@TAccordion(expandedPane="filtro", node=@TNode(id="repdoaacc",parse = true),
 			panes={
 					@TTitledPane(text="Filtros", node=@TNode(id="filtro",parse = true), expanded=true,
-							fields={"cozinha","ids","origem","texto2","dataInicio","dataFim"}),
+							fields={"cozinha","texto2"}),
 					@TTitledPane(text="Resultado", node=@TNode(id="resultado",parse = true),
-						fields={"texto3","result"})})	
+						fields={"texto3","result"})})
+	private SimpleStringProperty displayText;
+	
+		
 	@THBox(	pane=@TPane(children={"cozinha","ids", "origem"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="cozinha", priority=Priority.ALWAYS),
+	hgrow=@THGrow(priority={@TPriority(field="cozinha", priority=Priority.NEVER),
    				   		@TPriority(field="ids", priority=Priority.SOMETIMES),
-   				   		@TPriority(field="origem", priority=Priority.SOMETIMES) }))
+   				   		@TPriority(field="origem", priority=Priority.ALWAYS) }))
 	@TLabel(text="Cozinha:")
 	@TComboBoxField(optionsList=@TOptionsList(entityClass=Cozinha.class, 
 	optionModelViewClass=CozinhaModelView.class, optionsProcessClass=CozinhaOptionProcess.class))
@@ -88,7 +88,7 @@ public class EstoqueReportModelView extends TModelView<EstoqueReportModel>{
 	@TTextField(textInputControl=@TTextInputControl(promptText="Insira os codigos separados por virgula", parse = true))
 	private SimpleStringProperty ids;
 	
-	@TLabel(text="Estradas", position=TLabelPosition.LEFT)
+	@TLabel(text="Origem")
 	@THorizontalRadioGroup(alignment=Pos.CENTER_LEFT, spacing=4, 
 	radioButtons={
 			@TRadioButtonField(text = "Todas", userData = ""),
@@ -101,6 +101,7 @@ public class EstoqueReportModelView extends TModelView<EstoqueReportModel>{
 	@TText(text="Data ou Periodo:", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 	node=@TNode(id="t-form-title-text", parse = true))
 	@THBox(	pane=@TPane(children={"texto2","dataInicio","dataFim"}), spacing=10, fillHeight=true,
+	alignment=Pos.BOTTOM_LEFT,
 	hgrow=@THGrow(priority={@TPriority(field="texto2", priority=Priority.NEVER),
 			@TPriority(field="dataInicio", priority=Priority.NEVER),
    				   		@TPriority(field="dataFim", priority=Priority.NEVER) }))

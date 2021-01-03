@@ -25,17 +25,6 @@ import com.tedros.fxapi.form.TAxisPropertiesConfig;
 @SuppressWarnings("rawtypes")
 public final class TAreaChartFieldBuilder implements ITChartBuilder<com.tedros.fxapi.chart.TAreaChartField>{
 
-	private static TAreaChartFieldBuilder instance;
-	
-	private TAreaChartFieldBuilder(){
-		
-	}
-	
-	public static TAreaChartFieldBuilder getInstance(){
-		if(instance==null)
-			instance = new TAreaChartFieldBuilder();
-		return instance;
-	}
 	
 	
 	public com.tedros.fxapi.chart.TAreaChartField build(final Annotation annotation, com.tedros.fxapi.chart.TAreaChartField chartField) throws Exception {

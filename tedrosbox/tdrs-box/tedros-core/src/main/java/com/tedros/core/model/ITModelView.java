@@ -4,12 +4,14 @@ import java.util.Map;
 
 import java.util.Set;
 
-import com.tedros.core.module.TListenerRepository;
+import com.tedros.core.module.TObjectRepository;
 import com.tedros.ejb.base.model.ITModel;
 
 import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.SetChangeListener;
@@ -44,7 +46,7 @@ public interface ITModelView<M extends ITModel> {
 	/**
 	 * Returns the listener repository
 	 * */
-	public TListenerRepository getListenerRepository();
+	public TObjectRepository getListenerRepository();
 	
 	/**
 	 * Adds a {@link InvalidationListener} on the repository 
@@ -90,4 +92,6 @@ public interface ITModelView<M extends ITModel> {
 	@SuppressWarnings("rawtypes")
 	public void addListener(final String fieldName, final ListChangeListener listChangeListener);
 
+	public Observable getProperty(String fieldName);
+	
 }

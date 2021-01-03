@@ -602,6 +602,7 @@ public class Main extends Application {
                     scrollPane.setMinWidth(725);
                     scrollPane.setStyle("-fx-background-color: transparent; -fx-padding: 20 20 20 20;");
                     content = scrollPane;
+                    
                     this.expandedTollBar = true;
                     colapseMenuBar();
                 }else {

@@ -8,6 +8,11 @@ package com.tedros.fxapi.builder;
 
 import java.lang.annotation.Annotation;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.tedros.fxapi.annotation.control.TRadioButtonField;
+import com.tedros.fxapi.annotation.control.TVerticalRadioGroup;
+
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -21,12 +26,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.Tooltip;
 
-import org.apache.commons.lang3.StringUtils;
-
-import com.tedros.core.TInternationalizationEngine;
-import com.tedros.fxapi.annotation.control.TRadioButtonField;
-import com.tedros.fxapi.annotation.control.TVerticalRadioGroup;
-
 
 /**
  * DESCRIÇÃO DA CLASSE
@@ -39,18 +38,6 @@ public final class TVerticalRadioGroupBuilder
 extends TBuilder
 implements ITControlBuilder<com.tedros.fxapi.control.TVerticalRadioGroup, Property>{
 
-	private static TVerticalRadioGroupBuilder instance;
-	
-	private TVerticalRadioGroupBuilder(){
-		
-	}
-	
-	public static  TVerticalRadioGroupBuilder getInstance(){
-		if(instance==null)
-			instance = new TVerticalRadioGroupBuilder();
-		return instance;	
-	}
-	
 	@SuppressWarnings({"unchecked"})
 	public com.tedros.fxapi.control.TVerticalRadioGroup build(final Annotation annotation, final Property attrProperty) throws Exception {
 		TVerticalRadioGroup tAnnotation = (TVerticalRadioGroup) annotation;

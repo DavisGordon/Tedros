@@ -1,49 +1,88 @@
 package com.tedros.fxapi.form;
 
-import java.lang.annotation.Annotation;
 import java.util.List;
+import java.util.Map;
 
 import com.tedros.core.model.ITModelView;
-import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.parser.TAnnotationParser;
+import com.tedros.core.module.TObjectRepository;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.descriptor.TFieldDescriptor;
 import com.tedros.fxapi.domain.TViewMode;
-import com.tedros.fxapi.util.TReflectionUtil;
 
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.WeakChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.scene.Node;
-import javafx.scene.effect.Effect;
 
 public abstract class TFieldLoader<M extends ITModelView<?>> {
 	
 	
-	private final TComponentDescriptor descriptor;
-	
+	private SimpleBooleanProperty allLoaded = new SimpleBooleanProperty(false);
+	private SimpleIntegerProperty totalToLoad = new SimpleIntegerProperty();
+	protected TObjectRepository repo = new TObjectRepository();
+	protected final TComponentDescriptor descriptor;
+	private final Object lock = new Object();
 	
 	public TFieldLoader(M modelView, ITModelForm<M> form) {
 		descriptor = new TComponentDescriptor(form, modelView, TViewMode.EDIT);
 	}
 	
 	protected void initialize(){
-		descriptor.getFieldBoxMap().clear();
-		for(TFieldDescriptor a : descriptor.getFieldDescriptorList())
-			a.setLoaded(false);
+		descriptor.getComponents().clear();
+		this.totalToLoad.setValue(0);
+		this.allLoaded.bind(this.descriptor.loadedProperty());
+		/*for(TFieldDescriptor fd : descriptor.getFieldDescriptorList()) {
+			if(fd.hasControl() || fd.hasLayout()) {
+				fd.setLoaded(false);
+				totalToLoad.setValue(totalToLoad.intValue()+1);
+				ChangeListener<Boolean> chl = (obj, o, n) -> {
+					if(n) {
+						fieldLoaded();
+					}
+				};
+				repo.add(fd.getFieldName(), chl);
+				fd.loadedProperty().addListener(new WeakChangeListener<Boolean>(chl));
+			}
+		}*/
+	}
+	
+	private void fieldLoaded() {
+		synchronized(lock) {
+			totalToLoad.setValue(totalToLoad.intValue()-1);
+			if(totalToLoad.intValue()==0) {
+				this.allLoaded.setValue(true);
+			}
+		}
+	}
+	
+	public ReadOnlyBooleanProperty allLoadedProperty() {
+		return this.allLoaded;
 	}
 	
 	protected List<TFieldDescriptor> getFieldDescriptorList(){
 		return descriptor.getFieldDescriptorList();
 	}
 	
-	protected TFieldBox getFieldBox(String fieldName){
-		if(descriptor.getFieldBoxMap().containsKey(fieldName))
-			return descriptor.getFieldBoxMap().get(fieldName);
+	protected Node getComponent(String fieldName){
+		if(descriptor.getComponents().containsKey(fieldName))
+			return descriptor.getComponents().get(fieldName);
 		else
 			return null;
 	}
 	
-	protected ObservableMap<String, TFieldBox> getFieldBoxMap() {
+	protected ObservableMap<String, Node> getComponents() {
+		return descriptor.getComponents();
+	}
+	
+	protected TFieldBox geFieldBox(String fieldName){
+		return descriptor.getFieldBox(fieldName);
+	}
+	
+	protected Map<String, TFieldBox> getFieldBoxMap() {
 		return descriptor.getFieldBoxMap();
 	}
 	
@@ -54,7 +93,7 @@ public abstract class TFieldLoader<M extends ITModelView<?>> {
 		return null;
 	}
 	
-	protected void loadEditFieldBox(final ObservableList<Node> nodesLoaded, final TFieldDescriptor tFieldDescriptor) throws Exception{
+	protected void loadEditFieldBox(final TFieldDescriptor tFieldDescriptor, boolean bcontrol) throws Exception{
 		
 		/*int x=0;
 		if(tFieldDescriptor.getFieldName().equals("painelCorTexto"))
@@ -62,41 +101,14 @@ public abstract class TFieldLoader<M extends ITModelView<?>> {
 		
 		descriptor.setMode(TViewMode.EDIT);
 		descriptor.setFieldDescriptor(tFieldDescriptor);
-		final List<Annotation> fieldEffects = TReflectionUtil.getEffectAnnotations(descriptor.getFieldAnnotationList());
 		
-		Node control = TComponentBuilder.getField(descriptor);
+		TControlLayoutBuilder builder = new TControlLayoutBuilder();
 		
-		if(control==null){
-			System.err.println("WARNING: Control null to "+tFieldDescriptor.getFieldName());
-			return;
-		}
+		Node control = (bcontrol) 
+				? builder.getControlField(descriptor)
+						: builder.getLayoutField(descriptor);
 		
-		if(control!=null && !fieldEffects.isEmpty()){
-			for (final Annotation effect : fieldEffects) {
-				Effect e = TComponentBuilder.getEffect(effect);
-				if(e!=null)
-					control.setEffect(e);
-			}
-		}
-
-		for (Annotation annotation : descriptor.getFieldAnnotationList()) {
-			if(annotation instanceof TLabel)
-				continue;
-			boolean builderMethod;
-			boolean parserMethod;
-			try{
-				builderMethod = (annotation.getClass().getMethod("builder")!=null);
-			}catch(NoSuchMethodException e){ builderMethod = false;}
-			try{
-				parserMethod = (annotation.getClass().getMethod("parser")!=null);
-			}catch(NoSuchMethodException e){ parserMethod = false;}
-			
-			if(parserMethod && !builderMethod){
-				TAnnotationParser.callParser(annotation, control, descriptor);
-			}
-		}
 		
-		nodesLoaded.add(control);
 	}
 	
 	protected void loadReaderFieldBox(final ObservableList<Node> nodesLoaded, final TFieldDescriptor tFieldDescriptor) throws Exception{

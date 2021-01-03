@@ -13,7 +13,6 @@ import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.exception.TValidatorException;
-import com.tedros.fxapi.form.ITModelForm;
 import com.tedros.fxapi.modal.TMessageBox;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewActionBaseDecorator;
@@ -108,7 +107,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		readRadio.setToggleGroup(radioGroup);
 		
 		ChangeListener<Toggle> listener = (a0, a1, a2) -> changeModeAction();
-		super.getListenerRepository().addListener("modesRadioCL", listener);
+		super.getListenerRepository().add("modesRadioCL", listener);
 		radioGroup.selectedToggleProperty().addListener(new WeakChangeListener<Toggle>(listener));
 		
 		modeBtnDisableProperty = new SimpleBooleanProperty();
@@ -125,7 +124,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			readRadio.disableProperty().unbindBidirectional(modeBtnDisableProperty);
 			readRadio.visibleProperty().unbindBidirectional(modeBtnVisibleProperty);
 		};
-		getListenerRepository().addListener("invalidateModeUnBind", invCL);
+		getListenerRepository().add("invalidateModeUnBind", invCL);
 		invalidateProperty().addListener(new WeakChangeListener<>(invCL));
 		
 		setViewMode(TViewMode.EDIT);
@@ -344,14 +343,24 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		
 		setViewMode(mode);
 		
-		ITModelForm<M> form = (mode!=null) 
+		if (mode!=null) 
+			buildForm(mode);
+		else if (radioGroup!=null) {
+			if (isReaderModeSelected())
+				buildForm(TViewMode.READER);
+			else
+				buildForm(TViewMode.EDIT);
+		}else 
+			buildForm(TViewMode.EDIT);
+		
+		/*ITModelForm<M> form = (mode!=null) 
 				? buildForm(mode)
 						: radioGroup!=null 
 						?  (isReaderModeSelected() 
 								? buildForm(TViewMode.READER) 
 										: buildForm(TViewMode.EDIT))
 								: buildForm(TViewMode.EDIT);
-		setForm(form);
+		setForm(form);*/
 	}
 	
 	/**

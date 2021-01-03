@@ -53,9 +53,9 @@ import com.tedros.fxapi.util.TReflectionUtil;
 @SuppressWarnings("rawtypes")
 public abstract class TAnnotationParser<A extends Annotation, T> implements ITAnnotationParser<A, T> {
 	
-	private static final String SET = "set";
-	private static final String GET = "get";
-	private static final String[] SKIPMETHODS = {"builder","parser","parse","equals", "getClass", "wait", "hashCode", "toString", "notify", "notifyAll", "annotationType"};
+	private final static String SET = "set";
+	private final static String GET = "get";
+	private final String[] SKIPMETHODS = {"builder","parser","parse","equals", "getClass", "wait", "hashCode", "toString", "notify", "notifyAll", "annotationType"};
 	
 	private TComponentDescriptor componentDescriptor;
 	protected TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
@@ -234,8 +234,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 								: new Class[]{(Class<? extends ITAnnotationParser>)object};
 						
 				for (Class<? extends ITAnnotationParser> clazz : parsers) {
-					Method m = clazz.getMethod("getInstance");
-					ITAnnotationParser parser = (ITAnnotationParser) m.invoke(clazz);
+					ITAnnotationParser parser = (ITAnnotationParser) clazz.newInstance();
 					parser.setComponentDescriptor(componentDescriptor);
 					try{
 						parser.parse(tAnnotation, control);
@@ -417,7 +416,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 		return null;
 	}
 	
-	private static Object getAnnotation(String key, Annotation annotation) throws Exception {
+	private Object getAnnotation(String key, Annotation annotation) throws Exception {
 		return annotation.annotationType().getMethod(key).invoke(annotation);
 	}
 	

@@ -13,6 +13,7 @@ import com.tedros.fxapi.annotation.control.TOneSelectionModal;
 import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
+import com.tedros.fxapi.annotation.control.TTrigger;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
@@ -44,7 +45,7 @@ import javafx.scene.layout.Priority;
 @TFormReaderHtml
 @TForm(name = "Adicionar produtos")
 @TDetailTableViewPresenter(
-		presenter=@TPresenter(behavior=@TBehavior(type=TDetailFieldBehavior.class),
+		presenter=@TPresenter(behavior=@TBehavior(type=TDetailFieldBehavior.class, addAction=EntradaItemAddAction.class),
 				decorator = @TDecorator(type=TDetailFieldDecorator.class, viewTitle="Itens")
 				),
 		tableView=@TTableView(editable=true, 
@@ -62,6 +63,7 @@ public class EntradaItemModelView extends TEntityModelView<EntradaItem> {
 	@TLabel(text="Produto")
 	@TOneSelectionModal(modelClass = Produto.class, modelViewClass = ProdutoFindModelView.class,
 	width=300, height=50, required=true)
+	@TTrigger(triggerClass = ProdutoSelecionadoTrigger.class, targetFieldName="unidadeMedida")
 	private SimpleObjectProperty<Produto> produto;
 	
 	
@@ -108,7 +110,7 @@ public class EntradaItemModelView extends TEntityModelView<EntradaItem> {
 	
 	private void buildListener() {
 		
-		ChangeListener<Produto> idListener =  super.getListenerRepository().getListener("displayText");
+		ChangeListener<Produto> idListener =  super.getListenerRepository().get("displayText");
 		if(idListener==null){
 			idListener = (arg0, arg1, produto) -> {
 	

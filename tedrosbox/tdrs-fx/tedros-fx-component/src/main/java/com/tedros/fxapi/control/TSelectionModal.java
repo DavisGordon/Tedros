@@ -7,7 +7,7 @@ import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.TModule;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.context.TedrosContext;
-import com.tedros.core.module.TListenerRepository;
+import com.tedros.core.module.TObjectRepository;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
@@ -53,7 +53,7 @@ public class TSelectionModal extends TModalRequired {
 	private double width;
 	private double height;
 	
-	private TListenerRepository repo = new TListenerRepository();
+	private TObjectRepository repo = new TObjectRepository();
 	
 	/**
 	 * 
@@ -98,7 +98,7 @@ public class TSelectionModal extends TModalRequired {
 			.getModuleContext((TModule)TedrosContext.getView()).getCurrentViewContext()
 			.getPresenter().getView().tShowModal(pane, false);
 		};
-		repo.addListener("fev", fev);
+		repo.add("fev", fev);
 		tFindButton.setOnAction(new WeakEventHandler<>(fev));
 		
 		//remove event
@@ -107,14 +107,14 @@ public class TSelectionModal extends TModalRequired {
 			tListView.getSelectionModel().clearSelection();
 			tListView.getItems().remove(index);
 		};
-		repo.addListener("rev", rev);
+		repo.add("rev", rev);
 		tRemoveButton.setOnAction(new WeakEventHandler<>(rev));
 		
 		//clear event
 		EventHandler<ActionEvent> cev = e -> {
 			tSelectedItems.clear();;
 		};
-		repo.addListener("cev", cev);
+		repo.add("cev", cev);
 		tClearButton.setOnAction(new WeakEventHandler<>(cev));
 	}
 	
@@ -143,13 +143,13 @@ public class TSelectionModal extends TModalRequired {
 			boolean disable = o.getList().isEmpty();
 			tClearButton.setDisable(disable);
 		};
-		repo.addListener("icl", icl);
+		repo.add("icl", icl);
 		tListView.getItems().addListener(new WeakListChangeListener(icl));
 		
 		ChangeListener<TModelView> selchl = (o, old, n) -> {
 			tRemoveButton.setDisable(n==null);
 		};
-		repo.addListener("selchl", selchl);
+		repo.add("selchl", selchl);
 		tListView.getSelectionModel().selectedItemProperty().addListener(new WeakChangeListener(selchl));
 	}
 

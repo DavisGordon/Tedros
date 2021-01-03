@@ -8,6 +8,7 @@ import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.effect.TEffectUtil;
 import com.tedros.fxapi.presenter.model.TModelView;
 
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -27,6 +28,11 @@ public abstract class TModalRequired extends VBox implements ITField, ITComponen
 	private Effect requiredEffect;
     private ListChangeListener requiredListener;
     private SimpleBooleanProperty requiredProperty; 
+    
+    @Override
+	public Observable tValueProperty() {
+		return gettSelectedItems();
+	}
     
 	public void setRequired(boolean required){
     	

@@ -29,7 +29,7 @@ import com.tedros.util.TColorUtil;
  * @author Davis Gordon
  *
  */
-public class CustomizarPainelTrigger extends TTrigger {
+public class CustomizarPainelTrigger extends TTrigger<Object> {
 
 	
 	private final NumberFormat numberFormat;
@@ -41,7 +41,7 @@ public class CustomizarPainelTrigger extends TTrigger {
 	}
 	
 	@Override
-	public void run() {
+	public void run(Object value) {
 		
 		final TFieldBox source = getSource();
 		final ExampleBehavior behavior = (ExampleBehavior) getForm().gettAssociatedObject(ExampleBehavior.class.getSimpleName());

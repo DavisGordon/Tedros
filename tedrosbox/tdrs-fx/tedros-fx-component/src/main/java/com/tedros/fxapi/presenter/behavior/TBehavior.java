@@ -3,19 +3,24 @@ package com.tedros.fxapi.presenter.behavior;
 import com.tedros.core.ITModule;
 import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.context.TedrosAppManager;
-import com.tedros.core.module.TListenerRepository;
+import com.tedros.core.module.TObjectRepository;
 import com.tedros.core.presenter.ITPresenter;
 import com.tedros.core.presenter.view.ITView;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.form.ITModelForm;
+import com.tedros.fxapi.form.TBuildFormStatus;
 import com.tedros.fxapi.form.TFormBuilder;
+import com.tedros.fxapi.form.TProgressIndicatorForm;
 import com.tedros.fxapi.form.TReaderFormBuilder;
 import com.tedros.fxapi.presenter.model.TModelView;
 
+import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WeakChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ScrollPane;
@@ -26,21 +31,70 @@ import javafx.scene.layout.Region;
 public abstract class TBehavior<M extends TModelView, P extends ITPresenter> implements ITBehavior<M, P> {
 	
 	private P presenter;
-	private ITModelForm<M> form;
 	private SimpleObjectProperty<TModelView> modelViewProperty;
 	private ObservableList<M> models;
 	private TViewMode tMode;
-	private TListenerRepository listenerRepository;
+	private TObjectRepository listenerRepository;
 	private SimpleBooleanProperty invalidateProperty;
-	
+	private SimpleObjectProperty<TBuildFormStatus> buildFormStatusProperty;
+	private SimpleObjectProperty<ITModelForm<M>> formProperty;
 	
 	protected TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
 	
+	@SuppressWarnings("unchecked")
 	public TBehavior() {
 		modelViewProperty = new SimpleObjectProperty<>();
+		formProperty = new SimpleObjectProperty<>();
 		invalidateProperty = new SimpleBooleanProperty(false);
-		listenerRepository = new TListenerRepository();
+		listenerRepository = new TObjectRepository();
+		buildFormStatusProperty = new SimpleObjectProperty();
 		
+		
+		ChangeListener<ITModelForm<M>> formCL = (a0, a1, form) -> {
+			
+			if(form!=null) {
+				
+				this.buildFormStatusProperty.setValue(TBuildFormStatus.LOADING);
+				ChangeListener<Boolean> loadedListener = new ChangeListener<Boolean>() {
+					@Override
+					public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean n) {
+						if(n) {
+							form.tLoadedProperty().removeListener(this);
+							buildFormStatusProperty.setValue(TBuildFormStatus.FINISHED);
+						}
+					}
+				};
+				form.tLoadedProperty().addListener(loadedListener);
+				
+				if(form.gettPresenter()==null)
+		    		form.settPresenter(this.presenter);
+				
+		    	((Region)form).layout();
+		    	ScrollPane scroll = new ScrollPane();
+		    	scroll.setId("t-form-scroll");
+		    	scroll.setContent((Region)form);
+		    	scroll.setFitToWidth(true);
+		    	scroll.maxHeight(Double.MAX_VALUE);
+		    	scroll.maxWidth(Double.MAX_VALUE);
+		    	scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		    	scroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		    	scroll.setStyle("-fx-background-color: transparent;");
+		    	getView().gettFormSpace().getChildren().clear();
+		    	getView().gettFormSpace().getChildren().add(scroll);
+			}
+		};
+		listenerRepository.add("formPropCL", formCL);
+		formProperty.addListener(new WeakChangeListener<>(formCL));
+		
+		ChangeListener<TBuildFormStatus> bfchl = (ob, o, n) -> {
+			if(n!=null && n.equals(TBuildFormStatus.STARTING)) {
+				buildFormTask();
+			}
+		};
+		listenerRepository.add("buildingFormCHL", bfchl);
+		buildFormStatusProperty.addListener(new WeakChangeListener(bfchl));
+		
+		// Invalidation listeer
 		ChangeListener<Boolean> invCL = (a0, a1, a2) -> {
 			if(a2) {
 				removeAllListenerFromModelView();
@@ -48,10 +102,62 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 				listenerRepository.clear();
 			}
 		};
-		listenerRepository.addListener("invalidateModelAndRepo", invCL);
+		listenerRepository.add("invalidateModelAndRepo", invCL);
 		invalidateProperty.addListener(new WeakChangeListener<>(invCL));
-		
 	}
+
+	private void buildFormTask() {
+		this.buildFormStatusProperty.setValue(TBuildFormStatus.BUILDING);
+		Thread buildFormThread = new Thread(new Runnable() {
+		      @Override
+		      public void run() {
+				Platform.runLater(new Runnable() {
+		            @Override
+		            public void run() {
+		            	try {
+		            		@SuppressWarnings("unchecked")
+							ITModelForm<M> form = (ITModelForm<M>) (tMode.equals(TViewMode.READER) 
+		    						? TReaderFormBuilder.create(getModelView()).build() 
+		    								: TFormBuilder.create(getModelView()).presenter(getPresenter()).build());
+		    				setForm(form);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+		            }
+		          });
+		      	}
+			});
+		buildFormThread.setDaemon(true);
+		buildFormThread.start();
+	}
+
+	public void buildForm(TViewMode mode) {
+		setViewMode(mode);
+		buildForm();
+	}
+	
+	public void buildForm() {
+		
+		if(tMode==null)
+			tMode = TViewMode.READER;
+		
+		this.buildFormStatusProperty.setValue(TBuildFormStatus.STARTING);
+	}
+	
+	public void clearForm() {
+		this.buildFormStatusProperty.setValue(null);
+		getView().gettFormSpace().getChildren().clear();
+		this.formProperty.setValue(null);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void setForm(ITModelForm form) {
+		TProgressIndicatorForm pif = (form instanceof TProgressIndicatorForm) 
+				? (TProgressIndicatorForm) form 
+						: new TProgressIndicatorForm(form);
+    	this.formProperty.setValue(pif);
+    }
+	
 
 
 	/**
@@ -92,7 +198,7 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 	/**
 	 * @return the listenerRepository
 	 */
-	public TListenerRepository getListenerRepository() {
+	public TObjectRepository getListenerRepository() {
 		return listenerRepository;
 	}
 
@@ -116,50 +222,6 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 	public void setViewMode(TViewMode mode){
 		this.tMode = mode;
 	}
-	
-	public ITModelForm<M> buildForm(TViewMode mode) {
-		setViewMode(mode);
-		return buildForm();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public ITModelForm<M> buildForm() {
-		
-		if(tMode==null)
-			tMode = TViewMode.READER;
-		
-		return (ITModelForm<M>) (tMode.equals(TViewMode.READER) 
-				? TReaderFormBuilder.create(getModelView()).build() 
-						: TFormBuilder.create(getModelView()).presenter(getPresenter()).build());
-	}
-	
-	public void clearForm() {
-		getView().gettFormSpace().getChildren().clear();
-		form = null;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public void setForm(ITModelForm form) {
-    	clearForm();
-    	this.form = form;
-    	
-    	if(this.form.gettPresenter()==null)
-    		this.form.settPresenter(this.presenter);
-    	
-    	((Region)form).layout();
-    	ScrollPane scroll = new ScrollPane();
-    	scroll.setId("t-form-scroll");
-    	scroll.setContent((Region)form);
-    	scroll.setFitToWidth(true);
-    	scroll.maxHeight(Double.MAX_VALUE);
-    	scroll.maxWidth(Double.MAX_VALUE);
-    	scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-    	scroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
-    	scroll.setStyle("-fx-background-color: transparent;");
-    	
-    	getView().gettFormSpace().getChildren().add(scroll);
-    	
-    }
 	
 	@SuppressWarnings("unchecked")
 	public <V extends ITView> V getView(){
@@ -193,12 +255,12 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 
 
 	public String getFormName() {
-		final TForm tForm = this.form.gettModelView().getClass().getAnnotation(TForm.class);
+		final TForm tForm = getForm().gettModelView().getClass().getAnnotation(TForm.class);
 		return (tForm!=null) ? tForm.name() : "@TForm(name='SET A NAME')";
 	}
 
 	public ITModelForm<M> getForm() {
-		return form;
+		return formProperty.get();
 	}
 	
 	@Override
@@ -229,6 +291,20 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 			uuid = TedrosAppManager.getInstance().getModuleContext(module).getModuleDescriptor().getApplicationUUID();
 		}
 		return uuid;
+	}
+
+	/**
+	 * @return the formProperty
+	 */
+	public ReadOnlyObjectProperty<ITModelForm<M>> formProperty() {
+		return formProperty;
+	}
+
+	/**
+	 * @return the buildFormStatusProperty
+	 */
+	public ReadOnlyObjectProperty<TBuildFormStatus> buildFormStatusProperty() {
+		return buildFormStatusProperty;
 	}
 	
 

@@ -1,9 +1,7 @@
 package com.tedros.fxapi.annotation.parser;
 
 import com.tedros.fxapi.annotation.layout.TFieldSet;
-import com.tedros.fxapi.descriptor.TComponentDescriptor;
-import com.tedros.fxapi.form.TComponentBuilder;
-import com.tedros.fxapi.form.TFieldBox;
+import com.tedros.fxapi.descriptor.TFieldDescriptor;
 
 import javafx.scene.Node;
 
@@ -17,36 +15,35 @@ import javafx.scene.Node;
  * */
 public class TFieldSetParser extends TAnnotationParser<TFieldSet, com.tedros.fxapi.layout.TFieldSet> {
 
-	private static TFieldSetParser instance;
-	
-	private TFieldSetParser(){
-		
-	}
-	
-	public static  TFieldSetParser getInstance(){
-		if(instance==null)
-			instance = new TFieldSetParser();
-		return instance;	
-	}
 	
 	@Override
 	public void parse(TFieldSet annotation, com.tedros.fxapi.layout.TFieldSet object, String... byPass) throws Exception {
 		
 		object.tAddLegend(iEngine.getString(annotation.legend()));
-		TFieldBox firstItem = (TFieldBox) object.getUserData();
-		for(String field: annotation.fields()){
-			Node node = null;
-			if(firstItem!=null && field.equals(firstItem.gettControlFieldName())){
-				node = firstItem;
-			}else{
-				final TComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), field);
-				node = TComponentBuilder.getField(descriptor);
-			}
-			if(node!=null){
-				object.tAddContent(node);
-			}
-		}
+
+		for(String field: annotation.fields()) 
+			addNode(annotation, object, field);
 		
 		super.parse(annotation, object, "layoutType", "fields", "legend", "skipAnnotatedField", "mode" );
+	}
+	
+	private void addNode(TFieldSet annotation, final com.tedros.fxapi.layout.TFieldSet object, String field) {
+		TFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor();
+		if(fd.hasParent())
+			return;
+		Node node = null;
+		if(fd.getFieldName().equals(field)) {
+			if(annotation.skipAnnotatedField())
+				return;
+			node = fd.getComponent();
+		}else {
+			fd = getComponentDescriptor().getFieldDescriptor(field);
+			fd.setHasParent(true);
+			 node = fd.hasLayout() 
+					 ? fd.getLayout()
+							 : fd.getComponent();
+		}
+		if(node!=null && !object.getChildren().contains(node))
+			object.tAddContent(node);
 	}
 }

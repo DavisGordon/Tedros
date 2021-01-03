@@ -11,11 +11,11 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
-import com.covidsemfome.ejb.service.EstoqueService;
 import com.covidsemfome.ejb.service.SaidaService;
 import com.covidsemfome.model.Saida;
 import com.tedros.ejb.base.controller.TEjbController;
 import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.ejb.base.service.ITEjbService;
 
 /**
@@ -31,35 +31,27 @@ public class SaidaController extends TEjbController<Saida> implements ISaidaCont
 	@EJB
 	private SaidaService serv;
 	
-	@EJB
-	private EstoqueService estServ;
-	
 	@Override
 	public ITEjbService<Saida> getService() {
 		return serv;
 	}
 	
 	@Override
-	public TResult<Saida> save(Saida entidade) {
+	public TResult<Saida> save(Saida saida) {
 		
 		try{
-			estServ.gerarEstoque(entidade);
-			TResult<Saida> res = super.save(entidade);
-			return res;
+			Saida saidaOld = null;
+			if(!saida.isNew()) 
+				saidaOld = serv.findById(saida);
+					
+			Saida res = serv.save(saida, saidaOld);
+			
+			return new TResult<>(EnumResult.SUCESS, res);
 		}catch(Exception e) {
-			return processException(entidade, e);
+			return processException(saida, e);
 		}
 	}
 	
-	@Override
-	public TResult<Saida> remove(Saida entidade) {
-		try{
-			estServ.removerEstoque(entidade);
-			TResult<Saida> res = super.remove(entidade);
-			return res;
-		}catch(Exception e) {
-			return processException(entidade, e);
-		}
-	}
+	
 
 }

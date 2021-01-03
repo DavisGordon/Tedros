@@ -97,7 +97,7 @@ public class PessoaFindModelView extends TEntityModelView<Pessoa>{
 
 	private void buildListener() {
 		
-		ChangeListener<String> nomeListener = super.getListenerRepository().getListener("displayText1");
+		ChangeListener<String> nomeListener = super.getListenerRepository().get("displayText1");
 		if(nomeListener==null){
 			nomeListener = new ChangeListener<String>(){
 				@Override
@@ -114,7 +114,7 @@ public class PessoaFindModelView extends TEntityModelView<Pessoa>{
 		
 		nome.addListener(nomeListener);
 		
-		ChangeListener<String> tipoListener = super.getListenerRepository().getListener("displayText2");
+		ChangeListener<String> tipoListener = super.getListenerRepository().get("displayText2");
 		if(tipoListener==null){
 			tipoListener = new ChangeListener<String>(){
 				@Override

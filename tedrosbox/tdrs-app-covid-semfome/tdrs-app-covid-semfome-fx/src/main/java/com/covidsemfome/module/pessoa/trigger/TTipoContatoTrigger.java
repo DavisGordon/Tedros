@@ -5,15 +5,17 @@ import com.tedros.fxapi.control.TMaskField;
 import com.tedros.fxapi.control.trigger.TTrigger;
 import com.tedros.fxapi.form.TFieldBox;
 
+import javafx.scene.control.Toggle;
 
-public class TTipoContatoTrigger extends TTrigger {
+
+public class TTipoContatoTrigger extends TTrigger<Toggle> {
 
 	public TTipoContatoTrigger(TFieldBox source, TFieldBox target) {
 		super(source, target);
 	}
 
 	@Override
-	public void run() {
+	public void run(Toggle toggle) {
 		THorizontalRadioGroup vRadio = (THorizontalRadioGroup) getSource().gettControl();
 		if(vRadio==null || vRadio.getSelectedToggle()==null || vRadio.getSelectedToggle().getUserData()==null)
 			return;

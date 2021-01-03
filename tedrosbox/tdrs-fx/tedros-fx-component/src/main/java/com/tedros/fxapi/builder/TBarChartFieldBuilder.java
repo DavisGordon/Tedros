@@ -25,17 +25,6 @@ import com.tedros.fxapi.form.TAxisPropertiesConfig;
 @SuppressWarnings("rawtypes")
 public final class TBarChartFieldBuilder implements ITChartBuilder<com.tedros.fxapi.chart.TBarChartField>{
 	
-	private static TBarChartFieldBuilder instance;
-	
-	private TBarChartFieldBuilder(){
-		
-	}
-	
-	public static TBarChartFieldBuilder getInstance(){
-		if(instance==null)
-			instance = new TBarChartFieldBuilder();
-		return instance;
-	}
 	
 	public com.tedros.fxapi.chart.TBarChartField build(final Annotation annotation, com.tedros.fxapi.chart.TBarChartField chartField) throws Exception {
 		TBarChartField tAnnotation = (TBarChartField) annotation;

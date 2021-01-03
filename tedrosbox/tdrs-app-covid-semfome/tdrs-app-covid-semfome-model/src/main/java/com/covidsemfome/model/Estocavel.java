@@ -3,7 +3,9 @@ package com.covidsemfome.model;
 import java.util.Date;
 import java.util.List;
 
-public interface Estocavel {
+import com.tedros.ejb.base.entity.ITEntity;
+
+public interface Estocavel extends ITEntity{
 
 	/**
 	 * @return the data

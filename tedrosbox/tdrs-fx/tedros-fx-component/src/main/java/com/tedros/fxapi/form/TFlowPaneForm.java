@@ -7,17 +7,19 @@
 package com.tedros.fxapi.form;
 
 import java.util.List;
-
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.scene.Node;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.web.WebView;
+import java.util.Map;
 
 import com.tedros.core.model.ITModelView;
+import com.tedros.core.module.TObjectRepository;
 import com.tedros.core.presenter.ITPresenter;
 import com.tedros.fxapi.descriptor.TFieldDescriptor;
 import com.tedros.fxapi.domain.TViewMode;
+
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.web.WebView;
 
 /**
  * DESCRIÇÃO DA CLASSE
@@ -96,7 +98,7 @@ extends FlowPane implements ITModelForm<M> {
 	}
 	
 	@Override
-	public ObservableMap<String, TFieldBox> gettFieldBoxMap() {
+	public Map<String, TFieldBox> gettFieldBoxMap() {
 		return formEngine.getFieldBoxMap();
 	}
 	
@@ -146,5 +148,25 @@ extends FlowPane implements ITModelForm<M> {
 	@Override
 	public WebView gettWebView() {
 		return this.formEngine.getWebView();
+	}
+	
+	@Override
+	public TObjectRepository gettObjectRepository() {
+		return this.formEngine.getObjectRepository();
+	}
+
+	@Override
+	public void tDispose() {
+		this.gettObjectRepository().clear();
+	}
+	
+	@Override
+	public ReadOnlyBooleanProperty tLoadedProperty() {
+		return this.formEngine.loadedProperty();
+	}
+
+	@Override
+	public boolean isLoaded() {
+		return this.formEngine.loadedProperty().get();
 	}
 }

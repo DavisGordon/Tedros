@@ -6,7 +6,7 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.tedros.core.module.TListenerRepository;
+import com.tedros.core.module.TObjectRepository;
 import com.tedros.ejb.base.model.ITFileModel;
 import com.tedros.ejb.base.model.TFileModel;
 
@@ -27,7 +27,7 @@ public class TSimpleFileModelProperty<T extends ITFileModel> extends SimpleObjec
 	private SimpleObjectProperty<byte[]> bytesProperty;
 	private SimpleStringProperty filePathProperty;
 	
-	private TListenerRepository repo;
+	private TObjectRepository repo;
 	
 	
 	public TSimpleFileModelProperty() {
@@ -51,7 +51,7 @@ public class TSimpleFileModelProperty<T extends ITFileModel> extends SimpleObjec
 	}
 	
 	private void initialize(){
-		this.repo = new TListenerRepository();
+		this.repo = new TObjectRepository();
 		this.fileProperty = new SimpleObjectProperty<>();
 		this.fileNameProperty = new SimpleStringProperty();
 		this.fileExtensionProperty = new SimpleStringProperty();
@@ -70,21 +70,21 @@ public class TSimpleFileModelProperty<T extends ITFileModel> extends SimpleObjec
 				fileExtensionProperty.setValue(getValue().getFileExtension());
 				fireValueChangedEvent();
 			};
-		repo.addListener("flnCL", flnCL);
+		repo.add("flnCL", flnCL);
 		this.fileNameProperty.addListener(new WeakChangeListener<String>(flnCL));
 		
 		ChangeListener<String> flpCL = (arg0, arg1, arg2) -> {
 			getValue().setFilePath(arg2);
 			fireValueChangedEvent();
 		};
-		repo.addListener("flpCL", flpCL);
+		repo.add("flpCL", flpCL);
 		this.filePathProperty.addListener(new WeakChangeListener<String>(flpCL));
 		
 		ChangeListener<byte[]> bpCL = (arg0, arg1, arg2) -> {
 			getValue().getByteModel().setBytes(arg2);
 			fireValueChangedEvent();
 		};
-		repo.addListener("bpCL", bpCL);
+		repo.add("bpCL", bpCL);
 		this.bytesProperty.addListener(new WeakChangeListener<byte[]>(bpCL));		
 		
 		ChangeListener<File> fCL = (arg0, arg1, arg2) -> {
@@ -99,7 +99,7 @@ public class TSimpleFileModelProperty<T extends ITFileModel> extends SimpleObjec
 			}
 			fireValueChangedEvent();
 		};
-		repo.addListener("fCL", fCL);
+		repo.add("fCL", fCL);
 		this.fileProperty.addListener(new WeakChangeListener<File>(fCL));
 	}
 

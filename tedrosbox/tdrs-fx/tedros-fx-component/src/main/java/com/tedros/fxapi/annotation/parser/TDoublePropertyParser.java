@@ -8,18 +8,7 @@ import com.tedros.fxapi.annotation.property.TDoubleProperty;
 
 public class TDoublePropertyParser extends TAnnotationParser<TDoubleProperty, DoubleProperty>{
 	
-	private static TDoublePropertyParser instance;
 	
-	private TDoublePropertyParser(){
-		
-	}
-	
-	public static TDoublePropertyParser getInstance(){
-		if(instance==null)
-			instance = new TDoublePropertyParser();
-		return instance;
-		
-	}
 	
 	@Override
 	public void parse(TDoubleProperty annotation, DoubleProperty object, String... byPass) throws Exception {

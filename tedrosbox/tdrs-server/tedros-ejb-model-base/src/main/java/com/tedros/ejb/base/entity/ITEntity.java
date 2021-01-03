@@ -10,6 +10,8 @@ public interface ITEntity extends ITModel, Serializable{
 
 	abstract public Long getId();
 	
+	abstract public void setId(Long id);
+	
 	public boolean isNew();
 	
 	public Integer getVersionNum();

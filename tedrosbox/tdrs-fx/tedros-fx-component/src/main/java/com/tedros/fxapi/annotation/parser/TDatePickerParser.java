@@ -5,15 +5,5 @@ import com.tedros.fxapi.control.DatePicker;
 
 public class TDatePickerParser extends TAnnotationParser<TDatePickerField, DatePicker> {
 
-	private static TDatePickerParser instance;
 
-	private TDatePickerParser(){
-		
-	}
-	
-	public static TDatePickerParser getInstance(){
-		if(instance==null)
-			instance = new TDatePickerParser();
-		return instance;
-	}
 }
