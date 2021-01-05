@@ -24,7 +24,6 @@ import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.exception.TValidatorException;
 import com.tedros.fxapi.form.ITForm;
-import com.tedros.fxapi.form.ITModelForm;
 import com.tedros.fxapi.form.TBuildFormStatus;
 import com.tedros.fxapi.form.TFieldBox;
 import com.tedros.fxapi.modal.TMessageBox;
@@ -299,22 +298,6 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 		super.buildFormStatusProperty().addListener(new WeakChangeListener<>(chl));
 		newAction();
 	}
-
-	/*@SuppressWarnings("rawtypes")
-	@Override
-	protected void runAfterBuildForm(ITModelForm form) {
-		
-		if(!form.isLoaded()) {
-			ChangeListener<Boolean> chl = (ob, o, n) -> {
-				if(n)
-					getControls(super.getForm());
-			};
-			super.getListenerRepository().add("loadedForm", chl);
-			form.tLoadedProperty().addListener(new WeakChangeListener<>(chl));
-		}else
-			getControls(form);
-
-	}*/
 
 	@SuppressWarnings("unchecked")
 	private void getControls(ITForm form) {

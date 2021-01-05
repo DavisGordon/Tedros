@@ -36,12 +36,10 @@ import com.tedros.fxapi.util.TReflectionUtil;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
-import javafx.collections.ListChangeListener;
 import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -55,8 +53,6 @@ import javafx.util.Callback;
 @SuppressWarnings("rawtypes")
 public abstract class TDynaViewSelectionBaseBehavior<M extends TModelView, E extends ITEntity> 
 extends TDynaViewSimpleBaseBehavior<M, E> {
-	
-	private ListChangeListener<Node> formListChangeListener;
 	
 	private TPresenterAction<TDynaPresenter<M>> cleanAction;
 	private TPresenterAction<TDynaPresenter<M>> searchAction;
@@ -433,37 +429,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			buildForm(TViewMode.EDIT);
 	}
 	
-
-	public synchronized void removeFormListChangeListener() {
-		if(formListChangeListener!=null)
-			getView().gettFormSpace().getChildren().removeListener(formListChangeListener);
-	}
-	
-	@SuppressWarnings("unlikely-arg-type")
-	public synchronized void addFormListChangeListener() {
-		if(formListChangeListener!=null && !getView().gettFormSpace().getChildren().contains(formListChangeListener)){
-			getView().gettFormSpace().getChildren().addListener(formListChangeListener);
-		}
-	}
-
-
-
-	/**
-	 * @return the formListChangeListener
-	 */
-	public ListChangeListener<Node> getFormListChangeListener() {
-		return formListChangeListener;
-	}
-
-
-
-	/**
-	 * @param formListChangeListener the formListChangeListener to set
-	 */
-	public void setFormListChangeListener(ListChangeListener<Node> formListChangeListener) {
-		this.formListChangeListener = formListChangeListener;
-	}
-
 	/**
 	 * @return the cleanAction
 	 */

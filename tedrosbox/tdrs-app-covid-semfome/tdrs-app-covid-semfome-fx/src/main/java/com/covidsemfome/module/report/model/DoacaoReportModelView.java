@@ -13,7 +13,6 @@ import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.control.TCallbackFactory;
 import com.tedros.fxapi.annotation.control.TCellValueFactory;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
-import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
 import com.tedros.fxapi.annotation.control.TOptionsList;
@@ -22,8 +21,6 @@ import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
-import com.tedros.fxapi.annotation.effect.TDropShadow;
-import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.TAccordion;
 import com.tedros.fxapi.annotation.layout.THBox;
@@ -47,7 +44,6 @@ import com.tedros.fxapi.presenter.report.decorator.TDataSetReportDecorator;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
@@ -56,7 +52,7 @@ import javafx.scene.text.TextAlignment;
 @TReportProcess(type=DoacaoReportProcess.class, model = DoacaoReportModel.class)
 @TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = TDataSetReportBehavior.class, 
-			cleanAction=CleanAction.class, searchAction=SearchAction.class), 
+			searchAction=SearchAction.class), 
 			decorator = @TDecorator(type = TDataSetReportDecorator.class, 
 									viewTitle="Relatório de Doações"))
 @TSecurity(	id="COVSEMFOME_DOACAOREP_FORM", 
@@ -66,18 +62,14 @@ public class DoacaoReportModelView extends TModelView<DoacaoReportModel>{
 	
 	private SimpleLongProperty id;
 	
-	private SimpleStringProperty displayText;
-	
 	@TAccordion(expandedPane="filtro", node=@TNode(id="repdoaacc",parse = true),
 			panes={
 					@TTitledPane(text="Filtros", node=@TNode(id="filtro",parse = true), expanded=true,
-							fields={"texto1","nome","texto2","tiposAjuda"}),
+							fields={"nome","texto2","tiposAjuda"}),
 					@TTitledPane(text="Resultado", node=@TNode(id="resultado",parse = true),
-						fields={"texto3","result"})})
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
-	@TText(text="Pessoa e Ação", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
-	node=@TNode(id="t-form-title-text", parse = true))
-	private SimpleStringProperty texto1;
+						fields={"result"})})
+	private SimpleStringProperty displayText;
+	
 	
 	@TLabel(text="Pessoa")
 	@TTextField(textInputControl=@TTextInputControl(promptText="Insira parte ou o nome completo da pessoa", parse = true))
@@ -90,7 +82,6 @@ public class DoacaoReportModelView extends TModelView<DoacaoReportModel>{
 	@TTextField(textInputControl=@TTextInputControl(promptText="Insira os codigos separados por virgula", parse = true))
 	private SimpleStringProperty acaoId;
 	
-	//@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
 	@TText(text="Data ou Periodo da doação:", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 	node=@TNode(id="t-form-title-text", parse = true))
 	@THBox(	pane=@TPane(children={"texto2","dataInicio","dataFim"}), spacing=10, fillHeight=true,
@@ -115,10 +106,6 @@ public class DoacaoReportModelView extends TModelView<DoacaoReportModel>{
 	@TModelViewCollectionType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=false)
 	private ITObservableList<TipoAjudaModelView> tiposAjuda;
 	
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
-	@TText(text="Resultado", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
-			node=@TNode(id="t-form-title-text", parse = true))
-	private SimpleStringProperty texto3;
 	
 	@TTableView(editable=true, 
 			columns = { @TTableColumn(cellValue="data", text = "Data", prefWidth=30, resizable=true,
@@ -165,20 +152,6 @@ public class DoacaoReportModelView extends TModelView<DoacaoReportModel>{
 	 */
 	public void setDisplayText(SimpleStringProperty displayText) {
 		this.displayText = displayText;
-	}
-
-	/**
-	 * @return the texto1
-	 */
-	public SimpleStringProperty getTexto1() {
-		return texto1;
-	}
-
-	/**
-	 * @param texto1 the texto1 to set
-	 */
-	public void setTexto1(SimpleStringProperty texto1) {
-		this.texto1 = texto1;
 	}
 
 	/**
@@ -279,19 +252,6 @@ public class DoacaoReportModelView extends TModelView<DoacaoReportModel>{
 		this.result = result;
 	}
 
-	/**
-	 * @return the texto3
-	 */
-	public SimpleStringProperty getTexto3() {
-		return texto3;
-	}
-
-	/**
-	 * @param texto3 the texto3 to set
-	 */
-	public void setTexto3(SimpleStringProperty texto3) {
-		this.texto3 = texto3;
-	}
 
 	
 }

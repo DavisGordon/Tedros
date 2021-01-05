@@ -7,6 +7,9 @@ import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.fxapi.annotation.parser.TAnnotationParser;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
+import com.tedros.fxapi.descriptor.TFieldDescriptor;
+
+import javafx.scene.Node;
 
 
 public abstract class TBuilder implements ITBuilder {
@@ -38,6 +41,31 @@ public abstract class TBuilder implements ITBuilder {
 	
 	public void callParser(final Annotation tAnnotation, final Object control) throws Exception {
 		TAnnotationParser.callParser(tAnnotation, control, componentDescriptor);
+	}
+	
+	protected Node getNode(String field) {
+		TFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor();
+		if(fd.hasParent())
+			return null;
+		Node node = null;
+		if(fd.getFieldName().equals(field)) {
+			node = fd.getComponent();
+		}else {
+			fd = getComponentDescriptor().getFieldDescriptor(field);
+			if(fd==null)
+				throw new RuntimeException("The field "+field+" was not found in "
+			+ getComponentDescriptor().getModelView().getClass().getSimpleName());
+			
+			fd.setHasParent(true);
+			node = fd.hasLayout() 
+					 ? fd.getLayout()
+							 : fd.getComponent();
+		}
+		
+		if(node==null)
+			throw new RuntimeException("The field "+field+" hasn't configured with a componet to be used."
+					+ getComponentDescriptor().getModelView().getClass().getSimpleName());
+		return node;
 	}
 	
 }

@@ -2,9 +2,6 @@ package com.tedros.settings.layout.behavior;
 
 import java.util.Map;
 
-import javafx.scene.Node;
-import javafx.scene.paint.Color;
-
 import com.tedros.fxapi.control.TCheckBoxField;
 import com.tedros.fxapi.control.THorizontalRadioGroup;
 import com.tedros.fxapi.control.TVerticalRadioGroup;
@@ -13,6 +10,7 @@ import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.form.ITModelForm;
 import com.tedros.fxapi.form.TDefaultForm;
 import com.tedros.fxapi.form.TFieldBox;
+import com.tedros.fxapi.form.TProgressIndicatorForm;
 import com.tedros.fxapi.layout.TFieldSet;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
@@ -22,6 +20,9 @@ import com.tedros.settings.layout.decorator.ExampleDecorator;
 import com.tedros.settings.layout.form.EntityExampleForm;
 import com.tedros.settings.layout.model.ExampleViewModel;
 import com.tedros.util.TColorUtil;
+
+import javafx.scene.Node;
+import javafx.scene.paint.Color;
 
 public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleViewModel, EntityExampleForm> {
 
@@ -55,6 +56,7 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleViewModel,
 		return (ExampleDecorator) getPresenter().getDecorator();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void processPanelTextStyle(String color, String size) {
 		
 		StringBuilder style = new StringBuilder("-fx-text-fill: "+color+";");
@@ -67,9 +69,10 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleViewModel,
 		((TDynaView<ExampleViewModel>) decorator.getView()).gettViewTitle().setStyle(style.toString());
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void processFieldSetBorderAndTextColor(String color, String size){
 		final ITModelForm<ExampleViewModel> form = getForm();
-		Node node = ((TDefaultForm<ExampleViewModel>) form).lookup("#stringField-fieldSet");
+		Node node = ((TDefaultForm<ExampleViewModel>) ((TProgressIndicatorForm) form).gettForm()).lookup("#stringField-fieldSet");
 		if(node instanceof TFieldSet){
 			TFieldSet fieldSet = (TFieldSet) node;
 			
@@ -87,9 +90,10 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleViewModel,
 		}
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void processFieldSetLegendBackgroundColor(Color panelColor){
 		final ITModelForm<ExampleViewModel> form = getForm();
-		Node node = ((TDefaultForm<ExampleViewModel>) form).lookup("#stringField-fieldSet");
+		Node node = ((TDefaultForm<ExampleViewModel>) ((TProgressIndicatorForm) form).gettForm()).lookup("#stringField-fieldSet");
 		if(node instanceof TFieldSet){
 			
 			java.awt.Color rgb = TColorUtil.hex2Rgb(TColorUtil.toHexadecimal(panelColor));

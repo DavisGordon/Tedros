@@ -49,7 +49,7 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 		listenerRepository = new TObjectRepository();
 		buildFormStatusProperty = new SimpleObjectProperty();
 		
-		
+		//form added listener
 		ChangeListener<ITModelForm<M>> formCL = (a0, a1, form) -> {
 			
 			if(form!=null) {
@@ -86,6 +86,7 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 		listenerRepository.add("formPropCL", formCL);
 		formProperty.addListener(new WeakChangeListener<>(formCL));
 		
+		// build form status listener
 		ChangeListener<TBuildFormStatus> bfchl = (ob, o, n) -> {
 			if(n!=null && n.equals(TBuildFormStatus.STARTING)) {
 				buildFormTask();
@@ -94,7 +95,7 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 		listenerRepository.add("buildingFormCHL", bfchl);
 		buildFormStatusProperty.addListener(new WeakChangeListener(bfchl));
 		
-		// Invalidation listeer
+		// Invalidation listener
 		ChangeListener<Boolean> invCL = (a0, a1, a2) -> {
 			if(a2) {
 				removeAllListenerFromModelView();

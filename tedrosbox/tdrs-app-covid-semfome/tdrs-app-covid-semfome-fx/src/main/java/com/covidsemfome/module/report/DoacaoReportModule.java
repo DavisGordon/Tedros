@@ -4,7 +4,6 @@
 package com.covidsemfome.module.report;
 
 import com.covidsemfome.module.report.model.AcoesReportModelView;
-import com.covidsemfome.module.report.model.DoacaoReportModelView;
 import com.covidsemfome.module.report.model.EstoqueReportModelView;
 import com.covidsemfome.module.report.model.VoluntariosReportModelView;
 import com.tedros.core.TModule;
@@ -28,7 +27,6 @@ public class DoacaoReportModule extends TModule {
 		tShowView(new TGroupView<TGroupPresenter>(this, "Relatórios", 
 				new TViewItem(TDynaView.class, AcoesReportModelView.class, "Ação"),
 				new TViewItem(TDynaView.class, VoluntariosReportModelView.class, "Voluntário"),
-				new TViewItem(TDynaView.class, DoacaoReportModelView.class, "Doação"),
 				new TViewItem(TDynaView.class, EstoqueReportModelView.class, "Estoque")
 				));
 	}

@@ -45,9 +45,13 @@ public class TProgressIndicatorForm<M extends ITModelView<?>> extends StackPane 
 	
 	public TProgressIndicatorForm(ITModelForm<M> form) {
 		this.form = form;
-		this.form.tLoadedProperty().addListener(new WeakChangeListener<>(loadedListener));
-		BooleanBinding bb = BooleanBinding.booleanExpression(this.form.tLoadedProperty()).not();
-		this.pIndicator.bind(bb);
+		if(form.isLoaded())
+			getChildren().add((Node) form);
+		else {
+			this.form.tLoadedProperty().addListener(new WeakChangeListener<>(loadedListener));
+			BooleanBinding bb = BooleanBinding.booleanExpression(this.form.tLoadedProperty()).not();
+			this.pIndicator.bind(bb);
+		}
 		autosize();
 		setAlignment(Pos.TOP_LEFT);
 		setPadding(new Insets(0));

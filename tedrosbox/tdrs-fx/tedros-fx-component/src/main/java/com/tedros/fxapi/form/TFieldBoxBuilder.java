@@ -36,14 +36,10 @@ import javafx.scene.control.Labeled;
  */
 final class TFieldBoxBuilder {
 	
-	//private static TAnnotationParser<TLabel, Labeled> parser = null;
-	//private static Class<? extends TAnnotationParser<TLabel, Labeled>> parserClass = null;
-
 	public static TFieldBox build(final Node control, final TComponentDescriptor descriptor){
 		return generate(control, descriptor);
 	}	
 	
-	@SuppressWarnings({"unchecked"})
 	private static TFieldBox generate(final Node control, final TComponentDescriptor descriptor) {
 		
 		final TLabel fieldLabel = (TLabel) descriptor.getFieldLabelAnnotation();

@@ -21,8 +21,6 @@ import com.tedros.fxapi.annotation.control.TShowField;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
-import com.tedros.fxapi.annotation.effect.TDropShadow;
-import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
@@ -89,7 +87,7 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
 	@TText(text="Ação / Campanha", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 	node=@TNode(id="t-form-title-text", parse = true))
 	private SimpleStringProperty textoCadastro;
@@ -105,7 +103,7 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	@TLabel(text="Data e Hora")
 	@TDatePickerField(required = true, dateFormat=DateTimeFormatBuilder.class)
 	@THBox(	pane=@TPane(children={"data","status"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="data", priority=Priority.ALWAYS), 
+	hgrow=@THGrow(priority={@TPriority(field="data", priority=Priority.NEVER), 
    				   		@TPriority(field="status", priority=Priority.ALWAYS) }))
 	private SimpleObjectProperty<Date> data;
 	
@@ -125,8 +123,8 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	@TLabel(text="Qtd. Minima de voluntários")
 	@TNumberSpinnerField(maxValue = 150)
 	@THBox(	pane=@TPane(children={"qtdMinVoluntarios","qtdMaxVoluntarios"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="qtdMinVoluntarios", priority=Priority.ALWAYS), 
-   				   		@TPriority(field="qtdMaxVoluntarios", priority=Priority.ALWAYS) }))
+	hgrow=@THGrow(priority={@TPriority(field="qtdMinVoluntarios", priority=Priority.NEVER), 
+   				   		@TPriority(field="qtdMaxVoluntarios", priority=Priority.NEVER) }))
 	private SimpleIntegerProperty qtdMinVoluntarios;
 	
 	@TReaderHtml
@@ -138,9 +136,9 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	@TLabel(text = "Valor previsto")
 	@TBigDecimalField(textInputControl=@TTextInputControl(promptText="Valor previsto", parse = true))
 	@THBox(	pane=@TPane(children={"vlrPrevisto","vlrArrecadado","vlrExecutado"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="vlrPrevisto", priority=Priority.ALWAYS), 
-   				   		@TPriority(field="vlrArrecadado", priority=Priority.ALWAYS),
-   				   		@TPriority(field="vlrExecutado", priority=Priority.ALWAYS) }))
+	hgrow=@THGrow(priority={@TPriority(field="vlrPrevisto", priority=Priority.NEVER), 
+   				   		@TPriority(field="vlrArrecadado", priority=Priority.NEVER),
+   				   		@TPriority(field="vlrExecutado", priority=Priority.NEVER) }))
 	private SimpleDoubleProperty vlrPrevisto;
 	
 	@TReaderHtml

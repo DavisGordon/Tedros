@@ -22,10 +22,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
-import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
@@ -35,8 +33,6 @@ import javafx.scene.control.ToggleGroup;
 @SuppressWarnings("rawtypes")
 public abstract class TDynaViewActionBaseBehavior<M extends TModelView, E extends ITModel> 
 extends TDynaViewSimpleBaseBehavior<M, E> {
-	
-	private ListChangeListener<Node> formListChangeListener;
 	
 	private ToggleGroup radioGroup;
 	private BooleanProperty modeBtnDisableProperty;
@@ -72,8 +68,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				this.modelClass = (Class<E>) tEjbService.model();
 			}
 			
-			
-			//final TForm tForm = presenter.getFormAnnotation();
 			final TBehavior tBehavior = presenter.getPresenterAnnotation().behavior();
 			
 			// set the custom behavior actions
@@ -144,7 +138,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		if(tMode==null){
 			setViewMode(TViewMode.EDIT);
 		}
-		
 		
 		tMode = getViewMode();
 		
@@ -219,7 +212,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	}
 	
 	/**
-	 * Config the search button
+	 * Config the action button
 	 * */
 	public void configActionButton() {
 		final Button actionButton = this.decorator.gettActionButton();
@@ -353,14 +346,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		}else 
 			buildForm(TViewMode.EDIT);
 		
-		/*ITModelForm<M> form = (mode!=null) 
-				? buildForm(mode)
-						: radioGroup!=null 
-						?  (isReaderModeSelected() 
-								? buildForm(TViewMode.READER) 
-										: buildForm(TViewMode.EDIT))
-								: buildForm(TViewMode.EDIT);
-		setForm(form);*/
 	}
 	
 	/**
@@ -375,35 +360,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * */
 	public boolean isEditModeSelected(){
 		return radioGroup.getSelectedToggle()!=null && radioGroup.getSelectedToggle().equals(this.decorator.gettEditModeRadio());
-	}
-
-	public synchronized void removeFormListChangeListener() {
-		if(formListChangeListener!=null)
-			getView().gettFormSpace().getChildren().removeListener(formListChangeListener);
-	}
-	
-	public synchronized void addFormListChangeListener() {
-		if(formListChangeListener!=null && !getView().gettFormSpace().getChildren().contains(formListChangeListener)){
-			getView().gettFormSpace().getChildren().addListener(formListChangeListener);
-		}
-	}
-
-
-
-	/**
-	 * @return the formListChangeListener
-	 */
-	public ListChangeListener<Node> getFormListChangeListener() {
-		return formListChangeListener;
-	}
-
-
-
-	/**
-	 * @param formListChangeListener the formListChangeListener to set
-	 */
-	public void setFormListChangeListener(ListChangeListener<Node> formListChangeListener) {
-		this.formListChangeListener = formListChangeListener;
 	}
 
 	/**

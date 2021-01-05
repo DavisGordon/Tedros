@@ -83,9 +83,9 @@ import javafx.scene.text.TextAlignment;
 			show=true, showSearchField=true, searchFieldName="nome",
 			orderBy = {	@TOption(text = "Codigo", value = "id"), 
 						@TOption(text = "Nome", value = "nome")}),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{view.person.name}")))
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Pessoa")))
 @TSecurity(	id="COVSEMFOME_CADPESS_FORM", 
-	appName = "#{app.name}", moduleName = "Administrativo", viewName = "#{view.person.name}",
+	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Pessoa",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 
