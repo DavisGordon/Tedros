@@ -12,7 +12,6 @@ import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
-import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
@@ -22,8 +21,6 @@ import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
-import com.tedros.fxapi.annotation.effect.TDropShadow;
-import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.TAccordion;
 import com.tedros.fxapi.annotation.layout.THBox;
@@ -56,7 +53,7 @@ import javafx.scene.text.TextAlignment;
 @TReportProcess(type=EstoqueReportProcess.class, model = EstoqueReportModel.class)
 @TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = TDataSetReportBehavior.class, 
-			cleanAction=CleanAction.class, searchAction=SearchAction.class), 
+			searchAction=SearchAction.class), 
 			decorator = @TDecorator(type = TDataSetReportDecorator.class, 
 									viewTitle="Relatório de Estoque"))
 @TSecurity(	id="COVSEMFOME_ESTOQREP_FORM", 
@@ -71,7 +68,7 @@ public class EstoqueReportModelView extends TModelView<EstoqueReportModel>{
 					@TTitledPane(text="Filtros", node=@TNode(id="filtro",parse = true), expanded=true,
 							fields={"cozinha","texto2"}),
 					@TTitledPane(text="Resultado", node=@TNode(id="resultado",parse = true),
-						fields={"texto3","result"})})
+						fields={"result"})})
 	private SimpleStringProperty displayText;
 	
 		
@@ -97,7 +94,6 @@ public class EstoqueReportModelView extends TModelView<EstoqueReportModel>{
 			})
 	private SimpleStringProperty origem;
 			
-	//@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
 	@TText(text="Data ou Periodo:", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 	node=@TNode(id="t-form-title-text", parse = true))
 	@THBox(	pane=@TPane(children={"texto2","dataInicio","dataFim"}), spacing=10, fillHeight=true,
@@ -115,11 +111,6 @@ public class EstoqueReportModelView extends TModelView<EstoqueReportModel>{
 	@TDatePickerField
 	private SimpleObjectProperty<Date> dataFim;
 	
-	
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
-	@TText(text="Resultado", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
-			node=@TNode(id="t-form-title-text", parse = true))
-	private SimpleStringProperty texto3;
 	
 	@TTableView(editable=true, 
 			columns = { @TTableColumn(cellValue="id", text = "Codigo", prefWidth=20, resizable=true), 
@@ -254,25 +245,6 @@ public class EstoqueReportModelView extends TModelView<EstoqueReportModel>{
 	public void setDataFim(SimpleObjectProperty<Date> dataFim) {
 		this.dataFim = dataFim;
 	}
-
-
-
-	/**
-	 * @return the texto3
-	 */
-	public SimpleStringProperty getTexto3() {
-		return texto3;
-	}
-
-
-
-	/**
-	 * @param texto3 the texto3 to set
-	 */
-	public void setTexto3(SimpleStringProperty texto3) {
-		this.texto3 = texto3;
-	}
-
 
 
 	/**

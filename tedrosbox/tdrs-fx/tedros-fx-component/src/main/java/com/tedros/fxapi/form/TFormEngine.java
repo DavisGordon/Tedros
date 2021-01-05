@@ -140,8 +140,8 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 					if(sbf!=null)
 						webView.getEngine().loadContent(sbf.toString());
 				}
-				
-					
+			//loaded.unbind();
+			loaded.setValue(true);
 			initializeReader();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -150,7 +150,6 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 
 	private void buildModelViewLoader() {
 		this.modelViewLoader = new TModelViewLoader<M>(modelView, this.form);
-		this.loaded.bind(this.modelViewLoader.allLoadedProperty());
 	}
 
 	public void setEditMode(){
@@ -160,7 +159,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 		
 		resetForm();
 		buildModelViewLoader();
-		
+		this.loaded.bind(this.modelViewLoader.allLoadedProperty());
 		try {
 			if(StringUtils.isBlank(this.form.getId()))
 				this.form.setId("t-form");

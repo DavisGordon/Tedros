@@ -167,10 +167,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 						: TFormBuilder.create(model).presenter(getPresenter()).build();
 		
 		form.settPresenter(presenter);
-		
-		//removeBreadcrumbFormChangeListener();
 		presenter.getBehavior().setForm(form);
-		//addBreadcrumbFormChangeListener();
 	}
 
 	public void setDisableModelActionButtons(boolean flag) {

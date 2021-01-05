@@ -23,7 +23,6 @@ import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.exception.TException;
 import com.tedros.fxapi.exception.TValidatorException;
-import com.tedros.fxapi.form.ITForm;
 import com.tedros.fxapi.form.ITModelForm;
 import com.tedros.fxapi.layout.TBreadcrumbForm;
 import com.tedros.fxapi.modal.TConfirmMessageBox;
@@ -46,11 +45,9 @@ import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
@@ -445,18 +442,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 						
 						behavior.addBreadcrumbFormChangeListener();
 					}
-					
-					//addBreadcrumbFormChangeListener();
-				}/*else{
-					//addBreadcrumbFormChangeListener();
-					removeAllButtons(entryList, tBreadcrumbForm);
-				}*/
+				}
 			}
-
-			private void removeAllButtons(final ObservableList<TEntry<Object>> formItemList, final TBreadcrumbForm tBreadcrumbForm) {
-				formItemList.clear();
-			}
-
 		};
 		
 		addBreadcrumbFormChangeListener();
@@ -650,7 +637,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	/**
 	 * Called by the newAction() method to perform a custom behavior 
 	 * like add the new item in a {@link ListView} or {@link TableView}.  
-	 * @return TODO
+	 * @return boolean
 	 * */
 	public abstract boolean processNewEntityBeforeBuildForm(M model);
 	

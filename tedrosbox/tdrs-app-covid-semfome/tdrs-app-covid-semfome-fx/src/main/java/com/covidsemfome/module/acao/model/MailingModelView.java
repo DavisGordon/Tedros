@@ -26,8 +26,6 @@ import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.control.TValidator;
-import com.tedros.fxapi.annotation.effect.TDropShadow;
-import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.TAccordion;
 import com.tedros.fxapi.annotation.layout.THBox;
@@ -83,11 +81,11 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 	
 	@TAccordion(expandedPane="eem",
 			panes={	@TTitledPane(text="Dados da Acão / Campanha", 
-					fields={"textoCadastro","titulo","data","status","descricao"}),
-					
+					fields={"textoCadastro","titulo","descricao"}),
 					@TTitledPane(text="Voluntários inscritos", fields={"voluntarios"}),
-					@TTitledPane(text="Email",node=@TNode(id="eem",parse = true), expanded=true, fields={"destino","emails","tituloEmail", "conteudo","tituloBoxEmail","textoChaves"})})
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
+					@TTitledPane(text="Email",node=@TNode(id="eem",parse = true), expanded=true, 
+					fields={"destino","emails","tituloEmail", "conteudo","tituloBoxEmail","textoChaves"})})
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
 	@TText(text="Acão / Campanha", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 	node=@TNode(id="t-form-title-text", parse = true))
 	private SimpleStringProperty textoCadastro;
@@ -138,7 +136,7 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 	@TTextAreaField(required=true, wrapText=true, control=@TControl(prefWidth=250, prefHeight=150, parse = true))
 	private SimpleStringProperty conteudo;
 	
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), 
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", 
 			style="-fx-background-color: #FFFFFF", parse = true))
 	@TText(text="Chaves para substituição, insira a chave desejada para inserir uma informação. ex: #NOME# será substituido pelo nome do voluntário.", 
 	wrappingWidth=650,
@@ -146,7 +144,7 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 	node=@TNode(id="t-label", parse = true))
 	private SimpleStringProperty tituloBoxEmail;
 	
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), 
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form",
 			style="-fx-background-color: #FFFFFF", parse = true))
 	@TText(text="#NOME# #TITULOACAO# #DESCRICAOACAO# #STATUSACAO# #DATAACAO# #QTDINSCRITOS# #QTDMINVOL# #QTDMAXVOL# #LINKPAINEL# #LINKSITE#", 
 			wrappingWidth=650,

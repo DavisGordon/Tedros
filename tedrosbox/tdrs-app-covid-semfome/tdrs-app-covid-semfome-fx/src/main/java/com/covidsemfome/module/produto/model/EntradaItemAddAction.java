@@ -29,6 +29,8 @@ public class EntradaItemAddAction extends TPresenterAction<TDynaPresenter<Entrad
 		String n = null;
 		if(m!=null && lst!=null && !lst.isEmpty()) {
 			EntradaItem s1 = m.getEntity();
+			if(s1.getProduto()==null)
+				return true;
 			for (EntradaItemModelView i : lst) {
 				EntradaItem s2 = i.getEntity();
 				if(s1.getProduto().getId().equals(s2.getProduto().getId())) {

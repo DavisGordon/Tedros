@@ -29,6 +29,8 @@ public class SaidaItemAddAction extends TPresenterAction<TDynaPresenter<SaidaIte
 		String n = null;
 		if(m!=null && lst!=null && !lst.isEmpty()) {
 			SaidaItem s1 = m.getEntity();
+			if(s1.getProduto()==null)
+				return true;
 			for (SaidaItemModelView i : lst) {
 				SaidaItem s2 = i.getEntity();
 				if(s1.getProduto().getId().equals(s2.getProduto().getId())) {

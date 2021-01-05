@@ -104,9 +104,10 @@ public abstract class TFieldLoader<M extends ITModelView<?>> {
 		
 		TControlLayoutBuilder builder = new TControlLayoutBuilder();
 		
-		Node control = (bcontrol) 
-				? builder.getControlField(descriptor)
-						: builder.getLayoutField(descriptor);
+		if (bcontrol) 
+			builder.getControlField(descriptor);
+		else
+			builder.getLayoutField(descriptor);
 		
 		
 	}

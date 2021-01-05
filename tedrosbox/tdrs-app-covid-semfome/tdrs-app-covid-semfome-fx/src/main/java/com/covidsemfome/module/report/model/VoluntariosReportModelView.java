@@ -10,7 +10,6 @@ import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.control.TCallbackFactory;
 import com.tedros.fxapi.annotation.control.TCellValueFactory;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
-import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
@@ -19,8 +18,6 @@ import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
-import com.tedros.fxapi.annotation.effect.TDropShadow;
-import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.TAccordion;
 import com.tedros.fxapi.annotation.layout.THBox;
@@ -53,7 +50,7 @@ import javafx.scene.text.TextAlignment;
 @TReportProcess(type=VoluntarioReportProcess.class, model = VoluntarioReportModel.class)
 @TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = TDataSetReportBehavior.class, 
-			cleanAction=CleanAction.class, searchAction=SearchAction.class), 
+			searchAction=SearchAction.class), 
 			decorator = @TDecorator(type = TDataSetReportDecorator.class, 
 									viewTitle="Relatório de Voluntários"))
 @TSecurity(	id="COVSEMFOME_VOLUNREP_FORM", 
@@ -68,7 +65,7 @@ public class VoluntariosReportModelView extends TModelView<VoluntarioReportModel
 					@TTitledPane(text="Filtros", node=@TNode(id="filtro",parse = true), expanded=true,
 							fields={"titulo","status","texto2"}),
 					@TTitledPane(text="Resultado", node=@TNode(id="resultado",parse = true),
-						fields={"texto3","result"})})	
+						fields={"result"})})	
 	private SimpleStringProperty displayText;
 	
 	@TLabel(text="Titulo / Local")
@@ -92,8 +89,6 @@ public class VoluntariosReportModelView extends TModelView<VoluntarioReportModel
 					})
 	private SimpleStringProperty status;
 			
-	
-	//@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
 	@TText(text="Data ou Periodo da ação:", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 	node=@TNode(id="t-form-title-text", parse = true))
 	@THBox(	pane=@TPane(children={"texto2","dataInicio","dataFim"}), spacing=10, fillHeight=true,
@@ -109,12 +104,6 @@ public class VoluntariosReportModelView extends TModelView<VoluntarioReportModel
 	@TLabel(text="Ate")
 	@TDatePickerField
 	private SimpleObjectProperty<Date> dataFim;
-	
-	
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
-	@TText(text="Resultado", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
-			node=@TNode(id="t-form-title-text", parse = true))
-	private SimpleStringProperty texto3;
 	
 	@TTableView(editable=true, 
 			columns = { @TTableColumn(cellValue="id", text = "Codigo", prefWidth=20, resizable=true), 
@@ -246,20 +235,6 @@ public class VoluntariosReportModelView extends TModelView<VoluntarioReportModel
 	 */
 	public void setDataFim(SimpleObjectProperty<Date> dataFim) {
 		this.dataFim = dataFim;
-	}
-
-	/**
-	 * @return the texto3
-	 */
-	public SimpleStringProperty getTexto3() {
-		return texto3;
-	}
-
-	/**
-	 * @param texto3 the texto3 to set
-	 */
-	public void setTexto3(SimpleStringProperty texto3) {
-		this.texto3 = texto3;
 	}
 
 	/**

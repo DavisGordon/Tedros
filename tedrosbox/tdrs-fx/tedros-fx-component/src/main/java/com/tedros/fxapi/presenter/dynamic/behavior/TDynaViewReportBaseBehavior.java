@@ -32,7 +32,6 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
@@ -42,8 +41,6 @@ import javafx.scene.control.ToggleGroup;
 @SuppressWarnings("rawtypes")
 public abstract class TDynaViewReportBaseBehavior<M extends TModelView, E extends ITReportModel> 
 extends TDynaViewSimpleBaseBehavior<M, E> {
-	
-	private ListChangeListener<Node> formListChangeListener;
 	
 	private ToggleGroup radioGroup;
 	private BooleanProperty modeBtnDisableProperty;
@@ -586,20 +583,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	public boolean isRadioGroupBuilt(){
 		return radioGroup!=null;
 	}
-
-	
-
-	public synchronized void removeFormListChangeListener() {
-		if(formListChangeListener!=null)
-			getView().gettFormSpace().getChildren().removeListener(formListChangeListener);
-	}
-	
-	public synchronized void addFormListChangeListener() {
-		if(formListChangeListener!=null && !getView().gettFormSpace().getChildren().contains(formListChangeListener)){
-			getView().gettFormSpace().getChildren().addListener(formListChangeListener);
-		}
-	}
-	
 	
 	/**
 	 * Return the {@link TReportProcess} class

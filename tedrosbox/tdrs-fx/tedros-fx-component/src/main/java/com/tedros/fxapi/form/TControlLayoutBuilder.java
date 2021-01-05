@@ -74,50 +74,48 @@ public final class TControlLayoutBuilder {
 		
 	}
 	
-	public Node getControlField(TComponentDescriptor descriptor) throws Exception{
+	public void getControlField(TComponentDescriptor descriptor) throws Exception{
 		
 		Long startTime = TDebugConfig.detailParseExecution ? System.nanoTime() : null;
 		
-		Node node = null;
 		if(descriptor.getMode() == TViewMode.EDIT )
 			getControl(descriptor);
 		else 
-			node = getReader(descriptor);
+			getReader(descriptor);
 		
 		Long endTime = TDebugConfig.detailParseExecution ? System.nanoTime() : null;
 		
 		if(TDebugConfig.detailParseExecution) {
 			try{
 				long duration = (endTime - startTime);
-				System.out.println("[TComponentBuilder][Field: "+descriptor.getFieldDescriptor().getFieldName()+"][Node: "+( (node==null) ? "null" : (node instanceof TFieldBox) ? ((TFieldBox) node).gettControl().getClass().getSimpleName(): node.getClass().getSimpleName())+"][Build duration: "+(duration/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration/1000000))+"s] ");
+				System.out.println("[TComponentBuilder][Field: "+descriptor.getFieldDescriptor().getFieldName()+
+						"][Build duration: "+(duration/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration/1000000))+"s] ");
 			}catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		return node;
 	}
 	
-	public Node getLayoutField(TComponentDescriptor descriptor) throws Exception{
+	public void getLayoutField(TComponentDescriptor descriptor) throws Exception{
 		
 		Long startTime = TDebugConfig.detailParseExecution ? System.nanoTime() : null;
 		
-		Node node = null;
 		if(descriptor.getMode() == TViewMode.EDIT)
 			getLayout(descriptor);
 		else
-			node = getLayoutReader(descriptor);
+			getLayoutReader(descriptor);
 		
 		Long endTime = TDebugConfig.detailParseExecution ? System.nanoTime() : null;
 		
 		if(TDebugConfig.detailParseExecution) {
 			try{
 				long duration = (endTime - startTime);
-				System.out.println("[TComponentBuilder][Field: "+descriptor.getFieldDescriptor().getFieldName()+"][Node: "+( (node==null) ? "null" : (node instanceof TFieldBox) ? ((TFieldBox) node).gettControl().getClass().getSimpleName(): node.getClass().getSimpleName())+"][Build duration: "+(duration/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration/1000000))+"s] ");
+				System.out.println("[TComponentBuilder][Field: "+descriptor.getFieldDescriptor().getFieldName()+
+						"][Build duration: "+(duration/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration/1000000))+"s] ");
 			}catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		return node;
 	}
 
 	@SuppressWarnings({"rawtypes"})
@@ -188,8 +186,10 @@ public final class TControlLayoutBuilder {
 		if(controlBuilder==null){
 			return;
 		}
-		
-		if(descriptor.getFieldDescriptor().hasLayout()) {
+		Node control =  buildFieldBox(buildControl(descriptor, modelView, modelViewGetMethod, controlBuilder, controlAnnotation), descriptor);
+		descriptor.getFieldDescriptor().setComponent(control);
+		/*if(descriptor.getFieldDescriptor().hasLayout()) {
+			
 			Node control = buildControl(descriptor, modelView, modelViewGetMethod, controlBuilder, controlAnnotation);
 			TFieldBox fieldBox = TFieldBoxBuilder.build(control, descriptor);
 			descriptor.getFieldDescriptor().setComponent(fieldBox);
@@ -199,15 +199,15 @@ public final class TControlLayoutBuilder {
 		} else {
 			Node control =  buildFieldBox(buildControl(descriptor, modelView, modelViewGetMethod, controlBuilder, controlAnnotation), descriptor);
 			descriptor.getFieldDescriptor().setComponent(control);
-		}
+		}*/
 	}
 	
 	
 	@SuppressWarnings({"rawtypes"})
-	private Node getReader(TComponentDescriptor descriptor) throws Exception{
+	private void getReader(TComponentDescriptor descriptor) throws Exception{
 		
 		if(descriptor.getFieldDescriptor().isLoaded())
-			return null;
+			return;
 		
 		/*int x=0;
 		if(descriptor.getFieldDescriptor().getFieldName().equals("textoCadastro"))
@@ -257,22 +257,24 @@ public final class TControlLayoutBuilder {
 		
 		
 		if(readerBuilder==null){
-			return null;
+			return;
 		}
 		
+		Node node = null;
 		if(htmlReaderFlag)
-			return buildHtmlBox((THtmlReader) buildReader(modelView, modelViewGetMethod, readerAnnotation, readerBuilder), descriptor);
+			node = buildHtmlBox((THtmlReader) buildReader(modelView, modelViewGetMethod, readerAnnotation, readerBuilder), descriptor);
 		else
-			return buildFieldBox((Node) buildReader(modelView, modelViewGetMethod, readerAnnotation, readerBuilder), descriptor);
+			node = buildFieldBox((Node) buildReader(modelView, modelViewGetMethod, readerAnnotation, readerBuilder), descriptor);
 		
+		descriptor.getFieldDescriptor().setComponent(node);
 	}
 
 
 	@SuppressWarnings({"rawtypes"})
-	private final Node getLayoutReader(TComponentDescriptor descriptor) throws Exception{
+	private final void getLayoutReader(TComponentDescriptor descriptor) throws Exception{
 		
 		if(descriptor.getFieldDescriptor().isLoaded())
-			return null;
+			return;
 		
 		final String fieldName = descriptor.getFieldDescriptor().getFieldName();
 		final ITModelView modelView = descriptor.getModelView();
@@ -300,23 +302,26 @@ public final class TControlLayoutBuilder {
 		}
 		
 		if(layoutBuilder==null){
-			return null;
+			return;
 		}
 		
+		TFieldDescriptor fd = descriptor.getFieldDescriptor();
+		Node layout = null;
 		
 		if(!htmlReaderFlag){
-			//Node control = buildReader(modelView, modelViewGetMethod, readerAnnotation, readerBuilder);
-			TFieldBox fieldBox = TFieldBoxBuilder.build(null, descriptor);
-			Node layout = ((ITLayoutBuilder) layoutBuilder).build(layoutAnnotation);
-			return layout;
+			layout = ((ITLayoutBuilder) layoutBuilder).build(layoutAnnotation);
 		}else{
-			//THtmlReader control = buildHtmlBox((THtmlReader) buildReader(modelView, modelViewGetMethod, readerAnnotation, readerBuilder), descriptor);
-			//TFieldBox fieldBox = new TFieldBox(descriptor.getFieldDescriptor().getFieldName(), null, control, null);
-			THtmlReader layout = null;//((ITLayoutBuilder) layoutBuilder).build(layoutAnnotation, control);
-			//checkAsLoaded(descriptor, fieldBox);
-			return layout;
+			TFieldBox fieldBox = (TFieldBox) fd.getComponent();
+			layout = ((ITLayoutBuilder) layoutBuilder).build(layoutAnnotation, (THtmlReader) fieldBox.gettControl());
+			
 		}
 	
+		
+		TFieldBox fieldBox = (TFieldBox) fd.getComponent();
+		descriptor.getComponents().put(fd.getFieldName(), layout);
+		if(fieldBox!=null)
+			descriptor.getFieldBoxMap().put(fd.getFieldName(), fieldBox);
+		fd.setLayout(layout);
 		
 	}
 
@@ -475,7 +480,7 @@ public final class TControlLayoutBuilder {
 	private Node buildFieldBox(Node node, final TComponentDescriptor descriptor) {
 		final TFieldBox fieldBox = TFieldBoxBuilder.build(node, descriptor);
 		descriptor.getFieldBoxMap().put(descriptor.getFieldDescriptor().getFieldName(), fieldBox);
-		checkAsLoaded(descriptor, fieldBox);
+		descriptor.getComponents().put(descriptor.getFieldDescriptor().getFieldName(), fieldBox);
 		return fieldBox;
 		
 	}
@@ -484,14 +489,9 @@ public final class TControlLayoutBuilder {
 		final THtmlReader tHtmlReader = THtmlBoxBuilder.build(node, descriptor);
 		TFieldBox fieldBox = new TFieldBox(descriptor.getFieldDescriptor().getFieldName(), null, tHtmlReader, null);
 		descriptor.getFieldBoxMap().put(descriptor.getFieldDescriptor().getFieldName(), fieldBox);
-		checkAsLoaded(descriptor, fieldBox);
+		descriptor.getComponents().put(descriptor.getFieldDescriptor().getFieldName(), fieldBox);
 		return tHtmlReader;
 		
-	}
-	
-	private void checkAsLoaded(final TComponentDescriptor descriptor, final TFieldBox fieldBox) {
-		descriptor.getComponents().put(descriptor.getFieldDescriptor().getFieldName(), fieldBox);
-		//descriptor.getFieldDescriptor().setLoaded(true);
 	}
 	
 	private static Method getMethod(final String fieldName, final Object modelView) throws NoSuchMethodException {
