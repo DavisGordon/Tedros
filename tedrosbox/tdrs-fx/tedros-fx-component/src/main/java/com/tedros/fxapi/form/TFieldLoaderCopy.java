@@ -6,6 +6,7 @@ import java.util.List;
 import com.tedros.core.model.ITModelView;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.parser.TAnnotationParser;
+import com.tedros.fxapi.builder.TEffectBuilder;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.descriptor.TFieldDescriptor;
 import com.tedros.fxapi.domain.TViewMode;
@@ -64,7 +65,7 @@ public abstract class TFieldLoaderCopy<M extends ITModelView<?>> {
 		descriptor.setFieldDescriptor(tFieldDescriptor);
 		final List<Annotation> fieldEffects = TReflectionUtil.getEffectAnnotations(descriptor.getFieldAnnotationList());
 		
-		Node control = TComponentBuilder.getField(descriptor);
+		Node control = TControlLayoutReaderBuilder.getField(descriptor);
 		
 		if(control==null){
 			System.err.println("WARNING: Control null to "+tFieldDescriptor.getFieldName());
@@ -73,7 +74,7 @@ public abstract class TFieldLoaderCopy<M extends ITModelView<?>> {
 		
 		if(control!=null && !fieldEffects.isEmpty()){
 			for (final Annotation effect : fieldEffects) {
-				Effect e = TComponentBuilder.getEffect(effect);
+				Effect e = TEffectBuilder.getEffect(effect);
 				if(e!=null)
 					control.setEffect(e);
 			}
@@ -106,7 +107,7 @@ public abstract class TFieldLoaderCopy<M extends ITModelView<?>> {
 			x=1;*/
 		descriptor.setMode(TViewMode.READER);
 		descriptor.setFieldDescriptor(tFieldDescriptor);
-		final Node reader = TComponentBuilder.getField(descriptor);
+		final Node reader = TControlLayoutReaderBuilder.getField(descriptor);
 			
 		if(reader==null){
 			System.err.println("WARNING: Reader null to "+tFieldDescriptor.getFieldName());

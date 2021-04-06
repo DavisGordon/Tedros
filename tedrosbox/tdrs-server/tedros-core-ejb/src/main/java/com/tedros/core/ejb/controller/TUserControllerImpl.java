@@ -5,7 +5,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
-import com.tedros.core.ejb.service.TUserServiceImpl;
+import com.tedros.core.ejb.service.TUserService;
 import com.tedros.core.security.model.TProfile;
 import com.tedros.core.security.model.TUser;
 import com.tedros.ejb.base.controller.TEjbController;
@@ -19,7 +19,7 @@ import com.tedros.ejb.base.service.ITEjbService;
 public class TUserControllerImpl extends TEjbController<TUser>	implements	TUserController {
 
 	@EJB
-	private TUserServiceImpl serv;
+	private TUserService serv;
 	
 	@Override
 	public TResult<TUser> login(String login, String password) {

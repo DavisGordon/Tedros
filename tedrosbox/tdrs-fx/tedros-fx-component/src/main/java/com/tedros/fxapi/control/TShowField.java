@@ -130,7 +130,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 		if(l!=null)
 			l.setId("t-form-control-label");
 		
-		Node c = buildNode(value);
+		Node c = buildNode(TInternationalizationEngine.getInstance(null).getString(value));
 		return new TFieldBox(f.getName(), l, c, f.getLabelPosition());
 		
 	}

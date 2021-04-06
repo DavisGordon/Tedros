@@ -3,53 +3,83 @@
  */
 package com.tedros.settings.security.model;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleStringProperty;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.security.model.TAuthorization;
 import com.tedros.fxapi.annotation.control.TLabel;
+import com.tedros.fxapi.annotation.control.TLabelDefaultSetting;
+import com.tedros.fxapi.annotation.control.TTableColumn;
+import com.tedros.fxapi.annotation.control.TTableView;
+import com.tedros.fxapi.annotation.control.TTextField;
+import com.tedros.fxapi.annotation.control.TTextInputControl;
+import com.tedros.fxapi.annotation.presenter.TBehavior;
+import com.tedros.fxapi.annotation.presenter.TDecorator;
+import com.tedros.fxapi.annotation.presenter.TPresenter;
+import com.tedros.fxapi.annotation.presenter.TSelectionModalPresenter;
 import com.tedros.fxapi.annotation.reader.TReader;
+import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.annotation.text.TFont;
+import com.tedros.fxapi.annotation.view.TPaginator;
+import com.tedros.fxapi.presenter.modal.behavior.TSelectionModalBehavior;
+import com.tedros.fxapi.presenter.modal.decorator.TSelectionModalDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
+
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 /**
  * @author Davis Gordon
  *
  */
+
+@TLabelDefaultSetting(font=@TFont(size=12))
+@TSelectionModalPresenter(
+		paginator=@TPaginator(entityClass = TAuthorization.class, modelViewClass=TAuthorizationTableView.class, 
+			serviceName = "TAuthorizationControllerRemote"),
+		presenter=@TPresenter(behavior = @TBehavior(type = TSelectionModalBehavior.class), 
+			decorator = @TDecorator(type=TSelectionModalDecorator.class, 
+			viewTitle="#{security.authorization.form.name}")),
+		tableView=@TTableView(editable=true, 
+			columns = { @TTableColumn(cellValue="appName", text = "#{label.appName}", prefWidth=30, resizable=true), 
+						@TTableColumn(cellValue="moduleName", text = "#{label.moduleName}", prefWidth=40, resizable=true),
+						@TTableColumn(cellValue="viewName", text = "#{label.viewName}", prefWidth=40, resizable=true), 
+						@TTableColumn(cellValue="typeDescription", text = "#{label.permission}",  resizable=true)}), 
+		allowsMultipleSelections = true)
 public final class TAuthorizationTableView extends TEntityModelView<TAuthorization> {
 	
 	private SimpleLongProperty id;
 	
-	@TReader
-	@TLabel(text="#{label.securityId}")
-	private SimpleStringProperty securityId;
+	private SimpleStringProperty displayText;
 	
 	@TReader
 	@TLabel(text="#{label.appName}")
+	@TTextField(maxLength=60, required = false, 
+	textInputControl=@TTextInputControl(promptText="#{label.appName}", parse = true), 
+	control=@TControl(tooltip="#{label.appName}", parse = true))
 	private SimpleStringProperty appName;
 	
 	@TReader
 	@TLabel(text="#{label.moduleName}")
+	@TTextField(maxLength=60, required = false, 
+	textInputControl=@TTextInputControl(promptText="#{label.moduleName}", parse = true), 
+	control=@TControl(tooltip="#{label.moduleName}", parse = true))
 	private SimpleStringProperty moduleName;
 	
 	@TReader
 	@TLabel(text="#{label.viewName}")
+	@TTextField(maxLength=60, required = false, 
+	textInputControl=@TTextInputControl(promptText="#{label.viewName}", parse = true), 
+	control=@TControl(tooltip="#{label.viewName}", parse = true))
 	private SimpleStringProperty viewName;
 	
 	private SimpleStringProperty type;
 	
-	@TReader
-	@TLabel(text="#{label.permission}")
-	private SimpleStringProperty typeDescription;
-	
-	@TReader(label=@TLabel(text="#{label.enabled}"))
-	private SimpleBooleanProperty enabled;
 
 	public TAuthorizationTableView(TAuthorization entity) {
 		super(entity);
+		loadDisplayText(model);
 	}
 	
 	@Override
@@ -62,6 +92,24 @@ public final class TAuthorizationTableView extends TEntityModelView<TAuthorizati
 		return EqualsBuilder.reflectionEquals(this, obj, false);
 	}
 
+	public void reload(TAuthorization model) {
+		super.reload(model);
+		loadDisplayText(model);
+	}
+
+	/**
+	 * @param model
+	 */
+	private void loadDisplayText(TAuthorization model) {
+		if(!model.isNew()){
+			TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+			String str = (appName.getValue()==null ? "" : iEngine.getString(appName.getValue())+" / " )
+					+ (moduleName.getValue()!=null ? iEngine.getString(moduleName.getValue()) +" / " : "")
+					+ (viewName.getValue()!=null ? iEngine.getString(viewName.getValue()) +" / ": "")
+					+ (type.getValue()!=null ? type.getValue(): "");
+			displayText.setValue(str);
+		}
+	}
 	
 	/* (non-Javadoc)
 	 * @see com.tedros.fxapi.presenter.model.TModelView#setId(javafx.beans.property.SimpleLongProperty)
@@ -84,7 +132,7 @@ public final class TAuthorizationTableView extends TEntityModelView<TAuthorizati
 	 */
 	@Override
 	public SimpleStringProperty getDisplayProperty() {
-		return type;
+		return this.displayText;
 	}
 
 
@@ -107,30 +155,6 @@ public final class TAuthorizationTableView extends TEntityModelView<TAuthorizati
 		this.moduleName = moduleName;
 	}
 
-	public SimpleBooleanProperty getEnabled() {
-		return enabled;
-	}
-	
-	public SimpleBooleanProperty enabledProperty() {
-		return enabled;
-	}
-
-
-	public void setEnabled(SimpleBooleanProperty enabled) {
-		this.enabled = enabled;
-	}
-	
-	public void setEnabled(Boolean enabled) {
-		this.enabled.setValue(enabled);
-	}
-
-	public SimpleStringProperty getSecurityId() {
-		return securityId;
-	}
-
-	public void setSecurityId(SimpleStringProperty securityId) {
-		this.securityId = securityId;
-	}
 
 	public SimpleStringProperty getType() {
 		return type;
@@ -140,20 +164,26 @@ public final class TAuthorizationTableView extends TEntityModelView<TAuthorizati
 		this.type = type;
 	}
 
-	public SimpleStringProperty getTypeDescription() {
-		return typeDescription;
-	}
-
-	public void setTypeDescription(SimpleStringProperty typeDescription) {
-		this.typeDescription = typeDescription;
-	}
-
 	public SimpleStringProperty getViewName() {
 		return viewName;
 	}
 
 	public void setViewName(SimpleStringProperty viewName) {
 		this.viewName = viewName;
+	}
+
+	/**
+	 * @return the displayText
+	 */
+	public SimpleStringProperty getDisplayText() {
+		return displayText;
+	}
+
+	/**
+	 * @param displayText the displayText to set
+	 */
+	public void setDisplayText(SimpleStringProperty displayText) {
+		this.displayText = displayText;
 	}
 
 }

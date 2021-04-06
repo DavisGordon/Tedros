@@ -6,29 +6,21 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
-import com.tedros.common.model.TFileEntity;
-import com.tedros.core.ejb.bo.TFileEntityBO;
+import com.tedros.core.ejb.bo.TProfileBO;
+import com.tedros.core.security.model.TProfile;
 import com.tedros.ejb.base.bo.ITGenericBO;
 import com.tedros.ejb.base.service.TEjbService;
 
 @Local
-@Stateless(name="TFileEntityService")
+@Stateless(name="TProfileService")
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
-public class TFileEntityServiceImpl extends TEjbService<TFileEntity>  {
+public class TProfileService extends TEjbService<TProfile>	{
 
 	@Inject
-	private TFileEntityBO bo;
-	
-	
+	private TProfileBO bo;
 	
 	@Override
-	public ITGenericBO<TFileEntity> getBussinesObject() {
+	public ITGenericBO<TProfile> getBussinesObject() {
 		return bo;
-	}
-
-	public void loadBytes(TFileEntity entity) {
-		 bo.loadBytes(entity);
-	}
-
-
+	}	
 }

@@ -256,5 +256,14 @@ public class TFieldDescriptor {
 	public void setHasParent(boolean hasParent) {
 		this.hasParent = hasParent;
 	}
+
+	/**
+	 * @param loaded the loaded to set
+	 *//*
+	public void setLoaded(Boolean loaded) {
+		if(this.loaded.isBound())
+			this.loaded.unbind();
+		this.loaded.setValue(loaded);
+	}*/
 	
 }

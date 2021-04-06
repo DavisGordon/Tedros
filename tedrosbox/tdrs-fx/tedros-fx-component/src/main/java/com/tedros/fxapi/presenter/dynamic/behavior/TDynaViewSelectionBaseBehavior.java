@@ -130,6 +130,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			
 			tableView.setTableMenuButtonVisible(true);
 			
+			if(this.allowsMultipleSel)
+				tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+				
 			EventHandler<MouseEvent> ev = e ->{
 				if(e.getClickCount()==2) {
 					int index = tableView.getSelectionModel().getSelectedIndex();
@@ -179,6 +182,48 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		listView.setOnMouseClicked(new WeakEventHandler<>(ev));
 	}
 	
+	/**
+	 * Config the select all button 
+	 * */
+	public void configSelectAllButton() {
+		final Button selectAllButton = this.decorator.gettSelectAllButton();
+		selectAllButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				selectAllAction();
+			}
+
+			
+		});
+		
+	}
+	
+	private void selectAllAction() {
+		TableView tbv = decorator.gettTableView();
+		tbv.getSelectionModel().selectAll();
+	}
+	/**
+	 * Config the add button 
+	 * */
+	public void configAddButton() {
+		final Button addButton = this.decorator.gettAddButton();
+		addButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				addAction();
+			}
+		});
+		
+	}
+	
+	protected void addAction() {
+		TableView tbv = decorator.gettTableView();
+		for(Object obj : tbv.getSelectionModel().getSelectedItems()) {
+			TModelView new_ = (TModelView) obj;
+			selectedItemAction(new_);
+		}
+	}
+
 	/**
 	 * Config the close button 
 	 * */

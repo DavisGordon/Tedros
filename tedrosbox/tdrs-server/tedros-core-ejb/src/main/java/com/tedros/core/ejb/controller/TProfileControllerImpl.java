@@ -5,7 +5,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
-import com.tedros.core.ejb.service.TProfileServiceImpl;
+import com.tedros.core.ejb.service.TProfileService;
 import com.tedros.core.security.model.TProfile;
 import com.tedros.ejb.base.controller.TEjbController;
 import com.tedros.ejb.base.service.ITEjbService;
@@ -16,7 +16,7 @@ import com.tedros.ejb.base.service.ITEjbService;
 public class TProfileControllerImpl extends TEjbController<TProfile>	implements	TProfileController {
 
 	@EJB
-	private TProfileServiceImpl serv;
+	private TProfileService serv;
 
 	@Override
 	public ITEjbService<TProfile> getService() {

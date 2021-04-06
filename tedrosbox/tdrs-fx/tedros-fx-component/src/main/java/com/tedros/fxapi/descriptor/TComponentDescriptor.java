@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.sun.javafx.collections.MappingChange.Map;
 import com.tedros.core.model.ITModelView;
-import com.tedros.core.module.TObjectRepository;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.parser.ITAnnotationParser;
 import com.tedros.fxapi.domain.TViewMode;
@@ -50,7 +49,7 @@ public class TComponentDescriptor {
 	private TViewMode mode;
 	private String annotationPropertyInExecution;
 	private Class<? extends ITAnnotationParser> parserClassInExecution;
-	private TObjectRepository repo = new TObjectRepository();
+	
 	/**
 	 * <pre>
 	 * Initialize a new {@link TComponentDescriptor}

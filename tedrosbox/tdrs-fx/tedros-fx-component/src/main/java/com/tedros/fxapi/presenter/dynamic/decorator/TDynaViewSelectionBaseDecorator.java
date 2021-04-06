@@ -22,6 +22,8 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	private Button tSearchButton;
 	private Button tCancelButton;
 	private Button tCloseButton;
+	private Button tSelectAllButton;
+	private Button tAddButton;
 	
 	private ListView tListView;
 	private TLabel tListViewTitle;
@@ -68,6 +70,58 @@ extends TDynaViewSimpleBaseDecorator<M> {
     	tPaginator = new TPaginator(false, false);
     }
     
+    /**
+	 * <p>
+	 * Build a button for the add action.<br><br>
+	 * 
+	 * If the parameter was null this will use the text set up
+	 * in @{@link TPresenter}{decorator= @{@link TDecorator}{addButtonText=''}} 
+	 * but if the given {@link TModelView} was not annotated with {@link TPresenter} 
+	 * or with a custom view annotation which contains a {@link TPresenter} 
+	 * a default string (TAnnotationDefaultValue.TVIEW_addButtonText) will be used.<br><br> 
+	 * 
+	 * This will initialize with "t-button" id.
+	 * </p>
+	 * */
+	public void buildAddButton(String text) {
+		if(text==null){
+			tAddButton = new Button();
+			tAddButton.setText(iEngine.getString(TAnnotationDefaultValue.TVIEW_addButtonText));
+			tAddButton.setId("t-button");
+		}else {
+			tAddButton = new Button();
+			tAddButton.setText(iEngine.getString(text));
+			tAddButton.setId("t-button");
+		}
+	}
+	
+	/**
+	 * <p>
+	 * Build a button for the select all action.<br><br>
+	 * 
+	 * If the parameter was null this will use the text set up
+	 * in @{@link TPresenter}{decorator= @{@link TDecorator}{selectAllButtonText=''}} 
+	 * but if the given {@link TModelView} was not annotated with {@link TPresenter} 
+	 * or with a custom view annotation which contains a {@link TPresenter} 
+	 * a default string (TAnnotationDefaultValue.TVIEW_selectAllButtonText) will be used.<br><br> 
+	 * 
+	 * This will initialize with "t-button" id.
+	 * </p>
+	 * */
+	public void buildSelectAllButton(String text) {
+		if(text==null){
+			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
+			tSelectAllButton = new Button();
+			tSelectAllButton.setText(iEngine.getString(tPresenter==null 
+							? TAnnotationDefaultValue.TVIEW_selectAllButtonText 
+									: tPresenter.decorator().selectAllButtonText()));
+			tSelectAllButton.setId("t-button");
+		}else {
+			tSelectAllButton = new Button();
+			tSelectAllButton.setText(iEngine.getString(text));
+			tSelectAllButton.setId("t-button");
+		}
+	}
 	
 	/**
 	 * <p>
@@ -269,6 +323,34 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	 */
 	public TLabel gettListViewTitle() {
 		return tListViewTitle;
+	}
+
+	/**
+	 * @return the tSelectAllButton
+	 */
+	public Button gettSelectAllButton() {
+		return tSelectAllButton;
+	}
+
+	/**
+	 * @param tSelectAllButton the tSelectAllButton to set
+	 */
+	public void settSelectAllButton(Button tSelectAllButton) {
+		this.tSelectAllButton = tSelectAllButton;
+	}
+
+	/**
+	 * @return the tAddButton
+	 */
+	public Button gettAddButton() {
+		return tAddButton;
+	}
+
+	/**
+	 * @param tAddButton the tAddButton to set
+	 */
+	public void settAddButton(Button tAddButton) {
+		this.tAddButton = tAddButton;
 	}
 
 	

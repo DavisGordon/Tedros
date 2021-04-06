@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
-import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
 import com.tedros.core.ModalMessage;
@@ -209,8 +208,8 @@ public final class TedrosContext {
 				if(!userAuthorization.getSecurityId().equals(securityDescriptor.getId()))
 					continue;
 				for(TAuthorizationType definedType : securityDescriptor.getAllowedAccesses()){
-					if(definedType.name().equals(authorizationTypeToCheck.name()) && userAuthorization.getType().equals(authorizationTypeToCheck.name()) 
-							&& userAuthorization.getEnabled().equals("T")){
+					if(definedType.name().equals(authorizationTypeToCheck.name()) 
+							&& userAuthorization.getType().equals(authorizationTypeToCheck.name())){
 						flag = true;
 					}
 				}

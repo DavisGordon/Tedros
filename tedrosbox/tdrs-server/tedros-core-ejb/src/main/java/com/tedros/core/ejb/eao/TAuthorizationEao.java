@@ -5,7 +5,7 @@ package com.tedros.core.ejb.eao;
 
 import javax.enterprise.context.RequestScoped;
 
-import com.tedros.core.security.model.TProfile;
+import com.tedros.core.security.model.TAuthorization;
 import com.tedros.ejb.base.eao.TGenericEAO;
 
 /**
@@ -13,7 +13,7 @@ import com.tedros.ejb.base.eao.TGenericEAO;
  *
  */
 @RequestScoped
-public class TProfileEao extends TGenericEAO<TProfile> {
+public class TAuthorizationEao extends TGenericEAO<TAuthorization> {
 	
 	/*@Override
 	public void beforePersist(TProfile entity) throws Exception {

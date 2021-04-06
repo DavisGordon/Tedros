@@ -7,20 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.effect.BlurType;
-import javafx.scene.effect.DropShadowBuilder;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextBuilder;
-
 import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.core.model.ITModelView;
@@ -30,6 +16,19 @@ import com.tedros.fxapi.control.validator.TValidatorResult;
 import com.tedros.fxapi.exception.TException;
 import com.tedros.fxapi.exception.TValidatorException;
 import com.tedros.fxapi.form.TFieldBox;
+
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 public class TMessageBox extends StackPane {
 	
@@ -51,7 +50,7 @@ public class TMessageBox extends StackPane {
     	load(Arrays.asList(e.getMessage()));
 	}
     
-    @SuppressWarnings({"unchecked"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
 	public TMessageBox(TValidatorException e) {
     	
     	List<TValidatorResult<ITModelView>> results = (List<TValidatorResult<ITModelView>>) e.getValidatorResults();
@@ -92,9 +91,11 @@ public class TMessageBox extends StackPane {
 	        
 			Map<String, Node> content = new HashMap<>();
 			if(messages!=null)
-		        for (String label : messages.keySet())
-		        	content.put(label, TextBuilder.create().text(messages.get(label)).wrappingWidth(350).build());
-			
+		        for (String label : messages.keySet()) {
+		        	Text text = new Text(messages.get(label));
+		        	text.setWrappingWidth(350);
+		        	content.put(label, text);
+		        }
 			final TAccordion accordionMsg = new TAccordion(content);
 			accordionMsg.addItem(content);
 			messageVBox.getChildren().add(accordionMsg);
@@ -138,21 +139,19 @@ public class TMessageBox extends StackPane {
 
 
 	public void tAddMessage(String string) {
-		Text text = TextBuilder.create()
-				.text(string)
-				.id("t-form-item-text")
-				.wrappingWidth(this.getMaxWidth()-100)
-				.build();
+		Text text = new Text(string);
+		text.setId("t-form-item-text");
+		text.setWrappingWidth(this.getMaxWidth()-100);
+		DropShadow ef = new DropShadow();
+		ef.setColor(Color.BLACK);
+		ef.setBlurType(BlurType.THREE_PASS_BOX);
+		ef.setRadius(15.119047619047619);
+		ef.setWidth(35.16666666666667);
+		ef.setHeight(35.16666666666667);
 		TFieldBox fieldBox = new TFieldBox(null, null, text, null);
 		fieldBox.setAlignment(Pos.CENTER);
 		fieldBox.setId("t-form");
-		fieldBox.setEffect(DropShadowBuilder.create()
-				.color(Color.BLACK)
-				.blurType(BlurType.THREE_PASS_BOX)
-				.radius(15.119047619047619)
-				.width(35.16666666666667)
-				.height(35.16666666666667)
-				.build());
+		fieldBox.setEffect(ef);
 		
 		messageVBox.getChildren().add(fieldBox);
 	}

@@ -10,12 +10,15 @@ import com.tedros.fxapi.annotation.control.TCellValueFactory;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TMultipleSelectionModal;
 import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.form.TForm;
+import com.tedros.fxapi.annotation.layout.TAccordion;
+import com.tedros.fxapi.annotation.layout.TTitledPane;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
@@ -49,11 +52,7 @@ import javafx.scene.text.TextAlignment;
 			modelClass=TProfile.class,
 			decorator=@TDecorator(	type=TMasterCrudViewDecorator.class, 
 									viewTitle="#{security.profile.view.title}", 
-									listTitle="#{security.profile.list.title}"), 
-			behavior=@TBehavior(type=TMasterCrudViewBehavior.class,
-								newAction=TProfileCompleteTableViewAction.class, 
-								editAction=TProfileCompleteTableViewAction.class, 
-								selectedItemAction=TProfileCompleteTableViewAction.class))
+									listTitle="#{security.profile.list.title}"))
 @TSecurity(	id="T_CUSTOM_SECURITY_PROFILE", 
 			appName="#{settings.app.name}", 
 			moduleName="#{label.profile}", 
@@ -65,6 +64,12 @@ public final class TProfileModelView extends TEntityModelView<TProfile> {
 	
 	private SimpleLongProperty id;
 	
+	@TAccordion(expandedPane="main", node=@TNode(id="profileAcc",parse = true),
+			panes={
+					@TTitledPane(text="Principal", node=@TNode(id="main",parse = true), expanded=true,
+							fields={"textoCadastro", "name", "description"}),
+					@TTitledPane(text="Detalhe", node=@TNode(id="detail",parse = true),
+						fields={"autorizations"})})
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
 	@TText(text="#{label.profile.header}", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
 		node=@TNode(id="t-form-title-text", parse = true))
@@ -85,19 +90,8 @@ public final class TProfileModelView extends TEntityModelView<TProfile> {
 	private SimpleStringProperty description;
 	
 	@TDetailReader(label=@TLabel(text="Authorization"))
-	@TTableView(editable=true,
-			columns = { @TTableColumn(cellValue="securityId", text = "#{label.securityId}", prefWidth=100),
-						@TTableColumn(cellValue="appName", text = "#{label.appName}", prefWidth=70, resizable=true), 
-						@TTableColumn(cellValue="moduleName", text = "#{label.moduleName}", prefWidth=70, resizable=true), 
-						@TTableColumn(cellValue="viewName", text = "#{label.viewName}", prefWidth=70, resizable=true),
-						@TTableColumn(cellValue="typeDescription", text = "#{label.permission}", resizable=true), 
-						@TTableColumn(	cellValue="enabled", 
-										text = "enabled", 
-										cellValueFactory=@TCellValueFactory(parse=true, value=@TCallbackFactory(parse=true, value=CheckBoxEnableCallBack.class)),
-										cellFactory=@TCellFactory(parse=true, tableCell=CheckBoxTableCell.class),
-										maxWidth=50
-						)
-			})
+	@TMultipleSelectionModal(modelClass = TAuthorization.class, modelViewClass = TAuthorizationTableView.class,
+	width=600, height=350)
 	@TModelViewCollectionType(modelClass=TAuthorization.class, modelViewClass=TAuthorizationTableView.class)
 	private ITObservableList<TAuthorizationTableView> autorizations;
 

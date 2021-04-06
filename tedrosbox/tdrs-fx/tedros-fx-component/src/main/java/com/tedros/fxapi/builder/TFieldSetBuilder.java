@@ -9,7 +9,7 @@ package com.tedros.fxapi.builder;
 import java.lang.annotation.Annotation;
 
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
-import com.tedros.fxapi.form.TComponentBuilder;
+import com.tedros.fxapi.form.TControlLayoutReaderBuilder;
 import com.tedros.fxapi.html.THtmlFieldSetGenerator;
 import com.tedros.fxapi.layout.TFieldSet;
 import com.tedros.fxapi.reader.THtmlReader;
@@ -49,7 +49,7 @@ implements ITLayoutBuilder<TFieldSet> {
 				node = tHtmlReader;
 			}else{
 				final TComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), field);
-				node = TComponentBuilder.getField(descriptor);
+				node = TControlLayoutReaderBuilder.getField(descriptor);
 			}
 			
 			if(node==null)

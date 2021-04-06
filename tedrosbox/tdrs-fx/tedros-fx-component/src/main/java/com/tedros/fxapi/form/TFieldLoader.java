@@ -12,8 +12,6 @@ import com.tedros.fxapi.domain.TViewMode;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.WeakChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.scene.Node;
@@ -25,7 +23,6 @@ public abstract class TFieldLoader<M extends ITModelView<?>> {
 	private SimpleIntegerProperty totalToLoad = new SimpleIntegerProperty();
 	protected TObjectRepository repo = new TObjectRepository();
 	protected final TComponentDescriptor descriptor;
-	private final Object lock = new Object();
 	
 	public TFieldLoader(M modelView, ITModelForm<M> form) {
 		descriptor = new TComponentDescriptor(form, modelView, TViewMode.EDIT);
@@ -35,28 +32,6 @@ public abstract class TFieldLoader<M extends ITModelView<?>> {
 		descriptor.getComponents().clear();
 		this.totalToLoad.setValue(0);
 		this.allLoaded.bind(this.descriptor.loadedProperty());
-		/*for(TFieldDescriptor fd : descriptor.getFieldDescriptorList()) {
-			if(fd.hasControl() || fd.hasLayout()) {
-				fd.setLoaded(false);
-				totalToLoad.setValue(totalToLoad.intValue()+1);
-				ChangeListener<Boolean> chl = (obj, o, n) -> {
-					if(n) {
-						fieldLoaded();
-					}
-				};
-				repo.add(fd.getFieldName(), chl);
-				fd.loadedProperty().addListener(new WeakChangeListener<Boolean>(chl));
-			}
-		}*/
-	}
-	
-	private void fieldLoaded() {
-		synchronized(lock) {
-			totalToLoad.setValue(totalToLoad.intValue()-1);
-			if(totalToLoad.intValue()==0) {
-				this.allLoaded.setValue(true);
-			}
-		}
 	}
 	
 	public ReadOnlyBooleanProperty allLoadedProperty() {
@@ -114,12 +89,9 @@ public abstract class TFieldLoader<M extends ITModelView<?>> {
 	
 	protected void loadReaderFieldBox(final ObservableList<Node> nodesLoaded, final TFieldDescriptor tFieldDescriptor) throws Exception{
 		
-		/*int x=0;
-		if(tAnnotatedField.getFieldName().equals("imagem"))
-			x=1;*/
 		descriptor.setMode(TViewMode.READER);
 		descriptor.setFieldDescriptor(tFieldDescriptor);
-		final Node reader = TComponentBuilder.getField(descriptor);
+		final Node reader = TControlLayoutReaderBuilder.getField(descriptor);
 			
 		if(reader==null){
 			System.err.println("WARNING: Reader null to "+tFieldDescriptor.getFieldName());

@@ -28,6 +28,8 @@ extends TDynaViewSelectionBaseBehavior<M, E> {
 		configSearchButton();
 		configCancelButton();
 		configCloseButton();
+		configAddButton();
+		configSelectAllButton();
 		configSelectedListView();
 		final Class<E> entityClass = getModelClass();
 		

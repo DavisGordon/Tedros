@@ -28,7 +28,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.web.WebView;
@@ -98,9 +97,6 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 						sbf.append(htmlReader.getText()).append("\n");
 					}
 					
-					/*int x=0;
-					if(modelView.getClass().getSimpleName().contains("TUserModelView"))
-						x=1;*/
 						
 					webView = new WebView();
 					form.tAddFormItem(webView);
@@ -140,7 +136,6 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 					if(sbf!=null)
 						webView.getEngine().loadContent(sbf.toString());
 				}
-			//loaded.unbind();
 			loaded.setValue(true);
 			initializeReader();
 		} catch (Exception e) {
@@ -163,11 +158,8 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 		try {
 			if(StringUtils.isBlank(this.form.getId()))
 				this.form.setId("t-form");
-			//fields = this.modelViewLoader.getControls();
-			this.modelViewLoader.getControls(form.getChildren());
+			this.modelViewLoader.loadEditFields(form.getChildren());
 			
-			/*for(Node node : fields)
-				form.tAddFormItem(node);*/
 			initializeForm();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -251,7 +243,9 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	 * @return the fields
 	 */
 	public ObservableList<Node> getFields() {
-		return fields;
+		return mode.equals(TViewMode.READER) 
+				? fields :
+					this.form.getChildren();
 	}
 
 	/**
