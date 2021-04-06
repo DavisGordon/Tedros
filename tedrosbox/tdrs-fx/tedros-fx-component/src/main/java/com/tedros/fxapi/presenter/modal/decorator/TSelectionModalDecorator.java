@@ -32,10 +32,13 @@ extends TDynaViewSelectionBaseDecorator<M> {
 		buildSearchButton(null);
 		buildCancelButton(null);
 		buildCloseButton(null);
+		buildSelectAllButton(null);
+		buildAddButton(null);
 		buildPaginator();
 		// add the buttons at the header tool bar
 		addItemInTHeaderToolBar(gettSearchButton(), gettCleanButton(), 
-				gettCancelButton(), gettCloseButton());
+				gettCancelButton(), gettSelectAllButton(), 
+				gettAddButton(), gettCloseButton());
 		
 		box = new VBox();
 		

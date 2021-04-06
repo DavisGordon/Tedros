@@ -46,7 +46,7 @@ class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 		}
 	}
 	
-	public void getControls(final ObservableList<Node> nodesLoaded) throws Exception {
+	public void loadEditFields(final ObservableList<Node> nodesLoaded) throws Exception {
 		
 		Long startTime;
 		if(TDebugConfig.detailParseExecution) 
@@ -161,7 +161,6 @@ class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 			long duration = (endTime - startTime);
 			System.out.println("[TModelViewLoader][ModelView: "+getModelViewClassName()+"][Form: "+getFormClassName()+"][Build duration: "+(duration/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration/1000000))+"s] ");
 		}
-		//return nodesLoaded;
 	}
 	
 	public ObservableList<Node> getReaders() throws Exception {

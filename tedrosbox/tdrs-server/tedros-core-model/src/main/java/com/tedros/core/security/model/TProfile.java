@@ -3,12 +3,14 @@ package com.tedros.core.security.model;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -29,8 +31,15 @@ public class TProfile extends TEntity {
 	@Column(name = "description", length=600, nullable = true)
 	private String description;
 	
-	@OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(	name=DomainTables.profile_authorization,
+				schema=DomainSchema.tedros_core,
+				uniqueConstraints=@UniqueConstraint(name="profAuthUK", 
+				columnNames = { "profile_id","auth_id" }),
+				joinColumns= @JoinColumn(name="profile_id"),
+				inverseJoinColumns= @JoinColumn(name="auth_id"))
 	private List<TAuthorization> autorizations;
+	
 	
 	public TProfile() {
 		

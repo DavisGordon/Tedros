@@ -16,7 +16,7 @@ import com.tedros.fxapi.annotation.control.TTab;
 import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.domain.TLayoutType;
-import com.tedros.fxapi.form.TComponentBuilder;
+import com.tedros.fxapi.form.TControlLayoutReaderBuilder;
 import com.tedros.fxapi.html.THtmlLayoutGenerator;
 import com.tedros.fxapi.reader.THtmlReader;
 
@@ -67,7 +67,7 @@ implements ITLayoutBuilder<TabPane> {
 				node = tHtmlReader;
 			}else{
 				final TComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), field);
-				node = TComponentBuilder.getField(descriptor);
+				node = TControlLayoutReaderBuilder.getField(descriptor);
 			}
 			
 			if(node==null)

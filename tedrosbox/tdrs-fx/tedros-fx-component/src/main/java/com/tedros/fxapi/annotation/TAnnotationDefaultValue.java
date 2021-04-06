@@ -14,6 +14,7 @@ public interface TAnnotationDefaultValue {
 	public final static String TVIEW_searchButtonText = "#{tedros.fxapi.button.search}";
 	public static final String TVIEW_cleanButtonText = "#{tedros.fxapi.button.clean}";
 	public static final String TVIEW_selectButtonText = "#{tedros.fxapi.button.select}";
+	public static final String TVIEW_selectAllButtonText = "#{tedros.fxapi.button.selectAll}";
 	public static final String TVIEW_closeButtonText = "#{tedros.fxapi.button.close}";
 	public final static String TVIEW_viewTitle = "#{tedros.fxapi.view.title}";
 	public final static String TVIEW_listTitle = "#{tedros.fxapi.view.list.title}";

@@ -10,7 +10,7 @@ public class CheckBoxEnableCallBack implements Callback <CellDataFeatures<TAutho
 
 	@Override
 	public ObservableValue<Boolean> call(CellDataFeatures<TAuthorizationTableView, ObservableValue<Boolean>> param) {
-		return param.getValue().getEnabled();
+		return null; //param.getValue().getEnabled();
 	}
 	
 	

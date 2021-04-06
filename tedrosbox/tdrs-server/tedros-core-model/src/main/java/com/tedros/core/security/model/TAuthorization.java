@@ -5,12 +5,9 @@ package com.tedros.core.security.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.tedros.core.domain.DomainSchema;
@@ -22,14 +19,11 @@ import com.tedros.ejb.base.entity.TEntity;
  *
  */
 @Entity
-@Table(name = DomainTables.authorization, schema = DomainSchema.tedros_core)
+@Table(name = DomainTables.authorization, schema = DomainSchema.tedros_core, 
+uniqueConstraints=@UniqueConstraint(name="aSecurityTypeUK", columnNames = { "security_id", "type" }))
 public class TAuthorization extends TEntity {
 	
 	private static final long serialVersionUID = 3480135875409356712L;
-	
-	@ManyToOne
-	@JoinColumn(name = "prof_id", nullable=false)
-	private TProfile profile;
 	
 	@Column(name="security_id", length=200, nullable=false)
 	private String securityId;
@@ -37,20 +31,20 @@ public class TAuthorization extends TEntity {
 	@Column(name="type", length=30, nullable=false)
 	private String type;
 	
-	@Column(name="enabled", length=1, nullable=true)
-	private String enabled;
-	
-	@Transient
+	@Column(name="app_name", length=60, nullable=false)
 	private String appName;
 	
-	@Transient
+	@Column(name="module_name", length=60, nullable=true)
 	private String moduleName;
 	
-	@Transient
+	@Column(name="view_name", length=60, nullable=true)
 	private String viewName;
 	
-	@Transient
+	@Column(name="type_description", length=200, nullable=false)
 	private String typeDescription;
+	
+	@Column(name="enabled", length=3, nullable=false)
+	private String enabled; 
 	
 		
 	public String getSecurityId() {
@@ -61,13 +55,6 @@ public class TAuthorization extends TEntity {
 		this.securityId = securityId;
 	}
 
-	public String getEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(String enabled) {
-		this.enabled = enabled;
-	}
 	
 	public String getAppName() {
 		return appName;
@@ -85,13 +72,6 @@ public class TAuthorization extends TEntity {
 		this.moduleName = moduleName;
 	}
 	
-	public TProfile getProfile() {
-		return profile;
-	}
-
-	public void setProfile(TProfile profile) {
-		this.profile = profile;
-	}
 
 	public String getType() {
 		return type;
@@ -105,29 +85,58 @@ public class TAuthorization extends TEntity {
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this, true);
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
-		return EqualsBuilder.reflectionEquals(this, obj, true);
+		if (this == obj)
+			return true;
+		/*if (!super.equals(obj))
+			return false;*/
+		if (!(obj instanceof TAuthorization))
+			return false;
+		TAuthorization other = (TAuthorization) obj;
+		if (securityId == null) {
+			if (other.securityId != null)
+				return false;
+		} else if (!securityId.equals(other.securityId))
+			return false;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
+			return false;
+		return true;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		
-		StringBuilder sb = new StringBuilder();
-		if(securityId!=null) 
-			sb.append(securityId).append(" - ");
-		
-		if(type!=null) 
-			sb.append(type).append(" - ");
-		
-		if(enabled!=null) 
-			sb.append(enabled);
-		else
-			sb.append("enabled is null");
-		
-		
-		return sb.toString();
+		StringBuilder builder = new StringBuilder();
+		if (securityId != null) {
+			builder.append(securityId);
+			builder.append(", ");
+		}
+		if (appName != null) {
+			builder.append(appName);
+			builder.append(", ");
+		}
+		if (moduleName != null) {
+			builder.append(moduleName);
+			builder.append(", ");
+		}
+		if (viewName != null) {
+			builder.append(viewName);
+			builder.append(", ");
+		}
+		if (type != null) {
+			builder.append(type);
+		}
+		return builder.toString();
 	}
 
 	public String getViewName() {
@@ -144,6 +153,20 @@ public class TAuthorization extends TEntity {
 
 	public void setTypeDescription(String typeDescription) {
 		this.typeDescription = typeDescription;
+	}
+
+	/**
+	 * @return the enabled
+	 */
+	public String getEnabled() {
+		return enabled;
+	}
+
+	/**
+	 * @param enabled the enabled to set
+	 */
+	public void setEnabled(String enabled) {
+		this.enabled = enabled;
 	}
 
 }

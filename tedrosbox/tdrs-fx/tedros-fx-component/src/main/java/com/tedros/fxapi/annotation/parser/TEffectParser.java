@@ -5,12 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import javafx.scene.effect.Effect;
-import javafx.scene.effect.FloatMap;
-import javafx.scene.effect.FloatMapBuilder;
-import javafx.scene.effect.Light;
-import javafx.scene.paint.Color;
-
 import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
@@ -18,17 +12,23 @@ import com.tedros.fxapi.annotation.effect.TBlend;
 import com.tedros.fxapi.annotation.effect.TDisplacementMap;
 import com.tedros.fxapi.annotation.effect.TDropShadow;
 import com.tedros.fxapi.annotation.effect.TEffect;
-import com.tedros.fxapi.annotation.effect.TFloatMap;
 import com.tedros.fxapi.annotation.effect.TEffect.NullEffectBuilder;
+import com.tedros.fxapi.annotation.effect.TFloatMap;
 import com.tedros.fxapi.annotation.effect.TFloatMap.TSample;
 import com.tedros.fxapi.annotation.effect.TFloatMap.TSamples;
 import com.tedros.fxapi.annotation.effect.TLighting;
 import com.tedros.fxapi.annotation.effect.TLighting.TLightDistant;
 import com.tedros.fxapi.annotation.effect.TLighting.TLightPoint;
 import com.tedros.fxapi.annotation.effect.TLighting.TLightSpot;
+import com.tedros.fxapi.builder.TEffectBuilder;
 import com.tedros.fxapi.effect.ITEffectBuilder;
-import com.tedros.fxapi.form.TComponentBuilder;
 import com.tedros.fxapi.util.TReflectionUtil;
+
+import javafx.scene.effect.Effect;
+import javafx.scene.effect.FloatMap;
+import javafx.scene.effect.FloatMapBuilder;
+import javafx.scene.effect.Light;
+import javafx.scene.paint.Color;
 
 
 public final class TEffectParser implements ITEffectParse {
@@ -252,49 +252,49 @@ public final class TEffectParser implements ITEffectParse {
 	private final Effect analyse(TEffect tEffect) throws Exception{
 		
 		if(tEffect.bloom().input()!=NullEffectBuilder.class)
-			return TComponentBuilder.getEffect(tEffect.bloom());
+			return TEffectBuilder.getEffect(tEffect.bloom());
 		
 		if(tEffect.boxBlur().input()!=NullEffectBuilder.class)
-			return TComponentBuilder.getEffect(tEffect.boxBlur());
+			return TEffectBuilder.getEffect(tEffect.boxBlur());
 		
 		if(tEffect.colorAdjust().input()!=NullEffectBuilder.class)
-			return TComponentBuilder.getEffect(tEffect.colorAdjust());
+			return TEffectBuilder.getEffect(tEffect.colorAdjust());
 		
 		if(tEffect.colorInput().input()!=NullEffectBuilder.class)
-			return TComponentBuilder.getEffect(tEffect.colorInput());
+			return TEffectBuilder.getEffect(tEffect.colorInput());
 		
 		if(tEffect.displacementMap().input()!=NullEffectBuilder.class)
-			return TComponentBuilder.getEffect(tEffect.displacementMap());
+			return TEffectBuilder.getEffect(tEffect.displacementMap());
 		
 		if(tEffect.dropShadow().input()!=NullEffectBuilder.class)
-			return TComponentBuilder.getEffect(tEffect.dropShadow());
+			return TEffectBuilder.getEffect(tEffect.dropShadow());
 		
 		if(tEffect.gaussianBlur().input()!=NullEffectBuilder.class)
-			return TComponentBuilder.getEffect(tEffect.gaussianBlur());
+			return TEffectBuilder.getEffect(tEffect.gaussianBlur());
 		
 		if(tEffect.glow().input()!=NullEffectBuilder.class)
-			return TComponentBuilder.getEffect(tEffect.glow());
+			return TEffectBuilder.getEffect(tEffect.glow());
 		
 		if(tEffect.innerShadow().input()!=NullEffectBuilder.class)
-			return TComponentBuilder.getEffect(tEffect.innerShadow());
+			return TEffectBuilder.getEffect(tEffect.innerShadow());
 		
 		if(tEffect.lighting().bumpInput()!=NullEffectBuilder.class)
-			return TComponentBuilder.getEffect(tEffect.lighting());
+			return TEffectBuilder.getEffect(tEffect.lighting());
 		
 		if(tEffect.motionBlur().input()!=NullEffectBuilder.class)
-			return TComponentBuilder.getEffect(tEffect.motionBlur());
+			return TEffectBuilder.getEffect(tEffect.motionBlur());
 		
 		if(tEffect.perspectiveTransform().input()!=NullEffectBuilder.class)
-			return TComponentBuilder.getEffect(tEffect.perspectiveTransform());
+			return TEffectBuilder.getEffect(tEffect.perspectiveTransform());
 		
 		if(tEffect.reflection().input()!=NullEffectBuilder.class)
-			return TComponentBuilder.getEffect(tEffect.reflection());
+			return TEffectBuilder.getEffect(tEffect.reflection());
 		
 		if(tEffect.sepiaTone().input()!=NullEffectBuilder.class)
-			return TComponentBuilder.getEffect(tEffect.sepiaTone());
+			return TEffectBuilder.getEffect(tEffect.sepiaTone());
 		
 		if(tEffect.shadow().input()!=NullEffectBuilder.class)
-			return TComponentBuilder.getEffect(tEffect.shadow());
+			return TEffectBuilder.getEffect(tEffect.shadow());
 		
 		return null;
 	}

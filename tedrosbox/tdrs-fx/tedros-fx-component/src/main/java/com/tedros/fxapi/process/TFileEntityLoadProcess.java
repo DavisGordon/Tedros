@@ -8,7 +8,7 @@ import java.util.Properties;
 import javax.naming.InitialContext;
 
 import com.tedros.common.model.TFileEntity;
-import com.tedros.core.ejb.service.TFileEntityService;
+import com.tedros.core.ejb.controller.TFileEntityController;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.util.TResourceUtil;
@@ -21,7 +21,7 @@ import com.tedros.util.TResourceUtil;
  * */
 public class TFileEntityLoadProcess extends TProcess<TResult<TFileEntity>>{
 	
-	private TFileEntityService service;
+	private TFileEntityController service;
 	private Properties p;
 	private InitialContext ctx;
 	private TFileEntity value;
@@ -32,7 +32,7 @@ public class TFileEntityLoadProcess extends TProcess<TResult<TFileEntity>>{
 			setAutoStart(true);
 			initRemote();
 			ctx = new InitialContext(p);
-			service = (TFileEntityService) ctx.lookup("TFileEntityServiceRemote");
+			service = (TFileEntityController) ctx.lookup("TFileEntityControllerRemote");
 			
 		} catch (Exception e) {
 			throw new TProcessException(e, e.getMessage(), "Cant connect with the server");

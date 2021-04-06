@@ -6,7 +6,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
 import com.tedros.common.model.TFileEntity;
-import com.tedros.core.ejb.service.TFileEntityServiceImpl;
+import com.tedros.core.ejb.service.TFileEntityService;
 import com.tedros.ejb.base.controller.TEjbController;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
@@ -18,7 +18,7 @@ import com.tedros.ejb.base.service.ITEjbService;
 public class TFileEntityControllerImpl extends TEjbController<TFileEntity> implements	TFileEntityController {
 
 	@EJB
-	private TFileEntityServiceImpl serv;
+	private TFileEntityService serv;
 	
 	
 	@Override

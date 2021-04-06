@@ -45,8 +45,7 @@ public abstract class TBuilder implements ITBuilder {
 	
 	protected Node getNode(String field) {
 		TFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor();
-		if(fd.hasParent())
-			return null;
+		
 		Node node = null;
 		if(fd.getFieldName().equals(field)) {
 			node = fd.getComponent();

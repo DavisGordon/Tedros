@@ -90,6 +90,13 @@ public @interface TDecorator {
 	
 	/**
 	 * <pre>
+	 * Set the Select All button text
+	 * </pre>
+	 * */
+	public String selectAllButtonText() default TAnnotationDefaultValue.TVIEW_selectAllButtonText;
+	
+	/**
+	 * <pre>
 	 * Set the Import button text
 	 * </pre>
 	 * */

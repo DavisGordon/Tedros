@@ -88,7 +88,7 @@ public final class TControlLayoutBuilder {
 		if(TDebugConfig.detailParseExecution) {
 			try{
 				long duration = (endTime - startTime);
-				System.out.println("[TComponentBuilder][Field: "+descriptor.getFieldDescriptor().getFieldName()+
+				System.out.println("[TControlLayoutReaderBuilder][Field: "+descriptor.getFieldDescriptor().getFieldName()+
 						"][Build duration: "+(duration/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration/1000000))+"s] ");
 			}catch (Exception e) {
 				e.printStackTrace();
@@ -110,7 +110,7 @@ public final class TControlLayoutBuilder {
 		if(TDebugConfig.detailParseExecution) {
 			try{
 				long duration = (endTime - startTime);
-				System.out.println("[TComponentBuilder][Field: "+descriptor.getFieldDescriptor().getFieldName()+
+				System.out.println("[TControlLayoutReaderBuilder][Field: "+descriptor.getFieldDescriptor().getFieldName()+
 						"][Build duration: "+(duration/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration/1000000))+"s] ");
 			}catch (Exception e) {
 				e.printStackTrace();
