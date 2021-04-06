@@ -36,6 +36,8 @@ import com.tedros.fxapi.util.TReflectionUtil;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
+import javafx.collections.ListChangeListener;
+import javafx.collections.WeakListChangeListener;
 import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -127,13 +129,20 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 					.getString("#{tedros.fxapi.label.double.click.select}")));
 	    	
 	    	decorator.setTableView(tableView);
-			
+			decorator.gettSelectAllButton().setDisable(true);
+			decorator.gettAddButton().setDisable(true);
 			tableView.setTableMenuButtonVisible(true);
 			
-			if(this.allowsMultipleSel)
+			if(this.allowsMultipleSel) {
 				tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-				
-			EventHandler<MouseEvent> ev = e ->{
+				ListChangeListener lstchg = l -> {
+					if(l!=null) 
+						decorator.gettSelectAllButton().setDisable(l.getList().isEmpty());
+				};
+				super.getListenerRepository().add("tbvlstchg", lstchg);
+				tableView.getItems().addListener(new WeakListChangeListener(lstchg));
+			}
+			EventHandler<MouseEvent> ev = e -> {
 				if(e.getClickCount()==2) {
 					int index = tableView.getSelectionModel().getSelectedIndex();
 					TModelView new_ = (TModelView) tableView.getItems().get(index);
@@ -142,6 +151,14 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			};
 			super.getListenerRepository().add("tvmclkeh", ev);
 			tableView.setOnMouseClicked(new WeakEventHandler<>(ev));
+			
+			ListChangeListener selidxchg = l -> {
+				if(l!=null) 
+					decorator.gettAddButton().setDisable(l.getList().isEmpty());
+			};
+			super.getListenerRepository().add("selidxchg", selidxchg);
+			
+			tableView.getSelectionModel().getSelectedIndices().addListener(new WeakListChangeListener(selidxchg));
 			
 			if(this.decorator.gettPaginator()!=null) {
 				ChangeListener<TPagination> chl = (a0, a1, a2) -> {
