@@ -74,6 +74,8 @@ public final class TAuthorizationTableView extends TEntityModelView<TAuthorizati
 	control=@TControl(tooltip="#{label.viewName}", parse = true))
 	private SimpleStringProperty viewName;
 	
+	private SimpleStringProperty typeDescription;
+	
 	private SimpleStringProperty type;
 	
 
@@ -184,6 +186,20 @@ public final class TAuthorizationTableView extends TEntityModelView<TAuthorizati
 	 */
 	public void setDisplayText(SimpleStringProperty displayText) {
 		this.displayText = displayText;
+	}
+
+	/**
+	 * @return the typeDescription
+	 */
+	public SimpleStringProperty getTypeDescription() {
+		return typeDescription;
+	}
+
+	/**
+	 * @param typeDescription the typeDescription to set
+	 */
+	public void setTypeDescription(SimpleStringProperty typeDescription) {
+		this.typeDescription = typeDescription;
 	}
 
 }
