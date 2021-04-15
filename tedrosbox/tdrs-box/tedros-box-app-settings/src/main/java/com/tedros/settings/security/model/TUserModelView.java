@@ -17,6 +17,12 @@ import com.tedros.fxapi.annotation.control.TPasswordField;
 import com.tedros.fxapi.annotation.control.TPickListField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.form.TForm;
+import com.tedros.fxapi.annotation.layout.TAccordion;
+import com.tedros.fxapi.annotation.layout.THBox;
+import com.tedros.fxapi.annotation.layout.THGrow;
+import com.tedros.fxapi.annotation.layout.TPane;
+import com.tedros.fxapi.annotation.layout.TPriority;
+import com.tedros.fxapi.annotation.layout.TTitledPane;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
@@ -46,6 +52,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
+import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
 /**
@@ -68,6 +75,12 @@ public class TUserModelView extends TEntityModelView<TUser> {
 
 	private SimpleLongProperty id;
 	
+	@TAccordion(expandedPane="main", node=@TNode(id="UserAcc",parse = true),
+			panes={
+					@TTitledPane(text="Principal", node=@TNode(id="main",parse = true), expanded=true,
+							fields={"header", "name", "login", "active"}),
+					@TTitledPane(text="Detalhe", node=@TNode(id="detail",parse = true),
+						fields={"profilesText","profiles"})})
 	@TReaderHtml(htmlTemplateForControlValue="<h2 style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 				cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 				cssForHtmlBox="", cssForContentValue="")
@@ -84,6 +97,9 @@ public class TUserModelView extends TEntityModelView<TUser> {
 	@TReaderHtml
 	@TLabel(text="#{label.userLogin}:")
 	@TTextField(maxLength=100, required=true)
+	@THBox(	pane=@TPane(children={"login","password"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="login", priority=Priority.NEVER), 
+		   		@TPriority(field="password", priority=Priority.NEVER)}))
 	private SimpleStringProperty login;
 	
 	@TLabel(text="#{label.password}:")
