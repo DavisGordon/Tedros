@@ -1,25 +1,22 @@
 package com.tedros.settings.security.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.core.security.model.TAuthorization;
 import com.tedros.core.security.model.TProfile;
-import com.tedros.fxapi.annotation.control.TCallbackFactory;
-import com.tedros.fxapi.annotation.control.TCellFactory;
-import com.tedros.fxapi.annotation.control.TCellValueFactory;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
 import com.tedros.fxapi.annotation.control.TMultipleSelectionModal;
-import com.tedros.fxapi.annotation.control.TTableColumn;
-import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.TAccordion;
 import com.tedros.fxapi.annotation.layout.TTitledPane;
-import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEntityProcess;
@@ -31,17 +28,13 @@ import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
-import com.tedros.fxapi.presenter.entity.behavior.TMasterCrudViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
-import com.tedros.settings.security.action.TProfileCompleteTableViewAction;
-import com.tedros.settings.security.callback.CheckBoxEnableCallBack;
 import com.tedros.settings.security.process.TProfileProcess;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
-import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.text.TextAlignment;
 
 /**
@@ -99,7 +92,15 @@ public final class TProfileModelView extends TEntityModelView<TProfile> {
 		super(entity);
 	}
 	
+	@Override
+	public int hashCode() {
+		return HashCodeBuilder.reflectionHashCode(this, false);
+	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		return EqualsBuilder.reflectionEquals(this.getModel(), obj != null ? ((TProfileModelView)obj).getModel() : obj, false);
+	}
 
 	/* (non-Javadoc)
 	 * @see com.tedros.fxapi.presenter.model.TModelView#setId(javafx.beans.property.SimpleLongProperty)
