@@ -24,11 +24,16 @@ import com.tedros.core.context.TedroxBoxHeaderButton;
 import com.tedros.core.control.TedrosBoxBreadcrumbBar;
 import com.tedros.core.control.TedrosBoxResizeBar;
 import com.tedros.core.logging.TLoggerManager;
+import com.tedros.core.security.model.TUser;
+import com.tedros.fxapi.control.PopOver;
+import com.tedros.fxapi.form.TDefaultForm;
 import com.tedros.fxapi.modal.TConfirmMessageBox;
 import com.tedros.fxapi.modal.TModalPane;
 import com.tedros.fxapi.presenter.TPresenter;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.login.model.LoginModelView;
+import com.tedros.login.model.TLogedUserModelView;
+import com.tedros.login.model.TUserModelView;
 import com.tedros.util.TFileUtil;
 import com.tedros.util.TZipUtil;
 import com.tedros.util.TedrosFolderEnum;
@@ -42,20 +47,25 @@ import javafx.application.ConditionalFeature;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.DepthTest;
 import javafx.scene.Node;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.TreeView;
 import javafx.scene.effect.DropShadow;
@@ -68,6 +78,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -285,6 +296,41 @@ public class Main extends Application {
         h.setAlignment(Pos.CENTER_LEFT);
         HBox.setMargin(appName, new Insets(0,15,0,0));
         h.getChildren().addAll(appName);
+        
+        PopOver userPopover = new PopOver();
+        userPopover.setCloseButtonEnabled(true);
+        userPopover.getRoot().getStylesheets().addAll(customStyleCssUrl, immutableStylesCssUrl, defaultStyleCssUrl2, defaultStyleCssUrl3);
+        
+        appName.setCursor(Cursor.HAND);
+        
+        appName.setOnMouseClicked(e -> {
+        	
+        	TUser usr = TedrosContext.getLoggedUser();
+        	VBox vb = new VBox();
+        	
+        	TUserModelView umv = new TUserModelView(usr);
+        	ObservableList l = FXCollections.observableArrayList(umv);
+        	TDynaView v = new TDynaView(TUserModelView.class, l);
+        	v.tLoad();
+        	//TDefaultForm frm = new TDefaultForm(umv);
+        	/*frm.tLoadedProperty().addListener((o ,x, n)->{
+        		if(n) {
+        			TComboBoxField combo = (TComboBoxField) frm.gettFieldBox("activeProfile").gettControl();
+        			combo.setItems(umv.getProfiles());
+
+        		}
+        	});*/
+        	
+        	Accordion acc = new Accordion();
+        	TitledPane t1 = new TitledPane();
+        	t1.setText("Usúario");
+        	t1.setContent(v);
+        	
+        	acc.getPanes().addAll(t1);
+        	userPopover.setContentNode(acc);
+        	userPopover.show(appName);
+        });
+        
         
         HBox.setMargin(h, new Insets(0,0,0,40));
         toolBar.getItems().add(h);
