@@ -1,6 +1,7 @@
 package com.tedros.fxapi.presenter.modal.decorator;
 
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewSelectionBaseDecorator;
+import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
 
@@ -23,7 +24,7 @@ extends TDynaViewSelectionBaseDecorator<M> {
 		
 		
 		// get the view
-		final TDynaView<M> view = getPresenter().getView();
+		final ITDynaView<M> view = getPresenter().getView();
 		
 		setViewTitle(null);
 		buildListView();

@@ -99,6 +99,8 @@ public final class TProfileModelView extends TEntityModelView<TProfile> {
 	
 	@Override
 	public boolean equals(Object obj) {
+		if(!(obj instanceof TProfileModelView))
+			return false;
 		return EqualsBuilder.reflectionEquals(this.getModel(), obj != null ? ((TProfileModelView)obj).getModel() : obj, false);
 	}
 

@@ -27,7 +27,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 			
 			M model = (M) super.getModels().get(0);
 			setModelView(model);
-			showForm(TViewMode.EDIT);
+			//showForm(TViewMode.EDIT);
 			
 			
 		}catch(Throwable e){

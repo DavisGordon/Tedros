@@ -18,7 +18,7 @@ import com.tedros.fxapi.exception.TErrorType;
 import com.tedros.fxapi.presenter.TPresenter;
 import com.tedros.fxapi.presenter.behavior.ITBehavior;
 import com.tedros.fxapi.presenter.decorator.ITDecorator;
-import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
+import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.util.TReflectionUtil;
 
@@ -30,9 +30,9 @@ import javafx.collections.ObservableList;
  *  @author Davis Gordon
  * */
 @SuppressWarnings("rawtypes")
-public class TDynaPresenter<M extends TModelView>	extends TPresenter<TDynaView<M>> {
+public class TDynaPresenter<M extends TModelView>	extends TPresenter<ITDynaView<M>> {
 	
-	private ITDecorator<TDynaPresenter<M>> decorator;
+	private ITDecorator<TDynaPresenter<M>> 		decorator;
 	private ITBehavior<M, TDynaPresenter<M>> 	behavior;
 	
 	private M modelView;

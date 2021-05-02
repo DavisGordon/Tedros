@@ -2,6 +2,7 @@ package com.tedros.fxapi.presenter.report.decorator;
 
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewReportBaseDecorator;
+import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
 
@@ -15,7 +16,7 @@ extends TDynaViewReportBaseDecorator<M> {
 		final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
 		
 		// get the view
-		final TDynaView<M> view = getPresenter().getView();
+		final ITDynaView<M> view = getPresenter().getView();
 		
 		addItemInTCenterContent(view.gettFormSpace());
 		setViewTitle(null);

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,15 +26,24 @@ import com.tedros.core.control.TedrosBoxBreadcrumbBar;
 import com.tedros.core.control.TedrosBoxResizeBar;
 import com.tedros.core.logging.TLoggerManager;
 import com.tedros.core.security.model.TUser;
+import com.tedros.ejb.base.model.ITImportModel;
+import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.control.PopOver;
+import com.tedros.fxapi.domain.TViewMode;
+import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.form.TDefaultForm;
 import com.tedros.fxapi.modal.TConfirmMessageBox;
 import com.tedros.fxapi.modal.TModalPane;
 import com.tedros.fxapi.presenter.TPresenter;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
+import com.tedros.login.model.Login;
 import com.tedros.login.model.LoginModelView;
 import com.tedros.login.model.TLogedUserModelView;
 import com.tedros.login.model.TUserModelView;
+import com.tedros.login.model.UserSetting;
+import com.tedros.login.model.UserSettingModelView;
+import com.tedros.settings.security.model.TProfileModelView;
+import com.tedros.settings.security.process.TUserProcess;
 import com.tedros.util.TFileUtil;
 import com.tedros.util.TZipUtil;
 import com.tedros.util.TedrosFolderEnum;
@@ -49,6 +59,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -150,7 +161,7 @@ public class Main extends Application {
 		//create tedros directory if is not exists
     	File folder = new File(outputFolder+"/.tedros");
     	if(folder.exists()){ 
-    		if(new File(outputFolder+"/.tedros"+"/tedrosbox__V8.0.txt").exists())
+    		if(new File(outputFolder+"/.tedros"+"/tedrosbox__V8.3.txt").exists())
     			return false;
     		TFileUtil.delete(folder);
     	}
@@ -297,40 +308,74 @@ public class Main extends Application {
         HBox.setMargin(appName, new Insets(0,15,0,0));
         h.getChildren().addAll(appName);
         
-        PopOver userPopover = new PopOver();
-        userPopover.setCloseButtonEnabled(true);
-        userPopover.getRoot().getStylesheets().addAll(customStyleCssUrl, immutableStylesCssUrl, defaultStyleCssUrl2, defaultStyleCssUrl3);
         
-        appName.setCursor(Cursor.HAND);
+       /* appName.setCursor(Cursor.HAND);
         
         appName.setOnMouseClicked(e -> {
-        	
-        	TUser usr = TedrosContext.getLoggedUser();
-        	VBox vb = new VBox();
-        	
-        	TUserModelView umv = new TUserModelView(usr);
-        	ObservableList l = FXCollections.observableArrayList(umv);
-        	TDynaView v = new TDynaView(TUserModelView.class, l);
-        	v.tLoad();
-        	//TDefaultForm frm = new TDefaultForm(umv);
-        	/*frm.tLoadedProperty().addListener((o ,x, n)->{
-        		if(n) {
-        			TComboBoxField combo = (TComboBoxField) frm.gettFieldBox("activeProfile").gettControl();
-        			combo.setItems(umv.getProfiles());
-
-        		}
-        	});*/
-        	
+        	PopOver userPopover = new PopOver();
+        	userPopover.setCloseButtonEnabled(true);
+        	userPopover.getRoot().getStylesheets().addAll(customStyleCssUrl, immutableStylesCssUrl, defaultStyleCssUrl2, defaultStyleCssUrl3);
+        
         	Accordion acc = new Accordion();
         	TitledPane t1 = new TitledPane();
-        	t1.setText("Usúario");
-        	t1.setContent(v);
+        	t1.setText("Meus dados");
+        	t1.setStyle("-fx-font-size: 0.7em");
+        	
+        	
+        	
+        	TUser usr = TedrosContext.getLoggedUser();
+        	try {
+				TUserProcess p = new TUserProcess();
+				ChangeListener<State> prcl = (arg0, arg1, arg2) -> {
+					
+					if(arg2.equals(State.SUCCEEDED)){
+						
+						List<TResult<TUser>> resultados = (List<TResult<TUser>>) p.getValue();
+						
+						if(resultados != null) {
+						
+							TUser result =  resultados.get(0).getValue();
+							TUserModelView umv = new TUserModelView(result);
+				        	ObservableList l = FXCollections.observableArrayList(umv);
+				        	TDynaView v = new TDynaView(TUserModelView.class, l);
+				        	v.tLoad();
+				        	//v.setId("t-tedros-colo.r");
+							
+							t1.setContent(v);
+							ObservableList<TProfileModelView> profiles = umv.getProfiles();
+							if(profiles!=null && profiles.size()>=2) {
+								UserSetting log = new UserSetting(result);
+								UserSettingModelView lmv = new UserSettingModelView(log);
+					        	ObservableList l2 = FXCollections.observableArrayList(lmv);
+					        	TDynaView v2 = new TDynaView(UserSettingModelView.class, l2);
+					        	v2.tLoad();
+								
+								TitledPane t2 = new TitledPane();
+					        	t2.setText("Meu perfil");
+					        	t2.setStyle("-fx-font-size: 0.7em");
+					        	t2.setContent(v2);
+					        	acc.getPanes().add(t2);
+					        	
+							}
+						}
+					}
+				};
+				
+				p.stateProperty().addListener(prcl);
+				p.findById(usr);
+				p.start();
+				
+			} catch (TProcessException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        	//VBox vb = new VBox();
         	
         	acc.getPanes().addAll(t1);
         	userPopover.setContentNode(acc);
         	userPopover.show(appName);
         });
-        
+        */
         
         HBox.setMargin(h, new Insets(0,0,0,40));
         toolBar.getItems().add(h);

@@ -35,7 +35,7 @@ extends TDynaViewCrudBaseDecorator<M>
 		setShowBreadcrumBar((tForm!=null) ? tForm.showBreadcrumBar() : false);
 		
 		// get the views
-		final TDynaView<M> view = getPresenter().getView();
+		final ITDynaView<M> view = getPresenter().getView();
 		
 		addItemInTCenterContent(view.gettFormSpace());
 		setViewTitle(null);

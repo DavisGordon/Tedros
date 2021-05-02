@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
+import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.settings.layout.model.ExampleViewModel;
 
@@ -14,7 +15,7 @@ public class ExampleDecorator extends TDynaViewCrudBaseDecorator<ExampleViewMode
 	public void decorate() {
 		
 		// get the view
-		final TDynaView<ExampleViewModel> view = getPresenter().getView();
+		final ITDynaView<ExampleViewModel> view = getPresenter().getView();
 		
 		view.gettFormSpace().setPrefWidth(400);
 		view.gettFormSpace().setAlignment(Pos.TOP_LEFT);

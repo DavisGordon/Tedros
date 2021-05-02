@@ -64,7 +64,7 @@
 			    <configuration>
 			      <home>${project.build.directory}/catalina-base</home>
 			      <properties>
-			       <cargo.servlet.port>8080</cargo.servlet.port>
+			       <cargo.servlet.port>8081</cargo.servlet.port>
 			       <cargo.rmi.port>8206</cargo.rmi.port>
 			       <cargo.tomcat.ajp.port>8009</cargo.tomcat.ajp.port>
 			        <cargo.start.jvmargs>
