@@ -19,7 +19,7 @@ public class TEncriptPasswordChangeListener extends TChangeListener<Boolean> {
 	@Override
 	public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldVal, Boolean newVal) {
 		if(!newVal){
-			final TLogedUserModelView modelView = (TLogedUserModelView) getComponentDescriptor().getModelView();
+			final TUserModelView modelView = (TUserModelView) getComponentDescriptor().getModelView();
 			if((modelView.getPassword()!=null && modelView.getLastPassword()!=null && 
 					modelView.getPassword().getValue()!=null && modelView.getLastPassword().getValue()==null) ||
 					(modelView.getPassword()!=null && modelView.getLastPassword()!=null 

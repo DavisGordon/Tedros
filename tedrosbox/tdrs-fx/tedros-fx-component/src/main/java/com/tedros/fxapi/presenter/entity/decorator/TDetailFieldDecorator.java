@@ -1,7 +1,7 @@
 package com.tedros.fxapi.presenter.entity.decorator;
 
 import com.tedros.fxapi.presenter.dynamic.decorator.TDetailFieldBaseDecorator;
-import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
+import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.scene.control.TableView;
@@ -16,7 +16,7 @@ extends TDetailFieldBaseDecorator<M>
 	public void decorate() {
 		
 		// get the views
-		final TDynaView<M> view = getPresenter().getView();
+		final ITDynaView<M> view = getPresenter().getView();
 		
 		box = new VBox();
 		box.getChildren().add(view.gettFormSpace());

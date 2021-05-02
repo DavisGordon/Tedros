@@ -5,9 +5,11 @@ package com.tedros.login.model;
 
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
+import com.tedros.core.security.model.TProfile;
 import com.tedros.core.security.model.TUser;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
+import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
 import com.tedros.fxapi.annotation.control.TPasswordField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.form.TForm;
@@ -23,10 +25,12 @@ import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
+import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.entity.behavior.TSaveViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TSaveViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
+import com.tedros.settings.security.model.TProfileModelView;
 import com.tedros.settings.security.process.TUserProcess;
 
 import javafx.beans.property.SimpleLongProperty;
@@ -42,24 +46,13 @@ import javafx.scene.text.TextAlignment;
 @TForm(name="#{security.user.form.name}")
 @TFormReaderHtml
 @TPresenter(type=TDynaPresenter.class, 
-			decorator=@TDecorator(type = TSaveViewDecorator.class, viewTitle="#{security.user.view.title}", listTitle="#{security.user.list.title}"),
+			decorator=@TDecorator(type = TSaveViewDecorator.class, viewTitle="#{security.user.view.title}", 
+			listTitle="#{security.user.list.title}", buildModesRadioButton=false ),
 			behavior=@TBehavior(type=TSaveViewBehavior.class))
 @TEntityProcess(entity=TUser.class, process = TUserProcess.class)
-@TSecurity(	id="T_CUSTOM_SECURITY_USER", 
-			appName="#{settings.app.name}", 
-			moduleName="#{label.user}", 
-			viewName="#{security.user.view.title}",
-			allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
-			   					TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public class TUserModelView extends TEntityModelView<TUser> {
 
 	private SimpleLongProperty id;
-	
-
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-pane", parse = true))
-	@TText(text="#{label.user.header}", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
-		node=@TNode(id="t-form-title-text", parse = true))
-	private SimpleStringProperty header;
 	
 
 	@TLabel(text="#{label.name}:")
@@ -83,15 +76,8 @@ public class TUserModelView extends TEntityModelView<TUser> {
 	private SimpleStringProperty password;
 	
 	
-	/*@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="#{label.profilesText}", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
-		node=@TNode(id="t-form-title-text", parse = true), mode=TViewMode.EDIT)
-	private SimpleStringProperty profilesText;
-	
-	
-	@TLabel(text = "#{tedros.profile}")
-	@TComboBoxField(firstItemTex="#{tedros.select}")
-	private SimpleObjectProperty<TProfileModelView> activeProfile;*/
+	@TModelViewCollectionType(modelClass=TProfile.class, modelViewClass=TProfileModelView.class, required=true)
+	private ITObservableList<TProfileModelView> profiles;
 
 	
 	private SimpleStringProperty lastPassword;
@@ -172,24 +158,26 @@ public class TUserModelView extends TEntityModelView<TUser> {
 		this.password = password;
 	}
 	
-	
-
-	public SimpleStringProperty getHeader() {
-		return header;
-	}
-
-	public void setHeader(SimpleStringProperty header) {
-		this.header = header;
-	}
-
-	
-
 	public SimpleStringProperty getLastPassword() {
 		return lastPassword;
 	}
 
 	public void setLastPassword(SimpleStringProperty lastPassword) {
 		this.lastPassword = lastPassword;
+	}
+
+	/**
+	 * @return the profiles
+	 */
+	public ITObservableList<TProfileModelView> getProfiles() {
+		return profiles;
+	}
+
+	/**
+	 * @param profiles the profiles to set
+	 */
+	public void setProfiles(ITObservableList<TProfileModelView> profiles) {
+		this.profiles = profiles;
 	}
 
 
