@@ -34,6 +34,9 @@ public class Endereco extends TEntity {
 	@Column(length=300, nullable = true)
 	private String complemento;
 	
+	@Column(length=20, nullable = true)
+	private String tipoLogradouro;
+	
 	@Column(length=300, nullable = true)
 	private String logradouro;
 	
@@ -152,6 +155,20 @@ public class Endereco extends TEntity {
 
 	public final void setUf(UF uf) {
 		this.uf = uf;
+	}
+
+	/**
+	 * @return the tipoLogradouro
+	 */
+	public String getTipoLogradouro() {
+		return tipoLogradouro;
+	}
+
+	/**
+	 * @param tipoLogradouro the tipoLogradouro to set
+	 */
+	public void setTipoLogradouro(String tipoLogradouro) {
+		this.tipoLogradouro = tipoLogradouro;
 	}
 	
 

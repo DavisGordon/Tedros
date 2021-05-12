@@ -7,6 +7,7 @@ import com.tedros.fxapi.control.TTextField;
 import com.tedros.fxapi.control.trigger.TTrigger;
 import com.tedros.fxapi.form.TFieldBox;
 
+import javafx.scene.Node;
 import javafx.scene.control.Toggle;
 
 public class TDocumentoTrigger extends TTrigger<Toggle> {
@@ -32,6 +33,7 @@ public class TDocumentoTrigger extends TTrigger<Toggle> {
 		if(data==null)
 			return;
 		
+		TFieldBox nacionalidadeBox = getAssociatedFieldBox("nacionalidade");
 		TFieldBox dataValidadeBox = getAssociatedFieldBox("dataValidade");
 		TFieldBox dataEmissaoBox = getAssociatedFieldBox("dataEmissao");
 		TFieldBox orgaoEmissorBox = getAssociatedFieldBox("orgaoEmissor");
@@ -40,50 +42,46 @@ public class TDocumentoTrigger extends TTrigger<Toggle> {
 		switch (tipo) {
 			case 1 :
 				documentoField.setMask("##########");
-				desabilitar(dataValidadeBox, dataEmissaoBox, orgaoEmissorBox);
+				habilitar(nacionalidadeBox, dataValidadeBox, dataEmissaoBox, orgaoEmissorBox);
 				break;
 
 			case 2:
 				documentoField.setMask("999.999.999-99");
-				habilitar(dataValidadeBox, dataEmissaoBox, orgaoEmissorBox);
+				desabilitar(nacionalidadeBox,dataValidadeBox, dataEmissaoBox, orgaoEmissorBox);
 				
 				break;
 			case 3:
 				documentoField.setMask("99.999.999/9999-99");
-				habilitar(dataValidadeBox, dataEmissaoBox,
-						orgaoEmissorBox);
+				desabilitar(nacionalidadeBox, dataValidadeBox, dataEmissaoBox, orgaoEmissorBox);
 				break;
 		}
 
 	}
 
-	private void desabilitar(TFieldBox dataValidadeBox,
-			TFieldBox dataEmissaoBox, TFieldBox orgaoEmissorBox) {
-		if(dataValidadeBox!=null)
-			dataValidadeBox.setDisable(false);
-		if(dataEmissaoBox!=null)
-			dataEmissaoBox.setDisable(false);
-		if(orgaoEmissorBox!=null)
-			orgaoEmissorBox.setDisable(false);
+	private void desabilitar(TFieldBox... fieldBox) {
+		for(TFieldBox box: fieldBox)
+			if(box!=null) {
+				clear(box);
+				box.setDisable(true);
+			}
+	}
+	
+	private void habilitar(TFieldBox... fieldBox) {
+		for(TFieldBox box: fieldBox)
+			if(box!=null) 
+				box.setDisable(false);
 	}
 
 	
-	private void habilitar(TFieldBox dataValidadeBox,
-			TFieldBox dataEmissaoBox, TFieldBox orgaoEmissorBox) {
-		
-		if(dataValidadeBox!=null){
-			((TDatePickerField)dataValidadeBox.gettControl()).setValue(null);
-			dataValidadeBox.setDisable(true);
+	private void clear(TFieldBox fieldBox) {
+		Node control = fieldBox.gettControl();
+		if(control instanceof TTextField){
+			((TTextField) control).setText(null);
+		}
+		if(control instanceof TDatePickerField){
+			((TDatePickerField)control).setValue(null);
 		}
 		
-		if(dataEmissaoBox!=null){
-			((TDatePickerField)dataEmissaoBox.gettControl()).setValue(null);
-			dataEmissaoBox.setDisable(true);
-		}
-		if(orgaoEmissorBox!=null){
-			((TTextField) orgaoEmissorBox.gettControl()).setText(null);
-			orgaoEmissorBox.setDisable(true);
-		}
 	}
 
 }

@@ -68,6 +68,9 @@ public class Pessoa extends TEntity {
 	@Column(length=1, nullable = true)
 	private String sexo;
 	
+	@Column(length=12, nullable = true)
+	private String estadoCivil;
+	
 	@Column(length=1000)
 	private String observacao;
 	
@@ -90,7 +93,10 @@ public class Pessoa extends TEntity {
                 inverseJoinColumns= @JoinColumn(name="ende_id"))	
 	private Set<Endereco> enderecos;
 	
-		
+	@OneToMany(mappedBy="pessoa",  fetch = FetchType.EAGER, orphanRemoval=true, cascade={CascadeType.ALL})
+	private Set<PessoaTermoAdesao> termosAdesao;
+	
+	
 	public Pessoa() {
 		
 	}
@@ -273,6 +279,34 @@ public class Pessoa extends TEntity {
 	 */
 	public void setNewPassKey(String newPassKey) {
 		this.newPassKey = newPassKey;
+	}
+
+	/**
+	 * @return the estadoCivil
+	 */
+	public String getEstadoCivil() {
+		return estadoCivil;
+	}
+
+	/**
+	 * @param estadoCivil the estadoCivil to set
+	 */
+	public void setEstadoCivil(String estadoCivil) {
+		this.estadoCivil = estadoCivil;
+	}
+
+	/**
+	 * @return the termosAdesao
+	 */
+	public Set<PessoaTermoAdesao> getTermosAdesao() {
+		return termosAdesao;
+	}
+
+	/**
+	 * @param termosAdesao the termosAdesao to set
+	 */
+	public void setTermosAdesao(Set<PessoaTermoAdesao> termosAdesao) {
+		this.termosAdesao = termosAdesao;
 	}
 
 	

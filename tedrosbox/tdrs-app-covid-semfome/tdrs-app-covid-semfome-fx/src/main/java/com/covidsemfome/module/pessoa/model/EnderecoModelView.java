@@ -7,10 +7,13 @@
 package com.covidsemfome.module.pessoa.model;
 
 import com.covidsemfome.model.Endereco;
+import com.covidsemfome.model.UF;
 import com.tedros.fxapi.annotation.TCodeValue;
+import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TMaskField;
+import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
@@ -32,6 +35,7 @@ import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.util.TPropertyUtil;
 
 import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
@@ -60,15 +64,16 @@ public class EnderecoModelView extends TEntityModelView<Endereco> {
 							@TRadioButtonField(text="#{label.work}", userData="2"),
 							@TRadioButtonField(text="#{label.other}", userData="3")
 			})
-	@THBox(	pane=@TPane(children={"tipo","caixaPostal","cep"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="tipo", priority=Priority.ALWAYS), 
-   				   		@TPriority(field="caixaPostal", priority=Priority.NEVER),
-   				   		@TPriority(field="cep", priority=Priority.ALWAYS) }))
 	private SimpleStringProperty tipo;
 	
 	@TReaderHtml
 	@TLabel(text="Caixa Postal")
 	@TTextField(maxLength=60, control=@TControl(minWidth=80, parse = true))
+	@THBox(	pane=@TPane(children={"complemento","caixaPostal","cep"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="complemento", priority=Priority.ALWAYS), 
+   				   		@TPriority(field="caixaPostal", priority=Priority.NEVER),
+   				   		@TPriority(field="cep", priority=Priority.NEVER) }))
+	
 	private SimpleStringProperty caixaPostal;
 	
 	@TReaderHtml
@@ -103,12 +108,17 @@ public class EnderecoModelView extends TEntityModelView<Endereco> {
 	@TReaderHtml
 	@TLabel(text="Cidade")
 	@TTextField(required=true, maxLength=300, control=@TControl(prefWidth=350, parse = true))
+	@THBox(	pane=@TPane(children={"cidade","uf"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="cidade", priority=Priority.ALWAYS), 
+   				   		@TPriority(field="uf", priority=Priority.NEVER) }))
 	private SimpleStringProperty cidade;
 	
-	/*@TReader
+	@TReaderHtml
 	@TLabel(text="UF")
-	@TTextField(required=true, textInputControl=@TTextInputControl(promptText="Sigla do estado", parse = true))
-	private SimpleStringProperty uf;*/
+	@TComboBoxField(firstItemTex="Selecione", 
+	optionsList=@TOptionsList(entityClass=UF.class, 
+			optionModelViewClass=UFModelView.class, optionsProcessClass = UFOptionProcess.class))
+	private SimpleObjectProperty<UF> uf;
 	
 	
 	public EnderecoModelView(Endereco entidade) {
@@ -223,6 +233,20 @@ public class EnderecoModelView extends TEntityModelView<Endereco> {
 
 	public final void setId(SimpleLongProperty id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return the uf
+	 */
+	public SimpleObjectProperty<UF> getUf() {
+		return uf;
+	}
+
+	/**
+	 * @param uf the uf to set
+	 */
+	public void setUf(SimpleObjectProperty<UF> uf) {
+		this.uf = uf;
 	}
 
 	

@@ -46,39 +46,95 @@
 					
 					
 					<section class="wrapper style2 align-left" id="volun">
-										<header>
-											<h3>Meus dados pessoais</h3>
-										</header>
-										<div class="content">
-											<form name="frm" id="frm" method="post" action="../api/painel/user/alter">
-												<div class="fields">
-													<div class="field">
-														<label for="name">Nome</label>
-														<input type="text" name="name" id="name"  value="" />
-													</div>
-													<div class="field half">
-														<label for="email">Email</label>
-														<input type="email" name="email" id="email" value="" />
-													</div>
-													<div class="field half">
-														<label for="telefone">Telefone / Whatsup</label>
-														<input type="text" name="telefone" id="telefone" value="" />
-													</div>
-													<div class="field half">
-														<input type="radio" id="m" name="sexo" value="M" />
-														<label for="m">Masculino</label>
-													</div>
-													<div class="field half" style="">
-														<input type="radio" id="f" name="sexo"value="F"  />
-														<label for="f">Feminino</label>
-													</div>
-												</div>
-												<ul class="actions">
-													<li><input type="submit" name="submit" id="submit" value="Enviar" /></li>
-												</ul>
-											</form>
-										</div>
-									</section>
+						<header>
+							<h3>Meus dados pessoais</h3>
+						</header>
+						<div class="content">
+							<form name="frm" id="frm" method="post" action="../api/painel/user/alter">
+								<div class="fields">
+									<div class="field half">
+										<label for="name">Nome</label>
+										<input type="text" name="name" id="name"  value="" />
+									</div>
+									<div class="field half">
+										<label for="name">Profissão</label>
+										<input type="text" name="profissao" id="profissao"  value="" />
+									</div>
+									
+									<div class="field half">
+										<label for="identidade">Identidade</label>
+										<input type="text" name="identidade" id="identidade" value="" />
+									</div>
+									<div class="field half">
+										<label for="cpf">CPF</label>
+										<input type="text" name="cpf" id="cpf" value="" />
+									</div>
+									<div class="field">
+										<label for="telefone">Nacionalidade</label>
+										<input type="text" name="nacionalidade" id="nacionalidade" value="" />
+									</div>
+									<div class="field half">
+										<label for="email">Email</label>
+										<input type="email" name="email" id="email" value="" />
+									</div>
+									<div class="field half">
+										<label for="telefone">Telefone / Whatsapp</label>
+										<input type="text" name="telefone" id="telefone" value="" />
+									</div>
+									<div class="field half">
+										<input type="radio" id="solteiro" name="estadoCivil" value="Solteiro" />
+										<label for="solteiro">Solteiro</label>
+										<input type="radio" id="casado" name="estadoCivil" value="Casado"  />
+										<label for="casado">Casado</label>
+									</div>
+									<div class="field half">
+										<input type="radio" id="m" name="sexo" value="M" />
+										<label for="m">Masculino</label>
+									
+										<input type="radio" id="f" name="sexo"value="F"  />
+										<label for="f">Feminino</label>
+									</div>
+									
+									<div class="field half">
+										<label for="tipoLogradouro">Tipo Logradouro (Rua/Avenida...)</label>
+										<input type="text" name="tipoLogradouro" id="tipoLogradouro"  value="" />
+									</div>
+									<div class="field half">
+										<label for="logradouro">Logradouro</label>
+										<input type="text" name="logradouro" id="logradouro"  value="" />
+									</div>
+									<div class="field half">
+										<label for="bairro">Bairro</label>
+										<input type="text" name="bairro" id="bairro"  value="" />
+									</div>
+									<div class="field half">
+										<label for="complemento">Complemento (Número/Apartamento...)</label>
+										<input type="text" name="complemento" id="complemento"  value="" />
+									</div>
+									<div class="field half">
+										<label for="cidade">Cidade</label>
+										<input type="text" name="cidade" id="cidade"  value="" />
+									</div>
+									<div class="field half">
+										<label for="uf">Estado (UF)</label>
+										<select name="uf" id="uf"></select>
+									</div>
+									<div class="field half">
+										<label for="cep">CEP</label>
+										<input type="text" name="cep" id="cep"  value="" />
+									</div>
+									
+									
+									
+								</div>
+								<ul class="actions">
+									<li><input type="submit" name="submit" id="submit" value="Enviar" /></li>
+								</ul>
+							</form>
+						</div>
+					</section>
+					
+					
 			</div>
 	<!-- Scripts -->
 			<script src="../assets/js/jquery.min.js"></script>
@@ -95,7 +151,7 @@
     			
     			$('#frm').ajaxForm( { beforeSubmit: validate, success: showResponse  } ); 
     			 
-    			carregarDadosPessoais();
+    			carregarEstados();
     			ltpf();
     			
     		});
@@ -153,6 +209,26 @@
     		        	}else{
     		        		alert(result.message);
     		        	}
+    		    	}
+    			}); 
+    		}
+    		
+    		function carregarEstados(){
+    			$.ajax
+    		    ({ 
+    		        url: '../api/painel/ufs',
+    		        type: 'get',
+    		        dataType:'json',
+    		        headers : {'Content-Type' : 'application/json'},
+    		        success: function(result)
+    		        {
+    		        	$('#uf').append('<option value="">Selecione</option>');
+    		        	if(result.data){
+   	        				$.each(result.data, function(index,obj){
+   	        				 $('#uf').append('<option value="' + obj.id + '">' + obj.descricao + '</option>');
+   	        				});
+   	        			}	
+    		        	carregarDadosPessoais();
     		    	}
     			}); 
     		}
@@ -304,14 +380,34 @@
 	        		 if(result.data){
 	        			 $("#userName").html(result.data.nome);
 	        			 $('#name').val(result.data.nome);
+	        			 $('#profissao').val(result.data.profissao);
+	        			 $('#identidade').val(result.data.identidade);
+	        			 $('#cpf').val(result.data.cpf);
+	        			 $('#nacionalidade').val(result.data.nacionalidade);
 	        			 $('#email').val(result.data.email);
 	        			 $('#telefone').val(result.data.telefone);
+	        			 if(result.data.estadoCivil && result.data.estadoCivil=='Casado'){
+	        				 $("#casado").prop("checked", true);
+	        			 }
+	        			 if(result.data.estadoCivil && result.data.estadoCivil=='Solteiro'){
+	        				 $("#solteiro").prop("checked", true);
+	        			 }
 	        			 if(result.data.sexo && result.data.sexo=='M'){
 	        				 $("#m").prop("checked", true);
 	        			 }
 	        			 if(result.data.sexo && result.data.sexo=='F'){
 	        				 $("#f").prop("checked", true);
 	        			 }
+	        			 $('#tipoLogradouro').val(result.data.tipoLogr);
+	        			 $('#logradouro').val(result.data.logradouro);
+	        			 $('#complemento').val(result.data.complemento);
+	        			 $('#bairro').val(result.data.bairro);
+	        			 $('#cidade').val(result.data.cidade);
+	        			 $('#cep').val(result.data.cep);
+	        			 
+	        			 $('#uf option[value="'+result.data.ufid+'"]').prop('selected', true);
+	        			 
+	        			 
 	        		 }
 	        	}else{
 	        		alert(result.message);
@@ -328,10 +424,80 @@
     		}
     		
 			function validate(formData, jqForm, options) { 
-    		    
+				var campos =  "";
     		    var form = jqForm[0]; 
-    		    if (!form.name.value || !form.email.value ) { 
-    		        alert('Por favor informar o seu nome e email.'); 
+    		    
+    		    if (!form.name.value) { 
+    		        campos += "Nome"; 
+    		    } 
+    		    
+    		    if (!form.profissao.value) { 
+    		    	if(campos!="") campos += ", ";
+    		        campos += "Profissão"; 
+    		    } 
+    		    
+    		    if (!form.identidade.value) { 
+    		    	if(campos!="") campos += ", ";
+    		        campos += "Identidade"; 
+    		    } 
+    		    
+    		    if (!form.cpf.value) { 
+    		    	if(campos!="") campos += ", ";
+    		        campos += "CPF"; 
+    		    } 
+    		    
+    		    if (!form.nacionalidade.value) { 
+    		    	if(campos!="") campos += ", ";
+    		        campos += "Nacionalidade"; 
+    		    } 
+    		    
+    		    if (!form.email.value) { 
+    		    	if(campos!="") campos += ", ";
+    		        campos += "Email"; 
+    		    } 
+    		    
+    		    if (!document.getElementById("casado").checked && !document.getElementById("solteiro").checked){
+    		    	if(campos!="") campos += ", ";
+    		        campos += "Casado ou Solteiro"; 
+    		    }
+    		    
+    		    if (!form.tipoLogradouro.value) { 
+    		    	if(campos!="") campos += ", ";
+    		        campos += "Tipo Logradouro"; 
+    		    } 
+    		    
+    		    if (!form.logradouro.value) { 
+    		    	if(campos!="") campos += ", ";
+    		        campos += "Logradouro"; 
+    		    } 
+    		    
+    		    if (!form.bairro.value) { 
+    		    	if(campos!="") campos += ", ";
+    		        campos += "Bairro"; 
+    		    } 
+    		    
+    		    if (!form.complemento.value) { 
+    		    	if(campos!="") campos += ", ";
+    		        campos += "Complemento"; 
+    		    } 
+    		    
+    		    if (!form.cidade.value) { 
+    		    	if(campos!="") campos += ", ";
+    		        campos += "Cidade"; 
+    		    } 
+    		    
+    		    if (!$("#uf option:selected").val()) { 
+    		    	if(campos!="") campos += ", ";
+    		        campos += "Estado (UF)"; 
+    		    } 
+    		    
+    		    if (!form.cep.value) { 
+    		    	if(campos!="") campos += ", ";
+    		        campos += "CEP"; 
+    		    } 
+    		    
+    		    if (campos != "" ) { 
+    		        alert('Por favor informar os campos: '+campos); 
     		        return false; 
     		    } 
     		}

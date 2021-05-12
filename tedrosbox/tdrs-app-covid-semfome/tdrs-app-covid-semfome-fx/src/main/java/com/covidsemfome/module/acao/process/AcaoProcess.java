@@ -6,7 +6,6 @@
  */
 package com.covidsemfome.module.acao.process;
 
-import java.util.Date;
 import java.util.List;
 
 import com.covidsemfome.model.Acao;

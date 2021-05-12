@@ -203,11 +203,25 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	@THorizontalRadioGroup(required=false, spacing=4, 
 			radioButtons={	@TRadioButtonField(text = "#{label.female}", userData = "F"), 
 							@TRadioButtonField(text = "#{label.male}", userData = "M")})
-	@THBox(pane=@TPane(	children={"sexo","insertDate","lastUpdate"}), spacing=10, fillHeight=true, 
+	@THBox(pane=@TPane(	children={"sexo", "estadoCivil", "insertDate","lastUpdate"}), spacing=10, fillHeight=true, 
 		hgrow=@THGrow(priority={@TPriority(field="sexo", priority=Priority.ALWAYS),
+								@TPriority(field="estadoCivil", priority=Priority.ALWAYS),
 								@TPriority(field="insertDate", priority=Priority.ALWAYS), 
 								@TPriority(field="lastUpdate", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty sexo;
+	
+	@TReaderHtml(codeValues={@TCodeValue(code = "Solteiro", value = "Solteiro"), 
+			@TCodeValue(code = "Casado", value = "Casado"),
+			@TCodeValue(code = "Viúvo(a)", value = "Viúvo(a)")
+	})
+	@TLabel(text="Estado civil")
+	@THorizontalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
+	radioButtons = {@TRadioButtonField(text="Solteiro", userData="Solteiro"), 
+					@TRadioButtonField(text="Casado", userData="Casado"),
+					@TRadioButtonField(text="Viúvo(a)", userData="Viúvo(a)")
+	})
+	private SimpleStringProperty estadoCivil;
+	
 	
 	@TReaderHtml
 	@TLabel(text="Cadastrado em")
@@ -303,6 +317,7 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 		ChangeListener<String> nomeListener = super.getListenerRepository().get("displayText1");
 		if(nomeListener==null){
 			nomeListener = new ChangeListener<String>(){
+				@SuppressWarnings("rawtypes")
 				@Override
 				public void changed(ObservableValue arg0, String arg1, String arg2) {
 					String str = (arg2!=null ? arg2 : "") 
@@ -320,6 +335,7 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 		ChangeListener<String> tipoListener = super.getListenerRepository().get("displayText2");
 		if(tipoListener==null){
 			tipoListener = new ChangeListener<String>(){
+				@SuppressWarnings("rawtypes")
 				@Override
 				public void changed(ObservableValue arg0, String arg1, String arg2) {
 					String str = (nome.getValue()!=null ? nome.getValue() : "") 
@@ -566,6 +582,20 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	 */
 	public void setDisplayText(SimpleStringProperty displayText) {
 		this.displayText = displayText;
+	}
+
+	/**
+	 * @return the estadoCivil
+	 */
+	public SimpleStringProperty getEstadoCivil() {
+		return estadoCivil;
+	}
+
+	/**
+	 * @param estadoCivil the estadoCivil to set
+	 */
+	public void setEstadoCivil(SimpleStringProperty estadoCivil) {
+		this.estadoCivil = estadoCivil;
 	}
 
 

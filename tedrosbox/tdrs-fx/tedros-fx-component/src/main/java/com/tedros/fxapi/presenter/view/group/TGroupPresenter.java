@@ -30,6 +30,8 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 	private TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
 	private ITModule module;
 	
+	private ITGroupViewItem itemSelected;
+	
 	public TGroupPresenter() {
 		
 	}
@@ -154,6 +156,7 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 
 	private void showView(final ITGroupViewItem item) {
 		try {
+			itemSelected = item;
 			final StackPane formSpacePane = view.gettFormSpace();
 			final ITView<?> view = item.getViewInstance(getModule());
 			//view.settModule(this.getView().gettModule());
@@ -166,6 +169,10 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 		} catch (Exception exception) {
 		    throw new RuntimeException(exception);
 		}
+	}
+	
+	public ITView getSelectedView() {
+		return itemSelected.getViewInstance(getModule());
 	}
 
 	@Override

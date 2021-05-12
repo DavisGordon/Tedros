@@ -12,6 +12,7 @@ import com.tedros.core.context.TEntry;
 import com.tedros.core.context.TEntryBuilder;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.context.TedrosContext;
+import com.tedros.core.presenter.ITPresenter;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.ejb.base.result.TResult;
@@ -31,6 +32,7 @@ import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
+import com.tedros.fxapi.presenter.view.group.TGroupPresenter;
 import com.tedros.fxapi.process.TEntityProcess;
 
 import javafx.beans.property.BooleanProperty;
@@ -512,8 +514,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			}
 		}
 		
-		if(saveAction!=null)
-			saveAction.runAfter(presenter);
+		
 	}
 	
 	
@@ -549,9 +550,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				public void changed(ObservableValue<? extends State> arg0, State arg1, State arg2) {
 					if(arg2.equals(State.SUCCEEDED)){
 						List<TResult<E>> resultados = (List<TResult<E>>) process.getValue();
-						if(resultados.isEmpty())
+						if(resultados.isEmpty()) {
+							if(saveAction!=null)
+								saveAction.runAfter(getPresenter());
 							return;
-						
+						}
 						TResult result = resultados.get(0);
 						E entity = (E) result.getValue();
 						if(entity!=null){
@@ -562,12 +565,13 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 												: iEngine.getFormatedString("#{tedros.fxapi.message.save}", model.getDisplayProperty().getValue());
 						
 								mensagens.add(msg);
-							} catch (Exception e) 
-							{	
+							} catch (Exception e) {	
 								mensagens.add(iEngine.getString("#{tedros.fxapi.message.error.save}")+"\n"+e.getMessage());
 								e.printStackTrace();
 							}
 						}
+						if(saveAction!=null)
+							saveAction.runAfter(getPresenter());
 						if(result.getResult().getValue() == EnumResult.ERROR.getValue()){
 							System.out.println(result.getMessage());
 							mensagens.add(result.getMessage());
@@ -576,6 +580,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 							System.out.println(result.getMessage());
 							mensagens.add(iEngine.getString("#{tedros.fxapi.message.outdate}"));
 						}
+						
 					}	
 				}
 
@@ -667,12 +672,19 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				
 		ITModule module = getPresenter().getModule() ;
 		
-		final TDynaPresenter presenter = (TDynaPresenter) TedrosAppManager.getInstance()
+		ITPresenter presenter = 
+				TedrosAppManager.getInstance()
 				.getModuleContext(module).getCurrentViewContext().getPresenter();
 		
 		if(presenter==null)
 			throw new RuntimeException("The ITPresenter was not present in TViewContext while build the "+module.getClass().getSimpleName()+" module");
-		return presenter;
+		
+		presenter = presenter instanceof TGroupPresenter
+				? ((TGroupPresenter)presenter).getSelectedView().gettPresenter()
+						: presenter;
+				
+		
+		return (TDynaPresenter) presenter;
 	}
 	
 	public String canInvalidate() {
