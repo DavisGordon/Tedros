@@ -23,8 +23,8 @@ public class TEmailUtil {
 	public static void main(String[] args) {
 		try {
 			TEmailUtil.getInstance("smtp.gmail.com", "587", "javax.net.ssl.SSLSocketFactory", 
-					"true", "587", "tedrosbox@gmail.com", "$tdrs#221978@")
-			.sent(true, "tedrosbox@gmail.com", "davis.dun@gmail.com", "subject", "content", true);
+					"true", "587", "@gmail.com", "")
+			.sent(true, "@gmail.com", ".@gmail.com", "subject", "content", true);
 		} catch (TSentEmailException e) {
 			e.printStackTrace();
 		}

@@ -55,7 +55,7 @@ public class DocumentoModelView extends TEntityModelView<Documento>{
 	@TTrigger(	targetFieldName="numero", 
 				triggerClass=TDocumentoTrigger.class, 
 				runAfterFormBuild=true,
-				associatedFieldBox={"dataEmissao", "dataValidade", "orgaoEmissor"})
+				associatedFieldBox={"nacionalidade", "dataEmissao", "dataValidade", "orgaoEmissor"})
 	@THorizontalRadioGroup(required=true, alignment=Pos.CENTER_LEFT, spacing=4, 
 	radioButtons={
 			@TRadioButtonField(text = "#{label.identity}", userData = "1"),
@@ -70,12 +70,18 @@ public class DocumentoModelView extends TEntityModelView<Documento>{
 	@TMaskField(required=true, textInputControl=@TTextInputControl(promptText="Identidade, Cpf ou Cnpj", parse = true),
 	mask="######################")
 	@TValidator(validatorClass = DocumentoValidator.class, associatedFieldsName={"tipo"})
-	@THBox(	pane=@TPane(children={"numero","dataEmissao","dataValidade","orgaoEmissor"}), spacing=10, fillHeight=true,
+	@THBox(	pane=@TPane(children={"numero", "nacionalidade", "dataEmissao","dataValidade","orgaoEmissor"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="numero", priority=Priority.ALWAYS), 
+						@TPriority(field="nacionalidade", priority=Priority.ALWAYS), 
    				   		@TPriority(field="dataEmissao", priority=Priority.ALWAYS), 
    				   		@TPriority(field="dataValidade", priority=Priority.ALWAYS), 
    				   		@TPriority(field="orgaoEmissor", priority=Priority.ALWAYS) }))
 	private SimpleStringProperty numero;
+	
+	@TReaderHtml
+	@TLabel(text="Nacionalidade")
+	@TTextField(maxLength=100)
+	private SimpleStringProperty nacionalidade;
 	
 	@TReaderHtml
 	@TLabel(text="Data de emissão")
@@ -194,6 +200,20 @@ public class DocumentoModelView extends TEntityModelView<Documento>{
 
 	public final void setId(SimpleLongProperty id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return the nacionalidade
+	 */
+	public SimpleStringProperty getNacionalidade() {
+		return nacionalidade;
+	}
+
+	/**
+	 * @param nacionalidade the nacionalidade to set
+	 */
+	public void setNacionalidade(SimpleStringProperty nacionalidade) {
+		this.nacionalidade = nacionalidade;
 	}
 
 }

@@ -29,6 +29,7 @@
 		<class>com.covidsemfome.model.Produto</class>
 		<class>com.tedros.common.model.TFileEntity</class>
 		<class>com.tedros.common.model.TByteEntity</class>
+		<class>com.covidsemfome.model.TermoAdesao</class>
 		
 		<properties>
 		

@@ -42,6 +42,8 @@ public class Documento extends TEntity {
 	@Column(name = "observacao", length=300, nullable = true)
 	private String observacao;
 	
+	@Column(length=100, nullable = true)
+	private String nacionalidade;
 	
 	@OneToOne
 	@JoinColumn(name = "pess_id", referencedColumnName = "id")
@@ -136,6 +138,20 @@ public class Documento extends TEntity {
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+
+	/**
+	 * @return the nacionalidade
+	 */
+	public String getNacionalidade() {
+		return nacionalidade;
+	}
+
+	/**
+	 * @param nacionalidade the nacionalidade to set
+	 */
+	public void setNacionalidade(String nacionalidade) {
+		this.nacionalidade = nacionalidade;
 	}
 	
 	

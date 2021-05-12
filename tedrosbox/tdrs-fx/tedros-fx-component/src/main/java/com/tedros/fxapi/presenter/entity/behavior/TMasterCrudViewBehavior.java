@@ -41,7 +41,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	
 	private String paginatorServiceName;
 	private String searchFieldName;
-	
+	private TPaginator tPagAnn = null;
 	protected TMasterCrudViewDecorator<M> decorator;
 		
 	@Override
@@ -51,10 +51,8 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		initialize();
 	}
 		
-	@SuppressWarnings("unchecked")
 	public void initialize() {
-		try{
-			
+		
 			configCancelAction();
 			configColapseButton();
 			configNewButton();
@@ -68,16 +66,27 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 			configListViewChangeListener();
 			configListViewCallBack();
 			
-			TPaginator tPagAnn = null;
+			
 			TListViewPresenter tAnnotation = getPresenter().getModelViewClass().getAnnotation(TListViewPresenter.class);
 			if(tAnnotation!=null){
 				tPagAnn = tAnnotation.paginator();
 				this.paginatorServiceName = tPagAnn.serviceName();
 				this.searchFieldName = tPagAnn.searchFieldName();
-				if(tPagAnn.showSearchField() && StringUtils.isBlank(this.searchFieldName))
-					throw new TException("The property searchFieldName in TPaginator annotation is required when showSearhField is true.");
+				try {
+					if(tPagAnn.showSearchField() && StringUtils.isBlank(this.searchFieldName))
+						throw new TException("The property searchFieldName in TPaginator annotation is required when showSearhField is true.");
+				}catch(TException e){
+					getView().tShowModal(new TMessageBox(e), true);
+					e.printStackTrace();
+				}
 			}
 			
+			loadModels();
+		}
+	
+	@SuppressWarnings("unchecked")
+	public void loadModels() {
+		try{
 			if(tPagAnn!=null && tPagAnn.show()) {
 				TPaginationProcess process = new TPaginationProcess(super.getEntityClass(), this.paginatorServiceName) {};
 				ChangeListener<State> prcl = (arg0, arg1, arg2) -> {
