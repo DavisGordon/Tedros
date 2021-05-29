@@ -132,6 +132,11 @@ extends TDynaViewCrudBaseDecorator<M> {
 			nodes = ArrayUtils.add(nodes, gettSaveButton());
 		}
 		
+		if(tDeco.buildPrintButton()) {
+			buildPrintButton(null);
+			nodes = ArrayUtils.add(nodes, gettPrintButton());
+		}
+		
 		if(tDeco.buildCancelButton()) {
 			buildCancelButton(null);
 			nodes = ArrayUtils.add(nodes, gettCancelButton());

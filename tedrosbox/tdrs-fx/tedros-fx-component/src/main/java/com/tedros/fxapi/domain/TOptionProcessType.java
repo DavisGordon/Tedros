@@ -14,5 +14,5 @@ package com.tedros.fxapi.domain;
  */
 public enum TOptionProcessType {
 	LIST_ALL,
-	CUSTOM_FILTER;
+	SEARCH;
 }

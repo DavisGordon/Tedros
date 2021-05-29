@@ -6,10 +6,7 @@
  */
 package com.covidsemfome.module.acao.process;
 
-import java.util.List;
-
 import com.covidsemfome.model.Acao;
-import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.process.TEntityProcess;
 
@@ -32,12 +29,6 @@ public class AcaoProcess extends TEntityProcess<Acao> {
 			a.setStatus("Agendada");
 			super.save(a);
 		}*/
-		
-	}
-
-
-	@Override
-	public void execute(List<TResult<Acao>> resultados) {
 		
 	}
 

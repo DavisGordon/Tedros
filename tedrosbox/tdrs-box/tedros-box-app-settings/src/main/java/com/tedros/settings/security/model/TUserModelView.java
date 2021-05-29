@@ -45,7 +45,6 @@ import com.tedros.fxapi.presenter.entity.behavior.TMasterCrudViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.settings.security.action.TEncriptPasswordChangeListener;
-import com.tedros.settings.security.process.LoadTProfileOptionListProcess;
 import com.tedros.settings.security.process.TUserProcess;
 
 import javafx.beans.property.SimpleBooleanProperty;
@@ -126,8 +125,7 @@ public class TUserModelView extends TEntityModelView<TUser> {
 	@TPickListField(selectedLabel="#{label.selected}", 
 			sourceLabel="#{label.profiles}", required=true,
 			optionsList=@TOptionsList(entityClass=TProfile.class,
-						optionModelViewClass=TProfileModelView.class, 
-						optionsProcessClass=LoadTProfileOptionListProcess.class))
+						optionModelViewClass=TProfileModelView.class, serviceName = "TProfileControllerRemote"))
 	@TModelViewCollectionType(modelClass=TProfile.class, modelViewClass=TProfileModelView.class, required=true)
 	private ITObservableList<TProfileModelView> profiles;
 	

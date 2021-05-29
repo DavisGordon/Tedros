@@ -34,6 +34,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	private Button tEditButton;
 	private Button tCancelButton;
 	private Button tImportButton;
+	private Button tPrintButton;
 	
     private RadioButton tEditModeRadio;
     private RadioButton tReadModeRadio;
@@ -137,6 +138,36 @@ extends TDynaViewSimpleBaseDecorator<M> {
 			tEditModeRadio.setDisable(true);
 		if(isUserNotAuthorized(TAuthorizationType.READ))
 			tReadModeRadio.setDisable(true);
+	}
+	/**
+	 * <p>
+	 * Build a button for the print action.<br><br>
+	 * 
+	 * If the parameter was null this will use the text set up
+	 * in @{@link TPresenter}{decorator= @{@link TDecorator}{printButtonText=''}} 
+	 * but if the given {@link TModelView} was not annotated with {@link TPresenter} 
+	 * or with a custom view annotation which contains a {@link TPresenter} 
+	 * a default string (TAnnotationDefaultValue.TVIEW_printButtonText) will be used.<br><br> 
+	 * 
+	 * This will initialize with "t-button" id.
+	 * </p>
+	 * */
+	public void buildPrintButton(String text) {
+		if(text==null){
+			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
+			tPrintButton = new Button();
+			tPrintButton.setText(iEngine.getString(tPresenter==null 
+					? TAnnotationDefaultValue.TVIEW_printButtonText 
+							: tPresenter.decorator().printButtonText()));
+			tPrintButton.setId("t-button");
+		}else{
+			tPrintButton = new Button();
+			tPrintButton.setText(iEngine.getString(text));
+			tPrintButton.setId("t-button");
+		}
+		
+		if(isUserNotAuthorized(TAuthorizationType.PRINT))
+			tPrintButton.setDisable(true);
 	}
 	
 	/**
@@ -425,6 +456,13 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	 */
 	public Button gettImportButton() {
 		return tImportButton;
+	}
+
+	/**
+	 * @return the tPrintButton
+	 */
+	public Button gettPrintButton() {
+		return tPrintButton;
 	}
 
 	

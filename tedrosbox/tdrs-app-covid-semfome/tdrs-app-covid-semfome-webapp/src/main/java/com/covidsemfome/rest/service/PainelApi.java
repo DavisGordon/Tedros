@@ -26,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.covidsemfome.ejb.controller.IAcaoController;
 import com.covidsemfome.ejb.controller.IAutUserController;
 import com.covidsemfome.ejb.controller.IPessoaController;
+import com.covidsemfome.ejb.controller.ITermoAdesaoController;
 import com.covidsemfome.ejb.controller.ITipoAjudaController;
 import com.covidsemfome.ejb.controller.IUFController;
 import com.covidsemfome.ejb.controller.IVoluntarioController;
@@ -34,11 +35,14 @@ import com.covidsemfome.model.Contato;
 import com.covidsemfome.model.Documento;
 import com.covidsemfome.model.Endereco;
 import com.covidsemfome.model.Pessoa;
+import com.covidsemfome.model.PessoaTermoAdesao;
+import com.covidsemfome.model.TermoAdesao;
 import com.covidsemfome.model.TipoAjuda;
 import com.covidsemfome.model.UF;
 import com.covidsemfome.model.Voluntario;
 import com.covidsemfome.rest.model.AcaoModel;
 import com.covidsemfome.rest.model.RestModel;
+import com.covidsemfome.rest.model.TermoAdesaoModel;
 import com.covidsemfome.rest.model.UserModel;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
@@ -78,6 +82,15 @@ public class PainelApi {
 	
 	@EJB 
 	private IUFController ufServ;
+	
+	@EJB 
+	private ITermoAdesaoController tAdServ;
+	
+	/*@GET
+	@Path("/")
+	public RestModel<String> x(){
+		
+	}*/
 	
 	@GET
 	@Path("/logout")
@@ -321,7 +334,30 @@ public class PainelApi {
 			}
 			UserModel m = new UserModel(p.getId(), p.getNome(), p.getLoginName(), telefone, p.getSexo(), p.getTipoVoluntario(), 
 					p.getProfissao(), nac, p.getEstadoCivil(), ident, cpf, tpLogr, logr, compl, bairro, cidade, cep, ufid);
+			
+			if(p.getTermosAdesao()!=null && !p.getTermosAdesao().isEmpty()) {
+				for(PessoaTermoAdesao t : p.getTermosAdesao()) {
+					if(t.getStatus().equals("ATIVADO")){
+						TermoAdesaoModel a = new TermoAdesaoModel(t);
+						m.setTermoAdesao(a);
+					}	
+				}
+			}
+			
+			if(m.getTermoAdesao()==null) {
+				TermoAdesao t = new TermoAdesao();
+				t.setStatus("ATIVADO");
+				
+				TResult<TermoAdesao> r = tAdServ.find(t);
+				if(r.getValue()!=null) {
+					t = r.getValue();
+					TermoAdesaoModel a = new TermoAdesaoModel(t);
+					m.setTermoAdesao(a);
+				}
+			}
+			
 			return new RestModel<>(m, "200", "OK");
+			
 		}catch(Exception e){
 			e.printStackTrace();
 			return new RestModel<>(null, "500", ERROR);

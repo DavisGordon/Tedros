@@ -7,7 +7,6 @@ import com.covidsemfome.model.Doacao;
 import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.TipoAjuda;
 import com.covidsemfome.module.voluntario.model.TipoAjudaModelView;
-import com.covidsemfome.module.voluntario.process.LoadTipoAjudaOptionListProcess;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.control.TBigDecimalField;
@@ -40,7 +39,6 @@ import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.domain.THtmlConstant;
-import com.tedros.fxapi.domain.TOptionProcessType;
 import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
@@ -94,8 +92,8 @@ public class DoacaoModelView extends TEntityModelView<Doacao>{
 	@TLabel(text="Tipo ajuda")
 	@TComboBoxField(firstItemTex="Selecione a forma de doação...", required=true, 
 			control=@TControl(parse = true, minWidth=270),
-			optionsList=@TOptionsList(optionsProcessClass = LoadTipoAjudaOptionListProcess.class, 
-			entityClass=TipoAjuda.class, optionModelViewClass=TipoAjudaModelView.class, optionProcessType=TOptionProcessType.LIST_ALL ))
+			optionsList=@TOptionsList(entityClass=TipoAjuda.class, optionModelViewClass=TipoAjudaModelView.class, 
+			serviceName = "ITipoAjudaControllerRemote" ))
 	private SimpleObjectProperty<TipoAjuda> tipoAjuda;
 	
 	@TReaderHtml

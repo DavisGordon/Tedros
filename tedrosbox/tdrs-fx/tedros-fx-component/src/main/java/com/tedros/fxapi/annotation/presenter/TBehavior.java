@@ -31,6 +31,14 @@ public @interface TBehavior {
 	 * */
 	@SuppressWarnings("rawtypes")
 	public Class<? extends Callback> listViewCallBack() default TEntityListViewCallback.class;
+
+	/**
+	 * <pre>
+	 * Specifies an action to the print event dispatched by the print button;
+	 * </pre>
+	 * */
+	@SuppressWarnings("rawtypes")
+	public Class<? extends TPresenterAction> printAction() default TPresenterAction.class;
 	
 	/**
 	 * <pre>
@@ -206,6 +214,7 @@ public @interface TBehavior {
 	 * </code>
 	 * 
 	 * */
+	@SuppressWarnings("rawtypes")
 	public Class<? extends TImportModelView> importModelViewClass() default TImportModelView.class;
 	
 	/**
@@ -218,6 +227,7 @@ public @interface TBehavior {
 	 * The model view type to be built with the result of the import process. 
 	 * This must be set in a TImportModelView type.
 	 * */
+	@SuppressWarnings("rawtypes")
 	public Class<? extends TModelView> importedModelViewClass() default TModelView.class;
 
 	

@@ -11,7 +11,6 @@ import java.lang.annotation.Annotation;
 import com.tedros.fxapi.annotation.control.THTMLEditor;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.web.HTMLEditor;
 
 
 /**
@@ -22,20 +21,15 @@ import javafx.scene.web.HTMLEditor;
  */
 public final class THTMLEditorBuilder 
 extends TBuilder
-implements ITControlBuilder<HTMLEditor, SimpleStringProperty> {
+implements ITControlBuilder<com.tedros.fxapi.control.THTMLEditor, SimpleStringProperty> {
 	
-	public HTMLEditor build(final Annotation annotation, final SimpleStringProperty attrProperty) throws Exception {
+	public com.tedros.fxapi.control.THTMLEditor build(final Annotation annotation, final SimpleStringProperty attrProperty) throws Exception {
 	
 		final THTMLEditor tAnnotation = (THTMLEditor) annotation;
-		final HTMLEditor control = new HTMLEditor();
+		final com.tedros.fxapi.control.THTMLEditor control = new com.tedros.fxapi.control.THTMLEditor(attrProperty);
         
-		if(attrProperty.getValue()!=null)
-			control.setHtmlText(attrProperty.getValue());
-		//control.
-		callParser(tAnnotation, control);
 		
-		if(attrProperty.getValue()!=null)
-			control.setHtmlText(attrProperty.getValue());
+		callParser(tAnnotation, control);
 		
 		return control;
 	}

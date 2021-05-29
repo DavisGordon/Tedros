@@ -59,6 +59,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 			configSaveButton();
 			configDeleteButton();
 			configImportButton();
+			configPrintButton();
 			
 			configModesRadio();
 			configCancelButton();

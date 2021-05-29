@@ -6,11 +6,7 @@
  */
 package com.covidsemfome.module.termoAdesao.process;
 
-import java.util.List;
-
 import com.covidsemfome.model.TermoAdesao;
-import com.tedros.ejb.base.result.TResult;
-import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.process.TEntityProcess;
 
 /**
@@ -21,16 +17,7 @@ import com.tedros.fxapi.process.TEntityProcess;
  */
 public class TermoAdesaoProcess extends TEntityProcess<TermoAdesao> {
 
-	public TermoAdesaoProcess() throws TProcessException {
+	public TermoAdesaoProcess() {
 		super(TermoAdesao.class, "ITermoAdesaoControllerRemote");
-		
-		
 	}
-
-
-	@Override
-	public void execute(List<TResult<TermoAdesao>> resultados) {
-		
-	}
-
 }

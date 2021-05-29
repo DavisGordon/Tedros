@@ -2,24 +2,13 @@ package com.tedros.fxapi.process;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-
-import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.core.service.remote.ServiceLocator;
 import com.tedros.ejb.base.controller.ITEjbController;
-import com.tedros.ejb.base.controller.ITEjbReportController;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
-import com.tedros.ejb.base.result.TResult.EnumResult;
-import com.tedros.fxapi.exception.TProcessException;
-import com.tedros.util.TResourceUtil;
 
 
 /**
@@ -63,7 +52,7 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 	 * @param entityType - The entity class
 	 * @param serviceJndiName - The ejb service jndi name 
 	 * */
-	public TEntityProcess(Class<E> entityType, String serviceJndiName) throws TProcessException {
+	public TEntityProcess(Class<E> entityType, String serviceJndiName){
 		setAutoStart(true);
 		this.values = new ArrayList<>();
 		this.entityType = entityType;
@@ -118,11 +107,27 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 		operation = LIST;
 	}
 	/**
-	 * <pre>Execute the operation</pre>
-	 * @param resultList 
+	 * <pre>The last operation called by the call method.
+	 * Override it for filter or address the results. 
+	 * </pre>
+	 * @param resultList - the result list to be returned by the process
 	 * */
-	public abstract void execute(List<TResult<E>> resultList);
-	
+	public void runAfter(List<TResult<E>> resultList) {
+		
+	}
+	/**
+	 * <pre>The first operation called by the call method.
+	 * Override it for custom operation. 
+	 * Returning false the process is finalized otherwise 
+	 * it continues processing.
+	 * </pre>
+	 * @param resultList - the result list to be returned by the process
+	 * @return boolean - false the process is finalized otherwise 
+	 * it continues processing
+	 * */
+	public boolean runBefore(List<TResult<E>> resultList) {
+		return true;
+	}
 	/**
 	 * <pre>Create the task to be executed</pre>
 	 * @return TTaskImpl 
@@ -142,7 +147,9 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
         		
         		List<TResult<E>> resultList = new ArrayList<>();
         		try {
-	        		execute(resultList);
+	        		if(!runBefore(resultList)) {
+	        			return resultList;
+	        		};
 	        		ServiceLocator loc = ServiceLocator.getInstance();
 	        		ITEjbController<E> service = (ITEjbController<E>) loc.lookup(serviceJndiName);
 	        		if(service!=null){
@@ -168,14 +175,15 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 								break;
 							case SEARCH :
 								for (E entity : values){
-									TResult<List<E>> result = service.findAll(entity);
-									if(result.getResult().equals(EnumResult.SUCESS)){
+									TResult result = service.findAll(entity);
+									resultList.add(result);
+									/*if(result.getResult().equals(EnumResult.SUCESS)){
 										for(E v : result.getValue()){
 											resultList.add(new TResult<E>(EnumResult.SUCESS, v));
 										}
 									}
 									else 
-										resultList.add(new TResult<E>(EnumResult.ERROR, result.getMessage()));		
+										resultList.add(new TResult<E>(EnumResult.ERROR, result.getMessage()));*/		
 								}
 								break;
 						}
@@ -187,6 +195,7 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 					e.printStackTrace();
 				} 
         		
+        		runAfter(resultList);
         	    return resultList;
         	}
 		};

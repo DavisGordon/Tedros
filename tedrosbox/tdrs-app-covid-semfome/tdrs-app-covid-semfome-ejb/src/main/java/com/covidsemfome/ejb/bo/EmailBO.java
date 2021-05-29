@@ -100,7 +100,7 @@ public class EmailBO {
 				
 	}
 	
-	public void enviarEmailParticiparAcao(Voluntario v) throws TSentEmailException, EmailBusinessException{
+	public void enviarEmailParticiparAcao(Voluntario v, String termo) throws TSentEmailException, EmailBusinessException{
 		
 		Pessoa p = v.getPessoa();
 		
@@ -119,7 +119,8 @@ public class EmailBO {
 				+ formataDataHora(v.getAcao().getData())+"."
 				+ "<br>Email: "+p.getLoginName()
 				+ "<br>Cel/Tel: "+cel
-				+ "<hr>Tipo de ajuda:"+tajs;
+				+ "<br>Tipo de ajuda:"+tajs
+				+ (termo!=null ? "<hr><br>Termo de adesão:<br><br>" + termo : "");
 		
 		String to = pessBO.estrategicoEmail();
 		if(to.isEmpty())

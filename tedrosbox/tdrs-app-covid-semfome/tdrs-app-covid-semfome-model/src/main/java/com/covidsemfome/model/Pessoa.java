@@ -21,6 +21,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -107,6 +108,39 @@ public class Pessoa extends TEntity {
 	
 	public Pessoa(String nome) {
 		this.nome = nome;
+	}
+	
+	public boolean isTermoAdesaoNecessario(Set<TipoAjuda> lst) {
+		PessoaTermoAdesao pta = this.getTermosAdesaoVigente();
+		return pta==null || (pta!=null && !pta.isTermoValido(lst));
+	}
+	
+	public boolean isTermoAdesaoElegivel() {
+		boolean a = StringUtils.isNotBlank(nome) && StringUtils.isNotBlank(profissao) 
+				&& StringUtils.isNotBlank(estadoCivil);
+		
+		boolean b = false;
+		if (this.getDocumentos()!=null) {
+			int t = 2;
+			for(Documento d : this.getDocumentos())
+				if(d.getTipo().equals("1") || d.getTipo().equals("2"))
+					t--;
+			b = t==0;
+		}
+		
+		boolean c = false;
+		if (this.getEnderecos()!=null) {
+			for(Endereco e : this.getEnderecos())
+				if(e.getTipo().equals("1")) {
+					c = StringUtils.isNotBlank(e.getTipoLogradouro()) && StringUtils.isNotBlank(e.getLogradouro()) 
+							&& StringUtils.isNotBlank(e.getComplemento()) && StringUtils.isNotBlank(e.getBairro()) 
+							&& StringUtils.isNotBlank(e.getCidade()) && StringUtils.isNotBlank(e.getCep()) 
+							&& e.getUf()!=null;
+				}
+					
+		}
+		
+		return (a && b && c);
 	}
 	
 	@Override
@@ -298,10 +332,22 @@ public class Pessoa extends TEntity {
 	/**
 	 * @return the termosAdesao
 	 */
+	public PessoaTermoAdesao getTermosAdesaoVigente() {
+		if(termosAdesao!=null)
+			for(PessoaTermoAdesao e : termosAdesao)
+				if(e.getStatus().equals("ATIVADO"))
+					return e;
+		return null;
+	}
+
+
+	/**
+	 * @return the termosAdesao
+	 */
 	public Set<PessoaTermoAdesao> getTermosAdesao() {
 		return termosAdesao;
 	}
-
+	
 	/**
 	 * @param termosAdesao the termosAdesao to set
 	 */

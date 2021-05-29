@@ -13,11 +13,11 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityExistsException;
 
 import com.covidsemfome.ejb.exception.EmailBusinessException;
 import com.covidsemfome.ejb.producer.Item;
 import com.covidsemfome.ejb.service.AcaoService;
+import com.covidsemfome.ejb.service.PessoaService;
 import com.covidsemfome.ejb.service.TipoAjudaService;
 import com.covidsemfome.ejb.service.VoluntarioService;
 import com.covidsemfome.model.Acao;
@@ -41,11 +41,15 @@ public class VoluntarioController extends TEjbController<Voluntario> implements 
 	@EJB(beanName="IVoluntarioService")
 	private VoluntarioService serv;
 	
+	@EJB(beanName="IPessoaService")
+	private PessoaService pServ;
+	
 	@EJB(beanName="ITipoAjudaService")
 	private TipoAjudaService tpServ;
 	
 	@EJB(beanName="IAcaoService")
 	private AcaoService aServ;
+	
  
 	@Inject
 	@Named("errorMsg")
@@ -69,6 +73,10 @@ public class VoluntarioController extends TEjbController<Voluntario> implements 
 				tiposAjudaSet.add(tpRes);
 			}
 			
+			if(pessoa.isTermoAdesaoNecessario(tiposAjudaSet) && !pessoa.isTermoAdesaoElegivel()) {
+				return new TResult<>(EnumResult.WARNING, "Favor informar seus dados pessoais primeiro.");
+			} 
+			
 			Voluntario v = getVoluntario(acao, pessoa);
 			
 			if(v==null){
@@ -81,7 +89,12 @@ public class VoluntarioController extends TEjbController<Voluntario> implements 
 			v.setTiposAjuda(tiposAjudaSet);
 			aServ.save(acao);
 			
-			aServ.enviarEmailParticiparAcao(v);
+			String termo = null;
+			if(pessoa.isTermoAdesaoNecessario(tiposAjudaSet) && pessoa.isTermoAdesaoElegivel()) {
+				termo = pServ.gerarTermoAdesao(pessoa, tiposAjudaSet, acao.getData());
+			}
+			
+			aServ.enviarEmailParticiparAcao(v, termo);
 			
 			List<Acao> lst = aServ.listAcoesParaExibirNoPainel();
 			return new TResult<>(EnumResult.SUCESS, "", lst);

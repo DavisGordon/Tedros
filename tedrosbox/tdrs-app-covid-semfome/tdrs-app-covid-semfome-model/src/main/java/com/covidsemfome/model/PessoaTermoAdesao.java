@@ -3,6 +3,7 @@
  */
 package com.covidsemfome.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -41,13 +42,32 @@ public class PessoaTermoAdesao extends TEntity {
 	private Set<TipoAjuda> tiposAjuda;
 	
 	@Column(nullable=false)
-	private String termoAdesao;
+	private String conteudo;
+	
+	@Column(length=12, nullable = false)
+	private String status;
+	
 	/**
 	 * 
 	 */
 	public PessoaTermoAdesao() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	public boolean isTermoValido(Set<TipoAjuda> selected) {
+		if(this.tiposAjuda==null)
+			return false;
+		if(selected!=null && this.tiposAjuda!=null) {
+			for(TipoAjuda a : selected) {
+				if(!this.tiposAjuda.contains(a)) {
+					return false;
+				}
+			}
+		}
+		
+		return true;
+	}
+	
 	/**
 	 * @return the pessoa
 	 */
@@ -59,6 +79,9 @@ public class PessoaTermoAdesao extends TEntity {
 	 */
 	public void setPessoa(Pessoa pessoa) {
 		this.pessoa = pessoa;
+		if(this.pessoa.getTermosAdesao()==null)
+			this.pessoa.setTermosAdesao(new HashSet<>());
+		this.pessoa.getTermosAdesao().add(this);
 	}
 	/**
 	 * @return the tiposAjuda
@@ -72,58 +95,31 @@ public class PessoaTermoAdesao extends TEntity {
 	public void setTiposAjuda(Set<TipoAjuda> tiposAjuda) {
 		this.tiposAjuda = tiposAjuda;
 	}
+	
+	
 	/**
-	 * @return the termoAdesao
+	 * @return the status
 	 */
-	public String getTermoAdesao() {
-		return termoAdesao;
+	public String getStatus() {
+		return status;
 	}
 	/**
-	 * @param termoAdesao the termoAdesao to set
+	 * @param status the status to set
 	 */
-	public void setTermoAdesao(String termoAdesao) {
-		this.termoAdesao = termoAdesao;
+	public void setStatus(String status) {
+		this.status = status;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
+	/**
+	 * @return the conteudo
 	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((pessoa == null) ? 0 : pessoa.hashCode());
-		result = prime * result + ((termoAdesao == null) ? 0 : termoAdesao.hashCode());
-		result = prime * result + ((tiposAjuda == null) ? 0 : tiposAjuda.hashCode());
-		return result;
+	public String getConteudo() {
+		return conteudo;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/**
+	 * @param conteudo the conteudo to set
 	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PessoaTermoAdesao other = (PessoaTermoAdesao) obj;
-		if (pessoa == null) {
-			if (other.pessoa != null)
-				return false;
-		} else if (!pessoa.equals(other.pessoa))
-			return false;
-		if (termoAdesao == null) {
-			if (other.termoAdesao != null)
-				return false;
-		} else if (!termoAdesao.equals(other.termoAdesao))
-			return false;
-		if (tiposAjuda == null) {
-			if (other.tiposAjuda != null)
-				return false;
-		} else if (!tiposAjuda.equals(other.tiposAjuda))
-			return false;
-		return true;
+	public void setConteudo(String conteudo) {
+		this.conteudo = conteudo;
 	}
 
 

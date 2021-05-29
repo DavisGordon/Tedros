@@ -5,7 +5,6 @@ import java.util.Date;
 import com.covidsemfome.model.TipoAjuda;
 import com.covidsemfome.module.report.process.DoacaoReportProcess;
 import com.covidsemfome.module.voluntario.model.TipoAjudaModelView;
-import com.covidsemfome.module.voluntario.process.LoadTipoAjudaOptionListProcess;
 import com.covidsemfome.report.model.DoacaoItemModel;
 import com.covidsemfome.report.model.DoacaoReportModel;
 import com.tedros.core.annotation.security.TAuthorizationType;
@@ -101,8 +100,7 @@ public class DoacaoReportModelView extends TModelView<DoacaoReportModel>{
 	@TPickListField(selectedLabel="#{label.selected}", 
 			sourceLabel="Tipo Ajuda", required=false,
 			optionsList=@TOptionsList(entityClass=TipoAjuda.class,
-						optionModelViewClass=TipoAjudaModelView.class, 
-						optionsProcessClass=LoadTipoAjudaOptionListProcess.class))
+						optionModelViewClass=TipoAjudaModelView.class, serviceName = "ITipoAjudaControllerRemote"))
 	@TModelViewCollectionType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=false)
 	private ITObservableList<TipoAjudaModelView> tiposAjuda;
 	

@@ -30,22 +30,21 @@ public class TAuthorizationProcess extends TEntityProcess<TAuthorization> {
 		this.lst = lst;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.process.TEntityProcess#execute(java.util.List)
-	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public void execute(List<TResult<TAuthorization>> res) {
-		if(lst==null)
-			return;
-		ServiceLocator loc = ServiceLocator.getInstance();
-		try {
-			TAuthorizationController serv = loc.lookup("TAuthorizationControllerRemote");
-			res.add(serv.process(lst));
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}finally {
-			loc.close();
+	public boolean runBefore(List<TResult<TAuthorization>> res) {
+		if(lst!=null){
+			ServiceLocator loc = ServiceLocator.getInstance();
+			try {
+				TAuthorizationController serv = loc.lookup("TAuthorizationControllerRemote");
+				res.add(serv.process(lst));
+			} catch (NamingException e) {
+				e.printStackTrace();
+			}finally {
+				loc.close();
+			}
 		}
+		return false;
 	}
 
 }

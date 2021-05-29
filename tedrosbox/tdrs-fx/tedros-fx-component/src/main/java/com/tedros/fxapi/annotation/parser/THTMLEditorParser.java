@@ -2,12 +2,10 @@ package com.tedros.fxapi.annotation.parser;
 
 import com.tedros.fxapi.annotation.control.THTMLEditor;
 
-import javafx.scene.web.HTMLEditor;
-
-public class THTMLEditorParser extends TAnnotationParser<THTMLEditor, HTMLEditor> {
+public class THTMLEditorParser extends TAnnotationParser<THTMLEditor, com.tedros.fxapi.control.THTMLEditor> {
 
 	@Override
-	public void parse(THTMLEditor annotation, HTMLEditor object, String... byPass)
+	public void parse(THTMLEditor annotation, com.tedros.fxapi.control.THTMLEditor object, String... byPass)
 			throws Exception {
 		
 		super.parse(annotation, object);

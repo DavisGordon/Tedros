@@ -6,6 +6,8 @@ import com.covidsemfome.model.Contato;
 import com.covidsemfome.model.Documento;
 import com.covidsemfome.model.Endereco;
 import com.covidsemfome.model.Pessoa;
+import com.covidsemfome.model.PessoaTermoAdesao;
+import com.covidsemfome.model.TermoAdesao;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.TCodeValue;
@@ -259,7 +261,9 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 				@TTab(	text = "#{label.contacts}", closable=false, 
 				  		content = @TContent(detailForm = @TDetailForm(fields= {"contatos"}))),
 				@TTab(	text = "#{label.address}", closable=false, 
-						content = @TContent(detailForm = @TDetailForm(fields= {"enderecos"})))})
+						content = @TContent(detailForm = @TDetailForm(fields= {"enderecos"}))),
+				@TTab(	text = "Termo adesão", closable=false, 
+				content = @TContent(detailForm = @TDetailForm(fields= {"termosAdesao"})))})
 	@TDetailListField(entityModelViewClass = DocumentoModelView.class, entityClass = Documento.class)
 	@TModelViewCollectionType(modelClass=Documento.class, modelViewClass=DocumentoModelView.class)
 	private ITObservableList<DocumentoModelView> documentos;
@@ -273,6 +277,11 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	@TDetailListField(entityModelViewClass = EnderecoModelView.class, entityClass = Endereco.class)
 	@TModelViewCollectionType(modelClass=Endereco.class, modelViewClass=EnderecoModelView.class)
 	private ITObservableList<EnderecoModelView> enderecos;
+	
+	@TDetailReaderHtml(label=@TLabel(text="Termo adesão"), entityClass=PessoaTermoAdesao.class, modelViewClass=PessoaTermoAdesaoModelView.class)
+	@TDetailListField(entityModelViewClass = PessoaTermoAdesaoModelView.class, entityClass = PessoaTermoAdesao.class)
+	@TModelViewCollectionType(modelClass=PessoaTermoAdesao.class, modelViewClass=PessoaTermoAdesaoModelView.class)
+	private ITObservableList<PessoaTermoAdesaoModelView> termosAdesao;
 	
 	private SimpleStringProperty lastPassword;
 	
@@ -596,6 +605,20 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	 */
 	public void setEstadoCivil(SimpleStringProperty estadoCivil) {
 		this.estadoCivil = estadoCivil;
+	}
+
+	/**
+	 * @return the termosAdesao
+	 */
+	public ITObservableList<PessoaTermoAdesaoModelView> getTermosAdesao() {
+		return termosAdesao;
+	}
+
+	/**
+	 * @param termosAdesao the termosAdesao to set
+	 */
+	public void setTermosAdesao(ITObservableList<PessoaTermoAdesaoModelView> termosAdesao) {
+		this.termosAdesao = termosAdesao;
 	}
 
 

@@ -417,7 +417,14 @@
     		function validateTpa(formData, jqForm, options) { 
     		    
     		    var form = jqForm[0]; 
-    		    if (form.tiposAjuda[0]=='') { 
+    		    var f = false;
+    		    $.each(form.tiposAjuda, function(index,obj){
+    		    	if(obj.checked){
+    		    		f = true;
+    		    	}
+    		    		
+    		    });
+    		    if (!f) { 
     		        alert('Por favor selecionar uma forma de como deseja ajudar.'); 
     		        return false; 
     		    } 

@@ -13,11 +13,13 @@ import java.lang.annotation.Target;
 
 import com.tedros.fxapi.annotation.parser.ITAnnotationParser;
 import com.tedros.fxapi.annotation.parser.THTMLEditorParser;
+import com.tedros.fxapi.annotation.parser.TRequiredHTMLEditorParser;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.builder.ITControlBuilder;
 import com.tedros.fxapi.builder.ITFieldBuilder;
 import com.tedros.fxapi.builder.THTMLEditorBuilder;
+import com.tedros.fxapi.control.TRequiredHTMLEditor;
 import com.tedros.fxapi.domain.TDefaultValues;
 
 import javafx.scene.Node;
@@ -26,7 +28,7 @@ import javafx.scene.web.HTMLEditor;
 
 /**
  * <pre>
- * Build a {@link javafx.scene.web.HTMLEditor} component.
+ * Build a {@link com.tedros.fxapi.control.THTMLEditor} component.
  * 
  * A control that allows for users to edit text, and apply styling to this text. 
  * The underlying data model is HTML, although this is not shown visually to the end-user.
@@ -50,11 +52,11 @@ public @interface THTMLEditor  {
 	 * <pre>
 	 * The parser class for this annotation.
 	 * 
-	 * Default value: {THTMLEditorParser.class}
+	 * Default value: {TRequiredHTMLEditorParser.class, THTMLEditorParser.class}
 	 * </pre>
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITAnnotationParser>[] parser() default {THTMLEditorParser.class};
+	public Class<? extends ITAnnotationParser>[] parser() default {TRequiredHTMLEditorParser.class, THTMLEditorParser.class};
 	
 	/**
 	 * <pre>
@@ -82,5 +84,20 @@ public @interface THTMLEditor  {
 	 * </pre>
 	 * */
 	public String htmlText() default "<b>HTML editor.</b>";
+	
+	/**
+	 * <pre>
+	 * {@link TRequiredHTMLEditor} Class
+	 * 
+	 * Sets the value of the property required.
+	 * 
+	 * Property description:
+	 * 
+	 * Determines with this control will be required.
+	 * 
+	 * Default value: false.
+	 * </pre>
+	 * */
+	public boolean required() default false;
 
 }

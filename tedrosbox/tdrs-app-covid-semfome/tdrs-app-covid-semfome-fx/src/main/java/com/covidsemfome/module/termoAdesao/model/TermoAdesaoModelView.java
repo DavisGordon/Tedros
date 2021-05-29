@@ -43,7 +43,7 @@ import javafx.scene.text.TextAlignment;
 @TForm(name = "Termo de adesão", showBreadcrumBar=false)
 @TEntityProcess(process = TermoAdesaoProcess.class, entity=TermoAdesao.class)
 @TPresenter(decorator = @TDecorator(viewTitle="Termo de adesão"), 
-		    behavior=@TBehavior(saveAction=TermoAdesaoSaveAction.class))
+		    behavior=@TBehavior(/*saveAction=TermoAdesaoSaveAction.class*/))
 @TSecurity(	id="COVSEMFOME_TERMADES_FORM", 
 	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Termo de adesão",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
@@ -75,14 +75,15 @@ public class TermoAdesaoModelView extends TEntityModelView<TermoAdesao> {
 	
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form",
 			style="-fx-background-color: #FFFFFF", parse = true))
-	@TText(text="#NOME# #NACIONALIDADE# #ESTADOCIVIL# #CPF# #PROFISSAO# "
-			+ "#IDENTIDADE# #RUA# #BAIRRO# #CEP# #CIDADE# #UF# #TIPOSAJUDA# #DATAACAO# #HORAACAO#", 
+	@TText(text="#NOME# #PROFISSAO# #ESTADOCIVIL# #IDENTIDADE# #NACIONALIDADE# #CPF# "
+			+ "#TIPOLOGRADOURO# #LOGRADOURO# #COMPLEMENTO# #BAIRRO# #CEP# #CIDADE# #UF# "
+			+ "#TIPOSAJUDA# #DATAACAO# #HORAACAO#", 
 			wrappingWidth=650,
 			font=@TFont(size=12), textAlignment=TextAlignment.LEFT, 
 	node=@TNode(id="t-label", parse = true))
 	private SimpleStringProperty textoChaves;
 	
-	@THTMLEditor()
+	@THTMLEditor(required=true)
 	private SimpleStringProperty conteudo;
 	
 	public TermoAdesaoModelView(TermoAdesao entity) {

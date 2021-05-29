@@ -30,6 +30,7 @@
 		<class>com.tedros.common.model.TFileEntity</class>
 		<class>com.tedros.common.model.TByteEntity</class>
 		<class>com.covidsemfome.model.TermoAdesao</class>
+		<class>com.covidsemfome.model.PessoaTermoAdesao</class>
 		
 		<properties>
 		

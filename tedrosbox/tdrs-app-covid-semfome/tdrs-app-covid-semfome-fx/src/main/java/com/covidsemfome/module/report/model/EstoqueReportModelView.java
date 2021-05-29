@@ -4,7 +4,6 @@ import java.util.Date;
 
 import com.covidsemfome.model.Cozinha;
 import com.covidsemfome.module.cozinha.model.CozinhaModelView;
-import com.covidsemfome.module.cozinha.process.CozinhaOptionProcess;
 import com.covidsemfome.module.report.process.EstoqueReportProcess;
 import com.covidsemfome.report.model.EstoqueModel;
 import com.covidsemfome.report.model.EstoqueReportModel;
@@ -78,7 +77,7 @@ public class EstoqueReportModelView extends TModelView<EstoqueReportModel>{
    				   		@TPriority(field="origem", priority=Priority.ALWAYS) }))
 	@TLabel(text="Cozinha:")
 	@TComboBoxField(optionsList=@TOptionsList(entityClass=Cozinha.class, 
-	optionModelViewClass=CozinhaModelView.class, optionsProcessClass=CozinhaOptionProcess.class))
+	optionModelViewClass=CozinhaModelView.class, serviceName = "ICozinhaControllerRemote"))
 	private SimpleObjectProperty<Cozinha> cozinha;
 	
 	@TLabel(text="Codigo do estoque")

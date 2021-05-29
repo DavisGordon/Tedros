@@ -34,6 +34,7 @@ import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.presenter.view.group.TGroupPresenter;
 import com.tedros.fxapi.process.TEntityProcess;
+import com.tedros.fxapi.util.TPrintUtil;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -47,6 +48,7 @@ import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
@@ -67,6 +69,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	private BooleanProperty modeBtnVisibleProperty;
 
 	private TPresenterAction<TDynaPresenter<M>> newAction;
+	private TPresenterAction<TDynaPresenter<M>> printAction;
 	private TPresenterAction<TDynaPresenter<M>> importAction;
 	private TPresenterAction<TDynaPresenter<M>> saveAction;
 	private TPresenterAction<TDynaPresenter<M>> deleteAction;
@@ -143,6 +146,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				editAction = tBehavior.editAction().newInstance();
 			if(tBehavior.cancelAction()!=TPresenterAction.class)
 				cancelAction = tBehavior.cancelAction().newInstance();
+			if(tBehavior.printAction()!=TPresenterAction.class)
+				printAction = tBehavior.printAction().newInstance();
 			if(tBehavior.changeModeAction()!=TPresenterAction.class)
 				changeModeAction = tBehavior.changeModeAction().newInstance();
 			
@@ -200,6 +205,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			decorator.gettImportButton().setDisable(!flag);
 		if(decorator.gettDeleteButton()!=null && isUserAuthorized(TAuthorizationType.DELETE))
 			decorator.gettDeleteButton().setDisable(flag);
+		if(decorator.gettPrintButton()!=null && isUserAuthorized(TAuthorizationType.PRINT))
+			decorator.gettPrintButton().setDisable(flag);
 		if(decorator.gettEditModeRadio()!=null && isUserAuthorized(TAuthorizationType.EDIT))
 			decorator.gettEditModeRadio().setDisable(flag);
 		if(decorator.gettReadModeRadio()!=null && isUserAuthorized(TAuthorizationType.READ))
@@ -216,6 +223,20 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			EventHandler<ActionEvent> eh = e -> colapseAction();
 			super.getListenerRepository().add("colapseButtonClickEH", eh);
 			colapseButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
+		}
+	}
+	
+	/**
+	 * Config the print button;
+	 * */
+	public void configPrintButton() {
+		if(isUserAuthorized(TAuthorizationType.PRINT)){
+			final Button printButton = this.decorator.gettPrintButton();
+			if(printButton!=null) {
+				EventHandler<ActionEvent> eh = e -> printAction();
+				super.getListenerRepository().add("printButtonClickEH", eh);
+				printButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
+			}
 		}
 	}
 	
@@ -647,6 +668,22 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	public abstract boolean processNewEntityBeforeBuildForm(M model);
 	
 	/**
+	 * Perform this action when print button onAction is triggered.
+	 * */
+	public void printAction() {
+		final TDynaPresenter<M> presenter = getPresenter();
+		if(printAction==null || (printAction!=null && printAction.runBefore(presenter))){
+			try{
+				TPrintUtil.print((Node) super.getForm());
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		if(printAction!=null)
+			printAction.runAfter(presenter);
+	}
+	
+	/**
 	 * Perform this action when edit button onAction is triggered.
 	 * */
 	public void editAction() {
@@ -891,11 +928,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	public TEntityProcess createEntityProcess() throws Throwable {
 		
 		if((StringUtils.isNotBlank(serviceName)) && this.entityClass!=null && (this.entityProcessClass==null || this.entityProcessClass == TEntityProcess.class)){
-			return new TEntityProcess(entityClass, this.serviceName) {
-				@Override
-				public void execute(List resultList) {
-				}
-			};
+			return new TEntityProcess(entityClass, this.serviceName) {};
 		}
 		
 		if(this.entityProcessClass != null && this.entityProcessClass != TEntityProcess.class)
@@ -1115,6 +1148,20 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 */
 	public void setSkipConfigBreadcrumb(boolean skipConfigBreadcrumb) {
 		this.skipConfigBreadcrumb = skipConfigBreadcrumb;
+	}
+
+	/**
+	 * @return the printAction
+	 */
+	public TPresenterAction<TDynaPresenter<M>> getPrintAction() {
+		return printAction;
+	}
+
+	/**
+	 * @param printAction the printAction to set
+	 */
+	public void setPrintAction(TPresenterAction<TDynaPresenter<M>> printAction) {
+		this.printAction = printAction;
 	}
 	
 }
