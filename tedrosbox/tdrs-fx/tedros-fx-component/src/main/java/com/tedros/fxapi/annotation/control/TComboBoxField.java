@@ -242,7 +242,7 @@ public @interface TComboBoxField  {
 	 * */
 	public TOptionsList optionsList() default @TOptionsList(entityClass = ITEntity.class, 
 			optionModelViewClass = TModelView.class, 
-			optionsProcessClass = TOptionsProcess.class);
+			optionsProcessClass = TOptionsProcess.class, serviceName = "");
 	
 	
 	// 	PROPERTYS

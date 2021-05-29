@@ -3,14 +3,10 @@
  */
 package com.covidsemfome.model;
 
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.covidsemfome.domain.DomainSchema;
@@ -81,19 +77,34 @@ public class TipoAjuda extends TEntity {
 		this.tipoPessoa = tipoPessoa;
 	}
 	
-	@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this, false);
-	}
 	
-	@Override
-	public boolean equals(Object obj) {
-		return EqualsBuilder.reflectionEquals(this, obj, false);
-	}
 	
 	@Override
 	public String toString() {
 		return descricao;
+	}
+
+	@Override
+	public int hashCode() {
+		return HashCodeBuilder.reflectionHashCode(this, false);
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (getClass() != obj.getClass())
+			return false;
+		TipoAjuda other = (TipoAjuda) obj;
+		if (this.getId() == null) {
+			if (other.getId() != null)
+				return false;
+		} else if (!this.getId().equals(other.getId()))
+			return false;
+		return true;
 	}
 
 }

@@ -40,6 +40,11 @@ public @interface TDecorator {
 	 * Set the edit button text
 	 * */
 	public String editButtonText() default TAnnotationDefaultValue.TVIEW_editButtonText;
+
+	/**
+	 * Set the print button text
+	 * */
+	public String printButtonText() default TAnnotationDefaultValue.TVIEW_printButtonText;
 	
 	/**
 	 * Set the cancel button text
@@ -129,6 +134,15 @@ public @interface TDecorator {
 	 * </pre>
 	 * */
 	public String readerModeTitle() default TAnnotationDefaultValue.TVIEW_readerModeTitle;
+
+	/**
+	 * <pre>
+	 * Build the print button if true
+	 * 
+	 * Default value: false
+	 * </pre>
+	 * */
+	public boolean buildPrintButton() default false;
 
 	/**
 	 * <pre>

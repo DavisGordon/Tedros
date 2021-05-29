@@ -4,7 +4,6 @@ import com.covidsemfome.model.Cozinha;
 import com.covidsemfome.model.EstoqueConfig;
 import com.covidsemfome.model.Produto;
 import com.covidsemfome.module.cozinha.model.CozinhaModelView;
-import com.covidsemfome.module.cozinha.process.CozinhaOptionProcess;
 import com.covidsemfome.module.produto.model.ProdutoFindModelView;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
@@ -84,7 +83,7 @@ public class EstoqueConfigModelView extends TEntityModelView<EstoqueConfig> {
 	@TReaderHtml
 	@TLabel(text="Cozinha:")
 	@TComboBoxField(required=true, optionsList=@TOptionsList(entityClass=Cozinha.class, 
-	optionModelViewClass=CozinhaModelView.class, optionsProcessClass=CozinhaOptionProcess.class))
+	optionModelViewClass=CozinhaModelView.class, serviceName = "ICozinhaControllerRemote"))
 	private SimpleObjectProperty<Cozinha> cozinha;
 	
 	

@@ -3,6 +3,9 @@
  */
 package com.covidsemfome.module.voluntario.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.covidsemfome.model.TipoAjuda;
 import com.covidsemfome.module.voluntario.process.TipoAjudaProcess;
 import com.tedros.core.annotation.security.TAuthorizationType;
@@ -97,6 +100,18 @@ public class TipoAjudaModelView extends TEntityModelView<TipoAjuda> {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public int hashCode() {
+		return HashCodeBuilder.reflectionHashCode(this, false);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof TipoAjudaModelView))
+			return false;
+		return EqualsBuilder.reflectionEquals(this.getModel(), obj != null ? ((TipoAjudaModelView)obj).getModel() : obj, false);
+	}
+	
 	/**
 	 * @return the id
 	 */

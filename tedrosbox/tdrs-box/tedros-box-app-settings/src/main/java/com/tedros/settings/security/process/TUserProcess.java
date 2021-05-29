@@ -33,12 +33,9 @@ public class TUserProcess extends TEntityProcess<TUser> {
 		super(TUser.class, SERV_NAME);
 	} 
 
-	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.process.TEntityProcess#execute(java.util.List)
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void execute(List<TResult<TUser>> resultList) {
+	public boolean runBefore(List<TResult<TUser>> resultList) {
 		ServiceLocator loc = ServiceLocator.getInstance();
 		TUserController service;
 		try {
@@ -58,6 +55,8 @@ public class TUserProcess extends TEntityProcess<TUser> {
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
+		
+		return false;
 	}
 
 	public void setProfile(TProfile profile) {

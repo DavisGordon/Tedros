@@ -45,7 +45,7 @@ public class UserModel {
 	
 	private Long ufid;
 	
-	
+	private TermoAdesaoModel termoAdesao;
 	
 
 	/**
@@ -341,6 +341,20 @@ public class UserModel {
 	 */
 	public void setUfid(Long ufid) {
 		this.ufid = ufid;
+	}
+
+	/**
+	 * @return the termoAdesao
+	 */
+	public TermoAdesaoModel getTermoAdesao() {
+		return termoAdesao;
+	}
+
+	/**
+	 * @param termoAdesao the termoAdesao to set
+	 */
+	public void setTermoAdesao(TermoAdesaoModel termoAdesao) {
+		this.termoAdesao = termoAdesao;
 	}
 
 }

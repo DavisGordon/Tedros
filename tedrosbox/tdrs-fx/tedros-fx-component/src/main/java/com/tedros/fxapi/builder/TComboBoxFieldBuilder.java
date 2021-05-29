@@ -13,8 +13,10 @@ import java.util.List;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
+import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.control.TItem;
 import com.tedros.fxapi.domain.TOptionProcessType;
+import com.tedros.fxapi.exception.TException;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.process.TOptionsProcess;
 
@@ -85,63 +87,85 @@ implements ITControlBuilder<com.tedros.fxapi.control.TComboBoxField, Property<Ob
 		
 		callParser(tAnnotation, (ComboBox) control);
 		
-		if(tAnnotation.optionsList()!=null && tAnnotation.optionsList().optionProcessType() == TOptionProcessType.LIST_ALL){
-			final Class<? extends TModelView> mClass = tAnnotation.optionsList().optionModelViewClass();
-			final Class<? extends ITEntity> eClass = tAnnotation.optionsList().entityClass();
-			final Class<? extends TOptionsProcess> pClass = tAnnotation.optionsList().optionsProcessClass();
-			if(pClass!=TOptionsProcess.class){
-				final TOptionsProcess process = pClass.newInstance();
-				process.listAll();
-				process.stateProperty().addListener(new ChangeListener<State>() {
-					@Override
-					public void changed(ObservableValue<? extends State> arg0,
-							State arg1, State arg2) {
+		if(tAnnotation.optionsList()!=null) {
+			TOptionsList optAnn = tAnnotation.optionsList();
+			final Class<? extends TOptionsProcess> pClass = optAnn.optionsProcessClass();
+			final Class<? extends TModelView> mClass = optAnn.optionModelViewClass();
+			final Class<? extends ITEntity> eClass = optAnn.entityClass();
+			final String serviceName = optAnn.serviceName();
+			
+			final TOptionsProcess process = pClass!=TOptionsProcess.class 
+					? pClass.newInstance()
+					: new TOptionsProcess(eClass, serviceName) {
 						
-							if(arg2.equals(State.SUCCEEDED)){
-								List<TResult<Object>> resultados = process.getValue();
-								if(resultados!=null && resultados.size()>0){
-									TResult result = resultados.get(0);
-									if(result.getValue()!=null && result.getValue() instanceof List<?>){
-										for(Object e : (List<Object>) result.getValue()){
-											if(e instanceof ITEntity){
-												if(mClass != TModelView.class){
-													try {
-														TModelView<?> model = mClass.getConstructor(eClass).newInstance(e);
-														control.getItems().add(model);
-													} catch (InstantiationException
-															| IllegalAccessException
-															| IllegalArgumentException
-															| InvocationTargetException
-															| NoSuchMethodException
-															| SecurityException e1) 
-													{
-														e1.printStackTrace();
-													}
-												}else
-													System.out.println(T_ITENTITY_WARNING);
-											}
-										}
-										Object value = attrProperty.getValue();
-										if(value instanceof ITEntity){
+					};
+		
+			process.stateProperty().addListener(new ChangeListener<State>() {
+				@Override
+				public void changed(ObservableValue<? extends State> arg0,
+						State arg1, State arg2) {
+					
+						if(arg2.equals(State.SUCCEEDED)){
+							List<TResult<Object>> resultados = (List<TResult<Object>>) process.getValue();
+							if(resultados!=null && resultados.size()>0){
+								TResult result = resultados.get(0);
+								if(result.getValue()!=null && result.getValue() instanceof List<?>){
+									for(Object e : (List<Object>) result.getValue()){
+										if(e instanceof ITEntity){
 											if(mClass != TModelView.class){
 												try {
-													TModelView<?> model = mClass.getConstructor(eClass).newInstance(value);
-													control.setValue(model);
-												} catch (Exception e1){
+													TModelView<?> model = mClass.getConstructor(eClass).newInstance(e);
+													control.getItems().add(model);
+												} catch (InstantiationException
+														| IllegalAccessException
+														| IllegalArgumentException
+														| InvocationTargetException
+														| NoSuchMethodException
+														| SecurityException e1) 
+												{
 													e1.printStackTrace();
 												}
-													
 											}else
 												System.out.println(T_ITENTITY_WARNING);
-										}else
-											control.setValue(attrProperty.getValue());
+										}
 									}
-							}
+									Object value = attrProperty.getValue();
+									if(value instanceof ITEntity){
+										if(mClass != TModelView.class){
+											try {
+												TModelView<?> model = mClass.getConstructor(eClass).newInstance(value);
+												control.setValue(model);
+											} catch (Exception e1){
+												e1.printStackTrace();
+											}
+												
+										}else
+											System.out.println(T_ITENTITY_WARNING);
+									}else
+										control.setValue(attrProperty.getValue());
+								}
 						}
 					}
-				});
-				process.startProcess();
+				}
+			});
+			
+			if(optAnn.optionProcessType() == TOptionProcessType.LIST_ALL){
+				process.list();
+			}else {
+				Class<? extends ITGenericBuilder> bClass = optAnn.exampleEntityBuilder();
+				if(bClass == NullEntityBuilder.class)
+					throw new RuntimeException("The property exampleEntityBuilder is required for @TOptionsList"
+							+ " when the property optionProcessType = TOptionProcessType.SEARCH. See field "
+							+ super.getComponentDescriptor().getFieldDescriptor().getFieldName()
+							+ " in "+super.getComponentDescriptor().getModelView().getClass().getSimpleName());
+				
+				ITGenericBuilder builder = bClass.newInstance();
+				ITEntity example = (ITEntity) builder.build();
+				process.search(example);
 			}
+			
+			process.startProcess();
+			
 			if(attrProperty!=null)
 				control.setValue(attrProperty.getValue());
 		}else{

@@ -61,6 +61,11 @@ extends TDynaViewCrudBaseDecorator<M>
 		else
 			addItemInTHeaderToolBar(gettColapseButton(), gettNewButton(), gettDeleteButton());
 
+		if(tPresenter.decorator().buildPrintButton()) {
+			buildPrintButton(tPresenter.decorator().printButtonText());
+			addItemInTHeaderToolBar(gettPrintButton());
+		}
+		
 		// add the mode radio buttons
 		addItemInTHeaderHorizontalLayout(gettEditModeRadio(), gettReadModeRadio());
 		

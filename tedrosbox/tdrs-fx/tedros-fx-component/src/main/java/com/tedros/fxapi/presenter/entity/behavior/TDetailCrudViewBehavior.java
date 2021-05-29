@@ -43,6 +43,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 			configColapseButton();
 			configNewButton();
 			configDeleteButton();
+			configPrintButton();
 			if(this.decorator.gettEditButton()!=null)
 				configEditButton();
 			

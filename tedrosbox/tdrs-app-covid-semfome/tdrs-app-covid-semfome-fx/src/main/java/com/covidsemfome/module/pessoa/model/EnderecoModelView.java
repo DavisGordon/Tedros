@@ -117,7 +117,7 @@ public class EnderecoModelView extends TEntityModelView<Endereco> {
 	@TLabel(text="UF")
 	@TComboBoxField(firstItemTex="Selecione", 
 	optionsList=@TOptionsList(entityClass=UF.class, 
-			optionModelViewClass=UFModelView.class, optionsProcessClass = UFOptionProcess.class))
+			optionModelViewClass=UFModelView.class, serviceName = "IUFControllerRemote"))
 	private SimpleObjectProperty<UF> uf;
 	
 	

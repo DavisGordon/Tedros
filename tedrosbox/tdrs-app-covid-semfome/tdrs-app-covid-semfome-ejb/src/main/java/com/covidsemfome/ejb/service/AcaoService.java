@@ -50,8 +50,8 @@ public class AcaoService extends TEjbService<Acao> {
 		emailBO.enviarEmailSairAcao(p, a);
 	}
 	@TransactionAttribute(value = TransactionAttributeType.NEVER)
-	public void enviarEmailParticiparAcao(Voluntario v) throws TSentEmailException, EmailBusinessException{
-		emailBO.enviarEmailParticiparAcao(v);
+	public void enviarEmailParticiparAcao(Voluntario v, String termo) throws TSentEmailException, EmailBusinessException{
+		emailBO.enviarEmailParticiparAcao(v, termo);
 	}
 	
 	public List<Acao> pesquisar(String ids, String titulo, Date dataInicio, Date dataFim, String status){

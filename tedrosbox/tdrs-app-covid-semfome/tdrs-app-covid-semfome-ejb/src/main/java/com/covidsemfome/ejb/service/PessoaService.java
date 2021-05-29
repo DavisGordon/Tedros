@@ -5,6 +5,7 @@ package com.covidsemfome.ejb.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.ejb.Local;
@@ -19,6 +20,7 @@ import com.covidsemfome.ejb.bo.UserBO;
 import com.covidsemfome.ejb.bo.VoluntarioBO;
 import com.covidsemfome.ejb.exception.EmailBusinessException;
 import com.covidsemfome.model.Pessoa;
+import com.covidsemfome.model.TipoAjuda;
 import com.covidsemfome.model.User;
 import com.tedros.ejb.base.service.TEjbService;
 import com.tedros.util.TSentEmailException;
@@ -44,10 +46,17 @@ public class PessoaService extends TEjbService<Pessoa>  {
 	@Inject
 	private VoluntarioBO volunBO;
 	
+	
 	@Override
 	public PessoaBO getBussinesObject() {
 		return bo;
 	}
+	
+	@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
+	public String gerarTermoAdesao(Pessoa p, Set<TipoAjuda> lst, Date dataHoraAcao)throws Exception{
+		return bo.gerarTermoAdesao(p, lst, dataHoraAcao);
+	}
+	
 	
 	@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
 	public String newPass(Pessoa pess) throws Exception{

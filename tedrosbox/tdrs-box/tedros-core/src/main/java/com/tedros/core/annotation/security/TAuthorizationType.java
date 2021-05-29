@@ -49,7 +49,11 @@ public enum TAuthorizationType {
 	/**
 	 * Define the allow for the search action 
 	 * */
-	SEARCH ("#{tedros.security.search}");
+	SEARCH ("#{tedros.security.search}"),
+	/**
+	 * Define the allow for the print action 
+	 * */
+	PRINT ("#{tedros.security.print}");
 	
 	private String value;
 	

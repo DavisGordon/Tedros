@@ -10,7 +10,6 @@ import com.covidsemfome.model.Cozinha;
 import com.covidsemfome.model.Saida;
 import com.covidsemfome.model.SaidaItem;
 import com.covidsemfome.module.cozinha.model.CozinhaModelView;
-import com.covidsemfome.module.cozinha.process.CozinhaOptionProcess;
 import com.covidsemfome.module.doacao.model.AcaoFindModelView;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
@@ -23,8 +22,6 @@ import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
 import com.tedros.fxapi.annotation.control.TOneSelectionModal;
 import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
-import com.tedros.fxapi.annotation.effect.TDropShadow;
-import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.TAccordion;
 import com.tedros.fxapi.annotation.layout.THBox;
@@ -130,7 +127,7 @@ public class SaidaModelView extends TEntityModelView<Saida> {
 	@TReaderHtml
 	@TLabel(text="Cozinha:")
 	@TComboBoxField(required=true, optionsList=@TOptionsList(entityClass=Cozinha.class, 
-	optionModelViewClass=CozinhaModelView.class, optionsProcessClass=CozinhaOptionProcess.class))
+	optionModelViewClass=CozinhaModelView.class, serviceName = "ICozinhaControllerRemote"))
 	private SimpleObjectProperty<Cozinha> cozinha;
 	
 	
