@@ -20,6 +20,7 @@ import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.control.TTrigger;
+import com.tedros.fxapi.annotation.control.TValidator;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
@@ -77,6 +78,7 @@ public class ContatoModelView extends TEntityModelView<Contato> {
 	@TMaskField(mask="##################################################", 
 	textInputControl=@TTextInputControl(promptText="E-mail, telefone, celuar...", parse = true),
 	required=true)
+	@TValidator(validatorClass = DocumentoValidator.class, associatedFieldsName={"tipo"})
 	private SimpleStringProperty descricao;
 	
 	public ContatoModelView(Contato entidade) {

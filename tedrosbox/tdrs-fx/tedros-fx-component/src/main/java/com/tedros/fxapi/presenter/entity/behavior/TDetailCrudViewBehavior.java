@@ -178,6 +178,8 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 			decorator.gettEditButton().setDisable(flag);
 		if(decorator.gettDeleteButton()!=null)
 			decorator.gettDeleteButton().setDisable(flag);
+		if(decorator.gettPrintButton()!=null)
+			decorator.gettPrintButton().setDisable(flag);
 	}
 	
 	@Override
