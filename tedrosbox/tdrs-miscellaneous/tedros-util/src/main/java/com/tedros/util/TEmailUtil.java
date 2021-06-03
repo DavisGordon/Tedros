@@ -2,6 +2,8 @@ package com.tedros.util;
 
 
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.mail.Address;
 import javax.mail.Message;
@@ -12,7 +14,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class TEmailUtil {
+public final class TEmailUtil {
 	
 	private static TEmailUtil instance;
 	
@@ -28,6 +30,13 @@ public class TEmailUtil {
 		} catch (TSentEmailException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static boolean validate(String email) {
+		String regex = "^(.+)@(.+)$";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(email);
+		return matcher.matches();
 	}
 	
 	public static TEmailUtil getInstance(String smtpHost, String smtpSocketPort, String smtpSocketClass, 

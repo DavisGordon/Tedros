@@ -97,7 +97,6 @@ public class TipoAjudaModelView extends TEntityModelView<TipoAjuda> {
 	
 	public TipoAjudaModelView(TipoAjuda entity) {
 		super(entity);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

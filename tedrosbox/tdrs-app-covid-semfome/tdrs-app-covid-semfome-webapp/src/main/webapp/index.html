@@ -651,6 +651,12 @@
 		        alert('Por favor informar o seu nome e email para acesso ao painel.'); 
 		        return false; 
 		    } 
+		    
+		    if(form.email.value && !validateEmail(form.email.value)){
+		    	alert('Por favor informar um email valido.'); 
+		        return false; 
+		    }
+		    
 		    if (!form.pass.value || !form.passConf.value) { 
 		        alert('Por favor informar uma senha para acesso ao painel.'); 
 		        return false; 
@@ -660,6 +666,11 @@
 		        return false; 
 		    } 
 		    
+		}
+		
+		function validateEmail(email) {
+			  const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			  return re.test(email);
 		}
 		
 		// post-submit callback 

@@ -7,7 +7,6 @@ import com.covidsemfome.model.Documento;
 import com.covidsemfome.model.Endereco;
 import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.PessoaTermoAdesao;
-import com.covidsemfome.model.TermoAdesao;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.TCodeValue;

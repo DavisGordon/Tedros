@@ -26,7 +26,7 @@ import com.tedros.fxapi.annotation.layout.TTitledPane;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
-import com.tedros.fxapi.annotation.process.TEntityProcess;
+import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.property.TReadOnlyBooleanProperty;
 import com.tedros.fxapi.annotation.reader.TColumnReader;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
@@ -45,7 +45,6 @@ import com.tedros.fxapi.presenter.entity.behavior.TMasterCrudViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.settings.security.action.TEncriptPasswordChangeListener;
-import com.tedros.settings.security.process.TUserProcess;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
@@ -60,10 +59,10 @@ import javafx.scene.text.TextAlignment;
  */
 @TForm(name="#{security.user.form.name}")
 @TFormReaderHtml
+@TEjbService(serviceName = "TUserControllerRemote", model=TUser.class)
 @TPresenter(type=TDynaPresenter.class, 
 			decorator=@TDecorator(type = TMasterCrudViewDecorator.class, viewTitle="#{security.user.view.title}", listTitle="#{security.user.list.title}"),
 			behavior=@TBehavior(type=TMasterCrudViewBehavior.class))
-@TEntityProcess(entity=TUser.class, process = TUserProcess.class)
 @TSecurity(	id="T_CUSTOM_SECURITY_USER", 
 			appName="#{settings.app.name}", 
 			moduleName="#{label.user}", 
