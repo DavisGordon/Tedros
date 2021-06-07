@@ -7,7 +7,7 @@
 package com.covidsemfome.module.pessoa;
 
 import com.covidsemfome.module.pessoa.model.PessoaModelView;
-import com.covidsemfome.module.termoAdesao.model.TermoAdesaoModelView;
+import com.covidsemfome.module.pessoa.model.TermoAdesaoModelView;
 import com.tedros.core.TModule;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;

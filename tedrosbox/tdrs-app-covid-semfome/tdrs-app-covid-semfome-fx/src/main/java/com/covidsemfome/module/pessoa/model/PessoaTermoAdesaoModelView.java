@@ -15,6 +15,7 @@ import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
 import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.annotation.control.TPickListField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
+import com.tedros.fxapi.annotation.control.TShowField;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.TAccordion;
 import com.tedros.fxapi.annotation.layout.THBox;
@@ -39,6 +40,7 @@ import com.tedros.fxapi.presenter.entity.behavior.TDetailCrudViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TDetailCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
@@ -55,7 +57,7 @@ import javafx.scene.text.TextAlignment;
 		behavior = @TBehavior(type = TDetailCrudViewBehavior.class,
 		newAction=PessoaTermoAdesaoNewAction.class, printAction=PessoaTermoAdesaoPrintAction.class), 
 		decorator = @TDecorator(type = TDetailCrudViewDecorator.class, viewTitle="Termo de adesão", 
-		buildPrintButton=true)))
+		buildPrintButton=true, printButtonText="Exportar PDF")))
 public class PessoaTermoAdesaoModelView extends TEntityModelView<PessoaTermoAdesao> {
 
 	private SimpleLongProperty id;
@@ -79,17 +81,23 @@ public class PessoaTermoAdesaoModelView extends TEntityModelView<PessoaTermoAdes
 	radioButtons = {@TRadioButtonField(text="Ativado", userData="ATIVADO"), 
 					@TRadioButtonField(text="Desativado", userData="DESATIVADO")
 	})
-	@THBox(	pane=@TPane(children={"tiposAjuda","status"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="tiposAjuda", priority=Priority.NEVER),
-   				   		@TPriority(field="status", priority=Priority.ALWAYS) }))
+	@THBox(pane=@TPane(	children={"status", "versionNum"}), spacing=10, fillHeight=true, 
+	hgrow=@THGrow(priority={@TPriority(field="status", priority=Priority.ALWAYS),
+							@TPriority(field="versionNum", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty status;
+	
+	@TReaderHtml
+	@TLabel(text="Versão")
+	@TShowField()
+	private SimpleIntegerProperty versionNum;
+	
 	
 	@TLabel(text="Tipos de Ajuda")
 	@TTableReaderHtml(label=@TLabel(text="Tipo de Ajuda:"), 
 		column = { 	@TColumnReader(field = "descricao", name = "Descricao"), 
 					@TColumnReader(field = "tipoPessoa", name = "Tipo pessoa")})
 	@TPickListField(selectedLabel="#{label.selected}", 
-		sourceLabel="#{label.profiles}", required=true,
+		sourceLabel="Opções", required=true,
 		optionsList=@TOptionsList(entityClass=TipoAjuda.class,
 					optionModelViewClass=TipoAjudaModelView.class,
 					exampleEntityBuilder=TipoAjudaExampleBuilder.class,
@@ -97,7 +105,7 @@ public class PessoaTermoAdesaoModelView extends TEntityModelView<PessoaTermoAdes
 					serviceName = "ITipoAjudaControllerRemote"))
 	@TModelViewCollectionType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=true)
 	private ITObservableList<TipoAjudaModelView> tiposAjuda;
-	
+		
 	@THTMLEditor
 	private SimpleStringProperty conteudo;
 	
@@ -176,6 +184,20 @@ public class PessoaTermoAdesaoModelView extends TEntityModelView<PessoaTermoAdes
 	 */
 	public void setTextoCadastro(SimpleStringProperty textoCadastro) {
 		this.textoCadastro = textoCadastro;
+	}
+
+	/**
+	 * @return the versionNum
+	 */
+	public SimpleIntegerProperty getVersionNum() {
+		return versionNum;
+	}
+
+	/**
+	 * @param versionNum the versionNum to set
+	 */
+	public void setVersionNum(SimpleIntegerProperty versionNum) {
+		this.versionNum = versionNum;
 	}
 
 }

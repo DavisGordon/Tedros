@@ -1,10 +1,10 @@
 /**
  * 
  */
-package com.covidsemfome.module.termoAdesao.model;
+package com.covidsemfome.module.pessoa.model;
 
 import com.covidsemfome.model.TermoAdesao;
-import com.covidsemfome.module.termoAdesao.process.TermoAdesaoProcess;
+import com.covidsemfome.module.pessoa.process.TermoAdesaoProcess;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.TCodeValue;
@@ -42,8 +42,9 @@ import javafx.scene.text.TextAlignment;
  */
 @TForm(name = "Termo de adesão", showBreadcrumBar=false)
 @TEntityProcess(process = TermoAdesaoProcess.class, entity=TermoAdesao.class)
-@TPresenter(decorator = @TDecorator(viewTitle="Termo de adesão"), 
-		    behavior=@TBehavior(/*saveAction=TermoAdesaoSaveAction.class*/))
+@TPresenter(decorator = @TDecorator(viewTitle="Termo de adesão", 
+			buildPrintButton=true, printButtonText="Exportar PDF"), 
+		    behavior=@TBehavior(printAction=TermoAdesaoPrintAction.class))
 @TSecurity(	id="COVSEMFOME_TERMADES_FORM", 
 	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Termo de adesão",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 

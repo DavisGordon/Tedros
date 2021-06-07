@@ -33,7 +33,7 @@
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tdrs-app-covid-semfome-fx</artifactId>
 	  		<version>8-2.2</version>
-	  		<scope>runtime</scope>
+	  		<scope>compile</scope>
 	  	</dependency>
 	  	 
 	  	<dependency>

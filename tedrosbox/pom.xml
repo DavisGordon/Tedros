@@ -30,6 +30,9 @@
 		<commons.io.version>2.7</commons.io.version>
 		<commons.lang.version>3.11</commons.lang.version>
 		
+		<!-- Define the version of OPEN HTML TO PDF in the properties section of your POM. -->  	       
+	  	<openhtml.version>1.0.8</openhtml.version>
+		
 		<junit.version>4.13</junit.version>
 		<cargo.version>1.6.7</cargo.version>
 		<h2.version>1.4.199</h2.version>

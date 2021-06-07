@@ -69,12 +69,12 @@
 	      	<version>${junit.version}</version>
 	      	<scope>test</scope>
 	    </dependency>
-	    <dependency>
-		  <!-- jsoup HTML parser library @ http://jsoup.org/ -->
+	    <!-- <dependency>
+		  jsoup HTML parser library @ http://jsoup.org/
 		  <groupId>org.jsoup</groupId>
 		  <artifactId>jsoup</artifactId>
-		  <version>1.8.1</version>
-		</dependency>
+		  <version>1.8.1</version> 
+		</dependency>-->
 	    
   	</dependencies>
   	

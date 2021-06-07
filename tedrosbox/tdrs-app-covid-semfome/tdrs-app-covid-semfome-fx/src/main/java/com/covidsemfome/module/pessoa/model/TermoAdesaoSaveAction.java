@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.covidsemfome.module.termoAdesao.model;
+package com.covidsemfome.module.pessoa.model;
 
 import com.covidsemfome.model.TermoAdesao;
 import com.tedros.fxapi.control.action.TPresenterAction;

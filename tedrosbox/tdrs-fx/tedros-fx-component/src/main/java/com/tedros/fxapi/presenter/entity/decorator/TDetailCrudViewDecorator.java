@@ -1,14 +1,16 @@
 package com.tedros.fxapi.presenter.entity.decorator;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
-import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Priority;
@@ -50,25 +52,23 @@ extends TDynaViewCrudBaseDecorator<M>
 		buildColapseButton(null);
 		buildNewButton(null);
 		buildDeleteButton(null);
-		if(tForm.showBreadcrumBar())
+		Node[] nodes = new Node[0];
+		nodes = ArrayUtils.addAll(nodes, gettColapseButton(), gettNewButton(), gettDeleteButton());
+		if(tForm.showBreadcrumBar()) {
 			buildEditButton(null);
-		//buildCancelButton(null);
-		buildModesRadioButton(null, null);
-		
-		// add the buttons at the header tool bar
-		if(tForm.showBreadcrumBar())
-			addItemInTHeaderToolBar(gettColapseButton(), gettNewButton(), gettDeleteButton(), gettEditButton());
-		else
-			addItemInTHeaderToolBar(gettColapseButton(), gettNewButton(), gettDeleteButton());
-
-		if(tPresenter.decorator().buildPrintButton()) {
-			buildPrintButton(tPresenter.decorator().printButtonText());
-			addItemInTHeaderToolBar(gettPrintButton());
+			nodes = ArrayUtils.add(nodes, gettEditButton());
 		}
 		
+		if(tPresenter.decorator().buildPrintButton()) {
+			buildPrintButton(tPresenter.decorator().printButtonText());
+			nodes = ArrayUtils.add(nodes, gettPrintButton());
+		}
+		
+		buildModesRadioButton(null, null);
+		
+		addItemInTHeaderToolBar(nodes);
 		// add the mode radio buttons
 		addItemInTHeaderHorizontalLayout(gettEditModeRadio(), gettReadModeRadio());
-		
 		// set padding at rigth in left content pane
 		addPaddingInTLeftContent(0, 4, 0, 0);
 		

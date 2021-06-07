@@ -8,7 +8,7 @@ import java.util.List;
 import com.covidsemfome.helper.TermoAdesaoHelper;
 import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.TermoAdesao;
-import com.covidsemfome.module.termoAdesao.process.TermoAdesaoProcess;
+import com.covidsemfome.module.pessoa.process.TermoAdesaoProcess;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.fxapi.control.action.TPresenterAction;
