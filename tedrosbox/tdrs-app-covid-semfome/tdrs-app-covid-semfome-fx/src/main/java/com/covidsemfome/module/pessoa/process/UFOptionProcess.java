@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.covidsemfome.module.pessoa.model;
+package com.covidsemfome.module.pessoa.process;
 
 import com.covidsemfome.model.UF;
 import com.tedros.fxapi.exception.TProcessException;

@@ -59,7 +59,7 @@ extends TBehavior<M, TDynaPresenter<M>> {
 			userAuthorizations = new ArrayList<>();
 			for(TAuthorizationType type : new TAuthorizationType[]{	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 																	TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW, 
-																	TAuthorizationType.EXPORT, TAuthorizationType.SEARCH}){
+																	TAuthorizationType.EXPORT, TAuthorizationType.SEARCH, TAuthorizationType.PRINT}){
 				if(TedrosContext.isUserAuthorized(securityDescriptor, type))
 					userAuthorizations.add(type);
 			}
