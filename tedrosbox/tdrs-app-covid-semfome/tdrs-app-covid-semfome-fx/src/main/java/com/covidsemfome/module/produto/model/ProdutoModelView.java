@@ -12,8 +12,6 @@ import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
-import com.tedros.fxapi.annotation.effect.TDropShadow;
-import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
@@ -57,7 +55,7 @@ import javafx.scene.text.TextAlignment;
 			orderBy = {	@TOption(text = "Codigo", value = "codigo"), 
 						@TOption(text = "Nome", value = "nome")}),
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Produtos", buildImportButton=true),
-	behavior=@TBehavior(importModelViewClass=ProdutoImportModelView.class)))
+	behavior=@TBehavior(importModelViewClass=ProdutoImportModelView.class, runNewActionAfterSave=true)))
 @TSecurity(	id="COVSEMFOME_CADPROD_FORM", 
 	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Produtos",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 

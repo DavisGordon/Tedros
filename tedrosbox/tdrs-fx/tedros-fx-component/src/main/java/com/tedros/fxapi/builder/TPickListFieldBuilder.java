@@ -47,7 +47,7 @@ implements ITControlBuilder<com.tedros.fxapi.control.TPickListField, ObservableL
 															attrProperty, 
 															tAnnotation.required());
 		
-		if(tAnnotation.optionsList()!=null) {
+		if(tAnnotation.optionsList().entityClass()!=ITEntity.class) {
 			TOptionsList optAnn = tAnnotation.optionsList();
 			final Class<? extends TOptionsProcess> pClass = optAnn.optionsProcessClass();
 			final Class<? extends TModelView> mClass = optAnn.optionModelViewClass();

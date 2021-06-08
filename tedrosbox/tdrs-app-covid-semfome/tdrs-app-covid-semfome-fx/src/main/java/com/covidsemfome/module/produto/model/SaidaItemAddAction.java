@@ -4,8 +4,8 @@
 package com.covidsemfome.module.produto.model;
 
 import com.covidsemfome.model.SaidaItem;
+import com.tedros.core.control.PopOver;
 import com.tedros.fxapi.collections.ITObservableList;
-import com.tedros.fxapi.control.PopOver;
 import com.tedros.fxapi.control.TSelectionModal;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;

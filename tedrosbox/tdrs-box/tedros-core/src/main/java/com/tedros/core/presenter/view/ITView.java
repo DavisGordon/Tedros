@@ -5,6 +5,7 @@ import java.net.URL;
 import com.tedros.core.control.TProgressIndicator;
 import com.tedros.core.presenter.ITPresenter;
 
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 
@@ -33,6 +34,11 @@ public interface ITView<P extends ITPresenter>{
 	 * Hides a modal
 	 * */
 	public void tHideModal();
+	
+	/**
+	 * The modal visible property
+	 * */
+	public ReadOnlyBooleanProperty tModalVisibleProperty();
 	
 	/**
 	 * Returns the progress indicator

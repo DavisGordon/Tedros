@@ -36,6 +36,7 @@ import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
+import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
@@ -84,7 +85,8 @@ import javafx.scene.text.TextAlignment;
 			show=true, showSearchField=true, searchFieldName="nome",
 			orderBy = {	@TOption(text = "Codigo", value = "id"), 
 						@TOption(text = "Nome", value = "nome")}),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Pessoa")))
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Pessoa"), 
+							behavior=@TBehavior(saveAllModels=false)))
 @TSecurity(	id="COVSEMFOME_CADPESS_FORM", 
 	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Pessoa",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
@@ -213,12 +215,14 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	
 	@TReaderHtml(codeValues={@TCodeValue(code = "Solteiro", value = "Solteiro"), 
 			@TCodeValue(code = "Casado", value = "Casado"),
+			@TCodeValue(code = "Divorciado", value = "Divorciado"),
 			@TCodeValue(code = "Viúvo(a)", value = "Viúvo(a)")
 	})
 	@TLabel(text="Estado civil")
 	@THorizontalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
 	radioButtons = {@TRadioButtonField(text="Solteiro", userData="Solteiro"), 
 					@TRadioButtonField(text="Casado", userData="Casado"),
+					@TRadioButtonField(text="Divorciado", userData="Divorciado"),
 					@TRadioButtonField(text="Viúvo(a)", userData="Viúvo(a)")
 	})
 	private SimpleStringProperty estadoCivil;

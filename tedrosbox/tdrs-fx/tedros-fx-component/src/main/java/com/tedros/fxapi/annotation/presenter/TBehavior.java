@@ -173,6 +173,16 @@ public @interface TBehavior {
 
 	/**
 	 * <pre>
+	 * Process the new action after save action.
+	 * 
+	 * Default: false
+	 * </pre>
+	 * */
+	public boolean runNewActionAfterSave() default false;
+
+	
+	/**
+	 * <pre>
 	 * Specifies an action to the action event dispatched from the action button;
 	 * </pre>
 	 * */

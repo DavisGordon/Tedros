@@ -24,14 +24,12 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.tedros.fxapi.control;
+package com.tedros.core.control;
 
-import static com.tedros.fxapi.i18n.Localization.asKey;
-import static com.tedros.fxapi.i18n.Localization.localize;
+import static com.tedros.core.control.i18n.Localization.asKey;
+import static com.tedros.core.control.i18n.Localization.localize;
 import static java.util.Objects.requireNonNull;
 import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
-
-import com.tedros.fxapi.control.skin.PopOverSkin;
 
 import javafx.animation.FadeTransition;
 import javafx.beans.InvalidationListener;

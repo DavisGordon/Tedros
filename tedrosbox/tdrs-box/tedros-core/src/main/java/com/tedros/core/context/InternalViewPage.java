@@ -1,9 +1,14 @@
 package com.tedros.core.context;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.tedros.core.TModule;
+import com.tedros.core.control.PopOver;
+import com.tedros.core.control.PopOver.ArrowLocation;
 
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
@@ -15,6 +20,8 @@ import javafx.scene.effect.GlowBuilder;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
@@ -113,6 +120,7 @@ class InternalViewPage extends Page{
     public Node createTile() {
         
     	Node icon;
+    	String desc = context.getModuleDescriptor().getDescription();
 		try {
 			icon = getIcon();
 		} catch (InstantiationException | IllegalAccessException e) {
@@ -178,7 +186,34 @@ class InternalViewPage extends Page{
                 	TedrosContext.setPageProperty(InternalViewPage.this, true, false, true);
                 }
             });
+            
+            if(StringUtils.isNotBlank(desc)) {
+            	PopOver popover = new PopOver();
+            	tile.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> {
+            		Label l = new Label(desc);
+            		l.setWrapText(true);
+            		l.setMaxWidth(350);
+            		StackPane p = new StackPane();
+            		p.getChildren().add(l);
+            		p.setMargin(l, new Insets(5,10,5,10));
+            		
+	            	popover.setArrowLocation(ArrowLocation.TOP_CENTER);
+			    	popover.setCloseButtonEnabled(false);
+			    	popover.setContentNode(p);
+			    	popover.setAnimated(true);
+			    	popover.setAutoHide(true);
+			    	popover.setMaxWidth(350);
+			    	
+			    	
+			    	popover.show(tile);
+            	});
+            	tile.addEventHandler(MouseEvent.MOUSE_EXITED, e -> {
+            		popover.hide();
+            	});
+            }
+            
             return tile;
         }
     }
+    
 }

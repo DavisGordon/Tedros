@@ -100,8 +100,8 @@ public class PessoaTermoAdesaoModelView extends TEntityModelView<PessoaTermoAdes
 		sourceLabel="Opções", required=true,
 		optionsList=@TOptionsList(entityClass=TipoAjuda.class,
 					optionModelViewClass=TipoAjudaModelView.class,
-					exampleEntityBuilder=TipoAjudaExampleBuilder.class,
-					optionProcessType=TOptionProcessType.SEARCH,
+					/*exampleEntityBuilder=TipoAjudaExampleBuilder.class,*/
+					optionProcessType=TOptionProcessType.LIST_ALL,
 					serviceName = "ITipoAjudaControllerRemote"))
 	@TModelViewCollectionType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=true)
 	private ITObservableList<TipoAjudaModelView> tiposAjuda;

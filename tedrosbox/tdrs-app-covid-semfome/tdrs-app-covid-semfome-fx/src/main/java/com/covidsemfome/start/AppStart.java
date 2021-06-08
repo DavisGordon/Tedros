@@ -42,23 +42,38 @@ import com.tedros.core.context.ITApplication;
 @TApplication(name="#{app.name}", universalUniqueIdentifier=TConstant.UUI,
 module = {	
 			@TModule(type=CadastroTipoAjudaModule.class, name="Tipos de Ajuda", menu="Gerenciar Campanha", 
-					icon=TipoAjudaIconImageView.class, menuIcon=TipoAjudaMenuIconImageView.class),
+					icon=TipoAjudaIconImageView.class, menuIcon=TipoAjudaMenuIconImageView.class,
+					description="Edite aqui os Tipos de Ajuda que os voluntarios podem executar."),
 			@TModule(type=AcaoModule.class, name="Ação", menu="Gerenciar Campanha", 
-					icon=AcaoIconImageView.class, menuIcon=AcaoMenuIconImageView.class),
+					icon=AcaoIconImageView.class, menuIcon=AcaoMenuIconImageView.class,
+					description="Administre aqui as ações/campanhas."),
 			@TModule(type=CadastroVoluntarioModule.class, name="Voluntários inscritos", menu="Gerenciar Campanha", 
-					icon=VoluntarioIconImageView.class, menuIcon=VoluntarioMenuIconImageView.class),
+					icon=VoluntarioIconImageView.class, menuIcon=VoluntarioMenuIconImageView.class,
+					description="Edite/visualize aqui os voluntarios e o tipo de ajuda nas ações."),
 			@TModule(type=MailingModule.class, name="Mailing", menu="Gerenciar Campanha", 
-					icon=MailingIconImageView.class, menuIcon=MailingMenuIconImageView.class),
+					icon=MailingIconImageView.class, menuIcon=MailingMenuIconImageView.class,
+					description="Crie e envie e-mails a um grupo de pessoas sobre uma determinada ação."),
 			@TModule(type=DoacaoReportModule.class, name="Relatórios", menu="Administrativo", 
-					icon=RelatoriosIconImageView.class, menuIcon=RelatoriosMenuIconImageView.class),
+					icon=RelatoriosIconImageView.class, menuIcon=RelatoriosMenuIconImageView.class,
+					description="Gere relatórios que ajudem nos processos administrativos."),
 			@TModule(type=CadastroDePessoaModule.class, name="#{label.person}", menu="Administrativo", 
-					icon=PessoaIconImageView.class, menuIcon=PessoaMenuIconImageView.class),
+					icon=PessoaIconImageView.class, menuIcon=PessoaMenuIconImageView.class,
+					description="Gerencie aqui todas as pessoas envolvidas no projeto, voluntarios e "
+							+ "filantropicos cadastrados pelo site e também os termos de adesão."),
 			@TModule(type=CozinhaModule.class, name="Local de Produção", menu="Administrativo", 
-					icon=CozinhaIconImageView.class, menuIcon=CozinhaMenuIconImageView.class),
+					icon=CozinhaIconImageView.class, menuIcon=CozinhaMenuIconImageView.class,
+					description="Edite aqui os locais (cozinhas) de produção, necessario "
+							+ "para editar estoque e inserir entradas e saidas de produtos."),
 			@TModule(type=ProdutoModule.class, name="Produto", menu="Administrativo", 
-					icon=ProdutoIconImageView.class, menuIcon=ProdutoMenuIconImageView.class),
+					icon=ProdutoIconImageView.class, menuIcon=ProdutoMenuIconImageView.class,
+					description="Insira/Importe aqui os produtos utilizados na produção e informe "
+							+ "as entradas (Compras) e saídas (Produção). "
+							+ "Necessario editar o estoque inicial antes de lançar as entradas e saídas."),
 			@TModule(type=EstoqueModule.class, name="Estoque", menu="Administrativo", 
-					icon=EstoqueIconImageView.class, menuIcon=EstoqueMenuIconImageView.class)
+					icon=EstoqueIconImageView.class, menuIcon=EstoqueMenuIconImageView.class,
+					description="Edite o estoque inicial e visualize os estoques gerados apos o lançamento "
+							+ "das entradas e saidas de produtos. Necessario inserir os locais de produção "
+							+ "e os produtos primeiro.")
 
 })
 @TResourceBundle(resourceName={"CovidLabels"})

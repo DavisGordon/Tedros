@@ -90,6 +90,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 
 	private boolean saveAllModels;
 	private boolean saveOnlyChangedModel;
+	private boolean runNewActionAfterSave;
 
 	private boolean skipConfigBreadcrumb;
 	
@@ -123,6 +124,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			
 			saveAllModels = tBehavior.saveAllModels();
 			saveOnlyChangedModel = tBehavior.saveOnlyChangedModels();
+			runNewActionAfterSave = tBehavior.runNewActionAfterSave();
 			importFileModelViewClass = tBehavior.importModelViewClass();
 			
 			if(decorator.gettImportButton()!=null && importFileModelViewClass==TModelView.class)
@@ -275,7 +277,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		if(isUserAuthorized(TAuthorizationType.SAVE)){
 			final Button saveButton = this.decorator.gettSaveButton();
 			if(saveButton!=null) {
-				EventHandler<ActionEvent> eh = e -> saveAction();
+				EventHandler<ActionEvent> eh = e -> {
+					saveAction();
+				};
 				super.getListenerRepository().add("saveButtonClickEH", eh);
 				saveButton.setOnAction(new WeakEventHandler<ActionEvent>(eh));
 			}
@@ -584,14 +588,26 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 								String msg = result.isPriorityMessage() 
 										? result.getMessage()
 												: iEngine.getFormatedString("#{tedros.fxapi.message.save}", model.getDisplayProperty().getValue());
-						
+								if(runNewActionAfterSave) {
+									getView().tModalVisibleProperty().addListener(new ChangeListener<Boolean>() {
+										@Override
+										public void changed(ObservableValue<? extends Boolean> arg0, Boolean b, Boolean c) {
+											if(!c) {
+												getView().tModalVisibleProperty().removeListener(this);
+												if(saveAction!=null)
+													saveAction.runAfter(getPresenter());
+												newAction();
+											}
+										}
+									});
+								}
 								mensagens.add(msg);
 							} catch (Exception e) {	
 								mensagens.add(iEngine.getString("#{tedros.fxapi.message.error.save}")+"\n"+e.getMessage());
 								e.printStackTrace();
 							}
 						}
-						if(saveAction!=null)
+						if(saveAction!=null && !runNewActionAfterSave)
 							saveAction.runAfter(getPresenter());
 						if(result.getResult().getValue() == EnumResult.ERROR.getValue()){
 							System.out.println(result.getMessage());
