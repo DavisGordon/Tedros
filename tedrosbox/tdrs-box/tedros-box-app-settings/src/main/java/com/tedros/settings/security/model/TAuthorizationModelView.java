@@ -55,7 +55,7 @@ import javafx.scene.layout.Priority;
 	moduleName="#{label.authorization}", 
 	viewName="#{security.authorization.view.title}",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, 
-			TAuthorizationType.READ, TAuthorizationType.SAVE})
+			TAuthorizationType.READ, TAuthorizationType.SAVE, TAuthorizationType.NEW})
 public final class TAuthorizationModelView extends TEntityModelView<TAuthorization> {
 	
 	private SimpleLongProperty id;

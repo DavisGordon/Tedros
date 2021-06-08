@@ -73,8 +73,8 @@ import javafx.scene.text.TextAlignment;
 			viewTitle="Mailing", listTitle="Acão / Campanha", saveButtonText="Enviar email")))
 @TSecurity(	id="COVSEMFOME_MAIL_FORM", 
 	appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Mailing",
-	allowedAccesses={TAuthorizationType.VIEW_ACCESS})
-
+	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.SAVE, TAuthorizationType.EDIT, 
+			TAuthorizationType.READ})
 public class MailingModelView extends TEntityModelView<Mailing> {
 	
 	private SimpleLongProperty id;

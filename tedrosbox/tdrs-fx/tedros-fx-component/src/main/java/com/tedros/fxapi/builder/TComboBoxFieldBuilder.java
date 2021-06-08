@@ -16,7 +16,6 @@ import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.control.TItem;
 import com.tedros.fxapi.domain.TOptionProcessType;
-import com.tedros.fxapi.exception.TException;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.process.TOptionsProcess;
 
@@ -87,7 +86,7 @@ implements ITControlBuilder<com.tedros.fxapi.control.TComboBoxField, Property<Ob
 		
 		callParser(tAnnotation, (ComboBox) control);
 		
-		if(tAnnotation.optionsList()!=null) {
+		if(tAnnotation.optionsList().entityClass()!=ITEntity.class) {
 			TOptionsList optAnn = tAnnotation.optionsList();
 			final Class<? extends TOptionsProcess> pClass = optAnn.optionsProcessClass();
 			final Class<? extends TModelView> mClass = optAnn.optionModelViewClass();

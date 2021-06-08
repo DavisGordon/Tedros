@@ -48,7 +48,8 @@ import javafx.scene.text.TextAlignment;
 @TSecurity(	id="COVSEMFOME_TERMADES_FORM", 
 	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Termo de adesão",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
-					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
+					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW,
+					TAuthorizationType.PRINT})
 public class TermoAdesaoModelView extends TEntityModelView<TermoAdesao> {
 
 	private SimpleLongProperty id;

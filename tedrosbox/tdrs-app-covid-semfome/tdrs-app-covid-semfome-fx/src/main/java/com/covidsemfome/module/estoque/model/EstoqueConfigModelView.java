@@ -49,9 +49,9 @@ import javafx.scene.text.TextAlignment;
 @TListViewPresenter(
 	paginator=@TPaginator(entityClass = EstoqueConfig.class, serviceName = "IEstoqueConfigControllerRemote",
 			show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Configurar estoque")))
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Editar estoque inicial")))
 @TSecurity(	id="COVSEMFOME_ESTOQUECONF_FORM", 
-	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Configurar estoque",
+	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Administrar/Editar estoque",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class EstoqueConfigModelView extends TEntityModelView<EstoqueConfig> {

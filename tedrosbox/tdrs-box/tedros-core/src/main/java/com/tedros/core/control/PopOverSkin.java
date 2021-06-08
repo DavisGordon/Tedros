@@ -24,30 +24,29 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.tedros.fxapi.control.skin;
+package com.tedros.core.control;
 
+import static com.tedros.core.control.PopOver.ArrowLocation.BOTTOM_CENTER;
+import static com.tedros.core.control.PopOver.ArrowLocation.BOTTOM_LEFT;
+import static com.tedros.core.control.PopOver.ArrowLocation.BOTTOM_RIGHT;
+import static com.tedros.core.control.PopOver.ArrowLocation.LEFT_BOTTOM;
+import static com.tedros.core.control.PopOver.ArrowLocation.LEFT_CENTER;
+import static com.tedros.core.control.PopOver.ArrowLocation.LEFT_TOP;
+import static com.tedros.core.control.PopOver.ArrowLocation.RIGHT_BOTTOM;
+import static com.tedros.core.control.PopOver.ArrowLocation.RIGHT_CENTER;
+import static com.tedros.core.control.PopOver.ArrowLocation.RIGHT_TOP;
+import static com.tedros.core.control.PopOver.ArrowLocation.TOP_CENTER;
+import static com.tedros.core.control.PopOver.ArrowLocation.TOP_LEFT;
+import static com.tedros.core.control.PopOver.ArrowLocation.TOP_RIGHT;
 import static java.lang.Double.MAX_VALUE;
 import static javafx.geometry.Pos.CENTER_LEFT;
 import static javafx.scene.control.ContentDisplay.GRAPHIC_ONLY;
 import static javafx.scene.paint.Color.YELLOW;
-import static com.tedros.fxapi.control.PopOver.ArrowLocation.BOTTOM_CENTER;
-import static com.tedros.fxapi.control.PopOver.ArrowLocation.BOTTOM_LEFT;
-import static com.tedros.fxapi.control.PopOver.ArrowLocation.BOTTOM_RIGHT;
-import static com.tedros.fxapi.control.PopOver.ArrowLocation.LEFT_BOTTOM;
-import static com.tedros.fxapi.control.PopOver.ArrowLocation.LEFT_CENTER;
-import static com.tedros.fxapi.control.PopOver.ArrowLocation.LEFT_TOP;
-import static com.tedros.fxapi.control.PopOver.ArrowLocation.RIGHT_BOTTOM;
-import static com.tedros.fxapi.control.PopOver.ArrowLocation.RIGHT_CENTER;
-import static com.tedros.fxapi.control.PopOver.ArrowLocation.RIGHT_TOP;
-import static com.tedros.fxapi.control.PopOver.ArrowLocation.TOP_CENTER;
-import static com.tedros.fxapi.control.PopOver.ArrowLocation.TOP_LEFT;
-import static com.tedros.fxapi.control.PopOver.ArrowLocation.TOP_RIGHT;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tedros.fxapi.control.PopOver;
-import com.tedros.fxapi.control.PopOver.ArrowLocation;
+import com.tedros.core.control.PopOver.ArrowLocation;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;

@@ -3,7 +3,7 @@ package com.tedros.fxapi.modal;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
-import javafx.animation.TimelineBuilder;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -41,7 +41,8 @@ public class TModalPane extends StackPane {
         setOpacity(0);
         setVisible(true);
         setCache(true);
-        TimelineBuilder.create().keyFrames(
+        Timeline tl = new Timeline();
+        tl.getKeyFrames().add(
             new KeyFrame(Duration.millis(400), 
                 new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent t) {
@@ -49,7 +50,8 @@ public class TModalPane extends StackPane {
                     }
                 },
                 new KeyValue(opacityProperty(),1, Interpolator.LINEAR)
-        )).build().play();
+        ));
+        tl.play();
         setVisible(true);
 	 }
 	
@@ -58,7 +60,8 @@ public class TModalPane extends StackPane {
 	 * */
 	public void hideModal() {
         setCache(true);
-        TimelineBuilder.create().keyFrames(
+        Timeline tl = new Timeline();
+        tl.getKeyFrames().add(
             new KeyFrame(Duration.millis(400), 
                 new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent t) {
@@ -68,7 +71,8 @@ public class TModalPane extends StackPane {
                     }
                 },
                 new KeyValue(opacityProperty(),0, Interpolator.LINEAR)
-        )).build().play();
+        ));
+        tl.play();
 	}
 	
 	private void setEventToCloseModal(boolean addEvent) {

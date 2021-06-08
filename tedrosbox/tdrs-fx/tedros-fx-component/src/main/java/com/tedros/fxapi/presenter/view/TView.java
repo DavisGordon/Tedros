@@ -8,6 +8,7 @@ import com.tedros.core.presenter.ITPresenter;
 import com.tedros.core.presenter.view.ITView;
 import com.tedros.fxapi.modal.TModalPane;
 
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
@@ -75,6 +76,11 @@ extends StackPane implements ITView<P>{
 		initializeModalPane();
 		modalPane.showModal(message, closeModalOnMouseClick);
 	 }
+	
+	public ReadOnlyBooleanProperty tModalVisibleProperty() {
+		initializeModalPane();
+		return  modalPane.visibleProperty();
+	}
 	
 	/**
 	 * Fecha modal

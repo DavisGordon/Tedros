@@ -67,6 +67,27 @@ public class EnderecoModelView extends TEntityModelView<Endereco> {
 	private SimpleStringProperty tipo;
 	
 	@TReaderHtml
+	@TLabel(text="Tipo Logradouro")
+	@TTextField(maxLength=100, required=true,
+	textInputControl=@TTextInputControl(promptText="Rua, Avenida...", parse = true), 
+	control=@TControl(prefWidth=350, parse = true))
+	@THBox(	pane=@TPane(children={"tipoLogradouro","logradouro","bairro"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="tipoLogradouro", priority=Priority.ALWAYS), 
+   				   		@TPriority(field="logradouro", priority=Priority.ALWAYS),
+   				   		@TPriority(field="bairro", priority=Priority.ALWAYS) }))
+	private SimpleStringProperty tipoLogradouro;
+	
+	@TReaderHtml
+	@TLabel(text="Logradouro")
+	@TTextField(maxLength=300, required=true, control=@TControl(prefWidth=350, parse = true))
+	private SimpleStringProperty logradouro;
+	
+	@TReaderHtml
+	@TLabel(text="Bairro")
+	@TTextField(maxLength=300, required=true, control=@TControl(prefWidth=350, parse = true))
+	private SimpleStringProperty bairro;
+	
+	@TReaderHtml
 	@TLabel(text="Caixa Postal")
 	@TTextField(maxLength=60, control=@TControl(minWidth=80, parse = true))
 	@THBox(	pane=@TPane(children={"complemento","caixaPostal","cep"}), spacing=10, fillHeight=true,
@@ -83,27 +104,8 @@ public class EnderecoModelView extends TEntityModelView<Endereco> {
 	
 	@TReaderHtml
 	@TLabel(text="Complemento")
-	@TTextField(maxLength=300, control=@TControl(prefWidth=350, parse = true))
+	@TTextField(maxLength=300, required=true, control=@TControl(prefWidth=350, parse = true))
 	private SimpleStringProperty complemento;
-	
-	@TReaderHtml
-	@TLabel(text="Tipo Logradouro")
-	@TTextField(maxLength=100, textInputControl=@TTextInputControl(promptText="Rua, Avenida...", parse = true), control=@TControl(prefWidth=350, parse = true))
-	@THBox(	pane=@TPane(children={"tipoLogradouro","logradouro","bairro"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="tipoLogradouro", priority=Priority.ALWAYS), 
-   				   		@TPriority(field="logradouro", priority=Priority.ALWAYS),
-   				   		@TPriority(field="bairro", priority=Priority.ALWAYS) }))
-	private SimpleStringProperty tipoLogradouro;
-	
-	@TReaderHtml
-	@TLabel(text="Logradouro")
-	@TTextField(maxLength=300, control=@TControl(prefWidth=350, parse = true))
-	private SimpleStringProperty logradouro;
-	
-	@TReaderHtml
-	@TLabel(text="Bairro")
-	@TTextField(maxLength=300, control=@TControl(prefWidth=350, parse = true))
-	private SimpleStringProperty bairro;
 	
 	@TReaderHtml
 	@TLabel(text="Cidade")
@@ -115,7 +117,7 @@ public class EnderecoModelView extends TEntityModelView<Endereco> {
 	
 	@TReaderHtml
 	@TLabel(text="UF")
-	@TComboBoxField(firstItemTex="Selecione", 
+	@TComboBoxField(firstItemTex="Selecione", required=true,
 	optionsList=@TOptionsList(entityClass=UF.class, 
 			optionModelViewClass=UFModelView.class, serviceName = "IUFControllerRemote"))
 	private SimpleObjectProperty<UF> uf;
