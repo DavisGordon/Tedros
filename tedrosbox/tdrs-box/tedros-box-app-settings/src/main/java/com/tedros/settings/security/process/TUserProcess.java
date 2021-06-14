@@ -48,11 +48,17 @@ public class TUserProcess extends TEntityProcess<TUser> {
 			}
 			
 			if(profile!=null && userId!=null){
-				resultList.add(service.saveActiveProfile(profile, userId));
+				TUser user = new TUser();
+				user.setId(userId);
+				TResult<TUser> res = service.findById(user);
+				user = res.getValue();
+				user.setActiveProfile(profile);
+				//resultList.add(service.saveActiveProfile(profile, userId));
+				resultList.add(service.save(user));
 				profile = null;
 				userId = null;
 			}
-		} catch (NamingException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		

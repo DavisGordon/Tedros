@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tedros.login.model;
+package com.tedros.settings.logged.user;
 
 import com.tedros.fxapi.annotation.listener.TChangeListener;
 import com.tedros.fxapi.control.TPasswordField;

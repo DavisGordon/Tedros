@@ -1,13 +1,12 @@
 package com.tedros.fxapi.presenter.entity.behavior;
 
 import com.tedros.ejb.base.entity.ITEntity;
-import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.modal.TMessageBox;
 import com.tedros.fxapi.presenter.entity.decorator.TSaveViewDecorator;
-import com.tedros.fxapi.presenter.model.TEntityModelView;
+import com.tedros.fxapi.presenter.model.TModelView;
 
 @SuppressWarnings({ "rawtypes" })
-public class TSaveViewBehavior<M extends TEntityModelView, E extends ITEntity>
+public class TSaveViewBehavior<M extends TModelView, E extends ITEntity>
 extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M, E> {
 	
 	protected TSaveViewDecorator<M> decorator;

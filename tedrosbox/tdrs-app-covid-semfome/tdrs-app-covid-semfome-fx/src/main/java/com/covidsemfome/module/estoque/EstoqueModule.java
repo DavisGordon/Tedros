@@ -26,7 +26,6 @@ public class EstoqueModule extends TModule {
 	 */
 	@Override
 	public void tStart() {
-		TDynaView<EstoqueModelView> view = new TDynaView<>(this, EstoqueModelView.class);
 		tShowView(new TGroupView<TGroupPresenter>(this, "Estoque", 
 				new TViewItem(TDynaView.class, EstoqueModelView.class, "Ver Estoque"),
 				new TViewItem(TDynaView.class, EstoqueConfigModelView.class, "Editar Estoque Inicial")

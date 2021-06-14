@@ -23,6 +23,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WeakChangeListener;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.Region;
@@ -69,16 +70,19 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 				if(form.gettPresenter()==null)
 		    		form.settPresenter(this.presenter);
 				
-		    	((Region)form).layout();
-		    	ScrollPane scroll = new ScrollPane();
+		    	
+				ScrollPane scroll = new ScrollPane();
 		    	scroll.setId("t-form-scroll");
-		    	scroll.setContent((Region)form);
+		    	scroll.setContent((Node)form);
 		    	scroll.setFitToWidth(true);
+		    	//scroll.setFitToHeight(true);
+		    	
 		    	scroll.maxHeight(Double.MAX_VALUE);
 		    	scroll.maxWidth(Double.MAX_VALUE);
 		    	scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		    	scroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		    	scroll.setStyle("-fx-background-color: transparent;");
+		    	((Region)form).layout();
 		    	getView().gettFormSpace().getChildren().clear();
 		    	getView().gettFormSpace().getChildren().add(scroll);
 			}

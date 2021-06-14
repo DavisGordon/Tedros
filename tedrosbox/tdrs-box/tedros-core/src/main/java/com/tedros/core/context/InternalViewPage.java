@@ -15,12 +15,10 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.DropShadowBuilder;
-import javafx.scene.effect.GlowBuilder;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -140,21 +138,23 @@ class InternalViewPage extends Page{
 	        moduleName.setId("t-module-name");
 	        moduleName.setWrapText(true);
 	        
-	        final DropShadow shadow = DropShadowBuilder.create()
-	        		.blurType(BlurType.THREE_PASS_BOX)
-	        		.width(30)
-	        		.height(30)
-	        		.radius(12)
-	        		.spread(0)
-	        		.color(Color.BLANCHEDALMOND)
-	        		.build();
+	        final DropShadow shadow = new DropShadow();
+	        shadow.setBlurType(BlurType.THREE_PASS_BOX);
+	        shadow.setWidth(30);
+	        shadow.setHeight(30);
+	        shadow.setRadius(12);
+	        shadow.setSpread(0);
+	        shadow.setColor(Color.BLANCHEDALMOND);
 	        
 	        pane.setEffect(shadow);
 	        
 	        pane.setOnMouseEntered(new EventHandler<MouseEvent>() {
 				@Override
 				public void handle(MouseEvent arg0) {
-					pane.setEffect(GlowBuilder.create().level(0.5).input(shadow).build());
+					Glow glow = new Glow();
+					glow.setLevel(0.5);
+					glow.setInput(shadow);
+					pane.setEffect(glow);
 				}
 			});
 	        pane.setOnMouseExited(new EventHandler<MouseEvent>() {
@@ -171,6 +171,9 @@ class InternalViewPage extends Page{
 			});       
         
         	pane.setCenter(moduleName);
+        	
+        	buildPopover(desc, pane);
+        	
         	return pane;
         	
         }else{
@@ -187,33 +190,41 @@ class InternalViewPage extends Page{
                 }
             });
             
-            if(StringUtils.isNotBlank(desc)) {
-            	PopOver popover = new PopOver();
-            	tile.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> {
-            		Label l = new Label(desc);
-            		l.setWrapText(true);
-            		l.setMaxWidth(350);
-            		StackPane p = new StackPane();
-            		p.getChildren().add(l);
-            		p.setMargin(l, new Insets(5,10,5,10));
-            		
-	            	popover.setArrowLocation(ArrowLocation.TOP_CENTER);
-			    	popover.setCloseButtonEnabled(false);
-			    	popover.setContentNode(p);
-			    	popover.setAnimated(true);
-			    	popover.setAutoHide(true);
-			    	popover.setMaxWidth(350);
-			    	
-			    	
-			    	popover.show(tile);
-            	});
-            	tile.addEventHandler(MouseEvent.MOUSE_EXITED, e -> {
-            		popover.hide();
-            	});
-            }
+            buildPopover(desc, tile);
             
             return tile;
         }
     }
+
+	/**
+	 * @param desc
+	 * @param tile
+	 */
+	private void buildPopover(String desc, Node tile) {
+		if(StringUtils.isNotBlank(desc)) {
+			PopOver popover = new PopOver();
+			tile.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> {
+				Label l = new Label(desc);
+				l.setWrapText(true);
+				l.setMaxWidth(350);
+				StackPane p = new StackPane();
+				p.getChildren().add(l);
+				StackPane.setMargin(l, new Insets(5,10,5,10));
+				
+		    	popover.setArrowLocation(ArrowLocation.TOP_CENTER);
+		    	popover.setCloseButtonEnabled(false);
+		    	popover.setContentNode(p);
+		    	popover.setAnimated(true);
+		    	popover.setAutoHide(true);
+		    	popover.setMaxWidth(350);
+		    	
+		    	
+		    	popover.show(tile);
+			});
+			tile.addEventHandler(MouseEvent.MOUSE_EXITED, e -> {
+				popover.hide();
+			});
+		}
+	}
     
 }

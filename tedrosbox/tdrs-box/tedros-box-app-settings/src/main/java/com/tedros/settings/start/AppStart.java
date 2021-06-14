@@ -1,11 +1,11 @@
 package com.tedros.settings.start;
 
+import com.tedros.core.ITApplication;
 import com.tedros.core.annotation.TApplication;
 import com.tedros.core.annotation.TModule;
 import com.tedros.core.annotation.TResourceBundle;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
-import com.tedros.core.context.ITApplication;
 import com.tedros.settings.layout.CustomizarModule;
 import com.tedros.settings.layout.icon.LayoutIconImageView;
 import com.tedros.settings.layout.icon.LayoutMenuIconImageView;

@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
 import org.reflections.util.ConfigurationBuilder;
 
+import com.tedros.core.ITedrosBox;
 import com.tedros.core.ModalMessage;
 import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.TSecurityDescriptor;
@@ -68,7 +69,7 @@ public final class TedrosContext {
 	private static StringProperty contextStringProperty;
 	private static StringProperty initializationErrorMessageStringProperty;
 	
-	private static Stage stage;
+	//private static Stage stage;
 	private static Node currentView;
 	
 	private static TUser loggedUser;
@@ -87,7 +88,7 @@ public final class TedrosContext {
 	
 	private static Locale locale;	
 	
-	private static Application main;
+	private static ITedrosBox main;
 	
 	/**
 	 * Start the context
@@ -484,16 +485,16 @@ public final class TedrosContext {
 	
 	/**
 	 * Set the app main Stage
-	 * */
+	 * *//*
 	public static void setStage(Stage s){
 		stage = s;
-	}
+	}*/
 	
 	/**
 	 * Get the app main Stage
 	 * */
 	public static Stage getStage(){
-		return stage;
+		return main.getStage();
 	}
 	
 	/**
@@ -526,15 +527,19 @@ public final class TedrosContext {
 	}
 
 	public static void openDocument(String path) {
-		TedrosContext.main.getHostServices().showDocument(path);
+		((Application)main).getHostServices().showDocument(path);
 		
 	}
 
 	/**
 	 * @param main the main to set
 	 */
-	public static void setMain(Application main) {
+	public static void setApplication(ITedrosBox main) {
 		TedrosContext.main = main;
+	}
+	
+	public static ITedrosBox getApplication() {
+		return main;
 	}
 	
 }

@@ -1,29 +1,19 @@
 package com.tedros.fxapi.presenter.entity.decorator;
 
-import java.util.Arrays;
-
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
-import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
-import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
-import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
-import com.tedros.fxapi.presenter.model.TEntityModelView;
-import com.tedros.fxapi.presenter.paginator.TPaginator;
+import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
+import com.tedros.fxapi.presenter.model.TModelView;
 
 import javafx.scene.Node;
-import javafx.scene.control.Accordion;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TitledPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 
 @SuppressWarnings("rawtypes")
-public class TSaveViewDecorator<M extends TEntityModelView> 
+public class TSaveViewDecorator<M extends TModelView> 
 extends TDynaViewCrudBaseDecorator<M> {
 	
 	private TPresenter tPresenter;
@@ -31,8 +21,8 @@ extends TDynaViewCrudBaseDecorator<M> {
     public void decorate() {
     	tPresenter = getPresenter().getPresenterAnnotation();
 		configFormSpace();
-		configViewTitle();
 		configAllButtons();
+		configViewTitle();
 	}
 
 	
@@ -49,6 +39,9 @@ extends TDynaViewCrudBaseDecorator<M> {
 		
 		if(nodes.length>0)
 			addItemInTHeaderToolBar(nodes);
+		else 
+			((TDynaView)super.getView()).gettLayout().getChildren().remove(2);
+		
 		
 		// add the mode radio buttons
 		if(tDeco.buildModesRadioButton()) {
@@ -62,7 +55,12 @@ extends TDynaViewCrudBaseDecorator<M> {
 	}
 
 	protected void configViewTitle() {
-		setViewTitle(null);
+		final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
+		if(!tPresenter.decorator().viewTitle().equals(TAnnotationDefaultValue.TVIEW_viewTitle))
+			setViewTitle(null);
+		else {
+			((TDynaView)super.getView()).gettLayout().getChildren().remove(0);
+		}
 	}
 
 	protected void configFormSpace() {

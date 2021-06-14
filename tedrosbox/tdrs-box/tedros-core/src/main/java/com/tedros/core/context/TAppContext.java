@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import com.tedros.app.process.ITProcess;
+import com.tedros.core.ITApplication;
 import com.tedros.core.ITModule;
 import com.tedros.core.TAppDescriptor;
 import com.tedros.core.TInternationalizationEngine;
