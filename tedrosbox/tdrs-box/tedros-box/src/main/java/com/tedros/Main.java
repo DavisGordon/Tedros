@@ -13,6 +13,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.core.ITModule;
+import com.tedros.core.ITedrosBox;
 import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.TModule;
 import com.tedros.core.context.Page;
@@ -21,6 +22,7 @@ import com.tedros.core.context.TModuleContext;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.context.TedroxBoxHeaderButton;
+import com.tedros.core.control.PopOver;
 import com.tedros.core.control.TedrosBoxBreadcrumbBar;
 import com.tedros.core.control.TedrosBoxResizeBar;
 import com.tedros.core.logging.TLoggerManager;
@@ -29,6 +31,7 @@ import com.tedros.fxapi.modal.TModalPane;
 import com.tedros.fxapi.presenter.TPresenter;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.login.model.LoginModelView;
+import com.tedros.settings.logged.user.TUserSettingsPane;
 import com.tedros.util.TFileUtil;
 import com.tedros.util.TZipUtil;
 import com.tedros.util.TedrosFolderEnum;
@@ -46,16 +49,19 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.DepthTest;
 import javafx.scene.Node;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.TreeView;
 import javafx.scene.effect.DropShadow;
@@ -68,6 +74,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -78,12 +85,12 @@ import javafx.util.Duration;
  * 
  * @author Davis Gordon
  * */
-public class Main extends Application {
+public class Main extends Application implements ITedrosBox  {
 	
 	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
 	private static Main tedros;
-	//private Stage stage;
+	private Stage stage;
     private Scene scene;
     private BorderPane root;
     private ToolBar toolBar;
@@ -108,7 +115,8 @@ public class Main extends Application {
     private ToolBar pageToolBar;
     
     private BorderPane leftSplitPane;
-    
+    private VBox leftMenuPane;
+    private Accordion settingsAcc;
     private Label appName;
 
     private boolean expandedTollBar = true;
@@ -153,8 +161,8 @@ public class Main extends Application {
     	TZipUtil.unZip(zipFile, outputFolder);
 	}
     
-    private Stage getStage(){
-    	return TedrosContext.getStage();
+    public Stage getStage(){
+    	return stage;
     }
 
     public static Main getTedros(){
@@ -193,16 +201,17 @@ public class Main extends Application {
     	root.setId("t-tedros-color");
     }
 
-	@SuppressWarnings("restriction")
+    
 	private void removeCss(String url) {
 		if(scene.getStylesheets().contains(url))
 			scene.getStylesheets().remove(url);
 	}
 
-    @SuppressWarnings({"rawtypes", "unchecked", "restriction" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
 	private void init(Stage primaryStage) {
-    	TedrosContext.setMain(this);
-    	TedrosContext.setStage(primaryStage);
+    	stage = primaryStage;
+    	TedrosContext.setApplication(this);
+    	//TedrosContext.setStage(primaryStage);
     	
     	tedros = this;
     	getStage().setTitle("Tedros");
@@ -287,73 +296,19 @@ public class Main extends Application {
         h.getChildren().addAll(appName);
         
         
-       /* appName.setCursor(Cursor.HAND);
+        appName.setCursor(Cursor.HAND);
         
         appName.setOnMouseClicked(e -> {
         	PopOver userPopover = new PopOver();
+        	userPopover.setHeaderAlwaysVisible(true);
+        	userPopover.setTitle("Settings");
         	userPopover.setCloseButtonEnabled(true);
         	userPopover.getRoot().getStylesheets().addAll(customStyleCssUrl, immutableStylesCssUrl, defaultStyleCssUrl2, defaultStyleCssUrl3);
-        
-        	Accordion acc = new Accordion();
-        	TitledPane t1 = new TitledPane();
-        	t1.setText("Meus dados");
-        	t1.setStyle("-fx-font-size: 0.7em");
-        	
-        	
-        	
-        	TUser usr = TedrosContext.getLoggedUser();
-        	try {
-				TUserProcess p = new TUserProcess();
-				ChangeListener<State> prcl = (arg0, arg1, arg2) -> {
-					
-					if(arg2.equals(State.SUCCEEDED)){
-						
-						List<TResult<TUser>> resultados = (List<TResult<TUser>>) p.getValue();
-						
-						if(resultados != null) {
-						
-							TUser result =  resultados.get(0).getValue();
-							TUserModelView umv = new TUserModelView(result);
-				        	ObservableList l = FXCollections.observableArrayList(umv);
-				        	TDynaView v = new TDynaView(TUserModelView.class, l);
-				        	v.tLoad();
-				        	//v.setId("t-tedros-colo.r");
-							
-							t1.setContent(v);
-							ObservableList<TProfileModelView> profiles = umv.getProfiles();
-							if(profiles!=null && profiles.size()>=2) {
-								UserSetting log = new UserSetting(result);
-								UserSettingModelView lmv = new UserSettingModelView(log);
-					        	ObservableList l2 = FXCollections.observableArrayList(lmv);
-					        	TDynaView v2 = new TDynaView(UserSettingModelView.class, l2);
-					        	v2.tLoad();
-								
-								TitledPane t2 = new TitledPane();
-					        	t2.setText("Meu perfil");
-					        	t2.setStyle("-fx-font-size: 0.7em");
-					        	t2.setContent(v2);
-					        	acc.getPanes().add(t2);
-					        	
-							}
-						}
-					}
-				};
-				
-				p.stateProperty().addListener(prcl);
-				p.findById(usr);
-				p.start();
-				
-			} catch (TProcessException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-        	//VBox vb = new VBox();
-        	
-        	acc.getPanes().addAll(t1);
-        	userPopover.setContentNode(acc);
+        	userPopover.setContentNode(new Label());
         	userPopover.show(appName);
+    	
         });
-        */
+        
         
         HBox.setMargin(h, new Insets(0,0,0,40));
         toolBar.getItems().add(h);
@@ -415,9 +370,12 @@ public class Main extends Application {
         // create left split pane
         leftSplitPane = new BorderPane();
         leftSplitPane.setStyle("-fx-background-color: transparent;");
-        BorderPane leftMenuPane = new BorderPane();
+        //BorderPane leftMenuPane = new BorderPane();
+        leftMenuPane = new VBox();
         leftMenuPane.setStyle("-fx-effect: dropshadow( three-pass-box , #000000 , 9, 0.1 , 0 , 4); -fx-text-fill: #FFFFFF; -fx-background-color: transparent;");
-        leftMenuPane.setCenter(menuTree);
+        leftMenuPane.getChildren().add(menuTree);
+        VBox.setVgrow(menuTree, Priority.ALWAYS);
+        
         
         leftSplitPane.setCenter(leftMenuPane);
         // create page toolbar
@@ -532,7 +490,7 @@ public class Main extends Application {
         getStage().show();
         windowButtons.toogleMaximized();
         TedrosContext.showContextInitializationErrorMessage();
-        
+        this.colapseMenuBar();
         TedrosContext.showModal(buildLogin());
         
     }
@@ -545,6 +503,16 @@ public class Main extends Application {
         // goto initial page
         goToPage(pages.getModules());
     }
+	
+	public void buildSettingsPane() {
+		settingsAcc = new Accordion();
+		settingsAcc.autosize();
+        TitledPane t = new TitledPane();
+        t.setText("Usúario");
+        settingsAcc.getPanes().add(t);
+        t.setContent(new TUserSettingsPane());
+        leftMenuPane.getChildren().add(settingsAcc);
+	}
     
     private Node buildLogin(){
     	
@@ -792,9 +760,13 @@ public class Main extends Application {
     }
     public void colapseMenuBar() {
 		if(expandedTollBar){
+			if(this.leftMenuPane.getChildren().contains(settingsAcc))
+				this.leftMenuPane.getChildren().remove(settingsAcc);
 			splitPane.setDividerPosition(0, 0.0038);
 			expandedTollBar = false;
 		}else{
+			if(!this.leftMenuPane.getChildren().contains(settingsAcc))
+				this.leftMenuPane.getChildren().add(settingsAcc);
 			splitPane.setDividerPosition(0, 0.197);
 			expandedTollBar = true;
 		}

@@ -23,6 +23,7 @@ extends TView<TDynaPresenter<M>>
 implements ITDynaView<M> {
 	
 	private static final String FXML = "TDynamicView.fxml";
+	private static final String FXML2 = "TSimpleView.fxml";
 	
 	@FXML private VBox 		tLayout;
 	@FXML private StackPane tHeaderContent;
@@ -50,6 +51,10 @@ implements ITDynaView<M> {
 	
 	public TDynaView(Class<M> modelViewClass, ObservableList<M> models){
 		super(new TDynaPresenter<>(modelViewClass, models), getURL());
+	}
+	
+	public TDynaView(Class<M> modelViewClass, ObservableList<M> models, boolean full){
+		super(new TDynaPresenter<>(modelViewClass, models), getURL(full));
 	}
 	
 	public TDynaView(Class<M> modelViewClass, Class<? extends ITModel> modelClass, ObservableList<M> models){
@@ -88,7 +93,11 @@ implements ITDynaView<M> {
     
 	
 	private static URL getURL() {
-		return TDynaView.class.getResource(FXML);
+		return getURL(true);
+	}
+	
+	private static URL getURL(boolean full) {
+		return TDynaView.class.getResource(full ? FXML : FXML2);
 	}
 
 	@Override

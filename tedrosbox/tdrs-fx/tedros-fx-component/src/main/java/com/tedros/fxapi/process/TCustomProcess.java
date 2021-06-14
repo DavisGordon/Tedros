@@ -1,5 +1,6 @@
 package com.tedros.fxapi.process;
 
+import com.tedros.fxapi.presenter.behavior.TActionType;
 
 /**
  * A custom process receive and return a pre defined object
@@ -9,7 +10,7 @@ package com.tedros.fxapi.process;
 public abstract class TCustomProcess<IN, OUT> extends TProcess<OUT>  {
 	
 	private IN object;
-	private String operationID;
+	private TActionType actionType;
 	
 	/**
 	 * Execute 
@@ -49,18 +50,20 @@ public abstract class TCustomProcess<IN, OUT> extends TProcess<OUT>  {
 	}
 
 	/**
-	 * Return the operation id
-	 * */
-	public String getOperationID() {
-		return operationID;
+	 * @return the actionType
+	 */
+	public TActionType getActionType() {
+		return actionType;
 	}
 
 	/**
-	 * Define an operation id
-	 * */
-	public void setOperationID(String operationID) {
-		this.operationID = operationID;
+	 * @param actionType the actionType to set
+	 */
+	public void setActionType(TActionType actionType) {
+		this.actionType = actionType;
 	}
+
+	
 	
 	
 }

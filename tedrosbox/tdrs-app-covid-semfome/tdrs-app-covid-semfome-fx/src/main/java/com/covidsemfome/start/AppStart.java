@@ -27,12 +27,12 @@ import com.covidsemfome.module.voluntario.icon.TipoAjudaIconImageView;
 import com.covidsemfome.module.voluntario.icon.TipoAjudaMenuIconImageView;
 import com.covidsemfome.module.voluntario.icon.VoluntarioIconImageView;
 import com.covidsemfome.module.voluntario.icon.VoluntarioMenuIconImageView;
+import com.tedros.core.ITApplication;
 import com.tedros.core.annotation.TApplication;
 import com.tedros.core.annotation.TModule;
 import com.tedros.core.annotation.TResourceBundle;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
-import com.tedros.core.context.ITApplication;
 
 /**
  * The app start class.

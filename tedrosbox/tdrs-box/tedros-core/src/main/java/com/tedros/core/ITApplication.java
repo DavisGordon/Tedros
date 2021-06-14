@@ -1,4 +1,4 @@
-package com.tedros.core.context;
+package com.tedros.core;
 
 /**
  * Define an application contract to be loaded.

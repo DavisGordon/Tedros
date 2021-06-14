@@ -231,13 +231,15 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 										List<TResult<TUser>> resultados = (List<TResult<TUser>>) process.getValue();
 										if(resultados.isEmpty())
 											return;
+										
 										TResult<TUser> result = resultados.get(0);
+			
 										if(result.getResult().getValue() == EnumResult.ERROR.getValue()){
 											System.out.println(result.getMessage());
 											mensagens.add(result.getMessage());
 										}else{
 											try{
-												loadTedros(user);												
+												loadTedros(result.getValue());												
 											}catch(Exception e){
 												saveButton.setDisable(false);
 												e.printStackTrace();
@@ -331,6 +333,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 	}
 
 	private void loadTedros(final TUser user) throws IOException {
+		
 		profileText.setText(iEngine.getString("#{tedros.loading}"));
 		LOGGER.info(iEngine.getString("#{tedros.loading}"));
 		
@@ -344,7 +347,9 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 		
 		TedrosContext.setLocale(new Locale(language));
 		TedrosContext.searchApps();
+		Main.getTedros().buildSettingsPane();
 		Main.getTedros().buildApplicationMenu();
+		
 		TedrosContext.hideModal();
 	}
 	

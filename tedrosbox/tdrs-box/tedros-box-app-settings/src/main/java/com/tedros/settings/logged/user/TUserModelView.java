@@ -1,43 +1,35 @@
 /**
  * 
  */
-package com.tedros.login.model;
+package com.tedros.settings.logged.user;
 
-import com.tedros.core.annotation.security.TAuthorizationType;
-import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.core.security.model.TProfile;
 import com.tedros.core.security.model.TUser;
-import com.tedros.fxapi.annotation.control.TFieldBox;
+import com.tedros.fxapi.annotation.TObservableValue;
+import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
 import com.tedros.fxapi.annotation.control.TPasswordField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.form.TForm;
-import com.tedros.fxapi.annotation.layout.THBox;
-import com.tedros.fxapi.annotation.layout.THGrow;
-import com.tedros.fxapi.annotation.layout.TPane;
-import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
-import com.tedros.fxapi.annotation.process.TEntityProcess;
+import com.tedros.fxapi.annotation.process.TEjbService;
+import com.tedros.fxapi.annotation.property.TReadOnlyBooleanProperty;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
-import com.tedros.fxapi.annotation.text.TFont;
-import com.tedros.fxapi.annotation.text.TText;
+import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.builder.LanguageBuilder;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
-import com.tedros.fxapi.presenter.entity.behavior.TSaveViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TSaveViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.settings.security.model.TProfileModelView;
-import com.tedros.settings.security.process.TUserProcess;
 
 import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.geometry.Pos;
-import javafx.scene.layout.Priority;
-import javafx.scene.text.TextAlignment;
 
 /**
  * @author Davis Gordon
@@ -46,34 +38,39 @@ import javafx.scene.text.TextAlignment;
 @TForm(name="#{security.user.form.name}")
 @TFormReaderHtml
 @TPresenter(type=TDynaPresenter.class, 
-			decorator=@TDecorator(type = TSaveViewDecorator.class, viewTitle="#{security.user.view.title}", 
-			listTitle="#{security.user.list.title}", buildModesRadioButton=false ),
-			behavior=@TBehavior(type=TSaveViewBehavior.class))
-@TEntityProcess(entity=TUser.class, process = TUserProcess.class)
+			decorator=@TDecorator(type = TSaveViewDecorator.class, 
+			buildModesRadioButton=false, saveButtonText="#{label.apply}" ),
+			behavior=@TBehavior(type=TUserSettingBehavior.class, saveOnlyChangedModels=false))
+@TEjbService(model=TUser.class, serviceName = "TUserControllerRemote")
 public class TUserModelView extends TEntityModelView<TUser> {
 
 	private SimpleLongProperty id;
 	
 
 	@TLabel(text="#{label.name}:")
-	@TTextField(maxLength=100, required=true)
+	@TTextField(maxLength=100, required=true, control=@TControl(maxWidth=180, parse = true))
 	private SimpleStringProperty name;
 	
 	
 	@TLabel(text="#{label.userLogin}:")
-	@TTextField(maxLength=100, required=true)
-	@THBox(	pane=@TPane(children={"login","password"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="login", priority=Priority.NEVER), 
-		   		@TPriority(field="password", priority=Priority.NEVER)}))
+	@TTextField(maxLength=100, required=true, control=@TControl(maxWidth=180, parse = true))
 	private SimpleStringProperty login;
 	
 	@TLabel(text="#{label.password}:")
-	@TPasswordField(required=true/*, 
+	@TPasswordField(required=true, control=@TControl(maxWidth=180, parse = true),
 		node=@TNode(focusedProperty=@TReadOnlyBooleanProperty(
 				observableValue=@TObservableValue(addListener=TEncriptPasswordChangeListener.class), 
 				parse = true), 
-		parse = true)*/)
+		parse = true))
 	private SimpleStringProperty password;
+	
+	@TLabel(text = "#{tedros.profile}")
+	@TComboBoxField(firstItemTex="#{tedros.select}")
+	private SimpleObjectProperty<TProfileModelView> activeProfile;
+
+	@TLabel(text = "#{tedros.language}")
+	@TComboBoxField(items=LanguageBuilder.class)
+	private SimpleStringProperty language;
 	
 	
 	@TModelViewCollectionType(modelClass=TProfile.class, modelViewClass=TProfileModelView.class, required=true)
@@ -178,6 +175,34 @@ public class TUserModelView extends TEntityModelView<TUser> {
 	 */
 	public void setProfiles(ITObservableList<TProfileModelView> profiles) {
 		this.profiles = profiles;
+	}
+
+	/**
+	 * @return the language
+	 */
+	public SimpleStringProperty getLanguage() {
+		return language;
+	}
+
+	/**
+	 * @param language the language to set
+	 */
+	public void setLanguage(SimpleStringProperty language) {
+		this.language = language;
+	}
+
+	/**
+	 * @return the activeProfile
+	 */
+	public SimpleObjectProperty<TProfileModelView> getActiveProfile() {
+		return activeProfile;
+	}
+
+	/**
+	 * @param activeProfile the activeProfile to set
+	 */
+	public void setActiveProfile(SimpleObjectProperty<TProfileModelView> activeProfile) {
+		this.activeProfile = activeProfile;
 	}
 
 

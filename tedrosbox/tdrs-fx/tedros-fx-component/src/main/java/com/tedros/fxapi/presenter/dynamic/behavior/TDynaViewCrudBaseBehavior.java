@@ -28,6 +28,9 @@ import com.tedros.fxapi.form.ITModelForm;
 import com.tedros.fxapi.layout.TBreadcrumbForm;
 import com.tedros.fxapi.modal.TConfirmMessageBox;
 import com.tedros.fxapi.modal.TMessageBox;
+import com.tedros.fxapi.presenter.behavior.TActionState;
+import com.tedros.fxapi.presenter.behavior.TActionType;
+import com.tedros.fxapi.presenter.behavior.TProcessResult;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
@@ -487,6 +490,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * Perform this action when a model is selected.
 	 * */
 	public void selectedItemAction(M new_val) {
+		setActionState(new TActionState<>(TActionType.SELECTED_ITEM, TProcessResult.RUNNING));
 		final TDynaPresenter<M> presenter = getPresenter();
 		presenter.setModelView(new_val);
 		if(selectedItemAction==null || (selectedItemAction!=null && selectedItemAction.runBefore(presenter))){
@@ -498,6 +502,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		}
 		if(selectedItemAction!=null)
 			selectedItemAction.runAfter(presenter);
+		setActionState(new TActionState<>(TActionType.SELECTED_ITEM, TProcessResult.FINISHED, new_val));
 	}
 	
 	/**
@@ -507,23 +512,13 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		final TDynaPresenter<M> presenter = getPresenter();
 		if(saveAction==null || (saveAction!=null && saveAction.runBefore(presenter))){
 			
-			final ObservableList<String> mensagens = FXCollections.observableArrayList();
-			mensagens.addListener(new ListChangeListener<String>(){
-				@Override
-				public void onChanged(javafx.collections.ListChangeListener.Change<? extends String> c) {
-					final TMessageBox tMessageBox = new TMessageBox();
-					tMessageBox.tAddMessage(c.getList());
-					getView().tShowModal(tMessageBox, true);
-				}
-			});
-			
 			try{
 				boolean flag = true;
 				if(getEntityProcessClass()!=null || (StringUtils.isNotBlank(this.serviceName) && this.entityClass!=null)){
-					runSaveEntityProcess(mensagens);
+					runSaveEntityProcess();
 					flag = false;
 				}else if(getModelProcessClass()!=null){
-					runModelProcess(mensagens, "SAVE");
+					runModelProcess(TActionType.SAVE);
 					flag = false;
 				}
 				
@@ -538,18 +533,14 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				e.printStackTrace();
 			}
 		}
-		
-		
 	}
 	
 	
 
 	@SuppressWarnings("unchecked")
-	private void runSaveEntityProcess(final ObservableList<String> mensagens)
+	private void runSaveEntityProcess()
 			throws Exception, TValidatorException, Throwable {
 		//recupera a lista de models views
-		//final ObservableList<M> modelsViewsList = this.decorator.gettListView().getItems(); 
-		
 		final ObservableList<M> modelsViewsList = (ObservableList<M>) ((saveAllModels && getModels()!=null) 
 				? getModels() 
 						: getModelView()!=null 
@@ -561,6 +552,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 						
 		// valida os models views
 		validateModels(modelsViewsList);
+		
+		boolean runNewAction = ((ITEntity)this.getModelView().getModel()).isNew() && this.runNewActionAfterSave;
+		
 		// salva os models views
 		for(int x=0; x<modelsViewsList.size(); x++){
 			
@@ -578,47 +572,52 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 						if(resultados.isEmpty()) {
 							if(saveAction!=null)
 								saveAction.runAfter(getPresenter());
+							setActionState(new TActionState(TActionType.SAVE, arg2, TProcessResult.NO_RESULT, model));
 							return;
 						}
 						TResult result = resultados.get(0);
-						E entity = (E) result.getValue();
-						if(entity!=null){
-							try {
-								model.reload(entity);
-								String msg = result.isPriorityMessage() 
-										? result.getMessage()
-												: iEngine.getFormatedString("#{tedros.fxapi.message.save}", model.getDisplayProperty().getValue());
-								if(runNewActionAfterSave) {
-									getView().tModalVisibleProperty().addListener(new ChangeListener<Boolean>() {
-										@Override
-										public void changed(ObservableValue<? extends Boolean> arg0, Boolean b, Boolean c) {
-											if(!c) {
-												getView().tModalVisibleProperty().removeListener(this);
-												if(saveAction!=null)
-													saveAction.runAfter(getPresenter());
-												newAction();
+						if(result.getResult().equals(EnumResult.SUCESS)){
+							E entity = (E) result.getValue();
+							if(entity!=null){
+								try {
+									model.reload(entity);
+									String msg = result.isPriorityMessage() 
+											? result.getMessage()
+													: iEngine.getFormatedString("#{tedros.fxapi.message.save}", model.getDisplayProperty().getValue());
+									if(runNewAction) {
+										getView().tModalVisibleProperty().addListener(new ChangeListener<Boolean>() {
+											@Override
+											public void changed(ObservableValue<? extends Boolean> arg0, Boolean b, Boolean c) {
+												if(!c) {
+													getView().tModalVisibleProperty().removeListener(this);
+													if(saveAction!=null)
+														saveAction.runAfter(getPresenter());
+													newAction();
+												}
 											}
-										}
-									});
+										});
+									}
+									setActionState(new TActionState(TActionType.SAVE, arg2, TProcessResult.SUCCESS, model));
+									addMessage(msg);
+								} catch (Exception e) {	
+									addMessage(iEngine.getString("#{tedros.fxapi.message.error.save}")+"\n"+e.getMessage());
+									e.printStackTrace();
 								}
-								mensagens.add(msg);
-							} catch (Exception e) {	
-								mensagens.add(iEngine.getString("#{tedros.fxapi.message.error.save}")+"\n"+e.getMessage());
-								e.printStackTrace();
 							}
-						}
-						if(saveAction!=null && !runNewActionAfterSave)
-							saveAction.runAfter(getPresenter());
-						if(result.getResult().getValue() == EnumResult.ERROR.getValue()){
+							if(saveAction!=null && !runNewAction)
+								saveAction.runAfter(getPresenter());
+						}else{
 							System.out.println(result.getMessage());
-							mensagens.add(result.getMessage());
-						}
-						if(result.getResult().getValue() == EnumResult.OUTDATED.getValue()){
-							System.out.println(result.getMessage());
-							mensagens.add(iEngine.getString("#{tedros.fxapi.message.outdate}"));
+							setActionState(new TActionState(TActionType.SAVE, arg2, TProcessResult.get(result.getResult()), result.getMessage(), model));
+							String msg = result.getResult().equals(EnumResult.OUTDATED) 
+									? iEngine.getString("#{tedros.fxapi.message.outdate}")
+											: result.getMessage();
+							addMessage(msg);
 						}
 						
-					}	
+					}else {
+						setActionState(new TActionState(TActionType.SAVE, arg2));
+					}
 				}
 
 				
@@ -632,48 +631,58 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * */
 	@SuppressWarnings("unchecked")
 	public void importAction() {
+		setActionState(new TActionState<>(TActionType.IMPORT, TProcessResult.RUNNING));
 		final TDynaPresenter<M> presenter = getPresenter();
-		if(importAction==null || (importAction!=null && importAction.runBefore(presenter))){
-			try{
-				StackPane pane = new StackPane();
-				if(getModels()==null)
-					setModelViewList(TFXCollections.iTObservableList());
-				TDynaView view = new TDynaView(importFileModelViewClass, getModels());
-				pane.setMaxSize(950, 600);
-				pane.getChildren().add(view);
-				pane.setId("t-tedros-color");
-				pane.setStyle("-fx-effect: dropshadow( three-pass-box , white , 4 , 0.4 , 0 , 0 );");
-				view.tLoad();
-				TedrosAppManager.getInstance()
-				.getModuleContext((TModule)TedrosContext.getView()).getCurrentViewContext()
-				.getPresenter().getView().tShowModal(pane, false);
-			}catch(Exception e){
-				e.printStackTrace();
+		try{
+			if(importAction==null || (importAction!=null && importAction.runBefore(presenter))){
+				
+					StackPane pane = new StackPane();
+					if(getModels()==null)
+						setModelViewList(TFXCollections.iTObservableList());
+					TDynaView view = new TDynaView(importFileModelViewClass, getModels());
+					pane.setMaxSize(950, 600);
+					pane.getChildren().add(view);
+					pane.setId("t-tedros-color");
+					pane.setStyle("-fx-effect: dropshadow( three-pass-box , white , 4 , 0.4 , 0 , 0 );");
+					view.tLoad();
+					TedrosAppManager.getInstance()
+					.getModuleContext((TModule)TedrosContext.getView()).getCurrentViewContext()
+					.getPresenter().getView().tShowModal(pane, false);
+				
 			}
+			if(importAction!=null)
+				importAction.runAfter(presenter);
+			setActionState(new TActionState<>(TActionType.IMPORT, TProcessResult.FINISHED));
+		}catch(Exception e){
+			e.printStackTrace();
+			setActionState(new TActionState<>(TActionType.IMPORT, TProcessResult.ERROR, e.getMessage()));
 		}
-		if(importAction!=null)
-			importAction.runAfter(presenter);
 	}
 		
 	/**
 	 * Perform this action when new button onAction is triggered.
 	 * */
 	public void newAction() {
+		setActionState(new TActionState<>(TActionType.NEW, TProcessResult.RUNNING));
 		final TDynaPresenter<M> presenter = getPresenter();
-		if(newAction==null || (newAction!=null && newAction.runBefore(presenter))){
-			try{
-				final Class<E> entityClass = getEntityClass();
-				final M model = (M) getModelViewClass().getConstructor(entityClass).newInstance(entityClass.newInstance());
+		try{
+			M model = null;
+			if(newAction==null || (newAction!=null && newAction.runBefore(presenter))){
 				
-				if(processNewEntityBeforeBuildForm(model)) {
-					setModelView(model);
-				}
-			}catch(Exception e){
-				e.printStackTrace();
+					final Class<E> entityClass = getEntityClass();
+					model = (M) getModelViewClass().getConstructor(entityClass).newInstance(entityClass.newInstance());
+					
+					if(processNewEntityBeforeBuildForm(model)) {
+						setModelView(model);
+					}
 			}
+			if(newAction!=null)
+				newAction.runAfter(presenter);
+			setActionState(new TActionState<>(TActionType.NEW, TProcessResult.SUCCESS, model));
+		}catch(Exception e){
+			e.printStackTrace();
+			setActionState(new TActionState<>(TActionType.NEW, TProcessResult.ERROR, e.getMessage()));
 		}
-		if(newAction!=null)
-			newAction.runAfter(presenter);
 	}
 	
 	/**
@@ -687,32 +696,38 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * Perform this action when print button onAction is triggered.
 	 * */
 	public void printAction() {
+		setActionState(new TActionState<>(TActionType.PRINT, TProcessResult.RUNNING));
 		final TDynaPresenter<M> presenter = getPresenter();
-		if(printAction==null || (printAction!=null && printAction.runBefore(presenter))){
-			try{
+		try{
+			if(printAction==null || (printAction!=null && printAction.runBefore(presenter))){
 				TPrintUtil.print((Node) super.getForm());
-			}catch(Exception e){
-				e.printStackTrace();
 			}
+			if(printAction!=null)
+				printAction.runAfter(presenter);
+			setActionState(new TActionState<>(TActionType.PRINT, TProcessResult.SUCCESS));
+		}catch(Exception e){
+			e.printStackTrace();
+			setActionState(new TActionState<>(TActionType.PRINT, TProcessResult.ERROR, e.getMessage()));
 		}
-		if(printAction!=null)
-			printAction.runAfter(presenter);
 	}
 	
 	/**
 	 * Perform this action when edit button onAction is triggered.
 	 * */
 	public void editAction() {
+		setActionState(new TActionState<>(TActionType.EDIT, TProcessResult.RUNNING));
 		final TDynaPresenter<M> presenter = getPresenter();
-		if(editAction==null || (editAction!=null && editAction.runBefore(presenter))){
-			try{
+		try{
+			if(editAction==null || (editAction!=null && editAction.runBefore(presenter))){
 				editEntity(getModelView());
-			}catch(Exception e){
-				e.printStackTrace();
 			}
+			if(editAction!=null)
+				editAction.runAfter(presenter);
+			setActionState(new TActionState<>(TActionType.EDIT, TProcessResult.SUCCESS));
+		}catch(Exception e){
+			e.printStackTrace();
+			setActionState(new TActionState<>(TActionType.EDIT, TProcessResult.ERROR, e.getMessage()));
 		}
-		if(editAction!=null)
-			editAction.runAfter(presenter);
 	}
 	
 	
@@ -763,6 +778,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * Perform this action when cancel button onAction is triggered.
 	 * */
 	public void cancelAction() {
+		setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.RUNNING));
 		final TDynaPresenter<M> presenter = getPresenter();
 		if(cancelAction==null || (cancelAction!=null && cancelAction.runBefore(presenter))){
 			try{
@@ -783,6 +799,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 									
 									if(cancelAction!=null)
 										cancelAction.runAfter(presenter);
+									setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.SUCCESS));
 								}else{
 									try{
 										final TEntityProcess process = createEntityProcess();
@@ -795,18 +812,29 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 														if(resultados.isEmpty())
 															return;
 														TResult result = resultados.get(0);
-														if(result.getResult().equals(EnumResult.ERROR))
+														if(result.getResult().equals(EnumResult.ERROR)) {
 															System.out.println(result.getMessage());
-														else{
+															setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.ERROR, result.getMessage()));
+															addMessage(result.getMessage());
+														}else{
 															E entity = (E) result.getValue();
-															if(entity!=null)
+															if(entity!=null) {
 																model.reload(entity);
+																setModelView(null);
+																final TDynaPresenter<M> presenter = getPresenter();
+																if(cancelAction!=null)
+																	cancelAction.runAfter(presenter);
+																setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.SUCCESS));
+															}else {
+																setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.NO_RESULT));
+																addMessage(iEngine.getString("#{tedros.fxapi.message.error}"));
+															}
 														}
-														setModelView(null);
-													}	
-													final TDynaPresenter<M> presenter = getPresenter();
-													if(cancelAction!=null)
-														cancelAction.runAfter(presenter);
+														
+													}else {
+														setActionState(new TActionState<>(TActionType.CANCEL, arg2));
+													}
+													
 											}
 										});
 										getView().tHideModal();	
@@ -815,10 +843,14 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 										e.printStackTrace();
 										getView().tHideModal();	
 										getView().tShowModal(new TMessageBox(e), true);
+										setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.ERROR, e.getMessage()));
+										
 									}
 								}
-							}else
+							}else {
 								getView().tHideModal();	
+								setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.FINISHED));
+							}
 							
 						}
 					});
@@ -835,11 +867,12 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 					
 					if(cancelAction!=null)
 						cancelAction.runAfter(presenter);
-				
+					setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.SUCCESS));
 				}
 				
 			}catch(Exception e){
 				e.printStackTrace();
+				setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.ERROR, e.getMessage()));
 			}
 		}
 		
@@ -1003,15 +1036,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				buildForm(TViewMode.EDIT);
 		}else 
 			buildForm(TViewMode.EDIT);
-		
-		/*ITModelForm<M> form = (mode!=null) 
-				? buildForm(mode)
-						: radioGroup!=null 
-						?  (isReaderModeSelected() 
-								? buildForm(TViewMode.READER) 
-										: buildForm(TViewMode.EDIT))
-								: buildForm(TViewMode.EDIT);
-		setForm(form);*/
 	}
 	
 	/**
