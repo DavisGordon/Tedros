@@ -1,12 +1,5 @@
 package com.tedros.settings.layout.model;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.paint.Color;
-
 import com.tedros.core.style.TStyleResourceValue;
 import com.tedros.fxapi.annotation.control.TCheckBoxField;
 import com.tedros.fxapi.annotation.control.TColorPickerField;
@@ -23,6 +16,7 @@ import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TModelProcess;
 import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.annotation.scene.control.TLabeled;
 import com.tedros.fxapi.domain.TLabelPosition;
 import com.tedros.fxapi.domain.TLayoutType;
 import com.tedros.fxapi.domain.TViewMode;
@@ -32,6 +26,13 @@ import com.tedros.settings.layout.behavior.TedrosSettingBehavior;
 import com.tedros.settings.layout.decorator.TedrosSettingDecorator;
 import com.tedros.settings.layout.process.TedrosSettingProcess;
 import com.tedros.settings.layout.trigger.CustomizarPainelTrigger;
+
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.paint.Color;
 
 @TForm(name="#{settings.form.name}")
 @TLabelDefaultSetting(position=TLabelPosition.TOP, textFill="#ffffff")
@@ -155,7 +156,7 @@ public class PainelModelView extends TModelView<PainelModel> {
 	@TTrigger(triggerClass=CustomizarPainelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleDoubleProperty campoTamTexto;
 	
-	@TCheckBoxField(label=@TLabel(text="Negrito"))
+	@TCheckBoxField(labeled=@TLabeled(text="Negrito", parse = true))
 	@TTrigger(triggerClass=CustomizarPainelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleBooleanProperty campoTextoNegrito;
 	

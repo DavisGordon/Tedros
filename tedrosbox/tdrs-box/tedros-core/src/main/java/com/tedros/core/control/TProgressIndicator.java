@@ -34,17 +34,25 @@ public class TProgressIndicator {
 	private Region veil;
 	private ImageView progressIndicator;
 	private FadeTransition ft;
-	
+	private Pane pane;
 	public TProgressIndicator(final Pane pane) {
 		initialize();
+		this.pane = pane;
+		setMargin(50);
+        this.pane.getChildren().addAll(veil, progressIndicator);
+	}
+
+	/**
+	 * @param pane
+	 */
+	public void setMargin(double val) {
 		if(pane instanceof StackPane){
-			StackPane.setMargin(progressIndicator, new Insets(50));
+			StackPane.setMargin(progressIndicator, new Insets(val));
 			StackPane.setAlignment(progressIndicator, Pos.CENTER);
 		}else if(pane instanceof BorderPane){
-			BorderPane.setMargin(progressIndicator, new Insets(50));
+			BorderPane.setMargin(progressIndicator, new Insets(val));
 			BorderPane.setAlignment(progressIndicator, Pos.CENTER);
 		}
-        pane.getChildren().addAll(veil, progressIndicator);
 	}
 	
 	public void bind(final BooleanBinding bb){

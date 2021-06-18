@@ -3,6 +3,7 @@
  */
 package com.tedros.core;
 
+import javafx.scene.Node;
 import javafx.stage.Stage;
 
 /**
@@ -11,10 +12,16 @@ import javafx.stage.Stage;
  */
 public interface ITedrosBox {
 
+	public Node buildLogin();
+	
 	public void buildApplicationMenu();
 	
 	public void buildSettingsPane();
 	
 	public Stage getStage();
+	
+	public void showApps();
+    
+    public void hideApps();
 	
 }

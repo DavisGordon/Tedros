@@ -105,6 +105,7 @@ extends TBehavior<M, TDynaPresenter<M>> {
 	/**
 	 * Set a TActionState
 	 * */
+	@SuppressWarnings("unchecked")
 	public void setActionState(TActionState actionState) {
 		this.actionStateProperty.setValue(actionState);
 	}

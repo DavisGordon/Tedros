@@ -35,6 +35,7 @@ import com.tedros.util.TedrosClassLoader;
 import com.tedros.util.TedrosFolderEnum;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -77,6 +78,7 @@ public final class TedrosContext {
 	private static ModalMessage MODAL_MESSAGE;
 	private static Node MODAL;
 	
+	private static boolean collapseMenu;
 	private static boolean PAGE_FORCE;
 	private static boolean PAGE_ADDHISTORY; 
 	private static boolean PAGE_SWAPVIEWS;
@@ -122,6 +124,7 @@ public final class TedrosContext {
 		
 		LOGGER.info("Starting context...");
 		updateMessage("Starting context...");
+		collapseMenu = true;
 		pageProperty = new SimpleObjectProperty<Page>();
 		pagePathProperty = new SimpleStringProperty();
 		showModalProperty = new SimpleBooleanProperty();
@@ -531,6 +534,20 @@ public final class TedrosContext {
 		
 	}
 
+	public static void logOut() {
+		main.hideApps();
+		loggedUser = null;
+		TedrosContext.showModal(main.buildLogin());
+	}
+	
+	/**
+	 * Stop all services and exit program
+	 * */
+	public static void exit() {
+		TedrosProcess.stopAllServices();
+        Platform.exit();
+	}
+	
 	/**
 	 * @param main the main to set
 	 */
@@ -540,6 +557,20 @@ public final class TedrosContext {
 	
 	public static ITedrosBox getApplication() {
 		return main;
+	}
+
+	/**
+	 * @return the collapseMenu
+	 */
+	public static boolean isCollapseMenu() {
+		return collapseMenu;
+	}
+
+	/**
+	 * @param collapseMenu the collapseMenu to set
+	 */
+	public static void setCollapseMenu(boolean collapseMenu) {
+		TedrosContext.collapseMenu = collapseMenu;
 	}
 	
 }

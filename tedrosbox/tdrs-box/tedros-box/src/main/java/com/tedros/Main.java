@@ -29,8 +29,10 @@ import com.tedros.core.logging.TLoggerManager;
 import com.tedros.fxapi.modal.TConfirmMessageBox;
 import com.tedros.fxapi.modal.TModalPane;
 import com.tedros.fxapi.presenter.TPresenter;
+import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.login.model.LoginModelView;
+import com.tedros.settings.logged.user.TMainSettingsPane;
 import com.tedros.settings.logged.user.TUserSettingsPane;
 import com.tedros.util.TFileUtil;
 import com.tedros.util.TZipUtil;
@@ -76,6 +78,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -102,6 +105,8 @@ public class Main extends Application implements ITedrosBox  {
     private Page currentPage;
     private String currentPagePath;
     
+    private StackPane layerPane;
+    private StackPane innerPane;
     private TedrosBoxBreadcrumbBar breadcrumbBar;
     private Stack<Page> history;
     private Stack<Page> forwardHistory;
@@ -120,6 +125,8 @@ public class Main extends Application implements ITedrosBox  {
     private Label appName;
 
     private boolean expandedTollBar = true;
+    
+    private String version = "8.5.1";
     
     
     public Main(){
@@ -147,7 +154,7 @@ public class Main extends Application implements ITedrosBox  {
 		//create tedros directory if is not exists
     	File folder = new File(outputFolder+"/.tedros");
     	if(folder.exists()){ 
-    		if(new File(outputFolder+"/.tedros"+"/tedrosbox__V8.4.txt").exists())
+    		if(new File(outputFolder+"/.tedros"+"/tedrosbox__V8.5.txt").exists())
     			return false;
     		TFileUtil.delete(folder);
     	}
@@ -220,8 +227,8 @@ public class Main extends Application implements ITedrosBox  {
     	
     	getStage().getIcons().add(img);
     	// create root stack pane that we use to be able to overlay proxy dialog
-        StackPane layerPane = new StackPane();
-        
+        layerPane = new StackPane();
+        innerPane = new StackPane();
         getStage().initStyle(StageStyle.UNDECORATED);
         // create window resize button
         windowResizeButton = new TedrosBoxResizeBar(getStage(), 1020, 600);
@@ -273,7 +280,7 @@ public class Main extends Application implements ITedrosBox  {
         modalMessage.setVisible(false);
         layerPane.getChildren().add(modalMessage);
         
-        tModalPane = new TModalPane(layerPane);
+        tModalPane = new TModalPane(innerPane);
          
         // create main toolbar
         toolBar = new ToolBar();
@@ -299,13 +306,18 @@ public class Main extends Application implements ITedrosBox  {
         appName.setCursor(Cursor.HAND);
         
         appName.setOnMouseClicked(e -> {
-        	PopOver userPopover = new PopOver();
-        	userPopover.setHeaderAlwaysVisible(true);
-        	userPopover.setTitle("Settings");
-        	userPopover.setCloseButtonEnabled(true);
-        	userPopover.getRoot().getStylesheets().addAll(customStyleCssUrl, immutableStylesCssUrl, defaultStyleCssUrl2, defaultStyleCssUrl3);
-        	userPopover.setContentNode(new Label());
-        	userPopover.show(appName);
+        	String ab = TInternationalizationEngine.getInstance(null).getString("#{tedros.about}");
+        	String tt = TInternationalizationEngine.getInstance(null).getFormatedString("#{tedros.tooltip}", version);
+        	Label l = new Label(tt);
+        	l.setFont(Font.font(11));
+        	//StackPane.setMargin(l, new Insets(30,0,0,0));
+        	PopOver p = new PopOver();
+        	//p.setHeaderAlwaysVisible(true);
+        	//p.setTitle(ab);
+        	p.setCloseButtonEnabled(true);
+        	p.setContentNode(l);
+        	p.getRoot().setPadding(new Insets(20,20,20,20));
+        	p.show(appName);
     	
         });
         
@@ -431,9 +443,10 @@ public class Main extends Application implements ITedrosBox  {
         
         splitPane.getItems().addAll(leftSplitPane, rightSplitPane);
         splitPane.setDividerPosition(0, 0.099);
-        
+       // innerPane.getChildren().add(splitPane);
         root.setTop(toolBar);
-        root.setCenter(splitPane);
+        //root.setCenter(splitPane);
+        root.setCenter(innerPane);
         root.setStyle("-fx-background-color: transparent;");
         // add window resize button so its on top
         windowResizeButton.setManaged(false);
@@ -495,6 +508,15 @@ public class Main extends Application implements ITedrosBox  {
         
     }
     
+    public void showApps() {
+    	if(innerPane.getChildren().isEmpty() || !innerPane.getChildren().contains(splitPane))
+    		innerPane.getChildren().add(splitPane);
+    }
+    
+    public void hideApps() {
+    	innerPane.getChildren().remove(splitPane);
+    }
+    
 	@SuppressWarnings("unchecked")
 	public void buildApplicationMenu(){
     	pages = new Pages();
@@ -502,19 +524,31 @@ public class Main extends Application implements ITedrosBox  {
     	pages.parseModules();
         // goto initial page
         goToPage(pages.getModules());
+        showApps();
     }
 	
 	public void buildSettingsPane() {
+		TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+		
+		if(settingsAcc!=null &&  leftMenuPane.getChildren().contains(settingsAcc)) {
+			for(TitledPane t : settingsAcc.getPanes())
+				((TDynaPresenter)((TDynaView)((StackPane)t.getContent()).getChildren().get(0)).gettPresenter()).invalidate();
+			leftMenuPane.getChildren().remove(settingsAcc);
+		}
 		settingsAcc = new Accordion();
 		settingsAcc.autosize();
         TitledPane t = new TitledPane();
-        t.setText("Usúario");
-        settingsAcc.getPanes().add(t);
+        t.setText(iEngine.getString("#{tedros.setting.user}"));
         t.setContent(new TUserSettingsPane());
+        TitledPane t2 = new TitledPane();
+        t2.setText(iEngine.getString("#{tedros.setting.main}"));
+        t2.setContent(new TMainSettingsPane());
+        
+        settingsAcc.getPanes().addAll(t, t2);
         leftMenuPane.getChildren().add(settingsAcc);
 	}
     
-    private Node buildLogin(){
+    public Node buildLogin(){
     	
     	TModule module = new TModule() {
     		@Override
@@ -640,7 +674,7 @@ public class Main extends Application implements ITedrosBox  {
                     scrollPane.setStyle("-fx-background-color: transparent; -fx-padding: 20 20 20 20;");
                     content = scrollPane;
                     
-                    this.expandedTollBar = true;
+                    this.expandedTollBar = TedrosContext.isCollapseMenu(); //true;
                     colapseMenuBar();
                 }else {
                 	content = view;

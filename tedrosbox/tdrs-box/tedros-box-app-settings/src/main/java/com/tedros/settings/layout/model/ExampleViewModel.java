@@ -2,13 +2,6 @@ package com.tedros.settings.layout.model;
 
 
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.geometry.Pos;
-import javafx.scene.layout.Priority;
-import javafx.scene.text.TextAlignment;
-
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.tedros.fxapi.annotation.TBooleanValues;
@@ -31,6 +24,7 @@ import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.reader.TReader;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.annotation.scene.control.TLabeled;
 import com.tedros.fxapi.annotation.scene.control.TSize;
 import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
@@ -41,6 +35,13 @@ import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.settings.layout.behavior.ExampleBehavior;
 import com.tedros.settings.layout.decorator.ExampleDecorator;
 import com.tedros.settings.layout.form.EntityExampleForm;
+
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.geometry.Pos;
+import javafx.scene.layout.Priority;
+import javafx.scene.text.TextAlignment;
 
 
 @TLabelDefaultSetting(wrapText=false, position = TLabelPosition.TOP, node=@TNode(id="t-form-control-label", parse = true))
@@ -80,7 +81,7 @@ public class ExampleViewModel extends TEntityModelView<EntityExampleForm> {
 
 	@TReader(label=@TLabel(text="Check"), booleanValues=@TBooleanValues(falseValue="No", trueValue="Yes"))
 	@TLabel(text="Check")
-	@TCheckBoxField(label=@TLabel(text="Yes"), control=@TControl(tooltip="Check", parse = true), required=true)
+	@TCheckBoxField(labeled=@TLabeled(text="Yes", parse = true), control=@TControl(tooltip="Check", parse = true), required=true)
 	private SimpleBooleanProperty booleanField;
 	
 	public ExampleViewModel(){
