@@ -4,7 +4,7 @@ import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.entity.decorator.TSaveViewDecorator;
 
-public class TUserSettingDecorator extends TSaveViewDecorator<TUserModelView> {
+public class TUserSettingDecorator extends TSaveViewDecorator<TUserSettingModelView> {
 
 	@Override
 	public void decorate() {

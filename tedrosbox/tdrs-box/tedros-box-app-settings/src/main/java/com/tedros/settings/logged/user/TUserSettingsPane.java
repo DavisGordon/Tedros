@@ -24,9 +24,9 @@ public class TUserSettingsPane extends StackPane {
 	public TUserSettingsPane() {
 		TUser usr = TedrosContext.getLoggedUser();
     	
-		TUserModelView umv = new TUserModelView(usr);
+		TUserSettingModelView umv = new TUserSettingModelView(usr);
     	ObservableList l = FXCollections.observableArrayList(umv);
-    	TDynaView<TUserModelView> v = new TDynaView<>(TUserModelView.class, l, false);
+    	TDynaView<TUserSettingModelView> v = new TDynaView<>(TUserSettingModelView.class, l, false);
     	v.tLoad();
     	v.setMinHeight(400);
 		super.getChildren().add(v);

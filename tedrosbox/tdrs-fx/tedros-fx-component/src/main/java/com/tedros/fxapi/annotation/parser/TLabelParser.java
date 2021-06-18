@@ -18,4 +18,9 @@ import com.tedros.fxapi.annotation.control.TLabel;
  */
 public final class TLabelParser extends TAnnotationParser<TLabel, Labeled>{
 	
+	@Override
+	public void parse(TLabel annotation, Labeled object, String... byPass) throws Exception {
+		//object.setText(annotation.text());
+		super.parse(annotation, object, byPass);
+	}
 }

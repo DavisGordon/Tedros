@@ -28,7 +28,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
 import javafx.scene.control.Button;
 
-public class TUserSettingBehavior extends TSaveViewBehavior<TUserModelView, TUser> {
+public class TUserSettingBehavior extends TSaveViewBehavior<TUserSettingModelView, TUser> {
 
 	private Button saveButton;
 	private TComboBoxField<String> languageComboBox;
@@ -42,16 +42,16 @@ public class TUserSettingBehavior extends TSaveViewBehavior<TUserModelView, TUse
 		
 		iEngine = TInternationalizationEngine.getInstance(null);
 		
-		super.setSaveAction(new TPresenterAction<TDynaPresenter<TUserModelView>>() {
+		super.setSaveAction(new TPresenterAction<TDynaPresenter<TUserSettingModelView>>() {
 
 			@Override
-			public boolean runBefore(TDynaPresenter<TUserModelView> presenter) {
+			public boolean runBefore(TDynaPresenter<TUserSettingModelView> presenter) {
 				// TODO Auto-generated method stub
 				return true;
 			}
 
 			@Override
-			public void runAfter(TDynaPresenter<TUserModelView> presenter) {
+			public void runAfter(TDynaPresenter<TUserSettingModelView> presenter) {
 				try {
 					loadTedros();
 				} catch (IOException e) {
@@ -69,7 +69,8 @@ public class TUserSettingBehavior extends TSaveViewBehavior<TUserModelView, TUse
 		};
 		super.getListenerRepository().add("buildForm", chl);
 		super.buildFormStatusProperty().addListener(new WeakChangeListener<>(chl));
-		
+		super.setShoWMessages(false);
+		getView().gettProgressIndicator().setMargin(5);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -98,7 +99,7 @@ public class TUserSettingBehavior extends TSaveViewBehavior<TUserModelView, TUse
 	}
 
 	@Override
-	public boolean processNewEntityBeforeBuildForm(TUserModelView model) {
+	public boolean processNewEntityBeforeBuildForm(TUserSettingModelView model) {
 		return true;
 	}
 
@@ -107,7 +108,7 @@ public class TUserSettingBehavior extends TSaveViewBehavior<TUserModelView, TUse
 	}
 
 	private void loadTedros() throws IOException {
-		TUserModelView model = getModelView();
+		TUserSettingModelView model = getModelView();
 		boolean reload = !this.profileComboBox.getSelectionModel().getSelectedItem()
 				.getModel().getId().equals(model.getModel().getActiveProfile().getId());
 		

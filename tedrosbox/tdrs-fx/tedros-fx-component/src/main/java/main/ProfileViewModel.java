@@ -8,14 +8,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.geometry.Pos;
-
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.tedros.fxapi.annotation.control.TBigDecimalField;
@@ -36,9 +28,18 @@ import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.annotation.scene.control.TLabeled;
 import com.tedros.fxapi.domain.TLabelPosition;
 import com.tedros.fxapi.domain.TZeroValidation;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
+
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.geometry.Pos;
 
 
 //@TCrudForm(aligment=Pos.CENTER_LEFT, style="-fx-background-color: #ffffff;", width=400, formClass = null)
@@ -89,7 +90,7 @@ public class ProfileViewModel extends TEntityModelView<TCProfile> {
 	private SimpleStringProperty endereco;
 	
 	@TLabel(text="Funções avançadas")
-	@TCheckBoxField(label=@TLabel(text="Ativar"), control=@TControl(tooltip="ativar tudo", parse = true), required=true)
+	@TCheckBoxField(labeled=@TLabeled(text="Ativar", parse = true), control=@TControl(tooltip="ativar tudo", parse = true), required=true)
 	private SimpleBooleanProperty ativar;
 	
 	/*@TLabel(text="DESCRIÇÃO", position=TLabelPosition.TOP)

@@ -65,7 +65,7 @@ public class PessoaTermoAdesaoModelView extends TEntityModelView<PessoaTermoAdes
 	@TAccordion(expandedPane="main", node=@TNode(id="repdoaacc",parse = true),
 			panes={
 					@TTitledPane(text="Detalhes", node=@TNode(id="main",parse = true), expanded=true,
-							fields={"textoCadastro", "status"}),
+							fields={"textoCadastro", "status", "tiposAjuda"}),
 					@TTitledPane(text="Termo de adesão", node=@TNode(id="detail",parse = true),
 						fields={"conteudo"})})
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))

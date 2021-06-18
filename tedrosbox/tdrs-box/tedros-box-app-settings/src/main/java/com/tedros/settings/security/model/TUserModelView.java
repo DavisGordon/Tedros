@@ -33,6 +33,7 @@ import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.reader.TTableReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
+import com.tedros.fxapi.annotation.scene.control.TLabeled;
 import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.collections.ITObservableList;
@@ -110,7 +111,7 @@ public class TUserModelView extends TEntityModelView<TUser> {
 	
 	@TReaderHtml
 	@TLabel(text="#{label.active}:", position=TLabelPosition.LEFT)
-	@TCheckBoxField(label=@TLabel(text="#{label.active}"))
+	@TCheckBoxField(labeled=@TLabeled(text="#{label.active}", parse = true))
 	private SimpleBooleanProperty active;
 	
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))

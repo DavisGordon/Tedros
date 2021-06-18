@@ -11,22 +11,23 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javafx.scene.Node;
-import javafx.scene.control.ButtonBase;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Control;
-import javafx.scene.control.Labeled;
-
 import com.tedros.fxapi.annotation.parser.TAnnotationParser;
 import com.tedros.fxapi.annotation.parser.TCheckBoxParser;
 import com.tedros.fxapi.annotation.parser.TRequiredCheckBoxParser;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TButtonBase;
 import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.annotation.scene.control.TLabeled;
 import com.tedros.fxapi.builder.ITControlBuilder;
 import com.tedros.fxapi.builder.TCheckBoxFieldBuilder;
 import com.tedros.fxapi.control.TRequiredCheckBox;
 import com.tedros.fxapi.domain.TDefaultValues;
+
+import javafx.scene.Node;
+import javafx.scene.control.ButtonBase;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Control;
+import javafx.scene.control.Labeled;
 
 /**
  * <pre>
@@ -102,7 +103,7 @@ public @interface TCheckBoxField  {
 	 * The {@link Labeled} properties.
 	 * </pre>
 	 * */
-	public TLabel label() default @TLabel;
+	public TLabeled labeled();
 	
 	/**
 	 * <pre>
