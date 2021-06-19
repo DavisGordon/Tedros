@@ -157,9 +157,9 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 					continue;
 				}
 				
-				/*int y=0; 
+				int y=0; 
 				if(key.contains("node") || key.contains("labeled"))
-					y=1;*/
+					y=1;
 				
 				if(byPass!=null && byPass.length>0){
 					if(exclusive.size()>0 && !exclusive.contains(key)){
