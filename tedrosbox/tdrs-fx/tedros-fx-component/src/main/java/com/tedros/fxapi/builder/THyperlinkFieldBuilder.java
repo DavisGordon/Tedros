@@ -8,6 +8,8 @@ package com.tedros.fxapi.builder;
 
 import java.lang.annotation.Annotation;
 
+import com.tedros.fxapi.control.TText.TTextStyle;
+
 import javafx.beans.property.Property;
 import javafx.scene.control.Hyperlink;
 
@@ -24,7 +26,7 @@ implements ITControlBuilder<Hyperlink, Property<String>> {
 	
 	public Hyperlink build(final Annotation annotation, final Property<String> attrProperty) throws Exception {
 		final Hyperlink control = new Hyperlink();
-		control.setId("t-label");
+		control.getStyleClass().add(TTextStyle.CUSTOM.getValue());
 		control.textProperty().bindBidirectional(attrProperty);
 		callParser(annotation, control);
 		return control;

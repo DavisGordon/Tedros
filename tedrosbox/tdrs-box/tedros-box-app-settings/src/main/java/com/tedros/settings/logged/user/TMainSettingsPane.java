@@ -29,7 +29,7 @@ public class TMainSettingsPane extends StackPane {
     	ObservableList l = FXCollections.observableArrayList(umv);
     	TDynaView<TMainSettingsModelView> v = new TDynaView<>(TMainSettingsModelView.class, l, false);
     	v.tLoad();
-    	v.setMinHeight(100);
+    	v.setMinHeight(60);
 		super.getChildren().add(v);
 				
 		

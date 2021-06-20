@@ -15,11 +15,10 @@ import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEntityProcess;
-import com.tedros.fxapi.annotation.property.TObservableListProperty;
 import com.tedros.fxapi.annotation.scene.TNode;
-import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.builder.LanguageBuilder;
+import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.login.behavior.LoginBehavior;
@@ -45,7 +44,7 @@ public class LoginModelView extends TModelView<Login> {
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", 
 			effect=@TEffect(dropShadow=@TDropShadow, parse = false), parse = true))
 	@TText(text="#{tedros.login.form.title}", textAlignment=TextAlignment.LEFT, 
-		node=@TNode(styleClass=@TObservableListProperty(addAll={"t-form-title-text"},parse = true), parse = true))
+			textStyle=TTextStyle.LARGE)
 	private SimpleStringProperty title;
 	
 	@TLabel(text = "#{tedros.login.user}")
@@ -62,9 +61,8 @@ public class LoginModelView extends TModelView<Login> {
 	
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", 
 			effect=@TEffect(dropShadow=@TDropShadow, parse = false), parse = true))
-	@TText(text="#{tedros.profileText}", font=@TFont(size=14), wrappingWidth=400, 
-		textAlignment=TextAlignment.LEFT, 
-		node=@TNode(styleClass=@TObservableListProperty(addAll={"t-form-title-text"},parse = true), parse = true))
+	@TText(text="#{tedros.profileText}", wrappingWidth=480, textAlignment=TextAlignment.LEFT, 
+		textStyle=TTextStyle.MEDIUM)
 	private SimpleStringProperty profileText;
 	
 	@TLabel(text = "#{tedros.profile}")

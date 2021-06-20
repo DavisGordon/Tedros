@@ -133,6 +133,10 @@ extends TMasterCrudViewBehavior<MailingModelView, Mailing> {
 			decorator.gettSaveButton().setDisable(flag);
 		if(decorator.gettDeleteButton()!=null && isUserAuthorized(TAuthorizationType.DELETE))
 			decorator.gettDeleteButton().setDisable(flag);
+		if(decorator.gettEditModeRadio()!=null && isUserAuthorized(TAuthorizationType.EDIT))
+			decorator.gettEditModeRadio().setDisable(flag);
+		if(decorator.gettReadModeRadio()!=null && isUserAuthorized(TAuthorizationType.READ))
+			decorator.gettReadModeRadio().setDisable(flag);
 	}
 	
 }

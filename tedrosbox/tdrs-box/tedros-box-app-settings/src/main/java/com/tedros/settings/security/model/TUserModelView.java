@@ -34,9 +34,9 @@ import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.reader.TTableReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TLabeled;
-import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.collections.ITObservableList;
+import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TLabelPosition;
 import com.tedros.fxapi.domain.TStyleParameter;
@@ -84,8 +84,8 @@ public class TUserModelView extends TEntityModelView<TUser> {
 				cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 				cssForHtmlBox="", cssForContentValue="")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-pane", parse = true))
-	@TText(text="#{label.user.header}", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
-		node=@TNode(id="t-form-title-text", parse = true))
+	@TText(text="#{label.user.header}", textAlignment=TextAlignment.LEFT, 
+			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty header;
 	
 	@TReaderHtml
@@ -115,8 +115,8 @@ public class TUserModelView extends TEntityModelView<TUser> {
 	private SimpleBooleanProperty active;
 	
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="#{label.profilesText}", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
-		node=@TNode(id="t-form-title-text", parse = true), mode=TViewMode.EDIT)
+	@TText(text="#{label.profilesText}", textAlignment=TextAlignment.LEFT, 
+			textStyle = TTextStyle.LARGE, mode=TViewMode.EDIT)
 	private SimpleStringProperty profilesText;
 	
 	@TTableReaderHtml(label=@TLabel(text="#{label.profiles}:"), 

@@ -8,7 +8,7 @@ package com.tedros.fxapi.annotation.parser;
 
 import java.lang.annotation.Annotation;
 
-import javafx.scene.text.Text;
+import com.tedros.fxapi.control.TText;
 
 /**
  * DESCRIÇÃO DA CLASSE
@@ -16,7 +16,12 @@ import javafx.scene.text.Text;
  * @author Davis Gordon
  *
  */
-public final class TTextParser extends TAnnotationParser<Annotation, Text> {
+public final class TTextParser extends TAnnotationParser<Annotation, TText> {
 
-		
+		@Override
+		public void parse(Annotation annotation, TText object, String... byPass) throws Exception {
+			com.tedros.fxapi.annotation.text.TText tAnnotation = (com.tedros.fxapi.annotation.text.TText) annotation;
+			object.settTextStyle(tAnnotation.textStyle());
+			super.parse(annotation, object, "textStyle");
+		}
 }

@@ -32,9 +32,9 @@ import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TReportProcess;
 import com.tedros.fxapi.annotation.scene.TNode;
-import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.collections.ITObservableList;
+import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.presenter.report.behavior.TDataSetReportBehavior;
@@ -93,8 +93,8 @@ public class EstoqueReportModelView extends TModelView<EstoqueReportModel>{
 			})
 	private SimpleStringProperty origem;
 			
-	@TText(text="Data ou Periodo:", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
-	node=@TNode(id="t-form-title-text", parse = true))
+	@TText(text="Data ou Periodo:", textAlignment=TextAlignment.LEFT, 
+			textStyle = TTextStyle.MEDIUM)
 	@THBox(	pane=@TPane(children={"texto2","dataInicio","dataFim"}), spacing=10, fillHeight=true,
 	alignment=Pos.BOTTOM_LEFT,
 	hgrow=@THGrow(priority={@TPriority(field="texto2", priority=Priority.NEVER),

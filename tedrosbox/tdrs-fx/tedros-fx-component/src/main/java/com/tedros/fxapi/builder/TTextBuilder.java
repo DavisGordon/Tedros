@@ -24,12 +24,12 @@ import com.tedros.fxapi.annotation.text.TText;
  */
 public class TTextBuilder 
 extends TBuilder 
-implements ITControlBuilder<Text, SimpleStringProperty>, ITReaderBuilder<Text, SimpleStringProperty> {
+implements ITControlBuilder<com.tedros.fxapi.control.TText, SimpleStringProperty>, ITReaderBuilder<Text, SimpleStringProperty> {
 	
 	@Override
-	public Text build(Annotation annotation, final SimpleStringProperty property) throws Exception {
+	public com.tedros.fxapi.control.TText build(Annotation annotation, final SimpleStringProperty property) throws Exception {
 		TText tAnnotation = (TText) annotation;
-		final Text control = new Text();
+		final com.tedros.fxapi.control.TText control = new com.tedros.fxapi.control.TText();
 		control.textProperty().addListener(new ChangeListener<String>() {
 
 			@Override

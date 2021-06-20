@@ -26,8 +26,8 @@ import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEntityProcess;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
-import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
+import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.beans.property.SimpleLongProperty;
@@ -75,14 +75,12 @@ public class TermoAdesaoModelView extends TEntityModelView<TermoAdesao> {
 	})
 	private SimpleStringProperty status;
 	
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form",
-			style="-fx-background-color: #FFFFFF", parse = true))
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
 	@TText(text="#NOME# #PROFISSAO# #ESTADOCIVIL# #IDENTIDADE# #NACIONALIDADE# #CPF# "
 			+ "#TIPOLOGRADOURO# #LOGRADOURO# #COMPLEMENTO# #BAIRRO# #CEP# #CIDADE# #UF# "
 			+ "#TIPOSAJUDA# #DATAACAO# #HORAACAO#", 
-			wrappingWidth=650,
-			font=@TFont(size=12), textAlignment=TextAlignment.LEFT, 
-	node=@TNode(id="t-label", parse = true))
+			wrappingWidth=650, textAlignment=TextAlignment.LEFT, 
+			textStyle = TTextStyle.CUSTOM)
 	private SimpleStringProperty textoChaves;
 	
 	@THTMLEditor(required=true)

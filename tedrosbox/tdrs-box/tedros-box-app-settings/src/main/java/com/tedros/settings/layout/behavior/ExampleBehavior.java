@@ -187,8 +187,7 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleViewModel,
 			if(label!=null){
 				label.setStyle("-fx-text-fill: "+TColorUtil.toHexadecimal(textColor)+";"+ 
 						"-fx-font: \"Helvetica\";"+
-						"-fx-font-size: "+size+"em;"+
-						"-fx-font-weight: bold;");
+						"-fx-font-size: "+size+"em;");
 			}
 		}
 	}
