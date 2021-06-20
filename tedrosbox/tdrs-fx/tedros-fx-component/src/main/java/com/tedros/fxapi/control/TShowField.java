@@ -137,7 +137,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 
 	private Node buildNode(String value) {
 		TLabel c = new TLabel(value);
-		c.setId("t-form-item-text");
+		c.setId("t-form-label-field-value");
 		return c;
 	}
 

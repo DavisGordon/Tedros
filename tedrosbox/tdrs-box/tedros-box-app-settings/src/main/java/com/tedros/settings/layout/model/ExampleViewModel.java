@@ -28,6 +28,7 @@ import com.tedros.fxapi.annotation.scene.control.TLabeled;
 import com.tedros.fxapi.annotation.scene.control.TSize;
 import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
+import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.domain.TLabelPosition;
 import com.tedros.fxapi.domain.TZeroValidation;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
@@ -49,7 +50,8 @@ import javafx.scene.text.TextAlignment;
 public class ExampleViewModel extends TEntityModelView<EntityExampleForm> {
 	
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Example form", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, node=@TNode(id="t-form-title-text", parse = true))
+	@TText(text="Example form", textAlignment=TextAlignment.LEFT, 
+	textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty text;
 	
 	@TReader

@@ -11,6 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.core.model.ITModelView;
 import com.tedros.fxapi.control.TAccordion;
+import com.tedros.fxapi.control.TText;
+import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.control.validator.TFieldResult;
 import com.tedros.fxapi.control.validator.TValidatorResult;
 import com.tedros.fxapi.exception.TException;
@@ -139,8 +141,8 @@ public class TMessageBox extends StackPane {
 
 
 	public void tAddMessage(String string) {
-		Text text = new Text(string);
-		text.setId("t-form-item-text");
+		TText text = new TText(string);
+		text.settTextStyle(TTextStyle.CUSTOM);
 		text.setWrappingWidth(this.getMaxWidth()-100);
 		DropShadow ef = new DropShadow();
 		ef.setColor(Color.BLACK);

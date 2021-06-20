@@ -41,7 +41,7 @@ import com.tedros.util.TedrosFolderEnum;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
-import javafx.animation.TimelineBuilder;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.ConditionalFeature;
 import javafx.application.Platform;
@@ -126,7 +126,7 @@ public class Main extends Application implements ITedrosBox  {
 
     private boolean expandedTollBar = true;
     
-    private String version = "8.5.1";
+    private String version = "8.5.2";
     
     
     public Main(){
@@ -154,7 +154,7 @@ public class Main extends Application implements ITedrosBox  {
 		//create tedros directory if is not exists
     	File folder = new File(outputFolder+"/.tedros");
     	if(folder.exists()){ 
-    		if(new File(outputFolder+"/.tedros"+"/tedrosbox__V8.5.txt").exists())
+    		if(new File(outputFolder+"/.tedros"+"/tedrosbox__V8.5.2.txt").exists())
     			return false;
     		TFileUtil.delete(folder);
     	}
@@ -484,10 +484,13 @@ public class Main extends Application implements ITedrosBox  {
 			public void changed(ObservableValue<? extends Boolean> arg0,
 					Boolean arg1, Boolean newValue) {
 				
-				if(newValue && TedrosContext.getModal() != null)
+				if(newValue && TedrosContext.getModal() != null) {
+					tModalPane = new TModalPane(innerPane);
 					tModalPane.showModal(TedrosContext.getModal(), false);
-				else
+				}else {
 					tModalPane.hideModal();
+					innerPane.getChildren().remove(tModalPane);
+				}
 			}
 		});
         
@@ -705,7 +708,8 @@ public class Main extends Application implements ITedrosBox  {
         modalMessage.setOpacity(0);
         modalMessage.setVisible(true);
         modalMessage.setCache(true);
-        TimelineBuilder.create().keyFrames(
+        Timeline tl = new Timeline();
+        tl.getKeyFrames().add(
             new KeyFrame(Duration.millis(400), 
                 new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent t) {
@@ -713,7 +717,8 @@ public class Main extends Application implements ITedrosBox  {
                     }
                 },
                 new KeyValue(modalMessage.opacityProperty(),1, Interpolator.EASE_BOTH)
-        )).build().play();
+        ));
+        tl.play();
     }
     
     /**
@@ -721,7 +726,8 @@ public class Main extends Application implements ITedrosBox  {
      */
     public void hideModalMessage() {
         modalMessage.setCache(true);
-        TimelineBuilder.create().keyFrames(
+        Timeline tl = new Timeline();
+        tl.getKeyFrames().add(
             new KeyFrame(Duration.millis(400), 
                 new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent t) {
@@ -731,7 +737,8 @@ public class Main extends Application implements ITedrosBox  {
                     }
                 },
                 new KeyValue(modalMessage.opacityProperty(),0, Interpolator.EASE_BOTH)
-        )).build().play();
+        ));
+        tl.play();
     }
     
     /**

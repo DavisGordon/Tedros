@@ -32,9 +32,9 @@ import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.reader.TTableReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
-import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.collections.ITObservableList;
+import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.domain.TOptionProcessType;
 import com.tedros.fxapi.presenter.entity.behavior.TDetailCrudViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TDetailCrudViewDecorator;
@@ -69,8 +69,8 @@ public class PessoaTermoAdesaoModelView extends TEntityModelView<PessoaTermoAdes
 					@TTitledPane(text="Termo de adesão", node=@TNode(id="detail",parse = true),
 						fields={"conteudo"})})
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Detalhes do termo", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
-		node=@TNode(id="t-form-title-text", parse = true))
+	@TText(text="Detalhes do termo", textAlignment=TextAlignment.LEFT, 
+			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty textoCadastro;
 	
 	@TLabel(text="Status")

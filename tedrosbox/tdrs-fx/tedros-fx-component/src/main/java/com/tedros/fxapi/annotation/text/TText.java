@@ -26,6 +26,7 @@ import com.tedros.fxapi.annotation.scene.shape.TShape;
 import com.tedros.fxapi.builder.ITControlBuilder;
 import com.tedros.fxapi.builder.ITFieldBuilder;
 import com.tedros.fxapi.builder.TTextBuilder;
+import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.domain.TViewMode;
 
 /**
@@ -56,6 +57,21 @@ public @interface TText {
 	* */
 	@SuppressWarnings("rawtypes")
 	public Class<? extends ITAnnotationParser>[] parser() default {TTextParser.class};
+	
+	/**
+	* <pre>
+	* {@link TText} Class
+	* 
+	*  Sets the value of the property tTextStyle. 
+	*  
+	*  Property description: 
+	*  
+	*  Defines text tedros style. 
+	*  
+	*  Default value: TTextStyle.CUSTOM
+	* </pre>
+	**/
+	public TTextStyle textStyle();// default TTextStyle.CUSTOM;
 	
 	/**
 	* <pre>

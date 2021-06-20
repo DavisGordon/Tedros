@@ -24,9 +24,9 @@ import com.tedros.fxapi.annotation.reader.TDetailReader;
 import com.tedros.fxapi.annotation.reader.TReader;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
-import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.collections.ITObservableList;
+import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
@@ -64,8 +64,8 @@ public final class TProfileModelView extends TEntityModelView<TProfile> {
 					@TTitledPane(text="Detalhe", node=@TNode(id="detail",parse = true),
 						fields={"autorizations"})})
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="#{label.profile.header}", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, 
-		node=@TNode(id="t-form-title-text", parse = true))
+	@TText(text="#{label.profile.header}", textAlignment=TextAlignment.LEFT, 
+			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty textoCadastro;
 	
 	@TReader
