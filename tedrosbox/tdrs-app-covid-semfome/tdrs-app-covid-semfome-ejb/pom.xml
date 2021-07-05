@@ -55,7 +55,6 @@
 	  		<version>8-1.0</version>
 	  		<scope>compile</scope>
 	  	</dependency>
-	  	
 	  
 	  	<dependency>
 		   	<groupId>org.eclipse.persistence</groupId>

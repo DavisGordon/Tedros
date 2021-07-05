@@ -56,7 +56,7 @@ public class TermoAdesaoModelView extends TEntityModelView<TermoAdesao> {
 	
 	@TReaderHtml
 	@TLabel(text="Titulo")
-	@TTextField(maxLength=100, 
+	@TTextField(maxLength=100, node=@TNode(requestFocus=true, parse = true),
 	textInputControl=@TTextInputControl(promptText="Insira um titulo", parse = true),
 	required=true)
 	@THBox(	pane=@TPane(children={"titulo","status"}), spacing=10, fillHeight=true,

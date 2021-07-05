@@ -77,6 +77,15 @@
   	
   	<build>
     	<plugins>
+    		<plugin>
+			 <groupId>org.apache.maven.plugins</groupId>
+			 <artifactId>maven-resources-plugin</artifactId>
+			 <version>2.5</version>
+			 <configuration>
+			   <!-- specify UTF-8, ISO-8859-1 or any other file encoding -->
+			   <encoding>UTF-8</encoding>
+			 </configuration>
+			</plugin>
       		<plugin>
         		<groupId>org.apache.maven.plugins</groupId>
         		<artifactId>maven-compiler-plugin</artifactId>
@@ -87,6 +96,17 @@
         		</configuration>
       		</plugin>
   		</plugins>
+  		
+  		<resources>
+        	<resource>
+            	<directory>src/main/resources</directory>
+            	<filtering>true</filtering>
+            	<includes>
+          			<include>**/*.*</include>
+        		</includes>
+        	</resource>
+    	</resources>
+  		
  	</build>
  
  

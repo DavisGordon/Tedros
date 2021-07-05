@@ -27,6 +27,7 @@ import com.tedros.fxapi.annotation.presenter.TDetailListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
+import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.presenter.entity.behavior.TDetailCrudViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TDetailCrudViewDecorator;
@@ -57,18 +58,18 @@ public class DocumentoModelView extends TEntityModelView<Documento>{
 				runAfterFormBuild=true,
 				associatedFieldBox={"nacionalidade", "dataEmissao", "dataValidade", "orgaoEmissor"})
 	@THorizontalRadioGroup(required=true, alignment=Pos.CENTER_LEFT, spacing=4, 
-	radioButtons={
-			@TRadioButtonField(text = "#{label.identity}", userData = "1"),
-			@TRadioButtonField(text = "#{label.cpf}", userData = "2"), 
-			@TRadioButtonField(text = "#{label.cnpj}", userData = "3")
-			})
+		radioButtons={
+				@TRadioButtonField(text = "#{label.identity}", userData = "1"),
+				@TRadioButtonField(text = "#{label.cpf}", userData = "2"), 
+				@TRadioButtonField(text = "#{label.cnpj}", userData = "3")
+				})
 	private SimpleStringProperty tipo;
 	
 	
 	@TReaderHtml
 	@TLabel(text = "Numero")
 	@TMaskField(required=true, textInputControl=@TTextInputControl(promptText="Identidade, Cpf ou Cnpj", parse = true),
-	mask="######################")
+	mask="######################", node=@TNode(requestFocus=true, parse = true))
 	@TValidator(validatorClass = DocumentoValidator.class, associatedFieldsName={"tipo"})
 	@THBox(	pane=@TPane(children={"numero", "nacionalidade", "dataEmissao","dataValidade","orgaoEmissor"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="numero", priority=Priority.ALWAYS), 

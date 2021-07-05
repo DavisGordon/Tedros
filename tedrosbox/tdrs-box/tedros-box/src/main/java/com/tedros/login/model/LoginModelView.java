@@ -48,7 +48,7 @@ public class LoginModelView extends TModelView<Login> {
 	private SimpleStringProperty title;
 	
 	@TLabel(text = "#{tedros.login.user}")
-	@TTextField(required=true)
+	@TTextField(required=true, node=@TNode(requestFocus=true, parse = true))
 	private SimpleStringProperty user;
 	
 	@TLabel(text = "#{tedros.login.password}")
@@ -79,7 +79,7 @@ public class LoginModelView extends TModelView<Login> {
 	} 
 	
 	public SimpleStringProperty getUser() {
-		return user;
+		return user; 
 	}
 
 	public void setUser(SimpleStringProperty user) {

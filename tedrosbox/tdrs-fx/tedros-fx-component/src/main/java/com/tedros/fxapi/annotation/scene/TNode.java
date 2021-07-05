@@ -692,6 +692,8 @@ public @interface TNode {
 	**/
 	public double scaleZ() default 1.0;
 
+	public boolean requestFocus() default false;
+	
 	/**
 	* <pre>
 	* {@link Node} property

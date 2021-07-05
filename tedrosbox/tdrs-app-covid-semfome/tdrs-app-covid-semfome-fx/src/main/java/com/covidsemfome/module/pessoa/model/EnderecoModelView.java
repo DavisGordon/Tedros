@@ -28,6 +28,7 @@ import com.tedros.fxapi.annotation.presenter.TDetailListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
+import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.presenter.entity.behavior.TDetailCrudViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TDetailCrudViewDecorator;
@@ -69,6 +70,7 @@ public class EnderecoModelView extends TEntityModelView<Endereco> {
 	@TReaderHtml
 	@TLabel(text="Tipo Logradouro")
 	@TTextField(maxLength=100, required=true,
+	node=@TNode(requestFocus=true, parse = true),
 	textInputControl=@TTextInputControl(promptText="Rua, Avenida...", parse = true), 
 	control=@TControl(prefWidth=350, parse = true))
 	@THBox(	pane=@TPane(children={"tipoLogradouro","logradouro","bairro"}), spacing=10, fillHeight=true,

@@ -12,6 +12,7 @@ import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.presenter.TSelectionModalPresenter;
+import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
@@ -37,7 +38,8 @@ public class TipoAjudaFindModelView extends TEntityModelView<TipoAjuda> {
 	private SimpleLongProperty id;
 	
 	@TLabel(text="Descrição")
-	@TTextField(maxLength=60, required = true, textInputControl=@TTextInputControl(promptText="Descrição", parse = true), 
+	@TTextField(maxLength=60, required = true, node=@TNode(requestFocus=true, parse = true),
+	textInputControl=@TTextInputControl(promptText="Descrição", parse = true), 
 				control=@TControl(tooltip="#{label.name}", parse = true))
 	private SimpleStringProperty descricao;
 	

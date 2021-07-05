@@ -24,8 +24,7 @@ import com.tedros.ejb.base.entity.ITEntity;
  */
 @RequestScoped
 public class AcaoEAO extends TGenericEAO<Acao> {
-
-
+	
 	@SuppressWarnings("unchecked")
 	public List<Acao> pesquisar(List<Long> idsl, String titulo, Date dataInicio, Date dataFim, String status){
 	

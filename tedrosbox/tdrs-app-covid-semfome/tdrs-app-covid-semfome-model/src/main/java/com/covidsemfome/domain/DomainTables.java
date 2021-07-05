@@ -28,7 +28,12 @@ public interface DomainTables {
 	final static String pessoaTermoAdesao = "pessoa_termo_adesao";
 	final static String voluntario = "voluntario";
 	final static String vol_tipoajuda = "vol_tipoajuda";
-	final static String termo_tipoajuda = "termo_tipoajuda";;
+	final static String termo_tipoajuda = "termo_tipoajuda";
+	final static String site_doacao = "site_doacao";
+	final static String site_video = "site_video";
+	final static String site_about = "site_about";
+	final static String site_contato = "site_contato";
+	final static String site_noticia = "site_noticia";
 }
 
 

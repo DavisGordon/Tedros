@@ -70,7 +70,7 @@ import javafx.scene.text.TextAlignment;
 					@TOption(text = "Titulo", value = "titulo"), 
 					@TOption(text = "Data", value = "data")}),
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Ação / Campanha")))
-@TSecurity(	id="COVSEMFOME_ACAO_FORM", 
+@TSecurity(	id="COVSEMFOME_SITEACAO_FORM", 
 	appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Ação / Campanha",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
@@ -93,7 +93,7 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	
 	@TReaderHtml
 	@TLabel(text="Titulo/Local")
-	@TTextField(maxLength=100, 
+	@TTextField(maxLength=100, node=@TNode(requestFocus=true, parse = true),
 	textInputControl=@TTextInputControl(promptText="Insira um titulo ou o local", parse = true),
 	required=true)
 	private SimpleStringProperty titulo;
@@ -152,12 +152,14 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	
 	@TReaderHtml
 	@TLabel(text="Descricão")
-	@TTextAreaField(required=true, maxLength=2000, control=@TControl(prefWidth=250, prefHeight=150, parse = true))
+	@TTextAreaField(required=true, maxLength=2000, wrapText=true,
+	control=@TControl(prefWidth=250, prefHeight=150, parse = true))
 	private SimpleStringProperty descricao;
 	
 	@TReaderHtml
 	@TLabel(text="Observação")
-	@TTextAreaField(maxLength=600, control=@TControl(prefWidth=250, prefHeight=100, parse = true))
+	@TTextAreaField(maxLength=600, wrapText=true,
+	control=@TControl(prefWidth=250, prefHeight=100, parse = true))
 	private SimpleStringProperty observacao;
 	
 	

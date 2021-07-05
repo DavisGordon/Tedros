@@ -126,7 +126,7 @@ public class Main extends Application implements ITedrosBox  {
 
     private boolean expandedTollBar = true;
     
-    private String version = "8.5.2";
+    private String version = "8.5.3";
     
     
     public Main(){
@@ -154,7 +154,7 @@ public class Main extends Application implements ITedrosBox  {
 		//create tedros directory if is not exists
     	File folder = new File(outputFolder+"/.tedros");
     	if(folder.exists()){ 
-    		if(new File(outputFolder+"/.tedros"+"/tedrosbox__V8.5.2.txt").exists())
+    		if(new File(outputFolder+"/.tedros"+"/tedrosbox__V"+version+".txt").exists())
     			return false;
     		TFileUtil.delete(folder);
     	}
@@ -546,7 +546,9 @@ public class Main extends Application implements ITedrosBox  {
         TitledPane t2 = new TitledPane();
         t2.setText(iEngine.getString("#{tedros.setting.main}"));
         t2.setContent(new TMainSettingsPane());
-        
+        settingsAcc.getStyleClass().add("t-settings-page");
+        t.getStyleClass().add("t-settings-header");
+        t2.getStyleClass().add("t-settings-header");
         settingsAcc.getPanes().addAll(t, t2);
         leftMenuPane.getChildren().add(settingsAcc);
 	}
