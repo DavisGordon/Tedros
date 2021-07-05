@@ -13,6 +13,7 @@ import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.presenter.TSelectionModalPresenter;
+import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.domain.TLabelPosition;
@@ -54,7 +55,8 @@ public class ProdutoFindModelView extends TEntityModelView<Produto>{
 	
 	@TLabel(text="#{label.name}")
 	@TTextField(maxLength=60, required = true, textInputControl=@TTextInputControl(promptText="#{label.name}", parse = true), 
-				control=@TControl(tooltip="#{label.name}", parse = true))
+	node=@TNode(requestFocus=true, parse = true),
+	control=@TControl(tooltip="#{label.name}", parse = true))
 	private SimpleStringProperty nome;
 	
 	

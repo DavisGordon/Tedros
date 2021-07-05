@@ -65,7 +65,8 @@ public class CozinhaModelView extends TEntityModelView<Cozinha> {
 	@TReaderHtml
 	@TLabel(text="#{label.name}")
 	@TTextField(maxLength=60, required = true, textInputControl=@TTextInputControl(promptText="#{label.name}", parse = true), 
-				control=@TControl(tooltip="#{label.name}", parse = true))
+			node=@TNode(requestFocus=true, parse = true),
+		control=@TControl(tooltip="#{label.name}", parse = true))
 	@THBox(	pane=@TPane(children={"nome","telefone"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="nome", priority=Priority.ALWAYS), 
 						@TPriority(field="telefone", priority=Priority.NEVER)}))

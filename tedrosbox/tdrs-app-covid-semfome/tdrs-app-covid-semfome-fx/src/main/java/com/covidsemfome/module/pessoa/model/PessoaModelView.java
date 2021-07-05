@@ -126,7 +126,8 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	@TReaderHtml
 	@TLabel(text="#{label.name}")
 	@TTextField(maxLength=60, required = true, textInputControl=@TTextInputControl(promptText="#{label.name}", parse = true), 
-				control=@TControl(tooltip="#{label.name}", parse = true))
+			node=@TNode(requestFocus=true, parse = true),
+			control=@TControl(tooltip="#{label.name}", parse = true))
 	@THBox(	pane=@TPane(children={"nome","profissao","dataNascimento"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="nome", priority=Priority.ALWAYS), 
 						@TPriority(field="profissao", priority=Priority.ALWAYS), 

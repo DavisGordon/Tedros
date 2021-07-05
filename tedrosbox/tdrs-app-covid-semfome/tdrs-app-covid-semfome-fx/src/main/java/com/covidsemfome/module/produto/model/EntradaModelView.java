@@ -89,7 +89,7 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 	@TAccordion(expandedPane="main", node=@TNode(id="estocavelAcc",parse = true),
 			panes={
 					@TTitledPane(text="Principal", node=@TNode(id="main",parse = true), expanded=true,
-							fields={"textoCadastro", "doador"}),
+							fields={"textoCadastro", "tipo"}),
 					@TTitledPane(text="Detalhe", node=@TNode(id="detail",parse = true),
 						fields={"itens"})})
 	@TTextReaderHtml(text="Entrada de produtos", 
@@ -101,26 +101,6 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty textoCadastro;
 	
-	@TReaderHtml
-	@TLabel(text="Doador")
-	@TFieldBox(node=@TNode(parse = true))
-	@TOneSelectionModal(modelClass = Pessoa.class, modelViewClass = PessoaFindModelView.class,
-	width=300, height=50)
-	@TValidator(validatorClass = EntradaDoadorValidator.class, associatedFieldsName="tipo")
-	@THBox(	pane=@TPane(children={"data","tipo", "doador"}), spacing=10, fillHeight=false,
-	hgrow=@THGrow(priority={@TPriority(field="data", priority=Priority.NEVER), 
-		   		@TPriority(field="tipo", priority=Priority.NEVER), 
-   				   		@TPriority(field="doador", priority=Priority.ALWAYS) }))
-	private SimpleObjectProperty<Pessoa> doador;
-	
-	@TReaderHtml
-	@TLabel(text="Data e Hora")
-	@TDatePickerField(required = true, dateFormat=DateTimeFormatBuilder.class)
-	@TVBox(	pane=@TPane(children={"data", "cozinha"}), spacing=10, fillWidth=false,
-	vgrow=@TVGrow(priority={@TPriority(field="data", priority=Priority.NEVER), 
-   				   		@TPriority(field="cozinha", priority=Priority.ALWAYS) }))
-	private SimpleObjectProperty<Date> data;
-	
 	@TLabel(text="Tipo")
 	@TReaderHtml(codeValues={@TCodeValue(code = "Compras", value = "Compras"), 
 			@TCodeValue(code = "Doação", value = "Doação")})
@@ -130,14 +110,33 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 			@TRadioButtonField(text = "Doação", userData = "Doação")
 			})
 	@TTrigger(triggerClass = EntradaTipoTrigger.class, targetFieldName = "doador", runAfterFormBuild=true)
+	@THBox(	pane=@TPane(children={"data","tipo", "doador"}), spacing=10, fillHeight=false,
+	hgrow=@THGrow(priority={@TPriority(field="data", priority=Priority.NEVER), 
+		   		@TPriority(field="tipo", priority=Priority.NEVER), 
+   				   		@TPriority(field="doador", priority=Priority.ALWAYS) }))
 	private SimpleStringProperty tipo;
+	
+	@TReaderHtml
+	@TLabel(text="Doador")
+	@TFieldBox(node=@TNode(parse = true))
+	@TOneSelectionModal(modelClass = Pessoa.class, modelViewClass = PessoaFindModelView.class,
+	width=300, height=50)
+	@TValidator(validatorClass = EntradaDoadorValidator.class, associatedFieldsName="tipo")
+	private SimpleObjectProperty<Pessoa> doador;
+	
+	@TReaderHtml
+	@TLabel(text="Data e Hora")
+	@TDatePickerField(required = true, node=@TNode(requestFocus=true, parse = true), dateFormat=DateTimeFormatBuilder.class)
+	@TVBox(	pane=@TPane(children={"data", "cozinha"}), spacing=10, fillWidth=false,
+	vgrow=@TVGrow(priority={@TPriority(field="data", priority=Priority.NEVER), 
+   				   		@TPriority(field="cozinha", priority=Priority.ALWAYS) }))
+	private SimpleObjectProperty<Date> data;
 	
 	@TReaderHtml
 	@TLabel(text="Cozinha:")
 	@TComboBoxField(required=true, optionsList=@TOptionsList(entityClass=Cozinha.class, 
 	optionModelViewClass=CozinhaModelView.class, serviceName = "ICozinhaControllerRemote"))
 	private SimpleObjectProperty<Cozinha> cozinha;
-	
 	
 	@TDetailReaderHtml(	label=@TLabel(text="Produtos"), 
 			entityClass=EntradaItem.class, 

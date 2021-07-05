@@ -28,6 +28,7 @@ import com.tedros.fxapi.annotation.presenter.TDetailTableViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
+import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.presenter.entity.behavior.TDetailFieldBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TDetailFieldDecorator;
@@ -76,6 +77,7 @@ public class ContatoModelView extends TEntityModelView<Contato> {
 	@TReaderHtml
 	@TLabel(text="DESCRIÇÃO")
 	@TMaskField(mask="##################################################", 
+	node=@TNode(requestFocus=true, parse = true),
 	textInputControl=@TTextInputControl(promptText="E-mail, telefone, celuar...", parse = true),
 	required=true)
 	@TValidator(validatorClass = DocumentoValidator.class, associatedFieldsName={"tipo"})

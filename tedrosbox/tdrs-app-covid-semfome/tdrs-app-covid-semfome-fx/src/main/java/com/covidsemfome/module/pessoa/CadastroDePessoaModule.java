@@ -29,7 +29,6 @@ public class CadastroDePessoaModule extends TModule{
 
 	@Override
 	public void tStart() {
-		TDynaView<PessoaModelView> view = new TDynaView<>(this, PessoaModelView.class);
 		tShowView(new TGroupView<TGroupPresenter>(this, "Pessoa Voluntaria", 
 				new TViewItem(TDynaView.class, PessoaModelView.class, "Pessoa"),
 				new TViewItem(TDynaView.class, TermoAdesaoModelView.class, "Termo Adesão")

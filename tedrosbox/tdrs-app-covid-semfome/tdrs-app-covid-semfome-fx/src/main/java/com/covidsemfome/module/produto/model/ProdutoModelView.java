@@ -78,7 +78,7 @@ public class ProdutoModelView extends TEntityModelView<Produto> {
 	
 	@TReaderHtml
 	@TLabel(text="Codigo")
-	@TTextField(maxLength=20, required = true, 
+	@TTextField(maxLength=20, required = true, node=@TNode(requestFocus=true, parse = true),
 	textInputControl=@TTextInputControl(promptText="Codigo do produto", parse = true), 
 				control=@TControl(tooltip="Codigo de referencia", parse = true))
 	@THBox(	pane=@TPane(children={"codigo","nome"}), spacing=10, fillHeight=true,

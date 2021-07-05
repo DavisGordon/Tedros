@@ -70,7 +70,8 @@ public class AcoesReportModelView extends TModelView<AcaoReportModel>{
 	
 		
 	@TLabel(text="Titulo / Local")
-	@TTextField(textInputControl=@TTextInputControl(promptText="Insira parte ou o titulo completo da ação", parse = true))
+	@TTextField(node=@TNode(requestFocus=true, parse = true),
+	textInputControl=@TTextInputControl(promptText="Insira parte ou o titulo completo da ação", parse = true))
 	@THBox(	pane=@TPane(children={"titulo","ids"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="titulo", priority=Priority.ALWAYS),
    				   		@TPriority(field="ids", priority=Priority.ALWAYS) }))

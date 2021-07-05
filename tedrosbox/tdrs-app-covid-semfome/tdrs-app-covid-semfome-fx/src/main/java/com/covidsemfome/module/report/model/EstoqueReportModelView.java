@@ -76,7 +76,8 @@ public class EstoqueReportModelView extends TModelView<EstoqueReportModel>{
    				   		@TPriority(field="ids", priority=Priority.SOMETIMES),
    				   		@TPriority(field="origem", priority=Priority.ALWAYS) }))
 	@TLabel(text="Cozinha:")
-	@TComboBoxField(optionsList=@TOptionsList(entityClass=Cozinha.class, 
+	@TComboBoxField(node=@TNode(requestFocus=true, parse = true),
+	optionsList=@TOptionsList(entityClass=Cozinha.class, 
 	optionModelViewClass=CozinhaModelView.class, serviceName = "ICozinhaControllerRemote"))
 	private SimpleObjectProperty<Cozinha> cozinha;
 	

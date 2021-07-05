@@ -120,7 +120,7 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 	
 	@TLabel(text="Destino:")
 	@TValidator(validatorClass = MailingDestinoValidator.class, associatedFieldsName={"emails"})
-	@TComboBoxField(items=DestinoItensBuilder.class)
+	@TComboBoxField(items=DestinoItensBuilder.class, node=@TNode(requestFocus=true, parse = true))
 	private SimpleObjectProperty<TItemModel<String>> destino;
 
 	@TLabel(text="Para")

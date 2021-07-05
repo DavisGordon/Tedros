@@ -73,7 +73,7 @@ public class EstoqueConfigModelView extends TEntityModelView<EstoqueConfig> {
 	@TReaderHtml
 	@TLabel(text="Produto")
 	@TOneSelectionModal(modelClass = Produto.class, modelViewClass = ProdutoFindModelView.class,
-	width=300, height=50, required=true)
+	width=300, height=50, required=true, node=@TNode(requestFocus=true, parse = true))
 	@THBox(	pane=@TPane(children={"produto","cozinha"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="produto", priority=Priority.NEVER), 
 		   		@TPriority(field="cozinha", priority=Priority.ALWAYS)}))

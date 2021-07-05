@@ -78,9 +78,10 @@ public class PessoaTermoAdesaoModelView extends TEntityModelView<PessoaTermoAdes
 			@TCodeValue(code = "DESATIVADO", value = "Desativado")
 	})
 	@THorizontalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4, required=true,
-	radioButtons = {@TRadioButtonField(text="Ativado", userData="ATIVADO"), 
-					@TRadioButtonField(text="Desativado", userData="DESATIVADO")
-	})
+		node=@TNode(requestFocus=true, parse = true),
+		radioButtons = {@TRadioButtonField(text="Ativado", userData="ATIVADO"), 
+						@TRadioButtonField(text="Desativado", userData="DESATIVADO")
+		})
 	@THBox(pane=@TPane(	children={"status", "versionNum"}), spacing=10, fillHeight=true, 
 	hgrow=@THGrow(priority={@TPriority(field="status", priority=Priority.ALWAYS),
 							@TPriority(field="versionNum", priority=Priority.ALWAYS)}))
