@@ -8,6 +8,7 @@ import com.covidsemfome.module.acao.model.SiteAboutModelView;
 import com.covidsemfome.module.acao.model.SiteContatoModelView;
 import com.covidsemfome.module.acao.model.SiteDoacaoModelView;
 import com.covidsemfome.module.acao.model.SiteNoticiaModelView;
+import com.covidsemfome.module.acao.model.SiteTermoModelView;
 import com.covidsemfome.module.acao.model.SiteVideoModelView;
 import com.tedros.core.TModule;
 import com.tedros.core.annotation.security.TAuthorizationType;
@@ -36,7 +37,8 @@ public class AcaoModule extends TModule {
 				new TViewItem(TDynaView.class, SiteContatoModelView.class, "Contatos"),
 				new TViewItem(TDynaView.class, SiteVideoModelView.class, "Videos"),
 				new TViewItem(TDynaView.class, SiteDoacaoModelView.class, "Doação"),
-				new TViewItem(TDynaView.class, SiteNoticiaModelView.class, "Noticias")
+				new TViewItem(TDynaView.class, SiteNoticiaModelView.class, "Noticias"),
+				new TViewItem(TDynaView.class, SiteTermoModelView.class, "Termo")
 				));
 	}
 

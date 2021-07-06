@@ -36,6 +36,7 @@
 		<class>com.covidsemfome.model.SiteAbout</class>
 		<class>com.covidsemfome.model.SiteContato</class>
 		<class>com.covidsemfome.model.SiteNoticia</class>
+		<class>com.covidsemfome.model.SiteTermo</class>
 		
 		<properties>
 		
