@@ -34,6 +34,7 @@ public interface DomainTables {
 	final static String site_about = "site_about";
 	final static String site_contato = "site_contato";
 	final static String site_noticia = "site_noticia";
+	final static String site_termo = "site_termo";
 }
 
 

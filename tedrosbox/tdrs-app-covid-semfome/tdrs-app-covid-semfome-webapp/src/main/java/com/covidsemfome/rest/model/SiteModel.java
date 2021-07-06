@@ -1,7 +1,6 @@
 package com.covidsemfome.rest.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -11,6 +10,7 @@ import com.covidsemfome.model.SiteAbout;
 import com.covidsemfome.model.SiteContato;
 import com.covidsemfome.model.SiteDoacao;
 import com.covidsemfome.model.SiteNoticia;
+import com.covidsemfome.model.SiteTermo;
 import com.covidsemfome.model.SiteVideo;
 
 @XmlRootElement(name="doacao")
@@ -45,7 +45,9 @@ public class SiteModel implements Serializable{
 	@XmlAttribute
 	private String email;
 	
-	
+	public SiteModel(SiteTermo e) {
+		this.descricao = e.getDescricao();
+	}
 	
 	public SiteModel(SiteAbout e) {
 		this.descricao = e.getDescricao();

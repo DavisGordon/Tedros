@@ -62,7 +62,6 @@ public class TermoAdesaoModelView extends TEntityModelView<TermoAdesao> {
 	@THBox(	pane=@TPane(children={"titulo","status"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="titulo", priority=Priority.ALWAYS), 
    				   		@TPriority(field="status", priority=Priority.ALWAYS) }))
-	
 	private SimpleStringProperty titulo;
 	
 	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "Ativado"), 

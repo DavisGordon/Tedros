@@ -30,8 +30,8 @@ import br.com.covidsemfome.bean.CovidUserBean;
  * @author Davis Gordon
  *
  */
-@WebFilter(filterName = "PainelAuthFilter",urlPatterns = {"/painel/*","/api/painel/*"})
-public class AutenticacaoFilter implements Filter {
+@WebFilter(filterName = "TermoFilter",urlPatterns = {"/termo/*","/api/termo/*"})
+public class TermoFilter implements Filter {
 	
 	@Inject @Any
 	private CovidUserBean covidUserBean;
@@ -90,12 +90,7 @@ public class AutenticacaoFilter implements Filter {
 						covidUserBean.getUser().setId(u.getId());
 						covidUserBean.getUser().setPessoa(u.getPessoa());
 						
-						Boolean f = u.getPessoa().getConcordaTermo();
-						
-						if(f!=null && f)
-							chain.doFilter(req, resp);
-						else
-							((HttpServletResponse)resp).sendRedirect(httpRequest.getContextPath() + "/termo/termo.html");
+						chain.doFilter(req, resp);
 					}else{
 						((HttpServletResponse)resp).sendRedirect(httpRequest.getContextPath() + "/voluntario.html");
 					}

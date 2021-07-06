@@ -111,8 +111,8 @@
 						<div class="content">
 							<h2>Painel do voluntário</h2>
 							<p>Bem-vindo <strong><span id="userName" ></span></strong>, 
-							este é o seu espaço, fique por dentro das proximas ações, clique sobre o nome 
-							daquela que deseja se voluntariar, informe o tipo de ajuda e clique no botão Participar.
+							este é o seu espaço, fique por dentro das proximas ações, clique em Opções 
+							daquela que deseja se voluntariar, informe o tipo de ajuda e confirme com o botão Participar.
 							</p>
 						</div>
 						<div class="image">
@@ -124,7 +124,7 @@
 					<section class="wrapper style1 align-left" >
 						<div class="inner">
 							<header>
-								<h2>Ações / Campanhas</h2>*Clique no nome da ação para mais detalhes.
+								<h2>Ações</h2>*Clique no nome da ação para mais detalhes.
 							</header>
 							<div class="content align-center" id="acoesContent"></div>
 						</div>
@@ -407,12 +407,13 @@
 	        				frms.push('frm'+index);
 	        				
 	        				content += ('<header>');
-	        				content += ('<h1><a href="javascript: displayContent(\'content'+index+'\')">' + obj.titulo + '</a></h1>');
+	        				content += ('<h1>' + obj.titulo + '</h1>');
 	        				content += ('<p>' + obj.data + ', ' + obj.status + ', Inscritos(' + obj.qtdVoluntariosInscritos + '), Max(' + obj.qtdMaxVoluntarios + '), Min(' + obj.qtdMinVoluntarios + ')</p>');
 	        				content += ('</header>');
 	        				content += ('<p>' + obj.descricao + '</p>');
-	        				
-	        				if(obj.status=='Agendada' && (tpf || tpj)){
+	                        content += ('<a href="javascript: displayContent(\'content'+index+'\')" class="button primary fit small">Opções</a>');
+	        			
+	                        if(obj.status=='Agendada' && (tpf || tpj)){
 	        					var display = obj.inscrito ? "block" : "none";
 	        					content += ('<div class="content" id="content'+index+'" style="display:'+display+'">');
 		        				content += ('<h2>Quero participar</h2>');
@@ -420,7 +421,7 @@
 		        				content += ('<input type="hidden" name="id" id="id" value="'+obj.id+'" /> ');
 	        					content += ('<div class="fields">');
 		        				if(tpf){
-			        				content += ('<div class="field half" style="text-align:left;"><h3>Como pessoa fisica:</h3>');
+			        				content += ('<div class="field half" style="text-align:left;"><h3>Como voluntário:</h3>');
 			        				
 			        				$.each(tpf, function(index2,obj2){
 			        					var chk = '';
@@ -435,7 +436,7 @@
 			        				content += ('</p></div>');
 		        				}
 		        				if(tpj){
-			        				content += ('		<div class="field half" style="text-align:left;"><h3>Como pessoa juridica:</h3><p>');
+			        				content += ('		<div class="field half" style="text-align:left;"><h3>Prestando suporte:</h3><p>');
 			        				$.each(tpj, function(index2,obj2){
 			        					var chk = '';
 			        					$.each(obj.tiposAjuda, function(index3,obj3){

@@ -336,8 +336,6 @@
 									<div class="inner">
 										<header>
 											<h2>Proximas Ações</h2>
-											*Se é um voluntario cadastrado acesse o painel para marcar presença 
-											se ainda não for cadastrado clique <a href="#volun">aqui</a> para se cadastrar.
 										</header>
 										<div class="content align-center" id="acoesContent"></div>
 									</div>
@@ -590,15 +588,19 @@
 						</div>
 					</section>
 
-
-
-				<!-- Footer -->
-					<footer class="wrapper style1 align-center">
+					<footer class="wrapper style1 align-center is-inactive">
 						<div class="inner">
 							<ul class="icons">
+								<li><a href="https://www.facebook.com/covidsemfome" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a></li>
 								<li><a href="https://www.instagram.com/covidsemfome/" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
+								<li><a href="email: rosane2783@gmail.com" class="icon style2 fa-envelope"><span class="label">Email</span></a></li>
 							</ul>
-							<p>&copy; Developed by: <a href="https://www.linkedin.com/in/davis-gordon-dun?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BEVy8cyuBQnya3R5bZ9AXWQ%3D%3D">Davis Gordon Dun</a>.</p>
+							<ul class="icons">		
+								<li>&copy; Developed by: Davis Gordon Dun.</li>
+							
+								<li><a href="https://www.linkedin.com/in/davis-gordon-dun" class="icon brands style1 fa-linkedin"><span class="label">LinkedIn</span></a></li>
+								<li><a href="https://github.com/DavisGordon" class="icon brands style1 fa-github"><span class="label">Github</span></a></li>
+							</ul>
 						</div>
 					</footer>
 
@@ -648,7 +650,7 @@
 			        				if((result.data.length-1) == index+1)
 			        					content += ('<span  id="contatos" ></span>');
 			        				content += ('<p>' + obj.descricao + '</p>');
-			                        //content += ('<hr />');
+			                        content += ('<a href="voluntario.html" class="button primary fit small">Participar</a>');
 			        				});
 		        			}else{
 		        				content += ('<span  id="contatos" ></span>');

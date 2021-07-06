@@ -78,6 +78,9 @@ public class Pessoa extends TEntity {
 	@Column(length=12, nullable = true)
 	private String status;
 	
+	@Column
+	private Boolean concordaTermo;
+	
 	@Column(length=100)
 	private String newPassKey;
 	
@@ -353,6 +356,20 @@ public class Pessoa extends TEntity {
 	 */
 	public void setTermosAdesao(Set<PessoaTermoAdesao> termosAdesao) {
 		this.termosAdesao = termosAdesao;
+	}
+
+	/**
+	 * @return the concordaTermo
+	 */
+	public Boolean getConcordaTermo() {
+		return concordaTermo;
+	}
+
+	/**
+	 * @param concordaTermo the concordaTermo to set
+	 */
+	public void setConcordaTermo(Boolean concordaTermo) {
+		this.concordaTermo = concordaTermo;
 	}
 
 	
