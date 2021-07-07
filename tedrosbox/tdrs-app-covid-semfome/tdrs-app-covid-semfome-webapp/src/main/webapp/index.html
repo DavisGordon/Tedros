@@ -335,7 +335,7 @@
 								<section class="wrapper style1 align-left" >
 									<div class="inner">
 										<header>
-											<h2>Proximas Ações</h2>
+											<h3>Proximas Ações</h3>
 										</header>
 										<div class="content align-center" id="acoesContent"></div>
 									</div>
@@ -352,7 +352,7 @@
 									
 								</section>
 								
-								<section>
+								<section class="wrapper style2 align-left">
 									<header>
 										<h3>Doações</h3>
 									</header>
@@ -593,7 +593,7 @@
 							<ul class="icons">
 								<li><a href="https://www.facebook.com/covidsemfome" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a></li>
 								<li><a href="https://www.instagram.com/covidsemfome/" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
-								<li><a href="email: rosane2783@gmail.com" class="icon style2 fa-envelope"><span class="label">Email</span></a></li>
+								<li><a href="mailto: jacquelinedun@gmail.com" class="icon style2 fa-envelope"><span class="label">Email</span></a></li>
 							</ul>
 							<ul class="icons">		
 								<li>&copy; Developed by: Davis Gordon Dun.</li>
@@ -647,10 +647,12 @@
 			        				content += ('<h1>' + obj.titulo + '</h1>');
 			        				content += ('<p>' + obj.data + ', ' + obj.status + ', Inscritos(' + obj.qtdVoluntariosInscritos + '), Max(' + obj.qtdMaxVoluntarios + '), Min(' + obj.qtdMinVoluntarios + ')</p>');
 			        				content += ('</header>');
+			        				content += ('<p>' + obj.descricao + '</p>');
+			        				content += ('<a href="voluntario.html" class="button primary fit small">Participar</a>');
 			        				if((result.data.length-1) == index+1)
 			        					content += ('<span  id="contatos" ></span>');
-			        				content += ('<p>' + obj.descricao + '</p>');
-			                        content += ('<a href="voluntario.html" class="button primary fit small">Participar</a>');
+			        				
+			                        
 			        				});
 		        			}else{
 		        				content += ('<span  id="contatos" ></span>');
@@ -805,12 +807,7 @@
 		
 		
 		function validate(formData, jqForm, options) { 
-		    // jqForm is a jQuery object which wraps the form DOM element 
-		    // 
-		    // To validate, we can access the DOM elements directly and return true 
-		    // only if the values of both the username and password fields evaluate 
-		    // to true 
-		   
+		    
 		    var form = jqForm[0]; 
 		    if (!form.name.value || !form.email.value) { 
 		        alert('Por favor informar o seu nome e email para acesso ao painel.'); 
@@ -840,17 +837,7 @@
 		
 		// post-submit callback 
 		function showResponse(responseText, statusText, xhr, $form)  { 
-		    // for normal html responses, the first argument to the success callback 
-		    // is the XMLHttpRequest object's responseText property 
-		 
-		    // if the ajaxForm method was passed an Options Object with the dataType 
-		    // property set to 'xml' then the first argument to the success callback 
-		    // is the XMLHttpRequest object's responseXML property 
-		 
-		    // if the ajaxForm method was passed an Options Object with the dataType 
-		    // property set to 'json' then the first argument to the success callback 
-		    // is the json data object returned by the server 
-		 	if(responseText instanceof Object)
+		    if(responseText instanceof Object)
 		    	alert(responseText.responseText); 
 		 	else
 		 		alert(responseText); 
