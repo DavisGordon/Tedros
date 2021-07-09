@@ -4,16 +4,19 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <dependent-module archiveName="tdrs-app-covid-semfome-ejb-client-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tdrs-app-covid-semfome-ejb-client/tdrs-app-covid-semfome-ejb-client">
+        <dependent-module archiveName="tdrs-app-covid-semfome-ejb-client-8-2.2.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tdrs-app-covid-semfome-ejb-client/tdrs-app-covid-semfome-ejb-client">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="tdrs-app-covid-semfome-model-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tdrs-app-covid-semfome-model/tdrs-app-covid-semfome-model">
+        <dependent-module archiveName="tdrs-app-covid-semfome-model-8-2.2.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tdrs-app-covid-semfome-model/tdrs-app-covid-semfome-model">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="tedros-ejb-model-base-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tedros-ejb-model-base/tedros-ejb-model-base">
+        <dependent-module archiveName="tedros-ejb-model-base-8-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tedros-ejb-model-base/tedros-ejb-model-base">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="tedros-util-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tedros-util/tedros-util">
+        <dependent-module archiveName="tedros-common-model-8-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tedros-common-model/tedros-common-model">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="tedros-util-8-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tedros-util/tedros-util">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="java-output-path" value="/tdrs-app-covid-semfome-webapp/target/classes"/>
