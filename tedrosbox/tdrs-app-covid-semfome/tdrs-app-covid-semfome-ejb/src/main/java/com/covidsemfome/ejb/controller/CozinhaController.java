@@ -11,7 +11,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
-import com.covidsemfome.ejb.service.CozinhaService;
+import com.covidsemfome.ejb.service.TStatelessService;
 import com.covidsemfome.model.Cozinha;
 import com.tedros.ejb.base.controller.TEjbController;
 import com.tedros.ejb.base.service.ITEjbService;
@@ -27,7 +27,7 @@ import com.tedros.ejb.base.service.ITEjbService;
 public class CozinhaController extends TEjbController<Cozinha> implements ICozinhaController {
 	
 	@EJB
-	private CozinhaService serv;
+	private TStatelessService<Cozinha> serv;
 	
 	@Override
 	public ITEjbService<Cozinha> getService() {

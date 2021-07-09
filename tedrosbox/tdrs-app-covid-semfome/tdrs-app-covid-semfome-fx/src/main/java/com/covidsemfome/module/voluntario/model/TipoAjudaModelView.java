@@ -7,7 +7,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.covidsemfome.model.TipoAjuda;
-import com.covidsemfome.module.voluntario.process.TipoAjudaProcess;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.TCodeValue;
@@ -24,7 +23,7 @@ import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
-import com.tedros.fxapi.annotation.process.TEntityProcess;
+import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
@@ -48,7 +47,7 @@ import javafx.scene.text.TextAlignment;
  */
 @TFormReaderHtml
 @TForm(name = "Tipos de ajuda")
-@TEntityProcess(process = TipoAjudaProcess.class, entity=TipoAjuda.class)
+@TEjbService(serviceName = "ITipoAjudaControllerRemote", model=TipoAjuda.class)
 @TPresenter(decorator = @TDecorator(viewTitle="Tipos de ajuda voluntariado"))
 @TSecurity(	id="COVSEMFOME_CADTIPOAJUDA_FORM", 
 			appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Tipos de Ajuda",

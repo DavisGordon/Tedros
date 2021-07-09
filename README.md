@@ -1,15 +1,29 @@
 # Tedros
 ## API JavaFX para desenvolvimento de aplicativos desktop.
 
-Este projeto foi iniciado em 2013 para participar do maior evento de startup do Brasil daquele ano, o Desafio Brasil 2013, patrocionado pela FGV (Fundação Getulio Vargas), dentre os mais de 5000 projetos ficamos entre os melhores chegando a semi-final.
+Tedros é um framework para desenvolvimento de aplicativos desktop em JavaFX, standalone ou clinte servidor.
+Sua arquitetura foi projetada visando maior produtividade no desenvolvimento de um aplicativo.
 
-Sua ideia é ajudar no desenvolvimento de aplicações desktop com JavaFX, disponibilizando aos desenvolvedores um conjunto completo de componentes em uma estrutura pré-definida que facilite o desenvolvimento.
+Por exemplo, para se criar a tela CRUD abaixo com listagem de uma entidade simples:
 
-Para facilitar o desenvolvimento de telas CRUD e outros tipos de telas comportamentais foi criado um conjunto de componentes que auxiliam a estruturação do que deve ser exibido na view usando anotações (annotations). 
+![Tela Editar Cozinha](https://github.com/DavisGordon/Tedros/blob/master/img/ex_simpleview.png)
 
-Em breve detalharei todos os componentes e como customiza-los.
+São necessarias apenas 7 classes com pouquissimo codigo, são elas:
 
-No momento so foi adicionado o how-to de configuração do tedros para execução, fiquem a vontade para debugar e ver como funciona.
+**No backend**
+|Classe  |Descrição |
+|:---       |:---      |
+|Cozinha.java| A entidade de persistencia|
+|ICozinhaController.java|Interface de acesso remoto ao serviço EJB|
+|CozinhaController.java|Implementação da interface|
+
+**No frontend**
+|Classe  |Descrição |
+|:---       |:---      |
+|CozinhaModelView.java|Aqui é definido atravez de anotações java toda informação necessaria sobre a tela a ser construida para editar a entidade.|
+|CozinhaModule.java|Aqui declaramos um modulo para a tela. Um modulo pode conter uma ou mais telas. |
+|CozinhaIconImageView.java|Opcional, representa a imagem a ser usada como icone do modulo.|
+|AppStart.java|E por ultimo, declaramos o modulo no aplicativo.|
 
 Abaixo alguns prints:
 
