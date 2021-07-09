@@ -1,15 +1,29 @@
 # Tedros
-## API JavaFX for desktop app development.
+## API JavaFX para desenvolvimento de aplicativos desktop.
 
-Este projeto foi iniciado em 2013 para participar do maior evento de startup do Brasil daquele ano, o Desafio Brasil 2013, patrocionado pela FGV (Fundação Getulio Vargas), dentre os mais de 5000 projetos ficamos entre os melhores chegando a semi-final.
+Tedros é um framework para desenvolvimento de aplicativos desktop em JavaFX, standalone ou clinte servidor.
+Sua arquitetura foi projetada visando maior produtividade no desenvolvimento de um aplicativo.
 
-Sua ideia é ajudar no desenvolvimento de aplicações desktop com JavaFX, disponibilizando aos desenvolvedores um conjunto completo de componentes em uma estrutura pré-definida que facilite o desenvolvimento.
+Por exemplo, para se criar a tela CRUD abaixo com listagem de uma entidade simples:
 
-Para facilitar o desenvolvimento de telas CRUD e outros tipos de telas comportamentais foi criado um conjunto de componentes que auxiliam a estruturação do que deve ser exibido na view usando anotações (annotations). 
+![Tela Editar Cozinha](https://github.com/DavisGordon/Tedros/blob/master/img/ex_simpleview.png)
 
-Em breve detalharei todos os componentes e como customiza-los.
+São necessarias apenas 7 classes com pouquissimo codigo, são elas:
 
-No momento so foi adicionado o how-to de configuração do tedros para execução, fiquem a vontade para debugar e ver como funciona.
+**No backend**
+|Classe  |Descrição |
+|:---       |:---      |
+|Cozinha.java| A entidade de persistencia|
+|ICozinhaController.java|Interface de acesso remoto ao serviço EJB|
+|CozinhaController.java|Implementação da interface|
+
+**No frontend**
+|Classe  |Descrição |
+|:---       |:---      |
+|CozinhaModelView.java|Aqui é definido atravez de anotações java toda informação necessaria sobre a tela a ser construida para editar a entidade.|
+|CozinhaModule.java|Aqui declaramos um modulo para a tela. Um modulo pode conter uma ou mais telas. |
+|CozinhaIconImageView.java|Opcional, representa a imagem a ser usada como icone do modulo.|
+|AppStart.java|E por ultimo, declaramos o modulo no aplicativo.|
 
 Abaixo alguns prints:
 
@@ -21,43 +35,35 @@ Abaixo alguns prints:
 
 **Configuração:**
 
-Para esta versão do tedros é preciso:
-- JDK 1.7
-- Maven 3.x
-- Lib jfxrt versão 1.7.0_80 (encontra-se na pasta zips)
-- H2 (Banco de dados) (encontra-se na pasta zips)
-- Tomee (Servidor de aplicação) (encontra-se na pasta zips)
-- windows (não foi testado no linux e MAC)
+Requisitos:
+- JDK 1.8
+- Maven
+- Lib jfxrt versão 1.8.0_261 (encontra-se na pasta zips)
+- H2 Database (https://www.h2database.com/html/download.html)
 
 1. Faça o clone/download do projeto
 
 2. Na pasta zips:
 - Descompacte o arquivo usr.zip na raiz do file system. Este arquivo contem o banco de dados h2 ja configurado
-- Descompacte o arquivo apache-tomee-webprofile-1.7.2.zip em qualquer lugar de sua preferencia e execute o comando maven abaixo para colocar a lib jfxrt-1.7.0_80.jar no repositorio local do mavem: 
-- `mvn install:install-file -Dfile=jfxrt-1.7.0_80.jar -DgroupId=com.oracle -DartifactId=jfxrt -Dversion=1.7.0_80 -Dpackaging=jar`
+- Faça o download do arquivo jfxrt-1.8.0_261.jar e execute o comando maven abaixo para adiciona-lo no repositorio local: 
+- `mvn install:install-file -Dfile=jfxrt-1.8.0_261.jar -DgroupId=com.oracle -DartifactId=jfxrt -Dversion= 1.8.0_261 -Dpackaging=jar`
 
-3. Importe o projeto maven tedrosbox para dentro da IDE, sugiro o eclipse.
+3. Importe o projeto maven tedrosbox.
 
-4. Altere as properties abaixo nos arquivos pom.xml com o local onde se encontra o jdk e a pasta webapp do tomee acima informado.
+4. Altere a propriedade abaixo no arquivo pom.xml com o local onde se encontra o jdk .
 
-`<java.home>C:\Program Files\Java\jdk1.7.0_51</java.home>`
-
-`<tomee.webapp>C:\Desenv\Servidores\apache-tomee-webprofile-1.7.2\webapps</tomee.webapp>`
-
-(obs: estas propriedades estão replicadas em alguns arquivos pom.xml, sugiro fazer um search para identificar onde elas foram declaradas, vou corrigir futuramente, esse é o tipico problema usual do copy and paste)
+`<java.home>C:\Program Files\Java\jdk1.8.0_102\bin</java.home>`
 
 5. Com o botão direito do mouse sobre o projeto tedrosbox selecione a opção: `Run as >Maven build`, e execute no campo Goals: `clean install`
 
 6. Com o botão direito do mouse sobre o projeto server-application selecione a opção: `Run as >Maven build`, e execute no campo Goals: `cargo:run`
 
-7. Abra o arquivo Tedros.java que contem o metodo main.
+7. Abra e execute o arquivo com.tedros.Main.java como java application.
 
-8. Execute o arquivo Tedros.java como java application.
-
-Se tudo tiver sido configurado de forma correta o Tedros irá descompactar a pasta TedrosBox na pasta do seu usuario com as configurações de layout necessarias e logo em seguida será apresentada a tela de login.
+Se tudo tiver sido configurado de forma correta o Tedros devera criar a pasta .tedros na pasta do seu usuario com as configurações de layout necessarias e em seguida será apresentada a tela de login.
 
 Utilize o super usuario **owner**. 
-A senha pode ser qualquer caracter alphanumerico nesta versão snapshot.
+A senha é **xxx**.
 
 ## Entendendo a estrutura do projeto:
 
