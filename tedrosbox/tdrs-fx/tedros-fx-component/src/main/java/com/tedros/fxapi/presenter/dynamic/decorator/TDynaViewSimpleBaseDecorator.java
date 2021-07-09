@@ -16,6 +16,7 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.StackPaneBuilder;
 import javafx.scene.layout.VBox;
 
 @SuppressWarnings("rawtypes")
@@ -94,8 +95,7 @@ implements ITDecorator<TDynaPresenter<M>>{
 	 * */
 	public void addItemInTLeftContent(Node item) {		 
 		final ITDynaView<M> view = getView();
-		if(!view.gettLeftContent().getChildren().contains(item))
-			view.gettLeftContent().getChildren().add(item);
+		view.gettLeftContent().getChildren().add(item);
 	}
 
 	/**
@@ -136,13 +136,9 @@ implements ITDecorator<TDynaPresenter<M>>{
 	 * </p>
 	 * */
 	public void addItemInTHeaderVerticalLayout(Node item){
-		StackPane pane = new StackPane();
-		pane.setId("t-header-box");
-		pane.getChildren().add(item);
-		
 		final ITDynaView<M> view = getView();
 		int index = view.gettHeaderVerticalLayout().getChildren().size();
-		view.gettHeaderVerticalLayout().getChildren().add(index, pane);
+		view.gettHeaderVerticalLayout().getChildren().add(index, StackPaneBuilder.create().id("t-header-box").children(item).build());
 	}
 	
 	/**

@@ -17,5 +17,16 @@ import javafx.beans.property.Property;
  */
 public class TIntegerFieldBuilder extends TNumberFieldBuilder<com.tedros.fxapi.control.TIntegerField, Property<Integer>> {
 
+	private static TIntegerFieldBuilder instance;
+	
+	private TIntegerFieldBuilder(){
+		
+	}
+	
+	public static TIntegerFieldBuilder getInstance(){
+		if(instance==null)
+			instance = new TIntegerFieldBuilder();
+		return instance;
+	}
 	
 }

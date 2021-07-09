@@ -3,11 +3,6 @@ package com.tedros.fxapi.layout;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tedros.core.TInternationalizationEngine;
-import com.tedros.core.context.TEntry;
-import com.tedros.fxapi.form.ITForm;
-import com.tedros.fxapi.form.group.TGroupFormControl;
-
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -19,10 +14,16 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.control.ScrollPaneBuilder;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+
+import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.context.TEntry;
+import com.tedros.fxapi.form.ITForm;
+import com.tedros.fxapi.form.group.TGroupFormControl;
 
 /**
  * TBreadcrumbForm
@@ -163,17 +164,17 @@ public class TBreadcrumbForm extends HBox {
 				tGroupFormControl.runBefore(item, tEntryList);
 			
 			final ITForm form = (ITForm) item.getEntry(TFORM);
-			//form.tReloadForm();
-			ScrollPane scroll = new ScrollPane();
-			scroll.setId("t-form-scroll");
-			scroll.setContent((Node)form);
-			scroll.setFitToWidth(true);
-			scroll.maxHeight(Double.MAX_VALUE);
-			scroll.maxWidth(Double.MAX_VALUE);
-			scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-			scroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
-			scroll.setStyle("-fx-background-color: transparent;");
-					
+			form.tReloadForm();
+			ScrollPane scroll = ScrollPaneBuilder.create()
+	    			.id("t-form-scroll")
+					.content((Node)form)
+					.fitToWidth(true)
+					.maxHeight(Double.MAX_VALUE)
+					.maxWidth(Double.MAX_VALUE)
+					.vbarPolicy(ScrollBarPolicy.AS_NEEDED)
+					.hbarPolicy(ScrollBarPolicy.AS_NEEDED)
+					.style("-fx-background-color: transparent;")
+					.build();
 			tFormSpace.getChildren().clear();
 			tFormSpace.getChildren().add(scroll);
         } catch (Exception exception) {
@@ -186,7 +187,6 @@ public class TBreadcrumbForm extends HBox {
 			tEntryList.removeListener(entryListChangeListener);
 	}
 	
-	@SuppressWarnings("unlikely-arg-type")
 	public void tAddEntryListChangeListener() {
 		if(entryListChangeListener!=null && tEntryList!=null && !tEntryList.contains(entryListChangeListener))
 			tEntryList.addListener(entryListChangeListener);
@@ -196,4 +196,10 @@ public class TBreadcrumbForm extends HBox {
 		return new SimpleListProperty<>(tEntryList);
 	}
 
+    /*public void settEntryList(ObservableList<TEntry<Object>> tEntryList) {
+    	this.tEntryList = tEntryList;
+    	this.tEntryList.addListener(entryListChangeListener);
+    }*/
+	
+	
 }

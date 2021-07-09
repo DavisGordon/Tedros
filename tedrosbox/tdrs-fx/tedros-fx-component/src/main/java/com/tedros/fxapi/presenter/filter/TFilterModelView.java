@@ -17,7 +17,6 @@ import com.tedros.fxapi.presenter.model.TModelView;
  * @author Davis Gordon
  *
  */
-@Deprecated
 public abstract class TFilterModelView<M extends ITModel> extends TModelView<M> implements ITFilterModelView<M>{
 	
 	public TFilterModelView(M modelView) {

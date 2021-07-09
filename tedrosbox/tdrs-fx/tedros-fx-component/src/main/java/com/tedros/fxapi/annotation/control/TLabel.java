@@ -21,7 +21,6 @@ import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.builder.ITNodeBuilder;
 import com.tedros.fxapi.domain.TDefaultValues;
-import com.tedros.fxapi.domain.TLabelPosition;
 
 
 /**

@@ -2,9 +2,10 @@ package com.tedros.fxapi.builder;
 
 import java.lang.annotation.Annotation;
 
-import com.tedros.fxapi.reader.THtmlReader;
-
 import javafx.scene.Node;
+
+import com.tedros.fxapi.form.TFieldBox;
+import com.tedros.fxapi.reader.THtmlReader;
 
 /**
  * <pre>
@@ -15,7 +16,7 @@ import javafx.scene.Node;
  * */
 public interface ITLayoutBuilder<C extends Node> extends ITFieldBuilder {
 	
-	public C build(final Annotation tAnnotation) throws Exception;
+	public C build(final Annotation tAnnotation, TFieldBox fieldBox) throws Exception;
 	
 	public THtmlReader build(final Annotation tAnnotation, THtmlReader tHtmlReader) throws Exception;
 

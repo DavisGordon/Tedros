@@ -40,6 +40,17 @@ public class TDetailReaderBuilder
 extends TBuilder
 implements ITReaderBuilder<Node, Object> {
 
+	private static TDetailReaderBuilder instance;
+	
+	private TDetailReaderBuilder(){
+		
+	}
+	
+	public static TDetailReaderBuilder getInstance(){
+		if(instance==null)
+			instance = new TDetailReaderBuilder();
+		return instance;
+	}
 	
 	@SuppressWarnings("unchecked")
 	public Node build(final Annotation annotation, final Object attrProperty) throws Exception {

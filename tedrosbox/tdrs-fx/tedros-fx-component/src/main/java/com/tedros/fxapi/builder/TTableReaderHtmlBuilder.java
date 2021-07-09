@@ -53,10 +53,18 @@ extends TBuilder
 implements ITReaderHtmlBuilder<TTableReaderHtml, Object> {
 
 	private static final String DIV = "<div id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' >"+THtmlConstant.CONTENT+"</div>";
-	private final TStripTagUtil tStripTagUtil;
+	private static TTableReaderHtmlBuilder instance;
 	
-	public TTableReaderHtmlBuilder(){
+	private TStripTagUtil tStripTagUtil;
+	
+	private TTableReaderHtmlBuilder(){
 		tStripTagUtil = new TStripTagUtil();
+	}
+	
+	public static TTableReaderHtmlBuilder getInstance(){
+		if(instance==null)
+			instance = new TTableReaderHtmlBuilder();
+		return instance;
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -18,4 +18,15 @@ import com.tedros.fxapi.reader.TTextReader;
 @SuppressWarnings("rawtypes")
 public final class TTextReaderParser extends TAnnotationParser<TReader, TTextReader> {
 
+	private static TTextReaderParser instance;
+	
+	private TTextReaderParser() {
+		
+	}
+	
+	public static TTextReaderParser getInstance(){
+		if(instance==null)
+			instance = new TTextReaderParser();
+		return instance;	
+	}	
 }

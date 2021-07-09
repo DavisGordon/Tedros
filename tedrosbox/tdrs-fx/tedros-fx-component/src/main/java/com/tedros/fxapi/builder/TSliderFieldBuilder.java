@@ -24,7 +24,19 @@ import com.tedros.fxapi.control.TSlider;
 public final class TSliderFieldBuilder 
 extends TBuilder
 implements ITControlBuilder<TSlider, Property> {
-
+	
+	private static TSliderFieldBuilder instance;
+	
+	private TSliderFieldBuilder(){
+		
+	}
+	
+	public static TSliderFieldBuilder getInstance(){
+		if(instance==null)
+			instance = new TSliderFieldBuilder();
+		return instance;
+	}
+	
 	@SuppressWarnings({"unchecked"})
 	public com.tedros.fxapi.control.TSlider build(final Annotation annotation, final Property attrProperty) throws Exception {
 		final TSliderField tAnnotation = (TSliderField) annotation;				

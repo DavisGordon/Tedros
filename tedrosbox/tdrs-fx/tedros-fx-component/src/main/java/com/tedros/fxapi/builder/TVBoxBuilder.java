@@ -11,7 +11,8 @@ import java.lang.annotation.Annotation;
 import com.tedros.fxapi.annotation.layout.TVBox;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.domain.TLayoutType;
-import com.tedros.fxapi.form.TControlLayoutReaderBuilder;
+import com.tedros.fxapi.form.TComponentBuilder;
+import com.tedros.fxapi.form.TFieldBox;
 import com.tedros.fxapi.html.THtmlLayoutGenerator;
 import com.tedros.fxapi.reader.THtmlReader;
 
@@ -29,11 +30,23 @@ public class TVBoxBuilder
 extends TBuilder 
 implements ITLayoutBuilder<VBox> {
 	
+	private static TVBoxBuilder instance;
+	
+	private TVBoxBuilder(){
+		
+	}
+	
+	public static TVBoxBuilder getInstance(){
+		if(instance==null)
+			instance = new TVBoxBuilder();
+		return instance;
+	}
 
 	@Override
-	public VBox build(Annotation tAnnotation) throws Exception {
+	public VBox build(Annotation tAnnotation, TFieldBox fieldBox) throws Exception {
 		TVBox tvBox = (TVBox) tAnnotation;
 		VBox node = new VBox();
+		node.getChildren().add(fieldBox);
 		callParser(tvBox, node);
 		return node;
 	}
@@ -52,7 +65,7 @@ implements ITLayoutBuilder<VBox> {
 				node = tHtmlReader;
 			}else{
 				final TComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), field);
-				node = TControlLayoutReaderBuilder.getField(descriptor);
+				node = TComponentBuilder.getField(descriptor);
 			}
 			
 			if(node==null)

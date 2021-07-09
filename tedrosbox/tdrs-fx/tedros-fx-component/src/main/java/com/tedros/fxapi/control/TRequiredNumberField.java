@@ -6,7 +6,6 @@
  */
 package com.tedros.fxapi.control;
 
-import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -34,11 +33,6 @@ public abstract class TRequiredNumberField extends TextField implements ITField,
     private SimpleObjectProperty<TZeroValidation> zeroValidationProperty;
 	private String t_componentId; 
     
-	@Override
-	public Observable tValueProperty() {
-		return textProperty();
-	}
-	
 	public void setZeroValidation(TZeroValidation zeroValidation){
     	
 		if(this.zeroValidationProperty == null)

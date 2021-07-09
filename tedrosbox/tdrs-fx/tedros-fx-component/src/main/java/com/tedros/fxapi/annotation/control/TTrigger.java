@@ -29,6 +29,5 @@ public @interface TTrigger  {
 	public String[] associatedFieldBox() default "";
 	public TViewMode[] mode() default {TViewMode.EDIT};
 	public Class<? extends com.tedros.fxapi.control.trigger.TTrigger> triggerClass();
-	public boolean triggerFieldBox() default false;
 	
 }

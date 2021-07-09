@@ -1,12 +1,9 @@
 package com.tedros.fxapi.form;
 
-import java.util.Map;
-
-import com.tedros.core.module.TObjectRepository;
 import com.tedros.core.presenter.ITPresenter;
 
-import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.scene.Node;
 
 /**
@@ -21,7 +18,7 @@ public interface ITForm {
 	
 	public TFieldBox gettFieldBox(String fieldName);
 	
-	public Map<String, TFieldBox> gettFieldBoxMap();
+	public ObservableMap<String, TFieldBox> gettFieldBoxMap();
 	
 	public void settPresenter(ITPresenter presenter);
 	
@@ -33,11 +30,4 @@ public interface ITForm {
 	
 	public ObservableList<Node> getChildren();
 	
-	public TObjectRepository gettObjectRepository();
-	
-	public void tDispose();
-	
-	public ReadOnlyBooleanProperty tLoadedProperty();
-	
-	public boolean isLoaded();
 }

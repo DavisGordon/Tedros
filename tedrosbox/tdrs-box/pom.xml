@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.tedros</groupId>
 		<artifactId>tedrosbox</artifactId>
-		<version>8-1.0</version>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	
 	<!-- PROJECT -->
@@ -52,7 +52,7 @@
 		<module>tedros-box</module>
 		<module>tedros-box-app-base</module>
 		<module>tedros-core</module>
-		<module>tedros-box-app-settings</module>
+		<module>app-tedros-settings</module>
 	</modules>
 
 

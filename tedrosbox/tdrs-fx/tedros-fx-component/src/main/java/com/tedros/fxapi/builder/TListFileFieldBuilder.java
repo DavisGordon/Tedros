@@ -36,7 +36,7 @@ public final class TListFileFieldBuilder implements ITListFileFieldBuilder<com.t
 		return control;
 	}
 	
-	public void preLoadBytes(final TSimpleFileEntityProperty<?> fileEntityProperty) {
+	public static void preLoadBytes(final TSimpleFileEntityProperty<?> fileEntityProperty) {
 		try {
 			TBytesLoader.loadBytesFromTFileEntity(fileEntityProperty.getValue().getByteEntity().getId(), fileEntityProperty.bytesProperty());
 		} catch (TProcessException e) {
@@ -45,7 +45,7 @@ public final class TListFileFieldBuilder implements ITListFileFieldBuilder<com.t
 		}
 	}
 	
-	private void setProperties(TListFileField tAnnotation, final com.tedros.fxapi.control.TListFileModelField control) {
+	private static void setProperties(TListFileField tAnnotation, final com.tedros.fxapi.control.TListFileModelField control) {
 		
 		//if(tAnnotation.alignment()!=null) control.setAlignment(tAnnotation.alignment());
 		if(tAnnotation.width()>0) control.setPrefWidth(tAnnotation.width());

@@ -7,11 +7,10 @@ import java.lang.annotation.Target;
 
 import com.tedros.core.presenter.ITPresenter;
 import com.tedros.ejb.base.model.ITModel;
-import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 
 /**
  * <pre>
- * Settings for actions, layout and titles in the view
+ * Customize actions and titles in a {@link com.tedros.fxapi.presenter.view.TView} subClass.
  * </pre>
  * @author Davis Gordon
  * */
@@ -19,24 +18,9 @@ import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 @Target(value={ElementType.ANNOTATION_TYPE, ElementType.TYPE})
 public @interface TPresenter {
 	
-	/**
-	 * The presenter class responsible to hold and control the objects to build and invalidate the view  
-	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITPresenter> type() default TDynaPresenter.class;
-	
-	/**
-	 * The decorator responsible to build the layout of the view
-	 * */
-	public TDecorator decorator() default @TDecorator();
-	
-	/**
-	 * The behavior responsible for the actions of the view
-	 * */
-	public TBehavior behavior() default @TBehavior();
-	
-	/**
-	 * The model class associated with the view
-	 * */
+	public Class<? extends ITPresenter> type();
+	public TDecorator decorator();
+	public TBehavior behavior();
 	public Class<? extends ITModel> modelClass() default ITModel.class;
 }

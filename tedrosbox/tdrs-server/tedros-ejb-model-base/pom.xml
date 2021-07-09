@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.tedros</groupId>
 		<artifactId>tdrs-server</artifactId>
-		<version>8-1.0</version>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	
 	<!-- MODULE INFO -->
@@ -21,45 +21,30 @@
   	<!-- DEPENDENCIES -->
   	<dependencies>
 	  	<dependency>
-			<groupId>org.eclipse.persistence</groupId>
-			<artifactId>eclipselink</artifactId>
-			<version>${eclipselink.version}</version>
-			<scope>compile</scope>
+		   <groupId>org.eclipse.persistence</groupId>
+		   <artifactId>eclipselink</artifactId>
+		   <version>2.4.2</version>
+		   <scope>compile</scope>
 		</dependency>
 		
 		<dependency>
 		   	<groupId>commons-io</groupId>
 		   	<artifactId>commons-io</artifactId>
-		   	<version>${commons.io.version}</version>
+		   	<version>2.4</version>
 		</dependency>
 	  
 	  	<dependency>
 	  		<groupId>org.apache.commons</groupId>
 	  		<artifactId>commons-lang3</artifactId>
-	  		<version>${commons.lang.version}</version>
+	  		<version>3.4</version>
 	  	</dependency>
 	  	
 	    <dependency>
 	    	<groupId>junit</groupId>
 	      	<artifactId>junit</artifactId>
-	      	<version>${junit.version}</version>
+	      	<version>3.8.1</version>
 	      	<scope>test</scope>
 	    </dependency>
   	</dependencies>
-  	
-  	<build>
-    	<plugins>
-      		<plugin>
-        		<groupId>org.apache.maven.plugins</groupId>
-        		<artifactId>maven-compiler-plugin</artifactId>
-        		<version>3.3</version>
-        		<configuration>
-          			<source>${java.version}</source>
-          			<target>${java.version}</target>
-        		</configuration>
-      		</plugin>
-  		</plugins>
- 	</build>
-  	
     
 </project>

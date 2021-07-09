@@ -8,15 +8,16 @@ package com.tedros.fxapi.builder;
 
 import java.lang.annotation.Annotation;
 
+import javafx.scene.Node;
+import javafx.scene.layout.HBox;
+
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.domain.TLayoutType;
-import com.tedros.fxapi.form.TControlLayoutReaderBuilder;
+import com.tedros.fxapi.form.TComponentBuilder;
+import com.tedros.fxapi.form.TFieldBox;
 import com.tedros.fxapi.html.THtmlLayoutGenerator;
 import com.tedros.fxapi.reader.THtmlReader;
-
-import javafx.scene.Node;
-import javafx.scene.layout.HBox;
 
 
 /**
@@ -29,10 +30,23 @@ public class THBoxBuilder
 extends TBuilder 
 implements ITLayoutBuilder<HBox> {
 	
+	private static THBoxBuilder instance;
+	
+	private THBoxBuilder(){
+		
+	}
+	
+	public static THBoxBuilder getInstance(){
+		if(instance==null)
+			instance = new THBoxBuilder();
+		return instance;
+	}
+
 	@Override
-	public HBox build(Annotation tAnnotation) throws Exception {
+	public HBox build(Annotation tAnnotation, TFieldBox fieldBox) throws Exception {
 		THBox thBox = (THBox) tAnnotation;
 		HBox node = new HBox();
+		node.getChildren().add(fieldBox);
 		callParser(thBox, node);
 		return node;
 	}
@@ -50,7 +64,7 @@ implements ITLayoutBuilder<HBox> {
 				node = tHtmlReader;
 			}else{
 				final TComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), field);
-				node = TControlLayoutReaderBuilder.getField(descriptor);
+				node = TComponentBuilder.getField(descriptor);
 			}
 			
 			if(node==null)

@@ -9,6 +9,7 @@ import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.presenter.model.TModelView;
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -21,11 +22,22 @@ import javafx.scene.control.cell.ProgressBarTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
-import javafx.util.StringConverter;
 
-@SuppressWarnings({ "rawtypes" })
+@SuppressWarnings("rawtypes")
 public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 
+	private static TTableViewParser instance;
+	
+	private TTableViewParser(){
+		
+	}
+	
+	public static  TTableViewParser getInstance(){
+		if(instance==null)
+			instance = new TTableViewParser();
+		return instance;	
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void parse(TTableView annotation, TableView tableView, String... byPass) throws Exception {
@@ -47,7 +59,13 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 					final TableColumn tableNestedColumn = new TableColumn<>();
 					tableSubColumn.getColumns().add(tableNestedColumn);
 					if(StringUtils.isNotBlank(tTableNestedColumn.cellValue())){
-						tableNestedColumn.setCellValueFactory(buildPropertyValueFactory(tTableNestedColumn.cellValue()));
+						tableNestedColumn.setCellValueFactory(
+								new PropertyValueFactory(tTableNestedColumn.cellValue()){   
+									 @Override
+									 public ObservableValue call(CellDataFeatures p) {
+									  return new ReadOnlyObjectWrapper(((ObservableValue)((TModelView) p.getValue()).getProperty(tTableNestedColumn.cellValue())).getValue());
+									 }
+									});
 						sbClnVf = true;
 					}
 					final TComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), null);
@@ -56,7 +74,13 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 				
 				if(!sbClnVf){
 					if(StringUtils.isNotBlank(tTableSubColumn.cellValue())){
-						tableSubColumn.setCellValueFactory(buildPropertyValueFactory(tTableSubColumn.cellValue()));
+						tableSubColumn.setCellValueFactory(
+								new PropertyValueFactory(tTableSubColumn.cellValue()){   
+									 @Override
+									 public ObservableValue call(CellDataFeatures p) {
+									  return new ReadOnlyObjectWrapper(((ObservableValue)((TModelView) p.getValue()).getProperty(tTableSubColumn.cellValue())).getValue());
+									 }
+									});
 						clnVf = true;
 					}
 				}
@@ -66,11 +90,16 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 			
 			if(!clnVf){
 				if(StringUtils.isNotBlank(tTableColumn.cellValue())){
-					tableColumn.setCellValueFactory(buildPropertyValueFactory(tTableColumn.cellValue()));
+					tableColumn.setCellValueFactory(
+							new PropertyValueFactory(tTableColumn.cellValue()){   
+								 @Override
+								 public ObservableValue call(CellDataFeatures p) {
+								  return new ReadOnlyObjectWrapper( ((ObservableValue)((TModelView) p.getValue()).getProperty(tTableColumn.cellValue())).getValue());
+								 }
+								});
 					clnVf = true;
 				}
 			}
-			
 			final TComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), null);
 			callParser(tTableColumn, tableColumn, descriptor);
 			
@@ -107,8 +136,8 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 									? tTableNestedColumn.cellFactory().callBack().value()
 											: null;
 							Class tableCellClass = tTableNestedColumn.cellFactory().tableCell();
-							Class<? extends StringConverter> converter = tTableNestedColumn.cellFactory().stringConverter();
-							setCellFactory(tableNestedColumn, callbackClass, tableCellClass, converter);
+							
+							setCellFactory(tableNestedColumn, callbackClass, tableCellClass);
 						
 							tableNestedColumn.setEditable(true);
 							sbClnVf = true;
@@ -129,8 +158,8 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 								? tTableSubColumn.cellFactory().callBack().value()
 										: null;
 						Class tableCellClass = tTableSubColumn.cellFactory().tableCell();
-						Class<? extends StringConverter> converter = tTableSubColumn.cellFactory().stringConverter();
-						setCellFactory(tableSubColumn, callbackClass, tableCellClass, converter);
+						
+						setCellFactory(tableSubColumn, callbackClass, tableCellClass);
 					
 						tableSubColumn.setEditable(true);
 						clnVf = true;
@@ -151,9 +180,8 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 							? tTableColumn.cellFactory().callBack().value()
 									: null;
 					Class tableCellClass = tTableColumn.cellFactory().tableCell();
-					Class<? extends StringConverter> converter = tTableColumn.cellFactory().stringConverter();
 					
-					setCellFactory(tableColumn, callbackClass, tableCellClass, converter);
+					setCellFactory(tableColumn, callbackClass, tableCellClass);
 					
 					tableColumn.setEditable(true);
 					clnVf = true;
@@ -169,27 +197,13 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 		super.parse(annotation, tableView, "columns");
 	}
 
-	/**
-	 * @param cv
-	 * @return
-	 */
-	private PropertyValueFactory buildPropertyValueFactory(String cv) {
-		return new PropertyValueFactory(cv){   
-			 @Override
-			 public ObservableValue call(CellDataFeatures p) {
-				 return getModelViewProperty(p, cv);
-			 }
-		};
-	}
-
 	@SuppressWarnings("unchecked")
 	private void setCellValueFactory(final TableColumn tableColumn, Callback callback) {
 		tableColumn.setCellValueFactory(callback);
 	}
 
 	@SuppressWarnings("unchecked")
-	private void setCellFactory(final TableColumn tableColumn, Class callbackClass, Class tableCellClass, 
-			Class<? extends StringConverter> converter)
+	private void setCellFactory(final TableColumn tableColumn, Class callbackClass, Class tableCellClass)
 			throws InstantiationException, IllegalAccessException {
 	
 		if(callbackClass != null && callbackClass != Callback.class){
@@ -211,7 +225,7 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 				tableColumn.setCellFactory(ProgressBarTableCell.forTableColumn());
 			else						
 			if(tableCellClass==TextFieldTableCell.class)
-				tableColumn.setCellFactory(TextFieldTableCell.forTableColumn(converter.newInstance()));
+				tableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 		}
 	}
 	
@@ -239,19 +253,6 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 		}
 		
 		return tableColumn;
-	}
-
-	/**
-	 * @param p
-	 * @param cv
-	 * @return
-	 */
-	private ObservableValue getModelViewProperty(CellDataFeatures p, String cv) {
-		try {
-			 return  (ObservableValue) ((TModelView) p.getValue()).getProperty(cv);
-		 }catch(Exception e) {
-			 throw new RuntimeException("ERROR: cellValue: "+cv, e);
-		 }
 	}
 	
 }

@@ -30,8 +30,6 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 	private TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
 	private ITModule module;
 	
-	private ITGroupViewItem itemSelected;
-	
 	public TGroupPresenter() {
 		
 	}
@@ -156,7 +154,6 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 
 	private void showView(final ITGroupViewItem item) {
 		try {
-			itemSelected = item;
 			final StackPane formSpacePane = view.gettFormSpace();
 			final ITView<?> view = item.getViewInstance(getModule());
 			//view.settModule(this.getView().gettModule());
@@ -170,42 +167,16 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 		    throw new RuntimeException(exception);
 		}
 	}
-	
-	public ITView getSelectedView() {
-		return itemSelected.getViewInstance(getModule());
-	}
 
 	@Override
-	public boolean invalidate() {
+	public void stop() {
 		if(groupViewItemList!=null){
 			for (ITGroupViewItem itGroupViewItem : groupViewItemList) {
 				ITView view = itGroupViewItem.getViewInstance(getModule());
-				if(view!=null) {
-					if(!view.gettPresenter().invalidate()) {
-						return false;
-					}
-				}
+				if(view!=null)
+					view.gettPresenter().stop();
 			}
 		}
-		return true;
-	}
-	
-	@Override
-	public String canInvalidate() {
-		
-		if(groupViewItemList!=null){
-			for (ITGroupViewItem itGroupViewItem : groupViewItemList) {
-				ITView view = itGroupViewItem.getViewInstance(getModule());
-				if(view!=null) {
-					String msg = view.gettPresenter().canInvalidate();
-					if(msg!=null) {
-						return msg;
-					}
-				}
-			}
-		}
-		return null;
-	
 	}
 
 	public ITModule getModule() {

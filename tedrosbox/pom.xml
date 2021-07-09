@@ -1,10 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project 	xmlns="http://maven.apache.org/POM/4.0.0" 
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+			xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
 	<!-- PROJECT -->
 	<modelVersion>4.0.0</modelVersion>
   	<groupId>com.tedros</groupId>
   	<artifactId>tedrosbox</artifactId>
-  	<version>8-1.0</version>
+  	<version>0.0.1-SNAPSHOT</version>
   	<packaging>pom</packaging>
   	
   	<name>tedros box</name>
@@ -17,37 +19,14 @@
   	
   	<!-- PROPERTIES -->
 	<properties>
-		<javafx.version>1.8.0_261</javafx.version>
-		<java.version>1.8</java.version>
-		<maven.compiler.target>1.8</maven.compiler.target>
-    	<maven.compiler.source>1.8</maven.compiler.source>
+		<java.version>1.7</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!-- <java.home>C:\Program Files\Java\jdk1.7.0_51</java.home> -->
-		<java.home>C:\Program Files\Java\jdk1.8.0_102\bin</java.home>
-		
-		<commons-collections.version>4.4</commons-collections.version>
-		<commons.logging.version>1.2</commons.logging.version>
-		<commons.io.version>2.7</commons.io.version>
-		<commons.lang.version>3.11</commons.lang.version>
-		
-		<!-- Define the version of OPEN HTML TO PDF in the properties section of your POM. -->  	       
-	  	<openhtml.version>1.0.8</openhtml.version>
-		
-		<junit.version>4.13</junit.version>
+		<java.home>C:\Program Files\Java\jdk1.7.0_51</java.home>
 		<cargo.version>1.6.7</cargo.version>
-		<h2.version>1.4.199</h2.version>
-		<eclipselink.version>2.7.7</eclipselink.version>
-		<jackson.jaxrs.json.provider>2.11.2</jackson.jaxrs.json.provider>
-		
-		<tomee.version>7.1.3</tomee.version>
+		<h2.version>1.3.176</h2.version>
+		<tomee.version>1.7.2</tomee.version>
 		<tomee.ejb.url>http://127.0.0.1:8080/tomee/ejb</tomee.ejb.url>
 		<tomee.webapp>${project.basedir}\server-application\target\catalina-base\apps</tomee.webapp>
-	
-		<javaee.api.version>7.0-2</javaee.api.version>
-		<openejb.version>7.1.3</openejb.version>
-	
-	
-	
 	</properties>
   
   	<!-- DEVELOPERS -->
@@ -79,12 +58,11 @@
 	<modules>
 		<module>tdrs-box</module>
 		<module>tdrs-fx</module>
-		<module>tdrs-app-covid-semfome</module>
+		<module>tdrs-global-brasil</module>
 		<module>tdrs-miscellaneous</module>
 		<module>tdrs-server</module>
 		<module>server-application</module>
-    	
-  </modules>
+	</modules>
 
 
 </project>

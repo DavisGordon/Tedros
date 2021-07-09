@@ -17,7 +17,6 @@ public final class TModuleDescriptor implements Comparable<TModuleDescriptor> {
 	private String applicationUUID;
 	private String menu;
 	private String moduleName;
-	private String description;
 	
 	@Transient
 	private Class<? extends TModule> type;
@@ -26,8 +25,8 @@ public final class TModuleDescriptor implements Comparable<TModuleDescriptor> {
 	private final TSecurityDescriptor securityDescriptor;
 	private TInternationalizationEngine iEngine;
 	
-	public TModuleDescriptor(String applicationName, String universalUniqueIdentifier, String menu,  String moduleName, String description, 
-			Class<? extends TModule> type, Class<? extends TImageView> iconImageViewClass, Class<? extends TImageView> menuIconImageViewClass, 
+	public TModuleDescriptor(String applicationName, String universalUniqueIdentifier, String menu,  String moduleName, Class<? extends TModule> type, 
+			Class<? extends TImageView> iconImageViewClass, Class<? extends TImageView> menuIconImageViewClass, 
 			TSecurityDescriptor securityDescriptor) {
 		
 		iEngine = TInternationalizationEngine.getInstance(applicationUUID);
@@ -41,7 +40,6 @@ public final class TModuleDescriptor implements Comparable<TModuleDescriptor> {
 		this.applicationName = applicationName;
 		this.menu = menu;
 		this.moduleName = moduleName;
-		this.description = description;
 		this.type = type;
 		this.iconImageViewClass = iconImageViewClass;
 		this.menuIconImageViewClass = menuIconImageViewClass;
@@ -89,13 +87,6 @@ public final class TModuleDescriptor implements Comparable<TModuleDescriptor> {
 
 	public void setApplicationUUID(String applicationUUID) {
 		this.applicationUUID = applicationUUID;
-	}
-
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
 	}
 	
 }

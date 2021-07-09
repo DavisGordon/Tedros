@@ -3,36 +3,26 @@ package com.tedros.fxapi.presenter.dynamic;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 
+import javafx.collections.ObservableList;
+
 import com.tedros.core.ITModule;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.annotation.form.TForm;
-import com.tedros.fxapi.annotation.presenter.TDetailListViewPresenter;
-import com.tedros.fxapi.annotation.presenter.TDetailTableViewPresenter;
-import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
-import com.tedros.fxapi.annotation.presenter.TSelectionModalPresenter;
 import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.process.TEntityProcess;
 import com.tedros.fxapi.annotation.process.TModelProcess;
-import com.tedros.fxapi.annotation.process.TReportProcess;
 import com.tedros.fxapi.exception.TErrorType;
 import com.tedros.fxapi.presenter.TPresenter;
 import com.tedros.fxapi.presenter.behavior.ITBehavior;
 import com.tedros.fxapi.presenter.decorator.ITDecorator;
-import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
+import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.util.TReflectionUtil;
 
-import javafx.collections.ObservableList;
-
-/**
- * Responsible to hold and control the objects to build and invalidate the view.
- * 
- *  @author Davis Gordon
- * */
 @SuppressWarnings("rawtypes")
-public class TDynaPresenter<M extends TModelView>	extends TPresenter<ITDynaView<M>> {
+public class TDynaPresenter<M extends TModelView>	extends TPresenter<TDynaView<M>> {
 	
-	private ITDecorator<TDynaPresenter<M>> 		decorator;
+	private ITDecorator<TDynaPresenter<M>> decorator;
 	private ITBehavior<M, TDynaPresenter<M>> 	behavior;
 	
 	private M modelView;
@@ -41,7 +31,6 @@ public class TDynaPresenter<M extends TModelView>	extends TPresenter<ITDynaView<
 	
 	private Class<? extends ITModel> modelClass;
 	
-	private TReportProcess tReportProcess;
 	private TModelProcess tModelProcess;
 	private TEntityProcess tEntityProcess;
 	private TEjbService tEjbService;
@@ -127,28 +116,9 @@ public class TDynaPresenter<M extends TModelView>	extends TPresenter<ITDynaView<
 			Annotation annotation = (Annotation) arr[0];
 			tPresenter = TReflectionUtil.getTPresenter(annotation);
 		}else{
-			for (Annotation ann : modelAnnotations) {
-				if(ann instanceof com.tedros.fxapi.annotation.presenter.TPresenter) {
+			for (Annotation ann : modelAnnotations) 
+				if(ann instanceof com.tedros.fxapi.annotation.presenter.TPresenter)
 					tPresenter = (com.tedros.fxapi.annotation.presenter.TPresenter) ann;
-					break;
-				}
-				if(ann instanceof TListViewPresenter) {
-					tPresenter = ((TListViewPresenter) ann).presenter();
-					break;
-				}
-				if(ann instanceof TSelectionModalPresenter) {
-					tPresenter = ((TSelectionModalPresenter) ann).presenter();
-					break;
-				}
-				if(ann instanceof TDetailTableViewPresenter) {
-					tPresenter = ((TDetailTableViewPresenter) ann).presenter();
-					break;
-				}
-				if(ann instanceof TDetailListViewPresenter) {
-					tPresenter = ((TDetailListViewPresenter) ann).presenter();
-					break;
-				}
-			}
 		}
 		
 		if(tPresenter==null)
@@ -166,7 +136,6 @@ public class TDynaPresenter<M extends TModelView>	extends TPresenter<ITDynaView<
 		tEjbService = (TEjbService) this.modelViewClass.getAnnotation(TEjbService.class);
 		tModelProcess = (TModelProcess) this.modelViewClass.getAnnotation(TModelProcess.class);
 		tEntityProcess = (TEntityProcess) this.modelViewClass.getAnnotation(TEntityProcess.class);
-		tReportProcess = (TReportProcess) this.modelViewClass.getAnnotation(TReportProcess.class);
 		tForm = (TForm) this.modelViewClass.getAnnotation(TForm.class);
 		
 		//loadView();
@@ -230,10 +199,6 @@ public class TDynaPresenter<M extends TModelView>	extends TPresenter<ITDynaView<
 		return tEntityProcess;
 	}
 
-	public TReportProcess getReportProcessAnnotation() {
-		return tReportProcess;
-	}
-	
 	public TEjbService getEjbServiceAnnotation() {
 		return tEjbService;
 	}
@@ -259,19 +224,8 @@ public class TDynaPresenter<M extends TModelView>	extends TPresenter<ITDynaView<
 	}
 
 	@Override
-	public boolean invalidate() {
-		if(behavior.invalidate()) {
-			if(modelView!=null) {
-				modelView.removeAllListener();
-				modelView = null;
-			}
-			return true;
-		}else
-			return false;
-	}
-
-	@Override
-	public String canInvalidate() {
-		return behavior.canInvalidate();
+	public void stop() {
+		behavior.removeAllListenerFromModelView();
+		behavior.removeAllListenerFromModelViewList();
 	}
 }

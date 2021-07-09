@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.tedros</groupId>
     <artifactId>tedrosbox</artifactId>
-    <version>8-1.0</version>
+    <version>0.0.1-SNAPSHOT</version>
   </parent>
   
   <artifactId>server-application</artifactId>
@@ -18,25 +18,19 @@
 	</dependency>
 	
 	<dependency>
-	   <groupId>com.tedros</groupId>
-  		<artifactId>tdrs-app-covid-semfome-webapp</artifactId>
-	    <type>war</type>
-	    <version>8-1.0</version>
+	    <groupId>com.tedros</groupId>
+	    <artifactId>tedros-core-ejb-ear</artifactId>
+	    <type>ear</type>
+	    <version>0.0.1-SNAPSHOT</version>
 	</dependency>
 	
 	<dependency>
 	    <groupId>com.tedros</groupId>
-	    <artifactId>tedros-core-ejb-ear</artifactId>
+	    <artifactId>tedros-global-brasil-ejb-ear</artifactId>
 	    <type>ear</type>
-	    <version>8-1.0</version>
+	    <version>0.0.1-SNAPSHOT</version>
 	</dependency>
 	
-	<dependency>
-		<groupId>com.tedros</groupId>
-		 <artifactId>tdrs-app-covid-semfome-ejb-ear</artifactId>
-		 <type>ear</type>
-		<version>8-2.2</version>
-	</dependency>
   </dependencies>
   
 	 <build>
@@ -50,9 +44,8 @@
 			  <configuration>
 			    <container>
 			      <containerId>tomee7x</containerId>
-			      <timeout>180000</timeout>
 			      <zipUrlInstaller>
-			        <url>https://repo.maven.apache.org/maven2/org/apache/tomee/apache-tomee/${tomee.version}/apache-tomee-${tomee.version}-webprofile.zip</url>
+			        <url>https://repo.maven.apache.org/maven2/org/apache/openejb/apache-tomee/${tomee.version}/apache-tomee-${tomee.version}-webprofile.zip</url>
 			      </zipUrlInstaller>
 			      <dependencies>
 		            <dependency>
@@ -63,49 +56,19 @@
 			    </container>
 			    <configuration>
 			      <home>${project.build.directory}/catalina-base</home>
-			      <properties>
-			       <cargo.servlet.port>8081</cargo.servlet.port>
-			       <cargo.rmi.port>8206</cargo.rmi.port>
-			       <cargo.tomcat.ajp.port>8009</cargo.tomcat.ajp.port>
-			        <cargo.start.jvmargs>
-			          -Xdebug
-			          -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8001
-			          -Xnoagent
-			          -Djava.compiler=NONE
-			        </cargo.start.jvmargs>
-			      </properties>
 			      <files>
 		            <copy>
 		              <file>${project.basedir}/files/tomee.xml</file>
 		              <tofile>conf/tomee.xml</tofile>
 		              <configfile>true</configfile>
 		              <overwrite>true</overwrite>
-		            </copy> 
-		            <copy>
-		              <file>${project.basedir}/files/server.xml</file>
-		              <tofile>conf/server.xml</tofile>
-		              <configfile>true</configfile>
-		              <overwrite>true</overwrite>
-		            </copy> 
-		            <copy>
-		              <file>${project.basedir}/files/system.properties</file>
-		              <tofile>conf/system.properties</tofile>
-		              <configfile>true</configfile>
-		              <overwrite>true</overwrite>
 		            </copy>
-		           <!--  <copy>
-		              <file>${project.basedir}/files/tomcat-users.xml</file>
-		              <tofile>conf/tomcat-users.xml</tofile>
-		              <configfile>true</configfile>
-		              <overwrite>true</overwrite>
-		            </copy> -->
 		          </files>
 			    </configuration>
 			    <deployables>
-			      
 			      <deployable>
 			        <groupId>com.tedros</groupId>
-			        <artifactId>tdrs-app-covid-semfome-ejb-ear</artifactId>
+			        <artifactId>tedros-global-brasil-ejb-ear</artifactId>
 			      	<type>ear</type>
 			      </deployable>
 			      <deployable>
@@ -113,12 +76,6 @@
 			        <artifactId>tedros-core-ejb-ear</artifactId>
 			        <type>ear</type>
 			      </deployable>
-			      <deployable>
-			      	<groupId>com.tedros</groupId>
-  					<artifactId>tdrs-app-covid-semfome-webapp</artifactId>
-  					<type>war</type>
-  				</deployable>
-			      
 			    </deployables>
 			    <packager>
 			      <outputLocation>${project.build.directory}/tomcat-packaged</outputLocation>
@@ -158,10 +115,10 @@
         		<configuration>
           			<source>${java.version}</source>
           			<target>${java.version}</target>
-          			<!-- <compilerArgs>
+          			<compilerArgs>
                        <arg>-Dhttps.protocols=TLSv1.2</arg>
                     </compilerArgs>
- -->        		</configuration>
+        		</configuration>
       		</plugin>
 			
 		</plugins>

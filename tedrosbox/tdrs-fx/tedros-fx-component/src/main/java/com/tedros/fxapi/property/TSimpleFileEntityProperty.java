@@ -1,20 +1,19 @@
 package com.tedros.fxapi.property;
 
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.tedros.core.module.TObjectRepository;
 import com.tedros.ejb.base.entity.ITFileEntity;
 import com.tedros.fxapi.annotation.reader.TFileReader;
 import com.tedros.fxapi.control.TFileField;
-
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.WeakChangeListener;
 
 /**
  * <pre>
@@ -34,9 +33,7 @@ public class TSimpleFileEntityProperty<T extends ITFileEntity> extends SimpleObj
 	private SimpleLongProperty fileSizeProperty;
 	private SimpleObjectProperty<byte[]> bytesProperty;
 	private SimpleLongProperty bytesEntityIdProperty;
-
-	private TObjectRepository repo;
-	
+	private TSimpleFileEntityProperty<T> _this;
 	
 	public TSimpleFileEntityProperty() {
 		super();
@@ -60,7 +57,7 @@ public class TSimpleFileEntityProperty<T extends ITFileEntity> extends SimpleObj
 	
 	private void initialize(){
 		
-		this.repo = new TObjectRepository();
+		_this = this;
 		this.fileNameProperty = new SimpleStringProperty();
 		this.fileExtensionProperty = new SimpleStringProperty();
 		this.fileSizeProperty = new SimpleLongProperty();
@@ -72,34 +69,37 @@ public class TSimpleFileEntityProperty<T extends ITFileEntity> extends SimpleObj
 	}
 
 	private void buildListeners() {
-		
-		ChangeListener<String> flnCL = (arg0, arg1, arg2) -> {
-			getValue().setFileName(arg2);
-			
-			String ext = FilenameUtils.getExtension(arg2);
-			if(StringUtils.isNotBlank(ext)){
-				fileExtensionProperty.setValue(ext);
-				getValue().setFileExtension(ext);
+		this.fileNameProperty.addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+				_this.getValue().setFileName(arg2);
+				
+				String ext = FilenameUtils.getExtension(arg2);
+				if(StringUtils.isNotBlank(ext)){
+					fileExtensionProperty.setValue(ext);
+					_this.getValue().setFileExtension(ext);
+				}
+				
+				_this.fireValueChangedEvent();
+				
 			}
-			
-			fireValueChangedEvent();
-		};
-		repo.add("flnCL", flnCL);
-		this.fileNameProperty.addListener(new WeakChangeListener<String>(flnCL));
+		});
 		
-		ChangeListener<byte[]> bpCL = (arg0, arg1, arg2) -> {
-			getValue().getByteEntity().setBytes(arg2);
-			fireValueChangedEvent();
-		};
-		repo.add("bpCL", bpCL);
-		this.bytesProperty.addListener(new WeakChangeListener<byte[]>(bpCL));		
+		this.bytesProperty.addListener(new ChangeListener<byte[]>() {
+			@Override
+			public void changed(ObservableValue<? extends byte[]> arg0, byte[] arg1, byte[] arg2) {
+				_this.getValue().getByteEntity().setBytes(arg2);
+				_this.fireValueChangedEvent();
+			}
+		});
 		
-		ChangeListener<Number> fsCL = (arg0, arg1, arg2) -> {
-			getValue().setFileSize((Long)arg2);
-			fireValueChangedEvent();
-		};
-		repo.add("fsCL", fsCL);
-		this.fileSizeProperty.addListener(new WeakChangeListener<Number>(fsCL));
+		this.fileSizeProperty.addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				_this.getValue().setFileSize((Long)arg2);
+				_this.fireValueChangedEvent();
+			}
+		});
 	}
 
 	private void setFilePropertyValue() {
@@ -153,10 +153,6 @@ public class TSimpleFileEntityProperty<T extends ITFileEntity> extends SimpleObj
 	@Override
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this, "bytesProperty");
-	}
-	
-	public void invalidate() {
-		repo.clear();
 	}
 
 }

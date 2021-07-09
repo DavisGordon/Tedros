@@ -95,8 +95,7 @@ public class TAppDescriptor {
 			if(tModuleSecurity!=null)
 				tsd = new TSecurityDescriptor(tModuleSecurity);		
 			
-			final TModuleDescriptor tModuleDescriptor = new TModuleDescriptor(tApplication.name(), universalUniqueIdentifier, 
-					tModule.menu(), tModule.name(), tModule.description(), tModule.type(), 
+			final TModuleDescriptor tModuleDescriptor = new TModuleDescriptor(tApplication.name(), universalUniqueIdentifier, tModule.menu(), tModule.name(), tModule.type(), 
 					(tModule.icon()==TImageView.class ? null : tModule.icon()), 
 					(tModule.menuIcon()==TImageView.class ? null : tModule.menuIcon()), tsd);
 			

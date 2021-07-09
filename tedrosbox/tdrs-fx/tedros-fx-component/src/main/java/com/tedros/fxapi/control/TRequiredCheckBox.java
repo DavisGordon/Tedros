@@ -6,7 +6,6 @@
  */
 package com.tedros.fxapi.control;
 
-import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -38,11 +37,6 @@ public abstract class TRequiredCheckBox extends CheckBox implements ITField, ITC
 		super(text);
 	}
     
-	@Override
-	public Observable tValueProperty() {
-		return selectedProperty();
-	}
-	
 	public void setRequired(boolean required){
     	
 		if(this.requiredProperty == null)

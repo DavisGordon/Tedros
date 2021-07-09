@@ -6,7 +6,6 @@
  */
 package com.tedros.fxapi.control;
 
-import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
@@ -40,11 +39,6 @@ public class THorizontalRadioGroup extends HBox implements ITField{
 		applyRadioGroupStyleClass();
 		applyRadioButtonStyleClass(radioButtons);
 		radioButtonGroup.addRadioButton(radioButtons);
-	}
-	
-	@Override
-	public Observable tValueProperty() {
-		return selectedToggleProperty();
 	}
 	
 	public void addRadioButton(final RadioButton radioButton){

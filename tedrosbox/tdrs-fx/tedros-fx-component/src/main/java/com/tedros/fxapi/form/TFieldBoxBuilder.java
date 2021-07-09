@@ -7,25 +7,26 @@
 package com.tedros.fxapi.form;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.List;
+
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TLabelDefaultSetting;
+import com.tedros.fxapi.annotation.control.TLabelPosition;
 import com.tedros.fxapi.annotation.parser.TAnnotationParser;
 import com.tedros.fxapi.annotation.reader.TByteArrayReader;
 import com.tedros.fxapi.annotation.reader.TDetailReader;
 import com.tedros.fxapi.annotation.reader.TReader;
 import com.tedros.fxapi.annotation.reader.TReaderDefaultSetting;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
-import com.tedros.fxapi.domain.TLabelPosition;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.util.TReflectionUtil;
-
-import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
 
 /**
  * <pre>
@@ -36,17 +37,19 @@ import javafx.scene.control.Labeled;
  */
 final class TFieldBoxBuilder {
 	
+	private static TAnnotationParser<TLabel, Labeled> parser = null;
+	private static Class<? extends TAnnotationParser<TLabel, Labeled>> parserClass = null;
+
 	public static TFieldBox build(final Node control, final TComponentDescriptor descriptor){
 		return generate(control, descriptor);
 	}	
 	
+	@SuppressWarnings({"unchecked"})
 	private static TFieldBox generate(final Node control, final TComponentDescriptor descriptor) {
 		
 		final TLabel fieldLabel = (TLabel) descriptor.getFieldLabelAnnotation();
 		final TLabelDefaultSetting tLabelDefaultSetting = (TLabelDefaultSetting) getDefaultSetting(fieldLabel, descriptor);
 		final String controlFieldName =  (String) descriptor.getFieldDescriptor().getFieldName();
-		TAnnotationParser<TLabel, Labeled> parser = null;
-		Class<? extends TAnnotationParser<TLabel, Labeled>> parserClass = null;
 		
 		if(descriptor.getMode() == TViewMode.READER)
 			setTLabelReaderSettings(fieldLabel, tLabelDefaultSetting, descriptor);
@@ -58,7 +61,8 @@ final class TFieldBoxBuilder {
 			if(parser == null | parserClass != fieldLabel.parser()){
 				parserClass = fieldLabel.parser();
 				try {
-					parser = (TAnnotationParser<TLabel, Labeled>) parserClass.newInstance();
+					Method m = parserClass.getMethod("getInstance");
+					parser = (TAnnotationParser<TLabel, Labeled>) m.invoke(null);
 				} catch (Exception e) {
 					e.printStackTrace();
 					return null;
@@ -84,13 +88,15 @@ final class TFieldBoxBuilder {
 		}
 		
 		TFieldBox fieldBox = new TFieldBox(controlFieldName, label, control, position);
-		com.tedros.fxapi.annotation.control.TFieldBox tAnnotation = (com.tedros.fxapi.annotation.control.TFieldBox) 
-				descriptor.getFieldDescriptor().getField().getAnnotation(com.tedros.fxapi.annotation.control.TFieldBox.class);
-		if(tAnnotation!=null){
-			try {
-				TAnnotationParser.callParser(tAnnotation, fieldBox, descriptor);
-			} catch (Exception e) {
-				e.printStackTrace();
+		for(Annotation a : descriptor.getFieldDescriptor().getAnnotations()){
+			if(a instanceof com.tedros.fxapi.annotation.control.TFieldBox){
+				com.tedros.fxapi.annotation.control.TFieldBox tAnnotation = (com.tedros.fxapi.annotation.control.TFieldBox) a;
+				try {
+					TAnnotationParser.callParser(tAnnotation, fieldBox, descriptor);
+					break;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		

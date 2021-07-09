@@ -18,6 +18,18 @@ import com.tedros.fxapi.collections.ITObservableList;
 public class TTableViewBuilder extends TBuilder implements
 	ITControlBuilder<TableView, ITObservableList> {
 
+	private static TTableViewBuilder instance;
+	
+	private TTableViewBuilder(){
+		
+	}
+	
+	public static TTableViewBuilder getInstance(){
+		if(instance==null)
+			instance = new TTableViewBuilder();
+		return instance;
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.tedros.fxapi.builder.ITLayoutBuilder#build(java.lang.annotation.Annotation, com.tedros.fxapi.form.TFieldBox)
 	 */

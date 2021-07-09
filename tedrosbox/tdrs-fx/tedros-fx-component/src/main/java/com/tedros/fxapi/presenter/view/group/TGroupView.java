@@ -113,6 +113,5 @@ public class TGroupView<P extends ITGroupPresenter> extends TView<P> implements 
 			tFormSpace = new StackPane();
 		return tFormSpace;
 	}
-
 	
 }

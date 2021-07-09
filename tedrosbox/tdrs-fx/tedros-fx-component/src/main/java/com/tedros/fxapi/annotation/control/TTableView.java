@@ -35,7 +35,7 @@ import javafx.scene.control.TableView;
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD, ElementType.TYPE})
+@Target(ElementType.FIELD)
 public @interface TTableView {
 	
 	@Retention(RetentionPolicy.RUNTIME)

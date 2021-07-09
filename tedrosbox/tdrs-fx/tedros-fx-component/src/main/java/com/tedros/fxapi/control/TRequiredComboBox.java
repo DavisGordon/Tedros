@@ -6,7 +6,6 @@
  */
 package com.tedros.fxapi.control;
 
-import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -29,11 +28,6 @@ public abstract class TRequiredComboBox<T> extends ComboBox<T> implements ITFiel
     private ChangeListener<Object> requiredListener;
     private SimpleBooleanProperty requiredProperty;
 	private String t_componentId; 
-	
-	@Override
-	public Observable tValueProperty() {
-		return valueProperty();
-	}
     
 	public void setRequired(boolean required){
     	

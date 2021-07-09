@@ -7,24 +7,20 @@
 package com.tedros.fxapi.form;
 
 import java.util.List;
-import java.util.Map;
 
-import com.tedros.core.model.ITModelView;
-import com.tedros.core.module.TObjectRepository;
-import com.tedros.core.presenter.ITPresenter;
-import com.tedros.fxapi.descriptor.TFieldDescriptor;
-import com.tedros.fxapi.domain.TViewMode;
-
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.WeakChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
+
+import com.tedros.core.model.ITModelView;
+import com.tedros.core.presenter.ITPresenter;
+import com.tedros.fxapi.descriptor.TFieldDescriptor;
+import com.tedros.fxapi.domain.TViewMode;
 
 /**
  * DESCRIÇÃO DA CLASSE
@@ -36,45 +32,36 @@ public abstract class TVBoxForm<M extends ITModelView<?>>
 extends VBox implements ITModelForm<M> {
 	
 	private final TFormEngine<M, TVBoxForm<M>> formEngine;
-	private final TTriggerLoader<M, TVBoxForm<M>> triggerLoader = new TTriggerLoader<M, TVBoxForm<M>>(this);
+	private final TTriggerLoader<M, TVBoxForm<M>> triggerLoader;
 	@SuppressWarnings("rawtypes")
 	private ITPresenter presenter;
-	private ChangeListener<Boolean> chl = (ob, o, n) -> {
-		if(n) buildTriggers();
-	};
 	
 	public TVBoxForm(M modelView) {
 		this.formEngine = new TFormEngine<M, TVBoxForm<M>>(this, modelView);
-		this.formEngine.loadedProperty().addListener(new WeakChangeListener<>(chl));
-		this.formEngine.setEditMode();
+		this.triggerLoader = new TTriggerLoader<M, TVBoxForm<M>>(this);
+		buildTriggers();
 	}
 	
 	public TVBoxForm(M modelView, boolean readerMode) {
-		this.formEngine = new TFormEngine<>(this, modelView);
-		this.formEngine.loadedProperty().addListener(new WeakChangeListener<>(chl));
-		if(readerMode)
-			this.formEngine.setReaderMode();
-		else
-			this.formEngine.setEditMode();
+		this.formEngine = new TFormEngine<>(this, modelView, readerMode);
+		this.triggerLoader = new TTriggerLoader<>(this);
+		buildTriggers();
 	}
 	
 	@SuppressWarnings("rawtypes")
 	public TVBoxForm(ITPresenter presenter, M modelView) {
 		this.presenter = presenter;
 		this.formEngine = new TFormEngine<M, TVBoxForm<M>>(this, modelView);
-		this.formEngine.loadedProperty().addListener(new WeakChangeListener<>(chl));
-		this.formEngine.setEditMode();
+		this.triggerLoader = new TTriggerLoader<M, TVBoxForm<M>>(this);
+		buildTriggers();
 	}
 	
 	@SuppressWarnings("rawtypes")
 	public TVBoxForm(ITPresenter presenter, M modelView, boolean readerMode) {
 		this.presenter = presenter;
 		this.formEngine = new TFormEngine<>(this, modelView, readerMode);
-		this.formEngine.loadedProperty().addListener(new WeakChangeListener<>(chl));
-		if(readerMode)
-			this.formEngine.setReaderMode();
-		else
-			this.formEngine.setEditMode();
+		this.triggerLoader = new TTriggerLoader<>(this);
+		buildTriggers();
 	}
 	
 	private void buildTriggers() {
@@ -115,7 +102,7 @@ extends VBox implements ITModelForm<M> {
 	}
 	
 	@Override
-	public Map<String, TFieldBox> gettFieldBoxMap() {
+	public ObservableMap<String, TFieldBox> gettFieldBoxMap() {
 		return formEngine.getFieldBoxMap();
 	}
 	
@@ -169,34 +156,5 @@ extends VBox implements ITModelForm<M> {
 	public WebView gettWebView() {
 		return this.formEngine.getWebView();
 	}
-
-	@Override
-	public TObjectRepository gettObjectRepository() {
-		return this.formEngine.getObjectRepository();
-	}
-
-	@Override
-	public void tDispose() {
-		this.gettObjectRepository().clear();
-		/*for(TFieldDescriptor fd : this.gettFieldDescriptorList()) {
-			String fn = fd.getFieldName();
-			Observable ob = this.formEngine.getModelView().getProperty(fn);
-			TFieldBox fb = this.gettFieldBox(fn);
-			if(ob!=null && fb!=null) {
-				
-			}
-		}*/
-	}
-
-
-	@Override
-	public ReadOnlyBooleanProperty tLoadedProperty() {
-		return this.formEngine.loadedProperty();
-	}
-
-	@Override
-	public boolean isLoaded() {
-		return this.formEngine.loadedProperty().get();
-	}
-
+	
 }

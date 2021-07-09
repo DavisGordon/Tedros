@@ -71,7 +71,7 @@ public @interface TVBox {
 	 * <pre>
 	 * The parser class for this annotation
 	 * 
-	 * Default value: {TVBoxParser.class}
+	 * Default value: {TRequiredNumeberFieldParser.class, TNumberFieldParser.class, TTextFieldParser.class}
 	 * </pre>
 	 * */
 	@SuppressWarnings("rawtypes")

@@ -8,6 +8,7 @@ package com.tedros.fxapi.builder;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -40,12 +41,19 @@ public class TReaderHtmlBuilder
 extends TBuilder
 implements ITReaderHtmlBuilder<TReaderHtml, Property> {
 
-	private final TStripTagUtil tStripTagUtil;
+	private static TStripTagUtil tStripTagUtil;
+	private static TReaderHtmlBuilder instance;
 	
-	public TReaderHtmlBuilder(){
+	private TReaderHtmlBuilder(){
 		tStripTagUtil = new TStripTagUtil();
 	}
 	
+	public static TReaderHtmlBuilder getInstance(){
+		if(instance==null)
+			instance = new TReaderHtmlBuilder();
+		return instance;
+	}
+
 	@SuppressWarnings("unchecked")
 	public THtmlReader build(final TReaderHtml tAnnotation, Property property) throws Exception {
 		
@@ -83,12 +91,9 @@ implements ITReaderHtmlBuilder<TReaderHtml, Property> {
 					System.out.println(html);
 					System.out.println("**************************************");
 					System.out.println(fieldName);*/
-					try{
-						String newValue = iEngine.getString(getValue(tAnnotation, arg2));
-						engine.executeScript("if(document.getElementById('"+fieldName+"')) document.getElementById('"+fieldName+"').innerHTML = '"+newValue+"'");
-					}catch(Exception e){
-						System.err.println("WARNING: ERROR ON TReaderHtmlBuilder line 98 The listeners still active after read mode was changed to edit mode. "+e.getMessage());
-					}
+					
+					String newValue = iEngine.getString(getValue(tAnnotation, arg2));
+					engine.executeScript("document.getElementById('"+fieldName+"').innerHTML = '"+newValue+"'");
 				};
 			}
 		};
