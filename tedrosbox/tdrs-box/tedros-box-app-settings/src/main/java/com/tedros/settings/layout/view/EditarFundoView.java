@@ -6,27 +6,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.context.TedrosContext;
+import com.tedros.core.style.TStyleResourceName;
+import com.tedros.settings.start.TConstant;
+import com.tedros.util.TFileUtil;
+import com.tedros.util.TedrosFolderEnum;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.StackPane;
-
-import org.apache.commons.lang3.StringUtils;
-
-import com.tedros.core.TInternationalizationEngine;
-import com.tedros.core.context.TedrosContext;
-import com.tedros.core.style.TStyleResourceName;
-import com.tedros.settings.layout.TemplateStyleId;
-import com.tedros.settings.layout.template.GradientBuilderApp;
-import com.tedros.settings.start.TConstant;
-import com.tedros.util.TFileUtil;
-import com.tedros.util.TedrosFolderEnum;
 
 public class EditarFundoView extends StackPane {
 	

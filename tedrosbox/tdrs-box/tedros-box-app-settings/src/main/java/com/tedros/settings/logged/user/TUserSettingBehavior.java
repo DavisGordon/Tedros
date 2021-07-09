@@ -84,14 +84,16 @@ public class TUserSettingBehavior extends TSaveViewBehavior<TUserSettingModelVie
 		
 		/*UserSettingModelView model = super.getModelView();*/
 		TUser model = TedrosContext.getLoggedUser();
-		List<TProfileModelView> profiles  = new TModelViewUtil<TProfileModelView, TProfile>
-		(TProfileModelView.class, TProfile.class, new ArrayList<>(model.getProfiles())).convertToModelViewList();
-		profileComboBox.getItems().clear();
-		profileComboBox.getItems().addAll(profiles);
-		
-		TProfileModelView pm = new TProfileModelView(model.getActiveProfile());
-		
-		profileComboBox.getSelectionModel().select(pm);
+		if(model.getProfiles()!=null) {
+			List<TProfileModelView> profiles  = new TModelViewUtil<TProfileModelView, TProfile>
+			(TProfileModelView.class, TProfile.class, new ArrayList<>(model.getProfiles())).convertToModelViewList();
+			profileComboBox.getItems().clear();
+			profileComboBox.getItems().addAll(profiles);
+			
+			TProfileModelView pm = new TProfileModelView(model.getActiveProfile());
+			
+			profileComboBox.getSelectionModel().select(pm);
+		}
 	}
 	
 	@Override
