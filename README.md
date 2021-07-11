@@ -39,21 +39,21 @@ Requisitos:
 - JDK 1.8
 - Maven
 - Lib jfxrt versão 1.8.0_261 (encontra-se na pasta zips)
-- H2 Database (https://www.h2database.com/html/download.html)
+- H2 Database (https://www.h2database.com/html/download.html) ou outro banco de dados.
 
 1. Faça o clone/download do projeto
 
 2. Na pasta zips:
-- Descompacte o arquivo usr.zip na raiz do file system. Este arquivo contem o banco de dados h2 ja configurado
 - Faça o download do arquivo jfxrt-1.8.0_261.jar e execute o comando maven abaixo para adiciona-lo no repositorio local: 
 - `mvn install:install-file -Dfile=jfxrt-1.8.0_261.jar -DgroupId=com.oracle -DartifactId=jfxrt -Dversion= 1.8.0_261 -Dpackaging=jar`
 
-3. Importe o projeto maven tedrosbox.
-
-4. Altere a propriedade abaixo no arquivo pom.xml com o local onde se encontra o jdk .
+3. Faça o download do banco de dados, execute o arquivo bin\h2.bat uma tela para conexão sera aberta no browser.
+4. Importe o projeto maven tedrosbox.
+5. Altere a propriedade abaixo no arquivo pom.xml com o local onde se encontra o jdk .
 
 `<java.home>C:\Program Files\Java\jdk1.8.0_102\bin</java.home>`
 
+5
 5. Com o botão direito do mouse sobre o projeto tedrosbox selecione a opção: `Run as >Maven build`, e execute no campo Goals: `clean install`
 
 6. Com o botão direito do mouse sobre o projeto server-application selecione a opção: `Run as >Maven build`, e execute no campo Goals: `cargo:run`
