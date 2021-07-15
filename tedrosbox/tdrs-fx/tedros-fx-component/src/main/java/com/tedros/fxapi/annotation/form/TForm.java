@@ -20,4 +20,9 @@ public @interface TForm {
 	
 	public String name();
 	
+	public String editCssId() default "t-form";
+	
+	public String readerCssId() default "t-reader";
+	
+	public String style() default "";
 }

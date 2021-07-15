@@ -31,6 +31,8 @@ public interface ITForm {
 	
 	public String getId();
 	
+	public void setStyle(String style);
+	
 	public ObservableList<Node> getChildren();
 	
 	public TObjectRepository gettObjectRepository();
