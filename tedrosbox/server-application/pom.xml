@@ -19,7 +19,7 @@
 	
 	<dependency>
 	   <groupId>com.tedros</groupId>
-  		<artifactId>tdrs-app-covid-semfome-webapp</artifactId>
+  		<artifactId>app-solidarity-webapp</artifactId>
 	    <type>war</type>
 	    <version>8-1.0</version>
 	</dependency>
@@ -33,7 +33,7 @@
 	
 	<dependency>
 		<groupId>com.tedros</groupId>
-		 <artifactId>tdrs-app-covid-semfome-ejb-ear</artifactId>
+		 <artifactId>app-solidarity-ejb-ear</artifactId>
 		 <type>ear</type>
 		<version>8-2.2</version>
 	</dependency>
@@ -105,7 +105,7 @@
 			      
 			      <deployable>
 			        <groupId>com.tedros</groupId>
-			        <artifactId>tdrs-app-covid-semfome-ejb-ear</artifactId>
+			        <artifactId>app-solidarity-ejb-ear</artifactId>
 			      	<type>ear</type>
 			      </deployable>
 			      <deployable>
@@ -115,7 +115,7 @@
 			      </deployable>
 			      <deployable>
 			      	<groupId>com.tedros</groupId>
-  					<artifactId>tdrs-app-covid-semfome-webapp</artifactId>
+  					<artifactId>app-solidarity-webapp</artifactId>
   					<type>war</type>
   				</deployable>
 			      

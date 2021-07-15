@@ -22,16 +22,9 @@
   	<dependencies>
 	  	
 	  	<!-- APPS -->
-	  	 <!-- <dependency>
-	  		<groupId>com.tedros</groupId>
-	  		<artifactId>app-global-brasil</artifactId>
-	  		<version>8-1.0</version>
-	  		<scope>runtime</scope>
-	  	</dependency> -->
-	  	
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
-	  		<artifactId>tdrs-app-covid-semfome-fx</artifactId>
+	  		<artifactId>app-solidarity-fx</artifactId>
 	  		<version>8-2.2</version>
 	  		<scope>compile</scope>
 	  	</dependency>

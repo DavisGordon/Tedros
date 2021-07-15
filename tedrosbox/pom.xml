@@ -22,8 +22,9 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
     	<maven.compiler.source>1.8</maven.compiler.source>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!-- <java.home>C:\Program Files\Java\jdk1.7.0_51</java.home> -->
+		
 		<java.home>C:\Program Files\Java\jdk1.8.0_102\bin</java.home>
+		<user.home>C://Users//Davis Gordon</user.home>
 		
 		<commons-collections.version>4.4</commons-collections.version>
 		<commons.logging.version>1.2</commons.logging.version>
@@ -79,7 +80,7 @@
 	<modules>
 		<module>tdrs-box</module>
 		<module>tdrs-fx</module>
-		<module>tdrs-app-covid-semfome</module>
+		<module>app-solidarity</module>
 		<module>tdrs-miscellaneous</module>
 		<module>tdrs-server</module>
 		<module>server-application</module>

@@ -9,6 +9,8 @@ package com.tedros.fxapi.form;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.tedros.core.model.ITModelView;
 import com.tedros.core.presenter.ITPresenter;
 import com.tedros.fxapi.annotation.form.TForm;
@@ -78,16 +80,20 @@ public class TFormBuilder<M extends ITModelView<?>> {
 			switch (constructorType) {
 				case 1 :
 					this.form = (ITModelForm<M>) formClass.getConstructor(ITModelView.class).newInstance((ITModelView)this.modelView);
-				break;
+					applyStyles(tForm);
+					break;
 				case 2 :
 					this.form = (ITModelForm<M>) formClass.getConstructor(this.modelView.getClass()).newInstance(this.modelView);
-				break;
+					applyStyles(tForm);
+					break;
 				case 3 :
 					this.form = (ITModelForm<M>) formClass.getConstructor(ITPresenter.class, ITModelView.class).newInstance(this.presenter, (ITModelView)this.modelView);
-				break;
+					applyStyles(tForm);
+					break;
 				case 4 :
 					this.form = (ITModelForm<M>) formClass.getConstructor(ITPresenter.class, this.modelView.getClass()).newInstance(this.presenter, this.modelView);
-				break;
+					applyStyles(tForm);
+					break;
 				default:
 					throw new InstantiationException("ERROR: THE FORM "+formClass.getName()+" must have a constructor with TModelView or "+this.modelView.getClass().getCanonicalName()+" parameter!");
 			}
@@ -102,6 +108,18 @@ public class TFormBuilder<M extends ITModelView<?>> {
 		
 		return this.form;
 		
+	}
+
+
+	/**
+	 * @param tForm
+	 */
+	private void applyStyles(TForm tForm) {
+		if(tForm==null)
+			return;
+		this.form.setId(StringUtils.isNotBlank(tForm.editCssId()) ? tForm.editCssId() : null);
+		if(StringUtils.isNotBlank(tForm.style()))
+			this.form.setStyle(tForm.style());
 	}
 	
 	

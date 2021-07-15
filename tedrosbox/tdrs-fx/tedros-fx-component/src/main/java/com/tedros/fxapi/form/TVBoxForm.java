@@ -46,16 +46,16 @@ extends VBox implements ITModelForm<M> {
 	public TVBoxForm(M modelView) {
 		this.formEngine = new TFormEngine<M, TVBoxForm<M>>(this, modelView);
 		this.formEngine.loadedProperty().addListener(new WeakChangeListener<>(chl));
-		this.formEngine.setEditMode();
+		settEditMode();
 	}
 	
 	public TVBoxForm(M modelView, boolean readerMode) {
 		this.formEngine = new TFormEngine<>(this, modelView);
 		this.formEngine.loadedProperty().addListener(new WeakChangeListener<>(chl));
 		if(readerMode)
-			this.formEngine.setReaderMode();
+			settReaderMode();
 		else
-			this.formEngine.setEditMode();
+			settEditMode();
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -63,7 +63,7 @@ extends VBox implements ITModelForm<M> {
 		this.presenter = presenter;
 		this.formEngine = new TFormEngine<M, TVBoxForm<M>>(this, modelView);
 		this.formEngine.loadedProperty().addListener(new WeakChangeListener<>(chl));
-		this.formEngine.setEditMode();
+		settEditMode();
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -72,9 +72,9 @@ extends VBox implements ITModelForm<M> {
 		this.formEngine = new TFormEngine<>(this, modelView, readerMode);
 		this.formEngine.loadedProperty().addListener(new WeakChangeListener<>(chl));
 		if(readerMode)
-			this.formEngine.setReaderMode();
+			settReaderMode();
 		else
-			this.formEngine.setEditMode();
+			settEditMode();
 	}
 	
 	private void buildTriggers() {
