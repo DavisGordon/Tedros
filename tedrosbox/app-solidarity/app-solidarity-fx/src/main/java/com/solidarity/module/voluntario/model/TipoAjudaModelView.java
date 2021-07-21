@@ -50,8 +50,8 @@ import javafx.scene.text.TextAlignment;
 @TForm(name = "Tipos de ajuda")
 @TEntityProcess(process = TipoAjudaProcess.class, entity=TipoAjuda.class)
 @TPresenter(decorator = @TDecorator(viewTitle="Tipos de ajuda voluntariado"))
-@TSecurity(	id="COVSEMFOME_CADTIPOAJUDA_FORM", 
-			appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Tipos de Ajuda",
+@TSecurity(	id="SOLIDARITY_CADTIPOAJUDA_FORM", 
+			appName = "#{app.name}", moduleName = "#{module.manage.campaign}", viewName = "Tipos de Ajuda",
 			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 							TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class TipoAjudaModelView extends TEntityModelView<TipoAjuda> {

@@ -11,8 +11,8 @@ import com.tedros.fxapi.presenter.view.group.TGroupPresenter;
 import com.tedros.fxapi.presenter.view.group.TGroupView;
 import com.tedros.fxapi.presenter.view.group.TViewItem;
 
-@TSecurity(	id="COVSEMFOME_PRODUTO_MODULE", appName = "#{app.name}", 
-moduleName = "Administrativo", 
+@TSecurity(	id="SOLIDARITY_PRODUTO_MODULE", appName = "#{app.name}", 
+moduleName = "#{module.administrativo}", 
 allowedAccesses=TAuthorizationType.MODULE_ACCESS)
 public class ProdutoModule extends TModule {
 

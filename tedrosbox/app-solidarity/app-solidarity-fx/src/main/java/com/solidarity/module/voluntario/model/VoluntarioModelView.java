@@ -11,8 +11,8 @@ import com.solidarity.model.Acao;
 import com.solidarity.model.Pessoa;
 import com.solidarity.model.TipoAjuda;
 import com.solidarity.model.Voluntario;
-import com.solidarity.module.doacao.model.AcaoFindModelView;
-import com.solidarity.module.doacao.model.PessoaFindModelView;
+import com.solidarity.module.acao.model.AcaoFindModelView;
+import com.solidarity.module.pessoa.model.PessoaFindModelView;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.control.TFieldBox;
@@ -62,8 +62,8 @@ import javafx.scene.text.TextAlignment;
 @TListViewPresenter(listViewMinWidth=350, listViewMaxWidth=350,
 	paginator=@TPaginator(entityClass = Voluntario.class, serviceName = "IVoluntarioControllerRemote", show=true),
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Voluntário inscrito")))
-@TSecurity(	id="COVSEMFOME_CADVOL_FORM", 
-	appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Voluntários inscritos na campanha",
+@TSecurity(	id="SOLIDARITY_CADVOL_FORM", 
+	appName = "#{app.name}", moduleName = "#{module.manage.campaign}", viewName = "Voluntários inscritos na campanha",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 

@@ -32,41 +32,42 @@ import javafx.geometry.Pos;
 import javafx.scene.text.TextAlignment;
 
 @TFormReaderHtml
-@TForm(name = "Site/Conheça", showBreadcrumBar=false)
+@TForm(name = "#{form.web.about.name}", showBreadcrumBar=false)
 @TEjbService(serviceName = "ISiteAboutControllerRemote", model=SiteAbout.class)
-@TListViewPresenter(paginator=@TPaginator(entityClass = SiteAbout.class, serviceName = "ISiteAboutControllerRemote", show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Site/Conheça")))
-@TSecurity(	id="COVSEMFOME_SITEABOUT_FORM", 
-	appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Site/Conheça",
+@TListViewPresenter(paginator=@TPaginator(entityClass = SiteAbout.class, 
+	serviceName = "ISiteAboutControllerRemote", show=true),
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{form.web.about.name}")))
+@TSecurity(	id="SOLIDARITY_SITEABOUT_FORM", 
+	appName = "#{app.name}", moduleName = "#{module.manage.campaign}", viewName = "#{form.web.about.name}",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class SiteAboutModelView extends TEntityModelView<SiteAbout>{
 	
 	private SimpleLongProperty id;
 	
-	@TTextReaderHtml(text="Site/Conheça", 
+	@TTextReaderHtml(text="#{form.web.about.name}", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Item a ser exibido no site", textAlignment=TextAlignment.LEFT, 
+	@TText(text="#{text.item.web}", textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty textoCadastro;
 	
 	
 	@TReaderHtml
-	@TLabel(text="Descrição")
+	@TLabel(text="#{label.descricao}")
 	@TTextAreaField(required=true, maxLength=4000, wrapText=true,
 	node=@TNode(requestFocus=true, parse = true),
 	control=@TControl(prefHeight=300, parse = true))
 	private SimpleStringProperty descricao;
 	
-	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "Ativado"), 
-			@TCodeValue(code = "DESATIVADO", value = "Desativado")})
 	@TLabel(text="Status")
+	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "#{label.ativado}"), 
+			@TCodeValue(code = "DESATIVADO", value = "#{label.desativado}")})
 	@THorizontalRadioGroup(alignment=Pos.TOP_LEFT, required=true, spacing=4,
-	radioButtons = {@TRadioButtonField(text="Ativado", userData="ATIVADO"), 
-					@TRadioButtonField(text="Desativado", userData="DESATIVADO")
+	radioButtons = {@TRadioButtonField(text="#{label.ativado}", userData="ATIVADO"), 
+					@TRadioButtonField(text="#{label.desativado}", userData="DESATIVADO")
 	})
 	private SimpleStringProperty status;
 	

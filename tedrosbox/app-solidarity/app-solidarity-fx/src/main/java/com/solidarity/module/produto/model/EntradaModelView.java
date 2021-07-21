@@ -10,7 +10,7 @@ import com.solidarity.model.Entrada;
 import com.solidarity.model.EntradaItem;
 import com.solidarity.model.Pessoa;
 import com.solidarity.module.cozinha.model.CozinhaModelView;
-import com.solidarity.module.doacao.model.PessoaFindModelView;
+import com.solidarity.module.pessoa.model.PessoaFindModelView;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.TCodeValue;
@@ -76,8 +76,8 @@ import javafx.scene.text.TextAlignment;
 			orderBy = {	@TOption(text = "Data", value = "data"), 
 						@TOption(text = "Tipo", value = "tipo")}),
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Entrada de Produtos")))
-@TSecurity(	id="COVSEMFOME_ENTRADAPROD_FORM", 
-	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Entrada de Produtos",
+@TSecurity(	id="SOLIDARITY_ENTRADAPROD_FORM", 
+	appName = "#{app.name}", moduleName = "#{module.administrativo}", viewName = "Entrada de Produtos",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class EntradaModelView extends TEntityModelView<Entrada> {

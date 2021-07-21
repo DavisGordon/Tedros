@@ -41,43 +41,37 @@ import com.tedros.core.annotation.security.TSecurity;
  * */
 @TApplication(name="#{app.name}", universalUniqueIdentifier=TConstant.UUI,
 module = {	
-			@TModule(type=CadastroTipoAjudaModule.class, name="Tipos de Ajuda", menu="Gerenciar Campanha", 
+			@TModule(type=CadastroTipoAjudaModule.class, name="#{view.tipoajuda}", menu="#{module.manage.campaign}", 
 					icon=TipoAjudaIconImageView.class, menuIcon=TipoAjudaMenuIconImageView.class,
-					description="Edite aqui os Tipos de Ajuda que os voluntarios podem executar."),
-			@TModule(type=AcaoModule.class, name="Ação/Site", menu="Gerenciar Campanha", 
+					description="#{view.tipoajuda.desc}"),
+			@TModule(type=AcaoModule.class, name="#{view.web}", menu="#{module.manage.campaign}", 
 					icon=AcaoIconImageView.class, menuIcon=AcaoMenuIconImageView.class,
-					description="Administre aqui as ações/campanhas e algumas informações do site"),
-			@TModule(type=CadastroVoluntarioModule.class, name="Voluntários inscritos", menu="Gerenciar Campanha", 
+					description="#{view.web.desc}"),
+			@TModule(type=CadastroVoluntarioModule.class, name="#{view.vol.inscritos}", menu="#{module.manage.campaign}", 
 					icon=VoluntarioIconImageView.class, menuIcon=VoluntarioMenuIconImageView.class,
-					description="Edite/visualize aqui os voluntarios e o tipo de ajuda nas ações."),
-			@TModule(type=MailingModule.class, name="Mailing", menu="Gerenciar Campanha", 
+					description="#{view.vol.inscritos.desc}"),
+			@TModule(type=MailingModule.class, name="#{view.emailing}", menu="#{module.manage.campaign}", 
 					icon=MailingIconImageView.class, menuIcon=MailingMenuIconImageView.class,
-					description="Crie e envie e-mails a um grupo de pessoas sobre uma determinada ação."),
-			@TModule(type=DoacaoReportModule.class, name="Relatórios", menu="Administrativo", 
+					description="#{view.emailing.desc}"),
+			@TModule(type=DoacaoReportModule.class, name="#{view.relatorios}", menu="#{module.administrativo}", 
 					icon=RelatoriosIconImageView.class, menuIcon=RelatoriosMenuIconImageView.class,
-					description="Gere relatórios que ajudem nos processos administrativos."),
-			@TModule(type=CadastroDePessoaModule.class, name="#{label.person}", menu="Administrativo", 
+					description="#{view.relatorios.desc}"),
+			@TModule(type=CadastroDePessoaModule.class, name="#{view.pessoa}", menu="#{module.administrativo}", 
 					icon=PessoaIconImageView.class, menuIcon=PessoaMenuIconImageView.class,
-					description="Gerencie aqui todas as pessoas envolvidas no projeto, voluntarios e "
-							+ "filantropicos cadastrados pelo site e também os termos de adesão."),
-			@TModule(type=CozinhaModule.class, name="Local de Produção", menu="Administrativo", 
+					description="#{view.pessoa.desc}"),
+			@TModule(type=CozinhaModule.class, name="#{view.local.prod}", menu="#{module.administrativo}", 
 					icon=CozinhaIconImageView.class, menuIcon=CozinhaMenuIconImageView.class,
-					description="Edite aqui os locais (cozinhas) de produção, necessario "
-							+ "para editar estoque e inserir entradas e saidas de produtos."),
-			@TModule(type=ProdutoModule.class, name="Produto", menu="Administrativo", 
+					description="#{view.local.prod.desc}"),
+			@TModule(type=ProdutoModule.class, name="#{view.produtos}", menu="#{module.administrativo}", 
 					icon=ProdutoIconImageView.class, menuIcon=ProdutoMenuIconImageView.class,
-					description="Insira/Importe aqui os produtos utilizados na produção e informe "
-							+ "as entradas (Compras) e saídas (Produção). "
-							+ "Necessario editar o estoque inicial antes de lançar as entradas e saídas."),
-			@TModule(type=EstoqueModule.class, name="Estoque", menu="Administrativo", 
+					description="#{view.produtos.desc}"),
+			@TModule(type=EstoqueModule.class, name="#{view.estoque}", menu="#{module.administrativo}", 
 					icon=EstoqueIconImageView.class, menuIcon=EstoqueMenuIconImageView.class,
-					description="Edite o estoque inicial e visualize os estoques gerados apos o lançamento "
-							+ "das entradas e saidas de produtos. Necessario inserir os locais de produção "
-							+ "e os produtos primeiro.")
+					description="#{view.estoque.desc}")
 
 })
-@TResourceBundle(resourceName={"CovidLabels"})
-@TSecurity(id="APP_COVIDSEMFOME", appName = "#{app.name}", allowedAccesses=TAuthorizationType.APP_ACCESS)
+@TResourceBundle(resourceName={"Solidarity"})
+@TSecurity(id="APP_SOLIDARITY", appName = "#{app.name}", allowedAccesses=TAuthorizationType.APP_ACCESS)
 public class AppStart implements ITApplication {
 
 	@Override

@@ -36,8 +36,6 @@ import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.scene.layout.TRegion;
-import com.tedros.fxapi.annotation.text.TFont;
-import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.domain.THtmlConstant;
@@ -50,19 +48,18 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
-import javafx.scene.text.TextAlignment;
 
 @TFormReaderHtml
-@TForm(name = "Estoque gerado automaticamente", showBreadcrumBar=true)
+@TForm(name = "#{form.estoque}", showBreadcrumBar=true)
 @TEjbService(serviceName = "IEstoqueControllerRemote", model=Estoque.class)
 @TListViewPresenter(listViewMinWidth=400,
 	paginator=@TPaginator(entityClass = Estoque.class, serviceName = "IEstoqueControllerRemote",
 		show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Ver Estoque", 
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{view.estoque.title}", 
 		buildNewButton=false, buildDeleteButton=false, buildCollapseButton=false
 	)))
-@TSecurity(	id="COVSEMFOME_ESTOQUE_FORM", 
-	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Estoque",
+@TSecurity(	id="SOLIDARITY_ESTOQUE_FORM", 
+	appName = "#{app.name}", moduleName = "#{module.administrativo}", viewName = "#{view.estoque.title}",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, 
 			TAuthorizationType.READ, TAuthorizationType.SAVE})
 public class EstoqueModelView extends TEntityModelView<Estoque> {
@@ -72,7 +69,7 @@ public class EstoqueModelView extends TEntityModelView<Estoque> {
 	
 	private SimpleStringProperty displayText;
 	
-	@TTextReaderHtml(text="Estoque", 
+	@TTextReaderHtml(text="#{label.estoque}", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
@@ -81,48 +78,49 @@ public class EstoqueModelView extends TEntityModelView<Estoque> {
 	private SimpleStringProperty header;
 	
 	@TReaderHtml
-	@TLabel(text="Local de produção:")
+	@TLabel(text="#{label.local.prod}")
 	@THBox(	pane=@TPane(children={"entradaRef","saidaRef","data","cozinha"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="entradaRef", priority=Priority.NEVER), 
 		   		@TPriority(field="saidaRef", priority=Priority.NEVER),
 		   		@TPriority(field="data", priority=Priority.ALWAYS), 
 			   		@TPriority(field="cozinha", priority=Priority.ALWAYS)}))
-	@TShowField(fields= {@TField(name = "nome", label="Cozinha da"), @TField(name = "telefone", label="Tel:", pattern="(99) #9999-9999")})
+	@TShowField(fields= {@TField(name = "nome", label="#{label.produzido.na}"), 
+			@TField(name = "telefone", label="Tel:", pattern="(99) #9999-9999")})
 	private SimpleObjectProperty<Cozinha> cozinha;
 	
 	@TReaderHtml
-	@TShowField(fields= {@TField(name = "data", label="Data"), @TField(name = "tipo", label="Tipo")})
-	@TFieldSet(fields = { "entradaRef" }, legend = "Entrada", region=@TRegion(maxWidth=200, parse = true))
+	@TShowField(fields= {@TField(name = "data", label="#{label.data}"), @TField(name = "tipo", label="#{label.tipo}")})
+	@TFieldSet(fields = { "entradaRef" }, legend = "#{label.entradas}", region=@TRegion(maxWidth=200, parse = true))
 	private SimpleObjectProperty<Entrada> entradaRef;
 	
 	@TReaderHtml
-	@TFieldSet(fields = { "saidaRef" }, legend = "Saida", region=@TRegion(maxWidth=300, parse = true))
-	@TShowField(fields= {@TField(name = "data", label="Data"), @TField(name = "acao", label="Ação")})
+	@TFieldSet(fields = { "saidaRef" }, legend = "#{label.saidas}", region=@TRegion(maxWidth=300, parse = true))
+	@TShowField(fields= {@TField(name = "data", label="#{label.data}"), @TField(name = "acao", label="#{label.campaign}")})
 	private SimpleObjectProperty<Saida> saidaRef;
 	
 	
 	
 	@TReaderHtml
-	@TLabel(text="Data e Hora")
+	@TLabel(text="#{label.dataHora}")
 	@TShowField(fields= {@TField(pattern = TDateUtil.DDMMYYYY_HHMM)})
 	private SimpleObjectProperty<Date> data;
 	
 	@TReaderHtml
-	@TLabel(text="Observação")
+	@TLabel(text="#{label.observacao}")
 	@TTextAreaField(maxLength=600, wrapText=true, control=@TControl(prefWidth=250, prefHeight=100, parse = true))
 	private SimpleStringProperty observacao;
 	
-	@TDetailReaderHtml(	label=@TLabel(text="Produtos"), 
+	@TDetailReaderHtml(	label=@TLabel(text="#{label.produtos}"), 
 			entityClass=EstoqueItem.class, 
 			modelViewClass=EstoqueItemModelView.class)
 	@TTableView(editable=true, tableMenuButtonVisible=true,
-	columns = { @TTableColumn(cellValue="produto", text = "Produto", prefWidth=50, resizable=true), 
-				@TTableColumn(cellValue="qtdMinima", text = "Qtd.Min", prefWidth=20, resizable=true),
-				@TTableColumn(cellValue="qtdInicial", text = "Qtd. Inicial", resizable=true), 
-				@TTableColumn(cellValue="qtdCalculado", text = "Qtd. Calculado", resizable=true), 
-				@TTableColumn(cellValue="qtdAjuste", text = "Ajuste", resizable=true, editable=true,
+	columns = { @TTableColumn(cellValue="produto", text = "#{label.produto}", prefWidth=50, resizable=true), 
+				@TTableColumn(cellValue="qtdMinima", text = "#{label.qtd.min}", prefWidth=20, resizable=true),
+				@TTableColumn(cellValue="qtdInicial", text = "#{label.qtd.inicial}", resizable=true), 
+				@TTableColumn(cellValue="qtdCalculado", text = "#{label.qtd.calc}", resizable=true), 
+				@TTableColumn(cellValue="qtdAjuste", text = "#{label.ajuste}", resizable=true, editable=true,
 						cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=QtdAjusteCallBack.class))), 
-				@TTableColumn(cellValue="vlrAjustado", text = "Total", resizable=true)})
+				@TTableColumn(cellValue="vlrAjustado", text = "#{label.total}", resizable=true)})
 	@TModelViewCollectionType(modelClass=EstoqueItem.class, modelViewClass=EstoqueItemModelView.class)
 	private ITObservableList<EstoqueItemModelView> itens;
 	

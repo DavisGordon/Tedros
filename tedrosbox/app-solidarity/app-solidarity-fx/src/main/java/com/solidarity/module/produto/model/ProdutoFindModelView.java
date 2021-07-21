@@ -28,26 +28,25 @@ import javafx.scene.layout.Priority;
  * 
  * @author Davis Gordon
  * */
-@TForm(name = "Produto")
+@TForm(name = "#{label.produto}")
 @TSelectionModalPresenter(
 		paginator=@TPaginator(entityClass = Produto.class, modelViewClass=ProdutoFindModelView.class, 
 			serviceName = "IProdutoControllerRemote"),
 		tableView=@TTableView(editable=true, 
-			columns = { @TTableColumn(cellValue="codigo", text = "Codigo", prefWidth=20, resizable=true), 
-						@TTableColumn(cellValue="nome", text = "Nome", resizable=true)}), 
+			columns = { @TTableColumn(cellValue="codigo", text = "#{label.codigo}", prefWidth=20, resizable=true), 
+						@TTableColumn(cellValue="nome", text = "#{label.name}", resizable=true)}), 
 		allowsMultipleSelections = false)
 public class ProdutoFindModelView extends TEntityModelView<Produto>{
 	
-	@TLabel(text="Codigo:", position=TLabelPosition.LEFT)
+	@TLabel(text="#{label.codigo}", position=TLabelPosition.LEFT)
 	@TLongField(maxLength=6 )
 	private SimpleLongProperty id;
 	
 	private SimpleStringProperty displayText;
 	
-	@TLabel(text="Codigo")
+	@TLabel(text="#{label.codigo.produto}")
 	@TTextField(maxLength=20, required = true, 
-	textInputControl=@TTextInputControl(promptText="Codigo do produto", parse = true), 
-				control=@TControl(tooltip="Codigo de referencia", parse = true))
+				control=@TControl(tooltip="#{tooltip.codigo.produto}", parse = true))
 	@THBox(	pane=@TPane(children={"codigo","nome"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="codigo", priority=Priority.NEVER), 
 						@TPriority(field="nome", priority=Priority.ALWAYS)}))

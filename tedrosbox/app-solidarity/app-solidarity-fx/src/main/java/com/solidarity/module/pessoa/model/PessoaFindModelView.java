@@ -1,7 +1,6 @@
-package com.solidarity.module.doacao.model;
+package com.solidarity.module.pessoa.model;
 
 import com.solidarity.model.Pessoa;
-import com.solidarity.module.pessoa.model.PessoaFieldValueUtil;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TLongField;
@@ -9,7 +8,6 @@ import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextField;
-import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.presenter.TSelectionModalPresenter;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
@@ -33,35 +31,33 @@ import javafx.geometry.Pos;
 		paginator=@TPaginator(entityClass = Pessoa.class, modelViewClass=PessoaFindModelView.class, 
 			serviceName = "IPessoaControllerRemote"),
 		tableView=@TTableView(editable=true, 
-			columns = { @TTableColumn(cellValue="id", text = "Codigo", prefWidth=20, resizable=true), 
-						@TTableColumn(cellValue="nome", text = "Nome", resizable=true), 
+			columns = { @TTableColumn(cellValue="id", text = "#{label.codigo}", prefWidth=20, resizable=true), 
+						@TTableColumn(cellValue="nome", text = "#{label.name}", resizable=true), 
 						@TTableColumn(cellValue="status", text = "Status", resizable=true)}), 
 		allowsMultipleSelections = false)
 public class PessoaFindModelView extends TEntityModelView<Pessoa>{
 	
-	@TLabel(text="Codigo:", position=TLabelPosition.LEFT)
+	@TLabel(text="#{label.codigo}", position=TLabelPosition.LEFT)
 	@TLongField(maxLength=6 )
 	private SimpleLongProperty id;
 	
 	private SimpleStringProperty displayText;
-	
-	
-	@TLabel(text="Status", position=TLabelPosition.LEFT)
-	@THorizontalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
-	radioButtons = {@TRadioButtonField(text="Ativado", userData="ATIVADO"), 
-					@TRadioButtonField(text="Desativado", userData="DESATIVADO")
-	})
-	private SimpleStringProperty status;
 	
 	/**
 	 * A text input description for the person name and a horizontal box with name, last name and nick name
 	 * */
 	@TReaderHtml
 	@TLabel(text="#{label.name}")
-	@TTextField(maxLength=60, required = true, textInputControl=@TTextInputControl(promptText="#{label.name}", parse = true), 
-				control=@TControl(tooltip="#{label.name}", parse = true))
+	@TTextField(maxLength=60, required = true, 
+	control=@TControl(tooltip="#{label.name}", parse = true))
 	private SimpleStringProperty nome;
 	
+	@TLabel(text="Status", position=TLabelPosition.LEFT)
+	@THorizontalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
+	radioButtons = {@TRadioButtonField(text="#{label.ativado}", userData="ATIVADO"), 
+					@TRadioButtonField(text="#{label.desativado}", userData="DESATIVADO")
+	})
+	private SimpleStringProperty status;
 	
 	private SimpleStringProperty tipoVoluntario;
 	

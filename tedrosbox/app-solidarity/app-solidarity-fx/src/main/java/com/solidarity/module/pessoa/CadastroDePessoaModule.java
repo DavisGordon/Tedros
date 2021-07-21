@@ -23,15 +23,15 @@ import com.tedros.fxapi.presenter.view.group.TViewItem;
  * @author Davis Gordon
  *
  */
-@TSecurity(	id="COVSEMFOME_CADPESS_MODULE", appName = "#{app.name}", moduleName = "Administrativo", 
+@TSecurity(	id="SOLIDARITY_CADPESS_MODULE", appName = "#{app.name}", moduleName = "#{module.administrativo}", 
 			allowedAccesses=TAuthorizationType.MODULE_ACCESS)
 public class CadastroDePessoaModule extends TModule{
 
 	@Override
 	public void tStart() {
-		tShowView(new TGroupView<TGroupPresenter>(this, "Pessoa Voluntaria", 
-				new TViewItem(TDynaView.class, PessoaModelView.class, "Pessoa"),
-				new TViewItem(TDynaView.class, TermoAdesaoModelView.class, "Termo Adesão")
+		tShowView(new TGroupView<TGroupPresenter>(this, "#{view.ger.pessoa}", 
+				new TViewItem(TDynaView.class, PessoaModelView.class, "#{view.pessoa}"),
+				new TViewItem(TDynaView.class, TermoAdesaoModelView.class, "#{view.termos.adesao}") 
 				));
 	}
 }

@@ -18,7 +18,7 @@ import com.tedros.fxapi.presenter.view.group.TViewItem;
  * @author Davis Gordon
  *
  */
-@TSecurity(	id="COVSEMFOME_REPORT_MODULE", appName = "#{app.name}", moduleName = "Administrativo", 
+@TSecurity(	id="SOLIDARITY_REPORT_MODULE", appName = "#{app.name}", moduleName = "#{module.administrativo}", 
 allowedAccesses=TAuthorizationType.MODULE_ACCESS)
 public class DoacaoReportModule extends TModule {
 

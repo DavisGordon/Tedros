@@ -2,6 +2,7 @@ package com.solidarity.module.pessoa.model;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.tedros.core.TInternationalizationEngine;
 import com.tedros.fxapi.control.validator.TFieldResult;
 import com.tedros.fxapi.control.validator.TValidator;
 import com.tedros.util.TEmailUtil;
@@ -22,7 +23,8 @@ public class DocumentoValidator extends TValidator {
 		if(StringUtils.isNotBlank(value.getValue()) 
 				&& (StringUtils.isNotBlank(tipo.getValue()) && tipo.getValue().equals("1"))){
 			if(!TEmailUtil.validate(value.getValue()))
-				return new TFieldResult(getLabel(), "Favor informar um email valido!", false, false);
+				return new TFieldResult(getLabel(), 
+						TInternationalizationEngine.getInstance(null).getString("#{msg.validar.email}"), false, false);
 		}
 		return null;
 	}

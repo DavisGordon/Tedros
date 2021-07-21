@@ -17,7 +17,7 @@ import com.tedros.fxapi.presenter.view.group.TViewItem;
  * @author Davis Gordon
  *
  */
-@TSecurity(	id="COVSEMFOME_ESTOQUE_MODULE", appName = "#{app.name}", moduleName = "Administrativo", 
+@TSecurity(	id="SOLIDARITY_ESTOQUE_MODULE", appName = "#{app.name}", moduleName = "#{module.administrativo}", 
 allowedAccesses=TAuthorizationType.MODULE_ACCESS)
 public class EstoqueModule extends TModule {
 
@@ -26,9 +26,9 @@ public class EstoqueModule extends TModule {
 	 */
 	@Override
 	public void tStart() {
-		tShowView(new TGroupView<TGroupPresenter>(this, "Estoque", 
-				new TViewItem(TDynaView.class, EstoqueModelView.class, "Ver Estoque"),
-				new TViewItem(TDynaView.class, EstoqueConfigModelView.class, "Editar Estoque Inicial")
+		tShowView(new TGroupView<TGroupPresenter>(this, "#{view.estoque}", 
+				new TViewItem(TDynaView.class, EstoqueModelView.class, "#{view.estoque.title}"),
+				new TViewItem(TDynaView.class, EstoqueConfigModelView.class, "#{view.estoque.inicial.title}")
 				));
 	}
 

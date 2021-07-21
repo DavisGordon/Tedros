@@ -2,6 +2,7 @@ package com.tedros.core.context;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.TModule;
 import com.tedros.core.control.PopOver;
 import com.tedros.core.control.PopOver.ArrowLocation;
@@ -204,7 +205,7 @@ class InternalViewPage extends Page{
 		if(StringUtils.isNotBlank(desc)) {
 			PopOver popover = new PopOver();
 			tile.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> {
-				Label l = new Label(desc);
+				Label l = new Label(TInternationalizationEngine.getInstance(null).getString(desc));
 				l.setWrapText(true);
 				l.setMaxWidth(350);
 				StackPane p = new StackPane();

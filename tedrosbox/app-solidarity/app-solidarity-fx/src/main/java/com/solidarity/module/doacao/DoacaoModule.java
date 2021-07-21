@@ -8,8 +8,6 @@ package com.solidarity.module.doacao;
 
 import com.solidarity.module.acao.model.SiteDoacaoModelView;
 import com.tedros.core.TModule;
-import com.tedros.core.annotation.security.TAuthorizationType;
-import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 
 
@@ -19,8 +17,9 @@ import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
  * @author Davis Gordon
  *
  */
-@TSecurity(	id="COVSEMFOME_SITE_MODULE", appName = "#{app.name}", moduleName = "Gerenciar Campanha", 
-			allowedAccesses=TAuthorizationType.MODULE_ACCESS)
+@Deprecated
+/*@TSecurity(	id="SOLIDARITY_SITE_MODULE", appName = "#{app.name}", moduleName = "#{module.manage.campaign}", 
+			allowedAccesses=TAuthorizationType.MODULE_ACCESS)*/
 public class DoacaoModule extends TModule{
 
 	@Override

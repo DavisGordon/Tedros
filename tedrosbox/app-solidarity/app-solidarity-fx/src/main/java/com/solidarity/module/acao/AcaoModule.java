@@ -22,7 +22,7 @@ import com.tedros.fxapi.presenter.view.group.TViewItem;
  * @author Davis Gordon
  *
  */
-@TSecurity(	id="COVSEMFOME_ACAOSITE_MODULE", appName = "#{app.name}", moduleName = "Gerenciar Campanha", 
+@TSecurity(	id="SOLIDARITY_ACAOSITE_MODULE", appName = "#{app.name}", moduleName = "#{module.manage.campaign}", 
 allowedAccesses=TAuthorizationType.MODULE_ACCESS)
 public class AcaoModule extends TModule {
 
@@ -31,14 +31,14 @@ public class AcaoModule extends TModule {
 	 */
 	@Override
 	public void tStart() {
-		tShowView(new TGroupView<TGroupPresenter>(this, "Atualizar Site", 
-				new TViewItem(TDynaView.class, AcaoModelView.class, "Ação"),
-				new TViewItem(TDynaView.class, SiteAboutModelView.class, "Conheça"),
-				new TViewItem(TDynaView.class, SiteContatoModelView.class, "Contatos"),
-				new TViewItem(TDynaView.class, SiteVideoModelView.class, "Videos"),
-				new TViewItem(TDynaView.class, SiteDoacaoModelView.class, "Doação"),
-				new TViewItem(TDynaView.class, SiteNoticiaModelView.class, "Noticias"),
-				new TViewItem(TDynaView.class, SiteTermoModelView.class, "Termo")
+		tShowView(new TGroupView<TGroupPresenter>(this, "#{view.web}", 
+				new TViewItem(TDynaView.class, AcaoModelView.class, "#{view.web.campaign}"),
+				new TViewItem(TDynaView.class, SiteAboutModelView.class, "#{view.web.about}"),
+				new TViewItem(TDynaView.class, SiteContatoModelView.class, "#{view.web.contato}"),
+				new TViewItem(TDynaView.class, SiteVideoModelView.class, "#{view.web.videos}"),
+				new TViewItem(TDynaView.class, SiteDoacaoModelView.class, "#{view.web.doacao}"),
+				new TViewItem(TDynaView.class, SiteNoticiaModelView.class, "#{view.web.noticias}"),
+				new TViewItem(TDynaView.class, SiteTermoModelView.class, "#{view.web.termo}")
 				));
 	}
 

@@ -73,7 +73,7 @@ import javafx.scene.text.TextAlignment;
 		saveAction=MailingAction.class, saveAllModels=false, saveOnlyChangedModels=false), 
 		decorator = @TDecorator(type = MailingDecorator.class, buildModesRadioButton=false, 
 			viewTitle="e-Mailing", listTitle="#{form.campaign.name}", saveButtonText="#{button.enviar.email}")))
-@TSecurity(	id="COVSEMFOME_MAIL_FORM", 
+@TSecurity(	id="SOLIDARITY_MAIL_FORM", 
 	appName = "#{app.name}", moduleName = "#{module.manage.campaign}", viewName = "e-Mailing",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.SAVE, TAuthorizationType.EDIT, 
 			TAuthorizationType.READ})

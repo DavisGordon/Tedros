@@ -26,14 +26,14 @@ public class VoluntarioTableView extends TEntityModelView<Voluntario> {
 	
 	private SimpleObjectProperty<Pessoa> pessoa;
 	
-	@TLabel(text="Nome")
+	@TLabel(text="#{label.name}")
 	private SimpleStringProperty nome = new SimpleStringProperty();
 	
-	@TLabel(text="Email")
+	@TLabel(text="E-mail")
 	private SimpleStringProperty email = new SimpleStringProperty();
 	
 	
-	@TLabel(text="Tipo")
+	@TLabel(text="#{label.tipo}")
 	private SimpleStringProperty tipoVoluntario = new SimpleStringProperty();;
 	
 	@TLabel(text="Status")

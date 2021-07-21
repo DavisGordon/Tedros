@@ -35,12 +35,12 @@ public class EstoqueItemModelView extends TEntityModelView<EstoqueItem> {
 	private SimpleStringProperty displayText;
 	
 	@TReaderHtml
-	@TLabel(text="Produto")
+	@TLabel(text="#{label.produto}")
 	private SimpleObjectProperty<Produto> produto;
 	
 	
 	@TReaderHtml
-	@TLabel(text="Qtd. Min")
+	@TLabel(text="#{label.qtd.min}")
 	@THBox(	pane=@TPane(children={"qtdMinima","qtdInicial","qtdCalculado", "qtdAjuste", "vlrAjustado"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="qtdMinima", priority=Priority.ALWAYS), 
 		   		@TPriority(field="qtdInicial", priority=Priority.ALWAYS), 
@@ -50,19 +50,19 @@ public class EstoqueItemModelView extends TEntityModelView<EstoqueItem> {
 	private SimpleIntegerProperty qtdMinima;
 	
 	@TReaderHtml
-	@TLabel(text="Qtd. Inicial")
+	@TLabel(text="#{label.qtd.inicial}")
 	private SimpleIntegerProperty qtdInicial;
 	
 	@TReaderHtml
-	@TLabel(text="Qtd. Calculado")
+	@TLabel(text="#{label.qtd.calc}")
 	private SimpleIntegerProperty qtdCalculado;
 	
 	@TReaderHtml
-	@TLabel(text="Qtd. Ajuste")
+	@TLabel(text="#{label.ajuste}")
 	private SimpleIntegerProperty qtdAjuste;
 	
 	@TReaderHtml
-	@TLabel(text="Total")
+	@TLabel(text="#{label.total}")
 	private SimpleIntegerProperty vlrAjustado = new SimpleIntegerProperty();
 	
 	
