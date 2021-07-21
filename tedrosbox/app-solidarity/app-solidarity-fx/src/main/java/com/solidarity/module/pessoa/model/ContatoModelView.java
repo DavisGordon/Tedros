@@ -46,15 +46,15 @@ import javafx.geometry.Pos;
  *
  */
 @TFormReaderHtml
-@TForm(showBreadcrumBar=true, name = "Editar contato")
+@TForm(showBreadcrumBar=true, name = "#{form.contatos}")
 @TDetailTableViewPresenter(
 		presenter=@TPresenter(behavior=@TBehavior(type=TDetailFieldBehavior.class),
-				decorator = @TDecorator(type=TDetailFieldDecorator.class, viewTitle="Contatos")
+				decorator = @TDecorator(type=TDetailFieldDecorator.class, viewTitle="#{view.contatos}")
 				),
 		tableView=@TTableView(editable=true, 
-			columns = { @TTableColumn(cellValue="tipo", text = "Tipo", resizable=true,
+			columns = { @TTableColumn(cellValue="tipo", text = "#{label.tipo}", resizable=true,
 			cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=TipoContatoCallback.class))), 
-						@TTableColumn(cellValue="descricao", text = "Descrição.", resizable=true)}))
+						@TTableColumn(cellValue="descricao", text = "#{label.descricao}", resizable=true)}))
 public class ContatoModelView extends TEntityModelView<Contato> {
 	
 	private SimpleLongProperty id;
@@ -63,7 +63,7 @@ public class ContatoModelView extends TEntityModelView<Contato> {
 			@TCodeValue(code = "2", value = "#{label.celnumber}"),
 			@TCodeValue(code = "3", value = "#{label.housenumber}"),
 			@TCodeValue(code = "4", value = "#{label.worknumber}")})
-	@TLabel(text = "Tipo")
+	@TLabel(text = "#{label.tipo}")
 	@THorizontalRadioGroup(required=true, alignment=Pos.TOP_LEFT, spacing=4, 
 			radioButtons = {@TRadioButtonField(text="#{label.email}", userData="1"), 
 							@TRadioButtonField(text="#{label.celnumber}", userData="2"),
@@ -75,10 +75,10 @@ public class ContatoModelView extends TEntityModelView<Contato> {
 	private SimpleStringProperty tipo;
 	
 	@TReaderHtml
-	@TLabel(text="DESCRIÇÃO")
+	@TLabel(text="#{label.descricao}")
 	@TMaskField(mask="##################################################", 
 	node=@TNode(requestFocus=true, parse = true),
-	textInputControl=@TTextInputControl(promptText="E-mail, telefone, celuar...", parse = true),
+	textInputControl=@TTextInputControl(promptText="#{prompt.contato.desc}", parse = true),
 	required=true)
 	@TValidator(validatorClass = DocumentoValidator.class, associatedFieldsName={"tipo"})
 	private SimpleStringProperty descricao;

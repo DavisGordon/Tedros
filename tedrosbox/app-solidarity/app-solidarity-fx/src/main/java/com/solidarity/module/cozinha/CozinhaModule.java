@@ -13,8 +13,8 @@ import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
  * @author Davis Gordon
  *
  */
-@TSecurity(	id="COVSEMFOME_COZINHA_MODULE", appName = "#{app.name}", 
-moduleName = "Administrativo", 
+@TSecurity(	id="SOLIDARITY_LOCALPROD_MODULE", appName = "#{app.name}", 
+moduleName = "#{module.administrativo}", 
 allowedAccesses=TAuthorizationType.MODULE_ACCESS)
 public class CozinhaModule extends TModule {
 

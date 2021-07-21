@@ -44,14 +44,14 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
 @TFormReaderHtml
-@TForm(name = "Estoque inicial", showBreadcrumBar=true)
+@TForm(name = "#{view.estoque.inicial.title}", showBreadcrumBar=true)
 @TEjbService(serviceName = "IEstoqueConfigControllerRemote", model=EstoqueConfig.class)
 @TListViewPresenter(
 	paginator=@TPaginator(entityClass = EstoqueConfig.class, serviceName = "IEstoqueConfigControllerRemote",
 			show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Editar estoque inicial")))
-@TSecurity(	id="COVSEMFOME_ESTOQUECONF_FORM", 
-	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Administrar/Editar estoque",
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{view.estoque.inicial.title}")))
+@TSecurity(	id="SOLIDARITY_ESTOQUECONF_FORM", 
+	appName = "#{app.name}", moduleName = "#{module.administrativo}", viewName = "#{view.estoque.inicial.title}",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class EstoqueConfigModelView extends TEntityModelView<EstoqueConfig> {
@@ -61,17 +61,17 @@ public class EstoqueConfigModelView extends TEntityModelView<EstoqueConfig> {
 	
 	private SimpleStringProperty displayText;
 	
-	@TTextReaderHtml(text="Configuração de Estoque", 
+	@TTextReaderHtml(text="#{text.estoque.conf}", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Definir produto em Estoque", textAlignment=TextAlignment.LEFT, 
+	@TText(text="#{text.estoque.conf.header}", textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty header;
 	
 	@TReaderHtml
-	@TLabel(text="Produto")
+	@TLabel(text="#{label.produto}")
 	@TOneSelectionModal(modelClass = Produto.class, modelViewClass = ProdutoFindModelView.class,
 	width=300, height=50, required=true, node=@TNode(requestFocus=true, parse = true))
 	@THBox(	pane=@TPane(children={"produto","cozinha"}), spacing=10, fillHeight=true,
@@ -81,14 +81,14 @@ public class EstoqueConfigModelView extends TEntityModelView<EstoqueConfig> {
 	
 	
 	@TReaderHtml
-	@TLabel(text="Cozinha:")
+	@TLabel(text="#{label.local.prod}")
 	@TComboBoxField(required=true, optionsList=@TOptionsList(entityClass=Cozinha.class, 
 	optionModelViewClass=CozinhaModelView.class, serviceName = "ICozinhaControllerRemote"))
 	private SimpleObjectProperty<Cozinha> cozinha;
 	
 	
 	@TReaderHtml
-	@TLabel(text="Quantidade Minima")
+	@TLabel(text="#{label.qtd.min}")
 	@TNumberSpinnerField(maxValue = 1000000, minValue=0, zeroValidation=TZeroValidation.GREATHER_THAN_ZERO)
 	@THBox(	pane=@TPane(children={"qtdMinima","qtdInicial"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="qtdMinima", priority=Priority.NEVER), 
@@ -97,7 +97,7 @@ public class EstoqueConfigModelView extends TEntityModelView<EstoqueConfig> {
 	
 	
 	@TReaderHtml
-	@TLabel(text="Quantidade Inicial")
+	@TLabel(text="#{label.qtd.inicial}")
 	@TNumberSpinnerField(maxValue = 1000000, minValue=0, zeroValidation=TZeroValidation.GREATHER_THAN_ZERO)
 	private SimpleIntegerProperty qtdInicial;
 	

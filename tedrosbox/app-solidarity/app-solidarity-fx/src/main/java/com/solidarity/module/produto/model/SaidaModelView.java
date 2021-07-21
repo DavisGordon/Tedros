@@ -9,8 +9,8 @@ import com.solidarity.model.Acao;
 import com.solidarity.model.Cozinha;
 import com.solidarity.model.Saida;
 import com.solidarity.model.SaidaItem;
+import com.solidarity.module.acao.model.AcaoFindModelView;
 import com.solidarity.module.cozinha.model.CozinhaModelView;
-import com.solidarity.module.doacao.model.AcaoFindModelView;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
@@ -73,8 +73,8 @@ import javafx.scene.text.TextAlignment;
 			orderBy = {	@TOption(text = "Data", value = "data"), 
 						@TOption(text = "Tipo", value = "tipo")}),
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Saida de Produtos")))
-@TSecurity(	id="COVSEMFOME_SAIDAPROD_FORM", 
-	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Saida de Produtos",
+@TSecurity(	id="SOLIDARITY_SAIDAPROD_FORM", 
+	appName = "#{app.name}", moduleName = "#{module.administrativo}", viewName = "Saida de Produtos",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class SaidaModelView extends TEntityModelView<Saida> {

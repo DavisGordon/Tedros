@@ -55,8 +55,8 @@ import javafx.scene.text.TextAlignment;
 			searchAction=SearchAction.class), 
 			decorator = @TDecorator(type = TDataSetReportDecorator.class, 
 									viewTitle="Relatório de Estoque"))
-@TSecurity(	id="COVSEMFOME_ESTOQREP_FORM", 
-			appName = "#{app.name}", moduleName = "Administrativo", viewName = "Relatório de Estoque",
+@TSecurity(	id="SOLIDARITY_ESTOQREP_FORM", 
+			appName = "#{app.name}", moduleName = "#{module.administrativo}", viewName = "Relatório de Estoque",
 			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EXPORT, TAuthorizationType.SEARCH})
 public class EstoqueReportModelView extends TModelView<EstoqueReportModel>{
 	

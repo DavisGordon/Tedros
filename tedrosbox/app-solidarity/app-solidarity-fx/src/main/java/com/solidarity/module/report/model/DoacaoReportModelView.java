@@ -54,8 +54,8 @@ import javafx.scene.text.TextAlignment;
 			searchAction=SearchAction.class), 
 			decorator = @TDecorator(type = TDataSetReportDecorator.class, 
 									viewTitle="Relatório de Doações"))
-@TSecurity(	id="COVSEMFOME_DOACAOREP_FORM", 
-			appName = "#{app.name}", moduleName = "Administrativo", viewName = "Relatório de Doações",
+@TSecurity(	id="SOLIDARITY_DOACAOREP_FORM", 
+			appName = "#{app.name}", moduleName = "#{module.administrativo}", viewName = "Relatório de Doações",
 			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EXPORT, TAuthorizationType.SEARCH})
 public class DoacaoReportModelView extends TModelView<DoacaoReportModel>{
 	

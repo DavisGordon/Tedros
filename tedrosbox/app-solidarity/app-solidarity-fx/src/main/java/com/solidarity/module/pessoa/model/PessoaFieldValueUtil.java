@@ -2,6 +2,7 @@ package com.solidarity.module.pessoa.model;
 
 import com.solidarity.model.Contato;
 import com.solidarity.model.Pessoa;
+import com.tedros.core.TInternationalizationEngine;
 
 public final class PessoaFieldValueUtil {
 
@@ -10,29 +11,31 @@ public final class PessoaFieldValueUtil {
 	}
 	
 	public static String getDescricaoTipo(String value) {
+		TInternationalizationEngine iE = TInternationalizationEngine.getInstance(null);
 		if(value==null)
 			value= "";
 		switch(value){
-		case "1": return "Operacional";
-		case "2": return "Estratégico";
-		case "3": return "Estratégico (Receber emails)";
-		case "4": return "Doador/Filatrópico";
-		case "5": return "Cadastro/Site";
-		case "6": return "Outro";
+		case "1": return iE.getString("#{label.operacional}");
+		case "2": return iE.getString("#{label.estrategico}");
+		case "3": return iE.getString("#{label.estrategico.email}");
+		case "4": return iE.getString("#{label.doador.filant}");
+		case "5": return iE.getString("#{label.cad.site}");
+		case "6": return iE.getString("#{label.outro}");
 		default: return "";
 		}
 	}
 
 	public static String getDescricaoStatus(String value) {
+		TInternationalizationEngine iE = TInternationalizationEngine.getInstance(null);
+
 		if(value==null)
 			value= "";
 		switch(value){
-		case "1": return "Aguardando";
-		case "2": return "Contactado";
-		case "3": return "Voluntário";
-		case "4": return "Voluntário Ativo";
-		case "5": return "Voluntário problematico";
-		case "6": return "Desligado";
+		case "1": return iE.getString("#{label.nao.contactado}");
+		case "2": return iE.getString("#{label.contactado}");
+		case "3": return iE.getString("#{label.inativo}");
+		case "4": return iE.getString("#{label.ativo}");
+		case "5": return iE.getString("#{label.desligado}");
 		default: return "";
 		}
 	}

@@ -6,6 +6,8 @@ import com.solidarity.model.Acao;
 import com.solidarity.model.Doacao;
 import com.solidarity.model.Pessoa;
 import com.solidarity.model.TipoAjuda;
+import com.solidarity.module.acao.model.AcaoFindModelView;
+import com.solidarity.module.pessoa.model.PessoaFindModelView;
 import com.solidarity.module.voluntario.model.TipoAjudaModelView;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
@@ -53,16 +55,17 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
+@Deprecated
 @TFormReaderHtml
 @TForm(name = "Doação", showBreadcrumBar=false)
 @TEjbService(serviceName = "IDoacaoControllerRemote", model=Doacao.class)
 @TListViewPresenter(listViewMinWidth=380, listViewMaxWidth=380,
 	paginator=@TPaginator(entityClass = Doacao.class, serviceName = "IDoacaoControllerRemote", show=true),
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Doação")))
-@TSecurity(	id="COVSEMFOME_DOACAO_FORM", 
-	appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Doação",
+/*@TSecurity(	id="SOLIDARITY_DOACAO_FORM", 
+	appName = "#{app.name}", moduleName = "#{module.manage.campaign}", viewName = "Doação",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
-					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
+					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})*/
 public class DoacaoModelView extends TEntityModelView<Doacao>{
 	
 	private SimpleLongProperty id;

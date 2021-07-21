@@ -71,7 +71,7 @@ import javafx.scene.text.TextAlignment;
 					@TOption(text = "#{label.titulo}", value = "titulo"), 
 					@TOption(text = "#{label.data}", value = "data")}),
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{form.campaign.name}")))
-@TSecurity(	id="COVSEMFOME_SITEACAO_FORM", 
+@TSecurity(	id="SOLIDARITY_SITEACAO_FORM", 
 	appName = "#{app.name}", moduleName = "#{module.manage.campaign}", viewName = "#{form.campaign.name}",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})

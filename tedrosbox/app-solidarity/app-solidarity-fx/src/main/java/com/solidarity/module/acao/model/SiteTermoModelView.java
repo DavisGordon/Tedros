@@ -31,33 +31,33 @@ import javafx.geometry.Pos;
 import javafx.scene.text.TextAlignment;
 
 @TFormReaderHtml
-@TForm(name = "Site/Termo", showBreadcrumBar=false)
+@TForm(name = "#{form.web.termo.name}", showBreadcrumBar=false)
 @TEjbService(serviceName = "ISiteTermoControllerRemote", model=SiteTermo.class)
 @TListViewPresenter(paginator=@TPaginator(entityClass = SiteTermo.class, serviceName = "ISiteTermoControllerRemote", show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Site/Termo")))
-@TSecurity(	id="COVSEMFOME_SITETERMO_FORM", 
-	appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Site/Termo",
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{form.web.termo.name}")))
+@TSecurity(	id="SOLIDARITY_SITETERMO_FORM", 
+	appName = "#{app.name}", moduleName = "#{module.manage.campaign}", viewName = "#{form.web.termo.name}",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class SiteTermoModelView extends TEntityModelView<SiteTermo>{
 	
 	private SimpleLongProperty id;
 	
-	@TTextReaderHtml(text="Site/Termo", 
+	@TTextReaderHtml(text="#{form.web.termo.name}", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Termo a ler e concordar ao se cadastrar no painel.", textAlignment=TextAlignment.LEFT, 
+	@TText(text="#{text.termo.web}", textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty textoCadastro;
 	
-	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "Ativado"), 
-			@TCodeValue(code = "DESATIVADO", value = "Desativado")})
 	@TLabel(text="Status")
+	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "#{label.ativado}"), 
+			@TCodeValue(code = "DESATIVADO", value = "#{label.desativado}")})
 	@THorizontalRadioGroup(alignment=Pos.TOP_LEFT, required=true, spacing=4,
-	radioButtons = {@TRadioButtonField(text="Ativado", userData="ATIVADO"), 
-					@TRadioButtonField(text="Desativado", userData="DESATIVADO")
+	radioButtons = {@TRadioButtonField(text="#{label.ativado}", userData="ATIVADO"), 
+					@TRadioButtonField(text="#{label.desativado}", userData="DESATIVADO")
 	})
 	private SimpleStringProperty status;
 	

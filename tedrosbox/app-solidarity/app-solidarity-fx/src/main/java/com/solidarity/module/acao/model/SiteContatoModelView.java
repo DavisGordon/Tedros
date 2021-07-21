@@ -42,30 +42,30 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
 @TFormReaderHtml
-@TForm(name = "Site/Contato", showBreadcrumBar=false)
+@TForm(name = "#{form.web.contato.name}", showBreadcrumBar=false)
 @TEjbService(serviceName = "ISiteContatoControllerRemote", model=SiteContato.class)
 @TListViewPresenter(paginator=@TPaginator(entityClass = SiteContato.class, serviceName = "ISiteContatoControllerRemote", show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Site/Contato")))
-@TSecurity(	id="COVSEMFOME_SITECONTATO_FORM", 
-	appName = "#{app.name}", moduleName = "Gerenciar Campanha", viewName = "Site/Contato",
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{form.web.contato.name}")))
+@TSecurity(	id="SOLIDARITY_SITECONTATO_FORM", 
+	appName = "#{app.name}", moduleName = "#{module.manage.campaign}", viewName = "#{form.web.contato.name}",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class SiteContatoModelView extends TEntityModelView<SiteContato>{
 	
 	private SimpleLongProperty id;
 	
-	@TTextReaderHtml(text="Site/Contato", 
+	@TTextReaderHtml(text="#{form.web.contato.name}", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Item a ser exibido no site", textAlignment=TextAlignment.LEFT, 
+	@TText(text="#{text.item.web}", textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty textoCadastro;
 	
 	
 	@TReaderHtml
-	@TLabel(text="Nome")
+	@TLabel(text="#{label.name}")
 	@TTextField(maxLength=60, required=true, node=@TNode(requestFocus=true, parse = true))
 	@THBox(	pane=@TPane(children={"nome","cargo"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="nome", priority=Priority.ALWAYS), 
@@ -73,12 +73,12 @@ public class SiteContatoModelView extends TEntityModelView<SiteContato>{
 	private SimpleStringProperty nome;
 	
 	@TReaderHtml
-	@TLabel(text="Cargo")
+	@TLabel(text="#{label.cargo}")
 	@TTextField(maxLength=80, required=true)
 	private SimpleStringProperty cargo;
 	
 	@TReaderHtml
-	@TLabel(text="Telefone/Celular")
+	@TLabel(text="#{label.tel.cel}")
 	@TMaskField(mask="(99) 99999-9999")
 	@THBox(	pane=@TPane(children={"telefone","whatsapp"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="telefone", priority=Priority.NEVER), 
@@ -98,16 +98,16 @@ public class SiteContatoModelView extends TEntityModelView<SiteContato>{
 	private SimpleStringProperty email;
 	
 	@TReaderHtml
-	@TLabel(text="Ordem")
+	@TLabel(text="#{label.ordem}")
 	@TNumberSpinnerField(maxValue = 100)
 	private SimpleIntegerProperty ordem;
 	
-	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "Ativado"), 
-			@TCodeValue(code = "DESATIVADO", value = "Desativado")})
 	@TLabel(text="Status")
+	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "#{label.ativado}"), 
+			@TCodeValue(code = "DESATIVADO", value = "#{label.desativado}")})
 	@THorizontalRadioGroup(alignment=Pos.TOP_LEFT, required=true, spacing=4,
-	radioButtons = {@TRadioButtonField(text="Ativado", userData="ATIVADO"), 
-					@TRadioButtonField(text="Desativado", userData="DESATIVADO")
+	radioButtons = {@TRadioButtonField(text="#{label.ativado}", userData="ATIVADO"), 
+					@TRadioButtonField(text="#{label.desativado}", userData="DESATIVADO")
 	})
 	private SimpleStringProperty status;
 	

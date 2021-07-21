@@ -78,33 +78,32 @@ import javafx.scene.text.TextAlignment;
  * @author Davis Gordon
  * */
 @TFormReaderHtml
-@TForm(name = "Editar pessoa", showBreadcrumBar=true)
+@TForm(name = "#{form.pessoa}", showBreadcrumBar=true)
 @TEjbService(serviceName = "IPessoaControllerRemote", model=Pessoa.class)
 @TListViewPresenter(listViewMinWidth=350, listViewMaxWidth=350,
 	paginator=@TPaginator(entityClass = Pessoa.class, serviceName = "IPessoaControllerRemote",
 			show=true, showSearchField=true, searchFieldName="nome",
-			orderBy = {	@TOption(text = "Codigo", value = "id"), 
-						@TOption(text = "Nome", value = "nome")}),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Pessoa"), 
+			orderBy = {	@TOption(text = "#{label.codigo}", value = "id"), 
+						@TOption(text = "#{label.name}", value = "nome")}),
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{view.pessoa}"), 
 							behavior=@TBehavior(saveAllModels=false)))
-@TSecurity(	id="COVSEMFOME_CADPESS_FORM", 
-	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Pessoa",
+@TSecurity(	id="SOLIDARITY_CADPESS_FORM", 
+	appName = "#{app.name}", moduleName = "#{module.administrativo}", viewName = "#{view.pessoa}",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
-
 public class PessoaModelView extends TEntityModelView<Pessoa>{
 	
 	private SimpleLongProperty id;
 	
 	private SimpleStringProperty displayText;
 	
-	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "Ativado"), 
-			@TCodeValue(code = "DESATIVADO", value = "Desativado")
+	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "#{label.ativado}"), 
+			@TCodeValue(code = "DESATIVADO", value = "#{label.desativado}")
 	})
 	@TLabel(text="Status", position=TLabelPosition.LEFT)
 	@THorizontalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
-	radioButtons = {@TRadioButtonField(text="Ativado", userData="ATIVADO"), 
-					@TRadioButtonField(text="Desativado", userData="DESATIVADO")
+	radioButtons = {@TRadioButtonField(text="#{label.ativado}", userData="ATIVADO"), 
+					@TRadioButtonField(text="#{label.desativado}", userData="DESATIVADO")
 	})
 	private SimpleStringProperty status;
 	
@@ -116,7 +115,7 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 					cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 					cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Dados da pessoa", textAlignment=TextAlignment.LEFT, 
+	@TText(text="#{form.person.title}", textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty textoCadastro;
 	
@@ -125,7 +124,8 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	 * */
 	@TReaderHtml
 	@TLabel(text="#{label.name}")
-	@TTextField(maxLength=60, required = true, textInputControl=@TTextInputControl(promptText="#{label.name}", parse = true), 
+	@TTextField(maxLength=60, required = true, 
+			textInputControl=@TTextInputControl(promptText="#{label.name}", parse = true), 
 			node=@TNode(requestFocus=true, parse = true),
 			control=@TControl(tooltip="#{label.name}", parse = true))
 	@THBox(	pane=@TPane(children={"nome","profissao","dataNascimento"}), spacing=10, fillHeight=true,
@@ -146,39 +146,37 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
    				   		@TPriority(field="statusVoluntario", priority=Priority.ALWAYS) }))
 	private SimpleStringProperty observacao;
 	
-	@TReaderHtml(codeValues={@TCodeValue(code = "1", value = "Operacional"), 
-			@TCodeValue(code = "2", value = "Estratégico"), 
-			@TCodeValue(code = "3", value = "Estratégico (Receber emails)"),
-			@TCodeValue(code = "4", value = "Doador/Filatrópico"),
-			@TCodeValue(code = "5", value = "Cadastro/Site"),
-			@TCodeValue(code = "6", value = "Outro")
+	@TLabel(text="#{label.tipo}")
+	@TReaderHtml(codeValues={@TCodeValue(code = "1", value = "#{label.operacional}"), 
+			@TCodeValue(code = "2", value = "#{label.estrategico}"), 
+			@TCodeValue(code = "3", value = "#{label.estrategico.email}"),
+			@TCodeValue(code = "4", value = "#{label.doador.filant}"),
+			@TCodeValue(code = "5", value = "#{label.cad.site}"),
+			@TCodeValue(code = "6", value = "#{label.outro}")
 			})
-	@TLabel(text="Tipo voluntário")
 	@TVerticalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
-	radioButtons = {@TRadioButtonField(text="Operacional", userData="1"), 
-					@TRadioButtonField(text="Estratégico", userData="2"),
-					@TRadioButtonField(text="Estratégico (Receber emails)", userData="3"),
-					@TRadioButtonField(text="Doador/Filatrópico", userData="4"),
-					@TRadioButtonField(text="Cadastro/Site", userData="5"),
-					@TRadioButtonField(text="Outro", userData="6")
+	radioButtons = {@TRadioButtonField(text="#{label.operacional}", userData="1"), 
+					@TRadioButtonField(text="#{label.estrategico}", userData="2"),
+					@TRadioButtonField(text="#{label.estrategico.email}", userData="3"),
+					@TRadioButtonField(text="#{label.doador.filant}", userData="4"),
+					@TRadioButtonField(text="#{label.cad.site}", userData="5"),
+					@TRadioButtonField(text="#{label.outro}", userData="6")
 	})
 	private SimpleStringProperty tipoVoluntario;
 	
-	@TReaderHtml(codeValues={@TCodeValue(code = "1", value = "Aguardando"), 
-			@TCodeValue(code = "2", value = "Contactado"),
-			@TCodeValue(code = "3", value = "Voluntário"),
-			@TCodeValue(code = "4", value = "Voluntário Ativo"),
-			@TCodeValue(code = "5", value = "Voluntário problematico"),
-			@TCodeValue(code = "6", value = "Desligado")
+	@TLabel(text="#{label.situacao}")
+	@TReaderHtml(codeValues={@TCodeValue(code = "1", value = "#{label.nao.contactado}"), 
+			@TCodeValue(code = "2", value = "#{label.contactado}"),
+			@TCodeValue(code = "3", value = "#{label.inativo}"),
+			@TCodeValue(code = "4", value = "#{label.ativo}"),
+			@TCodeValue(code = "5", value = "#{label.desligado}")
 	})
-	@TLabel(text="Situação")
 	@TVerticalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
-	radioButtons = {@TRadioButtonField(text="Aguardando", userData="1"), 
-					@TRadioButtonField(text="Contactado", userData="2"),
-					@TRadioButtonField(text="Voluntário", userData="3"),
-					@TRadioButtonField(text="Voluntário Ativo", userData="4"),
-					@TRadioButtonField(text="Voluntário problematico", userData="5"),
-					@TRadioButtonField(text="Desligado ", userData="6")
+	radioButtons = {@TRadioButtonField(text="#{label.nao.contactado}", userData="1"), 
+					@TRadioButtonField(text="#{label.contactado}", userData="2"),
+					@TRadioButtonField(text="#{label.inativo}", userData="3"),
+					@TRadioButtonField(text="#{label.ativo}", userData="4"),
+					@TRadioButtonField(text="#{label.desligado}", userData="5")
 	})
 	private SimpleStringProperty statusVoluntario;
 	
@@ -202,8 +200,9 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	/**
 	 * A radio group description for the person sex
 	 * */
-	@TReaderHtml(codeValues={@TCodeValue(code = "F", value = "#{label.female}"), @TCodeValue(code = "M", value = "#{label.male}")})
 	@TLabel(text="#{label.sex}")
+	@TReaderHtml(codeValues={@TCodeValue(code = "F", value = "#{label.female}"), 
+			@TCodeValue(code = "M", value = "#{label.male}")})
 	@THorizontalRadioGroup(required=false, spacing=4, 
 			radioButtons={	@TRadioButtonField(text = "#{label.female}", userData = "F"), 
 							@TRadioButtonField(text = "#{label.male}", userData = "M")})
@@ -214,36 +213,36 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 								@TPriority(field="lastUpdate", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty sexo;
 	
-	@TReaderHtml(codeValues={@TCodeValue(code = "Solteiro", value = "Solteiro"), 
-			@TCodeValue(code = "Casado", value = "Casado"),
-			@TCodeValue(code = "Divorciado", value = "Divorciado"),
-			@TCodeValue(code = "Viúvo(a)", value = "Viúvo(a)")
+	@TLabel(text="#{label.estado.civil}")
+	@TReaderHtml(codeValues={@TCodeValue(code = "Solteiro", value = "#{label.solteiro}"), 
+			@TCodeValue(code = "Casado", value = "#{label.casado}"),
+			@TCodeValue(code = "Divorciado", value = "#{label.divorciado}"),
+			@TCodeValue(code = "Viúvo(a)", value = "#{label.viuvo}")
 	})
-	@TLabel(text="Estado civil")
 	@THorizontalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
-	radioButtons = {@TRadioButtonField(text="Solteiro", userData="Solteiro"), 
-					@TRadioButtonField(text="Casado", userData="Casado"),
-					@TRadioButtonField(text="Divorciado", userData="Divorciado"),
-					@TRadioButtonField(text="Viúvo(a)", userData="Viúvo(a)")
+	radioButtons = {@TRadioButtonField(text="#{label.solteiro}", userData="Solteiro"), 
+					@TRadioButtonField(text="#{label.casado}", userData="Casado"),
+					@TRadioButtonField(text="#{label.divorciado}", userData="Divorciado"),
+					@TRadioButtonField(text="#{label.viuvo}", userData="Viúvo(a)")
 	})
 	private SimpleStringProperty estadoCivil;
 	
 	
 	@TReaderHtml
-	@TLabel(text="Cadastrado em")
+	@TLabel(text="#{label.cadastrado.em}")
 	@TShowField(fields= {@TField(pattern=TDateUtil.DDMMYYYY_HHMM)})
 	private SimpleObjectProperty<Date> insertDate;
 	
 	@TReaderHtml
-	@TLabel(text="Alterado em")
+	@TLabel(text="#{label.alterado.em}")
 	@TShowField(fields= {@TField(pattern=TDateUtil.DDMMYYYY_HHMM)})
 	private SimpleObjectProperty<Date> lastUpdate;
 	
 	@TReaderHtml
-	@TLabel(text="Email (Login no painel)")
+	@TLabel(text="#{label.email.login}")
 	@TTextField(maxLength=80)
 	@TFieldSet(fields = { "loginName", "password" }, region=@TRegion(maxWidth=400, parse = true),
-		legend = "Credenciais para acesso ao painel do voluntário ")
+		legend = "#{legend.credenciais.painel}")
 	@TValidator(validatorClass = CredenciaisPainelValidator.class, associatedFieldsName={"password"})
 	private SimpleStringProperty loginName;
 	
@@ -266,7 +265,7 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 				  		content = @TContent(detailForm = @TDetailForm(fields= {"contatos"}))),
 				@TTab(	text = "#{label.address}", closable=false, 
 						content = @TContent(detailForm = @TDetailForm(fields= {"enderecos"}))),
-				@TTab(	text = "Termo adesão", closable=false, 
+				@TTab(	text = "#{label.termos.adesao}", closable=false, 
 				content = @TContent(detailForm = @TDetailForm(fields= {"termosAdesao"})))})
 	@TDetailListField(entityModelViewClass = DocumentoModelView.class, entityClass = Documento.class)
 	@TModelViewCollectionType(modelClass=Documento.class, modelViewClass=DocumentoModelView.class)
@@ -282,7 +281,7 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	@TModelViewCollectionType(modelClass=Endereco.class, modelViewClass=EnderecoModelView.class)
 	private ITObservableList<EnderecoModelView> enderecos;
 	
-	@TDetailReaderHtml(label=@TLabel(text="Termo adesão"), entityClass=PessoaTermoAdesao.class, modelViewClass=PessoaTermoAdesaoModelView.class)
+	@TDetailReaderHtml(label=@TLabel(text="#{label.termos.adesao}"), entityClass=PessoaTermoAdesao.class, modelViewClass=PessoaTermoAdesaoModelView.class)
 	@TDetailListField(entityModelViewClass = PessoaTermoAdesaoModelView.class, entityClass = PessoaTermoAdesao.class)
 	@TModelViewCollectionType(modelClass=PessoaTermoAdesao.class, modelViewClass=PessoaTermoAdesaoModelView.class)
 	private ITObservableList<PessoaTermoAdesaoModelView> termosAdesao;

@@ -19,7 +19,7 @@ import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
  * @author Davis Gordon
  *
  */
-@TSecurity(	id="COVSEMFOME_CADTIPOAJUDA_MODULE", appName = "#{app.name}", moduleName = "Gerenciar Campanha", 
+@TSecurity(	id="SOLIDARITY_CADTIPOAJUDA_MODULE", appName = "#{app.name}", moduleName = "#{module.manage.campaign}", 
 			allowedAccesses=TAuthorizationType.MODULE_ACCESS)
 public class CadastroTipoAjudaModule extends TModule{
 

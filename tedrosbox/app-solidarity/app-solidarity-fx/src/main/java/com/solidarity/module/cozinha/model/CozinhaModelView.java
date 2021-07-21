@@ -42,23 +42,23 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TFormReaderHtml
-@TForm(name = "Configurar local para produção das refeições", showBreadcrumBar=true)
+@TForm(name = "#{form.local.name}", showBreadcrumBar=true)
 @TEjbService(serviceName = "ICozinhaControllerRemote", model=Cozinha.class)
-@TPresenter(decorator = @TDecorator(viewTitle="Local de produção"))
-@TSecurity(	id="COVSEMFOME_CADCOZ_FORM", 
-	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Local de produção",
+@TPresenter(decorator = @TDecorator(viewTitle="#{view.local.prod}"))
+@TSecurity(	id="SOLIDARITY_CADCOZ_FORM", 
+	appName = "#{app.name}", moduleName = "#{module.administrativo}", viewName = "#{view.local.prod}",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class CozinhaModelView extends TEntityModelView<Cozinha> {
 
 	private SimpleLongProperty id;
 
-	@TTextReaderHtml(text="Cozinha", 
+	@TTextReaderHtml(text="#{label.local.prod}", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form",  parse = true))
-	@TText(text="Dados da Cozinha", textAlignment=TextAlignment.LEFT,
+	@TText(text="#{text.local.prod}", textAlignment=TextAlignment.LEFT,
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty header;
 	
@@ -73,16 +73,14 @@ public class CozinhaModelView extends TEntityModelView<Cozinha> {
 	private SimpleStringProperty nome;
 	
 	@TReaderHtml
-	@TLabel(text="Endereço")
+	@TLabel(text="#{label.address}")
 	@TTextAreaField(control=@TControl(prefWidth=250, prefHeight=50, parse = true), 
 	wrapText=true, maxLength=200, prefRowCount=4)
 	private SimpleStringProperty endereco;
 	
 	@TReaderHtml
-	@TLabel(text="Telefone")
-	@TMaskField(mask="(99) 999999999", 
-	textInputControl=@TTextInputControl(promptText="Telefone, celuar...", parse = true),
-	required=true)
+	@TLabel(text="#{label.tel.cel}")
+	@TMaskField(mask="(99) 99999-9999", required=true)
 	private SimpleStringProperty telefone;
 	
 	public CozinhaModelView(Cozinha model) {

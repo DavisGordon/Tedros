@@ -45,8 +45,8 @@ import javafx.scene.text.TextAlignment;
 @TPresenter(decorator = @TDecorator(viewTitle="Termo de adesão", 
 			buildPrintButton=true, printButtonText="Exportar PDF"), 
 		    behavior=@TBehavior(printAction=TermoAdesaoPrintAction.class))
-@TSecurity(	id="COVSEMFOME_TERMADES_FORM", 
-	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Termo de adesão",
+@TSecurity(	id="SOLIDARITY_TERMADES_FORM", 
+	appName = "#{app.name}", moduleName = "#{module.administrativo}", viewName = "Termo de adesão",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW,
 					TAuthorizationType.PRINT})

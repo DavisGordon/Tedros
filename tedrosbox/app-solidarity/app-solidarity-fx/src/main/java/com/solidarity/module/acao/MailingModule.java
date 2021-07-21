@@ -13,7 +13,7 @@ import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
  * @author Davis Gordon
  *
  */
-@TSecurity(	id="COVSEMFOME_MAIL_MODULE", appName = "#{app.name}", moduleName = "Gerenciar Campanha", 
+@TSecurity(	id="SOLIDARITY_MAIL_MODULE", appName = "#{app.name}", moduleName = "#{module.manage.campaign}", 
 allowedAccesses=TAuthorizationType.MODULE_ACCESS)
 public class MailingModule extends TModule {
 

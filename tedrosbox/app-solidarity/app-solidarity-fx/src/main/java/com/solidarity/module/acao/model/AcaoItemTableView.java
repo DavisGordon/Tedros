@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.solidarity.module.doacao.model;
+package com.solidarity.module.acao.model;
 
 import java.util.Date;
 

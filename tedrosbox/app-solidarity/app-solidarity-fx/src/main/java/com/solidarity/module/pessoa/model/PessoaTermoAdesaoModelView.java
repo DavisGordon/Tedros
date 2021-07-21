@@ -52,35 +52,35 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TFormReaderHtml
-@TForm(showBreadcrumBar=true, name = "Termo de adesão")
+@TForm(showBreadcrumBar=true, name = "#{label.termo.adesao}")
 @TDetailListViewPresenter(presenter=@TPresenter(
 		behavior = @TBehavior(type = TDetailCrudViewBehavior.class,
 		newAction=PessoaTermoAdesaoNewAction.class, printAction=PessoaTermoAdesaoPrintAction.class), 
-		decorator = @TDecorator(type = TDetailCrudViewDecorator.class, viewTitle="Termo de adesão", 
-		buildPrintButton=true, printButtonText="Exportar PDF")))
+		decorator = @TDecorator(type = TDetailCrudViewDecorator.class, viewTitle="#{view.termos.adesao}", 
+		buildPrintButton=true, printButtonText="#{button.exportar.pdf}")))
 public class PessoaTermoAdesaoModelView extends TEntityModelView<PessoaTermoAdesao> {
 
 	private SimpleLongProperty id;
 	
 	@TAccordion(expandedPane="main", node=@TNode(id="repdoaacc",parse = true),
 			panes={
-					@TTitledPane(text="Detalhes", node=@TNode(id="main",parse = true), expanded=true,
+					@TTitledPane(text="#{label.detalhes}", node=@TNode(id="main",parse = true), expanded=true,
 							fields={"textoCadastro", "status", "tiposAjuda"}),
-					@TTitledPane(text="Termo de adesão", node=@TNode(id="detail",parse = true),
+					@TTitledPane(text="#{label.termo.adesao}", node=@TNode(id="detail",parse = true),
 						fields={"conteudo"})})
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Detalhes do termo", textAlignment=TextAlignment.LEFT, 
+	@TText(text="#{label.detalhes.termo}", textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty textoCadastro;
 	
 	@TLabel(text="Status")
-	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "Ativado"), 
-			@TCodeValue(code = "DESATIVADO", value = "Desativado")
+	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "#{label.ativado}"), 
+			@TCodeValue(code = "DESATIVADO", value = "#{label.desativado}")
 	})
 	@THorizontalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4, required=true,
 		node=@TNode(requestFocus=true, parse = true),
-		radioButtons = {@TRadioButtonField(text="Ativado", userData="ATIVADO"), 
-						@TRadioButtonField(text="Desativado", userData="DESATIVADO")
+		radioButtons = {@TRadioButtonField(text="#{label.ativado}", userData="ATIVADO"), 
+						@TRadioButtonField(text="#{label.desativado}", userData="DESATIVADO")
 		})
 	@THBox(pane=@TPane(	children={"status", "versionNum"}), spacing=10, fillHeight=true, 
 	hgrow=@THGrow(priority={@TPriority(field="status", priority=Priority.ALWAYS),
@@ -88,17 +88,17 @@ public class PessoaTermoAdesaoModelView extends TEntityModelView<PessoaTermoAdes
 	private SimpleStringProperty status;
 	
 	@TReaderHtml
-	@TLabel(text="Versão")
+	@TLabel(text="#{label.versao}")
 	@TShowField()
 	private SimpleIntegerProperty versionNum;
 	
 	
-	@TLabel(text="Tipos de Ajuda")
-	@TTableReaderHtml(label=@TLabel(text="Tipo de Ajuda:"), 
-		column = { 	@TColumnReader(field = "descricao", name = "Descricao"), 
-					@TColumnReader(field = "tipoPessoa", name = "Tipo pessoa")})
+	@TLabel(text="#{label.tipos.ajuda}")
+	@TTableReaderHtml(label=@TLabel(text="#{label.tipos.ajuda}"), 
+		column = { 	@TColumnReader(field = "descricao", name = "#{label.descricao}"), 
+					@TColumnReader(field = "tipoPessoa", name = "#{label.tipo}")})
 	@TPickListField(selectedLabel="#{label.selected}", 
-		sourceLabel="Opções", required=true,
+		sourceLabel="#{label.opcoes}", required=true,
 		optionsList=@TOptionsList(entityClass=TipoAjuda.class,
 					optionModelViewClass=TipoAjudaModelView.class,
 					/*exampleEntityBuilder=TipoAjudaExampleBuilder.class,*/

@@ -5,6 +5,7 @@ import java.util.Date;
 import com.solidarity.model.Documento;
 import com.solidarity.module.pessoa.trigger.TDocumentoTrigger;
 import com.solidarity.module.pessoa.validator.DocumentoValidator;
+import com.tedros.core.TInternationalizationEngine;
 import com.tedros.fxapi.annotation.TCodeValue;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
@@ -67,8 +68,8 @@ public class DocumentoModelView extends TEntityModelView<Documento>{
 	
 	
 	@TReaderHtml
-	@TLabel(text = "Numero")
-	@TMaskField(required=true, textInputControl=@TTextInputControl(promptText="Identidade, Cpf ou Cnpj", parse = true),
+	@TLabel(text = "#{label.numero}")
+	@TMaskField(required=true, textInputControl=@TTextInputControl(promptText="#{prompt.doc.desc}", parse = true),
 	mask="######################", node=@TNode(requestFocus=true, parse = true))
 	@TValidator(validatorClass = DocumentoValidator.class, associatedFieldsName={"tipo"})
 	@THBox(	pane=@TPane(children={"numero", "nacionalidade", "dataEmissao","dataValidade","orgaoEmissor"}), spacing=10, fillHeight=true,
@@ -80,27 +81,27 @@ public class DocumentoModelView extends TEntityModelView<Documento>{
 	private SimpleStringProperty numero;
 	
 	@TReaderHtml
-	@TLabel(text="Nacionalidade")
+	@TLabel(text="#{label.nacionalidade}")
 	@TTextField(maxLength=100)
 	private SimpleStringProperty nacionalidade;
 	
 	@TReaderHtml
-	@TLabel(text="Data de emissão")
+	@TLabel(text="#{label.data.emissao}")
 	@TDatePickerField
 	private SimpleObjectProperty<Date> dataEmissao;
 	
 	@TReaderHtml
-	@TLabel(text="Valido até")
+	@TLabel(text="#{label.valido.ate}")
 	@TDatePickerField
 	private SimpleObjectProperty<Date> dataValidade;
 	
 	@TReaderHtml
-	@TLabel(text="Orgão emissor")
+	@TLabel(text="#{label.orgao.emissor}")
 	@TTextField(maxLength=100)
 	private SimpleStringProperty orgaoEmissor;
 	
 	@TReaderHtml
-	@TLabel(text="Observação")
+	@TLabel(text="#{label.observacao}")
 	@TTextAreaField(maxLength=300, control=@TControl(prefWidth=250, prefHeight=200, parse = true))
 	private SimpleStringProperty observacao;
 	
@@ -115,13 +116,14 @@ public class DocumentoModelView extends TEntityModelView<Documento>{
 		if(tipo.equals(""))
 			return (getNumero()!=null)? getNumero().getValue() : "";
 		else
-			return (tipo+": "+getNumero()!=null)? getNumero().getValue() : "";
+			return TInternationalizationEngine.getInstance(null).getString(tipo)+": "
+		+ getNumero()!=null ? getNumero().getValue() : "";
 	}
 	
 	public String getTipoDescricao(){
 		if(TPropertyUtil.isStringValueNotBlank(getTipo())){
 			if(getTipo().equals("1"))
-				return "Identidade";
+				return "#{label.identity}";
 			if(getTipo().equals("2"))
 				return "CPF";
 			if(getTipo().equals("3"))
