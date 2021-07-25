@@ -18,7 +18,7 @@ import com.solidarity.module.pessoa.icon.PessoaMenuIconImageView;
 import com.solidarity.module.produto.ProdutoModule;
 import com.solidarity.module.produto.icon.ProdutoIconImageView;
 import com.solidarity.module.produto.icon.ProdutoMenuIconImageView;
-import com.solidarity.module.report.DoacaoReportModule;
+import com.solidarity.module.report.ReportModule;
 import com.solidarity.module.report.icon.RelatoriosIconImageView;
 import com.solidarity.module.report.icon.RelatoriosMenuIconImageView;
 import com.solidarity.module.voluntario.CadastroTipoAjudaModule;
@@ -53,7 +53,7 @@ module = {
 			@TModule(type=MailingModule.class, name="#{view.emailing}", menu="#{module.manage.campaign}", 
 					icon=MailingIconImageView.class, menuIcon=MailingMenuIconImageView.class,
 					description="#{view.emailing.desc}"),
-			@TModule(type=DoacaoReportModule.class, name="#{view.relatorios}", menu="#{module.administrativo}", 
+			@TModule(type=ReportModule.class, name="#{view.relatorios}", menu="#{module.administrativo}", 
 					icon=RelatoriosIconImageView.class, menuIcon=RelatoriosMenuIconImageView.class,
 					description="#{view.relatorios.desc}"),
 			@TModule(type=CadastroDePessoaModule.class, name="#{view.pessoa}", menu="#{module.administrativo}", 

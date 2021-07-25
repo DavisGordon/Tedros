@@ -58,7 +58,7 @@ import javafx.scene.text.TextAlignment;
  * @author Davis Gordon
  *
  */
-@TForm(name="#{security.user.form.name}")
+@TForm(name="#{security.user.form.name}", showBreadcrumBar=true, editCssId="")
 @TFormReaderHtml
 @TEjbService(serviceName = "TUserControllerRemote", model=TUser.class)
 @TPresenter(type=TDynaPresenter.class, 

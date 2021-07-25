@@ -46,15 +46,15 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
 
-@TForm(name = "Relatório de Ações", showBreadcrumBar=false)
+@TForm(name = "#{form.relatorio.acoes}", showBreadcrumBar=false, editCssId="")
 @TReportProcess(type=AcaoReportProcess.class, model = AcaoReportModel.class)
 @TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = TDataSetReportBehavior.class, 
 			searchAction=SearchAction.class), 
 			decorator = @TDecorator(type = TDataSetReportDecorator.class, 
-									viewTitle="Relatório de Ações"))
+									viewTitle="#{view.relatorio.acoes}"))
 @TSecurity(	id="SOLIDARITY_ACAOREP_FORM", 
-			appName = "#{app.name}", moduleName = "#{module.administrativo}", viewName = "Relatório de Ações",
+			appName = "#{app.name}", moduleName = "#{module.administrativo}", viewName = "#{view.relatorio.acoes}",
 			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EXPORT, TAuthorizationType.SEARCH})
 public class AcoesReportModelView extends TModelView<AcaoReportModel>{
 	
@@ -62,56 +62,56 @@ public class AcoesReportModelView extends TModelView<AcaoReportModel>{
 	
 	@TAccordion(expandedPane="filtro", node=@TNode(id="repdoaacc",parse = true),
 			panes={
-					@TTitledPane(text="Filtros", node=@TNode(id="filtro",parse = true), expanded=true,
+					@TTitledPane(text="#{label.filtros}", node=@TNode(id="filtro",parse = true), expanded=true,
 							fields={"titulo","status","texto2"}),
-					@TTitledPane(text="Resultado", node=@TNode(id="resultado",parse = true),
+					@TTitledPane(text="#{label.resultado}", node=@TNode(id="resultado",parse = true),
 						fields={"result"})})
 	private SimpleStringProperty displayText;
 	
 		
-	@TLabel(text="Titulo / Local")
+	@TLabel(text="#{label.titulo.local}")
 	@TTextField(node=@TNode(requestFocus=true, parse = true),
-	textInputControl=@TTextInputControl(promptText="Insira parte ou o titulo completo da ação", parse = true))
+	textInputControl=@TTextInputControl(promptText="#{prompt.relatorio.acoes.titulo}", parse = true))
 	@THBox(	pane=@TPane(children={"titulo","ids"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="titulo", priority=Priority.ALWAYS),
    				   		@TPriority(field="ids", priority=Priority.ALWAYS) }))
 	private SimpleStringProperty titulo;
 	
-	@TLabel(text="Codigo da Ação")
-	@TTextField(textInputControl=@TTextInputControl(promptText="Insira os codigos separados por virgula", parse = true))
+	@TLabel(text="#{label.codigo}")
+	@TTextField(textInputControl=@TTextInputControl(promptText="#{prompt.relatorio.codigos}", parse = true))
 	private SimpleStringProperty ids;
 	
 	@TLabel(text="Status")
 	@THorizontalRadioGroup(alignment=Pos.CENTER_LEFT, spacing=4, 
 			radioButtons={
-					@TRadioButtonField(text = "Nenhum", userData = ""),
-					@TRadioButtonField(text = "Agendada", userData = "Agendada"),
-					@TRadioButtonField(text = "Cancelada", userData = "Cancelada"), 
-					@TRadioButtonField(text = "Executada", userData = "Executada")
+					@TRadioButtonField(text = "#{label.todos}", userData = ""),
+					@TRadioButtonField(text = "#{label.agendada}", userData = "Agendada"),
+					@TRadioButtonField(text = "#{label.cancelada}", userData = "Cancelada"), 
+					@TRadioButtonField(text = "#{label.executada}", userData = "Executada")
 					})
 	private SimpleStringProperty status;
 	
-	@TText(text="Data ou Periodo da ação:", textAlignment=TextAlignment.LEFT, textStyle = TTextStyle.MEDIUM)
+	@TText(text="#{label.data.periodo}", textAlignment=TextAlignment.LEFT, textStyle = TTextStyle.MEDIUM)
 	@THBox(	pane=@TPane(children={"texto2","dataInicio","dataFim"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="texto2", priority=Priority.NEVER),
 			@TPriority(field="dataInicio", priority=Priority.NEVER),
    				   		@TPriority(field="dataFim", priority=Priority.NEVER) }))
 	private SimpleStringProperty texto2;
 	
-	@TLabel(text="De")
+	@TLabel(text="#{label.de}")
 	@TDatePickerField
 	private SimpleObjectProperty<Date> dataInicio;
 	
-	@TLabel(text="Ate")
+	@TLabel(text="#{label.ate}")
 	@TDatePickerField
 	private SimpleObjectProperty<Date> dataFim;
 	
 	@TTableView(editable=true, 
-			columns = { @TTableColumn(cellValue="id", text = "Codigo", prefWidth=20, resizable=true), 
-					@TTableColumn(cellValue="data", text = "Data/Hora", prefWidth=40, resizable=true,
+			columns = { @TTableColumn(cellValue="id", text = "#{label.codigo}", prefWidth=20, resizable=true), 
+					@TTableColumn(cellValue="data", text = "#{label.dataHora}", prefWidth=40, resizable=true,
 						cellValueFactory=@TCellValueFactory(parse=true, value=@TCallbackFactory(parse=true, value=AcaoDateCellCallBack.class))),
-						@TTableColumn(cellValue="titulo", text = "Titulo / Local", resizable=true), 
-						@TTableColumn(cellValue="totalInscritos", text = "Qtd.Inscritos",prefWidth=10, resizable=true), 
+						@TTableColumn(cellValue="titulo", text = "#{label.titulo.local}", resizable=true), 
+						@TTableColumn(cellValue="totalInscritos", text = "#{label.qtd.inscritos}",prefWidth=10, resizable=true), 
 						@TTableColumn(cellValue="status", text = "Status", resizable=true)
 			})
 	@TModelViewCollectionType(modelClass=AcaoItemModel.class, modelViewClass=AcaoItemTableView.class)

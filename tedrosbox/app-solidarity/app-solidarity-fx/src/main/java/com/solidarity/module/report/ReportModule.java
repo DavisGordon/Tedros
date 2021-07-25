@@ -20,14 +20,14 @@ import com.tedros.fxapi.presenter.view.group.TViewItem;
  */
 @TSecurity(	id="SOLIDARITY_REPORT_MODULE", appName = "#{app.name}", moduleName = "#{module.administrativo}", 
 allowedAccesses=TAuthorizationType.MODULE_ACCESS)
-public class DoacaoReportModule extends TModule {
+public class ReportModule extends TModule {
 
 	@Override
 	public void tStart() {
-		tShowView(new TGroupView<TGroupPresenter>(this, "Relatórios", 
-				new TViewItem(TDynaView.class, AcoesReportModelView.class, "Ação"),
-				new TViewItem(TDynaView.class, VoluntariosReportModelView.class, "Voluntário"),
-				new TViewItem(TDynaView.class, EstoqueReportModelView.class, "Estoque")
+		tShowView(new TGroupView<TGroupPresenter>(this, "#{view.relatorios}", 
+				new TViewItem(TDynaView.class, AcoesReportModelView.class, "#{view.campaign}"),
+				new TViewItem(TDynaView.class, VoluntariosReportModelView.class, "#{view.pessoa}"),
+				new TViewItem(TDynaView.class, EstoqueReportModelView.class, "#{view.estoque}")
 				));
 	}
 

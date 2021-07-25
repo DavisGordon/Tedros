@@ -3,7 +3,6 @@
  */
 package com.solidarity.module.voluntario.model;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -13,6 +12,7 @@ import com.solidarity.model.TipoAjuda;
 import com.solidarity.model.Voluntario;
 import com.solidarity.module.acao.model.AcaoFindModelView;
 import com.solidarity.module.pessoa.model.PessoaFindModelView;
+import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.control.TFieldBox;
@@ -57,33 +57,32 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TFormReaderHtml
-@TForm(name = "Voluntário inscrito na campanha ", showBreadcrumBar=true)
+@TForm(name = "#{form.voluntarios.acao}", showBreadcrumBar=true)
 @TEjbService(serviceName = "IVoluntarioControllerRemote", model=Voluntario.class)
 @TListViewPresenter(listViewMinWidth=350, listViewMaxWidth=350,
 	paginator=@TPaginator(entityClass = Voluntario.class, serviceName = "IVoluntarioControllerRemote", show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Voluntário inscrito")))
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{view.voluntarios.acao}")))
 @TSecurity(	id="SOLIDARITY_CADVOL_FORM", 
-	appName = "#{app.name}", moduleName = "#{module.manage.campaign}", viewName = "Voluntários inscritos na campanha",
+	appName = "#{app.name}", moduleName = "#{module.manage.campaign}", viewName = "#{view.voluntarios.acao}",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
-
 public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 
 	private SimpleLongProperty id;
 	
 	private SimpleStringProperty displayText;
 	
-	@TTextReaderHtml(text="Voluntário na Ação/Campanha", 
+	@TTextReaderHtml(text="#{text.voluntario.acao}", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Selecione a ação o voluntário e o tipo de ajuda", textAlignment=TextAlignment.LEFT, 
+	@TText(text="#{text.voluntario.acao}", textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty textoCadastro;
 	
 	@TReaderHtml
-	@TLabel(text="Ação/Campanha")
+	@TLabel(text="#{label.campaign}")
 	@TOneSelectionModal(modelClass = Acao.class, modelViewClass = AcaoFindModelView.class, 
 	width=300, height=50, required=true)
 	@THBox(	pane=@TPane(children={"acao","pessoa"}), spacing=10, fillHeight=true,
@@ -92,15 +91,15 @@ public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 	private SimpleObjectProperty<Acao> acao;
 	
 	@TReaderHtml
-	@TLabel(text="Pessoa")
+	@TLabel(text="#{label.person}")
 	@TOneSelectionModal(modelClass = Pessoa.class, modelViewClass = PessoaFindModelView.class,
 	width=300, height=50, required=true)
 	private SimpleObjectProperty<Pessoa> pessoa;	
 	
-	@TLabel(text="Tipos de Ajuda")
-	@TTableReaderHtml(label=@TLabel(text="Tipo de Ajuda:"), 
-		column = { 	@TColumnReader(field = "descricao", name = "Descricao"), 
-					@TColumnReader(field = "tipoPessoa", name = "Tipo pessoa")})
+	@TLabel(text="#{label.tipos.ajuda}")
+	@TTableReaderHtml(label=@TLabel(text="#{label.tipos.juda}"), 
+		column = { 	@TColumnReader(field = "descricao", name = "#{label.descricao}"), 
+					@TColumnReader(field = "tipoPessoa", name = "#{label.tipo}")})
 	@TMultipleSelectionModal(modelClass = TipoAjuda.class, modelViewClass = TipoAjudaFindModelView.class, width=350, required=true)
 	@TModelViewCollectionType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=true)
 	private ITObservableList<TipoAjudaModelView> tiposAjuda;
@@ -110,11 +109,12 @@ public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 		super(entity);
 		buildListener();
 		if(!entity.isNew()){
+			String na = " "+ TInternationalizationEngine.getInstance(null).getString("#{label.na.acao.dia}")+" ";
 			String str =  ((pessoa.getValue()!=null) 
-					? pessoa.getValue().getNome() + " na "
-							: "")  + ((acao.getValue()!=null) 
-					? "ação do dia "+formataDataHora(acao.getValue().getData())
-						: "");
+					? pessoa.getValue().getNome() 
+							: "?")  + ((acao.getValue()!=null) 
+					? na + formataDataHora(acao.getValue().getData())
+						: " ?");
 			displayText.setValue(str);
 		}
 	}
@@ -125,18 +125,18 @@ public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 		buildListener();
 		
 		if(!model.isNew()){
+			String na = " "+ TInternationalizationEngine.getInstance(null).getString("#{label.na.acao.dia}")+" ";
 			String str =  ((pessoa.getValue()!=null) 
-					? pessoa.getValue().getNome() + " na "
-							: "")  + ((acao.getValue()!=null) 
-					? "ação do dia "+formataDataHora(acao.getValue().getData())
-						: "");
+					? pessoa.getValue().getNome() 
+							: "?")  + ((acao.getValue()!=null) 
+					? na + formataDataHora(acao.getValue().getData())
+						: " ?");
 			displayText.setValue(str);
 		}
 	}
 
 	private void buildListener() {
-		
-		
+		String na = " "+ TInternationalizationEngine.getInstance(null).getString("#{label.na.acao.dia}")+" ";
 		ChangeListener<Pessoa> pessListener = super.getListenerRepository().get("displayText");
 		if(pessListener==null){
 			pessListener = new ChangeListener<Pessoa>(){
@@ -144,7 +144,7 @@ public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 				@Override
 				public void changed(ObservableValue arg0, Pessoa arg1, Pessoa arg2) {
 					String str = (arg2!=null ? arg2.getNome() : "") + ((acao.getValue()!=null) 
-							? " na ação do dia "+formataDataHora(acao.getValue().getData())
+							? na +formataDataHora(acao.getValue().getData())
 							: "");
 					displayText.setValue(str);
 				}
@@ -162,9 +162,9 @@ public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 				@Override
 				public void changed(ObservableValue arg0, Acao arg1, Acao arg2) {
 					String str =  ((pessoa.getValue()!=null) 
-							? pessoa.getValue().getNome() + " na "
-									: "") 
-							+ (arg2!=null ? "ação do dia "+formataDataHora(arg2.getData()) : "");
+							? pessoa.getValue().getNome() 
+									: "?") 
+							+ (arg2!=null ? na + formataDataHora(arg2.getData()) : " ?");
 					displayText.setValue(str);
 				}
 				
@@ -178,8 +178,8 @@ public class VoluntarioModelView extends TEntityModelView<Voluntario> {
 	}
 	
 	private String formataDataHora(Date data){
-		String pattern = "dd/MM/yyyy 'às' HH:mm";
-		DateFormat df = new SimpleDateFormat(pattern);
+		String as = TInternationalizationEngine.getInstance(null).getString("#{label.as}");
+		SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy '"+as+"' HH:mm");
 		return df.format(data);
 	}
 

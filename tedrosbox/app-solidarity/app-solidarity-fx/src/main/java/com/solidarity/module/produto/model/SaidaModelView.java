@@ -11,6 +11,7 @@ import com.solidarity.model.Saida;
 import com.solidarity.model.SaidaItem;
 import com.solidarity.module.acao.model.AcaoFindModelView;
 import com.solidarity.module.cozinha.model.CozinhaModelView;
+import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
@@ -65,16 +66,16 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TFormReaderHtml
-@TForm(name = "Saida")
+@TForm(name = "#{form.saida.prod}", showBreadcrumBar=true, editCssId="")
 @TEjbService(serviceName = "ISaidaControllerRemote", model=Saida.class)
 @TListViewPresenter(
 	paginator=@TPaginator(entityClass = Saida.class, serviceName = "ISaidaControllerRemote",
 			show=true, 
-			orderBy = {	@TOption(text = "Data", value = "data"), 
-						@TOption(text = "Tipo", value = "tipo")}),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Saida de Produtos")))
+			orderBy = {	@TOption(text = "#{label.data}", value = "data"), 
+						@TOption(text = "#{label.tipo}", value = "tipo")}),
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{view.saida.prod}")))
 @TSecurity(	id="SOLIDARITY_SAIDAPROD_FORM", 
-	appName = "#{app.name}", moduleName = "#{module.administrativo}", viewName = "Saida de Produtos",
+	appName = "#{app.name}", moduleName = "#{module.administrativo}", viewName = "#{view.saida.prod}",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class SaidaModelView extends TEntityModelView<Saida> {
@@ -85,22 +86,22 @@ public class SaidaModelView extends TEntityModelView<Saida> {
 	
 	@TAccordion(expandedPane="main", node=@TNode(id="estocavelAcc",parse = true),
 			panes={
-					@TTitledPane(text="Principal", node=@TNode(id="main",parse = true), expanded=true,
+					@TTitledPane(text="#{label.principal}", node=@TNode(id="main",parse = true), expanded=true,
 							fields={"textoCadastro", "observacao"}),
-					@TTitledPane(text="Detalhe", node=@TNode(id="detail",parse = true),
+					@TTitledPane(text="#{label.detalhe}", node=@TNode(id="detail",parse = true),
 						fields={"itens"})})
-	@TTextReaderHtml(text="Saida de Produtos", 
+	@TTextReaderHtml(text="#{text.saida.prod}", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form",parse = true))
-	@TText(text="Informar produtos usados na ação/campanha", textAlignment=TextAlignment.LEFT, 
+	@TText(text="#{text.saida.prod}", textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty textoCadastro;
 	
 	
 	@TReaderHtml
-	@TLabel(text="Observação")
+	@TLabel(text="#{label.observacao}")
 	@TTextAreaField(maxLength=600, control=@TControl(prefWidth=250, prefHeight=100, parse = true))
 	@THBox(	pane=@TPane(children={"acao", "observacao"}), spacing=10, fillHeight=false,
 	hgrow=@THGrow(priority={@TPriority(field="acao", priority=Priority.NEVER), 
@@ -108,7 +109,7 @@ public class SaidaModelView extends TEntityModelView<Saida> {
 	private SimpleStringProperty observacao;
 	
 	@TReaderHtml
-	@TLabel(text="Ação/Campanha")
+	@TLabel(text="#{label.campaign}")
 	@TOneSelectionModal(modelClass = Acao.class, modelViewClass = AcaoFindModelView.class, 
 	width=300, height=50, required=true)
 	@TVBox(	pane=@TPane(children={"acao", "data"}), spacing=10, 
@@ -117,7 +118,7 @@ public class SaidaModelView extends TEntityModelView<Saida> {
 	private SimpleObjectProperty<Acao> acao;
 	
 	@TReaderHtml
-	@TLabel(text="Data")
+	@TLabel(text="#{label.dataHora}")
 	@TDatePickerField(required = true, dateFormat=DateTimeFormatBuilder.class)
 	@THBox(	pane=@TPane(children={"data", "cozinha"}), spacing=10, fillHeight=false,
 	hgrow=@THGrow(priority={@TPriority(field="data", priority=Priority.NEVER), 
@@ -125,13 +126,13 @@ public class SaidaModelView extends TEntityModelView<Saida> {
 	private SimpleObjectProperty<Date> data;
 	
 	@TReaderHtml
-	@TLabel(text="Cozinha:")
+	@TLabel(text="#{label.local.prod}")
 	@TComboBoxField(required=true, optionsList=@TOptionsList(entityClass=Cozinha.class, 
 	optionModelViewClass=CozinhaModelView.class, serviceName = "ICozinhaControllerRemote"))
 	private SimpleObjectProperty<Cozinha> cozinha;
 	
 	
-	@TDetailReaderHtml(	label=@TLabel(text="Itens"), 
+	@TDetailReaderHtml(	label=@TLabel(text="#{label.produtos}"), 
 			entityClass=SaidaItem.class, 
 			modelViewClass=SaidaItemModelView.class)
 	@TDetailListField(entityModelViewClass = SaidaItemModelView.class, entityClass = SaidaItem.class, required=true)
@@ -157,21 +158,22 @@ public class SaidaModelView extends TEntityModelView<Saida> {
 	 */
 	private void loadDisplayText(Saida model) {
 		if(!model.isNew()){
+			String em = " "+ TInternationalizationEngine.getInstance(null).getString("#{label.em}")+" ";
 			String str = (id.getValue()==null ? "" : "(ID: "+id.getValue().toString()+") " ) 
 					+ (acao.getValue()!=null ? acao.getValue() : "") 
-					+ (data.getValue()!=null ? " em "+formataDataHora(data.getValue()) : "");
+					+ (data.getValue()!=null ?  em + formataDataHora(data.getValue()) : "");
 			displayText.setValue(str);
 		}
 	}
 
 	private void buildListener() {
-		
+		String em = " "+ TInternationalizationEngine.getInstance(null).getString("#{label.em}")+" ";
 		ChangeListener<Number> idListener = super.getListenerRepository().get("displayText");
 		if(idListener==null){
 			idListener = (arg0, arg1, arg2) -> {
 					String str = (arg2==null ? "" : "(ID: "+arg2.toString()+") " ) 
 							+ (acao.getValue()!=null ? acao.getValue() : "") 
-							+ (data.getValue()!=null ? " em "+formataDataHora(data.getValue()) : "");
+							+ (data.getValue()!=null ? em + formataDataHora(data.getValue()) : "");
 					displayText.setValue(str);
 				};
 			
@@ -186,7 +188,7 @@ public class SaidaModelView extends TEntityModelView<Saida> {
 			tituloListener = (arg0, arg1, arg2) -> {
 					String str = (id.getValue()==null ? "" : "(ID: "+id.getValue().toString()+") " ) 
 							+ (arg2!=null ? arg2 : "") 
-							+ (data.getValue()!=null ? " em "+formataDataHora(data.getValue()) : "");
+							+ (data.getValue()!=null ? em + formataDataHora(data.getValue()) : "");
 					displayText.setValue(str);
 				};
 			super.addListener("displayText1", tituloListener);
@@ -200,7 +202,7 @@ public class SaidaModelView extends TEntityModelView<Saida> {
 			dataListener = (arg0, arg1, arg2) -> {
 					String str = (id.getValue()==null ? "" : "(ID: "+id.getValue().toString()+") " ) 
 							+ (acao.getValue()!=null ? acao.getValue() : "") 
-							+ (arg2!=null ? " em "+formataDataHora(arg2) : "");
+							+ (arg2!=null ? em + formataDataHora(arg2) : "");
 					displayText.setValue(str);
 				};
 				

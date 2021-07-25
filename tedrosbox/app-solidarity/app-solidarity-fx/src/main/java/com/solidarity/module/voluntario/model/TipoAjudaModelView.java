@@ -47,29 +47,29 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TFormReaderHtml
-@TForm(name = "Tipos de ajuda")
+@TForm(name = "#{form.tipo.ajuda}")
 @TEntityProcess(process = TipoAjudaProcess.class, entity=TipoAjuda.class)
-@TPresenter(decorator = @TDecorator(viewTitle="Tipos de ajuda voluntariado"))
+@TPresenter(decorator = @TDecorator(viewTitle="#{view.tipoajuda}"))
 @TSecurity(	id="SOLIDARITY_CADTIPOAJUDA_FORM", 
-			appName = "#{app.name}", moduleName = "#{module.manage.campaign}", viewName = "Tipos de Ajuda",
+			appName = "#{app.name}", moduleName = "#{module.manage.campaign}", viewName = "#{view.tipoajuda}",
 			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 							TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class TipoAjudaModelView extends TEntityModelView<TipoAjuda> {
 
 	private SimpleLongProperty id;
 	
-	@TTextReaderHtml(text="Tipo de Ajuda", 
+	@TTextReaderHtml(text="#{label.tipo.ajuda}", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Tipo de Ajuda", textAlignment=TextAlignment.LEFT, 
+	@TText(text="#{label.tipo.ajuda}", textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty textoCadastro;
 		
 	@TReaderHtml
-	@TLabel(text="Descrição")
-	@TTextField(maxLength=60, required = true, textInputControl=@TTextInputControl(promptText="Descrição", parse = true), 
+	@TLabel(text="#{label.descricao}")
+	@TTextField(maxLength=60, required = true, textInputControl=@TTextInputControl(promptText="#{label.descricao}", parse = true), 
 				control=@TControl(tooltip="#{label.name}", parse = true))
 	@THBox(	pane=@TPane(children={"descricao","status","tipoPessoa"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="descricao", priority=Priority.ALWAYS), 
@@ -77,21 +77,21 @@ public class TipoAjudaModelView extends TEntityModelView<TipoAjuda> {
    				   		@TPriority(field="tipoPessoa", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty descricao;
 	
-	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "Ativado"), 
-			@TCodeValue(code = "DESATIVADO", value = "Desativado")})
+	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "#{label.ativado}"), 
+			@TCodeValue(code = "DESATIVADO", value = "#{label.desativado}")})
 	@TLabel(text="Status")
 	@TVerticalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
-	radioButtons = {@TRadioButtonField(text="Ativado", userData="ATIVADO"), 
-					@TRadioButtonField(text="Desativado", userData="DESATIVADO")
+	radioButtons = {@TRadioButtonField(text="#{label.ativado}", userData="ATIVADO"), 
+					@TRadioButtonField(text="#{label.desativado}", userData="DESATIVADO")
 	})
 	private SimpleStringProperty status;
 	
-	@TReaderHtml(codeValues={@TCodeValue(code = "PF", value = "Pessoa Fisica"), 
-			@TCodeValue(code = "PJ", value = "Pessoa Juridica")})
-	@TLabel(text="Tipo Pessoa")
+	@TReaderHtml(codeValues={@TCodeValue(code = "PF", value = "#{label.pessoa.fisica}"), 
+			@TCodeValue(code = "PJ", value = "#{label.pessoa.juridica}")})
+	@TLabel(text="#{label.tipo.pessoa}")
 	@TVerticalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
-	radioButtons = {@TRadioButtonField(text="Pessoa Fisica", userData="PF"), 
-					@TRadioButtonField(text="Pessoa Juridica", userData="PJ")
+	radioButtons = {@TRadioButtonField(text="#{label.pessoa.fisica}", userData="PF"), 
+					@TRadioButtonField(text="#{label.pessoa.juridica}", userData="PJ")
 	})
 	private SimpleStringProperty tipoPessoa;
 	
