@@ -4,6 +4,7 @@
 package com.solidarity.module.produto.model;
 
 import com.solidarity.model.EntradaItem;
+import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.control.PopOver;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.control.TSelectionModal;
@@ -41,7 +42,8 @@ public class EntradaItemAddAction extends TPresenterAction<TDynaPresenter<Entrad
 		}
 		
 		if(n!=null) {
-			Label label = new Label("O produto "+n+" já se encontra adicionado!");
+			String msg = TInternationalizationEngine.getInstance(null).getFormatedString("#{msg.prod.ja.adicionado}", n);
+			Label label = new Label(msg);
 			label.setId("t-label");
 			label.setStyle(	"-fx-font: Arial; "+
 							"-fx-font-size: 1.0em; "+

@@ -38,14 +38,14 @@ import javafx.scene.layout.Priority;
  *
  */
 @TFormReaderHtml
-@TForm(name = "Adicionar insumo")
+@TForm(name = "#{form.add.insumo}")
 @TDetailTableViewPresenter(
 		presenter=@TPresenter(behavior=@TBehavior(type=TDetailFieldBehavior.class, addAction=SaidaItemAddAction.class),
-				decorator = @TDecorator(type=TDetailFieldDecorator.class, viewTitle="Itens")
+				decorator = @TDecorator(type=TDetailFieldDecorator.class, viewTitle="#{view.itens}")
 				),
 		tableView=@TTableView(editable=true, 
-			columns = { @TTableColumn(cellValue="produto", text = "Produto", prefWidth=50, resizable=true), 
-						@TTableColumn(cellValue="quantidade", text = "Qtd.", prefWidth=20, resizable=true)}))
+			columns = { @TTableColumn(cellValue="produto", text = "#{label.produto}", prefWidth=50, resizable=true), 
+						@TTableColumn(cellValue="quantidade", text = "#{label.qtd}", prefWidth=20, resizable=true)}))
 public class SaidaItemModelView extends TEntityModelView<SaidaItem> {
 
 	private SimpleLongProperty id;
@@ -53,7 +53,7 @@ public class SaidaItemModelView extends TEntityModelView<SaidaItem> {
 	private SimpleStringProperty displayText;
 	
 	@TReaderHtml
-	@TLabel(text="Produto")
+	@TLabel(text="#{label.produto}")
 	@TOneSelectionModal(modelClass = Produto.class, modelViewClass = ProdutoFindModelView.class,
 	width=300, height=50, required=true)
 	@THBox(	pane=@TPane(children={"produto","quantidade"}), spacing=10, fillHeight=false,
@@ -63,7 +63,7 @@ public class SaidaItemModelView extends TEntityModelView<SaidaItem> {
 	
 	
 	@TReaderHtml
-	@TLabel(text="Quantidade")
+	@TLabel(text="#{label.quantidade}")
 	@TNumberSpinnerField(maxValue = 1000000, minValue=0, zeroValidation=TZeroValidation.GREATHER_THAN_ZERO)
 	private SimpleIntegerProperty quantidade;
 	

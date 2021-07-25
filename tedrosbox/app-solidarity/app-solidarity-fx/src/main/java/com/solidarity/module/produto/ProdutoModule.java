@@ -18,10 +18,10 @@ public class ProdutoModule extends TModule {
 
 	@Override
 	public void tStart() {
-		tShowView(new TGroupView<TGroupPresenter>(this, "Produto", 
-				new TViewItem(TDynaView.class, ProdutoModelView.class, "Produtos"),
-				new TViewItem(TDynaView.class, EntradaModelView.class, "Entrada"),
-				new TViewItem(TDynaView.class, SaidaModelView.class, "Saida")
+		tShowView(new TGroupView<TGroupPresenter>(this, "#{view.ger.produtos}", 
+				new TViewItem(TDynaView.class, ProdutoModelView.class, "#{label.produtos}"),
+				new TViewItem(TDynaView.class, EntradaModelView.class, "#{label.entradas}"),
+				new TViewItem(TDynaView.class, SaidaModelView.class, "#{label.saidas}")
 				));
 	}
 

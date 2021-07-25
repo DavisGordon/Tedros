@@ -11,6 +11,7 @@ import com.solidarity.model.EntradaItem;
 import com.solidarity.model.Pessoa;
 import com.solidarity.module.cozinha.model.CozinhaModelView;
 import com.solidarity.module.pessoa.model.PessoaFindModelView;
+import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.TCodeValue;
@@ -68,16 +69,16 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TFormReaderHtml
-@TForm(name = "Entrada de Produtos")
+@TForm(name = "#{form.entrada.prod}", showBreadcrumBar=true, editCssId="")
 @TEjbService(serviceName = "IEntradaControllerRemote", model=Entrada.class)
 @TListViewPresenter(
 	paginator=@TPaginator(entityClass = Entrada.class, serviceName = "IEntradaControllerRemote",
 			show=true, 
-			orderBy = {	@TOption(text = "Data", value = "data"), 
-						@TOption(text = "Tipo", value = "tipo")}),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Entrada de Produtos")))
+			orderBy = {	@TOption(text = "#{label.data}", value = "data"), 
+						@TOption(text = "#{label.tipo}", value = "tipo")}),
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{view.entrada.prod}")))
 @TSecurity(	id="SOLIDARITY_ENTRADAPROD_FORM", 
-	appName = "#{app.name}", moduleName = "#{module.administrativo}", viewName = "Entrada de Produtos",
+	appName = "#{app.name}", moduleName = "#{module.administrativo}", viewName = "#{view.entrada.prod}",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class EntradaModelView extends TEntityModelView<Entrada> {
@@ -88,26 +89,26 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 	
 	@TAccordion(expandedPane="main", node=@TNode(id="estocavelAcc",parse = true),
 			panes={
-					@TTitledPane(text="Principal", node=@TNode(id="main",parse = true), expanded=true,
+					@TTitledPane(text="#{label.principal}", node=@TNode(id="main",parse = true), expanded=true,
 							fields={"textoCadastro", "tipo"}),
-					@TTitledPane(text="Detalhe", node=@TNode(id="detail",parse = true),
+					@TTitledPane(text="#{label.detalhe}", node=@TNode(id="detail",parse = true),
 						fields={"itens"})})
-	@TTextReaderHtml(text="Entrada de produtos", 
+	@TTextReaderHtml(text="#{text.entrada.prod}", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form",parse = true))
-	@TText(text="Informar entrada de produtos", textAlignment=TextAlignment.LEFT, 
+	@TText(text="#{text.entrada.prod}", textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty textoCadastro;
 	
-	@TLabel(text="Tipo")
-	@TReaderHtml(codeValues={@TCodeValue(code = "Compras", value = "Compras"), 
-			@TCodeValue(code = "Doação", value = "Doação")})
+	@TLabel(text="#{label.tipo}")
+	@TReaderHtml(codeValues={@TCodeValue(code = "Compras", value = "#{label.compras}"), 
+			@TCodeValue(code = "Doação", value = "#{label.donation}")})
 	@THorizontalRadioGroup(required=true, alignment=Pos.CENTER_LEFT, spacing=4, 
 	radioButtons={
-			@TRadioButtonField(text = "Compras", userData = "Compras"),
-			@TRadioButtonField(text = "Doação", userData = "Doação")
+			@TRadioButtonField(text = "#{label.compras}", userData = "Compras"),
+			@TRadioButtonField(text = "#{label.donation}", userData = "Doação")
 			})
 	@TTrigger(triggerClass = EntradaTipoTrigger.class, targetFieldName = "doador", runAfterFormBuild=true)
 	@THBox(	pane=@TPane(children={"data","tipo", "doador"}), spacing=10, fillHeight=false,
@@ -117,7 +118,7 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 	private SimpleStringProperty tipo;
 	
 	@TReaderHtml
-	@TLabel(text="Doador")
+	@TLabel(text="#{label.donor}")
 	@TFieldBox(node=@TNode(parse = true))
 	@TOneSelectionModal(modelClass = Pessoa.class, modelViewClass = PessoaFindModelView.class,
 	width=300, height=50)
@@ -125,7 +126,7 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 	private SimpleObjectProperty<Pessoa> doador;
 	
 	@TReaderHtml
-	@TLabel(text="Data e Hora")
+	@TLabel(text="#{label.dataHora}")
 	@TDatePickerField(required = true, node=@TNode(requestFocus=true, parse = true), dateFormat=DateTimeFormatBuilder.class)
 	@TVBox(	pane=@TPane(children={"data", "cozinha"}), spacing=10, fillWidth=false,
 	vgrow=@TVGrow(priority={@TPriority(field="data", priority=Priority.NEVER), 
@@ -133,12 +134,12 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 	private SimpleObjectProperty<Date> data;
 	
 	@TReaderHtml
-	@TLabel(text="Cozinha:")
+	@TLabel(text="#{label.local.prod}")
 	@TComboBoxField(required=true, optionsList=@TOptionsList(entityClass=Cozinha.class, 
 	optionModelViewClass=CozinhaModelView.class, serviceName = "ICozinhaControllerRemote"))
 	private SimpleObjectProperty<Cozinha> cozinha;
 	
-	@TDetailReaderHtml(	label=@TLabel(text="Produtos"), 
+	@TDetailReaderHtml(	label=@TLabel(text="#{label.produtos}"), 
 			entityClass=EntradaItem.class, 
 			modelViewClass=EntradaItemModelView.class)
 	@TDetailListField(entityModelViewClass = EntradaItemModelView.class, entityClass = EntradaItem.class, required=true)
@@ -164,21 +165,22 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 	 */
 	private void loadDisplayText(Entrada model) {
 		if(!model.isNew()){
+			String em = " "+ TInternationalizationEngine.getInstance(null).getString("#{label.em}")+" ";
 			String str = (id.getValue()==null ? "" : "(ID: "+id.getValue().toString()+") " ) 
 					+ (tipo.getValue()!=null ? tipo.getValue() : "") 
-					+ (data.getValue()!=null ? " em "+formataDataHora(data.getValue()) : "");
+					+ (data.getValue()!=null ? em + formataDataHora(data.getValue()) : "");
 			displayText.setValue(str);
 		}
 	}
 
 	private void buildListener() {
-		
+		String em = " "+ TInternationalizationEngine.getInstance(null).getString("#{label.em}")+" ";
 		ChangeListener<Number> idListener = super.getListenerRepository().get("displayText");
 		if(idListener==null){
 			idListener = (arg0, arg1, arg2) -> {
 					String str = (arg2==null ? "" : "(ID: "+arg2.toString()+") " ) 
 							+ (tipo.getValue()!=null ? tipo.getValue() : "") 
-							+ (data.getValue()!=null ? " em "+formataDataHora(data.getValue()) : "");
+							+ (data.getValue()!=null ?  em + formataDataHora(data.getValue()) : "");
 					displayText.setValue(str);
 				};
 			
@@ -193,7 +195,7 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 			tituloListener = (arg0, arg1, arg2) -> {
 					String str = (id.getValue()==null ? "" : "(ID: "+id.getValue().toString()+") " ) 
 							+ (arg2!=null ? arg2 : "") 
-							+ (data.getValue()!=null ? " em "+formataDataHora(data.getValue()) : "");
+							+ (data.getValue()!=null ? em + formataDataHora(data.getValue()) : "");
 					displayText.setValue(str);
 				};
 			super.addListener("displayText1", tituloListener);
@@ -207,7 +209,7 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 			dataListener = (arg0, arg1, arg2) -> {
 					String str = (id.getValue()==null ? "" : "(ID: "+id.getValue().toString()+") " ) 
 							+ (tipo.getValue()!=null ? tipo.getValue() : "") 
-							+ (arg2!=null ? " em "+formataDataHora(arg2) : "");
+							+ (arg2!=null ?  em + formataDataHora(arg2) : "");
 					displayText.setValue(str);
 				};
 				

@@ -43,16 +43,16 @@ import javafx.scene.layout.Priority;
  *
  */
 @TFormReaderHtml
-@TForm(name = "Adicionar produtos")
+@TForm(name = "#{form.add.produtos}")
 @TDetailTableViewPresenter(
 		presenter=@TPresenter(behavior=@TBehavior(type=TDetailFieldBehavior.class, addAction=EntradaItemAddAction.class),
-				decorator = @TDecorator(type=TDetailFieldDecorator.class, viewTitle="Itens")
+				decorator = @TDecorator(type=TDetailFieldDecorator.class, viewTitle="#{view.itens}")
 				),
 		tableView=@TTableView(editable=true, 
-			columns = { @TTableColumn(cellValue="produto", text = "Produto", prefWidth=50, resizable=true), 
-						@TTableColumn(cellValue="quantidade", text = "Qtd.", prefWidth=20, resizable=true),
-						@TTableColumn(cellValue="valorUnitario", text = "Vlr. Unitario", resizable=true), 
-						@TTableColumn(cellValue="unidadeMedida", text = "Unidade", resizable=true)}))
+			columns = { @TTableColumn(cellValue="produto", text = "#{label.produto}", prefWidth=50, resizable=true), 
+						@TTableColumn(cellValue="quantidade", text = "#{label.qtd}", prefWidth=20, resizable=true),
+						@TTableColumn(cellValue="valorUnitario", text = "#{label.vlr.unit}", resizable=true), 
+						@TTableColumn(cellValue="unidadeMedida", text = "#{label.unidade}", resizable=true)}))
 public class EntradaItemModelView extends TEntityModelView<EntradaItem> {
 
 	private SimpleLongProperty id;
@@ -60,7 +60,7 @@ public class EntradaItemModelView extends TEntityModelView<EntradaItem> {
 	private SimpleStringProperty displayText;
 	
 	@TReaderHtml
-	@TLabel(text="Produto")
+	@TLabel(text="#{label.produto}")
 	@TOneSelectionModal(modelClass = Produto.class, modelViewClass = ProdutoFindModelView.class,
 	width=300, height=50, required=true)
 	@TTrigger(triggerClass = ProdutoSelecionadoTrigger.class, targetFieldName="unidadeMedida")
@@ -68,7 +68,7 @@ public class EntradaItemModelView extends TEntityModelView<EntradaItem> {
 	
 	
 	@TReaderHtml
-	@TLabel(text="Quantidade")
+	@TLabel(text="#{label.quantidade}")
 	@TNumberSpinnerField(maxValue = 1000000, minValue=0, zeroValidation=TZeroValidation.GREATHER_THAN_ZERO)
 	@THBox(	pane=@TPane(children={"quantidade","unidadeMedida","valorUnitario"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="quantidade", priority=Priority.ALWAYS), 
@@ -77,13 +77,13 @@ public class EntradaItemModelView extends TEntityModelView<EntradaItem> {
 	private SimpleIntegerProperty quantidade;
 	
 	@TReaderHtml
-	@TLabel(text="Unidade de medida")
+	@TLabel(text="#{label.unidade.medida}")
 	@TComboBoxField(items=UnidadeMedidaBuilder.class, required=true)
 	private SimpleStringProperty unidadeMedida;
 	
 	@TReaderHtml
-	@TLabel(text = "Valor")
-	@TBigDecimalField(textInputControl=@TTextInputControl(promptText="Valor", parse = true))
+	@TLabel(text = "#{label.valor}")
+	@TBigDecimalField(textInputControl=@TTextInputControl(promptText="#{label.valor}", parse = true))
 	private SimpleDoubleProperty valorUnitario;
 	
 	public EntradaItemModelView(EntradaItem entity) {

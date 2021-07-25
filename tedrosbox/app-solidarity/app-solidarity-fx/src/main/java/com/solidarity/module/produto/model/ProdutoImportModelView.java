@@ -38,24 +38,24 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TEjbService(serviceName = "IProdutoImportControllerRemote", model=ProdutoImport.class)
-@TPresenter(decorator = @TDecorator(type=TImportFileModalDecorator.class, viewTitle="Importar produtos"),
+@TPresenter(decorator = @TDecorator(type=TImportFileModalDecorator.class, viewTitle="#{view.importar.prod}"),
 			behavior = @TBehavior(type=TImportFileModalBehavior.class, 
 			importedEntityClass=Produto.class, importedModelViewClass=ProdutoModelView.class))
 public class ProdutoImportModelView extends TImportModelView<ProdutoImport> {
 
-	@TTextReaderHtml(text="Especificação de arquivo para importação", 
+	@TTextReaderHtml(text="#{text.importar.prod.espec}", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
-	@TText(text="Importar arquivo para cadastro de produtos", textAlignment=TextAlignment.LEFT, 
+	@TText(text="#{text.importar.prod}", textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty texto;
 	
 	@TReaderHtml
 	private SimpleStringProperty rules;
 	
-	@TLabel(text="Arquivo")
+	@TLabel(text="#{label.arquivo}")
 	@TFileField(extensions= {TFileExtension.CSV}, moreExtensions= {"*.xls", "*.xlsx"},
 	showFilePath=true, required=true)
 	private TSimpleFileEntityProperty<TFileEntity> file;

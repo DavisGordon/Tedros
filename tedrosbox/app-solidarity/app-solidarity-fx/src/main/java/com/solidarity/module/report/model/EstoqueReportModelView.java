@@ -48,15 +48,15 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
 
-@TForm(name = "Relatório de Estoque", showBreadcrumBar=false)
+@TForm(name = "#{form.relatorio.estoque}", showBreadcrumBar=false, editCssId="")
 @TReportProcess(type=EstoqueReportProcess.class, model = EstoqueReportModel.class)
 @TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = TDataSetReportBehavior.class, 
 			searchAction=SearchAction.class), 
 			decorator = @TDecorator(type = TDataSetReportDecorator.class, 
-									viewTitle="Relatório de Estoque"))
+									viewTitle="#{view.relatorio.estoque}"))
 @TSecurity(	id="SOLIDARITY_ESTOQREP_FORM", 
-			appName = "#{app.name}", moduleName = "#{module.administrativo}", viewName = "Relatório de Estoque",
+			appName = "#{app.name}", moduleName = "#{module.administrativo}", viewName = "#{view.relatorio.estoque}",
 			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EXPORT, TAuthorizationType.SEARCH})
 public class EstoqueReportModelView extends TModelView<EstoqueReportModel>{
 	
@@ -64,9 +64,9 @@ public class EstoqueReportModelView extends TModelView<EstoqueReportModel>{
 	
 	@TAccordion(expandedPane="filtro", node=@TNode(id="repdoaacc",parse = true),
 			panes={
-					@TTitledPane(text="Filtros", node=@TNode(id="filtro",parse = true), expanded=true,
+					@TTitledPane(text="#{label.filtros}", node=@TNode(id="filtro",parse = true), expanded=true,
 							fields={"cozinha","texto2"}),
-					@TTitledPane(text="Resultado", node=@TNode(id="resultado",parse = true),
+					@TTitledPane(text="#{label.resultado}", node=@TNode(id="resultado",parse = true),
 						fields={"result"})})
 	private SimpleStringProperty displayText;
 	
@@ -75,26 +75,26 @@ public class EstoqueReportModelView extends TModelView<EstoqueReportModel>{
 	hgrow=@THGrow(priority={@TPriority(field="cozinha", priority=Priority.NEVER),
    				   		@TPriority(field="ids", priority=Priority.SOMETIMES),
    				   		@TPriority(field="origem", priority=Priority.ALWAYS) }))
-	@TLabel(text="Cozinha:")
+	@TLabel(text="#{label.local.prod}")
 	@TComboBoxField(node=@TNode(requestFocus=true, parse = true),
 	optionsList=@TOptionsList(entityClass=Cozinha.class, 
 	optionModelViewClass=CozinhaModelView.class, serviceName = "ICozinhaControllerRemote"))
 	private SimpleObjectProperty<Cozinha> cozinha;
 	
-	@TLabel(text="Codigo do estoque")
-	@TTextField(textInputControl=@TTextInputControl(promptText="Insira os codigos separados por virgula", parse = true))
+	@TLabel(text="#{label.codigo}")
+	@TTextField(textInputControl=@TTextInputControl(promptText="#{prompt.relatorio.codigos}", parse = true))
 	private SimpleStringProperty ids;
 	
-	@TLabel(text="Origem")
+	@TLabel(text="#{label.origem}")
 	@THorizontalRadioGroup(alignment=Pos.CENTER_LEFT, spacing=4, 
 	radioButtons={
-			@TRadioButtonField(text = "Todas", userData = ""),
-			@TRadioButtonField(text = "Entradas", userData = "E"),
-			@TRadioButtonField(text = "Saidas", userData = "S")
+			@TRadioButtonField(text = "#{label.todas}", userData = ""),
+			@TRadioButtonField(text = "#{label.entradas}", userData = "E"),
+			@TRadioButtonField(text = "#{label.saidas}", userData = "S")
 			})
 	private SimpleStringProperty origem;
 			
-	@TText(text="Data ou Periodo:", textAlignment=TextAlignment.LEFT, 
+	@TText(text="#{label.data.periodo}", textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.MEDIUM)
 	@THBox(	pane=@TPane(children={"texto2","dataInicio","dataFim"}), spacing=10, fillHeight=true,
 	alignment=Pos.BOTTOM_LEFT,
@@ -103,20 +103,20 @@ public class EstoqueReportModelView extends TModelView<EstoqueReportModel>{
    				   		@TPriority(field="dataFim", priority=Priority.NEVER) }))
 	private SimpleStringProperty texto2;
 	
-	@TLabel(text="De")
+	@TLabel(text="#{label.de}")
 	@TDatePickerField
 	private SimpleObjectProperty<Date> dataInicio;
 	
-	@TLabel(text="Ate")
+	@TLabel(text="#{label.ate}")
 	@TDatePickerField
 	private SimpleObjectProperty<Date> dataFim;
 	
 	
 	@TTableView(editable=true, 
-			columns = { @TTableColumn(cellValue="id", text = "Codigo", prefWidth=20, resizable=true), 
-					@TTableColumn(cellValue="dataHora", text = "Data/Hora", prefWidth=40, resizable=true),
-						@TTableColumn(cellValue="origem", text = "Gerado por", resizable=true), 
-						@TTableColumn(cellValue="cozinha", text = "Cozinha",prefWidth=10, resizable=true)
+			columns = { @TTableColumn(cellValue="id", text = "#{label.codigo}", prefWidth=20, resizable=true), 
+					@TTableColumn(cellValue="dataHora", text = "#{label.dataHora}", prefWidth=40, resizable=true),
+						@TTableColumn(cellValue="origem", text = "#{label.origem}", resizable=true), 
+						@TTableColumn(cellValue="cozinha", text = "#{label.local.prod}",prefWidth=10, resizable=true)
 			})
 	@TModelViewCollectionType(modelClass=EstoqueModel.class, modelViewClass=EstoqueTableView.class)
 	private ITObservableList<EstoqueTableView> result;
