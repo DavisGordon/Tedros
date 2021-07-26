@@ -5,6 +5,9 @@ package com.covidsemfome.module.estoque;
 
 import com.covidsemfome.module.estoque.model.EstoqueConfigModelView;
 import com.covidsemfome.module.estoque.model.EstoqueModelView;
+import com.covidsemfome.module.produto.model.EntradaModelView;
+import com.covidsemfome.module.produto.model.ProdutoModelView;
+import com.covidsemfome.module.produto.model.SaidaModelView;
 import com.tedros.core.TModule;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
@@ -27,8 +30,11 @@ public class EstoqueModule extends TModule {
 	@Override
 	public void tStart() {
 		tShowView(new TGroupView<TGroupPresenter>(this, "Estoque", 
-				new TViewItem(TDynaView.class, EstoqueModelView.class, "Ver Estoque"),
-				new TViewItem(TDynaView.class, EstoqueConfigModelView.class, "Editar Estoque Inicial")
+				new TViewItem(TDynaView.class, ProdutoModelView.class, "Produtos"),
+				new TViewItem(TDynaView.class, EstoqueConfigModelView.class, "Editar Estoque Inicial"),
+				new TViewItem(TDynaView.class, EntradaModelView.class, "Entradas de produtos"),
+				new TViewItem(TDynaView.class, SaidaModelView.class, "Saídas de produtos"),
+				new TViewItem(TDynaView.class, EstoqueModelView.class, "Ver Estoque gerado")
 				));
 	}
 

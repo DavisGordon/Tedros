@@ -40,7 +40,7 @@ import javafx.scene.text.TextAlignment;
 /**
  * @author Davis Gordon
  */
-@TForm(name="#{security.profile.form.name}")
+@TForm(name="#{security.profile.form.name}", showBreadcrumBar=true, editCssId="")
 @TPresenter(type=TDynaPresenter.class,
 			modelClass=TProfile.class,
 			decorator=@TDecorator(	type=TMasterCrudViewDecorator.class, 

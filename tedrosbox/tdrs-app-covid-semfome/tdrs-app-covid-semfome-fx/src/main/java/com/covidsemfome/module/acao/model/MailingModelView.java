@@ -59,7 +59,7 @@ import javafx.scene.text.TextAlignment;
  * @author Davis Gordon
  *
  */
-@TForm(name = "Mailing", showBreadcrumBar=false, form=EmailTemplateForm.class)
+@TForm(name = "Mailing", showBreadcrumBar=false, form=EmailTemplateForm.class, editCssId="")
 @TEjbService(serviceName = "IMailingControllerRemote", model=Mailing.class)
 @TListViewPresenter(listViewMinWidth=350, listViewMaxWidth=350,
 	paginator=@TPaginator(entityClass = Mailing.class, serviceName = "IMailingControllerRemote",

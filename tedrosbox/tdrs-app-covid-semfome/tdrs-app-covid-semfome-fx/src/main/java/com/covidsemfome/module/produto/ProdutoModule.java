@@ -10,10 +10,10 @@ import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.view.group.TGroupPresenter;
 import com.tedros.fxapi.presenter.view.group.TGroupView;
 import com.tedros.fxapi.presenter.view.group.TViewItem;
-
+/*
 @TSecurity(	id="COVSEMFOME_PRODUTO_MODULE", appName = "#{app.name}", 
 moduleName = "Administrativo", 
-allowedAccesses=TAuthorizationType.MODULE_ACCESS)
+allowedAccesses=TAuthorizationType.MODULE_ACCESS)*/
 public class ProdutoModule extends TModule {
 
 	@Override

@@ -64,16 +64,16 @@ module = {
 					icon=CozinhaIconImageView.class, menuIcon=CozinhaMenuIconImageView.class,
 					description="Edite aqui os locais (cozinhas) de produção, necessario "
 							+ "para editar estoque e inserir entradas e saidas de produtos."),
-			@TModule(type=ProdutoModule.class, name="Produto", menu="Administrativo", 
+			/*@TModule(type=ProdutoModule.class, name="Produto", menu="Administrativo", 
 					icon=ProdutoIconImageView.class, menuIcon=ProdutoMenuIconImageView.class,
 					description="Insira/Importe aqui os produtos utilizados na produção e informe "
 							+ "as entradas (Compras) e saídas (Produção). "
-							+ "Necessario editar o estoque inicial antes de lançar as entradas e saídas."),
+							+ "Necessario editar o estoque inicial antes de lançar as entradas e saídas."),*/
 			@TModule(type=EstoqueModule.class, name="Estoque", menu="Administrativo", 
 					icon=EstoqueIconImageView.class, menuIcon=EstoqueMenuIconImageView.class,
-					description="Edite o estoque inicial e visualize os estoques gerados apos o lançamento "
-							+ "das entradas e saidas de produtos. Necessario inserir os locais de produção "
-							+ "e os produtos primeiro.")
+					description="Gerencie aqui os produtos as entradas e saídas do estoque, edite o "
+							+ "estoque inicial e visualize os estoques gerados. "
+							+ "Necessario inserir os locais de produção.")
 
 })
 @TResourceBundle(resourceName={"CovidLabels"})
