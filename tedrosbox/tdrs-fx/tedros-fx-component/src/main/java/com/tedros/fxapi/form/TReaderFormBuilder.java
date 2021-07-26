@@ -8,6 +8,8 @@ package com.tedros.fxapi.form;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.tedros.core.model.ITModelView;
 import com.tedros.fxapi.annotation.form.TForm;
 
@@ -58,6 +60,7 @@ public class TReaderFormBuilder<M extends ITModelView<?>> {
 		
 		try {
 			generate();
+			applyStyles(tForm);
 		} catch (InstantiationException | IllegalAccessException
 				| IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
@@ -69,6 +72,17 @@ public class TReaderFormBuilder<M extends ITModelView<?>> {
 		
 	}
 
+	/**
+	 * @param tForm
+	 */
+	private void applyStyles(TForm tForm) {
+		if(tForm==null)
+			return;
+		this.form.setId(StringUtils.isNotBlank(tForm.readerCssId()) ? tForm.readerCssId() : null);
+		if(StringUtils.isNotBlank(tForm.style()))
+			this.form.setStyle(tForm.style());
+	}
+	
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	private void generate() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		

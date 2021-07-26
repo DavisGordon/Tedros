@@ -40,7 +40,7 @@ import javafx.scene.text.TextAlignment;
  * @author Davis Gordon
  *
  */
-@TForm(name = "Termo de adesão", showBreadcrumBar=false)
+@TForm(name = "Termo de adesão", showBreadcrumBar=false, editCssId="")
 @TEntityProcess(process = TermoAdesaoProcess.class, entity=TermoAdesao.class)
 @TPresenter(decorator = @TDecorator(viewTitle="Termo de adesão", 
 			buildPrintButton=true, printButtonText="Exportar PDF"), 

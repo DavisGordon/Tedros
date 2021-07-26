@@ -65,7 +65,7 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TFormReaderHtml
-@TForm(name = "Saida")
+@TForm(name = "Saida de produtos do estoque", showBreadcrumBar=true, editCssId="")
 @TEjbService(serviceName = "ISaidaControllerRemote", model=Saida.class)
 @TListViewPresenter(
 	paginator=@TPaginator(entityClass = Saida.class, serviceName = "ISaidaControllerRemote",
@@ -94,7 +94,7 @@ public class SaidaModelView extends TEntityModelView<Saida> {
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form",parse = true))
-	@TText(text="Informar produtos usados na ação/campanha", textAlignment=TextAlignment.LEFT, 
+	@TText(text="Informar os produtos que sairam do estoque", textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty textoCadastro;
 	
