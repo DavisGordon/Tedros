@@ -20,8 +20,24 @@
   	<version.jboss.spec.javaee.6.0>3.0.2.Final</version.jboss.spec.javaee.6.0>
   	<version.jboss.as>7.1.1.Final</version.jboss.as>
   </properties>
-  
-  
+
+	<profiles>
+		<profile>
+		  <id>prod</id>
+		  <properties>
+		    <hit.file>/home/csf/hit.txt</hit.file>
+		  </properties>
+		</profile>
+		<profile>
+		  <id>des</id>
+		  <activation>
+		  	<activeByDefault>true</activeByDefault>
+		  </activation>
+		  <properties>
+		    <hit.file>C://usr//covidsemfome//hit.txt</hit.file>
+		  </properties>
+		</profile>
+	</profiles>
   
   <dependencies>
   
@@ -73,22 +89,34 @@
 			<warName>${project.artifactId}</warName>
 		</configuration>
       </plugin>
-      
-      		<plugin>
-        		<groupId>org.apache.maven.plugins</groupId>
-        		<artifactId>maven-compiler-plugin</artifactId>
-        		<version>3.3</version>
-        		<configuration>
-          			<source>${java.version}</source>
-          			<target>${java.version}</target>
-        		</configuration>
-      		</plugin>
+      <plugin>
+		 <groupId>org.apache.maven.plugins</groupId>
+		 <artifactId>maven-resources-plugin</artifactId>
+		 <version>2.5</version>
+		 <configuration>
+		   <!-- specify UTF-8, ISO-8859-1 or any other file encoding -->
+		   <encoding>UTF-8</encoding>
+		 </configuration>
+		</plugin>
+     		<plugin>
+       		<groupId>org.apache.maven.plugins</groupId>
+       		<artifactId>maven-compiler-plugin</artifactId>
+       		<version>3.3</version>
+       		<configuration>
+         			<source>${java.version}</source>
+         			<target>${java.version}</target>
+       		</configuration>
+     	</plugin>
       
     </plugins>
     
   <resources>
        	<resource>
            	<directory>src/main/resources</directory>
+           	<filtering>true</filtering>
+            	<includes>
+          			<include>**/*.*</include>
+        		</includes>
        	</resource>
        	<resource>
        		<directory>src/main/java</directory>

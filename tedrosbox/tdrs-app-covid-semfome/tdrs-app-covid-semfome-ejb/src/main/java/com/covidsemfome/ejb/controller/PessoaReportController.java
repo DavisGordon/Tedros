@@ -1,0 +1,91 @@
+package com.covidsemfome.ejb.controller;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+
+import org.apache.commons.lang.StringUtils;
+
+import com.covidsemfome.ejb.service.AcaoService;
+import com.covidsemfome.ejb.service.PessoaService;
+import com.covidsemfome.ejb.service.VoluntarioService;
+import com.covidsemfome.model.Acao;
+import com.covidsemfome.model.Pessoa;
+import com.covidsemfome.model.Voluntario;
+import com.covidsemfome.report.model.AcaoItemModel;
+import com.covidsemfome.report.model.PessoaModel;
+import com.covidsemfome.report.model.PessoaReportModel;
+import com.covidsemfome.report.model.VoluntarioItemModel;
+import com.covidsemfome.report.model.VoluntarioReportModel;
+import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.result.TResult.EnumResult;
+
+@Stateless(name="IPessoaReportController")
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
+public class PessoaReportController implements IPessoaReportController {
+
+	@EJB
+	private PessoaService serv;
+	
+	@EJB
+	private VoluntarioService vServ;
+	
+	public PessoaReportController() {
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public TResult<PessoaReportModel> process(PessoaReportModel m) {
+		try{
+			Pessoa ex = new Pessoa();
+			if(StringUtils.isNotBlank(m.getNome()))
+				ex.setNome(m.getNome());
+			
+			if(StringUtils.isNotBlank(m.getTipoVoluntario()))
+				ex.setTipoVoluntario(m.getTipoVoluntario());
+	
+			if(StringUtils.isNotBlank(m.getStatusVoluntario()))
+				ex.setStatusVoluntario(m.getStatusVoluntario());
+			
+			List<Pessoa> lst = serv.findAll(ex);
+
+			if(lst!=null){
+				Calendar c = Calendar.getInstance();
+				c.setTime(new Date());
+				List<PessoaModel> itens = new ArrayList<>();
+				for(Pessoa a : lst){
+					PessoaModel pm = new PessoaModel(a);
+					if(m.isListarAcoes()) {
+						List<AcaoItemModel> l = new ArrayList<>();
+						Voluntario vEx = new Voluntario();
+						vEx.setPessoa(a);
+						List<Voluntario> v = vServ.findAll(vEx);
+						if(v!=null) {
+							for (Voluntario b : v) {
+								Calendar c1 = Calendar.getInstance();
+								Acao x = b.getAcao();
+								c1.setTime(x.getData());
+								if(c.before(c1)) {
+									l.add(new AcaoItemModel(b.getAcao()));
+								}
+							}
+							pm.setAcoes(l);
+						}
+					}
+					itens.add(pm);
+				}
+				m.setResult(itens);
+			}
+			return new TResult<>(EnumResult.SUCESS, m);
+		}catch(Exception e){
+			return new TResult<>(EnumResult.ERROR, e.getMessage());
+		}
+	}
+
+}
