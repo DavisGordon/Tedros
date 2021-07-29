@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.naming.NamingException;
 
@@ -41,6 +43,8 @@ import net.sf.jasperreports.export.SimpleXlsReportConfiguration;
 @SuppressWarnings("rawtypes")
 public abstract class TReportProcess<M extends ITReportModel> extends TProcess<TResult<M>> {
 
+	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	
 	private M model;
 	private TReportProcessEnum action;
 	private String reportName;
@@ -52,6 +56,7 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 		setAutoStart(true);
 		this.reportName = reportName;
 		this.serviceJndiName = serviceJndiName;
+		LOGGER.setLevel(Level.ALL);
 	}
 	
 	public void search(M model){
@@ -107,9 +112,11 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 	        		
 	    		} catch(NamingException e){
 	    			setException( new TProcessException(e, e.getMessage(), "The service is not available!"));
+	    			LOGGER.severe(e.toString());
 	    			e.printStackTrace();
 	    		}catch (Exception e) {
 					setException(e);
+					LOGGER.severe(e.toString());
 					e.printStackTrace();
 				} 
         	    return resultado;
@@ -137,6 +144,7 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 			runAfterExport(params);
 			return new TResult<>(EnumResult.SUCESS, f, model);
 		}catch(Exception e){
+			LOGGER.severe(e.toString());
 			return new TResult<>(EnumResult.ERROR, e.getMessage());
 		}
 	}
@@ -163,6 +171,7 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 			runAfterExport(params);
 			return new TResult<>(EnumResult.SUCESS, f, model);
 		}catch(Exception e){
+			LOGGER.severe(e.toString());
 			return new TResult<>(EnumResult.ERROR, e.getMessage());
 		}
 	}
