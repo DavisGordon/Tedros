@@ -11,6 +11,7 @@ import com.covidsemfome.model.TermoAdesao;
 import com.tedros.fxapi.control.THTMLEditor;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
+import com.tedros.fxapi.util.HtmlPDFExportHelper;
 import com.tedros.util.TFileUtil;
 import com.tedros.util.TedrosFolderEnum;
 
@@ -27,7 +28,7 @@ public class TermoAdesaoPrintAction extends TPresenterAction<TDynaPresenter<Term
 		Date data = termo.getLastUpdate()!=null ? termo.getLastUpdate() : termo.getInsertDate();
 		String output = this.getDestFile(termo.getTitulo(), data);
 		String html = editor.gettHTMLEditor().getHtmlText();
-		TermoPDFHelper.generate(presenter, output, html);
+		HtmlPDFExportHelper.generate(presenter, output, html);
 		return false;
 	}
 

@@ -29,9 +29,9 @@ public class CadastroDePessoaModule extends TModule{
 
 	@Override
 	public void tStart() {
-		tShowView(new TGroupView<TGroupPresenter>(this, "Pessoa Voluntaria", 
-				new TViewItem(TDynaView.class, PessoaModelView.class, "Pessoa"),
-				new TViewItem(TDynaView.class, TermoAdesaoModelView.class, "Termo Adesão")
+		tShowView(new TGroupView<TGroupPresenter>(this, "Gerenciar Pessoas Voluntárias", 
+				new TViewItem(TDynaView.class, PessoaModelView.class, "Pessoas"),
+				new TViewItem(TDynaView.class, TermoAdesaoModelView.class, "Termos de Adesão Modelo")
 				));
 	}
 }

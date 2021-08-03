@@ -9,6 +9,7 @@ import com.tedros.fxapi.control.THTMLEditor;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
+import com.tedros.fxapi.util.HtmlPDFExportHelper;
 import com.tedros.util.TFileUtil;
 import com.tedros.util.TedrosFolderEnum;
 
@@ -27,7 +28,7 @@ public class PessoaTermoAdesaoPrintAction extends TPresenterAction<TDynaPresente
 		THTMLEditor editor = (THTMLEditor) presenter.getBehavior().getForm().gettFieldBox("conteudo").gettControl();
 		String output = this.getDestFile(pess.getNome(), termo.getVersionNum());
 		String html = editor.gettHTMLEditor().getHtmlText();
-		TermoPDFHelper.generate(presenter, output, html);
+		HtmlPDFExportHelper.generate(presenter, output, html);
 		return false;
 	}
 

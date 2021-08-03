@@ -56,6 +56,7 @@ import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TLabelPosition;
+import com.tedros.fxapi.domain.TLayoutType;
 import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.util.TDateUtil;
@@ -266,7 +267,7 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 				  		content = @TContent(detailForm = @TDetailForm(fields= {"contatos"}))),
 				@TTab(	text = "#{label.address}", closable=false, 
 						content = @TContent(detailForm = @TDetailForm(fields= {"enderecos"}))),
-				@TTab(	text = "Termo adesão", closable=false, 
+				@TTab(	text = "Termo de adesão vigente", closable=false, 
 				content = @TContent(detailForm = @TDetailForm(fields= {"termosAdesao"})))})
 	@TDetailListField(entityModelViewClass = DocumentoModelView.class, entityClass = Documento.class)
 	@TModelViewCollectionType(modelClass=Documento.class, modelViewClass=DocumentoModelView.class)
@@ -282,7 +283,8 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	@TModelViewCollectionType(modelClass=Endereco.class, modelViewClass=EnderecoModelView.class)
 	private ITObservableList<EnderecoModelView> enderecos;
 	
-	@TDetailReaderHtml(label=@TLabel(text="Termo adesão"), entityClass=PessoaTermoAdesao.class, modelViewClass=PessoaTermoAdesaoModelView.class)
+	@TDetailReaderHtml(label=@TLabel(text="Termo de adesão vigente"), entityClass=PessoaTermoAdesao.class, 
+			modelViewClass=PessoaTermoAdesaoModelView.class, modelLayout=TLayoutType.VBOX, fieldsLayout=TLayoutType.VBOX)
 	@TDetailListField(entityModelViewClass = PessoaTermoAdesaoModelView.class, entityClass = PessoaTermoAdesao.class)
 	@TModelViewCollectionType(modelClass=PessoaTermoAdesao.class, modelViewClass=PessoaTermoAdesaoModelView.class)
 	private ITObservableList<PessoaTermoAdesaoModelView> termosAdesao;

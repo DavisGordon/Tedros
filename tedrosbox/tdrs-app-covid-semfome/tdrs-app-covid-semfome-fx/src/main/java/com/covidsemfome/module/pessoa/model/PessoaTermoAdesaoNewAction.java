@@ -44,9 +44,11 @@ public class PessoaTermoAdesaoNewAction extends TPresenterAction<TDynaPresenter<
 					TDynaPresenter<PessoaModelView> p = ((TDynaViewCrudBaseBehavior)presenter.getBehavior()).getModulePresenter();
 					Pessoa pess = (Pessoa) p.getBehavior().getModelView().getModel();
 					TermoAdesao e = res.getValue();
-					String termo = e.getConteudo();
-					termo = TermoAdesaoHelper.replaceTokensTermo(pess, null, null, termo);
-					mv.getConteudo().setValue(termo);
+					if(e!=null) {
+						String termo = e.getConteudo();
+						termo = TermoAdesaoHelper.replaceTokensTermo(pess, null, null, termo);
+						mv.getConteudo().setValue(termo);
+					}
 				}
 			}
 		});

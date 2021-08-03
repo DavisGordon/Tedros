@@ -1,9 +1,18 @@
 package com.tedros.fxapi.presenter.dynamic.behavior;
 
+import java.io.OutputStreamWriter;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import org.apache.commons.lang3.StringUtils;
+import org.w3c.dom.Document;
 
 import com.tedros.core.ITModule;
 import com.tedros.core.TModule;
@@ -37,6 +46,7 @@ import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.presenter.view.group.TGroupPresenter;
 import com.tedros.fxapi.process.TEntityProcess;
+import com.tedros.fxapi.util.HtmlPDFExportHelper;
 import com.tedros.fxapi.util.TPrintUtil;
 
 import javafx.beans.property.BooleanProperty;
@@ -52,12 +62,14 @@ import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.StackPane;
+import javafx.scene.web.WebView;
 
 
 @SuppressWarnings("rawtypes")
@@ -339,6 +351,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		
 		final RadioButton editRadio = this.decorator.gettEditModeRadio();
 		final RadioButton readRadio = this.decorator.gettReadModeRadio();
+		final Hyperlink exportLink = this.decorator.gettExportReadHyperLink();
 		
 		if(editRadio==null && readRadio==null)
 			return;
@@ -346,6 +359,16 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		radioGroup = new ToggleGroup();
 		editRadio.setToggleGroup(radioGroup);
 		readRadio.setToggleGroup(radioGroup);
+		
+		exportLink.setOnAction(e -> {
+			WebView wv = super.getForm().gettWebView();
+			if(wv!=null) {
+				String output = HtmlPDFExportHelper.getDestFile("ExportedView", new Date());
+				String html = (String) wv.getEngine().executeScript("document.documentElement.outerHTML");
+				HtmlPDFExportHelper.generate(super.getPresenter(), output, html);
+			}
+			
+		});
 		
 		ChangeListener<Toggle> listener = (a0, a1, a2) -> changeModeAction();
 		super.getListenerRepository().add("modesRadioCL", listener);
@@ -358,12 +381,16 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		editRadio.visibleProperty().bindBidirectional(modeBtnVisibleProperty);
 		readRadio.disableProperty().bindBidirectional(modeBtnDisableProperty);
 		readRadio.visibleProperty().bindBidirectional(modeBtnVisibleProperty);
+		//exportLink.disableProperty().bindBidirectional(modeBtnDisableProperty);
+		exportLink.visibleProperty().bindBidirectional(modeBtnVisibleProperty);
 		
 		ChangeListener<Boolean> invCL = (a0, a1, a2) -> {
 			editRadio.disableProperty().unbindBidirectional(modeBtnDisableProperty);
 			editRadio.visibleProperty().unbindBidirectional(modeBtnVisibleProperty);
 			readRadio.disableProperty().unbindBidirectional(modeBtnDisableProperty);
 			readRadio.visibleProperty().unbindBidirectional(modeBtnVisibleProperty);
+			//exportLink.disableProperty().unbindBidirectional(modeBtnDisableProperty);
+			exportLink.visibleProperty().unbindBidirectional(modeBtnVisibleProperty);
 		};
 		getListenerRepository().add("invalidateModeUnBind", invCL);
 		invalidateProperty().addListener(new WeakChangeListener<>(invCL));
@@ -379,6 +406,13 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			setViewMode(TViewMode.READER);
 		
 		selectMode();
+	}
+	
+	public void setViewMode(TViewMode mode){
+		super.setViewMode(mode);
+		final Hyperlink exportLink = this.decorator.gettExportReadHyperLink();
+		if(exportLink!=null)
+			exportLink.setDisable(mode==null || mode.equals(TViewMode.EDIT));
 	}
 	
 	/**

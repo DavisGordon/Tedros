@@ -55,32 +55,16 @@ implements ITReaderHtmlBuilder<TDetailReaderHtml, Object> {
 		final String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 		final String fieldName = descriptor.getFieldDescriptor().getFieldName();
 		
-		System.out.println("########################");
+		/*System.out.println("########################");
 		System.out.println(uuid);
-		System.out.println(fieldName);
+		System.out.println(fieldName);*/
 
-	
-		
 		if (fieldObject instanceof ITObservableList){
 			//build listener
 			ChangeListener<Number> listener = new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {					
 					updateWebView(tAnnotation, fieldObject, descriptor, uuid);
-					/*WebView wv =  ((ITModelForm)descriptor.getForm()).gettWebView();
-					if(wv!=null){
-						
-						String html = (String) ((ITModelForm)descriptor.getForm()).gettWebView().getEngine().executeScript("document.documentElement.outerHTML");
-						
-						System.out.println(html);
-						System.out.println("**************************************");
-						System.out.println(uuid);
-						System.out.println(fieldName);
-						System.out.println(arg2);
-						
-						THtmlReader tHtmlReader = buildTHtmlReader(tAnnotation, fieldObject);
-						wv.getEngine().executeScript("document.getElementById('"+uuid+"').innerHTML = \""+tHtmlReader.getText()+"\"");
-					}*/
 				}
 			};			
 			//add listener to the property
@@ -95,20 +79,6 @@ implements ITReaderHtmlBuilder<TDetailReaderHtml, Object> {
 				@Override
 				public void changed(ObservableValue<? extends Object> arg0, Object arg1, Object arg2) {					
 					updateWebView(tAnnotation, fieldObject, descriptor, uuid);
-					/*WebView wv =  ((ITModelForm)descriptor.getForm()).gettWebView();
-					if(wv!=null){
-						
-						String html = (String) ((ITModelForm)descriptor.getForm()).gettWebView().getEngine().executeScript("document.documentElement.outerHTML");
-						
-						System.out.println(html);
-						System.out.println("**************************************");
-						System.out.println(uuid);
-						System.out.println(fieldName);
-						System.out.println(arg2);
-						
-						THtmlReader tHtmlReader = buildTHtmlReader(tAnnotation, fieldObject);
-						wv.getEngine().executeScript("document.getElementById('"+uuid+"').innerHTML = \""+tHtmlReader.getText()+"\"");
-					}*/
 				}
 			};
 			//add listener to the property

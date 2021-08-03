@@ -126,21 +126,29 @@ public final class TControlLayoutReaderBuilder {
 				TFieldBox fieldBox = TFieldBoxBuilder.build(control, descriptor);
 				Node layout = ((ITLayoutBuilder) layoutBuilder).build(layoutAnnotation);
 				checkAsLoaded(descriptor, fieldBox);
+				descriptor.getFieldDescriptor().setComponentLoaded(true);
+				descriptor.getFieldDescriptor().setLayoutLoaded(true);
 				return layout;
 			}else{
 				THtmlReader control = buildHtmlBox((THtmlReader) buildReader(modelView, modelViewGetMethod, readerAnnotation, readerBuilder), descriptor);
 				TFieldBox fieldBox = new TFieldBox(descriptor.getFieldDescriptor().getFieldName(), null, control, null);
 				THtmlReader layout = ((ITLayoutBuilder) layoutBuilder).build(layoutAnnotation, control);
 				checkAsLoaded(descriptor, fieldBox);
+				descriptor.getFieldDescriptor().setComponentLoaded(true);
+				descriptor.getFieldDescriptor().setLayoutLoaded(true);
 				return layout;
 			}
 		}else{
 			if(htmlReaderFlag){ 
-				return buildHtmlBox((THtmlReader) buildReader(modelView, modelViewGetMethod, readerAnnotation, readerBuilder), descriptor);
-			}else
-				return buildFieldBox((Node) buildReader(modelView, modelViewGetMethod, readerAnnotation, readerBuilder), descriptor);
+				THtmlReader control =  buildHtmlBox((THtmlReader) buildReader(modelView, modelViewGetMethod, readerAnnotation, readerBuilder), descriptor);
+				descriptor.getFieldDescriptor().setComponentLoaded(true);
+				return control;
+			}else {
+				Node control =   buildFieldBox((Node) buildReader(modelView, modelViewGetMethod, readerAnnotation, readerBuilder), descriptor);
+				descriptor.getFieldDescriptor().setComponentLoaded(true);
+				return control;
+			}
 		}
-	
 		
 	}
 

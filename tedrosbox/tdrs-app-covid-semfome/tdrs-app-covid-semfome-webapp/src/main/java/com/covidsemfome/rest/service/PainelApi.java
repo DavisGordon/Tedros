@@ -474,9 +474,11 @@ public class PainelApi {
 				}
 			System.out.println("Acoes processadas");
 			return new RestModel<>(models, "200", res.getMessage());
-		}else{
-			//System.out.println(res.getErrorMessage());
-			return new RestModel<>(null, "404", res.getResult().equals(EnumResult.WARNING) ? res.getMessage()  : ERROR );
+		}else if(res.getResult().equals(EnumResult.WARNING)){
+			return new RestModel<>(null, "404", res.getMessage());
+		}else {
+			return new RestModel<>(null, "500", ERROR );
+
 		}
 	}
 	
