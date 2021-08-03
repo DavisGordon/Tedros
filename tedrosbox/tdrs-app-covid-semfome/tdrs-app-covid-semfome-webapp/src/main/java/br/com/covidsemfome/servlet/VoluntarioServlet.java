@@ -26,6 +26,7 @@ import com.covidsemfome.model.Contato;
 import com.covidsemfome.model.Pessoa;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.util.TEmailUtil;
 import com.tedros.util.TEncriptUtil;
 /**
  * @author Davis Gordon
@@ -54,57 +55,60 @@ public class VoluntarioServlet extends HttpServlet {
 			resp.setStatus(SC_BAD_REQUEST);
 			out.println("Por favor informar o seu nome, email e senha.");
 		}else{
-	
-			try {
-				
-				List<Contato> lst = new ArrayList<>();			
-				if(email!=null){
-					Contato cont1 = new Contato();
-					cont1.setDescricao(email);
-					cont1.setTipo("1");
-					lst.add(cont1);
+			if(!TEmailUtil.validate(email)) {
+				resp.setStatus(SC_BAD_REQUEST);
+				out.println("Email invalido.");
+			}else{
+				try {
+					
+					List<Contato> lst = new ArrayList<>();			
+					if(email!=null){
+						Contato cont1 = new Contato();
+						cont1.setDescricao(email);
+						cont1.setTipo("1");
+						lst.add(cont1);
+					}
+					
+					if(tel!=null){
+						Contato cont2 = new Contato();
+						cont2.setDescricao(tel);
+						cont2.setTipo("2");
+						lst.add(cont2);
+					}
+					
+					
+					Pessoa pess = new Pessoa();
+					pess.setNome(nome);
+					pess.setLoginName(email);
+					pess.setPassword(TEncriptUtil.encript(pass));
+					pess.getContatos().addAll(lst);
+					pess.setTipoVoluntario("5");
+					pess.setStatusVoluntario("1");
+					pess.setStatus("ATIVADO");
+					
+					TResult<Pessoa> res = service.saveFromSite(pess);
+								
+					if(res.getResult().equals(EnumResult.SUCESS)){
+						System.out.println("sucesso");
+						resp.setStatus(SC_OK);
+						out.println("Obrigado por se cadastrar agora voce tem acesso a um painel feito para te ajudar a agendar suas ações como voluntário.");
+					}else if(res.getResult().equals(EnumResult.WARNING)){
+						//System.out.println(res.getErrorMessage());
+						resp.setStatus(SC_ACCEPTED);	
+						out.println("Entre no painel com seu email e senha.");
+					}else if(res.getResult().equals(EnumResult.ERROR)){
+						//System.out.println(res.getErrorMessage());
+						resp.setStatus(SC_INTERNAL_SERVER_ERROR);	
+						out.println(res.getMessage());
+					}
+			
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+					resp.sendError(SC_INTERNAL_SERVER_ERROR);
+					out.println("Não foi possivel realizar seu cadastro mas pode realiza-lo atraves do whatsup (21) 99606-1825 / Pedro Borges");
 				}
-				
-				if(tel!=null){
-					Contato cont2 = new Contato();
-					cont2.setDescricao(tel);
-					cont2.setTipo("2");
-					lst.add(cont2);
-				}
-				
-				
-				Pessoa pess = new Pessoa();
-				pess.setNome(nome);
-				pess.setLoginName(email);
-				pess.setPassword(TEncriptUtil.encript(pass));
-				pess.getContatos().addAll(lst);
-				pess.setTipoVoluntario("5");
-				pess.setStatusVoluntario("1");
-				pess.setStatus("ATIVADO");
-				
-				TResult<Pessoa> res = service.saveFromSite(pess);
-							
-				if(res.getResult().equals(EnumResult.SUCESS)){
-					System.out.println("sucesso");
-					resp.setStatus(SC_OK);
-					out.println("Obrigado por se cadastrar agora voce tem acesso a um painel feito para te ajudar a agendar suas ações como voluntário.");
-				}else if(res.getResult().equals(EnumResult.WARNING)){
-					//System.out.println(res.getErrorMessage());
-					resp.setStatus(SC_ACCEPTED);	
-					out.println("Entre no painel com seu email e senha.");
-				}else if(res.getResult().equals(EnumResult.ERROR)){
-					//System.out.println(res.getErrorMessage());
-					resp.setStatus(SC_INTERNAL_SERVER_ERROR);	
-					out.println(res.getMessage());
-				}
-		
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-				resp.sendError(SC_INTERNAL_SERVER_ERROR);
-				out.println("Não foi possivel realizar seu cadastro mas pode realiza-lo atraves do whatsup (21) 99606-1825 / Pedro Borges");
 			}
-		
 		}
 		out.close();
 		//super.doPost(request, resp);

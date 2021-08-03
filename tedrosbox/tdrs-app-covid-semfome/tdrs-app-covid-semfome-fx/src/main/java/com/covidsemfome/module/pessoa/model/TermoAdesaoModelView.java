@@ -25,9 +25,12 @@ import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEntityProcess;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
+import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.control.TText.TTextStyle;
+import com.tedros.fxapi.domain.THtmlConstant;
+import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.beans.property.SimpleLongProperty;
@@ -40,7 +43,7 @@ import javafx.scene.text.TextAlignment;
  * @author Davis Gordon
  *
  */
-@TForm(name = "Termo de adesão", showBreadcrumBar=false, editCssId="")
+@TForm(name = "Termo de adesão a ser assinado pelo voluntário", showBreadcrumBar=true)
 @TEntityProcess(process = TermoAdesaoProcess.class, entity=TermoAdesao.class)
 @TPresenter(decorator = @TDecorator(viewTitle="Termo de adesão", 
 			buildPrintButton=true, printButtonText="Exportar PDF"), 
@@ -53,6 +56,15 @@ import javafx.scene.text.TextAlignment;
 public class TermoAdesaoModelView extends TEntityModelView<TermoAdesao> {
 
 	private SimpleLongProperty id;
+	
+	@TTextReaderHtml(text="Termo de adesão do voluntário", 
+			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
+			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
+			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
+	@TText(text="Termo de adesão do voluntário", textAlignment=TextAlignment.LEFT, 
+		textStyle = TTextStyle.LARGE)
+	private SimpleStringProperty textoCadastro;
 	
 	@TReaderHtml
 	@TLabel(text="Titulo")
@@ -82,6 +94,7 @@ public class TermoAdesaoModelView extends TEntityModelView<TermoAdesao> {
 			textStyle = TTextStyle.CUSTOM)
 	private SimpleStringProperty textoChaves;
 	
+	@TReaderHtml
 	@THTMLEditor(required=true)
 	private SimpleStringProperty conteudo;
 	
@@ -158,6 +171,20 @@ public class TermoAdesaoModelView extends TEntityModelView<TermoAdesao> {
 	 */
 	public void setTextoChaves(SimpleStringProperty textoChaves) {
 		this.textoChaves = textoChaves;
+	}
+
+	/**
+	 * @return the textoCadastro
+	 */
+	public SimpleStringProperty getTextoCadastro() {
+		return textoCadastro;
+	}
+
+	/**
+	 * @param textoCadastro the textoCadastro to set
+	 */
+	public void setTextoCadastro(SimpleStringProperty textoCadastro) {
+		this.textoCadastro = textoCadastro;
 	}
 
 }

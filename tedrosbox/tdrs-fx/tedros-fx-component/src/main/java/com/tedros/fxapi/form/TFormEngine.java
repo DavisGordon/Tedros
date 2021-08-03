@@ -96,11 +96,13 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 						THtmlReader htmlReader = (THtmlReader) node;
 						sbf.append(htmlReader.getText()).append("\n");
 					}
-					
-						
+					StringBuffer op = new StringBuffer("<html><body>");
+					StringBuffer cl = new StringBuffer("</body></html>");
+					sbf = new StringBuffer(op.toString()+sbf.toString()+cl.toString());
+					//System.out.println(sbf.toString());
 					webView = new WebView();
 					form.tAddFormItem(webView);
-					webView.setDisable(true);
+					webView.setDisable(false);
 					
 					ChangeListener<Number> hListener = (arg0, arg1, arg2) -> webView.setPrefHeight((double) arg2);
 					this.tObjectRepository.add("webviewformchl", hListener);
