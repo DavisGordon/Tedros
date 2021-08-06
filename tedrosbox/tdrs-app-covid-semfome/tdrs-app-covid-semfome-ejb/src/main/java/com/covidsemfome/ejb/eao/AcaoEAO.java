@@ -3,11 +3,13 @@
  */
 package com.covidsemfome.ejb.eao;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.persistence.config.CacheUsage;
@@ -37,8 +39,19 @@ public class AcaoEAO extends TGenericEAO<Acao> {
 		if(StringUtils.isNotBlank(titulo))
 			sbf.append("and lower(e.titulo) like :titulo ");
 		
-		if(dataInicio!=null && dataFim==null)
-			sbf.append("and e.data = :data ");
+		if(dataInicio!=null && dataFim==null) {
+			Calendar c = Calendar.getInstance();
+			c.setTime(dataInicio);
+			c.set(Calendar.HOUR, 23);
+			c.set(Calendar.MINUTE, 59);
+			dataFim = c.getTime();
+		}else if(dataInicio!=null && dataFim!=null) {
+			Calendar c = Calendar.getInstance();
+			c.setTime(dataFim);
+			c.set(Calendar.HOUR, 23);
+			c.set(Calendar.MINUTE, 59);
+			dataFim = c.getTime();
+		}
 		
 		if(dataInicio!=null && dataFim!=null)
 			sbf.append("and e.data >= :dataInicio and e.data <= :dataFim ");
@@ -55,9 +68,6 @@ public class AcaoEAO extends TGenericEAO<Acao> {
 		
 		if(StringUtils.isNotBlank(titulo))
 			qry.setParameter("titulo", "%"+titulo.toLowerCase()+"%");
-		
-		if(dataInicio!=null && dataFim==null)
-			qry.setParameter("data", dataInicio);
 		
 		if(dataInicio!=null && dataFim!=null){
 			qry.setParameter("dataInicio", dataInicio);

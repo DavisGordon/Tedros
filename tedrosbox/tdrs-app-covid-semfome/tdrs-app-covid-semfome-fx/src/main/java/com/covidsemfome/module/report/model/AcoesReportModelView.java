@@ -46,7 +46,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
 
-@TForm(name = "Relatório de Ações", showBreadcrumBar=false, editCssId="")
+@TForm(name = "Pesquisar as Ações cadastradas", showBreadcrumBar=true, editCssId="")
 @TReportProcess(type=AcaoReportProcess.class, model = AcaoReportModel.class)
 @TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = TDataSetReportBehavior.class, 

@@ -46,15 +46,15 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
 
-@TForm(name = "Relatório de Voluntarios", showBreadcrumBar=false, editCssId="")
+@TForm(name = "Pesquisar por voluntários inscritos nas ações", showBreadcrumBar=true, editCssId="")
 @TReportProcess(type=VoluntarioReportProcess.class, model = VoluntarioReportModel.class)
 @TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = TDataSetReportBehavior.class, 
 			searchAction=SearchAction.class), 
 			decorator = @TDecorator(type = TDataSetReportDecorator.class, 
-									viewTitle="Relatório de Voluntários"))
+									viewTitle="Relatório de Voluntários inscritos"))
 @TSecurity(	id="COVSEMFOME_VOLUNREP_FORM", 
-			appName = "#{app.name}", moduleName = "Administrativo", viewName = "Relatório de Voluntários",
+			appName = "#{app.name}", moduleName = "Administrativo", viewName = "Relatório de Voluntários inscritos",
 			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EXPORT, TAuthorizationType.SEARCH})
 public class VoluntariosReportModelView extends TModelView<VoluntarioReportModel>{
 	

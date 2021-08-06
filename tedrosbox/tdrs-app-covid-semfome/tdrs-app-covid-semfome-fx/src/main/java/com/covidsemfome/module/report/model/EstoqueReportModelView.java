@@ -48,7 +48,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
 
-@TForm(name = "Relatório de Estoque", showBreadcrumBar=false, editCssId="")
+@TForm(name = "Pesquisar por estoques das cozinhas", showBreadcrumBar=true, editCssId="")
 @TReportProcess(type=EstoqueReportProcess.class, model = EstoqueReportModel.class)
 @TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = TDataSetReportBehavior.class, 
