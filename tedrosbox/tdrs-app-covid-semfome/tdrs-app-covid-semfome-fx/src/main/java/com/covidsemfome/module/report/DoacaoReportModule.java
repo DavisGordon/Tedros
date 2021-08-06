@@ -27,7 +27,7 @@ public class DoacaoReportModule extends TModule {
 	public void tStart() {
 		tShowView(new TGroupView<TGroupPresenter>(this, "Relatórios", 
 				new TViewItem(TDynaView.class, AcoesReportModelView.class, "Ação"),
-				new TViewItem(TDynaView.class, VoluntariosReportModelView.class, "Voluntário"),
+				new TViewItem(TDynaView.class, VoluntariosReportModelView.class, "Lista de voluntário inscritos"),
 				new TViewItem(TDynaView.class, PessoaReportModelView.class, "Pessoa"),
 				new TViewItem(TDynaView.class, EstoqueReportModelView.class, "Estoque")
 				));

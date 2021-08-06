@@ -403,7 +403,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		// percorre os campos do model view 
 		for (final Field field : propertyFields) {
 			
-			LOGGER.log(Level.FINEST, field.getName()+" field found.");
+			//LOGGER.log(Level.FINEST, field.getName()+" field found.");
 			
 			final String propertyFieldName = field.getName();
 			final Class propertyFieldType = field.getType();

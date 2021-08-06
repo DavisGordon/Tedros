@@ -1,9 +1,7 @@
 package com.tedros.fxapi.presenter.report.decorator;
 
-import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewReportBaseDecorator;
 import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
-import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
 
 @SuppressWarnings("rawtypes")
@@ -11,9 +9,6 @@ public class TDataSetReportDecorator<M extends TModelView>
 extends TDynaViewReportBaseDecorator<M> {
 	
 	 public void decorate() {
-		
-		// get the model view annotation array 
-		final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
 		
 		// get the view
 		final ITDynaView<M> view = getPresenter().getView();

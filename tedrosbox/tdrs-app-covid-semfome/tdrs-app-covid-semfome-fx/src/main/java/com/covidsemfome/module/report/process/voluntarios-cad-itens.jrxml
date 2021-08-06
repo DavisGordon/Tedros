@@ -52,7 +52,7 @@
 	</columnHeader>
 	<detail>
 		<band height="18" splitType="Stretch">
-			<textField pattern="dd/MM/yyyy h.mm a" isBlankWhenNull="true">
+			<textField pattern="dd/MM/yyyy &apos;às&apos; HH:mm" isBlankWhenNull="true">
 				<reportElement x="421" y="3" width="206" height="15" isPrintWhenDetailOverflows="true" uuid="3be7439a-cb82-40ba-a600-ef3f31563590"/>
 				<textFieldExpression><![CDATA[$F{data}]]></textFieldExpression>
 			</textField>

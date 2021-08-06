@@ -3,6 +3,7 @@
  */
 package com.covidsemfome.ejb.eao;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -73,8 +74,19 @@ public class EstoqueEAO extends TGenericEAO<Estoque> {
 		if(coz != null)
 			sbf.append("and e.cozinha.id = :id ");
 		
-		if(dataInicio!=null && dataFim==null)
-			sbf.append("and e.data = :data ");
+		if(dataInicio!=null && dataFim==null) {
+			Calendar c = Calendar.getInstance();
+			c.setTime(dataInicio);
+			c.set(Calendar.HOUR, 23);
+			c.set(Calendar.MINUTE, 59);
+			dataFim = c.getTime();
+		}else if(dataInicio!=null && dataFim!=null) {
+			Calendar c = Calendar.getInstance();
+			c.setTime(dataFim);
+			c.set(Calendar.HOUR, 23);
+			c.set(Calendar.MINUTE, 59);
+			dataFim = c.getTime();
+		}
 		
 		if(dataInicio!=null && dataFim!=null)
 			sbf.append("and e.data >= :dataInicio and e.data <= :dataFim ");
@@ -94,9 +106,6 @@ public class EstoqueEAO extends TGenericEAO<Estoque> {
 		
 		if(coz!=null)
 			qry.setParameter("id", coz.getId());
-		
-		if(dataInicio!=null && dataFim==null)
-			qry.setParameter("data", dataInicio);
 		
 		if(dataInicio!=null && dataFim!=null){
 			qry.setParameter("dataInicio", dataInicio);

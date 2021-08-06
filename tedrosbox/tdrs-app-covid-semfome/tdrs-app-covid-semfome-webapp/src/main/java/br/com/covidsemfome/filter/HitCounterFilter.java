@@ -19,15 +19,36 @@ import javax.servlet.annotation.WebFilter;
 import com.tedros.util.TResourceUtil;
 
 //@WebFilter("/index.html")
-public class HitCounterFilter /*implements Filter */{
+public class HitCounterFilter /*implements Filter*/ {
     
 	private ResourceBundle res;
 	
+	/*@Resource
+    private ConnectionFactory connectionFactory;
 
-   //@Override
+    @Resource(name = "SiteVisitorBean")
+    private Queue queue;*/
+
+  // @Override
    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
            throws IOException, ServletException {
 
+	  /* try {
+		   final Connection connection = connectionFactory.createConnection();
+	
+	       connection.start();
+	
+	       final Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+	
+	       final MessageProducer msg = session.createProducer(queue);
+	   
+	       msg.send(session.createTextMessage("hello"));
+	   
+	   }catch(Exception e) {
+		   e.printStackTrace();
+	   }*/
+	   
+	   /*
 	   String hitFilePath = res.getString("location");
        File hitFile = new File(hitFilePath);
         
@@ -36,6 +57,7 @@ public class HitCounterFilter /*implements Filter */{
        updateHitCounterFile(++currentHit, hitFile);
          
        chain.doFilter(request, response);
+       */
        
    }
 

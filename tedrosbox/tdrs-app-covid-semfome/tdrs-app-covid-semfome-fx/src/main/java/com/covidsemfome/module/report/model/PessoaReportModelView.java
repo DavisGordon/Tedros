@@ -42,7 +42,7 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
 
 
-@TForm(name = "Relatório de pessoas", showBreadcrumBar=false, editCssId="")
+@TForm(name = "Pesquisar por pessoas cadastradas", showBreadcrumBar=true, editCssId="")
 @TReportProcess(type=PessoaReportProcess.class, model = PessoaReportModel.class)
 @TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = TDataSetReportBehavior.class, 

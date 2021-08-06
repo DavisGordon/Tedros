@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="estoque" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7f6bed53-7bd9-4c1c-b64f-090a19710b76">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="15"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="132"/>
 	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -56,7 +56,7 @@
 				</textElement>
 				<text><![CDATA[Data:]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy &apos;às&apos; HH:mm" isBlankWhenNull="true">
 				<reportElement x="275" y="30" width="183" height="20" isPrintWhenDetailOverflows="true" uuid="80d2209c-b145-4231-b578-df4f625d8e89"/>
 				<textElement verticalAlignment="Bottom"/>
 				<textFieldExpression><![CDATA[$F{dataHora}]]></textFieldExpression>
@@ -140,7 +140,7 @@
 			<staticText>
 				<reportElement x="0" y="0" width="190" height="20" uuid="8a9f790d-e3f7-460c-987c-421f206e4cfd"/>
 				<textElement verticalAlignment="Bottom">
-					<font fontName="Adobe Arabic" size="12"/>
+					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Powered by Tedros Box]]></text>
 			</staticText>
