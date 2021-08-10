@@ -12,10 +12,10 @@ import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.StackPane;
 
@@ -64,31 +64,33 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 		
 		if(title!=null)
 			view.gettGroupTitle().setText(title);
-    	
+		
+		MenuBar menuBar = new MenuBar();
+		final Menu menu = new Menu(iEngine.getString("#{tedros.fxapi.label.options}"));
+		menuBar.getMenus().add(menu);
     	boolean addFirst = true;
+    	
     	for (final ITGroupViewItem item : groupViewItemList) {
     		
-    		final Button button = new Button(iEngine.getString(item.getButtonTitle()));
-    		button.setId("t-button");
-    		button.setOnAction(new EventHandler<ActionEvent>() {
-    			@Override
-    			public void handle(ActionEvent event) {
-    				showView(item);
-    			}
+    		//final Button button = new Button(iEngine.getString(item.getButtonTitle()));
+    		final MenuItem button = new MenuItem(iEngine.getString(item.getButtonTitle()));
+    		//button.setId("t-button");
+    		button.setOnAction( e -> {
+    			showView(item);
+    			menu.setText(iEngine.getString("#{tedros.fxapi.label.options}"+" > "+item.getButtonTitle()));
     		});
-    		
-    		view.gettGroupToolbar().getItems().add(button);
-    		
+    		//view.gettGroupToolbar().getItems().add(button);
+    		menu.getItems().add(button);
     		if(addFirst){
     			showView(item);
+    			menu.setText(iEngine.getString("#{tedros.fxapi.label.options}"+" > "+item.getButtonTitle()));
     			addFirst = false;
     		}
 		}
-    	
-    	final ToolBar tGroupToolbar = view.gettGroupToolbar(); 
-    	
-    	if(tGroupToolbar.getItems().size()>0)
-    		tGroupToolbar.getItems().get(tGroupToolbar.getItems().size()-1).setId("t-last-button");
+		final ToolBar tGroupToolbar = view.gettGroupToolbar(); 
+    	tGroupToolbar.getItems().add(menuBar);
+    	//if(tGroupToolbar.getItems().size()>0)
+    	//	tGroupToolbar.getItems().get(tGroupToolbar.getItems().size()-1).setId("t-last-button");
 		
 	}
 	

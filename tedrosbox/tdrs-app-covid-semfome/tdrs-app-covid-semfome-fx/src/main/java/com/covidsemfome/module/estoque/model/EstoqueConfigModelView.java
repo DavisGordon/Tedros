@@ -4,15 +4,19 @@ import com.covidsemfome.model.Cozinha;
 import com.covidsemfome.model.EstoqueConfig;
 import com.covidsemfome.model.Produto;
 import com.covidsemfome.module.cozinha.model.CozinhaModelView;
+import com.covidsemfome.module.produto.model.CarregarProdutoListener;
 import com.covidsemfome.module.produto.model.ProdutoFindModelView;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
+import com.tedros.fxapi.annotation.TObservableValue;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
 import com.tedros.fxapi.annotation.control.TOneSelectionModal;
 import com.tedros.fxapi.annotation.control.TOptionsList;
+import com.tedros.fxapi.annotation.control.TTextField;
+import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
@@ -22,10 +26,12 @@ import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEjbService;
+import com.tedros.fxapi.annotation.property.TReadOnlyBooleanProperty;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
+import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.control.TText.TTextStyle;
@@ -70,29 +76,36 @@ public class EstoqueConfigModelView extends TEntityModelView<EstoqueConfig> {
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty header;
 	
+	@TLabel(text="Pesquisar pelo codigo")
+	@TTextField(maxLength=20, required = true, node=@TNode(requestFocus=true,
+	focusedProperty=@TReadOnlyBooleanProperty(observableValue=@TObservableValue(
+			addListener=CarregarProdutoListener.class), parse = true), parse = true),
+	textInputControl=@TTextInputControl(promptText="Codigo do produto", parse = true), 
+				control=@TControl(tooltip="Insira o codigo do produto a ser carregado", parse = true))
+	@THBox(	pane=@TPane(children={"codigo","produto"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="codigo", priority=Priority.NEVER), 
+						@TPriority(field="produto", priority=Priority.ALWAYS)}))
+	private SimpleStringProperty codigo;
+	
 	@TReaderHtml
 	@TLabel(text="Produto")
 	@TOneSelectionModal(modelClass = Produto.class, modelViewClass = ProdutoFindModelView.class,
 	width=300, height=50, required=true, node=@TNode(requestFocus=true, parse = true))
-	@THBox(	pane=@TPane(children={"produto","cozinha"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="produto", priority=Priority.NEVER), 
-		   		@TPriority(field="cozinha", priority=Priority.ALWAYS)}))
 	private SimpleObjectProperty<Produto> produto;
-	
 	
 	@TReaderHtml
 	@TLabel(text="Cozinha:")
 	@TComboBoxField(required=true, optionsList=@TOptionsList(entityClass=Cozinha.class, 
 	optionModelViewClass=CozinhaModelView.class, serviceName = "ICozinhaControllerRemote"))
+	@THBox(	pane=@TPane(children={"cozinha","qtdMinima","qtdInicial"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="cozinha", priority=Priority.NEVER),
+			@TPriority(field="qtdMinima", priority=Priority.NEVER), 
+		   	@TPriority(field="qtdInicial", priority=Priority.NEVER)}))
 	private SimpleObjectProperty<Cozinha> cozinha;
-	
 	
 	@TReaderHtml
 	@TLabel(text="Quantidade Minima")
 	@TNumberSpinnerField(maxValue = 1000000, minValue=0, zeroValidation=TZeroValidation.GREATHER_THAN_ZERO)
-	@THBox(	pane=@TPane(children={"qtdMinima","qtdInicial"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="qtdMinima", priority=Priority.NEVER), 
-		   		@TPriority(field="qtdInicial", priority=Priority.NEVER)}))
 	private SimpleIntegerProperty qtdMinima;
 	
 	
@@ -258,6 +271,20 @@ public class EstoqueConfigModelView extends TEntityModelView<EstoqueConfig> {
 	 */
 	public void setHeader(SimpleStringProperty header) {
 		this.header = header;
+	}
+
+	/**
+	 * @return the codigo
+	 */
+	public SimpleStringProperty getCodigo() {
+		return codigo;
+	}
+
+	/**
+	 * @param codigo the codigo to set
+	 */
+	public void setCodigo(SimpleStringProperty codigo) {
+		this.codigo = codigo;
 	}
 
 }
