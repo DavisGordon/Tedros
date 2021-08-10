@@ -5,6 +5,7 @@ package com.covidsemfome.module.produto.model;
 
 import com.covidsemfome.model.EntradaItem;
 import com.covidsemfome.model.Produto;
+import com.tedros.fxapi.annotation.TObservableValue;
 import com.tedros.fxapi.annotation.control.TBigDecimalField;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TLabel;
@@ -12,6 +13,7 @@ import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
 import com.tedros.fxapi.annotation.control.TOneSelectionModal;
 import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
+import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.control.TTrigger;
 import com.tedros.fxapi.annotation.form.TForm;
@@ -23,8 +25,11 @@ import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TDetailTableViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
+import com.tedros.fxapi.annotation.property.TReadOnlyBooleanProperty;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
+import com.tedros.fxapi.annotation.scene.TNode;
+import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.domain.TZeroValidation;
 import com.tedros.fxapi.presenter.entity.behavior.TDetailFieldBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TDetailFieldDecorator;
@@ -59,6 +64,17 @@ public class EntradaItemModelView extends TEntityModelView<EntradaItem> {
 	
 	private SimpleStringProperty displayText;
 	
+	@TLabel(text="Pesquisar pelo codigo")
+	@TTextField(maxLength=20, required = true, node=@TNode(requestFocus=true,
+	focusedProperty=@TReadOnlyBooleanProperty(observableValue=@TObservableValue(
+			addListener=CarregarProdutoListener.class), parse = true), parse = true),
+	textInputControl=@TTextInputControl(promptText="Codigo do produto", parse = true), 
+				control=@TControl(tooltip="Insira o codigo do produto a ser carregado", parse = true))
+	@THBox(	pane=@TPane(children={"codigo","produto"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="codigo", priority=Priority.NEVER), 
+						@TPriority(field="produto", priority=Priority.ALWAYS)}))
+	private SimpleStringProperty codigo;
+	
 	@TReaderHtml
 	@TLabel(text="Produto")
 	@TOneSelectionModal(modelClass = Produto.class, modelViewClass = ProdutoFindModelView.class,
@@ -71,9 +87,9 @@ public class EntradaItemModelView extends TEntityModelView<EntradaItem> {
 	@TLabel(text="Quantidade")
 	@TNumberSpinnerField(maxValue = 1000000, minValue=0, zeroValidation=TZeroValidation.GREATHER_THAN_ZERO)
 	@THBox(	pane=@TPane(children={"quantidade","unidadeMedida","valorUnitario"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="quantidade", priority=Priority.ALWAYS), 
-		   		@TPriority(field="unidadeMedida", priority=Priority.ALWAYS), 
-		   		@TPriority(field="valorUnitario", priority=Priority.ALWAYS)}))
+	hgrow=@THGrow(priority={@TPriority(field="quantidade", priority=Priority.NEVER), 
+		   		@TPriority(field="unidadeMedida", priority=Priority.NEVER), 
+		   		@TPriority(field="valorUnitario", priority=Priority.NEVER)}))
 	private SimpleIntegerProperty quantidade;
 	
 	@TReaderHtml
@@ -228,6 +244,22 @@ public class EntradaItemModelView extends TEntityModelView<EntradaItem> {
 	 */
 	public void setUnidadeMedida(SimpleStringProperty unidadeMedida) {
 		this.unidadeMedida = unidadeMedida;
+	}
+
+
+	/**
+	 * @return the codigo
+	 */
+	public SimpleStringProperty getCodigo() {
+		return codigo;
+	}
+
+
+	/**
+	 * @param codigo the codigo to set
+	 */
+	public void setCodigo(SimpleStringProperty codigo) {
+		this.codigo = codigo;
 	}
 
 }

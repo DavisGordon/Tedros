@@ -5,11 +5,14 @@ package com.covidsemfome.module.produto.model;
 
 import com.covidsemfome.model.Produto;
 import com.covidsemfome.model.SaidaItem;
+import com.tedros.fxapi.annotation.TObservableValue;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
 import com.tedros.fxapi.annotation.control.TOneSelectionModal;
 import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
+import com.tedros.fxapi.annotation.control.TTextField;
+import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
@@ -19,8 +22,11 @@ import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TDetailTableViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
+import com.tedros.fxapi.annotation.property.TReadOnlyBooleanProperty;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
+import com.tedros.fxapi.annotation.scene.TNode;
+import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.domain.TZeroValidation;
 import com.tedros.fxapi.presenter.entity.behavior.TDetailFieldBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TDetailFieldDecorator;
@@ -51,6 +57,17 @@ public class SaidaItemModelView extends TEntityModelView<SaidaItem> {
 	private SimpleLongProperty id;
 	
 	private SimpleStringProperty displayText;
+	
+	@TLabel(text="Pesquisar pelo codigo")
+	@TTextField(maxLength=20, required = true, node=@TNode(requestFocus=true,
+	focusedProperty=@TReadOnlyBooleanProperty(observableValue=@TObservableValue(
+			addListener=CarregarProdutoListener.class), parse = true), parse = true),
+	textInputControl=@TTextInputControl(promptText="Codigo do produto", parse = true), 
+				control=@TControl(tooltip="Insira o codigo do produto a ser carregado", parse = true))
+	@THBox(	pane=@TPane(children={"codigo","produto"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="codigo", priority=Priority.NEVER), 
+						@TPriority(field="produto", priority=Priority.ALWAYS)}))
+	private SimpleStringProperty codigo;
 	
 	@TReaderHtml
 	@TLabel(text="Produto")
@@ -179,6 +196,22 @@ public class SaidaItemModelView extends TEntityModelView<SaidaItem> {
 	 */
 	public void setQuantidade(SimpleIntegerProperty quantidade) {
 		this.quantidade = quantidade;
+	}
+
+
+	/**
+	 * @return the codigo
+	 */
+	public SimpleStringProperty getCodigo() {
+		return codigo;
+	}
+
+
+	/**
+	 * @param codigo the codigo to set
+	 */
+	public void setCodigo(SimpleStringProperty codigo) {
+		this.codigo = codigo;
 	}
 
 
