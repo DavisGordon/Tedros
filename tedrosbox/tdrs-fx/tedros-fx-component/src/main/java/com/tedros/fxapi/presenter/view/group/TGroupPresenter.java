@@ -77,13 +77,13 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
     		//button.setId("t-button");
     		button.setOnAction( e -> {
     			showView(item);
-    			menu.setText(iEngine.getString("#{tedros.fxapi.label.options}"+" > "+item.getButtonTitle()));
+    			menu.setText(iEngine.getString("#{tedros.fxapi.label.options}")+" > "+button.getText());
     		});
     		//view.gettGroupToolbar().getItems().add(button);
     		menu.getItems().add(button);
     		if(addFirst){
     			showView(item);
-    			menu.setText(iEngine.getString("#{tedros.fxapi.label.options}"+" > "+item.getButtonTitle()));
+    			menu.setText(iEngine.getString("#{tedros.fxapi.label.options}")+" > "+button.getText());
     			addFirst = false;
     		}
 		}

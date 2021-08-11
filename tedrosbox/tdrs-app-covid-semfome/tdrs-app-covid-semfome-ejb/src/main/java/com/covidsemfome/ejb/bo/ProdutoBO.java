@@ -6,6 +6,10 @@
  */
 package com.covidsemfome.ejb.bo;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
@@ -30,5 +34,15 @@ public class ProdutoBO extends TGenericBO<Produto> {
 		return eao;
 	}
 	
+	public List<Produto> pesquisar(String cod, String nome, String marca, String medida, String uniMed){
+		List<String> cods = null;
+		if(cod!=null){
+			cods = new ArrayList<>();
+			String[] arr = cod.split(",");
+			cods = Arrays.asList(arr);
+		}
+		
+		return eao.pesquisar(cods, nome, marca, medida, uniMed);
+	}
 
 }

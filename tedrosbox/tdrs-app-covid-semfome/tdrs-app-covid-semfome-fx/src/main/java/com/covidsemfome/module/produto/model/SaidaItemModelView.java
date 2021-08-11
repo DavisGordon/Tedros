@@ -59,7 +59,7 @@ public class SaidaItemModelView extends TEntityModelView<SaidaItem> {
 	private SimpleStringProperty displayText;
 	
 	@TLabel(text="Pesquisar pelo codigo")
-	@TTextField(maxLength=20, required = true, node=@TNode(requestFocus=true,
+	@TTextField(maxLength=20, node=@TNode(requestFocus=true,
 	focusedProperty=@TReadOnlyBooleanProperty(observableValue=@TObservableValue(
 			addListener=CarregarProdutoListener.class), parse = true), parse = true),
 	textInputControl=@TTextInputControl(promptText="Codigo do produto", parse = true), 

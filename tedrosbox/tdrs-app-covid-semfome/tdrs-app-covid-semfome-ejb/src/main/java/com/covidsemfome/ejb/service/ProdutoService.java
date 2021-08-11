@@ -6,6 +6,8 @@
  */
 package com.covidsemfome.ejb.service;
 
+import java.util.List;
+
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -35,5 +37,8 @@ public class ProdutoService extends TEjbService<Produto> {
 		return bo;
 	}
 	
+	public List<Produto> pesquisar(String cod, String nome, String marca, String medida, String uniMed){
+		return bo.pesquisar(cod, nome, marca, medida, uniMed);
+	}
 
 }
