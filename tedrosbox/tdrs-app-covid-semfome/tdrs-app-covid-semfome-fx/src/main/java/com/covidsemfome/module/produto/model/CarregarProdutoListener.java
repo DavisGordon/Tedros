@@ -17,6 +17,7 @@ import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewSimpleBaseBehavior;
 import com.tedros.fxapi.process.TEntityProcess;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker.State;
@@ -32,8 +33,10 @@ public class CarregarProdutoListener extends TChangeListener<Boolean> {
 	@Override
 	public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean val) {
 		TFieldBox codBox = super.getComponentDescriptor().getForm().gettFieldBox("codigo");
+		SimpleObjectProperty<Produto> prop = (SimpleObjectProperty<Produto>) super.getComponentDescriptor().getModelView().getProperty("produto");
+		String propVal = prop!=null && prop.getValue()!=null ? prop.getValue().getCodigo() : "";
 		String cod = ((TextField)codBox.gettControl()).getText();
-		if(!val && StringUtils.isNotBlank(cod)) {
+		if(!val && StringUtils.isNotBlank(cod) && !cod.equals(propVal)) {
 			Produto ex = new Produto();
 			ex.setCodigo(cod);
 			TFieldBox prodBox =  super.getComponentDescriptor().getForm().gettFieldBox("produto");

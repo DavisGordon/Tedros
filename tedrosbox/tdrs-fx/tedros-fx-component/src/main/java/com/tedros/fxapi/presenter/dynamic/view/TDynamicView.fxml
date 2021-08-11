@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import java.util.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?scenebuilder-stylesheet ../../../../../../../../../../../../../TedrosBox/CONF/custom-styles.css?>
 <?scenebuilder-stylesheet ../../../../../../../../../../../../../TedrosBox/CONF/immutable-styles.css?>
 
-<fx:root type="javafx.scene.layout.StackPane" id="" alignment="TOP_LEFT" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+<fx:root id="" alignment="TOP_LEFT" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" type="javafx.scene.layout.StackPane" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <VBox fx:id="tLayout" prefHeight="-1.0" prefWidth="-1.0">
       <children>
@@ -28,7 +30,7 @@
                             <Font size="18.0" />
                           </font>
                           <HBox.margin>
-                            <Insets fx:id="x1" />
+                            <Insets right="10.0" fx:id="x1" />
                           </HBox.margin>
                         </Label>
                         <Region prefHeight="0.0" prefWidth="0.0" HBox.hgrow="SOMETIMES" />
