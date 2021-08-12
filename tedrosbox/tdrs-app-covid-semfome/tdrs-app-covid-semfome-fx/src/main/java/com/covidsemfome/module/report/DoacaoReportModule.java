@@ -4,9 +4,11 @@
 package com.covidsemfome.module.report;
 
 import com.covidsemfome.module.report.model.AcoesReportModelView;
+import com.covidsemfome.module.report.model.EntradaReportModelView;
 import com.covidsemfome.module.report.model.EstoqueReportModelView;
 import com.covidsemfome.module.report.model.PessoaReportModelView;
 import com.covidsemfome.module.report.model.ProdutoReportModelView;
+import com.covidsemfome.module.report.model.SaidaReportModelView;
 import com.covidsemfome.module.report.model.VoluntariosReportModelView;
 import com.tedros.core.TModule;
 import com.tedros.core.annotation.security.TAuthorizationType;
@@ -31,6 +33,8 @@ public class DoacaoReportModule extends TModule {
 				new TViewItem(TDynaView.class, VoluntariosReportModelView.class, "Lista de voluntário inscritos"),
 				new TViewItem(TDynaView.class, PessoaReportModelView.class, "Pessoa"),
 				new TViewItem(TDynaView.class, ProdutoReportModelView.class, "Produto"),
+				new TViewItem(TDynaView.class, EntradaReportModelView.class, "Entrada de produtos no estoque"),
+				new TViewItem(TDynaView.class, SaidaReportModelView.class, "Saída de produtos do estoque"),
 				new TViewItem(TDynaView.class, EstoqueReportModelView.class, "Estoque")
 				));
 	}

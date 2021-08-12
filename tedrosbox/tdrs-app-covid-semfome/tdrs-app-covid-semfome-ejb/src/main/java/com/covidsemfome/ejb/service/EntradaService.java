@@ -22,6 +22,7 @@ import com.covidsemfome.ejb.bo.EstoqueConfigBO;
 import com.covidsemfome.ejb.bo.ProdutoBO;
 import com.covidsemfome.model.Entrada;
 import com.covidsemfome.model.EntradaItem;
+import com.covidsemfome.report.model.EstocavelReportModel;
 import com.tedros.ejb.base.service.TEjbService;
 
 /**
@@ -53,6 +54,10 @@ public class EntradaService extends TEjbService<Entrada> {
 	@Override
 	public EntradaBO getBussinesObject() {
 		return bo;
+	}
+	
+	public EstocavelReportModel pesquisar(EstocavelReportModel m){
+		return bo.pesquisar(m);
 	}
 	
 	@Override

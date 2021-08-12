@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="entrada_itens" pageWidth="802" pageHeight="555" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="4eb7442f-d569-4fc1-a414-b82b1ef38701">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="produto" class="java.lang.String"/>
+	<field name="quantidade" class="java.lang.Integer"/>
+	<field name="codigo" class="java.lang.String"/>
+	<field name="valorUnitario" class="java.math.BigDecimal"/>
+	<field name="unidadeMedida" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="16" splitType="Stretch">
+			<staticText>
+				<reportElement x="69" y="0" width="282" height="15" uuid="8f3ff097-317e-4404-84b7-74bc82e7b4ca"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Produto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="517" y="0" width="75" height="15" uuid="cb87cceb-ccb7-48fb-a862-8fe300bd0a4d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="699" y="0" width="103" height="15" uuid="8c50e6d5-bc07-48d1-990e-97bd3992c2f9"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unidade Medida]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="802" height="1" uuid="007e30e7-ac17-4774-8ca1-97b140846b17"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="0" y="0" width="69" height="15" uuid="5ff07aab-a45e-49ef-9d8f-f7af5c1de1d4"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="699" y="2" width="103" height="15" isPrintWhenDetailOverflows="true" uuid="17d8dba8-354e-4005-b5c0-e30c6ee2d555"/>
+				<textFieldExpression><![CDATA[$F{unidadeMedida}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="17" width="802" height="1" uuid="b0750144-cf6d-49b4-ac4a-1981685c3403"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="69" y="2" width="282" height="15" isPrintWhenDetailOverflows="true" uuid="021261ba-e6cc-438c-8c75-f7e09a9c75ec"/>
+				<textElement markup="html"/>
+				<textFieldExpression><![CDATA[$F{produto}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="2" width="69" height="15" isPrintWhenDetailOverflows="true" uuid="3f7d5f0a-1688-449c-8397-31020da06ec4"/>
+				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="517" y="3" width="75" height="15" uuid="8b4be0c8-2ff4-4dfd-ab52-67e262c4b490"/>
+				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="25">
+			<line>
+				<reportElement x="0" y="22" width="802" height="1" uuid="4acbf104-591c-4c78-86af-6eee4fd22b8e"/>
+				<graphicElement>
+					<pen lineWidth="1.25" lineStyle="Double" lineColor="#CCCCCC"/>
+				</graphicElement>
+			</line>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

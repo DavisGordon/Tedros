@@ -22,6 +22,7 @@ import com.covidsemfome.ejb.bo.ProdutoBO;
 import com.covidsemfome.ejb.bo.SaidaBO;
 import com.covidsemfome.model.Saida;
 import com.covidsemfome.model.SaidaItem;
+import com.covidsemfome.report.model.EstocavelReportModel;
 import com.tedros.ejb.base.service.TEjbService;
 
 /**
@@ -53,6 +54,10 @@ public class SaidaService extends TEjbService<Saida> {
 	@Override
 	public SaidaBO getBussinesObject() {
 		return bo;
+	}
+	
+	public EstocavelReportModel pesquisar(EstocavelReportModel m){
+		return bo.pesquisar(m);
 	}
 	
 	@Override
