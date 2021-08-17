@@ -148,7 +148,7 @@ extends TDynaViewCrudBaseDecorator<M> {
 		// add the mode radio buttons
 		if(tDeco.buildModesRadioButton()) {
 			buildModesRadioButton(null, null);
-			addItemInTHeaderHorizontalLayout(gettEditModeRadio(), gettReadModeRadio());
+			addItemInTHeaderHorizontalLayout(gettEditModeRadio(), gettReadModeRadio(), gettExportReadHyperLink());
 		}
 		
 		

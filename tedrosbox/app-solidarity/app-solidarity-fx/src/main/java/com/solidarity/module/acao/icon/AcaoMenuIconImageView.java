@@ -18,7 +18,7 @@ public class AcaoMenuIconImageView extends TImageView {
 	
    @Override
 	public String getImagePathName() {
-	   return "com/solidarity/module/acao/icon/menu_icon9.png";
+	   return "com/solidarity/module/acao/icon/menu_icon12.png";
 	}
 
 }

@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class THtmlAccordionGenerator implements ITHtmlGenerator{
 		File f;
 		try {
 			f = new File(url.toURI());
-			StringBuffer sbf = new StringBuffer(FileUtils.readFileToString(f));
+			StringBuffer sbf = new StringBuffer(FileUtils.readFileToString(f, Charset.defaultCharset()));
 			StringBuffer sbfSections = new StringBuffer();
 			
 			for (StringBuffer sb : sections) {
