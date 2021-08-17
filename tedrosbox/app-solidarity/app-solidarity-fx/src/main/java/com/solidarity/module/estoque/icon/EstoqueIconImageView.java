@@ -18,7 +18,7 @@ public class EstoqueIconImageView extends TImageView {
 
 	@Override
 	public String getImagePathName() {
-		return "com/solidarity/module/estoque/icon/icon16.png";
+		return "com/solidarity/module/estoque/icon/icon3.png";
 	}
 
 }

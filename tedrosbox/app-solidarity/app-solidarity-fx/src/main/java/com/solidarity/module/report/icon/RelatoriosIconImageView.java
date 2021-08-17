@@ -18,7 +18,7 @@ public class RelatoriosIconImageView extends TImageView {
 
 	@Override
 	public String getImagePathName() {
-		return "com/solidarity/module/report/icon/icones12.png";
+		return "com/solidarity/module/report/icon/icon16.png";
 	}
 
 }

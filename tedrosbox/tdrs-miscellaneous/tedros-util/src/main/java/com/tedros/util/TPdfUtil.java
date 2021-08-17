@@ -28,13 +28,23 @@ public final class TPdfUtil {
 	
 	public static void convert(String html, String output) throws FileNotFoundException, IOException  {
 		org.w3c.dom.Document doc = html5ParseDocument(html);
-		 try (OutputStream os = new FileOutputStream(output)){
+		 generate(doc, output); 
+	}
+
+	/**
+	 * @param output
+	 * @param doc
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 */
+	public static void generate(org.w3c.dom.Document doc, String output) throws IOException, FileNotFoundException {
+		try (OutputStream os = new FileOutputStream(output)){
 			 PdfRendererBuilder builder = new PdfRendererBuilder();
 	         builder.useFastMode();
 	         builder.withW3cDocument(doc, null);
 	         builder.toStream(os);
 	         builder.run();
-	        } 
+	        }
 	}
 	
 	private static org.w3c.dom.Document html5ParseDocument(String html) 

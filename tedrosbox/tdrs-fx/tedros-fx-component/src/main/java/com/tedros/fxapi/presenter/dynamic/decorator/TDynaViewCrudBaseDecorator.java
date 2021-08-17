@@ -12,6 +12,7 @@ import com.tedros.core.context.TedrosContext;
 import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
+import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.layout.TBreadcrumbForm;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
@@ -20,6 +21,7 @@ import com.tedros.fxapi.presenter.model.TModelView;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToolBar;
 
@@ -38,6 +40,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	
     private RadioButton tEditModeRadio;
     private RadioButton tReadModeRadio;
+    private Hyperlink tExportReadHyperLink;
     
     private ToolBar tBreadcrumbFormToolBar;
     private TBreadcrumbForm tBreadcrumbForm;
@@ -134,10 +137,15 @@ extends TDynaViewSimpleBaseDecorator<M> {
 			tReadModeRadio.setId("t-title-label");
 		}
 		
+		tExportReadHyperLink = new Hyperlink(iEngine.getString("#{tedros.fxapi.hyperlink.read.export}"));
+		tExportReadHyperLink.setId("t-title-label");
+		
 		if(isUserNotAuthorized(TAuthorizationType.EDIT))
 			tEditModeRadio.setDisable(true);
-		if(isUserNotAuthorized(TAuthorizationType.READ))
+		if(isUserNotAuthorized(TAuthorizationType.READ)) {
 			tReadModeRadio.setDisable(true);
+			tExportReadHyperLink.setDisable(true);
+		}
 	}
 	/**
 	 * <p>
@@ -463,6 +471,13 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	 */
 	public Button gettPrintButton() {
 		return tPrintButton;
+	}
+
+	/**
+	 * @return the tExportReadHyperLink
+	 */
+	public Hyperlink gettExportReadHyperLink() {
+		return tExportReadHyperLink;
 	}
 
 	

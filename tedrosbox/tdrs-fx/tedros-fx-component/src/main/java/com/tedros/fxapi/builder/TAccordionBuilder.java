@@ -8,6 +8,7 @@ package com.tedros.fxapi.builder;
 
 import java.lang.annotation.Annotation;
 
+import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.style.TStyleResourceValue;
 import com.tedros.fxapi.annotation.layout.TAccordion;
 import com.tedros.fxapi.annotation.layout.TTitledPane;
@@ -65,7 +66,7 @@ implements ITLayoutBuilder<Accordion> {
 				final TLayoutType layout = tTitledPane.layoutType();
 				
 				THtmlLayoutGenerator tHtmlLayoutGenerator = new THtmlLayoutGenerator(layout);
-				
+				TInternationalizationEngine iEng = TInternationalizationEngine.getInstance(null);
 				for(String field: tTitledPane.fields()){
 					Node node = null;
 					
@@ -85,11 +86,11 @@ implements ITLayoutBuilder<Accordion> {
 								+"  must be annotated with @TReaderHtml()");
 					}else{
 						THtmlReader fieldHtmlReader = (THtmlReader) node;
-						tHtmlLayoutGenerator.addContent(fieldHtmlReader.getText());
+						tHtmlLayoutGenerator.addContent(iEng.getString(fieldHtmlReader.getText()));
 					}
 				}
 				
-				htmlAccordion.addSection(tTitledPane.text(), tHtmlLayoutGenerator.getHtml());
+				htmlAccordion.addSection(iEng.getString(tTitledPane.text()), tHtmlLayoutGenerator.getHtml());
 			}
 		}
 		

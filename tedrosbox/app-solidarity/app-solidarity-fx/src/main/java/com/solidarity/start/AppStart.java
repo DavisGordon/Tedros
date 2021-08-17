@@ -15,9 +15,6 @@ import com.solidarity.module.estoque.icon.EstoqueMenuIconImageView;
 import com.solidarity.module.pessoa.CadastroDePessoaModule;
 import com.solidarity.module.pessoa.icon.PessoaIconImageView;
 import com.solidarity.module.pessoa.icon.PessoaMenuIconImageView;
-import com.solidarity.module.produto.ProdutoModule;
-import com.solidarity.module.produto.icon.ProdutoIconImageView;
-import com.solidarity.module.produto.icon.ProdutoMenuIconImageView;
 import com.solidarity.module.report.ReportModule;
 import com.solidarity.module.report.icon.RelatoriosIconImageView;
 import com.solidarity.module.report.icon.RelatoriosMenuIconImageView;
@@ -62,9 +59,6 @@ module = {
 			@TModule(type=CozinhaModule.class, name="#{view.local.prod}", menu="#{module.administrativo}", 
 					icon=CozinhaIconImageView.class, menuIcon=CozinhaMenuIconImageView.class,
 					description="#{view.local.prod.desc}"),
-			@TModule(type=ProdutoModule.class, name="#{view.produtos}", menu="#{module.administrativo}", 
-					icon=ProdutoIconImageView.class, menuIcon=ProdutoMenuIconImageView.class,
-					description="#{view.produtos.desc}"),
 			@TModule(type=EstoqueModule.class, name="#{view.estoque}", menu="#{module.administrativo}", 
 					icon=EstoqueIconImageView.class, menuIcon=EstoqueMenuIconImageView.class,
 					description="#{view.estoque.desc}")
