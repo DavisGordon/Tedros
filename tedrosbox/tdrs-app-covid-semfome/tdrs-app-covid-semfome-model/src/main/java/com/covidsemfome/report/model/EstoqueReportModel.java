@@ -4,16 +4,15 @@
 package com.covidsemfome.report.model;
 
 import java.util.Date;
-import java.util.List;
 
 import com.covidsemfome.model.Cozinha;
-import com.tedros.ejb.base.model.ITReportModel;
+import com.tedros.ejb.base.model.TReportModel;
 
 /**
  * @author Davis Gordon
  *
  */
-public class EstoqueReportModel implements ITReportModel<EstoqueModel> {
+public class EstoqueReportModel extends TReportModel<EstoqueModel> {
 	
 	/**
 	 * 
@@ -30,7 +29,6 @@ public class EstoqueReportModel implements ITReportModel<EstoqueModel> {
 	
 	private String origem;
 	
-	private List<EstoqueModel> result;
 
 
 	/**
@@ -61,21 +59,6 @@ public class EstoqueReportModel implements ITReportModel<EstoqueModel> {
 		this.dataFim = dataFim;
 	}
 
-	
-
-	/**
-	 * @return the result
-	 */
-	public List<EstoqueModel> getResult() {
-		return result;
-	}
-
-	/**
-	 * @param result the result to set
-	 */
-	public void setResult(List<EstoqueModel> result) {
-		this.result = result;
-	}
 
 	/**
 	 * @return the cozinha

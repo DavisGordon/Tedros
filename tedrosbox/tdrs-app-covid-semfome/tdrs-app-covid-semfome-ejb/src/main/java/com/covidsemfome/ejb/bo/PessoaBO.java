@@ -111,6 +111,11 @@ public class PessoaBO extends TGenericBO<Pessoa> {
 		return eao.recuperar(loginName, password);
 	}
 	
+	public List<Pessoa> pesquisar(String nome, String tipo, String status, 
+			Date dataInicio, Date dataFim, String orderBy, String orderType){
+		return eao.pesquisar(nome, tipo, status, dataInicio, dataFim, orderBy, orderType);
+	}
+	
 	public List<Pessoa> pesquisar(String nome, Date dataNascimento, String tipo, String tipoDocumento, String numero){
 		return eao.pesquisar(nome, dataNascimento, tipo, tipoDocumento, numero);
 	}

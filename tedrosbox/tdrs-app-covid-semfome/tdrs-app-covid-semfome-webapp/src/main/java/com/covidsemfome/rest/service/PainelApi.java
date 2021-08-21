@@ -1,6 +1,7 @@
 package com.covidsemfome.rest.service;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,6 +47,7 @@ import com.covidsemfome.rest.model.TermoAdesaoModel;
 import com.covidsemfome.rest.model.UserModel;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.util.TDateUtil;
 
 import br.com.covidsemfome.bean.CovidUserBean;
 
@@ -120,6 +122,7 @@ public class PainelApi {
 			@FormParam("profissao") String  prof,
 			@FormParam("identidade") String  ident,
 			@FormParam("cpf") String  cpf,
+			@FormParam("dtNasc") String  dtNasc,
 			@FormParam("nacionalidade") String  nac,
 			@FormParam("telefone") String  tel,
 			@FormParam("email") String  email,
@@ -142,6 +145,15 @@ public class PainelApi {
 			p.setSexo(sexo);
 			p.setLoginName(email);
 			
+			if(dtNasc!=null) {
+				try {
+					Date dt = TDateUtil.getDate(dtNasc, "yyyy-MM-dd");
+					p.setDataNascimento(dt);
+				}catch(ParseException e) {
+					e.printStackTrace();
+					System.err.println("Não foi possivel converter a data "+dtNasc+" para o voluntario "+name);
+				}
+			}
 			UF uf = null;
 			if(ufid!=null) {
 				uf = new UF();
@@ -274,7 +286,7 @@ public class PainelApi {
 			TResult<Pessoa> res = pessServ.save(p);
 			
 			UserModel m = new UserModel(p.getId(), p.getNome(), p.getLoginName(), tel, p.getSexo(), p.getTipoVoluntario(), 
-					p.getProfissao(), nac, p.getEstadoCivil(), ident, cpf, tpLog, logr, compl, bairro, cidade, cep, ufid);
+					p.getDataNascimento(), p.getProfissao(), nac, p.getEstadoCivil(), ident, cpf, tpLog, logr, compl, bairro, cidade, cep, ufid);
 			return new RestModel<>(m, "200", "OK");
 			
 		}catch(Exception e){
@@ -333,7 +345,7 @@ public class PainelApi {
 				}
 			}
 			UserModel m = new UserModel(p.getId(), p.getNome(), p.getLoginName(), telefone, p.getSexo(), p.getTipoVoluntario(), 
-					p.getProfissao(), nac, p.getEstadoCivil(), ident, cpf, tpLogr, logr, compl, bairro, cidade, cep, ufid);
+					p.getDataNascimento(), p.getProfissao(), nac, p.getEstadoCivil(), ident, cpf, tpLogr, logr, compl, bairro, cidade, cep, ufid);
 			
 			if(p.getTermosAdesao()!=null && !p.getTermosAdesao().isEmpty()) {
 				for(PessoaTermoAdesao t : p.getTermosAdesao()) {

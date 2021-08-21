@@ -4,15 +4,14 @@
 package com.covidsemfome.report.model;
 
 import java.util.Date;
-import java.util.List;
 
-import com.tedros.ejb.base.model.ITReportModel;
+import com.tedros.ejb.base.model.TReportModel;
 
 /**
  * @author Davis Gordon
  *
  */
-public class AcaoReportModel implements ITReportModel<AcaoItemModel> {
+public class AcaoReportModel extends TReportModel<AcaoItemModel> {
 
 	/**
 	 * 
@@ -29,7 +28,6 @@ public class AcaoReportModel implements ITReportModel<AcaoItemModel> {
 
 	private String status;
 	
-	private List<AcaoItemModel> result;
 	/**
 	 * 
 	 */
@@ -61,18 +59,7 @@ public class AcaoReportModel implements ITReportModel<AcaoItemModel> {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	/**
-	 * @return the result
-	 */
-	public List<AcaoItemModel> getResult() {
-		return result;
-	}
-	/**
-	 * @param result the result to set
-	 */
-	public void setResult(List<AcaoItemModel> result) {
-		this.result = result;
-	}
+	
 	/**
 	 * @return the dataInicio
 	 */

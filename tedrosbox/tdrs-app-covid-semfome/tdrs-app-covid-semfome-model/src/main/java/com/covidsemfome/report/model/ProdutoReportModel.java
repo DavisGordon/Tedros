@@ -3,15 +3,13 @@
  */
 package com.covidsemfome.report.model;
 
-import java.util.List;
-
-import com.tedros.ejb.base.model.ITReportModel;
+import com.tedros.ejb.base.model.TReportModel;
 
 /**
  * @author Davis Gordon
  *
  */
-public class ProdutoReportModel implements ITReportModel<ProdutoItemModel> {
+public class ProdutoReportModel extends TReportModel<ProdutoItemModel> {
 
 	/**
 	 * 
@@ -28,7 +26,6 @@ public class ProdutoReportModel implements ITReportModel<ProdutoItemModel> {
 	
 	private String medida;
 	
-	private List<ProdutoItemModel> result;
 	/**
 	 * 
 	 */
@@ -95,18 +92,6 @@ public class ProdutoReportModel implements ITReportModel<ProdutoItemModel> {
 	 */
 	public void setMedida(String medida) {
 		this.medida = medida;
-	}
-	/**
-	 * @return the result
-	 */
-	public List<ProdutoItemModel> getResult() {
-		return result;
-	}
-	/**
-	 * @param result the result to set
-	 */
-	public void setResult(List<ProdutoItemModel> result) {
-		this.result = result;
 	}
 	
 }

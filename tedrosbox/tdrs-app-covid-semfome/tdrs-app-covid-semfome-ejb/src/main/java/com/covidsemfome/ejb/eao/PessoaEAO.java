@@ -6,6 +6,7 @@
  */
 package com.covidsemfome.ejb.eao;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.persistence.Query;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.persistence.config.CacheUsage;
+import org.eclipse.persistence.config.QueryHints;
 
 import com.covidsemfome.model.Contato;
 import com.covidsemfome.model.Documento;
@@ -62,6 +65,69 @@ public class PessoaEAO extends TGenericEAO<Pessoa> {
 		return (Pessoa) qry.getSingleResult();
 	}
 
+
+	@SuppressWarnings("unchecked")
+	public List<Pessoa> pesquisar(String nome, String tipo, String status, 
+			Date dataInicio, Date dataFim, String orderBy, String orderType){
+		
+		StringBuffer sbf = new StringBuffer("select distinct e from Pessoa e "
+				+ "left join e.contatos c "
+				+ "where 1=1 ");
+		
+		if(StringUtils.isNotBlank(nome))
+			sbf.append("and lower(e.nome) like :nome ");
+		
+		if(StringUtils.isNotBlank(tipo))
+			sbf.append("and e.tipoVoluntario = :tipo ");
+		
+		if(StringUtils.isNotBlank(status))
+			sbf.append("and e.statusVoluntario = :status ");
+		
+		if(dataInicio!=null && dataFim==null) {
+			Calendar c = Calendar.getInstance();
+			c.setTime(dataInicio);
+			c.set(Calendar.HOUR, 23);
+			c.set(Calendar.MINUTE, 59);
+			dataFim = c.getTime();
+		}else if(dataInicio!=null && dataFim!=null) {
+			Calendar c = Calendar.getInstance();
+			c.setTime(dataFim);
+			c.set(Calendar.HOUR, 23);
+			c.set(Calendar.MINUTE, 59);
+			dataFim = c.getTime();
+		}
+		
+		if(dataInicio!=null && dataFim!=null)
+			sbf.append("and e.insertDate >= :dataInicio and e.insertDate <= :dataFim ");
+		
+		if(StringUtils.isNotBlank(orderBy)) {
+			sbf.append("order by e."+orderBy);
+			if(StringUtils.isNotBlank(orderType))
+				sbf.append(" "+orderType);
+			
+		}
+		
+		Query qry = getEntityManager().createQuery(sbf.toString());
+		
+		if(StringUtils.isNotBlank(nome))
+			qry.setParameter("nome", "%"+nome.toLowerCase()+"%");
+		
+		if(StringUtils.isNotBlank(tipo))
+			qry.setParameter("tipo", tipo);
+		
+		if(StringUtils.isNotBlank(status))
+			qry.setParameter("status", status);
+		
+		if(dataInicio!=null && dataFim!=null){
+			qry.setParameter("dataInicio", dataInicio);
+			qry.setParameter("dataFim", dataFim);
+		}
+		
+		qry.setHint(QueryHints.CACHE_USAGE, CacheUsage.DoNotCheckCache);
+		return qry.getResultList();
+	}
+	
+	
 	@SuppressWarnings("unchecked")
 	public List<Pessoa> pesquisar(String nome, Date dataNascimento, String tipo, String tipoDocumento, String numero){
 		

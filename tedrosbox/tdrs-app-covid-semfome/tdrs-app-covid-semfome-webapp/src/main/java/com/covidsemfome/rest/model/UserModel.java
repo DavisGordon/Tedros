@@ -3,6 +3,10 @@
  */
 package com.covidsemfome.rest.model;
 
+import java.util.Date;
+
+import com.tedros.util.TDateUtil;
+
 /**
  * @author Davis Gordon
  *
@@ -24,6 +28,8 @@ public class UserModel {
 	private String profissao;
 	
 	private String nacionalidade;
+	
+	private String dataNascimento;
 	
 	private String estadoCivil;
 	
@@ -69,7 +75,7 @@ public class UserModel {
 	 * @param ufid
 	 */
 	public UserModel(Long id, String nome, String email, String telefone, String sexo, String tipoVoluntario,
-			String profissao, String nacionalidade, String estadoCivil, String identidade, String cpf, String tipoLogr,
+			Date dataNascimento, String profissao, String nacionalidade, String estadoCivil, String identidade, String cpf, String tipoLogr,
 			String logradouro, String complemento, String bairro, String cidade, String cep, Long ufid) {
 		this.id = id;
 		this.nome = nome;
@@ -89,6 +95,10 @@ public class UserModel {
 		this.cidade = cidade;
 		this.cep = cep;
 		this.ufid = ufid;
+		
+		if(dataNascimento!=null) {
+			this.dataNascimento = TDateUtil.getFormatedDate(dataNascimento, "yyyy-MM-dd");
+		}
 	}
 
 	/**
@@ -355,6 +365,20 @@ public class UserModel {
 	 */
 	public void setTermoAdesao(TermoAdesaoModel termoAdesao) {
 		this.termoAdesao = termoAdesao;
+	}
+
+	/**
+	 * @return the dataNascimento
+	 */
+	public String getDataNascimento() {
+		return dataNascimento;
+	}
+
+	/**
+	 * @param dataNascimento the dataNascimento to set
+	 */
+	public void setDataNascimento(String dataNascimento) {
+		this.dataNascimento = dataNascimento;
 	}
 
 }

@@ -4,15 +4,14 @@
 package com.covidsemfome.report.model;
 
 import java.util.Date;
-import java.util.List;
 
-import com.tedros.ejb.base.model.ITReportModel;
+import com.tedros.ejb.base.model.TReportModel;
 
 /**
  * @author Davis Gordon
  *
  */
-public class VoluntarioReportModel implements ITReportModel<VoluntarioItemModel> {
+public class VoluntarioReportModel extends TReportModel<VoluntarioItemModel> {
 
 	/**
 	 * 
@@ -29,7 +28,6 @@ public class VoluntarioReportModel implements ITReportModel<VoluntarioItemModel>
 
 	private String status;
 	
-	private List<VoluntarioItemModel> result;
 	/**
 	 * 
 	 */
@@ -98,17 +96,6 @@ public class VoluntarioReportModel implements ITReportModel<VoluntarioItemModel>
 	public void setIds(String ids) {
 		this.ids = ids;
 	}
-	/**
-	 * @return the result
-	 */
-	public List<VoluntarioItemModel> getResult() {
-		return result;
-	}
-	/**
-	 * @param result the result to set
-	 */
-	public void setResult(List<VoluntarioItemModel> result) {
-		this.result = result;
-	}
+	
 
 }

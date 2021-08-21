@@ -3,10 +3,13 @@
  */
 package com.covidsemfome.module.report.model;
 
+import java.util.Date;
+
 import com.covidsemfome.report.model.PessoaModel;
 import com.tedros.fxapi.presenter.model.TModelView;
 
 import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -20,6 +23,8 @@ public class PessoaModelTableView extends TModelView<PessoaModel> {
 	private SimpleStringProperty nome;
 	
 	private SimpleStringProperty tipo;
+	
+	private SimpleObjectProperty<Date> dataCadastro;
 	
 	private SimpleStringProperty email;
 
@@ -106,6 +111,20 @@ public class PessoaModelTableView extends TModelView<PessoaModel> {
 	 */
 	public void setContatos(SimpleStringProperty contatos) {
 		this.contatos = contatos;
+	}
+
+	/**
+	 * @return the dataCadastro
+	 */
+	public SimpleObjectProperty<Date> getDataCadastro() {
+		return dataCadastro;
+	}
+
+	/**
+	 * @param dataCadastro the dataCadastro to set
+	 */
+	public void setDataCadastro(SimpleObjectProperty<Date> dataCadastro) {
+		this.dataCadastro = dataCadastro;
 	}
 
 

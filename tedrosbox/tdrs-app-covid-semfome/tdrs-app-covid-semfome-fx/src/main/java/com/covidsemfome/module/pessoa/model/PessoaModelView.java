@@ -203,11 +203,14 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	/**
 	 * A radio group description for the person sex
 	 * */
-	@TReaderHtml(codeValues={@TCodeValue(code = "F", value = "#{label.female}"), @TCodeValue(code = "M", value = "#{label.male}")})
+	@TReaderHtml(codeValues={@TCodeValue(code = "F", value = "#{label.female}"), 
+			@TCodeValue(code = "M", value = "#{label.male}"), 
+			@TCodeValue(code = "O", value = "Outro")})
 	@TLabel(text="#{label.sex}")
 	@THorizontalRadioGroup(required=false, spacing=4, 
 			radioButtons={	@TRadioButtonField(text = "#{label.female}", userData = "F"), 
-							@TRadioButtonField(text = "#{label.male}", userData = "M")})
+							@TRadioButtonField(text = "#{label.male}", userData = "M"), 
+							@TRadioButtonField(text = "Outro", userData = "O")})
 	@THBox(pane=@TPane(	children={"sexo", "estadoCivil", "insertDate","lastUpdate"}), spacing=10, fillHeight=true, 
 		hgrow=@THGrow(priority={@TPriority(field="sexo", priority=Priority.ALWAYS),
 								@TPriority(field="estadoCivil", priority=Priority.ALWAYS),

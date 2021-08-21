@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="voluntarios" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="7f6bed53-7bd9-4c1c-b64f-090a19710b76">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fill="Solid" fontName="Arial" fontSize="12"/>
+	<parameter name="logo" class="java.io.InputStream"/>
+	<field name="data" class="java.util.Date"/>
+	<field name="titulo" class="java.lang.String"/>
+	<field name="id" class="java.lang.Long"/>
+	<field name="nome" class="java.lang.String"/>
+	<field name="tipo" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="contatos" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="109" splitType="Stretch">
+			<staticText>
+				<reportElement style="SubTitle" x="0" y="36" width="244" height="22" uuid="0fac86c8-9454-4b41-bb90-9f6a9839a756"/>
+				<text><![CDATA[Relatório de voluntários]]></text>
+			</staticText>
+			<image onErrorType="Blank">
+				<reportElement x="510" y="0" width="292" height="106" uuid="837fc979-9b53-4aff-9b74-04568b4175a8"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement style="Column header" x="35" y="0" width="95" height="15" uuid="c64d4008-7194-44f7-b4a8-87443ab332bb"/>
+				<text><![CDATA[Data/Hora]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="14" width="802" height="1" uuid="50257e9e-2b7b-46b8-a200-bde029c123dd"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="0" width="35" height="15" uuid="a51932dd-98db-4c18-adc4-1179b00824f0"/>
+				<text><![CDATA[Cod.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="289" y="0" width="128" height="15" uuid="9e238890-f135-4588-b5e3-5f4204a7ac8d"/>
+				<text><![CDATA[Voluntário]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="417" y="0" width="103" height="15" uuid="3e4f66d2-cdb2-4d2e-9a3a-4a9e5857c81e"/>
+				<text><![CDATA[Tipo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="130" y="0" width="159" height="15" uuid="954d6939-f964-41d3-90b6-bb8a557017f3"/>
+				<text><![CDATA[Ação / Campanha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="520" y="0" width="140" height="15" uuid="5d7b96cd-e707-484e-b059-2adb6e9da4fa"/>
+				<text><![CDATA[Email (Painel)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="660" y="0" width="142" height="15" uuid="a296ad3e-3afe-4030-af1c-c0d2f82b3338"/>
+				<text><![CDATA[Contatos]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy HH:mm" isBlankWhenNull="true">
+				<reportElement x="35" y="0" width="95" height="16" isPrintWhenDetailOverflows="true" uuid="3be7439a-cb82-40ba-a600-ef3f31563590"/>
+				<textFieldExpression><![CDATA[$F{data}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="130" y="0" width="159" height="16" isPrintWhenDetailOverflows="true" uuid="d0f4d2f5-33ff-4236-a424-ec6730f35e20"/>
+				<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="289" y="0" width="128" height="16" isPrintWhenDetailOverflows="true" uuid="be2dc539-655b-4295-94d8-83c51be53618"/>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="417" y="0" width="103" height="16" isPrintWhenDetailOverflows="true" uuid="3b3c8f7f-ba53-410e-a2ed-8ef3fc1604c2"/>
+				<textFieldExpression><![CDATA[$F{tipo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="520" y="0" width="140" height="16" isPrintWhenDetailOverflows="true" uuid="3ceed668-1b56-48db-97b1-af744b08c900"/>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="660" y="0" width="142" height="16" isPrintWhenDetailOverflows="true" uuid="c444cceb-262d-4812-b42e-fd287496fa85"/>
+				<textFieldExpression><![CDATA[$F{contatos}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="35" height="16" isPrintWhenDetailOverflows="true" uuid="b410c70b-79ae-4bd8-8703-32fda95fe3b4"/>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

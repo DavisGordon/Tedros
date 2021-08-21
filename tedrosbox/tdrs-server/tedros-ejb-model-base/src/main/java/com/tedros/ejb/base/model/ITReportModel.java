@@ -17,5 +17,9 @@ import java.util.List;
  */
 public interface ITReportModel<M extends ITModel> extends ITModel, Serializable {
 
+	public String getOrderBy();
+	
+	public String getOrderType();
+	
 	public List<M> getResult();
 }

@@ -4,6 +4,7 @@
 package com.tedros.util;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -28,4 +29,8 @@ public class TDateUtil {
 		return df.format(data);
 	}
 
+	public static synchronized Date getDate(String data, String pattern) throws ParseException{
+		DateFormat df = new SimpleDateFormat(pattern);
+		return df.parse(data);
+	}
 }

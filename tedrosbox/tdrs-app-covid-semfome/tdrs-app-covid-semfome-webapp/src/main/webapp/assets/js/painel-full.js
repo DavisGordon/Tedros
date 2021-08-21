@@ -1,6 +1,6 @@
 $(document).ready(function() { 
     			
-    			$('#frm').ajaxForm( { beforeSubmit: validate, success: showResponse  } ); 
+    			$('#frm1000').ajaxForm( { beforeSubmit: validate, success: showResponse  } ); 
     			 
     			carregarEstados();
     			ltpf();
@@ -124,7 +124,9 @@ $(document).ready(function() {
     			}); 
     		}
     		
-    		function sair(btn, acao){
+    		function sair(btn, acao, index){
+    			var form = document.getElementById("frm"+index);
+    			showLoader('lds-circle', form);
     			$(btn).each(function() {
     			    this.data("href", this.attr("href"))
     			        .attr("href", "javascript:void(0)")
@@ -138,6 +140,7 @@ $(document).ready(function() {
     		        headers : {'Content-Type' : 'application/json'},
     		        success: function(result)
     		        {
+    		        	showLoader('', form);
     		        	processarAcoes(result);
     		    	}
     			}); 
@@ -180,11 +183,16 @@ $(document).ready(function() {
 	        			
 	                        if(obj.status=='Agendada' && (tpf || tpj)){
 	        					var display = obj.inscrito ? "block" : "none";
-	        					content += ('<div class="content" id="content'+index+'" style="display:'+display+'">');
-		        				content += ('<h2>Quero participar</h2>');
-		        				content += ('<form name="frm'+index+'" id="frm'+index+'" method="post" action="../api/painel/acao/participar/"><p>');
+	        					
+	        					content += ('<div class="content contentLoad" id="content'+index+'" style="display:'+display+';">');
+	        					content += ('<div id="loader'+index+'" class="loader">');
+	        					content += ('<div id="cssloader'+index+'"><div></div></div>');
+	        					content += ('</div>');
+	        					content += ('<h2>Quero participar</h2>');
+		        				content += ('<form name="frm'+index+'" id="frm'+index+'"  method="post" action="../api/painel/acao/participar/"><p>');
 		        				content += ('<input type="hidden" name="id" id="id" value="'+obj.id+'" /> ');
-	        					content += ('<div class="fields">');
+		        				content += ('<input type="hidden" name="idx" id="idx" value="'+index+'" /> ');
+		        				content += ('<div class="fields">');
 		        				if(tpf){
 			        				content += ('<div class="field half" style="text-align:left;"><h3>Como voluntário:</h3>');
 			        				
@@ -219,7 +227,7 @@ $(document).ready(function() {
 		        				content += ('		<li><input type="submit" name="submit" id="submit" value="Participar" /></li>');
 		        				
 		        				if(obj.inscrito){
-	                           		content += ('<li><a id="pa'+obj.id+'" href="javascript: sair(\'pa'+obj.id+'\', '+ obj.id +')" class="button fit small wide smooth-scroll-middle">Sair da ação</a></li>');
+	                           		content += ('<li><a id="pa'+obj.id+'" href="javascript: sair(\'pa'+obj.id+'\', '+ obj.id +', '+ index +')" class="button fit small wide smooth-scroll-middle">Sair da ação</a></li>');
 	                            }
 		        				
 		        				content += ('</ul>');
@@ -251,18 +259,11 @@ $(document).ready(function() {
 	        			 $('#nacionalidade').val(result.data.nacionalidade);
 	        			 $('#email').val(result.data.email);
 	        			 $('#telefone').val(result.data.telefone);
-	        			 if(result.data.estadoCivil && result.data.estadoCivil=='Casado'){
-	        				 $("#casado").prop("checked", true);
-	        			 }
-	        			 if(result.data.estadoCivil && result.data.estadoCivil=='Solteiro'){
-	        				 $("#solteiro").prop("checked", true);
-	        			 }
-	        			 if(result.data.sexo && result.data.sexo=='M'){
-	        				 $("#m").prop("checked", true);
-	        			 }
-	        			 if(result.data.sexo && result.data.sexo=='F'){
-	        				 $("#f").prop("checked", true);
-	        			 }
+	        			 $('#dtNasc').val(result.data.dataNascimento);
+	        			 
+	        			 $('#estCiv option[value="'+result.data.estadoCivil+'"]').prop('selected', true);
+	        			 $('#sexo option[value="'+result.data.sexo+'"]').prop('selected', true);
+	        			
 	        			 $('#tipoLogradouro').val(result.data.tipoLogr);
 	        			 $('#logradouro').val(result.data.logradouro);
 	        			 $('#complemento').val(result.data.complemento);
@@ -293,6 +294,21 @@ $(document).ready(function() {
     		        alert('Por favor selecionar uma forma de como deseja ajudar.'); 
     		        return false; 
     		    } 
+    		    
+    		    showLoader('lds-heart', form);
+    		}
+    		
+    		function showLoader(className, form){
+    			var loader = document.getElementById('loader'+form.idx.value);
+    			if(className != ''){
+    				document.getElementById('cssloader'+form.idx.value).className = className;
+    	    		loader.style.display = 'block';
+    	    		form.style = 'background-color: #cccccc; opacity: .4;';
+    			}else{
+    				loader.style.display = 'none';
+    				document.getElementById('cssloader'+form.idx.value).className = '';
+    	    		form.style = '';
+    			}
     		}
     		
 			function validate(formData, jqForm, options) { 
@@ -328,9 +344,9 @@ $(document).ready(function() {
     		        campos += "Email"; 
     		    } 
     		    
-    		    if (!document.getElementById("casado").checked && !document.getElementById("solteiro").checked){
+    		    if (!$("#estCiv option:selected").val()){
     		    	if(campos!="") campos += ", ";
-    		        campos += "Casado ou Solteiro"; 
+    		        campos += "Estado Civil"; 
     		    }
     		    
     		    if (!form.tipoLogradouro.value) { 
@@ -377,6 +393,8 @@ $(document).ready(function() {
     				        return false; 
     				    }
     		    }
+    		    
+    		    showLoader('lds-circle', form);
     		}
     		
     		function showResponse(result, statusText, xhr, $form)  { 
@@ -386,17 +404,22 @@ $(document).ready(function() {
     			}else{
 	        		alert(result.message);
 	        	}
+    			 showLoader('', $form[0]);
     		} 
     		
     		function showResponseTpa(result, statusText, xhr, $form)  { 
+    			var form = $form[0];
     			if(result.code == "200"){
     				processarAcoes(result);
     		    	alert("Obrigado sua intenção em ajudar foi registrada e em breve entraremos em contato ou se desejar entre em contato conosco!");
+    		    	showLoader('', form);
+        		    
     			}else if(result.code == "404"){
 	        		alert(result.message);
 	        		location.href = "#volun";
 	        	}else{
 	        		alert(result.message);
+	        		showLoader('', form);
 	        	}
     		} 
     		
