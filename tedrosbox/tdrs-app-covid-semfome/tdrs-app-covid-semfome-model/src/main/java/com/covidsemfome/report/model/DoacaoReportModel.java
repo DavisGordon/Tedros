@@ -8,13 +8,13 @@ import java.util.Date;
 import java.util.List;
 
 import com.covidsemfome.model.TipoAjuda;
-import com.tedros.ejb.base.model.ITReportModel;
+import com.tedros.ejb.base.model.TReportModel;
 
 /**
  * @author Davis Gordon
  *
  */
-public class DoacaoReportModel implements ITReportModel<DoacaoItemModel> {
+public class DoacaoReportModel extends TReportModel<DoacaoItemModel> {
 	
 	/**
 	 * 
@@ -31,13 +31,12 @@ public class DoacaoReportModel implements ITReportModel<DoacaoItemModel> {
 	
 	private List<TipoAjuda> tiposAjuda;
 	
-	private List<DoacaoItemModel> result;
 	
 	public BigDecimal getTotalValor(){
 		BigDecimal t = new BigDecimal(0);
 		
-		if(result!=null)
-			for (DoacaoItemModel i : result) {
+		if(getResult()!=null)
+			for (DoacaoItemModel i : getResult()) {
 				if(i.getValor()!=null)
 					t = t.add(i.getValor());
 			}
@@ -46,8 +45,8 @@ public class DoacaoReportModel implements ITReportModel<DoacaoItemModel> {
 	
 	public Long getTotalQuantidade(){
 		Long t = 0L;
-		if(result!=null)
-			for (DoacaoItemModel i : result) {
+		if(getResult()!=null)
+			for (DoacaoItemModel i : getResult()) {
 				if(i.getQuantidade()!=null)
 					t  += i.getQuantidade();
 			}
@@ -122,20 +121,6 @@ public class DoacaoReportModel implements ITReportModel<DoacaoItemModel> {
 	 */
 	public void setTiposAjuda(List<TipoAjuda> tiposAjuda) {
 		this.tiposAjuda = tiposAjuda;
-	}
-
-	/**
-	 * @return the result
-	 */
-	public List<DoacaoItemModel> getResult() {
-		return result;
-	}
-
-	/**
-	 * @param result the result to set
-	 */
-	public void setResult(List<DoacaoItemModel> result) {
-		this.result = result;
 	}
 
 }

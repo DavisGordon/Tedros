@@ -4,16 +4,15 @@
 package com.covidsemfome.report.model;
 
 import java.util.Date;
-import java.util.List;
 
 import com.covidsemfome.model.Cozinha;
-import com.tedros.ejb.base.model.ITReportModel;
+import com.tedros.ejb.base.model.TReportModel;
 
 /**
  * @author Davis Gordon
  *
  */
-public class EstocavelReportModel implements ITReportModel<EstocavelModel> {
+public class EstocavelReportModel extends TReportModel<EstocavelModel> {
 
 	private static final long serialVersionUID = 956821922026096079L;
 	
@@ -29,7 +28,6 @@ public class EstocavelReportModel implements ITReportModel<EstocavelModel> {
 	
 	private String origem;
 	
-	private List<EstocavelModel> result;
 	/**
 	 * 
 	 */
@@ -96,18 +94,7 @@ public class EstocavelReportModel implements ITReportModel<EstocavelModel> {
 	public void setOrigem(String origem) {
 		this.origem = origem;
 	}
-	/**
-	 * @return the result
-	 */
-	public List<EstocavelModel> getResult() {
-		return result;
-	}
-	/**
-	 * @param result the result to set
-	 */
-	public void setResult(List<EstocavelModel> result) {
-		this.result = result;
-	}
+	
 	/**
 	 * @return the tipo
 	 */

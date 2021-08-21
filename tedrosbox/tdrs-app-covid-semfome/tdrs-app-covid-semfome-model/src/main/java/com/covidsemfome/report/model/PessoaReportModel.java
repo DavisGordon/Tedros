@@ -4,17 +4,14 @@
 package com.covidsemfome.report.model;
 
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.Column;
-
-import com.tedros.ejb.base.model.ITReportModel;
+import com.tedros.ejb.base.model.TReportModel;
 
 /**
  * @author Davis Gordon
  *
  */
-public class PessoaReportModel implements ITReportModel<PessoaModel> {
+public class PessoaReportModel extends TReportModel<PessoaModel> {
 
 	/**
 	 * 
@@ -27,9 +24,12 @@ public class PessoaReportModel implements ITReportModel<PessoaModel> {
 	
 	private String statusVoluntario;
 	
+	private Date dataInicio;
+	
+	private Date dataFim;
+	
 	private Boolean listarAcoes;
 	
-	private List<PessoaModel> result;
 	/**
 	 * 
 	 */
@@ -84,23 +84,36 @@ public class PessoaReportModel implements ITReportModel<PessoaModel> {
 	public void setListarAcoes(Boolean listarAcoes) {
 		this.listarAcoes = listarAcoes;
 	}
-	/**
-	 * @return the result
-	 */
-	public List<PessoaModel> getResult() {
-		return result;
-	}
-	/**
-	 * @param result the result to set
-	 */
-	public void setResult(List<PessoaModel> result) {
-		this.result = result;
-	}
+	
 	/**
 	 * @return the listarAcoes
 	 */
 	public Boolean getListarAcoes() {
 		return listarAcoes;
+	}
+	/**
+	 * @return the dataInicio
+	 */
+	public Date getDataInicio() {
+		return dataInicio;
+	}
+	/**
+	 * @param dataInicio the dataInicio to set
+	 */
+	public void setDataInicio(Date dataInicio) {
+		this.dataInicio = dataInicio;
+	}
+	/**
+	 * @return the dataFim
+	 */
+	public Date getDataFim() {
+		return dataFim;
+	}
+	/**
+	 * @param dataFim the dataFim to set
+	 */
+	public void setDataFim(Date dataFim) {
+		this.dataFim = dataFim;
 	}
 	
 

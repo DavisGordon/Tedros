@@ -3,6 +3,7 @@
  */
 package com.covidsemfome.report.model;
 
+import java.util.Date;
 import java.util.List;
 
 import com.covidsemfome.model.Contato;
@@ -24,6 +25,8 @@ public class PessoaModel extends TEntity {
 	private String email;
 	
 	private String contatos;
+	
+	private Date dataCadastro;
 	
 	private List<AcaoItemModel> acoes;
 	
@@ -50,7 +53,7 @@ public class PessoaModel extends TEntity {
 		else if(tipo!=null && tipo.equals("6"))
 			this.tipo = "Outro";
 		this.email = v.getLoginName();
-		
+		this.dataCadastro = v.getInsertDate();
 		String ct = "";
 		if(v.getContatos()!=null)
 			for(Contato c : v.getContatos()){
@@ -139,6 +142,20 @@ public class PessoaModel extends TEntity {
 	 */
 	public void setAcoes(List<AcaoItemModel> acoes) {
 		this.acoes = acoes;
+	}
+
+	/**
+	 * @return the dataCadastro
+	 */
+	public Date getDataCadastro() {
+		return dataCadastro;
+	}
+
+	/**
+	 * @param dataCadastro the dataCadastro to set
+	 */
+	public void setDataCadastro(Date dataCadastro) {
+		this.dataCadastro = dataCadastro;
 	}
 
 

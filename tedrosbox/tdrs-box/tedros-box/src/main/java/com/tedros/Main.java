@@ -126,7 +126,7 @@ public class Main extends Application implements ITedrosBox  {
 
     private boolean expandedTollBar = true;
     
-    private String version = "8.6.1";
+    private String version = "8.6.3";
     
     
     public Main(){

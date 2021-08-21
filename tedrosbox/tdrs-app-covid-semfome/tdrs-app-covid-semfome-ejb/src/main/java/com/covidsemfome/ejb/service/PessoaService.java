@@ -107,6 +107,13 @@ public class PessoaService extends TEjbService<Pessoa>  {
 	public Pessoa recuperar(String loginName, String password){
 		return getBussinesObject().recuperar(loginName, password);
 	}
+	
+	@TransactionAttribute(value = TransactionAttributeType.NEVER)
+	public List<Pessoa> pesquisar(String nome, String tipo, String status, 
+			Date dataInicio, Date dataFim, String orderBy, String orderType){
+		return bo.pesquisar(nome, tipo, status, dataInicio, dataFim, orderBy, orderType);
+	}
+	
 	@TransactionAttribute(value = TransactionAttributeType.NEVER)
 	public List<Pessoa> pesquisar(String nome, Date dataNascimento, String tipo, String tipoDocumento, String numero){
 		return getBussinesObject().pesquisar(nome, dataNascimento, tipo, tipoDocumento, numero);

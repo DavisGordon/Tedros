@@ -8,6 +8,7 @@ import java.util.Map;
 import com.covidsemfome.report.model.VoluntarioReportModel;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.process.TReportProcess;
+import com.tedros.fxapi.process.TReportProcessEnum;
 
 public class VoluntarioReportProcess extends TReportProcess<VoluntarioReportModel> {
 
@@ -23,7 +24,9 @@ public class VoluntarioReportProcess extends TReportProcess<VoluntarioReportMode
 	}
 	
 	protected InputStream getJasperInputStream() {
-		InputStream inputStream = getClass().getResourceAsStream("voluntarios.jasper");
+		InputStream inputStream = this.getAction().equals(TReportProcessEnum.EXPORT_XLS) 
+				? getClass().getResourceAsStream("voluntarios-xls.jasper") 
+						: getClass().getResourceAsStream("voluntarios.jasper");
 		return inputStream;
 	}
 
