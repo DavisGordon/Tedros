@@ -30,6 +30,8 @@ public class PessoaReportModel extends TReportModel<PessoaModel> {
 	
 	private Boolean listarAcoes;
 	
+	private Boolean detalhado;
+	
 	/**
 	 * 
 	 */
@@ -115,6 +117,21 @@ public class PessoaReportModel extends TReportModel<PessoaModel> {
 	public void setDataFim(Date dataFim) {
 		this.dataFim = dataFim;
 	}
+	/**
+	 * @return the detalhado
+	 */
+	public Boolean getDetalhado() {
+		return detalhado;
+	}
+	/**
+	 * @param detalhado the detalhado to set
+	 */
+	public void setDetalhado(Boolean detalhado) {
+		this.detalhado = detalhado;
+	}
 	
+	public boolean isDetalhado() {
+		return detalhado!=null && detalhado;
+	}
 
 }

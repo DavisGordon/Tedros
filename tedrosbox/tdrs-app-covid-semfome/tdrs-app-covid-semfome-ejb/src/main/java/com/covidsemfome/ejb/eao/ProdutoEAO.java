@@ -22,7 +22,7 @@ public class ProdutoEAO extends TGenericEAO<Produto> {
 
 
 	@SuppressWarnings("unchecked")
-	public List<Produto> pesquisar(List<String> cod, String nome, String marca, String medida, String uniMed){
+	public List<Produto> pesquisar(List<String> cod, String nome, String marca, String medida, String uniMed, String orderby, String ordertype){
 		
 		StringBuffer sbf = new StringBuffer("select distinct e from Produto e where 1=1 ");
 		
@@ -41,7 +41,11 @@ public class ProdutoEAO extends TGenericEAO<Produto> {
 		if(StringUtils.isNotBlank(uniMed))
 			sbf.append("and e.unidadeMedida = :um ");
 		
-		sbf.append("order by e.nome");
+		if(StringUtils.isNotBlank(orderby)) {
+			sbf.append("order by e."+orderby);
+			if(StringUtils.isNotBlank(ordertype))
+				sbf.append(" "+ordertype);
+		}
 		
 		Query qry = getEntityManager().createQuery(sbf.toString());
 		

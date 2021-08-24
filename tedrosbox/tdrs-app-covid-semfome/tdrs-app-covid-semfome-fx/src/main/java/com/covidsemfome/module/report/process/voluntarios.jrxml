@@ -15,6 +15,7 @@
 	<field name="tipo" class="java.lang.String"/>
 	<field name="email" class="java.lang.String"/>
 	<field name="contatos" class="java.lang.String"/>
+	<field name="tiposAjuda" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -55,7 +56,7 @@
 			</staticText>
 			<staticText>
 				<reportElement style="Column header" x="417" y="0" width="103" height="15" uuid="3e4f66d2-cdb2-4d2e-9a3a-4a9e5857c81e"/>
-				<text><![CDATA[Tipo]]></text>
+				<text><![CDATA[Tipo Ajuda]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="Column header" x="130" y="0" width="159" height="15" uuid="954d6939-f964-41d3-90b6-bb8a557017f3"/>
@@ -67,6 +68,7 @@
 			</staticText>
 			<staticText>
 				<reportElement style="Column header" x="660" y="0" width="142" height="15" uuid="a296ad3e-3afe-4030-af1c-c0d2f82b3338"/>
+				<textElement textAlignment="Center"/>
 				<text><![CDATA[Contatos]]></text>
 			</staticText>
 		</band>
@@ -81,30 +83,37 @@
 			</line>
 			<textField pattern="dd/MM/yyyy HH:mm" isBlankWhenNull="true">
 				<reportElement x="35" y="0" width="95" height="16" isPrintWhenDetailOverflows="true" uuid="3be7439a-cb82-40ba-a600-ef3f31563590"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{data}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="0" width="35" height="16" isPrintWhenDetailOverflows="true" uuid="b410c70b-79ae-4bd8-8703-32fda95fe3b4"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="130" y="0" width="159" height="16" isPrintWhenDetailOverflows="true" uuid="d0f4d2f5-33ff-4236-a424-ec6730f35e20"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="289" y="0" width="128" height="16" isPrintWhenDetailOverflows="true" uuid="be2dc539-655b-4295-94d8-83c51be53618"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="417" y="0" width="103" height="16" isPrintWhenDetailOverflows="true" uuid="3b3c8f7f-ba53-410e-a2ed-8ef3fc1604c2"/>
-				<textFieldExpression><![CDATA[$F{tipo}]]></textFieldExpression>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{tiposAjuda}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="520" y="0" width="140" height="16" isPrintWhenDetailOverflows="true" uuid="3ceed668-1b56-48db-97b1-af744b08c900"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="660" y="0" width="142" height="16" isPrintWhenDetailOverflows="true" uuid="c444cceb-262d-4812-b42e-fd287496fa85"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{contatos}]]></textFieldExpression>
 			</textField>
 		</band>

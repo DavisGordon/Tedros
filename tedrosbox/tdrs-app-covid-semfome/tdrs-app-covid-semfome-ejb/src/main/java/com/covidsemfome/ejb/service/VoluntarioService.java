@@ -14,6 +14,7 @@ import javax.inject.Inject;
 
 import com.covidsemfome.ejb.bo.VoluntarioBO;
 import com.covidsemfome.model.Voluntario;
+import com.covidsemfome.report.model.VoluntarioReportModel;
 import com.tedros.ejb.base.service.TEjbService;
 
 /**
@@ -35,5 +36,9 @@ public class VoluntarioService extends TEjbService<Voluntario>  {
 		return bo;
 	}
 	
+	@TransactionAttribute(value = TransactionAttributeType.NEVER)
+	public VoluntarioReportModel pesquisar(VoluntarioReportModel m){
+		return bo.pesquisar(m);
+	}
 	
 }

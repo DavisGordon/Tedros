@@ -101,7 +101,8 @@ public class EstoqueBO extends TGenericBO<Estoque> {
 				idsl.add(Long.valueOf(i));
 		}
 		
-		List<Estoque> lst = eao.pesquisar(idsl, m.getCozinha(), m.getDataInicio(), m.getDataFim(), m.getOrigem());
+		List<Estoque> lst = eao.pesquisar(idsl, m.getCozinha(), m.getDataInicio(), m.getDataFim(), 
+				m.getOrigem(), m.getOrderBy(), m.getOrderType());
 		if(lst!=null) {
 			List<EstoqueModel> itens = new ArrayList<>();
 			for(Estoque a : lst){

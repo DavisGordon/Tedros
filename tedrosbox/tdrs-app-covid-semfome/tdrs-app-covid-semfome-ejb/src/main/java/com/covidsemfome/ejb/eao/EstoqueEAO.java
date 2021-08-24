@@ -64,7 +64,7 @@ public class EstoqueEAO extends TGenericEAO<Estoque> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Estoque> pesquisar(List<Long> idsl, Cozinha coz, Date dataInicio, Date dataFim, String origem){
+	public List<Estoque> pesquisar(List<Long> idsl, Cozinha coz, Date dataInicio, Date dataFim, String origem, String orderby, String ordertype){
 		
 		StringBuffer sbf = new StringBuffer("select e from Estoque e where 1=1 ");
 		
@@ -97,7 +97,11 @@ public class EstoqueEAO extends TGenericEAO<Estoque> {
 			else
 				sbf.append("and e.producaoRef is not null ");
 		
-		sbf.append("order by e.data desc ");
+		if(StringUtils.isNotBlank(orderby)) {
+			sbf.append("order by e."+orderby);
+			if(StringUtils.isNotBlank(ordertype))
+				sbf.append(" "+ordertype);
+		}
 		
 		Query qry = getEntityManager().createQuery(sbf.toString());
 		

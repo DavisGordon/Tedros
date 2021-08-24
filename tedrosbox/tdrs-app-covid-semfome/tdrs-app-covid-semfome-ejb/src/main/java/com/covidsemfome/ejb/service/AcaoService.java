@@ -54,8 +54,8 @@ public class AcaoService extends TEjbService<Acao> {
 		emailBO.enviarEmailParticiparAcao(v, termo);
 	}
 	
-	public List<Acao> pesquisar(String ids, String titulo, Date dataInicio, Date dataFim, String status){
-		return bo.pesquisar(ids, titulo, dataInicio, dataFim, status);
+	public List<Acao> pesquisar(String ids, String titulo, Date dataInicio, Date dataFim, String status, String orderby, String ordertype){
+		return bo.pesquisar(ids, titulo, dataInicio, dataFim, status, orderby, ordertype);
 	}
 	
 

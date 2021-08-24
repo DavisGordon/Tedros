@@ -39,7 +39,7 @@ public class AcaoBO extends TGenericBO<Acao> {
 		return eao.listAcoes(data);
 	}
 	
-	public List<Acao> pesquisar(String ids, String titulo, Date dataInicio, Date dataFim, String status){
+	public List<Acao> pesquisar(String ids, String titulo, Date dataInicio, Date dataFim, String status, String orderby, String ordertype){
 		
 		List<Long> idsl = null;
 		if(ids!=null){
@@ -49,6 +49,6 @@ public class AcaoBO extends TGenericBO<Acao> {
 				idsl.add(Long.valueOf(i));
 		}
 		
-		return eao.pesquisar(idsl, titulo, dataInicio, dataFim, status);
+		return eao.pesquisar(idsl, titulo, dataInicio, dataFim, status, orderby, ordertype);
 	}
 }

@@ -20,21 +20,26 @@ import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
+import com.tedros.fxapi.annotation.control.TVerticalRadioGroup;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.TAccordion;
+import com.tedros.fxapi.annotation.layout.TFieldSet;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.layout.TTitledPane;
+import com.tedros.fxapi.annotation.layout.TVBox;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TReportProcess;
 import com.tedros.fxapi.annotation.scene.TNode;
+import com.tedros.fxapi.annotation.scene.layout.TRegion;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.control.TText.TTextStyle;
+import com.tedros.fxapi.domain.TLayoutType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.presenter.report.behavior.TDataSetReportBehavior;
@@ -64,26 +69,23 @@ public class EntradaReportModelView extends TModelView<EstocavelReportModel>{
 	
 	@TAccordion(expandedPane="filtro", node=@TNode(id="repdoaacc",parse = true),
 			panes={
-					@TTitledPane(text="Filtros", node=@TNode(id="filtro",parse = true), expanded=true,
-							fields={"cozinha","texto2"}),
+					@TTitledPane(text="Filtros", node=@TNode(id="filtro",parse = true), 
+							expanded=true, layoutType=TLayoutType.HBOX,
+							fields={"ids", "orderBy"}),
 					@TTitledPane(text="Resultado", node=@TNode(id="resultado",parse = true),
 						fields={"result"})})
 	private SimpleStringProperty displayText;
 	
-		
-	@THBox(	pane=@TPane(children={"cozinha","ids", "tipo"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="cozinha", priority=Priority.NEVER),
-   				   		@TPriority(field="ids", priority=Priority.SOMETIMES),
-   				   		@TPriority(field="tipo", priority=Priority.ALWAYS) }))
+	@TLabel(text="Codigo da Entrada")
+	@TTextField(node=@TNode(requestFocus=true, parse = true),
+	textInputControl=@TTextInputControl(promptText="Insira os codigos separados por virgula", parse = true))
+	@TVBox(	pane=@TPane(children={"ids", "cozinha", "tipo", "texto2"}), spacing=10, fillWidth=true)
+	private SimpleStringProperty ids;
+	
 	@TLabel(text="Cozinha:")
-	@TComboBoxField(node=@TNode(requestFocus=true, parse = true),
-	optionsList=@TOptionsList(entityClass=Cozinha.class, 
+	@TComboBoxField(optionsList=@TOptionsList(entityClass=Cozinha.class, 
 	optionModelViewClass=CozinhaModelView.class, serviceName = "ICozinhaControllerRemote"))
 	private SimpleObjectProperty<Cozinha> cozinha;
-	
-	@TLabel(text="Codigo da Entrada")
-	@TTextField(textInputControl=@TTextInputControl(promptText="Insira os codigos separados por virgula", parse = true))
-	private SimpleStringProperty ids;
 	
 	@TLabel(text="Tipo")
 	@THorizontalRadioGroup(alignment=Pos.CENTER_LEFT, spacing=4, 
@@ -110,6 +112,23 @@ public class EntradaReportModelView extends TModelView<EstocavelReportModel>{
 	@TDatePickerField
 	private SimpleObjectProperty<Date> dataFim;
 	
+	@TLabel(text="Ordenar por:")
+	@TFieldSet(fields = { "orderBy", "orderType" }, 
+		region=@TRegion(maxWidth=600, parse = true),
+		legend = "Ordenação dos resultados")
+	@TVerticalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
+	radioButtons = {@TRadioButtonField(text="Codigo", userData="id"), 
+					@TRadioButtonField(text="Data", userData="data"), 
+					@TRadioButtonField(text="Tipo", userData="tipo")
+	})
+	private SimpleStringProperty orderBy;
+	
+	@TLabel(text="Ordenar de forma:")
+	@TVerticalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
+	radioButtons = {@TRadioButtonField(text="Crescente", userData="asc"), 
+					@TRadioButtonField(text="Decrescente", userData="desc")
+	})
+	private SimpleStringProperty orderType;
 	
 	@TTableView(editable=true, 
 			columns = { @TTableColumn(cellValue="id", text = "Codigo", prefWidth=20, resizable=true), 
@@ -276,6 +295,38 @@ public class EntradaReportModelView extends TModelView<EstocavelReportModel>{
 	public SimpleStringProperty getDisplayProperty() {
 		// TODO Auto-generated method stub
 		return this.displayText;
+	}
+
+
+	/**
+	 * @return the orderBy
+	 */
+	public SimpleStringProperty getOrderBy() {
+		return orderBy;
+	}
+
+
+	/**
+	 * @param orderBy the orderBy to set
+	 */
+	public void setOrderBy(SimpleStringProperty orderBy) {
+		this.orderBy = orderBy;
+	}
+
+
+	/**
+	 * @return the orderType
+	 */
+	public SimpleStringProperty getOrderType() {
+		return orderType;
+	}
+
+
+	/**
+	 * @param orderType the orderType to set
+	 */
+	public void setOrderType(SimpleStringProperty orderType) {
+		this.orderType = orderType;
 	}
 	
 	

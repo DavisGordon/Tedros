@@ -26,7 +26,7 @@ public class VoluntarioItemTableView extends TModelView<VoluntarioItemModel> {
 		
 	private SimpleStringProperty nome;
 	
-	private SimpleStringProperty tipo;
+	private SimpleStringProperty tiposAjuda;
 	
 	private SimpleStringProperty email;
 
@@ -100,19 +100,6 @@ public class VoluntarioItemTableView extends TModelView<VoluntarioItemModel> {
 		this.nome = nome;
 	}
 
-	/**
-	 * @return the tipo
-	 */
-	public SimpleStringProperty getTipo() {
-		return tipo;
-	}
-
-	/**
-	 * @param tipo the tipo to set
-	 */
-	public void setTipo(SimpleStringProperty tipo) {
-		this.tipo = tipo;
-	}
 
 	/**
 	 * @return the email
@@ -140,6 +127,20 @@ public class VoluntarioItemTableView extends TModelView<VoluntarioItemModel> {
 	 */
 	public void setContatos(SimpleStringProperty contatos) {
 		this.contatos = contatos;
+	}
+
+	/**
+	 * @return the tiposAjuda
+	 */
+	public SimpleStringProperty getTiposAjuda() {
+		return tiposAjuda;
+	}
+
+	/**
+	 * @param tiposAjuda the tiposAjuda to set
+	 */
+	public void setTiposAjuda(SimpleStringProperty tiposAjuda) {
+		this.tiposAjuda = tiposAjuda;
 	}
 
 

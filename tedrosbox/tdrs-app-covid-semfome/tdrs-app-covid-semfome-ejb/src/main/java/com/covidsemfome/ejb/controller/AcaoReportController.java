@@ -29,7 +29,8 @@ public class AcaoReportController implements IAcaoReportController {
 	@Override
 	public TResult<AcaoReportModel> process(AcaoReportModel m) {
 		try{
-			List<Acao> lst = serv.pesquisar(m.getIds(), m.getTitulo(), m.getDataInicio(), m.getDataFim(), m.getStatus());
+			List<Acao> lst = serv.pesquisar(m.getIds(), m.getTitulo(), m.getDataInicio(), m.getDataFim(), 
+					m.getStatus(), m.getOrderBy(), m.getOrderType());
 			if(lst!=null){
 				List<AcaoItemModel> itens = new ArrayList<>();
 				for(Acao a : lst){

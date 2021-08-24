@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.Query;
-import javax.persistence.TemporalType;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.persistence.config.CacheUsage;
@@ -28,7 +27,7 @@ import com.tedros.ejb.base.entity.ITEntity;
 public class AcaoEAO extends TGenericEAO<Acao> {
 	
 	@SuppressWarnings("unchecked")
-	public List<Acao> pesquisar(List<Long> idsl, String titulo, Date dataInicio, Date dataFim, String status){
+	public List<Acao> pesquisar(List<Long> idsl, String titulo, Date dataInicio, Date dataFim, String status, String orderby, String ordertype){
 	
 		StringBuffer sbf = new StringBuffer("select e from Acao e where 1=1 ");
 		
@@ -59,7 +58,11 @@ public class AcaoEAO extends TGenericEAO<Acao> {
 		if(StringUtils.isNotBlank(status))
 			sbf.append("and e.status = :status ");
 		
-		sbf.append("order by e.data desc ");
+		if(StringUtils.isNotBlank(orderby)) {
+			sbf.append("order by e."+orderby);
+			if(StringUtils.isNotBlank(ordertype))
+				sbf.append(" "+ordertype);
+		}
 		
 		Query qry = getEntityManager().createQuery(sbf.toString());
 		

@@ -37,8 +37,8 @@ public class ProdutoService extends TEjbService<Produto> {
 		return bo;
 	}
 	
-	public List<Produto> pesquisar(String cod, String nome, String marca, String medida, String uniMed){
-		return bo.pesquisar(cod, nome, marca, medida, uniMed);
+	public List<Produto> pesquisar(String cod, String nome, String marca, String medida, String uniMed, String orderby, String ordertype){
+		return bo.pesquisar(cod, nome, marca, medida, uniMed, orderby, ordertype);
 	}
 
 }
