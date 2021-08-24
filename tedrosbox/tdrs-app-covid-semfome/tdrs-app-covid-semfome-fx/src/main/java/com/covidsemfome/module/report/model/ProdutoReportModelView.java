@@ -9,17 +9,21 @@ import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
+import com.tedros.fxapi.annotation.control.TVerticalRadioGroup;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.TAccordion;
+import com.tedros.fxapi.annotation.layout.TFieldSet;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.layout.TTitledPane;
+import com.tedros.fxapi.annotation.layout.TVBox;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
@@ -27,7 +31,9 @@ import com.tedros.fxapi.annotation.process.TReportProcess;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.annotation.scene.layout.TRegion;
 import com.tedros.fxapi.collections.ITObservableList;
+import com.tedros.fxapi.domain.TLayoutType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.presenter.report.behavior.TDataSetReportBehavior;
@@ -35,6 +41,7 @@ import com.tedros.fxapi.presenter.report.decorator.TDataSetReportDecorator;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
 
 
@@ -54,23 +61,22 @@ public class ProdutoReportModelView extends TModelView<ProdutoReportModel>{
 	
 	@TAccordion(expandedPane="filtro", node=@TNode(id="repdoaacc",parse = true),
 			panes={
-					@TTitledPane(text="Filtros", node=@TNode(id="filtro",parse = true), expanded=true,
-							fields={"nome","marca"}),
+					@TTitledPane(text="Filtros", node=@TNode(id="filtro",parse = true), 
+							expanded=true, layoutType=TLayoutType.HBOX,
+							fields={"codigo", "orderBy"}),
 					@TTitledPane(text="Resultado", node=@TNode(id="resultado",parse = true),
 						fields={"result"})})	
 	private SimpleStringProperty displayText;
 	
-	@TLabel(text="Nome")
-	@TTextField(node=@TNode(requestFocus=true, parse = true),
-	textInputControl=@TTextInputControl(promptText="Insira parte ou o nome completo do produto", parse = true))
-	@THBox(	pane=@TPane(children={"nome","codigo"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="nome", priority=Priority.ALWAYS),
-   				   		@TPriority(field="codigo", priority=Priority.SOMETIMES) }))
-	private SimpleStringProperty nome;
-	
 	@TLabel(text="Codigo")
-	@TTextField(textInputControl=@TTextInputControl(promptText="Insira os codigos dos produtos separados por virgula", parse = true))
+	@TTextField(node=@TNode(requestFocus=true, parse = true), 
+	textInputControl=@TTextInputControl(promptText="Insira os codigos dos produtos separados por virgula", parse = true))
+	@TVBox(	pane=@TPane(children={"codigo", "nome", "marca", "texto2"}), spacing=10, fillWidth=true)
 	private SimpleStringProperty codigo;
+	
+	@TLabel(text="Nome")
+	@TTextField(textInputControl=@TTextInputControl(promptText="Insira parte ou o nome completo do produto", parse = true))
+	private SimpleStringProperty nome;
 	
 	@TLabel(text="Marca")
 	@TTextField(maxLength=20,
@@ -92,6 +98,23 @@ public class ProdutoReportModelView extends TModelView<ProdutoReportModel>{
 			textInputControl=@TTextInputControl(promptText="Medida", parse = true), 
 						control=@TControl(tooltip="Insira a medida", parse = true))
 	private SimpleStringProperty  medida;
+	
+	@TLabel(text="Ordenar por:")
+	@TFieldSet(fields = { "orderBy", "orderType" }, 
+		region=@TRegion(maxWidth=600, parse = true),
+		legend = "Ordenação dos resultados")
+	@TVerticalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
+	radioButtons = {@TRadioButtonField(text="Codigo", userData="codigo"), 
+					@TRadioButtonField(text="Nome", userData="nome")
+	})
+	private SimpleStringProperty orderBy;
+	
+	@TLabel(text="Ordenar de forma:")
+	@TVerticalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
+	radioButtons = {@TRadioButtonField(text="Crescente", userData="asc"), 
+					@TRadioButtonField(text="Decrescente", userData="desc")
+	})
+	private SimpleStringProperty orderType;
 	
 	@TTableView(editable=true, 
 			columns = { @TTableColumn(cellValue="codigo", text = "Codigo", prefWidth=20, resizable=true), 
@@ -231,5 +254,37 @@ public class ProdutoReportModelView extends TModelView<ProdutoReportModel>{
 	 */
 	public void setResult(ITObservableList<ProdutoItemTableView> result) {
 		this.result = result;
+	}
+
+
+	/**
+	 * @return the orderBy
+	 */
+	public SimpleStringProperty getOrderBy() {
+		return orderBy;
+	}
+
+
+	/**
+	 * @param orderBy the orderBy to set
+	 */
+	public void setOrderBy(SimpleStringProperty orderBy) {
+		this.orderBy = orderBy;
+	}
+
+
+	/**
+	 * @return the orderType
+	 */
+	public SimpleStringProperty getOrderType() {
+		return orderType;
+	}
+
+
+	/**
+	 * @param orderType the orderType to set
+	 */
+	public void setOrderType(SimpleStringProperty orderType) {
+		this.orderType = orderType;
 	}
 }

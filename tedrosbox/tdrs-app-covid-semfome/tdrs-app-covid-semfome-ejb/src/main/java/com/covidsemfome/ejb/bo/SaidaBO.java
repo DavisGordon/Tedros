@@ -13,7 +13,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import com.covidsemfome.ejb.eao.SaidaEAO;
-import com.covidsemfome.model.Entrada;
 import com.covidsemfome.model.Saida;
 import com.covidsemfome.report.model.EstocavelModel;
 import com.covidsemfome.report.model.EstocavelReportModel;
@@ -46,7 +45,7 @@ public class SaidaBO extends TGenericBO<Saida> {
 				idsl.add(Long.valueOf(i));
 		}
 		
-		List<Saida> lst = eao.pesquisar(idsl, m.getCozinha(), m.getDataInicio(), m.getDataFim());
+		List<Saida> lst = eao.pesquisar(idsl, m.getCozinha(), m.getDataInicio(), m.getDataFim(), m.getOrderBy(), m.getOrderType());
 		if(lst!=null) {
 			List<EstocavelModel> itens = new ArrayList<>();
 			for(Saida a : lst){

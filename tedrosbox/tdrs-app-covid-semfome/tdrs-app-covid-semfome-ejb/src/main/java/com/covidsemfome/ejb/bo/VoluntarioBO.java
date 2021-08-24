@@ -3,13 +3,19 @@
  */
 package com.covidsemfome.ejb.bo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import com.covidsemfome.ejb.eao.VoluntarioEAO;
 import com.covidsemfome.model.Acao;
 import com.covidsemfome.model.Pessoa;
+import com.covidsemfome.model.TipoAjuda;
 import com.covidsemfome.model.Voluntario;
+import com.covidsemfome.report.model.VoluntarioItemModel;
+import com.covidsemfome.report.model.VoluntarioReportModel;
 import com.tedros.ejb.base.bo.TGenericBO;
 import com.tedros.ejb.base.eao.ITGenericEAO;
 
@@ -35,6 +41,36 @@ public class VoluntarioBO extends TGenericBO<Voluntario> {
 	
 	public boolean isVoluntario(Pessoa pess){
 		return eao.isVoluntario(pess);
+	}
+	
+	public VoluntarioReportModel pesquisar(VoluntarioReportModel m){
+		String ids = m.getIds();
+		List<Long> idsl = null;
+		if(ids!=null){
+			idsl = new ArrayList<>();
+			String[] arr = ids.split(",");
+			for(String i : arr)
+				idsl.add(Long.valueOf(i));
+		}
+		List<Long> idst = null;
+		if(m.getTiposAjuda()!=null){
+			idst = new ArrayList<>();
+			for(TipoAjuda i : m.getTiposAjuda())
+				idst.add(i.getId());
+		}
+		List<Voluntario> lst = eao.pesquisar(idsl, m.getTitulo(), m.getStatus(), m.getNome(), idst, 
+				m.getDataInicio(), m.getDataFim(), m.getOrderBy(), m.getOrderType());
+		
+		if(lst!=null){
+			List<VoluntarioItemModel> itens = new ArrayList<>();
+			for(Voluntario v : lst)
+				itens.add(new VoluntarioItemModel(v));
+			
+			m.setResult(itens);
+		}
+		
+		
+		return m;
 	}
 	
 	public void sairDaAcao(Pessoa pessoa, Long acaoId) throws Exception{

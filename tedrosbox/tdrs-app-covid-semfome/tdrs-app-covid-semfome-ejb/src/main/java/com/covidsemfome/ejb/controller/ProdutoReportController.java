@@ -29,7 +29,8 @@ public class ProdutoReportController implements IProdutoReportController {
 	@Override
 	public TResult<ProdutoReportModel> process(ProdutoReportModel m) {
 		try{
-			List<Produto> lst = serv.pesquisar(m.getCodigo(), m.getNome(), m.getMarca(), m.getMedida(),m.getUnidadeMedida());
+			List<Produto> lst = serv.pesquisar(m.getCodigo(), m.getNome(), m.getMarca(), m.getMedida(),
+					m.getUnidadeMedida(), m.getOrderBy(), m.getOrderType());
 			if(lst!=null){
 				List<ProdutoItemModel> itens = new ArrayList<>();
 				for(Produto a : lst){

@@ -28,6 +28,20 @@ public class PessoaModel extends TEntity {
 	
 	private Date dataCadastro;
 	
+	private String profissao;
+	
+	private String statusVoluntario;
+	
+	private Date dataNascimento;
+	
+	private String sexo;
+	
+	private String estadoCivil;
+	
+	private String observacao;
+	
+	private String status;
+	
 	private List<AcaoItemModel> acoes;
 	
 	/**
@@ -54,6 +68,29 @@ public class PessoaModel extends TEntity {
 			this.tipo = "Outro";
 		this.email = v.getLoginName();
 		this.dataCadastro = v.getInsertDate();
+		this.profissao = v.getProfissao();
+		if(v.getSexo()!=null) {
+			switch(v.getSexo()) {
+			case "M" : this.sexo = "Masculino"; break;
+			case "F" : this.sexo = "Feminino"; break;
+			case "O" : this.sexo = "Outro"; break;
+			}
+		}
+		this.dataNascimento = v.getDataNascimento();
+		this.estadoCivil = v.getEstadoCivil();
+		this.observacao = v.getObservacao();
+		this.status = v.getStatus();
+		if(v.getStatusVoluntario()!=null) {
+			switch(v.getStatusVoluntario()) {
+			case "1": this.statusVoluntario ="Aguardando"; break;
+			case "2": this.statusVoluntario ="Contactado"; break;
+			case "3": this.statusVoluntario ="Voluntário"; break;
+			case "4": this.statusVoluntario ="Voluntário Ativo"; break;
+			case "5": this.statusVoluntario ="Voluntário problematico"; break;
+			case "6": this.statusVoluntario ="Desligado"; break;
+			}
+		}
+		
 		String ct = "";
 		if(v.getContatos()!=null)
 			for(Contato c : v.getContatos()){
@@ -156,6 +193,104 @@ public class PessoaModel extends TEntity {
 	 */
 	public void setDataCadastro(Date dataCadastro) {
 		this.dataCadastro = dataCadastro;
+	}
+
+	/**
+	 * @return the profissao
+	 */
+	public String getProfissao() {
+		return profissao;
+	}
+
+	/**
+	 * @param profissao the profissao to set
+	 */
+	public void setProfissao(String profissao) {
+		this.profissao = profissao;
+	}
+
+	/**
+	 * @return the statusVoluntario
+	 */
+	public String getStatusVoluntario() {
+		return statusVoluntario;
+	}
+
+	/**
+	 * @param statusVoluntario the statusVoluntario to set
+	 */
+	public void setStatusVoluntario(String statusVoluntario) {
+		this.statusVoluntario = statusVoluntario;
+	}
+
+	/**
+	 * @return the dataNascimento
+	 */
+	public Date getDataNascimento() {
+		return dataNascimento;
+	}
+
+	/**
+	 * @param dataNascimento the dataNascimento to set
+	 */
+	public void setDataNascimento(Date dataNascimento) {
+		this.dataNascimento = dataNascimento;
+	}
+
+	/**
+	 * @return the sexo
+	 */
+	public String getSexo() {
+		return sexo;
+	}
+
+	/**
+	 * @param sexo the sexo to set
+	 */
+	public void setSexo(String sexo) {
+		this.sexo = sexo;
+	}
+
+	/**
+	 * @return the estadoCivil
+	 */
+	public String getEstadoCivil() {
+		return estadoCivil;
+	}
+
+	/**
+	 * @param estadoCivil the estadoCivil to set
+	 */
+	public void setEstadoCivil(String estadoCivil) {
+		this.estadoCivil = estadoCivil;
+	}
+
+	/**
+	 * @return the observacao
+	 */
+	public String getObservacao() {
+		return observacao;
+	}
+
+	/**
+	 * @param observacao the observacao to set
+	 */
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
+	}
+
+	/**
+	 * @return the status
+	 */
+	public String getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 

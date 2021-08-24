@@ -35,7 +35,7 @@ public class EntradaEAO extends TGenericEAO<Entrada> {
 	};
 
 	@SuppressWarnings("unchecked")
-	public List<Entrada> pesquisar(List<Long> idsl, Cozinha coz, Date dataInicio, Date dataFim, String tipo){
+	public List<Entrada> pesquisar(List<Long> idsl, Cozinha coz, Date dataInicio, Date dataFim, String tipo, String orderby, String ordertype){
 		
 		StringBuffer sbf = new StringBuffer("select e from Entrada e where 1=1 ");
 		
@@ -65,7 +65,11 @@ public class EntradaEAO extends TGenericEAO<Entrada> {
 		if(StringUtils.isNotBlank(tipo))
 			sbf.append("and e.tipo = :tipo");
 		
-		sbf.append("order by e.data desc ");
+		if(StringUtils.isNotBlank(orderby)) {
+			sbf.append("order by e."+orderby);
+			if(StringUtils.isNotBlank(ordertype))
+				sbf.append(" "+ordertype);
+		}
 		
 		Query qry = getEntityManager().createQuery(sbf.toString());
 		

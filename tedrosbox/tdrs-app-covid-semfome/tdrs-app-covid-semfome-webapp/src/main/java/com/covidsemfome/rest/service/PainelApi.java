@@ -126,7 +126,7 @@ public class PainelApi {
 			@FormParam("nacionalidade") String  nac,
 			@FormParam("telefone") String  tel,
 			@FormParam("email") String  email,
-			@FormParam("estadoCivil") String  estCiv,
+			@FormParam("estCiv") String  estCiv,
 			@FormParam("sexo") String  sexo,
 			@FormParam("tipoLogradouro") String  tpLog,
 			@FormParam("logradouro") String  logr,

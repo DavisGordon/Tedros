@@ -14,11 +14,8 @@ import javax.inject.Inject;
 
 import com.covidsemfome.ejb.eao.EntradaEAO;
 import com.covidsemfome.model.Entrada;
-import com.covidsemfome.model.Estoque;
 import com.covidsemfome.report.model.EstocavelModel;
 import com.covidsemfome.report.model.EstocavelReportModel;
-import com.covidsemfome.report.model.EstoqueModel;
-import com.covidsemfome.report.model.EstoqueReportModel;
 import com.tedros.ejb.base.bo.TGenericBO;
 
 /**
@@ -48,7 +45,8 @@ public class EntradaBO extends TGenericBO<Entrada> {
 				idsl.add(Long.valueOf(i));
 		}
 		
-		List<Entrada> lst = eao.pesquisar(idsl, m.getCozinha(), m.getDataInicio(), m.getDataFim(), m.getTipo());
+		List<Entrada> lst = eao.pesquisar(idsl, m.getCozinha(), m.getDataInicio(), m.getDataFim(), 
+				m.getTipo(), m.getOrderBy(), m.getOrderType());
 		if(lst!=null) {
 			List<EstocavelModel> itens = new ArrayList<>();
 			for(Entrada a : lst){

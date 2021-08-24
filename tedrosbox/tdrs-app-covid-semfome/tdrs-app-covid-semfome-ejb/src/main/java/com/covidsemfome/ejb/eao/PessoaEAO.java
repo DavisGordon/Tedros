@@ -104,7 +104,6 @@ public class PessoaEAO extends TGenericEAO<Pessoa> {
 			sbf.append("order by e."+orderBy);
 			if(StringUtils.isNotBlank(orderType))
 				sbf.append(" "+orderType);
-			
 		}
 		
 		Query qry = getEntityManager().createQuery(sbf.toString());

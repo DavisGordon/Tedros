@@ -6,6 +6,7 @@ package com.covidsemfome.report.model;
 import java.util.Date;
 
 import com.covidsemfome.model.Contato;
+import com.covidsemfome.model.TipoAjuda;
 import com.covidsemfome.model.Voluntario;
 import com.tedros.ejb.base.model.ITModel;
 
@@ -31,6 +32,8 @@ public class VoluntarioItemModel implements ITModel {
 	private String email;
 	
 	private String contatos;
+	
+	private String tiposAjuda;
 	
 	
 	/**
@@ -67,10 +70,16 @@ public class VoluntarioItemModel implements ITModel {
 						&& this.email.toLowerCase().trim().equals(c.getDescricao().toLowerCase().trim()))
 					continue;
 				
-				ct += (!ct.isEmpty()) ? "," + c.getDescricao() : c.getDescricao();
+				ct += (!ct.isEmpty()) ? ", " + c.getDescricao() : c.getDescricao();
 			}
 		
 		this.contatos = ct;
+		
+		String ta = "";
+		if(v.getTiposAjuda()!=null)
+			for(TipoAjuda c : v.getTiposAjuda())
+				ta += (!ta.isEmpty()) ? ", " + c.getDescricao() : c.getDescricao();
+		this.tiposAjuda = ta;
 	}
 
 
@@ -182,6 +191,20 @@ public class VoluntarioItemModel implements ITModel {
 	 */
 	public void setContatos(String contatos) {
 		this.contatos = contatos;
+	}
+
+	/**
+	 * @return the tiposAjuda
+	 */
+	public String getTiposAjuda() {
+		return tiposAjuda;
+	}
+
+	/**
+	 * @param tiposAjuda the tiposAjuda to set
+	 */
+	public void setTiposAjuda(String tiposAjuda) {
+		this.tiposAjuda = tiposAjuda;
 	}
 
 

@@ -27,6 +27,8 @@ import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.layout.TTitledPane;
+import com.tedros.fxapi.annotation.layout.TVBox;
+import com.tedros.fxapi.annotation.layout.TVGrow;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
@@ -38,6 +40,7 @@ import com.tedros.fxapi.annotation.scene.layout.TRegion;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.control.TText.TTextStyle;
+import com.tedros.fxapi.domain.TLayoutType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.presenter.report.behavior.TDataSetReportBehavior;
@@ -68,8 +71,9 @@ public class PessoaReportModelView extends TModelView<PessoaReportModel>{
 	
 	@TAccordion(expandedPane="filtro", node=@TNode(id="repdoaacc",parse = true),
 			panes={
-					@TTitledPane(text="Filtros", node=@TNode(id="filtro",parse = true), expanded=true,
-							fields={"nome","tipoVoluntario", "texto2", "orderBy"}),
+					@TTitledPane(text="Filtros", node=@TNode(id="filtro",parse = true), 
+							expanded=true, layoutType=TLayoutType.HBOX,
+							fields={"nome","detalhado"}),
 					@TTitledPane(text="Resultado", node=@TNode(id="resultado",parse = true),
 						fields={"result"})})	
 	private SimpleStringProperty displayText;
@@ -78,13 +82,8 @@ public class PessoaReportModelView extends TModelView<PessoaReportModel>{
 	@TTextField(maxLength=60, textInputControl=@TTextInputControl(promptText="#{label.name}", parse = true), 
 			node=@TNode(requestFocus=true, parse = true),
 			control=@TControl(tooltip="#{label.name}", parse = true))
-	@THBox(	pane=@TPane(children={"nome","listarAcoes"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="nome", priority=Priority.NEVER),
-			@TPriority(field="listarAcoes", priority=Priority.NEVER)}))
+	@TVBox(	pane=@TPane(children={"nome", "tipoVoluntario", "texto2"}), spacing=10, fillWidth=true)
 	private SimpleStringProperty nome;
-	
-	@TCheckBoxField(labeled=@TLabeled(text="Exibir as proximas ações que estiver inscrito", parse = true))
-	private SimpleBooleanProperty listarAcoes;
 	
 	@TLabel(text="Tipo voluntário")
 	@TVerticalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
@@ -126,10 +125,20 @@ public class PessoaReportModelView extends TModelView<PessoaReportModel>{
 	@TDatePickerField
 	private SimpleObjectProperty<Date> dataFim;
 	
-	@TLabel(text="Ordenar por:")
-	@TFieldSet(fields = { "orderBy", "orderType" }, region=@TRegion(maxWidth=400, parse = true),
-		legend = "Ordenação dos resultados")
+	@TCheckBoxField(labeled=@TLabeled(text="Relatório detalhado", parse = true))
+	@TVBox(	pane=@TPane(children={"detalhado", "listarAcoes", "orderBy"}), spacing=10, fillWidth=true,
+	vgrow=@TVGrow(priority={@TPriority(field="detalhado", priority=Priority.NEVER),
+						@TPriority(field="listarAcoes", priority=Priority.NEVER),
+   				   		@TPriority(field="orderBy", priority=Priority.ALWAYS) }))
+	private SimpleBooleanProperty detalhado;
 	
+	@TCheckBoxField(labeled=@TLabeled(text="Exibir as proximas ações que estiver inscrito", parse = true))
+	private SimpleBooleanProperty listarAcoes;
+	
+	@TLabel(text="Ordenar por:")
+	@TFieldSet(fields = { "orderBy", "orderType" }, 
+		region=@TRegion(maxWidth=400, parse = true),
+		legend = "Ordenação dos resultados")
 	@TVerticalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
 	radioButtons = {@TRadioButtonField(text="Nome", userData="nome"), 
 					@TRadioButtonField(text="Data Cadastro", userData="insertDate")
@@ -347,6 +356,22 @@ public class PessoaReportModelView extends TModelView<PessoaReportModel>{
 	 */
 	public void setOrderType(SimpleStringProperty orderType) {
 		this.orderType = orderType;
+	}
+
+
+	/**
+	 * @return the detalhado
+	 */
+	public SimpleBooleanProperty getDetalhado() {
+		return detalhado;
+	}
+
+
+	/**
+	 * @param detalhado the detalhado to set
+	 */
+	public void setDetalhado(SimpleBooleanProperty detalhado) {
+		this.detalhado = detalhado;
 	}
 
 	

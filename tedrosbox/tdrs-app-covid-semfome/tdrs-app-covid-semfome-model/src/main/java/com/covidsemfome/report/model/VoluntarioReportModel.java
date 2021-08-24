@@ -4,7 +4,9 @@
 package com.covidsemfome.report.model;
 
 import java.util.Date;
+import java.util.List;
 
+import com.covidsemfome.model.TipoAjuda;
 import com.tedros.ejb.base.model.TReportModel;
 
 /**
@@ -27,6 +29,10 @@ public class VoluntarioReportModel extends TReportModel<VoluntarioItemModel> {
 	private Date dataFim;
 
 	private String status;
+	
+	private String nome;
+	
+	private List<TipoAjuda> tiposAjuda;
 	
 	/**
 	 * 
@@ -95,6 +101,30 @@ public class VoluntarioReportModel extends TReportModel<VoluntarioItemModel> {
 	 */
 	public void setIds(String ids) {
 		this.ids = ids;
+	}
+	/**
+	 * @return the nome
+	 */
+	public String getNome() {
+		return nome;
+	}
+	/**
+	 * @param nome the nome to set
+	 */
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+	/**
+	 * @return the tiposAjuda
+	 */
+	public List<TipoAjuda> getTiposAjuda() {
+		return tiposAjuda;
+	}
+	/**
+	 * @param tiposAjuda the tiposAjuda to set
+	 */
+	public void setTiposAjuda(List<TipoAjuda> tiposAjuda) {
+		this.tiposAjuda = tiposAjuda;
 	}
 	
 

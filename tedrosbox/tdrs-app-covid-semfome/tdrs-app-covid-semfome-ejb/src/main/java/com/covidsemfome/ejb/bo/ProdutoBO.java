@@ -34,7 +34,7 @@ public class ProdutoBO extends TGenericBO<Produto> {
 		return eao;
 	}
 	
-	public List<Produto> pesquisar(String cod, String nome, String marca, String medida, String uniMed){
+	public List<Produto> pesquisar(String cod, String nome, String marca, String medida, String uniMed, String orderby, String ordertype){
 		List<String> cods = null;
 		if(cod!=null){
 			cods = new ArrayList<>();
@@ -42,7 +42,7 @@ public class ProdutoBO extends TGenericBO<Produto> {
 			cods = Arrays.asList(arr);
 		}
 		
-		return eao.pesquisar(cods, nome, marca, medida, uniMed);
+		return eao.pesquisar(cods, nome, marca, medida, uniMed, orderby, ordertype);
 	}
 
 }
