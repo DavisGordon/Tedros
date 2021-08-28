@@ -107,11 +107,13 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	private SimpleObjectProperty<Date> data;
 	
 	@TLabel(text="Status")
-	@TReaderHtml(codeValues={@TCodeValue(code = "Agendada", value = "Agendada"), 
+	@TReaderHtml(codeValues={@TCodeValue(code = "Programada", value = "Programada"),
+			@TCodeValue(code = "Agendada", value = "Agendada"), 
 			@TCodeValue(code = "Cancelada", value = "Cancelada"),
 			@TCodeValue(code = "Executada", value = "Executada")})
 	@THorizontalRadioGroup(required=true, alignment=Pos.CENTER_LEFT, spacing=4, 
 	radioButtons={
+			@TRadioButtonField(text = "Programada", userData = "Programada"),
 			@TRadioButtonField(text = "Agendada", userData = "Agendada"),
 			@TRadioButtonField(text = "Cancelada", userData = "Cancelada"), 
 			@TRadioButtonField(text = "Executada", userData = "Executada")

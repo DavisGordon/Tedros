@@ -41,9 +41,17 @@ public class AcaoService extends TEjbService<Acao> {
 	public ITGenericBO<Acao> getBussinesObject() {
 		return bo;
 	}
-	@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
+	
+	public List<Acao> listAcoesProgramadasParaDecisao(){
+		return bo.listAcoesProgramadasParaDecisao();
+	}
+	@TransactionAttribute(value = TransactionAttributeType.NEVER)
 	public List<Acao> listAcoesParaExibirNoPainel(){
 		return bo.listAcoesDoDiaAnteriorEmDiante();
+	}
+	
+	public void enviarEmailProgramadasParaDecisao(List<Acao> lst) throws TSentEmailException, EmailBusinessException{
+		emailBO.enviarEmailAcoesProgramadasParaDecisao(lst);
 	}
 	@TransactionAttribute(value = TransactionAttributeType.NEVER)
 	public void enviarEmailSairAcao(Pessoa p, Acao a) throws TSentEmailException, EmailBusinessException{

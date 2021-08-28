@@ -32,7 +32,7 @@
 		  	<activeByDefault>true</activeByDefault>
 		  </activation>
 		  <properties>
-		    <srv.host>http://localhost:8080/tdrs-app-covid-semfome-webapp/</srv.host>
+		    <srv.host>http://localhost:8081/tdrs-app-covid-semfome-webapp/</srv.host>
 		    <csf.email>covidsemfome@gmail.com</csf.email>
 		    <srv.email.template.path>C://usr//covidsemfome//email_boasvindas.html</srv.email.template.path>
 		    <srv.email.resource.path>C://usr//covidsemfome//smtpAccount.properties</srv.email.resource.path>

@@ -28,6 +28,15 @@ public class AcaoController extends TEjbController<Acao> implements IAcaoControl
 	@EJB
 	private AcaoService serv;
 
+	public TResult<List<Acao>> listAcoesProgramadasParaDecisao(){
+		try{
+			List<Acao> lst = serv.listAcoesProgramadasParaDecisao();
+			return new TResult<>(EnumResult.SUCESS, "", lst);
+		}catch(Exception e){
+			e.printStackTrace();
+			return new TResult<>(EnumResult.ERROR, e.getMessage());
+		}
+	}
 	
 	public TResult<List<Acao>> listAcoesParaExibirNoPainel(){
 		try{

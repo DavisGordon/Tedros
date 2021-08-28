@@ -26,5 +26,6 @@ public class TUserBO extends TGenericBO<TUser> {
 	public void saveActiveProfile(TProfile profile, Long userId) throws Exception{
 		eao.saveActiveProfile(profile, userId);
 	}
+	
 
 }

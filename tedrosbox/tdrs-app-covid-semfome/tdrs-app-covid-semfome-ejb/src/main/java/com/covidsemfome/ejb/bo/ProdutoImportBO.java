@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package com.covidsemfome.ejb.bo;
 
 import javax.enterprise.context.RequestScoped;

@@ -19,5 +19,7 @@ import com.tedros.ejb.base.result.TResult;
 @Remote
 public interface IAcaoController extends ITEjbController<Acao> {
 
+	public TResult<List<Acao>> listAcoesProgramadasParaDecisao();
+	
 	public TResult<List<Acao>> listAcoesParaExibirNoPainel();
 }
