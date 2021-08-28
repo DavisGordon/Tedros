@@ -50,6 +50,14 @@ public class ServiceLocator {
 		return locator;
 	}
 	
+	/*public static ServiceLocator getInstance(TUser user){
+		P.put("java.naming.security.principal", user.getLogin());
+		P.put("java.naming.security.credentials", user.getPassword());
+		if(locator ==null)
+			locator = new ServiceLocator();
+		return locator;
+	}*/
+	
 	@SuppressWarnings("unchecked")
 	public <E> E lookup(String jndi) throws NamingException{
 		ctx = new InitialContext(P);

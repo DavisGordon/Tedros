@@ -92,8 +92,24 @@ public class AcaoEAO extends TGenericEAO<Acao> {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<Acao> listAcoesProgramadas(Date data){
+		StringBuffer sbf = new StringBuffer("select distinct e from Acao e "
+				+ "where e.status = 'Programada' "
+				+ "and e.data <= :data order by e.data ");
+		
+		Query qry = getEntityManager().createQuery(sbf.toString());
+		qry.setParameter("data", data);
+		qry.setHint(QueryHints.CACHE_USAGE, CacheUsage.DoNotCheckCache);
+		List<Acao> lst = qry.getResultList();
+		return lst;
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<Acao> listAcoes(Date data){
-		StringBuffer sbf = new StringBuffer("select distinct e from Acao e left join fetch e.voluntarios v where e.data >= :data order by e.data ");
+		StringBuffer sbf = new StringBuffer("select distinct e from Acao e "
+				+ "left join fetch e.voluntarios v "
+				+ "where e.status != 'Programada' "
+				+ "and e.data >= :data order by e.data ");
 		
 		Query qry = getEntityManager().createQuery(sbf.toString());
 		qry.setParameter("data", data);

@@ -150,6 +150,9 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 	        		if(!runBefore(resultList)) {
 	        			return resultList;
 	        		};
+	        		//TUser user = TedrosContext.getLoggedUser();
+	        		/*ServiceLocator loc = user!=null ? ServiceLocator.getInstance(user)
+	        				: ServiceLocator.getInstance();*/
 	        		ServiceLocator loc = ServiceLocator.getInstance();
 	        		ITEjbController<E> service = (ITEjbController<E>) loc.lookup(serviceJndiName);
 	        		if(service!=null){

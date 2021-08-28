@@ -84,27 +84,37 @@ public class PessoaBO extends TGenericBO<Pessoa> {
 		super.save(p);
 		return termo;
 	}
+	
+	public List<Pessoa> getListaEstrategicoEmail(){
+		return eao.getListaEstrategicoEmail();
+	}
 
-	public String estrategicoEmail(){
+	public String getEnderecoEstrategicoEmail(){
 		String str = "";
-		List<Pessoa> lst = eao.estrategicoEmail();
+		List<Pessoa> lst = this.getListaEstrategicoEmail();
 		if(lst!=null){
 			for (Pessoa p : lst) {
-				if(p.getLoginName()!=null){
-					str += ((str.isEmpty()) ?"":",") + p.getLoginName();
-				}else{
-					if(p.getContatos()!= null){
-						for(Contato c : p.getContatos()){
-							if(c.getTipo().equals("1")){
-								str += ((str.isEmpty()) ?"":",") + c.getDescricao();
-								break;
-							}
-						}
+				String e = getEmail(p);
+				if(e!=null)
+					str += ((str.isEmpty()) ?"":",") + getEmail(p);
+			}
+		}
+		return str;
+	}
+	
+	public String getEmail(Pessoa p) {
+		if(p.getLoginName()!=null){
+			 return p.getLoginName();
+		}else{
+			if(p.getContatos()!= null){
+				for(Contato c : p.getContatos()){
+					if(c.getTipo().equals("1")){
+						return c.getDescricao();
 					}
 				}
 			}
 		}
-		return str;
+		return null;
 	}
 	
 	public Pessoa recuperar(String loginName, String password){

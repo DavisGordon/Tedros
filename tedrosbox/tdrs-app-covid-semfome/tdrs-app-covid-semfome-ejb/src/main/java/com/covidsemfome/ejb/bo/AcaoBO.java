@@ -51,4 +51,11 @@ public class AcaoBO extends TGenericBO<Acao> {
 		
 		return eao.pesquisar(idsl, titulo, dataInicio, dataFim, status, orderby, ordertype);
 	}
+
+	public List<Acao> listAcoesProgramadasParaDecisao() {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, 7);
+		Date data = cal.getTime();
+		return eao.listAcoesProgramadas(data);
+	}
 }
