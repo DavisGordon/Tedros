@@ -12,24 +12,32 @@ import javax.ejb.TransactionAttributeType;
 import com.covidsemfome.ejb.exception.MailingWarningException;
 import com.covidsemfome.ejb.service.MailingService;
 import com.covidsemfome.model.Mailing;
-import com.tedros.ejb.base.controller.TEjbController;
+import com.tedros.ejb.base.controller.ITSecurityController;
+import com.tedros.ejb.base.controller.TSecureEjbController;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.security.ITSecurity;
+import com.tedros.ejb.base.security.TAccessToken;
+import com.tedros.ejb.base.security.TRemoteSecurity;
 import com.tedros.ejb.base.service.ITEjbService;
 
 /**
  * @author Davis Gordon
  *
  */
+@TRemoteSecurity
 @Stateless(name="IMailingController")
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
-public class MailingServiceController extends TEjbController<Mailing> implements IMailingController{
+public class MailingServiceController extends TSecureEjbController<Mailing> implements IMailingController, ITSecurity{
 	
 	@EJB
 	private MailingService serv;
 	
+	@EJB
+	private ITSecurityController securityController;
+	
 	@Override
-	public TResult<Mailing> save(Mailing m) {
+	public TResult<Mailing> save(TAccessToken token, Mailing m) {
 		
 		try{
 			serv.enviar(m);
@@ -52,6 +60,10 @@ public class MailingServiceController extends TEjbController<Mailing> implements
 	public ITEjbService<Mailing> getService() {
 		return serv;
 	}
-	
+
+	@Override
+	public ITSecurityController getSecurityController() {
+		return securityController;
+	}
 
 }

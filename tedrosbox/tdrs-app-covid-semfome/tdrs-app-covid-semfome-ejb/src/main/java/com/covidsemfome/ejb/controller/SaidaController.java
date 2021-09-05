@@ -13,9 +13,13 @@ import javax.ejb.TransactionAttributeType;
 
 import com.covidsemfome.ejb.service.SaidaService;
 import com.covidsemfome.model.Saida;
-import com.tedros.ejb.base.controller.TEjbController;
+import com.tedros.ejb.base.controller.ITSecurityController;
+import com.tedros.ejb.base.controller.TSecureEjbController;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.security.ITSecurity;
+import com.tedros.ejb.base.security.TAccessToken;
+import com.tedros.ejb.base.security.TRemoteSecurity;
 import com.tedros.ejb.base.service.ITEjbService;
 
 /**
@@ -24,12 +28,16 @@ import com.tedros.ejb.base.service.ITEjbService;
  * @author Davis Gordon
  *
  */
+@TRemoteSecurity
 @Stateless(name="ISaidaController")
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
-public class SaidaController extends TEjbController<Saida> implements ISaidaController {
+public class SaidaController extends TSecureEjbController<Saida> implements ISaidaController, ITSecurity {
 	
 	@EJB
 	private SaidaService serv;
+	
+	@EJB
+	private ITSecurityController securityController;
 	
 	@Override
 	public ITEjbService<Saida> getService() {
@@ -37,7 +45,7 @@ public class SaidaController extends TEjbController<Saida> implements ISaidaCont
 	}
 	
 	@Override
-	public TResult<Saida> save(Saida saida) {
+	public TResult<Saida> save(TAccessToken token, Saida saida) {
 		
 		try{
 			Saida saidaOld = null;
@@ -48,10 +56,13 @@ public class SaidaController extends TEjbController<Saida> implements ISaidaCont
 			
 			return new TResult<>(EnumResult.SUCESS, res);
 		}catch(Exception e) {
-			return processException(saida, e);
+			return processException(token, saida, e);
 		}
 	}
 	
-	
+	@Override
+	public ITSecurityController getSecurityController() {
+		return securityController;
+	}
 
 }

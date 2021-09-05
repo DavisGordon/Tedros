@@ -19,9 +19,13 @@ import com.covidsemfome.ejb.exception.PessoaContatoExistException;
 import com.covidsemfome.ejb.producer.Item;
 import com.covidsemfome.ejb.service.PessoaService;
 import com.covidsemfome.model.Pessoa;
-import com.tedros.ejb.base.controller.TEjbController;
+import com.tedros.ejb.base.controller.ITSecurityController;
+import com.tedros.ejb.base.controller.TSecureEjbController;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.security.ITSecurity;
+import com.tedros.ejb.base.security.TAccessToken;
+import com.tedros.ejb.base.security.TRemoteSecurity;
 import com.tedros.util.TEncriptUtil;
 import com.tedros.util.TSentEmailException;
 
@@ -29,12 +33,16 @@ import com.tedros.util.TSentEmailException;
  * @author Davis Gordon
  *
  */
+@TRemoteSecurity
 @Stateless(name="IPessoaController")
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
-public class PessoaController extends TEjbController<Pessoa> implements IPessoaController {
+public class PessoaController extends TSecureEjbController<Pessoa> implements IPessoaController, ITSecurity {
 
 	@EJB
 	private PessoaService serv;
+	
+	@EJB
+	private ITSecurityController securityController;
 	
 	@Inject
 	@Named("errorMsg")
@@ -46,7 +54,7 @@ public class PessoaController extends TEjbController<Pessoa> implements IPessoaC
 	}
 	
 	@Override
-	public TResult<Boolean> defpass(String key, String pass) {
+	public TResult<Boolean> defpass(TAccessToken token, String key, String pass) {
 		try{
 			
 			Pessoa p = new Pessoa();
@@ -73,7 +81,7 @@ public class PessoaController extends TEjbController<Pessoa> implements IPessoaC
 	}
 	
 	@Override
-	public TResult<Boolean> validateNewPassKey(String key) {
+	public TResult<Boolean> validateNewPassKey(TAccessToken token, String key) {
 		try{
 			
 			Pessoa p = new Pessoa();
@@ -94,7 +102,7 @@ public class PessoaController extends TEjbController<Pessoa> implements IPessoaC
 	}
 	
 	@Override
-	public TResult<Boolean> newPass(String email) {
+	public TResult<Boolean> newPass(TAccessToken token, String email) {
 		
 		try{
 			
@@ -120,7 +128,7 @@ public class PessoaController extends TEjbController<Pessoa> implements IPessoaC
 	}
 	
 	@Override
-	public TResult<Pessoa> remove(Pessoa entidade) {
+	public TResult<Pessoa> remove(TAccessToken token, Pessoa entidade) {
 		
 		try{
 			if(serv.isVoluntario(entidade)){
@@ -139,7 +147,7 @@ public class PessoaController extends TEjbController<Pessoa> implements IPessoaC
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public TResult recuperar(String loginName, String password){
+	public TResult recuperar(TAccessToken token, String loginName, String password){
 		try{
 			Pessoa pess = getService().recuperar(loginName, password);
 			return new TResult<Pessoa>(EnumResult.SUCESS, pess);
@@ -150,7 +158,7 @@ public class PessoaController extends TEjbController<Pessoa> implements IPessoaC
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public TResult pesquisar(String nome, Date dataNascimento, String tipo, String tipoDocumento, String numero){
+	public TResult pesquisar(TAccessToken token, String nome, Date dataNascimento, String tipo, String tipoDocumento, String numero){
 		try{
 			List<Pessoa> list = getService().pesquisar(nome, dataNascimento, tipo, tipoDocumento, numero);
 			return new TResult<List<Pessoa>>(EnumResult.SUCESS, list);
@@ -161,7 +169,7 @@ public class PessoaController extends TEjbController<Pessoa> implements IPessoaC
 		
 	}
 	
-	public TResult<Pessoa> saveFromSite(Pessoa entidade) {
+	public TResult<Pessoa> saveFromSite(TAccessToken token, Pessoa entidade) {
 		try{
 			
 			if(serv.isLoginEmUso(entidade)){
@@ -185,7 +193,23 @@ public class PessoaController extends TEjbController<Pessoa> implements IPessoaC
 		}
 	}
 
-	
+	@Override
+	public ITSecurityController getSecurityController() {
+		return securityController;
+	}
+
+	@Override
+	public TResult<Boolean> isLoginInUse(TAccessToken token, String email) {
+		Pessoa ex = new Pessoa();
+		ex.setLoginName(email);
+		try {
+			Boolean f = serv.isLoginEmUso(ex);
+			return new TResult<>(EnumResult.SUCESS, f);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new TResult<>(EnumResult.ERROR, errorMsg.getValue());
+		}
+	}
 
 	
 

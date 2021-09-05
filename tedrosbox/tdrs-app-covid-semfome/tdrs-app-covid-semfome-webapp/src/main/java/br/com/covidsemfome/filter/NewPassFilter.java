@@ -6,6 +6,7 @@ package br.com.covidsemfome.filter;
 import java.io.IOException;
 
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -20,6 +21,8 @@ import com.covidsemfome.ejb.controller.IPessoaController;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 
+import br.com.covidsemfome.bean.AppBean;
+
 /**
  * @author Davis Gordon
  *
@@ -28,6 +31,9 @@ import com.tedros.ejb.base.result.TResult.EnumResult;
 public class NewPassFilter implements Filter {
 	
 	private static String PARAM = "k";
+	
+	@Inject
+	private AppBean appBean;
 	
 	@EJB
 	private IPessoaController serv;
@@ -54,7 +60,7 @@ public class NewPassFilter implements Filter {
 	    if(key!=null && !key.trim().equals("")){
 	    				
 			try {
-				TResult<Boolean> res = serv.validateNewPassKey(key.trim());
+				TResult<Boolean> res = serv.validateNewPassKey(appBean.getToken(), key.trim());
 				if(res.getResult().equals(EnumResult.SUCESS)){
 					chain.doFilter(req, resp);
 				}else if(res.getResult().equals(EnumResult.WARNING)){

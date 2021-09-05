@@ -16,6 +16,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.naming.NamingException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
 import org.reflections.util.ConfigurationBuilder;
@@ -26,8 +28,10 @@ import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.TSecurityDescriptor;
 import com.tedros.core.annotation.TApplication;
 import com.tedros.core.annotation.security.TAuthorizationType;
+import com.tedros.core.ejb.controller.ITLoginController;
 import com.tedros.core.security.model.TAuthorization;
 import com.tedros.core.security.model.TUser;
+import com.tedros.core.service.remote.ServiceLocator;
 import com.tedros.core.style.TStyleResourceValue;
 import com.tedros.util.TClassUtil;
 import com.tedros.util.TFileUtil;
@@ -535,6 +539,7 @@ public final class TedrosContext {
 	}
 
 	public static void logOut() {
+		serverLogout();
 		main.hideApps();
 		loggedUser = null;
 		TedrosContext.showModal(main.buildLogin());
@@ -544,8 +549,24 @@ public final class TedrosContext {
 	 * Stop all services and exit program
 	 * */
 	public static void exit() {
+		serverLogout();
+		loggedUser = null;
 		TedrosProcess.stopAllServices();
         Platform.exit();
+	}
+	
+	public static void serverLogout() {
+		if(loggedUser!=null && loggedUser.getAccessToken()!=null) {
+			ServiceLocator loc = ServiceLocator.getInstance();
+			try {
+				ITLoginController serv = loc.lookup("ITLoginControllerRemote");
+				serv.logout(loggedUser.getAccessToken());
+			} catch (NamingException e) {
+				e.printStackTrace();
+			}finally {
+				loc.close();
+			}
+		}
 	}
 	
 	/**

@@ -7,6 +7,9 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -36,11 +39,20 @@ import com.covidsemfome.rest.model.SiteModel;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 
+import br.com.covidsemfome.bean.AppBean;
+import br.com.covidsemfome.producer.Item;
+
 @Path("/csf")
+@RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
 public class SiteApi {
 	
-	private static String ERROR = "Desculpe estamos há resolver um problema técnico e em breve voltaremos.";
+	@Inject
+	@Named("errorMsg")
+	private Item<String> error;
+	
+	@Inject
+	private AppBean appBean;
 	
 	@EJB
 	private ISiteDoacaoController doaServ;
@@ -97,6 +109,7 @@ public class SiteApi {
 	}
 				
 	
+	@SuppressWarnings("unchecked")
 	@GET
 	@Path("/acao/{id}/prog/{idx}/{email}")
 	public String setDecisaoProgramadas(@PathParam("id") Long id, 
@@ -114,7 +127,7 @@ public class SiteApi {
 			
 			Acao ex = new Acao();
 			ex.setId(id);
-			TResult<Acao> res = aServ.findById(ex);
+			TResult<Acao> res = aServ.findById(appBean.getToken(), ex);
 			ex = res.getValue();
 			if(alterarStatus(idx, ex)) {
 				return "Status alterado, obrigado!";
@@ -135,7 +148,7 @@ public class SiteApi {
 	private boolean validarEmail(String email, boolean f) {
 		Pessoa p = new Pessoa();
 		p.setTipoVoluntario("3");
-		TResult<List<Pessoa>> pr = pServ.findAll(p);
+		TResult<List<Pessoa>> pr = pServ.findAll(appBean.getToken(), p);
 		List<Pessoa> l = pr.getValue();
 		for(Pessoa e : l) {
 			String em = this.getEmail(e);
@@ -173,7 +186,7 @@ public class SiteApi {
 			case 2: ex.setStatus("Cancelada"); break;
 			case 3: ex.setStatus("Executada"); break;
 			}
-			aServ.save(ex);
+			aServ.save(appBean.getToken(), ex);
 			return true;
 		}
 		return false;
@@ -190,7 +203,7 @@ public class SiteApi {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new RestModel<>(null, "500", ERROR);
+			return new RestModel<>(null, "500", error.getValue());
 		}
 	}
 	
@@ -218,7 +231,7 @@ public class SiteApi {
 			return new RestModel<>(models, "200", res.getMessage());
 		}else{
 			//System.out.println(res.getErrorMessage());
-			return new RestModel<>(null, "404", res.getResult().equals(EnumResult.WARNING) ? res.getMessage()  : ERROR );
+			return new RestModel<>(null, "404", res.getResult().equals(EnumResult.WARNING) ? res.getMessage()  : error.getValue() );
 		}
 	}
 	
@@ -228,13 +241,14 @@ public class SiteApi {
 		return df.format(data);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@GET
 	@Path("/about")
 	public RestModel<SiteModel> getAbout(){
 		try {
 			SiteAbout ex = new SiteAbout();
 			ex.setStatus("ATIVADO");
-			TResult<SiteAbout> res = aboServ.find(ex);
+			TResult<SiteAbout> res = aboServ.find(appBean.getToken(), ex);
 			if(res.getResult().equals(EnumResult.SUCESS)){
 				SiteModel m = (res.getValue()!=null) 
 						? new SiteModel(res.getValue()) 
@@ -245,12 +259,12 @@ public class SiteApi {
 			}else{
 				return new RestModel<>(new SiteModel(), "404", res.getResult().equals(EnumResult.WARNING) 
 						? res.getMessage()  
-								: ERROR );
+								: error.getValue() );
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new RestModel<>(null, "500", ERROR);
+			return new RestModel<>(null, "500", error.getValue());
 		}
 		
 	}
@@ -261,7 +275,7 @@ public class SiteApi {
 		try {
 			SiteContato ex = new SiteContato();
 			ex.setStatus("ATIVADO");
-			TResult<List<SiteContato>> res = conServ.findAll(ex);
+			TResult<List<SiteContato>> res = conServ.findAll(appBean.getToken(), ex);
 			List<SiteModel> lst = new ArrayList<>();
 			if(res.getResult().equals(EnumResult.SUCESS)){
 				if(res.getValue()!=null) {
@@ -278,12 +292,12 @@ public class SiteApi {
 			}else{
 				return new RestModel<>(lst, "404", res.getResult().equals(EnumResult.WARNING) 
 						? res.getMessage()  
-								: ERROR );
+								: error.getValue() );
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new RestModel<>(null, "500", ERROR);
+			return new RestModel<>(null, "500", error.getValue());
 		}
 		
 	}
@@ -294,7 +308,7 @@ public class SiteApi {
 		try {
 			SiteVideo ex = new SiteVideo();
 			ex.setStatus("ATIVADO");
-			TResult<List<SiteVideo>> res = vidServ.findAll(ex);
+			TResult<List<SiteVideo>> res = vidServ.findAll(appBean.getToken(), ex);
 			List<SiteModel> lst = new ArrayList<>();
 			if(res.getResult().equals(EnumResult.SUCESS)){
 				if(res.getValue()!=null) {
@@ -311,12 +325,12 @@ public class SiteApi {
 			}else{
 				return new RestModel<>(lst, "404", res.getResult().equals(EnumResult.WARNING) 
 						? res.getMessage()  
-								: ERROR );
+								: error.getValue() );
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new RestModel<>(null, "500", ERROR);
+			return new RestModel<>(null, "500", error.getValue());
 		}
 		
 	}
@@ -327,7 +341,7 @@ public class SiteApi {
 		try {
 			SiteNoticia ex = new SiteNoticia();
 			ex.setStatus("ATIVADO");
-			TResult<List<SiteNoticia>> res = newServ.findAll(ex);
+			TResult<List<SiteNoticia>> res = newServ.findAll(appBean.getToken(), ex);
 			List<SiteModel> lst = new ArrayList<>();
 			if(res.getResult().equals(EnumResult.SUCESS)){
 				if(res.getValue()!=null) {
@@ -344,12 +358,12 @@ public class SiteApi {
 			}else{
 				return new RestModel<>(lst, "404", res.getResult().equals(EnumResult.WARNING) 
 						? res.getMessage()  
-								: ERROR );
+								: error.getValue() );
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new RestModel<>(null, "500", ERROR);
+			return new RestModel<>(null, "500", error.getValue());
 		}
 		
 	}
@@ -360,7 +374,7 @@ public class SiteApi {
 		try {
 			SiteDoacao ex = new SiteDoacao();
 			ex.setStatus("ATIVADO");
-			TResult<List<SiteDoacao>> res = doaServ.findAll(ex);
+			TResult<List<SiteDoacao>> res = doaServ.findAll(appBean.getToken(), ex);
 			List<SiteModel> lst = new ArrayList<>();
 			if(res.getResult().equals(EnumResult.SUCESS)){
 				
@@ -378,12 +392,12 @@ public class SiteApi {
 			}else{
 				return new RestModel<>(lst, "404", res.getResult().equals(EnumResult.WARNING) 
 						? res.getMessage()  
-								: ERROR );
+								: error.getValue() );
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new RestModel<>(null, "500", ERROR);
+			return new RestModel<>(null, "500", error.getValue());
 		}
 		
 	}

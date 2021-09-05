@@ -120,7 +120,7 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T> T processException(E entidade, Exception e) {
+	protected <T> T processException(E entidade, Exception e) {
 		e.printStackTrace();
 		if(e instanceof OptimisticLockException || e.getCause() instanceof OptimisticLockException){
 			TResult<E> result = find(entidade);

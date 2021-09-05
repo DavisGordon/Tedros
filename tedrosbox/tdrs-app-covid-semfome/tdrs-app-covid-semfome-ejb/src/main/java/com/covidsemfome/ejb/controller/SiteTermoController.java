@@ -15,8 +15,12 @@ import javax.ejb.TransactionAttributeType;
 
 import com.covidsemfome.ejb.service.TStatelessService;
 import com.covidsemfome.model.SiteTermo;
-import com.tedros.ejb.base.controller.TEjbController;
+import com.tedros.ejb.base.controller.ITSecurityController;
+import com.tedros.ejb.base.controller.TSecureEjbController;
 import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.security.ITSecurity;
+import com.tedros.ejb.base.security.TAccessToken;
+import com.tedros.ejb.base.security.TRemoteSecurity;
 import com.tedros.ejb.base.service.ITEjbService;
 
 /**
@@ -25,12 +29,16 @@ import com.tedros.ejb.base.service.ITEjbService;
  * @author Davis Gordon
  *
  */
+@TRemoteSecurity
 @Stateless(name="ISiteTermoController")
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
-public class SiteTermoController extends TEjbController<SiteTermo> implements ISiteTermoController {
+public class SiteTermoController extends TSecureEjbController<SiteTermo> implements ISiteTermoController, ITSecurity {
 	
 	@EJB
 	private TStatelessService<SiteTermo> serv;
+
+	@EJB
+	private ITSecurityController securityController;
 	
 	@Override
 	public ITEjbService<SiteTermo> getService() {
@@ -38,7 +46,13 @@ public class SiteTermoController extends TEjbController<SiteTermo> implements IS
 	}
 
 	@Override
-	public TResult<SiteTermo> save(SiteTermo e) {
+	public ITSecurityController getSecurityController() {
+		return securityController;
+	}
+
+
+	@Override
+	public TResult<SiteTermo> save(TAccessToken token, SiteTermo e) {
 		
 		if(e.getStatus().equals("ATIVADO")) {
 			SiteTermo ex = new SiteTermo();
@@ -53,10 +67,10 @@ public class SiteTermoController extends TEjbController<SiteTermo> implements IS
 						serv.save(i);
 					}
 			} catch (Exception e1) {
-				return processException(e, e1);
+				return processException(token, e, e1);
 			}
 		}
 		
-		return super.save(e);
+		return super.save(token, e);
 	}
 }

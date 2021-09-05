@@ -7,8 +7,10 @@ import java.util.List;
 
 import javax.naming.NamingException;
 
+import com.tedros.core.context.TedrosContext;
 import com.tedros.core.ejb.controller.TAuthorizationController;
 import com.tedros.core.security.model.TAuthorization;
+import com.tedros.core.security.model.TUser;
 import com.tedros.core.service.remote.ServiceLocator;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.exception.TProcessException;
@@ -36,8 +38,9 @@ public class TAuthorizationProcess extends TEntityProcess<TAuthorization> {
 		if(lst!=null){
 			ServiceLocator loc = ServiceLocator.getInstance();
 			try {
+				TUser user = TedrosContext.getLoggedUser();
 				TAuthorizationController serv = loc.lookup("TAuthorizationControllerRemote");
-				res.add(serv.process(lst));
+				res.add(serv.process(user.getAccessToken(), lst));
 			} catch (NamingException e) {
 				e.printStackTrace();
 			}finally {

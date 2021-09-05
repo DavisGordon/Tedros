@@ -179,11 +179,12 @@ $(document).ready(function() {
 	        				content += ('<p>' + obj.data + ', ' + obj.status + ', Inscritos(' + obj.qtdVoluntariosInscritos + '), Max(' + obj.qtdMaxVoluntarios + '), Min(' + obj.qtdMinVoluntarios + ')</p>');
 	        				content += ('</header>');
 	        				content += ('<p>' + obj.descricao + '</p>');
-	                        content += ('<a href="javascript: displayContent(\'content'+index+'\')" class="button primary fit small">Opções</a>');
 	        			
-	                        if(obj.status=='Agendada' && (tpf || tpj)){
+	                        if(obj.status=='Agendada' && (tpf || tpj) 
+	                        		&& ((obj.qtdVoluntariosInscritos < obj.qtdMaxVoluntarios) || (obj.qtdVoluntariosInscritos >= obj.qtdMaxVoluntarios && obj.inscrito)  ) ){
 	        					var display = obj.inscrito ? "block" : "none";
-	        					
+		                        content += ('<a href="javascript: displayContent(\'content'+index+'\')" class="button primary fit small">Opções</a>');
+
 	        					content += ('<div class="content contentLoad" id="content'+index+'" style="display:'+display+';">');
 	        					content += ('<div id="loader'+index+'" class="loader">');
 	        					content += ('<div id="cssloader'+index+'"><div></div></div>');
@@ -224,8 +225,9 @@ $(document).ready(function() {
 		        				}
 		        				content += ('	</div>');
 		        				content += ('	<ul class="actions">');
-		        				content += ('		<li><input type="submit" name="submit" id="submit" value="Participar" /></li>');
-		        				
+		        				if(obj.qtdVoluntariosInscritos < obj.qtdMaxVoluntarios){
+		        					content += ('		<li><input type="submit" name="submit" id="submit" value="Participar" /></li>');
+		        				}
 		        				if(obj.inscrito){
 	                           		content += ('<li><a id="pa'+obj.id+'" href="javascript: sair(\'pa'+obj.id+'\', '+ obj.id +', '+ index +')" class="button fit small wide smooth-scroll-middle">Sair da ação</a></li>');
 	                            }
@@ -412,15 +414,13 @@ $(document).ready(function() {
     			if(result.code == "200"){
     				processarAcoes(result);
     		    	alert("Obrigado sua intenção em ajudar foi registrada e em breve entraremos em contato ou se desejar entre em contato conosco!");
-    		    	showLoader('', form);
-        		    
     			}else if(result.code == "404"){
 	        		alert(result.message);
 	        		location.href = "#volun";
 	        	}else{
 	        		alert(result.message);
-	        		showLoader('', form);
 	        	}
+    			showLoader('', form);
     		} 
     		
     		function validateEmail(email) {

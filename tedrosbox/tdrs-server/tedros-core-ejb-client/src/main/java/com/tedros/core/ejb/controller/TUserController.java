@@ -2,17 +2,11 @@ package com.tedros.core.ejb.controller;
 
 import javax.ejb.Remote;
 
-import com.tedros.core.security.model.TProfile;
 import com.tedros.core.security.model.TUser;
-import com.tedros.ejb.base.controller.ITEjbController;
-import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.controller.ITSecureEjbController;
 
 @Remote
-public interface TUserController extends ITEjbController<TUser>{
+public interface TUserController extends ITSecureEjbController<TUser>{
 	
-	@SuppressWarnings("rawtypes")
-	public TResult login(String login, String password);
-	
-	public TResult<TUser> saveActiveProfile(TProfile profile, Long userId);
 	
 }

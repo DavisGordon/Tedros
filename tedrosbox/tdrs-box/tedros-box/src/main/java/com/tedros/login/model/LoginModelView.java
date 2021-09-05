@@ -24,7 +24,6 @@ import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.login.behavior.LoginBehavior;
 import com.tedros.login.decorator.LoginDecorator;
 import com.tedros.settings.security.model.TProfileModelView;
-import com.tedros.settings.security.process.TUserProcess;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -36,7 +35,7 @@ import javafx.scene.text.TextAlignment;
 @TPresenter(modelClass=Login.class, behavior=@TBehavior(type=LoginBehavior.class), 
 	decorator=@TDecorator(type=LoginDecorator.class, saveButtonText="#{tedros.validateUser}", viewTitle="#{tedros.login.view.title}"), 
 	type = TDynaPresenter.class)
-@TEntityProcess(entity=TUser.class, process=TUserProcess.class)
+@TEntityProcess(entity=TUser.class, process=TLoginProcess.class)
 public class LoginModelView extends TModelView<Login> {
 	
 	private SimpleLongProperty id;

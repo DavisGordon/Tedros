@@ -12,22 +12,29 @@ import com.covidsemfome.ejb.service.DoacaoService;
 import com.covidsemfome.model.Doacao;
 import com.covidsemfome.report.model.DoacaoItemModel;
 import com.covidsemfome.report.model.DoacaoReportModel;
+import com.tedros.ejb.base.controller.ITSecurityController;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.security.ITSecurity;
+import com.tedros.ejb.base.security.TAccessToken;
+import com.tedros.ejb.base.security.TRemoteSecurity;
 
+@TRemoteSecurity
 @Stateless(name="IDoacaoReportController")
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
-public class DoacaoReportController implements IDoacaoReportController {
+public class DoacaoReportController implements IDoacaoReportController, ITSecurity {
 
 	@EJB
 	private DoacaoService serv;
 	
+	@EJB
+	private ITSecurityController security;
+	
 	public DoacaoReportController() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public TResult<DoacaoReportModel> process(DoacaoReportModel m) {
+	public TResult<DoacaoReportModel> process(TAccessToken token, DoacaoReportModel m) {
 		try{
 			List<Doacao> lst = serv.pesquisar(m.getNome(), m.getDataInicio(), m.getDataFim(), m.getAcaoId(), m.getTiposAjuda());
 			if(lst!=null){
@@ -43,6 +50,11 @@ public class DoacaoReportController implements IDoacaoReportController {
 		}catch(Exception e){
 			return new TResult<>(EnumResult.ERROR, e.getMessage());
 		}
+	}
+
+	@Override
+	public ITSecurityController getSecurityController() {
+		return security;
 	}
 
 }

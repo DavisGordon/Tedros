@@ -17,6 +17,8 @@ import java.util.logging.Logger;
 
 import javax.naming.NamingException;
 
+import com.tedros.core.context.TedrosContext;
+import com.tedros.core.security.model.TUser;
 import com.tedros.core.service.remote.ServiceLocator;
 import com.tedros.ejb.base.controller.ITEjbReportController;
 import com.tedros.ejb.base.model.ITReportModel;
@@ -97,9 +99,21 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
         			switch(action) {
         			case SEARCH:
         				ServiceLocator loc = ServiceLocator.getInstance();
-        				ITEjbReportController<M> service = (ITEjbReportController<M>) loc.lookup(serviceJndiName);
-        				resultado = service.process(model);
-        				loc.close();
+        				try {
+        					TUser user = TedrosContext.getLoggedUser();
+	        				ITEjbReportController<M> service = (ITEjbReportController<M>) loc.lookup(serviceJndiName);
+	        				resultado = service.process(user.getAccessToken(), model);
+        				} catch(NamingException e){
+        	    			setException( new TProcessException(e, e.getMessage(), "The service is not available!"));
+        	    			LOGGER.severe(e.toString());
+        	    			e.printStackTrace();
+        	    		}catch (Exception e) {
+        					setException(e);
+        					LOGGER.severe(e.toString());
+        					e.printStackTrace();
+        				}finally {
+        					loc.close();
+        				}
         				break;
         			case EXPORT_PDF:
         				resultado = runExportPdf();
@@ -108,12 +122,6 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
         				resultado = runExportXls();
         				break;
         			}
-	        		
-	        		
-	    		} catch(NamingException e){
-	    			setException( new TProcessException(e, e.getMessage(), "The service is not available!"));
-	    			LOGGER.severe(e.toString());
-	    			e.printStackTrace();
 	    		}catch (Exception e) {
 					setException(e);
 					LOGGER.severe(e.toString());

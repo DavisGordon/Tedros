@@ -6,44 +6,32 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
 import com.tedros.core.ejb.service.TUserService;
-import com.tedros.core.security.model.TProfile;
 import com.tedros.core.security.model.TUser;
-import com.tedros.ejb.base.controller.TEjbController;
-import com.tedros.ejb.base.result.TResult;
-import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.controller.ITSecurityController;
+import com.tedros.ejb.base.controller.TSecureEjbController;
+import com.tedros.ejb.base.security.ITSecurity;
+import com.tedros.ejb.base.security.TRemoteSecurity;
 import com.tedros.ejb.base.service.ITEjbService;
 
-
+@TRemoteSecurity
 @Stateless(name="TUserController")
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
-public class TUserControllerImpl extends TEjbController<TUser>	implements	TUserController {
+public class TUserControllerImpl extends TSecureEjbController<TUser> implements	ITSecurity, TUserController {
 
 	@EJB
 	private TUserService serv;
 	
-	@Override
-	public TResult<TUser> login(String login, String password) {
-		try{
-			TUser entity = serv.login(login, password);
-			return new TResult<TUser>(EnumResult.SUCESS, entity);
-		}catch(Exception e){
-			e.printStackTrace();
-			return new TResult<TUser>(EnumResult.ERROR, e.getMessage());
-		}
-	}
+	@EJB
+	private ITSecurityController security;
 	
-	public TResult<TUser> saveActiveProfile(TProfile profile, Long userId) {
-		try{
-			serv.saveActiveProfile(profile, userId);
-			return new TResult<TUser>(EnumResult.SUCESS);
-		}catch(Exception e){
-			e.printStackTrace();
-			return new TResult<TUser>(EnumResult.ERROR, e.getMessage());
-		}
-	}
 	@Override
 	public ITEjbService<TUser> getService() {
 		return serv;
+	}
+
+	@Override
+	public ITSecurityController getSecurityController() {
+		return security;
 	}
 
 	

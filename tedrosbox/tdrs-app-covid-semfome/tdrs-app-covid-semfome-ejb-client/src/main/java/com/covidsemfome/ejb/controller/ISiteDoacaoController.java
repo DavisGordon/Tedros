@@ -3,9 +3,9 @@ package com.covidsemfome.ejb.controller;
 import javax.ejb.Remote;
 
 import com.covidsemfome.model.SiteDoacao;
-import com.tedros.ejb.base.controller.ITEjbController;
+import com.tedros.ejb.base.controller.ITSecureEjbController;
 
 @Remote
-public interface ISiteDoacaoController extends ITEjbController<SiteDoacao>{
+public interface ISiteDoacaoController extends ITSecureEjbController<SiteDoacao>{
 
 }

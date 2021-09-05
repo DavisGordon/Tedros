@@ -18,12 +18,17 @@ import com.covidsemfome.model.Voluntario;
 import com.covidsemfome.report.model.AcaoItemModel;
 import com.covidsemfome.report.model.PessoaModel;
 import com.covidsemfome.report.model.PessoaReportModel;
+import com.tedros.ejb.base.controller.ITSecurityController;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.security.ITSecurity;
+import com.tedros.ejb.base.security.TAccessToken;
+import com.tedros.ejb.base.security.TRemoteSecurity;
 
+@TRemoteSecurity
 @Stateless(name="IPessoaReportController")
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
-public class PessoaReportController implements IPessoaReportController {
+public class PessoaReportController implements IPessoaReportController, ITSecurity {
 
 	@EJB
 	private PessoaService serv;
@@ -31,12 +36,14 @@ public class PessoaReportController implements IPessoaReportController {
 	@EJB
 	private VoluntarioService vServ;
 	
+	@EJB
+	private ITSecurityController security;
+	
 	public PessoaReportController() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public TResult<PessoaReportModel> process(PessoaReportModel m) {
+	public TResult<PessoaReportModel> process(TAccessToken token, PessoaReportModel m) {
 		try{
 			List<Pessoa> lst = serv.pesquisar(m.getNome(), m.getTipoVoluntario(), m.getStatusVoluntario(), 
 					m.getDataInicio(), m.getDataFim(), m.getOrderBy(), m.getOrderType());
@@ -72,6 +79,11 @@ public class PessoaReportController implements IPessoaReportController {
 		}catch(Exception e){
 			return new TResult<>(EnumResult.ERROR, e.getMessage());
 		}
+	}
+
+	@Override
+	public ITSecurityController getSecurityController() {
+		return security;
 	}
 
 }

@@ -26,14 +26,11 @@ import com.tedros.util.TedrosFolderEnum;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
-import javafx.scene.control.Button;
 
 public class TUserSettingBehavior extends TSaveViewBehavior<TUserSettingModelView, TUser> {
 
-	private Button saveButton;
 	private TComboBoxField<String> languageComboBox;
 	private TComboBoxField<TProfileModelView> profileComboBox;
-	private TInternationalizationEngine iEngine;
 	
 	@Override
 	public void load() {

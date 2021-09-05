@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,8 @@ import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.util.TEmailUtil;
 import com.tedros.util.TEncriptUtil;
+
+import br.com.covidsemfome.bean.AppBean;
 /**
  * @author Davis Gordon
  *
@@ -35,6 +38,9 @@ import com.tedros.util.TEncriptUtil;
 public class VoluntarioServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -3035965625139672187L;
+	
+	@Inject
+	private AppBean appBean;
 	
 	@EJB
 	private IPessoaController service;
@@ -86,7 +92,7 @@ public class VoluntarioServlet extends HttpServlet {
 					pess.setStatusVoluntario("1");
 					pess.setStatus("ATIVADO");
 					
-					TResult<Pessoa> res = service.saveFromSite(pess);
+					TResult<Pessoa> res = service.saveFromSite(appBean.getToken(), pess);
 								
 					if(res.getResult().equals(EnumResult.SUCESS)){
 						System.out.println("sucesso");

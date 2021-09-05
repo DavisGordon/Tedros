@@ -2,16 +2,14 @@ package com.tedros.fxapi.process;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.text.MessageFormat;
-import java.util.Properties;
-
-import javax.naming.InitialContext;
 
 import com.tedros.common.model.TFileEntity;
+import com.tedros.core.context.TedrosContext;
 import com.tedros.core.ejb.controller.TFileEntityController;
+import com.tedros.core.security.model.TUser;
+import com.tedros.core.service.remote.ServiceLocator;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.exception.TProcessException;
-import com.tedros.util.TResourceUtil;
 
 /**
  * A process to load a file from application server
@@ -21,70 +19,17 @@ import com.tedros.util.TResourceUtil;
  * */
 public class TFileEntityLoadProcess extends TProcess<TResult<TFileEntity>>{
 	
-	private TFileEntityController service;
-	private Properties p;
-	private InitialContext ctx;
+	private String jndiService ="TFileEntityControllerRemote";
+	
 	private TFileEntity value;
-		
 	
 	public TFileEntityLoadProcess() throws TProcessException {
-		try {
-			setAutoStart(true);
-			initRemote();
-			ctx = new InitialContext(p);
-			service = (TFileEntityController) ctx.lookup("TFileEntityControllerRemote");
-			
-		} catch (Exception e) {
-			throw new TProcessException(e, e.getMessage(), "Cant connect with the server");
-		}
+		setAutoStart(true);
 	}
 	
 	public void load(TFileEntity entidade){
 		value = entidade;
 	}
-	
-	private void initRemote() {
-		
-		Properties prop = TResourceUtil.getPropertiesFromConfFolder("remote-config.properties");
-		
-		String url = "http://{0}:8080/tomee/ejb";
-		String ip = "127.0.0.1";
-		
-		if(prop!=null){
-			url = prop.getProperty("url");
-			ip = prop.getProperty("server_ip");
-		}	
-		
-		String serviceURL = MessageFormat.format(url, ip);
-		
-		p = new Properties();
-		p.put("java.naming.factory.initial", "org.apache.openejb.client.RemoteInitialContextFactory");
-		p.put("java.naming.provider.url", serviceURL);
-	}
-		
-	@SuppressWarnings("unused")
-	private void initLocal() {
-		p = new Properties();
-		p.put("java.naming.factory.initial", "org.apache.openejb.client.LocalInitialContextFactory");
-		
-		p.put("tedrosDataSource", "new://Resource?type=DataSource");
-		p.put("tedrosDataSource.UserName", "tdrs");
-		p.put("tedrosDataSource.Password", "xpto");
-		p.put("tedrosDataSource.JdbcDriver", "org.h2.Driver");
-		p.put("tedrosDataSource.JdbcUrl", "jdbc:h2:file:C:/Tedros/box/data/db;");
-		p.put("tedrosDataSource.JtaManaged", "true");
-		
-		// change some logging
-		p.put("log4j.category.OpenEJB.options ", " debug");
-		p.put("log4j.category.OpenEJB.startup ", " debug");
-		p.put("log4j.category.OpenEJB.startup.config ", " debug");
-		
-		// set some openejb flags
-		p.put("openejb.jndiname.format ", " {ejbName}/{interfaceClass}");
-		p.put("openejb.descriptors.output ", " true");
-		p.put("openejb.validation.output.level ", " verbose");
-	}
-	
 	@Override
 	protected TTaskImpl<TResult<TFileEntity>> createTask() {
 		
@@ -96,16 +41,20 @@ public class TFileEntityLoadProcess extends TProcess<TResult<TFileEntity>>{
 			};
         	
 			protected TResult<TFileEntity> call() throws IOException, MalformedURLException {
-        		
+        		ServiceLocator loc = ServiceLocator.getInstance();
         		TResult<TFileEntity> result = null;
         		try {
+        			TUser user = TedrosContext.getLoggedUser();
+        			TFileEntityController service = loc.lookup(jndiService);
 	        		if(service!=null){
-	        			result = service.loadBytes(value);
+	        			result = service.loadBytes(user.getAccessToken(), value);
 	        		}
         		} catch (Exception e) {
 					setException(e);
 					e.printStackTrace();
-				} 
+				} finally {
+					loc.close();
+				}
         	    return result;
         	}
 		};

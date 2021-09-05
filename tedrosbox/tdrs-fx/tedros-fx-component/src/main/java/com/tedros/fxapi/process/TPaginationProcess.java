@@ -7,8 +7,12 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.tedros.core.context.TedrosContext;
+import com.tedros.core.security.model.TUser;
 import com.tedros.core.service.remote.ServiceLocator;
+import com.tedros.ejb.base.controller.ITBaseController;
 import com.tedros.ejb.base.controller.ITEjbController;
+import com.tedros.ejb.base.controller.ITSecureEjbController;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.exception.TProcessException;
@@ -100,29 +104,46 @@ public abstract class TPaginationProcess<E extends ITEntity> extends TProcess<TR
         	@SuppressWarnings("unchecked")
 			protected TResult<Map<String, Object>> call() throws IOException, MalformedURLException {
         		
+        		ServiceLocator loc = ServiceLocator.getInstance();
         		TResult<Map<String, Object>> result = null;
         		try {
-	        		ServiceLocator loc = ServiceLocator.getInstance();
-	        		ITEjbController<E> service = (ITEjbController<E>) loc.lookup(serviceJndiName);
-	        		if(service!=null){
+        			TUser user = TedrosContext.getLoggedUser();
+	        		ITBaseController base = (ITBaseController) loc.lookup(serviceJndiName);
+	        		ITEjbController<E> service = null;
+	        		ITSecureEjbController<E> secure = null;
+	        		if(base instanceof ITEjbController)
+	        			service = (ITEjbController<E>) base;
+	        		if(base instanceof ITSecureEjbController) {
+	        			if(user==null || user.getAccessToken()==null)
+	        				throw new IllegalStateException("The remote service "+serviceJndiName+" is secured and a logged user is required!");
+	        			secure = (ITSecureEjbController<E>) base;
+	        		}
+        			
+        			if(service!=null || secure!=null){
 	        			if(StringUtils.isNotBlank(pagination.getOrderBy())) {
 	        				value.setOrderBy(new ArrayList<>());
 	        				value.addOrderBy(pagination.getOrderBy());
 	        			}
 		        		switch (operation) {
 							case FINDALL :
-								result = service.findAll(value, pagination.getStart(), pagination.getTotalRows(), pagination.isOrderByAsc(), true);
+								result = service!=null
+									? service.findAll(value, pagination.getStart(), pagination.getTotalRows(), pagination.isOrderByAsc(), true)
+											: secure.findAll(user.getAccessToken(), value, pagination.getStart(), pagination.getTotalRows(), pagination.isOrderByAsc(), true);
 								break;
 							case PAGEALL :
-								result = service.pageAll(value, pagination.getStart(), pagination.getTotalRows(), pagination.isOrderByAsc());
+								result = service!=null
+										? service.pageAll(value, pagination.getStart(), pagination.getTotalRows(), pagination.isOrderByAsc())
+												: secure.pageAll(user.getAccessToken(), value, pagination.getStart(), pagination.getTotalRows(), pagination.isOrderByAsc());
 								break;
 						}
 	        		}
-	        		loc.close();
+	        		
         		} catch (Exception e) {
 					setException(e);
 					e.printStackTrace();
-				} 
+				}finally {
+					loc.close();
+				}
         		
         	    return result;
         	}

@@ -9,9 +9,10 @@ import java.util.HashSet;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Any;
 import javax.inject.Inject;
-import javax.inject.Singleton;
+import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -49,23 +50,28 @@ import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.util.TDateUtil;
 
+import br.com.covidsemfome.bean.AppBean;
 import br.com.covidsemfome.bean.CovidUserBean;
+import br.com.covidsemfome.producer.Item;
 
 /**
  * @author Davis Gordon
  *
  */
-@Singleton
-
+@RequestScoped
 @Path("/painel")
 @Produces(MediaType.APPLICATION_JSON + "; charset=UTF-8")
 public class PainelApi {
 	
-	private static String ERROR = "Desculpe estamos há resolver um problema tecnico em breve voltaremos.";
-
+	@Inject
+	@Named("errorMsg")
+	private Item<String> error;
 	
 	@Inject @Any
 	private CovidUserBean covidUserBean;
+	
+	@Inject
+	private AppBean appBean;
 
 	@EJB
 	private IPessoaController pessServ;
@@ -106,12 +112,12 @@ public class PainelApi {
 				
 				return new RestModel<String>("LOGOUT", "200", res.getMessage());
 			}else{
-				return new RestModel<String>("", "404", res.getResult().equals(EnumResult.WARNING) ? res.getMessage()  : ERROR );
+				return new RestModel<String>("", "404", res.getResult().equals(EnumResult.WARNING) ? res.getMessage()  : error.getValue() );
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new RestModel<String>("", "500", ERROR);
+			return new RestModel<String>("", "500", error.getValue());
 		}
 	}
 	
@@ -143,7 +149,17 @@ public class PainelApi {
 			p.setProfissao(prof);
 			p.setEstadoCivil(estCiv);
 			p.setSexo(sexo);
-			p.setLoginName(email);
+			
+			if(!email.equals(p.getLoginName())) {
+				TResult<Boolean> r = pessServ.isLoginInUse(appBean.getToken(), email);
+				if(!r.getResult().equals(EnumResult.SUCESS))
+					return new RestModel<>(null, "500", error.getValue());
+				
+				if(r.getValue())
+					return new RestModel<>(null, "404", "O email informado já encontra-se em uso!" );
+
+				p.setLoginName(email);
+			}
 			
 			if(dtNasc!=null) {
 				try {
@@ -158,7 +174,7 @@ public class PainelApi {
 			if(ufid!=null) {
 				uf = new UF();
 				uf.setId(ufid);
-				TResult res = ufServ.findById(uf);
+				TResult res = ufServ.findById(appBean.getToken(), uf);
 				uf = (UF) res.getValue();
 			}
 			
@@ -283,7 +299,7 @@ public class PainelApi {
 				} 	
 			}
 			
-			TResult<Pessoa> res = pessServ.save(p);
+			TResult<Pessoa> res = pessServ.save(appBean.getToken(), p);
 			
 			UserModel m = new UserModel(p.getId(), p.getNome(), p.getLoginName(), tel, p.getSexo(), p.getTipoVoluntario(), 
 					p.getDataNascimento(), p.getProfissao(), nac, p.getEstadoCivil(), ident, cpf, tpLog, logr, compl, bairro, cidade, cep, ufid);
@@ -291,11 +307,12 @@ public class PainelApi {
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			return new RestModel<>(null, "500", ERROR);
+			return new RestModel<>(null, "500", error.getValue());
 		}
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	@GET
 	@Path("/user")
 	public RestModel<UserModel> getUser(){
@@ -360,7 +377,7 @@ public class PainelApi {
 				TermoAdesao t = new TermoAdesao();
 				t.setStatus("ATIVADO");
 				
-				TResult<TermoAdesao> r = tAdServ.find(t);
+				TResult<TermoAdesao> r = tAdServ.find(appBean.getToken(), t);
 				if(r.getValue()!=null) {
 					t = r.getValue();
 					TermoAdesaoModel a = new TermoAdesaoModel(t);
@@ -372,22 +389,23 @@ public class PainelApi {
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			return new RestModel<>(null, "500", ERROR);
+			return new RestModel<>(null, "500", error.getValue());
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@GET
 	@Path("/ufs")
 	public RestModel<List<UF>> listaEstadosUF(){
 				
 		try {
-			TResult<List<UF>> res = ufServ.listAll(UF.class);
+			TResult<List<UF>> res = ufServ.listAll(appBean.getToken(), UF.class);
 			System.out.println( "UFs recuperado com sucesso!");
 			return new RestModel<>(res.getValue(), "200", "OK");
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			return new RestModel<>(null, "500", ERROR);
+			return new RestModel<>(null, "500", error.getValue());
 		}
 	}
 	
@@ -402,7 +420,7 @@ public class PainelApi {
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			return new RestModel<>(null, "500", ERROR);
+			return new RestModel<>(null, "500", error.getValue());
 		}
 	}
 	
@@ -417,7 +435,7 @@ public class PainelApi {
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			return new RestModel<>(null, "500", ERROR);
+			return new RestModel<>(null, "500", error.getValue());
 		}
 		
 	}
@@ -433,7 +451,7 @@ public class PainelApi {
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			return new RestModel<>(null, "500", ERROR);
+			return new RestModel<>(null, "500", error.getValue());
 		}
 		
 	}
@@ -449,7 +467,7 @@ public class PainelApi {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new RestModel<>(null, "500", ERROR);
+			return new RestModel<>(null, "500", error.getValue());
 		}
 	}
 
@@ -489,7 +507,7 @@ public class PainelApi {
 		}else if(res.getResult().equals(EnumResult.WARNING)){
 			return new RestModel<>(null, "404", res.getMessage());
 		}else {
-			return new RestModel<>(null, "500", ERROR );
+			return new RestModel<>(null, "500", error.getValue() );
 
 		}
 	}

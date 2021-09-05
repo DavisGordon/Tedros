@@ -33,8 +33,8 @@ import com.tedros.fxapi.util.TModelViewUtil;
 import com.tedros.login.decorator.LoginDecorator;
 import com.tedros.login.model.Login;
 import com.tedros.login.model.LoginModelView;
+import com.tedros.login.model.TLoginProcess;
 import com.tedros.settings.security.model.TProfileModelView;
-import com.tedros.settings.security.process.TUserProcess;
 import com.tedros.util.TEncriptUtil;
 import com.tedros.util.TFileUtil;
 import com.tedros.util.TedrosFolderEnum;
@@ -176,7 +176,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 							}
 						}
 						
-						final TUserProcess process  = (TUserProcess) createEntityProcess();
+						final TLoginProcess process  = (TLoginProcess) createEntityProcess();
 						process.setLogin(userLogin);
 						process.setPassword(TEncriptUtil.encript(password));
 						//process.setPassword(password);
@@ -221,9 +221,8 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 							final TUser user = loggedUserProperty.getValue();
 							user.setActiveProfile(selectedProfile.getModel());
 							
-							final TUserProcess process  = (TUserProcess) createEntityProcess();
-							process.setUserId(user.getId());
-							process.setProfile(user.getActiveProfile());
+							final TLoginProcess process  = (TLoginProcess) createEntityProcess();
+							process.setUser(user);
 							process.stateProperty().addListener(new ChangeListener<State>() {
 								@Override
 								public void changed(ObservableValue<? extends State> arg0, State arg1, State arg2) {

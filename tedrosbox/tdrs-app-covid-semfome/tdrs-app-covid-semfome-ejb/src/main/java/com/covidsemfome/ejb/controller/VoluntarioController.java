@@ -24,9 +24,13 @@ import com.covidsemfome.model.Acao;
 import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.TipoAjuda;
 import com.covidsemfome.model.Voluntario;
-import com.tedros.ejb.base.controller.TEjbController;
+import com.tedros.ejb.base.controller.ITSecurityController;
+import com.tedros.ejb.base.controller.TSecureEjbController;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.security.ITSecurity;
+import com.tedros.ejb.base.security.TAccessToken;
+import com.tedros.ejb.base.security.TRemoteSecurity;
 import com.tedros.ejb.base.service.ITEjbService;
 import com.tedros.util.TSentEmailException;
 
@@ -34,9 +38,10 @@ import com.tedros.util.TSentEmailException;
  * @author Davis Gordon
  *
  */
+@TRemoteSecurity
 @Stateless(name="IVoluntarioController")
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
-public class VoluntarioController extends TEjbController<Voluntario> implements IVoluntarioController {
+public class VoluntarioController extends TSecureEjbController<Voluntario> implements IVoluntarioController, ITSecurity {
 	
 	@EJB(beanName="IVoluntarioService")
 	private VoluntarioService serv;
@@ -49,6 +54,9 @@ public class VoluntarioController extends TEjbController<Voluntario> implements 
 	
 	@EJB(beanName="IAcaoService")
 	private AcaoService aServ;
+
+	@EJB
+	private ITSecurityController securityController;
 	
  
 	@Inject
@@ -131,7 +139,7 @@ public class VoluntarioController extends TEjbController<Voluntario> implements 
 
 
 	@Override
-	public TResult<Voluntario> save(Voluntario entidade) {
+	public TResult<Voluntario> save(TAccessToken token, Voluntario entidade) {
 		
 		try{
 			
@@ -183,7 +191,7 @@ public class VoluntarioController extends TEjbController<Voluntario> implements 
 	}
 	
 	@Override
-	public TResult<Voluntario> remove(Voluntario entidade) {
+	public TResult<Voluntario> remove(TAccessToken token, Voluntario entidade) {
 		try{
 			
 			Acao acao = aServ.find(entidade.getAcao());
@@ -211,6 +219,11 @@ public class VoluntarioController extends TEjbController<Voluntario> implements 
 	@Override
 	public ITEjbService<Voluntario> getService() {
 		return serv;
+	}
+
+	@Override
+	public ITSecurityController getSecurityController() {
+		return securityController;
 	}
 
 	

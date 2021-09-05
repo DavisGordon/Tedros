@@ -23,8 +23,13 @@ public class TUserBO extends TGenericBO<TUser> {
 		return eao.getUserByLoginPassword(login, password);
 	}
 	
-	public void saveActiveProfile(TProfile profile, Long userId) throws Exception{
-		eao.saveActiveProfile(profile, userId);
+	public TUser saveActiveProfile(TProfile profile, Long userId) throws Exception{
+		TUser user = new TUser();
+		user.setId(userId);
+		user = findById(user);
+		user.setActiveProfile(profile);
+		save(user);
+		return user;
 	}
 	
 

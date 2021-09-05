@@ -5,7 +5,7 @@ import java.util.List;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
 
-public interface ITEjbController<E extends ITEntity> {
+public interface ITEjbController<E extends ITEntity> extends ITBaseController {
 	
 	/**
 	 * Retorna uma entidade pelo seu id

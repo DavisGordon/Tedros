@@ -3,10 +3,10 @@ package com.covidsemfome.ejb.controller;
 import javax.ejb.Remote;
 
 import com.covidsemfome.model.Doacao;
-import com.tedros.ejb.base.controller.ITEjbController;
+import com.tedros.ejb.base.controller.ITSecureEjbController;
 
 @Remote
-public interface IDoacaoController extends ITEjbController<Doacao>{
+public interface IDoacaoController extends ITSecureEjbController<Doacao>{
 	
 	
 }
