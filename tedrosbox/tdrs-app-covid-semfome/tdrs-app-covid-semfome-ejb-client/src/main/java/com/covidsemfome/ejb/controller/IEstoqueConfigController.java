@@ -3,9 +3,9 @@ package com.covidsemfome.ejb.controller;
 import javax.ejb.Remote;
 
 import com.covidsemfome.model.EstoqueConfig;
-import com.tedros.ejb.base.controller.ITEjbController;
+import com.tedros.ejb.base.controller.ITSecureEjbController;
 
 @Remote
-public interface IEstoqueConfigController extends ITEjbController<EstoqueConfig>{
+public interface IEstoqueConfigController extends ITSecureEjbController<EstoqueConfig>{
 
 }

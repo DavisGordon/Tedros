@@ -8,12 +8,17 @@ import javax.ejb.TransactionAttributeType;
 import com.covidsemfome.ejb.service.EntradaService;
 import com.covidsemfome.ejb.service.SaidaService;
 import com.covidsemfome.report.model.EstocavelReportModel;
+import com.tedros.ejb.base.controller.ITSecurityController;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.security.ITSecurity;
+import com.tedros.ejb.base.security.TAccessToken;
+import com.tedros.ejb.base.security.TRemoteSecurity;
 
+@TRemoteSecurity
 @Stateless(name="IEstocavelReportController")
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
-public class EstocavelReportController implements IEstocavelReportController {
+public class EstocavelReportController implements IEstocavelReportController, ITSecurity {
 
 	@EJB
 	private EntradaService eServ;
@@ -21,12 +26,14 @@ public class EstocavelReportController implements IEstocavelReportController {
 	@EJB
 	private SaidaService sServ;
 	
+	@EJB
+	private ITSecurityController security;
+	
 	public EstocavelReportController() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public TResult<EstocavelReportModel> process(EstocavelReportModel m) {
+	public TResult<EstocavelReportModel> process(TAccessToken token, EstocavelReportModel m) {
 		try{
 			m = m.getOrigem().equals("Entrada") 
 					? eServ.pesquisar(m)
@@ -35,6 +42,11 @@ public class EstocavelReportController implements IEstocavelReportController {
 		}catch(Exception e){
 			return new TResult<>(EnumResult.ERROR, e.getMessage());
 		}
+	}
+
+	@Override
+	public ITSecurityController getSecurityController() {
+		return security;
 	}
 
 }

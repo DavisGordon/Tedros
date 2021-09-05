@@ -28,7 +28,6 @@ public class AcaoBO extends TGenericBO<Acao> {
 
 	@Override
 	public ITGenericEAO<Acao> getEao() {
-		// TODO Auto-generated method stub
 		return eao;
 	}
 

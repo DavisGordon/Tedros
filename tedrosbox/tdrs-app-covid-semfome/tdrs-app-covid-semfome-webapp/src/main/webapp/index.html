@@ -9,6 +9,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<link rel="stylesheet" href="assets/css/csf.css" />
+		<link rel="stylesheet" href="assets/css/loader.css" />
 		<noscript>
 			<link rel="stylesheet" href="assets/css/noscript.css" />
 			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -385,32 +386,34 @@
 					<!-- Participe -->
 					<!-- <div style="margin-bottom:90px" id="volun"></div> -->
 					<section class="spotlight style2 orient-center content-align-left image-position-right onscroll-image-fade-in" >				
-						<div class="content">
+						<div class="content contentLoad">
 							<h3>Participe</h3>
 							<p>Venha fortalecer essa rede do bem!</p>
-							
+							<div id="loader" class="loader">
+	        					<div id="cssloader"><div></div></div>
+	        				</div>
 							<form name="frm" id="frm" method="post" action="cadVol">
 								<div class="fields">
 									<div class="field half">
 										<label for="name">Nome</label>
-										<input type="text" name="name" id="name"  value="" />
+										<input type="text" name="name" id="name" maxlength="60" value="" />
 									</div>
 									
 									<div class="field half">
 										<label for="telefone">Telefone / WhatsApp</label>
-										<input type="text" name="telefone" id="telefone" value="" />
+										<input type="text" name="telefone" id="telefone" maxlength="20" value="" />
 									</div>
 									<div class="field">
 										<label for="email">Email</label>
-										<input type="email" name="email" id="email" value="" />
+										<input type="email" name="email" id="email" maxlength="80" value="" />
 									</div>
 									<div class="field half">
 										<label for="pass">Senha</label>
-										<input type="password" name="pass" id="pass" value="" />
+										<input type="password" name="pass" id="pass" maxlength="20" value="" />
 									</div>
 									<div class="field half">
 										<label for="passConf">Confirmar Senha</label>
-										<input type="password" name="passConf" id="passConf" value="" />
+										<input type="password" name="passConf" id="passConf"  maxlength="20" value="" />
 									</div>
 									
 								</div>
@@ -615,7 +618,7 @@
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
     		<script src="assets/js/jquery.form.js"></script> 
-    		<script src="assets/js/csf.min.js"></script> 
+    		<script src="assets/js/csf-full.js"></script> 
 
 	</body>
 </html>

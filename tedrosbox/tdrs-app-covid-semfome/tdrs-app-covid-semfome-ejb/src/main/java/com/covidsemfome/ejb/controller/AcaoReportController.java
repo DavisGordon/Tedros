@@ -12,22 +12,29 @@ import com.covidsemfome.ejb.service.AcaoService;
 import com.covidsemfome.model.Acao;
 import com.covidsemfome.report.model.AcaoItemModel;
 import com.covidsemfome.report.model.AcaoReportModel;
+import com.tedros.ejb.base.controller.ITSecurityController;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.security.ITSecurity;
+import com.tedros.ejb.base.security.TAccessToken;
+import com.tedros.ejb.base.security.TRemoteSecurity;
 
+@TRemoteSecurity
 @Stateless(name="IAcaoReportController")
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
-public class AcaoReportController implements IAcaoReportController {
+public class AcaoReportController implements IAcaoReportController, ITSecurity {
 
 	@EJB
 	private AcaoService serv;
 	
+	@EJB
+	private ITSecurityController security;
+	
 	public AcaoReportController() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public TResult<AcaoReportModel> process(AcaoReportModel m) {
+	public TResult<AcaoReportModel> process(TAccessToken token, AcaoReportModel m) {
 		try{
 			List<Acao> lst = serv.pesquisar(m.getIds(), m.getTitulo(), m.getDataInicio(), m.getDataFim(), 
 					m.getStatus(), m.getOrderBy(), m.getOrderType());
@@ -42,6 +49,11 @@ public class AcaoReportController implements IAcaoReportController {
 		}catch(Exception e){
 			return new TResult<>(EnumResult.ERROR, e.getMessage());
 		}
+	}
+
+	@Override
+	public ITSecurityController getSecurityController() {
+		return security;
 	}
 
 }

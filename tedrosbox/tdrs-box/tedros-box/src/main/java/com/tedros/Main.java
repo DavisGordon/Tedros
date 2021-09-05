@@ -126,7 +126,7 @@ public class Main extends Application implements ITedrosBox  {
 
     private boolean expandedTollBar = true;
     
-    private String version = "8.6.5";
+    private String version = "8.7";
     
     
     public Main(){
@@ -148,6 +148,8 @@ public class Main extends Application implements ITedrosBox  {
 			LOGGER.severe(e.toString());
 		}
     }
+    
+    
     
     private boolean checkAndBuildTedrosBoxFolder(String outputFolder) throws IOException{
 		
@@ -182,6 +184,12 @@ public class Main extends Application implements ITedrosBox  {
     
     public double getYStage(){
     	return getStage().getY();
+    }
+    
+    @Override
+    public void stop() throws Exception {
+    	TedrosContext.serverLogout();
+    	super.stop();
     }
         
     public void reloadStyle(){

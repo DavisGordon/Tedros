@@ -8,6 +8,8 @@ import java.net.MalformedURLException;
 
 import javax.naming.NamingException;
 
+import com.tedros.core.context.TedrosContext;
+import com.tedros.core.security.model.TUser;
 import com.tedros.core.service.remote.ServiceLocator;
 import com.tedros.ejb.base.controller.ITEjbImportController;
 import com.tedros.ejb.base.model.ITImportModel;
@@ -52,32 +54,28 @@ public abstract class TImportProcess<M extends ITImportModel> extends TProcess<T
         	
 			@SuppressWarnings("unchecked")
 			protected TResult<M> call() throws IOException, MalformedURLException {
-        		
+        		ServiceLocator loc = ServiceLocator.getInstance();
         		TResult<M> resultado = null;
         		try {
-        			ServiceLocator loc = ServiceLocator.getInstance();
-        			ITEjbImportController service;
+        			TUser user = TedrosContext.getLoggedUser();
+        			ITEjbImportController service = (ITEjbImportController) loc.lookup(serviceJndiName);
         			switch(action) {
         			case IMPORT:
-        				service = (ITEjbImportController) loc.lookup(serviceJndiName);
-        				resultado = service.importFile(model.getFile());
-        				loc.close();
+        				resultado = service.importFile(user.getAccessToken(), model.getFile());
         				break;
         			case GET_RULES:
-        				service = (ITEjbImportController) loc.lookup(serviceJndiName);
-        				resultado = service.getImportRules();
-        				loc.close();
+        				resultado = service.getImportRules(user.getAccessToken());
         				break;
         			}
-	        		
-	        		
 	    		} catch(NamingException e){
 	    			setException( new TProcessException(e, e.getMessage(), "The service is not available!"));
 	    			e.printStackTrace();
 	    		}catch (Exception e) {
 					setException(e);
 					e.printStackTrace();
-				} 
+				} finally {
+					loc.close();
+				}
         	    return resultado;
         	}
 		};

@@ -11,12 +11,12 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.tedros.core.domain.DomainSchema;
 import com.tedros.core.domain.DomainTables;
 import com.tedros.ejb.base.entity.TEntity;
+import com.tedros.ejb.base.security.TAccessToken;
 
 @Entity
 @Table(name = DomainTables.user, schema = DomainSchema.tedros_core)
@@ -47,6 +47,8 @@ public class TUser extends TEntity {
 	@JoinColumn(name="prof_id")
 	private TProfile activeProfile;
 	
+	private TAccessToken accessToken;
+	
 	public TUser() {
 		
 	}
@@ -60,11 +62,29 @@ public class TUser extends TEntity {
 		this.name = name;
 	}
 			
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
-	public boolean equals(Object obj) {		
-		return EqualsBuilder.reflectionEquals(this, obj, false);
+	public boolean equals(Object obj) {
+		if(obj==null)
+			return false;
+		if (this == obj)
+			return true;
+		if (getClass() != obj.getClass())
+			return false;
+		TUser other = (TUser) obj;
+		if (login == null) {
+			if (other.login != null)
+				return false;
+		} else if (!login.equals(other.login))
+			return false;
+		return true;
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this, false);
@@ -117,5 +137,21 @@ public class TUser extends TEntity {
 	public void setActiveProfile(TProfile activeProfile) {
 		this.activeProfile = activeProfile;
 	}
+
+	/**
+	 * @return the accessToken
+	 */
+	public TAccessToken getAccessToken() {
+		return accessToken;
+	}
+
+	/**
+	 * @param accessToken the accessToken to set
+	 */
+	public void setAccessToken(TAccessToken accessToken) {
+		this.accessToken = accessToken;
+	}
+
+	
 
 }

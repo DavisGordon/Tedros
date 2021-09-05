@@ -1,5 +1,6 @@
 package com.tedros.core.ejb.service;
 
+import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -20,6 +21,9 @@ public class TUserService extends TEjbService<TUser> {
 	@Inject
 	private TUserBO bo;
 	
+	@EJB
+	private TSecurityService serv;
+	
 	@Override
 	public ITGenericBO<TUser> getBussinesObject() {
 		return bo;
@@ -27,12 +31,16 @@ public class TUserService extends TEjbService<TUser> {
 
 	
 	public TUser login(String login, String password) {
-		return bo.getUserByLoginPassword(login, password);
+		TUser user = bo.getUserByLoginPassword(login, password);
+		serv.addUser(user);
+		return user;
 	}
 	
 	@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
-	public void saveActiveProfile(TProfile profile, Long userId) throws Exception {
-		bo.saveActiveProfile(profile, userId);
+	public TUser saveActiveProfile(TProfile profile, Long userId) throws Exception {
+		TUser user = bo.saveActiveProfile(profile, userId);
+		serv.addUser(user);
+		return user;
 	}
 
 	

@@ -5,11 +5,10 @@ package com.covidsemfome.ejb.controller;
 
 import java.util.List;
 
-
 import javax.ejb.Remote;
 
 import com.covidsemfome.model.Acao;
-import com.tedros.ejb.base.controller.ITEjbController;
+import com.tedros.ejb.base.controller.ITSecureEjbController;
 import com.tedros.ejb.base.result.TResult;
 
 /**
@@ -17,7 +16,7 @@ import com.tedros.ejb.base.result.TResult;
  *
  */
 @Remote
-public interface IAcaoController extends ITEjbController<Acao> {
+public interface IAcaoController extends ITSecureEjbController<Acao> {
 
 	public TResult<List<Acao>> listAcoesProgramadasParaDecisao();
 	

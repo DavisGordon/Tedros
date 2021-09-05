@@ -208,7 +208,7 @@ $(document).ready(function() {
 		        alert('As senhas não conferem.'); 
 		        return false; 
 		    } 
-		    
+		    showLoader('lds-heart', form);
 		}
 		
 		function validateEmail(email) {
@@ -218,15 +218,30 @@ $(document).ready(function() {
 		
 		// post-submit callback 
 		function showResponse(responseText, statusText, xhr, $form)  { 
+			var form = $form[0];
 		    if(responseText instanceof Object)
 		    	alert(responseText.responseText); 
 		 	else
 		 		alert(responseText); 
-		    
+		    showLoader('', form);
 		    if(xhr.status==200 || xhr.status==202){
 		    	location.href = 'voluntario.html';
 		    }else {
 		    	location.href = '500.html';
 		    }
 		    	
-		} 
+		}
+		
+		function showLoader(className, form){
+			var loader = document.getElementById('loader');
+			if(className != ''){
+				document.getElementById('cssloader').className = className;
+	    		loader.style.display = 'block';
+	    		form.style = 'background-color: #cccccc; opacity: .4;';
+			}else{
+				loader.style.display = 'none';
+				document.getElementById('cssloader').className = '';
+	    		form.style = '';
+			}
+		}
+		

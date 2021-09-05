@@ -42,7 +42,6 @@ public class AcaoServiceTimer {
     private void construct() {
         final TimerConfig programadas = new TimerConfig("programadas", false);
         timerService.createCalendarTimer(new ScheduleExpression().minute(0).hour(12), programadas);
-        //timerService.createCalendarTimer(new ScheduleExpression().second("*").minute("*").hour("*"), checkOnTheDaughters);
     }
 
     @Timeout

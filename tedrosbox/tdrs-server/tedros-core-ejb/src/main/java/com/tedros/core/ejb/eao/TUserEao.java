@@ -18,12 +18,13 @@ import com.tedros.ejb.base.eao.TGenericEAO;
 @RequestScoped
 public class TUserEao extends TGenericEAO<TUser> {
 	
-	public void saveActiveProfile(TProfile profile, Long userId) throws Exception{
+	public TUser saveActiveProfile(TProfile profile, Long userId) throws Exception{
 		TUser user = new TUser();
 		user.setId(userId);
 		user = this.find(user);
 		user.setActiveProfile(profile);
 		persist(user);
+		return user;
 	}
 	
 	public TUser getUserByLoginPassword(String login, String password){

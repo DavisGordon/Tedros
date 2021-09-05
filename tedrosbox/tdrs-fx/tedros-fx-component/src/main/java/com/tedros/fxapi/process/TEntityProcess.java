@@ -5,8 +5,12 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tedros.core.context.TedrosContext;
+import com.tedros.core.security.model.TUser;
 import com.tedros.core.service.remote.ServiceLocator;
+import com.tedros.ejb.base.controller.ITBaseController;
 import com.tedros.ejb.base.controller.ITEjbController;
+import com.tedros.ejb.base.controller.ITSecureEjbController;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
 
@@ -142,61 +146,75 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 				return getProcessName();
 			};
         	
-        	@SuppressWarnings("unchecked")
+        	@SuppressWarnings({ "unchecked", "rawtypes" })
 			protected List<TResult<E>> call() throws IOException, MalformedURLException {
-        		
+        		ServiceLocator loc = ServiceLocator.getInstance();
         		List<TResult<E>> resultList = new ArrayList<>();
         		try {
 	        		if(!runBefore(resultList)) {
 	        			return resultList;
 	        		};
-	        		//TUser user = TedrosContext.getLoggedUser();
-	        		/*ServiceLocator loc = user!=null ? ServiceLocator.getInstance(user)
-	        				: ServiceLocator.getInstance();*/
-	        		ServiceLocator loc = ServiceLocator.getInstance();
-	        		ITEjbController<E> service = (ITEjbController<E>) loc.lookup(serviceJndiName);
-	        		if(service!=null){
+	        		TUser user = TedrosContext.getLoggedUser();  		
+	        		ITBaseController base = (ITBaseController) loc.lookup(serviceJndiName);
+	        		ITEjbController<E> service = null;
+	        		ITSecureEjbController<E> secure = null;
+	        		if(base instanceof ITEjbController)
+	        			service = (ITEjbController<E>) base;
+	        		if(base instanceof ITSecureEjbController) {
+	        			if(user==null || user.getAccessToken()==null)
+	        				throw new IllegalStateException("The remote service "+serviceJndiName+" is secured and a logged user is required!");
+	        			secure = (ITSecureEjbController<E>) base;
+	        		}
+	        		
+	        		if(service!=null || secure!=null){
 		        		switch (operation) {
 							case SAVE :
 								for (E entity : values)
-									resultList.add(service.save(entity));
+									resultList.add(service!=null 
+										? service.save(entity) 
+											: secure.save(user.getAccessToken(), entity));
 								break;
 							case DELETE :
 								for (E entity : values)
-									resultList.add(service.remove(entity));
+									resultList.add(service!=null 
+											? service.remove(entity)
+													: secure.remove(user.getAccessToken(), entity));
 								break;
 							case FINDBYID :
 								for (E entity : values)
-									resultList.add(service.findById(entity));
+									resultList.add(service!=null 
+											? service.findById(entity)
+													: secure.findById(user.getAccessToken(), entity));
 								break;
 							case FIND :
 								for (E entity : values)
-									resultList.add(service.find(entity));
+									resultList.add(service!=null 
+											? service.find(entity)
+													: secure.find(user.getAccessToken(), entity));
 								break;
 							case LIST :
-								resultList.add(service.listAll(entityType));
+								resultList.add(service!=null 
+										? service.listAll(entityType)
+												: secure.listAll(user.getAccessToken(), entityType));
 								break;
 							case SEARCH :
 								for (E entity : values){
-									TResult result = service.findAll(entity);
-									resultList.add(result);
-									/*if(result.getResult().equals(EnumResult.SUCESS)){
-										for(E v : result.getValue()){
-											resultList.add(new TResult<E>(EnumResult.SUCESS, v));
-										}
-									}
-									else 
-										resultList.add(new TResult<E>(EnumResult.ERROR, result.getMessage()));*/		
+									TResult result = service!=null 
+											? service.findAll(entity)
+													: secure.findAll(user.getAccessToken(), entity);
+									resultList.add(result);		
 								}
 								break;
 						}
 		        		values.clear();
 	        		}
-	        		loc.close();
+	        		
         		} catch (Exception e) {
 					setException(e);
 					e.printStackTrace();
-				} 
+				} finally {
+					loc.close();
+				}
         		
         		runAfter(resultList);
         	    return resultList;
