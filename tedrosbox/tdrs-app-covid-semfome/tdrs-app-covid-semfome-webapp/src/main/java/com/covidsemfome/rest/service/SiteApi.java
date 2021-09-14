@@ -224,7 +224,7 @@ public class SiteApi {
 					AcaoModel model = new AcaoModel(null, acao.getTitulo(), acao.getDescricao(), 
 							formataDataHora(acao.getData()), acao.getStatus(), acao.getObservacao(), 
 							acao.getQtdMinVoluntarios(), acao.getQtdMaxVoluntarios(), qtdVolIns, 
-							false, null);
+							false, null, null, null);
 					models.add(model);
 					
 				}

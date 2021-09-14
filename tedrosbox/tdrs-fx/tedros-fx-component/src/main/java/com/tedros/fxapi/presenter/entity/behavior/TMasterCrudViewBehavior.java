@@ -23,6 +23,7 @@ import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.presenter.paginator.TPagination;
 import com.tedros.fxapi.process.TEntityProcess;
 import com.tedros.fxapi.process.TPaginationProcess;
+import com.tedros.fxapi.process.TProcess;
 import com.tedros.fxapi.util.TEntityListViewCallback;
 
 import javafx.beans.value.ChangeListener;
@@ -131,6 +132,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 				try {
 					E entity = super.getEntityClass().newInstance();
 					process.pageAll(entity, this.decorator.gettPaginator().getPagination());
+					bindProgressIndicator(process);
 					process.stateProperty().addListener(new WeakChangeListener(prcl));
 					process.startProcess();
 				} catch (InstantiationException | IllegalAccessException e) {
@@ -188,6 +190,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 					super.getListenerRepository().add("processloadlistviewCL", prcl);
 					
 					process.list();
+					bindProgressIndicator(process);
 					process.stateProperty().addListener(new WeakChangeListener(prcl));
 					process.startProcess();
 				}else{
@@ -325,9 +328,16 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 			}
 			
 		}
-		
+		bindProgressIndicator(process);
 		process.stateProperty().addListener(new WeakChangeListener(prcl));
 		process.startProcess();
+	}
+
+	/**
+	 * @param process
+	 */
+	private void bindProgressIndicator(TProcess process) {
+		this.decorator.gettListViewProgressIndicator().bind(process.runningProperty());
 	}
 	
 	@SuppressWarnings("unchecked")

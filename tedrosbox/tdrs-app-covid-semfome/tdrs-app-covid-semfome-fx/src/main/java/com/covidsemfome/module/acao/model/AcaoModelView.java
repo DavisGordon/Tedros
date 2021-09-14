@@ -6,15 +6,22 @@ package com.covidsemfome.module.acao.model;
 import java.util.Date;
 
 import com.covidsemfome.model.Acao;
+import com.covidsemfome.model.TipoAjuda;
+import com.covidsemfome.model.Voluntario;
 import com.covidsemfome.module.acao.process.AcaoProcess;
+import com.covidsemfome.module.voluntario.model.TipoAjudaFindModelView;
+import com.covidsemfome.module.voluntario.model.TipoAjudaModelView;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.TCodeValue;
 import com.tedros.fxapi.annotation.control.TBigDecimalField;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
+import com.tedros.fxapi.annotation.control.TDetailListField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
+import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TMultipleSelectionModal;
 import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TShowField;
@@ -22,16 +29,22 @@ import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.form.TForm;
+import com.tedros.fxapi.annotation.layout.TAccordion;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
+import com.tedros.fxapi.annotation.layout.TTitledPane;
+import com.tedros.fxapi.annotation.layout.TVBox;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEntityProcess;
+import com.tedros.fxapi.annotation.reader.TColumnReader;
+import com.tedros.fxapi.annotation.reader.TDetailReaderHtml;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
+import com.tedros.fxapi.annotation.reader.TTableReaderHtml;
 import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
@@ -39,9 +52,11 @@ import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.annotation.view.TOption;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.builder.DateTimeFormatBuilder;
+import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TLabelPosition;
+import com.tedros.fxapi.domain.TLayoutType;
 import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.util.TDateUtil;
@@ -61,7 +76,7 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TFormReaderHtml
-@TForm(name = "Ação / Campanha", showBreadcrumBar=false)
+@TForm(name = "Ação a ser exibida no site", showBreadcrumBar=false, editCssId="")
 @TEntityProcess(process = AcaoProcess.class, entity=Acao.class)
 @TListViewPresenter(listViewMinWidth=350, listViewMaxWidth=350,
 	paginator=@TPaginator(entityClass = Acao.class, serviceName = "IAcaoControllerRemote",
@@ -78,32 +93,47 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	
 	@TReaderHtml
 	@TLabel(text="Codigo:", position=TLabelPosition.LEFT)
-	@TShowField()
+	@TShowField
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
+	@THBox(	pane=@TPane(children={"id","textoCadastro"}), spacing=4, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="id", priority=Priority.NEVER), 
+   				   		@TPriority(field="textoCadastro", priority=Priority.ALWAYS) }))
 	private SimpleLongProperty id;
-	
-	private SimpleStringProperty displayText = new SimpleStringProperty();
 	
 	@TTextReaderHtml(text="Ação / Campanha", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
+	@TText(text="As ações com status 'Agendada' serão exibidas no site e no painel do voluntário, "
+			+ "as 'Programadas' não serão exibidas, porem, quando estiver faltando 7 dias para a "
+			+ "execução desta um e-mail solicitando a alteração do status da ação será enviado para "
+			+ "os Voluntários Operacionais que possuem permissão para receber e-mails.", 
+	textAlignment=TextAlignment.LEFT, wrappingWidth=750,
+	textStyle = TTextStyle.MEDIUM)
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Ação / Campanha", textAlignment=TextAlignment.LEFT, textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty textoCadastro;
+	
+	@TAccordion(expandedPane="dados", node=@TNode(id="acaoacc",parse = true),
+			panes={
+					@TTitledPane(text="Dados da Ação", node=@TNode(id="dados",parse = true), 
+							expanded=true, layoutType=TLayoutType.HBOX,
+							fields={"titulo", "tiposAjuda"}),
+					@TTitledPane(text="Voluntários inscritos", node=@TNode(id="voluntarios",parse = true),
+						fields={"voluntarios"})})
+	private SimpleStringProperty displayText = new SimpleStringProperty();
+	
 	
 	@TReaderHtml
 	@TLabel(text="Titulo/Local")
 	@TTextField(maxLength=100, node=@TNode(requestFocus=true, parse = true),
 	textInputControl=@TTextInputControl(promptText="Insira um titulo ou o local", parse = true),
 	required=true)
+	@TVBox(pane=@TPane(children={"titulo", "data","status","qtdMinVoluntarios","vlrPrevisto"}), spacing=10)
 	private SimpleStringProperty titulo;
 	
 	@TReaderHtml
 	@TLabel(text="Data e Hora")
 	@TDatePickerField(required = true, dateFormat=DateTimeFormatBuilder.class)
-	@THBox(	pane=@TPane(children={"data","status"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="data", priority=Priority.NEVER), 
-   				   		@TPriority(field="status", priority=Priority.ALWAYS) }))
 	private SimpleObjectProperty<Date> data;
 	
 	@TLabel(text="Status")
@@ -152,10 +182,23 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	@TBigDecimalField(textInputControl=@TTextInputControl(promptText="Valor executado", parse = true))
 	private SimpleDoubleProperty vlrExecutado;
 	
+	@TLabel(text="Tipos de Ajuda")
+	@TTableReaderHtml(label=@TLabel(text="Tipo de Ajuda:"), 
+		column = { 	@TColumnReader(field = "descricao", name = "Descricao"), 
+					@TColumnReader(field = "tipoPessoa", name = "Tipo pessoa")})
+	@TMultipleSelectionModal(modelClass = TipoAjuda.class, modelViewClass = TipoAjudaFindModelView.class, 
+	width=350, required=false)
+	@TVBox(	pane=@TPane(children={"tiposAjuda", "descricao"}), spacing=10)
+	@TModelViewCollectionType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=false)
+	private ITObservableList<TipoAjudaModelView> tiposAjuda;
+	
 	@TReaderHtml
 	@TLabel(text="Descricão")
 	@TTextAreaField(required=true, maxLength=2000, wrapText=true,
-	control=@TControl(prefWidth=250, prefHeight=150, parse = true))
+	control=@TControl(maxWidth=300,prefHeight=100, parse = true))
+	@THBox(	pane=@TPane(children={"descricao","observacao"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="descricao", priority=Priority.ALWAYS), 
+   				   		@TPriority(field="observacao", priority=Priority.NEVER) }))
 	private SimpleStringProperty descricao;
 	
 	@TReaderHtml
@@ -164,7 +207,10 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	control=@TControl(prefWidth=250, prefHeight=100, parse = true))
 	private SimpleStringProperty observacao;
 	
-	
+	@TDetailReaderHtml(label=@TLabel(text="Voluntários"), entityClass=Voluntario.class, modelViewClass=VoluntarioDetailView.class)
+	@TDetailListField(entityModelViewClass = VoluntarioDetailView.class, entityClass = Voluntario.class)
+	@TModelViewCollectionType(modelClass=Voluntario.class, modelViewClass=VoluntarioDetailView.class)
+	private ITObservableList<VoluntarioDetailView> voluntarios;
 
 	public AcaoModelView(Acao entity) {
 		super(entity);
@@ -446,6 +492,35 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	public void setDisplayText(SimpleStringProperty displayText) {
 		this.displayText = displayText;
 	}
+
+	/**
+	 * @return the tiposAjuda
+	 */
+	public ITObservableList<TipoAjudaModelView> getTiposAjuda() {
+		return tiposAjuda;
+	}
+
+	/**
+	 * @param tiposAjuda the tiposAjuda to set
+	 */
+	public void setTiposAjuda(ITObservableList<TipoAjudaModelView> tiposAjuda) {
+		this.tiposAjuda = tiposAjuda;
+	}
+
+	/**
+	 * @return the voluntarios
+	 */
+	public ITObservableList<VoluntarioDetailView> getVoluntarios() {
+		return voluntarios;
+	}
+
+	/**
+	 * @param voluntarios the voluntarios to set
+	 */
+	public void setVoluntarios(ITObservableList<VoluntarioDetailView> voluntarios) {
+		this.voluntarios = voluntarios;
+	}
+
 
 
 }

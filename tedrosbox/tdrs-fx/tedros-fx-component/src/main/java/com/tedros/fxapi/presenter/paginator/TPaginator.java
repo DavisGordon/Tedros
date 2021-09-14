@@ -42,6 +42,8 @@ import javafx.scene.text.Font;
  */
 public class TPaginator extends BorderPane {
 	
+	private double totalItens = 25.0;
+	private double maxItens = 100.0;
 	private int lastEnd;
 	private String lastButton;
 	
@@ -71,23 +73,25 @@ public class TPaginator extends BorderPane {
 		lastButton = null;
 		
 		slider = new TSlider();
-		slider.setMax(250);
-		slider.setMin(50);
-		slider.setValue(50);
+		slider.setMax(maxItens);
+		slider.setMin(totalItens);
+		slider.setValue(totalItens);
 		slider.setShowTickLabels(true);
 		slider.setShowTickMarks(true);
-		slider.setMajorTickUnit(50);
+		slider.setMajorTickUnit(totalItens);
 		slider.setMinorTickCount(0);
 		slider.setSnapToTicks(true);
 		
 		ChangeListener<Number> ehs = (a0, a1, a2) ->{
-			if(!slider.isValueChanging())
+			if(!slider.isValueChanging() 
+					|| (slider.isValueChanging() && (a2.doubleValue()==totalItens || a2.doubleValue()==maxItens))) {
 				lastButton = null;
 				paginationProperty.setValue(buildPagination(0));
+			}
 		};
 		repo.add("slider", ehs);
 		slider.valueProperty().addListener(new WeakChangeListener<>(ehs));
-		
+		//slider.valueChangingProperty(new WeakChangeListener<>(ehs));
 		TLabel title = new TLabel(iEngine.getString("#{tedros.fxapi.label.current.page}") + ":") ;
 		title.setId("t-title-label");
 		title.setFont(Font.font(16));

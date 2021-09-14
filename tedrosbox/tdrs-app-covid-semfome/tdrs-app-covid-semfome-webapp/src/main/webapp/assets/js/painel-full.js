@@ -194,10 +194,12 @@ $(document).ready(function() {
 		        				content += ('<input type="hidden" name="id" id="id" value="'+obj.id+'" /> ');
 		        				content += ('<input type="hidden" name="idx" id="idx" value="'+index+'" /> ');
 		        				content += ('<div class="fields">');
-		        				if(tpf){
+		        				
+		        				if(obj.tiposAjudaPF || (!obj.tiposAjudaPF && !obj.tiposAjudaPJ)){
+		        					var vTpf = obj.tiposAjudaPF ? obj.tiposAjudaPF : tpf;
 			        				content += ('<div class="field half" style="text-align:left;"><h3>Como voluntário:</h3>');
 			        				
-			        				$.each(tpf, function(index2,obj2){
+			        				$.each(vTpf, function(index2,obj2){
 			        					var chk = '';
 			        					$.each(obj.tiposAjuda, function(index3,obj3){
 			        						if(obj2.id==obj3.id){
@@ -209,9 +211,10 @@ $(document).ready(function() {
 			        				});
 			        				content += ('</p></div>');
 		        				}
-		        				if(tpj){
+		        				if(obj.tiposAjudaPJ || (!obj.tiposAjudaPF && !obj.tiposAjudaPJ)){
+		        					var vTpj = obj.tiposAjudaPJ ? obj.tiposAjudaPJ : tpj;
 			        				content += ('		<div class="field half" style="text-align:left;"><h3>Prestando suporte:</h3><p>');
-			        				$.each(tpj, function(index2,obj2){
+			        				$.each(vTpj, function(index2,obj2){
 			        					var chk = '';
 			        					$.each(obj.tiposAjuda, function(index3,obj3){
 			        						if(obj2.id==obj3.id){
@@ -286,12 +289,16 @@ $(document).ready(function() {
     		    
     		    var form = jqForm[0]; 
     		    var f = false;
-    		    $.each(form.tiposAjuda, function(index,obj){
-    		    	if(obj.checked){
-    		    		f = true;
-    		    	}
-    		    		
-    		    });
+    		    if(form.tiposAjuda.length){
+	    		    $.each(form.tiposAjuda, function(index,obj){
+	    		    	if(obj.checked){
+	    		    		f = true;
+	    		    	}
+	    		    		
+	    		    });
+    		    }else{
+    		    	f = form.tiposAjuda.checked;
+    		    }
     		    if (!f) { 
     		        alert('Por favor selecionar uma forma de como deseja ajudar.'); 
     		        return false; 

@@ -1,0 +1,138 @@
+/**
+ * 
+ */
+package com.covidsemfome.module.acao.model;
+
+import com.covidsemfome.model.Pessoa;
+import com.covidsemfome.model.TipoAjuda;
+import com.covidsemfome.model.Voluntario;
+import com.covidsemfome.module.doacao.model.PessoaFindModelView;
+import com.covidsemfome.module.voluntario.model.TipoAjudaFindModelView;
+import com.covidsemfome.module.voluntario.model.TipoAjudaModelView;
+import com.tedros.fxapi.annotation.control.TCallbackFactory;
+import com.tedros.fxapi.annotation.control.TCellFactory;
+import com.tedros.fxapi.annotation.control.TLabel;
+import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TMultipleSelectionModal;
+import com.tedros.fxapi.annotation.control.TOneSelectionModal;
+import com.tedros.fxapi.annotation.control.TTableColumn;
+import com.tedros.fxapi.annotation.control.TTableView;
+import com.tedros.fxapi.annotation.form.TForm;
+import com.tedros.fxapi.annotation.layout.THBox;
+import com.tedros.fxapi.annotation.layout.THGrow;
+import com.tedros.fxapi.annotation.layout.TPane;
+import com.tedros.fxapi.annotation.layout.TPriority;
+import com.tedros.fxapi.annotation.presenter.TBehavior;
+import com.tedros.fxapi.annotation.presenter.TDecorator;
+import com.tedros.fxapi.annotation.presenter.TDetailTableViewPresenter;
+import com.tedros.fxapi.annotation.presenter.TPresenter;
+import com.tedros.fxapi.annotation.reader.TColumnReader;
+import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
+import com.tedros.fxapi.annotation.reader.TReaderHtml;
+import com.tedros.fxapi.annotation.reader.TTableReaderHtml;
+import com.tedros.fxapi.collections.ITObservableList;
+import com.tedros.fxapi.presenter.entity.behavior.TDetailFieldBehavior;
+import com.tedros.fxapi.presenter.entity.decorator.TDetailFieldDecorator;
+import com.tedros.fxapi.presenter.model.TEntityModelView;
+
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.layout.Priority;
+
+/**
+ * @author Davis Gordon
+ *
+ */
+@TFormReaderHtml
+@TForm(name = "Voluntário inscrito", showBreadcrumBar=false)
+@TDetailTableViewPresenter(
+		presenter=@TPresenter(behavior=@TBehavior(type=TDetailFieldBehavior.class),
+				decorator = @TDecorator(type=TDetailFieldDecorator.class, viewTitle="Voluntários")
+				),
+		tableView=@TTableView(editable=true, 
+			columns = { @TTableColumn(cellValue="pessoa", text = "Nome", resizable=true,
+							cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=PessoaNomeCallback.class))), 
+						@TTableColumn(cellValue="pessoa", text = "Profissão", resizable=true,
+							cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=PessoaProfissaoCallback.class))), 
+						@TTableColumn(cellValue="pessoa", text = "Contato", resizable=true,
+							cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=PessoaContatoCallback.class)))
+				}))
+public class VoluntarioDetailView extends TEntityModelView<Voluntario> {
+
+	private SimpleLongProperty id;
+	
+	@TReaderHtml
+	@TLabel(text="Pessoa")
+	@TOneSelectionModal(modelClass = Pessoa.class, modelViewClass = PessoaFindModelView.class,
+	width=300, height=50, required=true)
+	@THBox(	pane=@TPane(children={"pessoa","tiposAjuda"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="pessoa", priority=Priority.NEVER), 
+   				   		@TPriority(field="tiposAjuda", priority=Priority.NEVER)}))
+	private SimpleObjectProperty<Pessoa> pessoa;	
+	
+	
+	@TLabel(text="Tipos de Ajuda")
+	@TTableReaderHtml(label=@TLabel(text="Tipo de Ajuda:"), 
+	column = { 	@TColumnReader(field = "descricao", name = "Descricao"), 
+				@TColumnReader(field = "tipoPessoa", name = "Tipo pessoa")})
+	@TMultipleSelectionModal(modelClass = TipoAjuda.class, modelViewClass = TipoAjudaFindModelView.class, width=350, height=50, required=true)
+	@TModelViewCollectionType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=true)
+	private ITObservableList<TipoAjudaModelView> tiposAjuda;
+	
+	
+	public VoluntarioDetailView(Voluntario entity) {
+		super(entity);
+	}
+	
+	@Override
+	public SimpleStringProperty getDisplayProperty() {
+		return null;
+	}
+
+	/**
+	 * @return the pessoa
+	 */
+	public SimpleObjectProperty<Pessoa> getPessoa() {
+		return pessoa;
+	}
+
+	/**
+	 * @param pessoa the pessoa to set
+	 */
+	public void setPessoa(SimpleObjectProperty<Pessoa> pessoa) {
+		this.pessoa = pessoa;
+	}
+
+	
+
+	
+	/**
+	 * @return the tiposAjuda
+	 */
+	public ITObservableList<TipoAjudaModelView> getTiposAjuda() {
+		return tiposAjuda;
+	}
+
+	/**
+	 * @param tiposAjuda the tiposAjuda to set
+	 */
+	public void setTiposAjuda(ITObservableList<TipoAjudaModelView> tiposAjuda) {
+		this.tiposAjuda = tiposAjuda;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public SimpleLongProperty getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(SimpleLongProperty id) {
+		this.id = id;
+	}
+
+}

@@ -25,7 +25,9 @@ public class PessoaReportProcess extends TReportProcess<PessoaReportModel> {
 	
 	protected InputStream getJasperInputStream() {
 		InputStream inputStream = super.getModel().isDetalhado() 
-				? getClass().getResourceAsStream("voluntarios-cad-full.jasper")
+				? this.getAction().equals(TReportProcessEnum.EXPORT_XLS) 
+						? getClass().getResourceAsStream("voluntarios-cad-full-xls.jasper")
+								: getClass().getResourceAsStream("voluntarios-cad-full.jasper")
 				: this.getAction().equals(TReportProcessEnum.EXPORT_XLS) 
 				? getClass().getResourceAsStream("voluntarios-cad-xls.jasper")
 						: getClass().getResourceAsStream("voluntarios-cad.jasper");

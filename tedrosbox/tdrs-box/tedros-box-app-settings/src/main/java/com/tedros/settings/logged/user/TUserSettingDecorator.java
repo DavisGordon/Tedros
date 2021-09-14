@@ -1,7 +1,5 @@
 package com.tedros.settings.logged.user;
 
-import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
-import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.entity.decorator.TSaveViewDecorator;
 
 public class TUserSettingDecorator extends TSaveViewDecorator<TUserSettingModelView> {
@@ -9,7 +7,7 @@ public class TUserSettingDecorator extends TSaveViewDecorator<TUserSettingModelV
 	@Override
 	public void decorate() {
 		super.decorate();
-
+		super.getView().gettProgressIndicator().setMediumLogo();
 	}
 
 }

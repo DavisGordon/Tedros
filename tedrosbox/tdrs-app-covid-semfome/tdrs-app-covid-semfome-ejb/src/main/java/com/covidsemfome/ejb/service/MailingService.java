@@ -5,6 +5,7 @@ package com.covidsemfome.ejb.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
@@ -89,7 +90,7 @@ public class MailingService extends TEjbService<Mailing> {
 						throw new MailingWarningException("Todos os voluntários estão inscritos para a ação!");
 					for (Pessoa p : lstp) {
 						boolean enviar = true;
-						List<Voluntario> vLst = m.getVoluntarios();
+						Set<Voluntario> vLst = m.getVoluntarios();
 						if(vLst!=null && !vLst.isEmpty()){
 							for (Voluntario v : vLst) {
 								if(v.getPessoa().getId().equals(p.getId())){
@@ -106,7 +107,7 @@ public class MailingService extends TEjbService<Mailing> {
 					break;
 					
 				case "3": // somente inscritos
-					List<Voluntario> vLst = m.getVoluntarios();
+					Set<Voluntario> vLst = m.getVoluntarios();
 					if(vLst!=null && !vLst.isEmpty()){
 						for (Voluntario v : vLst) {
 							msg = enviar(m, msg, v.getPessoa());

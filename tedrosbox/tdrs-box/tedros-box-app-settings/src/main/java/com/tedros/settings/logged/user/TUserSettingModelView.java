@@ -23,7 +23,6 @@ import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.builder.LanguageBuilder;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
-import com.tedros.fxapi.presenter.entity.decorator.TSaveViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.settings.security.model.TProfileModelView;
 
@@ -38,7 +37,7 @@ import javafx.beans.property.SimpleStringProperty;
 @TForm(name="#{security.user.form.name}")
 @TFormReaderHtml
 @TPresenter(type=TDynaPresenter.class, 
-			decorator=@TDecorator(type = TSaveViewDecorator.class, 
+			decorator=@TDecorator(type = TUserSettingDecorator.class, 
 			buildModesRadioButton=false, saveButtonText="#{label.apply}" ),
 			behavior=@TBehavior(type=TUserSettingBehavior.class, saveOnlyChangedModels=false))
 @TEjbService(model=TUser.class, serviceName = "TUserControllerRemote")

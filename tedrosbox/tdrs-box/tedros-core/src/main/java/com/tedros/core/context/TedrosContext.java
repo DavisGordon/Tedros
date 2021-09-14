@@ -364,7 +364,6 @@ public final class TedrosContext {
 	 * @param node
 	 * */
 	public static void showModal(Node node){
-				
 		MODAL = node;
 		showModalProperty.set(true);
 	}

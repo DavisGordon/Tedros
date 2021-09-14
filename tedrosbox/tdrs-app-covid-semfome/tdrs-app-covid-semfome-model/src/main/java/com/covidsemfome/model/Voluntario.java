@@ -15,9 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.covidsemfome.domain.DomainSchema;
 import com.covidsemfome.domain.DomainTables;
 import com.tedros.ejb.base.entity.TEntity;
@@ -109,15 +106,43 @@ public class Voluntario extends TEntity {
 	public void setTiposAjuda(Set<TipoAjuda> tiposAjuda) {
 		this.tiposAjuda = tiposAjuda;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this, false);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return EqualsBuilder.reflectionEquals(this, obj, false);
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((acao == null) ? 0 : acao.hashCode());
+		result = prime * result + ((pessoa == null) ? 0 : pessoa.hashCode());
+		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof Voluntario))
+			return false;
+		Voluntario other = (Voluntario) obj;
+		if (acao == null) {
+			if (other.acao != null)
+				return false;
+		} else if (!acao.equals(other.acao))
+			return false;
+		if (pessoa == null) {
+			if (other.pessoa != null)
+				return false;
+		} else if (!pessoa.equals(other.pessoa))
+			return false;
+		return true;
+	}
+	
+	
 }
