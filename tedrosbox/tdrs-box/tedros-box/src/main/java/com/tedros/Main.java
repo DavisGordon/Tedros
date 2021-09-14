@@ -38,6 +38,7 @@ import com.tedros.util.TFileUtil;
 import com.tedros.util.TZipUtil;
 import com.tedros.util.TedrosFolderEnum;
 
+import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -68,6 +69,7 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.control.TreeView;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -126,7 +128,8 @@ public class Main extends Application implements ITedrosBox  {
 
     private boolean expandedTollBar = true;
     
-    private String version = "8.7";
+    private String version = "8.7.3";
+    private FadeTransition logoEffect;
     
     
     public Main(){
@@ -299,6 +302,12 @@ public class Main extends Application implements ITedrosBox  {
         ds.setOffsetY(3.0f);
         ds.setColor(Color.BLACK);
         
+        StackPane logoPane = new StackPane();
+        Image logo = new Image(TedrosContext.getImageInputStream("logo-tedros-small.png"));
+        ImageView imgLogo = new ImageView();
+        imgLogo.setImage(logo);
+        imgLogo.setEffect(ds);
+        
         appName = new Label();
         appName.setEffect(ds);
         appName.setCache(true);
@@ -307,9 +316,19 @@ public class Main extends Application implements ITedrosBox  {
         
         HBox h = new HBox();
         h.setAlignment(Pos.CENTER_LEFT);
-        HBox.setMargin(appName, new Insets(0,15,0,0));
-        h.getChildren().addAll(appName);
+        HBox.setMargin(imgLogo, new Insets(8,0,0,8));
+        h.getChildren().addAll(imgLogo);
         
+        logoPane.getChildren().addAll(h, appName);
+       // StackPane.setMargin(imgLogo, new Insets(8,0,0,8));
+        StackPane.setMargin(appName, new Insets(0,0,0,55));
+        toolBar.getItems().add(logoPane);
+        
+        logoEffect = new FadeTransition(Duration.millis(2000), imgLogo);
+        logoEffect.setFromValue(1.0);
+        logoEffect.setToValue(0.3);
+        logoEffect.setCycleCount(FadeTransition.INDEFINITE);
+        logoEffect.setAutoReverse(true);
         
         appName.setCursor(Cursor.HAND);
         
@@ -330,8 +349,7 @@ public class Main extends Application implements ITedrosBox  {
         });
         
         
-        HBox.setMargin(h, new Insets(0,0,0,40));
-        toolBar.getItems().add(h);
+        
         
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -480,10 +498,13 @@ public class Main extends Application implements ITedrosBox  {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0,
 					Boolean arg1, Boolean arg2) {
-				if(arg2)
+				if(arg2) {
+					logoEffect.play();
 					showModalMessage(TedrosContext.getMessage());
-				else
+				}else {
 					hideModalMessage();
+					logoEffect.stop();
+				}
 			}
 		});
         
@@ -493,11 +514,13 @@ public class Main extends Application implements ITedrosBox  {
 					Boolean arg1, Boolean newValue) {
 				
 				if(newValue && TedrosContext.getModal() != null) {
+					logoEffect.play();
 					tModalPane = new TModalPane(innerPane);
 					tModalPane.showModal(TedrosContext.getModal(), false);
 				}else {
 					tModalPane.hideModal();
 					innerPane.getChildren().remove(tModalPane);
+					logoEffect.stop();
 				}
 			}
 		});
@@ -506,7 +529,9 @@ public class Main extends Application implements ITedrosBox  {
  			@Override
  			public void changed(ObservableValue<? extends Boolean> arg0,
  					Boolean arg1, Boolean arg2) {
+ 				logoEffect.play();
  				reloadStyle();
+ 				logoEffect.stop();
  			}
  		});
         
@@ -578,7 +603,6 @@ public class Main extends Application implements ITedrosBox  {
 					flag = context.stopModule();
 					context = null;
 				}
-				
 				return flag;
 			}			
 		};
@@ -612,6 +636,7 @@ public class Main extends Application implements ITedrosBox  {
             return;
         if(!force && page == currentPage)
             return;
+        
     	Node view = TedrosContext.getView();
     	ITModule m = null;
     	if(view != null && view instanceof ITModule)
@@ -648,6 +673,7 @@ public class Main extends Application implements ITedrosBox  {
             return;
         if(!force && page == currentPage)
             return;
+        
         changingPage = true;
         if(swapViews){
             Node view = page.createModule();

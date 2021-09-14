@@ -44,10 +44,14 @@ public class AcaoModel implements Serializable{
 	
 	private List<TipoAjuda> tiposAjuda;
 
+	private List<TipoAjuda> tiposAjudaPF;
+	
+	private List<TipoAjuda> tiposAjudaPJ;
+	
 	public AcaoModel(Long id, String titulo, String descricao, 
 			String data, String status, String observacao, 
 			Integer qtdMinVoluntarios,  Integer qtdMaxVoluntarios, Integer qtdVoluntariosInscritos,
-			boolean inscrito, List<TipoAjuda> tiposAjuda) {
+			boolean inscrito, List<TipoAjuda> tiposAjuda, List<TipoAjuda> tiposAjudaPF, List<TipoAjuda> tiposAjudaPJ) {
 		
 		this.id = id;
 		this.titulo = titulo;
@@ -60,7 +64,8 @@ public class AcaoModel implements Serializable{
 		this.qtdVoluntariosInscritos = qtdVoluntariosInscritos;
 		this.inscrito = inscrito;
 		this.tiposAjuda = tiposAjuda;
-		
+		this.tiposAjudaPF = tiposAjudaPF;
+		this.tiposAjudaPJ = tiposAjudaPJ;
 	}
 
 	/**
@@ -215,5 +220,33 @@ public class AcaoModel implements Serializable{
 	 */
 	public void setTiposAjuda(List<TipoAjuda> tiposAjuda) {
 		this.tiposAjuda = tiposAjuda;
+	}
+
+	/**
+	 * @return the tiposAjudaPF
+	 */
+	public List<TipoAjuda> getTiposAjudaPF() {
+		return tiposAjudaPF;
+	}
+
+	/**
+	 * @param tiposAjudaPF the tiposAjudaPF to set
+	 */
+	public void setTiposAjudaPF(List<TipoAjuda> tiposAjudaPF) {
+		this.tiposAjudaPF = tiposAjudaPF;
+	}
+
+	/**
+	 * @return the tiposAjudaPJ
+	 */
+	public List<TipoAjuda> getTiposAjudaPJ() {
+		return tiposAjudaPJ;
+	}
+
+	/**
+	 * @param tiposAjudaPJ the tiposAjudaPJ to set
+	 */
+	public void setTiposAjudaPJ(List<TipoAjuda> tiposAjudaPJ) {
+		this.tiposAjudaPJ = tiposAjudaPJ;
 	}
 }

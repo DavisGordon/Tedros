@@ -4,14 +4,17 @@
 package com.covidsemfome.model;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -69,8 +72,17 @@ public class Acao extends TEntity {
 	@Column(nullable = true)
 	private BigDecimal vlrExecutado;
 	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(	name=DomainTables.acao_tipoajuda,
+				schema=DomainSchema.riosemfome,
+				joinColumns= @JoinColumn(name="acao_id"),
+				inverseJoinColumns= @JoinColumn(name="tip_id"))
+	private Set<TipoAjuda> tiposAjuda;
+	
 	@OneToMany(mappedBy="acao", fetch=FetchType.EAGER, orphanRemoval=true, cascade={CascadeType.ALL})
-	private List<Voluntario> voluntarios;
+	private Set<Voluntario> voluntarios;
+	
+	
 	
 	public Acao() {
 		
@@ -78,7 +90,7 @@ public class Acao extends TEntity {
 
 	public Acao(Long id, Integer versionNum, Date lastUpdate, Date insertDate, String titulo, String descricao,
 			Date data, String status, String observacao, Integer qtdMinVoluntarios, Integer qtdMaxVoluntarios,
-			BigDecimal vlrPrevisto, BigDecimal vlrArrecadado, BigDecimal vlrExecutado, List<Voluntario> voluntarios) {
+			BigDecimal vlrPrevisto, BigDecimal vlrArrecadado, BigDecimal vlrExecutado, Set<Voluntario> voluntarios) {
 		super(id, versionNum, lastUpdate, insertDate);
 		this.titulo = titulo;
 		this.descricao = descricao;
@@ -92,10 +104,6 @@ public class Acao extends TEntity {
 		this.vlrExecutado = vlrExecutado;
 		this.voluntarios = voluntarios;
 	}
-
-
-
-
 
 	/**
 	 * @return the titulo
@@ -254,17 +262,33 @@ public class Acao extends TEntity {
 	/**
 	 * @return the voluntarios
 	 */
-	public List<Voluntario> getVoluntarios() {
+	public Set<Voluntario> getVoluntarios() {
 		if(voluntarios==null)
-			voluntarios = new ArrayList<>();
+			voluntarios = new HashSet<>();
 		return voluntarios;
 	}
 
 	/**
 	 * @param voluntarios the voluntarios to set
 	 */
-	public void setVoluntarios(List<Voluntario> voluntarios) {
+	public void setVoluntarios(Set<Voluntario> voluntarios) {
 		this.voluntarios = voluntarios;
+	}
+
+	/**
+	 * @return the tiposAjuda
+	 */
+	public Set<TipoAjuda> getTiposAjuda() {
+		if(this.tiposAjuda==null)
+			this.tiposAjuda = new HashSet<>();
+		return tiposAjuda;
+	}
+
+	/**
+	 * @param tiposAjuda the tiposAjuda to set
+	 */
+	public void setTiposAjuda(Set<TipoAjuda> tiposAjuda) {
+		this.tiposAjuda = tiposAjuda;
 	}
 	
 }

@@ -120,9 +120,14 @@ public class VoluntarioController extends TSecureEjbController<Voluntario> imple
 			
 			acao = aServ.find(acao);
 			
-			Voluntario v = getVoluntario(acao, pessoa);
-			if(v!=null){
-				acao.getVoluntarios().remove(v);
+			if(acao!=null){
+				Set<Voluntario> l = new HashSet<>();
+				for(Voluntario v : acao.getVoluntarios()) {
+					if(v.getPessoa().getId().equals(pessoa.getId()))
+						continue;
+					l.add(v);
+				}
+				acao.setVoluntarios(l);
 				aServ.save(acao);
 				aServ.enviarEmailSairAcao(pessoa, acao);
 			}

@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import com.tedros.core.control.TProgressIndicator;
 import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
@@ -20,15 +21,19 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 @SuppressWarnings("rawtypes")
 public class TMasterCrudViewDecorator<M extends TEntityModelView> 
 extends TDynaViewCrudBaseDecorator<M> {
 	
+	
 	private VBox 		tListViewLayout;
+	private StackPane	tListViewPane;
     private Label 		tListViewTitle;
     private ListView<M> tListView;
+    private TProgressIndicator tListViewProgressIndicator;
     
     private Accordion tPaginatorAccordion;
     private TPaginator tPaginator;
@@ -76,11 +81,13 @@ extends TDynaViewCrudBaseDecorator<M> {
 		tListViewTitle.maxWidth(listViewMaxWidth);
 		
 		
-		
+		tListViewPane = new StackPane();
 		// build the list view box
 		tListViewLayout = new VBox();
 		tListViewLayout.maxWidth(listViewMaxWidth+2);
-		
+		tListViewPane.getChildren().add(tListViewLayout);
+		tListViewProgressIndicator = new TProgressIndicator(tListViewPane);
+		tListViewProgressIndicator.setMediumLogo();
 		if(tPaginator!=null) {
 			
 			tPaginatorAccordion = new Accordion();
@@ -101,7 +108,7 @@ extends TDynaViewCrudBaseDecorator<M> {
 		VBox.setVgrow(tListView, Priority.ALWAYS);
 		// add the list view box at the left 
 		
-		addItemInTLeftContent(tListViewLayout);
+		addItemInTLeftContent(tListViewPane);
 	}
 
 	protected void configAllButtons() {
@@ -174,16 +181,16 @@ extends TDynaViewCrudBaseDecorator<M> {
 	
     public boolean isListContentVisible() {
     	final ITDynaView<M> view = getView();
-		return view.gettLeftContent().getChildren().contains(tListViewLayout);
+		return view.gettLeftContent().getChildren().contains(tListViewPane);
     }
     
 	public void hideListContent() {
 		final ITDynaView<M> view = getView();
-		view.gettLeftContent().getChildren().remove(tListViewLayout);
+		view.gettLeftContent().getChildren().remove(tListViewPane);
 	}
 	
 	public void showListContent() {
-		addItemInTLeftContent(tListViewLayout);
+		addItemInTLeftContent(tListViewPane);
 		
 	}
 	
@@ -246,6 +253,13 @@ extends TDynaViewCrudBaseDecorator<M> {
 	 */
 	public Accordion gettPaginatorAccordion() {
 		return tPaginatorAccordion;
+	}
+
+	/**
+	 * @return the tListViewProgressIndicator
+	 */
+	public TProgressIndicator gettListViewProgressIndicator() {
+		return tListViewProgressIndicator;
 	}
 
 }

@@ -62,7 +62,8 @@ public class TTableCell<S, T> extends TableCell<S, T> {
 						setCellDate((Date) obj);
 				}
 			}
-		}
+		}else
+			setText(null);
 	}
 	
 	private void setCellText(String text){

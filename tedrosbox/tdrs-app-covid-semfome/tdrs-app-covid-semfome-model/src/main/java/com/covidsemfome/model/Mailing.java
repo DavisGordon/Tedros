@@ -5,7 +5,7 @@ package com.covidsemfome.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -38,7 +38,7 @@ public class Mailing extends Acao {
 	
 	public Mailing(Long id, Integer versionNum, Date lastUpdate, Date insertDate, String titulo, String descricao,
 			Date data, String status, String observacao, Integer qtdMinVoluntarios, Integer qtdMaxVoluntarios,
-			BigDecimal vlrPrevisto, BigDecimal vlrArrecadado, BigDecimal vlrExecutado, List<Voluntario> voluntarios) {
+			BigDecimal vlrPrevisto, BigDecimal vlrArrecadado, BigDecimal vlrExecutado, Set<Voluntario> voluntarios) {
 		super(id, versionNum, lastUpdate, insertDate, titulo, descricao, data, status, observacao, qtdMinVoluntarios,
 				qtdMaxVoluntarios, vlrPrevisto, vlrArrecadado, vlrExecutado, voluntarios);
 	}

@@ -77,6 +77,21 @@ public class TProgressIndicator {
 		progressIndicator.visibleProperty().unbind();
 	}
 	
+	public void setSmallLogo() {
+		Image img = new Image(TedrosContext.getImageInputStream("logo-tedros-small.png"));
+        progressIndicator.setImage(img);
+	}
+	
+	public void setMediumLogo() {
+		Image img = new Image(TedrosContext.getImageInputStream("logo-tedros-medium.png"));
+        progressIndicator.setImage(img);
+	}
+	
+	public void setLogo() {
+		Image img = new Image(TedrosContext.getImageInputStream("logo-tedros.png"));
+        progressIndicator.setImage(img);
+	}
+	
 	private void initialize() {
 		veil = new Region();
 		veil.setVisible(false);
@@ -85,9 +100,7 @@ public class TProgressIndicator {
 		progressIndicator.setVisible(false);
 		//progressIndicator.setMaxSize(50, 50);
         
-        Image img = new Image(TedrosContext.getImageInputStream("logo-tedros.png"));
-        
-        progressIndicator.setImage(img);
+        setLogo();
         
         ft = new FadeTransition(Duration.millis(2000), progressIndicator);
         ft.setFromValue(1.0);

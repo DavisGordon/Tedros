@@ -495,10 +495,24 @@ public class PainelApi {
 								break;
 							}
 					
+					List<TipoAjuda> lst3 = new ArrayList<>();
+					List<TipoAjuda> lst4 = new ArrayList<>();
+					if(acao.getTiposAjuda()!=null) {
+						for(TipoAjuda t : acao.getTiposAjuda()) {
+							if(t.getStatus().equals("ATIVADO") && t.getTipoPessoa().equals("PF"))
+								lst3.add(t);
+							if(t.getStatus().equals("ATIVADO") && t.getTipoPessoa().equals("PJ"))
+								lst4.add(t);
+						}
+						if(lst3.isEmpty())
+							lst3 = null;
+						if(lst4.isEmpty())
+							lst4 = null;
+					}
 					AcaoModel model = new AcaoModel(acao.getId(), acao.getTitulo(), acao.getDescricao(), 
 							formataDataHora(acao.getData()), acao.getStatus(), acao.getObservacao(), 
 							acao.getQtdMinVoluntarios(), acao.getQtdMaxVoluntarios(), qtdVolIns, 
-							inscrito, lst2);
+							inscrito, lst2, lst3, lst4);
 					models.add(model);
 					
 				}

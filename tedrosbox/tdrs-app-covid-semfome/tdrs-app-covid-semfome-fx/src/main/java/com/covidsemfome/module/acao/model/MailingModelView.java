@@ -5,6 +5,7 @@ package com.covidsemfome.module.acao.model;
 
 import java.util.Date;
 
+import com.covidsemfome.model.Acao;
 import com.covidsemfome.model.Mailing;
 import com.covidsemfome.model.Voluntario;
 import com.covidsemfome.module.acao.behavior.MailingAction;
@@ -78,6 +79,8 @@ import javafx.scene.text.TextAlignment;
 public class MailingModelView extends TEntityModelView<Mailing> {
 	
 	private SimpleLongProperty id;
+	
+	private SimpleStringProperty displayText = new SimpleStringProperty();
 	
 	@TAccordion(expandedPane="eem",
 			panes={	@TTitledPane(text="Dados da Acão / Campanha", 
@@ -154,7 +157,17 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 		tituloEmail.setValue("[Covid Sem Fome] "+getModel().getTitulo());
 		conteudo.setValue("Olá #NOME#,<br> precisamos da sua ajuda para a campanha a ser realizada no dia #DATAACAO#, temos #QTDINSCRITOS# inscrito(s) e precisamos de #QTDMINVOL#, você pode se inscrever pelo #LINKPAINEL# em nosso site. <br><br> "
 		+getModel().getDescricao()+"<br><br>Equipe Covid Sem Fome<br>#LINKSITE#");
+		this.loadDisplayText(entity);
+	}
 	
+	private void loadDisplayText(Acao model) {
+		if(!model.isNew()){
+			String str = (id.getValue()==null ? "" : "(ID: "+id.getValue().toString()+") " ) 
+					+ (titulo.getValue()!=null ? titulo.getValue() : "") 
+					+ (data.getValue()!=null ? " em "+
+					TDateUtil.getFormatedDate(data.getValue(), TDateUtil.DDMMYYYY_HHMM) : "");
+			displayText.setValue(str);
+		}
 	}
 	
 	@Override
@@ -185,7 +198,7 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 
 	@Override
 	public SimpleStringProperty getDisplayProperty() {
-		return titulo;
+		return this.displayText;
 	}
 
 	
