@@ -72,14 +72,11 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
     	
     	for (final ITGroupViewItem item : groupViewItemList) {
     		
-    		//final Button button = new Button(iEngine.getString(item.getButtonTitle()));
     		final MenuItem button = new MenuItem(iEngine.getString(item.getButtonTitle()));
-    		//button.setId("t-button");
     		button.setOnAction( e -> {
     			showView(item);
     			menu.setText(iEngine.getString("#{tedros.fxapi.label.options}")+" > "+button.getText());
     		});
-    		//view.gettGroupToolbar().getItems().add(button);
     		menu.getItems().add(button);
     		if(addFirst){
     			showView(item);
@@ -89,9 +86,6 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 		}
 		final ToolBar tGroupToolbar = view.gettGroupToolbar(); 
     	tGroupToolbar.getItems().add(menuBar);
-    	//if(tGroupToolbar.getItems().size()>0)
-    	//	tGroupToolbar.getItems().get(tGroupToolbar.getItems().size()-1).setId("t-last-button");
-		
 	}
 	
 	@Override
@@ -161,7 +155,7 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 			itemSelected = item;
 			final StackPane formSpacePane = view.gettFormSpace();
 			final ITView<?> view = item.getViewInstance(getModule());
-			//view.settModule(this.getView().gettModule());
+			((Node)view).setId("t-view-group");
 			formSpacePane.getChildren().clear();
 			formSpacePane.getChildren().add((Node)view);
 			

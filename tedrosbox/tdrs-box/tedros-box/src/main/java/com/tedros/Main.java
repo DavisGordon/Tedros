@@ -4,6 +4,7 @@ package com.tedros;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Stack;
 import java.util.logging.Level;
@@ -26,6 +27,7 @@ import com.tedros.core.control.PopOver;
 import com.tedros.core.control.TedrosBoxBreadcrumbBar;
 import com.tedros.core.control.TedrosBoxResizeBar;
 import com.tedros.core.logging.TLoggerManager;
+import com.tedros.fxapi.layout.TSliderMenu;
 import com.tedros.fxapi.modal.TConfirmMessageBox;
 import com.tedros.fxapi.modal.TModalPane;
 import com.tedros.fxapi.presenter.TPresenter;
@@ -58,12 +60,10 @@ import javafx.scene.Node;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
-import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.TreeView;
@@ -99,7 +99,6 @@ public class Main extends Application implements ITedrosBox  {
     private Scene scene;
     private BorderPane root;
     private ToolBar toolBar;
-    private SplitPane splitPane;
     @SuppressWarnings("rawtypes")
 	private TreeView menuTree;
     private Pane pageArea;
@@ -108,7 +107,6 @@ public class Main extends Application implements ITedrosBox  {
     private String currentPagePath;
     
     private StackPane layerPane;
-    private StackPane innerPane;
     private TedrosBoxBreadcrumbBar breadcrumbBar;
     private Stack<Page> history;
     private Stack<Page> forwardHistory;
@@ -120,15 +118,14 @@ public class Main extends Application implements ITedrosBox  {
     private StackPane modalMessage;
     private TModalPane tModalPane;
     private ToolBar pageToolBar;
-    
-    private BorderPane leftSplitPane;
     private VBox leftMenuPane;
     private Accordion settingsAcc;
+    private TSliderMenu innerPane;
     private Label appName;
 
     private boolean expandedTollBar = true;
     
-    private String version = "8.7.3";
+    private String version = "8.8";
     private FadeTransition logoEffect;
     
     
@@ -151,8 +148,6 @@ public class Main extends Application implements ITedrosBox  {
 			LOGGER.severe(e.toString());
 		}
     }
-    
-    
     
     private boolean checkAndBuildTedrosBoxFolder(String outputFolder) throws IOException{
 		
@@ -203,9 +198,8 @@ public class Main extends Application implements ITedrosBox  {
     	removeCss(customStyleCssUrl);
     	File basckGroundCss = new File(TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+"background-image.css");
 		try {
-			System.out.println(FileUtils.readFileToString(basckGroundCss));
+			System.out.println(FileUtils.readFileToString(basckGroundCss, Charset.defaultCharset()));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	if(!basckGroundCss.exists()){
@@ -229,18 +223,13 @@ public class Main extends Application implements ITedrosBox  {
 	private void init(Stage primaryStage) {
     	stage = primaryStage;
     	TedrosContext.setApplication(this);
-    	//TedrosContext.setStage(primaryStage);
-    	
     	tedros = this;
     	getStage().setTitle("Tedros");
-    	
-    	Image img = new Image(TedrosContext.getImageInputStream("icon-tedros.png"));
-    	
-    	getStage().getIcons().add(img);
+    	getStage().initStyle(StageStyle.UNDECORATED);
+    	getStage().getIcons().add(new Image(TedrosContext.getImageInputStream("icon-tedros.png")));
     	// create root stack pane that we use to be able to overlay proxy dialog
         layerPane = new StackPane();
-        innerPane = new StackPane();
-        getStage().initStyle(StageStyle.UNDECORATED);
+        
         // create window resize button
         windowResizeButton = new TedrosBoxResizeBar(getStage(), 1020, 600);
         // create root
@@ -253,7 +242,6 @@ public class Main extends Application implements ITedrosBox  {
             }
         };
        
-        
         layerPane.setDepthTest(DepthTest.DISABLE);
         layerPane.getChildren().add(root);
         // create scene
@@ -279,20 +267,7 @@ public class Main extends Application implements ITedrosBox  {
 		
 		root.getStyleClass().add("application");
 		root.setId("t-tedros-color");
-        // create modal dimmer, to dim screen when showing modal dialogs
-        modalMessage = new StackPane();
-        modalMessage.setId("t-modal-dimmer");
-        modalMessage.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent t) {
-                t.consume();
-                TedrosContext.hideMessage();
-            }
-        });
-        modalMessage.setVisible(false);
-        layerPane.getChildren().add(modalMessage);
         
-        tModalPane = new TModalPane(innerPane);
-         
         // create main toolbar
         toolBar = new ToolBar();
         toolBar.setId("t-main-toolbar");
@@ -320,7 +295,6 @@ public class Main extends Application implements ITedrosBox  {
         h.getChildren().addAll(imgLogo);
         
         logoPane.getChildren().addAll(h, appName);
-       // StackPane.setMargin(imgLogo, new Insets(8,0,0,8));
         StackPane.setMargin(appName, new Insets(0,0,0,55));
         toolBar.getItems().add(logoPane);
         
@@ -333,23 +307,17 @@ public class Main extends Application implements ITedrosBox  {
         appName.setCursor(Cursor.HAND);
         
         appName.setOnMouseClicked(e -> {
-        	String ab = TInternationalizationEngine.getInstance(null).getString("#{tedros.about}");
+        	//String ab = TInternationalizationEngine.getInstance(null).getString("#{tedros.about}");
         	String tt = TInternationalizationEngine.getInstance(null).getFormatedString("#{tedros.tooltip}", version);
         	Label l = new Label(tt);
         	l.setFont(Font.font(11));
-        	//StackPane.setMargin(l, new Insets(30,0,0,0));
         	PopOver p = new PopOver();
-        	//p.setHeaderAlwaysVisible(true);
-        	//p.setTitle(ab);
         	p.setCloseButtonEnabled(true);
         	p.setContentNode(l);
         	p.getRoot().setPadding(new Insets(20,20,20,20));
         	p.show(appName);
     	
         });
-        
-        
-        
         
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -390,7 +358,6 @@ public class Main extends Application implements ITedrosBox  {
         menuTree.setId("t-tedros-menu-tree");
         menuTree.setStyle("-fx-background-color: transparent;");
         menuTree.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        //menuTree.setRoot(pages.getRoot());
         menuTree.setShowRoot(false);
         menuTree.setEditable(false);
         menuTree.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -405,41 +372,16 @@ public class Main extends Application implements ITedrosBox  {
             }
         });
         
-        // create left split pane
-        leftSplitPane = new BorderPane();
-        leftSplitPane.setStyle("-fx-background-color: transparent;");
-        //BorderPane leftMenuPane = new BorderPane();
         leftMenuPane = new VBox();
         leftMenuPane.setStyle("-fx-effect: dropshadow( three-pass-box , #000000 , 9, 0.1 , 0 , 4); -fx-text-fill: #FFFFFF; -fx-background-color: transparent;");
         leftMenuPane.getChildren().add(menuTree);
         VBox.setVgrow(menuTree, Priority.ALWAYS);
-        
-        
-        leftSplitPane.setCenter(leftMenuPane);
         // create page toolbar
         pageToolBar = new ToolBar();
         pageToolBar.setId("t-tedros-toolbar");
-        //pageToolBar.setMinHeight(29);
         pageToolBar.setMaxSize(Double.MAX_VALUE, Control.USE_PREF_SIZE);
-        
-        final Button expandCollapseButton = new Button("<|>");
-        expandCollapseButton.getStyleClass().setAll("button","expand-button");
-        
-        
-        expandCollapseButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				colapseMenuBar();
-			}
-		});
-        
-        
-        
         // Inicio breadcrumbar
         breadcrumbBar = new TedrosBoxBreadcrumbBar();
-        //breadcrumbBar.getChildren().add(0, menuPane);
-        breadcrumbBar.getChildren().add(0, expandCollapseButton);
-        
         pageToolBar.getItems().addAll(breadcrumbBar);
         // Fim breadcrumbar 
                 
@@ -453,31 +395,36 @@ public class Main extends Application implements ITedrosBox  {
         };
         pageArea.setId("t-app-area");
         pageArea.setStyle("-fx-background-color: transparent;");
-        // create right split pane
-        BorderPane rightSplitPane = new BorderPane();
-        rightSplitPane.setTop(pageToolBar);
-        rightSplitPane.setCenter(pageArea);
-        splitPane = new SplitPane();
-        splitPane.setId("t-tedros-splitpane");
-        splitPane.setStyle("-fx-background-color: transparent;");
-        splitPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        GridPane.setConstraints(splitPane, 0, 1);
-           
+        // create main pane
+        BorderPane mainPane = new BorderPane();
+        mainPane.setTop(pageToolBar);
+        mainPane.setCenter(pageArea);
+        mainPane.setMinWidth(300);
+        mainPane.setStyle("-fx-effect: dropshadow( three-pass-box , #000000 , 9, 0.1 , 0 , 4); -fx-text-fill: #FFFFFF; -fx-background-color: transparent;");
         
-        rightSplitPane.setMinWidth(300);
-        rightSplitPane.setStyle("-fx-effect: dropshadow( three-pass-box , #000000 , 9, 0.1 , 0 , 4); -fx-text-fill: #FFFFFF; -fx-background-color: transparent;");
-        
-        splitPane.getItems().addAll(leftSplitPane, rightSplitPane);
-        splitPane.setDividerPosition(0, 0.099);
-       // innerPane.getChildren().add(splitPane);
+        this.innerPane = new TSliderMenu(mainPane);
+        innerPane.settExpandButtonVisible(false);
         root.setTop(toolBar);
-        //root.setCenter(splitPane);
-        root.setCenter(innerPane);
+        root.setCenter(this.innerPane);
         root.setStyle("-fx-background-color: transparent;");
         // add window resize button so its on top
         windowResizeButton.setManaged(false);
        
         root.getChildren().addAll(windowResizeButton);
+        
+     // create modal dimmer, to dim screen when showing modal dialogs
+        modalMessage = new StackPane();
+        modalMessage.setId("t-modal-dimmer");
+        modalMessage.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent t) {
+                t.consume();
+                TedrosContext.hideMessage();
+            }
+        });
+        modalMessage.setVisible(false);
+        layerPane.getChildren().add(modalMessage);
+        
+        tModalPane = new TModalPane(innerPane);
         
         // configura listener para exibir view
         TedrosContext.pageProperty().addListener(new ChangeListener<Page>() {
@@ -539,19 +486,23 @@ public class Main extends Application implements ITedrosBox  {
         getStage().show();
         windowButtons.toogleMaximized();
         TedrosContext.showContextInitializationErrorMessage();
-        this.colapseMenuBar();
         TedrosContext.showModal(buildLogin());
         
     }
     
-    public void showApps() {
-    	if(innerPane.getChildren().isEmpty() || !innerPane.getChildren().contains(splitPane))
-    		innerPane.getChildren().add(splitPane);
+    
+    public void logout() {
+    	currentPage = null;
+        currentPagePath = "";
+        changingPage = false;
+        pageArea.getChildren().clear();
+        breadcrumbBar.setPath("");
+    	innerPane.settMenuOpened(false);
+    	innerPane.tClearMenuContent();
+    	innerPane.settExpandButtonVisible(false);
+    	
     }
     
-    public void hideApps() {
-    	innerPane.getChildren().remove(splitPane);
-    }
     
 	@SuppressWarnings("unchecked")
 	public void buildApplicationMenu(){
@@ -560,9 +511,11 @@ public class Main extends Application implements ITedrosBox  {
     	pages.parseModules();
         // goto initial page
         goToPage(pages.getModules());
-        showApps();
+        innerPane.settMenuContent(leftMenuPane);
+    	innerPane.settExpandButtonVisible(true);
     }
 	
+	@SuppressWarnings("rawtypes")
 	public void buildSettingsPane() {
 		TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
 		
@@ -573,6 +526,7 @@ public class Main extends Application implements ITedrosBox  {
 		}
 		settingsAcc = new Accordion();
 		settingsAcc.autosize();
+		
         TitledPane t = new TitledPane();
         t.setText(iEngine.getString("#{tedros.setting.user}"));
         t.setContent(new TUserSettingsPane());
@@ -713,13 +667,13 @@ public class Main extends Application implements ITedrosBox  {
                     scrollPane.setStyle("-fx-background-color: transparent; -fx-padding: 20 20 20 20;");
                     content = scrollPane;
                     
-                    this.expandedTollBar = TedrosContext.isCollapseMenu(); //true;
-                    colapseMenuBar();
+                   // this.expandedTollBar = TedrosContext.isCollapseMenu(); //true;
+                    //colapseMenuBar();
                 }else {
                 	content = view;
                 	content.setStyle("-fx-background-color: transparent;");
-                	this.expandedTollBar = false;
-                    colapseMenuBar();
+                	//this.expandedTollBar = false;
+                   // colapseMenuBar();
                 }
                 pageArea.getChildren().setAll(content);
                 TedrosContext.setView(view);
@@ -835,19 +789,19 @@ public class Main extends Application implements ITedrosBox  {
         
        // TedrosProcessManager.addProcess(TTomeeServerService.class);
     }
-    public void colapseMenuBar() {
+   /* public void colapseMenuBar() {
 		if(expandedTollBar){
 			if(this.leftMenuPane.getChildren().contains(settingsAcc))
 				this.leftMenuPane.getChildren().remove(settingsAcc);
-			splitPane.setDividerPosition(0, 0.0038);
+			//splitPane.setDividerPosition(0, 0.0038);
 			expandedTollBar = false;
 		}else{
 			if(!this.leftMenuPane.getChildren().contains(settingsAcc))
 				this.leftMenuPane.getChildren().add(settingsAcc);
-			splitPane.setDividerPosition(0, 0.197);
+			//splitPane.setDividerPosition(0, 0.197);
 			expandedTollBar = true;
 		}
-	}
+	}*/
 
 	public static void main(String[] args) { 
     	launch(args); 

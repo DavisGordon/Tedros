@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.tedros.util.TedrosFolderEnum;
-
 import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 
@@ -84,12 +85,19 @@ public class CategoryPage extends Page {
             addAllCategoriesTiles(categoryPage, directChildFlow);
             main.getChildren().add(directChildFlow);
         }
+        HBox hb = new HBox();
+        Region lr = new Region();
+        Region rr = new Region();
+        lr.setPrefWidth(80);
+        rr.setPrefWidth(80);
+        hb.getChildren().addAll(lr, main, rr);
+        HBox.setHgrow(main, Priority.ALWAYS);
         // wrap in scroll pane
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.getStyleClass().add("noborder-scroll-pane");
         scrollPane.setStyle("-fx-background-color: transparent;");
         scrollPane.setFitToWidth(true);
-        scrollPane.setContent(main);
+        scrollPane.setContent(hb);
         return scrollPane;
     }
 

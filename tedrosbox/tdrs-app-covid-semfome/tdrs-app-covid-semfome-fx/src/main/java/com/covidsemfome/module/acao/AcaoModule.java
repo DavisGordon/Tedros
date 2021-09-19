@@ -13,7 +13,7 @@ import com.covidsemfome.module.acao.model.SiteVideoModelView;
 import com.tedros.core.TModule;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
-import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
+import com.tedros.fxapi.presenter.dynamic.view.TDynaGroupView;
 import com.tedros.fxapi.presenter.view.group.TGroupPresenter;
 import com.tedros.fxapi.presenter.view.group.TGroupView;
 import com.tedros.fxapi.presenter.view.group.TViewItem;
@@ -32,13 +32,13 @@ public class AcaoModule extends TModule {
 	@Override
 	public void tStart() {
 		tShowView(new TGroupView<TGroupPresenter>(this, "Atualizar Site", 
-				new TViewItem(TDynaView.class, AcaoModelView.class, "Ação"),
-				new TViewItem(TDynaView.class, SiteAboutModelView.class, "Conheça"),
-				new TViewItem(TDynaView.class, SiteContatoModelView.class, "Contatos"),
-				new TViewItem(TDynaView.class, SiteVideoModelView.class, "Videos"),
-				new TViewItem(TDynaView.class, SiteDoacaoModelView.class, "Doação"),
-				new TViewItem(TDynaView.class, SiteNoticiaModelView.class, "Noticias"),
-				new TViewItem(TDynaView.class, SiteTermoModelView.class, "Termo")
+				new TViewItem(TDynaGroupView.class, AcaoModelView.class, "Ação"),
+				new TViewItem(TDynaGroupView.class, SiteAboutModelView.class, "Conheça"),
+				new TViewItem(TDynaGroupView.class, SiteContatoModelView.class, "Contatos"),
+				new TViewItem(TDynaGroupView.class, SiteVideoModelView.class, "Videos"),
+				new TViewItem(TDynaGroupView.class, SiteDoacaoModelView.class, "Doação"),
+				new TViewItem(TDynaGroupView.class, SiteNoticiaModelView.class, "Noticias"),
+				new TViewItem(TDynaGroupView.class, SiteTermoModelView.class, "Termo")
 				));
 	}
 

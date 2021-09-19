@@ -13,7 +13,7 @@
 <?scenebuilder-stylesheet ../../../../../../../../../../../../../TedrosBox/CONF/custom-styles.css?>
 <?scenebuilder-stylesheet ../../../../../../../../../../../../../TedrosBox/CONF/immutable-styles.css?>
 
-<fx:root id="" alignment="TOP_LEFT" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" type="javafx.scene.layout.StackPane" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root  id="t-view"  alignment="TOP_LEFT" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" type="javafx.scene.layout.StackPane" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <VBox fx:id="tLayout" prefHeight="-1.0" prefWidth="-1.0">
       <children>

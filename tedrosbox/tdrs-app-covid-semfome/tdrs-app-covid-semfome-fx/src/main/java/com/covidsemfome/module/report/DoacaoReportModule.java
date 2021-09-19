@@ -13,7 +13,7 @@ import com.covidsemfome.module.report.model.VoluntariosReportModelView;
 import com.tedros.core.TModule;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
-import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
+import com.tedros.fxapi.presenter.dynamic.view.TDynaGroupView;
 import com.tedros.fxapi.presenter.view.group.TGroupPresenter;
 import com.tedros.fxapi.presenter.view.group.TGroupView;
 import com.tedros.fxapi.presenter.view.group.TViewItem;
@@ -29,13 +29,13 @@ public class DoacaoReportModule extends TModule {
 	@Override
 	public void tStart() {
 		tShowView(new TGroupView<TGroupPresenter>(this, "Relatórios", 
-				new TViewItem(TDynaView.class, AcoesReportModelView.class, "Ação"),
-				new TViewItem(TDynaView.class, VoluntariosReportModelView.class, "Lista de voluntário inscritos"),
-				new TViewItem(TDynaView.class, PessoaReportModelView.class, "Pessoa"),
-				new TViewItem(TDynaView.class, ProdutoReportModelView.class, "Produto"),
-				new TViewItem(TDynaView.class, EntradaReportModelView.class, "Entrada de produtos no estoque"),
-				new TViewItem(TDynaView.class, SaidaReportModelView.class, "Saída de produtos do estoque"),
-				new TViewItem(TDynaView.class, EstoqueReportModelView.class, "Estoque")
+				new TViewItem(TDynaGroupView.class, AcoesReportModelView.class, "Ação"),
+				new TViewItem(TDynaGroupView.class, VoluntariosReportModelView.class, "Lista de voluntário inscritos"),
+				new TViewItem(TDynaGroupView.class, PessoaReportModelView.class, "Pessoa"),
+				new TViewItem(TDynaGroupView.class, ProdutoReportModelView.class, "Produto"),
+				new TViewItem(TDynaGroupView.class, EntradaReportModelView.class, "Entrada de produtos no estoque"),
+				new TViewItem(TDynaGroupView.class, SaidaReportModelView.class, "Saída de produtos do estoque"),
+				new TViewItem(TDynaGroupView.class, EstoqueReportModelView.class, "Estoque")
 				));
 	}
 

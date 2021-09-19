@@ -95,7 +95,7 @@ public class TProgressIndicator {
 	private void initialize() {
 		veil = new Region();
 		veil.setVisible(false);
-		veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4)");
+		veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4); -fx-background-radius: 20 20 20 20;");
 		progressIndicator = new ImageView();
 		progressIndicator.setVisible(false);
 		//progressIndicator.setMaxSize(50, 50);

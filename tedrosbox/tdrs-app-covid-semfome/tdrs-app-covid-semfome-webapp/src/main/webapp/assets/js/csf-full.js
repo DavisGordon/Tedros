@@ -29,7 +29,10 @@ $(document).ready(function() {
 			        				content += ('<p>' + obj.data + ', ' + obj.status + ', Inscritos(' + obj.qtdVoluntariosInscritos + '), Max(' + obj.qtdMaxVoluntarios + '), Min(' + obj.qtdMinVoluntarios + ')</p>');
 			        				content += ('</header>');
 			        				content += ('<p>' + obj.descricao + '</p>');
-			        				content += ('<a href="voluntario.html" class="button primary fit small">Participar</a><hr>');
+			        				if(obj.status=='Agendada')
+			        					content += ('<a href="voluntario.html" class="button primary fit small">Participar</a><hr>');
+			        				else
+			        					content += ('<hr>');
 			        				if((result.data.length-1) == index+1)
 			        					content += ('<span  id="contatos" ></span>');
 			        				

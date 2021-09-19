@@ -11,7 +11,7 @@ import com.covidsemfome.module.produto.model.SaidaModelView;
 import com.tedros.core.TModule;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
-import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
+import com.tedros.fxapi.presenter.dynamic.view.TDynaGroupView;
 import com.tedros.fxapi.presenter.view.group.TGroupPresenter;
 import com.tedros.fxapi.presenter.view.group.TGroupView;
 import com.tedros.fxapi.presenter.view.group.TViewItem;
@@ -30,11 +30,11 @@ public class EstoqueModule extends TModule {
 	@Override
 	public void tStart() {
 		tShowView(new TGroupView<TGroupPresenter>(this, "Estoque", 
-				new TViewItem(TDynaView.class, ProdutoModelView.class, "Produtos"),
-				new TViewItem(TDynaView.class, EstoqueConfigModelView.class, "Editar Estoque Inicial"),
-				new TViewItem(TDynaView.class, EntradaModelView.class, "Entradas de produtos"),
-				new TViewItem(TDynaView.class, SaidaModelView.class, "Saídas de produtos"),
-				new TViewItem(TDynaView.class, EstoqueModelView.class, "Ver Estoque gerado")
+				new TViewItem(TDynaGroupView.class, ProdutoModelView.class, "Produtos"),
+				new TViewItem(TDynaGroupView.class, EstoqueConfigModelView.class, "Editar Estoque Inicial"),
+				new TViewItem(TDynaGroupView.class, EntradaModelView.class, "Entradas de produtos"),
+				new TViewItem(TDynaGroupView.class, SaidaModelView.class, "Saídas de produtos"),
+				new TViewItem(TDynaGroupView.class, EstoqueModelView.class, "Ver Estoque gerado")
 				));
 	}
 

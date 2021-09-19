@@ -19,9 +19,7 @@ public interface ITedrosBox {
 	public void buildSettingsPane();
 	
 	public Stage getStage();
-	
-	public void showApps();
     
-    public void hideApps();
+    public void logout();
 	
 }

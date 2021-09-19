@@ -470,7 +470,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		int index = view.gettHeaderVerticalLayout().getChildren().size();
 		
 		StackPane sp = new StackPane();
-		sp.setId("t-header-box");
+		//sp.setId("t-header-box");
+		sp.getStyleClass().add("t-panel-background-color");
 		sp.getChildren().add(this.decorator.gettBreadcrumbFormToolBar());
 		
 		view.gettHeaderVerticalLayout().getChildren().add(index, sp);
