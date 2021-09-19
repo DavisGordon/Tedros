@@ -99,6 +99,7 @@ public class TBreadcrumbForm extends HBox {
                 if (i == this.tEntryList.size()-1) {
                     if(i==0) {
                         button.getStyleClass().setAll("button","only-button");
+                        button.setDisable(true);
                     } else {
                         button.getStyleClass().setAll("button","last-button");
                     }

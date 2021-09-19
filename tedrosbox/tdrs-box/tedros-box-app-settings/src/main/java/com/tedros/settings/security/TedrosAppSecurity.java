@@ -7,7 +7,7 @@ package com.tedros.settings.security;
 import com.tedros.core.TModule;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
-import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
+import com.tedros.fxapi.presenter.dynamic.view.TDynaGroupView;
 import com.tedros.fxapi.presenter.view.group.TGroupPresenter;
 import com.tedros.fxapi.presenter.view.group.TGroupView;
 import com.tedros.fxapi.presenter.view.group.TViewItem;
@@ -28,9 +28,9 @@ public class TedrosAppSecurity extends TModule {
 	public void tStart() {
 		
 		tShowView(new TGroupView<TGroupPresenter>(this, "#{security.view.title}", 
-				new TViewItem(TDynaView.class, TAuthorizationModelView.class, "#{label.authorization}"),
-				new TViewItem(TDynaView.class, TProfileModelView.class, "#{label.profile}"),
-				new TViewItem(TDynaView.class, TUserModelView.class, "#{label.user}")
+				new TViewItem(TDynaGroupView.class, TAuthorizationModelView.class, "#{label.authorization}"),
+				new TViewItem(TDynaGroupView.class, TProfileModelView.class, "#{label.profile}"),
+				new TViewItem(TDynaGroupView.class, TUserModelView.class, "#{label.user}")
 				));
 		
 	}

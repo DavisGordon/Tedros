@@ -4,7 +4,7 @@ import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.TModule;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
-import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
+import com.tedros.fxapi.presenter.dynamic.view.TDynaGroupView;
 import com.tedros.fxapi.presenter.view.group.TGroupView;
 import com.tedros.fxapi.presenter.view.group.TViewItem;
 import com.tedros.settings.layout.model.BackgroundImageModelView;
@@ -20,8 +20,8 @@ public class CustomizarModule extends TModule {
 		
 		TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(TConstant.UUI);
 		tShowView(new TGroupView<>(this, iEngine.getString("#{settings.view.title}"), 
-				new TViewItem(TDynaView.class, PainelModelView.class, iEngine.getString("#{settings.form.name}")),
-				new TViewItem(TDynaView.class, BackgroundImageModelView.class, iEngine.getString("#{background.painel.title}"))));
+				new TViewItem(TDynaGroupView.class, PainelModelView.class, iEngine.getString("#{settings.form.name}")),
+				new TViewItem(TDynaGroupView.class, BackgroundImageModelView.class, iEngine.getString("#{background.painel.title}"))));
 		
 	}
 

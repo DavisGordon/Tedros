@@ -26,7 +26,7 @@ public class CollapseMenuTrigger extends TTrigger<Boolean> {
 
 	@Override
 	public void run(Boolean value) {
-		TedrosContext.setCollapseMenu(value);
+		//TedrosContext.setCollapseMenu(value);
 	}
 	
 }
