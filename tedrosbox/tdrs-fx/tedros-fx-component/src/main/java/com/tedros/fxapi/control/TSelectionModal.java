@@ -9,6 +9,7 @@ import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.module.TObjectRepository;
 import com.tedros.fxapi.collections.ITObservableList;
+import com.tedros.fxapi.presenter.dynamic.view.TDynaGroupView;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.util.TEntityListViewCallback;
@@ -88,11 +89,12 @@ public class TSelectionModal extends TModalRequired {
 		//Open modal event
 		EventHandler<ActionEvent> fev = e -> {
 			StackPane pane = new StackPane();
-			view = new TDynaView(tModelViewClass, tSelectedItems);
+			view = new TDynaGroupView(tModelViewClass, tSelectedItems);
 			pane.setMaxSize(950, 600);
 			pane.getChildren().add(view);
 			pane.setId("t-tedros-color");
-			pane.setStyle("-fx-effect: dropshadow( three-pass-box , white , 4 , 0.4 , 0 , 0 );");
+			//pane.getStyleClass().add("t-panel-color");
+			pane.setStyle("-fx-background-radius: 20 20 20 20;");
 			view.tLoad();
 			TedrosAppManager.getInstance()
 			.getModuleContext((TModule)TedrosContext.getView()).getCurrentViewContext()

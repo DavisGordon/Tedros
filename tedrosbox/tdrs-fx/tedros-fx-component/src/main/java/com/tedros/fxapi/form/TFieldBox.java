@@ -39,7 +39,7 @@ public class TFieldBox extends StackPane implements ITField {
 		this.controlFieldName = controlFieldName;
 		this.label = label;
 		this.control = control;
-		
+		setId("t-fieldbox");
 		if(this.label==null && control==null)
 			return;
 		

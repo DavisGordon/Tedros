@@ -15,6 +15,7 @@ import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.TCodeValue;
 import com.tedros.fxapi.annotation.control.TBigDecimalField;
+import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TDetailListField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
@@ -25,9 +26,12 @@ import com.tedros.fxapi.annotation.control.TMultipleSelectionModal;
 import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TShowField;
+import com.tedros.fxapi.annotation.control.TTab;
+import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
+import com.tedros.fxapi.annotation.form.TDetailForm;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.TAccordion;
 import com.tedros.fxapi.annotation.layout.THBox;
@@ -67,6 +71,7 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
@@ -76,7 +81,7 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TFormReaderHtml
-@TForm(name = "Ação a ser exibida no site", showBreadcrumBar=false, editCssId="")
+@TForm(name = "Ação a ser exibida no site", showBreadcrumBar=false)
 @TEntityProcess(process = AcaoProcess.class, entity=Acao.class)
 @TListViewPresenter(listViewMinWidth=350, listViewMaxWidth=350,
 	paginator=@TPaginator(entityClass = Acao.class, serviceName = "IAcaoControllerRemote",
@@ -94,7 +99,7 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	@TReaderHtml
 	@TLabel(text="Codigo:", position=TLabelPosition.LEFT)
 	@TShowField
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-hsplit-first", parse = true))
 	@THBox(	pane=@TPane(children={"id","textoCadastro"}), spacing=4, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="id", priority=Priority.NEVER), 
    				   		@TPriority(field="textoCadastro", priority=Priority.ALWAYS) }))
@@ -110,16 +115,20 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 			+ "os Voluntários Operacionais que possuem permissão para receber e-mails.", 
 	textAlignment=TextAlignment.LEFT, wrappingWidth=750,
 	textStyle = TTextStyle.MEDIUM)
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-hsplit-last", parse = true))
 	private SimpleStringProperty textoCadastro;
 	
-	@TAccordion(expandedPane="dados", node=@TNode(id="acaoacc",parse = true),
+	/*@TAccordion(expandedPane="dados", node=@TNode(id="acaoacc",parse = true),
 			panes={
 					@TTitledPane(text="Dados da Ação", node=@TNode(id="dados",parse = true), 
 							expanded=true, layoutType=TLayoutType.HBOX,
 							fields={"titulo", "tiposAjuda"}),
 					@TTitledPane(text="Voluntários inscritos", node=@TNode(id="voluntarios",parse = true),
 						fields={"voluntarios"})})
+	*/
+	@TTabPane(tabs = { @TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"titulo", "tiposAjuda"}, orientation=Orientation.HORIZONTAL)), text = "Detalhes"), 
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"voluntarios"})), text = "Voluntários inscritos")
+	})
 	private SimpleStringProperty displayText = new SimpleStringProperty();
 	
 	
@@ -207,6 +216,7 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	control=@TControl(prefWidth=250, prefHeight=100, parse = true))
 	private SimpleStringProperty observacao;
 	
+	@TFieldBox(node=@TNode(id="volinscr", parse = true))
 	@TDetailReaderHtml(label=@TLabel(text="Voluntários"), entityClass=Voluntario.class, modelViewClass=VoluntarioDetailView.class)
 	@TDetailListField(entityModelViewClass = VoluntarioDetailView.class, entityClass = Voluntario.class)
 	@TModelViewCollectionType(modelClass=Voluntario.class, modelViewClass=VoluntarioDetailView.class)

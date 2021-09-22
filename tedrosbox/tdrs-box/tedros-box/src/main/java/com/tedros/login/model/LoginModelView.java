@@ -40,7 +40,7 @@ public class LoginModelView extends TModelView<Login> {
 	
 	private SimpleLongProperty id;
 	
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", 
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-title", 
 			effect=@TEffect(dropShadow=@TDropShadow, parse = false), parse = true))
 	@TText(text="#{tedros.login.form.title}", textAlignment=TextAlignment.LEFT, 
 			textStyle=TTextStyle.LARGE)
@@ -58,7 +58,7 @@ public class LoginModelView extends TModelView<Login> {
 	@TComboBoxField(items=LanguageBuilder.class, required=true)
 	private SimpleStringProperty language;
 	
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", 
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-info", 
 			effect=@TEffect(dropShadow=@TDropShadow, parse = false), parse = true))
 	@TText(text="#{tedros.profileText}", wrappingWidth=480, textAlignment=TextAlignment.LEFT, 
 		textStyle=TTextStyle.MEDIUM)

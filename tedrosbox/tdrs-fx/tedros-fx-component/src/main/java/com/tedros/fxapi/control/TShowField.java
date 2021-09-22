@@ -9,8 +9,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.app.component.ITComponent;
 import com.tedros.core.TInternationalizationEngine;
+import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.domain.TLayoutType;
 import com.tedros.fxapi.form.TFieldBox;
+import com.tedros.fxapi.form.TFieldBoxBuilder;
 import com.tedros.fxapi.util.TMaskUtil;
 import com.tedros.fxapi.util.TReflectionUtil;
 import com.tedros.util.TDateUtil;
@@ -40,6 +42,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 	@SuppressWarnings("rawtypes")
 	private Property value;
 	private TShowFieldValue[] fields;
+	private TComponentDescriptor descriptor;
 	
 	private Pane pane;
 	/**
@@ -58,7 +61,18 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 			e.printStackTrace();
 		}
 	}
-	
+	@SuppressWarnings("rawtypes")
+	public TShowField(TLayoutType layout, Property value, TComponentDescriptor descriptor ,TShowFieldValue... fields) {
+		this.descriptor = descriptor;
+		this.layout = layout;
+		this.value = value;
+		this.fields = fields;
+		try {
+			init();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * @param value
 	 * @param fields
@@ -131,7 +145,10 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 			l.setId("t-form-control-label");
 		
 		Node c = buildNode(TInternationalizationEngine.getInstance(null).getString(value));
-		return new TFieldBox(f.getName(), l, c, f.getLabelPosition());
+		TFieldBox box =  new TFieldBox(f.getName(), l, c, f.getLabelPosition());
+		if(descriptor!=null)
+			TFieldBoxBuilder.parse(descriptor, box);
+		return box;
 		
 	}
 

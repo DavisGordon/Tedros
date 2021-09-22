@@ -45,19 +45,14 @@ import com.tedros.fxapi.annotation.property.TReadOnlyBooleanProperty;
 import com.tedros.fxapi.annotation.reader.TDetailReaderHtml;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
-import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.scene.layout.TRegion;
-import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.annotation.view.TOption;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.collections.ITObservableList;
-import com.tedros.fxapi.control.TText.TTextStyle;
-import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TLabelPosition;
 import com.tedros.fxapi.domain.TLayoutType;
-import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.util.TDateUtil;
 
@@ -68,7 +63,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
-import javafx.scene.text.TextAlignment;
 
 /**
  * The person model view
@@ -79,7 +73,7 @@ import javafx.scene.text.TextAlignment;
  * @author Davis Gordon
  * */
 @TFormReaderHtml
-@TForm(name = "Editar pessoa", showBreadcrumBar=true)
+@TForm(name = "Editar pessoa", showBreadcrumBar=false)
 @TEjbService(serviceName = "IPessoaControllerRemote", model=Pessoa.class)
 @TListViewPresenter(listViewMinWidth=350, listViewMaxWidth=350,
 	paginator=@TPaginator(entityClass = Pessoa.class, serviceName = "IPessoaControllerRemote",
@@ -99,6 +93,12 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	
 	private SimpleStringProperty displayText;
 	
+	@TTabPane(tabs = { @TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"status", "nome", "observacao", "sexo", "loginName"})), text = "Detalhes"), 
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"documentos"})), text = "Documentos"), 
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"contatos"})), text = "Contatos"), 
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"enderecos"})), text = "Enderecos"), 
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"termosAdesao"})), text = "Termos de adesão")
+	})
 	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "Ativado"), 
 			@TCodeValue(code = "DESATIVADO", value = "Desativado")
 	})
@@ -108,18 +108,6 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 					@TRadioButtonField(text="Desativado", userData="DESATIVADO")
 	})
 	private SimpleStringProperty status;
-	
-	/**
-	 * A descripton for the title and the field box
-	 * */
-	@TTextReaderHtml(text="#{form.person.title}", 
-					htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
-					cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
-					cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Dados da pessoa", textAlignment=TextAlignment.LEFT, 
-			textStyle = TTextStyle.LARGE)
-	private SimpleStringProperty textoCadastro;
 	
 	/**
 	 * A text input description for the person name and a horizontal box with name, last name and nick name
@@ -257,35 +245,27 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 		parse = true))
 	private SimpleStringProperty password;
 	
-	/**
-	 * Build a tab pane with detail views to edit the collections of person documents, contacts and address.
-	 * */
+	@TFieldBox(node=@TNode(id="pd", parse = true))
 	@TDetailReaderHtml(	label=@TLabel(text="#{label.document}"), 
 						entityClass=Documento.class, 
 						modelViewClass=DocumentoModelView.class)
-	@TTabPane(tabs = {
-				@TTab(	text = "#{label.documents}", closable=false,
-						content = @TContent(detailForm = @TDetailForm(fields= {"documentos"}))),
-				@TTab(	text = "#{label.contacts}", closable=false, 
-				  		content = @TContent(detailForm = @TDetailForm(fields= {"contatos"}))),
-				@TTab(	text = "#{label.address}", closable=false, 
-						content = @TContent(detailForm = @TDetailForm(fields= {"enderecos"}))),
-				@TTab(	text = "Termo de adesão vigente", closable=false, 
-				content = @TContent(detailForm = @TDetailForm(fields= {"termosAdesao"})))})
 	@TDetailListField(entityModelViewClass = DocumentoModelView.class, entityClass = Documento.class)
 	@TModelViewCollectionType(modelClass=Documento.class, modelViewClass=DocumentoModelView.class)
 	private ITObservableList<DocumentoModelView> documentos;
 	
+	@TFieldBox(node=@TNode(id="pc", parse = true))
 	@TDetailReaderHtml(label=@TLabel(text="#{label.contacts}"), entityClass=Contato.class, modelViewClass=ContatoModelView.class)
 	@TDetailListField(entityModelViewClass = ContatoModelView.class, entityClass = Contato.class)
 	@TModelViewCollectionType(modelClass=Contato.class, modelViewClass=ContatoModelView.class)
 	private ITObservableList<ContatoModelView> contatos;
 	
+	@TFieldBox(node=@TNode(id="pe", parse = true))
 	@TDetailReaderHtml(label=@TLabel(text="#{label.address}"), entityClass=Endereco.class, modelViewClass=EnderecoModelView.class)
 	@TDetailListField(entityModelViewClass = EnderecoModelView.class, entityClass = Endereco.class)
 	@TModelViewCollectionType(modelClass=Endereco.class, modelViewClass=EnderecoModelView.class)
 	private ITObservableList<EnderecoModelView> enderecos;
 	
+	@TFieldBox(node=@TNode(id="pta", parse = true))
 	@TDetailReaderHtml(label=@TLabel(text="Termo de adesão vigente"), entityClass=PessoaTermoAdesao.class, 
 			modelViewClass=PessoaTermoAdesaoModelView.class, modelLayout=TLayoutType.VBOX, fieldsLayout=TLayoutType.VBOX)
 	@TDetailListField(entityModelViewClass = PessoaTermoAdesaoModelView.class, entityClass = PessoaTermoAdesao.class)
@@ -396,14 +376,6 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 
 	public void setId(SimpleLongProperty id) {
 		this.id = id;
-	}
-
-	public SimpleStringProperty getTextoCadastro() {
-		return textoCadastro;
-	}
-
-	public void setTextoCadastro(SimpleStringProperty textoCadastro) {
-		this.textoCadastro = textoCadastro;
 	}
 
 	public SimpleStringProperty getNome() {

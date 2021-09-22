@@ -11,13 +11,13 @@
 <?import javafx.scene.text.Font?>
 <?scenebuilder-stylesheet C:/Users/Davis Gordon/.tedros/CONF/custom-styles.css?>
 
-<fx:root  id="t-view"  maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" type="javafx.scene.layout.StackPane" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root  id="t-group-view"  maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" type="javafx.scene.layout.StackPane" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <BorderPane id="conteudoPane" fx:id="tContentPane" prefHeight="-1.0" prefWidth="-1.0" style="" StackPane.alignment="CENTER">
       <top>
         <HBox id="t-header-box" alignment="CENTER_LEFT" spacing="0.0">
           <children>
-            <HBox id="t-view-title-box" alignment="CENTER" maxWidth="220.0" spacing="0.0" style="" HBox.hgrow="ALWAYS">
+            <HBox id="t-view-title-box" alignment="CENTER" maxWidth="320.0" spacing="0.0" style="" HBox.hgrow="ALWAYS">
               <children>
                 <Label id="t-view-title" fx:id="tGroupTitle" style="" text="GROUP_NAME" textFill="#3385ff" wrapText="true" HBox.hgrow="ALWAYS">
                   <font>

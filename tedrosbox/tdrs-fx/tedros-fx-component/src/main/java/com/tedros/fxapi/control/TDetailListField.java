@@ -8,6 +8,7 @@ import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.fxapi.annotation.presenter.TDetailListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TDetailTableViewPresenter;
 import com.tedros.fxapi.collections.ITObservableList;
+import com.tedros.fxapi.presenter.dynamic.view.TDynaGroupView;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.presenter.model.TModelView;
@@ -23,7 +24,7 @@ import com.tedros.fxapi.presenter.model.TModelView;
 public class TDetailListField extends TDetailFieldRequired {
 
 	@SuppressWarnings("rawtypes")
-	private TDynaView view;
+	private TDynaGroupView view;
 	@SuppressWarnings("rawtypes")
 	private ITObservableList<TModelView> tSelectedItems;
 	
@@ -41,12 +42,9 @@ public class TDetailListField extends TDetailFieldRequired {
 		
 		this.tSelectedItems = details;
 		view = (module==null) 
-				? new TDynaView(tEntityViewClass, entityClass, details)
-						: new TDynaView(module, tEntityViewClass, entityClass, details) ;
-		view.setId("t-tedros-color");
+				? new TDynaGroupView(tEntityViewClass, entityClass, details)
+						: new TDynaGroupView(module, tEntityViewClass, entityClass, details) ;
 		getChildren().add(view);
-		
-		view.setStyle("-fx-effect: dropshadow( three-pass-box , white , 4 , 0.4 , 0 , 0 );");
 		view.tLoad();
 	}
 	

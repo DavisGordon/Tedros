@@ -34,7 +34,7 @@ import javafx.scene.control.Labeled;
  * @author Davis Gordon
  *
  */
-final class TFieldBoxBuilder {
+public final class TFieldBoxBuilder {
 	
 	public static TFieldBox build(final Node control, final TComponentDescriptor descriptor){
 		return generate(control, descriptor);
@@ -84,6 +84,16 @@ final class TFieldBoxBuilder {
 		}
 		
 		TFieldBox fieldBox = new TFieldBox(controlFieldName, label, control, position);
+		parse(descriptor, fieldBox);
+		
+		return fieldBox; 
+	}
+
+	/**
+	 * @param descriptor
+	 * @param fieldBox
+	 */
+	public static void parse(final TComponentDescriptor descriptor, TFieldBox fieldBox) {
 		com.tedros.fxapi.annotation.control.TFieldBox tAnnotation = (com.tedros.fxapi.annotation.control.TFieldBox) 
 				descriptor.getFieldDescriptor().getField().getAnnotation(com.tedros.fxapi.annotation.control.TFieldBox.class);
 		if(tAnnotation!=null){
@@ -93,8 +103,6 @@ final class TFieldBoxBuilder {
 				e.printStackTrace();
 			}
 		}
-		
-		return fieldBox; 
 	}
 	
 	private static void setTLabelReaderSettings(TLabel tLabel, final Annotation defaultSetting, final TComponentDescriptor descriptor) {

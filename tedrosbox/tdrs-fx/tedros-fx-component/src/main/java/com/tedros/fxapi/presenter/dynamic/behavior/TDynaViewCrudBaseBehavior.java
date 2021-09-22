@@ -42,6 +42,7 @@ import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.behavior.TProcessResult;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
+import com.tedros.fxapi.presenter.dynamic.view.TDynaGroupView;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.presenter.view.group.TGroupPresenter;
@@ -170,7 +171,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			ChangeListener<TModelView> mvcl = (a0, old_, new_) -> {
 				processModelView(new_);
 			};
-			
+			this.decorator.showScreenSaver();
 			super.getListenerRepository().add("setmodelviewCL", mvcl);
 			super.modelViewProperty().addListener(new WeakChangeListener(mvcl));
 			
@@ -705,7 +706,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 					StackPane pane = new StackPane();
 					if(getModels()==null)
 						setModelViewList(TFXCollections.iTObservableList());
-					TDynaView view = new TDynaView(importFileModelViewClass, getModels());
+					TDynaGroupView view = new TDynaGroupView(importFileModelViewClass, getModels());
 					pane.setMaxSize(950, 600);
 					pane.getChildren().add(view);
 					pane.setId("t-tedros-color");

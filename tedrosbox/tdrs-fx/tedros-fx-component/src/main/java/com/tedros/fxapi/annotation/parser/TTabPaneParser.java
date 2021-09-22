@@ -49,7 +49,7 @@ public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
 				scroll.maxWidth(Double.MAX_VALUE);
 				scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 				scroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
-				scroll.setId("t-form-scroll");
+				scroll.setId("t-tab-content");
 				scroll.layout();
 				
 				tab.setContent(scroll);
