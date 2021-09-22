@@ -125,7 +125,7 @@ public class Main extends Application implements ITedrosBox  {
 
     private boolean expandedTollBar = true;
     
-    private String version = "8.8";
+    private String version = "8.9";
     private FadeTransition logoEffect;
     
     
