@@ -45,7 +45,7 @@ public abstract class TDetailFieldRequired extends StackPane implements ITField,
 			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean new_value) {
 				if(new_value){
-					gettView().getStyleClass().add("required");
+					gettView().getStyleClass().add("required-detail");
 					buildRequiredEffect();
 		    		buildNotNullListener();
 		    		buildRequirementAccomplishedProperty();
@@ -57,7 +57,7 @@ public abstract class TDetailFieldRequired extends StackPane implements ITField,
 		    	}else{
 		    		requirementAccomplishedProperty = null;
 		    		removeEffect();
-		    		gettView().getStyleClass().remove("required");
+		    		gettView().getStyleClass().remove("required-detail");
 		    		if(requiredListener!=null)
 		    			gettSelectedItems().removeListener(requiredListener);
 		    	}
@@ -96,16 +96,16 @@ public abstract class TDetailFieldRequired extends StackPane implements ITField,
 		if(requirementAccomplishedProperty!=null)
 			requirementAccomplishedProperty.set(true);
 		gettView().setEffect(null);
-		gettView().getStyleClass().remove("required-not-ok");
-		gettView().getStyleClass().add("required-ok");
+		gettView().getStyleClass().remove("required-detail-not-ok");
+		gettView().getStyleClass().add("required-detail-ok");
 	}
 
 	private void applyEffect() {
 		if(requirementAccomplishedProperty!=null)
 			requirementAccomplishedProperty.set(false);
 		gettView().setEffect(requiredEffect);
-		gettView().getStyleClass().remove("required-ok");
-		gettView().getStyleClass().add("required-not-ok");
+		gettView().getStyleClass().remove("required-detail-ok");
+		gettView().getStyleClass().add("required-detail-not-ok");
 	}
 	
 	public SimpleBooleanProperty requiredProperty() {

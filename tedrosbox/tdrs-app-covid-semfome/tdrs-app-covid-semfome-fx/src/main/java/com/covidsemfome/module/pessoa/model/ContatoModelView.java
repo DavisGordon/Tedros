@@ -29,6 +29,7 @@ import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
+import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.presenter.entity.behavior.TDetailFieldBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TDetailFieldDecorator;
@@ -46,12 +47,12 @@ import javafx.geometry.Pos;
  *
  */
 @TFormReaderHtml
-@TForm(showBreadcrumBar=true, name = "Editar contato")
+@TForm(showBreadcrumBar=false, name = "Editar contato")
 @TDetailTableViewPresenter(
 		presenter=@TPresenter(behavior=@TBehavior(type=TDetailFieldBehavior.class),
 				decorator = @TDecorator(type=TDetailFieldDecorator.class, viewTitle="Contatos")
 				),
-		tableView=@TTableView(editable=true, 
+		tableView=@TTableView(editable=true, control=@TControl(prefHeight=200, parse = true),
 			columns = { @TTableColumn(cellValue="tipo", text = "Tipo", resizable=true,
 			cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=TipoContatoCallback.class))), 
 						@TTableColumn(cellValue="descricao", text = "Descrição.", resizable=true)}))

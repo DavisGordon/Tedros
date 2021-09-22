@@ -15,6 +15,7 @@ import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.TCodeValue;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
+import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TDetailListField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
@@ -24,8 +25,11 @@ import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
 import com.tedros.fxapi.annotation.control.TOneSelectionModal;
 import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
+import com.tedros.fxapi.annotation.control.TTab;
+import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.annotation.control.TTrigger;
 import com.tedros.fxapi.annotation.control.TValidator;
+import com.tedros.fxapi.annotation.form.TDetailForm;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.TAccordion;
 import com.tedros.fxapi.annotation.layout.THBox;
@@ -59,6 +63,7 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
@@ -68,7 +73,7 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TFormReaderHtml
-@TForm(name = "Entrada de produtos no estoque", showBreadcrumBar=true, editCssId="")
+@TForm(name = "Entrada de produtos no estoque", showBreadcrumBar=true)
 @TEjbService(serviceName = "IEntradaControllerRemote", model=Entrada.class)
 @TListViewPresenter(
 	paginator=@TPaginator(entityClass = Entrada.class, serviceName = "IEntradaControllerRemote",
@@ -86,12 +91,9 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 	
 	private SimpleStringProperty displayText = new SimpleStringProperty();
 	
-	@TAccordion(expandedPane="main", node=@TNode(id="estocavelAcc",parse = true),
-			panes={
-					@TTitledPane(text="Principal", node=@TNode(id="main",parse = true), expanded=true,
-							fields={"textoCadastro", "tipo"}),
-					@TTitledPane(text="Detalhe", node=@TNode(id="detail",parse = true),
-						fields={"itens"})})
+	@TTabPane(tabs = { @TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"textoCadastro", "tipo"})), text = "Principal"), 
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"itens"})), text = "Detalhe")
+	})
 	@TTextReaderHtml(text="Entrada de produtos", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
@@ -138,6 +140,7 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 	optionModelViewClass=CozinhaModelView.class, serviceName = "ICozinhaControllerRemote"))
 	private SimpleObjectProperty<Cozinha> cozinha;
 	
+	@TFieldBox(node=@TNode(id="prods", parse = true))
 	@TDetailReaderHtml(	label=@TLabel(text="Produtos"), 
 			entityClass=EntradaItem.class, 
 			modelViewClass=EntradaItemModelView.class)

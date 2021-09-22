@@ -7,7 +7,7 @@ import com.covidsemfome.model.PessoaTermoAdesao;
 import com.covidsemfome.model.TipoAjuda;
 import com.covidsemfome.module.voluntario.model.TipoAjudaModelView;
 import com.tedros.fxapi.annotation.TCodeValue;
-import com.tedros.fxapi.annotation.control.TFieldBox;
+import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.THTMLEditor;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
@@ -16,13 +16,10 @@ import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.annotation.control.TPickListField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TShowField;
+import com.tedros.fxapi.annotation.control.TTab;
+import com.tedros.fxapi.annotation.control.TTabPane;
+import com.tedros.fxapi.annotation.form.TDetailForm;
 import com.tedros.fxapi.annotation.form.TForm;
-import com.tedros.fxapi.annotation.layout.TAccordion;
-import com.tedros.fxapi.annotation.layout.THBox;
-import com.tedros.fxapi.annotation.layout.THGrow;
-import com.tedros.fxapi.annotation.layout.TPane;
-import com.tedros.fxapi.annotation.layout.TPriority;
-import com.tedros.fxapi.annotation.layout.TTitledPane;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TDetailListViewPresenter;
@@ -31,14 +28,10 @@ import com.tedros.fxapi.annotation.reader.TColumnReader;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.reader.TTableReaderHtml;
-import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
-import com.tedros.fxapi.annotation.text.TText;
+import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.collections.ITObservableList;
-import com.tedros.fxapi.control.TText.TTextStyle;
-import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TOptionProcessType;
-import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.entity.behavior.TDetailCrudViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TDetailCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
@@ -46,16 +39,15 @@ import com.tedros.fxapi.presenter.model.TEntityModelView;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.layout.Priority;
-import javafx.scene.text.TextAlignment;
 
 /**
  * @author Davis Gordon
  *
  */
 @TFormReaderHtml
-@TForm(showBreadcrumBar=true, name = "Termo de adesão preenchido", editCssId="")
+@TForm(showBreadcrumBar=false, name = "Termo de adesão preenchido", editCssId="")
 @TDetailListViewPresenter(presenter=@TPresenter(
 		behavior = @TBehavior(type = TDetailCrudViewBehavior.class,
 		newAction=PessoaTermoAdesaoNewAction.class, printAction=PessoaTermoAdesaoPrintAction.class), 
@@ -65,21 +57,21 @@ public class PessoaTermoAdesaoModelView extends TEntityModelView<PessoaTermoAdes
 
 	private SimpleLongProperty id;
 	
-	@TAccordion(expandedPane="main", node=@TNode(id="repdoaacc",parse = true),
-			panes={
-					@TTitledPane(text="Detalhes", node=@TNode(id="main",parse = true), expanded=true,
-							fields={"textoCadastro", "status", "tiposAjuda"}),
-					@TTitledPane(text="Termo de adesão", node=@TNode(id="detail",parse = true),
-						fields={"conteudo"})})
-	@TTextReaderHtml(text="Termo de adesão", 
-	htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
-	cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
-	cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
-
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Detalhes do termo", textAlignment=TextAlignment.LEFT, 
-			textStyle = TTextStyle.LARGE)
-	private SimpleStringProperty textoCadastro;
+	@TTabPane(tabs = { @TTab(closable=false, content = @TContent(detailForm=@TDetailForm(orientation=Orientation.HORIZONTAL, fields={"tiposAjuda","status", "versionNum"})), text = "Tipos de ajuda"), 
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"conteudo"})), text = "Documento")
+	})
+	@TLabel(text="Tipos de Ajuda")
+	@TTableReaderHtml(label=@TLabel(text="Tipo de Ajuda:"), 
+		column = { 	@TColumnReader(field = "descricao", name = "Descricao"), 
+					@TColumnReader(field = "tipoPessoa", name = "Tipo pessoa")})
+	@TPickListField(selectedLabel="#{label.selected}", 
+		sourceLabel="Opções", required=true,
+		optionsList=@TOptionsList(entityClass=TipoAjuda.class,
+					optionModelViewClass=TipoAjudaModelView.class,
+					optionProcessType=TOptionProcessType.LIST_ALL,
+					serviceName = "ITipoAjudaControllerRemote"))
+	@TModelViewCollectionType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=true)
+	private ITObservableList<TipoAjudaModelView> tiposAjuda;
 	
 	@TLabel(text="Status")
 	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "Ativado"), 
@@ -90,9 +82,6 @@ public class PessoaTermoAdesaoModelView extends TEntityModelView<PessoaTermoAdes
 		radioButtons = {@TRadioButtonField(text="Ativado", userData="ATIVADO"), 
 						@TRadioButtonField(text="Desativado", userData="DESATIVADO")
 		})
-	@THBox(pane=@TPane(	children={"status", "versionNum"}), spacing=10, fillHeight=true, 
-	hgrow=@THGrow(priority={@TPriority(field="status", priority=Priority.ALWAYS),
-							@TPriority(field="versionNum", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty status;
 	
 	@TReaderHtml
@@ -101,22 +90,10 @@ public class PessoaTermoAdesaoModelView extends TEntityModelView<PessoaTermoAdes
 	private SimpleIntegerProperty versionNum;
 	
 	
-	@TLabel(text="Tipos de Ajuda")
-	@TTableReaderHtml(label=@TLabel(text="Tipo de Ajuda:"), 
-		column = { 	@TColumnReader(field = "descricao", name = "Descricao"), 
-					@TColumnReader(field = "tipoPessoa", name = "Tipo pessoa")})
-	@TPickListField(selectedLabel="#{label.selected}", 
-		sourceLabel="Opções", required=true,
-		optionsList=@TOptionsList(entityClass=TipoAjuda.class,
-					optionModelViewClass=TipoAjudaModelView.class,
-					/*exampleEntityBuilder=TipoAjudaExampleBuilder.class,*/
-					optionProcessType=TOptionProcessType.LIST_ALL,
-					serviceName = "ITipoAjudaControllerRemote"))
-	@TModelViewCollectionType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=true)
-	private ITObservableList<TipoAjudaModelView> tiposAjuda;
+	
 		
 	@TReaderHtml
-	@THTMLEditor
+	@THTMLEditor(control=@TControl(prefHeight=350, parse = true))
 	private SimpleStringProperty conteudo;
 	
 	
@@ -182,19 +159,7 @@ public class PessoaTermoAdesaoModelView extends TEntityModelView<PessoaTermoAdes
 		this.conteudo = conteudo;
 	}
 
-	/**
-	 * @return the textoCadastro
-	 */
-	public SimpleStringProperty getTextoCadastro() {
-		return textoCadastro;
-	}
-
-	/**
-	 * @param textoCadastro the textoCadastro to set
-	 */
-	public void setTextoCadastro(SimpleStringProperty textoCadastro) {
-		this.textoCadastro = textoCadastro;
-	}
+	
 
 	/**
 	 * @return the versionNum

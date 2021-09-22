@@ -48,7 +48,7 @@ import javafx.scene.layout.Priority;
  *
  */
 @TFormReaderHtml
-@TForm(showBreadcrumBar=true, name = "Editar endereço")
+@TForm(showBreadcrumBar=false, name = "Editar endereço")
 @TDetailListViewPresenter(presenter=@TPresenter(
 behavior = @TBehavior(type = TDetailCrudViewBehavior.class), 
 decorator = @TDecorator(type = TDetailCrudViewDecorator.class, viewTitle="Endereços")))

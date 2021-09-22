@@ -30,6 +30,7 @@ import com.tedros.fxapi.annotation.reader.TColumnReader;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.reader.TTableReaderHtml;
+import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.presenter.entity.behavior.TDetailFieldBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TDetailFieldDecorator;
@@ -50,7 +51,7 @@ import javafx.scene.layout.Priority;
 		presenter=@TPresenter(behavior=@TBehavior(type=TDetailFieldBehavior.class),
 				decorator = @TDecorator(type=TDetailFieldDecorator.class, viewTitle="Voluntários")
 				),
-		tableView=@TTableView(editable=true, 
+		tableView=@TTableView(editable=true, control=@TControl(prefHeight=180,parse = true),
 			columns = { @TTableColumn(cellValue="pessoa", text = "Nome", resizable=true,
 							cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=PessoaNomeCallback.class))), 
 						@TTableColumn(cellValue="pessoa", text = "Profissão", resizable=true,

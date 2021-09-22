@@ -27,7 +27,6 @@ extends TDetailFieldBaseDecorator<M>
 		buildRemoveButton(null);
 		buildCleanButton(null);
 		addItemInTHeaderToolBar(gettAddButton(), gettRemoveButton(), gettCleanButton());
-
 	}
 	@Override
 	public void settTableView(TableView<M> tv) {

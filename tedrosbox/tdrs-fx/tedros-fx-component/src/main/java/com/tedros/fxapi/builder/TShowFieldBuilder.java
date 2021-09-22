@@ -44,7 +44,7 @@ implements ITControlBuilder<TShowField, Property> {
 			fields = ArrayUtils.add(fields, v);
 		}
 		
-		TShowField control = new TShowField(layout, attrProperty, fields);
+		TShowField control = new TShowField(layout, attrProperty, super.getComponentDescriptor(), fields);
 		
 		callParser(tAnnotation, control);
 		return control;

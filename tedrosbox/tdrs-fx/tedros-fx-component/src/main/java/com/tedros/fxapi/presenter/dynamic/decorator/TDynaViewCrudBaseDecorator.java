@@ -12,7 +12,6 @@ import com.tedros.core.context.TedrosContext;
 import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
-import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.layout.TBreadcrumbForm;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;

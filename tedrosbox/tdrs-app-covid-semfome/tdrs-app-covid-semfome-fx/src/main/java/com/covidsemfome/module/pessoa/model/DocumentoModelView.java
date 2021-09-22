@@ -41,7 +41,7 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
 
 @TFormReaderHtml
-@TForm(showBreadcrumBar=true, name = "#{form.document.name}")
+@TForm(showBreadcrumBar=false, name = "#{form.document.name}")
 @TDetailListViewPresenter(presenter=@TPresenter(
 		behavior = @TBehavior(type = TDetailCrudViewBehavior.class), 
 		decorator = @TDecorator(type = TDetailCrudViewDecorator.class, viewTitle="#{view.document.name}")))
@@ -101,7 +101,7 @@ public class DocumentoModelView extends TEntityModelView<Documento>{
 	
 	@TReaderHtml
 	@TLabel(text="Observação")
-	@TTextAreaField(maxLength=300, control=@TControl(prefWidth=250, prefHeight=200, parse = true))
+	@TTextAreaField(maxLength=300, control=@TControl(prefWidth=250, prefHeight=80, parse = true))
 	private SimpleStringProperty observacao;
 	
 	
