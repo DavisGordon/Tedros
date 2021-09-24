@@ -39,6 +39,9 @@ import com.tedros.fxapi.presenter.model.TEntityModelView;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.WeakListChangeListener;
 import javafx.scene.layout.Priority;
 
 /**
@@ -57,7 +60,8 @@ import javafx.scene.layout.Priority;
 						@TTableColumn(cellValue="pessoa", text = "Profissão", resizable=true,
 							cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=PessoaProfissaoCallback.class))), 
 						@TTableColumn(cellValue="pessoa", text = "Contato", resizable=true,
-							cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=PessoaContatoCallback.class)))
+							cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=PessoaContatoCallback.class))), 
+						@TTableColumn(cellValue="tiposAjudaDesc", text = "Tipos de ajuda", resizable=true)
 				}))
 public class VoluntarioDetailView extends TEntityModelView<Voluntario> {
 
@@ -82,10 +86,36 @@ public class VoluntarioDetailView extends TEntityModelView<Voluntario> {
 	private ITObservableList<TipoAjudaModelView> tiposAjuda;
 	
 	
+	private SimpleStringProperty tiposAjudaDesc;
+	
 	public VoluntarioDetailView(Voluntario entity) {
 		super(entity);
+		if(tiposAjudaDesc==null) 
+			tiposAjudaDesc = new SimpleStringProperty();
+		super.registerProperty("tiposAjudaDesc", tiposAjudaDesc);
+		
+		ListChangeListener<TipoAjudaModelView> ltn = (l) ->{
+			readTiposAjuda(l.getList());
+		};
+		super.addListener("tiposAjuda", ltn);
+		tiposAjuda.addListener(new WeakListChangeListener<>(ltn));
+		readTiposAjuda(null);
 	}
 	
+	private void readTiposAjuda(ObservableList<? extends TipoAjudaModelView> list) {
+		String s = "";
+		if(list!=null) 
+			for(TipoAjudaModelView e : list)
+				s += ("".equals(s)) ? e.getDescricao().getValue() : ", "+e.getDescricao().getValue();
+		else if(super.getEntity().getTiposAjuda()!=null) {
+			for(TipoAjuda e : super.getEntity().getTiposAjuda())
+				s += ("".equals(s)) ? e.getDescricao() : ", "+e.getDescricao();
+		}
+				
+		tiposAjudaDesc.setValue(s);
+		
+	}
+
 	@Override
 	public SimpleStringProperty getDisplayProperty() {
 		return null;
@@ -134,6 +164,20 @@ public class VoluntarioDetailView extends TEntityModelView<Voluntario> {
 	 */
 	public void setId(SimpleLongProperty id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return the tiposAjudaDesc
+	 */
+	public SimpleStringProperty getTiposAjudaDesc() {
+		return tiposAjudaDesc;
+	}
+
+	/**
+	 * @param tiposAjudaDesc the tiposAjudaDesc to set
+	 */
+	public void setTiposAjudaDesc(SimpleStringProperty tiposAjudaDesc) {
+		this.tiposAjudaDesc = tiposAjudaDesc;
 	}
 
 }

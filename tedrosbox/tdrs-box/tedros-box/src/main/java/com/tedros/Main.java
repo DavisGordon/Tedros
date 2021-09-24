@@ -123,9 +123,7 @@ public class Main extends Application implements ITedrosBox  {
     private TSliderMenu innerPane;
     private Label appName;
 
-    private boolean expandedTollBar = true;
-    
-    private String version = "8.9";
+    private String version = "8.9.1";
     private FadeTransition logoEffect;
     
     
@@ -585,7 +583,8 @@ public class Main extends Application implements ITedrosBox  {
     	TedrosContext.setPageProperty(page, true, false, true);
     }
 
-    private void goToPage(Page page, boolean addHistory, boolean force, boolean swapViews) {
+    @SuppressWarnings("unchecked")
+	private void goToPage(Page page, boolean addHistory, boolean force, boolean swapViews) {
     	if(page == null)
             return;
         if(!force && page == currentPage)

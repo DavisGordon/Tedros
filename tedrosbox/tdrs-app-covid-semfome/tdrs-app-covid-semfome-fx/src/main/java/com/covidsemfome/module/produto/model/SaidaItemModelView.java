@@ -49,7 +49,7 @@ import javafx.scene.layout.Priority;
 		presenter=@TPresenter(behavior=@TBehavior(type=TDetailFieldBehavior.class, addAction=SaidaItemAddAction.class),
 				decorator = @TDecorator(type=TDetailFieldDecorator.class, viewTitle="Itens")
 				),
-		tableView=@TTableView(editable=true, 
+		tableView=@TTableView(editable=true, control=@TControl(prefHeight=180, parse=true),
 			columns = { @TTableColumn(cellValue="produto", text = "Produto", prefWidth=50, resizable=true), 
 						@TTableColumn(cellValue="quantidade", text = "Qtd.", prefWidth=20, resizable=true)}))
 public class SaidaItemModelView extends TEntityModelView<SaidaItem> {

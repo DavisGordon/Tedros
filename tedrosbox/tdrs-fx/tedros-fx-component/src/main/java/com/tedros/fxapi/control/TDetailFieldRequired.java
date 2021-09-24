@@ -5,7 +5,6 @@ package com.tedros.fxapi.control;
 
 import com.tedros.app.component.ITComponent;
 import com.tedros.fxapi.collections.ITObservableList;
-import com.tedros.fxapi.effect.TEffectUtil;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
 
@@ -14,7 +13,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
-import javafx.scene.effect.Effect;
 import javafx.scene.layout.StackPane;
 
 /**
@@ -25,8 +23,7 @@ public abstract class TDetailFieldRequired extends StackPane implements ITField,
 
 	private String t_componentId;
 	private SimpleBooleanProperty requirementAccomplishedProperty;
-	private Effect requiredEffect;
-    @SuppressWarnings("rawtypes")
+	@SuppressWarnings("rawtypes")
 	private ListChangeListener requiredListener;
     private SimpleBooleanProperty requiredProperty; 
     
@@ -46,8 +43,7 @@ public abstract class TDetailFieldRequired extends StackPane implements ITField,
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean new_value) {
 				if(new_value){
 					gettView().getStyleClass().add("required-detail");
-					buildRequiredEffect();
-		    		buildNotNullListener();
+					buildNotNullListener();
 		    		buildRequirementAccomplishedProperty();
 		    		gettSelectedItems().addListener(requiredListener);
 					if(gettSelectedItems().isEmpty())
@@ -71,11 +67,6 @@ public abstract class TDetailFieldRequired extends StackPane implements ITField,
 
 	@SuppressWarnings("rawtypes")
 	public abstract ITObservableList<TModelView> gettSelectedItems();
-	
-	 private void buildRequiredEffect(){
-			if(requiredEffect == null)
-				requiredEffect = TEffectUtil.buildNotNullFieldFormEffect();
-		}
    
 	private void buildNotNullListener(){
 		if(requiredListener == null)
@@ -95,7 +86,6 @@ public abstract class TDetailFieldRequired extends StackPane implements ITField,
 	private void removeEffect() {
 		if(requirementAccomplishedProperty!=null)
 			requirementAccomplishedProperty.set(true);
-		gettView().setEffect(null);
 		gettView().getStyleClass().remove("required-detail-not-ok");
 		gettView().getStyleClass().add("required-detail-ok");
 	}
@@ -103,7 +93,6 @@ public abstract class TDetailFieldRequired extends StackPane implements ITField,
 	private void applyEffect() {
 		if(requirementAccomplishedProperty!=null)
 			requirementAccomplishedProperty.set(false);
-		gettView().setEffect(requiredEffect);
 		gettView().getStyleClass().remove("required-detail-ok");
 		gettView().getStyleClass().add("required-detail-not-ok");
 	}

@@ -36,6 +36,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.WeakListChangeListener;
 import javafx.concurrent.Worker.State;
+import javafx.scene.layout.StackPane;
 
 @SuppressWarnings("rawtypes")
 public abstract class TDynaViewSimpleBaseBehavior<M extends TModelView, E extends ITModel> 
@@ -65,7 +66,9 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		buildUserAuthorizations();
 		
 		if(isUserNotAuthorized(TAuthorizationType.VIEW_ACCESS)){
-			getView().tShowModal(presenter.getDecorator().getScreenSaverPane(), false);
+			StackPane accessDenied = new StackPane();
+			accessDenied.setId("t-access-denied");
+			getView().tShowModal(accessDenied, false);
 		}
 		
 		final com.tedros.fxapi.annotation.process.TModelProcess tModelProcess = getPresenter().getModelProcessAnnotation();

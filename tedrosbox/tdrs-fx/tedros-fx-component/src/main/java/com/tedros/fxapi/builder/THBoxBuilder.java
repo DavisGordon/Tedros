@@ -46,7 +46,7 @@ implements ITLayoutBuilder<HBox> {
 		
 		for(String field : tAnnotation.pane().children()){
 			Node node = null;
-			if(getComponentDescriptor().getFieldDescriptor().getFieldName().equals(field)){
+			if(tHtmlReader!=null && getComponentDescriptor().getFieldDescriptor().getFieldName().equals(field)){
 				node = tHtmlReader;
 			}else{
 				final TComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), field);

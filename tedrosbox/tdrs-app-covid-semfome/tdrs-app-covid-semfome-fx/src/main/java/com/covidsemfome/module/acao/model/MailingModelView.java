@@ -16,24 +16,26 @@ import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.ejb.base.model.TItemModel;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
+import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
 import com.tedros.fxapi.annotation.control.TShowField;
 import com.tedros.fxapi.annotation.control.TShowField.TField;
+import com.tedros.fxapi.annotation.control.TTab;
+import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.control.TValidator;
+import com.tedros.fxapi.annotation.form.TDetailForm;
 import com.tedros.fxapi.annotation.form.TForm;
-import com.tedros.fxapi.annotation.layout.TAccordion;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
-import com.tedros.fxapi.annotation.layout.TTitledPane;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
@@ -60,7 +62,7 @@ import javafx.scene.text.TextAlignment;
  * @author Davis Gordon
  *
  */
-@TForm(name = "Mailing", showBreadcrumBar=false, form=EmailTemplateForm.class, editCssId="")
+@TForm(name = "Mailing", showBreadcrumBar=false, form=EmailTemplateForm.class)
 @TEjbService(serviceName = "IMailingControllerRemote", model=Mailing.class)
 @TListViewPresenter(listViewMinWidth=350, listViewMaxWidth=350,
 	paginator=@TPaginator(entityClass = Mailing.class, serviceName = "IMailingControllerRemote",
@@ -80,14 +82,12 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 	
 	private SimpleLongProperty id;
 	
+	@TTabPane(tabs = { @TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"textoCadastro","titulo","descricao"})), text = "Acão"), 
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"voluntarios"})), text = "Voluntários inscritos"), 
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"destino","emails","tituloEmail", "conteudo","tituloBoxEmail","textoChaves"})), text = "Editar Email")
+	})
 	private SimpleStringProperty displayText = new SimpleStringProperty();
 	
-	@TAccordion(expandedPane="eem",
-			panes={	@TTitledPane(text="Dados da Acão / Campanha", 
-					fields={"textoCadastro","titulo","descricao"}),
-					@TTitledPane(text="Voluntários inscritos", fields={"voluntarios"}),
-					@TTitledPane(text="Email",node=@TNode(id="eem",parse = true), expanded=true, 
-					fields={"destino","emails","tituloEmail", "conteudo","tituloBoxEmail","textoChaves"})})
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
 	@TText(text="Acão / Campanha", textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)
