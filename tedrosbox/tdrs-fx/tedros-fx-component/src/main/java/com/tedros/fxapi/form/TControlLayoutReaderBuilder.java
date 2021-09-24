@@ -125,7 +125,7 @@ public final class TControlLayoutReaderBuilder {
 				Node control = buildReader(modelView, modelViewGetMethod, readerAnnotation, readerBuilder);
 				TFieldBox fieldBox = TFieldBoxBuilder.build(control, descriptor);
 				Node layout = ((ITLayoutBuilder) layoutBuilder).build(layoutAnnotation);
-				checkAsLoaded(descriptor, fieldBox);
+				registerComponent(descriptor, fieldBox);
 				descriptor.getFieldDescriptor().setComponentLoaded(true);
 				descriptor.getFieldDescriptor().setLayoutLoaded(true);
 				return layout;
@@ -133,8 +133,20 @@ public final class TControlLayoutReaderBuilder {
 				THtmlReader control = buildHtmlBox((THtmlReader) buildReader(modelView, modelViewGetMethod, readerAnnotation, readerBuilder), descriptor);
 				TFieldBox fieldBox = new TFieldBox(descriptor.getFieldDescriptor().getFieldName(), null, control, null);
 				THtmlReader layout = ((ITLayoutBuilder) layoutBuilder).build(layoutAnnotation, control);
-				checkAsLoaded(descriptor, fieldBox);
+				registerComponent(descriptor, fieldBox);
 				descriptor.getFieldDescriptor().setComponentLoaded(true);
+				descriptor.getFieldDescriptor().setLayoutLoaded(true);
+				return layout;
+			}
+		}else if(layoutBuilder!=null && readerBuilder==null) {
+			if(!htmlReaderFlag){
+				Node layout = ((ITLayoutBuilder) layoutBuilder).build(layoutAnnotation);
+				registerComponent(descriptor, layout);
+				descriptor.getFieldDescriptor().setLayoutLoaded(true);
+				return layout;
+			}else{
+				THtmlReader layout = ((ITLayoutBuilder) layoutBuilder).build(layoutAnnotation, null);
+				registerComponent(descriptor, layout);
 				descriptor.getFieldDescriptor().setLayoutLoaded(true);
 				return layout;
 			}
@@ -212,7 +224,7 @@ public final class TControlLayoutReaderBuilder {
 	
 	private static Node buildFieldBox(Node node, final TComponentDescriptor descriptor) {
 		final TFieldBox fieldBox = TFieldBoxBuilder.build(node, descriptor);
-		checkAsLoaded(descriptor, fieldBox);
+		registerComponent(descriptor, fieldBox);
 		return fieldBox;
 		
 	}
@@ -220,14 +232,13 @@ public final class TControlLayoutReaderBuilder {
 	private static THtmlReader buildHtmlBox(THtmlReader node, final TComponentDescriptor descriptor) {
 		final THtmlReader tHtmlReader = THtmlBoxBuilder.build(node, descriptor);
 		TFieldBox fieldBox = new TFieldBox(descriptor.getFieldDescriptor().getFieldName(), null, tHtmlReader, null);
-		checkAsLoaded(descriptor, fieldBox);
+		registerComponent(descriptor, fieldBox);
 		return tHtmlReader;
 		
 	}
 	
-	private static void checkAsLoaded(final TComponentDescriptor descriptor, final TFieldBox fieldBox) {
-		//descriptor.getFieldDescriptor().setLoaded(true);
-		descriptor.getComponents().put(descriptor.getFieldDescriptor().getFieldName(), fieldBox);
+	private static void registerComponent(final TComponentDescriptor descriptor, final Node node) {
+		descriptor.getComponents().put(descriptor.getFieldDescriptor().getFieldName(), node);
 	}
 	
 	private static Method getMethod(final String fieldName, final Object modelView) throws NoSuchMethodException {

@@ -45,7 +45,7 @@ implements ITLayoutBuilder<TFieldSet> {
 		tHtmlFieldSetGenerator.setLegend(iEngine.getString(tAnnotation.legend()));
 		for(String field: tAnnotation.fields()){
 			Node node = null;
-			if(getComponentDescriptor().getFieldDescriptor().getFieldName().equals(field)){
+			if(tHtmlReader!=null && getComponentDescriptor().getFieldDescriptor().getFieldName().equals(field)){
 				node = tHtmlReader;
 			}else{
 				final TComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), field);

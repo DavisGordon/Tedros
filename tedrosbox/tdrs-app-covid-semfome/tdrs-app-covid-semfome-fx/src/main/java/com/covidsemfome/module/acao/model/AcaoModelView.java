@@ -33,12 +33,10 @@ import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.form.TDetailForm;
 import com.tedros.fxapi.annotation.form.TForm;
-import com.tedros.fxapi.annotation.layout.TAccordion;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
-import com.tedros.fxapi.annotation.layout.TTitledPane;
 import com.tedros.fxapi.annotation.layout.TVBox;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
@@ -60,7 +58,6 @@ import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TLabelPosition;
-import com.tedros.fxapi.domain.TLayoutType;
 import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.util.TDateUtil;
@@ -118,14 +115,6 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-hsplit-last", parse = true))
 	private SimpleStringProperty textoCadastro;
 	
-	/*@TAccordion(expandedPane="dados", node=@TNode(id="acaoacc",parse = true),
-			panes={
-					@TTitledPane(text="Dados da Ação", node=@TNode(id="dados",parse = true), 
-							expanded=true, layoutType=TLayoutType.HBOX,
-							fields={"titulo", "tiposAjuda"}),
-					@TTitledPane(text="Voluntários inscritos", node=@TNode(id="voluntarios",parse = true),
-						fields={"voluntarios"})})
-	*/
 	@TTabPane(tabs = { @TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"titulo", "tiposAjuda"}, orientation=Orientation.HORIZONTAL)), text = "Detalhes"), 
 			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"voluntarios"})), text = "Voluntários inscritos")
 	})

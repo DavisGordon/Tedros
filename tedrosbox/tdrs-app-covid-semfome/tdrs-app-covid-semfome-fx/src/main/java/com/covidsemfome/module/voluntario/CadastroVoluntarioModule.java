@@ -8,8 +8,6 @@ package com.covidsemfome.module.voluntario;
 
 import com.covidsemfome.module.voluntario.model.VoluntarioModelView;
 import com.tedros.core.TModule;
-import com.tedros.core.annotation.security.TAuthorizationType;
-import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 
 
@@ -19,8 +17,8 @@ import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
  * @author Davis Gordon
  *
  */
-@TSecurity(	id="COVSEMFOME_CADVOL_MODULE", appName = "#{app.name}", moduleName = "Gerenciar Campanha", 
-			allowedAccesses=TAuthorizationType.MODULE_ACCESS)
+/*@TSecurity(	id="COVSEMFOME_CADVOL_MODULE", appName = "#{app.name}", moduleName = "Gerenciar Campanha", 
+			allowedAccesses=TAuthorizationType.MODULE_ACCESS)*/
 public class CadastroVoluntarioModule extends TModule{
 
 	@Override

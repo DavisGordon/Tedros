@@ -15,18 +15,12 @@ import com.covidsemfome.module.estoque.icon.EstoqueMenuIconImageView;
 import com.covidsemfome.module.pessoa.CadastroDePessoaModule;
 import com.covidsemfome.module.pessoa.icon.PessoaIconImageView;
 import com.covidsemfome.module.pessoa.icon.PessoaMenuIconImageView;
-import com.covidsemfome.module.produto.ProdutoModule;
-import com.covidsemfome.module.produto.icon.ProdutoIconImageView;
-import com.covidsemfome.module.produto.icon.ProdutoMenuIconImageView;
 import com.covidsemfome.module.report.DoacaoReportModule;
 import com.covidsemfome.module.report.icon.RelatoriosIconImageView;
 import com.covidsemfome.module.report.icon.RelatoriosMenuIconImageView;
 import com.covidsemfome.module.voluntario.CadastroTipoAjudaModule;
-import com.covidsemfome.module.voluntario.CadastroVoluntarioModule;
 import com.covidsemfome.module.voluntario.icon.TipoAjudaIconImageView;
 import com.covidsemfome.module.voluntario.icon.TipoAjudaMenuIconImageView;
-import com.covidsemfome.module.voluntario.icon.VoluntarioIconImageView;
-import com.covidsemfome.module.voluntario.icon.VoluntarioMenuIconImageView;
 import com.tedros.core.ITApplication;
 import com.tedros.core.annotation.TApplication;
 import com.tedros.core.annotation.TModule;
@@ -47,9 +41,9 @@ module = {
 			@TModule(type=AcaoModule.class, name="Ação/Site", menu="Gerenciar Campanha", 
 					icon=AcaoIconImageView.class, menuIcon=AcaoMenuIconImageView.class,
 					description="Administre aqui as ações/campanhas e algumas informações do site"),
-			@TModule(type=CadastroVoluntarioModule.class, name="Voluntários inscritos", menu="Gerenciar Campanha", 
+			/*@TModule(type=CadastroVoluntarioModule.class, name="Voluntários inscritos", menu="Gerenciar Campanha", 
 					icon=VoluntarioIconImageView.class, menuIcon=VoluntarioMenuIconImageView.class,
-					description="Edite/visualize aqui os voluntarios e o tipo de ajuda nas ações."),
+					description="Edite/visualize aqui os voluntarios e o tipo de ajuda nas ações."),*/
 			@TModule(type=MailingModule.class, name="Mailing", menu="Gerenciar Campanha", 
 					icon=MailingIconImageView.class, menuIcon=MailingMenuIconImageView.class,
 					description="Crie e envie e-mails a um grupo de pessoas sobre uma determinada ação."),

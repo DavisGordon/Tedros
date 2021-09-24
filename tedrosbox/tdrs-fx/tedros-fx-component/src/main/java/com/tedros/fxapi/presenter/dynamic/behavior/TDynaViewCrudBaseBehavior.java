@@ -1,18 +1,10 @@
 package com.tedros.fxapi.presenter.dynamic.behavior;
 
-import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
 import org.apache.commons.lang3.StringUtils;
-import org.w3c.dom.Document;
 
 import com.tedros.core.ITModule;
 import com.tedros.core.TModule;

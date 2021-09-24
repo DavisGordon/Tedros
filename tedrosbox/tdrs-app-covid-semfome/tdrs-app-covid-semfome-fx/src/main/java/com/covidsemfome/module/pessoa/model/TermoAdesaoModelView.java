@@ -61,7 +61,7 @@ public class TermoAdesaoModelView extends TEntityModelView<TermoAdesao> {
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-title", parse = true))
 	@TText(text="Termo de adesão do voluntário", textAlignment=TextAlignment.LEFT, 
 		textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty textoCadastro;
@@ -86,7 +86,7 @@ public class TermoAdesaoModelView extends TEntityModelView<TermoAdesao> {
 	})
 	private SimpleStringProperty status;
 	
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-info", parse = true))
 	@TText(text="#NOME# #PROFISSAO# #ESTADOCIVIL# #IDENTIDADE# #NACIONALIDADE# #CPF# "
 			+ "#TIPOLOGRADOURO# #LOGRADOURO# #COMPLEMENTO# #BAIRRO# #CEP# #CIDADE# #UF# "
 			+ "#TIPOSAJUDA# #DATAACAO# #HORAACAO#", 

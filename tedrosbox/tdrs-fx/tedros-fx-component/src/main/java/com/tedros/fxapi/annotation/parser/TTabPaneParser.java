@@ -88,6 +88,7 @@ public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
 		VBox b = new VBox();
 		b.setAlignment(Pos.CENTER_LEFT);
 		b.setFillWidth(true);
+		b.setSpacing(10);
 		return b;
 	}
 
@@ -95,6 +96,7 @@ public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
 		HBox b = new HBox();
 		b.setAlignment(Pos.CENTER_LEFT);
 		b.setFillHeight(true);
+		b.setSpacing(10);
 		return b;
 	}
 	

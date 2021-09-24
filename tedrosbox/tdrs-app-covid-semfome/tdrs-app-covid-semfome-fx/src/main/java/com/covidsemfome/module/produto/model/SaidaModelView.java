@@ -14,6 +14,7 @@ import com.covidsemfome.module.doacao.model.AcaoFindModelView;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
+import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TDetailListField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
@@ -21,14 +22,15 @@ import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
 import com.tedros.fxapi.annotation.control.TOneSelectionModal;
 import com.tedros.fxapi.annotation.control.TOptionsList;
+import com.tedros.fxapi.annotation.control.TTab;
+import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
+import com.tedros.fxapi.annotation.form.TDetailForm;
 import com.tedros.fxapi.annotation.form.TForm;
-import com.tedros.fxapi.annotation.layout.TAccordion;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
-import com.tedros.fxapi.annotation.layout.TTitledPane;
 import com.tedros.fxapi.annotation.layout.TVBox;
 import com.tedros.fxapi.annotation.layout.TVGrow;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
@@ -83,12 +85,9 @@ public class SaidaModelView extends TEntityModelView<Saida> {
 	
 	private SimpleStringProperty displayText = new SimpleStringProperty();
 	
-	@TAccordion(expandedPane="main", node=@TNode(id="estocavelAcc",parse = true),
-			panes={
-					@TTitledPane(text="Principal", node=@TNode(id="main",parse = true), expanded=true,
-							fields={"textoCadastro", "observacao"}),
-					@TTitledPane(text="Detalhe", node=@TNode(id="detail",parse = true),
-						fields={"itens"})})
+	@TTabPane(tabs = { @TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"textoCadastro", "observacao"})), text = "Principal"), 
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"itens"})), text = "Detalhe")
+	})
 	@TTextReaderHtml(text="Saida de Produtos", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
@@ -130,7 +129,7 @@ public class SaidaModelView extends TEntityModelView<Saida> {
 	optionModelViewClass=CozinhaModelView.class, serviceName = "ICozinhaControllerRemote"))
 	private SimpleObjectProperty<Cozinha> cozinha;
 	
-	
+	@TFieldBox(node=@TNode(id="prods", parse = true))
 	@TDetailReaderHtml(	label=@TLabel(text="Itens"), 
 			entityClass=SaidaItem.class, 
 			modelViewClass=SaidaItemModelView.class)

@@ -11,8 +11,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBuilder;
-import javafx.scene.layout.HBoxBuilder;
+import javafx.scene.layout.HBox;
 
 public class TConfirmMessageBox extends TMessageBox {
 	 	 
@@ -26,21 +25,20 @@ public class TConfirmMessageBox extends TMessageBox {
 			tAddMessage(iEngine.getString(text));
 			confirm = new SimpleIntegerProperty(-1);
 			
-			Button yesBtn = ButtonBuilder.create()
-					.id("t-last-button")
-					.text(iEngine.getString("#{tedros.fxapi.button.yes}"))
-					.build();
+			Button yesBtn = new Button();
+					yesBtn.setId("t-last-button");
+					yesBtn.setText(iEngine.getString("#{tedros.fxapi.button.yes}"));
 			
-			Button noBtn = ButtonBuilder.create()
-					.id("t-last-button")
-					.text(iEngine.getString("#{tedros.fxapi.button.no}"))
-					.build();
+			Button noBtn =new Button();
+					noBtn.setId("t-last-button");
+					noBtn.setText(iEngine.getString("#{tedros.fxapi.button.no}"));
 			
-			gettMessageVBox().getChildren().addAll(HBoxBuilder.create()
-					.children(yesBtn, noBtn)
-					.spacing(10)
-					.alignment(Pos.CENTER)
-					.build());
+			HBox box = new HBox();
+			box.getChildren().addAll(yesBtn, noBtn);
+			box.setSpacing(10);
+			box.setAlignment(Pos.CENTER);
+			
+			gettMessageVBox().getChildren().add(box);
 			
 			gettMessageVBox().setAlignment(Pos.CENTER);
 			

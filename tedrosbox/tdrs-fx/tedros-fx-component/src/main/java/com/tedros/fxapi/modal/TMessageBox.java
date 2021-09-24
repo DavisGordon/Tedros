@@ -142,7 +142,7 @@ public class TMessageBox extends StackPane {
 
 	public void tAddMessage(String string) {
 		TText text = new TText(string);
-		text.settTextStyle(TTextStyle.CUSTOM);
+		text.settTextStyle(TTextStyle.MEDIUM);
 		text.setWrappingWidth(this.getMaxWidth()-100);
 		DropShadow ef = new DropShadow();
 		ef.setColor(Color.BLACK);
@@ -152,7 +152,7 @@ public class TMessageBox extends StackPane {
 		ef.setHeight(35.16666666666667);
 		TFieldBox fieldBox = new TFieldBox(null, null, text, null);
 		fieldBox.setAlignment(Pos.CENTER);
-		fieldBox.setId("t-form");
+		fieldBox.setId("t-fieldbox-message");
 		fieldBox.setEffect(ef);
 		
 		messageVBox.getChildren().add(fieldBox);
