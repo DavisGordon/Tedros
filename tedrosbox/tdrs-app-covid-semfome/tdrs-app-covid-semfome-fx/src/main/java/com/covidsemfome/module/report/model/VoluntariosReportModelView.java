@@ -4,8 +4,8 @@ import java.util.Date;
 
 import com.covidsemfome.model.TipoAjuda;
 import com.covidsemfome.module.report.process.VoluntarioReportProcess;
-import com.covidsemfome.module.voluntario.model.TipoAjudaFindModelView;
-import com.covidsemfome.module.voluntario.model.TipoAjudaModelView;
+import com.covidsemfome.module.tipoAjuda.model.TipoAjudaFindModelView;
+import com.covidsemfome.module.tipoAjuda.model.TipoAjudaModelView;
 import com.covidsemfome.report.model.VoluntarioItemModel;
 import com.covidsemfome.report.model.VoluntarioReportModel;
 import com.tedros.core.annotation.security.TAuthorizationType;

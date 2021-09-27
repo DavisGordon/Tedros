@@ -5,7 +5,7 @@ package com.covidsemfome.module.pessoa.model;
 
 import com.covidsemfome.model.PessoaTermoAdesao;
 import com.covidsemfome.model.TipoAjuda;
-import com.covidsemfome.module.voluntario.model.TipoAjudaModelView;
+import com.covidsemfome.module.tipoAjuda.model.TipoAjudaModelView;
 import com.tedros.fxapi.annotation.TCodeValue;
 import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.THTMLEditor;

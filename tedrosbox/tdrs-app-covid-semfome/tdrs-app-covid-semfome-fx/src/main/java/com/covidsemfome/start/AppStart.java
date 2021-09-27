@@ -9,6 +9,9 @@ import com.covidsemfome.module.acao.icon.MailingMenuIconImageView;
 import com.covidsemfome.module.cozinha.CozinhaModule;
 import com.covidsemfome.module.cozinha.icon.CozinhaIconImageView;
 import com.covidsemfome.module.cozinha.icon.CozinhaMenuIconImageView;
+import com.covidsemfome.module.empresaParceira.EmpresaParceiraModule;
+import com.covidsemfome.module.empresaParceira.icon.EmpresaParceiraIconImageView;
+import com.covidsemfome.module.empresaParceira.icon.EmpresaParceiraMenuIconImageView;
 import com.covidsemfome.module.estoque.EstoqueModule;
 import com.covidsemfome.module.estoque.icon.EstoqueIconImageView;
 import com.covidsemfome.module.estoque.icon.EstoqueMenuIconImageView;
@@ -18,9 +21,9 @@ import com.covidsemfome.module.pessoa.icon.PessoaMenuIconImageView;
 import com.covidsemfome.module.report.DoacaoReportModule;
 import com.covidsemfome.module.report.icon.RelatoriosIconImageView;
 import com.covidsemfome.module.report.icon.RelatoriosMenuIconImageView;
-import com.covidsemfome.module.voluntario.CadastroTipoAjudaModule;
-import com.covidsemfome.module.voluntario.icon.TipoAjudaIconImageView;
-import com.covidsemfome.module.voluntario.icon.TipoAjudaMenuIconImageView;
+import com.covidsemfome.module.tipoAjuda.TipoAjudaModule;
+import com.covidsemfome.module.tipoAjuda.icon.TipoAjudaIconImageView;
+import com.covidsemfome.module.tipoAjuda.icon.TipoAjudaMenuIconImageView;
 import com.tedros.core.ITApplication;
 import com.tedros.core.annotation.TApplication;
 import com.tedros.core.annotation.TModule;
@@ -35,15 +38,15 @@ import com.tedros.core.annotation.security.TSecurity;
  * */
 @TApplication(name="#{app.name}", universalUniqueIdentifier=TConstant.UUI,
 module = {	
-			@TModule(type=CadastroTipoAjudaModule.class, name="Tipos de Ajuda", menu="Gerenciar Campanha", 
+			@TModule(type=TipoAjudaModule.class, name="Tipos de Ajuda", menu="Gerenciar Campanha", 
 					icon=TipoAjudaIconImageView.class, menuIcon=TipoAjudaMenuIconImageView.class,
 					description="Edite aqui os Tipos de Ajuda que os voluntarios podem executar."),
 			@TModule(type=AcaoModule.class, name="Ação/Site", menu="Gerenciar Campanha", 
 					icon=AcaoIconImageView.class, menuIcon=AcaoMenuIconImageView.class,
 					description="Administre aqui as ações/campanhas e algumas informações do site"),
-			/*@TModule(type=CadastroVoluntarioModule.class, name="Voluntários inscritos", menu="Gerenciar Campanha", 
-					icon=VoluntarioIconImageView.class, menuIcon=VoluntarioMenuIconImageView.class,
-					description="Edite/visualize aqui os voluntarios e o tipo de ajuda nas ações."),*/
+			@TModule(type=EmpresaParceiraModule.class, name="Parceiros", menu="Administrativo", 
+					icon=EmpresaParceiraIconImageView.class, menuIcon=EmpresaParceiraMenuIconImageView.class,
+					description="Edite/visualize aqui as empresas parceiras."),
 			@TModule(type=MailingModule.class, name="Mailing", menu="Gerenciar Campanha", 
 					icon=MailingIconImageView.class, menuIcon=MailingMenuIconImageView.class,
 					description="Crie e envie e-mails a um grupo de pessoas sobre uma determinada ação."),
@@ -58,7 +61,7 @@ module = {
 					icon=CozinhaIconImageView.class, menuIcon=CozinhaMenuIconImageView.class,
 					description="Edite aqui os locais (cozinhas) de produção, necessario "
 							+ "para editar estoque e inserir entradas e saidas de produtos."),
-			/*@TModule(type=ProdutoModule.class, name="Produto", menu="Administrativo", 
+			/*@TModule(type=ProdutoModuldgdde.class, name="Produto", menu="Administrativo", 
 					icon=ProdutoIconImageView.class, menuIcon=ProdutoMenuIconImageView.class,
 					description="Insira/Importe aqui os produtos utilizados na produção e informe "
 							+ "as entradas (Compras) e saídas (Produção). "

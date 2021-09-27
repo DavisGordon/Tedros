@@ -10,7 +10,7 @@ import com.covidsemfome.model.Entrada;
 import com.covidsemfome.model.EntradaItem;
 import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.module.cozinha.model.CozinhaModelView;
-import com.covidsemfome.module.doacao.model.PessoaFindModelView;
+import com.covidsemfome.module.pessoa.model.PessoaFindModelView;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.TCodeValue;
