@@ -105,6 +105,8 @@ public final class TControlValidator<E extends ITModelView> {
 				
 				if(tAnnotation.associatedFieldsName().length>0){
 					for(String fName : tAnnotation.associatedFieldsName()){
+						if(StringUtils.isBlank(fName))
+							continue;
 						final Method associatedFieldGetMethod = modelView.getClass().getMethod(GET+StringUtils.capitalize(fName));
 						Object associatedValue = associatedFieldGetMethod.invoke(modelView);
 						validator.addAssociatedFieldValue(fName, associatedValue);

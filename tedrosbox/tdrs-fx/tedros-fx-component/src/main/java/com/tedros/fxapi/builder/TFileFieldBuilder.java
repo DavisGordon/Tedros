@@ -67,7 +67,8 @@ implements ITFileBuilder<com.tedros.fxapi.control.TFileField> {
 
 	private void preLoadBytes(final TSimpleFileEntityProperty<?> fileEntityProperty) {
 		try {
-			TBytesLoader.loadBytesFromTFileEntity(fileEntityProperty.getValue().getByteEntity().getId(), fileEntityProperty.bytesProperty());
+			if(fileEntityProperty.getValue()!=null && fileEntityProperty.getValue().getByteEntity()!=null && fileEntityProperty.getValue().getByteEntity().getId()!=null)
+				TBytesLoader.loadBytesFromTFileEntity(fileEntityProperty.getValue().getByteEntity().getId(), fileEntityProperty.bytesProperty());
 		} catch (TProcessException e) {
 			e.printStackTrace();
 		}

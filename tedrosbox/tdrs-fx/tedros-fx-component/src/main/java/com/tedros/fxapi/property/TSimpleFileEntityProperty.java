@@ -101,6 +101,7 @@ public class TSimpleFileEntityProperty<T extends ITFileEntity> extends SimpleObj
 		repo.add("fsCL", fsCL);
 		this.fileSizeProperty.addListener(new WeakChangeListener<Number>(fsCL));
 	}
+	
 
 	private void setFilePropertyValue() {
 		if(getValue()!=null){

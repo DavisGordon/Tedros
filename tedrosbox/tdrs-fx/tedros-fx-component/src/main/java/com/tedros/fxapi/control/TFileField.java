@@ -127,7 +127,7 @@ public class TFileField extends StackPane {
 		
 		fileNameProperty.bindBidirectional(fileNameField.textProperty());
 		
-		boxImageLabelSpace.setId("t-image-pane");
+		//boxImageLabelSpace.setId("t-image-pane");
 		
 		toolbar.setId("t-file-toolbar");
 		toolbar.setMaxWidth(Double.MAX_VALUE);
@@ -153,9 +153,6 @@ public class TFileField extends StackPane {
 		toolbar.getItems().addAll(fileNameField, selectButton, openButton, cleanButton);
 		
 		vBox.setAlignment(Pos.CENTER_LEFT);
-		Label l = new Label();
-		l.setText("grhhgt yhjv yjjytg bjjhg ujhtv hjytresawtg jkk uh bj  jv");
-		l.getStyleClass().add("chat-bubble");
 		HBox hBox = new HBox();
 		HBox.setHgrow(toolbar, Priority.ALWAYS);
 		hBox.getChildren().add(toolbar);

@@ -19,6 +19,7 @@ public interface DomainTables {
 	final static String saida_item = "saida_item";
 	final static String saida = "saida";
 	final static String entrada = "entrada";
+	final static String empresaParceira = "empresa_parceira";
 	final static String user = "user";
 	final static String uf = "uf";
 	final static String binary = "binary";
@@ -36,6 +37,7 @@ public interface DomainTables {
 	final static String site_contato = "site_contato";
 	final static String site_noticia = "site_noticia";
 	final static String site_termo = "site_termo";
+	final static String site_conteudo = "site_conteudo";
 }
 
 

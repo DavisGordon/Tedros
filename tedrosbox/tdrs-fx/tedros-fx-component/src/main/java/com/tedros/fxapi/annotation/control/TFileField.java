@@ -11,14 +11,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javafx.beans.property.Property;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.Control;
-import javafx.scene.control.TextInputControl;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
-
 import com.tedros.core.model.ITModelView;
 import com.tedros.fxapi.annotation.parser.ITAnnotationParser;
 import com.tedros.fxapi.annotation.parser.TFileFieldParser;
@@ -37,6 +29,14 @@ import com.tedros.fxapi.domain.TFileExtension;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.property.TSimpleFileEntityProperty;
 import com.tedros.fxapi.property.TSimpleFileModelProperty;
+
+import javafx.beans.property.Property;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Control;
+import javafx.scene.control.TextInputControl;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 
 /**
  * <pre>
@@ -101,7 +101,6 @@ public @interface TFileField {
 	@SuppressWarnings("rawtypes")
 	public Class<? extends ITAnnotationParser>[] parser() default {TFileFieldParser.class, TStackPaneParser.class};
 	
-
 	/**
 	 * <pre>
 	 * The {@link Node} settings.
