@@ -11,6 +11,8 @@ import com.tedros.ejb.base.security.TAccessToken;
 public interface TFileEntityController extends ITSecureEjbController<TFileEntity>{
 
 	public TResult<TFileEntity> loadBytes(TAccessToken token, TFileEntity entity);
+
+	public TResult<TFileEntity> findByIdWithBytesLoaded(TAccessToken token, TFileEntity entity);
 	
 	
 }

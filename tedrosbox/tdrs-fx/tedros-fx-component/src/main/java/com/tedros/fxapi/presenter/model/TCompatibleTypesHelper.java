@@ -3,19 +3,16 @@
  */
 package com.tedros.fxapi.presenter.model;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.entity.ITFileEntity;
 import com.tedros.ejb.base.entity.TEntity;
 import com.tedros.ejb.base.model.ITFileModel;
@@ -38,7 +35,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
-import javafx.scene.paint.Color;
 
 /**
  * @author davis.dun
@@ -61,16 +57,19 @@ class TCompatibleTypesHelper<M extends ITModel> {
 		
 		boolean compatible = compatibleTypes.get(propertyFieldType).contains(typeToVerify); 
 		
-		if(!compatible && propertyFieldType == TSimpleFileEntityProperty.class)
+		if(!compatible && propertyFieldType == SimpleObjectProperty.class)
+			compatible = true;
+		
+		else if(!compatible && propertyFieldType == TSimpleFileEntityProperty.class)
 			compatible = tModelView.isClassAFileEntity(typeToVerify);
 		
-		if(!compatible && propertyFieldType == TSimpleFileModelProperty.class)
+		else if(!compatible && propertyFieldType == TSimpleFileModelProperty.class)
 			compatible = tModelView.isClassAFileModel(typeToVerify);
 		
-		if(!compatible && tModelView.isClassAnEntity(typeToVerify))
+		else if(!compatible && tModelView.isClassAnEntity(typeToVerify))
 			compatible = compatibleTypes.get(propertyFieldType).contains(TEntity.class);
 		
-		if(!compatible && tModelView.isClassAModel(typeToVerify))
+		else if(!compatible && tModelView.isClassAModel(typeToVerify))
 			compatible = compatibleTypes.get(propertyFieldType).contains(ITModel.class);
 		
 		return compatible; 
@@ -85,7 +84,8 @@ class TCompatibleTypesHelper<M extends ITModel> {
 	private void loadTypesCompatibility(){
 		
 		compatibleTypes = new HashMap<>();
-		compatibleTypes.put(SimpleObjectProperty.class, (List) Arrays.asList(ITModel.class, TEntity.class, ITFileEntity.class, ITFileModel.class, ITEntity.class, Color.class, Object.class, Date.class, byte[].class, BigDecimal.class, BigInteger.class, File.class));
+		//compatibleTypes.put(SimpleObjectProperty.class, (List) Arrays.asList(ITModel.class, TEntity.class, ITFileEntity.class, ITFileModel.class, ITEntity.class, Color.class, Object.class, Date.class, byte[].class, BigDecimal.class, BigInteger.class, File.class, Enum.class));
+		compatibleTypes.put(SimpleObjectProperty.class, (List) Arrays.asList(Object.class));
 		compatibleTypes.put(SimpleStringProperty.class, (List) Arrays.asList(String.class, Character.class, Long.class, Integer.class, Double.class, BigDecimal.class, BigInteger.class));
 		compatibleTypes.put(SimpleDoubleProperty.class, (List) Arrays.asList(Double.class, BigDecimal.class));
 		compatibleTypes.put(SimpleBooleanProperty.class, (List) Arrays.asList(Boolean.class, String.class));

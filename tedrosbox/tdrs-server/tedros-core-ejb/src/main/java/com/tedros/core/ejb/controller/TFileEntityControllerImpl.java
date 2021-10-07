@@ -27,6 +27,20 @@ public class TFileEntityControllerImpl extends TSecureEjbController<TFileEntity>
 	@EJB
 	private ITSecurityController security;
 	
+	@Override
+	public TResult<TFileEntity> findByIdWithBytesLoaded(TAccessToken token, TFileEntity entity) {
+		try{
+			entity = serv.findById(entity);
+			
+			serv.loadBytes(entity);
+			
+			return new TResult<TFileEntity>(EnumResult.SUCESS, entity);
+		}catch(Exception e){
+			e.printStackTrace();
+			return new TResult<TFileEntity>(EnumResult.ERROR, e.getMessage());
+		}
+	}
+	
 	
 	@Override
 	public TResult<TFileEntity> loadBytes(TAccessToken token, TFileEntity entity) {

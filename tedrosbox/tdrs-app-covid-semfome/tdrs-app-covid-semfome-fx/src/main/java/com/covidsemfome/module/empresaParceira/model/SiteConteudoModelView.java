@@ -55,11 +55,11 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
 @TFormReaderHtml
-@TForm(name = "Website Conteudo", showBreadcrumBar=false)
+@TForm(name = "Website Conteudo", form=SiteConteudoForm.class)
 @TEjbService(serviceName = "ISiteConteudoControllerRemote", model=SiteConteudo.class)
 @TListViewPresenter(
 	paginator=@TPaginator(entityClass = SiteConteudo.class, serviceName = "ISiteConteudoControllerRemote", show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Website Conteudo")))
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Website Conteudo", readerModeTitle="Ver template" )))
 @TSecurity(	id="COVSEMFOME_PARCEIRO_WEBCONTEUDO_FORM", 
 	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Conteudo Website Parceiros ",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 

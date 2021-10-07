@@ -16,11 +16,6 @@
   <version>8-1.0</version>
   <name>Covid Sem Fome Webapp</name>
   
-  <properties>
-  	<version.jboss.spec.javaee.6.0>3.0.2.Final</version.jboss.spec.javaee.6.0>
-  	<version.jboss.as>7.1.1.Final</version.jboss.as>
-  </properties>
-
 	<profiles>
 		<profile>
 		  <id>prod</id>

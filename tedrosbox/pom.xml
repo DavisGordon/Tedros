@@ -81,9 +81,9 @@
 		<module>tdrs-app-covid-semfome</module>
 		<module>tdrs-miscellaneous</module>
 		<module>tdrs-server</module>
+		<module>editor-web</module>
 		<module>server-application</module>
-    	
-  </modules>
+	</modules>
 
 
 </project>

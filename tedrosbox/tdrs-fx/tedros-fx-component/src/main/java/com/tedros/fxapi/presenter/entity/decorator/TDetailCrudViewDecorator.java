@@ -54,7 +54,7 @@ extends TDynaViewCrudBaseDecorator<M>
 		buildDeleteButton(null);
 		Node[] nodes = new Node[0];
 		nodes = ArrayUtils.addAll(nodes, gettColapseButton(), gettNewButton(), gettDeleteButton());
-		if(tForm.showBreadcrumBar()) {
+		if(tForm!=null && tForm.showBreadcrumBar()) {
 			buildEditButton(null);
 			nodes = ArrayUtils.add(nodes, gettEditButton());
 		}
@@ -64,11 +64,14 @@ extends TDynaViewCrudBaseDecorator<M>
 			nodes = ArrayUtils.add(nodes, gettPrintButton());
 		}
 		
-		buildModesRadioButton(null, null);
-		
 		addItemInTHeaderToolBar(nodes);
+		
 		// add the mode radio buttons
-		addItemInTHeaderHorizontalLayout(gettEditModeRadio(), gettReadModeRadio());
+		if(tPresenter.decorator().buildModesRadioButton()) {
+			buildModesRadioButton(null, null);
+			addItemInTHeaderHorizontalLayout(gettEditModeRadio(), gettReadModeRadio());
+		}
+		
 		// set padding at rigth in left content pane
 		addPaddingInTLeftContent(0, 4, 0, 0);
 		

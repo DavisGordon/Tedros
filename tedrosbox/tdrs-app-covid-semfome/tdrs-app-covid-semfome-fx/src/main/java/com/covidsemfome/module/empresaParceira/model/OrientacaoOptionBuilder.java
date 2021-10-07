@@ -15,7 +15,7 @@ implements ITGenericBuilder<ObservableList> {
 	
 	@Override
 	public ObservableList build() {
-		return FXCollections.observableList(Arrays.asList("Direita","Esquerda"));
+		return FXCollections.observableList(Arrays.asList("orient-left","orient-right"));
 	}
 
 }
