@@ -13,7 +13,7 @@ import com.covidsemfome.model.SiteNoticia;
 import com.covidsemfome.model.SiteTermo;
 import com.covidsemfome.model.SiteVideo;
 
-@XmlRootElement(name="doacao")
+@XmlRootElement(name="site")
 public class SiteModel implements Serializable{
 
 	/**

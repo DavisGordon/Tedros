@@ -71,7 +71,7 @@ public class EmailTemplateForm extends TVBoxForm<MailingModelView> {
 		}
 		setId("t-reader");
 		
-		webView = WebViewBuilder.create().build();
+		webView = new WebView();
 		tAddFormItem(webView);
 		webView.setDisable(true);
 		

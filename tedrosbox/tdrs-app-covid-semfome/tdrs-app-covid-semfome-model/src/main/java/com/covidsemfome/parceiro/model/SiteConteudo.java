@@ -39,7 +39,7 @@ public class SiteConteudo extends TEntity {
 	@JoinColumn(name="image_id")
 	private TFileEntity image;
 	
-	@Column(length=10)
+	@Column(length=15)
 	private String orientacao;
 	
 	@Column(length=10)
@@ -97,6 +97,8 @@ public class SiteConteudo extends TEntity {
 	 * @return the image
 	 */
 	public TFileEntity getImage() {
+		if(image==null)
+			image = new TFileEntity();
 		return image;
 	}
 

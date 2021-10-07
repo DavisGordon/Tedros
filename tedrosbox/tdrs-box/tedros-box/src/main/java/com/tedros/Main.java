@@ -123,7 +123,7 @@ public class Main extends Application implements ITedrosBox  {
     private TSliderMenu innerPane;
     private Label appName;
 
-    private String version = "8.9.1";
+    private String version = "8.9.2";
     private FadeTransition logoEffect;
     
     

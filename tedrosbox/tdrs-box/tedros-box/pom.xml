@@ -22,12 +22,12 @@
   	<dependencies>
 	  	
 	  	<!-- APPS -->
-	  	 <!-- <dependency>
+	  	<dependency>
 	  		<groupId>com.tedros</groupId>
-	  		<artifactId>app-global-brasil</artifactId>
+	  		<artifactId>editor-web-fx</artifactId>
 	  		<version>8-1.0</version>
-	  		<scope>runtime</scope>
-	  	</dependency> -->
+	  		<scope>compile</scope>
+	  	</dependency> 
 	  	
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
