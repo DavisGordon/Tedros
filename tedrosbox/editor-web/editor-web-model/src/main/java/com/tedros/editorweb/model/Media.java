@@ -3,12 +3,17 @@
  */
 package com.tedros.editorweb.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.tedros.common.model.TFileEntity;
 import com.tedros.editorweb.domain.DomainSchema;
 import com.tedros.editorweb.domain.DomainTables;
 import com.tedros.editorweb.domain.MediaType;
@@ -38,6 +43,10 @@ public class Media extends TEntity {
 	
 	@Enumerated(EnumType.STRING)
 	private MediaType type;
+	
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="file_id")
+	private TFileEntity file;
 
 	/**
 	 * @return the name
@@ -108,6 +117,20 @@ public class Media extends TEntity {
 	 */
 	public void setPreOrdering(Integer preOrdering) {
 		this.preOrdering = preOrdering;
+	}
+
+	/**
+	 * @return the file
+	 */
+	public TFileEntity getFile() {
+		return file;
+	}
+
+	/**
+	 * @param file the file to set
+	 */
+	public void setFile(TFileEntity file) {
+		this.file = file;
 	}
 
 }

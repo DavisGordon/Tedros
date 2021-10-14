@@ -3,10 +3,12 @@
  */
 package com.tedros.editorweb.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -45,9 +47,13 @@ public class Item extends TEntity {
 	@JoinColumn(name="content_id", nullable=false, updatable=false)
 	private Content content;
 	
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="media_id", nullable=false, updatable=true)
 	private Media media;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="template_id", nullable=true)
+	private ComponentTemplate template;
 
 	/**
 	 * @return the title
@@ -145,6 +151,20 @@ public class Item extends TEntity {
 	 */
 	public void setPreOrdering(Integer preOrdering) {
 		this.preOrdering = preOrdering;
+	}
+
+	/**
+	 * @return the template
+	 */
+	public ComponentTemplate getTemplate() {
+		return template;
+	}
+
+	/**
+	 * @param template the template to set
+	 */
+	public void setTemplate(ComponentTemplate template) {
+		this.template = template;
 	}
 
 }

@@ -3,10 +3,15 @@
  */
 package com.tedros.editorweb.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.tedros.editorweb.domain.DomainSchema;
@@ -29,6 +34,10 @@ public class Domain extends TEntity {
 	
 	@Enumerated(EnumType.STRING)
 	private Status status;
+	
+	@OneToMany(mappedBy="domain", 
+	cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	private List<Page> pages;
 
 	/**
 	 * @return the name
@@ -56,6 +65,20 @@ public class Domain extends TEntity {
 	 */
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+
+	/**
+	 * @return the pages
+	 */
+	public List<Page> getPages() {
+		return pages;
+	}
+
+	/**
+	 * @param pages the pages to set
+	 */
+	public void setPages(List<Page> pages) {
+		this.pages = pages;
 	}
 
 	

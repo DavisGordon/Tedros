@@ -4,7 +4,7 @@ import java.io.File;
 
 public enum TedrosFolderEnum {
 
-	ROOT_FOLDER 		("Tedros" + File.separator),
+	ROOT_FOLDER 		(".tedros" + File.separator),
 	IMAGES_FOLDER 		("IMAGES" + File.separator),
 	BACKGROUND_IMAGES_FOLDER ("IMAGES" + File.separator + "FUNDO" + File.separator),
 	CONF_FOLDER 		("CONF" + File.separator),
@@ -18,6 +18,13 @@ public enum TedrosFolderEnum {
 	
 	private TedrosFolderEnum(String folder){
 		this.folder = folder;
+	}
+	
+	public String getFullPath() {
+		if((".tedros" + File.separator).equals(folder))
+			return System.getProperty("user.home")+File.separator+folder;
+		else
+			return System.getProperty("user.home")+File.separator+".tedros" +File.separator+folder;
 	}
 
 	public String getFolder() {

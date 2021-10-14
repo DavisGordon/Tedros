@@ -27,7 +27,7 @@ public class Metadata extends TEntity {
 	private String httpEquiv;
 	
 	@Column(length=200)
-	private Boolean content;
+	private String content;
 	
 	@Column(length=160)
 	private String name;
@@ -51,20 +51,6 @@ public class Metadata extends TEntity {
 	 */
 	public void setHttpEquiv(String httpEquiv) {
 		this.httpEquiv = httpEquiv;
-	}
-
-	/**
-	 * @return the content
-	 */
-	public Boolean getContent() {
-		return content;
-	}
-
-	/**
-	 * @param content the content to set
-	 */
-	public void setContent(Boolean content) {
-		this.content = content;
 	}
 
 	/**
@@ -107,6 +93,20 @@ public class Metadata extends TEntity {
 	 */
 	public void setPage(Page page) {
 		this.page = page;
+	}
+
+	/**
+	 * @return the content
+	 */
+	public String getContent() {
+		return content;
+	}
+
+	/**
+	 * @param content the content to set
+	 */
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	

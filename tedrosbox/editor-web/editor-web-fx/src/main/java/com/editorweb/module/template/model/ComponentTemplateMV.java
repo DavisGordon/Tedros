@@ -73,7 +73,6 @@ public class ComponentTemplateMV extends TEntityModelView<ComponentTemplate> {
 	items=ComponentTypeOptionBuilder.class)
 	private SimpleObjectProperty<ComponentType> type;
 	
-	@TReaderHtml
 	@TTextAreaField(control=@TControl(prefWidth=250, prefHeight=200, parse = true), wrapText=true)
 	@TTabPane(tabs = { 
 			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"code"})), text = "#{label.code}"), 
@@ -88,9 +87,6 @@ public class ComponentTemplateMV extends TEntityModelView<ComponentTemplate> {
 	showFilePath=true)
 	private TSimpleFileEntityProperty<TFileEntity> imgExample;
 	
-	@TTableReaderHtml(label=@TLabel(text="#{label.profiles}:"), 
-			column = { 	@TColumnReader(field = "name", name = "#{label.name}"), 
-						@TColumnReader(field = "desc", name = "#{label.description}")})
 	@TPickListField(selectedLabel="#{label.selected}", 
 			sourceLabel="#{view.cssclass}", 
 			optionsList=@TOptionsList(entityClass=CssClass.class,

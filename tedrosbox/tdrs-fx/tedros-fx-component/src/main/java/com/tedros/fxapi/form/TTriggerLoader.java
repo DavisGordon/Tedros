@@ -96,7 +96,7 @@ public class TTriggerLoader<M extends ITModelView<?>, F extends ITModelForm<M>> 
 				} else 
 				if(ob instanceof ObservableList) {
 					final ListChangeListener l = (value) -> {
-						trigger.run(value);
+						trigger.run(value.getList());
 					};
 					this.form.gettObjectRepository().add(key, l);
 					ObservableList obt = (ObservableList) ob;
@@ -104,7 +104,7 @@ public class TTriggerLoader<M extends ITModelView<?>, F extends ITModelForm<M>> 
 				} else 
 				if(ob instanceof ObservableSet) {
 					final SetChangeListener l = (value) -> {
-						trigger.run(value);
+						trigger.run(value.getSet());
 					};
 					this.form.gettObjectRepository().add(key, l);
 					ObservableSet obt = (ObservableSet) ob;

@@ -54,7 +54,7 @@ public class ComponentTemplate extends TEntity {
 	@JoinColumn(name="template_id", nullable=false, updatable=true)
 	private HtmlTemplate template;
 	
-	@ManyToMany
+	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name="template_css", schema=DomainSchema.schema,
     joinColumns=@JoinColumn(name="templ_id", referencedColumnName="id"),
     inverseJoinColumns=@JoinColumn(name="css_id", referencedColumnName="id"))
@@ -106,6 +106,8 @@ public class ComponentTemplate extends TEntity {
 	 * @return the imgExample
 	 */
 	public TFileEntity getImgExample() {
+		if(imgExample==null)
+			imgExample = new TFileEntity();
 		return imgExample;
 	}
 
@@ -146,7 +148,7 @@ public class ComponentTemplate extends TEntity {
 
 	@Override
 	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this, false);
+		return HashCodeBuilder.reflectionHashCode(this, "template");
 	}
 	
 	@Override

@@ -45,7 +45,7 @@ import javafx.scene.text.TextAlignment;
 @TPresenter(decorator = @TDecorator(viewTitle="#{view.cssclass}"),
 behavior=@TBehavior(saveAllModels=false, runNewActionAfterSave=true))
 @TSecurity(	id="TEW_CSSCLASS_FORM", 
-	appName = "#{app.name}", moduleName = "#{module.template}", viewName = "#{view.cssclass}",
+	appName = "#{app.tew.name}", moduleName = "#{module.template}", viewName = "#{view.cssclass}",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class CssClassMV extends TEntityModelView<CssClass> {

@@ -262,7 +262,7 @@ public final class TedrosContext {
 	}
 	
 	private static void addPropertiesFilesToClassPath(){
-		File folder = new File(TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder());
+		File folder = new File(TedrosFolderEnum.CONF_FOLDER.getFullPath());
 		
 		String file;
 		File[] listOfFiles = folder.listFiles();
@@ -270,7 +270,7 @@ public final class TedrosContext {
 			if(listOfFiles[i].isFile()){
 				file = listOfFiles[i].getName();
 				if (file.endsWith(".properties")){
-					file = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+file;
+					file = TedrosFolderEnum.CONF_FOLDER.getFullPath()+file;
 					LOGGER.config("Loading file: "+file);
 					try {
 						
