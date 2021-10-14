@@ -8,10 +8,8 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
-import com.tedros.editorweb.model.ComponentTemplate;
-import com.tedros.editorweb.model.HtmlTemplate;
-import com.tedros.editorweb.model.Script;
-import com.tedros.editorweb.model.Style;
+import com.tedros.editorweb.model.Domain;
+import com.tedros.editorweb.model.Page;
 import com.tedros.editorweb.server.service.TEntityService;
 import com.tedros.ejb.base.controller.ITSecurityController;
 import com.tedros.ejb.base.controller.TSecureEjbController;
@@ -26,19 +24,19 @@ import com.tedros.ejb.base.service.ITEjbService;
  *
  */
 @TRemoteSecurity
-@Stateless(name="ITHtmlTemplateController")
+@Stateless(name="ITDomainController")
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
-public class THtmlTemplateController extends TSecureEjbController<HtmlTemplate> 
-implements ITHtmlTemplateController, ITSecurity{
+public class TDomainController extends TSecureEjbController<Domain> 
+implements ITDomainController, ITSecurity{
 
 	@EJB
-	private TEntityService<HtmlTemplate> serv;
+	private TEntityService<Domain> serv;
 	
 	@EJB
 	private ITSecurityController securityController;
 	
 	@Override
-	protected ITEjbService<HtmlTemplate> getService() {
+	protected ITEjbService<Domain> getService() {
 		return serv;
 	}
 	
@@ -48,22 +46,11 @@ implements ITHtmlTemplateController, ITSecurity{
 	}
 	
 	@Override
-	public TResult<HtmlTemplate> save(TAccessToken token, HtmlTemplate e) {
-		if(e.getScripts()!=null)
-			for(Script s : e.getScripts())
-				if(s.getTemplate()==null)
-					s.setTemplate(e);
-		if(e.getStyles()!=null)
-			for(Style s : e.getStyles())
-				if(s.getTemplate()==null)
-					s.setTemplate(e);
-		if(e.getComponents()!=null)
-			for(ComponentTemplate s : e.getComponents()) {
-				if(s.getTemplate()==null)
-					s.setTemplate(e);
-				if(s.getImgExample().isNew() && s.getImgExample().getFileName()==null)
-					s.setImgExample(null);
-			}
+	public TResult<Domain> save(TAccessToken token, Domain e) {
+		if(e.getPages()!=null)
+			for(Page s : e.getPages())
+				if(s.getDomain()==null)
+					s.setDomain(e);
 		return super.save(token, e);
 	}
 

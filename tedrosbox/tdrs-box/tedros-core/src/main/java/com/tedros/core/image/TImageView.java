@@ -3,6 +3,7 @@
  */
 package com.tedros.core.image;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import javafx.scene.image.Image;
@@ -26,6 +27,11 @@ public abstract class TImageView extends ImageView {
 			
 		InputStream is = this.getClass().getClassLoader().getResourceAsStream(getImagePathName());
 		setImage(new Image(is)); 
+		try {
+			is.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

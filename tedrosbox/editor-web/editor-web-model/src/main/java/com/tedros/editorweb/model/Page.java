@@ -5,8 +5,10 @@ package com.tedros.editorweb.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -42,20 +44,24 @@ public class Page extends TEntity {
 	@JoinColumn(name="domain_id", nullable=false, updatable=false)
 	private Domain domain;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="template_id", nullable=false, updatable=true)
 	private HtmlTemplate template;
 	
-	@OneToMany(mappedBy="page")
+	@OneToMany(mappedBy="page", 
+			cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private Set<Metadata> metas;
 	
-	@OneToMany(mappedBy="page")
+	@OneToMany(mappedBy="page", 
+			cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private Set<Script> scripts;
 	
-	@OneToMany(mappedBy="page")
+	@OneToMany(mappedBy="page", 
+			cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private Set<Style> styles;
 	
-	@OneToMany(mappedBy="page")
+	@OneToMany(mappedBy="page", 
+			cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private Set<Content> contents;
 	
 	

@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import com.tedros.core.module.TObjectRepository;
 import com.tedros.ejb.base.entity.ITFileEntity;
 import com.tedros.fxapi.annotation.reader.TFileReader;
+import com.tedros.fxapi.annotation.scene.image.TImageView;
 import com.tedros.fxapi.control.TFileField;
 
 import javafx.beans.property.SimpleLongProperty;
@@ -18,13 +19,13 @@ import javafx.beans.value.WeakChangeListener;
 
 /**
  * <pre>
- * This property can be used as representation of the {@link ITFileEntity} 
- * and to bind with {@link TFileField)   
+ * This property can be used as representation of the {@link ITFileEntity}.   
  * </pre>
  * 
  * @see TFileReader
  * @see TFileField
  * @see com.tedros.fxapi.annotation.control.TFileField
+ * @see TImageView
  * @author Davis Gordon
  * */
 public class TSimpleFileEntityProperty<T extends ITFileEntity> extends SimpleObjectProperty<T> {

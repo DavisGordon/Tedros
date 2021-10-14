@@ -1,8 +1,8 @@
 package com.tedros.fxapi.presenter.modal.decorator;
 
+import com.tedros.fxapi.annotation.presenter.TSelectionModalPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewSelectionBaseDecorator;
 import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
-import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
 
 import javafx.scene.control.Accordion;
@@ -26,6 +26,9 @@ extends TDynaViewSelectionBaseDecorator<M> {
 		// get the view
 		final ITDynaView<M> view = getPresenter().getView();
 		
+		TSelectionModalPresenter ann = super.getPresenter().getModelViewClass().getAnnotation(TSelectionModalPresenter.class);
+		super.listViewMaxWidth = ann.listViewMaxWidth();
+		super.listViewMinWidth = ann.listViewMinWidth();
 		setViewTitle(null);
 		buildListView();
 		buildListViewTitle(null);

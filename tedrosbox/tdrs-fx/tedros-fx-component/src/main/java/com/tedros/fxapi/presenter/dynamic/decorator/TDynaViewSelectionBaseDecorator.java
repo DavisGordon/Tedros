@@ -31,8 +31,8 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	private TableView<M> tTableView;
 	
 	private TPaginator tPaginator;
-	private double listViewMaxWidth = 250;
-	private double listViewMinWidth = 250;
+	protected double listViewMaxWidth = 250;
+	protected double listViewMinWidth = 250;
     
     
     @Override

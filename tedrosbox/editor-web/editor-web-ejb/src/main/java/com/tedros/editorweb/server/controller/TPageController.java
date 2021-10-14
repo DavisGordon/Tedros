@@ -8,8 +8,10 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
-import com.tedros.editorweb.model.ComponentTemplate;
-import com.tedros.editorweb.model.HtmlTemplate;
+import com.tedros.editorweb.model.Content;
+import com.tedros.editorweb.model.Item;
+import com.tedros.editorweb.model.Metadata;
+import com.tedros.editorweb.model.Page;
 import com.tedros.editorweb.model.Script;
 import com.tedros.editorweb.model.Style;
 import com.tedros.editorweb.server.service.TEntityService;
@@ -26,19 +28,19 @@ import com.tedros.ejb.base.service.ITEjbService;
  *
  */
 @TRemoteSecurity
-@Stateless(name="ITHtmlTemplateController")
+@Stateless(name="ITPageController")
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
-public class THtmlTemplateController extends TSecureEjbController<HtmlTemplate> 
-implements ITHtmlTemplateController, ITSecurity{
+public class TPageController extends TSecureEjbController<Page> 
+implements ITPageController, ITSecurity{
 
 	@EJB
-	private TEntityService<HtmlTemplate> serv;
+	private TEntityService<Page> serv;
 	
 	@EJB
 	private ITSecurityController securityController;
 	
 	@Override
-	protected ITEjbService<HtmlTemplate> getService() {
+	protected ITEjbService<Page> getService() {
 		return serv;
 	}
 	
@@ -48,21 +50,27 @@ implements ITHtmlTemplateController, ITSecurity{
 	}
 	
 	@Override
-	public TResult<HtmlTemplate> save(TAccessToken token, HtmlTemplate e) {
+	public TResult<Page> save(TAccessToken token, Page e) {
 		if(e.getScripts()!=null)
 			for(Script s : e.getScripts())
-				if(s.getTemplate()==null)
-					s.setTemplate(e);
+				if(s.getPage()==null)
+					s.setPage(e);
 		if(e.getStyles()!=null)
 			for(Style s : e.getStyles())
-				if(s.getTemplate()==null)
-					s.setTemplate(e);
-		if(e.getComponents()!=null)
-			for(ComponentTemplate s : e.getComponents()) {
-				if(s.getTemplate()==null)
-					s.setTemplate(e);
-				if(s.getImgExample().isNew() && s.getImgExample().getFileName()==null)
-					s.setImgExample(null);
+				if(s.getPage()==null)
+					s.setPage(e);
+		if(e.getMetas()!=null)
+			for(Metadata s : e.getMetas())
+				if(s.getPage()==null)
+					s.setPage(e);
+		if(e.getContents()!=null)
+			for(Content s : e.getContents()) {
+				if(s.getPage()==null)
+					s.setPage(e);
+				if(s.getItems()!=null)
+					for(Item i : s.getItems())
+						if(i.getContent()==null)
+							i.setContent(s);
 			}
 		return super.save(token, e);
 	}

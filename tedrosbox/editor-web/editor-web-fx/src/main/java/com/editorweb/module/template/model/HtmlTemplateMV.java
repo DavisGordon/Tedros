@@ -52,7 +52,7 @@ import javafx.scene.layout.Priority;
 @TListViewPresenter(presenter=@TPresenter(behavior=@TBehavior(saveAllModels=false, saveOnlyChangedModels=false),
 		decorator = @TDecorator(buildModesRadioButton=false, viewTitle="#{view.htmltemplate}")))
 @TSecurity(	id="TEW_HTMLTEMPLATE_FORM", 
-	appName = "#{app.name}", moduleName = "#{module.template}", viewName = "#{view.htmltemplate}",
+	appName = "#{app.tew.name}", moduleName = "#{module.template}", viewName = "#{view.htmltemplate}",
 			allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 							TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class HtmlTemplateMV extends TEntityModelView<HtmlTemplate> {

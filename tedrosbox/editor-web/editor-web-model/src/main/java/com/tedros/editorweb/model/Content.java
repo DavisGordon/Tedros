@@ -5,8 +5,10 @@ package com.tedros.editorweb.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -36,6 +38,9 @@ public class Content extends TEntity {
 	private String desc;
 	
 	@Column
+	private String code;
+	
+	@Column
 	private Integer preOrdering;
 	
 	@Column(length=160)
@@ -48,14 +53,15 @@ public class Content extends TEntity {
 	@JoinColumn(name="page_id", nullable=false)
 	private Page page;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="template_id", nullable=false)
 	private ComponentTemplate template;
 	
-	@OneToMany(mappedBy="content")
+	@OneToMany(mappedBy="content", 
+			cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private Set<Item> items;
 	
-	@ManyToMany
+	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name="content_css", schema=DomainSchema.schema,
     joinColumns=@JoinColumn(name="cont_id", referencedColumnName="id"),
     inverseJoinColumns=@JoinColumn(name="css_id", referencedColumnName="id"))
@@ -185,6 +191,20 @@ public class Content extends TEntity {
 	 */
 	public void setPreOrdering(Integer preOrdering) {
 		this.preOrdering = preOrdering;
+	}
+
+	/**
+	 * @return the code
+	 */
+	public String getCode() {
+		return code;
+	}
+
+	/**
+	 * @param code the code to set
+	 */
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 }

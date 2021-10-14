@@ -15,8 +15,8 @@
   	<artifactId>tedros-common-model</artifactId>
   	<packaging>jar</packaging>
 
-  	<name>tedros-global-model</name>
-  	<description>The tedros global entitys</description>
+  	<name>tedros-common-model</name>
+  	<description>The tedros common entitys</description>
 
 	<!-- DEPENDENCIES -->
  	<dependencies>  

@@ -53,7 +53,10 @@ public class TByteEntity extends TEntity implements ITByteEntity{
 	
 	@Override
 	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this, false);
+		if(bytes==null)
+			return HashCodeBuilder.reflectionHashCode(this, "bytes");
+		else
+			return HashCodeBuilder.reflectionHashCode(this, false);
 	}
 
 }
