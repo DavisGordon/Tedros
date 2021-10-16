@@ -5,35 +5,26 @@ package com.editorweb.module.site.model;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.tedros.common.model.TFileEntity;
 import com.tedros.editorweb.model.ComponentTemplate;
 import com.tedros.fxapi.control.trigger.TTrigger;
 import com.tedros.fxapi.form.TFieldBox;
-import com.tedros.fxapi.property.TSimpleFileEntityProperty;
-
-import javafx.collections.ObservableList;
 
 /**
  * @author Davis Gordon
  *
  */
-public class CompTempTrigger extends TTrigger<ObservableList> {
+public class CompTempStringTrigger extends TTrigger<String> {
 
-	public CompTempTrigger(TFieldBox source, TFieldBox target) {
+	public CompTempStringTrigger(TFieldBox source, TFieldBox target) {
 		super(source, target);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public void run(ObservableList value) {
+	public void run(String value) {
 		ContentMV mv = (ContentMV) super.getForm().gettModelView();
-		ComponentTemplateFindMV c = value!=null && value.size()==1 ? (ComponentTemplateFindMV) value.get(0) : null;
-		TFileEntity e = c!=null ? c.getImgExample().getValue() : new TFileEntity();
-		TSimpleFileEntityProperty<TFileEntity> p = (TSimpleFileEntityProperty<TFileEntity>) mv.getProperty("templateImg");
-		p.setValue(e);
-		
+		ComponentTemplate c = mv.getTemplate().getValue();
 		if(c!=null) {
-			String code = c.getModel().getCode();
+			String code = c.getCode();
 			String title = mv.getTitle().getValue();
 			String desc = mv.getDesc().getValue();
 			if(StringUtils.isNotBlank(title))

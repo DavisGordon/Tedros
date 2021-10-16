@@ -27,7 +27,7 @@ implements ITControlBuilder<com.tedros.fxapi.control.TSelectionModal, ITObservab
 	
 	public TSelectionModal build(final Annotation annotation, final ITObservableList attrProperty) throws Exception {
 		TMultipleSelectionModal tAnnotation = (TMultipleSelectionModal) annotation;
-		TSelectionModal control = new TSelectionModal( attrProperty, true, tAnnotation.width(), tAnnotation.height());
+		TSelectionModal control = new TSelectionModal( attrProperty, true, tAnnotation.width(), tAnnotation.height(), tAnnotation.modalWidth(), tAnnotation.modalHeight());
 		control.settModelViewClass(tAnnotation.modelViewClass());
 		callParser(tAnnotation, control);
 		return control;

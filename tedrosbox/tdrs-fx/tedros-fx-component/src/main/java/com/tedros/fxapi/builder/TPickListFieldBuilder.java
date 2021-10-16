@@ -45,6 +45,8 @@ implements ITControlBuilder<com.tedros.fxapi.control.TPickListField, ObservableL
 															tAnnotation.selectedLabel(), 
 															null, 
 															attrProperty, 
+															tAnnotation.width(),
+															tAnnotation.height(),
 															tAnnotation.required());
 		
 		if(tAnnotation.optionsList().entityClass()!=ITEntity.class) {

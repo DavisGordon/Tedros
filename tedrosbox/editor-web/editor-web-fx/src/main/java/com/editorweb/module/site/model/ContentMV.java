@@ -23,10 +23,12 @@ import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTrigger;
 import com.tedros.fxapi.annotation.form.TDetailForm;
+import com.tedros.fxapi.annotation.layout.TAccordion;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
+import com.tedros.fxapi.annotation.layout.TTitledPane;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TDetailListViewPresenter;
@@ -34,8 +36,10 @@ import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
-import com.tedros.fxapi.annotation.scene.image.TImage;
 import com.tedros.fxapi.annotation.scene.image.TImageView;
+import com.tedros.fxapi.annotation.scene.layout.TRegion;
+import com.tedros.fxapi.annotation.scene.web.TWebEngine;
+import com.tedros.fxapi.annotation.scene.web.TWebView;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.control.TText.TTextStyle;
@@ -62,75 +66,100 @@ behavior = @TBehavior(type = TDetailCrudViewBehavior.class),
 decorator = @TDecorator(type = TDetailCrudViewDecorator.class, buildModesRadioButton=false, viewTitle="#{label.contents}")))
 public class ContentMV extends TEntityModelView<Content> {
 
-	@TTabPane(tabs = { 
-			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"text1", "template", "templateImg"})), text = "Template"),
-			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"title", "desc"})), text = "#{label.main.data}"),
-			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"styleAttr", "code"})), text = "#{label.code}"), 
-			/*@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"imgExample"})), text = "#{label.imageExample}"), 
-			*/@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"cssClassList"})), text = "#{view.cssclass}")
-	})
-	private SimpleLongProperty id;
-	
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-info", parse = true))
+	/*@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-info", parse = true))
 	@TText(text="#{text.template}", 
 	wrappingWidth=650, textAlignment=TextAlignment.LEFT, 
 	textStyle = TTextStyle.CUSTOM)
-	private SimpleStringProperty text1;
+	private SimpleStringProperty text1;*/
 	
+	/*@TTabPane(tabs = { 
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"text1", "template", "templateImg"})), text = "Template"),
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"title", "desc"})), text = "#{label.main.data}"),
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"styleAttr", "code"})), text = "#{label.code}"), 
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"imgExample"})), text = "#{label.imageExample}"), 
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"cssClassList"})), text = "#{view.cssclass}")
+	})*/
+	@THBox(	pane=@TPane(children={"template", "desc"}), spacing=10, fillHeight=true,
+			hgrow=@THGrow(priority={@TPriority(field="desc", priority=Priority.ALWAYS),
+					@TPriority(field="template", priority=Priority.NEVER)
+			}))
+	private SimpleLongProperty id;
+	
+	@TAccordion(expandedPane="tmplt", node=@TNode(id="contaacc",parse = true), region=@TRegion(maxWidth=250, parse = true),
+			panes={
+					@TTitledPane(text="Template", node=@TNode(id="tmplt",parse = true), 
+							expanded=true, fields={"template", "templateImg"}),
+					@TTitledPane(text="#{label.main.data}", fields={"title", "preOrdering"}),
+					@TTitledPane(text="#{label.code}", fields={"styleAttr", "classAttr", "code"}),
+					@TTitledPane(text="#{view.cssclass}", fields={"cssClassList"})
+				})
 	@TLabel(text="Template")
 	@TTrigger(triggerClass = CompTempTrigger.class, runAfterFormBuild=true)
 	@TOneSelectionModal(modelClass = ComponentTemplate.class, modelViewClass = ComponentTemplateFindMV.class,
-			width=300, height=50)
+			width=200, height=50, modalHeight=510)
 	private SimpleObjectProperty<ComponentTemplate> template;
 	
-	@TImageView
+	@TImageView(fitWidth=200, preserveRatio=true)
 	private TSimpleFileEntityProperty<TFileEntity> templateImg;
 	
 	@TLabel(text="#{label.title}")
 	@TTextField(maxLength=120, required = true, 
 	node=@TNode(requestFocus=true, parse = true))
-	@THBox(	pane=@TPane(children={"title", "preOrdering"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="title", priority=Priority.ALWAYS)}))
+	/*@THBox(	pane=@TPane(children={"title", "preOrdering"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="title", priority=Priority.ALWAYS)}))*/
+	@TTrigger(triggerClass = CompTempStringTrigger.class)
 	private SimpleStringProperty title;
 	
 	@TLabel(text="#{label.ordering}")
 	@TNumberSpinnerField(maxValue = 250)
 	private SimpleIntegerProperty preOrdering;
 	
-	@THTMLEditor(control=@TControl(prefHeight=400, parse = true))
-	private SimpleStringProperty desc;
 	
 	@TLabel(text="#{label.styleattr}")
 	@TTextField(maxLength=160)
-	@THBox(	pane=@TPane(children={"styleAttr", "classAttr"}), spacing=10, fillHeight=true,
+	/*@THBox(	pane=@TPane(children={"styleAttr", "classAttr"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="styleAttr", priority=Priority.ALWAYS),
-   				   		@TPriority(field="classAttr", priority=Priority.ALWAYS) }))
+   				   		@TPriority(field="classAttr", priority=Priority.ALWAYS) }))*/
 	private SimpleStringProperty styleAttr;
 	
 	@TLabel(text="#{label.classattr}")
 	@TTextField(maxLength=160)
 	private SimpleStringProperty classAttr;
 	
-	@TLabel(text="#{label.title}")
-	@TTextAreaField(control=@TControl(prefWidth=250, prefHeight=200, parse = true), wrapText=true)
+	@TLabel(text="#{label.code}")
+	@TTextAreaField(control=@TControl(prefHeight=100, parse = true), wrapText=true)
 	private SimpleStringProperty code;
 	
 	@TPickListField(selectedLabel="#{label.selected}", 
-			sourceLabel="#{view.cssclass}", 
+			sourceLabel="#{view.cssclass}", width=110,
+			/*region=@TRegion(maxWidth=240, parse = true),*/
 			optionsList=@TOptionsList(entityClass=CssClass.class,
 						optionModelViewClass=CssClassMV.class, serviceName = "ITCssClassControllerRemote"))
 	@TModelViewCollectionType(modelClass=CssClass.class, modelViewClass=CssClassMV.class)
 	private ITObservableList<CssClassMV> cssClassList;
+	
+	@TTabPane(tabs = { 			
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"desc"})), text = "#{label.content}"),
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"webview"})), text = "View")
+			})
+	@THTMLEditor(control=@TControl(prefHeight=300, parse = true))
+	@TTrigger(triggerClass = CompTempStringTrigger.class)
+	private SimpleStringProperty desc;
+	
+	@TWebView(prefHeight=300, engine=@TWebEngine(load="http://www.covidsemfome.com.br"))
+	private SimpleStringProperty webview;
 
 	public ContentMV(Content entity) {
 		super(entity);
 		super.registerProperty("templateImg", templateImg);
+		super.registerProperty("webview", webview);
 	}
 	
 	@Override
 	public void reload(Content model) {
 		super.reload(model);
 		super.registerProperty("templateImg", templateImg);
+		super.registerProperty("webview", webview);
 	}
 
 	/**
@@ -265,20 +294,6 @@ public class ContentMV extends TEntityModelView<Content> {
 	}
 
 	/**
-	 * @return the text1
-	 */
-	public SimpleStringProperty getText1() {
-		return text1;
-	}
-
-	/**
-	 * @param text1 the text1 to set
-	 */
-	public void setText1(SimpleStringProperty text1) {
-		this.text1 = text1;
-	}
-
-	/**
 	 * @return the templateImg
 	 */
 	public TSimpleFileEntityProperty<TFileEntity> getTemplateImg() {
@@ -290,6 +305,20 @@ public class ContentMV extends TEntityModelView<Content> {
 	 */
 	public void setTemplateImg(TSimpleFileEntityProperty<TFileEntity> templateImg) {
 		this.templateImg = templateImg;
+	}
+
+	/**
+	 * @return the webview
+	 */
+	public SimpleStringProperty getWebview() {
+		return webview;
+	}
+
+	/**
+	 * @param webview the webview to set
+	 */
+	public void setWebview(SimpleStringProperty webview) {
+		this.webview = webview;
 	}
 
 }

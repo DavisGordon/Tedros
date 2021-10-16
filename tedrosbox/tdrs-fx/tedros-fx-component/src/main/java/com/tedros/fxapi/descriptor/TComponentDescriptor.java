@@ -58,25 +58,27 @@ public class TComponentDescriptor {
 	public TComponentDescriptor(ITForm form, ITModelView modelView, TViewMode mode) {
 		this.form = form;
 		this.modelView = modelView;
-		this.modelViewAnnotationList = Arrays.asList(this.modelView.getClass().getAnnotations());
 		this.components = FXCollections.observableHashMap();
 		this.fieldBoxMap = new HashMap<>();
-		this.fieldDescriptorList = TReflectionUtil.getFieldDescriptorList(this.modelView);
 		this.fieldsNameList = new ArrayList<>(0);
 		this.mode = mode;
-		loadFieldNameList(); 
-		
-		BooleanExpression be = null;
-		for (final TFieldDescriptor fd : fieldDescriptorList) {
-			if(fd.hasLayout() || fd.hasControl()) {
-				if(be==null)
-					be = BooleanBinding.booleanExpression(fd.loadedProperty());
-				else
-					be = be.and(fd.loadedProperty());
+		this.modelViewAnnotationList =  modelView!=null ? Arrays.asList(this.modelView.getClass().getAnnotations()) : null;
+		this.fieldDescriptorList = modelView!=null ? TReflectionUtil.getFieldDescriptorList(this.modelView) : null;
+		if(this.modelView!=null) {
+			loadFieldNameList(); 
+			
+			BooleanExpression be = null;
+			for (final TFieldDescriptor fd : fieldDescriptorList) {
+				if(fd.hasLayout() || fd.hasControl()) {
+					if(be==null)
+						be = BooleanBinding.booleanExpression(fd.loadedProperty());
+					else
+						be = be.and(fd.loadedProperty());
+				}
 			}
+			if(be!=null)
+				this.loaded.bind(be);
 		}
-		if(be!=null)
-			this.loaded.bind(be);
 	}
 	
 	/**

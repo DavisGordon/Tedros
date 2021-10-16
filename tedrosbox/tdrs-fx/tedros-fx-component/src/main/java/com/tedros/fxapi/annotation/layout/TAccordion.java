@@ -14,11 +14,13 @@ import java.lang.annotation.Target;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Control;
+import javafx.scene.layout.Region;
 
 import com.tedros.fxapi.annotation.parser.ITAnnotationParser;
 import com.tedros.fxapi.annotation.parser.TAccordionParser;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.annotation.scene.layout.TRegion;
 import com.tedros.fxapi.builder.ITLayoutBuilder;
 import com.tedros.fxapi.builder.TAccordionBuilder;
 import com.tedros.fxapi.builder.TVBoxBuilder;
@@ -100,7 +102,15 @@ public @interface TAccordion  {
 	 * Default value: @TControl(prefWidth=250) 
 	 * </pre>
 	 * */
-	public TControl control() default @TControl(prefWidth=TDefaultValues.LABEL_WIDTH, parse = true);
+	public TControl control() default @TControl(parse = false);
+	
+
+	/**
+	 * <pre>
+	 * The {@link Region} settings.
+	 * </pre>
+	 * */
+	public TRegion region() default @TRegion(parse = false);
 	
 	/**
 	* <pre>

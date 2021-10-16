@@ -6,6 +6,7 @@ import java.util.Arrays;
 import com.tedros.core.ITModule;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.annotation.form.TForm;
+import com.tedros.fxapi.annotation.parser.TStackPaneParser;
 import com.tedros.fxapi.annotation.presenter.TDetailListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TDetailTableViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
@@ -14,6 +15,7 @@ import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.process.TEntityProcess;
 import com.tedros.fxapi.annotation.process.TModelProcess;
 import com.tedros.fxapi.annotation.process.TReportProcess;
+import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.exception.TErrorType;
 import com.tedros.fxapi.presenter.TPresenter;
 import com.tedros.fxapi.presenter.behavior.ITBehavior;
@@ -23,6 +25,7 @@ import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.util.TReflectionUtil;
 
 import javafx.collections.ObservableList;
+import javafx.scene.layout.StackPane;
 
 /**
  * Responsible to hold and control the objects to build and invalidate the view.
@@ -177,6 +180,15 @@ public class TDynaPresenter<M extends TModelView>	extends TPresenter<ITDynaView<
 		
 		decorator.setPresenter(this);
 		decorator.decorate();
+		
+		TComponentDescriptor descriptor = new TComponentDescriptor(null, null, null);
+		TStackPaneParser parser = new TStackPaneParser();
+		parser.setComponentDescriptor(descriptor);
+		try {
+			parser.parse(tPresenter.decorator(), (StackPane) getView(), "+node", "+region", "+pane");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		behavior.setPresenter(this);
 		if(this.modelView != null){
