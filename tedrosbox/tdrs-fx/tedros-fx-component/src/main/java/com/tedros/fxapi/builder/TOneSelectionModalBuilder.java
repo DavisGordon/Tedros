@@ -62,7 +62,7 @@ implements ITControlBuilder<com.tedros.fxapi.control.TSelectionModal, Property> 
 		};
 		list.addListener(lcl);
 		
-		control = new TSelectionModal(list, false, tAnnotation.width(), tAnnotation.height());
+		control = new TSelectionModal(list, false, tAnnotation.width(), tAnnotation.height(), tAnnotation.modalWidth(), tAnnotation.modalHeight());
 		control.settModelViewClass(tAnnotation.modelViewClass());
 		
 		callParser(tAnnotation, control);

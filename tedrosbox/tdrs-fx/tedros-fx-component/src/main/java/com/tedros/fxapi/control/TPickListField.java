@@ -47,9 +47,11 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane {
 	    @SuppressWarnings("rawtypes")
 		private ListChangeListener notNullListener;
 	    private SimpleBooleanProperty requiredProperty;
-	    
-	    
-		public TPickListField(String sourceLabel, String selectedLabel, ObservableList<E> sourceObservableList, ObservableList<E> selectedObservableList, boolean required) {
+	   
+		public TPickListField(String sourceLabel, String selectedLabel, 
+				ObservableList<E> sourceObservableList, ObservableList<E> selectedObservableList, 
+				double width, double height,
+				boolean required) {
 	    	try{
 		    	loadFXML();     
 		        initializeListViews(sourceObservableList, selectedObservableList);
@@ -57,6 +59,16 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane {
 		        configButtons();
 		        setRequired(required);
 		        configLabels(sourceLabel, selectedLabel);
+		        if(width>0) {
+		        	
+		        	this.selectedListView.setPrefWidth(width);
+		        	this.sourceListView.setPrefWidth(width);
+		        }
+		        if(height>0) {
+		        	this.selectedListView.setPrefHeight(height);
+		        	this.sourceListView.setPrefHeight(height);
+		        }
+		        
 	    	}catch(Exception e){
 	    		e.printStackTrace();
 	    	}

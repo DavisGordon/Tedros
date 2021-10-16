@@ -412,9 +412,10 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 	private Annotation getDefaultSetting(A annotation) {
 		List<Annotation> typeAnnotations = componentDescriptor.getModelViewAnnotationList();
 		String nameToCompare = TReflectionUtil.getAnnotationName(annotation).toLowerCase()+"defaultsetting";
-		for (Annotation target : typeAnnotations)
-			if(TReflectionUtil.getAnnotationName(target).toLowerCase().equals(nameToCompare))
-				return target;
+		if(typeAnnotations!=null)
+			for (Annotation target : typeAnnotations)
+				if(TReflectionUtil.getAnnotationName(target).toLowerCase().equals(nameToCompare))
+					return target;
 		return null;
 	}
 	

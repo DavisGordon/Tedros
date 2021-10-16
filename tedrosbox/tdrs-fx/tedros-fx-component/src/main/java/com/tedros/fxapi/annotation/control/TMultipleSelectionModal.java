@@ -92,6 +92,16 @@ public @interface TMultipleSelectionModal  {
 	 * */
 	public double height() default 120;
 	
+	/**
+	 * The modal width 
+	 * @default 950
+	 * */
+	public double modalWidth() default 950;
+	/**
+	 * The modal height 
+	 * @default 600
+	 * */
+	public double modalHeight() default 600;
 	
 	/**
 	 * <pre>

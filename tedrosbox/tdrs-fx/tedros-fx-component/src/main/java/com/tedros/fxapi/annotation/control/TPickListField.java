@@ -80,6 +80,26 @@ public @interface TPickListField {
 	 * <pre>
 	 * {@link TPickListField} Class
 	 * 
+	 * Sets the ListView width
+	 * 
+	 * </pre>
+	 * */
+	public double width() default -1;
+	
+	/**
+	 * <pre>
+	 * {@link TPickListField} Class
+	 * 
+	 * Sets the ListView height
+	 * 
+	 * </pre>
+	 * */
+	public double height() default 150;
+	
+	/**
+	 * <pre>
+	 * {@link TPickListField} Class
+	 * 
 	 * Sets the value of the property sourceLabel.
 	 * 
 	 * Property description:

@@ -6,8 +6,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
+import com.tedros.fxapi.annotation.layout.TPane;
+import com.tedros.fxapi.annotation.scene.TNode;
+import com.tedros.fxapi.annotation.scene.layout.TRegion;
 import com.tedros.fxapi.presenter.decorator.ITDecorator;
 import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
+
+import javafx.scene.Node;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value=ElementType.ANNOTATION_TYPE)
@@ -15,6 +22,27 @@ public @interface TDecorator {
 	
 	@SuppressWarnings("rawtypes")
 	public Class<? extends ITDecorator> type() default TMasterCrudViewDecorator.class;
+	
+	/**
+	 * <pre>
+	 * The {@link Node} settings.
+	 * </pre>
+	 * */
+	public TNode node() default @TNode(parse = false);
+	
+	/**
+	 * <pre>
+	 * The {@link Region} settings.
+	 * </pre>
+	 * */
+	public TRegion region() default @TRegion(parse = false);
+	
+	/**
+	 * <pre>
+	 * The {@link Pane} settings.
+	 * </pre>
+	 * */
+	public TPane pane() default @TPane;
 	
 	/**
 	 * Set the new button text

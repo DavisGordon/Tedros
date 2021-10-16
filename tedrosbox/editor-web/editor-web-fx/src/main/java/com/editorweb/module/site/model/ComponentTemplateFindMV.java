@@ -30,14 +30,14 @@ import javafx.beans.property.SimpleStringProperty;
  *
  */
 @TSelectionModalPresenter(listViewMaxWidth=150, listViewMinWidth=150,
-		paginator=@TPaginator(entityClass = ComponentTemplate.class, modelViewClass=ComponentTemplateFindMV.class, 
-			serviceName = "ITComponentTemplateControllerRemote"),
-		tableView=@TTableView(editable=true, 
-			columns = { @TTableColumn(cellValue="name", text = "#{label.name}", minWidth=100, maxWidth=250, resizable=true), 
-						@TTableColumn(cellValue="type", text = "#{label.type}", minWidth=100, maxWidth=250, resizable=true), 
-						@TTableColumn(cellValue="imgExample", text = "#{label.imageExample}", resizable=true, maxWidth=305,
-								cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=CompTempImageCallback.class)))}), 
-		allowsMultipleSelections = false)
+	paginator=@TPaginator(entityClass = ComponentTemplate.class, modelViewClass=ComponentTemplateFindMV.class, 
+		serviceName = "ITComponentTemplateControllerRemote"),
+	tableView=@TTableView(editable=true, 
+		columns = { @TTableColumn(cellValue="name", text = "#{label.name}", minWidth=100, maxWidth=250, resizable=true), 
+					@TTableColumn(cellValue="type", text = "#{label.type}", minWidth=100, maxWidth=250, resizable=true), 
+					@TTableColumn(cellValue="imgExample", text = "#{label.imageExample}", resizable=true, maxWidth=305,
+						cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=CompTempImageCallback.class)))}), 
+	allowsMultipleSelections = false)
 public class ComponentTemplateFindMV extends TEntityModelView<ComponentTemplate> {
 
 	private SimpleLongProperty id;

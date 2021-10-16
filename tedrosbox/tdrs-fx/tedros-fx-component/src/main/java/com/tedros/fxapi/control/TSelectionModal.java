@@ -60,7 +60,7 @@ public class TSelectionModal extends TModalRequired {
 	 * 
 	 */
 	@SuppressWarnings({"unchecked" })
-	public TSelectionModal(ITObservableList items,  boolean selectMultipleItem, double width, double height) {
+	public TSelectionModal(ITObservableList items,  boolean selectMultipleItem, double width, double height, double modalWidth, double modalHeight) {
 		this.tSelectedItems = items;
 		this.width = width;
 		this.height = height;
@@ -90,7 +90,7 @@ public class TSelectionModal extends TModalRequired {
 		EventHandler<ActionEvent> fev = e -> {
 			StackPane pane = new StackPane();
 			view = new TDynaGroupView(tModelViewClass, tSelectedItems);
-			pane.setMaxSize(950, 600);
+			pane.setMaxSize(modalWidth, modalHeight);
 			pane.getChildren().add(view);
 			pane.setId("t-tedros-color");
 			//pane.getStyleClass().add("t-panel-color");
