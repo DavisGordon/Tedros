@@ -25,6 +25,13 @@
 	</dependency>
 	
 	<dependency>
+	   <groupId>com.tedros</groupId>
+  		<artifactId>editor-web-webapp</artifactId>
+	    <type>war</type>
+	    <version>8-1.0</version>
+	</dependency>
+	
+	<dependency>
 	    <groupId>com.tedros</groupId>
 	    <artifactId>tedros-core-ejb-ear</artifactId>
 	    <type>ear</type>
@@ -125,12 +132,16 @@
 			        <artifactId>editor-web-ejb-ear</artifactId>
 			        <type>ear</type>
 			      </deployable>
-			      <deployable>
+			     <!-- <deployable>
 			      	<groupId>com.tedros</groupId>
   					<artifactId>tdrs-app-covid-semfome-webapp</artifactId>
   					<type>war</type>
-  				</deployable>
-			      
+  				  </deployable>-->
+			      <deployable>
+			      	<groupId>com.tedros</groupId>
+  					<artifactId>editor-web-webapp</artifactId>
+  					<type>war</type>
+  				  </deployable>
 			    </deployables>
 			    <packager>
 			      <outputLocation>${project.build.directory}/tomcat-packaged</outputLocation>

@@ -1,6 +1,7 @@
 package com.tedros.fxapi.annotation.parser;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Color;
 
@@ -21,6 +24,7 @@ import com.tedros.core.ITModule;
 import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
+import com.tedros.fxapi.form.TComponentConfig;
 import com.tedros.fxapi.util.TReflectionUtil;
 
 
@@ -55,7 +59,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 	
 	private final static String SET = "set";
 	private final static String GET = "get";
-	private final String[] SKIPMETHODS = {"builder","parser","parse","equals", "getClass", "wait", "hashCode", "toString", "notify", "notifyAll", "annotationType"};
+	private final String[] SKIPMETHODS = {"componentConfig", "builder","parser","parse","equals", "getClass", "wait", "hashCode", "toString", "notify", "notifyAll", "annotationType"};
 	
 	private TComponentDescriptor componentDescriptor;
 	protected TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
@@ -210,6 +214,26 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 				//	  System.out.println("[TAnnotationParser][Annotation: "+TReflectionUtil.getAnnotationName(annotation)+"][attribute: "+key+"][Parser duration: "+(duration2/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration2/1000000))+"s] ");
 				}
 			}
+			Method mcc = TReflectionUtil.getMethod(annotation, "componentConfig");
+			if(mcc!=null) {
+				Object o = mcc.invoke(annotation);
+				Class<? extends TComponentConfig> c = (Class<? extends TComponentConfig>) o;
+				if(c!=TComponentConfig.class) {
+					TComponentConfig cc = c.getConstructor(TComponentDescriptor.class, object.getClass()).newInstance(this.componentDescriptor, object);
+					this.componentDescriptor.getForm().tLoadedProperty().addListener(new ChangeListener<Boolean>() {
+						@Override
+						public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
+							if(arg2) {
+								cc.config();
+								componentDescriptor.getForm().tLoadedProperty().removeListener(this);
+							}
+						}
+						
+					});
+				}
+			}
+			
+			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -229,6 +253,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 	public static void callParser(final Annotation tAnnotation, final Object control, final TComponentDescriptor componentDescriptor) throws Exception {
 		Method parserMethod = TReflectionUtil.getParserMethod(tAnnotation);
 		if(parserMethod!=null){
+			String tmp = null;
 			try{
 				Object object = parserMethod.invoke(tAnnotation);
 				Class<? extends ITAnnotationParser>[] parsers = (object instanceof Class[]) 
@@ -239,11 +264,14 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 					ITAnnotationParser parser = (ITAnnotationParser) clazz.newInstance();
 					parser.setComponentDescriptor(componentDescriptor);
 					try{
+						tmp = "Try to parse "+tAnnotation.getClass().getSimpleName()+" to "+control.getClass().getSimpleName()+" ";
 						parser.parse(tAnnotation, control);
 					}catch(ClassCastException e){
+						tmp +="Trying again after error "+e.getMessage();
 						final Method method = getTargetMethod(componentDescriptor.getAnnotationPropertyInExecution(), 
 								getGenericParamClass(componentDescriptor.getParserClassInExecution(),1));
-						
+						tmp += "\nTry invoke method "+method.getName()+" from "+ componentDescriptor.getAnnotationPropertyInExecution().getClass().getSimpleName();
+						tmp += " with "+control.getClass().getSimpleName()+" as param";
 						Object obj = method.invoke(control);
 						if(obj !=null){
 							parser.parse(tAnnotation, obj);
@@ -251,6 +279,8 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 					}
 				}
 			}catch(Exception e){
+				if(tmp!=null)
+					System.err.println(tmp);
 				e.printStackTrace();
 			}
 		}

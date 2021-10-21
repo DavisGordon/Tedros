@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Component view</title>
+		<meta charset="utf-8" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="assets/css/csf.css" />
+		<link rel="stylesheet" href="../css/editor.css" />
+		<script src='http://lovasoa.github.io/tidy-html5/tidy.js'></script>
+		
+<script type="text/javascript">
+console.log = function(message) { /*$('#selector-message').html(message);*/ tedros.log(message); };
+</script>
+	</head>
+	<body class="is-preload">
+		<div id="selector">
+		    <div id="selector-top"></div>
+		    <div id="selector-left"></div>
+		    <div id="selector-right"></div>
+		    <div id="selector-bottom"></div>
+		</div>
+		<div id="selector-selected" class="selected"></div>
+		<div id="selector-box">Editor | <span id="sel"></span></div>
+		<br><br>
+		<div id="spot" class="divided" >
+		</div>
+		<div id="selector-message"  >
+		</div>
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.scrollex.min.js"></script>
+		<script src="assets/js/jquery.scrolly.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+	  	<script src="assets/js/jquery.form.js"></script> 
+	  	<script src="../js/editor.js"></script>
+<script type="text/javascript">
+options = {
+		  "indent":"auto",
+		  "indent-spaces":2,
+		  "wrap":80,
+		  "markup":true,
+		  "output-xml":false,
+		  "numeric-entities":true,
+		  "quote-marks":true,
+		  "quote-nbsp":false,
+		  "show-body-only":true,
+		  "quote-ampersand":false,
+		  "break-before-br":true,
+		  "uppercase-tags":false,
+		  "uppercase-attributes":false,
+		  "drop-font-tags":true,
+		  "tidy-mark":false
+		}
+</script>
+	</body>
+</html>

@@ -2,6 +2,7 @@ package com.tedros.fxapi.control;
 
 import java.io.IOException;
 
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -28,7 +29,7 @@ import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.model.ITModelView;
 import com.tedros.fxapi.effect.TEffectUtil;
 
-public class TPickListField<E extends ITModelView<?>> extends StackPane {
+public class TPickListField<E extends ITModelView<?>> extends StackPane implements ITTriggeredable {
 		
 		@FXML private Label sourceLabel;
 		@FXML private Label selectedLabel;
@@ -381,6 +382,11 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane {
 		
 		public boolean isMandatoryAccepted(){
 			return (mandatoryResultProperty!=null) ? mandatoryResultProperty.get() : true;
+		}
+
+		@Override
+		public Observable tValueProperty() {
+			return this.selectedList;
 		}
 
 
