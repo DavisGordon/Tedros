@@ -11,11 +11,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javafx.scene.Node;
-import javafx.scene.control.Accordion;
-import javafx.scene.control.Control;
-import javafx.scene.layout.Region;
-
 import com.tedros.fxapi.annotation.parser.ITAnnotationParser;
 import com.tedros.fxapi.annotation.parser.TAccordionParser;
 import com.tedros.fxapi.annotation.scene.TNode;
@@ -24,8 +19,12 @@ import com.tedros.fxapi.annotation.scene.layout.TRegion;
 import com.tedros.fxapi.builder.ITLayoutBuilder;
 import com.tedros.fxapi.builder.TAccordionBuilder;
 import com.tedros.fxapi.builder.TVBoxBuilder;
-import com.tedros.fxapi.domain.TDefaultValues;
 import com.tedros.fxapi.domain.TViewMode;
+
+import javafx.scene.Node;
+import javafx.scene.control.Accordion;
+import javafx.scene.control.Control;
+import javafx.scene.layout.Region;
 
 /**
  * <pre>

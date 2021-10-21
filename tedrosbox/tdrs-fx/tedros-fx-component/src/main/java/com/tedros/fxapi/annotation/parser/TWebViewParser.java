@@ -1,6 +1,7 @@
 package com.tedros.fxapi.annotation.parser;
 
 import com.tedros.fxapi.annotation.scene.web.TWebView;
+import com.tedros.fxapi.descriptor.TComponentDescriptor;
 
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -37,7 +38,9 @@ public class TWebViewParser extends TAnnotationParser<TWebView, WebView> {
 		super.parse(ann, w, "engine", "minHeight","minWidth", "maxHeight", "maxWidth", "prefWidth", "prefHeight", "zoom");
 	
 		WebEngine e = w.getEngine();
-		new TWebEngineParser().parse(ann.engine(), e);
+		TWebEngineParser p = new TWebEngineParser();
+		p.setComponentDescriptor(new TComponentDescriptor(super.getComponentDescriptor(), null));
+		p.parse(ann.engine(), e);
 	
 	}
 

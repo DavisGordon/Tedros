@@ -9,12 +9,28 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<link rel="stylesheet" href="assets/css/csf.css" />
-		
+		<style type="text/css">
+		.over {
+		background: rgba(255, 0, 0, 0.1);
+  		overflow: hidden;
+		 display: block;
+		}
+		</style>
 	</head>
 	<body class="is-preload">
 	<br><br>
-	<div id="spot"></div>
-	
+	<div id="spot">
+	<section class="banner #CLASS_LIST#">
+       <div class="content">
+		<h2>#TITLE#</h2>
+         #CONTENT#
+	</div>
+	<div class="image">
+		<img src="images/tedros.png" alt="" />
+	</div>
+</section>
+	</div>
+	<div id="sel" class="over">.</div>
 	<script src="assets/js/jquery.min.js"></script>
 	<script src="assets/js/jquery.scrollex.min.js"></script>
 	<script src="assets/js/jquery.scrolly.min.js"></script>
@@ -24,37 +40,50 @@
 	<script src="assets/js/main.js"></script>
   	<script src="assets/js/jquery.form.js"></script> 
   		<script type="text/javascript">
-  		function load(id){
-  			$.ajax
-  		    ({ 
-  		        url: '../api/emp/spot/'+id,
-  		        type: 'get',
-  		        dataType:'json',
-  		        headers : {'Content-Type' : 'application/json'},
-  		        success: function(result)
-  		        {
-  		        	if(result.code == "200"){
- 		        		 if(result.data){
-  		        		var c = "spotlight "+result.data.estilo+" "+result.data.orientacao+" content-align-left image-position-center onscroll-image-fade-in"
-					var x = '';
- 		        			x += '<div id="wrapper" class="divided">';
- 		        			x += '<section class="'+c+'" id="first">';
- 		        			x += '<div class="content">';
- 		        			x += '	<h2>'+result.data.titulo+'</h2>';
- 		        			x += result.data.conteudo;
- 		        			x += '</div>';
- 		        			x += '<div class="image" id="img"><img src="../api/f/i/'+result.data.image+'"></div>';
- 		        			x += '</section>';
- 		        			x += '</div>';
- 		        			
- 		        			$("#spot").html(x);
- 		        			
- 		        		 }
- 		        		}
-  		    	}
-  			}); 
+  		$(document).ready(function() { 
+  		
+  			var el = document.getElementById("spot");
+  			runElements(el);
+  		});
+  		
+  		function runElements(el){
+  			var c = el.children;
+  			if(c && c.length>0){
+		  		for(var i=0; i<=c.length; i++){
+		  			var e = c[i];
+		  			if(e /*&& e.tagName=="SECTION"*/){
+		  				setEvents(e);
+		  				runElements(e);
+		  			}
+		  		}
+  			}
   		}
   		
+  		function setEvents(e){
+  			e.onmouseover = function(x){
+					var event = x || window.event;
+				var target = event.target || event.srcElement;
+				var t = target; //x.currentTarget;
+					var p = t.getBoundingClientRect();
+					var s = document.getElementById("sel");
+					s.style.position = "absolute";
+					s.style.display = "block";
+					s.style.left = p.left+'px';
+					s.style.top = p.top+'px';
+					s.style.width = p.width+'px';
+					s.style.height = p.height+'px';
+				};
+				
+				e.onmouseout = function(x){
+					var s = document.getElementById("sel");
+					s.style.position = "absolute";
+					s.style.display = "none";
+					s.style.left = 0+'px';
+					s.style.top = 0+'px';
+					s.style.width = 0+'px';
+					s.style.height = 0+'px';
+				};
+  		}
   		
   		</script>
 

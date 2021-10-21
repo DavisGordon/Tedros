@@ -20,6 +20,10 @@ import com.tedros.util.TDateUtil;
 import javafx.beans.Observable;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -93,18 +97,45 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 		return value;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void init() throws Exception {
 		
 		pane = layout.getValue().newInstance();
 		super.setAlignment(Pos.TOP_CENTER);
 		super.getChildren().add(pane);
 		if(value instanceof ListProperty) {
+			((ObservableList)value).addListener(new ListChangeListener() {
+				@Override
+				public void onChanged(Change c) {
+					pane.getChildren().clear();
+					for(Object obj : c.getList()) {
+						try {
+							addField(obj);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			});
 			ListProperty lst = (ListProperty) value;
 			for(Object obj : lst) {
 				addField(obj);
 			}
 		}else {
+			((ObservableValue)value).addListener(new ChangeListener() {
+
+				@Override
+				public void changed(ObservableValue arg0, Object arg1, Object arg2) {
+					try {
+						pane.getChildren().clear();
+						if(arg2!=null)
+							addField(arg2);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				
+			});;
 			addField(value.getValue());
 		}
 		
