@@ -1,11 +1,14 @@
 package com.tedros.fxapi.presenter.view.group;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.tedros.core.ITModule;
 import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.presenter.ITGroupPresenter;
 import com.tedros.core.presenter.view.ITGroupViewItem;
 import com.tedros.core.presenter.view.ITView;
+import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
@@ -17,6 +20,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
 @SuppressWarnings("rawtypes")
@@ -25,12 +29,14 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 	private SimpleBooleanProperty viewLoadedProperty = new SimpleBooleanProperty(false);
 	
 	private SimpleStringProperty tViewTitle;
-	private TGroupView<ITGroupPresenter> view;
+	private TGroupView<ITGroupPresenter> mainView;
 	private ObservableList<ITGroupViewItem> groupViewItemList;
 	private TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
 	private ITModule module;
 	
 	private ITGroupViewItem itemSelected;
+	private HBox headerPaneJoined;
+	private Node[] headerItensJoined;
 	
 	public TGroupPresenter() {
 		
@@ -51,25 +57,26 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 	@Override
 	public void initialize() {
 		
-		view.tLoad();
+		mainView.tLoad();
 		
-		final StackPane formSpacePane = view.gettFormSpace();
+		final StackPane formSpacePane = mainView.gettFormSpace();
 		
-		view.gettContentPane().setCenter(formSpacePane);
+		mainView.gettContentPane().setCenter(formSpacePane);
 		
 		String title = (tViewTitle!=null) ? tViewTitle.getValue() : null;
 		
 		
-		tViewTitle.bindBidirectional(view.gettGroupTitle().textProperty());
+		tViewTitle.bindBidirectional(mainView.gettGroupTitle().textProperty());
 		
 		if(title!=null)
-			view.gettGroupTitle().setText(title);
+			mainView.gettGroupTitle().setText(title);
 		
 		MenuBar menuBar = new MenuBar();
 		final Menu menu = new Menu(iEngine.getString("#{tedros.fxapi.label.options}"));
 		menuBar.getMenus().add(menu);
     	boolean addFirst = true;
-    	
+    	final ToolBar tGroupToolbar = mainView.gettGroupToolbar(); 
+    	tGroupToolbar.getItems().add(menuBar);
     	for (final ITGroupViewItem item : groupViewItemList) {
     		
     		final MenuItem button = new MenuItem(iEngine.getString(item.getButtonTitle()));
@@ -84,18 +91,59 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
     			addFirst = false;
     		}
 		}
-		final ToolBar tGroupToolbar = view.gettGroupToolbar(); 
-    	tGroupToolbar.getItems().add(menuBar);
+		
+	}
+	
+	private void showView(final ITGroupViewItem item) {
+		try {
+			final ITView<?> view = item.getViewInstance(getModule());
+			final StackPane formSpacePane = this.mainView.gettFormSpace();
+			if(this.headerItensJoined!=null && this.headerPaneJoined!=null && !formSpacePane.getChildren().isEmpty()) {
+				this.mainView.gettGroupToolbar().getItems().removeAll(headerItensJoined);
+				final ITDynaView currView = (ITDynaView) formSpacePane.getChildren().get(0);
+				currView.gettHeaderVerticalLayout().getChildren().add(0, this.headerPaneJoined);
+				currView.gettHeaderHorizontalLayout().getChildren().addAll(headerItensJoined);
+				this.headerItensJoined = null;
+				this.headerPaneJoined = null;
+			}
+			
+			((Node)view).setId("t-view-group");
+			formSpacePane.getChildren().clear();
+			formSpacePane.getChildren().add((Node)view);
+			
+			if(!view.gettPresenter().isViewLoaded())
+				view.tLoad();
+			
+			if(item.isJoinHeader()) {
+				final ITDynaView dynaView = (ITDynaView) view;
+				headerItensJoined = new Node[0];
+				for(Node n : dynaView.gettHeaderHorizontalLayout().getChildren()) {
+					if(n.getId()!=null && 
+							(n.getId().equals("t-view-title-box") || n.getId().equals("t-group-view-title-box")))
+						continue;
+					headerItensJoined = ArrayUtils.add(headerItensJoined, n);
+				}
+				dynaView.gettHeaderHorizontalLayout().getChildren().removeAll(headerItensJoined);
+				this.headerPaneJoined = (HBox) dynaView.gettHeaderHorizontalLayout();
+				dynaView.gettHeaderVerticalLayout().getChildren().remove(headerPaneJoined);
+				this.mainView.gettGroupToolbar().getItems().addAll(headerItensJoined);
+			}
+			
+			itemSelected = item;
+			
+		} catch (Exception exception) {
+		    throw new RuntimeException(exception);
+		}
 	}
 	
 	@Override
 	public TGroupView<ITGroupPresenter> getView() {
-		return this.view;
+		return this.mainView;
 	}
 	
 	@Override
 	public void setView(TGroupView<ITGroupPresenter> view) {
-		this.view = view;
+		this.mainView = view;
 	}
 	
 	@Override
@@ -150,22 +198,7 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 		this.groupViewItemList = groupViewItemList;
 	}
 
-	private void showView(final ITGroupViewItem item) {
-		try {
-			itemSelected = item;
-			final StackPane formSpacePane = view.gettFormSpace();
-			final ITView<?> view = item.getViewInstance(getModule());
-			((Node)view).setId("t-view-group");
-			formSpacePane.getChildren().clear();
-			formSpacePane.getChildren().add((Node)view);
-			
-			if(!view.gettPresenter().isViewLoaded())
-				view.tLoad();
-			
-		} catch (Exception exception) {
-		    throw new RuntimeException(exception);
-		}
-	}
+	
 	
 	public ITView getSelectedView() {
 		return itemSelected.getViewInstance(getModule());
@@ -183,6 +216,10 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 				}
 			}
 		}
+		this.headerItensJoined = null;
+		this.headerPaneJoined = null;
+		this.itemSelected = null;
+		this.groupViewItemList = null;
 		return true;
 	}
 	

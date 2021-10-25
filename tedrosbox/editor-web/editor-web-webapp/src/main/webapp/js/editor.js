@@ -1,24 +1,21 @@
 var selEl;
 function tdrsSetHtml(){
 	if(selEl){
-		//var p = $(selEl).parent().get(0);
 		var html = selEl.outerHTML;
 		var result = tidy_html5(html, options);
 		tedros.setHtml(result);
 	}
-	
 }
 function clear(){
 	$('#spot').empty();
 	removeSelectedArea();
 	selEl = null;
-	lastTarget = null;
 }
 function setElement(h){
-	console.log(selEl.outerHtml);
 	if(selEl){
-		$(h).replaceAll(selEl);
-		console.log(selEl.outerHtml);
+		var $n = $(h);
+		$n.replaceAll(selEl);
+		selEl = $n.get(0);
 		addSelectedArea();
 	}else
 		$('#spot').html(h);
@@ -65,14 +62,12 @@ function setParentEl(){
 	var p = $(selEl).parent().get(0);
 	if(p.id === 'spot')
 		return;
-	lastTarget = selEl;
 	setSelEl(p);
 }
 function removeSel(){
-	selEl = null;
-	if(lastTarget){
-	    $(lastTarget).off('click');	
-	    lastTarget = null;
+	if(selEl){
+	    $(selEl).off('click');	
+	    selEl = null;
 	}
 	removeSelectedArea();
 	$('#sel').html('');
@@ -109,6 +104,8 @@ function setSelEl(e) {
 	
 	var s = "<a id='selector-rem' class='sel' href='javascript: removeSel()' >[ - ]</a> ";
 	s += "<a id='selector-parent'  class='sel' href='javascript: setParentEl()' >[ ^ ]</a> | ";
+	//s += "<a id='selector-parent'  class='sel' href='javascript: setElement(\"<h1>teste</h1>\")' >[ set ]</a> | ";
+	
 	s += 'Element: '+selEl.tagName;
 	if(selEl.id!='')
 		s += ', id: '+selEl.id;
@@ -132,7 +129,6 @@ var elements = {
 	};
 
 var lastTarget;
-
 $(document).mousemove(function(event) {
 	var el = event.target;
     if(el.id.indexOf('selector') !== -1 || el.tagName === 'BODY' 
@@ -144,19 +140,16 @@ $(document).mousemove(function(event) {
 	elements.bottom.css({display:'block'});
     
   	var $target = $(el);
-    
-    if(lastTarget && !(lastTarget===el)){
-    	$(lastTarget).off('click');	
-    }
-    
+    if(lastTarget && !(lastTarget===el))
+    	$(lastTarget).off('click');
+  	$target.off('click');
     $target.on('click', function(){
-    	setSelEl(el);
+    	setSelEl(this);
     });
     lastTarget = el;
     targetOffset = $target[0].getBoundingClientRect(),
     	targetHeight = targetOffset.height,
     	targetWidth  = targetOffset.width;
-    //console.log(targetOffset);
     
     elements.top.css({
         left:  (targetOffset.left - 4),

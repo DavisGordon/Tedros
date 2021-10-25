@@ -14,6 +14,7 @@
 		
 <script type="text/javascript">
 console.log = function(message) { /*$('#selector-message').html(message);*/ tedros.log(message); };
+ //tedros = { setHtml: function(s){}, remElementTag: function(){}, setElementTag: function(s){}};
 </script>
 	</head>
 	<body class="is-preload">
@@ -26,7 +27,8 @@ console.log = function(message) { /*$('#selector-message').html(message);*/ tedr
 		<div id="selector-selected" class="selected"></div>
 		<div id="selector-box">Editor | <span id="sel"></span></div>
 		<br><br>
-		<div id="spot" class="divided" >
+		<div id="spot" class="divided" style="padding-left:10px; padding-right: 10px;">
+		
 		</div>
 		<div id="selector-message"  >
 		</div>
@@ -47,14 +49,14 @@ options = {
 		  "markup":true,
 		  "output-xml":false,
 		  "numeric-entities":true,
-		  "quote-marks":true,
+		  "quote-marks":false,
 		  "quote-nbsp":false,
 		  "show-body-only":true,
 		  "quote-ampersand":false,
 		  "break-before-br":true,
 		  "uppercase-tags":false,
 		  "uppercase-attributes":false,
-		  "drop-font-tags":true,
+		  "drop-font-tags":false,
 		  "tidy-mark":false
 		}
 </script>

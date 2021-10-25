@@ -139,7 +139,7 @@ public @interface TPickListField {
 	 * Default value: Empty string.
 	 * </pre>
 	 * */
-	public TOptionsList optionsList();
+	public TOptionsList optionsList() default @TOptionsList(serviceName = "");
 	
 	/**
 	* <pre>

@@ -3,14 +3,19 @@
  */
 package com.editorweb.module.site.model;
 
-import org.apache.commons.lang3.StringUtils;
+import java.util.List;
 
+import com.editorweb.module.template.model.CssClassMV;
 import com.tedros.common.model.TFileEntity;
+import com.tedros.editorweb.model.CssClass;
+import com.tedros.fxapi.control.TPickListField;
 import com.tedros.fxapi.control.trigger.TTrigger;
 import com.tedros.fxapi.form.TFieldBox;
 import com.tedros.fxapi.property.TSimpleFileEntityProperty;
+import com.tedros.fxapi.util.TModelViewUtil;
 
 import javafx.collections.ListChangeListener.Change;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -19,13 +24,14 @@ import javafx.scene.web.WebView;
  * @author Davis Gordon
  *
  */
+@SuppressWarnings("rawtypes")
 public class CompTempTrigger extends TTrigger<Change> {
 
 	public CompTempTrigger(TFieldBox source, TFieldBox target) {
 		super(source, target);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked" })
 	@Override
 	public void run(Change change) {
 		ObservableList value = change!= null ? change.getList() : null;
@@ -36,32 +42,38 @@ public class CompTempTrigger extends TTrigger<Change> {
 		p.setValue(e);
 		
 		if(c!=null) {
-			String code = c.getModel().getCode();
-			
-			
-			/*String title = mv.getTitle().getValue();
-			String desc = mv.getDesc().getValue();
-			if(StringUtils.isNotBlank(title))
-				code = code.replaceAll("#TITLE#", title);
-			if(StringUtils.isNotBlank(desc)) {
-				desc = desc.replace("<html dir=\"ltr\"><head></head><body contenteditable=\"true\">", "");
-				desc = desc.replace("</body></html>", "");
-				code = code.replaceAll("#CONTENT#", desc);
-			}*/
-			mv.getDesc().setValue(code);
-			mv.getCode().setValue(code);
 			WebView wv = (WebView) super.getForm().gettFieldBox("webview").gettControl();
 			WebEngine en = wv.getEngine();
 			en.executeScript("clear()");
-			en.executeScript("addFirst('"+code.replaceAll("\n", "")+"')");
+			updateCssPickList(c);
+			String code = c.getModel().getCode();
+			//mv.getDesc().setValue(code);
+			mv.getCode().setValue(code);
+			en.executeScript("setElement('"+code.replaceAll("\n", "").replace("'", "\\'")+"')");
 			
 		}else if(change!=null) {
 			mv.getCode().setValue(null);
 			WebView wv = (WebView) super.getForm().gettFieldBox("webview").gettControl();
 			WebEngine en = wv.getEngine();
 			en.executeScript("clear()");
+			updateCssPickList(null);
 		}
 		
 	}
 
+	/**
+	 * @param c
+	 */
+	@SuppressWarnings("unchecked")
+	private void updateCssPickList(ComponentTemplateFindMV c) {
+		TPickListField plf = (TPickListField) super.getTarget().gettControl();
+		//plf.getSelectedList().setAll(col)
+		plf.getSelectedList().clear();
+		if(c!=null && c.getModel().getCssClassList()!=null) {
+			List<CssClassMV> lst = new TModelViewUtil(CssClassMV.class, CssClass.class, 
+							c.getModel().getCssClassList()).convertToModelViewList();
+			plf.setSourceList(FXCollections.observableArrayList(lst));
+	
+		}
+	}
 }
