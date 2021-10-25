@@ -61,7 +61,6 @@ import javafx.scene.layout.Priority;
  * @author Davis Gordon
  *
  */
-@TFormReaderHtml
 @TDetailListViewPresenter(presenter=@TPresenter(
 behavior = @TBehavior(type = TDetailCrudViewBehavior.class), 
 decorator = @TDecorator(type = TDetailCrudViewDecorator.class, buildModesRadioButton=false, viewTitle="#{label.contents}")))
@@ -88,11 +87,11 @@ public class ContentMV extends TEntityModelView<Content> {
 			panes={
 					@TTitledPane(text="Template", node=@TNode(id="tmplt",parse = true), 
 							expanded=true, fields={"template", "templateImg"}),
-					@TTitledPane(text="#{label.main.data}", fields={"title", "preOrdering", "styleAttr", "classAttr"}),
+					@TTitledPane(text="#{label.main.data}", fields={"title", "preOrdering", "styleAttr"}),
 					@TTitledPane(text="#{view.cssclass}", fields={"cssClassList"})
 				})
 	@TLabel(text="Template")
-	@TTrigger(triggerClass = CompTempTrigger.class, runAfterFormBuild=true)
+	@TTrigger(triggerClass = CompTempTrigger.class, targetFieldName="cssClassList", runAfterFormBuild=true)
 	@TOneSelectionModal(modelClass = ComponentTemplate.class, modelViewClass = ComponentTemplateFindMV.class,
 			width=200, height=50, modalHeight=510)
 	private SimpleObjectProperty<ComponentTemplate> template;
@@ -111,28 +110,19 @@ public class ContentMV extends TEntityModelView<Content> {
 	private SimpleIntegerProperty preOrdering;
 	
 	@TLabel(text="#{label.styleattr}")
-	@TTextField(maxLength=160)
+	@TTextAreaField(wrapText=true)
 	private SimpleStringProperty styleAttr;
 	
-	@TLabel(text="#{label.classattr}")
-	@TTextField(maxLength=160)
-	private SimpleStringProperty classAttr;
-	
 	@TPickListField(selectedLabel="#{label.selected}", 
-			sourceLabel="#{view.cssclass}", width=110,
-			optionsList=@TOptionsList(entityClass=CssClass.class,
-						optionModelViewClass=CssClassMV.class, serviceName = "ITCssClassControllerRemote"))
-	@TTrigger(triggerClass = CompTempClassTrigger.class)
+			sourceLabel="#{view.cssclass}", width=110)
 	@TModelViewCollectionType(modelClass=CssClass.class, modelViewClass=CssClassMV.class)
 	private ITObservableList<CssClassMV> cssClassList;
 	
-	@TTabPane(tabs = { 			
+	@TTabPane(tabs = { @TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"webview"})), text = "View"),
 			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"desc"})), text = "#{label.content}"),
-			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"webview"})), text = "View"),
 			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"code"})), text = "#{label.code}")
 			})
 	@THTMLEditor(control=@TControl(prefHeight=300, parse = true))
-	//@TTrigger(triggerClass = CompTempStringTrigger.class)
 	private SimpleStringProperty desc;
 	
 	@TWebView(prefHeight=400, 
@@ -142,7 +132,7 @@ public class ContentMV extends TEntityModelView<Content> {
 	private SimpleStringProperty webview;
 
 	@TLabel(text="#{label.code}")
-	@TTextAreaField(/*control=@TControl( parse = true), */wrapText=true)
+	@TTextAreaField(wrapText=true)
 	private SimpleStringProperty code;
 	
 	public ContentMV(Content entity) {
@@ -261,20 +251,6 @@ public class ContentMV extends TEntityModelView<Content> {
 	 */
 	public void setStyleAttr(SimpleStringProperty styleAttr) {
 		this.styleAttr = styleAttr;
-	}
-
-	/**
-	 * @return the classAttr
-	 */
-	public SimpleStringProperty getClassAttr() {
-		return classAttr;
-	}
-
-	/**
-	 * @param classAttr the classAttr to set
-	 */
-	public void setClassAttr(SimpleStringProperty classAttr) {
-		this.classAttr = classAttr;
 	}
 
 	/**

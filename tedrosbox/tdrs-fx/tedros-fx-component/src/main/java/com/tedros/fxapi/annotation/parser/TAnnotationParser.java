@@ -1,7 +1,6 @@
 package com.tedros.fxapi.annotation.parser;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -12,11 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.control.Tooltip;
-import javafx.scene.paint.Color;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -26,6 +20,11 @@ import com.tedros.core.context.TedrosAppManager;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.form.TComponentConfig;
 import com.tedros.fxapi.util.TReflectionUtil;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Tooltip;
+import javafx.scene.paint.Color;
 
 
 /**

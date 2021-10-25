@@ -32,6 +32,7 @@ public class TViewItem implements ITGroupViewItem {
 	
 	private String id;
 	private String buttonTitle;
+	private boolean joinHeader = false;
 	
 	private ITView<?> view;
 	private Class<? extends ITView<?>> viewClass;
@@ -81,6 +82,47 @@ public class TViewItem implements ITGroupViewItem {
 		this.presenterClass = presenterClass;
 		this.modelViewClass = modelViewClass;
 		this.buttonTitle = buttonTitle;
+	}
+	
+	// JoinHeader 
+	public TViewItem(Class<? extends ITView> viewClass, Class<? extends TModelView> modelViewClass, String buttonTitle, boolean joinHeader) {
+		this.viewClass = (Class<ITView<?>>) viewClass;
+		this.modelViewClass = modelViewClass;
+		this.buttonTitle = buttonTitle; 
+		this.joinHeader = joinHeader;
+	}
+	
+	public TViewItem(Class<? extends ITView> viewClass, Class<? extends ITPresenter> presenterClass, Class<? extends TModelView> modelViewClass, String buttonTitle, boolean joinHeader) {
+		this.viewClass = (Class<ITView<?>>) viewClass;
+		this.presenterClass = presenterClass;
+		this.modelViewClass = modelViewClass;
+		this.buttonTitle = buttonTitle; 
+		this.joinHeader = joinHeader;
+	}
+	
+	public TViewItem(Class<? extends ITView> viewClass, Class<? extends TModelView<?>> modelViewClass, String id, String buttonTitle, boolean joinHeader) {
+		this.id = id;
+		this.viewClass = (Class<ITView<?>>) viewClass;
+		this.modelViewClass = modelViewClass;
+		this.buttonTitle = buttonTitle;
+		this.joinHeader = joinHeader;
+	}
+	
+	public TViewItem(Class<? extends ITView> viewClass, String id, String buttonTitle, Class<? extends TEntityModelView> modelViewClass, boolean joinHeader) {
+		this.id = id;
+		this.viewClass = (Class<ITView<?>>) viewClass;
+		this.modelViewClass = modelViewClass;
+		this.buttonTitle = buttonTitle;
+		this.joinHeader = joinHeader;
+	}
+	
+	public TViewItem(String id, String buttonTitle, Class<? extends ITView> viewClass, Class<? extends ITPresenter> presenterClass, Class<? extends TModelView> modelViewClass, boolean joinHeader) {
+		this.id = id;
+		this.viewClass = (Class<ITView<?>>) viewClass;
+		this.presenterClass = presenterClass;
+		this.modelViewClass = modelViewClass;
+		this.buttonTitle = buttonTitle;
+		this.joinHeader = joinHeader;
 	}
 	
 	/* (non-Javadoc)
@@ -229,6 +271,16 @@ public class TViewItem implements ITGroupViewItem {
 
 	public void setModule(ITModule module) {
 		this.module = module;
+	}
+
+	@Override
+	public void setJoinHeader(boolean join) {
+		this.joinHeader = join;
+	}
+
+	@Override
+	public boolean isJoinHeader() {
+		return this.joinHeader;
 	}
 
 	

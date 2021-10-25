@@ -49,6 +49,18 @@ public interface ITGroupViewItem {
 	 * Sets the button title for this view to show on the group view tool bar.  
 	 * */
 	void setButtonTitle(String buttonTitle);
+	
+	/**
+	 * If true join the header of this view with the main group view.
+	 * Default value: false;
+	 * */
+	void setJoinHeader(boolean join);
+	
+	
+	/**
+	 * Return the value for join header.
+	 * */
+	boolean isJoinHeader();
 
 	/**
 	 * Returns the item id

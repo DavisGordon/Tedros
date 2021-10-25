@@ -28,7 +28,7 @@ public class SiteModule extends TModule {
 	public void tStart() {
 		tShowView(new TGroupView<TGroupPresenter>(this, "#{view.site}", 
 				new TViewItem(TDynaGroupView.class, DomainMV.class, "#{view.domain}"),
-				new TViewItem(TDynaGroupView.class, PageMV.class, "#{view.pages}")
+				new TViewItem(TDynaGroupView.class, PageMV.class, "#{view.pages}", true)
 				));
 	}
 

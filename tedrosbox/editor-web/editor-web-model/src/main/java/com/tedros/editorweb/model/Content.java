@@ -3,15 +3,13 @@
  */
 package com.tedros.editorweb.model;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -43,7 +41,7 @@ public class Content extends TEntity {
 	@Column
 	private Integer preOrdering;
 	
-	@Column(length=160)
+	@Column(length=500)
 	private String styleAttr;
 	
 	@Column(length=160)
@@ -59,14 +57,8 @@ public class Content extends TEntity {
 	
 	@OneToMany(mappedBy="content", 
 			cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private Set<Item> items;
+	private List<Item> items;
 	
-	@ManyToMany(fetch=FetchType.EAGER)
-	@JoinTable(name="content_css", schema=DomainSchema.schema,
-    joinColumns=@JoinColumn(name="cont_id", referencedColumnName="id"),
-    inverseJoinColumns=@JoinColumn(name="css_id", referencedColumnName="id"))
-	private Set<CssClass> cssClassList;
-
 	/**
 	 * @return the title
 	 */
@@ -152,34 +144,6 @@ public class Content extends TEntity {
 	}
 
 	/**
-	 * @return the items
-	 */
-	public Set<Item> getItems() {
-		return items;
-	}
-
-	/**
-	 * @param items the items to set
-	 */
-	public void setItems(Set<Item> items) {
-		this.items = items;
-	}
-
-	/**
-	 * @return the cssClassList
-	 */
-	public Set<CssClass> getCssClassList() {
-		return cssClassList;
-	}
-
-	/**
-	 * @param cssClassList the cssClassList to set
-	 */
-	public void setCssClassList(Set<CssClass> cssClassList) {
-		this.cssClassList = cssClassList;
-	}
-
-	/**
 	 * @return the preOrdering
 	 */
 	public Integer getPreOrdering() {
@@ -205,6 +169,20 @@ public class Content extends TEntity {
 	 */
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	/**
+	 * @return the items
+	 */
+	public List<Item> getItems() {
+		return items;
+	}
+
+	/**
+	 * @param items the items to set
+	 */
+	public void setItems(List<Item> items) {
+		this.items = items;
 	}
 
 }

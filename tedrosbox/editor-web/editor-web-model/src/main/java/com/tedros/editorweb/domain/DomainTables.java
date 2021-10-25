@@ -13,8 +13,8 @@ public interface DomainTables {
 	final static String css_class = "css_class";
 	final static String item = "item";
 	final static String media = "media";
-	/*final static String estoque_item = "estoque_item";
-	final static String estoque_config = "estoque_config";
+	final static String parameter = "parameter";
+	/*final static String estoque_config = "estoque_config";
 	final static String entrada_item = "entrada_item";
 	final static String saida_item = "saida_item";
 	final static String saida = "saida";

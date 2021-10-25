@@ -8,7 +8,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
-import com.tedros.editorweb.model.CssClass;
+import com.tedros.editorweb.model.Parameter;
 import com.tedros.editorweb.server.service.TEntityService;
 import com.tedros.ejb.base.controller.ITSecurityController;
 import com.tedros.ejb.base.controller.TSecureEjbController;
@@ -21,18 +21,18 @@ import com.tedros.ejb.base.service.ITEjbService;
  *
  */
 @TRemoteSecurity
-@Stateless(name="ITCssClassController")
+@Stateless(name="ITParameterController")
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
-public class TCssClassController extends TSecureEjbController<CssClass> implements ITCssClassController, ITSecurity{
+public class TParameterController extends TSecureEjbController<Parameter> implements ITParameterController, ITSecurity{
 
 	@EJB
-	private TEntityService<CssClass> serv;
+	private TEntityService<Parameter> serv;
 	
 	@EJB
 	private ITSecurityController securityController;
 	
 	@Override
-	protected ITEjbService<CssClass> getService() {
+	protected ITEjbService<Parameter> getService() {
 		return serv;
 	}
 	
