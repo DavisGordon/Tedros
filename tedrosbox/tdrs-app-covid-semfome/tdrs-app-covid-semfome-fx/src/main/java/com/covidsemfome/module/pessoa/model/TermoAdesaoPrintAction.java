@@ -10,6 +10,7 @@ import java.util.Date;
 import com.covidsemfome.model.TermoAdesao;
 import com.tedros.fxapi.control.THTMLEditor;
 import com.tedros.fxapi.control.action.TPresenterAction;
+import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.util.HtmlPDFExportHelper;
 import com.tedros.util.TFileUtil;
@@ -19,10 +20,19 @@ import com.tedros.util.TedrosFolderEnum;
  * @author Davis Gordon
  *
  */
-public class TermoAdesaoPrintAction extends TPresenterAction<TDynaPresenter<TermoAdesaoModelView>> {
+public class TermoAdesaoPrintAction extends TPresenterAction{
+
+	/**
+	 * @param tActionType
+	 */
+	public TermoAdesaoPrintAction() {
+		super(TActionType.PRINT);
+	}
+
 
 	@Override
-	public boolean runBefore(TDynaPresenter<TermoAdesaoModelView> presenter) {
+	public boolean runBefore() {
+		TDynaPresenter<TermoAdesaoModelView> presenter = super.getPresenter();
 		TermoAdesao termo = (TermoAdesao) presenter.getBehavior().getModelView().getModel();
 		THTMLEditor editor = (THTMLEditor) presenter.getBehavior().getForm().gettFieldBox("conteudo").gettControl();
 		Date data = termo.getLastUpdate()!=null ? termo.getLastUpdate() : termo.getInsertDate();
@@ -34,7 +44,7 @@ public class TermoAdesaoPrintAction extends TPresenterAction<TDynaPresenter<Term
 
 	
 	@Override
-	public void runAfter(TDynaPresenter<TermoAdesaoModelView> presenter) {
+	public void runAfter() {
 		
 	}
 	

@@ -22,10 +22,10 @@ import com.tedros.fxapi.builder.ITControlBuilder;
 import com.tedros.fxapi.builder.ITFieldBuilder;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.collections.TFXCollections;
-import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.modal.TMessageBox;
+import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewSelectionBaseDecorator;
 import com.tedros.fxapi.presenter.model.TModelView;
@@ -56,11 +56,6 @@ import javafx.util.Callback;
 public abstract class TDynaViewSelectionBaseBehavior<M extends TModelView, E extends ITEntity> 
 extends TDynaViewSimpleBaseBehavior<M, E> {
 	
-	private TPresenterAction<TDynaPresenter<M>> cleanAction;
-	private TPresenterAction<TDynaPresenter<M>> searchAction;
-	private TPresenterAction<TDynaPresenter<M>> selectedItemAction;
-	private TPresenterAction<TDynaPresenter<M>> cancelAction;
-	private TPresenterAction<TDynaPresenter<M>> closeAction;
 	
 	private ITObservableList<TModelView> searchResultList;
 	
@@ -102,16 +97,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			final TBehavior tBehavior = presenter.getPresenterAnnotation().behavior();
 			
 			// set the custom behavior actions
-			if(tBehavior.searchAction()!=TPresenterAction.class)
-				searchAction = tBehavior.searchAction().newInstance();
-			if(tBehavior.cleanAction()!=TPresenterAction.class)
-				cleanAction = tBehavior.cleanAction().newInstance();
-			if(tBehavior.selectedItemAction()!=TPresenterAction.class)
-				selectedItemAction = tBehavior.selectedItemAction().newInstance();
-			if(tBehavior.cancelAction()!=TPresenterAction.class)
-				cancelAction = tBehavior.cancelAction().newInstance();
-			if(tBehavior.closeAction()!=TPresenterAction.class)
-				closeAction = tBehavior.closeAction().newInstance();
+			loadAction(presenter, tBehavior.action());
 			
 			allowsMultipleSel = modalPresenter.allowsMultipleSelections();
 			searchResultList = TFXCollections.iTObservableList();
@@ -304,8 +290,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * */
 	@SuppressWarnings("unchecked")
 	public void selectedItemAction(TModelView new_val) {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(selectedItemAction==null || (selectedItemAction!=null && selectedItemAction.runBefore(presenter))){
+		if(actionHelper.runBefore(TActionType.SELECTED_ITEM)){
 			if(new_val==null)
 				return;
 			if(!getModels().contains(new_val)) {
@@ -314,29 +299,22 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				getModels().add((M) new_val);
 			}
 		}
-		if(selectedItemAction!=null)
-			selectedItemAction.runAfter(presenter);
+		actionHelper.runAfter(TActionType.SELECTED_ITEM);
 	}
 	
 	/**
 	 * Perform this action when search button onAction is triggered.
 	 * */
 	public void searchAction() {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(searchAction==null || (searchAction!=null && searchAction.runBefore(presenter))){
-			
+		if(actionHelper.runBefore(TActionType.SEARCH)){
 			try{
 				runFindAllProcess(null);
-				
 			} catch (Throwable e) {
 				getView().tShowModal(new TMessageBox(e), true);
 				e.printStackTrace();
 			}
 		}
-		
-		
 	}
-	
 
 	@SuppressWarnings("unchecked")
 	protected void runFindAllProcess(TPagination pagination)
@@ -381,9 +359,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 					processPagination((long)result.get("total"));
 					getListenerRepository().remove(id);
 					
-					if(searchAction!=null){
-						searchAction.runAfter(getPresenter());
-					}
+					actionHelper.runAfter(TActionType.SEARCH);
 				}
 			}
 		};
@@ -401,12 +377,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * Perform this action when clean button onAction is triggered.
 	 * */
 	public void cleanAction() {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(cleanAction==null || (cleanAction!=null && cleanAction.runBefore(presenter))){
+		if(actionHelper.runBefore(TActionType.CLEAN))
 			processClean();
-		}
-		if(cleanAction!=null)
-			cleanAction.runAfter(presenter);
+		
+		actionHelper.runAfter(TActionType.CLEAN);
 	}
 
 	private void processClean() {
@@ -440,24 +414,21 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * Perform this action when close button onAction is triggered.
 	 * */
 	public void closeAction() {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(closeAction==null || (closeAction!=null && closeAction.runBefore(presenter))){
+		if(actionHelper.runBefore(TActionType.CLOSE)){
 			try{
 				closeModal();
 			}catch(Exception e){
 				e.printStackTrace();
 			}
 		}
-		if(closeAction!=null)
-			closeAction.runAfter(presenter);
+		actionHelper.runAfter(TActionType.CLOSE);
 	}
 	
 	/**
 	 * Perform this action when cancel button onAction is triggered.
 	 * */
 	public void cancelAction() {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(cancelAction==null || (cancelAction!=null && cancelAction.runBefore(presenter))){
+		if(actionHelper.runBefore(TActionType.CANCEL)){
 			try{
 				processClean();
 				getModels().clear();
@@ -465,8 +436,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				e.printStackTrace();
 			}
 		}
-		if(cancelAction!=null)
-			cancelAction.runAfter(presenter);
+		actionHelper.runAfter(TActionType.CANCEL);
 	}
 
 	
@@ -492,69 +462,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	}
 	
 	/**
-	 * @return the cleanAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getCleanAction() {
-		return cleanAction;
-	}
-
-	/**
-	 * @param cleanAction the cleanAction to set
-	 */
-	public void setCleanAction(TPresenterAction<TDynaPresenter<M>> cleanAction) {
-		this.cleanAction = cleanAction;
-	}
-
-	/**
-	 * @return the searchAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getSearchAction() {
-		return searchAction;
-	}
-
-	/**
-	 * @param searchAction the searchAction to set
-	 */
-	public void setSearchAction(TPresenterAction<TDynaPresenter<M>> searchAction) {
-		this.searchAction = searchAction;
-	}
-
-	/**
-	 * @return the selectedItemAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getSelectedItemAction() {
-		return selectedItemAction;
-	}
-
-	/**
-	 * @param selectedItemAction the selectedItemAction to set
-	 */
-	public void setSelectedItemAction(TPresenterAction<TDynaPresenter<M>> selectedItemAction) {
-		this.selectedItemAction = selectedItemAction;
-	}
-
-	/**
-	 * @return the cancelAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getCancelAction() {
-		return cancelAction;
-	}
-
-	/**
-	 * @param cancelAction the cancelAction to set
-	 */
-	public void setCancelAction(TPresenterAction<TDynaPresenter<M>> cancelAction) {
-		this.cancelAction = cancelAction;
-	}
-
-	/**
 	 * @return the modelClass
 	 */
 	public Class<E> getModelClass() {
 		return modelClass;
 	}
-
-
 
 	/**
 	 * @param modelClass the modelClass to set
@@ -563,9 +475,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		this.modelClass = modelClass;
 	}
 
-
-
-
 	/**
 	 * @return the decorator
 	 */
@@ -573,16 +482,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		return decorator;
 	}
 
-
-
 	/**
 	 * @param decorator the decorator to set
 	 */
 	public void setDecorator(TDynaViewSelectionBaseDecorator<M> decorator) {
 		this.decorator = decorator;
 	}
-	
-	
-	
 	
 }

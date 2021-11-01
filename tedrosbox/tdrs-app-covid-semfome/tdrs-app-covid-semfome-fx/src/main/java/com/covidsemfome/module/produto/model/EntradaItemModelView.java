@@ -50,7 +50,7 @@ import javafx.scene.layout.Priority;
 @TFormReaderHtml
 @TForm(name = "Adicionar produtos")
 @TDetailTableViewPresenter(
-		presenter=@TPresenter(behavior=@TBehavior(type=TDetailFieldBehavior.class, addAction=EntradaItemAddAction.class),
+		presenter=@TPresenter(behavior=@TBehavior(type=TDetailFieldBehavior.class, action=EntradaItemAddAction.class),
 				decorator = @TDecorator(type=TDetailFieldDecorator.class, viewTitle="Itens")
 				),
 		tableView=@TTableView(editable=true, control=@TControl(prefHeight=180, parse=true),

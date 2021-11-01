@@ -108,14 +108,10 @@ public class TComponentDescriptor {
 	}
 	
 	public  TFieldDescriptor getFieldDescriptor(String fieldName) {
-		if(fieldName==null)
-			return null;
-		
-		for (final TFieldDescriptor fd : fieldDescriptorList) {
-			if(fd.getFieldName().equals(fieldName)){
-				return fd;
-			}
-		}
+		if(fieldName!=null)
+			for (final TFieldDescriptor fd : fieldDescriptorList) 
+				if(fd.getFieldName().equals(fieldName))
+					return fd;
 		
 		return null;
 	}

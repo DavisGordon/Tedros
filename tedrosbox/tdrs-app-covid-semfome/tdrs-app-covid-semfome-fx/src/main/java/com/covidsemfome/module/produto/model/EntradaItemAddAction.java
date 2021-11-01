@@ -8,6 +8,7 @@ import com.tedros.core.control.PopOver;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.control.TSelectionModal;
 import com.tedros.fxapi.control.action.TPresenterAction;
+import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.entity.behavior.TDetailFieldBehavior;
 
@@ -17,12 +18,16 @@ import javafx.scene.control.Label;
  * @author Davis Gordon
  *
  */
-public class EntradaItemAddAction extends TPresenterAction<TDynaPresenter<EntradaItemModelView>> {
+public class EntradaItemAddAction extends TPresenterAction {
+
+	public EntradaItemAddAction() {
+		super(TActionType.ADD);
+	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public boolean runBefore(TDynaPresenter<EntradaItemModelView> presenter) {
-		
+	public boolean runBefore() {
+		TDynaPresenter<EntradaItemModelView> presenter = getPresenter();
 		TDetailFieldBehavior b = (TDetailFieldBehavior) presenter.getBehavior();
 		final EntradaItemModelView m = (EntradaItemModelView) b.getModelView();
 		ITObservableList<EntradaItemModelView> lst = (ITObservableList<EntradaItemModelView>) b.getModels();
@@ -58,8 +63,7 @@ public class EntradaItemAddAction extends TPresenterAction<TDynaPresenter<Entrad
 	}
 
 	@Override
-	public void runAfter(TDynaPresenter<EntradaItemModelView> presenter) {
-		// TODO Auto-generated method stub
+	public void runAfter() {
 		
 	}
 

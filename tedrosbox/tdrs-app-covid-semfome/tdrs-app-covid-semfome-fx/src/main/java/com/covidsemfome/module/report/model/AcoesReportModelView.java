@@ -55,7 +55,7 @@ import javafx.scene.text.TextAlignment;
 @TReportProcess(type=AcaoReportProcess.class, model = AcaoReportModel.class)
 @TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = TDataSetReportBehavior.class, 
-			searchAction=SearchAction.class), 
+			action=SearchAction.class), 
 			decorator = @TDecorator(type = TDataSetReportDecorator.class, 
 									viewTitle="Relatório de Ações"))
 @TSecurity(	id="COVSEMFOME_ACAOREP_FORM", 

@@ -17,7 +17,7 @@ import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.exception.TException;
 import com.tedros.fxapi.modal.TMessageBox;
-import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
+import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.presenter.paginator.TPagination;
@@ -208,15 +208,15 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	}
 
 	protected void configCancelAction() {
-		setCancelAction(new TPresenterAction<TDynaPresenter<M>>() {
+		addAction(new TPresenterAction(TActionType.CANCEL) {
 
 			@Override
-			public boolean runBefore(TDynaPresenter<M> presenter) {
+			public boolean runBefore() {
 				return true;
 			}
 
 			@Override
-			public void runAfter(TDynaPresenter<M> presenter) {
+			public void runAfter() {
 				final ListView<M> listView = decorator.gettListView();
 				listView.getSelectionModel().clearSelection();
 				setDisableModelActionButtons(true);

@@ -7,6 +7,7 @@ import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.PessoaTermoAdesao;
 import com.tedros.fxapi.control.THTMLEditor;
 import com.tedros.fxapi.control.action.TPresenterAction;
+import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 import com.tedros.fxapi.util.HtmlPDFExportHelper;
@@ -17,11 +18,20 @@ import com.tedros.util.TedrosFolderEnum;
  * @author Davis Gordon
  *
  */
-public class PessoaTermoAdesaoPrintAction extends TPresenterAction<TDynaPresenter<PessoaTermoAdesaoModelView>> {
+public class PessoaTermoAdesaoPrintAction extends TPresenterAction{
+
+	
+	/**
+	 * @param tActionType
+	 */
+	public PessoaTermoAdesaoPrintAction() {
+		super(TActionType.PRINT);
+	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public boolean runBefore(TDynaPresenter<PessoaTermoAdesaoModelView> presenter) {
+	public boolean runBefore() {
+		TDynaPresenter<PessoaTermoAdesaoModelView> presenter = super.getPresenter();
 		TDynaPresenter<PessoaModelView> p = ((TDynaViewCrudBaseBehavior)presenter.getBehavior()).getModulePresenter();
 		Pessoa pess = (Pessoa) p.getBehavior().getModelView().getModel();
 		PessoaTermoAdesao termo = (PessoaTermoAdesao) presenter.getBehavior().getModelView().getModel();
@@ -34,7 +44,7 @@ public class PessoaTermoAdesaoPrintAction extends TPresenterAction<TDynaPresente
 
 	
 	@Override
-	public void runAfter(TDynaPresenter<PessoaTermoAdesaoModelView> presenter) {
+	public void runAfter() {
 		
 	}
 	

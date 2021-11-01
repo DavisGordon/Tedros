@@ -12,6 +12,7 @@ import com.covidsemfome.module.pessoa.process.TermoAdesaoProcess;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.fxapi.control.action.TPresenterAction;
+import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 
@@ -21,18 +22,21 @@ import javafx.concurrent.Worker.State;
  * @author Davis Gordon
  *
  */
-public class PessoaTermoAdesaoNewAction extends TPresenterAction<TDynaPresenter<PessoaTermoAdesaoModelView>> {
+public class PessoaTermoAdesaoNewAction extends TPresenterAction {
+
+	public PessoaTermoAdesaoNewAction() {
+		super(TActionType.NEW);
+	}
 
 	@Override
-	public boolean runBefore(TDynaPresenter<PessoaTermoAdesaoModelView> presenter) {
-		
+	public boolean runBefore() {
 		return true;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void runAfter(TDynaPresenter<PessoaTermoAdesaoModelView> presenter) {
-		
+	public void runAfter() {
+		TDynaPresenter<PessoaTermoAdesaoModelView> presenter = super.getPresenter();
 		PessoaTermoAdesaoModelView mv = presenter.getBehavior().getModelView();
 		
 		TermoAdesaoProcess process = new TermoAdesaoProcess();

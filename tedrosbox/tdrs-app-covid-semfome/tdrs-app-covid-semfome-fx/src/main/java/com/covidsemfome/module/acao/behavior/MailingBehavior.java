@@ -4,7 +4,7 @@ import com.covidsemfome.model.Mailing;
 import com.covidsemfome.module.acao.model.MailingModelView;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.fxapi.control.action.TPresenterAction;
-import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
+import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.entity.behavior.TMasterCrudViewBehavior;
 
 import javafx.scene.control.ListView;
@@ -33,18 +33,14 @@ extends TMasterCrudViewBehavior<MailingModelView, Mailing> {
 		
 	}
 	
-	
-
 	protected void configCancelAction() {
-		setCancelAction(new TPresenterAction<TDynaPresenter<MailingModelView>>() {
-
+		addAction(new TPresenterAction(TActionType.CANCEL) {
 			@Override
-			public boolean runBefore(TDynaPresenter<MailingModelView> presenter) {
+			public boolean runBefore() {
 				return true;
 			}
-
 			@Override
-			public void runAfter(TDynaPresenter<MailingModelView> presenter) {
+			public void runAfter() {
 				final ListView<MailingModelView> listView = decorator.gettListView();
 				listView.getSelectionModel().clearSelection();
 				setDisableModelActionButtons(true);
@@ -56,22 +52,16 @@ extends TMasterCrudViewBehavior<MailingModelView, Mailing> {
 	/**
 	 * Perform this action when a mode radio change listener is triggered.
 	 * */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void changeModeAction() {
-		final TPresenterAction changeModeAction =  getChangeModeAction();
-		final TDynaPresenter<MailingModelView> presenter = getPresenter();
-		if(changeModeAction==null || (changeModeAction!=null && changeModeAction.runBefore(presenter))){
+		if(super.actionHelper.runBefore(TActionType.CHANGE_MODE)){
 			if(getModelView()!=null){
 				if(decorator.isShowBreadcrumBar())
 					decorator.gettBreadcrumbForm().tEntryListProperty().clear();
 				showForm(null);
 			}
 		}
-		
-		if(changeModeAction!=null)
-			changeModeAction.runAfter(presenter);
-		
+		super.actionHelper.runAfter(TActionType.CHANGE_MODE);
 	}
 	
 	

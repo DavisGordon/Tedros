@@ -1,14 +1,19 @@
 package com.tedros.fxapi.presenter.entity.behavior;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
+import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.form.ITModelForm;
 import com.tedros.fxapi.form.TFormBuilder;
 import com.tedros.fxapi.form.TReaderFormBuilder;
 import com.tedros.fxapi.modal.TMessageBox;
+import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
+import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewSimpleBaseBehavior;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import com.tedros.fxapi.presenter.entity.decorator.TDetailCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
@@ -56,6 +61,27 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		}catch(Throwable e){
 			getView().tShowModal(new TMessageBox(e), true);
 			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void addAction(TPresenterAction action) {
+		boolean flag = false;
+		if(action!=null && action.getTypes()!=null) { 
+			for(TActionType a : new TActionType[] {TActionType.NEW, TActionType.DELETE, TActionType.PRINT, 
+					TActionType.EDIT, TActionType.CHANGE_MODE, TActionType.SELECTED_ITEM})
+				if(ArrayUtils.contains(action.getTypes(), a)) {
+					flag = true;
+					break;
+				}	
+		}else
+			flag = true;
+		if(flag) {
+			super.addAction(action);
+		}else {
+			final TDynaPresenter presenter = getModulePresenter();
+			final TDynaViewSimpleBaseBehavior behavior = (TDynaViewSimpleBaseBehavior) presenter.getBehavior(); 
+			behavior.addAction(action);
 		}
 	}
 		

@@ -42,4 +42,6 @@ public interface ITForm {
 	public ReadOnlyBooleanProperty tLoadedProperty();
 	
 	public boolean isLoaded();
+	
+	public TSetting gettSetting();
 }

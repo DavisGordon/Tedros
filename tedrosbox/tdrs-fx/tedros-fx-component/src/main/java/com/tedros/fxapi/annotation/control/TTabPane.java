@@ -19,6 +19,7 @@ import com.tedros.fxapi.annotation.property.TDoubleProperty;
 import com.tedros.fxapi.annotation.property.TObjectProperty;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.annotation.scene.layout.TRegion;
 import com.tedros.fxapi.builder.ITFieldBuilder;
 import com.tedros.fxapi.builder.TTabPaneBuilder;
 import com.tedros.fxapi.domain.TDefaultValues;
@@ -28,6 +29,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
+import javafx.scene.layout.Region;
 
 /**
  * <pre>
@@ -95,6 +97,13 @@ public @interface TTabPane  {
 	 * </pre>
 	 * */
 	public TNode node() default @TNode(parse = false);
+	
+	/**
+	 * <pre>
+	 * The {@link Region} settings.
+	 * </pre>
+	 * */
+	public TRegion region() default @TRegion(parse = false);
 	
 	/**
 	 * <pre>

@@ -46,7 +46,7 @@ import javafx.scene.layout.Priority;
 @TFormReaderHtml
 @TForm(name = "Adicionar insumo")
 @TDetailTableViewPresenter(
-		presenter=@TPresenter(behavior=@TBehavior(type=TDetailFieldBehavior.class, addAction=SaidaItemAddAction.class),
+		presenter=@TPresenter(behavior=@TBehavior(type=TDetailFieldBehavior.class, action=SaidaItemAddAction.class),
 				decorator = @TDecorator(type=TDetailFieldDecorator.class, viewTitle="Itens")
 				),
 		tableView=@TTableView(editable=true, control=@TControl(prefHeight=180, parse=true),

@@ -20,8 +20,8 @@ public class CustomizarModule extends TModule {
 		
 		TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(TConstant.UUI);
 		tShowView(new TGroupView<>(this, iEngine.getString("#{settings.view.title}"), 
-				new TViewItem(TDynaGroupView.class, PainelModelView.class, iEngine.getString("#{settings.form.name}")),
-				new TViewItem(TDynaGroupView.class, BackgroundImageModelView.class, iEngine.getString("#{background.painel.title}"))));
+				new TViewItem(TDynaGroupView.class, PainelModelView.class, iEngine.getString("#{settings.form.name}"), true),
+				new TViewItem(TDynaGroupView.class, BackgroundImageModelView.class, iEngine.getString("#{background.painel.title}"), true)));
 		
 	}
 

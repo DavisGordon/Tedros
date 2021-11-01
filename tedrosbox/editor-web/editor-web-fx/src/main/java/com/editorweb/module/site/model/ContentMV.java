@@ -22,13 +22,14 @@ import com.tedros.fxapi.annotation.control.TTab;
 import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
+import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.control.TTrigger;
 import com.tedros.fxapi.annotation.form.TDetailForm;
+import com.tedros.fxapi.annotation.form.TSetting;
 import com.tedros.fxapi.annotation.layout.TAccordion;
-import com.tedros.fxapi.annotation.layout.THBox;
-import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
+import com.tedros.fxapi.annotation.layout.TSliderMenu;
 import com.tedros.fxapi.annotation.layout.TTitledPane;
 import com.tedros.fxapi.annotation.layout.TVBox;
 import com.tedros.fxapi.annotation.layout.TVGrow;
@@ -36,9 +37,9 @@ import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TDetailListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
-import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.annotation.scene.control.TInsets;
 import com.tedros.fxapi.annotation.scene.image.TImageView;
 import com.tedros.fxapi.annotation.scene.layout.TRegion;
 import com.tedros.fxapi.annotation.scene.web.TWebEngine;
@@ -55,23 +56,26 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.Priority;
 
 /**
  * @author Davis Gordon
  *
  */
+@TSetting(TContentSetting.class)
 @TDetailListViewPresenter(presenter=@TPresenter(
-behavior = @TBehavior(type = TDetailCrudViewBehavior.class), 
+behavior = @TBehavior(type = TDetailCrudViewBehavior.class, action=ContentSaveAction.class), 
 decorator = @TDecorator(type = TDetailCrudViewDecorator.class, buildModesRadioButton=false, viewTitle="#{label.contents}")))
 public class ContentMV extends TEntityModelView<Content> {
 
 	
 	
-	@THBox(	pane=@TPane(children={"selected", "desc"}), spacing=10, fillHeight=true,
+	/*@THBox(	pane=@TPane(children={"selected", "desc"}), spacing=10, fillHeight=true,
 			hgrow=@THGrow(priority={@TPriority(field="desc", priority=Priority.ALWAYS),
 					@TPriority(field="selected", priority=Priority.NEVER)
-			}))
+			}))*/
+	@TSliderMenu(content = "desc", menu = "selected", menuWidth=350)
 	private SimpleLongProperty id;
 	
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-info", parse = true))
@@ -83,14 +87,13 @@ public class ContentMV extends TEntityModelView<Content> {
 	}))
 	private SimpleStringProperty selected;
 	
-	@TAccordion(expandedPane="tmplt", node=@TNode(id="contaacc",parse = true), region=@TRegion(maxWidth=250, parse = true),
+	@TAccordion(expandedPane="tmplt", node=@TNode(id="contaacc",parse = true), region=@TRegion(maxWidth=300, parse = true),
 			panes={
-					@TTitledPane(text="Template", node=@TNode(id="tmplt",parse = true), 
+					@TTitledPane(text="#{label.component}", node=@TNode(id="tmplt",parse = true), 
 							expanded=true, fields={"template", "templateImg"}),
 					@TTitledPane(text="#{label.main.data}", fields={"title", "preOrdering", "styleAttr"}),
-					@TTitledPane(text="#{view.cssclass}", fields={"cssClassList"})
+					@TTitledPane(text="#{label.css.domain}", fields={"cssClassList"})
 				})
-	@TLabel(text="Template")
 	@TTrigger(triggerClass = CompTempTrigger.class, targetFieldName="cssClassList", runAfterFormBuild=true)
 	@TOneSelectionModal(modelClass = ComponentTemplate.class, modelViewClass = ComponentTemplateFindMV.class,
 			width=200, height=50, modalHeight=510)
@@ -110,36 +113,45 @@ public class ContentMV extends TEntityModelView<Content> {
 	private SimpleIntegerProperty preOrdering;
 	
 	@TLabel(text="#{label.styleattr}")
-	@TTextAreaField(wrapText=true)
+	@TTextAreaField(wrapText=true, prefRowCount=4)
 	private SimpleStringProperty styleAttr;
 	
 	@TPickListField(selectedLabel="#{label.selected}", 
-			sourceLabel="#{view.cssclass}", width=110)
+			sourceLabel="#{view.cssclass}", width=110, 
+			selectionMode=SelectionMode.MULTIPLE,
+			optionsList=@TOptionsList(entityClass=CssClass.class,
+					optionModelViewClass=CssClassMV.class, serviceName = "ITCssClassControllerRemote"))
 	@TModelViewCollectionType(modelClass=CssClass.class, modelViewClass=CssClassMV.class)
 	private ITObservableList<CssClassMV> cssClassList;
 	
-	@TTabPane(tabs = { @TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"webview"})), text = "View"),
-			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"desc"})), text = "#{label.content}"),
-			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"code"})), text = "#{label.code}")
-			})
-	@THTMLEditor(control=@TControl(prefHeight=300, parse = true))
+	@TTabPane(tabs = { @TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"webview"})), text = "#{label.view.select}"),
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"desc"})), text = "#{label.edit.content}"),
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"code"})), text = "#{label.code}"),
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"log"})), text = "Log")
+			}, region=@TRegion(padding=@TInsets(left=50), parse = true))
+	@THTMLEditor(control=@TControl(prefHeight=440, parse = true))
 	private SimpleStringProperty desc;
 	
-	@TWebView(prefHeight=400, 
+	@TWebView(prefHeight=440, 
 			engine=@TWebEngine(//load="http://localhost:8081/editor-web-webapp/story/edit.html",
-			load="file:C:/Users/Davis Gordon/git/Tedros/tedrosbox/editor-web/editor-web-webapp/src/main/webapp/story/edit.html",
-					componentConfig=WebEngineConfig.class))
+			load="file:C:/Users/Davis Gordon/git/Tedros/tedrosbox/editor-web/editor-web-webapp/src/main/webapp/story/edit.html"))
 	private SimpleStringProperty webview;
 
 	@TLabel(text="#{label.code}")
-	@TTextAreaField(wrapText=true)
+	@TTextAreaField(wrapText=true, control=@TControl(prefHeight=400, parse = true))
 	private SimpleStringProperty code;
+	
+	@TLabel(text="Log")
+	@TTextAreaField(wrapText=true,textInputControl=@TTextInputControl(editable=false, parse = true), 
+	control=@TControl(prefHeight=400, parse = true))
+	private SimpleStringProperty log;
 	
 	public ContentMV(Content entity) {
 		super(entity);
 		super.registerProperty("templateImg", templateImg);
 		super.registerProperty("webview", webview);
 		super.registerProperty("selected", selected);
+		super.registerProperty("log", log);
 	}
 	
 	@Override
@@ -148,6 +160,7 @@ public class ContentMV extends TEntityModelView<Content> {
 		super.registerProperty("templateImg", templateImg);
 		super.registerProperty("webview", webview);
 		super.registerProperty("selected", selected);
+		super.registerProperty("log", log);
 	}
 
 	/**
@@ -307,6 +320,20 @@ public class ContentMV extends TEntityModelView<Content> {
 	 */
 	public void setSelected(SimpleStringProperty selected) {
 		this.selected = selected;
+	}
+
+	/**
+	 * @return the log
+	 */
+	public SimpleStringProperty getLog() {
+		return log;
+	}
+
+	/**
+	 * @param log the log to set
+	 */
+	public void setLog(SimpleStringProperty log) {
+		this.log = log;
 	}
 
 }

@@ -6,6 +6,7 @@ package com.covidsemfome.module.pessoa.model;
 import com.covidsemfome.model.TermoAdesao;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.form.ITModelForm;
+import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.entity.behavior.TMasterCrudViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
@@ -17,12 +18,19 @@ import javafx.scene.web.HTMLEditor;
  *
  */
 @SuppressWarnings("rawtypes")
-public class TermoAdesaoSaveAction extends TPresenterAction<TDynaPresenter<TermoAdesaoModelView>> {
+public class TermoAdesaoSaveAction extends TPresenterAction {
+
+	/**
+	 * @param tActionType
+	 */
+	public TermoAdesaoSaveAction() {
+		super(TActionType.SAVE);
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean runBefore(TDynaPresenter presenter) {
-		
+	public boolean runBefore() {
+		TDynaPresenter presenter = super.getPresenter();
 		TMasterCrudViewBehavior<TermoAdesaoModelView, TermoAdesao> b = (TMasterCrudViewBehavior<TermoAdesaoModelView, TermoAdesao>) presenter.getBehavior();
 		TermoAdesaoModelView m =  b.getModelView();
 		ITModelForm<TermoAdesaoModelView> form = presenter.getBehavior().getForm();
@@ -33,8 +41,10 @@ public class TermoAdesaoSaveAction extends TPresenterAction<TDynaPresenter<Termo
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void runAfter(TDynaPresenter presenter) {
+	public void runAfter() {
+		TDynaPresenter presenter = super.getPresenter();
 		TMasterCrudViewDecorator<TermoAdesaoModelView> d = (TMasterCrudViewDecorator<TermoAdesaoModelView>) presenter.getDecorator();
 		TMasterCrudViewBehavior<TermoAdesaoModelView, TermoAdesao> b = (TMasterCrudViewBehavior<TermoAdesaoModelView, TermoAdesao>) presenter.getBehavior();
 		//TermoAdesaoModelView m =  b.getModelView();

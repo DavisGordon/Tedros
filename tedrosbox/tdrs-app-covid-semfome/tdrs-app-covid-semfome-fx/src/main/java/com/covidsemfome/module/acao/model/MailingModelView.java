@@ -8,8 +8,8 @@ import java.util.Date;
 import com.covidsemfome.model.Acao;
 import com.covidsemfome.model.Mailing;
 import com.covidsemfome.model.Voluntario;
-import com.covidsemfome.module.acao.behavior.MailingAction;
 import com.covidsemfome.module.acao.behavior.MailingBehavior;
+import com.covidsemfome.module.acao.behavior.MailingSaveAction;
 import com.covidsemfome.module.acao.decorator.MailingDecorator;
 import com.covidsemfome.module.acao.form.EmailTemplateForm;
 import com.tedros.core.annotation.security.TAuthorizationType;
@@ -71,7 +71,7 @@ import javafx.scene.text.TextAlignment;
 					@TOption(text = "Titulo", value = "titulo"), 
 					@TOption(text = "Data", value = "data")}),
 	presenter=@TPresenter(behavior = @TBehavior(type = MailingBehavior.class, 
-		saveAction=MailingAction.class, saveAllModels=false, saveOnlyChangedModels=false), 
+		action={MailingSaveAction.class}, saveAllModels=false, saveOnlyChangedModels=false), 
 		decorator = @TDecorator(type = MailingDecorator.class, 
 			viewTitle="Mailing", listTitle="Acão / Campanha", saveButtonText="Enviar email")))
 @TSecurity(	id="COVSEMFOME_MAIL_FORM", 

@@ -13,11 +13,11 @@ import com.tedros.fxapi.annotation.presenter.TDetailTableViewPresenter;
 import com.tedros.fxapi.builder.ITBuilder;
 import com.tedros.fxapi.builder.ITControlBuilder;
 import com.tedros.fxapi.builder.ITFieldBuilder;
-import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.exception.TValidatorException;
 import com.tedros.fxapi.modal.TMessageBox;
+import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDetailFieldBaseDecorator;
 import com.tedros.fxapi.presenter.model.TModelView;
@@ -44,11 +44,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	
 	private ListChangeListener<Node> formListChangeListener;
 	
-	private TPresenterAction<TDynaPresenter<M>> cleanAction;
-	private TPresenterAction<TDynaPresenter<M>> addAction;
-	private TPresenterAction<TDynaPresenter<M>> selectedItemAction;
-	private TPresenterAction<TDynaPresenter<M>> removeAction;
-	
 	protected TDetailFieldBaseDecorator<M> decorator;
 	protected Class<? extends ITEntity> entityClass;
 	
@@ -70,14 +65,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			final TBehavior tBehavior = presenter.getPresenterAnnotation().behavior();
 			
 			// set the custom behavior actions
-			if(tBehavior.addAction()!=TPresenterAction.class)
-				addAction = tBehavior.addAction().newInstance();
-			if(tBehavior.cleanAction()!=TPresenterAction.class)
-				cleanAction = tBehavior.cleanAction().newInstance();
-			if(tBehavior.selectedItemAction()!=TPresenterAction.class)
-				selectedItemAction = tBehavior.selectedItemAction().newInstance();
-			if(tBehavior.removeAction()!=TPresenterAction.class)
-				removeAction = tBehavior.removeAction().newInstance();
+			loadAction(presenter, tBehavior.action());
 			
 			TTableView tableViewAnn = modalPresenter.tableView();
 
@@ -169,24 +157,21 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * Perform this action when a model is selected.
 	 * */
 	public void selectedItemAction(TModelView new_val) {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(selectedItemAction==null || (selectedItemAction!=null && selectedItemAction.runBefore(presenter))){
+		if(actionHelper.runBefore(TActionType.SELECTED_ITEM)){
 			if(new_val==null)
 				return;
 			setModelView(new_val);
 			showForm(TViewMode.EDIT);
 		
 		}
-		if(selectedItemAction!=null)
-			selectedItemAction.runAfter(presenter);
+		actionHelper.runAfter(TActionType.SELECTED_ITEM);
 	}
 	
 	/**
 	 * Perform this action when search button onAction is triggered.
 	 * */
 	public void addAction() {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(addAction==null || (addAction!=null && addAction.runBefore(presenter))){
+		if(actionHelper.runBefore(TActionType.ADD)){
 			
 			try{
 				M mv = super.getModelView();
@@ -206,25 +191,20 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				getView().tShowModal(new TMessageBox(e), true);
 				e.printStackTrace();
 			}
-			if(addAction!=null)
-				addAction.runAfter(presenter);
-			
+			actionHelper.runAfter(TActionType.ADD);
 		}
 		
 	}
 	
-
 	
 	/**
 	 * Perform this action when clean button onAction is triggered.
 	 * */
 	public void cleanAction() {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(cleanAction==null || (cleanAction!=null && cleanAction.runBefore(presenter))){
+		if(actionHelper.runBefore(TActionType.CLEAN)){
 			processClean();
 		}
-		if(cleanAction!=null)
-			cleanAction.runAfter(presenter);
+		actionHelper.runAfter(TActionType.CLEAN);
 	}
 
 	private void processClean() {
@@ -255,10 +235,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * Perform this action when cancel button onAction is triggered.
 	 * */
 	public void removeAction() {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(removeAction==null || (removeAction!=null && removeAction.runBefore(presenter))){
+		if(actionHelper.runBefore(TActionType.REMOVE)){
 			try{
-				
 				M mv = super.getModelView();
 				getModels().remove(mv);
 				this.processClean();
@@ -267,8 +245,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				e.printStackTrace();
 			}
 		}
-		if(removeAction!=null)
-			removeAction.runAfter(presenter);
+		actionHelper.runAfter(TActionType.REMOVE);
 	}
 
 	/**
@@ -297,8 +274,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		}
 	}
 
-
-
 	/**
 	 * @return the formListChangeListener
 	 */
@@ -306,71 +281,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		return formListChangeListener;
 	}
 
-
-
 	/**
 	 * @param formListChangeListener the formListChangeListener to set
 	 */
 	public void setFormListChangeListener(ListChangeListener<Node> formListChangeListener) {
 		this.formListChangeListener = formListChangeListener;
-	}
-
-	/**
-	 * @return the cleanAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getCleanAction() {
-		return cleanAction;
-	}
-
-	/**
-	 * @param cleanAction the cleanAction to set
-	 */
-	public void setCleanAction(TPresenterAction<TDynaPresenter<M>> cleanAction) {
-		this.cleanAction = cleanAction;
-	}
-
-	
-
-	/**
-	 * @return the selectedItemAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getSelectedItemAction() {
-		return selectedItemAction;
-	}
-
-	/**
-	 * @param selectedItemAction the selectedItemAction to set
-	 */
-	public void setSelectedItemAction(TPresenterAction<TDynaPresenter<M>> selectedItemAction) {
-		this.selectedItemAction = selectedItemAction;
-	}
-
-	/**
-	 * @return the addAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getAddAction() {
-		return addAction;
-	}
-
-	/**
-	 * @param addAction the addAction to set
-	 */
-	public void setAddAction(TPresenterAction<TDynaPresenter<M>> addAction) {
-		this.addAction = addAction;
-	}
-
-	/**
-	 * @return the removeAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getRemoveAction() {
-		return removeAction;
-	}
-
-	/**
-	 * @param removeAction the removeAction to set
-	 */
-	public void setRemoveAction(TPresenterAction<TDynaPresenter<M>> removeAction) {
-		this.removeAction = removeAction;
 	}
 
 	/**
@@ -387,7 +302,4 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		this.decorator = decorator;
 	}
 
-	
-
-	
 }

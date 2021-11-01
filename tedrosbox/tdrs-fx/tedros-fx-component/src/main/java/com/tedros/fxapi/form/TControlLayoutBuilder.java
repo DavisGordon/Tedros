@@ -438,6 +438,7 @@ public final class TControlLayoutBuilder {
 		}
 	
 		this.applyEffects(descriptor, node);
+		descriptor.getFieldDescriptor().setControl(node);
 		return node;
 	}
 	

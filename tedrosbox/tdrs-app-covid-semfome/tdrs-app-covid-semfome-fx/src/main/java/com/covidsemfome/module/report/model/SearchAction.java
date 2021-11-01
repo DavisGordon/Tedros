@@ -3,10 +3,10 @@
  */
 package com.covidsemfome.module.report.model;
 
-import com.tedros.core.presenter.ITPresenter;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.form.TDefaultForm;
 import com.tedros.fxapi.form.TProgressIndicatorForm;
+import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.report.behavior.TDataSetReportBehavior;
 
@@ -20,16 +20,22 @@ import javafx.scene.control.TitledPane;
  */
 @SuppressWarnings("rawtypes")
 public class SearchAction extends TPresenterAction {
-
+	
+	/**
+	 * @param tActionType
+	 */
+	public SearchAction() {
+		super(TActionType.SEARCH);
+	}
+	
 	@Override
-	public boolean runBefore(ITPresenter presenter) {
+	public boolean runBefore() {
 		return true;
 	}
 
 	@Override
-	public void runAfter(ITPresenter presenter) {
-		
-		TDynaPresenter p = (TDynaPresenter) presenter;
+	public void runAfter() {
+		TDynaPresenter p = super.getPresenter();
 		TDataSetReportBehavior b =  (TDataSetReportBehavior) p.getBehavior();
 		TDefaultForm f = (TDefaultForm) ((TProgressIndicatorForm) b.getForm()).gettForm();
 		for(Node n : f.getChildren())
@@ -39,8 +45,6 @@ public class SearchAction extends TPresenterAction {
 				acc.setExpandedPane(res);
 				break;
 			}
-		
-
 	}
 
 	

@@ -112,6 +112,13 @@ public abstract class TFieldLoader<M extends ITModelView<?>> {
 	protected List<String> getFieldsName(){
 		return descriptor.getFieldNameList();
 	}
+
+	/**
+	 * @return the descriptor
+	 */
+	TComponentDescriptor getDescriptor() {
+		return descriptor;
+	}
 	
 	
 }

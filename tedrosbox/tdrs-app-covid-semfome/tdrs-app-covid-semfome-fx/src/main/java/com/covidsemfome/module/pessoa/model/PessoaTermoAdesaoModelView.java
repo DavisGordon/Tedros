@@ -50,7 +50,7 @@ import javafx.geometry.Pos;
 @TForm(showBreadcrumBar=false, name = "Termo de adesão preenchido", editCssId="")
 @TDetailListViewPresenter(presenter=@TPresenter(
 		behavior = @TBehavior(type = TDetailCrudViewBehavior.class,
-		newAction=PessoaTermoAdesaoNewAction.class, printAction=PessoaTermoAdesaoPrintAction.class), 
+		action = {PessoaTermoAdesaoNewAction.class, PessoaTermoAdesaoPrintAction.class}), 
 		decorator = @TDecorator(type = TDetailCrudViewDecorator.class, viewTitle="Termo de adesão", 
 		buildPrintButton=true, printButtonText="Exportar PDF")))
 public class PessoaTermoAdesaoModelView extends TEntityModelView<PessoaTermoAdesao> {

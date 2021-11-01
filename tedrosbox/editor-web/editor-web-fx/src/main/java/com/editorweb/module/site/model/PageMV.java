@@ -9,28 +9,16 @@ import com.tedros.editorweb.model.Content;
 import com.tedros.editorweb.model.Domain;
 import com.tedros.editorweb.model.HtmlTemplate;
 import com.tedros.editorweb.model.Page;
-import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TDetailListField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
-import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
-import com.tedros.fxapi.annotation.control.TShowField;
-import com.tedros.fxapi.annotation.control.TShowField.TField;
-import com.tedros.fxapi.annotation.control.TTab;
-import com.tedros.fxapi.annotation.control.TTabPane;
-import com.tedros.fxapi.annotation.form.TDetailForm;
 import com.tedros.fxapi.annotation.form.TForm;
-import com.tedros.fxapi.annotation.layout.THBox;
-import com.tedros.fxapi.annotation.layout.THGrow;
-import com.tedros.fxapi.annotation.layout.TPane;
-import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.scene.TNode;
-import com.tedros.fxapi.annotation.scene.layout.TRegion;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
@@ -38,7 +26,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.layout.Priority;
 
 /**
  * @author Davis Gordon
@@ -55,44 +42,44 @@ import javafx.scene.layout.Priority;
 public class PageMV extends TEntityModelView<Page> {
 
 	
-	@TTabPane(tabs = { 
+	/*@TTabPane(tabs = { 
 			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"domain","styleAttr"})), text = "#{label.main.data}"), 
 			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"contents"})), text = "#{label.contents}")
-	})
+	})*/
 	private SimpleLongProperty id;
 	
 	
-	@TLabel(text="#{label.domain}")
+	/*@TLabel(text="#{label.domain}")
 	@TShowField(fields= {@TField(name="name" , label="#{label.name}")})
 	@THBox(	pane=@TPane(children={"domain","title","template", "main"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="domain", priority=Priority.ALWAYS),
    				   	@TPriority(field="title", priority=Priority.ALWAYS),
    				   	@TPriority(field="template", priority=Priority.ALWAYS),
    	   				@TPriority(field="main", priority=Priority.ALWAYS) 
-	}))
+	}))*/
 	private SimpleObjectProperty<Domain> domain;
 	
-	@TLabel(text="#{label.name}")
-	@TShowField
+	/*@TLabel(text="#{label.name}")
+	@TShowField*/
 	private SimpleStringProperty title;
 	
-	@TLabel(text="Template")
-	@TShowField(fields= {@TField(name="name" , label="#{label.name}")})
+	/*@TLabel(text="Template")
+	@TShowField(fields= {@TField(name="name" , label="#{label.name}")})*/
 	private SimpleObjectProperty<HtmlTemplate> template;
 
-	@TLabel(text="#{label.main.page}")
-	@TShowField()
+	/*@TLabel(text="#{label.main.page}")
+	@TShowField()*/
 	private SimpleBooleanProperty  main;
 
-	@TLabel(text="#{label.styleattr}")
+	/*@TLabel(text="#{label.styleattr}")
 	@TShowField
 	@THBox(	pane=@TPane(children={"styleAttr", "classAttr"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="styleAttr", priority=Priority.ALWAYS),
-   				   		@TPriority(field="classAttr", priority=Priority.ALWAYS) }))
+   				   		@TPriority(field="classAttr", priority=Priority.ALWAYS) }))*/
 	private SimpleStringProperty styleAttr;
 	
-	@TLabel(text="#{label.classattr}")
-	@TShowField
+	/*@TLabel(text="#{label.classattr}")
+	@TShowField*/
 	private SimpleStringProperty classAttr;
 	
 	@TFieldBox(node=@TNode(id="ct", parse = true))

@@ -59,7 +59,7 @@ import javafx.scene.text.TextAlignment;
 @TReportProcess(type=PessoaReportProcess.class, model = PessoaReportModel.class)
 @TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = TDataSetReportBehavior.class, 
-			searchAction=SearchAction.class), 
+			action=SearchAction.class), 
 			decorator = @TDecorator(type = TDataSetReportDecorator.class, 
 									viewTitle="Relatório de pessoas"))
 @TSecurity(	id="COVSEMFOME_PESSREP_FORM", 

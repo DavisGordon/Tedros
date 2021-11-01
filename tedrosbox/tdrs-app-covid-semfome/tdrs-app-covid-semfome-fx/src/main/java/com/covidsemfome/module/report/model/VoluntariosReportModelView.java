@@ -62,7 +62,7 @@ showBreadcrumBar=true, editCssId="")
 @TReportProcess(type=VoluntarioReportProcess.class, model = VoluntarioReportModel.class)
 @TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = TDataSetReportBehavior.class, 
-			searchAction=SearchAction.class), 
+			action=SearchAction.class), 
 			decorator = @TDecorator(type = TDataSetReportDecorator.class, 
 									viewTitle="Relatório de Voluntários inscritos"))
 @TSecurity(	id="COVSEMFOME_VOLUNREP_FORM", 

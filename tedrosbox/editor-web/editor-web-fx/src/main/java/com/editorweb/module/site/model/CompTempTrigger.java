@@ -45,18 +45,15 @@ public class CompTempTrigger extends TTrigger<Change> {
 			WebView wv = (WebView) super.getForm().gettFieldBox("webview").gettControl();
 			WebEngine en = wv.getEngine();
 			en.executeScript("clear()");
-			updateCssPickList(c);
 			String code = c.getModel().getCode();
-			//mv.getDesc().setValue(code);
 			mv.getCode().setValue(code);
-			en.executeScript("setElement('"+code.replaceAll("\n", "").replace("'", "\\'")+"')");
 			
 		}else if(change!=null) {
 			mv.getCode().setValue(null);
 			WebView wv = (WebView) super.getForm().gettFieldBox("webview").gettControl();
 			WebEngine en = wv.getEngine();
 			en.executeScript("clear()");
-			updateCssPickList(null);
+			//updateCssPickList(null);
 		}
 		
 	}
@@ -67,12 +64,11 @@ public class CompTempTrigger extends TTrigger<Change> {
 	@SuppressWarnings("unchecked")
 	private void updateCssPickList(ComponentTemplateFindMV c) {
 		TPickListField plf = (TPickListField) super.getTarget().gettControl();
-		//plf.getSelectedList().setAll(col)
-		plf.getSelectedList().clear();
+		plf.gettSelectedList().clear();
 		if(c!=null && c.getModel().getCssClassList()!=null) {
 			List<CssClassMV> lst = new TModelViewUtil(CssClassMV.class, CssClass.class, 
 							c.getModel().getCssClassList()).convertToModelViewList();
-			plf.setSourceList(FXCollections.observableArrayList(lst));
+			plf.settSourceList(FXCollections.observableArrayList(lst));
 	
 		}
 	}

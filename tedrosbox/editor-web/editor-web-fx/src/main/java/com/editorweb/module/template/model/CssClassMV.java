@@ -3,7 +3,6 @@
  */
 package com.editorweb.module.template.model;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.tedros.core.annotation.security.TAuthorizationType;
@@ -85,9 +84,9 @@ public class CssClassMV extends TEntityModelView<CssClass> {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof CssClassMV))
+		if(obj==null || !(obj instanceof CssClassMV))
 			return false;
-		return EqualsBuilder.reflectionEquals(this.getModel(), obj != null ? ((CssClassMV)obj).getModel() : obj, false);
+		return this.getModel().equals(((CssClassMV)obj).getModel());
 	}
 
 	/**
