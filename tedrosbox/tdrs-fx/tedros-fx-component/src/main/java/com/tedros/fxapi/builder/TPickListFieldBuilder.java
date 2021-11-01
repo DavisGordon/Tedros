@@ -47,7 +47,8 @@ implements ITControlBuilder<com.tedros.fxapi.control.TPickListField, ObservableL
 															attrProperty, 
 															tAnnotation.width(),
 															tAnnotation.height(),
-															tAnnotation.required());
+															tAnnotation.required(),
+															tAnnotation.selectionMode());
 		
 		if(tAnnotation.optionsList().entityClass()!=ITEntity.class) {
 			TOptionsList optAnn = tAnnotation.optionsList();
@@ -89,7 +90,7 @@ implements ITControlBuilder<com.tedros.fxapi.control.TPickListField, ObservableL
 											
 										}
 									}
-									control.setSourceList(FXCollections.observableArrayList(list));
+									control.settSourceList(FXCollections.observableArrayList(list));
 								}
 							}
 						}	

@@ -5,7 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.domain.TViewMode;
-import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
+import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewSelectionBaseBehavior;
 import com.tedros.fxapi.presenter.modal.decorator.TSelectionModalDecorator;
 import com.tedros.fxapi.presenter.model.TModelView;
@@ -33,40 +33,27 @@ extends TDynaViewSelectionBaseBehavior<M, E> {
 		configSelectedListView();
 		final Class<E> entityClass = getModelClass();
 		
-		setSearchAction(new TPresenterAction<TDynaPresenter<M>>() {
+		addAction(new TPresenterAction(TActionType.SEARCH) {
 			@Override
-			public boolean runBefore(TDynaPresenter<M> presenter) {
+			public boolean runBefore() {
 				return true;
 			}
 
 			@Override
-			public void runAfter(TDynaPresenter<M> presenter) {
+			public void runAfter() {
 				decorator.expandResultPane();
 			}
 			
 		});
 		
-		setCleanAction(new TPresenterAction<TDynaPresenter<M>>() {
+		addAction(new TPresenterAction(TActionType.CLEAN, TActionType.CANCEL) {
 			@Override
-			public boolean runBefore(TDynaPresenter<M> presenter) {
+			public boolean runBefore() {
 				return true;
 			}
 
 			@Override
-			public void runAfter(TDynaPresenter<M> presenter) {
-				decorator.expandFilterPane();
-			}
-			
-		});
-		
-		setCancelAction(new TPresenterAction<TDynaPresenter<M>>() {
-			@Override
-			public boolean runBefore(TDynaPresenter<M> presenter) {
-				return true;
-			}
-
-			@Override
-			public void runAfter(TDynaPresenter<M> presenter) {
+			public void runAfter() {
 				decorator.expandFilterPane();
 			}
 			

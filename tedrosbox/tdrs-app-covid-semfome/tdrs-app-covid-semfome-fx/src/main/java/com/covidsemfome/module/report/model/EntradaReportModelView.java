@@ -57,7 +57,7 @@ import javafx.scene.text.TextAlignment;
 @TReportProcess(type=EntradaReportProcess.class, model = EstocavelReportModel.class)
 @TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = TDataSetReportBehavior.class, 
-			searchAction=SearchAction.class), 
+			action=SearchAction.class), 
 			decorator = @TDecorator(type = TDataSetReportDecorator.class, 
 									viewTitle="Relatório de Entrada de produtos no estoque"))
 @TSecurity(	id="COVSEMFOME_ENTRADAREP_FORM", 

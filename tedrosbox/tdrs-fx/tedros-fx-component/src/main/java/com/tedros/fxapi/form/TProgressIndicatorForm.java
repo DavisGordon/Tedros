@@ -172,5 +172,11 @@ public class TProgressIndicatorForm<M extends ITModelView<?>> extends StackPane 
 	public WebView gettWebView() {
 		return this.form.gettWebView();
 	}
+	
+
+	@Override
+	public TSetting gettSetting(){
+		return this.form.gettSetting();
+	}
 
 }

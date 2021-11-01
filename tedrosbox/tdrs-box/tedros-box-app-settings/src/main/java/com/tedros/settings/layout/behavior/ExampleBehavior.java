@@ -12,7 +12,7 @@ import com.tedros.fxapi.form.TDefaultForm;
 import com.tedros.fxapi.form.TFieldBox;
 import com.tedros.fxapi.form.TProgressIndicatorForm;
 import com.tedros.fxapi.layout.TFieldSet;
-import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
+import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.reader.TTextReader;
@@ -31,10 +31,10 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleViewModel,
 		super.load();
 		configModesRadio();
 		
-		setNewAction(new TPresenterAction<TDynaPresenter<ExampleViewModel>>() {
+		addAction(new TPresenterAction(TActionType.NEW) {
 
 			@Override
-			public boolean runBefore(TDynaPresenter<ExampleViewModel> presenter) {
+			public boolean runBefore() {
 				ExampleViewModel model = new ExampleViewModel();
 				setViewMode(TViewMode.EDIT);
 				setModelView(model);
@@ -43,8 +43,7 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleViewModel,
 			}
 
 			@Override
-			public void runAfter(TDynaPresenter<ExampleViewModel> presenter) {
-				// TODO Auto-generated method stub
+			public void runAfter() {
 				
 			}
 		});

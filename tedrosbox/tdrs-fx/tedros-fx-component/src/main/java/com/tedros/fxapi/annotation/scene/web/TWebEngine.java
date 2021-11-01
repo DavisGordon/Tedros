@@ -21,7 +21,6 @@ import com.tedros.fxapi.builder.NullRectangle2DWebEventBuilder;
 import com.tedros.fxapi.builder.NullStringBooleanCallBackBuilder;
 import com.tedros.fxapi.builder.NullStringWebEventBuilder;
 import com.tedros.fxapi.builder.NullWebErrorEventBuilder;
-import com.tedros.fxapi.form.TComponentConfig;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.web.PopupFeatures;
@@ -41,8 +40,6 @@ import javafx.util.Callback;
 @Retention(RUNTIME)
 @Target(ANNOTATION_TYPE)
 public @interface TWebEngine {
-	
-	public Class<? extends TComponentConfig> componentConfig() default TComponentConfig.class;
 	
 	/**
 	* <pre>

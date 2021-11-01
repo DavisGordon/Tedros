@@ -6,19 +6,30 @@ function tdrsSetHtml(){
 		tedros.setHtml(result);
 	}
 }
+function tdrsSetClass(){
+	if(selEl){
+		tedros.setCssClass(selEl.className);
+	}
+}
 function clear(){
 	$('#spot').empty();
 	removeSelectedArea();
 	selEl = null;
 }
 function setElement(h){
+	var $n = $(h);
 	if(selEl){
-		var $n = $(h);
 		$n.replaceAll(selEl);
-		selEl = $n.get(0);
+	}else{
+		$('#spot').prepend($n);
+	}
+	selEl = $n.get(0);
+	setTimeout(function(){
 		addSelectedArea();
-	}else
-		$('#spot').html(h);
+	}, 2000);
+	buildTools();
+	tedros.setElementTag(selEl.tagName);
+	tdrsSetClass();
 }
 function addLast(h){
 	if(selEl){
@@ -64,6 +75,10 @@ function setParentEl(){
 		return;
 	setSelEl(p);
 }
+function selectRoot(){
+	var s = $('#spot').first();
+	setSelEl(s.get(0));
+}
 function removeSel(){
 	if(selEl){
 	    $(selEl).off('click');	
@@ -99,9 +114,7 @@ function addSelectedArea(){
 	elements.right.css({display:'none'});
 	elements.bottom.css({display:'none'});
 }
-function setSelEl(e) {
-	selEl = e;
-	
+function buildTools(){
 	var s = "<a id='selector-rem' class='sel' href='javascript: removeSel()' >[ - ]</a> ";
 	s += "<a id='selector-parent'  class='sel' href='javascript: setParentEl()' >[ ^ ]</a> | ";
 	//s += "<a id='selector-parent'  class='sel' href='javascript: setElement(\"<h1>teste</h1>\")' >[ set ]</a> | ";
@@ -115,10 +128,14 @@ function setSelEl(e) {
 		s += ', src: '+selEl.src;
 	
 	$('#sel').html(s);
+}
+function setSelEl(e) {
+	selEl = e;
+	buildTools();
 	tdrsSetHtml();
+	tdrsSetClass();
 	tedros.setElementTag(selEl.tagName);
 	addSelectedArea();
-	
 }
 
 var elements = {

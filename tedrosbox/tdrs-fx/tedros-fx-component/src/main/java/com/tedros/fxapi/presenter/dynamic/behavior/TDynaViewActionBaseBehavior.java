@@ -10,10 +10,10 @@ import com.tedros.core.context.TedrosContext;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.process.TEjbService;
-import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.exception.TValidatorException;
 import com.tedros.fxapi.modal.TMessageBox;
+import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewActionBaseDecorator;
 import com.tedros.fxapi.presenter.model.TModelView;
@@ -37,20 +37,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	private ToggleGroup radioGroup;
 	private BooleanProperty modeBtnDisableProperty;
 	private BooleanProperty modeBtnVisibleProperty;
-
-	
-	private TPresenterAction<TDynaPresenter<M>> cleanAction;
-	private TPresenterAction<TDynaPresenter<M>> actionAction;
-	private TPresenterAction<TDynaPresenter<M>> selectedItemAction;
-	private TPresenterAction<TDynaPresenter<M>> closeAction;
-	private TPresenterAction<TDynaPresenter<M>> changeModeAction;
 	
 	protected Class<E> modelClass;
 	protected String serviceName;
 		
 	private TDynaViewActionBaseDecorator<M> decorator;
-
-	
 
 	@SuppressWarnings("unchecked")
 	public void load(){
@@ -71,16 +62,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			final TBehavior tBehavior = presenter.getPresenterAnnotation().behavior();
 			
 			// set the custom behavior actions
-			if(tBehavior.actionAction()!=TPresenterAction.class)
-				actionAction = tBehavior.actionAction().newInstance();
-			if(tBehavior.cleanAction()!=TPresenterAction.class)
-				cleanAction = tBehavior.cleanAction().newInstance();
-			if(tBehavior.selectedItemAction()!=TPresenterAction.class)
-				selectedItemAction = tBehavior.selectedItemAction().newInstance();
-			if(tBehavior.closeAction()!=TPresenterAction.class)
-				closeAction = tBehavior.closeAction().newInstance();
-			if(tBehavior.changeModeAction()!=TPresenterAction.class)
-				changeModeAction = tBehavior.changeModeAction().newInstance();
+			loadAction(presenter, tBehavior.action());
 			
 		}catch(Exception e){
 			e.printStackTrace();
@@ -171,16 +153,12 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * Perform this action when a mode radio change listener is triggered.
 	 * */
 	public void changeModeAction() {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(changeModeAction==null || (changeModeAction!=null && changeModeAction.runBefore(presenter))){
+		if(actionHelper.runBefore(TActionType.CHANGE_MODE)){
 			if(getModelView()!=null){
 				showForm(null);
 			}
 		}
-		
-		if(changeModeAction!=null)
-			changeModeAction.runAfter(presenter);
-		
+		actionHelper.runAfter(TActionType.CHANGE_MODE);
 	}
 	
 	/**
@@ -232,12 +210,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * Perform this action when clean button onAction is triggered.
 	 * */
 	public void cleanAction() {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(cleanAction==null || (cleanAction!=null && cleanAction.runBefore(presenter))){
+		if(actionHelper.runBefore(TActionType.CLEAN)){
 			processClean();
 		}
-		if(cleanAction!=null)
-			cleanAction.runAfter(presenter);
+		actionHelper.runAfter(TActionType.CLEAN);
 	}
 
 	private void processClean() {
@@ -256,12 +232,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * Perform this action when a model is selected.
 	 * */
 	public void selectedItemAction(TModelView new_val) {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(selectedItemAction==null || (selectedItemAction!=null && selectedItemAction.runBefore(presenter))){
+		if(actionHelper.runBefore(TActionType.SELECTED_ITEM)){
 			processSelectedItem(new_val);
 		}
-		if(selectedItemAction!=null)
-			selectedItemAction.runAfter(presenter);
+		actionHelper.runAfter(TActionType.SELECTED_ITEM);
 	}
 	
 	protected abstract void processSelectedItem(TModelView new_val);
@@ -271,9 +245,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * Perform this action when search button onAction is triggered.
 	 * */
 	public void actionAction() {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(actionAction==null || (actionAction!=null && actionAction.runBefore(presenter))){
-			
+		if(actionHelper.runBefore(TActionType.ACTION)){
 			try{
 				processAction();
 			}catch(TValidatorException e){
@@ -283,8 +255,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				e.printStackTrace();
 			}
 		}
-		
-		
 	}
 	
 
@@ -307,16 +277,14 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * Perform this action when close button onAction is triggered.
 	 * */
 	public void closeAction() {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(closeAction==null || (closeAction!=null && closeAction.runBefore(presenter))){
+		if(actionHelper.runBefore(TActionType.CLOSE)){
 			try{
 				closeModal();
 			}catch(Exception e){
 				e.printStackTrace();
 			}
 		}
-		if(closeAction!=null)
-			closeAction.runAfter(presenter);
+		actionHelper.runAfter(TActionType.CLOSE);
 	}
 	
 
@@ -363,95 +331,18 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	}
 
 	/**
-	 * @return the cleanAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getCleanAction() {
-		return cleanAction;
-	}
-
-	/**
-	 * @param cleanAction the cleanAction to set
-	 */
-	public void setCleanAction(TPresenterAction<TDynaPresenter<M>> cleanAction) {
-		this.cleanAction = cleanAction;
-	}
-
-	/**
-	 * @return the searchAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getSearchAction() {
-		return actionAction;
-	}
-
-	/**
-	 * @param searchAction the searchAction to set
-	 */
-	public void setSearchAction(TPresenterAction<TDynaPresenter<M>> searchAction) {
-		this.actionAction = searchAction;
-	}
-
-	/**
-	 * @return the selectedItemAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getSelectedItemAction() {
-		return selectedItemAction;
-	}
-
-	/**
-	 * @param selectedItemAction the selectedItemAction to set
-	 */
-	public void setSelectedItemAction(TPresenterAction<TDynaPresenter<M>> selectedItemAction) {
-		this.selectedItemAction = selectedItemAction;
-	}
-
-	/**
 	 * @return the modelClass
 	 */
 	public Class<E> getModelClass() {
 		return modelClass;
 	}
-
-
-
+	
 	/**
 	 * @param modelClass the modelClass to set
 	 */
 	public void setModelClass(Class<E> modelClass) {
 		this.modelClass = modelClass;
 	}
-
-
-	/**
-	 * @return the actionAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getActionAction() {
-		return actionAction;
-	}
-
-
-	/**
-	 * @param actionAction the actionAction to set
-	 */
-	public void setActionAction(TPresenterAction<TDynaPresenter<M>> actionAction) {
-		this.actionAction = actionAction;
-	}
-
-
-	/**
-	 * @return the closeAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getCloseAction() {
-		return closeAction;
-	}
-
-
-	/**
-	 * @param closeAction the closeAction to set
-	 */
-	public void setCloseAction(TPresenterAction<TDynaPresenter<M>> closeAction) {
-		this.closeAction = closeAction;
-	}
-
 
 	/**
 	 * @return the decorator
@@ -460,14 +351,12 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		return decorator;
 	}
 
-
 	/**
 	 * @return the serviceName
 	 */
 	protected String getServiceName() {
 		return serviceName;
 	}
-
 
 	/**
 	 * @param serviceName the serviceName to set

@@ -1,5 +1,6 @@
 package com.tedros.fxapi.presenter.dynamic.behavior;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,14 +10,17 @@ import com.tedros.core.TSecurityDescriptor;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.core.context.TedrosContext;
+import com.tedros.core.presenter.ITPresenter;
 import com.tedros.core.presenter.view.ITView;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.annotation.process.TEjbService;
+import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.control.validator.TControlValidator;
 import com.tedros.fxapi.control.validator.TValidatorResult;
 import com.tedros.fxapi.exception.TValidatorException;
 import com.tedros.fxapi.modal.TMessageBox;
+import com.tedros.fxapi.presenter.behavior.TActionHelper;
 import com.tedros.fxapi.presenter.behavior.TActionState;
 import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.behavior.TBehavior;
@@ -42,6 +46,7 @@ import javafx.scene.layout.StackPane;
 public abstract class TDynaViewSimpleBaseBehavior<M extends TModelView, E extends ITModel> 
 extends TBehavior<M, TDynaPresenter<M>> {
 	
+	protected TActionHelper actionHelper = new TActionHelper();
 	
 	private Class<? extends TModelProcess> modelProcessClass;
 	private Class<M> modelViewClass;
@@ -98,6 +103,27 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		getView().tModalVisibleProperty().addListener(new WeakChangeListener<Boolean>(modalCleanMsgLtnr));
 	}
 	
+	@SuppressWarnings("unchecked")
+	protected void loadAction(ITPresenter presenter, Class<? extends TPresenterAction>... action) {
+		try {
+			List<TPresenterAction> l = actionHelper.build(presenter, action);
+			if(l!=null)
+				for(TPresenterAction a : l)
+					this.addAction(a);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void addAction(TPresenterAction action) {
+		this.actionHelper.add(action);
+	}
+	
+	public List<TPresenterAction>  getActions(TActionType... type){
+		return this.actionHelper.getAction(type);
+	}
+
 	/**
 	 * If false none message from method addMessage will be displayed.
 	 * */

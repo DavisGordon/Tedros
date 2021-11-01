@@ -35,43 +35,27 @@ extends FlowPane implements ITModelForm<M> {
 	private ITPresenter presenter;
 	
 	private final TFormEngine<M, TFlowPaneForm<M>> formEngine;
-	private final TTriggerLoader<M, TFlowPaneForm<M>> triggerLoader;
 	
 	
 	public TFlowPaneForm(M modelView) {
 		this.formEngine = new TFormEngine<M, TFlowPaneForm<M>>(this, modelView);
-		this.triggerLoader = new TTriggerLoader<M, TFlowPaneForm<M>>(this);
-		buildTriggers();
+		this.formEngine.setEditMode();
 	}
 
 	public TFlowPaneForm(M modelView, Boolean readerMode) {
 		this.formEngine = new TFormEngine<M, TFlowPaneForm<M>>(this, modelView, readerMode);
-		this.triggerLoader = new TTriggerLoader<M, TFlowPaneForm<M>>(this);
-		buildTriggers();
 	}
 	
 	@SuppressWarnings("rawtypes")
 	public TFlowPaneForm(ITPresenter presenter, M modelView) {
 		this.presenter = presenter;
 		this.formEngine = new TFormEngine<M, TFlowPaneForm<M>>(this, modelView);
-		this.triggerLoader = new TTriggerLoader<M, TFlowPaneForm<M>>(this);
-		buildTriggers();
 	}
 	
 	@SuppressWarnings("rawtypes")
 	public TFlowPaneForm(ITPresenter presenter, M modelView, boolean readerMode) {
 		this.presenter = presenter;
 		this.formEngine = new TFormEngine<>(this, modelView, readerMode);
-		this.triggerLoader = new TTriggerLoader<>(this);
-		buildTriggers();
-	}
-	
-	private void buildTriggers() {
-		try {
-			triggerLoader.buildTriggers();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	@Override
@@ -142,7 +126,6 @@ extends FlowPane implements ITModelForm<M> {
 	@Override
 	public void tReloadForm() {
 		this.formEngine.reloadForm();
-		buildTriggers();
 	}
 	
 	@Override
@@ -168,5 +151,10 @@ extends FlowPane implements ITModelForm<M> {
 	@Override
 	public boolean isLoaded() {
 		return this.formEngine.loadedProperty().get();
+	}
+
+	@Override
+	public TSetting gettSetting(){
+		return this.formEngine.getSetting();
 	}
 }

@@ -17,7 +17,7 @@ import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.form.ITForm;
 import com.tedros.fxapi.form.TBuildFormStatus;
 import com.tedros.fxapi.form.TFieldBox;
-import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
+import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.entity.behavior.TSaveViewBehavior;
 import com.tedros.fxapi.util.TModelViewUtil;
 import com.tedros.settings.security.model.TProfileModelView;
@@ -39,20 +39,18 @@ public class TUserSettingBehavior extends TSaveViewBehavior<TUserSettingModelVie
 		
 		iEngine = TInternationalizationEngine.getInstance(null);
 		
-		super.setSaveAction(new TPresenterAction<TDynaPresenter<TUserSettingModelView>>() {
+		super.addAction(new TPresenterAction(TActionType.SAVE) {
 
 			@Override
-			public boolean runBefore(TDynaPresenter<TUserSettingModelView> presenter) {
-				// TODO Auto-generated method stub
+			public boolean runBefore() {
 				return true;
 			}
 
 			@Override
-			public void runAfter(TDynaPresenter<TUserSettingModelView> presenter) {
+			public void runAfter() {
 				try {
 					loadTedros();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				

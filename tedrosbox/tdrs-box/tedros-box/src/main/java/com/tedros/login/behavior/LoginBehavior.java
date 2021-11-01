@@ -27,7 +27,7 @@ import com.tedros.fxapi.form.ITForm;
 import com.tedros.fxapi.form.TBuildFormStatus;
 import com.tedros.fxapi.form.TFieldBox;
 import com.tedros.fxapi.modal.TMessageBox;
-import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
+import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 import com.tedros.fxapi.util.TModelViewUtil;
 import com.tedros.login.decorator.LoginDecorator;
@@ -112,10 +112,10 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 		
 		
 		
-		setNewAction(new TPresenterAction<TDynaPresenter<LoginModelView>>() {
+		addAction(new TPresenterAction(TActionType.NEW) {
 
 			@Override
-			public boolean runBefore(TDynaPresenter<LoginModelView> presenter) {
+			public boolean runBefore() {
 				Login login = new Login();
 				login.setLanguage(TedrosContext.getLocale().getLanguage().toUpperCase());
 				LoginModelView model = new LoginModelView(login);
@@ -126,17 +126,16 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 			}
 
 			@Override
-			public void runAfter(TDynaPresenter<LoginModelView> presenter) {
-				// TODO Auto-generated method stub
+			public void runAfter() {
 			}
 		});
 		
 		
 		
-		setSaveAction(new TPresenterAction<TDynaPresenter<LoginModelView>>() {
+		addAction(new TPresenterAction(TActionType.SAVE) {
 			
 			@Override
-			public boolean runBefore(TDynaPresenter<LoginModelView> presenter) {
+			public boolean runBefore() {
 				
 				saveButton.setDisable(true);
 				
@@ -262,28 +261,24 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 			}
 			
 			@Override
-			public void runAfter(TDynaPresenter<LoginModelView> presenter) {
+			public void runAfter() {
 				
 			}
 		});
 		
-		setCancelAction(new TPresenterAction<TDynaPresenter<LoginModelView>>() {
-
+		addAction(new TPresenterAction(TActionType.CANCEL) {
 			@Override
-			public boolean runBefore(TDynaPresenter<LoginModelView> presenter) {
-				
+			public boolean runBefore() {
 				if(profileComboBox.isDisable()){
 					Platform.exit();
 				}else{
 					loggedUserProperty.setValue(null);
 				}
-				
-				
 				return false;
 			}
 
 			@Override
-			public void runAfter(TDynaPresenter<LoginModelView> presenter) {
+			public void runAfter() {
 				
 			}
 		});

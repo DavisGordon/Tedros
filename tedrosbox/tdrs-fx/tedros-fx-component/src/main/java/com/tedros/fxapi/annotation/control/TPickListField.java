@@ -15,6 +15,7 @@ import com.tedros.fxapi.builder.TPickListFieldBuilder;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
@@ -95,6 +96,24 @@ public @interface TPickListField {
 	 * </pre>
 	 * */
 	public double height() default 150;
+	
+	/**
+	 * <pre>
+	 * {@link TPickListField} Class
+	 * 
+	 * Sets the value of the property selectionMode on both ListView.
+	 * 
+	 * Property description:
+	 * 
+	 * Specifies the selection mode to use in this selection model. 
+	 * The selection mode specifies how many items in the underlying 
+	 * data model can be selected at any one time. 
+	 * 
+	 * By default, the selection mode is SelectionMode.SINGLE
+	 * 
+	 * </pre>
+	 * */
+	public SelectionMode selectionMode() default SelectionMode.SINGLE;
 	
 	/**
 	 * <pre>

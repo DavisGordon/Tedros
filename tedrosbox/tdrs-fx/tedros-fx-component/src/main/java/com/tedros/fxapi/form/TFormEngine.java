@@ -7,6 +7,7 @@
 package com.tedros.fxapi.form;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import com.tedros.core.model.ITModelView;
 import com.tedros.core.module.TObjectRepository;
 import com.tedros.fxapi.annotation.TDebugConfig;
 import com.tedros.fxapi.builder.ITReaderHtmlBuilder;
+import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.descriptor.TFieldDescriptor;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.reader.THtmlReader;
@@ -41,6 +43,7 @@ import javafx.scene.web.WebView;
 public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M>>  {
 	
 	private TViewMode mode;
+	private TSetting setting;
 	private TModelViewLoader<M> modelViewLoader;
 	private final M modelView;
 	private final F form;
@@ -49,6 +52,13 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	private WebView webView;
 	private SimpleBooleanProperty loaded = new SimpleBooleanProperty(false);
 	private TObjectRepository tObjectRepository = new TObjectRepository();
+	private final TTriggerLoader<M, ITModelForm<M>> triggerLoader;
+	private ChangeListener<Boolean> chl = (ob, o, n) -> {
+		if(n) { 
+			buildTriggers();
+			runSetting();
+		}
+	};
 	
 	public TFormEngine(final F form, final M modelView) {
 		this.form = form;
@@ -56,12 +66,16 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 			this.form.setId("t-form");
 		this.modelView = modelView;
 		this.associatedObjectsMap = new HashMap<>(0);
+		triggerLoader = new TTriggerLoader<M, ITModelForm<M>>(form);
+		loadedProperty().addListener(new WeakChangeListener<>(chl));
 	}
 	
 	public TFormEngine(final F form, final M modelView, boolean readerMode) {
 		this.form = form;
 		this.modelView = modelView;
 		this.associatedObjectsMap = new HashMap<>(0);
+		triggerLoader = new TTriggerLoader<M, ITModelForm<M>>(form);
+		loadedProperty().addListener(new WeakChangeListener<>(chl));
 		if(readerMode)
 			setReaderMode();
 		else
@@ -177,6 +191,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 			setEditMode();
 		if(mode.equals(TViewMode.READER))
 			setReaderMode();
+		buildTriggers();
 	}
 	
 	public TFieldBox getFieldBox(String fieldName){
@@ -255,6 +270,40 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	 */
 	public TObjectRepository getObjectRepository() {
 		return tObjectRepository;
+	}
+	
+	private void runSetting() {
+		if(this.mode.equals(TViewMode.READER))
+			return; 
+		
+		com.tedros.fxapi.annotation.form.TSetting a = this.modelView.getClass().getAnnotation(com.tedros.fxapi.annotation.form.TSetting.class);
+		if(a!=null) {
+			Class<? extends TSetting> c = a.value();
+			try {
+				setting = c.getConstructor(TComponentDescriptor.class).newInstance(this.modelViewLoader.getDescriptor());
+				setting.run();
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException | NoSuchMethodException | SecurityException e) {
+				e.printStackTrace();
+			}
+			
+		
+		}
+	}
+	
+	private void buildTriggers() {
+		try {
+			triggerLoader.buildTriggers();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * @return the setting
+	 */
+	public TSetting getSetting() {
+		return setting;
 	}
 	
 }

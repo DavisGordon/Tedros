@@ -49,7 +49,7 @@ import javafx.scene.layout.Priority;
 @TReportProcess(type=ProdutoReportProcess.class, model = ProdutoReportModel.class)
 @TPresenter(type = TDynaPresenter.class,
 			behavior = @TBehavior(type = TDataSetReportBehavior.class, 
-			searchAction=SearchAction.class), 
+			action=SearchAction.class), 
 			decorator = @TDecorator(type = TDataSetReportDecorator.class, 
 									viewTitle="Relatório de produtos"))
 @TSecurity(	id="COVSEMFOME_PRODUTREP_FORM", 

@@ -16,8 +16,6 @@ import com.tedros.fxapi.descriptor.TFieldDescriptor;
 import com.tedros.fxapi.domain.TViewMode;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.WeakChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
@@ -36,22 +34,17 @@ public abstract class TVBoxForm<M extends ITModelView<?>>
 extends VBox implements ITModelForm<M> {
 	
 	private final TFormEngine<M, TVBoxForm<M>> formEngine;
-	private final TTriggerLoader<M, TVBoxForm<M>> triggerLoader = new TTriggerLoader<M, TVBoxForm<M>>(this);
 	@SuppressWarnings("rawtypes")
 	private ITPresenter presenter;
-	private ChangeListener<Boolean> chl = (ob, o, n) -> {
-		if(n) buildTriggers();
-	};
+	
 	
 	public TVBoxForm(M modelView) {
 		this.formEngine = new TFormEngine<M, TVBoxForm<M>>(this, modelView);
-		this.formEngine.loadedProperty().addListener(new WeakChangeListener<>(chl));
 		this.formEngine.setEditMode();
 	}
 	
 	public TVBoxForm(M modelView, boolean readerMode) {
 		this.formEngine = new TFormEngine<>(this, modelView);
-		this.formEngine.loadedProperty().addListener(new WeakChangeListener<>(chl));
 		if(readerMode)
 			this.formEngine.setReaderMode();
 		else
@@ -62,7 +55,6 @@ extends VBox implements ITModelForm<M> {
 	public TVBoxForm(ITPresenter presenter, M modelView) {
 		this.presenter = presenter;
 		this.formEngine = new TFormEngine<M, TVBoxForm<M>>(this, modelView);
-		this.formEngine.loadedProperty().addListener(new WeakChangeListener<>(chl));
 		this.formEngine.setEditMode();
 	}
 	
@@ -70,20 +62,13 @@ extends VBox implements ITModelForm<M> {
 	public TVBoxForm(ITPresenter presenter, M modelView, boolean readerMode) {
 		this.presenter = presenter;
 		this.formEngine = new TFormEngine<>(this, modelView, readerMode);
-		this.formEngine.loadedProperty().addListener(new WeakChangeListener<>(chl));
 		if(readerMode)
 			this.formEngine.setReaderMode();
 		else
 			this.formEngine.setEditMode();
 	}
 	
-	private void buildTriggers() {
-		try {
-			triggerLoader.buildTriggers();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	
 	
 	@Override
 	public ObservableList<Node> gettFormItens() {
@@ -162,7 +147,6 @@ extends VBox implements ITModelForm<M> {
 	@Override
 	public void tReloadForm() {
 		this.formEngine.reloadForm();
-		buildTriggers();
 	}
 	
 	@Override
@@ -197,6 +181,11 @@ extends VBox implements ITModelForm<M> {
 	@Override
 	public boolean isLoaded() {
 		return this.formEngine.loadedProperty().get();
+	}
+
+	@Override
+	public TSetting gettSetting(){
+		return this.formEngine.getSetting();
 	}
 
 }

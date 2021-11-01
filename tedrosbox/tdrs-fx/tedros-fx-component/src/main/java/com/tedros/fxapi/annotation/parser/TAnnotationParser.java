@@ -18,11 +18,8 @@ import com.tedros.core.ITModule;
 import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
-import com.tedros.fxapi.form.TComponentConfig;
 import com.tedros.fxapi.util.TReflectionUtil;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Color;
 
@@ -58,7 +55,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 	
 	private final static String SET = "set";
 	private final static String GET = "get";
-	private final String[] SKIPMETHODS = {"componentConfig", "builder","parser","parse","equals", "getClass", "wait", "hashCode", "toString", "notify", "notifyAll", "annotationType"};
+	private final String[] SKIPMETHODS = {"builder","parser","parse","equals", "getClass", "wait", "hashCode", "toString", "notify", "notifyAll", "annotationType"};
 	
 	private TComponentDescriptor componentDescriptor;
 	protected TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
@@ -213,25 +210,6 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 				//	  System.out.println("[TAnnotationParser][Annotation: "+TReflectionUtil.getAnnotationName(annotation)+"][attribute: "+key+"][Parser duration: "+(duration2/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration2/1000000))+"s] ");
 				}
 			}
-			Method mcc = TReflectionUtil.getMethod(annotation, "componentConfig");
-			if(mcc!=null) {
-				Object o = mcc.invoke(annotation);
-				Class<? extends TComponentConfig> c = (Class<? extends TComponentConfig>) o;
-				if(c!=TComponentConfig.class) {
-					TComponentConfig cc = c.getConstructor(TComponentDescriptor.class, object.getClass()).newInstance(this.componentDescriptor, object);
-					this.componentDescriptor.getForm().tLoadedProperty().addListener(new ChangeListener<Boolean>() {
-						@Override
-						public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
-							if(arg2) {
-								cc.config();
-								componentDescriptor.getForm().tLoadedProperty().removeListener(this);
-							}
-						}
-						
-					});
-				}
-			}
-			
 			
 		}catch(Exception e){
 			e.printStackTrace();

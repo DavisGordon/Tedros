@@ -14,7 +14,6 @@ import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.core.context.TedrosContext;
-import com.tedros.core.presenter.ITPresenter;
 import com.tedros.core.security.model.TAuthorization;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
@@ -25,7 +24,7 @@ import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.exception.TException;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.modal.TMessageBox;
-import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
+import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 import com.tedros.fxapi.presenter.paginator.TPagination;
@@ -75,10 +74,9 @@ extends TDynaViewCrudBaseBehavior<TAuthorizationModelView, TAuthorization> {
 			configListViewChangeListener();
 			configListViewCallBack();
 			
-			setNewAction(new TPresenterAction() {
-
+			addAction(new TPresenterAction(TActionType.NEW) {
 				@Override
-				public boolean runBefore(ITPresenter presenter) {
+				public boolean runBefore() {
 					List<TAuthorization> authorizations = new ArrayList<>();
 					TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
 					for (Class clazz : TedrosContext.getClassesAnnotatedWith(TSecurity.class) ) {
@@ -151,7 +149,7 @@ extends TDynaViewCrudBaseBehavior<TAuthorizationModelView, TAuthorization> {
 				}
 
 				@Override
-				public void runAfter(ITPresenter presenter) {
+				public void runAfter() {
 				}
 			});
 			
@@ -223,15 +221,15 @@ extends TDynaViewCrudBaseBehavior<TAuthorizationModelView, TAuthorization> {
 	}
 
 	protected void configCancelAction() {
-		setCancelAction(new TPresenterAction<TDynaPresenter<TAuthorizationModelView>>() {
+		addAction(new TPresenterAction(TActionType.CANCEL) {
 
 			@Override
-			public boolean runBefore(TDynaPresenter<TAuthorizationModelView> presenter) {
+			public boolean runBefore() {
 				return true;
 			}
 
 			@Override
-			public void runAfter(TDynaPresenter<TAuthorizationModelView> presenter) {
+			public void runAfter() {
 				final ListView<TAuthorizationModelView> listView = decorator.gettListView();
 				listView.getSelectionModel().clearSelection();
 				setDisableModelActionButtons(true);

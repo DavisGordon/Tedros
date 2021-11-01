@@ -14,10 +14,10 @@
       <center>
         <VBox id="buttonsVbox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" spacing="5.0">
           <children>
-            <Button id="t-last-button" fx:id="addOne" mnemonicParsing="false" text="&gt;" />
-            <Button id="t-last-button" fx:id="addAll" mnemonicParsing="false" text="&gt;&gt;" />
-            <Button id="t-last-button" fx:id="remAll" mnemonicParsing="false" text="&lt;&lt;" />
-            <Button id="t-last-button" fx:id="remOne" mnemonicParsing="false" text="&lt;" />
+            <Button id="t-last-button" fx:id="tAddButton" mnemonicParsing="false" text="&gt;" />
+            <Button id="t-last-button" fx:id="tAddAllButton" mnemonicParsing="false" text="&gt;&gt;" />
+            <Button id="t-last-button" fx:id="tRemoveAllButton" mnemonicParsing="false" text="&lt;&lt;" />
+            <Button id="t-last-button" fx:id="tRemoveButton" mnemonicParsing="false" text="&lt;" />
           </children>
                <padding>
                   <Insets left="15.0" right="15.0" />
@@ -27,12 +27,12 @@
       <left>
         <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0">
           <children>
-            <Label id="t-form-control-label" fx:id="sourceLabel" text="Label" VBox.vgrow="ALWAYS">
+            <Label id="t-form-control-label" fx:id="tSourceLabel" text="Label" VBox.vgrow="ALWAYS">
               <VBox.margin>
                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" fx:id="x1" />
               </VBox.margin>
             </Label>
-            <ListView fx:id="sourceListView" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefWidth="-1.0" VBox.vgrow="SOMETIMES">
+            <ListView fx:id="tSourceListView" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefWidth="-1.0" VBox.vgrow="SOMETIMES">
               <VBox.margin>
                 <Insets />
               </VBox.margin>
@@ -43,8 +43,8 @@
       <right>
         <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0">
           <children>
-            <Label id="t-form-control-label" fx:id="selectedLabel" text="Label" VBox.margin="$x1" VBox.vgrow="ALWAYS" />
-            <ListView fx:id="selectedListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="-1.0" VBox.vgrow="ALWAYS" />
+            <Label id="t-form-control-label" fx:id="tSelectedLabel" text="Label" VBox.margin="$x1" VBox.vgrow="ALWAYS" />
+            <ListView fx:id="tSelectedListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="-1.0" VBox.vgrow="ALWAYS" />
           </children>
         </VBox>
       </right>

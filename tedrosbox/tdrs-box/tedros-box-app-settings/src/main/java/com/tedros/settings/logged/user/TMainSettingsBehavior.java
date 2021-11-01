@@ -1,11 +1,10 @@
 package com.tedros.settings.logged.user;
 
 import com.tedros.core.ITModule;
-import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.modal.TConfirmMessageBox;
-import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
+import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.entity.behavior.TSaveViewBehavior;
 
 import javafx.beans.value.ChangeListener;
@@ -14,19 +13,19 @@ import javafx.scene.control.ScrollPane;
 
 public class TMainSettingsBehavior extends TSaveViewBehavior<TMainSettingsModelView, MainSettings> {
 
-	private TInternationalizationEngine iEngine;
+	//private TInternationalizationEngine iEngine;
 	
 	@Override
 	public void load() {
 		
 		super.load();
 		
-		iEngine = TInternationalizationEngine.getInstance(null);
+		//iEngine = TInternationalizationEngine.getInstance(null);
 		
-		super.setSaveAction(new TPresenterAction<TDynaPresenter<TMainSettingsModelView>>() {
+		addAction(new TPresenterAction(TActionType.SAVE) {
 
 			@Override
-			public boolean runBefore(TDynaPresenter<TMainSettingsModelView> presenter) {
+			public boolean runBefore() {
 				
 				Node view = TedrosContext.getView();
 		    	ITModule m = null;
@@ -59,7 +58,7 @@ public class TMainSettingsBehavior extends TSaveViewBehavior<TMainSettingsModelV
 			}
 
 			@Override
-			public void runAfter(TDynaPresenter<TMainSettingsModelView> presenter) {
+			public void runAfter() {
 				
 			}
 			

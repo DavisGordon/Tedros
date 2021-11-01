@@ -11,11 +11,11 @@ import com.tedros.ejb.base.model.ITReportModel;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
-import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.exception.TException;
 import com.tedros.fxapi.exception.TValidatorException;
 import com.tedros.fxapi.modal.TMessageBox;
+import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewReportBaseDecorator;
 import com.tedros.fxapi.presenter.model.TModelView;
@@ -45,15 +45,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	private ToggleGroup radioGroup;
 	private BooleanProperty modeBtnDisableProperty;
 	private BooleanProperty modeBtnVisibleProperty;
-
-	private TPresenterAction<TDynaPresenter<M>> cleanAction;
-	private TPresenterAction<TDynaPresenter<M>> searchAction;
-	private TPresenterAction<TDynaPresenter<M>> excelAction;
-	private TPresenterAction<TDynaPresenter<M>> wordAction;
-	private TPresenterAction<TDynaPresenter<M>> pdfAction;
-	private TPresenterAction<TDynaPresenter<M>> changeModeAction;
-	private TPresenterAction<TDynaPresenter<M>> selectedItemAction;
-	private TPresenterAction<TDynaPresenter<M>> cancelAction;
 	
 	private Class<E> modelClass;
 
@@ -83,20 +74,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			final TBehavior tBehavior = presenter.getPresenterAnnotation().behavior();
 			
 			// set the custom behavior actions
-			if(tBehavior.searchAction()!=TPresenterAction.class)
-				searchAction = tBehavior.searchAction().newInstance();
-			if(tBehavior.cleanAction()!=TPresenterAction.class)
-				cleanAction = tBehavior.cleanAction().newInstance();
-			if(tBehavior.excelAction()!=TPresenterAction.class)
-				excelAction = tBehavior.excelAction().newInstance();
-			if(tBehavior.pdfAction()!=TPresenterAction.class)
-				pdfAction = tBehavior.pdfAction().newInstance();
-			if(tBehavior.selectedItemAction()!=TPresenterAction.class)
-				selectedItemAction = tBehavior.selectedItemAction().newInstance();
-			if(tBehavior.cancelAction()!=TPresenterAction.class)
-				cancelAction = tBehavior.cancelAction().newInstance();
-			if(tBehavior.changeModeAction()!=TPresenterAction.class)
-				changeModeAction = tBehavior.changeModeAction().newInstance();
+			loadAction(presenter, tBehavior.action());
 			
 			// set the form settings
 			//setFormName((tForm!=null) ? tForm.name() : "@TForm(name='SET A NAME')");
@@ -285,9 +263,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * Perform this action when a model is selected.
 	 * */
 	public void selectedItemAction(M new_val) {
-		final TDynaPresenter<M> presenter = getPresenter();
 		setModelView(new_val);
-		if(selectedItemAction==null || (selectedItemAction!=null && selectedItemAction.runBefore(presenter))){
+		if(actionHelper.runBefore(TActionType.SELECTED_ITEM)){
 			if(new_val==null)
 				return;
 			
@@ -295,16 +272,14 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				showForm(getViewMode());
 			
 		}
-		if(selectedItemAction!=null)
-			selectedItemAction.runAfter(presenter);
+		actionHelper.runAfter(TActionType.SELECTED_ITEM);
 	}
 	
 	/**
 	 * Perform this action when search button onAction is triggered.
 	 * */
 	public void searchAction() {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(searchAction==null || (searchAction!=null && searchAction.runBefore(presenter))){
+		if(actionHelper.runBefore(TActionType.SEARCH)){
 			
 			final ObservableList<String> mensagens = FXCollections.observableArrayList();
 			mensagens.addListener(new ListChangeListener<String>(){
@@ -421,8 +396,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 							mensagens.add(result.getMessage());
 						}
 					}
-					if(searchAction!=null)
-						searchAction.runAfter(getPresenter());
+					actionHelper.runAfter(TActionType.SEARCH);
 				}
 
 				
@@ -436,8 +410,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * Perform this action when clean button onAction is triggered.
 	 * */
 	public void cleanAction() {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(cleanAction==null || (cleanAction!=null && cleanAction.runBefore(presenter))){
+		if(actionHelper.runBefore(TActionType.CLEAN)){
 			setDisableModelActionButtons(true);
 			try {
 				super.removeAllListenerFromModelView();
@@ -449,8 +422,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				e.printStackTrace();
 			}
 		}
-		if(cleanAction!=null)
-			cleanAction.runAfter(presenter);
+		actionHelper.runAfter(TActionType.CLEAN);
 	}
 	
 
@@ -470,8 +442,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * Perform this action when cancel button onAction is triggered.
 	 * */
 	public void cancelAction() {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(cancelAction==null || (cancelAction!=null && cancelAction.runBefore(presenter))){
+		if(actionHelper.runBefore(TActionType.CANCEL)){
 			try{
 				if(runningProcess!=null && runningProcess.isRunning())
 					runningProcess.cancel();
@@ -480,8 +451,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				e.printStackTrace();
 			}
 		}
-		if(cancelAction!=null)
-			cancelAction.runAfter(presenter);
+		actionHelper.runAfter(TActionType.CANCEL);
 	}
 	
 	
@@ -489,31 +459,25 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * Perform this action when excel button onAction is triggered.
 	 * */
 	public void excelAction() {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(excelAction==null || (excelAction!=null && excelAction.runBefore(presenter))){
+		if(actionHelper.runBefore(TActionType.EXPORT_EXCEL)){
 			if(getModelView()==null)
 				return;
 			startExportProcess(TReportProcessEnum.EXPORT_XLS, null);
 		}
-		
-		if(excelAction!=null)
-			excelAction.runAfter(presenter);
+		actionHelper.runAfter(TActionType.EXPORT_EXCEL);
 		
 	}
 	/**
 	 * Perform this action when excel button onAction is triggered.
 	 * */
 	public void pdfAction() {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(pdfAction==null || (pdfAction!=null && pdfAction.runBefore(presenter))){
+		if(actionHelper.runBefore(TActionType.EXPORT_PDF)){
 			if(getModelView()==null)
 				return;
 			
 			startExportProcess(TReportProcessEnum.EXPORT_PDF, null);
 		}
-		
-		if(pdfAction!=null)
-			pdfAction.runAfter(presenter);
+		actionHelper.runAfter(TActionType.EXPORT_PDF);
 		
 	}
 	
@@ -529,16 +493,12 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * Perform this action when a mode radio change listener is triggered.
 	 * */
 	public void changeModeAction() {
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(changeModeAction==null || (changeModeAction!=null && changeModeAction.runBefore(presenter))){
+		if(actionHelper.runBefore(TActionType.CHANGE_MODE)){
 			if(getModelView()!=null){
 				showForm(null);
 			}
 		}
-		
-		if(changeModeAction!=null)
-			changeModeAction.runAfter(presenter);
-		
+		actionHelper.runAfter(TActionType.CHANGE_MODE);
 	}
 	
 	/**
@@ -617,119 +577,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 */
 	public void setModeBtnVisibleProperty(BooleanProperty modeBtnVisibleProperty) {
 		this.modeBtnVisibleProperty = modeBtnVisibleProperty;
-	}
-
-	/**
-	 * @return the cleanAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getCleanAction() {
-		return cleanAction;
-	}
-
-	/**
-	 * @param cleanAction the cleanAction to set
-	 */
-	public void setCleanAction(TPresenterAction<TDynaPresenter<M>> cleanAction) {
-		this.cleanAction = cleanAction;
-	}
-
-	/**
-	 * @return the searchAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getSearchAction() {
-		return searchAction;
-	}
-
-	/**
-	 * @param searchAction the searchAction to set
-	 */
-	public void setSearchAction(TPresenterAction<TDynaPresenter<M>> searchAction) {
-		this.searchAction = searchAction;
-	}
-
-	/**
-	 * @return the excelAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getExcelAction() {
-		return excelAction;
-	}
-
-	/**
-	 * @param excelAction the excelAction to set
-	 */
-	public void setExcelAction(TPresenterAction<TDynaPresenter<M>> excelAction) {
-		this.excelAction = excelAction;
-	}
-
-	/**
-	 * @return the wordAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getWordAction() {
-		return wordAction;
-	}
-
-	/**
-	 * @param wordAction the wordAction to set
-	 */
-	public void setWordAction(TPresenterAction<TDynaPresenter<M>> wordAction) {
-		this.wordAction = wordAction;
-	}
-
-	/**
-	 * @return the pdfAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getPdfAction() {
-		return pdfAction;
-	}
-
-	/**
-	 * @param pdfAction the pdfAction to set
-	 */
-	public void setPdfAction(TPresenterAction<TDynaPresenter<M>> pdfAction) {
-		this.pdfAction = pdfAction;
-	}
-
-	/**
-	 * @return the changeModeAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getChangeModeAction() {
-		return changeModeAction;
-	}
-
-	/**
-	 * @param changeModeAction the changeModeAction to set
-	 */
-	public void setChangeModeAction(TPresenterAction<TDynaPresenter<M>> changeModeAction) {
-		this.changeModeAction = changeModeAction;
-	}
-
-	/**
-	 * @return the selectedItemAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getSelectedItemAction() {
-		return selectedItemAction;
-	}
-
-	/**
-	 * @param selectedItemAction the selectedItemAction to set
-	 */
-	public void setSelectedItemAction(TPresenterAction<TDynaPresenter<M>> selectedItemAction) {
-		this.selectedItemAction = selectedItemAction;
-	}
-
-
-	/**
-	 * @return the cancelAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getCancelAction() {
-		return cancelAction;
-	}
-
-	/**
-	 * @param cancelAction the cancelAction to set
-	 */
-	public void setCancelAction(TPresenterAction<TDynaPresenter<M>> cancelAction) {
-		this.cancelAction = cancelAction;
 	}
 
 	public void setDisableModelActionButtons(boolean flag) {

@@ -37,6 +37,7 @@ public class TFieldDescriptor {
 	private int order;
 	private Node layout;
 	private Node component;
+	private Node control;
 	
 	/**
 	 * Initialize this object
@@ -255,6 +256,20 @@ public class TFieldDescriptor {
 	 */
 	public void setHasParent(boolean hasParent) {
 		this.hasParent = hasParent;
+	}
+
+	/**
+	 * @return the control
+	 */
+	public Node getControl() {
+		return control;
+	}
+
+	/**
+	 * @param control the control to set
+	 */
+	public void setControl(Node control) {
+		this.control = control;
 	}
 
 	/**

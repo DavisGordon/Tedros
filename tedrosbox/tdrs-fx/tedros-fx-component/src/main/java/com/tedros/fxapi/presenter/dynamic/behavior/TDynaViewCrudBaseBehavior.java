@@ -21,7 +21,6 @@ import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.collections.TFXCollections;
-import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.exception.TException;
 import com.tedros.fxapi.exception.TValidatorException;
@@ -74,16 +73,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	private ToggleGroup radioGroup;
 	private BooleanProperty modeBtnDisableProperty;
 	private BooleanProperty modeBtnVisibleProperty;
-
-	private TPresenterAction<TDynaPresenter<M>> newAction;
-	private TPresenterAction<TDynaPresenter<M>> printAction;
-	private TPresenterAction<TDynaPresenter<M>> importAction;
-	private TPresenterAction<TDynaPresenter<M>> saveAction;
-	private TPresenterAction<TDynaPresenter<M>> deleteAction;
-	private TPresenterAction<TDynaPresenter<M>> changeModeAction;
-	private TPresenterAction<TDynaPresenter<M>> selectedItemAction;
-	private TPresenterAction<TDynaPresenter<M>> editAction;
-	private TPresenterAction<TDynaPresenter<M>> cancelAction;
 	
 	private Class<? extends TModelView> importFileModelViewClass;
 	
@@ -139,26 +128,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			
 			if(this.decorator.isShowBreadcrumBar())
 				configBreadcrumbForm();
-			
+						
 			// set the custom behavior actions
-			if(tBehavior.saveAction()!=TPresenterAction.class)
-				saveAction = tBehavior.saveAction().newInstance();
-			if(tBehavior.newAction()!=TPresenterAction.class)
-				newAction = tBehavior.newAction().newInstance();
-			if(tBehavior.importAction()!=TPresenterAction.class)
-				importAction = tBehavior.importAction().newInstance();
-			if(tBehavior.deleteAction()!=TPresenterAction.class)
-				deleteAction = tBehavior.deleteAction().newInstance();
-			if(tBehavior.selectedItemAction()!=TPresenterAction.class)
-				selectedItemAction = tBehavior.selectedItemAction().newInstance();
-			if(tBehavior.editAction()!=TPresenterAction.class)
-				editAction = tBehavior.editAction().newInstance();
-			if(tBehavior.cancelAction()!=TPresenterAction.class)
-				cancelAction = tBehavior.cancelAction().newInstance();
-			if(tBehavior.printAction()!=TPresenterAction.class)
-				printAction = tBehavior.printAction().newInstance();
-			if(tBehavior.changeModeAction()!=TPresenterAction.class)
-				changeModeAction = tBehavior.changeModeAction().newInstance();
+			loadAction(presenter, tBehavior.action());
 			
 			ChangeListener<TModelView> mvcl = (a0, old_, new_) -> {
 				processModelView(new_);
@@ -524,7 +496,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		setActionState(new TActionState<>(TActionType.SELECTED_ITEM, TProcessResult.RUNNING));
 		final TDynaPresenter<M> presenter = getPresenter();
 		presenter.setModelView(new_val);
-		if(selectedItemAction==null || (selectedItemAction!=null && selectedItemAction.runBefore(presenter))){
+		if(this.actionHelper.runBefore(TActionType.SELECTED_ITEM)){
 			if(new_val==null)
 				return;
 			super.formProperty().addListener(new ChangeListener<ITModelForm>() {
@@ -555,8 +527,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			setModelView(new_val);
 			
 		}
-		if(selectedItemAction!=null)
-			selectedItemAction.runAfter(presenter);
+		this.actionHelper.runAfter(TActionType.SELECTED_ITEM);
 		setActionState(new TActionState<>(TActionType.SELECTED_ITEM, TProcessResult.FINISHED, new_val));
 	}
 	
@@ -565,9 +536,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * */
 	public void saveAction() {
 		setActionState(new TActionState<>(TActionType.SAVE, TProcessResult.RUNNING));
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(saveAction==null || (saveAction!=null && saveAction.runBefore(presenter))){
-			
+		if(this.actionHelper.runBefore(TActionType.SAVE)){
 			try{
 				boolean flag = true;
 				if(getEntityProcessClass()!=null || (StringUtils.isNotBlank(this.serviceName) && this.entityClass!=null)){
@@ -628,8 +597,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 					if(arg2.equals(State.SUCCEEDED)){
 						List<TResult<E>> resultados = (List<TResult<E>>) process.getValue();
 						if(resultados.isEmpty()) {
-							if(saveAction!=null)
-								saveAction.runAfter(getPresenter());
+							actionHelper.runAfter(TActionType.SAVE);
 							setActionState(new TActionState(TActionType.SAVE, arg2, TProcessResult.NO_RESULT));
 							return;
 						}
@@ -648,8 +616,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 											public void changed(ObservableValue<? extends Boolean> arg0, Boolean b, Boolean c) {
 												if(!c) {
 													getView().tModalVisibleProperty().removeListener(this);
-													if(saveAction!=null)
-														saveAction.runAfter(getPresenter());
+													actionHelper.runAfter(TActionType.SAVE);
 													newAction();
 												}
 											}
@@ -663,8 +630,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 									
 								}
 							}
-							if(saveAction!=null && !runNewAction)
-								saveAction.runAfter(getPresenter());
+							if(!runNewAction)
+								actionHelper.runAfter(TActionType.SAVE);
 						}else{
 							System.out.println(result.getMessage());
 							String msg = result.getResult().equals(EnumResult.OUTDATED) 
@@ -691,10 +658,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	@SuppressWarnings("unchecked")
 	public void importAction() {
 		setActionState(new TActionState<>(TActionType.IMPORT, TProcessResult.RUNNING));
-		final TDynaPresenter<M> presenter = getPresenter();
 		try{
-			if(importAction==null || (importAction!=null && importAction.runBefore(presenter))){
-				
+			if(this.actionHelper.runBefore(TActionType.IMPORT)){
 					StackPane pane = new StackPane();
 					if(getModels()==null)
 						setModelViewList(TFXCollections.iTObservableList());
@@ -709,8 +674,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 					.getPresenter().getView().tShowModal(pane, false);
 				
 			}
-			if(importAction!=null)
-				importAction.runAfter(presenter);
+			this.actionHelper.runAfter(TActionType.IMPORT);
 			setActionState(new TActionState<>(TActionType.IMPORT, TProcessResult.FINISHED));
 		}catch(Exception e){
 			e.printStackTrace();
@@ -723,11 +687,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * */
 	public void newAction() {
 		setActionState(new TActionState<>(TActionType.NEW, TProcessResult.RUNNING));
-		final TDynaPresenter<M> presenter = getPresenter();
 		try{
 			M model = null;
-			if(newAction==null || (newAction!=null && newAction.runBefore(presenter))){
-				
+			if(this.actionHelper.runBefore(TActionType.NEW)){
 					final Class<E> entityClass = getEntityClass();
 					model = (M) getModelViewClass().getConstructor(entityClass).newInstance(entityClass.newInstance());
 					
@@ -760,8 +722,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 						setModelView(model);
 					}
 			}
-			if(newAction!=null)
-				newAction.runAfter(presenter);
+			this.actionHelper.runAfter(TActionType.NEW);
 			setActionState(new TActionState<>(TActionType.NEW, TProcessResult.FINISHED));
 		}catch(Exception e){
 			e.printStackTrace();
@@ -781,13 +742,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * */
 	public void printAction() {
 		setActionState(new TActionState<>(TActionType.PRINT, TProcessResult.RUNNING));
-		final TDynaPresenter<M> presenter = getPresenter();
 		try{
-			if(printAction==null || (printAction!=null && printAction.runBefore(presenter))){
+			if(this.actionHelper.runBefore(TActionType.PRINT))
 				TPrintUtil.print((Node) super.getForm());
-			}
-			if(printAction!=null)
-				printAction.runAfter(presenter);
+			this.actionHelper.runAfter(TActionType.PRINT);
 			setActionState(new TActionState<>(TActionType.PRINT, TProcessResult.FINISHED));
 		}catch(Exception e){
 			e.printStackTrace();
@@ -800,9 +758,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * */
 	public void editAction() {
 		setActionState(new TActionState<>(TActionType.EDIT, TProcessResult.RUNNING));
-		final TDynaPresenter<M> presenter = getPresenter();
 		try{
-			if(editAction==null || (editAction!=null && editAction.runBefore(presenter))){
+			if(this.actionHelper.runBefore(TActionType.EDIT)){
 				editEntity(getModelView());
 				super.getForm().tLoadedProperty().addListener(new ChangeListener<Boolean>() {
 
@@ -816,8 +773,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 					
 				});
 			}
-			if(editAction!=null)
-				editAction.runAfter(presenter);
+			this.actionHelper.runAfter(TActionType.EDIT);
 			setActionState(new TActionState<>(TActionType.EDIT, TProcessResult.FINISHED));
 		}catch(Exception e){
 			e.printStackTrace();
@@ -875,8 +831,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * */
 	public void cancelAction() {
 		setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.RUNNING));
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(cancelAction==null || (cancelAction!=null && cancelAction.runBefore(presenter))){
+		if(this.actionHelper.runBefore(TActionType.CANCEL)){
 			try{
 				final M model = getModelView();
 				if(model.isChanged()) {
@@ -893,8 +848,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 									getView().tHideModal();	
 									remove();
 									
-									if(cancelAction!=null)
-										cancelAction.runAfter(presenter);
+									actionHelper.runAfter(TActionType.CANCEL);
 									setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.SUCCESS));
 								}else{
 									try{
@@ -912,27 +866,21 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 															System.out.println(result.getMessage());
 															addMessage(result.getMessage());
 															setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.ERROR, result.getMessage()));
-															
 														}else{
 															E entity = (E) result.getValue();
 															if(entity!=null) {
 																model.reload(entity);
 																setModelView(null);
-																final TDynaPresenter<M> presenter = getPresenter();
-																if(cancelAction!=null)
-																	cancelAction.runAfter(presenter);
+																actionHelper.runAfter(TActionType.CANCEL);
 																setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.SUCCESS));
 															}else {
 																addMessage(iEngine.getString("#{tedros.fxapi.message.error}"));
 																setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.NO_RESULT));
-																
 															}
 														}
-														
 													}else {
 														setActionState(new TActionState<>(TActionType.CANCEL, arg2));
 													}
-													
 											}
 										});
 										getView().tHideModal();	
@@ -942,14 +890,12 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 										getView().tHideModal();	
 										getView().tShowModal(new TMessageBox(e), true);
 										setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.ERROR, e.getMessage()));
-										
 									}
 								}
 							}else {
 								getView().tHideModal();	
 								setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.FINISHED));
 							}
-							
 						}
 					});
 					
@@ -963,8 +909,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 						getView().tHideModal();	
 					}
 					
-					if(cancelAction!=null)
-						cancelAction.runAfter(presenter);
+					this.actionHelper.runAfter(TActionType.CANCEL);
 					setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.SUCCESS));
 				}
 				
@@ -975,17 +920,14 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.ERROR, e.getMessage()));
 			}
 		}
-		
 	}
-	
 	
 	/**
 	 * Perform this action when delete button onAction is triggered.
 	 * */
 	public void deleteAction() {
 		setActionState(new TActionState(TActionType.DELETE,  TProcessResult.RUNNING));
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(deleteAction==null || (deleteAction!=null && deleteAction.runBefore(presenter))){
+		if(this.actionHelper.runBefore(TActionType.DELETE)){
 			if(getModelView()==null)
 				return;
 			
@@ -1057,9 +999,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 										remove();
 										removeAllListenerFromModelView();
 										setModelView(null);
-										final TDynaPresenter<M> presenter = getPresenter();
-										if(deleteAction!=null)
-											deleteAction.runAfter(presenter);
+										actionHelper.runAfter(TActionType.DELETE);
 										setActionState(new TActionState(TActionType.DELETE, arg2, TProcessResult.SUCCESS));
 									}
 								}	
@@ -1114,8 +1054,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * */
 	public void changeModeAction() {
 		setActionState(new TActionState(TActionType.CHANGE_MODE, TProcessResult.RUNNING));
-		final TDynaPresenter<M> presenter = getPresenter();
-		if(changeModeAction==null || (changeModeAction!=null && changeModeAction.runBefore(presenter))){
+		if(this.actionHelper.runBefore(TActionType.CHANGE_MODE)){
 			if(getModelView()!=null){
 				if(decorator.isShowBreadcrumBar() && decorator.gettBreadcrumbForm()!=null)
 					decorator.gettBreadcrumbForm().tEntryListProperty().clear();
@@ -1133,11 +1072,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				});
 			}
 		}
-		
-		if(changeModeAction!=null)
-			changeModeAction.runAfter(presenter);
+		this.actionHelper.runAfter(TActionType.CHANGE_MODE);
 		setActionState(new TActionState(TActionType.CHANGE_MODE, TProcessResult.FINISHED));
-		
 	}
 	
 	/**
@@ -1171,73 +1107,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	public boolean isEditModeSelected(){
 		return radioGroup.getSelectedToggle()!=null && radioGroup.getSelectedToggle().equals(this.decorator.gettEditModeRadio());
 	}
-
-	
-	public TPresenterAction<TDynaPresenter<M>> getNewAction() {
-		return newAction;
-	}
-
-	
-	public void setNewAction(TPresenterAction<TDynaPresenter<M>> newAction) {
-		this.newAction = newAction;
-	}
-
-	
-	public TPresenterAction<TDynaPresenter<M>> getSaveAction() {
-		return saveAction;
-	}
-
-	
-	public void setSaveAction(TPresenterAction<TDynaPresenter<M>> saveAction) {
-		this.saveAction = saveAction;
-	}
-
-	
-	public TPresenterAction<TDynaPresenter<M>> getDeleteAction() {
-		return deleteAction;
-	}
-
-	
-	public void setDeleteAction(TPresenterAction<TDynaPresenter<M>> deleteAction) {
-		this.deleteAction = deleteAction;
-	}
-
-	
-	public TPresenterAction<TDynaPresenter<M>> getChangeModeAction() {
-		return changeModeAction;
-	}
-
-	
-	public void setChangeModeAction(TPresenterAction<TDynaPresenter<M>> changeModeAction) {
-		this.changeModeAction = changeModeAction;
-	}
-
-	
-	public TPresenterAction<TDynaPresenter<M>> getSelectedItemAction() {
-		return selectedItemAction;
-	}
-
-	
-	public void setSelectedItemAction(TPresenterAction<TDynaPresenter<M>> selectedItemAction) {
-		this.selectedItemAction = selectedItemAction;
-	}
-
-	public TPresenterAction<TDynaPresenter<M>> getEditAction() {
-		return editAction;
-	}
-
-	public void setEditAction(TPresenterAction<TDynaPresenter<M>> editAction) {
-		this.editAction = editAction;
-	}
-
-	public TPresenterAction<TDynaPresenter<M>> getCancelAction() {
-		return cancelAction;
-	}
-
-	public void setCancelAction(TPresenterAction<TDynaPresenter<M>> cancelAction) {
-		this.cancelAction = cancelAction;
-	}
-
 	
 	public ToggleGroup getRadioGroup() {
 		return radioGroup;
@@ -1251,7 +1120,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	public BooleanProperty getModeBtnDisableProperty() {
 		return modeBtnDisableProperty;
 	}
-
 	
 	public BooleanProperty getModeBtnVisibleProperty() {
 		return modeBtnVisibleProperty;
@@ -1310,18 +1178,5 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		this.skipConfigBreadcrumb = skipConfigBreadcrumb;
 	}
 
-	/**
-	 * @return the printAction
-	 */
-	public TPresenterAction<TDynaPresenter<M>> getPrintAction() {
-		return printAction;
-	}
-
-	/**
-	 * @param printAction the printAction to set
-	 */
-	public void setPrintAction(TPresenterAction<TDynaPresenter<M>> printAction) {
-		this.printAction = printAction;
-	}
 	
 }
