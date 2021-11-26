@@ -67,10 +67,10 @@ implements ITPageController, ITSecurity{
 			for(Content s : e.getContents()) {
 				if(s.getPage()==null)
 					s.setPage(e);
-				if(s.getItems()!=null)
+				/*if(s.getItems()!=null)
 					for(Item i : s.getItems())
 						if(i.getContent()==null)
-							i.setContent(s);
+							i.setContent(s);*/
 			}
 		return super.save(token, e);
 	}

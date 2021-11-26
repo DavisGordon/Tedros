@@ -1,5 +1,6 @@
 package com.covidsemfome.start;
 
+import com.covidsemfome.module.WebModule;
 import com.covidsemfome.module.acao.AcaoModule;
 import com.covidsemfome.module.acao.MailingModule;
 import com.covidsemfome.module.acao.icon.AcaoIconImageView;
@@ -24,6 +25,8 @@ import com.covidsemfome.module.report.icon.RelatoriosMenuIconImageView;
 import com.covidsemfome.module.tipoAjuda.TipoAjudaModule;
 import com.covidsemfome.module.tipoAjuda.icon.TipoAjudaIconImageView;
 import com.covidsemfome.module.tipoAjuda.icon.TipoAjudaMenuIconImageView;
+import com.covidsemfome.module.web.icon.WebTemplateIconImageView;
+import com.covidsemfome.module.web.icon.WebTemplateMenuIconImageView;
 import com.tedros.core.ITApplication;
 import com.tedros.core.annotation.TApplication;
 import com.tedros.core.annotation.TModule;
@@ -61,11 +64,9 @@ module = {
 					icon=CozinhaIconImageView.class, menuIcon=CozinhaMenuIconImageView.class,
 					description="Edite aqui os locais (cozinhas) de produção, necessario "
 							+ "para editar estoque e inserir entradas e saidas de produtos."),
-			/*@TModule(type=ProdutoModuldgdde.class, name="Produto", menu="Administrativo", 
-					icon=ProdutoIconImageView.class, menuIcon=ProdutoMenuIconImageView.class,
-					description="Insira/Importe aqui os produtos utilizados na produção e informe "
-							+ "as entradas (Compras) e saídas (Produção). "
-							+ "Necessario editar o estoque inicial antes de lançar as entradas e saídas."),*/
+			@TModule(type=WebModule.class, name="Website Template", menu="Administrativo", 
+					icon=WebTemplateIconImageView.class, menuIcon=WebTemplateMenuIconImageView.class,
+					description="Edite aqui os componentes web para criar a pagina das empresas parceiras"),
 			@TModule(type=EstoqueModule.class, name="Estoque", menu="Administrativo", 
 					icon=EstoqueIconImageView.class, menuIcon=EstoqueMenuIconImageView.class,
 					description="Gerencie aqui os produtos as entradas e saídas do estoque, edite o "

@@ -16,11 +16,11 @@ import java.util.UUID;
 
 import com.tedros.core.module.TObjectRepository;
 import com.tedros.ejb.base.entity.ITFileEntity;
+import com.tedros.ejb.base.model.ITFileBaseModel;
 import com.tedros.ejb.base.model.ITFileModel;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.collections.ITObservableList;
-import com.tedros.fxapi.property.TSimpleFileEntityProperty;
-import com.tedros.fxapi.property.TSimpleFileModelProperty;
+import com.tedros.fxapi.property.TSimpleFileProperty;
 import com.tedros.fxapi.util.TReflectionUtil;
 
 import javafx.beans.InvalidationListener;
@@ -175,19 +175,27 @@ class TListenerHelper<M extends ITModel> {
 	@SuppressWarnings({"rawtypes"})
 	protected void buildListeners(final Class propertyFieldType, final Class entidadeFieldType, final Property property, final Method entidadeSetMethod, final Object entityFieldValue, final String fieldName) {
 		
-		//TSimpleFileEntityProperty
-		if(propertyFieldType == TSimpleFileEntityProperty.class){
-			if(tModelView.isClassAFileEntity(entidadeFieldType)){
+		//TSimpleFileProperty
+		if(propertyFieldType == TSimpleFileProperty.class){
+			if(tModelView.isClassAFileBaseModel(entidadeFieldType)){
 				
 				InvalidationListener invalidationListener = new InvalidationListener() {
 					@Override
 					public void invalidated(Observable arg0) {
 						try {
-							final ITFileEntity fileEntity = (ITFileEntity) ((TSimpleFileEntityProperty)property).getValue();
-							if(fileEntity.getByteEntity().getBytes()==null && fileEntity.getFileName()==null)
-								entidadeSetMethod.invoke(tModelView.model, (ITFileEntity) null);
-							else
-								entidadeSetMethod.invoke(tModelView.model, fileEntity);
+							final ITFileBaseModel fbm = (ITFileBaseModel) ((TSimpleFileProperty)property).getValue();
+							
+							if(fbm.getByte().getBytes()==null && fbm.getFileName()==null) {
+								if(tModelView.isClassAFileEntity(entidadeFieldType))
+									entidadeSetMethod.invoke(tModelView.model, (ITFileEntity) null);
+								else
+									entidadeSetMethod.invoke(tModelView.model, (ITFileModel) null);
+							}else {
+								if(tModelView.isClassAFileEntity(entidadeFieldType))
+									entidadeSetMethod.invoke(tModelView.model, (ITFileEntity) fbm);
+								else
+									entidadeSetMethod.invoke(tModelView.model, (ITFileModel) fbm);
+							}
 							tModelView.buildLastHashCode();
 						} catch (IllegalAccessException	| IllegalArgumentException	| InvocationTargetException e) {
 							e.printStackTrace();
@@ -197,27 +205,6 @@ class TListenerHelper<M extends ITModel> {
 				};
 				
 				setInvalidationListener(property, fieldName, invalidationListener, entityFieldValue);	
-				
-				return;
-			}
-		}
-		
-		//TSimpleFileModelProperty
-		if(propertyFieldType == TSimpleFileModelProperty.class){
-			if(tModelView.isClassAFileModel(entidadeFieldType)){
-				InvalidationListener invalidationListener = new InvalidationListener() {
-					@Override
-					public void invalidated(Observable arg0) {
-						try {
-							entidadeSetMethod.invoke(tModelView.model, (ITFileModel) ((TSimpleFileModelProperty)property).getValue());
-							tModelView.buildLastHashCode();
-						} catch (IllegalAccessException	| IllegalArgumentException	| InvocationTargetException e) {
-							e.printStackTrace();
-						}
-					}
-				};
-				
-				setInvalidationListener(property, fieldName, invalidationListener, entityFieldValue);
 				
 				return;
 			}

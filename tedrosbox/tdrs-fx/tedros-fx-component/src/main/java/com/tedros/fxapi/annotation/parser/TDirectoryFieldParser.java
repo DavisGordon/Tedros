@@ -1,7 +1,7 @@
 package com.tedros.fxapi.annotation.parser;
 
 import com.tedros.fxapi.annotation.control.TDirectoryField;
-import com.tedros.fxapi.control.action.TActionEvent;
+import com.tedros.fxapi.control.action.TEventHandler;
 
 public class TDirectoryFieldParser extends TAnnotationParser<TDirectoryField, com.tedros.fxapi.control.TDirectoryField> {
 		
@@ -18,9 +18,9 @@ public class TDirectoryFieldParser extends TAnnotationParser<TDirectoryField, co
 		ticp.parse(tAnnotation.textInputControl(), control.gettFileNameField());
 		
 		try {
-			if(tAnnotation.cleanAction() != TActionEvent.class)
+			if(tAnnotation.cleanAction() != TEventHandler.class)
 				control.settCleanAction(tAnnotation.cleanAction().newInstance());
-			if(tAnnotation.selectAction() != TActionEvent.class)
+			if(tAnnotation.selectAction() != TEventHandler.class)
 				control.settSelectAction(tAnnotation.selectAction().newInstance());
 		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();

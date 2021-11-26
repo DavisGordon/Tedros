@@ -3,7 +3,7 @@ package com.tedros.fxapi.annotation.parser;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.tedros.fxapi.annotation.control.TFileField;
-import com.tedros.fxapi.control.action.TActionEvent;
+import com.tedros.fxapi.control.action.TEventHandler;
 import com.tedros.fxapi.domain.TFileExtension;
 
 public class TFileFieldParser extends TAnnotationParser<TFileField, com.tedros.fxapi.control.TFileField> {
@@ -29,15 +29,15 @@ public class TFileFieldParser extends TAnnotationParser<TFileField, com.tedros.f
 		control.setExtensions(extensions);
 		
 		try {
-			if(tAnnotation.openAction() != TActionEvent.class)
+			if(tAnnotation.openAction() != TEventHandler.class)
 				control.setOpenAction(tAnnotation.openAction().newInstance());
-			if(tAnnotation.cleanAction() != TActionEvent.class)
+			if(tAnnotation.cleanAction() != TEventHandler.class)
 				control.setCleanAction(tAnnotation.cleanAction().newInstance());
-			if(tAnnotation.loadAction() != TActionEvent.class)
+			if(tAnnotation.loadAction() != TEventHandler.class)
 				control.setLoadAction(tAnnotation.loadAction().newInstance());
-			if(tAnnotation.selectAction() != TActionEvent.class)
+			if(tAnnotation.selectAction() != TEventHandler.class)
 				control.setSelectAction(tAnnotation.selectAction().newInstance());
-			if(tAnnotation.imageClickAction() != TActionEvent.class)
+			if(tAnnotation.imageClickAction() != TEventHandler.class)
 				control.setImageClickAction(tAnnotation.imageClickAction().newInstance());
 		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();

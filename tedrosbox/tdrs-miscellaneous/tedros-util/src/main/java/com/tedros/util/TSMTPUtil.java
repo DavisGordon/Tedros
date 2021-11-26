@@ -14,41 +14,35 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public final class TEmailUtil {
+public final class TSMTPUtil {
 	
-	private static TEmailUtil instance;
+	private static TSMTPUtil instance;
 	
 	private final Properties props;
 	
 	private final Session session;
-	
+	/*
 	public static void main(String[] args) {
 		try {
-			TEmailUtil.getInstance("smtp.gmail.com", "587", "javax.net.ssl.SSLSocketFactory", 
+			TSMTPUtil.getInstance("smtp.gmail.com", "587", "javax.net.ssl.SSLSocketFactory", 
 					"true", "587", "@gmail.com", "")
 			.sent(true, "@gmail.com", ".@gmail.com", "subject", "content", true);
 		} catch (TSentEmailException e) {
 			e.printStackTrace();
 		}
 	}
+	*/
 	
-	public static boolean validate(String email) {
-		String regex = "^(.+)@(.+)$";
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(email);
-		return matcher.matches();
-	}
-	
-	public static TEmailUtil getInstance(String smtpHost, String smtpSocketPort, String smtpSocketClass, 
+	public static TSMTPUtil getInstance(String smtpHost, String smtpSocketPort, String smtpSocketClass, 
 			String smtpAuth, String smtpPort, String userName, String password){
 		
 		if(instance==null)
-			instance = new TEmailUtil(smtpHost, smtpSocketPort, smtpSocketClass, smtpAuth, smtpPort, userName, password);
+			instance = new TSMTPUtil(smtpHost, smtpSocketPort, smtpSocketClass, smtpAuth, smtpPort, userName, password);
 		
 		return instance;
 	}
 	
-	private TEmailUtil(String smtpHost, String smtpSocketPort, String smtpSocketClass, 
+	private TSMTPUtil(String smtpHost, String smtpSocketPort, String smtpSocketClass, 
 			String smtpAuth, String smtpPort, final String userName, final String password){
 		props = new Properties();
 	    /** Parâmetros de conexão com servidor Gmail */

@@ -8,19 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
-import javafx.scene.effect.Effect;
-
 import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.core.model.ITModelView;
 import com.tedros.fxapi.annotation.TDebugConfig;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.parser.ITEffectParse;
-import com.tedros.fxapi.annotation.parser.ITListFileFieldBuilder;
 import com.tedros.fxapi.annotation.parser.TAnnotationParser;
 import com.tedros.fxapi.builder.ITBuilder;
 import com.tedros.fxapi.builder.ITChartBuilder;
@@ -33,10 +26,14 @@ import com.tedros.fxapi.builder.ITReaderHtmlBuilder;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.descriptor.TFieldDescriptor;
 import com.tedros.fxapi.domain.TViewMode;
-import com.tedros.fxapi.property.TSimpleFileEntityProperty;
-import com.tedros.fxapi.property.TSimpleFileModelProperty;
+import com.tedros.fxapi.property.TSimpleFileProperty;
 import com.tedros.fxapi.reader.THtmlReader;
 import com.tedros.fxapi.util.TReflectionUtil;
+
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.Node;
+import javafx.scene.effect.Effect;
 
 public final class TControlLayoutBuilder {
 	
@@ -276,9 +273,6 @@ public final class TControlLayoutBuilder {
 		if(descriptor.getFieldDescriptor().isLoaded())
 			return;
 		
-		final String fieldName = descriptor.getFieldDescriptor().getFieldName();
-		final ITModelView modelView = descriptor.getModelView();
-		final Method modelViewGetMethod = getMethod(fieldName, modelView);
 		final List<Annotation> fieldAnnotations = descriptor.getFieldAnnotationList();
 		
 		ITFieldBuilder layoutBuilder = null;
@@ -398,20 +392,12 @@ public final class TControlLayoutBuilder {
 			final Node chart = (Node) modelViewGetMethod.invoke(modelView);
 			node =  ((ITChartBuilder) controlBuilder).build(controlAnnotation, chart);
 		}else
-		if(controlBuilder instanceof ITListFileFieldBuilder){
-			final ObservableList<TSimpleFileModelProperty<?>> attrProperty = (ObservableList<TSimpleFileModelProperty<?>>) modelViewGetMethod.invoke(modelView);
-			node =  ((ITListFileFieldBuilder) controlBuilder).build(controlAnnotation, attrProperty);
-		}else
 		if(controlBuilder instanceof ITFileBuilder){
 						
 			final Object obj = (Object) modelViewGetMethod.invoke(modelView);
 			
-			if(obj instanceof TSimpleFileEntityProperty){
-				TSimpleFileEntityProperty<?> attrProperty = (TSimpleFileEntityProperty<?>) obj;
-				node =  ((ITFileBuilder) controlBuilder).build(controlAnnotation, attrProperty);
-				
-			}else if(obj instanceof TSimpleFileModelProperty){
-				TSimpleFileModelProperty<?> attrProperty = (TSimpleFileModelProperty<?>) obj;
+			if(obj instanceof TSimpleFileProperty){
+				TSimpleFileProperty<?> attrProperty = (TSimpleFileProperty<?>) obj;
 				node =  ((ITFileBuilder) controlBuilder).build(controlAnnotation, attrProperty);
 			}else{
 				

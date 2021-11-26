@@ -16,6 +16,7 @@ import com.tedros.common.domain.DomainTables;
 import com.tedros.ejb.base.entity.ITByteEntity;
 import com.tedros.ejb.base.entity.ITFileEntity;
 import com.tedros.ejb.base.entity.TEntity;
+import com.tedros.ejb.base.model.ITByteBaseModel;
 
 @Entity
 @Table(name=DomainTables.file, schema=DomainSchema.tedros_common)
@@ -23,6 +24,12 @@ public class TFileEntity extends TEntity implements ITFileEntity {
 
 	private static final long serialVersionUID = 6429566289857357149L;
 
+	@Column(length=60)
+	private String owner;
+	
+	@Column(length=60)
+	private String description;
+	
 	@Column(name="file_name", nullable=false, length=1000)
 	private String fileName;
 	
@@ -30,7 +37,7 @@ public class TFileEntity extends TEntity implements ITFileEntity {
 	private String fileExtension;
 	
 	@Column(name="file_size")
-	private long fileSize;
+	private Long fileSize;
 		
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="BYTE_ID", unique=true, nullable=false)
@@ -58,16 +65,6 @@ public class TFileEntity extends TEntity implements ITFileEntity {
 	}
 
 	@Override
-	public long getFileSize() {
-		return fileSize;
-	}
-
-	@Override
-	public void setFileSize(long size) {
-		this.fileSize = size;
-	}
-
-	@Override
 	public TByteEntity getByteEntity() {
 		if(this.byteEntity==null)
 			this.byteEntity = new TByteEntity();
@@ -87,6 +84,58 @@ public class TFileEntity extends TEntity implements ITFileEntity {
 	@Override
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this, false);
+	}
+
+	/**
+	 * @return the owner
+	 */
+	public String getOwner() {
+		return owner;
+	}
+
+	/**
+	 * @param owner the owner to set
+	 */
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
+	@Override
+	public ITByteBaseModel getByte() {
+		return this.getByteEntity();
+	}
+
+	@Override
+	public <T extends ITByteBaseModel> void setByte(T byteModel) {
+		this.setByteEntity((ITByteEntity) byteModel);
+	}
+
+	/**
+	 * @return the fileSize
+	 */
+	public Long getFileSize() {
+		return fileSize;
+	}
+
+	/**
+	 * @param fileSize the fileSize to set
+	 */
+	public void setFileSize(Long fileSize) {
+		this.fileSize = fileSize;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	

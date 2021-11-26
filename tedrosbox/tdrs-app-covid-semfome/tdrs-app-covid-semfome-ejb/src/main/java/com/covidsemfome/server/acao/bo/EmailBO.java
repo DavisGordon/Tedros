@@ -24,7 +24,7 @@ import com.covidsemfome.server.exception.EmailBusinessException;
 import com.covidsemfome.server.pessoa.bo.PessoaBO;
 import com.covidsemfome.server.producer.Item;
 import com.tedros.util.TDateUtil;
-import com.tedros.util.TEmailUtil;
+import com.tedros.util.TSMTPUtil;
 import com.tedros.util.TSentEmailException;
 import com.tedros.util.TFileUtil;
 
@@ -54,11 +54,11 @@ public class EmailBO {
 	@Named("emailTemplatePath")
 	private Item<String> templPath;
 	
-	private TEmailUtil util;
+	private TSMTPUtil util;
 	
 	@PostConstruct
 	public void init(){
-		util = TEmailUtil.getInstance("smtp.gmail.com", "587", "javax.net.ssl.SSLSocketFactory", 
+		util = TSMTPUtil.getInstance("smtp.gmail.com", "587", "javax.net.ssl.SSLSocketFactory", 
 				"true", "587", emailAccount.getValue(), passAccount.getValue());
 	}
 	

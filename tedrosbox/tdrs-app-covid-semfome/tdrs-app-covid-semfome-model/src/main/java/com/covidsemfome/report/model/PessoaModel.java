@@ -6,6 +6,9 @@ package com.covidsemfome.report.model;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.WordUtils;
+
 import com.covidsemfome.model.Contato;
 import com.covidsemfome.model.Pessoa;
 import com.tedros.ejb.base.entity.TEntity;
@@ -52,7 +55,7 @@ public class PessoaModel extends TEntity {
 	}
 
 	public PessoaModel(Pessoa v) {
-		this.nome = v.getNome();
+		this.nome = WordUtils.capitalize(v.getNome().toLowerCase());
 		String tipo = v.getTipoVoluntario();
 		if(tipo!=null && tipo.equals("1"))
 			this.tipo = "Operacional";
@@ -66,7 +69,7 @@ public class PessoaModel extends TEntity {
 			this.tipo = "Cadastro/Site";
 		else if(tipo!=null && tipo.equals("6"))
 			this.tipo = "Outro";
-		this.email = v.getLoginName();
+		this.email = v.getLoginName() != null ? v.getLoginName().toLowerCase() : null;
 		this.dataCadastro = v.getInsertDate();
 		this.profissao = v.getProfissao();
 		if(v.getSexo()!=null) {
@@ -98,7 +101,7 @@ public class PessoaModel extends TEntity {
 						&& this.email.toLowerCase().trim().equals(c.getDescricao().toLowerCase().trim()))
 					continue;
 				
-				ct += (!ct.isEmpty()) ? "," + c.getDescricao() : c.getDescricao();
+				ct += (!ct.isEmpty()) ? ", " + c.getDescricao() : c.getDescricao();
 			}
 		
 		this.contatos = ct;

@@ -58,6 +58,7 @@ public class TText extends Text {
 	}
 	
 	public void settTextStyle(TTextStyle style) {
+		super.getStyleClass().clear();
 		super.getStyleClass().add(style.getValue());
 	}
 

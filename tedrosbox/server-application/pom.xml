@@ -132,11 +132,11 @@
 			        <artifactId>editor-web-ejb-ear</artifactId>
 			        <type>ear</type>
 			      </deployable>
-			     <!-- <deployable>
+			     <deployable>
 			      	<groupId>com.tedros</groupId>
   					<artifactId>tdrs-app-covid-semfome-webapp</artifactId>
   					<type>war</type>
-  				  </deployable>-->
+  				  </deployable>
 			      <deployable>
 			      	<groupId>com.tedros</groupId>
   					<artifactId>editor-web-webapp</artifactId>

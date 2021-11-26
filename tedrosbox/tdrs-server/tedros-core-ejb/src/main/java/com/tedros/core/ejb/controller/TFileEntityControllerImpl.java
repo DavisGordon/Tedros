@@ -1,5 +1,7 @@
 package com.tedros.core.ejb.controller;
 
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -26,6 +28,16 @@ public class TFileEntityControllerImpl extends TSecureEjbController<TFileEntity>
 	
 	@EJB
 	private ITSecurityController security;
+	
+	public TResult<List<TFileEntity>> find(TAccessToken token, List<String> owner, List<String> ext, Long maxSize, boolean loaded){
+		try {
+			List<TFileEntity> l = serv.find(owner, ext, maxSize, loaded);
+			return new TResult<>(EnumResult.SUCESS, l);
+		}catch(Exception e){
+			e.printStackTrace();
+			return new TResult<>(EnumResult.ERROR, e.getMessage());
+		}
+	}
 	
 	@Override
 	public TResult<TFileEntity> findByIdWithBytesLoaded(TAccessToken token, TFileEntity entity) {

@@ -20,10 +20,11 @@ extends TDynaViewReportBaseDecorator<M> {
 		buildPdfButton(null);
 		buildExcelButton(null);
 		buildSearchButton(null);
+		super.buildOpenExportFolderButton(null);
 		buildModesRadioButton(null, null);
 		
 		// add the buttons at the header tool bar
-		addItemInTHeaderToolBar(gettSearchButton(), gettCleanButton(), gettPdfButton(), gettExcelButton());
+		addItemInTHeaderToolBar(gettOpenExportFolderButton(), gettSearchButton(), gettCleanButton(), gettPdfButton(), gettExcelButton());
 		
 		
 		// set padding at rigth in left content pane

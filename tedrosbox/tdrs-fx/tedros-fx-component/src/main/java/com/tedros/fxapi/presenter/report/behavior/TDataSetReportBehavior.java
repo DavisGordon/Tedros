@@ -22,6 +22,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewReportBaseBehavior<
 		configSearchButton();
 		configPdfButton();
 		configExcelButton();
+		configOpenExportFolderButton();
 		setDisableModelActionButtons(true);
 		final Class<E> entityClass = getModelClass();
 		

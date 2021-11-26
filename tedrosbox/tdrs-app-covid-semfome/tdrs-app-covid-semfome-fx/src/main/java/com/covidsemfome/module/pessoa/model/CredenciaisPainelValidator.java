@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.fxapi.control.validator.TFieldResult;
 import com.tedros.fxapi.control.validator.TValidator;
-import com.tedros.util.TEmailUtil;
+import com.tedros.util.TValidatorUtil;
 
 import javafx.beans.property.SimpleStringProperty;
 
@@ -25,7 +25,7 @@ public class CredenciaisPainelValidator extends TValidator {
 			return new TFieldResult(getLabel(), "Favor informar o email de login para o password informado!", false, false);
 		}
 		if(StringUtils.isNotBlank(value.getValue())){
-			if(!TEmailUtil.validate(value.getValue()))
+			if(!TValidatorUtil.isEmailAddress(value.getValue()))
 				return new TFieldResult(getLabel(), "Favor informar um email valido!", false, false);
 		}
 		return null;

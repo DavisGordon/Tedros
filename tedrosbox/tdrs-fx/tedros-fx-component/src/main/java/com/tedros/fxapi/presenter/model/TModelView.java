@@ -26,6 +26,7 @@ import com.tedros.core.model.ITModelView;
 import com.tedros.core.module.TObjectRepository;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.entity.ITFileEntity;
+import com.tedros.ejb.base.model.ITFileBaseModel;
 import com.tedros.ejb.base.model.ITFileModel;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
@@ -34,7 +35,7 @@ import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.collections.TFXCollections;
 import com.tedros.fxapi.exception.TErrorType;
 import com.tedros.fxapi.exception.TException;
-import com.tedros.fxapi.property.TSimpleFileModelProperty;
+import com.tedros.fxapi.property.TSimpleFileProperty;
 import com.tedros.fxapi.util.TPropertyUtil;
 import com.tedros.fxapi.util.TReflectionUtil;
 
@@ -493,13 +494,16 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 								for(Object o : (Collection) obj){
 									//if(o instanceof TModelView){
 									if(o instanceof ITModel){
-										if(modelViewClass==null || entityClass==null)
+										if(modelViewClass==null && entityClass==null)
 											throw new Exception("\n\nT_ERROR "
 													+ "\nType: "+TErrorType.COLLECTION_CONFIGURATION
 													+ "\nFIELD: "+getClass().getSimpleName() + "."+propertyFieldName
 													+ "\n\n-Use the @TModelViewCollectionType annotation at field "+getClass().getSimpleName() + "."+propertyFieldName+"\n\n");
 										try{
-											property.add(modelViewClass.getConstructor(entityClass).newInstance(o));
+											if(modelViewClass!=TModelView.class && entityClass!=null)
+												property.add(modelViewClass.getConstructor(entityClass).newInstance(o));
+											else
+												property.add(o);
 										}catch(IllegalArgumentException e){
 											String error = "\n\nT_ERROR\nType: "+TErrorType.BUILD
 													+ "\nModel View class: "+modelViewClass.getName()+".class"
@@ -512,7 +516,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 											
 										}
 									}else if(o instanceof ITFileModel){
-										property.add(new TSimpleFileModelProperty<ITFileModel>((ITFileModel)o));
+										property.add(new TSimpleFileProperty<ITFileModel>((ITFileModel)o));
 									}
 								}
 							}
@@ -541,7 +545,10 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 							}
 							if(obj!=null)
 								for(Object o : (Collection) obj)
-									property.add(modelViewClass.getConstructor(entityClass).newInstance(o));
+									if(modelViewClass!=TModelView.class && entityClass!=null)
+										property.add(modelViewClass.getConstructor(entityClass).newInstance(o));
+									else
+										property.add(o);
 							if(listener==null)
 								tListenerHelper.buildSetListener(propertyFieldType, entityGetMethod, entidadeSetMethod, entityFieldType, property, propertyFieldName);
 							else
@@ -667,6 +674,11 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	@SuppressWarnings("rawtypes")
 	protected boolean isClassAnEntity(Class clazz) {
 		return TReflectionUtil.isImplemented(clazz, ITEntity.class);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	protected boolean isClassAFileBaseModel(Class clazz) {
+		return TReflectionUtil.isImplemented(clazz, ITFileBaseModel.class);
 	}
 
 	@SuppressWarnings("rawtypes")

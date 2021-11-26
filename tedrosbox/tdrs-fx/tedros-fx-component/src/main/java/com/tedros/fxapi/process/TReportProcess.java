@@ -25,7 +25,6 @@ import com.tedros.ejb.base.model.ITReportModel;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.fxapi.exception.TProcessException;
-import com.tedros.util.TFileUtil;
 import com.tedros.util.TedrosFolderEnum;
 
 import net.sf.jasperreports.engine.JRException;
@@ -71,7 +70,7 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 		this.action = TReportProcessEnum.EXPORT_PDF;
 		this.folderPath =  folderPath!=null 
 				? folderPath 
-				: TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.EXPORT_FOLDER.getFolder();
+				: TedrosFolderEnum.EXPORT_FOLDER.getFullPath();
 	}
 	
 	public void exportXLS(M model, String folderPath){
@@ -79,7 +78,7 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 		this.action = TReportProcessEnum.EXPORT_XLS;
 		this.folderPath =  folderPath!=null 
 				? folderPath 
-				: TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.EXPORT_FOLDER.getFolder();
+				: TedrosFolderEnum.EXPORT_FOLDER.getFullPath();
 	}
 	
 	protected TTaskImpl<TResult<M>> createTask() {

@@ -12,7 +12,7 @@ import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TModelView;
-import com.tedros.fxapi.property.TSimpleFileModelProperty;
+import com.tedros.fxapi.property.TSimpleFileProperty;
 import com.tedros.settings.layout.behavior.BackgroundBehavior;
 import com.tedros.settings.layout.decorator.BackgroundDecorator;
 
@@ -22,7 +22,7 @@ behavior=@TBehavior(type=BackgroundBehavior.class))
 public class BackgroundImageModelView extends TModelView<BackgroundImageModel> {
 	
 	@TFileField
-	private TSimpleFileModelProperty<ITFileModel> fileModel;
+	private TSimpleFileProperty<ITFileModel> fileModel;
 	
 	
 	private SimpleListProperty<TFileModel> listFileModel;
@@ -34,7 +34,7 @@ public class BackgroundImageModelView extends TModelView<BackgroundImageModel> {
 
 	@Override
 	public SimpleStringProperty getDisplayProperty() {
-		return fileModel.fileNameProperty();
+		return fileModel.tFileNameProperty();
 	}
 
 	@Override

@@ -37,7 +37,7 @@ import javafx.util.Callback;
  *
  */
 @SuppressWarnings("rawtypes")
-public class TSelectionModal extends TModalRequired {
+public class TSelectionModal extends TRequiredModal {
 	
 	private ITObservableList<TModelView> tSelectedItems;
 	

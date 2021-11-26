@@ -19,8 +19,7 @@ import com.tedros.ejb.base.model.ITFileModel;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.collections.TSimpleObservableList;
-import com.tedros.fxapi.property.TSimpleFileEntityProperty;
-import com.tedros.fxapi.property.TSimpleFileModelProperty;
+import com.tedros.fxapi.property.TSimpleFileProperty;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -60,11 +59,8 @@ class TCompatibleTypesHelper<M extends ITModel> {
 		if(!compatible && propertyFieldType == SimpleObjectProperty.class)
 			compatible = true;
 		
-		else if(!compatible && propertyFieldType == TSimpleFileEntityProperty.class)
-			compatible = tModelView.isClassAFileEntity(typeToVerify);
-		
-		else if(!compatible && propertyFieldType == TSimpleFileModelProperty.class)
-			compatible = tModelView.isClassAFileModel(typeToVerify);
+		else if(!compatible && propertyFieldType == TSimpleFileProperty.class)
+			compatible = tModelView.isClassAFileBaseModel(typeToVerify);
 		
 		else if(!compatible && tModelView.isClassAnEntity(typeToVerify))
 			compatible = compatibleTypes.get(propertyFieldType).contains(TEntity.class);
@@ -92,8 +88,7 @@ class TCompatibleTypesHelper<M extends ITModel> {
 		compatibleTypes.put(SimpleIntegerProperty.class, (List) Arrays.asList(Integer.class));
 		compatibleTypes.put(SimpleLongProperty.class, (List) Arrays.asList(Long.class));
 		compatibleTypes.put(SimpleFloatProperty.class, (List) Arrays.asList(Float.class));
-		compatibleTypes.put(TSimpleFileEntityProperty.class, (List) Arrays.asList(ITFileEntity.class));
-		compatibleTypes.put(TSimpleFileModelProperty.class, (List) Arrays.asList(ITFileModel.class));
+		compatibleTypes.put(TSimpleFileProperty.class, (List) Arrays.asList(ITFileEntity.class, ITFileModel.class));
 		
 		compatibleTypes.put(ITObservableList.class, (List) Arrays.asList(List.class, ArrayList.class));
 		compatibleTypes.put(TSimpleObservableList.class, (List) Arrays.asList(List.class, ArrayList.class));

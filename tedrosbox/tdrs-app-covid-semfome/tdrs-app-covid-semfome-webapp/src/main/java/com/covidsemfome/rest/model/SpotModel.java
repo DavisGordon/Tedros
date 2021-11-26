@@ -37,15 +37,13 @@ public final class SpotModel implements Serializable{
 
 	public SpotModel(SiteConteudo e) {
 		this.titulo = e.getTitulo();
-		this.conteudo = e.getConteudo();
+		this.conteudo = e.getCode();
 		if(!e.getImage().isNew()) {
 			this.image =  e.getImage().getId();
 			this.ext = e.getImage().getFileExtension();
 			//this.base64 = Base64.getEncoder().encodeToString(e.getImage().getByteEntity().getBytes());
 		}
 		
-		this.orientacao = e.getOrientacao();
-		this.estilo = e.getEstilo();
 	}
 
 	/**

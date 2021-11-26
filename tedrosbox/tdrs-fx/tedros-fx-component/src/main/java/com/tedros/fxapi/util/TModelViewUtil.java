@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tedros.core.model.ITModelView;
-import com.tedros.ejb.base.entity.ITEntity;
+import com.tedros.ejb.base.model.ITModel;
 
 /**
  * DESCRIÇÃO DA CLASSE
@@ -19,32 +19,32 @@ import com.tedros.ejb.base.entity.ITEntity;
  * @author Davis Gordon
  *
  */
-public final class TModelViewUtil<M extends ITModelView<?>, E extends ITEntity> {
+public final class TModelViewUtil<M extends ITModelView<?>, E extends ITModel> {
 	
 	final private Class<M> 	modelViewClass; 
-	final private Class<E> 	entityClass; 
-	final private List<E> 	entitys;
+	final private Class<E> 	modelClass; 
+	final private List<E> 	models;
 	
 	
-	public TModelViewUtil(Class<M> modelViewClass, Class<E> entityClass, List<E> entitys) {
+	public TModelViewUtil(Class<M> modelViewClass, Class<E> modelClass, List<E> models) {
 		this.modelViewClass = modelViewClass;
-		this.entityClass = entityClass;
-		this.entitys = entitys;
+		this.modelClass = modelClass;
+		this.models = models;
 	}
 	
-	public TModelViewUtil(Class<M> modelViewClass, Class<E> entityClass, E entity) {
+	public TModelViewUtil(Class<M> modelViewClass, Class<E> modelClass, E model) {
 		this.modelViewClass = modelViewClass;
-		this.entityClass = entityClass;
-		this.entitys = new ArrayList<>();
-		this.entitys.add(entity);
+		this.modelClass = modelClass;
+		this.models = new ArrayList<>();
+		this.models.add(model);
 	}
 	
 	public List<M> convertToModelViewList() {
-		List<M> result = new ArrayList<>(entitys.size());
-		for (E entity : entitys) {
+		List<M> result = new ArrayList<>(models.size());
+		for (E model : models) {
 			M modelView;
 			try {
-				modelView = (M) modelViewClass.getConstructor(entityClass).newInstance(entity);
+				modelView = (M) modelViewClass.getConstructor(modelClass).newInstance(model);
 				result.add(modelView);
 			} catch (InstantiationException | IllegalAccessException
 					| IllegalArgumentException | InvocationTargetException
@@ -56,10 +56,10 @@ public final class TModelViewUtil<M extends ITModelView<?>, E extends ITEntity> 
 	}
 	
 	public M convertToModelView(){
-		E entity = entitys.get(0);
+		E model = models.get(0);
 		M modelView = null;
 		try {
-			modelView = (M) modelViewClass.getConstructor(entityClass).newInstance(entity);
+			modelView = (M) modelViewClass.getConstructor(modelClass).newInstance(model);
 		} catch (InstantiationException | IllegalAccessException
 				| IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
@@ -68,4 +68,15 @@ public final class TModelViewUtil<M extends ITModelView<?>, E extends ITEntity> 
 		return modelView;
 	}
 
+	public static <T> T buildModelView(Class<T> modelViewClass, Class<? extends ITModel> modelClass){
+		try {
+			return modelViewClass.getConstructor(modelClass).newInstance(modelClass.newInstance());
+		} catch (InstantiationException | IllegalAccessException
+				| IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+
+	}
 }

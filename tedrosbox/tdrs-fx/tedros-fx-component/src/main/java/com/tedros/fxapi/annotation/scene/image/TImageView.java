@@ -17,7 +17,7 @@ import com.tedros.fxapi.builder.ITFieldBuilder;
 import com.tedros.fxapi.builder.ITGenericBuilder;
 import com.tedros.fxapi.builder.NullRectangle2DBuilder;
 import com.tedros.fxapi.builder.TImageViewBuilder;
-import com.tedros.fxapi.property.TSimpleFileEntityProperty;
+import com.tedros.fxapi.property.TSimpleFileProperty;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
@@ -33,20 +33,20 @@ import javafx.scene.image.ImageView;
  * Example: 
  * <b>Loading an image from an entity:</b>
  * <i>@</i>TImageView(fitWidth=130, preserveRatio=true)
- * private TSimpleFileEntityProperty&ltTFileEntity&gt entityFileImage;
+ * private TSimpleFileProperty&ltTFileEntity&gt entityFileImage;
  * 
  * <b>Loading an image from the web:</b>
  * <i>@</i>TImageView(image=<i>@</i>TImage(url="https://www.tedrosbox.com/images/logo.png"))
- * private TSimpleFileEntityProperty<TFileEntity> webImage;
+ * private TSimpleFileProperty&ltTFileEntity&gt webImage;
  * 
  * <b>Loading an image from the file system:</b>
  * <i>@</i>TImageView(image=<i>@</i>TImage(url="file:c://usr/logo.png"))
- * private TSimpleFileEntityProperty<TFileEntity> fileSystemImage;
+ * private TSimpleFileProperty&ltTFileEntity&gt fileSystemImage;
  * </pre>
  * @author Davis Gordon
  * 
  * @see {@link TImage}
- * @see {@link TSimpleFileEntityProperty}
+ * @see {@link TSimpleFileProperty}
  */
 @Retention(RUNTIME)
 @Target(FIELD)

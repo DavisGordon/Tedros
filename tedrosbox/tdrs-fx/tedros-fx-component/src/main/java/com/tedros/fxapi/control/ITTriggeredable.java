@@ -11,6 +11,6 @@ import javafx.beans.Observable;
  */
 public interface ITTriggeredable {
 	
-	Observable tValueProperty();
+	<T extends Observable> T tValueProperty();
 
 }

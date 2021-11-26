@@ -114,6 +114,13 @@ public @interface TDecorator {
 	 * */
 	public String pdfButtonText() default TAnnotationDefaultValue.TVIEW_pdfButtonText;
 
+	
+	/**
+	 * <pre>
+	 * Set the Open Export Folder button text
+	 * </pre>
+	 * */
+	public String openExportFolderButtonText() default TAnnotationDefaultValue.TVIEW_openExportFolderButtonText;
 	/**
 	 * <pre>
 	 * Set the Select button text

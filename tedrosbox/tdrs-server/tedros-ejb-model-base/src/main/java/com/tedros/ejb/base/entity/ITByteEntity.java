@@ -1,9 +1,8 @@
 package com.tedros.ejb.base.entity;
 
+import com.tedros.ejb.base.model.ITByteBaseModel;
 
-public interface ITByteEntity extends ITEntity {
+public interface ITByteEntity extends ITByteBaseModel, ITEntity {
 	
-	public byte[] getBytes();
-	public void setBytes(byte[] bytes);
 	
 }

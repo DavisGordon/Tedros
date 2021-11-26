@@ -36,8 +36,8 @@ public class TProgressIndicator {
 	private FadeTransition ft;
 	private Pane pane;
 	public TProgressIndicator(final Pane pane) {
-		initialize();
 		this.pane = pane;
+		initialize();
 		setMargin(50);
         this.pane.getChildren().addAll(veil, progressIndicator);
 	}
@@ -95,11 +95,15 @@ public class TProgressIndicator {
 	private void initialize() {
 		veil = new Region();
 		veil.setVisible(false);
-		veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4); -fx-background-radius: 0 0 20 20;");
+		String name = pane.getClass().getSimpleName();
+		if(name.contains("Form") || name.contains("GroupView"))
+			veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4); -fx-background-radius: 0 0 20 20;");
+		else
+			veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4); -fx-background-radius: 20 20 20 20;");
+		
 		progressIndicator = new ImageView();
 		progressIndicator.setVisible(false);
 		//progressIndicator.setMaxSize(50, 50);
-        
         setLogo();
         
         ft = new FadeTransition(Duration.millis(2000), progressIndicator);

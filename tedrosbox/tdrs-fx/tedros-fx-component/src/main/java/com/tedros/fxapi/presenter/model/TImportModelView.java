@@ -5,7 +5,7 @@ package com.tedros.fxapi.presenter.model;
 
 import com.tedros.common.model.TFileEntity;
 import com.tedros.ejb.base.model.ITImportModel;
-import com.tedros.fxapi.property.TSimpleFileEntityProperty;
+import com.tedros.fxapi.property.TSimpleFileProperty;
 
 import javafx.beans.property.SimpleStringProperty;
 
@@ -25,12 +25,12 @@ public abstract class TImportModelView<M extends ITImportModel> extends TModelVi
 	/**
 	 * @return the file
 	 */
-	public abstract TSimpleFileEntityProperty<TFileEntity> getFile();
+	public abstract TSimpleFileProperty<TFileEntity> getFile();
 
 	/**
 	 * @param file the file to set
 	 */
-	public abstract void setFile(TSimpleFileEntityProperty<TFileEntity> file);
+	public abstract void setFile(TSimpleFileProperty<TFileEntity> file);
 
 	/**
 	 * @return the rules

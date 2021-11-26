@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.fxapi.annotation.parser.ITAnnotationParser;
-import com.tedros.fxapi.annotation.parser.TRequiredDetailListParser;
+import com.tedros.fxapi.annotation.parser.TRequiredDetailParser;
 import com.tedros.fxapi.annotation.parser.TStackPaneParser;
 import com.tedros.fxapi.annotation.presenter.TDetailListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TDetailTableViewPresenter;
@@ -22,7 +22,7 @@ import com.tedros.fxapi.annotation.scene.control.TInsets;
 import com.tedros.fxapi.annotation.scene.layout.TRegion;
 import com.tedros.fxapi.builder.ITFieldBuilder;
 import com.tedros.fxapi.builder.TDetailListFieldlBuilder;
-import com.tedros.fxapi.control.TDetailFieldRequired;
+import com.tedros.fxapi.control.TRequiredDetailField;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.geometry.Pos;
@@ -58,11 +58,11 @@ public @interface TDetailListField  {
 	 * <pre>
 	 * The parser class for this annotation
 	 * 
-	 * Default value: {TStackPaneParser.class, TRequiredDetailListParser.class}
+	 * Default value: {TStackPaneParser.class, TRequiredDetailParser.class}
 	 * </pre>
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITAnnotationParser>[] parser() default {TStackPaneParser.class, TRequiredDetailListParser.class};
+	public Class<? extends ITAnnotationParser>[] parser() default {TStackPaneParser.class, TRequiredDetailParser.class};
 	 
 	
 	/**
@@ -94,7 +94,7 @@ public @interface TDetailListField  {
 	
 	/**
 	 * <pre>
-	 * {@link TDetailFieldRequired} Class
+	 * {@link TRequiredDetailField} Class
 	 * 
 	 * Sets the value of the property required.
 	 * 

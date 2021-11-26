@@ -1,8 +1,6 @@
 package com.tedros.ejb.base.model;
 
-public interface ITByteModel extends ITModel {
+public interface ITByteModel extends ITByteBaseModel, ITModel {
 
-	public byte[] getBytes();
-	public void setBytes(byte[] bytes);
 	
 }

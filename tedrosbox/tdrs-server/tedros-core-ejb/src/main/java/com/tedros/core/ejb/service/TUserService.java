@@ -32,14 +32,16 @@ public class TUserService extends TEjbService<TUser> {
 	
 	public TUser login(String login, String password) {
 		TUser user = bo.getUserByLoginPassword(login, password);
-		serv.addUser(user);
+		if(user!=null)
+			serv.addUser(user);
 		return user;
 	}
 	
 	@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
 	public TUser saveActiveProfile(TProfile profile, Long userId) throws Exception {
 		TUser user = bo.saveActiveProfile(profile, userId);
-		serv.addUser(user);
+		if(user!=null)
+			serv.addUser(user);
 		return user;
 	}
 
