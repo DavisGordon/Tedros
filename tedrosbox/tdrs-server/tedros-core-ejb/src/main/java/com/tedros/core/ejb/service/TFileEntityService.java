@@ -1,5 +1,7 @@
 package com.tedros.core.ejb.service;
 
+import java.util.List;
+
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -24,6 +26,10 @@ public class TFileEntityService extends TEjbService<TFileEntity>  {
 	@Override
 	public ITGenericBO<TFileEntity> getBussinesObject() {
 		return bo;
+	}
+	
+	public List<TFileEntity> find(List<String> owner, List<String> ext, Long maxSize, boolean loaded){
+		return bo.find(owner, ext, maxSize, loaded);
 	}
 
 	public void loadBytes(TFileEntity entity) {

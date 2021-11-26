@@ -21,12 +21,13 @@ import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.domain.TFileExtension;
+import com.tedros.fxapi.domain.TFileModelType;
 import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.modal.behavior.TImportFileModalBehavior;
 import com.tedros.fxapi.presenter.modal.decorator.TImportFileModalDecorator;
 import com.tedros.fxapi.presenter.model.TImportModelView;
-import com.tedros.fxapi.property.TSimpleFileEntityProperty;
+import com.tedros.fxapi.property.TSimpleFileProperty;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -56,9 +57,10 @@ public class ProdutoImportModelView extends TImportModelView<ProdutoImport> {
 	private SimpleStringProperty rules;
 	
 	@TLabel(text="Arquivo")
-	@TFileField(extensions= {TFileExtension.CSV}, moreExtensions= {"*.xls", "*.xlsx"},
+	@TFileField(propertyValueType=TFileModelType.ENTITY, 
+	extensions= {TFileExtension.CSV}, moreExtensions= {"*.xls", "*.xlsx"},
 	showFilePath=true, required=true)
-	private TSimpleFileEntityProperty<TFileEntity> file;
+	private TSimpleFileProperty<TFileEntity> file;
 	
 	public ProdutoImportModelView(ProdutoImport model) {
 		super(model);
@@ -86,14 +88,14 @@ public class ProdutoImportModelView extends TImportModelView<ProdutoImport> {
 	/**
 	 * @return the file
 	 */
-	public TSimpleFileEntityProperty<TFileEntity> getFile() {
+	public TSimpleFileProperty<TFileEntity> getFile() {
 		return file;
 	}
 
 	/**
 	 * @param file the file to set
 	 */
-	public void setFile(TSimpleFileEntityProperty<TFileEntity> file) {
+	public void setFile(TSimpleFileProperty<TFileEntity> file) {
 		this.file = file;
 	}
 

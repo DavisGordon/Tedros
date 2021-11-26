@@ -3,6 +3,8 @@
  */
 package com.tedros.core.ejb.bo;
 
+import java.util.List;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
@@ -29,6 +31,11 @@ public class TFileEntityBO extends TGenericBO<TFileEntity> {
 	
 	public void loadBytes(final TFileEntity entity) {
 		eao.loadBytes(entity);
+	}
+	
+
+	public List<TFileEntity> find(List<String> owner, List<String> ext, Long maxSize, boolean loaded){
+		return eao.find(owner, ext, maxSize, loaded);
 	}
 
 }

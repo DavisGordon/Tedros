@@ -147,12 +147,12 @@
 		</div>
 		<div style="padding-top:150px">
 			<section id="wrapper" 
-			class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right" >
+			class="banner style1 orient-left content-align-left image-position-left fullscreen onload-image-fade-in onload-content-fade-right" >
 				<div class="content">
 					<h1>Por trás da máscara, uma vida para salvar.</h1>
 				</div>
 				<div class="image"  id="home">
-					<img src="images/campanha.jpg" alt="" />
+					<img src="images/campanha3.jpg" alt="" id="mainImg" />
 				</div>	
 			</section>
 		</div>
@@ -619,6 +619,10 @@
 			<script src="assets/js/main.js"></script>
     		<script src="assets/js/jquery.form.js"></script> 
     		<script src="assets/js/csf-full.js"></script> 
-
+			<script>
+			var myPix = new Array("images/campanha.jpg","images/campanha1.jpg","images/campanha2.jpg","images/campanha3.jpg");
+			var randomNum = Math.floor(Math.random() * myPix.length);
+			$('#mainImg').attr('src', myPix[randomNum]);
+			</script>
 	</body>
 </html>

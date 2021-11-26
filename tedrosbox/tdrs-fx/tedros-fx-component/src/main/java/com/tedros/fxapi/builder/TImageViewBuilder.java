@@ -17,7 +17,7 @@ import com.tedros.ejb.base.entity.ITFileEntity;
 import com.tedros.fxapi.annotation.scene.image.TImage;
 import com.tedros.fxapi.annotation.scene.image.TImageView;
 import com.tedros.fxapi.form.ITForm;
-import com.tedros.fxapi.property.TSimpleFileEntityProperty;
+import com.tedros.fxapi.property.TSimpleFileProperty;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -34,16 +34,16 @@ import javafx.scene.image.ImageView;
  */
 public class TImageViewBuilder 
 extends TBuilder 
-implements ITControlBuilder<ImageView, TSimpleFileEntityProperty<ITFileEntity>>, ITReaderBuilder<ImageView, TSimpleFileEntityProperty<ITFileEntity>> {
+implements ITControlBuilder<ImageView, TSimpleFileProperty<ITFileEntity>>, ITReaderBuilder<ImageView, TSimpleFileProperty<ITFileEntity>> {
 	
 	@Override
-	public ImageView build(Annotation annotation, final TSimpleFileEntityProperty<ITFileEntity> property) throws Exception {
+	public ImageView build(Annotation annotation, final TSimpleFileProperty<ITFileEntity> property) throws Exception {
 		final ImageView control = new ImageView();
 		TImageView ann = (TImageView) annotation;
 		TImage a = ann.image();
 		Image i;
 		
-		byte[] bArray = property.bytesProperty().getValue();
+		byte[] bArray = property.tBytesProperty().getValue();
 		
 		if(bArray!=null){
 			ByteArrayInputStream bis = new ByteArrayInputStream(bArray);
@@ -94,7 +94,7 @@ implements ITControlBuilder<ImageView, TSimpleFileEntityProperty<ITFileEntity>>,
 		form.gettObjectRepository()
 			.add(field+"_observable_"+UUID.randomUUID().toString(), observable);
 		
-		property.bytesProperty().addListener(new WeakChangeListener<>(chl));
+		property.tBytesProperty().addListener(new WeakChangeListener<>(chl));
 	
 		control.imageProperty().bind(observable);
 		observable.setValue(i);

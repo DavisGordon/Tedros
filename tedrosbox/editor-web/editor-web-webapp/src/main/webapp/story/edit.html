@@ -11,13 +11,13 @@
 		<link rel="stylesheet" href="assets/css/csf.css" />
 		<link rel="stylesheet" href="../css/editor.css" />
 		<script src='http://lovasoa.github.io/tidy-html5/tidy.js'></script>
-		
+		<!-- <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script> -->
 <script type="text/javascript">
 console.log = function(message) { tedros.log(message); };
  //tedros = { setHtml: function(s){}, remElementTag: function(){}, setElementTag: function(s){}};
 </script>
 	</head>
-	<body class="is-preload">
+	<body class="is-preload" >
 		<div id="selector">
 		    <div id="selector-top"></div>
 		    <div id="selector-left"></div>
@@ -27,8 +27,7 @@ console.log = function(message) { tedros.log(message); };
 		<div id="selector-selected" class="selected"></div>
 		<div id="selector-box">Editor | <span id="sel"></span></div>
 		<br><br>
-		<div id="spot" class="divided" style="padding-left:10px; padding-right: 10px;">
-		
+		<div id="spot" contenteditable="true" class="divided" style="padding-left:10px; padding-right: 10px;">
 		</div>
 		<div id="selector-script">
 		</div>
@@ -42,6 +41,9 @@ console.log = function(message) { tedros.log(message); };
 	  	<script src="assets/js/jquery.form.js"></script> 
 	  	<script src="../js/editor.js"></script>
 <script type="text/javascript">
+
+//const editor = new EditorJS('selector-script');
+
 options = {
 		  "indent":"auto",
 		  "indent-spaces":2,

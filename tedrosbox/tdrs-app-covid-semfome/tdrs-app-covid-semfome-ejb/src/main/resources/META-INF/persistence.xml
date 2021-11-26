@@ -39,6 +39,9 @@
 		<class>com.covidsemfome.model.SiteTermo</class>
 		<class>com.covidsemfome.parceiro.model.EmpresaParceira</class>
 		<class>com.covidsemfome.parceiro.model.SiteConteudo</class>
+		<class>com.covidsemfome.parceiro.model.ComponentTemplate</class>
+		<class>com.covidsemfome.parceiro.model.CssClass</class>
+		<class>com.covidsemfome.model.CsfImagem</class>
 		
 		<properties>
 		

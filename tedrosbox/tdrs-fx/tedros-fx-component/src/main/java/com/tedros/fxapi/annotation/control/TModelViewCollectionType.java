@@ -5,7 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.tedros.ejb.base.entity.TEntity;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.presenter.model.TModelView;
 
@@ -22,7 +21,7 @@ public @interface TModelViewCollectionType {
 	 * The model view type
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends TModelView> modelViewClass();
+	public Class<? extends TModelView> modelViewClass() default TModelView.class;
 	
 	/**
 	 * The model or entity type

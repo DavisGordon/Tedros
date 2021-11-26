@@ -14,13 +14,14 @@
 	<field name="contatos" class="java.lang.String"/>
 	<field name="acoes" class="java.util.List"/>
 	<field name="dataCadastro" class="java.util.Date"/>
+	<field name="statusVoluntario" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="123" splitType="Stretch">
 			<staticText>
-				<reportElement style="SubTitle" x="0" y="32" width="396" height="22" uuid="0fac86c8-9454-4b41-bb90-9f6a9839a756"/>
+				<reportElement style="SubTitle" x="0" y="32" width="302" height="22" uuid="0fac86c8-9454-4b41-bb90-9f6a9839a756"/>
 				<text><![CDATA[Relatório de pessoas ]]></text>
 			</staticText>
 			<image onErrorType="Blank">
@@ -35,7 +36,7 @@
 	<columnHeader>
 		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement style="Column header" x="0" y="0" width="396" height="20" uuid="9e238890-f135-4588-b5e3-5f4204a7ac8d"/>
+				<reportElement style="Column header" x="0" y="0" width="302" height="20" uuid="9e238890-f135-4588-b5e3-5f4204a7ac8d"/>
 				<textElement verticalAlignment="Middle">
 					<paragraph lineSpacing="Single"/>
 				</textElement>
@@ -47,12 +48,12 @@
 				<text><![CDATA[Contatos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="625" y="0" width="145" height="20" uuid="763778d9-05f9-465d-9ab7-f159a7e908d6"/>
+				<reportElement style="Column header" x="697" y="0" width="110" height="20" uuid="763778d9-05f9-465d-9ab7-f159a7e908d6"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Data Cadastro]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="396" y="0" width="229" height="20" uuid="3e4f66d2-cdb2-4d2e-9a3a-4a9e5857c81e"/>
+				<reportElement style="Column header" x="302" y="0" width="180" height="20" uuid="3e4f66d2-cdb2-4d2e-9a3a-4a9e5857c81e"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Tipo]]></text>
 			</staticText>
@@ -62,16 +63,21 @@
 				<text><![CDATA[Email (Painel)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="770" y="0" width="145" height="20" uuid="68b7b9de-7996-42b1-b402-b00effd9c2fd"/>
+				<reportElement style="Column header" x="807" y="0" width="108" height="20" uuid="68b7b9de-7996-42b1-b402-b00effd9c2fd"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Hora Cadastro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="482" y="0" width="215" height="20" uuid="09e287f5-a699-43b1-9c34-ace928b2f044"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Situação]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="396" height="20" isPrintWhenDetailOverflows="true" uuid="be2dc539-655b-4295-94d8-83c51be53618"/>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="302" height="20" isPrintWhenDetailOverflows="true" uuid="be2dc539-655b-4295-94d8-83c51be53618"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
 			</textField>
@@ -86,19 +92,24 @@
 				<textFieldExpression><![CDATA[$F{contatos}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="625" y="0" width="145" height="20" isPrintWhenDetailOverflows="true" uuid="7114401f-d120-4938-b0e0-abdfe698601d"/>
+				<reportElement x="697" y="0" width="110" height="20" isPrintWhenDetailOverflows="true" uuid="7114401f-d120-4938-b0e0-abdfe698601d"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{dataCadastro}]]></textFieldExpression>
 			</textField>
 			<textField pattern="HH:mm" isBlankWhenNull="true">
-				<reportElement x="770" y="0" width="145" height="20" isPrintWhenDetailOverflows="true" uuid="d696fa24-48a4-4be1-a1bd-10b8ab6f3a9a"/>
+				<reportElement x="807" y="0" width="108" height="20" isPrintWhenDetailOverflows="true" uuid="d696fa24-48a4-4be1-a1bd-10b8ab6f3a9a"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{dataCadastro}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="396" y="0" width="229" height="20" isPrintWhenDetailOverflows="true" uuid="3b3c8f7f-ba53-410e-a2ed-8ef3fc1604c2"/>
+				<reportElement stretchType="RelativeToBandHeight" x="302" y="0" width="180" height="20" isPrintWhenDetailOverflows="true" uuid="3b3c8f7f-ba53-410e-a2ed-8ef3fc1604c2"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{tipo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="482" y="0" width="215" height="20" uuid="6020d770-07b1-4393-aefa-e45eb883b2f2"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{statusVoluntario}]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="17">

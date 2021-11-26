@@ -7,6 +7,7 @@
 package com.covidsemfome.module.empresaParceira;
 
 import com.covidsemfome.module.empresaParceira.model.EmpresaParceiraModelView;
+import com.covidsemfome.module.empresaParceira.model.ImagemMV;
 import com.covidsemfome.module.empresaParceira.model.SiteConteudoModelView;
 import com.tedros.core.TModule;
 import com.tedros.core.annotation.security.TAuthorizationType;
@@ -31,7 +32,8 @@ public class EmpresaParceiraModule extends TModule{
 	public void tStart() {
 		tShowView(new TGroupView<TGroupPresenter>(this, "Atualizar Website", 
 				new TViewItem(TDynaGroupView.class, EmpresaParceiraModelView.class, "Parceiros"),
-				new TViewItem(TDynaGroupView.class, SiteConteudoModelView.class, "Website Conteudo")
+				new TViewItem(TDynaGroupView.class, SiteConteudoModelView.class, "Website Conteudo", true),
+				new TViewItem(TDynaGroupView.class, ImagemMV.class, "Fotos e Imagens", true)
 				));
 	}
 }

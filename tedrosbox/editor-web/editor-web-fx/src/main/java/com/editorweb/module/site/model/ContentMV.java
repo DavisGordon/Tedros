@@ -27,6 +27,8 @@ import com.tedros.fxapi.annotation.control.TTrigger;
 import com.tedros.fxapi.annotation.form.TDetailForm;
 import com.tedros.fxapi.annotation.form.TSetting;
 import com.tedros.fxapi.annotation.layout.TAccordion;
+import com.tedros.fxapi.annotation.layout.THBox;
+import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.layout.TSliderMenu;
@@ -49,7 +51,7 @@ import com.tedros.fxapi.domain.TLabelPosition;
 import com.tedros.fxapi.presenter.entity.behavior.TDetailCrudViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TDetailCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
-import com.tedros.fxapi.property.TSimpleFileEntityProperty;
+import com.tedros.fxapi.property.TSimpleFileProperty;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
@@ -69,29 +71,39 @@ behavior = @TBehavior(type = TDetailCrudViewBehavior.class, action=ContentSaveAc
 decorator = @TDecorator(type = TDetailCrudViewDecorator.class, buildModesRadioButton=false, viewTitle="#{label.contents}")))
 public class ContentMV extends TEntityModelView<Content> {
 
-	
-	
-	/*@THBox(	pane=@TPane(children={"selected", "desc"}), spacing=10, fillHeight=true,
-			hgrow=@THGrow(priority={@TPriority(field="desc", priority=Priority.ALWAYS),
-					@TPriority(field="selected", priority=Priority.NEVER)
-			}))*/
-	@TSliderMenu(content = "desc", menu = "selected", menuWidth=350)
+	@TSliderMenu(content = "desc", menu = "selected", menuWidth=390)
 	private SimpleLongProperty id;
 	
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-info", parse = true))
-	@TLabel(text="Component Selecionado:", position=TLabelPosition.TOP)
+	@TLabel(text="Tag #{label.selected}:", position=TLabelPosition.TOP)
 	@TShowField
-	@TVBox(	pane=@TPane(children={"selected", "template"}), spacing=10, fillWidth=true,
-	vgrow=@TVGrow(priority={@TPriority(field="selected", priority=Priority.NEVER),
+	@TVBox(	pane=@TPane(children={"title", "selected", "template"}), spacing=10, fillWidth=true,
+	vgrow=@TVGrow(priority={@TPriority(field="title", priority=Priority.NEVER),
+			@TPriority(field="selected", priority=Priority.NEVER),
 			@TPriority(field="template", priority=Priority.ALWAYS)
 	}))
 	private SimpleStringProperty selected;
 	
-	@TAccordion(expandedPane="tmplt", node=@TNode(id="contaacc",parse = true), region=@TRegion(maxWidth=300, parse = true),
+
+	@TLabel(text="#{label.title}")
+	@TTextField(maxLength=120, required = true, 
+	node=@TNode(requestFocus=true, parse = true))
+	@THBox(	pane=@TPane(children={"title", "preOrdering"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="title", priority=Priority.ALWAYS),
+			@TPriority(field="preOrdering", priority=Priority.NEVER)
+	}))
+	private SimpleStringProperty title;
+	
+	@TLabel(text="#{label.ordering}")
+	@TNumberSpinnerField(maxValue = 250)
+	private SimpleIntegerProperty preOrdering;
+	
+	
+	@TAccordion(expandedPane="tmplt", node=@TNode(id="contaacc",parse = true), /*region=@TRegion(maxWidth=300, parse = true),*/
 			panes={
 					@TTitledPane(text="#{label.component}", node=@TNode(id="tmplt",parse = true), 
 							expanded=true, fields={"template", "templateImg"}),
-					@TTitledPane(text="#{label.main.data}", fields={"title", "preOrdering", "styleAttr"}),
+					@TTitledPane(text="#{label.main.data}", fields={"styleAttr"}),
 					@TTitledPane(text="#{label.css.domain}", fields={"cssClassList"})
 				})
 	@TTrigger(triggerClass = CompTempTrigger.class, targetFieldName="cssClassList", runAfterFormBuild=true)
@@ -100,17 +112,7 @@ public class ContentMV extends TEntityModelView<Content> {
 	private SimpleObjectProperty<ComponentTemplate> template;
 	
 	@TImageView(fitWidth=200, preserveRatio=true)
-	private TSimpleFileEntityProperty<TFileEntity> templateImg;
-	
-	@TLabel(text="#{label.title}")
-	@TTextField(maxLength=120, required = true, 
-	node=@TNode(requestFocus=true, parse = true))
-	//@TTrigger(triggerClass = CompTempStringTrigger.class)
-	private SimpleStringProperty title;
-	
-	@TLabel(text="#{label.ordering}")
-	@TNumberSpinnerField(maxValue = 250)
-	private SimpleIntegerProperty preOrdering;
+	private TSimpleFileProperty<TFileEntity> templateImg;
 	
 	@TLabel(text="#{label.styleattr}")
 	@TTextAreaField(wrapText=true, prefRowCount=4)
@@ -283,14 +285,14 @@ public class ContentMV extends TEntityModelView<Content> {
 	/**
 	 * @return the templateImg
 	 */
-	public TSimpleFileEntityProperty<TFileEntity> getTemplateImg() {
+	public TSimpleFileProperty<TFileEntity> getTemplateImg() {
 		return templateImg;
 	}
 
 	/**
 	 * @param templateImg the templateImg to set
 	 */
-	public void setTemplateImg(TSimpleFileEntityProperty<TFileEntity> templateImg) {
+	public void setTemplateImg(TSimpleFileProperty<TFileEntity> templateImg) {
 		this.templateImg = templateImg;
 	}
 

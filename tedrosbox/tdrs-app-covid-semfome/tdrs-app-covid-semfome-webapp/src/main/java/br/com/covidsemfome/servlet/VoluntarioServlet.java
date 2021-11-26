@@ -27,8 +27,8 @@ import com.covidsemfome.model.Contato;
 import com.covidsemfome.model.Pessoa;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
-import com.tedros.util.TEmailUtil;
 import com.tedros.util.TEncriptUtil;
+import com.tedros.util.TValidatorUtil;
 
 import br.com.covidsemfome.bean.AppBean;
 /**
@@ -61,7 +61,7 @@ public class VoluntarioServlet extends HttpServlet {
 			resp.setStatus(SC_BAD_REQUEST);
 			out.println("Por favor informar o seu nome, email e senha.");
 		}else{
-			if(!TEmailUtil.validate(email)) {
+			if(!TValidatorUtil.isEmailAddress(email)) {
 				resp.setStatus(SC_BAD_REQUEST);
 				out.println("Email invalido.");
 			}else{

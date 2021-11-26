@@ -28,7 +28,7 @@ import javafx.beans.value.WeakChangeListener;
  * @see TImageView
  * @author Davis Gordon
  * */
-public class TSimpleFileEntityProperty<T extends ITFileEntity> extends SimpleObjectProperty<T> {
+public class SimpleFileEntityProperty<T extends ITFileEntity> extends SimpleObjectProperty<T> {
 	
 	private SimpleStringProperty fileNameProperty;
 	private SimpleStringProperty fileExtensionProperty;
@@ -38,7 +38,7 @@ public class TSimpleFileEntityProperty<T extends ITFileEntity> extends SimpleObj
 
 	private TObjectRepository repo;
 	
-	
+	/*
 	public TSimpleFileEntityProperty() {
 		super();
 		initialize();
@@ -58,7 +58,7 @@ public class TSimpleFileEntityProperty<T extends ITFileEntity> extends SimpleObj
 		super(arg0, arg1);
 		initialize();
 	}
-	
+	*/
 	private void initialize(){
 		
 		this.repo = new TObjectRepository();
@@ -127,23 +127,23 @@ public class TSimpleFileEntityProperty<T extends ITFileEntity> extends SimpleObj
 	}
 	
 	
-	public final SimpleStringProperty fileNameProperty() {
+	public final SimpleStringProperty tFileNameProperty() {
 		return fileNameProperty;
 	}
 	
-	public final SimpleObjectProperty<byte[]> bytesProperty() {
+	public final SimpleObjectProperty<byte[]> tBytesProperty() {
 		return bytesProperty;
 	}
 	
-	public final SimpleStringProperty fileExtensionProperty() {
+	public final SimpleStringProperty tFileExtensionProperty() {
 		return fileExtensionProperty;
 	}
 
-	public final SimpleLongProperty fileSizeProperty() {
+	public final SimpleLongProperty tFileSizeProperty() {
 		return fileSizeProperty;
 	}
 	
-	public final SimpleLongProperty bytesEntityIdProperty() {
+	public final SimpleLongProperty tBytesEntityIdProperty() {
 		return bytesEntityIdProperty;
 	}
 	

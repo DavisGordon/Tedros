@@ -32,21 +32,14 @@ public class Item extends TEntity {
 	private String title;
 	
 	@Column
-	private String desc;
-	
-	@Column
-	private Integer preOrdering;
+	private String code;
 	
 	@Column(length=160)
 	private String url;
 	
 	@Enumerated(EnumType.STRING)
 	private ItemType type;
-	
-	@ManyToOne
-	@JoinColumn(name="content_id", nullable=false, updatable=false)
-	private Content content;
-	
+
 	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="media_id", nullable=false, updatable=true)
 	private Media media;
@@ -67,20 +60,6 @@ public class Item extends TEntity {
 	 */
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	/**
-	 * @return the desc
-	 */
-	public String getDesc() {
-		return desc;
-	}
-
-	/**
-	 * @param desc the desc to set
-	 */
-	public void setDesc(String desc) {
-		this.desc = desc;
 	}
 
 	/**
@@ -112,20 +91,6 @@ public class Item extends TEntity {
 	}
 
 	/**
-	 * @return the content
-	 */
-	public Content getContent() {
-		return content;
-	}
-
-	/**
-	 * @param content the content to set
-	 */
-	public void setContent(Content content) {
-		this.content = content;
-	}
-
-	/**
 	 * @return the media
 	 */
 	public Media getMedia() {
@@ -140,20 +105,6 @@ public class Item extends TEntity {
 	}
 
 	/**
-	 * @return the preOrdering
-	 */
-	public Integer getPreOrdering() {
-		return preOrdering;
-	}
-
-	/**
-	 * @param preOrdering the preOrdering to set
-	 */
-	public void setPreOrdering(Integer preOrdering) {
-		this.preOrdering = preOrdering;
-	}
-
-	/**
 	 * @return the template
 	 */
 	public ComponentTemplate getTemplate() {
@@ -165,6 +116,20 @@ public class Item extends TEntity {
 	 */
 	public void setTemplate(ComponentTemplate template) {
 		this.template = template;
+	}
+
+	/**
+	 * @return the code
+	 */
+	public String getCode() {
+		return code;
+	}
+
+	/**
+	 * @param code the code to set
+	 */
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 }

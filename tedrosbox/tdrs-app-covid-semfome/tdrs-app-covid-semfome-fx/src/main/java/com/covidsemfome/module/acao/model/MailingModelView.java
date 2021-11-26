@@ -384,5 +384,19 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 		this.emails = emails;
 	}
 
+	/**
+	 * @return the displayText
+	 */
+	public SimpleStringProperty getDisplayText() {
+		return displayText;
+	}
+
+	/**
+	 * @param displayText the displayText to set
+	 */
+	public void setDisplayText(SimpleStringProperty displayText) {
+		this.displayText = displayText;
+	}
+
 
 }

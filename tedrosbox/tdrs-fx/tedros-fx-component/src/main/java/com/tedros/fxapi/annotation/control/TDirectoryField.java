@@ -20,7 +20,7 @@ import com.tedros.fxapi.annotation.scene.control.TInsets;
 import com.tedros.fxapi.annotation.scene.layout.TRegion;
 import com.tedros.fxapi.builder.ITFieldBuilder;
 import com.tedros.fxapi.builder.TDirectoryFieldBuilder;
-import com.tedros.fxapi.control.action.TActionEvent;
+import com.tedros.fxapi.control.action.TEventHandler;
 import com.tedros.fxapi.domain.TDefaultValues;
 
 import javafx.geometry.Pos;
@@ -127,7 +127,7 @@ public @interface TDirectoryField {
 	 * Defines the action to the clean button.
 	 * </pre>
 	 * */
-	public Class<? extends TActionEvent> cleanAction() default TActionEvent.class;
+	public Class<? extends TEventHandler> cleanAction() default TEventHandler.class;
 	
 	/**
 	 * <pre>
@@ -140,7 +140,7 @@ public @interface TDirectoryField {
 	 * Defines the action to the select button
 	 * </pre>
 	 * */
-	public Class<? extends TActionEvent> selectAction() default TActionEvent.class;
+	public Class<? extends TEventHandler> selectAction() default TEventHandler.class;
 
 
 	/**

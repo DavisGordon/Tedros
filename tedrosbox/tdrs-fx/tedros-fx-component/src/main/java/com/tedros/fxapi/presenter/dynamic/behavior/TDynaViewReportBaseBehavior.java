@@ -1,12 +1,15 @@
 package com.tedros.fxapi.presenter.dynamic.behavior;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 import com.tedros.core.ITModule;
+import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.context.TedrosContext;
+import com.tedros.core.control.PopOver;
 import com.tedros.ejb.base.model.ITReportModel;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
@@ -21,7 +24,10 @@ import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewReportBaseDecorator
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.process.TReportProcess;
 import com.tedros.fxapi.process.TReportProcessEnum;
+import com.tedros.util.TFileUtil;
+import com.tedros.util.TedrosFolderEnum;
 
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -33,6 +39,7 @@ import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
@@ -170,6 +177,19 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			@Override
 			public void handle(ActionEvent event) {
 				cancelAction();
+			}
+		});
+	}
+	
+	/**
+	 * Config the cancel button;
+	 * */
+	public void configOpenExportFolderButton() {
+		final Button openExportButton = this.decorator.gettOpenExportFolderButton();
+		openExportButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				openExportFolderAction();
 			}
 		});
 	}
@@ -329,7 +349,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 						if(result.getResult().getValue() == EnumResult.SUCESS.getValue()){
 							String msg = iEngine.getFormatedString("#{tedros.fxapi.message.export}", result.getMessage());
 							getView().tShowModal(new TMessageBox(msg), true);
-							TedrosContext.openDocument(result.getMessage());
+							try {
+								TedrosContext.openDocument(result.getMessage());
+							} catch (Exception e) {
+								getView().tShowModal(new TMessageBox(e), true);
+							}
 						}
 						if(result.getResult().getValue() == EnumResult.ERROR.getValue()){
 							System.out.println(result.getMessage());
@@ -454,6 +478,38 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		actionHelper.runAfter(TActionType.CANCEL);
 	}
 	
+	/**
+	 * Perform this action when open export folder button onAction is triggered.
+	 * */
+	public void openExportFolderAction() {
+		
+		Thread thread = new Thread(new Runnable() {
+		      @Override
+		      public void run() {
+				Platform.runLater(new Runnable() {
+		            @Override
+		            public void run() {
+		                if(!TFileUtil.open(new File(TedrosFolderEnum.EXPORT_FOLDER.getFullPath()))) {
+		                	Label label = new Label(TInternationalizationEngine.getInstance(null).getString("#{tedros.fxapi.message.os.not.support.operation}"));
+		        			label.setId("t-label");
+		        			label.setStyle(	"-fx-font: Arial; "+
+		        							"-fx-font-size: 1.0em; "+
+		        							"-fx-font-weight: bold; "+
+		        							"-fx-font-smoothing-type:lcd; "+
+		        							"-fx-text-fill: #000000; "+
+		        							"-fx-padding: 2 5 5 2; ");
+		        			
+		        			PopOver p = new PopOver(label);
+		        			p.show(decorator.gettOpenExportFolderButton());
+		                }
+		            }
+		          });
+		      	}
+			});
+		thread.setDaemon(true);
+		thread.start();
+		
+	}
 	
 	/**
 	 * Perform this action when excel button onAction is triggered.

@@ -16,10 +16,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.control.PopOver;
-import com.tedros.fxapi.control.action.TActionEvent;
+import com.tedros.fxapi.control.action.TEventHandler;
 import com.tedros.fxapi.domain.TFileExtension;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.property.TBytesLoader;
+import com.tedros.util.TFileUtil;
 import com.tedros.util.TUrlUtil;
 
 import javafx.beans.InvalidationListener;
@@ -40,7 +41,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -88,11 +88,11 @@ public class TFileField extends StackPane {
 	private boolean showImage;
 	private boolean showFilePath;
 	
-	private TActionEvent openAction;
-	private TActionEvent cleanAction;
-	private TActionEvent loadAction;
-	private TActionEvent selectAction;
-	private TActionEvent imageClickAction;
+	private TEventHandler openAction;
+	private TEventHandler cleanAction;
+	private TEventHandler loadAction;
+	private TEventHandler selectAction;
+	private TEventHandler imageClickAction;
 	
 	private EventHandler<ActionEvent> openEventHandler;
 	private EventHandler<ActionEvent> downloadEventHandler;
@@ -202,105 +202,54 @@ public class TFileField extends StackPane {
 			}
 		});
 		
-		selectButton.setOnAction(
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(final ActionEvent e) {
-                    	
-                    	if(selectAction!=null)
-                    		if(!selectAction.runBefore(e))
-                    			return;
-                    	
-                        configureFileChooser(fileChooser,extensions);
-                        final File file = fileChooser.showOpenDialog(appStage);
-                        if (file != null) {
-                        	openFile(file);
-                        	openButton.setDisable(false);
-                        }
-                        
-                        
-                        if(selectAction!=null)
-                    		if(!selectAction.runAfter(e))
-                    			return;
-                    }
-                });
+		selectButton.setOnAction(e->{
+			configureFileChooser(fileChooser,extensions);
+            final File file = fileChooser.showOpenDialog(appStage);
+            if (file != null) {
+            	openFile(file);
+            	openButton.setDisable(false);
+            }
+		});
 		
-		cleanButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				if(cleanAction!=null)
-            		if(!cleanAction.runBefore(e))
-            			return;
-				cleanField();
-				if(cleanAction!=null)
-            		if(!cleanAction.runAfter(e))
-            			return;
-			}
+		cleanButton.setOnAction(e->{
+			cleanField();
 		});
 		
 		
-		downloadEventHandler = new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				
-				if(loadAction!=null)
-            		if(!loadAction.runBefore(arg0))
-            			return;
-				
-				try {
-					TBytesLoader.loadBytesFromTFileEntity(bytesEntityIdProperty.getValue(), byteArrayProperty);
-				} catch (TProcessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				if(loadAction!=null)
-            		if(!loadAction.runAfter(arg0))
-            			return;
+		downloadEventHandler = arg0->{
+			try {
+				TBytesLoader.loadBytesFromTFileEntity(bytesEntityIdProperty.getValue(), byteArrayProperty);
+			} catch (TProcessException e) {
+				e.printStackTrace();
 			}
 		};
 		
-		openEventHandler = new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				
-				if(openAction!=null)
-            		if(!openAction.runBefore(arg0))
-            			return;
-				
-				if(filePathLabel!=null && StringUtils.isNotBlank(filePathLabel.getText())){
-					String[] cmdArray = {"explorer.exe", filePathLabel.getText()};
-	                try {
-	                    java.lang.Runtime.getRuntime().exec(cmdArray);
-	                } catch (Exception e) {
-	                	showModal(iEngine.getFormatedString("#{tedros.fxapi.message.cannot.open.file}", e.getMessage()));
-	                }
-				}else{
-					if(byteArrayProperty!=null && byteArrayProperty.getValue()!=null && fileNameField!=null && fileNameField.getText()!=null){
-						try {
-							String folder = FileUtils.getUserDirectoryPath();
-							
-							File file = FileUtils.toFile(TUrlUtil.getURL(folder+"/"+fileNameField.getText()));
-							int x = 1;
-							boolean flag = file.exists();
-							while(flag){
-								String[] arr = new String[]{FilenameUtils.getBaseName(file.getName()), FilenameUtils.getExtension(file.getName())};
-								file = FileUtils.toFile(TUrlUtil.getURL(folder+"/"+arr[0]+" "+(x++)+"."+arr[1]));
-								flag = file.exists();
-							}
-							
-							FileUtils.writeByteArrayToFile(file, byteArrayProperty.getValue());
-							String[] cmdArray = {"explorer.exe", file.getAbsolutePath()};
-							java.lang.Runtime.getRuntime().exec(cmdArray);
-						} catch (Exception e) {
-							showModal(iEngine.getFormatedString("#{tedros.fxapi.message.cannot.open.file}", e.getMessage()));
+		openEventHandler = arg0->{
+			if(filePathLabel!=null && StringUtils.isNotBlank(filePathLabel.getText())){
+				if(!TFileUtil.open(new File(filePathLabel.getText()))) {
+                	showModal(iEngine.getString("#{tedros.fxapi.message.os.not.support.operation}"));
+                }
+			}else{
+				if(byteArrayProperty!=null && byteArrayProperty.getValue()!=null && fileNameField!=null && fileNameField.getText()!=null){
+					try {
+						String folder = FileUtils.getUserDirectoryPath();
+						File file = FileUtils.toFile(TUrlUtil.getURL(folder+"/"+fileNameField.getText()));
+						int x = 1;
+						boolean flag = file.exists();
+						while(flag){
+							String[] arr = new String[]{FilenameUtils.getBaseName(file.getName()), FilenameUtils.getExtension(file.getName())};
+							file = FileUtils.toFile(TUrlUtil.getURL(folder+"/"+arr[0]+" "+(x++)+"."+arr[1]));
+							flag = file.exists();
 						}
+						
+						FileUtils.writeByteArrayToFile(file, byteArrayProperty.getValue());
+						if(!TFileUtil.open(file)) {
+		                	showModal(iEngine.getString("#{tedros.fxapi.message.os.not.support.operation}"));
+		                }
+					} catch (Exception e) {
+						showModal(iEngine.getFormatedString("#{tedros.fxapi.message.cannot.open.file}", e.getMessage()));
 					}
 				}
-				
-				if(openAction!=null)
-            		if(!openAction.runAfter(arg0))
-            			return;
 			}
 		};
 		
@@ -626,7 +575,7 @@ public class TFileField extends StackPane {
 						showModal(msg);
 						cleanField();
 					}else{
-						
+						/*
 						if(imageClickAction!=null){
 							if(imageView!=null && imageView.getOnMouseClicked()==null){
 								imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -639,7 +588,7 @@ public class TFileField extends StackPane {
 									}
 								});
 							}
-						}
+						}*/
 						
 						imageView.setImage(image);
 						
@@ -649,43 +598,43 @@ public class TFileField extends StackPane {
 		}
 	}
 
-	public final TActionEvent getOpenAction() {
+	public final TEventHandler getOpenAction() {
 		return openAction;
 	}
 
-	public final void setOpenAction(TActionEvent openAction) {
+	public final void setOpenAction(TEventHandler openAction) {
 		this.openAction = openAction;
 	}
 
-	public final TActionEvent getCleanAction() {
+	public final TEventHandler getCleanAction() {
 		return cleanAction;
 	}
 
-	public final void setCleanAction(TActionEvent cleanAction) {
+	public final void setCleanAction(TEventHandler cleanAction) {
 		this.cleanAction = cleanAction;
 	}
 
-	public final TActionEvent getLoadAction() {
+	public final TEventHandler getLoadAction() {
 		return loadAction;
 	}
 
-	public final void setLoadAction(TActionEvent loadAction) {
+	public final void setLoadAction(TEventHandler loadAction) {
 		this.loadAction = loadAction;
 	}
 
-	public final TActionEvent getSelectAction() {
+	public final TEventHandler getSelectAction() {
 		return selectAction;
 	}
 
-	public final void setSelectAction(TActionEvent selectAction) {
+	public final void setSelectAction(TEventHandler selectAction) {
 		this.selectAction = selectAction;
 	}
 
-	public final TActionEvent getImageClickAction() {
+	public final TEventHandler getImageClickAction() {
 		return imageClickAction;
 	}
 
-	public final void setImageClickAction(TActionEvent imageClickAction) {
+	public final void setImageClickAction(TEventHandler imageClickAction) {
 		this.imageClickAction = imageClickAction;
 	}
 }

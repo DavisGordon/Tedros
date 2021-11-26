@@ -8,14 +8,15 @@ package com.tedros.fxapi.builder;
 
 import java.lang.annotation.Annotation;
 
-import javafx.beans.property.Property;
-
 import com.tedros.core.context.TedrosContext;
+import com.tedros.ejb.base.entity.ITFileEntity;
 import com.tedros.fxapi.annotation.control.TFileField;
+import com.tedros.fxapi.domain.TFileModelType;
 import com.tedros.fxapi.exception.TProcessException;
-import com.tedros.fxapi.property.TSimpleFileEntityProperty;
-import com.tedros.fxapi.property.TSimpleFileModelProperty;
 import com.tedros.fxapi.property.TBytesLoader;
+import com.tedros.fxapi.property.TSimpleFileProperty;
+
+import javafx.beans.property.Property;
 
 
 /**
@@ -39,36 +40,38 @@ implements ITFileBuilder<com.tedros.fxapi.control.TFileField> {
 		return control;
 	}
 	
-	public com.tedros.fxapi.control.TFileField build(final Annotation annotation, final TSimpleFileModelProperty<?> tSimpleFileModelProperty) throws Exception {
+	public com.tedros.fxapi.control.TFileField build(final Annotation annotation, final TSimpleFileProperty<?> property) throws Exception {
 		TFileField tAnnotation = (TFileField) annotation;
-		final com.tedros.fxapi.control.TFileField control = new com.tedros.fxapi.control.TFileField(TedrosContext.getStage());
-		control.byteArrayProperty().bindBidirectional(tSimpleFileModelProperty.bytesProperty());
-		control.textProperty().bindBidirectional(tSimpleFileModelProperty.fileNameProperty());
-		control.fileProperty().bindBidirectional(tSimpleFileModelProperty.fileProperty());
-		callParser(tAnnotation, control);
-		return control;
-	}
-	
-	public com.tedros.fxapi.control.TFileField build(final Annotation annotation, final TSimpleFileEntityProperty<?> tSimpleFileEntityProperty) throws Exception {
+		if(tAnnotation.propertyValueType().equals(TFileModelType.MODEL)) {
+			final com.tedros.fxapi.control.TFileField control = new com.tedros.fxapi.control.TFileField(TedrosContext.getStage());
+			control.byteArrayProperty().bindBidirectional(property.tBytesProperty());
+			control.textProperty().bindBidirectional(property.tFileNameProperty());
+			control.fileProperty().bindBidirectional(property.tFileProperty());
+			callParser(tAnnotation, control);
+			return control;
+		}else if(tAnnotation.propertyValueType().equals(TFileModelType.ENTITY)) {
 		
-		TFileField tAnnotation = (TFileField) annotation;
+			if(tAnnotation.preLoadFileBytes())
+				preLoadBytes(property);
+			
+			final com.tedros.fxapi.control.TFileField control = new com.tedros.fxapi.control.TFileField(TedrosContext.getStage());
+			control.byteArrayProperty().bindBidirectional(property.tBytesProperty());
+			control.textProperty().bindBidirectional(property.tFileNameProperty());
+			control.fileSizeProperty().bindBidirectional(property.tFileSizeProperty());
+			control.bytesEntityIdProperty().bindBidirectional(property.tBytesEntityIdProperty());
+			callParser(tAnnotation, control);
+			return control;
+		}
 		
-		if(tAnnotation.preLoadFileBytes())
-			preLoadBytes(tSimpleFileEntityProperty);
-		
-		final com.tedros.fxapi.control.TFileField control = new com.tedros.fxapi.control.TFileField(TedrosContext.getStage());
-		control.byteArrayProperty().bindBidirectional(tSimpleFileEntityProperty.bytesProperty());
-		control.textProperty().bindBidirectional(tSimpleFileEntityProperty.fileNameProperty());
-		control.fileSizeProperty().bindBidirectional(tSimpleFileEntityProperty.fileSizeProperty());
-		control.bytesEntityIdProperty().bindBidirectional(tSimpleFileEntityProperty.bytesEntityIdProperty());
-		callParser(tAnnotation, control);
-		return control;
+		throw new IllegalArgumentException("The field "+super.getComponentDescriptor().getFieldDescriptor().getFieldName()+" "
+				+ " of type "+property.getClass().getSimpleName()+" must set the propertyValueType in TFileField annotation with the value type of the field property.");
 	}
 
-	private void preLoadBytes(final TSimpleFileEntityProperty<?> fileEntityProperty) {
+	private void preLoadBytes(final TSimpleFileProperty<?> fileEntityProperty) {
 		try {
-			if(fileEntityProperty.getValue()!=null && fileEntityProperty.getValue().getByteEntity()!=null && fileEntityProperty.getValue().getByteEntity().getId()!=null)
-				TBytesLoader.loadBytesFromTFileEntity(fileEntityProperty.getValue().getByteEntity().getId(), fileEntityProperty.bytesProperty());
+			ITFileEntity v = (ITFileEntity) fileEntityProperty.getValue();
+			if(fileEntityProperty.getValue()!=null && v.getByte()!=null && v.getByteEntity().getId()!=null)
+				TBytesLoader.loadBytesFromTFileEntity(v.getByteEntity().getId(), fileEntityProperty.tBytesProperty());
 		} catch (TProcessException e) {
 			e.printStackTrace();
 		}

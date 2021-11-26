@@ -5,13 +5,13 @@ package com.tedros.editorweb.model;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.tedros.editorweb.domain.DomainSchema;
@@ -54,9 +54,11 @@ public class Content extends TEntity {
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="template_id", nullable=false)
 	private ComponentTemplate template;
-	
-	@OneToMany(mappedBy="content", 
-			cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+
+	@ManyToMany(fetch=FetchType.EAGER)
+	@JoinTable(name="content_item", schema=DomainSchema.schema,
+    joinColumns=@JoinColumn(name="cont_id", referencedColumnName="id"),
+    inverseJoinColumns=@JoinColumn(name="item_id", referencedColumnName="id"))
 	private List<Item> items;
 	
 	/**

@@ -24,7 +24,6 @@ import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.layout.TRegion;
 import com.tedros.fxapi.builder.ITReaderBuilder;
 import com.tedros.fxapi.builder.TFileReaderBuilder;
-import com.tedros.fxapi.property.TSimpleFileEntityProperty;
 
 /**
  * <pre>
@@ -34,7 +33,7 @@ import com.tedros.fxapi.property.TSimpleFileEntityProperty;
  * 
  * Types supported:
  * 
- * {@link TSimpleFileEntityProperty}
+ * {@link TSimpleFileProperty}
  * 
  * </pre>
  * 

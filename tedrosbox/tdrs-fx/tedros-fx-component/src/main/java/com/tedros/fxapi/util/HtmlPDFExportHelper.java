@@ -3,7 +3,6 @@
  */
 package com.tedros.fxapi.util;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -45,7 +44,7 @@ public final class HtmlPDFExportHelper {
 				String msg = TInternationalizationEngine.getInstance(null)
 						.getFormatedString("#{tedros.fxapi.message.export}", output);
 				presenter.getDecorator().getView().tShowModal(new TMessageBox(msg), true);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				String msg = TInternationalizationEngine.getInstance(null)
 						.getFormatedString("#{tedros.fxapi.message.error}");
@@ -62,7 +61,7 @@ public final class HtmlPDFExportHelper {
 				String msg = TInternationalizationEngine.getInstance(null)
 						.getFormatedString("#{tedros.fxapi.message.export}", output);
 				presenter.getDecorator().getView().tShowModal(new TMessageBox(msg), true);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				String msg = TInternationalizationEngine.getInstance(null)
 						.getFormatedString("#{tedros.fxapi.message.error}");

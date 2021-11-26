@@ -19,7 +19,7 @@ import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
-import com.tedros.fxapi.property.TSimpleFileEntityProperty;
+import com.tedros.fxapi.property.TSimpleFileProperty;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -52,7 +52,7 @@ public class ComponentTemplateFindMV extends TEntityModelView<ComponentTemplate>
 	items=ComponentTypeOptionBuilder.class)
 	private SimpleObjectProperty<ComponentType> type;
 	
-	private TSimpleFileEntityProperty<TFileEntity> imgExample;
+	private TSimpleFileProperty<TFileEntity> imgExample;
 	
 	public ComponentTemplateFindMV(ComponentTemplate entity) {
 		super(entity);
@@ -108,14 +108,14 @@ public class ComponentTemplateFindMV extends TEntityModelView<ComponentTemplate>
 	/**
 	 * @return the imgExample
 	 */
-	public TSimpleFileEntityProperty<TFileEntity> getImgExample() {
+	public TSimpleFileProperty<TFileEntity> getImgExample() {
 		return imgExample;
 	}
 
 	/**
 	 * @param imgExample the imgExample to set
 	 */
-	public void setImgExample(TSimpleFileEntityProperty<TFileEntity> imgExample) {
+	public void setImgExample(TSimpleFileProperty<TFileEntity> imgExample) {
 		this.imgExample = imgExample;
 	}
 	

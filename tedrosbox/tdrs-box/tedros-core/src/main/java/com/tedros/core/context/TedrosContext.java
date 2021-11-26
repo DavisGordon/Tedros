@@ -50,6 +50,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 /**
@@ -532,9 +533,15 @@ public final class TedrosContext {
 		TInternationalizationEngine.reloadBundles();
 	}
 
-	public static void openDocument(String path) {
-		((Application)main).getHostServices().showDocument(path);
-		
+	public static void openDocument(String path) throws Exception {
+		//((Application)main).getHostServices().showDocument(path);
+		if(path==null)
+			throw new IllegalArgumentException("path cannot be null");
+		File f = new File(path);
+		if(!f.isFile())
+			throw new Exception(path+" is not a file!");
+		if(!TFileUtil.open(f)) 
+			throw new Exception(TInternationalizationEngine.getInstance(null).getString("#{tedros.fxapi.message.os.not.support.operation}"));
 	}
 
 	public static void logOut() {

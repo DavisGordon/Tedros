@@ -9,17 +9,18 @@ package com.tedros.fxapi.builder;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 
-import javafx.beans.property.Property;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.Node;
-
+import com.tedros.ejb.base.entity.ITFileEntity;
 import com.tedros.fxapi.annotation.reader.TFileReader;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.form.TConverter;
 import com.tedros.fxapi.property.TBytesLoader;
-import com.tedros.fxapi.property.TSimpleFileEntityProperty;
+import com.tedros.fxapi.property.TSimpleFileProperty;
 import com.tedros.fxapi.reader.TByteArrayReader;
+
+import javafx.beans.property.Property;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.Node;
 
 /**
  * DESCRIÇÃO DA CLASSE
@@ -30,11 +31,11 @@ import com.tedros.fxapi.reader.TByteArrayReader;
 @SuppressWarnings("rawtypes")
 public final class TFileReaderBuilder 
 extends TBuilder 
-implements ITReaderBuilder<Node, TSimpleFileEntityProperty>{
+implements ITReaderBuilder<Node, TSimpleFileProperty>{
 
 		
 	@Override
-	public Node build(Annotation annotation, TSimpleFileEntityProperty property) throws Exception {
+	public Node build(Annotation annotation, TSimpleFileProperty property) throws Exception {
 			
 		TFileReader tAnnotation = (TFileReader) annotation;
 		Node reader = generateFileReader(tAnnotation, property);
@@ -60,24 +61,24 @@ implements ITReaderBuilder<Node, TSimpleFileEntityProperty>{
 				
 			}
 		}else{
-			final TSimpleFileEntityProperty<?> fileProperty = (TSimpleFileEntityProperty) property;
+			final TSimpleFileProperty<?> fileProperty = (TSimpleFileProperty) property;
 			try {
 				final TByteArrayReader reader = new TByteArrayReader();
 				reader.setShowImage(true);
-				if(fileProperty.bytesProperty().getValue()==null){
-					fileProperty.bytesProperty().addListener(new ChangeListener<byte[]>() {
+				if(fileProperty.tBytesProperty().getValue()==null){
+					fileProperty.tBytesProperty().addListener(new ChangeListener<byte[]>() {
 						@Override
 						public void changed(ObservableValue<? extends byte[]> arg0, byte[] arg1, byte[] arg2) {
 							if(arg2!=null){
-								reader.fileNameProperty().bindBidirectional(fileProperty.fileNameProperty());
-								reader.valueProperty().bindBidirectional(fileProperty.bytesProperty());
+								reader.fileNameProperty().bindBidirectional(fileProperty.tFileNameProperty());
+								reader.valueProperty().bindBidirectional(fileProperty.tBytesProperty());
 							}
 						}
 					});
-					TBytesLoader.loadBytesFromTFileEntity(fileProperty.getValue().getByteEntity().getId(), fileProperty.bytesProperty());
+					TBytesLoader.loadBytesFromTFileEntity(((ITFileEntity)fileProperty.getValue()).getByteEntity().getId(), fileProperty.tBytesProperty());
 				}else{
-					reader.fileNameProperty().bindBidirectional(fileProperty.fileNameProperty());
-					reader.valueProperty().bindBidirectional(fileProperty.bytesProperty());
+					reader.fileNameProperty().bindBidirectional(fileProperty.tFileNameProperty());
+					reader.valueProperty().bindBidirectional(fileProperty.tBytesProperty());
 				}
 				return reader;
 			} catch (TProcessException e) {

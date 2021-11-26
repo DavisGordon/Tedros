@@ -9,9 +9,10 @@ import com.tedros.fxapi.annotation.presenter.TDetailListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TDetailTableViewPresenter;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaGroupView;
-import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.presenter.model.TModelView;
+
+import javafx.scene.Node;
 
 /**<pre>
  * The detail field component opens a view to add and remove items.
@@ -21,7 +22,7 @@ import com.tedros.fxapi.presenter.model.TModelView;
  * @author Davis Gordon
  *
  */
-public class TDetailListField extends TDetailFieldRequired {
+public class TDetailListField extends TRequiredDetailField {
 
 	@SuppressWarnings("rawtypes")
 	private TDynaGroupView view;
@@ -53,7 +54,7 @@ public class TDetailListField extends TDetailFieldRequired {
 	 * @return the view
 	 */
 	@SuppressWarnings("rawtypes")
-	public TDynaView gettView() {
+	public Node gettComponent() {
 		return view;
 	}
 	/**

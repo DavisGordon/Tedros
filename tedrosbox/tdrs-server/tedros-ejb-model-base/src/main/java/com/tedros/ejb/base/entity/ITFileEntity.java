@@ -1,18 +1,15 @@
 package com.tedros.ejb.base.entity;
 
+import com.tedros.ejb.base.model.ITFileBaseModel;
 
-public interface ITFileEntity extends ITEntity {
-	
-	public String getFileName();
-	public void setFileName(String name);
-	
-	public String getFileExtension();
-	public void setFileExtension(String extension);
-	
-	public long getFileSize();
-	public void setFileSize(long size);
+public interface ITFileEntity extends ITFileBaseModel, ITEntity {
 	
 	public ITByteEntity getByteEntity();
 	public void setByteEntity(ITByteEntity byteEntity);
+	public String getDescription();
+	public void setDescription(String description);
+	public String getOwner();
+	public void setOwner(String owner);
+	
 	
 }

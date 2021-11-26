@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -32,24 +33,22 @@ public class SiteConteudo extends TEntity {
 	@Column
 	private Boolean showMenu;
 	
-	@Column(length=4000, nullable=false)
-	private String conteudo;
+	@Column(nullable=false)
+	private String code;
 	
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="image_id")
 	private TFileEntity image;
-	
-	@Column(length=15)
-	private String orientacao;
-	
-	@Column(length=10)
-	private String estilo;
 	
 	@Column
 	private Integer ordem;
 	
 	@Column(length=10)
 	private String status;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="template_id", nullable=false)
+	private ComponentTemplate template;
 
 	/**
 	 * @return the titulo
@@ -80,20 +79,6 @@ public class SiteConteudo extends TEntity {
 	}
 
 	/**
-	 * @return the conteudo
-	 */
-	public String getConteudo() {
-		return conteudo;
-	}
-
-	/**
-	 * @param conteudo the conteudo to set
-	 */
-	public void setConteudo(String conteudo) {
-		this.conteudo = conteudo;
-	}
-
-	/**
 	 * @return the image
 	 */
 	public TFileEntity getImage() {
@@ -107,34 +92,6 @@ public class SiteConteudo extends TEntity {
 	 */
 	public void setImage(TFileEntity image) {
 		this.image = image;
-	}
-
-	/**
-	 * @return the orientacao
-	 */
-	public String getOrientacao() {
-		return orientacao;
-	}
-
-	/**
-	 * @param orientacao the orientacao to set
-	 */
-	public void setOrientacao(String orientacao) {
-		this.orientacao = orientacao;
-	}
-
-	/**
-	 * @return the estilo
-	 */
-	public String getEstilo() {
-		return estilo;
-	}
-
-	/**
-	 * @param estilo the estilo to set
-	 */
-	public void setEstilo(String estilo) {
-		this.estilo = estilo;
 	}
 
 	/**
@@ -163,6 +120,34 @@ public class SiteConteudo extends TEntity {
 	 */
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	/**
+	 * @return the code
+	 */
+	public String getCode() {
+		return code;
+	}
+
+	/**
+	 * @param code the code to set
+	 */
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	/**
+	 * @return the template
+	 */
+	public ComponentTemplate getTemplate() {
+		return template;
+	}
+
+	/**
+	 * @param template the template to set
+	 */
+	public void setTemplate(ComponentTemplate template) {
+		this.template = template;
 	}
 	
 	

@@ -6,6 +6,7 @@ public interface DomainTables {
 	final static String doacao = "doacao";
 	final static String pessoa = "pessoa";
 	final static String contato = "contato";
+	final static String csf_imagem = "csf_imagem";
 	final static String documento = "documento";
 	final static String pessoa_endereco = "pessoa_endereco";
 	final static String endereco = "endereco";
@@ -38,6 +39,8 @@ public interface DomainTables {
 	final static String site_noticia = "site_noticia";
 	final static String site_termo = "site_termo";
 	final static String site_conteudo = "site_conteudo";
+	final static String component_template = "component_template";
+	final static String css_class = "css_class";
 }
 
 

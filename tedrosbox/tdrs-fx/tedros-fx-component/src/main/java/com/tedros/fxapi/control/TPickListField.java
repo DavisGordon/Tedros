@@ -252,16 +252,22 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 		public ObservableList<E> gettSelectedList() {
 			return tSelectedList;
 		}
+		
+		public void tClearSelectedList() {
+			if(this.tSelectedList!=null && !this.tSelectedList.isEmpty()){
+				this.tSourceList.addAll(this.tSelectedList);
+				this.tSelectedList.clear();
+				tSourceListView.getItems().sort(comparator);
+			}
+		}
 
 		public void settSelectedList(ObservableList<E> selectedList) {
 			
 			if(selectedList==null)
 				throw new IllegalArgumentException("The argument selectedList canot be null");
 			
-			if(this.tSelectedList!=null && !this.tSelectedList.isEmpty()){
-				this.tSourceList.addAll(this.tSelectedList);
-				this.tSelectedList.clear();
-			}
+			this.tClearSelectedList();
+			
 			if(this.tSourceList!=null){
 				this.tSourceList.retainAll(CollectionUtils.removeAll(this.tSourceList, selectedList));
 			}
@@ -273,7 +279,7 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 				this.tSelectedList.clear();
 				this.tSelectedList.addAll(selectedList);
 			}
-			tSourceListView.getItems().sort(comparator);
+			
 			tSelectedListView.getItems().sort(comparator);
 		}
 

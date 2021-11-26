@@ -36,5 +36,27 @@ public final class TBytesLoader {
 		});
 		process.startProcess();
 	}
+	
+	public static final void loadBytes(final TFileEntity fileEntity) throws TProcessException {
+		
+		final TFileEntityLoadProcess process = new TFileEntityLoadProcess();
+		process.load(fileEntity);
+		process.stateProperty().addListener(new ChangeListener<State>() {
+			@Override
+			public void changed(ObservableValue<? extends State> arg0,
+					State arg1, State arg2) {
+				
+					if(arg2.equals(State.SUCCEEDED)){
+						
+						TResult<TFileEntity> result = process.getValue();
+						if(result.getValue()!=null){
+							TFileEntity e = result.getValue();
+							fileEntity.getByteEntity().setBytes(e.getByteEntity().getBytes());
+						}
+					}	
+			}
+		});
+		process.startProcess();
+	}
 
 }

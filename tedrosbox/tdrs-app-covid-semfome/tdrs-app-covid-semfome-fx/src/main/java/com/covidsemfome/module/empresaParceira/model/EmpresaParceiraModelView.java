@@ -36,10 +36,11 @@ import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.domain.TFileExtension;
+import com.tedros.fxapi.domain.TFileModelType;
 import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
-import com.tedros.fxapi.property.TSimpleFileEntityProperty;
+import com.tedros.fxapi.property.TSimpleFileProperty;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -124,9 +125,11 @@ public class EmpresaParceiraModelView extends TEntityModelView<EmpresaParceira>{
 	
 	@TLabel(text="Logo")
 	@TFieldBox(node=@TNode(id="logo", parse=true))
-	@TFileField(showImage=true, maxImageHeight=161, preLoadFileBytes=true, maxImageWidth=161, extensions= {TFileExtension.JPG, TFileExtension.PNG},
+	@TFileField(showImage=true, propertyValueType=TFileModelType.ENTITY,
+	maxImageHeight=161, preLoadFileBytes=true, maxImageWidth=161, 
+	extensions= {TFileExtension.JPG, TFileExtension.PNG},
 	showFilePath=true)
-	private TSimpleFileEntityProperty<TFileEntity> logo;
+	private TSimpleFileProperty<TFileEntity> logo;
 	
 	
 	public EmpresaParceiraModelView(EmpresaParceira entidade) {
@@ -269,14 +272,14 @@ public class EmpresaParceiraModelView extends TEntityModelView<EmpresaParceira>{
 	/**
 	 * @return the logo
 	 */
-	public TSimpleFileEntityProperty<TFileEntity> getLogo() {
+	public TSimpleFileProperty<TFileEntity> getLogo() {
 		return logo;
 	}
 
 	/**
 	 * @param logo the logo to set
 	 */
-	public void setLogo(TSimpleFileEntityProperty<TFileEntity> logo) {
+	public void setLogo(TSimpleFileProperty<TFileEntity> logo) {
 		this.logo = logo;
 	}
 }

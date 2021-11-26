@@ -8,15 +8,13 @@ package com.tedros.fxapi.control;
 
 import java.io.File;
 
-import com.tedros.fxapi.control.action.TActionEvent;
+import com.tedros.fxapi.control.action.TEventHandler;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -53,8 +51,8 @@ public class TDirectoryField extends StackPane {
 	
 	private boolean showFilePath;
 	
-	private TActionEvent cleanAction;
-	private TActionEvent selectAction;
+	private TEventHandler cleanAction;
+	private TEventHandler selectAction;
 	
 	private ChangeListener<File> fileListener;
 	private ChangeListener<File> initialDirectoryListener;
@@ -149,41 +147,17 @@ public class TDirectoryField extends StackPane {
 		
 		fileProperty.addListener(fileListener);
 		
-		selectButton.setOnAction(
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(final ActionEvent e) {
-                    	
-                    	if(selectAction!=null)
-                    		if(!selectAction.runBefore(e))
-                    			return;
-                    	
-                        final File file = directoryChooser.showDialog(appStage);
-                        if (file != null) 
-                        	settFile(file);
-                        
-                        if(selectAction!=null)
-                    		if(!selectAction.runAfter(e))
-                    			return;
-                    }
-                });
+		selectButton.setOnAction(e->{
+            final File file = directoryChooser.showDialog(appStage);
+            if (file != null) 
+            	settFile(file);
+        });
 		
-		cleanButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				if(cleanAction!=null)
-            		if(!cleanAction.runBefore(e))
-            			return;
-				tCleanField();
-				if(cleanAction!=null)
-            		if(!cleanAction.runAfter(e))
-            			return;
-			}
+		cleanButton.setOnAction(e->{
+			tCleanField();
 		});
 			
 	}
-	
-	
 	
 	private void showHideFilePathSpace(){
 		if(!showFilePath){
@@ -266,11 +240,11 @@ public class TDirectoryField extends StackPane {
 			directoryNameField.setRequired(required);
 	}
 	
-	public final void settCleanAction(TActionEvent cleanAction) {
+	public final void settCleanAction(TEventHandler cleanAction) {
 		this.cleanAction = cleanAction;
 	}
 	
-	public final void settSelectAction(TActionEvent selectAction) {
+	public final void settSelectAction(TEventHandler selectAction) {
 		this.selectAction = selectAction;
 	}
 

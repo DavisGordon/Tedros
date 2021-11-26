@@ -71,12 +71,16 @@ public class TContentSetting extends TSetting {
 		};
 		mv.getCssClassList().addListener(classChl);
 		codeChl = (a, b, n) -> {
-			n = cleanHtml(n);
-			try {
-				insertHtml(n);
-			}catch(JSException e) {
-				log(e.getMessage());
-				e.printStackTrace();
+			if(StringUtils.isNotBlank(n)) {
+				n = cleanHtml(n);
+				try {
+					insertHtml(n);
+				}catch(JSException e) {
+					log(e.getMessage());
+					e.printStackTrace();
+				}
+			}else {
+				removeSelection();
 			}
 		};
 		mv.getCode().addListener(codeChl);
@@ -107,6 +111,13 @@ public class TContentSetting extends TSetting {
 		we.executeScript("selectRoot()");
 	}
 	
+	private void removeSelection(){
+		WebEngine we = getWebEngine();
+		we.executeScript("removeSel()");
+		we.executeScript("clear()");
+		this.setCssClass(null);
+	}
+	
 	public void setHtml(String html) {
 		ContentMV mv = getModelView();
 		mv.getCode().removeListener(codeChl);
@@ -126,9 +137,8 @@ public class TContentSetting extends TSetting {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void setCssClass(String css) {
+		TPickListField pl = super.getControl("cssClassList");
 		if(StringUtils.isNotBlank(css)) {
-			TPickListField pl = super.getControl("cssClassList");
-			
 			List<CssClassMV> lst = new ArrayList<>();
 			List<String> classes = Arrays.asList(css.split(" "));
 			ObservableList<CssClassMV> src = pl.gettSourceList();
@@ -141,6 +151,8 @@ public class TContentSetting extends TSetting {
 					lst.add(c);
 			});
 			pl.settSelectedList(FXCollections.observableArrayList(lst));
+		}else {
+			pl.tClearSelectedList();
 		}
 	}
 	

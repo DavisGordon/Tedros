@@ -1,5 +1,7 @@
 package com.tedros.core.ejb.controller;
 
+import java.util.List;
+
 import javax.ejb.Remote;
 
 import com.tedros.common.model.TFileEntity;
@@ -14,5 +16,6 @@ public interface TFileEntityController extends ITSecureEjbController<TFileEntity
 
 	public TResult<TFileEntity> findByIdWithBytesLoaded(TAccessToken token, TFileEntity entity);
 	
+	public TResult<List<TFileEntity>> find(TAccessToken token, List<String> owner, List<String> ext, Long maxSize, boolean loaded);
 	
 }

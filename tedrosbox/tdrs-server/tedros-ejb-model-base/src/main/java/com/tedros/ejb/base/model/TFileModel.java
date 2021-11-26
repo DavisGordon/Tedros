@@ -98,10 +98,6 @@ public class TFileModel implements ITFileModel, Serializable {
 		return fileExtension;
 	}
 	
-	public final Long getFileSize() {
-		return fileSize;
-	}
-	
 	public final ITByteModel getByteModel() {
 		initializeByteModel();
 		return byteModel;
@@ -124,6 +120,98 @@ public class TFileModel implements ITFileModel, Serializable {
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
 	}
+
+	@Override
+	public void setFileExtension(String extension) {
+		this.fileExtension = extension;
+	}
+
+
+	@Override
+	public ITByteBaseModel getByte() {
+		return this.getByteModel();
+	}
+
+	/**
+	 * @return the fileSize;
+	 */
+	public Long getFileSize() {
+		return fileSize;
+	}
+
+	/**
+	 * @param fileSize the fileSize to set
+	 */
+	public void setFileSize(Long fileSize) {
+		this.fileSize = fileSize;
+	}
+
+	@Override
+	public <T extends ITByteBaseModel> void setByte(T byteModel) {
+		this.setByteModel((ITByteModel) byteModel);
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((byteModel == null) ? 0 : byteModel.hashCode());
+		result = prime * result + ((file == null) ? 0 : file.hashCode());
+		result = prime * result + ((fileExtension == null) ? 0 : fileExtension.hashCode());
+		result = prime * result + ((fileName == null) ? 0 : fileName.hashCode());
+		result = prime * result + ((filePath == null) ? 0 : filePath.hashCode());
+		result = prime * result + ((fileSize == null) ? 0 : fileSize.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof TFileModel))
+			return false;
+		TFileModel other = (TFileModel) obj;
+		if (byteModel == null) {
+			if (other.byteModel != null)
+				return false;
+		} else if (!byteModel.equals(other.byteModel))
+			return false;
+		if (file == null) {
+			if (other.file != null)
+				return false;
+		} else if (!file.equals(other.file))
+			return false;
+		if (fileExtension == null) {
+			if (other.fileExtension != null)
+				return false;
+		} else if (!fileExtension.equals(other.fileExtension))
+			return false;
+		if (fileName == null) {
+			if (other.fileName != null)
+				return false;
+		} else if (!fileName.equals(other.fileName))
+			return false;
+		if (filePath == null) {
+			if (other.filePath != null)
+				return false;
+		} else if (!filePath.equals(other.filePath))
+			return false;
+		if (fileSize == null) {
+			if (other.fileSize != null)
+				return false;
+		} else if (!fileSize.equals(other.fileSize))
+			return false;
+		return true;
+	}
+
 
 	
 	

@@ -17,9 +17,7 @@ import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TModelView;
 
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBuilder;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.RadioButtonBuilder;
 
 @SuppressWarnings("rawtypes")
 public abstract class TDynaViewReportBaseDecorator<M extends TModelView> 
@@ -32,6 +30,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	private Button tPdfButton;
 	private Button tWordButton;
 	private Button tCancelButton;
+	private Button tOpenExportFolderButton;
 	
     private RadioButton tEditModeRadio;
     private RadioButton tReadModeRadio;
@@ -90,28 +89,28 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildModesRadioButton(String editRadiotext, String readRadioText) {
 		
 		final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-		if(editRadiotext==null)		
-			tEditModeRadio = RadioButtonBuilder.create()
-			.text(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_editModeTitle : tPresenter.decorator().editModeTitle()))
-			.id("t-title-label")
-			.build();
-		else
-			tEditModeRadio = RadioButtonBuilder.create()
-			.text(iEngine.getString(editRadiotext))
-			.id("t-title-label")
-			.build();
-		
-		if(readRadioText==null)	
-			tReadModeRadio = RadioButtonBuilder.create()
-			.text(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_readerModeTitle : tPresenter.decorator().readerModeTitle()))
-			.id("t-title-label")
-			.build();
-		else
-			tReadModeRadio = RadioButtonBuilder.create()
-			.text(iEngine.getString(readRadioText))
-			.id("t-title-label")
-			.build();
-		
+		if(editRadiotext==null)		{
+			tEditModeRadio = new RadioButton();
+			tEditModeRadio.setText(iEngine.getString(tPresenter==null 
+				? TAnnotationDefaultValue.TVIEW_editModeTitle 
+						: tPresenter.decorator().editModeTitle()));
+			tEditModeRadio.setId("t-title-label");
+		}else {
+			tEditModeRadio = new RadioButton();
+			tEditModeRadio.setText(iEngine.getString(editRadiotext));
+			tEditModeRadio.setId("t-title-label");
+		}
+		if(readRadioText==null)	{
+			tReadModeRadio = new RadioButton();
+			tReadModeRadio.setText(iEngine.getString(tPresenter==null 
+					? TAnnotationDefaultValue.TVIEW_readerModeTitle 
+							: tPresenter.decorator().readerModeTitle()));
+			tReadModeRadio.setId("t-title-label");
+		}else {
+			tReadModeRadio = new RadioButton();
+			tReadModeRadio.setText(iEngine.getString(readRadioText));
+			tReadModeRadio.setId("t-title-label");
+		}
 		if(isUserNotAuthorized(TAuthorizationType.EDIT))
 			tEditModeRadio.setDisable(true);
 		if(isUserNotAuthorized(TAuthorizationType.READ))
@@ -136,15 +135,16 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildCancelButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tCancelButton = ButtonBuilder.create()
-					.text(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_cancelButtonText : tPresenter.decorator().cancelButtonText()))
-					.id("t-button")
-					.build();
-		}else
-			tCancelButton = ButtonBuilder.create()
-			.text(iEngine.getString(text))
-			.id("t-button")
-			.build();
+			tCancelButton = new Button();
+			tCancelButton.setText(iEngine.getString(tPresenter==null 
+					? TAnnotationDefaultValue.TVIEW_cancelButtonText 
+							: tPresenter.decorator().cancelButtonText()));
+			tCancelButton.setId("t-button");
+		}else {
+			tCancelButton = new Button();
+			tCancelButton.setText(iEngine.getString(text));
+			tCancelButton.setId("t-button");
+		}
 	}
 	
 	/**
@@ -163,16 +163,16 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildSearchButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tSearchButton = ButtonBuilder.create()
-					.text(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_searchButtonText : tPresenter.decorator().searchButtonText()))
-					.id("t-button")
-					.build();
-		}else
-			tSearchButton = ButtonBuilder.create()
-			.text(iEngine.getString(text))
-			.id("t-button")
-			.build();
-		
+			tSearchButton = new Button();
+			tSearchButton.setText(iEngine.getString(tPresenter==null 
+					? TAnnotationDefaultValue.TVIEW_searchButtonText 
+							: tPresenter.decorator().searchButtonText()));
+			tSearchButton.setId("t-button");
+		}else {
+			tSearchButton = new Button();
+			tSearchButton.setText(iEngine.getString(text));
+			tSearchButton.setId("t-button");
+		}
 		if(isUserNotAuthorized(TAuthorizationType.SEARCH))
 			tSearchButton.setDisable(true);
 	}
@@ -193,16 +193,16 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildCleanButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tCleanButton = ButtonBuilder.create()
-					.text(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_cleanButtonText : tPresenter.decorator().cleanButtonText()))
-					.id("t-button")
-					.build();
-		}else
-			tCleanButton = ButtonBuilder.create()
-			.text(iEngine.getString(text))
-			.id("t-button")
-			.build();
-		
+			tCleanButton = new Button();
+			tCleanButton.setText(iEngine.getString(tPresenter==null 
+					? TAnnotationDefaultValue.TVIEW_cleanButtonText 
+							: tPresenter.decorator().cleanButtonText()));
+			tCleanButton.setId("t-button");
+		}else {
+			tCleanButton = new Button();
+			tCleanButton.setText(iEngine.getString(text));
+			tCleanButton.setId("t-button");
+		}
 		
 	}
 
@@ -222,16 +222,16 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildExcelButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tExcelButton = ButtonBuilder.create()
-					.text(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_excelButtonText : tPresenter.decorator().excelButtonText()))
-					.id("t-button")
-					.build();
-		}else
-			tExcelButton = ButtonBuilder.create()
-			.text(iEngine.getString(text))
-			.id("t-button")
-			.build();
-		
+			tExcelButton = new Button();
+			tExcelButton.setText(iEngine.getString(tPresenter==null 
+					? TAnnotationDefaultValue.TVIEW_excelButtonText 
+							: tPresenter.decorator().excelButtonText()));
+			tExcelButton.setId("t-button");
+		}else {
+			tExcelButton = new Button();
+			tExcelButton.setText(iEngine.getString(text));
+			tExcelButton.setId("t-button");
+		}
 		if(isUserNotAuthorized(TAuthorizationType.EXPORT))
 			tExcelButton.setDisable(true);
 	}
@@ -252,16 +252,16 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildWordButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tWordButton = ButtonBuilder.create()
-					.text(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_wordButtonText : tPresenter.decorator().wordButtonText()))
-					.id("t-button")
-					.build();
-		}else
-			tWordButton = ButtonBuilder.create()
-			.text(iEngine.getString(text))
-			.id("t-button")
-			.build();
-		
+			tWordButton = new Button();
+			tWordButton.setText(iEngine.getString(tPresenter==null 
+					? TAnnotationDefaultValue.TVIEW_wordButtonText 
+							: tPresenter.decorator().wordButtonText()));
+			tWordButton.setId("t-button");
+		}else {
+			tWordButton = new Button();
+			tWordButton.setText(iEngine.getString(text));
+			tWordButton.setId("t-button");
+		}
 		if(isUserNotAuthorized(TAuthorizationType.EXPORT))
 			tWordButton.setDisable(true);
 	}
@@ -282,19 +282,48 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildPdfButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tPdfButton = ButtonBuilder.create()
-					.text(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_pdfButtonText : tPresenter.decorator().pdfButtonText()))
-					.id("t-button")
-					.build();
-		}else
-			tPdfButton = ButtonBuilder.create()
-			.text(iEngine.getString(text))
-			.id("t-button")
-			.build();
-		
+			tPdfButton = new Button();
+			tPdfButton.setText(iEngine.getString(tPresenter==null 
+					? TAnnotationDefaultValue.TVIEW_pdfButtonText 
+							: tPresenter.decorator().pdfButtonText()));
+			tPdfButton.setId("t-button");
+		}else {
+			tPdfButton = new Button();
+			tPdfButton.setText(iEngine.getString(text));
+			tPdfButton.setId("t-button");
+		}
 		if(isUserNotAuthorized(TAuthorizationType.EXPORT))
 			tPdfButton.setDisable(true);
 	}
+	/**
+	 * <p>
+	 * Build a button for the Open Export Folder action.<br><br>
+	 * 
+	 * If the parameter was null this will use the text set up
+	 * in @{@link TPresenter}{decorator= @{@link TDecorator}{openExportFolderButtonText=''}} 
+	 * but if the given {@link TModelView} was not annotated with {@link TPresenter} 
+	 * or with a custom view annotation which contains a {@link TPresenter} 
+	 * a default string (TAnnotationDefaultValue.TVIEW_openExportFolderButtonText) will be used.<br><br> 
+	 * 
+	 * This will initialize with "t-button" id.
+	 * </p>
+	 * */
+	public void buildOpenExportFolderButton(String text) {
+		if(text==null){
+			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
+			tOpenExportFolderButton = new Button();
+			tOpenExportFolderButton.setText(iEngine.getString(tPresenter==null 
+					? TAnnotationDefaultValue.TVIEW_openExportFolderButtonText 
+							: tPresenter.decorator().openExportFolderButtonText()));
+			tOpenExportFolderButton.setId("t-button");
+		}else {
+			tOpenExportFolderButton = new Button();
+			tOpenExportFolderButton.setText(iEngine.getString(text));
+			tOpenExportFolderButton.setId("t-button");
+		}
+		
+	}
+	
 	/**
 	 * <p>
 	 * Build a button for the colapse action.
@@ -305,10 +334,10 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	 * </p>
 	 * */
 	public void buildColapseButton(String text) {
-		tColapseButton = ButtonBuilder.create()
-				.text(iEngine.getString(StringUtils.isBlank(text) ? TAnnotationDefaultValue.TVIEW_colapse : text))
-				.id("t-button")
-				.build();
+		tColapseButton = new Button();
+		tColapseButton.setText(iEngine.getString(StringUtils.isBlank(text) 
+				? TAnnotationDefaultValue.TVIEW_colapse : text));
+		tColapseButton.setId("t-button");
 	}
 
 	// getters and setters
@@ -374,6 +403,13 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	 */
 	public Button gettWordButton() {
 		return tWordButton;
+	}
+
+	/**
+	 * @return the tOpenExportFolderButton
+	 */
+	public Button gettOpenExportFolderButton() {
+		return tOpenExportFolderButton;
 	}
 
 	

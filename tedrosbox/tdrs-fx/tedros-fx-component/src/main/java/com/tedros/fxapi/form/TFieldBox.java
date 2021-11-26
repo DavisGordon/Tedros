@@ -9,6 +9,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import java.util.UUID;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -31,6 +33,7 @@ public class TFieldBox extends StackPane implements ITField {
 	private Node label;
 	private Node control;
 	private String controlFieldName;
+	private UUID uuid = UUID.randomUUID();
 	
 	/**
 	 * Initialize the field box
@@ -151,7 +154,10 @@ public class TFieldBox extends StackPane implements ITField {
 	
 	@Override
 	public boolean equals(Object obj) {
-		return EqualsBuilder.reflectionEquals(this, obj, true);
+		if(obj==null || !(obj instanceof TFieldBox))
+			return false;
+		return this.uuid.equals(((TFieldBox)obj).uuid);
+		//return EqualsBuilder.reflectionEquals(this, obj, true);
 	}
 	
 	@Override

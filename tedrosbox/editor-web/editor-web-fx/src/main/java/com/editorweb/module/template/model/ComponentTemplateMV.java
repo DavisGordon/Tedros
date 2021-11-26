@@ -28,18 +28,17 @@ import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TDetailListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
-import com.tedros.fxapi.annotation.reader.TColumnReader;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
-import com.tedros.fxapi.annotation.reader.TTableReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.domain.TFileExtension;
+import com.tedros.fxapi.domain.TFileModelType;
 import com.tedros.fxapi.presenter.entity.behavior.TDetailCrudViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TDetailCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
-import com.tedros.fxapi.property.TSimpleFileEntityProperty;
+import com.tedros.fxapi.property.TSimpleFileProperty;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -83,9 +82,10 @@ public class ComponentTemplateMV extends TEntityModelView<ComponentTemplate> {
 	
 	@TLabel(text="Imagem")
 	@TFieldBox(node=@TNode(id="image", parse=true))
-	@TFileField(showImage=true, preLoadFileBytes=true, extensions= {TFileExtension.JPG, TFileExtension.PNG},
+	@TFileField(showImage=true, propertyValueType=TFileModelType.ENTITY,
+	preLoadFileBytes=true, extensions= {TFileExtension.JPG, TFileExtension.PNG},
 	showFilePath=true)
-	private TSimpleFileEntityProperty<TFileEntity> imgExample;
+	private TSimpleFileProperty<TFileEntity> imgExample;
 	
 	@TPickListField(selectedLabel="#{label.selected}", 
 			sourceLabel="#{view.cssclass}", 
@@ -167,7 +167,7 @@ public class ComponentTemplateMV extends TEntityModelView<ComponentTemplate> {
 	/**
 	 * @return the imgExample
 	 */
-	public TSimpleFileEntityProperty<TFileEntity> getImgExample() {
+	public TSimpleFileProperty<TFileEntity> getImgExample() {
 		return imgExample;
 	}
 
@@ -175,7 +175,7 @@ public class ComponentTemplateMV extends TEntityModelView<ComponentTemplate> {
 	/**
 	 * @param imgExample the imgExample to set
 	 */
-	public void setImgExample(TSimpleFileEntityProperty<TFileEntity> imgExample) {
+	public void setImgExample(TSimpleFileProperty<TFileEntity> imgExample) {
 		this.imgExample = imgExample;
 	}
 

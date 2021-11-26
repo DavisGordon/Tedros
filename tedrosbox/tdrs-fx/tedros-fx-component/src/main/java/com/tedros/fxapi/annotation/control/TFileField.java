@@ -23,12 +23,12 @@ import com.tedros.fxapi.annotation.scene.control.TInsets;
 import com.tedros.fxapi.annotation.scene.layout.TRegion;
 import com.tedros.fxapi.builder.ITFileBuilder;
 import com.tedros.fxapi.builder.TFileFieldBuilder;
-import com.tedros.fxapi.control.action.TActionEvent;
+import com.tedros.fxapi.control.action.TEventHandler;
 import com.tedros.fxapi.domain.TDefaultValues;
 import com.tedros.fxapi.domain.TFileExtension;
+import com.tedros.fxapi.domain.TFileModelType;
 import com.tedros.fxapi.presenter.model.TModelView;
-import com.tedros.fxapi.property.TSimpleFileEntityProperty;
-import com.tedros.fxapi.property.TSimpleFileModelProperty;
+import com.tedros.fxapi.property.TSimpleFileProperty;
 
 import javafx.beans.property.Property;
 import javafx.geometry.Pos;
@@ -44,7 +44,7 @@ import javafx.scene.layout.StackPane;
 
  * Types supported:
  * 
- * {@link TSimpleFileEntityProperty}, {@link TSimpleFileModelProperty}, {@link Property}&lt;byte[]&gt;
+ * {@link TSimpleFileEntityProperty}, {@link TSimpleFileProperty}, {@link Property}&lt;byte[]&gt;
  * 
  * Example: 
  * 
@@ -154,6 +154,12 @@ public @interface TFileField {
 	* </pre>
 	**/
 	public Pos alignment() default Pos.CENTER_LEFT;
+	
+	
+	/**
+	 * Specify the Property value type.
+	 * */
+	public TFileModelType propertyValueType() default TFileModelType.NONE;
 	
 	/**
 	 * <pre>
@@ -343,7 +349,7 @@ public @interface TFileField {
 	 * Defines the action to the open button
 	 * </pre>
 	 * */
-	public Class<? extends TActionEvent> openAction() default TActionEvent.class;
+	public Class<? extends TEventHandler> openAction() default TEventHandler.class;
 	
 	/**
 	 * <pre>
@@ -356,7 +362,7 @@ public @interface TFileField {
 	 * Defines the action to the clean button
 	 * </pre>
 	 * */
-	public Class<? extends TActionEvent> cleanAction() default TActionEvent.class;
+	public Class<? extends TEventHandler> cleanAction() default TEventHandler.class;
 	
 	/**
 	 * <pre>
@@ -369,7 +375,7 @@ public @interface TFileField {
 	 * Defines the action to the load button
 	 * </pre>
 	 * */
-	public Class<? extends TActionEvent> loadAction() default TActionEvent.class;
+	public Class<? extends TEventHandler> loadAction() default TEventHandler.class;
 	
 	/**
 	 * <pre>
@@ -382,7 +388,7 @@ public @interface TFileField {
 	 * Defines the action to the select button
 	 * </pre>
 	 * */
-	public Class<? extends TActionEvent> selectAction() default TActionEvent.class;
+	public Class<? extends TEventHandler> selectAction() default TEventHandler.class;
 	
 	/**
 	 * <pre>
@@ -395,7 +401,7 @@ public @interface TFileField {
 	 * Defines the action to the image click event
 	 * </pre>
 	 * */
-	public Class<? extends TActionEvent> imageClickAction() default TActionEvent.class;
+	public Class<? extends TEventHandler> imageClickAction() default TEventHandler.class;
 	
 	
 }
