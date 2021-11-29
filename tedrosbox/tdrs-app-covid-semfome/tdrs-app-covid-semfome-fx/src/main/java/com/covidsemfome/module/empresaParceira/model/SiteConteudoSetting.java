@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.covidsemfome.module.web.model.CssClassMV;
 import com.covidsemfome.parceiro.model.ComponentTemplate;
 import com.covidsemfome.parceiro.model.CssClass;
+import com.tedros.common.model.TFileEntity;
 import com.tedros.fxapi.control.THTMLEditor;
 import com.tedros.fxapi.control.TPickListField;
 import com.tedros.fxapi.control.TTextAreaField;
@@ -23,7 +24,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker.State;
-import javafx.scene.web.HTMLEditor;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSException;
@@ -35,6 +35,7 @@ import netscape.javascript.JSObject;
  */
 public class SiteConteudoSetting extends TSetting {
 
+	
 	private ChangeListener<ComponentTemplate> tempChl;
 	private ChangeListener<String> codeChl;
 	private ListChangeListener<CssClassMV> classChl;
@@ -51,6 +52,15 @@ public class SiteConteudoSetting extends TSetting {
 			we.load("file:C:/Users/Davis Gordon/git/Tedros/tedrosbox/tdrs-app-covid-semfome/tdrs-app-covid-semfome-webapp/src/main/webapp/temp/edit.html");
 		}catch(Exception e) {}
 		SiteConteudoModelView mv = getModelView();
+		
+		mv.getImagem().addListener((a,b,n)->{
+			String s = mv.getSelected().getValue();
+			if(s!=null && s.trim().toUpperCase().equals("IMG") && n!=null) {
+				String v = "http://localhost:8081/tdrs-app-covid-semfome-webapp/api/f/i/"+((TFileEntity) n).getId();
+				this.setAttribute("src", v);
+			}
+		});
+		
 		//mv.getCode().bindBidirectional(mv.getDesc());
 		tempChl = (a, b, n) -> {
 			if(n!=null) {
@@ -96,8 +106,6 @@ public class SiteConteudoSetting extends TSetting {
 			}
 		};
 		//mv.getCode().addListener(codeChl);
-		
-		
 		
 		we.setJavaScriptEnabled(true);
 		we.getLoadWorker().stateProperty().addListener((a, b, n)->{
@@ -189,6 +197,11 @@ public class SiteConteudoSetting extends TSetting {
 			return;
 		WebEngine we = getWebEngineFromHtmlEditor();
 		we.executeScript("setElement('"+s.replaceAll("\n", "").replace("'", "\\'")+"')");
+	}
+	
+	private void setAttribute(String a, String v) {
+		WebEngine we = getWebEngineFromHtmlEditor();
+		we.executeScript("setAttribute('"+a+"', '"+v+"')");
 	}
 
 	private WebEngine getWebEngineFromHtmlEditor() {
