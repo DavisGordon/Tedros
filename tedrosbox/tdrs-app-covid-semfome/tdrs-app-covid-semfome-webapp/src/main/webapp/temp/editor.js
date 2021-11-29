@@ -11,6 +11,13 @@ function tdrsSetClass(){
 		tedros.setCssClass(selEl.className);
 	}
 }
+function setAttribute(a,v){
+	if(selEl){
+		$(selEl).attr(a,v);
+		tdrsSetHtml();
+	}
+	
+}
 function clear(){
 	$('#spot').html('');
 	removeSelectedArea();

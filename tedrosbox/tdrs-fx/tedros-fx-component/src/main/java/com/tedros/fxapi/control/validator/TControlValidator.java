@@ -18,6 +18,7 @@ import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
 import com.tedros.fxapi.annotation.control.TValidator;
 import com.tedros.fxapi.descriptor.TFieldDescriptor;
 import com.tedros.fxapi.domain.TZeroValidation;
+import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.util.TReflectionUtil;
 
 import javafx.beans.property.ObjectProperty;
@@ -67,10 +68,10 @@ public final class TControlValidator<E extends ITModelView> {
 		for (E tModelView : modelsView) {
 			List<TFieldDescriptor> fiels = TReflectionUtil.getFieldDescriptorList(tModelView);
 			TValidatorResult<E> result = new TValidatorResult(tModelView);
-			for (TFieldDescriptor tFieldDescriptor : fiels){
-				if(TReflectionUtil.isIgnoreField(tFieldDescriptor))
+			for (TFieldDescriptor fd : fiels){
+				if(TReflectionUtil.isIgnoreField(fd))
 					continue;
-				validateField(result, tFieldDescriptor, tModelView);
+				validateField(result, fd, tModelView);
 			}
 			if(!result.isRequirementAccomplished())
 				list.add(result);	
@@ -91,8 +92,6 @@ public final class TControlValidator<E extends ITModelView> {
 				label = tAnnotation.text();
 				continue;
 			}
-			
-			
 			
 			if(annotation instanceof TValidator){
 				
@@ -118,7 +117,7 @@ public final class TControlValidator<E extends ITModelView> {
 				continue;
 			}
 			
-			if (annotation instanceof TModelViewCollectionType){
+			if (annotation instanceof TModelViewCollectionType && ((TModelViewCollectionType)annotation).modelViewClass()!=TModelView.class){
 				//final TDetailView tAnnotation = (TDetailView) annotation;
 				final TControlValidator validator = new TControlValidator();
 				List<ITModelView> lst = null;

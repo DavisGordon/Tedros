@@ -39,6 +39,7 @@ import com.tedros.fxapi.annotation.layout.TSliderMenu;
 import com.tedros.fxapi.annotation.layout.TTitledPane;
 import com.tedros.fxapi.annotation.layout.TVBox;
 import com.tedros.fxapi.annotation.layout.TVGrow;
+import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
@@ -71,7 +72,8 @@ import javafx.scene.layout.Priority;
 @TListViewPresenter(
 	paginator=@TPaginator(entityClass = SiteConteudo.class, serviceName = "ISiteConteudoControllerRemote", show=true),
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Website Conteudo", 
-	readerModeTitle="Ver template", buildModesRadioButton=false )))
+	readerModeTitle="Ver template", buildModesRadioButton=false ), 
+	behavior=@TBehavior(saveAllModels=false, action=SiteConteudoSaveAction.class)))
 @TSecurity(	id="COVSEMFOME_PARCEIRO_WEBCONTEUDO_FORM", 
 	appName = "#{app.name}", moduleName = "Administrativo", viewName = "Conteudo Website Parceiros ",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,  
@@ -157,10 +159,6 @@ public class SiteConteudoModelView extends TEntityModelView<SiteConteudo>{
 	@TFieldBox(node=@TNode(id="img", parse = true))
 	@TSelectImageField(source=TEnvironment.REMOTE, target=TEnvironment.REMOTE, remoteOwner="csf")
 	private SimpleObjectProperty<ITFileBaseModel> imagem;
-	/*@TFieldBox(node=@TNode(id="image", parse=true))
-	@TFileField(showImage=true, preLoadFileBytes=true, extensions= {TFileExtension.JPG, TFileExtension.PNG},
-	showFilePath=true)*/
-	//private TSimpleFileEntityProperty<TFileEntity> image;
 
 	@TLabel(text="Log")
 	@TTextAreaField(wrapText=true,textInputControl=@TTextInputControl(editable=false, parse = true), 

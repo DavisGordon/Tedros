@@ -3,6 +3,7 @@ package com.tedros.fxapi.property;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -14,7 +15,6 @@ import com.tedros.ejb.base.model.ITFileModel;
 import com.tedros.ejb.base.model.TFileModel;
 
 import javafx.beans.property.LongProperty;
-import javafx.beans.property.ReadOnlyLongProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -70,52 +70,71 @@ public class TSimpleFileProperty<T extends ITFileBaseModel> extends SimpleObject
 
 	private void buildListeners() {
 		
-		ChangeListener<String> flnCL = (arg0, arg1, arg2) -> {
-				getValue().setFileName(arg2);
-				tFileExtensionProperty.setValue(getValue().getFileExtension());
+		ChangeListener<String> flnCL = (a, b, n) -> {
+			ITFileBaseModel v = getValue();
+			if(v!=null) {
+				v.setFileName(n);
+				String ext = n!=null ? FilenameUtils.getExtension(n) : null;
+				v.setFileExtension(ext);
+				tFileExtensionProperty.setValue(ext);
 				fireValueChangedEvent();
-			};
+			}
+		};
 		repo.add("flnCL", flnCL);
 		this.tFileNameProperty.addListener(new WeakChangeListener<String>(flnCL));
 		
-		ChangeListener<String> flpCL = (arg0, arg1, arg2) -> {
+		ChangeListener<String> flpCL = (a, b, n) -> {
 			ITFileBaseModel v = getValue();
 			if(v!=null && v instanceof ITFileModel) {
-				((ITFileModel)v).setFilePath(arg2);
+				((ITFileModel)v).setFilePath(n);
 				fireValueChangedEvent();
 			}
 		};
 		repo.add("flpCL", flpCL);
 		this.tFilePathProperty.addListener(new WeakChangeListener<String>(flpCL));
 		
-		ChangeListener<byte[]> bpCL = (arg0, arg1, arg2) -> {
+		ChangeListener<byte[]> bpCL = (a, b, n) -> {
 			ITFileBaseModel v = getValue();
 			if(v!=null) {
-				if(v instanceof ITFileModel) 
-					((ITFileModel)v).getByteModel().setBytes(arg2);
-				else
-					((ITFileEntity)v).getByteEntity().setBytes(arg2);
+				v.getByte().setBytes(n);
 				fireValueChangedEvent();
 			}
 		};
 		repo.add("bpCL", bpCL);
 		this.tBytesProperty.addListener(new WeakChangeListener<byte[]>(bpCL));		
 		
-		ChangeListener<File> fCL = (arg0, arg1, arg2) -> {
+		ChangeListener<Number> szCL = (a, b, n) -> {
 			ITFileBaseModel v = getValue();
-			if(v!=null && v instanceof ITFileModel) {
+			if(v!=null) {
+				v.setFileSize((Long) n);
+				fireValueChangedEvent();
+			}
+		};
+		repo.add("szCL", szCL);
+		this.tFileSizeProperty.addListener(new WeakChangeListener<>(szCL));		
+		
+		
+		ChangeListener<File> fCL = (a, b, n) -> {
+			//ITFileBaseModel v = getValue();
+			//if(v!=null && v instanceof ITFileModel) {
+			if(n!=null) {
 				try {
-					ITFileModel m = (ITFileModel) v;
-					m.setFile(arg2);
-					tFileNameProperty.setValue(arg2==null ? null : m.getFileName());
-					tFilePathProperty.setValue(arg2==null ? null : m.getFilePath());
-					tBytesProperty.setValue(arg2==null ? null : m.getByteModel().getBytes());
-					tFileSizeProperty.setValue(arg2==null ? null : m.getFileSize());
+					ITFileModel m = new TFileModel(); //(ITFileModel) v;
+					m.setFile(n);
+					tFileNameProperty.setValue(/*n==null ? null :*/ m.getFileName());
+					tFilePathProperty.setValue(/*n==null ? null :*/ m.getFilePath());
+					tBytesProperty.setValue(/*n==null ? null :*/ m.getByteModel().getBytes());
+					tFileSizeProperty.setValue(/*n==null ? null : */m.getFileSize());
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				fireValueChangedEvent();
+			}else {
+				tFileNameProperty.setValue(null);
+				tFilePathProperty.setValue(null);
+				tBytesProperty.setValue(null);
+				tFileSizeProperty.setValue(null);
 			}
+			fireValueChangedEvent();
 		};
 		repo.add("fCL", fCL);
 		this.tFileProperty.addListener(new WeakChangeListener<File>(fCL));

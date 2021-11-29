@@ -301,10 +301,10 @@ public class TFileField extends StackPane {
     		else{
 	    		if(showFilePath)
 	    			filePathLabel.setText(file.getAbsolutePath());
-	            
+	    		
+	            this.fileProperty.setValue(file);
 	    		this.fileNameProperty.setValue(file.getName());
 	    		this.byteArrayProperty.setValue(FileUtils.readFileToByteArray(file));
-	    		this.fileProperty.setValue(file);
 	    		this.fileSizeProperty.setValue(size);
     		}
         } catch (IOException ex) {

@@ -70,9 +70,9 @@ import javafx.scene.layout.VBox;
 public class TSelectImageField extends TRequiredSelectImage{
 
 	
-	private static final String IMGDEF = "tdrs-dftimg-tmp22";
 	private static final String SOURCE = "source";
 	private static final String TARGET = "target";
+	@SuppressWarnings("rawtypes")
 	private ObservableList<TEventHandler> tEventHandlerList;
 	private final ObservableList<ITFileBaseModel> tFileList;
 	private ObservableList<ITFileBaseModel> tSelectedFileList;
@@ -150,41 +150,6 @@ public class TSelectImageField extends TRequiredSelectImage{
 	
 	
 	/**
-	 * 
-	 */
-	private void callRemoteService() {
-		TRemoteFileProcess p = new TRemoteFileProcess();
-		p.stateProperty().addListener((a,b,n)->{
-			if(n.equals(State.SUCCEEDED)) {
-				TResult<List<TFileEntity>> r = p.getValue();
-				if(r.getValue()!=null && !r.getValue().isEmpty()) {
-					this.tFileList.addAll(r.getValue());
-				}
-			}
-		});
-		List<String> owner = this.remoteFileOwner!=null && this.remoteFileOwner.length>0 
-				? Arrays.asList(this.remoteFileOwner) 
-						: null;
-		List<String> exts = this.tImageExtensionProperty.getValue()!=null 
-				? Arrays.asList(this.tImageExtensionProperty.getValue().getExtensionName())
-						: null;
-		Long maxSize = this.tMaxFileSizeProperty.getValue() != null
-				? this.tMaxFileSizeProperty.getValue().longValue()
-						: null;
-		Boolean load = this.tPreLoadBytes.getValue()!=null
-				? this.tPreLoadBytes.getValue()
-						: false;
-		
-		Map<String, Object> in = new HashMap<>();
-		in.put("o", owner);
-		in.put("e", exts);
-		in.put("s", maxSize);
-		in.put("l", load);
-		p.process(in);
-		p.startProcess();
-	}
-	
-	/**
 	 * Initialize propertys
 	 * */
 	private void initialize(){
@@ -214,16 +179,16 @@ public class TSelectImageField extends TRequiredSelectImage{
 		actToolbar.getItems().addAll(viewBtn, backBtn, remBtn);
 		
 		scrollPane = new ScrollPane();
-    	scrollPane.setId("t-form-scroll");
-    	scrollPane.setContent(mainPane);
-    	scrollPane.setFitToWidth(true);
-    	
-    	scrollPane.maxHeight(Double.MAX_VALUE);
-    	scrollPane.maxWidth(Double.MAX_VALUE);
-    	scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-    	scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
-    	scrollPane.setStyle("-fx-background-color: transparent;");
-
+		scrollPane.setId("t-form-scroll");
+		scrollPane.setContent(mainPane);
+		scrollPane.setFitToWidth(true);
+		
+		scrollPane.maxHeight(Double.MAX_VALUE);
+		scrollPane.maxWidth(Double.MAX_VALUE);
+		scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		scrollPane.setStyle("-fx-background-color: transparent;");
+	
 		mainPane = new BorderPane();
 		
 		if(tFileSource.equals(TEnvironment.LOCAL)) {
@@ -275,49 +240,6 @@ public class TSelectImageField extends TRequiredSelectImage{
 		
 	}
 
-	/**
-	 * 
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void buildSourcePane() {
-		if(sourcePane!=null && !sourcePane.getChildren().isEmpty()) {
-			sourcePane.getChildren().forEach(n->{
-				TFieldBox fb = (TFieldBox) n;
-				ImageView iv = (ImageView) fb.gettControl();
-				iv.fitHeightProperty().unbindBidirectional(tFitHeightProperty);
-				iv.fitWidthProperty().unbindBidirectional(tFitWidthProperty);
-				if(!this.tEventHandlerList.isEmpty())
-					for(TEventHandler ev : tEventHandlerList)
-						iv.removeEventHandler(ev.getEventType(), ev);
-			});
-		}
-		
-		sourcePane =  new FlowPane();
-		sourcePane.setHgap(15);
-		sourcePane.setVgap(15);
-		sourcePane.setAlignment(Pos.CENTER);
-		sourcePane.setId(SOURCE);
-	}
-	
-	private void buildTargetPane() {
-		if(targetPane!=null && !targetPane.getChildren().isEmpty()) {
-			targetPane.getChildren().forEach(n->{
-				VBox h = (VBox) n;
-				ImageView iv = (ImageView) h.getChildren().get(0);
-				iv.fitHeightProperty().unbindBidirectional(tFitHeightProperty);
-				iv.fitWidthProperty().unbindBidirectional(tFitWidthProperty);
-				if(!this.tEventHandlerList.isEmpty())
-					for(TEventHandler ev : tEventHandlerList)
-						iv.removeEventHandler(ev.getEventType(), ev);
-			});
-		}
-		targetPane =  new FlowPane();
-		targetPane.setHgap(15);
-		targetPane.setVgap(15);
-		targetPane.setAlignment(Pos.CENTER);
-		targetPane.setId(TARGET);
-	}
-	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void buildListener() {
 		ChangeListener<Node> scrlChl = (a,b,n)->{
@@ -440,42 +362,39 @@ public class TSelectImageField extends TRequiredSelectImage{
 		
 	}
 
-	private void addTarget(List<ITFileBaseModel> lst) {
-		addTarget((ITFileBaseModel[])lst.toArray());
-	}
-	
-	private void addTarget(ITFileBaseModel... base) {
-		List<ITFileBaseModel> l = new ArrayList<>();
-		if(tFileTarget.equals(TEnvironment.LOCAL)) {
-			for(ITFileBaseModel value : base) {
-				if(value instanceof ITFileEntity) {
-					TFileModel m = TFileBaseUtil.convert((ITFileEntity)value);
-					l.add(m);
-				}else 
-					l.add(value);
-			}
-		}else {
-			for(ITFileBaseModel value : base) {
-				if(value instanceof TFileModel) {
-					ITFileEntity m = TFileBaseUtil.convert((TFileModel)value);
-					l.add(m);
-				}else 
-					l.add(value);
-			}
-		}
-		if(tModelProperty==null) 
-			tSelectedFileList.addAll(l);
-		else {
-			if(!tSelectedFileList.isEmpty())
-				this.tSelectedFileList.set(0, l.get(0));
-			else
-				this.tSelectedFileList.add(l.get(0));
-		}
+	private void buildSource(){
+		if(!tFileList.isEmpty()) {
+			buildSourcePane();
+			scrollPane.setContent(sourcePane);
+			for (ITFileBaseModel m : tFileList)
+				buildImageViewIcon(m);
+		}else 
+			showDefImageView();
 			
 	}
 
-	private void buildToolbar() {
+	/**
+	 * 
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void buildSourcePane() {
+		if(sourcePane!=null && !sourcePane.getChildren().isEmpty()) {
+			sourcePane.getChildren().forEach(n->{
+				TFieldBox fb = (TFieldBox) n;
+				ImageView iv = (ImageView) fb.gettControl();
+				iv.fitHeightProperty().unbindBidirectional(tFitHeightProperty);
+				iv.fitWidthProperty().unbindBidirectional(tFitWidthProperty);
+				if(!this.tEventHandlerList.isEmpty())
+					for(TEventHandler ev : tEventHandlerList)
+						iv.removeEventHandler(ev.getEventType(), ev);
+			});
+		}
 		
+		sourcePane =  new FlowPane();
+		sourcePane.setHgap(15);
+		sourcePane.setVgap(15);
+		sourcePane.setAlignment(Pos.CENTER);
+		sourcePane.setId(SOURCE);
 	}
 	
 	private void buildTarget() {
@@ -489,8 +408,9 @@ public class TSelectImageField extends TRequiredSelectImage{
 					VBox vbox = new VBox();
 					
 					ImageView iv = new ImageView();
-					this.setImage(iv, m.getByte().getBytes());
-					this.setting(iv);
+					iv.setUserData(m);
+					setting(iv);
+					settingImage(m, iv);
 					vbox.getChildren().add(iv);
 					if(m instanceof ITFileEntity) {
 						TTextField tif = new TTextField();
@@ -543,17 +463,61 @@ public class TSelectImageField extends TRequiredSelectImage{
 		}
 	}
 
-	private void buildSource(){
-		if(!tFileList.isEmpty()) {
-			buildSourcePane();
-			scrollPane.setContent(sourcePane);
-			for (ITFileBaseModel m : tFileList)
-				buildImageViewIcon(m);
-		}else 
-			showDefImageView();
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void buildTargetPane() {
+		if(targetPane!=null && !targetPane.getChildren().isEmpty()) {
+			targetPane.getChildren().forEach(n->{
+				VBox h = (VBox) n;
+				ImageView iv = (ImageView) h.getChildren().get(0);
+				iv.fitHeightProperty().unbindBidirectional(tFitHeightProperty);
+				iv.fitWidthProperty().unbindBidirectional(tFitWidthProperty);
+				if(!this.tEventHandlerList.isEmpty())
+					for(TEventHandler ev : tEventHandlerList)
+						iv.removeEventHandler(ev.getEventType(), ev);
+			});
+		}
+		targetPane =  new FlowPane();
+		targetPane.setHgap(15);
+		targetPane.setVgap(15);
+		targetPane.setAlignment(Pos.CENTER);
+		targetPane.setId(TARGET);
+	}
+	
+	private void addTarget(ITFileBaseModel... base) {
+		List<ITFileBaseModel> l = new ArrayList<>();
+		if(tFileTarget.equals(TEnvironment.LOCAL)) {
+			for(ITFileBaseModel value : base) {
+				if(value instanceof ITFileEntity) {
+					TFileModel m = TFileBaseUtil.convert((ITFileEntity)value);
+					l.add(m);
+				}else 
+					l.add(value);
+			}
+		}else {
+			for(ITFileBaseModel value : base) {
+				if(value instanceof TFileModel) {
+					ITFileEntity m = TFileBaseUtil.convert((TFileModel)value);
+					if(this.remoteFileOwner!=null && this.remoteFileOwner.length>0)
+						m.setOwner(this.remoteFileOwner[0]);
+					l.add(m);
+				}else {
+					if(((TFileEntity) value).getOwner()==null && this.remoteFileOwner!=null && this.remoteFileOwner.length>0)
+						((TFileEntity) value).setOwner(this.remoteFileOwner[0]);
+					l.add(value);
+				}
+			}
+		}
+		if(tModelProperty==null) 
+			tSelectedFileList.addAll(l);
+		else {
+			if(!tSelectedFileList.isEmpty())
+				this.tSelectedFileList.set(0, l.get(0));
+			else
+				this.tSelectedFileList.add(l.get(0));
+		}
 			
 	}
-
+	
 	/**
 	 * @throws FileNotFoundException
 	 * @throws IOException
@@ -586,16 +550,6 @@ public class TSelectImageField extends TRequiredSelectImage{
 		return img;
 	}
 
-	/**
-	 * @param imgView
-	 */
-	private void setting(final ImageView imgView) {
-		imgView.setPreserveRatio(true);
-		imgView.autosize();
-		imgView.fitHeightProperty().bindBidirectional(tFitHeightProperty);
-		imgView.fitWidthProperty().bindBidirectional(tFitWidthProperty);
-	}
-
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void buildImageViewIcon(ITFileBaseModel model) {
 		try {
@@ -607,31 +561,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 			
 			final ImageView imgView = new ImageView();
 			setting(imgView);
-			if(model instanceof ITFileEntity) {
-				ITFileEntity fe = (ITFileEntity) model;
-				byte[] bytes = fe.getByte().getBytes();
-				if(bytes==null) { 
-					if(tPreLoadBytes.getValue()) {
-						loadImage(imgView, fe);
-					}else {
-						imgView.setImage(buildDefImg());
-						final EventHandler<MouseEvent> evh = new EventHandler<MouseEvent>() {
-							@Override
-							public void handle(MouseEvent e) {
-								ImageView x = (ImageView) e.getSource();
-								x.removeEventHandler(MouseEvent.MOUSE_ENTERED, this);
-								ITFileEntity m = (ITFileEntity) x.getUserData();
-								loadImage(x, m);
-							}
-						};
-						imgView.addEventHandler(MouseEvent.MOUSE_ENTERED, evh);
-					}
-				}else {
-					setImage(imgView, bytes);
-				}
-			}else{
-				setImage(imgView, model.getByte().getBytes());
-			}
+			settingImage(model, imgView);
 			imgView.setCursor(Cursor.HAND);
 			imgView.setUserData(model);
 			imgView.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
@@ -678,6 +608,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 			public void changed(ObservableValue<? extends byte[]> arg0, byte[] arg1,
 					byte[] n) {
 				try {
+					fe.getByteEntity().setBytes(n);
 					setImage(imgView, n);
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -700,18 +631,87 @@ public class TSelectImageField extends TRequiredSelectImage{
 		imgView.setImage(img);
 	}
 
+	
 	/**
 	 * @param model
+	 * @param imgView
+	 * @throws FileNotFoundException
+	 * @throws IOException
 	 */
-	private void loadBytes(ITFileBaseModel model) {
-		try {
-			TFileEntity e = (TFileEntity) model;
-			TBytesLoader.loadBytes(e);
-		} catch (Throwable e) {
-			e.printStackTrace();
+	private void settingImage(ITFileBaseModel model, final ImageView imgView)
+			throws FileNotFoundException, IOException {
+		if(model instanceof ITFileEntity) {
+			ITFileEntity fe = (ITFileEntity) model;
+			byte[] bytes = fe.getByte().getBytes();
+			if(bytes==null) { 
+				if(tPreLoadBytes.getValue()) {
+					loadImage(imgView, fe);
+				}else {
+					imgView.setImage(buildDefImg());
+					final EventHandler<MouseEvent> evh = new EventHandler<MouseEvent>() {
+						@Override
+						public void handle(MouseEvent e) {
+							ImageView x = (ImageView) e.getSource();
+							x.removeEventHandler(MouseEvent.MOUSE_ENTERED, this);
+							ITFileEntity m = (ITFileEntity) x.getUserData();
+							loadImage(x, m);
+						}
+					};
+					imgView.addEventHandler(MouseEvent.MOUSE_ENTERED, evh);
+				}
+			}else {
+				setImage(imgView, bytes);
+			}
+		}else{
+			setImage(imgView, model.getByte().getBytes());
 		}
 	}
-	
+
+	/**
+	 * @param imgView
+	 */
+	private void setting(final ImageView imgView) {
+		imgView.setPreserveRatio(true);
+		imgView.autosize();
+		imgView.fitHeightProperty().bindBidirectional(tFitHeightProperty);
+		imgView.fitWidthProperty().bindBidirectional(tFitWidthProperty);
+	}
+
+	/**
+	 * 
+	 */
+	private void callRemoteService() {
+		TRemoteFileProcess p = new TRemoteFileProcess();
+		p.stateProperty().addListener((a,b,n)->{
+			if(n.equals(State.SUCCEEDED)) {
+				TResult<List<TFileEntity>> r = p.getValue();
+				if(r.getValue()!=null && !r.getValue().isEmpty()) {
+					this.tFileList.addAll(r.getValue());
+				}
+			}
+		});
+		List<String> owner = this.remoteFileOwner!=null && this.remoteFileOwner.length>0 
+				? Arrays.asList(this.remoteFileOwner) 
+						: null;
+		List<String> exts = this.tImageExtensionProperty.getValue()!=null 
+				? Arrays.asList(this.tImageExtensionProperty.getValue().getExtensionName())
+						: null;
+		Long maxSize = this.tMaxFileSizeProperty.getValue() != null && this.tMaxFileSizeProperty.getValue()>0
+				? this.tMaxFileSizeProperty.getValue().longValue()
+						: null;
+		Boolean load = this.tPreLoadBytes.getValue()!=null
+				? this.tPreLoadBytes.getValue()
+						: false;
+		
+		Map<String, Object> in = new HashMap<>();
+		in.put("o", owner);
+		in.put("e", exts);
+		in.put("s", maxSize);
+		in.put("l", load);
+		p.setObjectToProcess(in);
+		p.startProcess();
+	}
+
 	public final ObservableList<ITFileBaseModel> gettItems() {
 		return tFileList;
 	}
@@ -771,6 +771,8 @@ public class TSelectImageField extends TRequiredSelectImage{
 		@SuppressWarnings("unchecked")
 		@Override
 		public TResult<List<TFileEntity>> process(Map<String, Object> m) {
+			if(m==null)
+				return null;
 			List<String> owner = (List<String>) m.get("o");
 			List<String> exts = (List<String>) m.get("e");
 			Long maxSize = (Long) m.get("s");
