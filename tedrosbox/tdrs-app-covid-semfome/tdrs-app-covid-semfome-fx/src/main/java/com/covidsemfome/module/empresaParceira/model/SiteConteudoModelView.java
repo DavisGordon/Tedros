@@ -13,7 +13,7 @@ import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.THTMLEditor;
-import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
+import com.tedros.fxapi.annotation.control.THyperlinkField;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
 import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
@@ -27,6 +27,7 @@ import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
+import com.tedros.fxapi.annotation.control.TVerticalRadioGroup;
 import com.tedros.fxapi.annotation.form.TDetailForm;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.form.TSetting;
@@ -47,9 +48,12 @@ import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.annotation.scene.control.TInsets;
 import com.tedros.fxapi.annotation.scene.control.TLabeled;
+import com.tedros.fxapi.annotation.scene.layout.TRegion;
 import com.tedros.fxapi.annotation.scene.web.TWebEngine;
 import com.tedros.fxapi.annotation.scene.web.TWebView;
+import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.domain.TEnvironment;
@@ -65,6 +69,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.Priority;
+import javafx.scene.text.FontWeight;
 
 @TSetting(SiteConteudoSetting.class)
 @TForm(name = "Website Conteudo", form=SiteConteudoForm.class)
@@ -87,8 +92,9 @@ public class SiteConteudoModelView extends TEntityModelView<SiteConteudo>{
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-info", parse = true))
 	@TLabel(text="Editando tag:", position=TLabelPosition.TOP)
 	@TShowField
-	@TVBox(	pane=@TPane(children={"titulo", "selected", "template"}), spacing=10, fillWidth=true,
-	vgrow=@TVGrow(priority={@TPriority(field="title", priority=Priority.NEVER),
+	@TVBox(	pane=@TPane(children={"titulo", "status", "selected", "template"}), spacing=10, fillWidth=true,
+	vgrow=@TVGrow(priority={@TPriority(field="titulo", priority=Priority.NEVER),
+			@TPriority(field="status", priority=Priority.NEVER),
 			@TPriority(field="selected", priority=Priority.NEVER),
 			@TPriority(field="template", priority=Priority.ALWAYS)
 	}))
@@ -107,11 +113,25 @@ public class SiteConteudoModelView extends TEntityModelView<SiteConteudo>{
 	@TLabel(text="#{label.order}")
 	@TNumberSpinnerField(maxValue = 100)
 	private SimpleIntegerProperty ordem;
+
+	@TLabel(text="Status")
+	@TVerticalRadioGroup(alignment=Pos.TOP_LEFT, required=true, spacing=4,
+	radioButtons = {@TRadioButtonField(text="Ativado", userData="ATIVADO"), 
+					@TRadioButtonField(text="Desativado", userData="DESATIVADO")
+	})
+	@THBox(	pane=@TPane(children={"status","showMenu"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="status", priority=Priority.ALWAYS),
+   				   		@TPriority(field="showMenu", priority=Priority.NEVER) }))
+	private SimpleStringProperty status;
+	
+	@TCheckBoxField(labeled=@TLabeled(text="#{label.add.menu}", parse = true))
+	private SimpleBooleanProperty showMenu;
 	
 	@TAccordion(expandedPane="tmplt", node=@TNode(id="contaacc",parse = true), /*region=@TRegion(maxWidth=300, parse = true),*/
 			panes={
 					@TTitledPane(text="#{label.component}", node=@TNode(id="tmplt",parse = true), 
-							expanded=true, fields={"template", "showMenu", "status"}),
+							expanded=true, fields={"template", "addInside", "addFirst", 
+									"addLast", "addOutside", "replace"}),
 					@TTitledPane(text="#{label.css.domain}", fields={"cssClassList"})
 				})
 	@TLabel(text="#{label.component}")
@@ -119,16 +139,26 @@ public class SiteConteudoModelView extends TEntityModelView<SiteConteudo>{
 	entityClass=ComponentTemplate.class, optionModelViewClass=ComponentTemplateMV.class, 
 	optionProcessType=TOptionProcessType.LIST_ALL), required=true)
 	private SimpleObjectProperty<ComponentTemplate> template;
-
-	@TCheckBoxField(labeled=@TLabeled(text="#{label.add.menu}", parse = true))
-	private SimpleBooleanProperty showMenu;
 	
-	@TLabel(text="Status")
-	@THorizontalRadioGroup(alignment=Pos.TOP_LEFT, required=true, spacing=4,
-	radioButtons = {@TRadioButtonField(text="Ativado", userData="ATIVADO"), 
-					@TRadioButtonField(text="Desativado", userData="DESATIVADO")
-	})
-	private SimpleStringProperty status;
+	@THyperlinkField(labeled = @TLabeled(text="Adicionar dentro", 
+					font=@TFont(size=4, weight=FontWeight.BOLD), parse = true))
+	private SimpleStringProperty addInside;
+	
+	@THyperlinkField(labeled = @TLabeled(text="Adicionar antes", 
+					font=@TFont(size=4, weight=FontWeight.BOLD), parse = true))
+	private SimpleStringProperty addFirst;
+	
+	@THyperlinkField(labeled = @TLabeled(text="Adicionar depois", 
+					font=@TFont(size=4, weight=FontWeight.BOLD), parse = true))
+	private SimpleStringProperty addLast;
+	
+	@THyperlinkField(labeled = @TLabeled(text="Envolver", 
+					font=@TFont(size=4, weight=FontWeight.BOLD), parse = true))
+	private SimpleStringProperty addOutside;
+
+	@THyperlinkField(labeled = @TLabeled(text="Substituir", 
+					font=@TFont(size=4, weight=FontWeight.BOLD), parse = true))
+	private SimpleStringProperty replace;
 	
 	@TPickListField(selectedLabel="#{label.selected}", 
 			sourceLabel="#{view.cssclass}", width=110, 
@@ -144,7 +174,7 @@ public class SiteConteudoModelView extends TEntityModelView<SiteConteudo>{
 			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"webview"})), text = "Preview"),
 			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"log"})), text = "Log")
 			
-	})
+	}, region=@TRegion(padding=@TInsets(left=50), parse = true))
 	@THTMLEditor(control=@TControl(prefHeight=500, parse = true))
 	private SimpleStringProperty editor;
 	
@@ -369,6 +399,76 @@ public class SiteConteudoModelView extends TEntityModelView<SiteConteudo>{
 	 */
 	public void setImagem(SimpleObjectProperty<ITFileBaseModel> imagem) {
 		this.imagem = imagem;
+	}
+
+	/**
+	 * @return the addInside
+	 */
+	public SimpleStringProperty getAddInside() {
+		return addInside;
+	}
+
+	/**
+	 * @param addInside the addInside to set
+	 */
+	public void setAddInside(SimpleStringProperty addInside) {
+		this.addInside = addInside;
+	}
+
+	/**
+	 * @return the addFirst
+	 */
+	public SimpleStringProperty getAddFirst() {
+		return addFirst;
+	}
+
+	/**
+	 * @param addFirst the addFirst to set
+	 */
+	public void setAddFirst(SimpleStringProperty addFirst) {
+		this.addFirst = addFirst;
+	}
+
+	/**
+	 * @return the addLast
+	 */
+	public SimpleStringProperty getAddLast() {
+		return addLast;
+	}
+
+	/**
+	 * @param addLast the addLast to set
+	 */
+	public void setAddLast(SimpleStringProperty addLast) {
+		this.addLast = addLast;
+	}
+
+	/**
+	 * @return the addOutside
+	 */
+	public SimpleStringProperty getAddOutside() {
+		return addOutside;
+	}
+
+	/**
+	 * @param addOutside the addOutside to set
+	 */
+	public void setAddOutside(SimpleStringProperty addOutside) {
+		this.addOutside = addOutside;
+	}
+
+	/**
+	 * @return the replace
+	 */
+	public SimpleStringProperty getReplace() {
+		return replace;
+	}
+
+	/**
+	 * @param replace the replace to set
+	 */
+	public void setReplace(SimpleStringProperty replace) {
+		this.replace = replace;
 	}
 
 

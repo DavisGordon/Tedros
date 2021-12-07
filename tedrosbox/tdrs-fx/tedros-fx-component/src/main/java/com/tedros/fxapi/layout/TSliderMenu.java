@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.DepthTest;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
@@ -68,6 +69,9 @@ public class TSliderMenu extends StackPane {
 	    
 	    exBtn = new Button();
 	    exBtn.setGraphic(imgV);
+	    exBtn.setCache(true);
+	    exBtn.setCacheShape(true);
+	    exBtn.setDepthTest(DepthTest.ENABLE);
 	    exBtn.setId("t-slider-menu-button");
 	    
 
