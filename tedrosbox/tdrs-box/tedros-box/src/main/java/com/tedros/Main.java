@@ -247,12 +247,11 @@ public class Main extends Application implements ITedrosBox  {
         scene = new Scene(layerPane, 1020, 600, is3dSupported);
         if(is3dSupported)
             scene.setCamera(new PerspectiveCamera());
-        
+       
         final String defaultStyleCssUrl = TedrosContext.getExternalURLFile(TedrosFolderEnum.CSS_CASPIAN_FOLDER, "caspian.css").toExternalForm();
         final String defaultStyleCssUrl2 = TedrosContext.getExternalURLFile(TedrosFolderEnum.CSS_CASPIAN_FOLDER, "caspian-no-transparency.css").toExternalForm();
         final String defaultStyleCssUrl3 = TedrosContext.getExternalURLFile(TedrosFolderEnum.CSS_CASPIAN_FOLDER, "highcontrast.css").toExternalForm();
 
-        
         final String customStyleCssUrl = TedrosContext.getExternalURLFile(TedrosFolderEnum.CONF_FOLDER, "custom-styles.css").toExternalForm();
     	final String immutableStylesCssUrl = TedrosContext.getExternalURLFile(TedrosFolderEnum.CONF_FOLDER, "immutable-styles.css").toExternalForm();
 

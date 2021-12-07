@@ -39,18 +39,38 @@ function setElement(h){
 	tdrsSetClass();
 }
 function addLast(h){
+	var $n = $(h);
 	if(selEl){
-		$(selEl).append(h);
-		addSelectedArea();
+		$(selEl).append($n);
 	}else
-		$('#spot').append(h);
+		$('#spot').append($n);
+	selEl = $n.get(0);
+	setTimeout(function(){
+		addSelectedArea();
+	}, 2000);
+	buildTools();
+	tedros.setElementTag(selEl.tagName);
+	tdrsSetClass();
 }
 function addFirst(h){
+	var $n = $(h);
 	if(selEl){
-		$(selEl).prepend(h);
-		addSelectedArea();
+		$(selEl).prepend($n);
 	}else
-		$('#spot').prepend(h);
+		$('#spot').prepend($n);
+	selEl = $n.get(0);
+	setTimeout(function(){
+		addSelectedArea();
+	}, 2000);
+	buildTools();
+	tedros.setElementTag(selEl.tagName);
+	tdrsSetClass();
+}
+function wrap(h){
+	if(selEl){
+		$(selEl).wrap(h);
+		setParentEl();
+	}
 }
 function remove(){
 	if(selEl){

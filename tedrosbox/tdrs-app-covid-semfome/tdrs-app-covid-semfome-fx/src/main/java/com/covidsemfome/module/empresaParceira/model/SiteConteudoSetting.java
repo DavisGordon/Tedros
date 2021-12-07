@@ -19,11 +19,13 @@ import com.tedros.fxapi.control.TTextAreaField;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.form.TSetting;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker.State;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSException;
@@ -35,7 +37,7 @@ import netscape.javascript.JSObject;
  */
 public class SiteConteudoSetting extends TSetting {
 
-	
+	private SimpleStringProperty code = new SimpleStringProperty();
 	private ChangeListener<ComponentTemplate> tempChl;
 	private ChangeListener<String> codeChl;
 	private ListChangeListener<CssClassMV> classChl;
@@ -51,6 +53,7 @@ public class SiteConteudoSetting extends TSetting {
 		try {
 			we.load("file:C:/Users/Davis Gordon/git/Tedros/tedrosbox/tdrs-app-covid-semfome/tdrs-app-covid-semfome-webapp/src/main/webapp/temp/edit.html");
 		}catch(Exception e) {}
+		
 		SiteConteudoModelView mv = getModelView();
 		
 		mv.getImagem().addListener((a,b,n)->{
@@ -64,10 +67,60 @@ public class SiteConteudoSetting extends TSetting {
 		//mv.getCode().bindBidirectional(mv.getDesc());
 		tempChl = (a, b, n) -> {
 			if(n!=null) {
-				this.insertHtml(n.getCode());
+				code.setValue(n.getCode());
 			}
 		};
 		mv.getTemplate().addListener(tempChl);
+		
+		Hyperlink ai = super.getControl("addInside");
+		ai.setOnAction(e->{
+			if(StringUtils.isNotBlank(code.getValue())) {
+				this.addLast(code.getValue());
+			}
+		});
+		
+		Hyperlink af = super.getControl("addFirst");
+		af.setOnAction(e->{
+			if(StringUtils.isNotBlank(code.getValue())) {
+				this.addFirst(code.getValue());
+			}
+		});
+		
+		Hyperlink al = super.getControl("addLast");
+		al.setOnAction(e->{
+			if(StringUtils.isNotBlank(code.getValue())) {
+				this.addLast(code.getValue());
+			}
+		});
+		
+		Hyperlink ao = super.getControl("addOutside");
+		ao.setOnAction(e->{
+			if(StringUtils.isNotBlank(code.getValue())) {
+				this.wrap(code.getValue());
+			}
+		});
+		
+		Hyperlink r = super.getControl("replace");
+		r.setOnAction(e->{
+			if(StringUtils.isNotBlank(code.getValue())) {
+				this.replaceInsert(code.getValue());
+			}
+		});
+		boolean dsb = mv.getTemplate().getValue()==null;
+		ai.setDisable(dsb);
+		af.setDisable(dsb);
+		al.setDisable(dsb);
+		ao.setDisable(dsb);
+		r.setDisable(dsb);
+		
+		code.addListener((a,b,n)->{
+			ai.setDisable(StringUtils.isBlank(n));
+			af.setDisable(StringUtils.isBlank(n));
+			al.setDisable(StringUtils.isBlank(n));
+			ao.setDisable(StringUtils.isBlank(n));
+			r.setDisable(StringUtils.isBlank(n));
+		});
+		
 		classChl = change -> {
 			while(change.next()) {
 				List<CssClassMV> rem = (List<CssClassMV>) change.getRemoved();
@@ -96,7 +149,7 @@ public class SiteConteudoSetting extends TSetting {
 			if(StringUtils.isNotBlank(n)) {
 				n = cleanHtml(n);
 				try {
-					insertHtml(n);
+					replaceInsert(n);
 				}catch(JSException e) {
 					log(e.getMessage());
 					e.printStackTrace();
@@ -117,7 +170,7 @@ public class SiteConteudoSetting extends TSetting {
 				if(mv.getCode().getValue()!=null) {
 					String c = cleanHtml(mv.getCode().getValue());
 					try {
-						insertHtml(c);
+						replaceInsert(c);
 					}catch(JSException e) {
 						log(e.getMessage());
 						e.printStackTrace();
@@ -192,16 +245,46 @@ public class SiteConteudoSetting extends TSetting {
 		return s;
 	}
 	
-	private void insertHtml(String  s)  {
+	public void addFirst(String  s)  {
 		if(s==null)
 			return;
-		WebEngine we = getWebEngineFromHtmlEditor();
-		we.executeScript("setElement('"+s.replaceAll("\n", "").replace("'", "\\'")+"')");
+		String f = "addFirst";
+		callJS(s, f);
+	}
+	
+	public void addLast(String  s)  {
+		if(s==null)
+			return;
+		String f = "addLast";
+		callJS(s, f);
+	}
+	
+	public void wrap(String  s)  {
+		if(s==null)
+			return;
+		String f = "wrap";
+		callJS(s, f);
+	}
+
+	public void replaceInsert(String  s)  {
+		if(s==null)
+			return;
+		String f = "setElement";
+		callJS(s, f);
 	}
 	
 	private void setAttribute(String a, String v) {
 		WebEngine we = getWebEngineFromHtmlEditor();
 		we.executeScript("setAttribute('"+a+"', '"+v+"')");
+	}
+
+	/**
+	 * @param s
+	 * @param f
+	 */
+	private void callJS(String s, String f) {
+		WebEngine we = getWebEngineFromHtmlEditor();
+		we.executeScript(f+"('"+s.replaceAll("\n", "").replace("'", "\\'")+"')");
 	}
 
 	private WebEngine getWebEngineFromHtmlEditor() {
