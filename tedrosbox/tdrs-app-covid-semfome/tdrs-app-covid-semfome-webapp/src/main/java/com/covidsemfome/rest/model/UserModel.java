@@ -51,6 +51,8 @@ public class UserModel {
 	
 	private Long ufid;
 	
+	private String status;
+	
 	private TermoAdesaoModel termoAdesao;
 	
 
@@ -76,7 +78,7 @@ public class UserModel {
 	 */
 	public UserModel(Long id, String nome, String email, String telefone, String sexo, String tipoVoluntario,
 			Date dataNascimento, String profissao, String nacionalidade, String estadoCivil, String identidade, String cpf, String tipoLogr,
-			String logradouro, String complemento, String bairro, String cidade, String cep, Long ufid) {
+			String logradouro, String complemento, String bairro, String cidade, String cep, Long ufid, String status) {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
@@ -95,7 +97,7 @@ public class UserModel {
 		this.cidade = cidade;
 		this.cep = cep;
 		this.ufid = ufid;
-		
+		this.status = status;
 		if(dataNascimento!=null) {
 			this.dataNascimento = TDateUtil.getFormatedDate(dataNascimento, "yyyy-MM-dd");
 		}
@@ -379,6 +381,20 @@ public class UserModel {
 	 */
 	public void setDataNascimento(String dataNascimento) {
 		this.dataNascimento = dataNascimento;
+	}
+
+	/**
+	 * @return the status
+	 */
+	public String getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

@@ -178,5 +178,6 @@ public class TProgressIndicatorForm<M extends ITModelView<?>> extends StackPane 
 	public TSetting gettSetting(){
 		return this.form.gettSetting();
 	}
+	
 
 }

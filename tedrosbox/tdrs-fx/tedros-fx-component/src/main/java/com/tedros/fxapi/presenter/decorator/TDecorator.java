@@ -21,7 +21,7 @@ implements ITDecorator<P> {
 	public StackPane getScreenSaverPane() {
 		if(screenSaverPane==null){
 			screenSaverPane = new StackPane();
-			screenSaverPane.setId("t-form-pane");
+			screenSaverPane.setId("t-screen-saver");
 		}
 		return screenSaverPane;
 	}

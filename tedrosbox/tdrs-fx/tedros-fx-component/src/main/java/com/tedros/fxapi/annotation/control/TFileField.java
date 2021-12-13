@@ -11,6 +11,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.tedros.common.model.TFileEntity;
 import com.tedros.core.model.ITModelView;
 import com.tedros.fxapi.annotation.parser.ITAnnotationParser;
 import com.tedros.fxapi.annotation.parser.TFileFieldParser;
@@ -44,29 +45,32 @@ import javafx.scene.layout.StackPane;
 
  * Types supported:
  * 
- * {@link TSimpleFileEntityProperty}, {@link TSimpleFileProperty}, {@link Property}&lt;byte[]&gt;
+ * {@link TSimpleFileProperty}, {@link Property}&lt;byte[]&gt;
  * 
  * Example: 
  * 
- * In a TModel implementation we have:
+ * The jpa entity :
  * 
  *  <i>@</i>Entity
  *  <i>@</i>Table(name = DomainTables.product, schema = DomainSchema.main)
- *  public class Product extends TEntityImpl{
+ *  public class Product extends TEntity{
  *     ...
  *     <i>@</i>OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
- *     private TFileEntity imagem;
+ *     private TFileEntity image;
  *     ...
  *  }
  *  
- * and in the {@link ITModelView}: 
+ * and in the {@link TEntityModelView}: 
  *  
  *  public class ProductModelView extends TEntityModelView&lt;Product&gt; {
  *     ...
  *     <i>@</i>TFileReader
- *     <i>@</i>TLabel(text = "Imagem", control=<i>@</i>TControl(prefWidth=500))
- *     <strong><i>@</i>TFileField(extensions = TFileExtension.ALL_FILES, required = false, preLoadFileBytes=false, showImage=true)</strong>
- *     private TSimpleFileEntityProperty<ITFileEntity> imagem;
+ *     <i>@</i>TLabel(text="Image")
+ *     <i>@</i>TFieldBox(node=@TNode(id="image", parse=true))
+ *     <i>@</i>TFileField(showImage=true, propertyValueType=TFileModelType.ENTITY,
+ *     preLoadFileBytes=true, extensions= {TFileExtension.JPG, TFileExtension.PNG},
+ *     showFilePath=true)
+ *     private TSimpleFileProperty&ltTFileEntity&gt image
  *     ...
  *  }
  * 
@@ -74,7 +78,7 @@ import javafx.scene.layout.StackPane;
  * 
  * @see TByteArrayReader
  * @see TFileReader
- * @see ITModelView
+ * @see TEntityModelView
  * @author Davis Gordon
  *
  */

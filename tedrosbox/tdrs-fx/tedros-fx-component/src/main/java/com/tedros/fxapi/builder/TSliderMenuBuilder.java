@@ -37,6 +37,7 @@ implements ITLayoutBuilder<TSliderMenu> {
 		Node m = this.getComponent(ann.menu());
 		TSliderMenu node = new TSliderMenu(c, ann.menuWidth());
 		node.settMenuContent(m);
+		node.settMenuVisible(true);
 		node.settMenuOpened(ann.menuExpanded());
 		node.autosize();
 		callParser(ann, node);

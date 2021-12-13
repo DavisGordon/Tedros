@@ -22,5 +22,6 @@ public class TSelectImageParser extends TControlFieldParser<com.tedros.fxapi.ann
 			control.settFitHeight(ann.fitHeight());
 		control.settPreLoadBytes(ann.preLoadFileBytes());
 		control.settMaxFileSize(ann.maxFileSize());	
+		control.settHeight(ann.height());
 	}
 }

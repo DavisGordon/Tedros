@@ -102,9 +102,11 @@ public class LoginApi {
 			TResult<User> res = autServ.login(model.getEmail(), model.getPass());
 			
 			if(res.getResult().equals(EnumResult.SUCESS)){
-				System.out.println("sucesso");
-				
-				return new RestModel<String>(res.getValue().getKey(), "200", res.getMessage());
+				String s = res.getValue().getPessoa().getStatusVoluntario();
+				if(s.equals("5") || s.equals("6")) {
+					return new RestModel<String>("", "404", "Acesso negado ou desligado!");
+				}else
+					return new RestModel<String>(res.getValue().getKey(), "200", res.getMessage());
 			}else{
 				return new RestModel<String>("", "404", res.getResult().equals(EnumResult.WARNING) 
 						? res.getMessage()  

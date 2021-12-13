@@ -8,7 +8,6 @@ package com.tedros.fxapi.builder;
 
 import java.lang.annotation.Annotation;
 
-import com.tedros.ejb.base.model.ITFileBaseModel;
 import com.tedros.fxapi.control.TSelectImageField;
 
 import javafx.beans.Observable;
@@ -26,6 +25,7 @@ public final class TSelectImageFieldBuilder
 extends TBuilder
 implements ITControlBuilder<TSelectImageField, Observable> {
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public TSelectImageField build(final Annotation annotation, final Observable property) throws Exception {
 		com.tedros.fxapi.annotation.control.TSelectImageField ann =  (com.tedros.fxapi.annotation.control.TSelectImageField) annotation;
 		TSelectImageField control = property instanceof ObservableList 

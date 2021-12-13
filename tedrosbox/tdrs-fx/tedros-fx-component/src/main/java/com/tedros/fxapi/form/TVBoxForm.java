@@ -162,14 +162,6 @@ extends VBox implements ITModelForm<M> {
 	@Override
 	public void tDispose() {
 		this.gettObjectRepository().clear();
-		/*for(TFieldDescriptor fd : this.gettFieldDescriptorList()) {
-			String fn = fd.getFieldName();
-			Observable ob = this.formEngine.getModelView().getProperty(fn);
-			TFieldBox fb = this.gettFieldBox(fn);
-			if(ob!=null && fb!=null) {
-				
-			}
-		}*/
 	}
 
 
@@ -187,5 +179,7 @@ extends VBox implements ITModelForm<M> {
 	public TSetting gettSetting(){
 		return this.formEngine.getSetting();
 	}
+	
+	
 
 }
