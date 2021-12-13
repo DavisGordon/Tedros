@@ -302,7 +302,7 @@ public class PainelApi {
 			TResult<Pessoa> res = pessServ.save(appBean.getToken(), p);
 			
 			UserModel m = new UserModel(p.getId(), p.getNome(), p.getLoginName(), tel, p.getSexo(), p.getTipoVoluntario(), 
-					p.getDataNascimento(), p.getProfissao(), nac, p.getEstadoCivil(), ident, cpf, tpLog, logr, compl, bairro, cidade, cep, ufid);
+					p.getDataNascimento(), p.getProfissao(), nac, p.getEstadoCivil(), ident, cpf, tpLog, logr, compl, bairro, cidade, cep, ufid, p.getStatusVoluntario());
 			return new RestModel<>(m, "200", "OK");
 			
 		}catch(Exception e){
@@ -362,7 +362,7 @@ public class PainelApi {
 				}
 			}
 			UserModel m = new UserModel(p.getId(), p.getNome(), p.getLoginName(), telefone, p.getSexo(), p.getTipoVoluntario(), 
-					p.getDataNascimento(), p.getProfissao(), nac, p.getEstadoCivil(), ident, cpf, tpLogr, logr, compl, bairro, cidade, cep, ufid);
+					p.getDataNascimento(), p.getProfissao(), nac, p.getEstadoCivil(), ident, cpf, tpLogr, logr, compl, bairro, cidade, cep, ufid, p.getStatusVoluntario());
 			
 			if(p.getTermosAdesao()!=null && !p.getTermosAdesao().isEmpty()) {
 				for(PessoaTermoAdesao t : p.getTermosAdesao()) {
@@ -477,7 +477,10 @@ public class PainelApi {
 			List<AcaoModel> models = new ArrayList<>();
 			List<Acao> lst = res.getValue();
 			Pessoa pessoa = covidUserBean.getUser().getPessoa();
-			if(lst!=null && !lst.isEmpty())
+			
+			String s = pessoa.getStatusVoluntario();
+			if((s.equals("2") || s.equals("3") || s.equals("4")) 
+					&& lst!=null && !lst.isEmpty())
 				for (Acao acao : lst) {
 					boolean inscrito = false;
 					String data;

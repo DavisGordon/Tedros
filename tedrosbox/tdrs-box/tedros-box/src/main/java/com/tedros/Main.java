@@ -304,7 +304,6 @@ public class Main extends Application implements ITedrosBox  {
         appName.setCursor(Cursor.HAND);
         
         appName.setOnMouseClicked(e -> {
-        	//String ab = TInternationalizationEngine.getInstance(null).getString("#{tedros.about}");
         	String tt = TInternationalizationEngine.getInstance(null).getFormatedString("#{tedros.tooltip}", version);
         	Label l = new Label(tt);
         	l.setFont(Font.font(11));
@@ -370,7 +369,8 @@ public class Main extends Application implements ITedrosBox  {
         });
         
         leftMenuPane = new VBox();
-        leftMenuPane.setStyle("-fx-effect: dropshadow( three-pass-box , #000000 , 9, 0.1 , 0 , 4); -fx-text-fill: #FFFFFF; -fx-background-color: transparent;");
+        leftMenuPane.setStyle("-fx-effect: dropshadow( three-pass-box , #000000 , 9, 0.1 , 0 , 4); "
+        		+ "-fx-text-fill: #FFFFFF; -fx-background-color: transparent;");
         leftMenuPane.getChildren().add(menuTree);
         VBox.setVgrow(menuTree, Priority.ALWAYS);
         // create page toolbar
@@ -397,10 +397,11 @@ public class Main extends Application implements ITedrosBox  {
         mainPane.setTop(pageToolBar);
         mainPane.setCenter(pageArea);
         mainPane.setMinWidth(300);
-        mainPane.setStyle("-fx-effect: dropshadow( three-pass-box , #000000 , 9, 0.1 , 0 , 4); -fx-text-fill: #FFFFFF; -fx-background-color: transparent;");
+        mainPane.setStyle("-fx-effect: dropshadow( three-pass-box , #000000 , 9, 0.1 , 0 , 4); "
+        		+ "-fx-text-fill: #FFFFFF; -fx-background-color: transparent;");
         
         this.innerPane = new TSliderMenu(mainPane);
-        innerPane.settExpandButtonVisible(false);
+        innerPane.settMenuVisible(false);
         root.setTop(toolBar);
         root.setCenter(this.innerPane);
         root.setStyle("-fx-background-color: transparent;");
@@ -496,7 +497,7 @@ public class Main extends Application implements ITedrosBox  {
         breadcrumbBar.setPath("");
     	innerPane.settMenuOpened(false);
     	innerPane.tClearMenuContent();
-    	innerPane.settExpandButtonVisible(false);
+    	innerPane.settMenuVisible(false);
     	
     }
     
@@ -509,7 +510,7 @@ public class Main extends Application implements ITedrosBox  {
         // goto initial page
         goToPage(pages.getModules());
         innerPane.settMenuContent(leftMenuPane);
-    	innerPane.settExpandButtonVisible(true);
+    	innerPane.settMenuVisible(true);
     }
 	
 	@SuppressWarnings("rawtypes")
@@ -662,7 +663,7 @@ public class Main extends Application implements ITedrosBox  {
                     scrollPane.setFitToWidth(true);
                     scrollPane.setFitToHeight(true);
                     scrollPane.setMinWidth(725);
-                    scrollPane.setStyle("-fx-background-color: transparent; -fx-padding: 20 20 20 20;");
+                    scrollPane.setStyle("-fx-background-color: transparent; -fx-padding: 20 20 20 0;");
                     content = scrollPane;
                     
                    // this.expandedTollBar = TedrosContext.isCollapseMenu(); //true;

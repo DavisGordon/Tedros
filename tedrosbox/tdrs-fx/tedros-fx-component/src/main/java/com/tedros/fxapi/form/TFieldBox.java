@@ -1,7 +1,10 @@
 package com.tedros.fxapi.form;
 
 import javafx.beans.Observable;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -9,6 +12,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -178,4 +182,5 @@ public class TFieldBox extends StackPane implements ITField {
 		str.append("];");
 		return str.toString();
 	}
+	
 }

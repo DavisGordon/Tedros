@@ -174,7 +174,7 @@ public class SiteConteudoModelView extends TEntityModelView<SiteConteudo>{
 			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"webview"})), text = "Preview"),
 			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"log"})), text = "Log")
 			
-	}, region=@TRegion(padding=@TInsets(left=50), parse = true))
+	})
 	@THTMLEditor(control=@TControl(prefHeight=500, parse = true))
 	private SimpleStringProperty editor;
 	

@@ -34,7 +34,21 @@ import javafx.scene.layout.StackPane;
 
 /**
  * <pre>
- * Build a {@link TListFileModelField} component.
+ * Build a {@link com.tedros.fxapi.control.TSelectImageField} component.
+ * 
+ * Example:
+ * 
+ * Select a list of local images to be saved on remote repository. 
+ * The file repository is shared with all apps and which file is identified by the remote owner name.
+ * 
+ * <i>@</i>TSelectImageField(source=TEnvironment.LOCAL, target=TEnvironment.REMOTE, remoteOwner= "myApp")
+ * <i>@</i>TModelViewCollectionType(modelClass = TFileEntity.class)
+ * private ITObservableList&ltITFileBaseModel&gt files;
+ * 
+ * List the images saved on the remote repository to be selected and aggregate to an entity.
+ * 
+ * <i>@</i>TSelectImageField(source=TEnvironment.REMOTE, target=TEnvironment.REMOTE, remoteOwner="myApp")
+ * private SimpleObjectProperty&ltITFileBaseModel&gt image;
  * </pre>
  *
  * @author Davis Gordon
@@ -113,6 +127,16 @@ public @interface TSelectImageField {
 	 * */
 	public TFileModelType propertyValueType() default TFileModelType.ENTITY;
 	
+	/**
+	 * <pre>
+	 * {@link com.tedros.fxapi.control.TSelectImageField} Class
+	 * 
+	 * Set the component height inside the form. 
+	 * 
+	 * Default value: 450
+	 * </pre>
+	 * */
+	public double height() default 450;
 	/**
 	 * <pre>
 	 * {@link com.tedros.fxapi.control.TSelectImageField} Class

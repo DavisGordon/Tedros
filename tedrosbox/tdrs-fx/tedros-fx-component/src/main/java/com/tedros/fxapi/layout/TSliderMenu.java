@@ -1,5 +1,7 @@
 package com.tedros.fxapi.layout;
 
+
+
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.module.TObjectRepository;
 
@@ -11,9 +13,9 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.DepthTest;
 import javafx.scene.Node;
@@ -30,27 +32,26 @@ import javafx.util.Duration;
 
 public class TSliderMenu extends StackPane {
 	
+	private HBox slider;
 	private StackPane sliderContent;
 	private Timeline timeline;
-	private Button exBtn;
+	private StackPane btnPane;
 	
 	private SimpleBooleanProperty tMenuOpenedProperty;
 	private TObjectRepository repo = new TObjectRepository();
-	
+
 	public TSliderMenu(Node content) {
 		super(content);
+		StackPane.setMargin(content, new Insets(0,0,0,50));
 	    build(280);
 	}
 	
 	public TSliderMenu(Node content, double width) {
 		super(content);
+		StackPane.setMargin(content, new Insets(0,0,0,50));
 	    build(width);
 	}
 
-
-	/**
-	 * 
-	 */
 	private void build(double width) {
 		setStyle("-fx-background-color: transparent;");
 	    
@@ -62,33 +63,41 @@ public class TSliderMenu extends StackPane {
         ImageView imgV = new ImageView();
         imgV.setImage(img);
         imgV.setEffect(ds);
-
+        
+        
 	    sliderContent = new StackPane();
 	    sliderContent.setPrefWidth(width);
-	    sliderContent.setId("t-slider-menu");
 	    
-	    exBtn = new Button();
-	    exBtn.setGraphic(imgV);
-	    exBtn.setCache(true);
-	    exBtn.setCacheShape(true);
-	    exBtn.setDepthTest(DepthTest.ENABLE);
-	    exBtn.setId("t-slider-menu-button");
+	    Button btn = new Button();
+	    btn.setGraphic(imgV);
+	    btn.setCache(true);
+	    btn.setCacheShape(true);
+	    btn.setDepthTest(DepthTest.ENABLE);
+	    btn.setId("t-slider-menu-button");
 	    
-
-	    HBox slider = new HBox(sliderContent, exBtn);
+	    btnPane  = new StackPane(btn);
+	    
+	    btnPane.setPrefWidth(20);
+	    slider = new HBox(sliderContent, btnPane);
 	    slider.setAlignment(Pos.CENTER);
 	    slider.setPrefWidth(Region.USE_COMPUTED_SIZE);
 	    slider.setMaxWidth(Region.USE_PREF_SIZE);
-
+	    slider.setId("t-slider-menu");
 	    // start out of view
 	    slider.setTranslateX(-sliderContent.getPrefWidth());
 	    StackPane.setAlignment(slider, Pos.CENTER_LEFT);
-
+	    
 	    // animation for moving the slider
 	    timeline = new Timeline(
 	            new KeyFrame(Duration.ZERO, new KeyValue(slider.translateXProperty(), -sliderContent.getPrefWidth())),
 	            new KeyFrame(Duration.millis(500), new KeyValue(slider.translateXProperty(), 0d))
 	    );
+	    
+	    ChangeListener<Duration> chd = (a,b,n)->{
+	    	sliderContent.getChildren().get(0).setVisible(!n.equals(Duration.ZERO));
+	    };
+	    repo.add("chd", chd);
+	    timeline.currentTimeProperty().addListener(new WeakChangeListener<>(chd));
 	    
 	    ChangeListener<Boolean> chl = (o, a, b) -> {
 	    	setMenuAction(b);
@@ -98,13 +107,17 @@ public class TSliderMenu extends StackPane {
 	    this.tMenuOpenedProperty = new SimpleBooleanProperty(false);
 	    this.tMenuOpenedProperty.addListener(new WeakChangeListener<>(chl));
 
-	    EventHandler<ActionEvent> eh = evt -> {
-	        tMenuOpenedProperty.setValue(!tMenuOpenedProperty.getValue());
+	    EventHandler<MouseEvent> eh = evt -> {
+	    	this.tMenuOpenedProperty.setValue(true);
 	    };
 	    this.repo.add("eh", eh);
+	    slider.setOnMouseEntered(new WeakEventHandler<>(eh));
 	    
-	    exBtn.setOnAction(new WeakEventHandler<>(eh));
-
+	    EventHandler<MouseEvent> mev = ev -> {
+			this.tMenuOpenedProperty.setValue(false);
+		};
+		this.repo.add("mev", mev);
+		slider.setOnMouseExited(new WeakEventHandler<>(mev));
 	    getChildren().add(slider);
 	}
 
@@ -113,6 +126,7 @@ public class TSliderMenu extends StackPane {
 	 * @param text
 	 */
 	private void setMenuAction(boolean open) {
+		
 		boolean playing = timeline.getStatus() == Animation.Status.RUNNING;
 		if (open) {
 		    timeline.setRate(1);
@@ -128,12 +142,8 @@ public class TSliderMenu extends StackPane {
 	}
 
 	public void settMenuContent(Node node){
-		EventHandler<MouseEvent> mev = ev -> {
-			this.tMenuOpenedProperty.setValue(false);
-		};
-		this.repo.add("mev", mev);
-		node.setOnMouseExited(new WeakEventHandler<>(mev));
 		this.sliderContent.getChildren().add(0, node);
+		this.settMenuVisible(this.tMenuOpenedProperty.getValue());
 	}
 	
 	public void tClearMenuContent() {
@@ -148,8 +158,8 @@ public class TSliderMenu extends StackPane {
 		this.repo.clear();
 	}
 	
-	public void settExpandButtonVisible(boolean visible) {
-		this.exBtn.setVisible(visible);
+	public void settMenuVisible(boolean visible) {
+		this.slider.setVisible(visible);
 	}
 	
 
@@ -166,6 +176,7 @@ public class TSliderMenu extends StackPane {
 	 */
 	public void settMenuOpened(boolean open) {
 		this.tMenuOpenedProperty.setValue(open);
+		this.settMenuVisible(open);
 	}
 	
 

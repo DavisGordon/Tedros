@@ -158,7 +158,7 @@ public @interface TTableColumn {
 	* </pre>
 	**/
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITNodeBuilder> sortNode() default ITNodeBuilder.class;;
+	public Class<? extends ITNodeBuilder> sortNode() default ITNodeBuilder.class;
 
 	/**
 	* <pre>

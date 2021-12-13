@@ -180,12 +180,11 @@ public class TSelectImageField extends TRequiredSelectImage{
 		
 		scrollPane = new ScrollPane();
 		scrollPane.setId("t-form-scroll");
-		scrollPane.setContent(mainPane);
 		scrollPane.setFitToWidth(true);
 		
-		scrollPane.maxHeight(Double.MAX_VALUE);
+		
 		scrollPane.maxWidth(Double.MAX_VALUE);
-		scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		scrollPane.setStyle("-fx-background-color: transparent;");
 	
@@ -238,6 +237,13 @@ public class TSelectImageField extends TRequiredSelectImage{
 		BorderPane.setMargin(scrollPane, new Insets(10,0,0,10));
 		super.getChildren().add(mainPane);
 		
+	}
+
+	/**
+	 * 
+	 */
+	public void settHeight(double height) {
+		scrollPane.setMaxHeight(height);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
