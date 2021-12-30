@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="saida_itens" pageWidth="555" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="4eb7442f-d569-4fc1-a414-b82b1ef38701">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="observacao" class="java.lang.String"/>
 	<field name="produto" class="java.lang.String"/>
 	<field name="quantidade" class="java.lang.Integer"/>
 	<field name="codigo" class="java.lang.String"/>
@@ -12,7 +13,26 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band splitType="Stretch"/>
+		<band height="41" splitType="Stretch">
+			<printWhenExpression><![CDATA[$P{observacao} != null && !$P{observacao}.isEmpty()]]></printWhenExpression>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="73" y="0" width="482" height="41" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF" uuid="3b6362ac-1198-4214-9619-9d17a9aec6e1"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="html">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{observacao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="0" width="73" height="15" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF" uuid="1d69bd45-e69f-4b62-8abd-947404710ea9"/>
+				<box rightPadding="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Observação:]]></text>
+			</staticText>
+		</band>
 	</title>
 	<pageHeader>
 		<band splitType="Stretch"/>
@@ -20,22 +40,22 @@
 	<columnHeader>
 		<band height="16" splitType="Stretch">
 			<staticText>
-				<reportElement x="69" y="0" width="282" height="15" uuid="8f3ff097-317e-4404-84b7-74bc82e7b4ca"/>
-				<textElement>
+				<reportElement x="69" y="0" width="282" height="16" uuid="8f3ff097-317e-4404-84b7-74bc82e7b4ca"/>
+				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Produto]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="351" y="0" width="75" height="15" uuid="cb87cceb-ccb7-48fb-a862-8fe300bd0a4d"/>
-				<textElement>
+				<reportElement x="351" y="0" width="101" height="16" uuid="cb87cceb-ccb7-48fb-a862-8fe300bd0a4d"/>
+				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Quantidade]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="452" y="0" width="103" height="15" uuid="8c50e6d5-bc07-48d1-990e-97bd3992c2f9"/>
-				<textElement>
+				<reportElement x="452" y="0" width="103" height="16" uuid="8c50e6d5-bc07-48d1-990e-97bd3992c2f9"/>
+				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Unidade Medida]]></text>
@@ -47,18 +67,19 @@
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="0" y="0" width="69" height="15" uuid="5ff07aab-a45e-49ef-9d8f-f7af5c1de1d4"/>
-				<textElement>
+				<reportElement x="0" y="0" width="69" height="16" uuid="5ff07aab-a45e-49ef-9d8f-f7af5c1de1d4"/>
+				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Código]]></text>
+				<text><![CDATA[Codigo]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="18" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="452" y="2" width="103" height="15" isPrintWhenDetailOverflows="true" uuid="17d8dba8-354e-4005-b5c0-e30c6ee2d555"/>
+				<reportElement stretchType="RelativeToBandHeight" x="452" y="0" width="103" height="18" isPrintWhenDetailOverflows="true" uuid="17d8dba8-354e-4005-b5c0-e30c6ee2d555"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{unidadeMedida}]]></textFieldExpression>
 			</textField>
 			<line>
@@ -68,16 +89,18 @@
 				</graphicElement>
 			</line>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement x="69" y="2" width="282" height="15" isPrintWhenDetailOverflows="true" uuid="021261ba-e6cc-438c-8c75-f7e09a9c75ec"/>
-				<textElement markup="html"/>
+				<reportElement x="69" y="0" width="282" height="18" isPrintWhenDetailOverflows="true" uuid="021261ba-e6cc-438c-8c75-f7e09a9c75ec"/>
+				<textElement verticalAlignment="Middle" markup="html"/>
 				<textFieldExpression><![CDATA[$F{produto}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="2" width="69" height="15" isPrintWhenDetailOverflows="true" uuid="3f7d5f0a-1688-449c-8397-31020da06ec4"/>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="69" height="18" isPrintWhenDetailOverflows="true" uuid="3f7d5f0a-1688-449c-8397-31020da06ec4"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="351" y="2" width="75" height="15" uuid="8b4be0c8-2ff4-4dfd-ab52-67e262c4b490"/>
+				<reportElement x="351" y="0" width="101" height="18" uuid="8b4be0c8-2ff4-4dfd-ab52-67e262c4b490"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
 			</textField>
 		</band>

@@ -36,6 +36,7 @@ public @interface TOptionsList  {
 	/**
 	 * The custom process class
 	 * */
+	@SuppressWarnings("rawtypes")
 	public Class<? extends TOptionsProcess> optionsProcessClass() default TOptionsProcess.class;
 	
 	/**

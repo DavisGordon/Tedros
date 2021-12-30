@@ -60,7 +60,6 @@ public class Produto extends TEntity {
 	@Column(length=10, nullable = true)
 	private String medida;
 	
-	
 	public Produto() {
 	}
 	

@@ -5,7 +5,7 @@ package com.covidsemfome.rest.model;
 
 import java.util.Date;
 
-import com.tedros.util.TDateUtil;
+import com.covidsemfome.rest.util.ApiUtils;
 
 /**
  * @author Davis Gordon
@@ -98,9 +98,8 @@ public class UserModel {
 		this.cep = cep;
 		this.ufid = ufid;
 		this.status = status;
-		if(dataNascimento!=null) {
-			this.dataNascimento = TDateUtil.getFormatedDate(dataNascimento, "yyyy-MM-dd");
-		}
+		this.dataNascimento = ApiUtils.formatToDate(dataNascimento);
+		
 	}
 
 	/**

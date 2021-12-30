@@ -19,13 +19,15 @@
 	<field name="id" class="java.lang.Long"/>
 	<field name="estocavelLabel" class="java.lang.String"/>
 	<field name="acao" class="java.lang.String"/>
+	<field name="observacao" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="109" splitType="Stretch">
 			<staticText>
-				<reportElement style="SubTitle" x="0" y="36" width="208" height="55" uuid="0fac86c8-9454-4b41-bb90-9f6a9839a756"/>
+				<reportElement style="SubTitle" x="0" y="0" width="263" height="109" uuid="0fac86c8-9454-4b41-bb90-9f6a9839a756"/>
+				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Relatório de saída de produtos do estoque]]></text>
 			</staticText>
 			<image onErrorType="Blank">
@@ -41,14 +43,14 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="96" splitType="Stretch">
+		<band height="80" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement x="78" y="30" width="150" height="20" isPrintWhenDetailOverflows="true" uuid="e1c16992-a1c7-46e9-9ee2-b7208e7764dd"/>
+				<reportElement x="67" y="22" width="138" height="20" isPrintWhenDetailOverflows="true" uuid="e1c16992-a1c7-46e9-9ee2-b7208e7764dd"/>
 				<textElement verticalAlignment="Bottom"/>
 				<textFieldExpression><![CDATA[$F{cozinha}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Transparent" x="228" y="30" width="47" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="98ddc395-766c-42e5-872f-59bed512b783"/>
+				<reportElement mode="Transparent" x="205" y="22" width="58" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="98ddc395-766c-42e5-872f-59bed512b783"/>
 				<box rightPadding="12"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom" rotation="None" markup="none">
 					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -57,49 +59,52 @@
 				<text><![CDATA[Data:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy &apos;às&apos; HH:mm" isBlankWhenNull="true">
-				<reportElement x="275" y="30" width="183" height="20" isPrintWhenDetailOverflows="true" uuid="80d2209c-b145-4231-b578-df4f625d8e89"/>
+				<reportElement x="263" y="22" width="292" height="20" isPrintWhenDetailOverflows="true" uuid="80d2209c-b145-4231-b578-df4f625d8e89"/>
 				<textElement verticalAlignment="Bottom"/>
 				<textFieldExpression><![CDATA[$F{dataHora}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Transparent" x="135" y="10" width="140" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="b55afebd-1b3d-48c0-b00f-7cfa561779ee"/>
+				<reportElement mode="Transparent" x="205" y="2" width="58" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="b55afebd-1b3d-48c0-b00f-7cfa561779ee"/>
 				<box rightPadding="12"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom" rotation="None" markup="none">
 					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<text><![CDATA[Ação]]></text>
+				<text><![CDATA[Ação:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="0" y="30" width="78" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="bfac4024-ead7-44d3-9983-9791b6f65ac6"/>
+				<reportElement mode="Transparent" x="0" y="22" width="67" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="bfac4024-ead7-44d3-9983-9791b6f65ac6"/>
 				<box rightPadding="12"/>
-				<textElement textAlignment="Right" verticalAlignment="Bottom" rotation="None" markup="none">
+				<textElement verticalAlignment="Bottom" rotation="None" markup="none">
 					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Cozinha:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="275" y="10" width="280" height="20" uuid="7e3e8a50-ef1b-4cd3-9348-f68ff851a2d5"/>
+				<reportElement x="263" y="2" width="292" height="20" uuid="7e3e8a50-ef1b-4cd3-9348-f68ff851a2d5"/>
 				<textElement verticalAlignment="Bottom"/>
 				<textFieldExpression><![CDATA[$F{acao}]]></textFieldExpression>
 			</textField>
 			<subreport isUsingCache="false" runToBottom="false">
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="62" width="555" height="34" isPrintWhenDetailOverflows="true" backcolor="#CCCCCC" uuid="1c5689c2-c146-4a52-a393-5e75584c666b"/>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="46" width="555" height="34" isPrintWhenDetailOverflows="true" backcolor="#CCCCCC" uuid="1c5689c2-c146-4a52-a393-5e75584c666b"/>
+				<subreportParameter name="observacao">
+					<subreportParameterExpression><![CDATA[$F{observacao}]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{itens})]]></dataSourceExpression>
 				<subreportExpression><![CDATA["saida_itens.jasper"]]></subreportExpression>
 			</subreport>
 			<staticText>
-				<reportElement mode="Transparent" x="0" y="10" width="78" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="a37043a8-807e-40af-8ca3-e270628af778"/>
+				<reportElement mode="Transparent" x="0" y="2" width="67" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="a37043a8-807e-40af-8ca3-e270628af778"/>
 				<box rightPadding="12"/>
-				<textElement textAlignment="Right" verticalAlignment="Bottom" rotation="None" markup="none">
+				<textElement verticalAlignment="Bottom" rotation="None" markup="none">
 					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Codigo:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="78" y="10" width="57" height="20" uuid="15ec0365-c932-4044-8262-35372d8ab3c4"/>
+				<reportElement x="67" y="2" width="138" height="20" uuid="15ec0365-c932-4044-8262-35372d8ab3c4"/>
 				<textElement verticalAlignment="Bottom"/>
 				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
 			</textField>

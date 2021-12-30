@@ -26,6 +26,11 @@ public interface Estocavel extends ITEntity{
 	 * @param cozinha the cozinha to set
 	 */
 	void setCozinha(Cozinha cozinha);
+	
+	/**
+	 * @return a dynamic stock observation 
+	 * */
+	String getObservacaoEstoque();
 
 	/**
 	 * @return the itens

@@ -5,29 +5,29 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.poi.ss.formula.functions.T;
-
 import com.tedros.fxapi.annotation.parser.TAnnotationParser;
-import com.tedros.fxapi.annotation.parser.TStackPaneParser;
+import com.tedros.fxapi.annotation.parser.TListViewParser;
+import com.tedros.fxapi.annotation.parser.TRequiredListViewParser;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.scene.layout.TRegion;
 import com.tedros.fxapi.builder.ITControlBuilder;
 import com.tedros.fxapi.builder.ITEventHandlerBuilder;
+import com.tedros.fxapi.builder.ITGenericBuilder;
 import com.tedros.fxapi.builder.ITNodeBuilder;
-import com.tedros.fxapi.builder.TPickListFieldBuilder;
-import com.tedros.fxapi.domain.TDefaultValues;
+import com.tedros.fxapi.builder.NullObservableListBuilder;
+import com.tedros.fxapi.builder.TBaseEventHandlerBuilder;
+import com.tedros.fxapi.builder.TListViewFieldBuilder;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollToEvent;
 import javafx.scene.layout.Region;
 
 /**
- * Build a {@link com.tedros.fxapi.control.TPickListField} control.
+ * Build a {@link TListView} control.
  * 
  * @author Davis Gordon
  * */
@@ -39,21 +39,21 @@ public @interface TListViewField {
 	 *<pre>
 	 * The builder of type {@link ITControlBuilder} for this component.
 	 * 
-	 *  Default value: {@link TPickListFieldBuilder}
+	 *  Default value: {@link TListViewFieldBuilder}
 	 *</pre> 
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITControlBuilder> builder() default TPickListFieldBuilder.class;
+	public Class<? extends ITControlBuilder> builder() default TListViewFieldBuilder.class;
 	
 	/**
 	 * <pre>
 	 * The parser class for this annotation
 	 * 
-	 * Default value: {TStackPaneParser.class}
+	 * Default value: {TRequiredListViewParser.class, TListViewParser.class}
 	 * </pre>
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends TAnnotationParser>[] parser() default {TStackPaneParser.class};
+	public Class<? extends TAnnotationParser>[] parser() default {TRequiredListViewParser.class, TListViewParser.class};
 	
 	/**
 	 * <pre>
@@ -77,6 +77,21 @@ public @interface TListViewField {
 	 * </pre>
 	 * */
 	public TControl control() default @TControl(parse = false);
+	
+
+	/**
+	* <pre>
+	* {@link TListViewField} Class
+	* 
+	*  Sets the value of the property items. 
+	*  
+	*  Property description: 
+	*  
+	*  The list of items to show within the listview.
+	* </pre>
+	**/
+	@SuppressWarnings("rawtypes")
+	public Class<? extends ITGenericBuilder<ObservableList>> items() default NullObservableListBuilder.class;
 	
 	/**
 	 * <pre>
@@ -141,7 +156,7 @@ public @interface TListViewField {
 	*  and new ListCell's created with the new cell factory.
 	* </pre>
 	**/
-	public TCellFactory cellFactory() default @TCellFactory(parse = false);
+	//public TCellFactory cellFactory() default @TCellFactory(parse = false);
 
 	/**
 	* <pre>

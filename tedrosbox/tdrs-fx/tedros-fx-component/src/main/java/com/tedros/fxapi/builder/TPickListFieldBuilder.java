@@ -76,8 +76,11 @@ implements ITControlBuilder<com.tedros.fxapi.control.TPickListField, ObservableL
 									for(Object e : (List<Object>) result.getValue()){
 										if(e instanceof ITEntity){
 											try {
-												TModelView<?> model = mClass.getConstructor(eClass).newInstance(e);
-												list.add(model);
+												if(mClass!=TModelView.class) {
+													TModelView<?> model = mClass.getConstructor(eClass).newInstance(e);
+													list.add(model);
+												}else 
+													list.add(e);
 											} catch (InstantiationException
 													| IllegalAccessException
 													| IllegalArgumentException

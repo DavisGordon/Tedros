@@ -1,25 +1,20 @@
 package com.tedros.fxapi.form;
 
+import java.util.UUID;
+
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import com.tedros.fxapi.control.ITField;
+import com.tedros.fxapi.domain.TLabelPosition;
+
 import javafx.beans.Observable;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-
-import java.util.List;
-import java.util.UUID;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
-import com.tedros.fxapi.control.ITField;
-import com.tedros.fxapi.domain.TLabelPosition;
 
 /**
  * <pre>

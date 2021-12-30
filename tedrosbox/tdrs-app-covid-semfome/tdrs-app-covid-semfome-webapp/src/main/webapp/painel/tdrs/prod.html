@@ -1,0 +1,308 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Covid Sem Fome - Gestão</title>
+		<meta charset="utf-8" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../../assets/css/main.css" />
+		<link rel="stylesheet" href="../../assets/css/menu.css" />
+		<link rel="stylesheet" href="../../assets/css/loader.css" />
+		<style type="text/css">
+		 .tableFixHead {
+        overflow-y: auto;
+        height: 250px;
+      }
+      .tableFixHead thead th {
+        position: sticky;
+        top: 0;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th,
+      td {
+        padding: 8px 16px;
+      /*  border: 1px solid #ccc;*/
+      }
+      th {
+        background: #fff;
+      }
+		
+		</style>
+		<noscript>
+			<link rel="stylesheet" href="../../assets/css/noscript.css" />
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		</noscript>
+		<script type="text/javascript">
+		/* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
+		function shm() {
+		  var x = document.getElementById("myTopnav");
+		  if (x.className === "topnav") {
+		    x.className += " responsive";
+		  } else {
+		    x.className = "topnav";
+		  }
+		}
+		</script>
+	
+	</head>
+	<body class="is-preload">
+		<div class="topnav" id="myTopnav">
+		  
+		  <a href="../main.html" class="active"><img src="../../images/logo3.png" alt="" /></a>
+		  
+		  <a href="#editar" class="smooth-scroll-top">Editar Produto</a>
+		  <a href="entrada.html" >Estoque / Entrada</a>
+		  <a href="javascript:void(0);" class="icon" onclick="shm()">
+		    <i class="fa fa-bars"></i>
+		  </a>
+		  
+		</div>
+		<!-- Wrapper -->
+		<div id="wrapper" class="divided">
+				
+			<section class="wrapper style1 align-left">
+				<div class="inner">
+				<header>
+					<h3>Lista de produtos</h3>
+				</header>
+				<div class="content">
+					<div class="table-wrapper tableFixHead">
+						<table>
+							<thead>
+								<tr>
+									<th>Codigo</th>
+									<th>Nome</th>
+									<th>--</th>
+								</tr>
+							</thead>
+							<tbody id="tContent">
+							</tbody>
+						</table>
+					</div>
+				</div>
+				</div>
+			</section>
+					
+			<div id="editar"></div>
+			<section class="wrapper style2 align-left">
+				<header>
+					<h3>Editar Produto</h3>
+				</header>
+				<div class="content contentLoad">
+					<div id="loader1000" class="loader">
+       					<div id="cssloader1000"><div></div></div>
+       				</div>
+					<form name="frm1000" id="frm1000" method="post" action="../../api/tdrs/prod/save">
+						<input type="hidden" name="idx" id="idx" value="1000" /> 	
+						<div class="fields">
+							<div class="field half">
+								<label for="codigo">Codigo</label>
+								<input type="text" name="codigo" id="codigo" maxlength="10" value="" />
+							</div>
+							<div class="field half">
+								<label for="nome">Nome</label>
+								<input type="text" name="nome" id="nome" maxlength="60" value="" />
+							</div>
+							
+							<div class="field half">
+								<label for="marca">Marca</label>
+								<input type="text" name="marca" id="marca" maxlength="60"  value="" />
+							</div>
+							<div class="field half">
+								<label for="descricao">Descrição</label>
+								<input type="text" name="descricao" id="descricao"  maxlength="120" value="" />
+							</div>
+							<div class="field half">
+								<label for="medida">Medida</label>
+								<input type="text" name="medida" id="medida" maxlength="10" value="" />
+							</div>
+							<div class="field half">
+								<label for="sexo">Unidade Medida</label>
+								<select name="unidadeMedida" id="unidadeMedida">
+									<option value="">--</option>
+									<option value="KG">KG</option>
+									<option value="LT">LT</option>
+									<option value="UNID">UNID</option>
+									<option value="PCT">PCT</option>
+									<option value="ML">ML</option>
+									<option value="GR">GR</option>
+								</select>
+							</div>
+							<input type="hidden" name="id" id="id">
+						</div>
+						<ul class="actions">
+							<li><input type="submit" name="submit" id="submit" value="Salvar" /></li>
+							<li><a href="javascript: clear()" class="button primary small">Limpar</a></li>
+						</ul>
+					</form>
+				</div>
+			</section>
+					
+					
+			</div>
+	<!-- Scripts -->
+			<script src="../../assets/js/jquery.min.js"></script>
+			<script src="../../assets/js/jquery.scrollex.min.js"></script>
+			<script src="../../assets/js/jquery.scrolly.min.js"></script>
+			<script src="../../assets/js/browser.min.js"></script>
+			<script src="../../assets/js/breakpoints.min.js"></script>
+			<script src="../../assets/js/util.js"></script>
+			<script src="../../assets/js/main.js"></script>
+    		<script src="../../assets/js/jquery.form.js"></script> 
+<script type="text/javascript">
+$(document).ready(function() { 
+	$('#frm1000').ajaxForm( { beforeSubmit: validate, success: showResponse  } ); 
+	lp();
+});
+function lp(){
+	$.ajax
+    ({ 
+        url: '../../api/tdrs/prods',
+        type: 'get',
+        dataType:'json',
+        headers : {'Content-Type' : 'application/json'},
+        success: function(result)
+        {
+        	processList(result);
+    	}
+	}); 
+}
+
+function processList(result){
+	if(result.code == "200"){
+		var content = '';
+		$.each(result.data, function(index,obj){
+			
+			content += ('<tr>');
+			content += ('<td>' + obj.codigo + '</td>');
+			content += ('<td>' + obj.nome + '</td>');
+			content += ('<td>');
+            content += ('<a href="javascript: load('+obj.id+')" >Alterar</a><br>');
+            content += ('<a href="javascript: del('+obj.id+', \''+obj.nome+'\')" >Excluir</a>');
+            content += ('</td>');
+            content += ('</tr>');
+		});
+		$("#tContent").html(content);
+	}else{
+		alert(result.message);
+	}
+}
+
+function del(id,nome){
+	
+	var flag = confirm("Deseja excluir o produto "+nome+"?");
+	if (flag) {
+		$.ajax
+	    ({ 
+	        url: '../../api/tdrs/prod/del/'+id,
+	        type: 'delete',
+	        dataType:'json',
+	        headers : {'Content-Type' : 'application/json'},
+	        success: function(result)
+	        {
+	        	processList(result);
+	        	clear();
+	    	}
+		}); 
+	}
+}
+
+function load(id){
+	var form =  document.getElementById('frm1000');
+	showLoader('lds-circle', form);
+	location.href = "#editar";
+	$.ajax
+    ({ 
+        url: '../../api/tdrs/prod/'+id,
+        type: 'get',
+        dataType:'json',
+        headers : {'Content-Type' : 'application/json'},
+        success: function(result)
+        {
+        	process(result);
+        	showLoader('', form);
+    	}
+	}); 
+}
+
+function clear(){
+	 $("#codigo").val('');
+		 $('#nome').val('');
+		 $('#marca').val('');
+		 $('#descricao').val('');
+		 $('#medida').val('');
+		 $('#id').val('');
+	 $('#unidadeMedida option[value=""]').prop('selected', true);
+	 
+}
+
+function validate(formData, jqForm, options) { 
+	var campos =  "";
+    var form = jqForm[0]; 
+    
+    if (!form.codigo.value) { 
+        campos += "Codigo"; 
+    } 
+    
+    if (!form.nome.value) { 
+    	if(campos!="") campos += ", ";
+        campos += "Nome"; 
+    } 
+    
+    if (campos != "" ) { 
+        alert('Por favor informar os campos: '+campos); 
+        return false; 
+    }
+    
+    showLoader('lds-circle', form);
+}
+
+function showResponse(result, statusText, xhr, $form)  { 
+	if(result.code == "200"){
+		process(result);
+    	alert("Produto salvo!");
+    	lp();
+	}else{
+		alert(result.message);
+	}
+	 showLoader('', $form[0]);
+} 
+
+function process(result){
+	if(result.code == "200"){
+  		 if(result.data){
+  			 $("#codigo").val(result.data.codigo);
+  			 $('#nome').val(result.data.nome);
+  			 $('#marca').val(result.data.marca);
+  			 $('#descricao').val(result.data.descricao);
+  			 $('#medida').val(result.data.medida);
+  			 $('#id').val(result.data.id);
+			 $('#unidadeMedida option[value="'+result.data.unidadeMedida+'"]').prop('selected', true);
+  		 }
+   	}else{
+   		alert(result.message);
+   	}
+}
+
+    function showLoader(className, form){
+    	var loader = document.getElementById('loader'+form.idx.value);
+    	if(className != ''){
+    		document.getElementById('cssloader'+form.idx.value).className = className;
+    		loader.style.display = 'block';
+    		form.style = 'background-color: #cccccc; opacity: .4;';
+    	}else{
+    		loader.style.display = 'none';
+    		document.getElementById('cssloader'+form.idx.value).className = '';
+    		form.style = '';
+    	}
+    }   
+
+</script>
+
+</body>
+</html>

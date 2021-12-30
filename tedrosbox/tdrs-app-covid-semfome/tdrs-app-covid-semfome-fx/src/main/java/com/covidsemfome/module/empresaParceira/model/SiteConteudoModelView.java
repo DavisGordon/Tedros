@@ -1,6 +1,5 @@
 package com.covidsemfome.module.empresaParceira.model;
 
-import com.covidsemfome.module.web.model.ComponentTemplateMV;
 import com.covidsemfome.module.web.model.CssClassMV;
 import com.covidsemfome.parceiro.model.ComponentTemplate;
 import com.covidsemfome.parceiro.model.CssClass;
@@ -9,12 +8,12 @@ import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.ejb.base.model.ITFileBaseModel;
 import com.tedros.fxapi.annotation.control.TCheckBoxField;
-import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.THTMLEditor;
 import com.tedros.fxapi.annotation.control.THyperlinkField;
 import com.tedros.fxapi.annotation.control.TLabel;
+import com.tedros.fxapi.annotation.control.TListViewField;
 import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
 import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
 import com.tedros.fxapi.annotation.control.TOptionsList;
@@ -48,7 +47,6 @@ import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
-import com.tedros.fxapi.annotation.scene.control.TInsets;
 import com.tedros.fxapi.annotation.scene.control.TLabeled;
 import com.tedros.fxapi.annotation.scene.layout.TRegion;
 import com.tedros.fxapi.annotation.scene.web.TWebEngine;
@@ -58,6 +56,7 @@ import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.domain.TEnvironment;
 import com.tedros.fxapi.domain.TLabelPosition;
+import com.tedros.fxapi.domain.TLayoutType;
 import com.tedros.fxapi.domain.TOptionProcessType;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
@@ -130,14 +129,15 @@ public class SiteConteudoModelView extends TEntityModelView<SiteConteudo>{
 	@TAccordion(expandedPane="tmplt", node=@TNode(id="contaacc",parse = true), /*region=@TRegion(maxWidth=300, parse = true),*/
 			panes={
 					@TTitledPane(text="#{label.component}", node=@TNode(id="tmplt",parse = true), 
-							expanded=true, fields={"template", "addInside", "addFirst", 
+							expanded=true,layoutType=TLayoutType.FLOWPANE ,fields={"template", "addInside", "addFirst", 
 									"addLast", "addOutside", "replace"}),
 					@TTitledPane(text="#{label.css.domain}", fields={"cssClassList"})
 				})
 	@TLabel(text="#{label.component}")
-	@TComboBoxField(optionsList=@TOptionsList(serviceName = "IComponentTemplateControllerRemote", 
-	entityClass=ComponentTemplate.class, optionModelViewClass=ComponentTemplateMV.class, 
-	optionProcessType=TOptionProcessType.LIST_ALL), required=true)
+	@TListViewField(region=@TRegion(maxHeight=100, maxWidth=160, parse = true),
+			optionsList=@TOptionsList(serviceName = "IComponentTemplateControllerRemote", 
+	entityClass=ComponentTemplate.class,  
+	optionProcessType=TOptionProcessType.LIST_ALL), required=false)
 	private SimpleObjectProperty<ComponentTemplate> template;
 	
 	@THyperlinkField(labeled = @TLabeled(text="Adicionar dentro", 
