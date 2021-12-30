@@ -337,6 +337,7 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 			return (mandatoryResultProperty!=null) ? mandatoryResultProperty.get() : true;
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public Observable tValueProperty() {
 			return this.tSelectedList;

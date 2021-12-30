@@ -1,6 +1,5 @@
 package com.covidsemfome.start;
 
-import com.covidsemfome.module.WebModule;
 import com.covidsemfome.module.acao.AcaoModule;
 import com.covidsemfome.module.acao.MailingModule;
 import com.covidsemfome.module.acao.icon.AcaoIconImageView;
@@ -10,9 +9,6 @@ import com.covidsemfome.module.acao.icon.MailingMenuIconImageView;
 import com.covidsemfome.module.cozinha.CozinhaModule;
 import com.covidsemfome.module.cozinha.icon.CozinhaIconImageView;
 import com.covidsemfome.module.cozinha.icon.CozinhaMenuIconImageView;
-import com.covidsemfome.module.empresaParceira.EmpresaParceiraModule;
-import com.covidsemfome.module.empresaParceira.icon.EmpresaParceiraIconImageView;
-import com.covidsemfome.module.empresaParceira.icon.EmpresaParceiraMenuIconImageView;
 import com.covidsemfome.module.estoque.EstoqueModule;
 import com.covidsemfome.module.estoque.icon.EstoqueIconImageView;
 import com.covidsemfome.module.estoque.icon.EstoqueMenuIconImageView;
@@ -25,8 +21,6 @@ import com.covidsemfome.module.report.icon.RelatoriosMenuIconImageView;
 import com.covidsemfome.module.tipoAjuda.TipoAjudaModule;
 import com.covidsemfome.module.tipoAjuda.icon.TipoAjudaIconImageView;
 import com.covidsemfome.module.tipoAjuda.icon.TipoAjudaMenuIconImageView;
-import com.covidsemfome.module.web.icon.WebTemplateIconImageView;
-import com.covidsemfome.module.web.icon.WebTemplateMenuIconImageView;
 import com.tedros.core.ITApplication;
 import com.tedros.core.annotation.TApplication;
 import com.tedros.core.annotation.TModule;
@@ -47,9 +41,9 @@ module = {
 			@TModule(type=AcaoModule.class, name="Ação/Site", menu="Gerenciar Campanha", 
 					icon=AcaoIconImageView.class, menuIcon=AcaoMenuIconImageView.class,
 					description="Administre aqui as ações/campanhas e algumas informações do site"),
-			@TModule(type=EmpresaParceiraModule.class, name="Parceiros", menu="Administrativo", 
+			/*@TModule(type=EmpresaParceiraModule.class, name="Parceiros", menu="Administrativo", 
 					icon=EmpresaParceiraIconImageView.class, menuIcon=EmpresaParceiraMenuIconImageView.class,
-					description="Edite/visualize aqui as empresas parceiras."),
+					description="Edite/visualize aqui as empresas parceiras."),*/
 			@TModule(type=MailingModule.class, name="Mailing", menu="Gerenciar Campanha", 
 					icon=MailingIconImageView.class, menuIcon=MailingMenuIconImageView.class,
 					description="Crie e envie e-mails a um grupo de pessoas sobre uma determinada ação."),
@@ -64,9 +58,9 @@ module = {
 					icon=CozinhaIconImageView.class, menuIcon=CozinhaMenuIconImageView.class,
 					description="Edite aqui os locais (cozinhas) de produção, necessario "
 							+ "para editar estoque e inserir entradas e saidas de produtos."),
-			@TModule(type=WebModule.class, name="Website Template", menu="Administrativo", 
+			/*@TModule(type=WebModule.class, name="Website Template", menu="Administrativo", 
 					icon=WebTemplateIconImageView.class, menuIcon=WebTemplateMenuIconImageView.class,
-					description="Edite aqui os componentes web para criar a pagina das empresas parceiras"),
+					description="Edite aqui os componentes web para criar a pagina das empresas parceiras"),*/
 			@TModule(type=EstoqueModule.class, name="Estoque", menu="Administrativo", 
 					icon=EstoqueIconImageView.class, menuIcon=EstoqueMenuIconImageView.class,
 					description="Gerencie aqui os produtos as entradas e saídas do estoque, edite o "

@@ -1,8 +1,5 @@
 package com.covidsemfome.rest.service;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -46,9 +43,9 @@ import com.covidsemfome.rest.model.AcaoModel;
 import com.covidsemfome.rest.model.RestModel;
 import com.covidsemfome.rest.model.TermoAdesaoModel;
 import com.covidsemfome.rest.model.UserModel;
+import com.covidsemfome.rest.util.ApiUtils;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
-import com.tedros.util.TDateUtil;
 
 import br.com.covidsemfome.bean.AppBean;
 import br.com.covidsemfome.bean.CovidUserBean;
@@ -161,15 +158,9 @@ public class PainelApi {
 				p.setLoginName(email);
 			}
 			
-			if(dtNasc!=null) {
-				try {
-					Date dt = TDateUtil.getDate(dtNasc, "yyyy-MM-dd");
-					p.setDataNascimento(dt);
-				}catch(ParseException e) {
-					e.printStackTrace();
-					System.err.println("Não foi possivel converter a data "+dtNasc+" para o voluntario "+name);
-				}
-			}
+			Date dt = ApiUtils.convertToDate(dtNasc);
+			p.setDataNascimento(dt);
+				
 			UF uf = null;
 			if(ufid!=null) {
 				uf = new UF();
@@ -513,7 +504,7 @@ public class PainelApi {
 							lst4 = null;
 					}
 					AcaoModel model = new AcaoModel(acao.getId(), acao.getTitulo(), acao.getDescricao(), 
-							formataDataHora(acao.getData()), acao.getStatus(), acao.getObservacao(), 
+							ApiUtils.formatDateHourToView(acao.getData()), acao.getStatus(), acao.getObservacao(), 
 							acao.getQtdMinVoluntarios(), acao.getQtdMaxVoluntarios(), qtdVolIns, 
 							inscrito, lst2, lst3, lst4);
 					models.add(model);
@@ -529,10 +520,5 @@ public class PainelApi {
 		}
 	}
 	
-	private String formataDataHora(Date data){
-		String pattern = "dd/MM/yyyy 'às' HH:mm";
-		DateFormat df = new SimpleDateFormat(pattern);
-		return df.format(data);
-	}
 	
 }

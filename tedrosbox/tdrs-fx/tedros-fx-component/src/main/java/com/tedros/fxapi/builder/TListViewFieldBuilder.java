@@ -10,13 +10,11 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.annotation.control.TListViewField;
 import com.tedros.fxapi.annotation.control.TOptionsList;
-import com.tedros.fxapi.annotation.control.TPickListField;
 import com.tedros.fxapi.control.TListView;
 import com.tedros.fxapi.domain.TOptionProcessType;
 import com.tedros.fxapi.presenter.model.TModelView;
@@ -26,7 +24,6 @@ import javafx.beans.Observable;
 import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker.State;
@@ -77,8 +74,11 @@ implements ITControlBuilder<TListView, Observable> {
 									for(Object e : (List<Object>) result.getValue()){
 										if(e instanceof ITEntity){
 											try {
-												TModelView<?> model = mClass.getConstructor(eClass).newInstance(e);
-												list.add(model);
+												if(mClass!=TModelView.class) {
+													TModelView<?> model = mClass.getConstructor(eClass).newInstance(e);
+													list.add(model);
+												}else 
+													list.add(e);
 											} catch (InstantiationException
 													| IllegalAccessException
 													| IllegalArgumentException
@@ -91,7 +91,7 @@ implements ITControlBuilder<TListView, Observable> {
 											
 										}
 									}
-									control.getItems().add(FXCollections.observableArrayList(list));
+									control.getItems().addAll(list);
 								}
 							}
 						}	
@@ -116,10 +116,6 @@ implements ITControlBuilder<TListView, Observable> {
 			process.startProcess();
 		}
 		
-		
-		
-		
-		
 		callParser(tAnnotation, control);
 				
 		return control;
@@ -138,39 +134,39 @@ implements ITControlBuilder<TListView, Observable> {
 			String fn = super.getComponentDescriptor().getFieldDescriptor().getFieldName();
 			
 			ListChangeListener sellchll = c -> {
-				prop.removeListener((ListChangeListener)super.getComponentDescriptor().getModelView().getListenerRepository()
-						.get(fn+"_tlistview"));
+				prop.removeListener((ListChangeListener)super.getComponentDescriptor().getForm().gettObjectRepository()
+						.get(fn+"_tlistview_prop"));
 				prop.clear();
 				prop.addAll(c.getList());
-				prop.addListener((ListChangeListener)super.getComponentDescriptor().getModelView().getListenerRepository()
-						.get(fn+"_tlistview"));
+				prop.addListener((ListChangeListener)super.getComponentDescriptor().getForm().gettObjectRepository()
+						.get(fn+"_tlistview_prop"));
 			};
 			super.getComponentDescriptor().getForm().gettObjectRepository()
-			.add(fn+"_tlistview", sellchll);
+			.add(fn+"_tlistview_sel", sellchll);
 			sel.addListener(sellchll);
 			
 			ListChangeListener proplchll = c -> {
 				sel.removeListener((ListChangeListener)super.getComponentDescriptor().getForm().gettObjectRepository()
-						.get(fn+"_tlistview"));
+						.get(fn+"_tlistview_sel"));
 				control.getSelectionModel().clearSelection();
 				for(Object o : c.getList())
 					control.getSelectionModel().select(o);
 				sel.addListener((ListChangeListener)super.getComponentDescriptor().getForm().gettObjectRepository()
-						.get(fn+"_tlistview"));
+						.get(fn+"_tlistview_sel"));
 				
 			};
-			super.getComponentDescriptor().getModelView().getListenerRepository()
-			.add(fn+"_tlistview", proplchll);
+			super.getComponentDescriptor().getForm().gettObjectRepository()
+			.add(fn+"_tlistview_prop", proplchll);
 			prop.addListener(proplchll);
 			
 			ListChangeListener itemslchll = c -> {
 				sel.removeListener((ListChangeListener)super.getComponentDescriptor().getForm().gettObjectRepository()
-						.get(fn+"_tlistview"));
+						.get(fn+"_tlistview_sel"));
 				control.getSelectionModel().clearSelection();
 				for(Object o : prop)
 					control.getSelectionModel().select(o);
 				sel.addListener((ListChangeListener)super.getComponentDescriptor().getForm().gettObjectRepository()
-						.get(fn+"_tlistview"));
+						.get(fn+"_tlistview_sel"));
 				
 			};
 			super.getComponentDescriptor().getForm().gettObjectRepository()
@@ -179,6 +175,48 @@ implements ITControlBuilder<TListView, Observable> {
 			
 		}else{
 			control.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+			ObservableList sel = (ObservableList) control.tValueProperty();
+			Property prop = (Property) property;
+			String fn = super.getComponentDescriptor().getFieldDescriptor().getFieldName();
+			
+			ListChangeListener sellchll = c -> {
+				prop.removeListener((ChangeListener)super.getComponentDescriptor().getForm().gettObjectRepository()
+						.get(fn+"_tlistview_prop"));
+				prop.setValue(c.getList().isEmpty()?null:c.getList().get(0));
+				prop.addListener((ChangeListener)super.getComponentDescriptor().getForm().gettObjectRepository()
+						.get(fn+"_tlistview_prop"));
+			};
+			super.getComponentDescriptor().getForm().gettObjectRepository()
+			.add(fn+"_tlistview_sel", sellchll);
+			sel.addListener(sellchll);
+			
+			ChangeListener proplchll = (a,b,n) -> {
+				sel.removeListener((ListChangeListener)super.getComponentDescriptor().getForm().gettObjectRepository()
+						.get(fn+"_tlistview_sel"));
+				control.getSelectionModel().clearSelection();
+				control.getSelectionModel().select(n);
+				sel.addListener((ListChangeListener)super.getComponentDescriptor().getForm().gettObjectRepository()
+						.get(fn+"_tlistview_sel"));
+				
+			};
+			super.getComponentDescriptor().getForm().gettObjectRepository()
+			.add(fn+"_tlistview_prop", proplchll);
+			prop.addListener(proplchll);
+			
+			ListChangeListener itemslchll = c -> {
+				sel.removeListener((ListChangeListener)super.getComponentDescriptor().getForm().gettObjectRepository()
+						.get(fn+"_tlistview_sel"));
+				control.getSelectionModel().clearSelection();
+				if(prop.getValue()!=null)
+					control.getSelectionModel().select(prop.getValue());
+				sel.addListener((ListChangeListener)super.getComponentDescriptor().getForm().gettObjectRepository()
+						.get(fn+"_tlistview_sel"));
+				
+			};
+			super.getComponentDescriptor().getForm().gettObjectRepository()
+			.add(fn+"_tlistview2", itemslchll);
+			control.getItems().addListener(itemslchll);
+			
 		}
 	}
 	

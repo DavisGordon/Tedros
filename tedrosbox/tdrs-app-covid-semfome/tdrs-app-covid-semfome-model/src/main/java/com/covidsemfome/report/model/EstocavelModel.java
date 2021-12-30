@@ -34,6 +34,8 @@ public class EstocavelModel extends TEntity {
 	
 	private String doador;
 	
+	private String observacao;
+	
 	private List<EstocavelItemModel> itens;
 
 	public EstocavelModel(Entrada m) {
@@ -57,7 +59,7 @@ public class EstocavelModel extends TEntity {
 		this.cozinha = m.getCozinha().toString();
 		this.dataHora = TDateUtil.getFormatedDate(m.getData(), TDateUtil.DDMMYYYY_HHMM);
 		this.acao = m.getAcao().getTitulo() +" em " + this.dataHora;
-		
+		this.observacao = m.getObservacao();
 		this.itens = new ArrayList<>();
 		for(SaidaItem i : m.getItens()) 
 			itens.add(new EstocavelItemModel(i));
@@ -159,6 +161,20 @@ public class EstocavelModel extends TEntity {
 	 */
 	public void setItens(List<EstocavelItemModel> itens) {
 		this.itens = itens;
+	}
+
+	/**
+	 * @return the observacao
+	 */
+	public String getObservacao() {
+		return observacao;
+	}
+
+	/**
+	 * @param observacao the observacao to set
+	 */
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
 	}
 	
 

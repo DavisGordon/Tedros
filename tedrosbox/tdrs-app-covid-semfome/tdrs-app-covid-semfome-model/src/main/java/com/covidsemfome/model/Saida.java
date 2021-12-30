@@ -147,5 +147,14 @@ public class Saida extends TEntity implements Estocavel {
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
 	}
+
+	@Override
+	public String getObservacaoEstoque() {
+		String s = this.observacao != null ? this.observacao : "";
+		if(this.acao.getVoluntarios()!=null && this.acao.getVoluntarios().size()>0)
+			s +=  ("".equals(s) ? "" : "\n") 
+					+ "Qtd. voluntarios: " + this.acao.getVoluntarios().size();
+		return s;
+	}
 	
 }

@@ -6,12 +6,17 @@
  */
 package com.covidsemfome.server.estoque.controller;
 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
 import com.covidsemfome.ejb.controller.IEntradaController;
+import com.covidsemfome.model.Cozinha;
 import com.covidsemfome.model.Entrada;
 import com.covidsemfome.server.estoque.service.EntradaService;
 import com.tedros.ejb.base.controller.ITSecurityController;
@@ -43,6 +48,15 @@ public class EntradaController extends TSecureEjbController<Entrada> implements 
 	@Override
 	public ITEjbService<Entrada> getService() {
 		return serv;
+	}
+	
+	public TResult<List<Entrada>> pesquisar(TAccessToken token, Cozinha coz, Date dataInicio, Date dataFim, String tipo, String orderby, String ordertype, Long... idsl){
+		try{
+			List<Entrada> lst = serv.pesquisar(idsl!=null ? Arrays.asList(idsl) : null, coz, dataInicio, dataFim, tipo, orderby, ordertype);
+			return new TResult<>(EnumResult.SUCESS, lst);
+		}catch(Exception e) {
+			return processException(token, null, e);
+		}
 	}
 	
 	@Override

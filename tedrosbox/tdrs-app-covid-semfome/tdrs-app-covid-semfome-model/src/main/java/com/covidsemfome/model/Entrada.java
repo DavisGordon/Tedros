@@ -148,4 +148,11 @@ public class Entrada extends TEntity implements Estocavel{
 				+ (cozinha != null ? cozinha  : "")
 				+ (data != null ? " em " + TDateUtil.getFormatedDate(data, TDateUtil.DDMMYYYY)  : "")  ;
 	}
+
+	@Override
+	public String getObservacaoEstoque() {
+		return this.doador!=null 
+				? "Doador: "+doador.getNome()
+				: null;
+	}
 }

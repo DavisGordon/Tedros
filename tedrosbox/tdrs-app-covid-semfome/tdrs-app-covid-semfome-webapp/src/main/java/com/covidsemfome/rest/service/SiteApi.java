@@ -1,9 +1,6 @@
 package com.covidsemfome.rest.service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -36,6 +33,7 @@ import com.covidsemfome.model.SiteVideo;
 import com.covidsemfome.rest.model.AcaoModel;
 import com.covidsemfome.rest.model.RestModel;
 import com.covidsemfome.rest.model.SiteModel;
+import com.covidsemfome.rest.util.ApiUtils;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 
@@ -215,14 +213,13 @@ public class SiteApi {
 			List<Acao> lst = res.getValue();
 			if(lst!=null && !lst.isEmpty())
 				for (Acao acao : lst) {
-					String data;
 					Integer qtdVolIns = acao.getVoluntarios()!=null 
 							? acao.getVoluntarios().size() 
 									: 0;
 					
 					
 					AcaoModel model = new AcaoModel(null, acao.getTitulo(), acao.getDescricao(), 
-							formataDataHora(acao.getData()), acao.getStatus(), acao.getObservacao(), 
+							ApiUtils.formatDateHourToView(acao.getData()), acao.getStatus(), acao.getObservacao(), 
 							acao.getQtdMinVoluntarios(), acao.getQtdMaxVoluntarios(), qtdVolIns, 
 							false, null, null, null);
 					models.add(model);
@@ -230,16 +227,10 @@ public class SiteApi {
 				}
 			return new RestModel<>(models, "200", res.getMessage());
 		}else{
-			//System.out.println(res.getErrorMessage());
 			return new RestModel<>(null, "404", res.getResult().equals(EnumResult.WARNING) ? res.getMessage()  : error.getValue() );
 		}
 	}
 	
-	private String formataDataHora(Date data){
-		String pattern = "dd/MM/yyyy 'às' HH:mm";
-		DateFormat df = new SimpleDateFormat(pattern);
-		return df.format(data);
-	}
 	
 	@SuppressWarnings("unchecked")
 	@GET

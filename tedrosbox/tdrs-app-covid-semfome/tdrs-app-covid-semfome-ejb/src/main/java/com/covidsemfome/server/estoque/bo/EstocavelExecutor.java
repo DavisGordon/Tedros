@@ -11,6 +11,7 @@ import java.util.function.Supplier;
 import org.apache.commons.collections4.ListUtils;
 
 import com.covidsemfome.model.Cozinha;
+import com.covidsemfome.model.Entrada;
 import com.covidsemfome.model.Estocavel;
 import com.covidsemfome.model.EstocavelItem;
 import com.covidsemfome.model.Estoque;
@@ -47,27 +48,26 @@ public class EstocavelExecutor<T extends Estocavel, I extends EstocavelItem> {
 	}
 
 
-	public void removerEstoque(T entrada, T entSaved, Supplier<T> estocavelSupplier, Supplier<I> estocavelItemSupplier) throws Exception {
+	public void removerEstoque(T estocavel, T estocavelSaved, Supplier<T> estocavelSupplier, Supplier<I> estocavelItemSupplier) throws Exception {
 		
-		//entrada.setItens(new ArrayList<>());
-		gerarEstoque(entrada, entSaved, estocavelSupplier, estocavelItemSupplier);
+		gerarEstoque(estocavel, estocavelSaved, estocavelSupplier, estocavelItemSupplier);
 		
-		T entX = entrada;
-		Cozinha cozX = entrada.getCozinha();
+		T target = estocavel;
+		Cozinha cozX = estocavel.getCozinha();
 		
-		if(!entrada.isNew()) {
-			entX = estocavelSupplier.get();
-			entX.setId(entrada.getId());
+		if(!estocavel.isNew()) {
+			target = estocavelSupplier.get();
+			target.setId(estocavel.getId());
 			
 			cozX = new Cozinha();
-			cozX.setId(entrada.getCozinha().getId());
+			cozX.setId(estocavel.getCozinha().getId());
 		}
 		
-		Estoque ex = new Estoque(entX);
+		Estoque ex = new Estoque(target);
 		ex.setCozinha(cozX);
 		
-		// estoque gerado para as cozinha da entrada
-		Estoque est = (!entrada.isNew()) ? estoqueBO.find(ex) : null;
+		// remove
+		Estoque est = (!estocavel.isNew()) ? estoqueBO.find(ex) : null;
 		if(est!=null)
 			estoqueBO.remove(est);
 	}
@@ -102,7 +102,7 @@ public class EstocavelExecutor<T extends Estocavel, I extends EstocavelItem> {
 		Estoque estoqueRef = (!estocavel.isNew()) ? eao.find(estoqueExample) : null;
 		
 		if(estoqueRef!=null) {
-			// Alteracao da entrada, isto é, possui entrada e estoque na base
+			// Alteracao da entrada/saida, isto é, possui estoque associado na base
 			// recupera estoque anterior
 			Estoque estAnterior = eao.getAnterior(estoqueRef.getId(), estoqueRef.getCozinha());
 			// recupera os estoques da cozinha gerados a posteriore, se houver
@@ -209,8 +209,8 @@ public class EstocavelExecutor<T extends Estocavel, I extends EstocavelItem> {
 			atualizarEstoquePosteriores(post, values);
 			
 		}else {
-			// Primeira vez que a entrada é processada
-			// recupera o ultimo estoque antetior a data
+			// Primeira vez que a entrada/saida é processada
+			// recupera o ultimo estoque anterior a data
 			estoqueRef = eao.getUltimo(estocavel.getCozinha(), estocavel.getData());
 			List<EstoqueItem> itens = (estoqueRef==null) ? null : estoqueRef.getItens();
 			
@@ -220,7 +220,7 @@ public class EstocavelExecutor<T extends Estocavel, I extends EstocavelItem> {
 			Estoque estoqueNovo = new Estoque(estocavel);
 			estoqueNovo.setData(estocavel.getData());
 			estoqueNovo.setCozinha(estocavel.getCozinha());
-			
+			estoqueNovo.setObservacao(estocavel.getObservacaoEstoque());
 			List<? extends EstocavelItem> estocavelItens = estocavel.getItens();
 			I estocavelItem = estocavelItemSupplier.get();
 			for(Produto p : produtos) {

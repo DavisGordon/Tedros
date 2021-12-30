@@ -1,0 +1,559 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Covid Sem Fome - Gestão</title>
+		<meta charset="utf-8" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../../assets/css/main.css" />
+		<link rel="stylesheet" href="../../assets/css/menu.css" />
+		<link rel="stylesheet" href="../../assets/css/loader.css" />
+		<style type="text/css">
+		 .tableFixHead {
+        overflow-y: auto;
+        height: 250px;
+      }
+      .tableFixHead thead th {
+        position: sticky;
+        top: 0;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th,
+      td {
+        padding: 8px 16px;
+      /*  border: 1px solid #ccc;*/
+      }
+      th {
+        background: #fff;
+      }
+		
+		
+		
+.autocomplete {
+  /*the container must be positioned relative:*/
+  position: relative;
+  display: inline-block;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+.autocomplete-items div:hover {
+  /*when hovering an item:*/
+  background-color: #e9e9e9;
+}
+
+.autocomplete-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
+		</style>
+		<noscript>
+			<link rel="stylesheet" href="../../assets/css/noscript.css" />
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		</noscript>
+		<script type="text/javascript">
+		/* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
+		function shm() {
+		  var x = document.getElementById("myTopnav");
+		  if (x.className === "topnav") {
+		    x.className += " responsive";
+		  } else {
+		    x.className = "topnav";
+		  }
+		}
+		</script>
+	
+	</head>
+	<body class="is-preload">
+		<div class="topnav" id="myTopnav">
+		  
+		  <a href="../main.html" class="active"><img src="../../images/logo3.png" alt="" /></a>
+		  
+		  <a href="prod.html" >Editar Produto</a>
+		  <a href="#editar" class="smooth-scroll-top">Gerar Entrada</a>
+		  <a href="javascript:void(0);" class="icon" onclick="shm()">
+		    <i class="fa fa-bars"></i>
+		  </a>
+		  
+		</div>
+		<!-- Wrapper -->
+		<div id="wrapper" class="divided">
+				
+			<section class="wrapper style1 align-left">
+				<div class="inner">
+				<header>
+					<h3>Lista de Entradas no estoque</h3>
+				</header>
+				<div class="content">
+					<div class="fields">
+						<div class="field half">
+							<label for="cozF">Cozinha</label>
+							<select name="cozF" id="cozF">
+							</select>
+						</div>
+						<div class="field half">
+							<label for="dtinic">Data inicio</label>
+							<input type="date" name="dtinic" id="dtinic" value="" />
+						</div>
+						<div class="field half">
+							<label for="dtfim">Data fim</label>
+							<input type="date" name="dtfim" id="dtfim" value="" />
+						</div>
+					</div><br>
+					<a href="javascript: filter()" class="button primary fit small icon solid fa-search">Pesquisar</a>
+				
+					<div class="table-wrapper tableFixHead">
+						<table>
+							<thead>
+								<tr>
+									<th>Id</th>
+									<th>Data</th>
+									<th>Tipo</th>
+									<th>Cozinha</th>
+									<th>--</th>
+								</tr>
+							</thead>
+							<tbody id="tContent">
+							</tbody>
+						</table>
+					</div>
+				</div>
+				</div>
+			</section>
+					
+			<div id="editar"></div>
+			<section class="wrapper style2 align-left">
+				<header>
+					<h3>Entrada no estoque</h3>
+				</header>
+				<div class="content contentLoad">
+					<div id="loader1000" class="loader">
+       					<div id="cssloader1000"><div></div></div>
+       				</div>
+					<form name="frm1000" id="frm1000" autocomplete="off" method="post" action="../../api/tdrs/in/save">
+						<input type="hidden" name="idx" id="idx" value="1000" /> 	
+						<div class="fields">
+							<div class="field half">
+								<label for="cozinha">Cozinha</label>
+								<select name="cozinha" id="cozinha">
+								</select>
+							</div>
+							<div class="field half">
+								<label for="data">Data</label>
+								<input type="datetime-local" name="data" id="data" value="" />
+							</div>
+							
+							<div class="field half">
+								<label for="tipo">Tipo</label>
+								<select name="tipo" id="tipo">
+									<option value="">--</option>
+									<option value="Compras">Compras</option>
+									<option value="Doação">Doação</option>
+								</select>
+							</div>
+							<div class="field half">
+								<label for="doador">Doador</label>
+								<div class="autocomplete" style="width:300px;">
+    								<input id="doador" type="text" name="doador" placeholder="doadores">
+    								<input type="hidden" name="pessId" id="pessId">
+  								</div>
+							</div>
+							<input type="hidden" name="id" id="id">
+						</div>
+						<hr>
+						<div class="fields">
+							<div class="field half">
+								<label for="produto">Produto</label>
+								<div class="autocomplete" style="width:300px;">
+    								<input id="produto" type="text" name="produto" placeholder="produtos">
+    								<input type="hidden" name="prodId" id="prodId">
+  								</div>
+							</div>
+							<div class="field half">
+								<label for="quantidade">Quantidade</label>
+								<input type="text" name="quantidade" id="quantidade" value="" />
+							</div>
+							
+							<div class="field half">
+								<label for="valorUnitario">Vlr. Unitario</label>
+								<input type="text" name="valorUnitario" id="valorUnitario" value="" />
+							</div>
+							<div class="field half">
+								<label for="sexo">Unidade Medida</label>
+								<select name="unidadeMedida" id="unidadeMedida">
+									<option value="">--</option>
+									<option value="KG">KG</option>
+									<option value="LT">LT</option>
+									<option value="UNID">UNID</option>
+									<option value="PCT">PCT</option>
+									<option value="ML">ML</option>
+									<option value="GR">GR</option>
+								</select>
+							</div>
+							<input type="hidden" name="itemId" id="itemId">
+						</div>
+						<br><a href="javascript: add()" class="button primary fit small icon solid fa-search">Add</a>
+						<div class="table-wrapper tableFixHead">
+						<table>
+							<thead>
+								<tr>
+									<th>Produto</th>
+									<th>Qtd.</th>
+									<th>Vlr. Unitario</th>
+									<th>Unidade Medida</th>
+									<th>--</th>
+								</tr>
+							</thead>
+							<tbody id="tContentEdit">
+							</tbody>
+						</table>
+					</div>
+						
+						<ul class="actions">
+							<li><input type="submit" name="submit" id="submit" value="Salvar" /></li>
+							<li><a href="javascript: clear()" class="button primary small">Limpar</a></li>
+						</ul>
+					</form>
+				</div>
+			</section>
+					
+					
+			</div>
+	<!-- Scripts -->
+			<script src="../../assets/js/jquery.min.js"></script>
+			<script src="../../assets/js/jquery.scrollex.min.js"></script>
+			<script src="../../assets/js/jquery.scrolly.min.js"></script>
+			<script src="../../assets/js/browser.min.js"></script>
+			<script src="../../assets/js/breakpoints.min.js"></script>
+			<script src="../../assets/js/util.js"></script>
+			<script src="../../assets/js/main.js"></script>
+    		<script src="../../assets/js/jquery.form.js"></script> 
+<script type="text/javascript">
+$(document).ready(function() { 
+	//var arr = ["Davis","Dad","David","Deivson"];
+	autocomplete(document.getElementById("doador"), document.getElementById("pessId"), 'pess');
+	autocomplete(document.getElementById("produto"), document.getElementById("prodId"), 'prod');
+	$('#frm1000').ajaxForm( { beforeSubmit: validate, success: showResponse  } ); 
+	loadCoz();
+});
+function filter(){
+	var c = document.getElementById("cozF").value;
+	var b = document.getElementById("dtinic").value;
+	var e = document.getElementById("dtfim").value;
+	if(!c) c="0";
+	if(!b) b="x";
+	if(!e) e="x";
+	$.ajax
+    ({ 
+        url: '../../api/tdrs/filterIn/'+c+'/'+b+'/'+e,
+        type: 'get',
+        dataType:'json',
+        headers : {'Content-Type' : 'application/json'},
+        success: function(result)
+        {
+        	processList(result);
+    	}
+	}); 
+}
+
+function processList(result){
+	if(result.code == "200"){
+		var content = '';
+		$.each(result.data, function(index,obj){
+			
+			content += ('<tr>');
+			content += ('<td>' + obj.id + '</td>');
+			content += ('<td>' + obj.dataDesc + '</td>');
+			content += ('<td>' + obj.tipo + '</td>');
+			content += ('<td>' + obj.cozinha.nome + '</td>');
+			content += ('<td>');
+            content += ('<a href="javascript: load('+obj.id+')" >Alterar</a><br>');
+            content += ('<a href="javascript: del('+obj.id+', \''+obj.nome+'\')" >Excluir</a>');
+            content += ('</td>');
+            content += ('</tr>');
+		});
+		$("#tContent").html(content);
+	}else{
+		alert(result.message);
+	}
+}
+
+function del(id,nome){
+	
+	var flag = confirm("Deseja excluir o produto "+nome+"?");
+	if (flag) {
+		$.ajax
+	    ({ 
+	        url: '../../api/tdrs/prod/del/'+id,
+	        type: 'delete',
+	        dataType:'json',
+	        headers : {'Content-Type' : 'application/json'},
+	        success: function(result)
+	        {
+	        	processList(result);
+	        	clear();
+	    	}
+		}); 
+	}
+}
+
+function load(id){
+	var form =  document.getElementById('frm1000');
+	showLoader('lds-circle', form);
+	location.href = "#editar";
+	$.ajax
+    ({ 
+        url: '../../api/tdrs/prod/'+id,
+        type: 'get',
+        dataType:'json',
+        headers : {'Content-Type' : 'application/json'},
+        success: function(result)
+        {
+        	process(result);
+        	showLoader('', form);
+    	}
+	}); 
+}
+
+function clear(){
+	 $("#codigo").val('');
+		 $('#nome').val('');
+		 $('#marca').val('');
+		 $('#descricao').val('');
+		 $('#medida').val('');
+		 $('#id').val('');
+	 $('#unidadeMedida option[value=""]').prop('selected', true);
+	 
+}
+
+function validate(formData, jqForm, options) { 
+	var campos =  "";
+    var form = jqForm[0]; 
+    
+    if (!form.codigo.value) { 
+        campos += "Codigo"; 
+    } 
+    
+    if (!form.nome.value) { 
+    	if(campos!="") campos += ", ";
+        campos += "Nome"; 
+    } 
+    
+    if (campos != "" ) { 
+        alert('Por favor informar os campos: '+campos); 
+        return false; 
+    }
+    
+    showLoader('lds-circle', form);
+}
+
+function showResponse(result, statusText, xhr, $form)  { 
+	if(result.code == "200"){
+		process(result);
+    	alert("Produto salvo!");
+    	lp();
+	}else{
+		alert(result.message);
+	}
+	 showLoader('', $form[0]);
+} 
+
+function process(result){
+	if(result.code == "200"){
+  		 if(result.data){
+  			 $("#codigo").val(result.data.codigo);
+  			 $('#nome').val(result.data.nome);
+  			 $('#marca').val(result.data.marca);
+  			 $('#descricao').val(result.data.descricao);
+  			 $('#medida').val(result.data.medida);
+  			 $('#id').val(result.data.id);
+			 $('#unidadeMedida option[value="'+result.data.unidadeMedida+'"]').prop('selected', true);
+  		 }
+   	}else{
+   		alert(result.message);
+   	}
+}
+
+function search(target, val, callback){
+	$.ajax
+    ({ 
+        url: '../../api/tdrs/'+target+'/'+val,
+        type: 'get',
+        dataType:'json',
+        headers : {'Content-Type' : 'application/json'},
+        success: function(result)
+        {
+        	if(result.data){
+        		callback(result.data);
+			}	
+    	}
+	}); 
+}
+
+
+function loadCoz(){
+	$.ajax
+    ({ 
+        url: '../../api/tdrs/coz',
+        type: 'get',
+        dataType:'json',
+        headers : {'Content-Type' : 'application/json'},
+        success: function(result)
+        {
+        	$('#cozinha').append('<option value="">Selecione</option>');
+        	$('#cozF').append('<option value="">Selecione</option>');
+        	if(result.data){
+				$.each(result.data, function(index,obj){
+				 $('#cozinha').append('<option value="' + obj.id + '">' + obj.nome + '</option>');
+				 $('#cozF').append('<option value="' + obj.id + '">' + obj.nome + '</option>');
+					
+				});
+			}	
+    	}
+	}); 
+}
+
+
+    function showLoader(className, form){
+    	var loader = document.getElementById('loader'+form.idx.value);
+    	if(className != ''){
+    		document.getElementById('cssloader'+form.idx.value).className = className;
+    		loader.style.display = 'block';
+    		form.style = 'background-color: #cccccc; opacity: .4;';
+    	}else{
+    		loader.style.display = 'none';
+    		document.getElementById('cssloader'+form.idx.value).className = '';
+    		form.style = '';
+    	}
+    }   
+
+  
+    function autocomplete(inp, inpSel, target) {
+    	  /*the autocomplete function takes two arguments,
+    	  the text field element and an array of possible autocompleted values:*/
+    	  var currentFocus;
+    	  /*execute a function when someone writes in the text field:*/
+    	  inp.addEventListener("input", function(e) {
+    	      var a, b, i, val = this.value;
+    	      /*close any already open lists of autocompleted values*/
+    	      closeAllLists();
+    	      if (!val) { return false;}
+    	      
+    	      var thisObj = this;
+    	      search(target, val, function(arr){
+    	      
+    	      currentFocus = -1;
+    	      
+    	      /*create a DIV element that will contain the items (values):*/
+    	      a = document.createElement("DIV");
+    	      a.setAttribute("id", this.id + "autocomplete-list");
+    	      a.setAttribute("class", "autocomplete-items");
+    	      /*append the DIV element as a child of the autocomplete container:*/
+    	      thisObj.parentNode.appendChild(a);
+    	      /*for each item in the array...*/
+    	      for (i = 0; i < arr.length; i++) {
+    	        /*check if the item starts with the same letters as the text field value:*/
+    	        if (arr[i].nome.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+    	          /*create a DIV element for each matching element:*/
+    	          b = document.createElement("DIV");
+    	          /*make the matching letters bold:*/
+    	          b.innerHTML = "<strong>" + arr[i].nome.substr(0, val.length) + "</strong>";
+    	          b.innerHTML += arr[i].nome.substr(val.length);
+    	          /*insert a input field that will hold the current array item's value:*/
+    	          b.innerHTML += "<input type='hidden' value='" + arr[i].nome + "'>";
+    	          b.innerHTML += "<input type='hidden' value='" + arr[i].id + "'>";
+    	          /*execute a function when someone clicks on the item value (DIV element):*/
+    	              b.addEventListener("click", function(e) {
+    	              /*insert the value for the autocomplete text field:*/
+    	              inp.value = this.getElementsByTagName("input")[0].value;
+    	              inpSel.value = this.getElementsByTagName("input")[1].value;
+    	              /*close the list of autocompleted values,
+    	              (or any other open lists of autocompleted values:*/
+    	              closeAllLists();
+    	          });
+    	          a.appendChild(b);
+    	        }
+    	      }
+    	  });
+    	  });
+    	  /*execute a function presses a key on the keyboard:*/
+    	  inp.addEventListener("keydown", function(e) {
+    	      var x = document.getElementById(this.id + "autocomplete-list");
+    	      if (x) x = x.getElementsByTagName("div");
+    	      if (e.keyCode == 40) {
+    	        /*If the arrow DOWN key is pressed,
+    	        increase the currentFocus variable:*/
+    	        currentFocus++;
+    	        /*and and make the current item more visible:*/
+    	        addActive(x);
+    	      } else if (e.keyCode == 38) { //up
+    	        /*If the arrow UP key is pressed,
+    	        decrease the currentFocus variable:*/
+    	        currentFocus--;
+    	        /*and and make the current item more visible:*/
+    	        addActive(x);
+    	      } else if (e.keyCode == 13) {
+    	        /*If the ENTER key is pressed, prevent the form from being submitted,*/
+    	        e.preventDefault();
+    	        if (currentFocus > -1) {
+    	          /*and simulate a click on the "active" item:*/
+    	          if (x) x[currentFocus].click();
+    	        }
+    	      }
+    	  });
+    	  function addActive(x) {
+    	    /*a function to classify an item as "active":*/
+    	    if (!x) return false;
+    	    /*start by removing the "active" class on all items:*/
+    	    removeActive(x);
+    	    if (currentFocus >= x.length) currentFocus = 0;
+    	    if (currentFocus < 0) currentFocus = (x.length - 1);
+    	    /*add class "autocomplete-active":*/
+    	    x[currentFocus].classList.add("autocomplete-active");
+    	  }
+    	  function removeActive(x) {
+    	    /*a function to remove the "active" class from all autocomplete items:*/
+    	    for (var i = 0; i < x.length; i++) {
+    	      x[i].classList.remove("autocomplete-active");
+    	    }
+    	  }
+    	  function closeAllLists(elmnt) {
+    	    /*close all autocomplete lists in the document,
+    	    except the one passed as an argument:*/
+    	    var x = document.getElementsByClassName("autocomplete-items");
+    	    for (var i = 0; i < x.length; i++) {
+    	      if (elmnt != x[i] && elmnt != inp) {
+    	      x[i].parentNode.removeChild(x[i]);
+    	    }
+    	  }
+    	}
+    	/*execute a function when someone clicks in the document:*/
+    	document.addEventListener("click", function (e) {
+    	    closeAllLists(e.target);
+    	});
+    	}
+</script>
+
+</body>
+</html>
