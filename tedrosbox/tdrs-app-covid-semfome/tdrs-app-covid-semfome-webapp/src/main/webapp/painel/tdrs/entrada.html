@@ -91,7 +91,9 @@
 		  <a href="../main.html" class="active"><img src="../../images/logo3.png" alt="" /></a>
 		  
 		  <a href="prod.html" >Editar Produto</a>
-		  <a href="#editar" class="smooth-scroll-top">Gerar Entrada</a>
+		  <a href="#editar" class="smooth-scroll-top">Detalhes da Entrada</a>
+		  <a href="#addLista" class="smooth-scroll-top">Informar produtos</a>
+		  <a href="#concluir" class="smooth-scroll-top">Concluir</a>
 		  <a href="javascript:void(0);" class="icon" onclick="shm()">
 		    <i class="fa fa-bars"></i>
 		  </a>
@@ -99,31 +101,34 @@
 		</div>
 		<!-- Wrapper -->
 		<div id="wrapper" class="divided">
-				
-			<section class="wrapper style1 align-left">
+			<div id="pesquisar"></div>
+			<section class="wrapper style2 align-left color1">
 				<div class="inner">
 				<header>
-					<h3>Lista de Entradas no estoque</h3>
+					<h3>Pesquisar</h3>
+					<p>Pesquise aqui por registro de entradas na base de dados.
+					Caso queira informar uma nova acquisição de produtos <a href="#editar">avançe um pouco mais</a>.  </p>
 				</header>
 				<div class="content">
+				<form >
 					<div class="fields">
-						<div class="field half">
+						<div class="field third">
 							<label for="cozF">Cozinha</label>
 							<select name="cozF" id="cozF">
 							</select>
 						</div>
-						<div class="field half">
+						<div class="field third">
 							<label for="dtinic">Data inicio</label>
 							<input type="date" name="dtinic" id="dtinic" value="" />
 						</div>
-						<div class="field half">
+						<div class="field third">
 							<label for="dtfim">Data fim</label>
 							<input type="date" name="dtfim" id="dtfim" value="" />
 						</div>
-					</div><br>
+					</div>
 					<a href="javascript: filter()" class="button primary fit small icon solid fa-search">Pesquisar</a>
-				
-					<div class="table-wrapper tableFixHead">
+					</form>
+					<div id="resultadoPesquisa" class="table-wrapper tableFixHead">
 						<table>
 							<thead>
 								<tr>
@@ -143,10 +148,11 @@
 			</section>
 					
 			<div id="editar"></div>
-			<section class="wrapper style2 align-left">
-				<header>
-					<h3>Entrada no estoque</h3>
-				</header>
+			<section class="wrapper style2 align-left color4">
+				<div class="inner">
+					<h3>Entrada de produtos no estoque</h3>
+					<p>Informe aqui os detalhes desta acquisição.
+					 A seguir <a href="#addLista">adicione os produtos</a>.</p>
 				<div class="content contentLoad">
 					<div id="loader1000" class="loader">
        					<div id="cssloader1000"><div></div></div>
@@ -154,17 +160,17 @@
 					<form name="frm1000" id="frm1000" autocomplete="off" method="post" action="../../api/tdrs/in/save">
 						<input type="hidden" name="idx" id="idx" value="1000" /> 	
 						<div class="fields">
-							<div class="field half">
+							<div class="field third">
 								<label for="cozinha">Cozinha</label>
 								<select name="cozinha" id="cozinha">
 								</select>
 							</div>
-							<div class="field half">
+							<div class="field third">
 								<label for="data">Data</label>
 								<input type="datetime-local" name="data" id="data" value="" />
 							</div>
 							
-							<div class="field half">
+							<div class="field third">
 								<label for="tipo">Tipo</label>
 								<select name="tipo" id="tipo">
 									<option value="">--</option>
@@ -172,7 +178,7 @@
 									<option value="Doação">Doação</option>
 								</select>
 							</div>
-							<div class="field half">
+							<div id="doadorDiv" class="field">
 								<label for="doador">Doador</label>
 								<div class="autocomplete" style="width:300px;">
     								<input id="doador" type="text" name="doador" placeholder="doadores">
@@ -181,7 +187,18 @@
 							</div>
 							<input type="hidden" name="id" id="id">
 						</div>
-						<hr>
+					</form>
+				</div>
+				</div>
+			</section>
+			<div id="addLista"></div>
+			<section class="wrapper style2 align-left color5">
+						<div class="inner">
+					<h3>Lista de produtos adquiridos</h3>
+					<p>Adicione/altere ou remova aqui os produtos.
+					Para concluir <a href="#concluir">salve os dados informados</a> 
+					ou se precisar alterar algum detalhe desta acquisição <a href="#editar">volte acima</a>. </p>
+						<form>
 						<div class="fields">
 							<div class="field half">
 								<label for="produto">Produto</label>
@@ -213,31 +230,43 @@
 							</div>
 							<input type="hidden" name="itemId" id="itemId">
 						</div>
-						<br><a href="javascript: add()" class="button primary fit small icon solid fa-search">Add</a>
+						<a id="addItemBtn" href="javascript: add()" class="button primary fit small icon solid fa-download">Adicionar na lista</a>
+						<a id="newItemBtn" href="javascript: newItem()" class="button primary fit small icon solid fa-search" style="display:none">Novo item</a>
+						</form>
 						<div class="table-wrapper tableFixHead">
-						<table>
-							<thead>
-								<tr>
-									<th>Produto</th>
-									<th>Qtd.</th>
-									<th>Vlr. Unitario</th>
-									<th>Unidade Medida</th>
-									<th>--</th>
-								</tr>
-							</thead>
-							<tbody id="tContentEdit">
-							</tbody>
-						</table>
-					</div>
+							<table>
+								<thead>
+									<tr>
+										<th>Produto</th>
+										<th>Qtd.</th>
+										<th>Vlr. Unitario</th>
+										<th>Unidade Medida</th>
+										<th>--</th>
+									</tr>
+								</thead>
+								<tbody id="tContentEdit">
+								</tbody>
+							</table>
+						</div>
+						</div>
+					
+						</section>
+						<div id="concluir"></div>
+					<footer class="wrapper style1 align-center is-inactive ">
+						<div class="inner">
+						<h3>Concluir</h3>
+						<p>Conclua esta tarefa clicando em Salvar ou 
+						em Novo para informar uma nova acquisição.
+						Mas se desejar pode voltar para <a href="#addLista">adicionar mais produtos</a>, 
+						<a href="#editar">alterar algum detalhe</a> ou <a href="#pesquisar">realizar uma pesquisa</a>.</p>
 						
 						<ul class="actions">
-							<li><input type="submit" name="submit" id="submit" value="Salvar" /></li>
-							<li><a href="javascript: clear()" class="button primary small">Limpar</a></li>
+							<li><a href="javascript: save()" class="button primary fit">Salvar</a></li>
+							<li><a href="javascript: clear()" class="button  fit">Novo</a></li>
 						</ul>
-					</form>
-				</div>
-			</section>
-					
+					</div>
+					</footer>
+				
 					
 			</div>
 	<!-- Scripts -->
@@ -251,12 +280,18 @@
     		<script src="../../assets/js/jquery.form.js"></script> 
 <script type="text/javascript">
 $(document).ready(function() { 
-	//var arr = ["Davis","Dad","David","Deivson"];
 	autocomplete(document.getElementById("doador"), document.getElementById("pessId"), 'pess');
 	autocomplete(document.getElementById("produto"), document.getElementById("prodId"), 'prod');
 	$('#frm1000').ajaxForm( { beforeSubmit: validate, success: showResponse  } ); 
 	loadCoz();
+	buildObj();
+	addEvents();
+	addEventsNewItem();
 });
+
+var curObj;
+var curItemIdx;
+
 function filter(){
 	var c = document.getElementById("cozF").value;
 	var b = document.getElementById("dtinic").value;
@@ -294,6 +329,7 @@ function processList(result){
             content += ('</tr>');
 		});
 		$("#tContent").html(content);
+		location.href ="#resultadoPesquisa";
 	}else{
 		alert(result.message);
 	}
@@ -301,11 +337,11 @@ function processList(result){
 
 function del(id,nome){
 	
-	var flag = confirm("Deseja excluir o produto "+nome+"?");
+	var flag = confirm("Deseja excluir a entrada ?");
 	if (flag) {
 		$.ajax
 	    ({ 
-	        url: '../../api/tdrs/prod/del/'+id,
+	        url: '../../api/tdrs/in/del/'+id,
 	        type: 'delete',
 	        dataType:'json',
 	        headers : {'Content-Type' : 'application/json'},
@@ -324,7 +360,7 @@ function load(id){
 	location.href = "#editar";
 	$.ajax
     ({ 
-        url: '../../api/tdrs/prod/'+id,
+        url: '../../api/tdrs/in/'+id,
         type: 'get',
         dataType:'json',
         headers : {'Content-Type' : 'application/json'},
@@ -336,15 +372,257 @@ function load(id){
 	}); 
 }
 
-function clear(){
-	 $("#codigo").val('');
-		 $('#nome').val('');
-		 $('#marca').val('');
-		 $('#descricao').val('');
-		 $('#medida').val('');
-		 $('#id').val('');
-	 $('#unidadeMedida option[value=""]').prop('selected', true);
+function buildObj(){
+	
+	curObj = {
+			id:null,
+			data:null,
+			cozinha: {id:null, nome:null},
+			tipo:null,
+			doador: {id:null, nome:null},
+			itens: [],
+			containItem: function (prodId){
+				var f = false;
+				this.itens.forEach(function(o){
+					if(o.produto.id && prodId && o.produto.id==prodId) f = true;
+				});
+				return f;
+			},
+			addItem: function(id, nome, prodId, qtd, vlr, undMed ){
+				if(this.containItem(prodId))
+					return;
+				this.itens.push({id:id, 
+					produto:{id:prodId, nome:nome},
+					quantidade:qtd,
+					valorUnitario:vlr,
+					unidadeMedida:undMed
+				})
+			},
+			
+			load: function(m){
+				this.id = m.id;
+				this.data = m.data;
+				this.cozinha = m.cozinha;
+				this.tipo = m.tipo;
+				this.doador = m.doador;
+				if(m.itens){
+					var _this = this;
+					m.itens.forEach(function (i){
+						_this.addItem(i.id, i.produto.nome, i.produto.id, i.quantidade, i.valorUnitario, i.unidadeMedida);
+					});
+				}
+			}
+	};
+}
+
+function readObj(){
+	remEvents();
+	 $("#id").val(curObj.id);
+	 $('#data').val(curObj.data);
+	 $('#cozinha option[value="'+curObj.cozinha.id+'"]').prop('selected', true);
+	 $('#tipo option[value="'+curObj.tipo+'"]').prop('selected', true);
+	 if(curObj.tipo){
+		 if(curObj.tipo=="Doação"){
+			document.getElementById("doadorDiv").style.display = 'block';
+			$("#pessId").val(curObj.doador.id);
+			$("#doador").val(curObj.doador.nome);
+		}else{
+			document.getElementById("doadorDiv").style.display = 'none';
+			$("#pessId").val(null);
+			$("#doador").val(null);
+		}
+	 }
 	 
+	readObjItens();
+	addEvents();
+}
+
+function readObjItens(){
+	 $('#tContentEdit').html('');
+	 curObj.itens.forEach(function(i, idx, arr){
+		 var s = '<tr>';
+		 s += '<td>'+i.produto.nome+'</td>';
+		 s += '<td>'+i.quantidade+'</td>';
+		 s += '<td>'+(i.valorUnitario ? i.valorUnitario : '')+'</td>';
+		 s += '<td>'+(i.unidadeMedida ? i.unidadeMedida : '')+'</td>';
+		 s += '<td><a href="javascript: altItem('+idx+')">Alterar</a><br>';
+		 s += '<a href="javascript: remItem('+idx+')">Remover</a></td>';
+		 s += '</tr>';
+		 $('#tContentEdit').append(s);
+	 });
+}
+
+
+function addEvents(){
+	$("#cozinha").change(function (){
+		var id = $("#cozinha option:selected").val();
+		var nome = $("#cozinha option:selected").text();
+		curObj.cozinha.id=id;
+		if(id)
+			curObj.cozinha.nome = nome;
+	});
+	$("#tipo").change(function (){
+		var val = $("#tipo option:selected").val();
+		curObj.tipo=val;
+		if(val && val=="Doação"){
+			document.getElementById("doadorDiv").style.display = 'block';
+			curObj.doador.id=$("#pessId").val();
+			curObj.doador.nome=$("#doador").val();
+		}else{
+			document.getElementById("doadorDiv").style.display = 'none';
+			curObj.doador.id=null;
+			curObj.doador.nome=null;
+		}
+	});
+	$("#doador").change(function (){
+		curObj.doador.nome=$(this).val();
+	});
+	$("#pessId").change(function (){
+		curObj.doador.id=$(this).val();
+	});
+	$("#data").change(function (){
+		curObj.doador.id=$(this).val();
+	});
+}
+function remEvents(){
+	$("#cozinha").off("change");
+	$("#tipo").off("change");
+	$("#doador").off("change");
+	$("#pessId").off("change");
+	$("#data").off("change");
+}
+function add(){
+	var prodId = $('#prodId').val();
+	var qtd = $('#quantidade').val();
+	var f = '';
+	if(!prodId)
+		f = 'Produto';
+	if(!qtd)
+		f += (f!='' ? ', ' : '') + 'Quantidade';
+	if(f!=''){
+		alert('Os campos '+f+' são obrigatorios!');
+		return;
+	}
+	
+	var nome = $('#produto').val();
+	var vlr = $('#valorUnitario').val();
+	var unm = $("#unidadeMedida option:selected").val();
+	
+	curObj.addItem(null, nome, prodId, qtd, vlr, unm);
+	readObjItens();
+	newItem();
+}
+
+function newItem(){
+	curItemIdx = null;
+	document.getElementById('addItemBtn').style.display = 'block';
+	document.getElementById('newItemBtn').style.display = 'none';
+	remEventsItem();
+	clearItem();
+	addEventsNewItem();
+}
+
+function clearItem(){
+	$('#prodId').val('');
+	$('#produto').val('');
+	$('#quantidade').val('');
+	$('#valorUnitario').val('');
+	$('#unidadeMedida').prop('selectedIndex',0);
+}
+
+function addEventsNewItem(){
+	$('#prodId').change(function(){
+		var id = $(this).val();
+		if(id && curObj.containItem(id)){
+			alert("Este item já se encontra na lista!");
+			$('#produto').val('');
+			$('#prodId').val(null);
+		}
+	});
+}
+
+function remEventsNewItem(){
+	$('#prodId').off('change');
+}
+
+function altItem(idx){
+	curItemIdx = idx;
+	var o = curObj.itens[idx];
+	document.getElementById('addItemBtn').style.display = 'none';
+	document.getElementById('newItemBtn').style.display = 'block';
+	remEventsItem();
+	$('#produto').val(o.produto.nome);
+	$('#prodId').val(o.produto.id);
+	$('#quantidade').val(o.quantidade);
+	$('#valorUnitario').val(o.valorUnitario);
+	$('#unidadeMedida option[value="'+o.unidadeMedida+'"]').prop('selected', true);
+	addEventsItem();
+	location.href = "#addLista";
+}
+
+function addEventsItem(){
+	
+	$('#produto').change(function(){
+		var v = $(this).val();
+		if(!v || v==''){
+			alert('O campo produto é obrigatorio');
+		}
+	});
+	
+	$('#prodId').change(function(){
+		var id = $(this).val();
+		if(curObj.itens[curItemIdx].produto.id!=id && curObj.containItem(id)){
+			remEventsItem();
+			alert("Este produto já se encontra na lista!");
+			$('#produto').val(curObj.itens[curItemIdx].produto.nome);
+			$('#prodId').val(curObj.itens[curItemIdx].produto.id);
+			addEventsItem();
+			return;
+		}
+		curObj.itens[curItemIdx].produto.id = id;
+		var v = $('#produto').val();
+		var tr = $('#tContentEdit').children().get(curItemIdx);
+		var td = $(tr).children().get(0);
+		curObj.itens[curItemIdx].produto.nome = v;
+		td.innerHTML = v;
+		
+	});
+	$('#quantidade').change(function(){
+		var v = $(this).val();
+		if(!v || v==''){
+			alert('O campo quantidade é obrigatorio');
+		}
+		var tr = $('#tContentEdit').children().get(curItemIdx);
+		var td = $(tr).children().get(1);
+		curObj.itens[curItemIdx].quantidade = v;
+		td.innerHTML = v;
+	});
+	$('#valorUnitario').change(function(){
+		var v = $(this).val();
+		var tr = $('#tContentEdit').children().get(curItemIdx);
+		var td = $(tr).children().get(2);
+		curObj.itens[curItemIdx].valorUnitario = v;
+		td.innerHTML = v;
+	});
+	$('#unidadeMedida').change(function(){
+		var v = $("#unidadeMedida option:selected").val();
+		var tr = $('#tContentEdit').children().get(curItemIdx);
+		var td = $(tr).children().get(3);
+		curObj.itens[curItemIdx].unidadeMedida = v;
+		td.innerHTML = v;
+	});
+}
+function remEventsItem(){
+	//$('#produto').off('change');
+	$('#prodId').off('change');
+	$('#quantidade').off('change');
+	$('#valorUnitario').off('change');
+	$('#unidadeMedida').off('change');
+}
+
+function clear(){
+	buildObj();
+	readObj();
 }
 
 function validate(formData, jqForm, options) { 
@@ -382,13 +660,11 @@ function showResponse(result, statusText, xhr, $form)  {
 function process(result){
 	if(result.code == "200"){
   		 if(result.data){
-  			 $("#codigo").val(result.data.codigo);
-  			 $('#nome').val(result.data.nome);
-  			 $('#marca').val(result.data.marca);
-  			 $('#descricao').val(result.data.descricao);
-  			 $('#medida').val(result.data.medida);
-  			 $('#id').val(result.data.id);
-			 $('#unidadeMedida option[value="'+result.data.unidadeMedida+'"]').prop('selected', true);
+  			 buildObj();
+  			 var e = result.data;
+  			 var o = curObj;
+  			 o.load(e);
+  			 readObj();
   		 }
    	}else{
    		alert(result.message);
@@ -398,7 +674,7 @@ function process(result){
 function search(target, val, callback){
 	$.ajax
     ({ 
-        url: '../../api/tdrs/'+target+'/'+val,
+        url: '../../api/tdrs/'+target+'/search/'+val,
         type: 'get',
         dataType:'json',
         headers : {'Content-Type' : 'application/json'},
@@ -450,6 +726,16 @@ function loadCoz(){
 
   
     function autocomplete(inp, inpSel, target) {
+    	//add an observer in the input hidden to trigger a change event
+    	//var inpSel = document.getElementById("prodId");
+    	var observer = new MutationObserver(function(mutations, observer) {
+    	    if(mutations[0].attributeName == "value") {		
+    	        $(inpSel).change();
+    	    }
+    	});
+    	observer.observe(inpSel, {
+    	    attributes: true
+    	});
     	  /*the autocomplete function takes two arguments,
     	  the text field element and an array of possible autocompleted values:*/
     	  var currentFocus;

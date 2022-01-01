@@ -227,7 +227,7 @@ public class GestaoApi {
 	
 	@SuppressWarnings("unchecked")
 	@GET
-	@Path("/pess/{name}")
+	@Path("/pess/search/{name}")
 	public RestModel<List<IdNomeModel>> searchPess(@PathParam("name") String name){
 				
 		try {
@@ -257,7 +257,7 @@ public class GestaoApi {
 	}
 	
 	@GET
-	@Path("/prod/{name}")
+	@Path("/prod/search/{name}")
 	public RestModel<List<IdNomeModel>> searchProd(@PathParam("name") String name){
 				
 		try {
@@ -314,8 +314,8 @@ public class GestaoApi {
 	private EstocavelModel convert(Entrada e) {
 		List<EstocavelItemModel> itens = new ArrayList<>();
 		for(EntradaItem ei : e.getItens()) {
-			EstocavelItemModel i = new EstocavelItemModel(ei.getId(), new IdNomeModel(ei.getProduto().getId(), ei.getProduto().getNome()), 
-					ei.getQuantidade(), ei.getValorUnitario(), ei.getUnidadeMedida());
+			itens.add( new EstocavelItemModel(ei.getId(), new IdNomeModel(ei.getProduto().getId(), ei.getProduto().getNome()), 
+					ei.getQuantidade(), ei.getValorUnitario(), ei.getUnidadeMedida()));
 		}
 		IdNomeModel doador =  e.getDoador()!=null 
 				? new IdNomeModel(e.getDoador().getId(), e.getDoador().getNome())
