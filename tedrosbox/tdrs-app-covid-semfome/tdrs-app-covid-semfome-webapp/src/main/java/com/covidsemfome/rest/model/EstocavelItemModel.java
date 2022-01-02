@@ -21,19 +21,19 @@ public class EstocavelItemModel implements Serializable{
 	 */
 	private static final long serialVersionUID = 838858574627878332L;
 
-	@FormParam("id")
+	//@FormParam("id")
 	private Long id;
 	
-	@FormParam("produto")
+	//@FormParam("produto")
 	private IdNomeModel produto;
 	
-	@FormParam("quantidade")
+	//@FormParam("quantidade")
 	private Integer quantidade;
 	
-	@FormParam("valorUnitario")
+	//@FormParam("valorUnitario")
 	private BigDecimal valorUnitario;
 
-	@FormParam("unidadeMedida")
+	//@FormParam("unidadeMedida")
 	private String unidadeMedida;
 
 	/**

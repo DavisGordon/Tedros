@@ -23,33 +23,33 @@ public class EstocavelModel implements Serializable{
 	
 	private static final long serialVersionUID = 3274590223540865996L;
 
-	@HeaderParam("Content-Type")
+	//@HeaderParam("Content-Type")
 	private String contentType;
 	
-	@FormParam("id")
+	//@FormParam("id")
 	private Long id;
 	
-	@FormParam("cozinha")
+	//@FormParam("cozinha")
 	private IdNomeModel cozinha;
 	
-	@FormParam("data")
+	//@FormParam("data")
 	private String data;
 	
 	private String dataDesc;
 	
-	@FormParam("tipo")
+	//@FormParam("tipo")
 	private String tipo;
 	
-	@FormParam("doador")
+	//@FormParam("doador")
 	private IdNomeModel doador;
 	
-	@FormParam("acao")
+	//@FormParam("acao")
 	private IdNomeModel acao;
 	
-	@FormParam("observacao")
+	//@FormParam("observacao")
 	private String observacao;
 	
-	@FormParam("itens")
+	//@FormParam("itens")
 	private List<EstocavelItemModel> itens;
 
 	/**
