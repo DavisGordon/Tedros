@@ -67,6 +67,11 @@
   background-color: DodgerBlue !important;
   color: #ffffff;
 }
+
+.warnColor{
+background-color: #F5B7B1;
+}
+
 		</style>
 		<noscript>
 			<link rel="stylesheet" href="../../assets/css/noscript.css" />
@@ -106,7 +111,7 @@
 				<div class="inner">
 				<header>
 					<h3>Pesquisar</h3>
-					<p>Pesquise aqui por registro de entradas na base de dados.
+					<p class="major">Pesquise aqui por registro de entradas na base de dados.
 					Caso queira informar uma nova acquisição de produtos <a href="#editar">avançe um pouco mais</a>.  </p>
 				</header>
 				<div class="content">
@@ -151,7 +156,7 @@
 			<section class="wrapper style2 align-left color4">
 				<div class="inner">
 					<h3>Entrada de produtos no estoque</h3>
-					<p>Informe aqui os detalhes desta acquisição.
+					<p class="major">Informe aqui os detalhes desta acquisição.
 					 A seguir <a href="#addLista">adicione os produtos</a>.</p>
 				<div class="content contentLoad">
 					<div id="loader1000" class="loader">
@@ -178,7 +183,7 @@
 									<option value="Doação">Doação</option>
 								</select>
 							</div>
-							<div id="doadorDiv" class="field">
+							<div id="doadorDiv" class="field" style="display:none">
 								<label for="doador">Doador</label>
 								<div class="autocomplete" style="width:300px;">
     								<input id="doador" type="text" name="doador" placeholder="doadores">
@@ -195,7 +200,7 @@
 			<section class="wrapper style2 align-left color5">
 						<div class="inner">
 					<h3>Lista de produtos adquiridos</h3>
-					<p>Adicione/altere ou remova aqui os produtos.
+					<p class="major">Adicione, altere ou remova aqui os produtos adquiridos.
 					Para concluir <a href="#concluir">salve os dados informados</a> 
 					ou se precisar alterar algum detalhe desta acquisição <a href="#editar">volte acima</a>. </p>
 						<form>
@@ -231,7 +236,7 @@
 							<input type="hidden" name="itemId" id="itemId">
 						</div>
 						<a id="addItemBtn" href="javascript: add()" class="button primary fit small icon solid fa-download">Adicionar na lista</a>
-						<a id="newItemBtn" href="javascript: newItem()" class="button primary fit small icon solid fa-search" style="display:none">Novo item</a>
+						<a id="newItemBtn" href="javascript: newItem()" class="button primary fit small" style="display:none">Novo item</a>
 						</form>
 						<div class="table-wrapper tableFixHead">
 							<table>
@@ -255,7 +260,7 @@
 					<footer class="wrapper style1 align-center is-inactive ">
 						<div class="inner">
 						<h3>Concluir</h3>
-						<p>Conclua esta tarefa clicando em Salvar ou 
+						<p class="major">Conclua esta tarefa clicando em Salvar ou 
 						em Novo para informar uma nova acquisição.
 						Mas se desejar pode voltar para <a href="#addLista">adicionar mais produtos</a>, 
 						<a href="#editar">alterar algum detalhe</a> ou <a href="#pesquisar">realizar uma pesquisa</a>.</p>
@@ -282,7 +287,6 @@
 $(document).ready(function() { 
 	autocomplete(document.getElementById("doador"), document.getElementById("pessId"), 'pess');
 	autocomplete(document.getElementById("produto"), document.getElementById("prodId"), 'prod');
-	$('#frm1000').ajaxForm( { beforeSubmit: validate, success: showResponse  } ); 
 	loadCoz();
 	buildObj();
 	addEvents();
@@ -354,6 +358,74 @@ function del(id,nome){
 	}
 }
 
+function validate(){
+	if(curObj){
+		var s = '';
+		if(!curObj.cozinha || !curObj.cozinha.id || curObj.cozinha.id=='')
+			s += 'Cozinha';
+		if(!curObj.data || curObj.data=='')
+			s += (s!='' ? ', ' : '') + 'Data';
+		if(!curObj.tipo || curObj.tipo=='')
+			s +=  (s!='' ? ', ' : '') + 'Tipo';
+		else if(curObj.tipo=='Doação'
+					&& (!curObj.doador || !curObj.doador.id || curObj.doador.id==''))
+			s +=  (s!='' ? ', ' : '') + 'Doador';
+		
+		if(s!='')
+			s += ' são obrigatorios!'
+			
+		if(!curObj.itens || curObj.itens.length==0)
+			s +=  (s!='' ? '\n' : '') + 'Favor adicionar os produtos adquiridos!';
+		else{
+			var f = false;
+			curObj.itens.forEach(function (i, idx){
+				if(!i.produto || !i.produto.id || i.produto.id=='' 
+						|| !i.quantidade || i.quantidade==''){
+					var tr = $('#tContentEdit').children().get(idx);
+					$(tr).addClass('warnColor');
+					f = true;
+				}
+			});
+			if(f){
+				s +=  (s!='' ? '\n' : '') + 'Favor verificar os itens na lista sem produto ou quantidade!';
+				location.href = '#addLista';
+			}
+		}
+		
+		if(s!='')
+			alert(s);
+		
+		return s=='';
+		
+	}
+}
+
+function save(){
+	if(validate()){
+		var form =  document.getElementById('frm1000');
+		showLoader('lds-circle', form);
+		location.href = "#editar";
+		$.ajax
+	    ({ 
+	        url: '../../api/tdrs/in/save',
+	        type: 'POST',
+	        dataType:'json',
+	        data: JSON.stringify(curObj),
+	        contentType: 'application/json',
+	        headers : {'Content-Type' : 'application/json'},
+	        success: function(result)
+	        {
+	        	process(result);
+	        	showLoader('', form);
+	        	alert('Dados salvo com sucesso!');
+	        	if($("#tContent").children().length>0){
+	        		filter();
+	        	}
+	    	}
+		}); 
+	}
+}
+
 function load(id){
 	var form =  document.getElementById('frm1000');
 	showLoader('lds-circle', form);
@@ -398,7 +470,11 @@ function buildObj(){
 					unidadeMedida:undMed
 				})
 			},
-			
+			removeItem: function(idx){
+				if(this.itens){
+					this.itens.splice(idx, 1);
+				}
+			},
 			load: function(m){
 				this.id = m.id;
 				this.data = m.data;
@@ -416,6 +492,7 @@ function buildObj(){
 }
 
 function readObj(){
+	curItemIdx=null;
 	remEvents();
 	 $("#id").val(curObj.id);
 	 $('#data').val(curObj.data);
@@ -432,7 +509,7 @@ function readObj(){
 			$("#doador").val(null);
 		}
 	 }
-	 
+	newItem();
 	readObjItens();
 	addEvents();
 }
@@ -474,20 +551,17 @@ function addEvents(){
 			curObj.doador.nome=null;
 		}
 	});
-	$("#doador").change(function (){
-		curObj.doador.nome=$(this).val();
-	});
 	$("#pessId").change(function (){
 		curObj.doador.id=$(this).val();
+		curObj.doador.nome=$("#doador").val();
 	});
 	$("#data").change(function (){
-		curObj.doador.id=$(this).val();
+		curObj.data=$(this).val();
 	});
 }
 function remEvents(){
 	$("#cozinha").off("change");
 	$("#tipo").off("change");
-	$("#doador").off("change");
 	$("#pessId").off("change");
 	$("#data").off("change");
 }
@@ -543,6 +617,18 @@ function addEventsNewItem(){
 
 function remEventsNewItem(){
 	$('#prodId').off('change');
+}
+
+function remItem(idx){
+	if(confirm("Deseja remover o produto?")){
+		curObj.removeItem(idx);
+		readObjItens();
+		if(curItemIdx && curItemIdx==idx){
+			newItem();
+		}else if(curItemIdx && curItemIdx>idx){
+			curItemIdx--;
+		}
+	}
 }
 
 function altItem(idx){
@@ -622,40 +708,19 @@ function remEventsItem(){
 
 function clear(){
 	buildObj();
-	readObj();
+	remEvents();
+	$("#id").val('');
+	$('#data').val('');
+	$('#cozinha option[value=""]').prop('selected', true);
+	$('#tipo option[value=""]').prop('selected', true);
+	document.getElementById("doadorDiv").style.display = 'none';
+	$("#pessId").val('');
+ 	$("#doador").val('');
+ 	$('#tContentEdit').html('');
+ 	newItem();
+ 	addEvents();
+ 	location.href = '#editar';
 }
-
-function validate(formData, jqForm, options) { 
-	var campos =  "";
-    var form = jqForm[0]; 
-    
-    if (!form.codigo.value) { 
-        campos += "Codigo"; 
-    } 
-    
-    if (!form.nome.value) { 
-    	if(campos!="") campos += ", ";
-        campos += "Nome"; 
-    } 
-    
-    if (campos != "" ) { 
-        alert('Por favor informar os campos: '+campos); 
-        return false; 
-    }
-    
-    showLoader('lds-circle', form);
-}
-
-function showResponse(result, statusText, xhr, $form)  { 
-	if(result.code == "200"){
-		process(result);
-    	alert("Produto salvo!");
-    	lp();
-	}else{
-		alert(result.message);
-	}
-	 showLoader('', $form[0]);
-} 
 
 function process(result){
 	if(result.code == "200"){

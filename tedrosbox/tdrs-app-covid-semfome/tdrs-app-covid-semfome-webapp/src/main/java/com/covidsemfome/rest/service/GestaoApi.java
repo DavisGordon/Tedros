@@ -37,6 +37,7 @@ import com.covidsemfome.rest.model.ProdutoModel;
 import com.covidsemfome.rest.model.RestModel;
 import com.covidsemfome.rest.util.ApiUtils;
 import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.result.TResult.EnumResult;
 
 import br.com.covidsemfome.bean.AppBean;
 import br.com.covidsemfome.bean.CovidUserBean;
@@ -177,12 +178,18 @@ public class GestaoApi {
 	 * @return
 	 * @throws Exception
 	 */
-	private Produto findProdById(Long id) throws Exception {
-		Produto ex = new Produto();
-		ex.setId(id);
-		TResult<Produto> res = prodServ.findById(this.appBean.getToken(), ex);
-		ex = res.getValue();
-		return ex;
+	@SuppressWarnings("unchecked")
+	private Produto findProdById(Long id) throws RuntimeException {
+		try {
+			Produto ex = new Produto();
+			ex.setId(id);
+			TResult<Produto> res = prodServ.findById(this.appBean.getToken(), ex);
+			ex = res.getValue();
+			return ex;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 	}
 	
 	
@@ -355,19 +362,83 @@ public class GestaoApi {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	@POST
 	@Path("/in/save")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public RestModel<ProdutoModel> saveIn(@BeanParam EstocavelModel  estocavel){
+	public RestModel<EstocavelModel> saveIn(EstocavelModel  model){
 	
 		try{
-			//Pessoa p = covidUserBean.getUser().getPessoa();
+			final Entrada ex = model.getId()==null 
+					? new Entrada() 
+							: this.findInById(model.getId());
+					
+			ex.setData(ApiUtils.convertToDateTime(model.getData()));
+			if(ex.isNew() 
+					|| (!ex.isNew() 
+							&& !ex.getCozinha().getId().equals(model.getCozinha().getId()))) {
+				ex.setCozinha(this.findCozById(model.getCozinha().getId()));
+			}
+			ex.setTipo(model.getTipo());
+			if(model.getTipo().equals("Doação")) {
+				ex.setDoador(this.findPessoaById(model.getDoador().getId()));
+			}else {
+				ex.setDoador(null);
+			}
+			if(ex.isNew()) {
+				List<EntradaItem> l = new ArrayList<>();
+				for(EstocavelItemModel i : model.getItens()) {
+					EntradaItem ei = new EntradaItem();
+					Produto p = this.findProdById(i.getProduto().getId());
+					ei.setProduto(p);
+					ei.setQuantidade(i.getQuantidade());
+					ei.setValorUnitario(i.getValorUnitario());
+					ei.setUnidadeMedida(i.getUnidadeMedida());
+					l.add(ei);
+				}
+				ex.setItens(l);
+			}else{
+				ex.getItens().removeIf(ei ->{
+					for(EstocavelItemModel i : model.getItens()) {
+						if(i.getId()!=null && ei.getId().equals(i.getId()))
+							return false;
+					}
+					return true;
+				}); 
+				
+				ex.getItens().forEach(ei->{
+					for(EstocavelItemModel i : model.getItens()) {
+						if(i.getId()!=null && ei.getId().equals(i.getId())) {
+							if(!ei.getProduto().getId().equals(i.getProduto().getId()))
+								ei.setProduto(findProdById(i.getProduto().getId()));
+							ei.setQuantidade(i.getQuantidade());
+							ei.setValorUnitario(i.getValorUnitario());
+							ei.setUnidadeMedida(i.getUnidadeMedida());
+						}
+					}
+				});
+				
+				model.getItens().forEach(i->{
+					if(i.getId()==null) {
+						EntradaItem ei = new EntradaItem();
+						Produto p = this.findProdById(i.getProduto().getId());
+						ei.setProduto(p);
+						ei.setQuantidade(i.getQuantidade());
+						ei.setValorUnitario(i.getValorUnitario());
+						ei.setUnidadeMedida(i.getUnidadeMedida());
+						ex.getItens().add(ei);
+					}
+				});
+			}
 			
-			//TResult<Produto> res = prodServ.save(appBean.getToken(), p);
+			TResult<Entrada> res = inServ.save(appBean.getToken(), ex);
 			
-			//ProdutoModel m = convert(res.getValue());
-			
-			return new RestModel<>(null, "200", "OK");
+			if(res.getResult().equals(EnumResult.SUCESS)) {
+				Entrada in = res.getValue();
+				return new RestModel<>(convert(in), "200", "OK");
+			}else {
+				return new RestModel<>(null, "404",res.getMessage());
+			}
 			
 		}catch(Exception e){
 			e.printStackTrace();
@@ -389,7 +460,31 @@ public class GestaoApi {
 		return ex;
 	}
 	
+	/**
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	private Cozinha findCozById(Long id) throws Exception {
+		Cozinha ex = new Cozinha();
+		ex.setId(id);
+		TResult<Cozinha> res = cozServ.findById(appBean.getToken(), ex);
+		ex = res.getValue();
+		return ex;
+	}
 	
+	/**
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	private Pessoa findPessoaById(Long id) throws Exception {
+		Pessoa ex = new Pessoa();
+		ex.setId(id);
+		TResult<Pessoa> res = pessServ.findById(appBean.getToken(), ex);
+		ex = res.getValue();
+		return ex;
+	}
 	
 	
 }

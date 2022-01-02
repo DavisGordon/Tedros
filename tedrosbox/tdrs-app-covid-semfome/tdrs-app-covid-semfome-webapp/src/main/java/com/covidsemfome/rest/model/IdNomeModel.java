@@ -17,12 +17,15 @@ public class IdNomeModel implements Serializable{
 
 	private static final long serialVersionUID = 2195785092601867812L;
 	
-	@FormParam("id")
+	//@FormParam("id")
 	private Long id;
 	
-	@FormParam("nome")
+	//@FormParam("nome")
 	private String nome;
 	
+	public IdNomeModel() {
+		
+	}
 
 	/**
 	 * @param id
