@@ -10,6 +10,8 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.OptimisticLockException;
 
+import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
+
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
@@ -130,12 +132,26 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 			
 			return (T) new TResult<>(EnumResult.OUTDATED, message, result.getValue());
 		}else if(e instanceof EJBTransactionRolledbackException) {
-			return (T) new TResult<>(EnumResult.ERROR,true, e.getCause().getMessage());
+			if(this.isTheCause(e, JdbcSQLIntegrityConstraintViolationException.class))
+				return (T) new TResult<>(EnumResult.ERROR,true, "This operation cant be done to preserve data integrity!");
+			else
+				return (T) new TResult<>(EnumResult.ERROR,true, e.getCause().getMessage());
 		}else if(e instanceof EJBException) {
 			return (T) new TResult<>(EnumResult.ERROR,true, e.getCause().getMessage());
 		}else{
 			return (T) new TResult<>(EnumResult.ERROR, e.getMessage());
 		}
+	}
+	
+	protected boolean  isTheCause(Throwable e, Class<? extends Throwable> type) {
+		Throwable  c = e;
+		do {
+			if(c.getClass().getSimpleName().equals(type.getSimpleName()))
+				return true;
+			c = c.getCause();
+		}while(c!=null);
+		
+		return false;
 	}
 	
 	
