@@ -69,7 +69,7 @@
 }
 
 .warnColor{
-background-color: #F5B7B1;
+background-color: #F5B7B1 !important;
 }
 
 		</style>
@@ -111,8 +111,9 @@ background-color: #F5B7B1;
 				<div class="inner">
 				<header>
 					<h3>Pesquisar</h3>
-					<p class="major">Pesquise aqui por registro de entradas na base de dados.
-					Caso queira informar uma nova acquisição de produtos <a href="#editar">avançe um pouco mais</a>.  </p>
+					<p class="major">Pesquise aqui por registros de entrada na base de dados.
+					Caso queira informar uma nova acquisição de produtos deslize abaixo ate 
+					<a href="#editar">Entrada de produtos no estoque</a>.  </p>
 				</header>
 				<div class="content">
 				<form >
@@ -153,11 +154,13 @@ background-color: #F5B7B1;
 			</section>
 					
 			<div id="editar"></div>
-			<section class="wrapper style2 align-left color4">
+			<section class="wrapper style2 align-left color6">
 				<div class="inner">
 					<h3>Entrada de produtos no estoque</h3>
 					<p class="major">Informe aqui os detalhes desta acquisição.
-					 A seguir <a href="#addLista">adicione os produtos</a>.</p>
+					 A seguir <a href="#addLista">adicione os produtos</a>
+					 e para concluir <a href="#concluir">salve os dados informados</a> 
+					ou se preferir realize uma <a href="#pesquisar">pesquisa</a>.</p>
 				<div class="content contentLoad">
 					<div id="loader1000" class="loader">
        					<div id="cssloader1000"><div></div></div>
@@ -197,7 +200,7 @@ background-color: #F5B7B1;
 				</div>
 			</section>
 			<div id="addLista"></div>
-			<section class="wrapper style2 align-left color5">
+			<section class="wrapper style2 align-left color7">
 						<div class="inner">
 					<h3>Lista de produtos adquiridos</h3>
 					<p class="major">Adicione, altere ou remova aqui os produtos adquiridos.
@@ -256,20 +259,20 @@ background-color: #F5B7B1;
 						</div>
 					
 						</section>
-						<div id="concluir"></div>
+					<div id="concluir"></div>
 					<footer class="wrapper style1 align-center is-inactive ">
 						<div class="inner">
-						<h3>Concluir</h3>
-						<p class="major">Conclua esta tarefa clicando em Salvar ou 
-						em Novo para informar uma nova acquisição.
-						Mas se desejar pode voltar para <a href="#addLista">adicionar mais produtos</a>, 
-						<a href="#editar">alterar algum detalhe</a> ou <a href="#pesquisar">realizar uma pesquisa</a>.</p>
-						
-						<ul class="actions">
-							<li><a href="javascript: save()" class="button primary fit">Salvar</a></li>
-							<li><a href="javascript: clear()" class="button  fit">Novo</a></li>
-						</ul>
-					</div>
+							<h3>Concluir</h3>
+							<p class="major">Conclua esta tarefa clicando em Salvar ou 
+							em Novo para informar uma nova acquisição.
+							Mas se desejar pode voltar para <a href="#addLista">adicionar mais produtos</a>, 
+							<a href="#editar">alterar algum detalhe</a> ou <a href="#pesquisar">realizar uma pesquisa</a>.</p>
+							
+							<ul class="actions">
+								<li><a href="javascript: save()" class="button primary fit">Salvar</a></li>
+								<li><a href="javascript: clear()" class="button  fit">Novo</a></li>
+							</ul>
+						</div>
 					</footer>
 				
 					
@@ -282,7 +285,6 @@ background-color: #F5B7B1;
 			<script src="../../assets/js/breakpoints.min.js"></script>
 			<script src="../../assets/js/util.js"></script>
 			<script src="../../assets/js/main.js"></script>
-    		<script src="../../assets/js/jquery.form.js"></script> 
 <script type="text/javascript">
 $(document).ready(function() { 
 	autocomplete(document.getElementById("doador"), document.getElementById("pessId"), 'pess');
@@ -360,6 +362,7 @@ function del(id,nome){
 
 function validate(){
 	if(curObj){
+		
 		var s = '';
 		if(!curObj.cozinha || !curObj.cozinha.id || curObj.cozinha.id=='')
 			s += 'Cozinha';
@@ -374,6 +377,7 @@ function validate(){
 		if(s!='')
 			s += ' são obrigatorios!'
 			
+			
 		if(!curObj.itens || curObj.itens.length==0)
 			s +=  (s!='' ? '\n' : '') + 'Favor adicionar os produtos adquiridos!';
 		else{
@@ -384,6 +388,9 @@ function validate(){
 					var tr = $('#tContentEdit').children().get(idx);
 					$(tr).addClass('warnColor');
 					f = true;
+				}else{
+					var tr = $('#tContentEdit').children().get(idx);
+					$(tr).removeClass('warnColor');
 				}
 			});
 			if(f){
@@ -401,10 +408,10 @@ function validate(){
 }
 
 function save(){
+	location.href = "#editar";
 	if(validate()){
 		var form =  document.getElementById('frm1000');
 		showLoader('lds-circle', form);
-		location.href = "#editar";
 		$.ajax
 	    ({ 
 	        url: '../../api/tdrs/in/save',

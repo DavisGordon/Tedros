@@ -97,13 +97,15 @@ public class GestaoApi {
 			p.setMarca(marca);
 			p.setDescricao(descricao);
 			p.setUnidadeMedida(unidadeMedida);
-			p.setMedida(unidadeMedida);
+			p.setMedida(medida);
 			
 			TResult<Produto> res = prodServ.save(appBean.getToken(), p);
-			
-			ProdutoModel m = convert(res.getValue());
-			
-			return new RestModel<>(m, "200", "OK");
+			if(res.getResult().equals(EnumResult.SUCESS)) {
+				ProdutoModel m = convert(res.getValue());
+				return new RestModel<>(m, "200", "OK");
+			}else {
+				return new RestModel<>(null, "404", res.getMessage());
+			}
 			
 		}catch(Exception e){
 			e.printStackTrace();
@@ -201,9 +203,12 @@ public class GestaoApi {
 			Produto p = findProdById(id);
 			TResult res = prodServ.remove(appBean.getToken(), p);
 			
-			List<ProdutoModel> lst = listAllProds();
-			return new RestModel<>(lst, "200", "OK");
-			
+			if(res.getResult().equals(EnumResult.SUCESS)) {
+				List<ProdutoModel> lst = listAllProds();
+				return new RestModel<>(lst, "200", "OK");
+			}else {
+				return new RestModel<>(null, "404", res.getMessage());
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 			return new RestModel<>(null, "500", error.getValue());
@@ -353,7 +358,11 @@ public class GestaoApi {
 		try {
 			Entrada e = findInById(id);
 			TResult res = inServ.remove(appBean.getToken(), e);
-			return new RestModel<>(null, "200", "OK");
+			if(res.getResult().equals(EnumResult.SUCESS)) {
+				return new RestModel<>(null, "200", "OK");
+			}else {
+				return new RestModel<>(null, "404", res.getMessage());
+			}
 			
 		}catch(Exception e){
 			e.printStackTrace();

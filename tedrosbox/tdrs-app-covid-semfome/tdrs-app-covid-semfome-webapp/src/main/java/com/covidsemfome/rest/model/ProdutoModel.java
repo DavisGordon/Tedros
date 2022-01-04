@@ -32,6 +32,12 @@ public class ProdutoModel implements Serializable{
 	private String medida;
 
 	/**
+	 * 
+	 */
+	public ProdutoModel() {
+	}
+
+	/**
 	 * @param id
 	 * @param codigo
 	 * @param nome

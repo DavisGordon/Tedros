@@ -53,7 +53,7 @@
 	<body class="is-preload">
 		<div class="topnav" id="myTopnav">
 		  
-		  <a href="../main.html" class="active"><img src="../../images/logo3.png" alt="" /></a>
+		  <a href="../main.html" class="active"><img src="../../images/logo3.png"  alt="" /></a>
 		  
 		  <a href="#editar" class="smooth-scroll-top">Editar Produto</a>
 		  <a href="entrada.html" >Estoque / Entrada</a>
@@ -64,101 +64,139 @@
 		</div>
 		<!-- Wrapper -->
 		<div id="wrapper" class="divided">
-				
-			<section class="wrapper style1 align-left">
+			<div id="listagem"></div>
+			<section class="wrapper style2 align-left color1">
 				<div class="inner">
-				<header>
-					<h3>Lista de produtos</h3>
-				</header>
-				<div class="content">
-					<div class="table-wrapper tableFixHead">
-						<table>
-							<thead>
-								<tr>
-									<th>Codigo</th>
-									<th>Nome</th>
-									<th>--</th>
-								</tr>
-							</thead>
-							<tbody id="tContent">
-							</tbody>
-						</table>
+					<header>
+						<h3>Lista de produtos</h3>
+						<p class="major">Listagem de produtos cadastrados na base de dados.  
+						Aqui é possivel visualizar, alterar ou remover produtos.
+						Para inserir um novo produto deslize abaixo ate <a href="#editar">editar produto</a>.</p>
+					</header>
+					<div class="content">
+						<div class="table-wrapper tableFixHead">
+							<table>
+								<thead>
+									<tr>
+										<th>Codigo</th>
+										<th>Nome</th>
+										<th>--</th>
+									</tr>
+								</thead>
+								<tbody id="tContent">
+								</tbody>
+							</table>
+						</div>
 					</div>
-				</div>
 				</div>
 			</section>
 					
 			<div id="editar"></div>
-			<section class="wrapper style2 align-left">
-				<header>
-					<h3>Editar Produto</h3>
-				</header>
-				<div class="content contentLoad">
-					<div id="loader1000" class="loader">
-       					<div id="cssloader1000"><div></div></div>
-       				</div>
-					<form name="frm1000" id="frm1000" method="post" action="../../api/tdrs/prod/save">
-						<input type="hidden" name="idx" id="idx" value="1000" /> 	
-						<div class="fields">
-							<div class="field half">
-								<label for="codigo">Codigo</label>
-								<input type="text" name="codigo" id="codigo" maxlength="10" value="" />
+			<section class="wrapper style2 align-left color6">
+				<div class="inner">
+					<header>
+						<h3>Editar Produto</h3>
+						<p class="major">Informe aqui os detalhes do produto e logo em seguida
+						conclua <a href="#concluir">salvando os dados</a> mas se preferir
+						pode voltar para a <a href="#listagem">listagem de produtos</a>.</p>
+					
+					</header>
+					<div class="content contentLoad">
+						<div id="loader1000" class="loader">
+	       					<div id="cssloader1000"><div></div></div>
+	       				</div>
+						<form name="frm1000" id="frm1000" method="post" action="../../api/tdrs/prod/save">
+							<input type="hidden" name="idx" id="idx" value="1000" /> 	
+							<div class="fields">
+								<div class="field half">
+									<label for="codigo">Codigo</label>
+									<input type="text" name="codigo" id="codigo" maxlength="10" value="" />
+								</div>
+								<div class="field half">
+									<label for="nome">Nome</label>
+									<input type="text" name="nome" id="nome" maxlength="60" value="" />
+								</div>
+								
+								<div class="field half">
+									<label for="marca">Marca</label>
+									<input type="text" name="marca" id="marca" maxlength="60"  value="" />
+								</div>
+								<div class="field half">
+									<label for="descricao">Descrição</label>
+									<input type="text" name="descricao" id="descricao"  maxlength="120" value="" />
+								</div>
+								<div class="field half">
+									<label for="medida">Medida</label>
+									<input type="text" name="medida" id="medida" maxlength="10" value="" />
+								</div>
+								<div class="field half">
+									<label for="sexo">Unidade Medida</label>
+									<select name="unidadeMedida" id="unidadeMedida">
+										<option value="">--</option>
+										<option value="KG">KG</option>
+										<option value="LT">LT</option>
+										<option value="UNID">UNID</option>
+										<option value="PCT">PCT</option>
+										<option value="ML">ML</option>
+										<option value="GR">GR</option>
+									</select>
+								</div>
+								<input type="hidden" name="id" id="id">
 							</div>
-							<div class="field half">
-								<label for="nome">Nome</label>
-								<input type="text" name="nome" id="nome" maxlength="60" value="" />
-							</div>
-							
-							<div class="field half">
-								<label for="marca">Marca</label>
-								<input type="text" name="marca" id="marca" maxlength="60"  value="" />
-							</div>
-							<div class="field half">
-								<label for="descricao">Descrição</label>
-								<input type="text" name="descricao" id="descricao"  maxlength="120" value="" />
-							</div>
-							<div class="field half">
-								<label for="medida">Medida</label>
-								<input type="text" name="medida" id="medida" maxlength="10" value="" />
-							</div>
-							<div class="field half">
-								<label for="sexo">Unidade Medida</label>
-								<select name="unidadeMedida" id="unidadeMedida">
-									<option value="">--</option>
-									<option value="KG">KG</option>
-									<option value="LT">LT</option>
-									<option value="UNID">UNID</option>
-									<option value="PCT">PCT</option>
-									<option value="ML">ML</option>
-									<option value="GR">GR</option>
-								</select>
-							</div>
-							<input type="hidden" name="id" id="id">
-						</div>
-						<ul class="actions">
-							<li><input type="submit" name="submit" id="submit" value="Salvar" /></li>
-							<li><a href="javascript: clear()" class="button primary small">Limpar</a></li>
-						</ul>
-					</form>
+						</form>
+					</div>
 				</div>
 			</section>
+			<div id="concluir"></div>
+			<footer class="wrapper style1 align-center is-inactive ">
+				<div class="inner">
+					<h3>Concluir</h3>
+					<p class="major">Conclua esta tarefa clicando em Salvar ou 
+					em Novo para abrir um formulario em branco.
+					Mas se desejar pode voltar para continuar a <a href="#editar">editar o produto</a> 
+					ou ir ate a <a href="#listagem">listagem de produtos</a>.</p>
 					
+					<ul class="actions">
+						<li><a href="javascript: save()" class="button primary fit">Salvar</a></li>
+						<li><a href="javascript: newReg()" class="button  fit">Novo</a></li>
+					</ul>
+				</div>
+			</footer>		
 					
-			</div>
+	</div>
 	<!-- Scripts -->
-			<script src="../../assets/js/jquery.min.js"></script>
-			<script src="../../assets/js/jquery.scrollex.min.js"></script>
-			<script src="../../assets/js/jquery.scrolly.min.js"></script>
-			<script src="../../assets/js/browser.min.js"></script>
-			<script src="../../assets/js/breakpoints.min.js"></script>
-			<script src="../../assets/js/util.js"></script>
-			<script src="../../assets/js/main.js"></script>
-    		<script src="../../assets/js/jquery.form.js"></script> 
+	<script src="../../assets/js/jquery.min.js"></script>
+	<script src="../../assets/js/jquery.scrollex.min.js"></script>
+	<script src="../../assets/js/jquery.scrolly.min.js"></script>
+	<script src="../../assets/js/browser.min.js"></script>
+	<script src="../../assets/js/breakpoints.min.js"></script>
+	<script src="../../assets/js/util.js"></script>
+	<script src="../../assets/js/main.js"></script>
+			
 <script type="text/javascript">
 $(document).ready(function() { 
-	$('#frm1000').ajaxForm( { beforeSubmit: validate, success: showResponse  } ); 
 	lp();
 });
+
+function save(){
+	var frm = document.getElementById('frm1000');
+	location.href='#editar';
+	if(!validate(frm))
+        	return;
+    $.ajax({
+    	url: '../../api/tdrs/prod/save',
+		type: 'post',
+		dataType: 'json',
+		data: $("#frm1000").serialize(),
+		success: function(data) {
+			showResponse(data);
+		},
+		error: function(e){
+			alert('Ocorreu um erro inesperado, favor contacte nossos tecnicos!');
+		}
+	});
+}
+
 function lp(){
 	$.ajax
     ({ 
@@ -230,6 +268,11 @@ function load(id){
 	}); 
 }
 
+function newReg(){
+	clear();
+	 location.href='#editar';
+}
+
 function clear(){
 	 $("#codigo").val('');
 		 $('#nome').val('');
@@ -238,12 +281,10 @@ function clear(){
 		 $('#medida').val('');
 		 $('#id').val('');
 	 $('#unidadeMedida option[value=""]').prop('selected', true);
-	 
 }
 
-function validate(formData, jqForm, options) { 
+function validate(form) { 
 	var campos =  "";
-    var form = jqForm[0]; 
     
     if (!form.codigo.value) { 
         campos += "Codigo"; 
@@ -260,9 +301,10 @@ function validate(formData, jqForm, options) {
     }
     
     showLoader('lds-circle', form);
+    return true;
 }
 
-function showResponse(result, statusText, xhr, $form)  { 
+function showResponse(result)  { 
 	if(result.code == "200"){
 		process(result);
     	alert("Produto salvo!");
@@ -270,7 +312,7 @@ function showResponse(result, statusText, xhr, $form)  {
 	}else{
 		alert(result.message);
 	}
-	 showLoader('', $form[0]);
+	 showLoader('', document.getElementById('frm1000'));
 } 
 
 function process(result){
