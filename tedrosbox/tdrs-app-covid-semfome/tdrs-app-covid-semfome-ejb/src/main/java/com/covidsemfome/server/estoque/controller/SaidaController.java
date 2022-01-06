@@ -6,12 +6,17 @@
  */
 package com.covidsemfome.server.estoque.controller;
 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
 import com.covidsemfome.ejb.controller.ISaidaController;
+import com.covidsemfome.model.Cozinha;
 import com.covidsemfome.model.Saida;
 import com.covidsemfome.server.estoque.service.SaidaService;
 import com.tedros.ejb.base.controller.ITSecurityController;
@@ -43,6 +48,16 @@ public class SaidaController extends TSecureEjbController<Saida> implements ISai
 	@Override
 	public ITEjbService<Saida> getService() {
 		return serv;
+	}
+	
+	public TResult<List<Saida>> pesquisar(TAccessToken token, Cozinha coz, Date dataInicio, Date dataFim, String orderby, String ordertype, Long... idsl){
+		try{
+			List<Saida> lst = serv.pesquisar(idsl!=null ? Arrays.asList(idsl) : null, coz, dataInicio, dataFim, orderby, ordertype);
+			
+			return new TResult<>(EnumResult.SUCESS, lst);
+		}catch(Exception e) {
+			return processException(token, null, e);
+		}
 	}
 	
 	@Override

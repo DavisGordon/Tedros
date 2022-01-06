@@ -3,6 +3,7 @@
  */
 package com.covidsemfome.server.acao.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -18,6 +19,7 @@ import com.tedros.ejb.base.controller.TSecureEjbController;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.ejb.base.security.ITSecurity;
+import com.tedros.ejb.base.security.TAccessToken;
 import com.tedros.ejb.base.security.TRemoteSecurity;
 import com.tedros.ejb.base.service.ITEjbService;
 
@@ -35,6 +37,15 @@ public class AcaoController extends TSecureEjbController<Acao> implements IAcaoC
 	
 	@EJB
 	private ITSecurityController securityController;
+	
+	public TResult<List<Acao>> pesquisar(TAccessToken token, String ids, String titulo, Date dataInicio, Date dataFim, String status, String orderby, String ordertype){
+		try{
+			List<Acao> lst = serv.pesquisar(ids, titulo, dataInicio, dataFim, status, orderby, ordertype);
+			return new TResult<>(EnumResult.SUCESS, "", lst);
+		}catch(Exception e){
+			return super.processException(token, null, e);
+		}
+	}
 
 	public TResult<List<Acao>> listAcoesProgramadasParaDecisao(){
 		try{

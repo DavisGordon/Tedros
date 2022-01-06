@@ -96,8 +96,8 @@ background-color: #F5B7B1 !important;
 		  <a href="../main.html" class="active"><img src="../../images/logo3.png" alt="" /></a>
 		  
 		  <a href="prod.html" >Editar Produto</a>
-		  <a href="saida.html" >Estoque / Saida</a>
-		  <a href="#editar" class="smooth-scroll-top">Detalhes da Entrada</a>
+		  <a href="entrada.html" >Estoque / Entrada</a>
+		  <a href="#editar" class="smooth-scroll-top">Detalhes da Saida</a>
 		  <a href="#addLista" class="smooth-scroll-top">Informar produtos</a>
 		  <a href="#concluir" class="smooth-scroll-top">Concluir</a>
 		  <a href="javascript:void(0);" class="icon" onclick="shm()">
@@ -112,9 +112,9 @@ background-color: #F5B7B1 !important;
 				<div class="inner">
 				<header>
 					<h3>Pesquisar</h3>
-					<p class="major">Pesquise aqui por registros de entrada na base de dados.
-					Caso queira informar uma nova acquisição de produtos deslize abaixo ate 
-					<a href="#editar">Entrada de produtos no estoque</a>.  </p>
+					<p class="major">Pesquise aqui por registros de saida na base de dados.
+					Caso queira informar uma nova utilização de produtos deslize abaixo ate 
+					<a href="#editar">Saida de produtos do estoque</a>.  </p>
 				</header>
 				<div class="content">
 				<form >
@@ -141,7 +141,7 @@ background-color: #F5B7B1 !important;
 								<tr>
 									<th>Id</th>
 									<th>Data</th>
-									<th>Tipo</th>
+									<th>Ação</th>
 									<th>Cozinha</th>
 									<th>--</th>
 								</tr>
@@ -157,8 +157,8 @@ background-color: #F5B7B1 !important;
 			<div id="editar"></div>
 			<section class="wrapper style2 align-left color6">
 				<div class="inner">
-					<h3>Entrada de produtos no estoque</h3>
-					<p class="major">Informe aqui os detalhes desta acquisição.
+					<h3>Saida de produtos do estoque</h3>
+					<p class="major">Informe aqui os detalhes desta produção.
 					 A seguir <a href="#addLista">adicione os produtos</a>
 					 e para concluir <a href="#concluir">salve os dados informados</a> 
 					ou se preferir realize uma <a href="#pesquisar">pesquisa</a>.</p>
@@ -178,22 +178,21 @@ background-color: #F5B7B1 !important;
 								<label for="data">Data</label>
 								<input type="datetime-local" name="data" id="data" value="" />
 							</div>
-							
 							<div class="field third">
-								<label for="tipo">Tipo</label>
-								<select name="tipo" id="tipo">
+								<label for="observacao">Observação</label>
+								<textarea name="observacao" id="observacao" ></textarea>
+							</div>
+							<div class="field half" >
+								<label for="data">Filtrar Ações</label>
+								<input type="date" name="dataAcao" id="dataAcao" value="" />
+							</div>
+							<div class="field half">
+								<label for="acao">Ação</label>
+								<select name="acao" id="acao">
 									<option value="">--</option>
-									<option value="Compras">Compras</option>
-									<option value="Doação">Doação</option>
 								</select>
 							</div>
-							<div id="doadorDiv" class="field" style="display:none">
-								<label for="doador">Doador</label>
-								<div class="autocomplete" style="width:300px;">
-    								<input id="doador" type="text" name="doador" placeholder="doadores">
-    								<input type="hidden" name="pessId" id="pessId">
-  								</div>
-							</div>
+							
 							<input type="hidden" name="id" id="id">
 						</div>
 					</form>
@@ -203,39 +202,22 @@ background-color: #F5B7B1 !important;
 			<div id="addLista"></div>
 			<section class="wrapper style2 align-left color7">
 						<div class="inner">
-					<h3>Lista de produtos adquiridos</h3>
-					<p class="major">Adicione, altere ou remova aqui os produtos adquiridos.
+					<h3>Lista de produtos utilizados</h3>
+					<p class="major">Adicione, altere ou remova aqui os produtos utilizados.
 					Para concluir <a href="#concluir">salve os dados informados</a> 
-					ou se precisar alterar algum detalhe desta acquisição <a href="#editar">volte acima</a>. </p>
+					ou se precisar alterar algum detalhe desta produção <a href="#editar">volte acima</a>. </p>
 						<form>
 						<div class="fields">
 							<div class="field half">
 								<label for="produto">Produto</label>
 								<div class="autocomplete" style="width:300px;">
-    								<input id="produto" type="text" name="produto" placeholder="produtos">
+    								<input id="produto" type="text" name="produto" placeholder="Nome do produto">
     								<input type="hidden" name="prodId" id="prodId">
   								</div>
 							</div>
 							<div class="field half">
 								<label for="quantidade">Quantidade</label>
 								<input type="number" name="quantidade" id="quantidade" min="1" value="" />
-							</div>
-							
-							<div class="field half">
-								<label for="valorUnitario">Vlr. Unitario</label>
-								<input type="text" name="valorUnitario"  id="valorUnitario" value="" />
-							</div>
-							<div class="field half">
-								<label for="sexo">Unidade Medida</label>
-								<select name="unidadeMedida" id="unidadeMedida">
-									<option value="">--</option>
-									<option value="KG">KG</option>
-									<option value="LT">LT</option>
-									<option value="UNID">UNID</option>
-									<option value="PCT">PCT</option>
-									<option value="ML">ML</option>
-									<option value="GR">GR</option>
-								</select>
 							</div>
 							<input type="hidden" name="itemId" id="itemId">
 						</div>
@@ -248,8 +230,6 @@ background-color: #F5B7B1 !important;
 									<tr>
 										<th>Produto</th>
 										<th>Qtd.</th>
-										<th>Vlr. Unitario</th>
-										<th>Unidade Medida</th>
 										<th>--</th>
 									</tr>
 								</thead>
@@ -265,7 +245,7 @@ background-color: #F5B7B1 !important;
 						<div class="inner">
 							<h3>Concluir</h3>
 							<p class="major">Conclua esta tarefa clicando em Salvar ou 
-							em Novo para informar uma nova acquisição.
+							em Novo para informar uma nova produção.
 							Mas se desejar pode voltar para <a href="#addLista">adicionar mais produtos</a>, 
 							<a href="#editar">alterar algum detalhe</a> ou <a href="#pesquisar">realizar uma pesquisa</a>.</p>
 							
@@ -286,8 +266,7 @@ background-color: #F5B7B1 !important;
 			<script src="../../assets/js/breakpoints.min.js"></script>
 			<script src="../../assets/js/util.js"></script>
 			<script src="../../assets/js/main.js"></script>
-			<script src="../../assets/js/jquery.inputmask.min.js"></script>
-			<script src="entrada-full.js"></script>
+			<script src="saida-full.js"></script>
 
 
 </body>

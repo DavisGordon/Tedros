@@ -10,7 +10,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -21,15 +20,20 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.covidsemfome.ejb.controller.IAcaoController;
 import com.covidsemfome.ejb.controller.ICozinhaController;
 import com.covidsemfome.ejb.controller.IEntradaController;
 import com.covidsemfome.ejb.controller.IPessoaController;
 import com.covidsemfome.ejb.controller.IProdutoController;
+import com.covidsemfome.ejb.controller.ISaidaController;
+import com.covidsemfome.model.Acao;
 import com.covidsemfome.model.Cozinha;
 import com.covidsemfome.model.Entrada;
 import com.covidsemfome.model.EntradaItem;
 import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.Produto;
+import com.covidsemfome.model.Saida;
+import com.covidsemfome.model.SaidaItem;
 import com.covidsemfome.rest.model.EstocavelItemModel;
 import com.covidsemfome.rest.model.EstocavelModel;
 import com.covidsemfome.rest.model.IdNomeModel;
@@ -72,7 +76,13 @@ public class GestaoApi {
 	private IPessoaController pessServ;
 	
 	@EJB
+	private IAcaoController aServ;
+	
+	@EJB
 	private IEntradaController inServ;
+	
+	@EJB
+	private ISaidaController outServ;
 	
 	@POST
 	@Path("/prod/save")
@@ -468,6 +478,233 @@ public class GestaoApi {
 		ex = res.getValue();
 		return ex;
 	}
+	
+	//acao
+	
+	@GET
+	@Path("/filterAcao/{begin}")
+	public RestModel<List<IdNomeModel>> filterAcao(@PathParam("begin") String begin){
+				
+		try {
+			Date dti = !"x".equals(begin) ? ApiUtils.convertToDate(begin) : null;
+			
+			TResult<List<Acao>> res = aServ.pesquisar(appBean.getToken(), null, null, dti, null, null, "data", null);
+			List<IdNomeModel> lst = new ArrayList<>();
+			
+			if(res.getValue()!=null)
+				for(Acao e : res.getValue()) {
+					IdNomeModel m = convert(e);
+					lst.add(m);
+				}
+			
+			return new RestModel<>(lst, "200", "OK");
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return new RestModel<>(null, "500", error.getValue());
+		}
+	}
+	
+	// saida
+	
+
+	@GET
+	@Path("/filterOut/{cozId}/{begin}/{end}")
+	public RestModel<List<EstocavelModel>> filterOut(@PathParam("cozId") Long cozId, @PathParam("begin") String begin, @PathParam("end") String end){
+				
+		try {
+			Date dti = !"x".equals(begin) ? ApiUtils.convertToDate(begin) : null;
+			Date dtf = !"x".equals(end) ? ApiUtils.convertToDate(end) : null;
+			
+			Cozinha coz = cozId>0 ? new Cozinha() : null;
+			if(coz!=null)
+				coz.setId(cozId);
+			
+			TResult<List<Saida>> res = outServ.pesquisar(appBean.getToken(), coz, dti, dtf, null, "data", null);
+			List<EstocavelModel> lst = new ArrayList<>();
+			
+			if(res.getValue()!=null)
+				for(Saida e : res.getValue()) {
+					EstocavelModel m = convert(e);
+					lst.add(m);
+				}
+			
+			return new RestModel<>(lst, "200", "OK");
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return new RestModel<>(null, "500", error.getValue());
+		}
+	}
+
+
+	/**
+	 * @param e
+	 * @return
+	 */
+	private EstocavelModel convert(Saida e) {
+		List<EstocavelItemModel> itens = new ArrayList<>();
+		for(SaidaItem ei : e.getItens()) {
+			itens.add( new EstocavelItemModel(ei.getId(), new IdNomeModel(ei.getProduto().getId(), ei.getProduto().getNome()), 
+					ei.getQuantidade()));
+		}
+		Acao a = e.getAcao();
+		IdNomeModel acao = convert(a);
+		EstocavelModel m = new EstocavelModel(e.getId(), new IdNomeModel(e.getCozinha().getId(), e.getCozinha().getNome()), 
+				e.getData(), acao, e.getObservacao(), itens);
+		return m;
+	}
+
+
+	/**
+	 * @param a
+	 * @return
+	 */
+	private IdNomeModel convert(Acao a) {
+		IdNomeModel acao =  a!=null 
+				? new IdNomeModel(a.getId(), a.getTitulo() + " em "
+		+ ApiUtils.formatDateHourToView(a.getData()) + " ("+a.getStatus()+")")
+						: null;
+		return acao;
+	}
+
+	@GET
+	@Path("/out/{id}")
+	public RestModel<EstocavelModel> getOut(@PathParam("id") Long id){
+				
+		try {
+			Saida ex = findOutById(id);
+			return new RestModel<>(convert(ex), "200", "OK");
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return new RestModel<>(null, "500", error.getValue());
+		}
+	}
+
+	@DELETE
+	@Path("/out/del/{id}")
+	public RestModel<String> delOut(@PathParam("id") Long id){
+				
+		try {
+			Saida e = findOutById(id);
+			TResult res = outServ.remove(appBean.getToken(), e);
+			if(res.getResult().equals(EnumResult.SUCESS)) {
+				return new RestModel<>(null, "200", "OK");
+			}else {
+				return new RestModel<>(null, "404", res.getMessage());
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return new RestModel<>(null, "500", error.getValue());
+		}
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@POST
+	@Path("/out/save")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public RestModel<EstocavelModel> saveOut(EstocavelModel  model){
+	
+		try{
+			final Saida ex = model.getId()==null 
+					? new Saida() 
+							: this.findOutById(model.getId());
+					
+			ex.setData(ApiUtils.convertToDateTime(model.getData()));
+			if(ex.isNew() 
+					|| (!ex.isNew() 
+							&& !ex.getCozinha().getId().equals(model.getCozinha().getId()))) {
+				ex.setCozinha(this.findCozById(model.getCozinha().getId()));
+			}
+			ex.setObservacao(model.getObservacao());
+			ex.setAcao(this.findAcaoById(model.getAcao().getId()));
+			
+			if(ex.isNew()) {
+				List<SaidaItem> l = new ArrayList<>();
+				for(EstocavelItemModel i : model.getItens()) {
+					SaidaItem ei = new SaidaItem();
+					Produto p = this.findProdById(i.getProduto().getId());
+					ei.setProduto(p);
+					ei.setQuantidade(i.getQuantidade());
+					l.add(ei);
+				}
+				ex.setItens(l);
+			}else{
+				ex.getItens().removeIf(ei ->{
+					for(EstocavelItemModel i : model.getItens()) {
+						if(i.getId()!=null && ei.getId().equals(i.getId()))
+							return false;
+					}
+					return true;
+				}); 
+				
+				ex.getItens().forEach(ei->{
+					for(EstocavelItemModel i : model.getItens()) {
+						if(i.getId()!=null && ei.getId().equals(i.getId())) {
+							if(!ei.getProduto().getId().equals(i.getProduto().getId()))
+								ei.setProduto(findProdById(i.getProduto().getId()));
+							ei.setQuantidade(i.getQuantidade());
+						}
+					}
+				});
+				
+				model.getItens().forEach(i->{
+					if(i.getId()==null) {
+						SaidaItem ei = new SaidaItem();
+						Produto p = this.findProdById(i.getProduto().getId());
+						ei.setProduto(p);
+						ei.setQuantidade(i.getQuantidade());
+						ex.getItens().add(ei);
+					}
+				});
+			}
+			
+			TResult<Saida> res = outServ.save(appBean.getToken(), ex);
+			
+			if(res.getResult().equals(EnumResult.SUCESS)) {
+				Saida in = res.getValue();
+				return new RestModel<>(convert(in), "200", "OK");
+			}else {
+				return new RestModel<>(null, "404",res.getMessage());
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return new RestModel<>(null, "500", error.getValue());
+		}
+		
+	}
+
+	/**
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	private Saida findOutById(Long id) throws Exception {
+		Saida ex = new Saida();
+		ex.setId(id);
+		TResult<Saida> res = outServ.findById(appBean.getToken(), ex);
+		ex = res.getValue();
+		return ex;
+	}
+	
+	/**
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	private Acao findAcaoById(Long id) throws Exception {
+		Acao ex = new Acao();
+		ex.setId(id);
+		TResult<Acao> res = aServ.findById(appBean.getToken(), ex);
+		ex = res.getValue();
+		return ex;
+	}
+	
+	/**
 	
 	/**
 	 * @param id
