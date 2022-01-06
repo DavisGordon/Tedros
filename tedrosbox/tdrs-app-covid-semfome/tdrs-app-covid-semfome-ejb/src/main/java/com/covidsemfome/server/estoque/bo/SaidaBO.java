@@ -7,11 +7,13 @@
 package com.covidsemfome.server.estoque.bo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
+import com.covidsemfome.model.Cozinha;
 import com.covidsemfome.model.Saida;
 import com.covidsemfome.report.model.EstocavelModel;
 import com.covidsemfome.report.model.EstocavelReportModel;
@@ -35,6 +37,10 @@ public class SaidaBO extends TGenericBO<Saida> {
 		return eao;
 	}
 	
+	public List<Saida> pesquisar(List<Long> idsl, Cozinha coz, Date dataInicio, Date dataFim, String orderby, String ordertype){
+		return eao.pesquisar(idsl, coz, dataInicio, dataFim, orderby, ordertype);
+	}
+	
 	public EstocavelReportModel pesquisar(EstocavelReportModel m){
 		String ids = m.getIds();
 		List<Long> idsl = null;
@@ -45,7 +51,7 @@ public class SaidaBO extends TGenericBO<Saida> {
 				idsl.add(Long.valueOf(i));
 		}
 		
-		List<Saida> lst = eao.pesquisar(idsl, m.getCozinha(), m.getDataInicio(), m.getDataFim(), m.getOrderBy(), m.getOrderType());
+		List<Saida> lst = pesquisar(idsl, m.getCozinha(), m.getDataInicio(), m.getDataFim(), m.getOrderBy(), m.getOrderType());
 		if(lst!=null) {
 			List<EstocavelModel> itens = new ArrayList<>();
 			for(Saida a : lst){

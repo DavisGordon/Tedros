@@ -39,7 +39,7 @@ public class SaidaEAO extends TGenericEAO<Saida> {
 		
 		StringBuffer sbf = new StringBuffer("select e from Saida e join e.acao a where 1=1 ");
 		
-		if(idsl!=null)
+		if(idsl!=null && idsl.size()>0)
 			sbf.append("and e.id in :ids ");
 
 		if(coz != null)
@@ -71,7 +71,7 @@ public class SaidaEAO extends TGenericEAO<Saida> {
 		
 		Query qry = getEntityManager().createQuery(sbf.toString());
 		
-		if(idsl!=null)
+		if(idsl!=null && idsl.size()>0)
 			qry.setParameter("ids", idsl);
 		
 		if(coz!=null)

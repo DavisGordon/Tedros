@@ -7,6 +7,8 @@
 package com.covidsemfome.server.estoque.service;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Local;
@@ -15,6 +17,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import com.covidsemfome.model.Cozinha;
 import com.covidsemfome.model.Saida;
 import com.covidsemfome.model.SaidaItem;
 import com.covidsemfome.report.model.EstocavelReportModel;
@@ -54,6 +57,10 @@ public class SaidaService extends TEjbService<Saida> {
 	@Override
 	public SaidaBO getBussinesObject() {
 		return bo;
+	}
+	
+	public List<Saida> pesquisar(List<Long> idsl, Cozinha coz, Date dataInicio, Date dataFim, String orderby, String ordertype){
+		return bo.pesquisar(idsl, coz, dataInicio, dataFim, orderby, ordertype);
 	}
 	
 	public EstocavelReportModel pesquisar(EstocavelReportModel m){
