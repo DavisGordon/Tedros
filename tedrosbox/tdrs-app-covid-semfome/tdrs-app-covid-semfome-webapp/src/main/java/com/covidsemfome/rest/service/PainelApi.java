@@ -91,11 +91,6 @@ public class PainelApi {
 	@EJB 
 	private ITermoAdesaoController tAdServ;
 	
-	/*@GET
-	@Path("/")
-	public RestModel<String> x(){
-		
-	}*/
 	
 	@GET
 	@Path("/logout")
@@ -115,6 +110,35 @@ public class PainelApi {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new RestModel<String>("", "500", error.getValue());
+		}
+	}
+	
+	private boolean isAccessDenied() {
+		int tv = Integer.valueOf(this.covidUserBean.getUser().getPessoa().getTipoVoluntario());
+		return (tv<2||tv>3);
+	}
+	
+	@GET
+	@Path("/mg")
+	public RestModel<String> getMenuGestao(){
+				
+		try {
+			String m = " <a href=\"tdrs/prod.html\" >Editar Produtos</a>\r\n" + 
+					"		  <a href=\"tdrs/estoque_inicial.html\" >Estoque / Config</a>\r\n" + 
+					"		  <a href=\"tdrs/entrada.html\" >Estoque / Entrada</a>\r\n" + 
+					"		  <a href=\"tdrs/saida.html\" >Estoque / Saida</a>\r\n" +
+					"		  <a href=\"tdrs/estoque.html\" >Estoque / Visualizar</a>\r\n" ;
+			String n = "		  <a href=\"javascript: logout()\" >Sair</a>\r\n" + 
+					"		  <a href=\"javascript:void(0);\" class=\"icon\" onclick=\"shm()\">\r\n" + 
+					"		    <i class=\"fa fa-bars\"></i>\r\n" + 
+					"		  </a>";
+			
+			String mg = isAccessDenied() ? n : m+n;
+			return new RestModel<>(mg, "200", "OK");
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return new RestModel<>(null, "500", error.getValue());
 		}
 	}
 	

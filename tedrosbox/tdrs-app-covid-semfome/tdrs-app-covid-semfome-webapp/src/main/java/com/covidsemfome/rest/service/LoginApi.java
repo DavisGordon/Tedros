@@ -42,6 +42,7 @@ public class LoginApi {
 	@EJB
 	private IAutUserController autServ;
 	
+	
 	@GET
 	@Path("/newpass/{email}")
 	public RestModel<String> newPass(@PathParam("email") String email){
@@ -119,5 +120,6 @@ public class LoginApi {
 		}
 		
 	}
+	
 
 }

@@ -55,7 +55,7 @@ function processList(result){
 			content += ('<td>' + obj.cozinha.nome + '</td>');
 			content += ('<td>');
             content += ('<a href="javascript: load('+obj.id+')" >Alterar</a><br>');
-            content += ('<a href="javascript: del('+obj.id+', \''+obj.nome+'\')" >Excluir</a>');
+            content += ('<a href="javascript: del('+obj.id+')" >Excluir</a>');
             content += ('</td>');
             content += ('</tr>');
 		});
@@ -71,9 +71,9 @@ function newReg(){
  	location.href = '#editar';
 }
 
-function del(id,nome){
+function del(id){
 	
-	var flag = confirm("Deseja excluir a entrada ?");
+	var flag = confirm("Deseja excluir a entrada?");
 	if (flag) {
 		$.ajax
 	    ({ 
@@ -85,6 +85,7 @@ function del(id,nome){
 	        {
 	        	processList(result);
 	        	clear();
+	        	filter();
 	    	}
 		}); 
 	}
@@ -100,12 +101,12 @@ function validate(){
 			s += (s!='' ? ', ' : '') + 'Data';
 		if(!curObj.tipo || curObj.tipo=='')
 			s +=  (s!='' ? ', ' : '') + 'Tipo';
-		else if(curObj.tipo=='Doação'
+		else if(curObj.tipo=='DoaÃ§Ã£o'
 					&& (!curObj.doador || !curObj.doador.id || curObj.doador.id==''))
 			s +=  (s!='' ? ', ' : '') + 'Doador';
 		
 		if(s!='')
-			s += ' são obrigatorios!'
+			s = 'Favor preencher o(s) campo(s): '+s;
 			
 			
 		if(!curObj.itens || curObj.itens.length==0)
@@ -236,7 +237,7 @@ function readObj(){
 	 $('#cozinha option[value="'+curObj.cozinha.id+'"]').prop('selected', true);
 	 $('#tipo option[value="'+curObj.tipo+'"]').prop('selected', true);
 	 if(curObj.tipo){
-		 if(curObj.tipo=="Doação"){
+		 if(curObj.tipo=="DoaÃ§Ã£o"){
 			document.getElementById("doadorDiv").style.display = 'block';
 			$("#pessId").val(curObj.doador.id);
 			$("#doador").val(curObj.doador.nome);
@@ -278,7 +279,7 @@ function addEvents(){
 	$("#tipo").change(function (){
 		var val = $("#tipo option:selected").val();
 		curObj.tipo=val;
-		if(val && val=="Doação"){
+		if(val && val=="DoaÃ§Ã£o"){
 			document.getElementById("doadorDiv").style.display = 'block';
 			curObj.doador.id=$("#pessId").val();
 			curObj.doador.nome=$("#doador").val();
@@ -309,9 +310,9 @@ function add(){
 	if(!prodId)
 		f = 'Produto';
 	if(!qtd)
-		f += (f!='' ? ', ' : '') + 'Quantidade';
+		f += (f!='' ? ' e ' : '') + 'Quantidade';
 	if(f!=''){
-		alert('Os campos '+f+' são obrigatorios!');
+		alert('Favor preencher o(s) campo(s): '+f);
 		return;
 	}
 	
@@ -345,7 +346,7 @@ function addEventsNewItem(){
 	$('#prodId').change(function(){
 		var id = $(this).val();
 		if(id && curObj.containItem(id)){
-			alert("Este item já se encontra na lista!");
+			alert("Este item jï¿½ se encontra na lista!");
 			$('#produto').val('');
 			$('#prodId').val(null);
 		}
@@ -388,7 +389,7 @@ function addEventsItem(){
 	$('#produto').change(function(){
 		var v = $(this).val();
 		if(!v || v==''){
-			alert('O campo produto é obrigatorio');
+			alert('Preencha o campo produto!');
 		}
 	});
 	
@@ -396,7 +397,7 @@ function addEventsItem(){
 		var id = $(this).val();
 		if(curObj.itens[curItemIdx].produto.id!=id && curObj.containItem(id)){
 			remEventsItem();
-			alert("Este produto já se encontra na lista!");
+			alert("Este produto jÃ¡ se encontra na lista!");
 			$('#produto').val(curObj.itens[curItemIdx].produto.nome);
 			$('#prodId').val(curObj.itens[curItemIdx].produto.id);
 			addEventsItem();
@@ -413,7 +414,7 @@ function addEventsItem(){
 	$('#quantidade').change(function(){
 		var v = $(this).val();
 		if(!v || v==''){
-			alert('O campo quantidade é obrigatorio');
+			alert('Preencha o campo quantidade!');
 		}
 		var tr = $('#tContentEdit').children().get(curItemIdx);
 		var td = $(tr).children().get(1);
@@ -545,7 +546,10 @@ function loadCoz(){
     	      var a, b, i, val = this.value;
     	      /*close any already open lists of autocompleted values*/
     	      closeAllLists();
-    	      if (!val) { return false;}
+    	      if (!val) { 
+    	      	inpSel.value = '';
+    	      	return false;
+    	      }
     	      
     	      var thisObj = this;
     	      search(target, val, function(arr){

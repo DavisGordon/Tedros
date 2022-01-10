@@ -1,21 +1,38 @@
 var sv;
 $(document).ready(function() { 
-    			
+    gm();
 	$('#frm1000').ajaxForm( { beforeSubmit: validate, success: showResponse  } ); 
-	 
 	carregarEstados();
 	ltpf();
-	
 });
-    		
+	
 function scrollTo(a){
 	$(document.body).animate({
 	    'scrollTop':   $('#'+a).offset().top
 	}, 2000);
 }
 
+function gm(){
+	$.ajax
+    ({ 
+        url: '../api/painel/mg',
+        type: 'get',
+        dataType:'json',
+        headers : {'Content-Type' : 'application/json'},
+        success: function(result)
+        {
+        	if(result.code == "200"){
+        		$('#myTopnav').append(result.data);
+        	}else{
+        		alert(result.message);
+        	}
+    	}
+	}); 
+}
+
 var tpf;
 var tpj;
+
 function ltpf(){
 	$.ajax
     ({ 

@@ -10,69 +10,8 @@
 		<link rel="stylesheet" href="../../assets/css/main.css" />
 		<link rel="stylesheet" href="../../assets/css/menu.css" />
 		<link rel="stylesheet" href="../../assets/css/loader.css" />
-		<style type="text/css">
-		 .tableFixHead {
-        overflow-y: auto;
-        height: 250px;
-      }
-      .tableFixHead thead th {
-        position: sticky;
-        top: 0;
-      }
-      table {
-        border-collapse: collapse;
-        width: 100%;
-      }
-      th,
-      td {
-        padding: 8px 16px;
-      /*  border: 1px solid #ccc;*/
-      }
-      th {
-        background: #fff;
-      }
-		
-		
-		
-.autocomplete {
-  /*the container must be positioned relative:*/
-  position: relative;
-  display: inline-block;
-}
+		<link rel="stylesheet" href="tdrs.css" />
 
-.autocomplete-items {
-  position: absolute;
-  border: 1px solid #d4d4d4;
-  border-bottom: none;
-  border-top: none;
-  z-index: 99;
-  /*position the autocomplete items to be the same width as the container:*/
-  top: 100%;
-  left: 0;
-  right: 0;
-}
-.autocomplete-items div {
-  padding: 10px;
-  cursor: pointer;
-  background-color: #fff;
-  border-bottom: 1px solid #d4d4d4;
-}
-.autocomplete-items div:hover {
-  /*when hovering an item:*/
-  background-color: #e9e9e9;
-}
-
-.autocomplete-active {
-  /*when navigating through the items using the arrow keys:*/
-  background-color: DodgerBlue !important;
-  color: #ffffff;
-}
-
-.warnColor{
-background-color: #F5B7B1 !important;
-}
-
-		</style>
 		<noscript>
 			<link rel="stylesheet" href="../../assets/css/noscript.css" />
 			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -88,22 +27,24 @@ background-color: #F5B7B1 !important;
 		  }
 		}
 		</script>
-	
+
 	</head>
 	<body class="is-preload">
 		<div class="topnav" id="myTopnav">
-		  
+
 		  <a href="../main.html" class="active"><img src="../../images/logo3.png" alt="" /></a>
-		  
+
 		  <a href="prod.html" >Editar Produto</a>
+		  <a href="estoque_inicial.html" >Estoque / Config</a>
 		  <a href="saida.html" >Estoque / Saida</a>
+		  <a href="estoque.html" >Estoque / Visualizar</a>
 		  <a href="#editar" class="smooth-scroll-top">Detalhes da Entrada</a>
 		  <a href="#addLista" class="smooth-scroll-top">Informar produtos</a>
 		  <a href="#concluir" class="smooth-scroll-top">Concluir</a>
 		  <a href="javascript:void(0);" class="icon" onclick="shm()">
 		    <i class="fa fa-bars"></i>
 		  </a>
-		  
+
 		</div>
 		<!-- Wrapper -->
 		<div id="wrapper" class="divided">
@@ -113,7 +54,7 @@ background-color: #F5B7B1 !important;
 				<header>
 					<h3>Pesquisar</h3>
 					<p class="major">Pesquise aqui por registros de entrada na base de dados.
-					Caso queira informar uma nova acquisição de produtos deslize abaixo ate 
+					Caso queira informar uma nova acquisição de produtos deslize abaixo ate
 					<a href="#editar">Entrada de produtos no estoque</a>.  </p>
 				</header>
 				<div class="content">
@@ -153,21 +94,21 @@ background-color: #F5B7B1 !important;
 				</div>
 				</div>
 			</section>
-					
+
 			<div id="editar"></div>
 			<section class="wrapper style2 align-left color6">
 				<div class="inner">
 					<h3>Entrada de produtos no estoque</h3>
 					<p class="major">Informe aqui os detalhes desta acquisição.
 					 A seguir <a href="#addLista">adicione os produtos</a>
-					 e para concluir <a href="#concluir">salve os dados informados</a> 
+					 e para concluir <a href="#concluir">salve os dados informados</a>
 					ou se preferir realize uma <a href="#pesquisar">pesquisa</a>.</p>
 				<div class="content contentLoad">
 					<div id="loader1000" class="loader">
        					<div id="cssloader1000"><div></div></div>
        				</div>
 					<form name="frm1000" id="frm1000" autocomplete="off" method="post" action="../../api/tdrs/in/save">
-						<input type="hidden" name="idx" id="idx" value="1000" /> 	
+						<input type="hidden" name="idx" id="idx" value="1000" />
 						<div class="fields">
 							<div class="field third">
 								<label for="cozinha">Cozinha</label>
@@ -178,7 +119,7 @@ background-color: #F5B7B1 !important;
 								<label for="data">Data</label>
 								<input type="datetime-local" name="data" id="data" value="" />
 							</div>
-							
+
 							<div class="field third">
 								<label for="tipo">Tipo</label>
 								<select name="tipo" id="tipo">
@@ -190,7 +131,7 @@ background-color: #F5B7B1 !important;
 							<div id="doadorDiv" class="field" style="display:none">
 								<label for="doador">Doador</label>
 								<div class="autocomplete" style="width:300px;">
-    								<input id="doador" type="text" name="doador" placeholder="doadores">
+    								<input id="doador" type="text" name="doador" placeholder="Filtrar pelo nome">
     								<input type="hidden" name="pessId" id="pessId">
   								</div>
 							</div>
@@ -205,14 +146,14 @@ background-color: #F5B7B1 !important;
 						<div class="inner">
 					<h3>Lista de produtos adquiridos</h3>
 					<p class="major">Adicione, altere ou remova aqui os produtos adquiridos.
-					Para concluir <a href="#concluir">salve os dados informados</a> 
+					Para concluir <a href="#concluir">salve os dados informados</a>
 					ou se precisar alterar algum detalhe desta acquisição <a href="#editar">volte acima</a>. </p>
 						<form>
 						<div class="fields">
 							<div class="field half">
 								<label for="produto">Produto</label>
 								<div class="autocomplete" style="width:300px;">
-    								<input id="produto" type="text" name="produto" placeholder="produtos">
+    								<input id="produto" type="text" name="produto" placeholder="Filtrar pelo nome">
     								<input type="hidden" name="prodId" id="prodId">
   								</div>
 							</div>
@@ -220,7 +161,7 @@ background-color: #F5B7B1 !important;
 								<label for="quantidade">Quantidade</label>
 								<input type="number" name="quantidade" id="quantidade" min="1" value="" />
 							</div>
-							
+
 							<div class="field half">
 								<label for="valorUnitario">Vlr. Unitario</label>
 								<input type="text" name="valorUnitario"  id="valorUnitario" value="" />
@@ -258,25 +199,25 @@ background-color: #F5B7B1 !important;
 							</table>
 						</div>
 						</div>
-					
+
 						</section>
 					<div id="concluir"></div>
 					<footer class="wrapper style1 align-center is-inactive ">
 						<div class="inner">
 							<h3>Concluir</h3>
-							<p class="major">Conclua esta tarefa clicando em Salvar ou 
+							<p class="major">Conclua esta tarefa clicando em Salvar ou
 							em Novo para informar uma nova acquisição.
-							Mas se desejar pode voltar para <a href="#addLista">adicionar mais produtos</a>, 
+							Mas se desejar pode voltar para <a href="#addLista">adicionar mais produtos</a>,
 							<a href="#editar">alterar algum detalhe</a> ou <a href="#pesquisar">realizar uma pesquisa</a>.</p>
-							
+
 							<ul class="actions">
 								<li><a href="javascript: save()" class="button primary fit">Salvar</a></li>
 								<li><a href="javascript:newReg()" class="button  fit">Novo</a></li>
 							</ul>
 						</div>
 					</footer>
-				
-					
+
+
 			</div>
 	<!-- Scripts -->
 			<script src="../../assets/js/jquery.min.js"></script>

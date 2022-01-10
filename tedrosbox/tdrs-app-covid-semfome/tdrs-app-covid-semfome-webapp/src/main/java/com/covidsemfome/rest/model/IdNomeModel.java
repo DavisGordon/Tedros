@@ -5,7 +5,6 @@ package com.covidsemfome.rest.model;
 
 import java.io.Serializable;
 
-import javax.ws.rs.FormParam;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -17,10 +16,8 @@ public class IdNomeModel implements Serializable{
 
 	private static final long serialVersionUID = 2195785092601867812L;
 	
-	//@FormParam("id")
 	private Long id;
 	
-	//@FormParam("nome")
 	private String nome;
 	
 	public IdNomeModel() {

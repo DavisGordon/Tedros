@@ -10,29 +10,8 @@
 		<link rel="stylesheet" href="../../assets/css/main.css" />
 		<link rel="stylesheet" href="../../assets/css/menu.css" />
 		<link rel="stylesheet" href="../../assets/css/loader.css" />
-		<style type="text/css">
-		 .tableFixHead {
-        overflow-y: auto;
-        height: 250px;
-      }
-      .tableFixHead thead th {
-        position: sticky;
-        top: 0;
-      }
-      table {
-        border-collapse: collapse;
-        width: 100%;
-      }
-      th,
-      td {
-        padding: 8px 16px;
-      /*  border: 1px solid #ccc;*/
-      }
-      th {
-        background: #fff;
-      }
-		
-		</style>
+		<link rel="stylesheet" href="tdrs.css" />
+
 		<noscript>
 			<link rel="stylesheet" href="../../assets/css/noscript.css" />
 			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -48,20 +27,22 @@
 		  }
 		}
 		</script>
-	
+
 	</head>
 	<body class="is-preload">
 		<div class="topnav" id="myTopnav">
-		  
+
 		  <a href="../main.html" class="active"><img src="../../images/logo3.png"  alt="" /></a>
-		  
+
 		  <a href="#editar" class="smooth-scroll-top">Editar Produto</a>
+		  <a href="estoque_inicial.html" >Estoque / Config</a>
 		  <a href="entrada.html" >Estoque / Entrada</a>
 		  <a href="saida.html" >Estoque / Saida</a>
+		  <a href="estoque.html" >Estoque / Visualizar</a>
 		  <a href="javascript:void(0);" class="icon" onclick="shm()">
 		    <i class="fa fa-bars"></i>
 		  </a>
-		  
+
 		</div>
 		<!-- Wrapper -->
 		<div id="wrapper" class="divided">
@@ -70,7 +51,7 @@
 				<div class="inner">
 					<header>
 						<h3>Lista de produtos</h3>
-						<p class="major">Listagem de produtos cadastrados na base de dados.  
+						<p class="major">Listagem de produtos cadastrados na base de dados.
 						Aqui é possivel visualizar, alterar ou remover produtos.
 						Para inserir um novo produto deslize abaixo ate <a href="#editar">editar produto</a>.</p>
 					</header>
@@ -91,7 +72,7 @@
 					</div>
 				</div>
 			</section>
-					
+
 			<div id="editar"></div>
 			<section class="wrapper style2 align-left color6">
 				<div class="inner">
@@ -100,14 +81,14 @@
 						<p class="major">Informe aqui os detalhes do produto e logo em seguida
 						conclua <a href="#concluir">salvando os dados</a> mas se preferir
 						pode voltar para a <a href="#listagem">listagem de produtos</a>.</p>
-					
+
 					</header>
 					<div class="content contentLoad">
 						<div id="loader1000" class="loader">
 	       					<div id="cssloader1000"><div></div></div>
 	       				</div>
 						<form name="frm1000" id="frm1000" method="post" action="../../api/tdrs/prod/save">
-							<input type="hidden" name="idx" id="idx" value="1000" /> 	
+							<input type="hidden" name="idx" id="idx" value="1000" />
 							<div class="fields">
 								<div class="field half">
 									<label for="codigo">Codigo</label>
@@ -117,7 +98,7 @@
 									<label for="nome">Nome</label>
 									<input type="text" name="nome" id="nome" maxlength="60" value="" />
 								</div>
-								
+
 								<div class="field half">
 									<label for="marca">Marca</label>
 									<input type="text" name="marca" id="marca" maxlength="60"  value="" />
@@ -152,18 +133,18 @@
 			<footer class="wrapper style1 align-center is-inactive ">
 				<div class="inner">
 					<h3>Concluir</h3>
-					<p class="major">Conclua esta tarefa clicando em Salvar ou 
+					<p class="major">Conclua esta tarefa clicando em Salvar ou
 					em Novo para abrir um formulario em branco.
-					Mas se desejar pode voltar para continuar a <a href="#editar">editar o produto</a> 
+					Mas se desejar pode voltar para continuar a <a href="#editar">editar o produto</a>
 					ou ir ate a <a href="#listagem">listagem de produtos</a>.</p>
-					
+
 					<ul class="actions">
 						<li><a href="javascript: save()" class="button primary fit">Salvar</a></li>
 						<li><a href="javascript: newReg()" class="button  fit">Novo</a></li>
 					</ul>
 				</div>
-			</footer>		
-					
+			</footer>
+
 	</div>
 	<!-- Scripts -->
 	<script src="../../assets/js/jquery.min.js"></script>
@@ -173,9 +154,9 @@
 	<script src="../../assets/js/breakpoints.min.js"></script>
 	<script src="../../assets/js/util.js"></script>
 	<script src="../../assets/js/main.js"></script>
-			
+
 <script type="text/javascript">
-$(document).ready(function() { 
+$(document).ready(function() {
 	lp();
 });
 
@@ -200,7 +181,7 @@ function save(){
 
 function lp(){
 	$.ajax
-    ({ 
+    ({
         url: '../../api/tdrs/prods',
         type: 'get',
         dataType:'json',
@@ -209,14 +190,14 @@ function lp(){
         {
         	processList(result);
     	}
-	}); 
+	});
 }
 
 function processList(result){
 	if(result.code == "200"){
 		var content = '';
 		$.each(result.data, function(index,obj){
-			
+
 			content += ('<tr>');
 			content += ('<td>' + obj.codigo + '</td>');
 			content += ('<td>' + obj.nome + '</td>');
@@ -233,11 +214,11 @@ function processList(result){
 }
 
 function del(id,nome){
-	
+
 	var flag = confirm("Deseja excluir o produto "+nome+"?");
 	if (flag) {
 		$.ajax
-	    ({ 
+	    ({
 	        url: '../../api/tdrs/prod/del/'+id,
 	        type: 'delete',
 	        dataType:'json',
@@ -247,7 +228,7 @@ function del(id,nome){
 	        	processList(result);
 	        	clear();
 	    	}
-		}); 
+		});
 	}
 }
 
@@ -256,7 +237,7 @@ function load(id){
 	showLoader('lds-circle', form);
 	location.href = "#editar";
 	$.ajax
-    ({ 
+    ({
         url: '../../api/tdrs/prod/'+id,
         type: 'get',
         dataType:'json',
@@ -266,7 +247,7 @@ function load(id){
         	process(result);
         	showLoader('', form);
     	}
-	}); 
+	});
 }
 
 function newReg(){
@@ -284,28 +265,28 @@ function clear(){
 	 $('#unidadeMedida option[value=""]').prop('selected', true);
 }
 
-function validate(form) { 
+function validate(form) {
 	var campos =  "";
-    
-    if (!form.codigo.value) { 
-        campos += "Codigo"; 
-    } 
-    
-    if (!form.nome.value) { 
-    	if(campos!="") campos += ", ";
-        campos += "Nome"; 
-    } 
-    
-    if (campos != "" ) { 
-        alert('Por favor informar os campos: '+campos); 
-        return false; 
+
+    if (!form.codigo.value) {
+        campos += "Codigo";
     }
-    
+
+    if (!form.nome.value) {
+    	if(campos!="") campos += ", ";
+        campos += "Nome";
+    }
+
+    if (campos != "" ) {
+        alert('Por favor informar os campos: '+campos);
+        return false;
+    }
+
     showLoader('lds-circle', form);
     return true;
 }
 
-function showResponse(result)  { 
+function showResponse(result)  {
 	if(result.code == "200"){
 		process(result);
     	alert("Produto salvo!");
@@ -314,7 +295,7 @@ function showResponse(result)  {
 		alert(result.message);
 	}
 	 showLoader('', document.getElementById('frm1000'));
-} 
+}
 
 function process(result){
 	if(result.code == "200"){
@@ -343,7 +324,7 @@ function process(result){
     		document.getElementById('cssloader'+form.idx.value).className = '';
     		form.style = '';
     	}
-    }   
+    }
 
 </script>
 
