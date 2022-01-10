@@ -7,6 +7,7 @@
 package com.covidsemfome.server.estoque.bo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import java.util.Map;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
+import com.covidsemfome.model.Cozinha;
 import com.covidsemfome.model.Estoque;
 import com.covidsemfome.model.EstoqueItem;
 import com.covidsemfome.model.Produto;
@@ -91,6 +93,11 @@ public class EstoqueBO extends TGenericBO<Estoque> {
 		return super.save(e);
 	}
 	
+	public List<Estoque> pesquisar(List<Long> idsl, Cozinha coz, Date dataInicio, Date dataFim, String origem, String orderby, String ordertype){
+		return eao.pesquisar(idsl, coz, dataInicio, dataFim, origem, orderby, ordertype);
+	}
+		
+	
 	public EstoqueReportModel pesquisar(EstoqueReportModel m){
 		String ids = m.getIds();
 		List<Long> idsl = null;
@@ -101,7 +108,7 @@ public class EstoqueBO extends TGenericBO<Estoque> {
 				idsl.add(Long.valueOf(i));
 		}
 		
-		List<Estoque> lst = eao.pesquisar(idsl, m.getCozinha(), m.getDataInicio(), m.getDataFim(), 
+		List<Estoque> lst = pesquisar(idsl, m.getCozinha(), m.getDataInicio(), m.getDataFim(), 
 				m.getOrigem(), m.getOrderBy(), m.getOrderType());
 		if(lst!=null) {
 			List<EstoqueModel> itens = new ArrayList<>();

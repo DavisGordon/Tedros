@@ -7,8 +7,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.FormParam;
-import javax.ws.rs.HeaderParam;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.covidsemfome.rest.util.ApiUtils;
@@ -23,33 +21,24 @@ public class EstocavelModel implements Serializable{
 	
 	private static final long serialVersionUID = 3274590223540865996L;
 
-	//@HeaderParam("Content-Type")
 	private String contentType;
 	
-	//@FormParam("id")
 	private Long id;
 	
-	//@FormParam("cozinha")
 	private IdNomeModel cozinha;
 	
-	//@FormParam("data")
 	private String data;
 	
 	private String dataDesc;
 	
-	//@FormParam("tipo")
 	private String tipo;
 	
-	//@FormParam("doador")
 	private IdNomeModel doador;
 	
-	//@FormParam("acao")
 	private IdNomeModel acao;
 	
-	//@FormParam("observacao")
 	private String observacao;
 	
-	//@FormParam("itens")
 	private List<EstocavelItemModel> itens;
 
 	/**

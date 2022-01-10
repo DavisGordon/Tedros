@@ -57,6 +57,12 @@ public class ProdutoModel implements Serializable{
 		this.medida = medida;
 	}
 
+	public ProdutoModel(Long id, String codigo, String nome) {
+		this.id = id;
+		this.codigo = codigo;
+		this.nome = nome;
+	}
+
 	/**
 	 * @return the id
 	 */

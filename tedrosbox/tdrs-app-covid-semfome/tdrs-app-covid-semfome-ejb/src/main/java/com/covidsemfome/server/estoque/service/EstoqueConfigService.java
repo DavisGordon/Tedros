@@ -6,12 +6,15 @@
  */
 package com.covidsemfome.server.estoque.service;
 
+import java.util.List;
+
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import com.covidsemfome.model.Cozinha;
 import com.covidsemfome.model.EstoqueConfig;
 import com.covidsemfome.server.estoque.bo.EstoqueConfigBO;
 import com.tedros.ejb.base.service.TEjbService;
@@ -35,5 +38,8 @@ public class EstoqueConfigService extends TEjbService<EstoqueConfig> {
 		return bo;
 	}
 	
+	public List<EstoqueConfig> pesquisar(Cozinha cozinha){
+		return bo.list(cozinha);
+	}
 
 }

@@ -68,7 +68,7 @@ public class EstoqueEAO extends TGenericEAO<Estoque> {
 		
 		StringBuffer sbf = new StringBuffer("select e from Estoque e where 1=1 ");
 		
-		if(idsl!=null)
+		if(idsl!=null && idsl.size()>0)
 			sbf.append("and e.id in :ids ");
 
 		if(coz != null)
@@ -105,7 +105,7 @@ public class EstoqueEAO extends TGenericEAO<Estoque> {
 		
 		Query qry = getEntityManager().createQuery(sbf.toString());
 		
-		if(idsl!=null)
+		if(idsl!=null && idsl.size()>0)
 			qry.setParameter("ids", idsl);
 		
 		if(coz!=null)

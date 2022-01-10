@@ -72,6 +72,7 @@ function del(id,nome){
 	        {
 	        	processList(result);
 	        	clear();
+	        	filter();
 	    	}
 		}); 
 	}
@@ -89,7 +90,7 @@ function validate(){
 			s +=  (s!='' ? ', ' : '') + 'Ação';
 		
 		if(s!='')
-			s += ' são obrigatorios!'
+			s = 'Favor preencher o(s) campo(s): '+s;
 			
 			
 		if(!curObj.itens || curObj.itens.length==0)
@@ -280,9 +281,9 @@ function add(){
 	if(!prodId)
 		f = 'Produto';
 	if(!qtd)
-		f += (f!='' ? ', ' : '') + 'Quantidade';
+		f += (f!='' ? ' e ' : '') + 'Quantidade';
 	if(f!=''){
-		alert('Os campos '+f+' são obrigatorios!');
+		alert('Favor preencher o(s) campo(s): '+f);
 		return;
 	}
 	
@@ -353,7 +354,7 @@ function addEventsItem(){
 	$('#produto').change(function(){
 		var v = $(this).val();
 		if(!v || v==''){
-			alert('O campo produto é obrigatorio');
+			alert('Preencha o campo produto!');
 		}
 	});
 	
@@ -378,7 +379,7 @@ function addEventsItem(){
 	$('#quantidade').change(function(){
 		var v = $(this).val();
 		if(!v || v==''){
-			alert('O campo quantidade é obrigatorio');
+			alert('Preencha o campo quantidade!');
 		}
 		var tr = $('#tContentEdit').children().get(curItemIdx);
 		var td = $(tr).children().get(1);
@@ -515,7 +516,10 @@ function loadCoz(){
     	      var a, b, i, val = this.value;
     	      /*close any already open lists of autocompleted values*/
     	      closeAllLists();
-    	      if (!val) { return false;}
+    	      if (!val) { 
+    	      	inpSel.value = '';
+    	      	return false;
+    	      }
     	      
     	      var thisObj = this;
     	      search(target, val, function(arr){

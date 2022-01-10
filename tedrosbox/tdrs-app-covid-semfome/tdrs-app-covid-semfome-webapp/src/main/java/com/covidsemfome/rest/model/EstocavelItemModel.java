@@ -6,7 +6,6 @@ package com.covidsemfome.rest.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import javax.ws.rs.FormParam;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -21,19 +20,14 @@ public class EstocavelItemModel implements Serializable{
 	 */
 	private static final long serialVersionUID = 838858574627878332L;
 
-	//@FormParam("id")
 	private Long id;
 	
-	//@FormParam("produto")
 	private IdNomeModel produto;
 	
-	//@FormParam("quantidade")
 	private Integer quantidade;
 	
-	//@FormParam("valorUnitario")
 	private BigDecimal valorUnitario;
 
-	//@FormParam("unidadeMedida")
 	private String unidadeMedida;
 
 	/**

@@ -30,7 +30,8 @@ import br.com.covidsemfome.bean.CovidUserBean;
  * @author Davis Gordon
  *
  */
-@WebFilter(filterName = "PainelAuthFilter",urlPatterns = {"/painel/*","/api/painel/*"})
+@WebFilter(filterName = "PainelAuthFilter",
+urlPatterns = {"/painel/*","/api/painel/*", "/painel/tdrs/*", "/api/tdrs/*"})
 public class AutenticacaoFilter implements Filter {
 	
 	@Inject @Any

@@ -23,6 +23,8 @@ import javax.ws.rs.core.MediaType;
 import com.covidsemfome.ejb.controller.IAcaoController;
 import com.covidsemfome.ejb.controller.ICozinhaController;
 import com.covidsemfome.ejb.controller.IEntradaController;
+import com.covidsemfome.ejb.controller.IEstoqueConfigController;
+import com.covidsemfome.ejb.controller.IEstoqueController;
 import com.covidsemfome.ejb.controller.IPessoaController;
 import com.covidsemfome.ejb.controller.IProdutoController;
 import com.covidsemfome.ejb.controller.ISaidaController;
@@ -30,12 +32,18 @@ import com.covidsemfome.model.Acao;
 import com.covidsemfome.model.Cozinha;
 import com.covidsemfome.model.Entrada;
 import com.covidsemfome.model.EntradaItem;
+import com.covidsemfome.model.Estoque;
+import com.covidsemfome.model.EstoqueConfig;
+import com.covidsemfome.model.EstoqueItem;
 import com.covidsemfome.model.Pessoa;
 import com.covidsemfome.model.Produto;
 import com.covidsemfome.model.Saida;
 import com.covidsemfome.model.SaidaItem;
 import com.covidsemfome.rest.model.EstocavelItemModel;
 import com.covidsemfome.rest.model.EstocavelModel;
+import com.covidsemfome.rest.model.EstoqueConfigModel;
+import com.covidsemfome.rest.model.EstoqueItemModel;
+import com.covidsemfome.rest.model.EstoqueModel;
 import com.covidsemfome.rest.model.IdNomeModel;
 import com.covidsemfome.rest.model.ProdutoModel;
 import com.covidsemfome.rest.model.RestModel;
@@ -56,6 +64,8 @@ import br.com.covidsemfome.producer.Item;
 @Produces(MediaType.APPLICATION_JSON + "; charset=UTF-8")
 public class GestaoApi {
 	
+	private static final String ACCESS_DENIED = "Você não possui permissão para executar esta operação";
+
 	@Inject
 	@Named("errorMsg")
 	private Item<String> error;
@@ -84,6 +94,12 @@ public class GestaoApi {
 	@EJB
 	private ISaidaController outServ;
 	
+	@EJB
+	private IEstoqueConfigController scServ;
+	
+	@EJB
+	private IEstoqueController stServ;
+	
 	@POST
 	@Path("/prod/save")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -97,8 +113,9 @@ public class GestaoApi {
 			){
 	
 		try{
-			//Pessoa p = covidUserBean.getUser().getPessoa();
-			
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+			 
 			Produto p = id==null 
 					? new Produto()
 							: findProdById(id);
@@ -130,6 +147,10 @@ public class GestaoApi {
 	public RestModel<List<ProdutoModel>> getProds(){
 				
 		try {
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+				
+			
 			List<ProdutoModel> lst = listAllProds();
 			return new RestModel<>(lst, "200", "OK");
 			
@@ -210,6 +231,10 @@ public class GestaoApi {
 	public RestModel<List<ProdutoModel>> delProd(@PathParam("id") Long id){
 				
 		try {
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+				
+			
 			Produto p = findProdById(id);
 			TResult res = prodServ.remove(appBean.getToken(), p);
 			
@@ -231,6 +256,10 @@ public class GestaoApi {
 	public RestModel<List<IdNomeModel>> getCozinhas(){
 				
 		try {
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+				
+			
 			TResult<List<Cozinha>> res = cozServ.listAll(appBean.getToken(), Cozinha.class);
 			
 			List<IdNomeModel> lst = new ArrayList<>();
@@ -253,6 +282,10 @@ public class GestaoApi {
 	public RestModel<List<IdNomeModel>> searchPess(@PathParam("name") String name){
 				
 		try {
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+				
+			
 			TResult<List<Pessoa>> res = pessServ.pesquisar(appBean.getToken(), name, null, null, null, null); 
 			
 			List<IdNomeModel> lst = new ArrayList<>();
@@ -283,6 +316,9 @@ public class GestaoApi {
 	public RestModel<List<IdNomeModel>> searchProd(@PathParam("name") String name){
 				
 		try {
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+				
 			TResult<List<Produto>> res = prodServ.pesquisar(appBean.getToken(), null, name, null, null, null, "nome", null); 
 			
 			List<IdNomeModel> lst = new ArrayList<>();
@@ -304,6 +340,10 @@ public class GestaoApi {
 	public RestModel<List<EstocavelModel>> filterIn(@PathParam("cozId") Long cozId, @PathParam("begin") String begin, @PathParam("end") String end){
 				
 		try {
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+				
+			
 			Date dti = !"x".equals(begin) ? ApiUtils.convertToDate(begin) : null;
 			Date dtf = !"x".equals(end) ? ApiUtils.convertToDate(end) : null;
 			
@@ -352,6 +392,9 @@ public class GestaoApi {
 	public RestModel<EstocavelModel> getIn(@PathParam("id") Long id){
 				
 		try {
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+				
 			Entrada ex = findInById(id);
 			return new RestModel<>(convert(ex), "200", "OK");
 			
@@ -361,11 +404,19 @@ public class GestaoApi {
 		}
 	}
 
+	private boolean isAccessDenied() {
+		int tv = Integer.valueOf(this.covidUserBean.getUser().getPessoa().getTipoVoluntario());
+		return (tv<2||tv>3);
+	}
+	
 	@DELETE
 	@Path("/in/del/{id}")
 	public RestModel<String> delIn(@PathParam("id") Long id){
 				
 		try {
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+			
 			Entrada e = findInById(id);
 			TResult res = inServ.remove(appBean.getToken(), e);
 			if(res.getResult().equals(EnumResult.SUCESS)) {
@@ -388,6 +439,9 @@ public class GestaoApi {
 	public RestModel<EstocavelModel> saveIn(EstocavelModel  model){
 	
 		try{
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+				
 			final Entrada ex = model.getId()==null 
 					? new Entrada() 
 							: this.findInById(model.getId());
@@ -486,6 +540,9 @@ public class GestaoApi {
 	public RestModel<List<IdNomeModel>> filterAcao(@PathParam("begin") String begin){
 				
 		try {
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+				
 			Date dti = !"x".equals(begin) ? ApiUtils.convertToDate(begin) : null;
 			
 			TResult<List<Acao>> res = aServ.pesquisar(appBean.getToken(), null, null, dti, null, null, "data", null);
@@ -513,6 +570,9 @@ public class GestaoApi {
 	public RestModel<List<EstocavelModel>> filterOut(@PathParam("cozId") Long cozId, @PathParam("begin") String begin, @PathParam("end") String end){
 				
 		try {
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+				
 			Date dti = !"x".equals(begin) ? ApiUtils.convertToDate(begin) : null;
 			Date dtf = !"x".equals(end) ? ApiUtils.convertToDate(end) : null;
 			
@@ -573,6 +633,9 @@ public class GestaoApi {
 	public RestModel<EstocavelModel> getOut(@PathParam("id") Long id){
 				
 		try {
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+			
 			Saida ex = findOutById(id);
 			return new RestModel<>(convert(ex), "200", "OK");
 			
@@ -587,6 +650,9 @@ public class GestaoApi {
 	public RestModel<String> delOut(@PathParam("id") Long id){
 				
 		try {
+			 if(isAccessDenied())
+					return new RestModel<>(null, "404", ACCESS_DENIED);
+				
 			Saida e = findOutById(id);
 			TResult res = outServ.remove(appBean.getToken(), e);
 			if(res.getResult().equals(EnumResult.SUCESS)) {
@@ -609,6 +675,9 @@ public class GestaoApi {
 	public RestModel<EstocavelModel> saveOut(EstocavelModel  model){
 	
 		try{
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+				
 			final Saida ex = model.getId()==null 
 					? new Saida() 
 							: this.findOutById(model.getId());
@@ -704,7 +773,262 @@ public class GestaoApi {
 		return ex;
 	}
 	
+
+	@GET
+	@Path("/filterSC/{cozId}")
+	public RestModel<List<EstoqueConfigModel>> filterSc(@PathParam("cozId") Long cozId){
+				
+		try {
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+			
+			Cozinha coz = cozId>0 ? new Cozinha() : null;
+			if(coz!=null)
+				coz.setId(cozId);
+			
+			TResult<List<EstoqueConfig>> res = scServ.pesquisar(appBean.getToken(), coz);
+			List<EstoqueConfigModel> lst = new ArrayList<>();
+			
+			if(res.getValue()!=null)
+				for(EstoqueConfig e : res.getValue()) {
+					EstoqueConfigModel m = convert(e);
+					lst.add(m);
+				}
+			
+			return new RestModel<>(lst, "200", "OK");
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return new RestModel<>(null, "500", error.getValue());
+		}
+	}
+
+
+	private EstoqueConfigModel convert(EstoqueConfig e) {
+		IdNomeModel coz = new IdNomeModel(e.getCozinha().getId(), e.getCozinha().getNome());
+		ProdutoModel p = new ProdutoModel(e.getProduto().getId(), e.getProduto().getCodigo(), e.getProduto().getNome(), null, null, null, null);
+		return new EstoqueConfigModel(e.getId(), coz, p, e.getQtdMinima(), e.getQtdInicial());
+	}
+
+	@GET
+	@Path("/sc/{id}")
+	public RestModel<EstoqueConfigModel> getSc(@PathParam("id") Long id){
+				
+		try {
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+			
+			EstoqueConfig ex = findScById(id);
+			return new RestModel<>(convert(ex), "200", "OK");
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return new RestModel<>(null, "500", error.getValue());
+		}
+	}
+
+	@DELETE
+	@Path("/sc/del/{id}")
+	public RestModel<String> delSc(@PathParam("id") Long id){
+				
+		try {
+			 if(isAccessDenied())
+					return new RestModel<>(null, "404", ACCESS_DENIED);
+				
+			EstoqueConfig e = findScById(id);
+			TResult res = scServ.remove(appBean.getToken(), e);
+			if(res.getResult().equals(EnumResult.SUCESS)) {
+				return new RestModel<>(null, "200", "OK");
+			}else {
+				return new RestModel<>(null, "404", res.getMessage());
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return new RestModel<>(null, "500", error.getValue());
+		}
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@POST
+	@Path("/sc/save")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public RestModel<EstoqueConfigModel> saveSc(EstoqueConfigModel  model){
+	
+		try{
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+				
+			final EstoqueConfig ex = model.getId()==null 
+					? new EstoqueConfig() 
+							: this.findScById(model.getId());
+					
+			ex.setCozinha(this.findCozById(model.getCozinha().getId()));
+			ex.setProduto(this.findProdById(model.getProduto().getId()));
+			ex.setQtdInicial(model.getQtdInicial());
+			ex.setQtdMinima(model.getQtdMinima());
+			
+			TResult<EstoqueConfig> res = scServ.save(appBean.getToken(), ex);
+			
+			if(res.getResult().equals(EnumResult.SUCESS)) {
+				EstoqueConfig in = res.getValue();
+				return new RestModel<>(convert(in), "200", "OK");
+			}else {
+				return new RestModel<>(null, "404",res.getMessage());
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return new RestModel<>(null, "500", error.getValue());
+		}
+		
+	}
+	
 	/**
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	private EstoqueConfig findScById(Long id) throws Exception {
+		EstoqueConfig ex = new EstoqueConfig();
+		ex.setId(id);
+		TResult<EstoqueConfig> res = scServ.findById(appBean.getToken(), ex);
+		ex = res.getValue();
+		return ex;
+	}
+	
+	// estoqueModel
+	
+
+	@GET
+	@Path("/filterST/{cozId}/{begin}/{end}")
+	public RestModel<List<EstoqueModel>> filterSt(@PathParam("cozId") Long cozId, @PathParam("begin") String begin, @PathParam("end") String end){
+				
+		try {
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+				
+			Date dti = !"x".equals(begin) ? ApiUtils.convertToDate(begin) : null;
+			Date dtf = !"x".equals(end) ? ApiUtils.convertToDate(end) : null;
+			
+			Cozinha coz = cozId>0 ? new Cozinha() : null;
+			if(coz!=null)
+				coz.setId(cozId);
+			
+			TResult<List<Estoque>> res = stServ.pesquisar(appBean.getToken(), null, coz, dti, dtf, null, "data", "desc");
+			List<EstoqueModel> lst = new ArrayList<>();
+			
+			if(res.getValue()!=null)
+				for(Estoque e : res.getValue()) {
+					EstoqueModel m = convert(e);
+					lst.add(m);
+				}
+			
+			return new RestModel<>(lst, "200", "OK");
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return new RestModel<>(null, "500", error.getValue());
+		}
+	}
+
+	/**
+	 * @param e
+	 * @return
+	 */
+	private EstoqueModel convert(Estoque e) {
+		List<EstoqueItemModel> itens = new ArrayList<>();
+		for(EstoqueItem ei : e.getItens()) {
+			itens.add( new EstoqueItemModel(ei.getId(), 
+					new ProdutoModel(ei.getProduto().getId(), ei.getProduto().getCodigo(), ei.getProduto().getNome()), 
+					ei.getQtdMinima(), ei.getQtdInicial(), ei.getQtdCalculado(), ei.getQtdAjuste()));
+		}
+		String o;
+		if(e.getEntradaRef()!=null) {
+			Entrada in = e.getEntradaRef();
+			o = "Entrada de produtos em "+ApiUtils.formatDateHourToView(in.getData())
+			+" do tipo "+in.getTipo()+(in.getDoador()==null?"":" realizado por "+in.getDoador().getNome());
+		}else {
+			Saida out = e.getSaidaRef();
+			o = "Saída de produtos em "+ApiUtils.formatDateHourToView(out.getData())
+					+ " registrada para a ação "+out.getAcao().getTitulo()+" realizada no dia "+ApiUtils.formatDateHourToView(out.getAcao().getData());
+			
+		
+		}
+		
+		EstoqueModel m = new EstoqueModel(e.getId(), new IdNomeModel(e.getCozinha().getId(), e.getCozinha().getNome()), o, 
+				e.getData(), e.getObservacao(), itens);
+		return m;
+	}
+
+	@GET
+	@Path("/st/{id}")
+	public RestModel<EstoqueModel> getSt(@PathParam("id") Long id){
+				
+		try {
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+			
+			Estoque ex = findStById(id);
+			return new RestModel<>(convert(ex), "200", "OK");
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return new RestModel<>(null, "500", error.getValue());
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@POST
+	@Path("/st/save")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public RestModel<EstoqueModel> saveSt(EstoqueModel  model){
+	
+		try{
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+				
+			final Estoque ex =  this.findStById(model.getId());
+			ex.setObservacao(model.getObservacao());
+			model.getItens().forEach(i->{
+				if(i.getId()!=null) {
+					for(EstoqueItem ei : ex.getItens()) {
+						if( ei.getId().equals(i.getId())) {
+							ei.setQtdAjuste(i.getQtdAjuste());
+						}
+					}
+				}
+			});
+			
+			TResult<Estoque> res = stServ.save(appBean.getToken(), ex);
+			
+			if(res.getResult().equals(EnumResult.SUCESS)) {
+				Estoque st = res.getValue();
+				return new RestModel<>(convert(st), "200", "OK");
+			}else {
+				return new RestModel<>(null, "404",res.getMessage());
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return new RestModel<>(null, "500", error.getValue());
+		}
+		
+	}
+
+	/**
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	private Estoque findStById(Long id) throws Exception {
+		Estoque ex = new Estoque();
+		ex.setId(id);
+		TResult<Estoque> res = stServ.findById(appBean.getToken(), ex);
+		ex = res.getValue();
+		return ex;
+	}
 	
 	/**
 	 * @param id
