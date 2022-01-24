@@ -47,6 +47,18 @@ public class TAuthorization extends TEntity {
 	private String enabled; 
 	
 		
+	/**
+	 * 
+	 */
+	public TAuthorization() {
+		super.getOrderBy().clear();
+		super.addOrderBy("appName");
+		super.addOrderBy("moduleName");
+		super.addOrderBy("viewName");
+		super.addOrderBy("type");
+		
+	}
+
 	public String getSecurityId() {
 		return securityId;
 	}

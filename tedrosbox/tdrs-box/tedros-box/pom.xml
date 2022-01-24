@@ -35,10 +35,23 @@
 	  		</exclusions>
 	  	 </dependency>  -->
 	  	
-	  	<dependency>
+	  	<!-- <dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tdrs-app-covid-semfome-fx</artifactId>
 	  		<version>8-2.2</version>
+	  		<scope>compile</scope>
+	  		<exclusions>
+	  			<exclusion>
+	  				<groupId>org.eclipse.persistence</groupId>
+	  				<artifactId>eclipselink</artifactId>
+	  			</exclusion>
+	  		</exclusions>
+	  	</dependency> -->
+	  	 
+	  	 <dependency>
+	  		<groupId>com.tedros</groupId>
+	  		<artifactId>app-somos-fx</artifactId>
+	  		<version>8-1.0</version>
 	  		<scope>compile</scope>
 	  		<exclusions>
 	  			<exclusion>
