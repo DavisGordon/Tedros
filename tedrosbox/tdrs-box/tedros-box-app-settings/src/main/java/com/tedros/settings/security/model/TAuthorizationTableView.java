@@ -14,6 +14,10 @@ import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
+import com.tedros.fxapi.annotation.layout.THBox;
+import com.tedros.fxapi.annotation.layout.THGrow;
+import com.tedros.fxapi.annotation.layout.TPane;
+import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
@@ -28,6 +32,7 @@ import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.layout.Priority;
 
 /**
  * @author Davis Gordon
@@ -42,7 +47,8 @@ import javafx.beans.property.SimpleStringProperty;
 			decorator = @TDecorator(type=TSelectionModalDecorator.class, 
 			viewTitle="#{security.authorization.form.name}")),
 		tableView=@TTableView(editable=true, 
-			columns = { @TTableColumn(cellValue="appName", text = "#{label.appName}", prefWidth=30, resizable=true), 
+			columns = {  @TTableColumn(cellValue="securityId", text = "#{label.securityId}", prefWidth=30, resizable=true), 
+						@TTableColumn(cellValue="appName", text = "#{label.appName}", prefWidth=30, resizable=true), 
 						@TTableColumn(cellValue="moduleName", text = "#{label.moduleName}", prefWidth=40, resizable=true),
 						@TTableColumn(cellValue="viewName", text = "#{label.viewName}", prefWidth=40, resizable=true), 
 						@TTableColumn(cellValue="typeDescription", text = "#{label.permission}",  resizable=true)}), 
@@ -52,6 +58,14 @@ public final class TAuthorizationTableView extends TEntityModelView<TAuthorizati
 	private SimpleLongProperty id;
 	
 	private SimpleStringProperty displayText;
+	
+	@TLabel(text="#{label.securityId}")
+	@THBox(	pane=@TPane(children={"securityId","appName","moduleName","viewName"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="securityId", priority=Priority.NEVER), 
+		   		@TPriority(field="appName", priority=Priority.NEVER),
+		   		@TPriority(field="moduleName", priority=Priority.ALWAYS), 
+			   		@TPriority(field="viewName", priority=Priority.ALWAYS)}))
+	private SimpleStringProperty securityId;
 	
 	@TReader
 	@TLabel(text="#{label.appName}")
@@ -200,6 +214,20 @@ public final class TAuthorizationTableView extends TEntityModelView<TAuthorizati
 	 */
 	public void setTypeDescription(SimpleStringProperty typeDescription) {
 		this.typeDescription = typeDescription;
+	}
+
+	/**
+	 * @return the securityId
+	 */
+	public SimpleStringProperty getSecurityId() {
+		return securityId;
+	}
+
+	/**
+	 * @param securityId the securityId to set
+	 */
+	public void setSecurityId(SimpleStringProperty securityId) {
+		this.securityId = securityId;
 	}
 
 }

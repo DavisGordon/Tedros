@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="voluntarios-cad" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7f6bed53-7bd9-4c1c-b64f-090a19710b76">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="logo" class="java.io.InputStream"/>
+	<field name="nome" class="java.lang.String"/>
+	<field name="tipo" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="contatos" class="java.lang.String"/>
+	<field name="acoes" class="java.util.List"/>
+	<field name="dataCadastro" class="java.util.Date"/>
+	<field name="statusVoluntario" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="137" splitType="Stretch">
+			<staticText>
+				<reportElement style="SubTitle" x="0" y="36" width="244" height="22" uuid="0fac86c8-9454-4b41-bb90-9f6a9839a756"/>
+				<text><![CDATA[Relatório de pessoas ]]></text>
+			</staticText>
+			<image onErrorType="Blank">
+				<reportElement x="510" y="0" width="292" height="106" uuid="837fc979-9b53-4aff-9b74-04568b4175a8"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="15" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="14" width="802" height="1" uuid="50257e9e-2b7b-46b8-a200-bde029c123dd"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="0" width="157" height="15" uuid="9e238890-f135-4588-b5e3-5f4204a7ac8d"/>
+				<text><![CDATA[Nome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="157" y="0" width="113" height="15" uuid="3e4f66d2-cdb2-4d2e-9a3a-4a9e5857c81e"/>
+				<text><![CDATA[Tipo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="359" y="0" width="162" height="15" uuid="5d7b96cd-e707-484e-b059-2adb6e9da4fa"/>
+				<text><![CDATA[Email (Painel)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="270" y="0" width="89" height="15" uuid="763778d9-05f9-465d-9ab7-f159a7e908d6"/>
+				<text><![CDATA[Data Cadastro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="521" y="0" width="175" height="15" uuid="a296ad3e-3afe-4030-af1c-c0d2f82b3338"/>
+				<text><![CDATA[Contatos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="696" y="0" width="106" height="15" uuid="1722a20b-91c3-4c66-b1bd-a9027bbb877c"/>
+				<text><![CDATA[Situação]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="157" height="16" isPrintWhenDetailOverflows="true" uuid="be2dc539-655b-4295-94d8-83c51be53618"/>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="157" y="0" width="113" height="16" isPrintWhenDetailOverflows="true" uuid="3b3c8f7f-ba53-410e-a2ed-8ef3fc1604c2"/>
+				<textFieldExpression><![CDATA[$F{tipo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="359" y="0" width="162" height="16" isPrintWhenDetailOverflows="true" uuid="3ceed668-1b56-48db-97b1-af744b08c900"/>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="521" y="0" width="175" height="16" isPrintWhenDetailOverflows="true" uuid="c444cceb-262d-4812-b42e-fd287496fa85"/>
+				<textFieldExpression><![CDATA[$F{contatos}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH:mm" isBlankWhenNull="true">
+				<reportElement x="270" y="0" width="89" height="16" isPrintWhenDetailOverflows="true" uuid="7114401f-d120-4938-b0e0-abdfe698601d"/>
+				<textFieldExpression><![CDATA[$F{dataCadastro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="696" y="0" width="106" height="16" uuid="bc0ccaee-0bc0-430c-89c1-cba072f925e3"/>
+				<textFieldExpression><![CDATA[$F{statusVoluntario}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="17">
+			<printWhenExpression><![CDATA[$F{acoes}!=null && !$F{acoes}.isEmpty()]]></printWhenExpression>
+			<subreport isUsingCache="false">
+				<reportElement x="0" y="0" width="802" height="17" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" uuid="f83c0859-8094-4990-9af9-21e42acf09df">
+					<printWhenExpression><![CDATA[$F{acoes}!=null && !$F{acoes}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{acoes})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["voluntarios-cad-itens.jasper"]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="16" width="802" height="1" uuid="a139923b-038f-45f6-a3d0-6cd9159af8a0"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="682" y="0" width="80" height="20" uuid="4f9d39f2-c0d9-41d5-ae1d-e3044f747978"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="762" y="0" width="40" height="20" uuid="60ac72be-128c-4fb1-8614-a989e36af8d6"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="190" y="0" width="197" height="20" uuid="60f40776-070d-4bac-aefd-c768e5677544"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="190" height="20" uuid="8a9f790d-e3f7-460c-987c-421f206e4cfd"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Powered by Tedros Box]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
