@@ -1,0 +1,247 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>SOMOS - Social Movement</title>
+		<meta charset="utf-8" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="assets/css/loader.css" />
+		<link rel="stylesheet" href="assets/css/somos.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+
+							<!-- Logo -->
+								<a href="index.html" class="logo">
+									<span class="symbol"><img src="images/elementos/elem1-small.png" alt="" /></span>
+									<span class="sm-txt">Social Movement</span>
+								</a>
+
+							<!-- Nav -->
+								<nav>
+									<ul>
+										<li><a href="#menu">Menu</a></li>
+									</ul>
+								</nav>
+
+						</div>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="doacoes.html">Doações</a></li>
+							<li><a href="parceria.html">Parceria</a></li>
+							<li><a href="voluntario.html">Voluntario</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+							<header>
+								<p class="sm-title">Meu painel</p>
+							</header>
+							<section>
+								<div class="box alt">
+									<div class="row gtr-uniform">
+										<template id="welcomeTemplate">
+										<div class="col-12">
+											<p class="sm-txt">
+												<span class="image right">
+													<img  src="images/icon/icon2.jpg" alt="" />
+												</span>
+												Olá <span id="userLogged" class="sm-txt-bold"></span>, que alegria ver você aqui.<br>
+												Este é o seu painel, aqui você pode informar seus dados pessoais.<br> 
+												Para uma melhor experiencia sua sessão permanecera aberta e somente sera encerrada 
+												se realizar o logout pelo botão abaixo.
+											</p>
+											<ul class="actions">
+												<li><a href="javascript: logout()" class="button fit primary">Logout</a></li>
+											</ul>
+										</div>
+										</template>
+										<template id="loginTemplate">
+										<div id="loginCol" class="col-12">
+											<span class="sm-title">Log in</span>
+											<p class="sm-txt">Se já tiver feito seu cadastro inicie sua sessão fazendo o login, 
+											senão cadastre-se em <a href="voluntario.html">Voluntarios</a>. <br>
+											Com sua sessão iniciada iremos reconhece-lo toda vez que voltar ao nosso site podendo
+											além de vizualisar, marcar presença nas proximas ações.
+											</p> 
+											<p class="sm-txt">
+												<form name="frm" id="frm" method="post" action="voluntario/login" >
+													<div class="fields">
+														<div class="field half">
+															<label for="email">Email</label>
+															<input type="email" name="email" id="email" value="" />
+														</div>
+														<div class="field half">
+															<label for="pass">Senha</label>
+															<input type="password" name="pass" id="pass" value="" />
+														</div>
+													</div>
+													<ul class="actions">
+														<li><a href="javascript: validate()"  class="button fit small primary" id="submit">Entrar</a></li>
+														<li><a href="voluntario.html" class="button fit small">Fazer cadastro</a></li>
+														<li>Para definir uma nova senha clique <a href="javascript: newpass()" >aqui</a></li>
+													</ul>
+												</form>
+												
+											</p>
+										</div>
+									</template>
+									</div>
+								</div>		
+							</section>
+							<template id="userFrmTemplate">
+								<section id="meusdados" class="wrapper style2 align-left">
+									<header>
+										<h3>Meus dados pessoais</h3>
+										Estes dados serão utilizados para gerar o seu Termo de Adesão que lhe será entregue para ser assinado.
+										Suas informações são sigilosas e não serão compartilhadas nem usadas para outros fins.
+									</header>
+									<div class="content contentLoad">
+										<div id="loader1000" class="loader">
+											<div id="cssloader1000"><div></div></div>
+										</div>
+										<form name="frm1000" id="frm1000" method="post" action="../api/painel/user/alter">
+											<input type="hidden" name="idx" id="idx" value="1000" /> 	
+											<div class="fields">
+												<div class="field half">
+													<input type="text" name="name" id="name" maxlength="60" value="" />
+													<label for="name">Nome</label>
+												</div>
+												<div class="field half">
+													<input type="text" name="profissao" id="profissao" maxlength="80"  value="" />
+													<label for="profissao">Profissão</label>
+												</div>
+												
+												<div class="field half">
+													<input type="text" name="identidade" id="identidade"  maxlength="15" value="" />
+													<label for="identidade">Identidade</label>
+												</div>
+												<div class="field half">
+													<input type="text" name="cpf" id="cpf" maxlength="20" value="" />
+													<label for="cpf">CPF</label>
+												</div>
+												<div class="field half">
+													<input type="date" name="dtNasc" id="dtNasc" value="" />
+													<label for="dtNasc">Data de nascimento</label>
+												</div>
+												<div class="field half">
+													<input type="text" name="nacionalidade" id="nacionalidade" maxlength="60" value="" />
+													<label for="nacionalidade">Nacionalidade</label>
+												</div>
+												<div class="field half">
+													<input type="email" name="email" id="email" maxlength="80" value="" />
+													<label for="email">Email</label>
+												</div>
+												<div class="field half">
+													<input type="text" name="telefone" id="telefone"  maxlength="20" value="" />
+													<label for="telefone">Telefone / Whatsapp</label>
+												</div>
+												<div class="field half">
+													<select name="estCiv" id="estCiv">
+														<option value="">--</option>
+														<option value="Solteiro">Solteiro</option>
+														<option value="Casado">Casado</option>
+														<option value="Divorciado">Divorciado</option>
+														<option value="Viúvo(a)">Viúvo(a)</option>
+													</select>
+													<label for="estCiv">Estado Civil</label>
+												</div>
+												<div class="field half">
+													<select name="sexo" id="sexo">
+														<option value="">--</option>
+														<option value="M">Masculino</option>
+														<option value="F">Feminino</option>
+														<option value="O">Outro</option>
+													</select>
+													<label for="sexo">Sexo</label>
+												</div>
+												
+												<div class="field half">
+													<input type="text" name="tipoLogradouro" id="tipoLogradouro" maxlength="20"  value="" />
+													<label for="tipoLogradouro">Tipo Logradouro (Rua/Avenida...)</label>
+												</div>
+												<div class="field half">
+													<input type="text" name="logradouro" id="logradouro" maxlength="300" value="" />
+													<label for="logradouro">Logradouro</label>
+												</div>
+												<div class="field half">
+													<input type="text" name="bairro" id="bairro" maxlength="300" value="" />
+													<label for="bairro">Bairro</label>
+												</div>
+												<div class="field half">
+													<input type="text" name="complemento" id="complemento" maxlength="300" value="" />
+													<label for="complemento">Complemento (Número/Apartamento...)</label>
+												</div>
+												<div class="field half">
+													<input type="text" name="cidade" id="cidade" maxlength="300" value="" />
+													<label for="cidade">Cidade</label>
+												</div>
+												<div class="field half">
+													<select name="uf" id="uf"></select>
+													<label for="uf">Estado (UF)</label>
+												</div>
+												<div class="field half">
+													<input type="text" name="cep" id="cep" maxlength="10" value="" />
+													<label for="cep">CEP</label>
+												</div>
+											</div>
+											<ul class="actions">
+												<li><input type="submit" name="submit" id="submit" value="Enviar" /></li>
+											</ul>
+										</form>
+									</div>
+								</section>
+							</template>
+						
+						</div>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<section>
+								<h2>Siga nos</h2>
+								<ul class="icons">
+									<li><a href="#" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a></li>
+									<li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
+									<li><a href="#" class="icon solid style2 fa-phone"><span class="label">Phone</span></a></li>
+									<li><a href="#" class="icon solid style2 fa-envelope"><span class="label">Email</span></a></li>
+								</ul>
+							</section>
+							<ul class="copyright">
+								<li>&copy; SOMOS. All rights reserved</li>
+								<li>Desenvolvido por: <a href="https://www.linkedin.com/in/davis-gordon-dun">Davis Gordon Dun</a>
+								<a href="https://github.com/DavisGordon" class="icon brands style1 fa-github"><span class="label">Github</span></a></li>
+							</ul>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+    		<script src="assets/js/jquery.form.js"></script> 
+			<script src="assets/js/painelv.js"></script>
+
+	</body>
+</html>

@@ -8,6 +8,7 @@
 		<meta http-equiv="Expires" content="0" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="assets/css/loader.css" />
 		<link rel="stylesheet" href="assets/css/somos.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
@@ -21,7 +22,7 @@
 
 							<!-- Logo -->
 								<a href="index.html" class="logo">
-									<span class="symbol"><img src="images/elementos/elem2-small.png" alt="" /></span>
+									<span class="symbol"><img src="images/elementos/elem1-small.png" alt="" /></span>
 									<span class="sm-txt">Social Movement</span>
 								</a>
 
@@ -40,9 +41,9 @@
 						<h2>Menu</h2>
 						<ul>
 							<li><a href="index.html">Home</a></li>
-							<li><a href="voluntario.html">Voluntário</a></li>
+							<li><a href="doacoes.html">Doações</a></li>
 							<li><a href="parceria.html">Parceria</a></li>
-							<li><a href="index.html">Meu painel</a></li>
+							<li><a href="voluntario.html">Voluntario</a></li>
 						</ul>
 					</nav>
 
@@ -50,35 +51,26 @@
 					<div id="main">
 						<div class="inner">
 							<header>
-								<p class="sm-title">Doações</p>
+								<p class="sm-title">Termos e condições</p>
 							</header>
 							<section>
 								<div class="box alt">
 									<div class="row gtr-uniform">
 										<div class="col-12">
-											<p class="sm-txt">
-												<span class="image right">
-													<img src="images/campanha/pontocoleta.png" alt="" /></span>
-												Text introdutorio <br>
-												Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus euismod. 
-												Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac 
-												adipiscing accumsan faucibus. Vestibulum ante ipsum primis in faucibus lorem ipsum dolor sit amet 
-												nullam adipiscing eu felis.</p>
-											<span class="sm-title">Pontos de coleta</span>
-											<ul>
-												<li class="sm-txt">Café do alto - Rua Paschoal Carlos Magno, 143 - Santa Teresa;</li>
-												<li class="sm-txt">Rio Tap Beer House - Travessa dos Tamoios, 32 - LOJA B e C - Flamengo;</li>
-												<li class="sm-txt">Belga Burguer - Rua Adalberto Ferreira, Praça Cláudio Coutinho, 177 - Leblon.</li>
-											</ul>
-										</div>
-										<div class="col-12">
-											<span class="sm-title">Transferencia bancaria</span>
-											<p class="sm-txt">
-												<span class="image left"><img src="images/campanha/picpay.png" alt="" /></span>
-												Para doações em dinheiro utilize:<br>
-												Pix :164.307.437-72<br>
-												PicPay: @covidsemfome
-											</p>
+											<div class="container" style="height:250;">
+												<iframe  class="responsive-iframe"  id="termoContent"></iframe>
+											</div>
+											<form name="frm" id="frm" method="post" action="api/termo/aceitar" >
+												<div class="fields">
+													<div class="field">
+														<input type="checkbox" name="aceito" id="aceito"  />
+														<label for="aceito">Li e concordo com os termos e condições</label>
+													</div>
+												</div>
+												<ul class="actions">
+													<li><input type="submit" name="submit" id="submit" value="Continuar" /></li>
+												</ul>
+											</form>
 										</div>
 										
 									</div>
@@ -115,6 +107,8 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+    		<script src="assets/js/jquery.form.js"></script> 
+			<script src="assets/js/termo-full.js"></script>
 
 	</body>
 </html>

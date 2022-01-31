@@ -36,6 +36,9 @@ import com.tedros.util.TFileUtil;
 @RequestScoped
 public class EmailBO {
 	
+	private static final String PROJECT_NAME = "Social Movement";
+	private static final String PROJECT = "["+PROJECT_NAME+"]";
+
 	@Inject
 	private PessoaBO pessBO;
 	
@@ -72,7 +75,7 @@ public class EmailBO {
 		String content = gerarMsgBoasVindas(p.getNome());
 		
 		//Envia email de boas vindas
-		util.sent(false, emailAccount.getValue(), p.getLoginName(), "Bem vindo a ONG Covid Sem Fome", content, true);
+		util.sent(false, emailAccount.getValue(), p.getLoginName(), "Bem vindo a ONG "+PROJECT_NAME, content, true);
 				
 	}
 	
@@ -80,7 +83,7 @@ public class EmailBO {
 		
 		String content = "Olá "+p.getNome()+", para definir uma nova senha clique <a href=\""+host+"defpass/defpass.html?k="+key+"\">aqui</a>";
 		
-		util.sent(false, emailAccount.getValue(), p.getLoginName(), "[Covid Sem Fome] Definir nova senha", content, true);
+		util.sent(false, emailAccount.getValue(), p.getLoginName(), PROJECT+" Definir nova senha", content, true);
 				
 	}
 	
@@ -115,7 +118,7 @@ public class EmailBO {
 					+ "que foram alteradas isoladamente.";
 		
  
-			util.sent(false, emailAccount.getValue(), to, "[Covid Sem Fome] Avaliar ações com status programadas.", content, true);
+			util.sent(false, emailAccount.getValue(), to, PROJECT+" Avaliar ações com status programadas.", content, true);
 		}
 	}
 	
@@ -136,7 +139,7 @@ public class EmailBO {
 		if(to.isEmpty())
 			throw new EmailBusinessException("Não foi identificado nenhum voluntário estrategico para envio de email.");
 		
-		util.sent(false, emailAccount.getValue(), to, "[Covid Sem Fome] Novo cadastro de voluntário realizado pelo site", content, true);
+		util.sent(false, emailAccount.getValue(), to, PROJECT+" Novo cadastro de voluntário realizado pelo site", content, true);
 				
 	}
 	
@@ -166,7 +169,7 @@ public class EmailBO {
 		if(to.isEmpty())
 			throw new EmailBusinessException("Não foi identificado nenhum voluntário estrategico para envio de email.");
 		
-		util.sent(false, emailAccount.getValue(), to, "[Covid Sem Fome] Voluntário para ação "+v.getAcao().getTitulo(), content, true);
+		util.sent(false, emailAccount.getValue(), to, PROJECT+" Voluntário para ação "+v.getAcao().getTitulo(), content, true);
 				
 	}
 	
@@ -186,7 +189,7 @@ public class EmailBO {
 		if(to.isEmpty())
 			throw new EmailBusinessException("Não foi identificado nenhum voluntário estrategico para envio de email.");
 		
-		util.sent(false, emailAccount.getValue(), to, "[Covid Sem Fome] Voluntário saiu da ação "+a.getTitulo(), content, true);
+		util.sent(false, emailAccount.getValue(), to, PROJECT+" Voluntário saiu da ação "+a.getTitulo(), content, true);
 				
 	}
 

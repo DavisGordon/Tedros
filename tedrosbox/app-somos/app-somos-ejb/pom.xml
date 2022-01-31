@@ -22,8 +22,8 @@
 		  <properties>
 		    <srv.host>http://www.covidsemfome.com.br/</srv.host>
 		    <csf.email>covidsemfome@gmail.com</csf.email>
-		    <srv.email.template.path>/home/csf/email_boasvindas.html</srv.email.template.path>
-		    <srv.email.resource.path>/home/csf/smtpAccount.properties</srv.email.resource.path>
+		    <srv.email.template.path>/home/somos/email_boasvindas.html</srv.email.template.path>
+		    <srv.email.resource.path>/home/somos/smtpAccount.properties</srv.email.resource.path>
 		  </properties>
 		</profile>
 		<profile>
@@ -33,9 +33,9 @@
 		  </activation>
 		  <properties>
 		    <srv.host>http://localhost:8081/app-somos-web/</srv.host>
-		    <csf.email>covidsemfome@gmail.com</csf.email>
-		    <srv.email.template.path>C://usr//covidsemfome//email_boasvindas.html</srv.email.template.path>
-		    <srv.email.resource.path>C://usr//covidsemfome//smtpAccount.properties</srv.email.resource.path>
+		    <csf.email>tedrosbox@gmail.com</csf.email>
+		    <srv.email.template.path>C://usr//somos//email_boasvindas.html</srv.email.template.path>
+		    <srv.email.resource.path>C://usr//somos//smtpAccount.properties</srv.email.resource.path>
 		  </properties>
 		</profile>
 	</profiles>

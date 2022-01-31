@@ -18,7 +18,7 @@
 	</dependency>
 	
 	<dependency>
-	   <groupId>org.somos</groupId>
+	   <groupId>com.tedros</groupId>
   		<artifactId>app-somos-web</artifactId>
 	    <type>war</type>
 	    <version>8-1.0</version>
@@ -161,7 +161,7 @@
 			      -->
 			     
 			      <deployable>
-			      	<groupId>org.somos</groupId>
+			      	<groupId>com.tedros</groupId>
   					<artifactId>app-somos-web</artifactId>
   					<type>war</type>
   				  </deployable>
