@@ -1,15 +1,14 @@
 <!DOCTYPE HTML>
-<!--
-	Phantom by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
 <html>
 	<head>
 		<title>SOMOS - Social Movement</title>
 		<meta charset="utf-8" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="assets/css/loader.css" />
 		<link rel="stylesheet" href="assets/css/somos.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
@@ -51,7 +50,7 @@
 							<li><a href="doacoes.html">Doações</a></li>
 							<li><a href="parceria.html">Parceria</a></li>
 							<li><a href="voluntario.html">Voluntário</a></li>
-							<li><a href="#">Meu painel</a></li>
+							<li><a href="painelv.html">Meu painel</a></li>
 							<!-- <li><a href="elements.html">Elements</a></li> -->
 						</ul>
 					</nav>
@@ -60,7 +59,24 @@
 					<div id="main">
 						<div class="inner">
 							<header>
-								<p class="sm-txt"><span class="somos">SOMOS</span> pessoas! Movidas a tentar ajudar o próximo com nosso tempo, energia e conhecimento.</p>
+								<template id="welcomeTemplate">
+									<p class="sm-txt">
+										Olá! Seja bem vindo ao Social Movement, 
+										<span class="somos">SOMOS</span> pessoas
+										movidas a tentar ajudar o próximo com nosso tempo, 
+										energia e conhecimento. 
+										Aqui encontrará toda informação sobre a ONG, como surgiu,
+										Oque fazemos, Como e Onde. 
+										Quando estiver a vontade, venha ajudar, <span class="somos">SOMOS</span> o apoio de que 
+										muitos precisam. Doe, patrocine seja um voluntario, faça a 
+										diferença não seje indiferente!
+										</p>
+								</template>
+								<template id="welcomeLoggedUserTemplate">
+									<p class="sm-txt">
+										Olá <span class="sm-txt-bold"></span>, <span id="welcomeTxt"></span>
+									</p>
+								</template>
 							</header>
 							<section class="tiles">
 								<article class="style1">
@@ -112,18 +128,8 @@
 												<img src="images/pic/pic1.2.jpg" alt="" />
 											</span>
 										</div>
-										<div class="col-12"><p class="sm-txt">
-											 <span class="somos">SOMOS</span> é uma ONG que luta pela sobrevivência de pessoas em situação 
-											 de rua na pandemia por meio da distribuição de itens essenciais 
-											 como refeições, água mineral, materiais de higiene pessoal etc. 
-											 além do mapeamento das áreas atendidas. Com a chegada da pandemia, 
-											 o movimento nas ruas diminuiu quase a zero e muitas pessoas em 
-											 situação de vulnerabilidade se viram sem ajuda e sem recursos. 
-											 Foi assim que o casal Pedro e Jacqueline Borges deram início ao 
-											 projeto Covid Sem Fome, iniciamento apenas com a produção e 
-											 distribuição de quentinhas por conta própria. Com o tempo, 
-											 amigos foram se engajando na causa e projeto cresceu tendo hoje 
-											 parcerias com outros projetos e marcas importantes.</p>
+										<div class="col-12">
+											<p id="aboutContent" class="sm-txt"></p>
 										</div>
 									</div>
 								</div>
@@ -140,26 +146,14 @@
 							<section>
 								<div class="box alt">
 									<div class="row gtr-uniform">
-										<div class="col-6 col-12-small">
-											<div class="container">
-												<iframe class="responsive-iframe" src="https://www.youtube.com/embed/Wza1KutWAfg"></iframe>
+										<template id="videoTemplate">
+											<div class="col-6 col-12-small">
+												<div class="container">
+													<iframe class="responsive-iframe" src=""></iframe>
+												</div>
+												<span class="sm-txt"></span>
 											</div>
-										</div>
-										<div class="col-6 col-12-small">
-											<div class="container">
-												<iframe class="responsive-iframe" src="https://www.youtube.com/embed/wFG7-GjW0YY"></iframe>
-											</div>
-										</div>
-										<div class="col-6 col-12-small">
-											<div class="container">
-												<iframe class="responsive-iframe" src="https://www.youtube.com/embed/26U98CBD9Xg"></iframe>
-											</div>
-										</div>
-										<div class="col-6 col-12-small">
-											<div class="container">
-												<iframe class="responsive-iframe" src="https://www.youtube.com/embed/XlVATLHKQs8"></iframe>
-											</div>
-										</div>
+										</template>
 									</div>
 								</div>
 							</section>
@@ -173,32 +167,30 @@
 							</header>
 							<section>
 								<div class="box alt">
-									<div class="row gtr-uniform">
-										<div class="col-12">
-											<span class="sm-sub-title">Montagem - Cestas de hortifruti</span>
-											<p class="sm-txt">
-											22/01/2022 às 15:00, Agendada, Inscritos(4), Max(8), Min(4)
-											<br>
-											Faça parte da nossa ação de montagem de cestas de hortifruti para doação 
-											para as famílias em situação de vulnerabilidade. Local: São Martinho Rua 
-											Riachuelo, 7 – Lapa às 15hs no dia 22/01/22</p>
-											<ul class="actions fit small">
-												<li><a href="#" class="button primary fit">Participar</a></li>
-											</ul>
-											<hr>
-										</div>
-										<div class="col-12">
-											<span class="sm-sub-title">Montagem - Cestas de hortifruti</span>
-											<p class="sm-txt">
-											22/01/2022 às 15:00, Agendada, Inscritos(4), Max(8), Min(4)
-											<br>
-											Faça parte da nossa ação de montagem de cestas de hortifruti para doação 
-											para as famílias em situação de vulnerabilidade. Local: São Martinho Rua 
-											Riachuelo, 7 – Lapa às 15hs no dia 22/01/22</p>
-											<ul class="actions fit small">
-												<li><a href="#" class="button primary fit">Participar</a></li>
-											</ul>
-										</div>
+									<div id="acoesContent" class="row gtr-uniform">
+										<p id="acaoAviso" class="sm-txt fnt-large">Não existem ações agendadas no sistema no momento, 
+										entre em contato com nossa equipe para saber onde e quando será a proxima ação.</p>
+										<template id="statusAviso">
+											<span class="sm-txt fnt-large">Falta pouco...</span>
+											<p class="sm-txt"><span class="sm-txt-bold"></span> 
+											em breve entraremos em contato para lhe apresentar o projeto,
+											passar todos os detalhes e tirar todas as suas duvidas, apos este
+											contato ser realizado você poderá escolher em qual gostaria de participar. 
+											Enquanto isto aproveite para preencher os seus <a href="painelv.html#meusdados">dados pessoais</a>, 
+											estes dados são confidenciais e serão utilizados para gerar o seu Termo de Adesão.
+											</p>
+										</template>
+										<template id="acaoTemplate">
+											<div class="col-12">
+												<span class="sm-sub-title"></span>
+												<p class="sm-txt-bold"></p>
+												<p class="sm-txt"></p>
+												<ul class="actions fit small">
+													<li><a href="#" class="button primary fit">Participar</a></li>
+												</ul>
+												<hr>
+											</div>
+										</template>
 									</div>
 								</div>
 							</section>
@@ -213,31 +205,13 @@
 							<section>
 								<div class="box alt">
 									<div class="row gtr-uniform">
-										<div class="col-6">
-											<blockquote><p class="sm-txt">
-												<span class="sm-sub-title">Doações / Distribuição / Compras de insumos</span>
-											<br>Pedro Borges
-											<br>(21) 99606-1825</p></blockquote>
-										</div>
-										<div class="col-6">
-											<blockquote><p class="sm-txt">
-												<span class="sm-sub-title">Parcerias / Financeiro / Administrativo</span>
-												<br>Jacqueline Dun
-												<br>(21) 99237-5093</p></blockquote>
-										</div>
-										<div class="col-6">
-											<blockquote><p class="sm-txt">
-												<span class="sm-sub-title">Marketing / Imprensa / Captação de recursos / Parcerias</span>
-												<br>Rosane Ventura
-												<br>(21) 99973-2264</p></blockquote>
-										</div>
-										<div class="col-6">
-											<blockquote><p class="sm-txt">
-												<span class="sm-sub-title">Voluntários</span>
-												<br>Marcelo Lázaro
-												<br>(21) 97913-8020</p></blockquote>
-										</div>
-									</div>	
+										<template id="contatoTemplate">
+											<div class="col-4 col-12-small">
+												<span class="sm-sub-title"></span>
+												<p class="sm-txt"></p>
+											</div>
+										</template>
+									</div>
 								</div>
 							</section>
 						</div>
@@ -252,43 +226,43 @@
 								<div class="box alt">
 									<div class="row gtr-uniform">
 										<div class="col-4 col-12-small">
-											<span class="image">
+											<span class="image fit">
 												<img src="images/parceiro/par3.png" />
 											</span>
 										</div>
 										<div class="col-4 col-12-small">
-											<span class="image">
+											<span class="image fit">
 												<img src="images/parceiro/par2.png" />
 											</span>
 										</div>
 										<div class="col-4 col-12-small">
-											<span class="image">
+											<span class="image fit">
 												<img src="images/parceiro/par4.png" />
 											</span>
 										</div>
 										<div class="col-4 col-12-small">
-											<span class="image">
+											<span class="image fit">
 												<img src="images/parceiro/par1.png" />
 											</span>
 										</div>
 										<div class="col-4 col-12-small">
-											<span class="image">
+											<span class="image fit">
 												<img src="images/parceiro/par5.png" />
 											</span>
 										</div>
 										<div class="col-4 col-12-small">
-											<span class="image">
+											<span class="image fit">
 												<img src="images/parceiro/par6.png" />
 											</span>
 										</div>
-										<div class="col-6 col-12-small">
-											<span class="image">
+										<div class="col-4 col-12-small">
+											<span class="image fit">
 												<img src="images/parceiro/par7.png" />
 											</span>
 										</div>
-										<div class="col-6 col-12-small">
-											<span class="image">
-												<img src="images/parceiro/tedros.png" />
+										<div class="col-4 col-12-small">
+											<span class="image fit">
+												<img alt="Tedros" src="images/parceiro/tedros.png" />
 											</span>
 										</div>
 									</div>
@@ -402,6 +376,8 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<script src="assets/js/jquery.form.js"></script>
+			<script src="assets/js/sm-full.js"></script>
 
 	</body>
 </html>

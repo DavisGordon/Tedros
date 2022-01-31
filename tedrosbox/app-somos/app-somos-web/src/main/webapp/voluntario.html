@@ -1,16 +1,15 @@
 <!DOCTYPE HTML>
-<!--
-	Phantom by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
 <html>
 	<head>
 		<title>SOMOS - Social Movement</title>
 		<meta charset="utf-8" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<link rel="stylesheet" href="assets/css/somos.css" />
+		<link rel="stylesheet" href="assets/css/loader.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
 	<body class="is-preload">
@@ -59,7 +58,9 @@
 									<div class="row gtr-uniform">
 										<div class="col-12">
 											<p class="sm-txt">
-												<span class="image right"><img height="72" src="images/icon/icon2.png" alt="" /></span>
+												<span class="image right">
+													<img  src="images/icon/icon2.jpg" alt="" />
+												</span>
 												Text introdutorio <br>
 												Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus euismod. 
 												Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac 
@@ -71,7 +72,9 @@
 										<div class="col-12">
 											<span class="sm-title">Titulo</span>
 											<p class="sm-txt">
-												<span class="image left"><img height="72" src="images/icon/icon3.png" alt="" /></span>
+												<span class="image left">
+													<img  src="images/icon/icon3.jpg" alt="" />
+												</span>
 												Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus euismod.
 												Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac 
 												adipiscing accumsan faucibus. Vestibulum ante ipsum primis in faucibus lorem ipsum dolor sit amet 
@@ -79,30 +82,33 @@
 											</p>
 										</div>
 										<div class="col-12">
-											<span class="sm-title">Cadastro</span>
-											<p class="sm-txt">
-												<span class="image right"><img height="72" src="images/icon/icon4.png" alt="" /></span>
-												<form>
+											<span class="sm-title">Participe</span>
+											<div class="contentLoad">
+												<p class="sm-sub-title">Venha fortalecer essa rede do bem!</p>
+												<div id="loader" class="loader">
+													<div id="cssloader"><div></div></div>
+												</div>
+												<form name="frm" id="frm" method="post" action="cadVol">
 													<div class="fields">
-														<div class="field third">
-															<input type="text" name="nome" id="nome"  placeholder="Nome" />
-															<label for="nome">Nome</label>
+														<div class="field">
+															<input type="text" name="name" id="name"  placeholder="Nome" />
+															<label for="name">Nome</label>
 														</div>
-														<div class="field third">
-															<input type="text" name="email" id="email"  placeholder="Tel/E-mail" />
-															<label for="email">Contato</label>
+														<div class="field half">
+															<input type="text" name="email" id="email"  placeholder="E-mail" />
+															<label for="email">Email</label>
 														</div>
-														<div class="field third">
-															<input type="text" name="tel" id="tel"  placeholder="Tel/WhatsApp" />
-															<label for="tel">Tel/WhatsApp</label>
+														<div class="field half">
+															<input type="text" name="telefone" id="telefone"  placeholder="Tel/WhatsApp" />
+															<label for="telefone">Tel/WhatsApp</label>
 														</div>
 														<div class="field half">
 															<input type="password" name="pass" id="pass"  placeholder="Senha" />
 															<label for="pass">Senha</label>
 														</div>
 														<div class="field half">
-															<input type="password" name="repass" id="repass"  placeholder="Confirmar senha" />
-															<label for="tel">Confirmar senha</label>
+															<input type="password" name="passConf" id="passConf"  placeholder="Confirmar senha" />
+															<label for="passConf">Confirmar senha</label>
 														</div>
 														<div class="field">
 															<ul class="actions">
@@ -113,7 +119,7 @@
 														</div>
 													</div>
 												</form>
-											</p>
+											</div>
 										</div>
 									</div>
 								</div>		
@@ -149,6 +155,8 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<script src="assets/js/jquery.form.js"></script>
+			<script src="assets/js/sm-v-full.js"></script>
 
 	</body>
 </html>

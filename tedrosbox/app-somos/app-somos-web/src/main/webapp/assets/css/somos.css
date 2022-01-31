@@ -38,8 +38,8 @@
 	font-size: 1.0em;
 }
 .sm-txt{
-	font-family: ms-r !important;
-	font-size: 1.2em !important;
+	font-family: ms-r;
+	font-size: 1.0em;
 }
 .sm-txt-italic{
 	font-family: ms-i;
@@ -47,15 +47,24 @@
 }
 .sm-txt-bold{
 	font-family: ms-b;
-	font-size: 1.2em;
+	font-size: 1.0em;
 }
 .sm-txt-ebold{
 	font-family: ms-eb;
-	font-size: 1.2em;
+	font-size: 1.0em;
 }
 .sm-txt-thin{
 	font-family: ms-t;
-	font-size: 1.2em;
+	font-size: 1.0em;
+}
+.fnt-small{
+	font-size: 0.6em !important;
+}
+.fnt-large{
+	font-size: 1.2em !important;
+}
+.fnt-big{
+	font-size: 1.8em !important;
 }
 .container {
   position: relative;
