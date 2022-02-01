@@ -36,7 +36,10 @@ function loadUserInfo(){
 		statusCode: {
 		    401: function() {
 		      buildPage(null);
-		    }
+		    },
+			409: function() {
+			  location.href = 'termo.html';
+			}
 		  }
 	}); 
 }

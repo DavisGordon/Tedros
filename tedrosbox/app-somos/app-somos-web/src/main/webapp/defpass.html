@@ -26,46 +26,33 @@
 									<span class="sm-txt">Social Movement</span>
 								</a>
 
-							<!-- Nav -->
-								<nav>
-									<ul>
-										<li><a href="#menu">Menu</a></li>
-									</ul>
-								</nav>
-
 						</div>
 					</header>
-
-				<!-- Menu -->
-					<nav id="menu">
-						<h2>Menu</h2>
-						<ul>
-							<li><a href="index.html">Home</a></li>
-							<li><a href="doacoes.html">Doações</a></li>
-							<li><a href="parceria.html">Parceria</a></li>
-							<li><a href="voluntario.html">Voluntario</a></li>
-						</ul>
-					</nav>
 
 				<!-- Main -->
 					<div id="main">
 						<div class="inner">
 							<header>
-								<p class="sm-title">Termos e condições</p>
+								<p class="sm-title">Definir nova senha</p>
 							</header>
 							<section>
-								<form name="frm" id="frm" method="post" action="api/termo/aceitar" >
-									<div class="fields">
-										<div class="field">
-											<p class="sm-txt" id="termoContent"></p>
-											<input type="checkbox" name="aceito" id="aceito"  />
-											<label for="aceito">Li e concordo com os termos e condições</label>
-											<ul class="actions">
-												<li><input type="submit" name="submit" id="submit" value="Continuar" /></li>
-											</ul>
+								<form name="frm" id="frm" method="post" action="api/auth/defpass" >
+										<div class="fields">
+											<div class="field half">
+												<label for="pass">Senha</label>
+												<input type="password" name="pass" id="pass" value="" />
+											</div>
+											<div class="field half">
+												<label for="passConf">Confirmar Senha</label>
+												<input type="password" name="passConf" id="passConf" value="" />
+											</div>
 										</div>
-									</div>
-								</form>
+										<ul class="actions">
+											<li><input type="submit" name="submit" id="submit" value="Definir nova senha" /></li>
+										</ul>
+										<input type="hidden" name="key" id="key">
+									</form>
+								
 							</section>
 						</div>
 					</div>
@@ -99,7 +86,7 @@
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
     		<script src="assets/js/jquery.form.js"></script> 
-			<script src="assets/js/termo-full.js"></script>
+			<script src="assets/js/defpass-full.js"></script>
 
 	</body>
 </html>
