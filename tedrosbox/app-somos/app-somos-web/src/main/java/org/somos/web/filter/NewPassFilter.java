@@ -27,7 +27,7 @@ import com.tedros.ejb.base.result.TResult.EnumResult;
  * @author Davis Gordon
  *
  */
-@WebFilter(filterName = "NewPassFilter",urlPatterns = {"/defpass/*"})
+@WebFilter(filterName = "NewPassFilter",urlPatterns = {"/defpass.html"})
 public class NewPassFilter implements Filter {
 	
 	private static String PARAM = "k";

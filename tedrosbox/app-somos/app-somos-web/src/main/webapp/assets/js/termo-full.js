@@ -1,5 +1,4 @@
 $(document).ready(function() { 
-	// bind form using ajaxForm 
    $('#frm').ajaxForm( { success: validate  } ); 
    termo();
    $(':input[type="submit"]').prop('disabled', true);
@@ -20,7 +19,7 @@ function termo(){
 		{
 			if(result.code == "200"){
 			 if(result.data){
-				$("#termoContent").attr("srcdoc", result.data.descricao);
+				$("#termoContent").html( result.data.descricao);
 			 }
 		}
 		}

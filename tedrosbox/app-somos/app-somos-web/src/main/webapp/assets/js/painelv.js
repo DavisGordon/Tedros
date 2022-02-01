@@ -48,6 +48,13 @@ function newpass() {
 	
 	return false;
 }
+function loadJS(){
+	var l = window.location.href;
+	l = l.split('painelv.html')[0];
+	let myScript = document.createElement("script");
+	myScript.setAttribute("src", l + "/assets/js/painelu.js");
+	document.body.appendChild(myScript);
+}
 
 function buildPage(n){
 	if(n){
@@ -57,17 +64,16 @@ function buildPage(n){
 		let t = $($('#welcomeTemplate').html());
 		$('#userLogged', t).text(n.nome);
 		$('#welcomeTemplate').before(t);
-		
-		let t1 = $($('#userFrmTemplate').html());
-		$('#userFrmTemplate').before(t1);
-		loadUfs(function () {
-			loadUser();
-		});
-		
+		loadJS();
 	}else{
 		let t1 = $($('#loginTemplate').html());
 		$('#loginTemplate').before(t1);
 	}
+}
+
+function validateEmail(email) {
+  const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
 }
 
 function validate() { 
@@ -111,80 +117,11 @@ function loadUserInfo(){
 		statusCode: {
 		    401: function() {
 		      buildPage(null);
-		    }
+		    },
+			409: function() {
+			  location.href = 'termo.html';
+			}
 		  }
 	}); 
 }
 
-function loadUser(){
-	$.ajax
-    ({ 
-        url: 'api/painel/user',
-        type: 'get',
-        dataType:'json',
-        headers : {'Content-Type' : 'application/json'},
-        success: function(result)
-        {
-        	processarUser(result);
-    	},
-		statusCode: {
-		    401: function() {
-		      alert( "Necessario fazer o login primeiro!" );
-		    }
-		  }
-	}); 
-}
-		
-
-function processarUser(result){
-	if(result.code == "200"){
-		 if(result.data){
-			 
-			 $("#userName").html(result.data.nome);
-			 $('#name').val(result.data.nome);
-			 $('#profissao').val(result.data.profissao);
-			 $('#identidade').val(result.data.identidade);
-			 $('#cpf').val(result.data.cpf);
-			 $('#nacionalidade').val(result.data.nacionalidade);
-			 $('#email').val(result.data.email);
-			 $('#telefone').val(result.data.telefone);
-			 $('#dtNasc').val(result.data.dataNascimento);
-			 
-			 $('#estCiv option[value="'+result.data.estadoCivil+'"]').prop('selected', true);
-			 $('#sexo option[value="'+result.data.sexo+'"]').prop('selected', true);
-			
-			 $('#tipoLogradouro').val(result.data.tipoLogr);
-			 $('#logradouro').val(result.data.logradouro);
-			 $('#complemento').val(result.data.complemento);
-			 $('#bairro').val(result.data.bairro);
-			 $('#cidade').val(result.data.cidade);
-			 $('#cep').val(result.data.cep);
-			 
-			 $('#uf option[value="'+result.data.ufid+'"]').prop('selected', true);
-			 
-			 
-		 }
-	}else{
-		alert(result.message);
-	}
-}
-
-function loadUfs(callBack){
-	$.ajax
-    ({ 
-        url: 'api/painel/ufs',
-        type: 'get',
-        dataType:'json',
-        headers : {'Content-Type' : 'application/json'},
-        success: function(result)
-        {
-        	$('#uf').append('<option value="">Selecione</option>');
-        	if(result.data){
-				$.each(result.data, function(index,obj){
-				 $('#uf').append('<option value="' + obj.id + '">' + obj.descricao + '</option>');
-				});
-			}	
-        	callBack();
-    	}
-	}); 
-}

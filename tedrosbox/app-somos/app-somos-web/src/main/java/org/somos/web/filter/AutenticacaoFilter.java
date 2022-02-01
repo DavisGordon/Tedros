@@ -98,7 +98,7 @@ public class AutenticacaoFilter implements Filter {
 						if(f!=null && f)
 							chain.doFilter(req, resp);
 						else
-							((HttpServletResponse)resp).sendRedirect(httpRequest.getContextPath() + "/termo.html");
+							((HttpServletResponse)resp).setStatus(409);
 					}else{
 						((HttpServletResponse)resp).setStatus(401);
 					}

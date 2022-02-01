@@ -81,7 +81,7 @@ public class EmailBO {
 	
 	public void enviarEmailNewPass(Pessoa p, String key) throws TSentEmailException{
 		
-		String content = "Olá "+p.getNome()+", para definir uma nova senha clique <a href=\""+host+"defpass/defpass.html?k="+key+"\">aqui</a>";
+		String content = "Olá "+p.getNome()+", para definir uma nova senha clique <a href=\""+host+"defpass.html?k="+key+"\">aqui</a>";
 		
 		util.sent(false, emailAccount.getValue(), p.getLoginName(), PROJECT+" Definir nova senha", content, true);
 				
@@ -105,16 +105,16 @@ public class EmailBO {
 				+ " programada para "+TDateUtil.getFormatedDate(a.getData(), TDateUtil.DDMMYYYY_HHMM)
 				+ "<br>Mudar status para: ";
 				if(c.after(a.getData())) {
-					content += "<br><a href=\""+host+"api/csf/acao/"+a.getId()+"/prog/2/"+to+"\">Cancelada</a> ou "
-							+ "<a href=\""+host+"api/csf/acao/"+a.getId()+"/prog/3/"+to+"\">Executada</a> ";
+					content += "<br><a href=\""+host+"api/sm/acao/"+a.getId()+"/prog/2/"+to+"\">Cancelada</a> ou "
+							+ "<a href=\""+host+"api/sm/acao/"+a.getId()+"/prog/3/"+to+"\">Executada</a> ";
 				}else {
-					content += "<br><a href=\""+host+"api/csf/acao/"+a.getId()+"/prog/1/"+to+"\">Agendada</a> ou "
-							+ "<a href=\""+host+"api/csf/acao/"+a.getId()+"/prog/2/"+to+"\">Cancelada</a> ";
+					content += "<br><a href=\""+host+"api/sm/acao/"+a.getId()+"/prog/1/"+to+"\">Agendada</a> ou "
+							+ "<a href=\""+host+"api/sm/acao/"+a.getId()+"/prog/2/"+to+"\">Cancelada</a> ";
 				}
 				content += "<hr>";
 			}
-			content += "Alterar todas para <a href=\""+host+"api/csf/acao/prog/1/"+to+"\">Agendada</a> ou "
-					+ "todas para <a href=\""+host+"api/csf/acao/prog/2/"+to+"\">Cancelada</a> com exceção das "
+			content += "Alterar todas para <a href=\""+host+"api/sm/acao/prog/1/"+to+"\">Agendada</a> ou "
+					+ "todas para <a href=\""+host+"api/sm/acao/prog/2/"+to+"\">Cancelada</a> com exceção das "
 					+ "que foram alteradas isoladamente.";
 		
  
