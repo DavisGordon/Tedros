@@ -14,7 +14,7 @@ import com.tedros.fxapi.annotation.control.TCallbackFactory;
 import com.tedros.fxapi.annotation.control.TCellFactory;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TShowField;
 import com.tedros.fxapi.annotation.control.TShowField.TField;
 import com.tedros.fxapi.annotation.control.TTableColumn;
@@ -124,7 +124,7 @@ public class EstoqueModelView extends TEntityModelView<Estoque> {
 				@TTableColumn(cellValue="qtdAjuste", text = "Ajuste", resizable=true, editable=true,
 						cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=QtdAjusteCallBack.class))), 
 				@TTableColumn(cellValue="vlrAjustado", text = "Total", resizable=true)})
-	@TModelViewCollectionType(modelClass=EstoqueItem.class, modelViewClass=EstoqueItemModelView.class)
+	@TModelViewType(modelClass=EstoqueItem.class, modelViewClass=EstoqueItemModelView.class)
 	private ITObservableList<EstoqueItemModelView> itens;
 	
 	

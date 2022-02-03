@@ -12,7 +12,7 @@ import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.THTMLEditor;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
 import com.tedros.fxapi.annotation.control.TOneSelectionModal;
 import com.tedros.fxapi.annotation.control.TOptionsList;
@@ -123,7 +123,7 @@ public class ContentMV extends TEntityModelView<Content> {
 			selectionMode=SelectionMode.MULTIPLE,
 			optionsList=@TOptionsList(entityClass=CssClass.class,
 					optionModelViewClass=CssClassMV.class, serviceName = "ITCssClassControllerRemote"))
-	@TModelViewCollectionType(modelClass=CssClass.class, modelViewClass=CssClassMV.class)
+	@TModelViewType(modelClass=CssClass.class, modelViewClass=CssClassMV.class)
 	private ITObservableList<CssClassMV> cssClassList;
 	
 	@TTabPane(tabs = { @TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"webview"})), text = "#{label.view.select}"),

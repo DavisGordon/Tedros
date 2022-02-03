@@ -6,10 +6,12 @@ package org.somos.module.acao;
 import org.somos.module.acao.model.AcaoModelView;
 import org.somos.module.acao.model.SiteAboutModelView;
 import org.somos.module.acao.model.SiteContatoModelView;
-import org.somos.module.acao.model.SiteDoacaoModelView;
 import org.somos.module.acao.model.SiteNoticiaModelView;
+import org.somos.module.acao.model.SiteParceriaModelView;
+import org.somos.module.acao.model.SiteSMDoacaoModelView;
 import org.somos.module.acao.model.SiteTermoModelView;
 import org.somos.module.acao.model.SiteVideoModelView;
+import org.somos.module.acao.model.SiteVoluntarioModelView;
 
 import com.tedros.core.TModule;
 import com.tedros.core.annotation.security.TAuthorizationType;
@@ -34,12 +36,14 @@ public class AcaoModule extends TModule {
 	public void tStart() {
 		tShowView(new TGroupView<TGroupPresenter>(this, "Atualizar Site", 
 				new TViewItem(TDynaGroupView.class, AcaoModelView.class, "Ação"),
-				new TViewItem(TDynaGroupView.class, SiteAboutModelView.class, "Conheça"),
-				new TViewItem(TDynaGroupView.class, SiteContatoModelView.class, "Contatos"),
-				new TViewItem(TDynaGroupView.class, SiteVideoModelView.class, "Videos"),
-				new TViewItem(TDynaGroupView.class, SiteDoacaoModelView.class, "Doação"),
-				new TViewItem(TDynaGroupView.class, SiteNoticiaModelView.class, "Noticias"),
-				new TViewItem(TDynaGroupView.class, SiteTermoModelView.class, "Termo")
+				new TViewItem(TDynaGroupView.class, SiteAboutModelView.class, "Site/Home/Introdução"),
+				new TViewItem(TDynaGroupView.class, SiteContatoModelView.class, "Site/Home/Contatos"),
+				new TViewItem(TDynaGroupView.class, SiteVideoModelView.class, "Site/Home/Videos"),
+				new TViewItem(TDynaGroupView.class, SiteNoticiaModelView.class, "Site/Home/Noticias"),
+				new TViewItem(TDynaGroupView.class, SiteTermoModelView.class, "Site/Meu Painel/Termo"),
+				new TViewItem(TDynaGroupView.class, SiteSMDoacaoModelView.class, "Site/Doações"),
+				new TViewItem(TDynaGroupView.class, SiteParceriaModelView.class, "Site/Parceria"),
+				new TViewItem(TDynaGroupView.class, SiteVoluntarioModelView.class, "Site/Voluntario")
 				));
 	}
 

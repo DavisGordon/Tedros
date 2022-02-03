@@ -42,7 +42,7 @@ import javafx.scene.layout.StackPane;
  * The file repository is shared with all apps and which file is identified by the remote owner name.
  * 
  * <i>@</i>TSelectImageField(source=TEnvironment.LOCAL, target=TEnvironment.REMOTE, remoteOwner= "myApp")
- * <i>@</i>TModelViewCollectionType(modelClass = TFileEntity.class)
+ * <i>@</i>TModelViewType(modelClass = TFileEntity.class)
  * private ITObservableList&ltITFileBaseModel&gt files;
  * 
  * List the images saved on the remote repository to be selected and aggregate to an entity.

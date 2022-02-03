@@ -32,7 +32,12 @@ public interface DomainTables {
 	final static String vol_tipoajuda = "vol_tipoajuda";
 	final static String acao_tipoajuda = "acao_tipoajuda";
 	final static String termo_tipoajuda = "termo_tipoajuda";
-	final static String site_doacao = "site_doacao";
+	final static String site_sm_doacao = "site_sm_doacao";
+	final static String site_pontocoleta = "site_pontocoleta";
+	final static String site_doacao_transferencia = "site_doacao_transferencia";
+	final static String site_doacao = "site_doacao";//Deprecated
+	final static String site_voluntario = "site_voluntario";
+	final static String site_parceria = "site_parceria";
 	final static String site_video = "site_video";
 	final static String site_about = "site_about";
 	final static String site_contato = "site_contato";

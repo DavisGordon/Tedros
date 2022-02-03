@@ -13,7 +13,7 @@ import com.tedros.fxapi.annotation.control.TCellValueFactory;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
@@ -136,7 +136,7 @@ public class AcoesReportModelView extends TModelView<AcaoReportModel>{
 						@TTableColumn(cellValue="totalInscritos", text = "Qtd.Inscritos",prefWidth=10, resizable=true), 
 						@TTableColumn(cellValue="status", text = "Status", resizable=true)
 			})
-	@TModelViewCollectionType(modelClass=AcaoItemModel.class, modelViewClass=AcaoItemTableView.class)
+	@TModelViewType(modelClass=AcaoItemModel.class, modelViewClass=AcaoItemTableView.class)
 	private ITObservableList<AcaoItemTableView> result;
 	
 	

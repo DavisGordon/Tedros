@@ -9,7 +9,7 @@ import com.tedros.core.security.model.TAuthorization;
 import com.tedros.core.security.model.TProfile;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TMultipleSelectionModal;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
@@ -85,7 +85,7 @@ public final class TProfileModelView extends TEntityModelView<TProfile> {
 	@TDetailReader(label=@TLabel(text="Authorization"))
 	@TMultipleSelectionModal(modelClass = TAuthorization.class, modelViewClass = TAuthorizationTableView.class,
 	width=600, height=350)
-	@TModelViewCollectionType(modelClass=TAuthorization.class, modelViewClass=TAuthorizationTableView.class)
+	@TModelViewType(modelClass=TAuthorization.class, modelViewClass=TAuthorizationTableView.class)
 	private ITObservableList<TAuthorizationTableView> autorizations;
 
 	public TProfileModelView(TProfile entity) {

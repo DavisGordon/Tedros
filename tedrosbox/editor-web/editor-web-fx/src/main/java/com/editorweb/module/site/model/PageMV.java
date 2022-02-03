@@ -11,7 +11,7 @@ import com.tedros.editorweb.model.HtmlTemplate;
 import com.tedros.editorweb.model.Page;
 import com.tedros.fxapi.annotation.control.TDetailListField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
@@ -84,7 +84,7 @@ public class PageMV extends TEntityModelView<Page> {
 	
 	@TFieldBox(node=@TNode(id="ct", parse = true))
 	@TDetailListField(entityModelViewClass = ContentMV.class, entityClass = Content.class/*, region=@TRegion(prefHeight=390, parse = true)*/)
-	@TModelViewCollectionType(modelClass=Content.class, modelViewClass=ContentMV.class)
+	@TModelViewType(modelClass=Content.class, modelViewClass=ContentMV.class)
 	private ITObservableList<ContentMV> contents;
 	
 	public PageMV(Page entity) {

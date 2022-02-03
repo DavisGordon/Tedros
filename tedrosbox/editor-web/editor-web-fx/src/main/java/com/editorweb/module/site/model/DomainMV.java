@@ -11,7 +11,7 @@ import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TDetailListField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TTab;
 import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.annotation.control.TTextField;
@@ -55,7 +55,7 @@ public class DomainMV extends TEntityModelView<Domain> {
 
 	@TFieldBox(node=@TNode(id="pg", parse = true))
 	@TDetailListField(entityModelViewClass = DomainPageMV.class, entityClass = Page.class)
-	@TModelViewCollectionType(modelClass=Page.class, modelViewClass=DomainPageMV.class)
+	@TModelViewType(modelClass=Page.class, modelViewClass=DomainPageMV.class)
 	private ITObservableList<DomainPageMV> pages;
 	
 	public DomainMV(Domain entity) {

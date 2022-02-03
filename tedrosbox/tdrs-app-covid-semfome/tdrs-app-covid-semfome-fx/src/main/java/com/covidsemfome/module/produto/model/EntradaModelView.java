@@ -21,7 +21,7 @@ import com.tedros.fxapi.annotation.control.TDetailListField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TOneSelectionModal;
 import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
@@ -142,7 +142,7 @@ public class EntradaModelView extends TEntityModelView<Entrada> {
 			entityClass=EntradaItem.class, 
 			modelViewClass=EntradaItemModelView.class)
 	@TDetailListField(entityModelViewClass = EntradaItemModelView.class, entityClass = EntradaItem.class, required=true)
-	@TModelViewCollectionType(modelClass=EntradaItem.class, modelViewClass=EntradaItemModelView.class)
+	@TModelViewType(modelClass=EntradaItem.class, modelViewClass=EntradaItemModelView.class)
 	private ITObservableList<EntradaItemModelView> itens;
 	
 	

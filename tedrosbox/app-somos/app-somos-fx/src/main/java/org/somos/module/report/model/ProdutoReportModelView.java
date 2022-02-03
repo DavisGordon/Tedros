@@ -9,7 +9,7 @@ import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
@@ -124,7 +124,7 @@ public class ProdutoReportModelView extends TModelView<ProdutoReportModel>{
 						@TTableColumn(cellValue="medida", text = "Medida", resizable=true), 
 						@TTableColumn(cellValue="unidadeMedida", text = "Unidade Medida", resizable=true)
 			})
-	@TModelViewCollectionType(modelClass=ProdutoItemModel.class, modelViewClass=ProdutoItemTableView.class)
+	@TModelViewType(modelClass=ProdutoItemModel.class, modelViewClass=ProdutoItemTableView.class)
 	private ITObservableList<ProdutoItemTableView> result;
 	
 	public ProdutoReportModelView(ProdutoReportModel entidade) {

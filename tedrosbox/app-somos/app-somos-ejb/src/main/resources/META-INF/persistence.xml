@@ -37,11 +37,12 @@
 		<class>org.somos.model.SiteContato</class>
 		<class>org.somos.model.SiteNoticia</class>
 		<class>org.somos.model.SiteTermo</class>
-		<class>org.somos.parceiro.model.EmpresaParceira</class>
-		<class>org.somos.parceiro.model.SiteConteudo</class>
-		<class>org.somos.parceiro.model.ComponentTemplate</class>
-		<class>org.somos.parceiro.model.CssClass</class>
 		<class>org.somos.model.CsfImagem</class>
+		<class>org.somos.model.SiteParceria</class>
+		<class>org.somos.model.SiteVoluntario</class>
+		<class>org.somos.model.SiteSMDoacao</class>
+		<class>org.somos.model.SiteDoacaoTransferencia</class>
+		<class>org.somos.model.SitePontoColeta</class>
 		
 		<properties>
 		

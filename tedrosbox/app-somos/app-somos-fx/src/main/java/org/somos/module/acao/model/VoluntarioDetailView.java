@@ -13,7 +13,7 @@ import org.somos.module.tipoAjuda.model.TipoAjudaModelView;
 import com.tedros.fxapi.annotation.control.TCallbackFactory;
 import com.tedros.fxapi.annotation.control.TCellFactory;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TMultipleSelectionModal;
 import com.tedros.fxapi.annotation.control.TOneSelectionModal;
 import com.tedros.fxapi.annotation.control.TTableColumn;
@@ -83,7 +83,7 @@ public class VoluntarioDetailView extends TEntityModelView<Voluntario> {
 	column = { 	@TColumnReader(field = "descricao", name = "Descricao"), 
 				@TColumnReader(field = "tipoPessoa", name = "Tipo pessoa")})
 	@TMultipleSelectionModal(modelClass = TipoAjuda.class, modelViewClass = TipoAjudaFindModelView.class, width=350, height=50, required=true)
-	@TModelViewCollectionType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=true)
+	@TModelViewType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=true)
 	private ITObservableList<TipoAjudaModelView> tiposAjuda;
 	
 	

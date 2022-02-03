@@ -3,7 +3,7 @@ package com.covidsemfome.module.empresaParceira.model;
 import com.covidsemfome.model.CsfImagem;
 import com.tedros.common.model.TFileEntity;
 import com.tedros.ejb.base.model.ITFileBaseModel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TSelectImageField;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
@@ -33,7 +33,7 @@ public class ImagemMV extends TEntityModelView<CsfImagem> {
 	private SimpleStringProperty display;
 	
 	@TSelectImageField(source=TEnvironment.LOCAL, target=TEnvironment.REMOTE, remoteOwner= {"csf"})
-	@TModelViewCollectionType(modelClass = TFileEntity.class)
+	@TModelViewType(modelClass = TFileEntity.class)
 	private ITObservableList<ITFileBaseModel> files;
 	
 	

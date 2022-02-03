@@ -18,7 +18,7 @@ import com.tedros.fxapi.annotation.control.TDetailListField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TPasswordField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TShowField;
@@ -251,26 +251,26 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 						entityClass=Documento.class, 
 						modelViewClass=DocumentoModelView.class)
 	@TDetailListField(entityModelViewClass = DocumentoModelView.class, entityClass = Documento.class)
-	@TModelViewCollectionType(modelClass=Documento.class, modelViewClass=DocumentoModelView.class)
+	@TModelViewType(modelClass=Documento.class, modelViewClass=DocumentoModelView.class)
 	private ITObservableList<DocumentoModelView> documentos;
 	
 	@TFieldBox(node=@TNode(id="pc", parse = true))
 	@TDetailReaderHtml(label=@TLabel(text="#{label.contacts}"), entityClass=Contato.class, modelViewClass=ContatoModelView.class)
 	@TDetailListField(entityModelViewClass = ContatoModelView.class, entityClass = Contato.class)
-	@TModelViewCollectionType(modelClass=Contato.class, modelViewClass=ContatoModelView.class)
+	@TModelViewType(modelClass=Contato.class, modelViewClass=ContatoModelView.class)
 	private ITObservableList<ContatoModelView> contatos;
 	
 	@TFieldBox(node=@TNode(id="pe", parse = true))
 	@TDetailReaderHtml(label=@TLabel(text="#{label.address}"), entityClass=Endereco.class, modelViewClass=EnderecoModelView.class)
 	@TDetailListField(entityModelViewClass = EnderecoModelView.class, entityClass = Endereco.class)
-	@TModelViewCollectionType(modelClass=Endereco.class, modelViewClass=EnderecoModelView.class)
+	@TModelViewType(modelClass=Endereco.class, modelViewClass=EnderecoModelView.class)
 	private ITObservableList<EnderecoModelView> enderecos;
 	
 	@TFieldBox(node=@TNode(id="pta", parse = true))
 	@TDetailReaderHtml(label=@TLabel(text="Termo de adesão vigente"), entityClass=PessoaTermoAdesao.class, 
 			modelViewClass=PessoaTermoAdesaoModelView.class, modelLayout=TLayoutType.VBOX, fieldsLayout=TLayoutType.VBOX)
 	@TDetailListField(entityModelViewClass = PessoaTermoAdesaoModelView.class, entityClass = PessoaTermoAdesao.class)
-	@TModelViewCollectionType(modelClass=PessoaTermoAdesao.class, modelViewClass=PessoaTermoAdesaoModelView.class)
+	@TModelViewType(modelClass=PessoaTermoAdesao.class, modelViewClass=PessoaTermoAdesaoModelView.class)
 	private ITObservableList<PessoaTermoAdesaoModelView> termosAdesao;
 	
 	private SimpleStringProperty lastPassword;

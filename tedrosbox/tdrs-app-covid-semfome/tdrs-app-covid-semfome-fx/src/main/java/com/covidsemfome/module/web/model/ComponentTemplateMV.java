@@ -9,7 +9,7 @@ import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.annotation.control.TPickListField;
 import com.tedros.fxapi.annotation.control.TTab;
@@ -65,7 +65,7 @@ public class ComponentTemplateMV extends TEntityModelView<ComponentTemplate> {
 			sourceLabel="#{view.cssclass}", 
 			optionsList=@TOptionsList(entityClass=CssClass.class,
 						optionModelViewClass=CssClassMV.class, serviceName = "ICssClassControllerRemote"))
-	@TModelViewCollectionType(modelClass=CssClass.class, modelViewClass=CssClassMV.class)
+	@TModelViewType(modelClass=CssClass.class, modelViewClass=CssClassMV.class)
 	private ITObservableList<CssClassMV> cssClassList;
 
 	

@@ -17,7 +17,7 @@ import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TDetailListField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.annotation.control.TTab;
 import com.tedros.fxapi.annotation.control.TTabPane;
@@ -93,17 +93,17 @@ public class DomainPageMV extends TEntityModelView<Page> {
 	
 	@TFieldBox(node=@TNode(id="md", parse = true))
 	@TDetailListField(entityModelViewClass = MetadataMV.class, entityClass = Metadata.class, region=@TRegion(prefHeight=390, parse = true))
-	@TModelViewCollectionType(modelClass=Metadata.class, modelViewClass=MetadataMV.class)
+	@TModelViewType(modelClass=Metadata.class, modelViewClass=MetadataMV.class)
 	private ITObservableList<MetadataMV> metadatas;
 	
 	@TFieldBox(node=@TNode(id="sc", parse = true))
 	@TDetailListField(entityModelViewClass = ScriptMV.class, entityClass = Script.class)
-	@TModelViewCollectionType(modelClass=Script.class, modelViewClass=ScriptMV.class)
+	@TModelViewType(modelClass=Script.class, modelViewClass=ScriptMV.class)
 	private ITObservableList<ScriptMV> scripts;
 	
 	@TFieldBox(node=@TNode(id="st", parse = true))
 	@TDetailListField(entityModelViewClass = StyleMV.class, entityClass = Style.class)
-	@TModelViewCollectionType(modelClass=Style.class, modelViewClass=StyleMV.class)
+	@TModelViewType(modelClass=Style.class, modelViewClass=StyleMV.class)
 	private ITObservableList<StyleMV> styles;
 
 	public DomainPageMV(Page entity) {

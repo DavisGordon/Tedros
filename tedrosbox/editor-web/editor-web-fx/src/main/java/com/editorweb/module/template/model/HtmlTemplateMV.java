@@ -13,7 +13,7 @@ import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TDetailListField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TTab;
 import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
@@ -91,19 +91,19 @@ public class HtmlTemplateMV extends TEntityModelView<HtmlTemplate> {
 	@TFieldBox(node=@TNode(id="sc", parse = true))
 	@TDetailReaderHtml(label=@TLabel(text="Scripts"), entityClass=Script.class, modelViewClass=ScriptMV.class)
 	@TDetailListField(entityModelViewClass = ScriptMV.class, entityClass = Script.class)
-	@TModelViewCollectionType(modelClass=Script.class, modelViewClass=ScriptMV.class)
+	@TModelViewType(modelClass=Script.class, modelViewClass=ScriptMV.class)
 	private ITObservableList<ScriptMV> scripts;
 	
 	@TFieldBox(node=@TNode(id="st", parse = true))
 	@TDetailReaderHtml(label=@TLabel(text="Styles"), entityClass=Style.class, modelViewClass=StyleMV.class)
 	@TDetailListField(entityModelViewClass = StyleMV.class, entityClass = Style.class)
-	@TModelViewCollectionType(modelClass=Style.class, modelViewClass=StyleMV.class)
+	@TModelViewType(modelClass=Style.class, modelViewClass=StyleMV.class)
 	private ITObservableList<StyleMV> styles;
 
 	@TFieldBox(node=@TNode(id="ct", parse = true))
 	@TDetailReaderHtml(label=@TLabel(text="#{label.components}"), entityClass=ComponentTemplate.class, modelViewClass=ComponentTemplateMV.class)
 	@TDetailListField(entityModelViewClass = ComponentTemplateMV.class, entityClass = ComponentTemplate.class, region=@TRegion(prefHeight=390, parse = true))
-	@TModelViewCollectionType(modelClass=ComponentTemplate.class, modelViewClass=ComponentTemplateMV.class)
+	@TModelViewType(modelClass=ComponentTemplate.class, modelViewClass=ComponentTemplateMV.class)
 	private ITObservableList<ComponentTemplateMV> components;
 	
 	

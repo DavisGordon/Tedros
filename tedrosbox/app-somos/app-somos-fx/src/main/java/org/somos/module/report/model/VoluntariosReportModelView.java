@@ -16,7 +16,7 @@ import com.tedros.fxapi.annotation.control.TCellValueFactory;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TMultipleSelectionModal;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TTableColumn;
@@ -128,7 +128,7 @@ public class VoluntariosReportModelView extends TModelView<VoluntarioReportModel
 	@TVBox(	pane=@TPane(children={"tiposAjuda", "orderBy"}), spacing=10, fillWidth=true,
 	vgrow=@TVGrow(priority={@TPriority(field="tiposAjuda", priority=Priority.ALWAYS),
    				   		@TPriority(field="orderBy", priority=Priority.NEVER) }))
-	@TModelViewCollectionType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class)
+	@TModelViewType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class)
 	private ITObservableList<TipoAjudaModelView> tiposAjuda;
 	
 	@TLabel(text="Ordenar por:")
@@ -160,7 +160,7 @@ public class VoluntariosReportModelView extends TModelView<VoluntarioReportModel
 						@TTableColumn(cellValue="email", text = "Email", resizable=true), 
 						@TTableColumn(cellValue="contatos", text = "Contatos", resizable=true)
 			})
-	@TModelViewCollectionType(modelClass=VoluntarioItemModel.class, modelViewClass=VoluntarioItemTableView.class)
+	@TModelViewType(modelClass=VoluntarioItemModel.class, modelViewClass=VoluntarioItemTableView.class)
 	private ITObservableList<VoluntarioItemTableView> result;
 	
 	

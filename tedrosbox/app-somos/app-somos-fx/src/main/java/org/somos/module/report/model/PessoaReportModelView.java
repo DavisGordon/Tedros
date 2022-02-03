@@ -13,7 +13,7 @@ import com.tedros.fxapi.annotation.control.TCellValueFactory;
 import com.tedros.fxapi.annotation.control.TCheckBoxField;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
@@ -161,7 +161,7 @@ public class PessoaReportModelView extends TModelView<PessoaReportModel>{
 						@TTableColumn(cellValue="email", text = "Email", resizable=true), 
 						@TTableColumn(cellValue="contatos", text = "Contatos", resizable=true)
 			})
-	@TModelViewCollectionType(modelClass=PessoaModel.class, modelViewClass=PessoaModelTableView.class)
+	@TModelViewType(modelClass=PessoaModel.class, modelViewClass=PessoaModelTableView.class)
 	private ITObservableList<PessoaModelTableView> result;
 	
 	

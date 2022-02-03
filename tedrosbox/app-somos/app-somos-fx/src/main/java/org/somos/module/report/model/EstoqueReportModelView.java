@@ -14,7 +14,7 @@ import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TTableColumn;
@@ -137,7 +137,7 @@ public class EstoqueReportModelView extends TModelView<EstoqueReportModel>{
 						@TTableColumn(cellValue="origem", text = "Gerado por", resizable=true), 
 						@TTableColumn(cellValue="cozinha", text = "Cozinha",prefWidth=10, resizable=true)
 			})
-	@TModelViewCollectionType(modelClass=EstoqueModel.class, modelViewClass=EstoqueTableView.class)
+	@TModelViewType(modelClass=EstoqueModel.class, modelViewClass=EstoqueTableView.class)
 	private ITObservableList<EstoqueTableView> result;
 	
 	
