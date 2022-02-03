@@ -11,7 +11,7 @@ import com.tedros.fxapi.annotation.TObservableValue;
 import com.tedros.fxapi.annotation.control.TCheckBoxField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.annotation.control.TPasswordField;
 import com.tedros.fxapi.annotation.control.TPickListField;
@@ -126,7 +126,7 @@ public class TUserModelView extends TEntityModelView<TUser> {
 			sourceLabel="#{label.profiles}", required=true,
 			optionsList=@TOptionsList(entityClass=TProfile.class,
 						optionModelViewClass=TProfileModelView.class, serviceName = "TProfileControllerRemote"))
-	@TModelViewCollectionType(modelClass=TProfile.class, modelViewClass=TProfileModelView.class, required=true)
+	@TModelViewType(modelClass=TProfile.class, modelViewClass=TProfileModelView.class, required=true)
 	private ITObservableList<TProfileModelView> profiles;
 	
 	private SimpleStringProperty lastPassword;

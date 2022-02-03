@@ -20,7 +20,7 @@ import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TShowField;
 import com.tedros.fxapi.annotation.control.TShowField.TField;
 import com.tedros.fxapi.annotation.control.TTab;
@@ -119,7 +119,7 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 			@TTableColumn(cellValue="tipoVoluntario", text = "Tipo", prefWidth=60),
 			@TTableColumn(cellValue="statusVoluntario", text = "Status", prefWidth=60)
 			})
-	@TModelViewCollectionType(modelClass=Voluntario.class, modelViewClass=VoluntarioTableView.class)
+	@TModelViewType(modelClass=Voluntario.class, modelViewClass=VoluntarioTableView.class)
 	private ITObservableList<VoluntarioTableView> voluntarios;
 	
 	@TLabel(text="Destino:")

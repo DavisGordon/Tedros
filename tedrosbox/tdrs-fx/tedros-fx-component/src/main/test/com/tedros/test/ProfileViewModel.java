@@ -119,7 +119,7 @@ public class ProfileViewModel extends TEntityModelView<TCProfile> {
 	
 	/*@TPickListField(required=true, sourceLabel="Perfis", selectedLabel="Perfis selecionados")
 	@TLabel(text="Teste PickList")
-	@TModelViewCollectionType(modelViewClass=ProfileViewModel.class, entityClass=TCProfile.class)
+	@TModelViewType(modelViewClass=ProfileViewModel.class, entityClass=TCProfile.class)
 	private ObservableList<ProfileViewModel> profiles;*/
 	
 	public ProfileViewModel(){

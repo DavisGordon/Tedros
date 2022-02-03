@@ -29,7 +29,7 @@ import com.tedros.ejb.base.entity.ITFileEntity;
 import com.tedros.ejb.base.model.ITFileBaseModel;
 import com.tedros.ejb.base.model.ITFileModel;
 import com.tedros.ejb.base.model.ITModel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.chart.TAreaChartField;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.collections.TFXCollections;
@@ -194,7 +194,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	 *		<b><i>@</i>TDetailView</b>(formTitle="Documents", listTitle = "Document",
 	 *				propertyType=ITObservableList.class, entityClass=Document.class, 
 	 *				entityModelViewClass=DocumentModelView.class)
-	 *		<i>@</i>TModelViewCollectionType(entityClass=Document.class, modelViewClass=DocumentModelView.class)
+	 *		<i>@</i>TModelViewType(entityClass=Document.class, modelViewClass=DocumentModelView.class)
 	 *		private ITObservableList&lt;DocumentModelView&gt; documents;
 	 * 		
 	 * 	
@@ -473,8 +473,8 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 						Class entityClass = null;
 						
 						for(Annotation annotation : field.getDeclaredAnnotations())
-							if(annotation instanceof TModelViewCollectionType ){
-								TModelViewCollectionType tAnnotation = (TModelViewCollectionType) annotation;
+							if(annotation instanceof TModelViewType ){
+								TModelViewType tAnnotation = (TModelViewType) annotation;
 								modelViewClass = tAnnotation.modelViewClass();
 								entityClass = tAnnotation.modelClass();
 							}
@@ -498,7 +498,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 											throw new Exception("\n\nT_ERROR "
 													+ "\nType: "+TErrorType.COLLECTION_CONFIGURATION
 													+ "\nFIELD: "+getClass().getSimpleName() + "."+propertyFieldName
-													+ "\n\n-Use the @TModelViewCollectionType annotation at field "+getClass().getSimpleName() + "."+propertyFieldName+"\n\n");
+													+ "\n\n-Use the @TModelViewType annotation at field "+getClass().getSimpleName() + "."+propertyFieldName+"\n\n");
 										try{
 											if(modelViewClass!=TModelView.class && entityClass!=null)
 												property.add(modelViewClass.getConstructor(entityClass).newInstance(o));
@@ -600,8 +600,36 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 								String literal = v.equals("1") || v.toUpperCase().trim().equals("T") ||  v.toUpperCase().trim().equals("TRUE")  
 												? "true" : "false";
 								property.setValue(new Boolean(literal));
-							}else
+							}else if(obj instanceof ITModel) {
+								Class modelViewClass = null; 
+								Class entityClass = null;
+								
+								for(Annotation annotation : field.getDeclaredAnnotations())
+									if(annotation instanceof TModelViewType ){
+										TModelViewType tAnnotation = (TModelViewType) annotation;
+										modelViewClass = tAnnotation.modelViewClass();
+										entityClass = tAnnotation.modelClass();
+									}
+								try{
+									if(modelViewClass!=TModelView.class && entityClass!=null)
+										property.setValue(modelViewClass.getConstructor(entityClass).newInstance(obj));
+									else
+										property.setValue(obj);
+								}catch(IllegalArgumentException e){
+									String error = "\n\nT_ERROR\nType: "+TErrorType.BUILD
+											+ "\nModel View class: "+modelViewClass.getName()+".class"
+											+ "\nModel View constructor argument type: "+entityClass.getName()+".class"
+											+ "\nModel to bind: "+obj.getClass().getName()+".class"
+											+ "\n\n-Check the configuration of the field "+propertyFieldName+" at "+getClass().getName()+".java\n\n";
+									
+									LOGGER.severe(error);
+									LOGGER.severe(e.toString());
+									
+								}
+
+							}else {
 								property.setValue(obj);
+							}
 						}else
 							property.setValue(null);
 							

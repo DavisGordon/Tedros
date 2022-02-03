@@ -14,7 +14,7 @@ import com.tedros.fxapi.annotation.control.THTMLEditor;
 import com.tedros.fxapi.annotation.control.THyperlinkField;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TListViewField;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
 import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.annotation.control.TPickListField;
@@ -165,7 +165,7 @@ public class SiteConteudoModelView extends TEntityModelView<SiteConteudo>{
 			selectionMode=SelectionMode.MULTIPLE,
 			optionsList=@TOptionsList(entityClass=CssClass.class,
 					optionModelViewClass=CssClassMV.class, serviceName = "ICssClassControllerRemote"))
-	@TModelViewCollectionType(modelClass=CssClass.class, modelViewClass=CssClassMV.class)
+	@TModelViewType(modelClass=CssClass.class, modelViewClass=CssClassMV.class)
 	private ITObservableList<CssClassMV> cssClassList;
 	
 	@TTabPane(tabs = { @TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"editor"})), text = "#{label.edit.content}"),

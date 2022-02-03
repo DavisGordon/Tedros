@@ -13,7 +13,7 @@ import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TTableColumn;
@@ -129,7 +129,7 @@ public class SaidaReportModelView extends TModelView<EstocavelReportModel>{
 						@TTableColumn(cellValue="dataHora", text = "Data/Hora", prefWidth=40, resizable=true),
 						@TTableColumn(cellValue="acao", text = "Ação", resizable=true)
 			})
-	@TModelViewCollectionType(modelClass=EstocavelModel.class, modelViewClass=EstocavelTableView.class)
+	@TModelViewType(modelClass=EstocavelModel.class, modelViewClass=EstocavelTableView.class)
 	private ITObservableList<EstocavelTableView> result;
 	
 	

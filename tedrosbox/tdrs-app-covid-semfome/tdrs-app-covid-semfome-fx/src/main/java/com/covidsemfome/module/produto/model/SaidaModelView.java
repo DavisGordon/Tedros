@@ -19,7 +19,7 @@ import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TDetailListField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TOneSelectionModal;
 import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.annotation.control.TTab;
@@ -134,7 +134,7 @@ public class SaidaModelView extends TEntityModelView<Saida> {
 			entityClass=SaidaItem.class, 
 			modelViewClass=SaidaItemModelView.class)
 	@TDetailListField(entityModelViewClass = SaidaItemModelView.class, entityClass = SaidaItem.class, required=true)
-	@TModelViewCollectionType(modelClass=SaidaItem.class, modelViewClass=SaidaItemModelView.class)
+	@TModelViewType(modelClass=SaidaItem.class, modelViewClass=SaidaItemModelView.class)
 	private ITObservableList<SaidaItemModelView> itens;
 	
 	

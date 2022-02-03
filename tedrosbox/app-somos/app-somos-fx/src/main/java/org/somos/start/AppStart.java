@@ -42,9 +42,6 @@ module = {
 			@TModule(type=AcaoModule.class, name="Ação/Site", menu="Gerenciar Campanha", 
 					icon=AcaoIconImageView.class, menuIcon=AcaoMenuIconImageView.class,
 					description="Administre aqui as ações/campanhas e algumas informações do site"),
-			/*@TModule(type=EmpresaParceiraModule.class, name="Parceiros", menu="Administrativo", 
-					icon=EmpresaParceiraIconImageView.class, menuIcon=EmpresaParceiraMenuIconImageView.class,
-					description="Edite/visualize aqui as empresas parceiras."),*/
 			@TModule(type=MailingModule.class, name="Mailing", menu="Gerenciar Campanha", 
 					icon=MailingIconImageView.class, menuIcon=MailingMenuIconImageView.class,
 					description="Crie e envie e-mails a um grupo de pessoas sobre uma determinada ação."),
@@ -59,9 +56,6 @@ module = {
 					icon=CozinhaIconImageView.class, menuIcon=CozinhaMenuIconImageView.class,
 					description="Edite aqui os locais (cozinhas) de produção, necessario "
 							+ "para editar estoque e inserir entradas e saidas de produtos."),
-			/*@TModule(type=WebModule.class, name="Website Template", menu="Administrativo", 
-					icon=WebTemplateIconImageView.class, menuIcon=WebTemplateMenuIconImageView.class,
-					description="Edite aqui os componentes web para criar a pagina das empresas parceiras"),*/
 			@TModule(type=EstoqueModule.class, name="Estoque", menu="Administrativo", 
 					icon=EstoqueIconImageView.class, menuIcon=EstoqueMenuIconImageView.class,
 					description="Gerencie aqui os produtos as entradas e saídas do estoque, edite o "

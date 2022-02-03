@@ -11,7 +11,7 @@ import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.THTMLEditor;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.annotation.control.TPickListField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
@@ -70,7 +70,7 @@ public class PessoaTermoAdesaoModelView extends TEntityModelView<PessoaTermoAdes
 					optionModelViewClass=TipoAjudaModelView.class,
 					optionProcessType=TOptionProcessType.LIST_ALL,
 					serviceName = "ITipoAjudaControllerRemote"))
-	@TModelViewCollectionType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=true)
+	@TModelViewType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=true)
 	private ITObservableList<TipoAjudaModelView> tiposAjuda;
 	
 	@TLabel(text="Status")

@@ -13,7 +13,7 @@ import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TTableColumn;
@@ -137,7 +137,7 @@ public class EntradaReportModelView extends TModelView<EstocavelReportModel>{
 						@TTableColumn(cellValue="tipo", text = "Tipo", resizable=true),
 						@TTableColumn(cellValue="doador", text = "Doador", resizable=true)
 			})
-	@TModelViewCollectionType(modelClass=EstocavelModel.class, modelViewClass=EstocavelTableView.class)
+	@TModelViewType(modelClass=EstocavelModel.class, modelViewClass=EstocavelTableView.class)
 	private ITObservableList<EstocavelTableView> result;
 	
 	

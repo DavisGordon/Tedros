@@ -22,7 +22,7 @@ import com.tedros.fxapi.annotation.control.TDetailListField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TMultipleSelectionModal;
 import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
@@ -188,7 +188,7 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	@TMultipleSelectionModal(modelClass = TipoAjuda.class, modelViewClass = TipoAjudaFindModelView.class, 
 	width=350, required=false)
 	@TVBox(	pane=@TPane(children={"tiposAjuda", "descricao"}), spacing=10)
-	@TModelViewCollectionType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=false)
+	@TModelViewType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=false)
 	private ITObservableList<TipoAjudaModelView> tiposAjuda;
 	
 	@TReaderHtml
@@ -209,7 +209,7 @@ public class AcaoModelView extends TEntityModelView<Acao> {
 	@TFieldBox(node=@TNode(id="volinscr", parse = true))
 	@TDetailReaderHtml(label=@TLabel(text="Voluntários"), entityClass=Voluntario.class, modelViewClass=VoluntarioDetailView.class)
 	@TDetailListField(entityModelViewClass = VoluntarioDetailView.class, entityClass = Voluntario.class)
-	@TModelViewCollectionType(modelClass=Voluntario.class, modelViewClass=VoluntarioDetailView.class)
+	@TModelViewType(modelClass=Voluntario.class, modelViewClass=VoluntarioDetailView.class)
 	private ITObservableList<VoluntarioDetailView> voluntarios;
 
 	public AcaoModelView(Acao entity) {

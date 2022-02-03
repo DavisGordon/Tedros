@@ -8,7 +8,7 @@ import com.tedros.core.security.model.TUser;
 import com.tedros.fxapi.annotation.TObservableValue;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TPasswordField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.form.TForm;
@@ -72,7 +72,7 @@ public class TUserSettingModelView extends TEntityModelView<TUser> {
 	private SimpleStringProperty language;
 	
 	
-	@TModelViewCollectionType(modelClass=TProfile.class, modelViewClass=TProfileModelView.class, required=true)
+	@TModelViewType(modelClass=TProfile.class, modelViewClass=TProfileModelView.class, required=true)
 	private ITObservableList<TProfileModelView> profiles;
 
 	

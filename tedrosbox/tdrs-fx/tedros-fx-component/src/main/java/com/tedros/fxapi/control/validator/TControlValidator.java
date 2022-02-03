@@ -14,7 +14,7 @@ import com.tedros.core.model.ITModelView;
 import com.tedros.ejb.base.entity.ITFileEntity;
 import com.tedros.ejb.base.model.ITFileModel;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TValidator;
 import com.tedros.fxapi.descriptor.TFieldDescriptor;
 import com.tedros.fxapi.domain.TZeroValidation;
@@ -117,7 +117,7 @@ public final class TControlValidator<E extends ITModelView> {
 				continue;
 			}
 			
-			if (annotation instanceof TModelViewCollectionType && ((TModelViewCollectionType)annotation).modelViewClass()!=TModelView.class){
+			if (annotation instanceof TModelViewType && ((TModelViewType)annotation).modelViewClass()!=TModelView.class){
 				//final TDetailView tAnnotation = (TDetailView) annotation;
 				final TControlValidator validator = new TControlValidator();
 				List<ITModelView> lst = null;

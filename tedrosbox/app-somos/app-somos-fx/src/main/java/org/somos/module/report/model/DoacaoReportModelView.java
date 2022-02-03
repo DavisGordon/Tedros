@@ -14,7 +14,7 @@ import com.tedros.fxapi.annotation.control.TCallbackFactory;
 import com.tedros.fxapi.annotation.control.TCellValueFactory;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TModelViewCollectionType;
+import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.annotation.control.TPickListField;
 import com.tedros.fxapi.annotation.control.TTableColumn;
@@ -102,7 +102,7 @@ public class DoacaoReportModelView extends TModelView<DoacaoReportModel>{
 			sourceLabel="Tipo Ajuda", required=false,
 			optionsList=@TOptionsList(entityClass=TipoAjuda.class,
 						optionModelViewClass=TipoAjudaModelView.class, serviceName = "ITipoAjudaControllerRemote"))
-	@TModelViewCollectionType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=false)
+	@TModelViewType(modelClass=TipoAjuda.class, modelViewClass=TipoAjudaModelView.class, required=false)
 	private ITObservableList<TipoAjudaModelView> tiposAjuda;
 	
 	
@@ -115,7 +115,7 @@ public class DoacaoReportModelView extends TModelView<DoacaoReportModel>{
 						@TTableColumn(cellValue="pessoa", text = "Doador", resizable=true), 
 						@TTableColumn(cellValue="acao", text = "Acão", resizable=true)
 			})
-	@TModelViewCollectionType(modelClass=DoacaoItemModel.class, modelViewClass=DoacaoItemTableView.class)
+	@TModelViewType(modelClass=DoacaoItemModel.class, modelViewClass=DoacaoItemTableView.class)
 	private ITObservableList<DoacaoItemTableView> result;
 	
 	

@@ -1,23 +1,22 @@
 package org.somos.module.acao.model;
 
-import org.somos.model.SiteDoacao;
+import org.somos.model.SiteVoluntario;
 
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
+import com.tedros.ejb.base.model.ITFileBaseModel;
 import com.tedros.fxapi.annotation.TCodeValue;
-import com.tedros.fxapi.annotation.control.TBigDecimalField;
+import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TFieldBox;
+import com.tedros.fxapi.annotation.control.THTMLEditor;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
-import com.tedros.fxapi.annotation.control.TTextField;
-import com.tedros.fxapi.annotation.control.TTextInputControl;
+import com.tedros.fxapi.annotation.control.TSelectImageField;
+import com.tedros.fxapi.annotation.control.TTab;
+import com.tedros.fxapi.annotation.control.TTabPane;
+import com.tedros.fxapi.annotation.form.TDetailForm;
 import com.tedros.fxapi.annotation.form.TForm;
-import com.tedros.fxapi.annotation.layout.THBox;
-import com.tedros.fxapi.annotation.layout.THGrow;
-import com.tedros.fxapi.annotation.layout.TPane;
-import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
@@ -29,34 +28,31 @@ import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.control.TText.TTextStyle;
+import com.tedros.fxapi.domain.TEnvironment;
 import com.tedros.fxapi.domain.THtmlConstant;
 import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
-import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
-@Deprecated
-/*@TFormReaderHtml
-@TForm(name = "Site/Doação", showBreadcrumBar=false)
-@TEjbService(serviceName = "ISiteDoacaoControllerRemote", model=SiteDoacao.class)
-@TListViewPresenter(listViewMinWidth=380, listViewMaxWidth=380,
-	paginator=@TPaginator(entityClass = SiteDoacao.class, serviceName = "ISiteDoacaoControllerRemote", show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Site/Doação")))
-@TSecurity(	id="SOMOS_SITEDOACAO_FORM", 
-	appName = "#{somos.name}", moduleName = "Gerenciar Campanha", viewName = "Site/Doação",
+@TFormReaderHtml
+@TForm(name = "Site/Voluntario", showBreadcrumBar=false)
+@TEjbService(serviceName = "ISiteVoluntarioControllerRemote", model=SiteVoluntario.class)
+@TListViewPresenter(paginator=@TPaginator(entityClass = SiteVoluntario.class, serviceName = "ISiteVoluntarioControllerRemote", show=true),
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Site/Voluntario")))
+@TSecurity(	id="SOMOS_SITEVOLUNTARIO_FORM", 
+	appName = "#{somos.name}", moduleName = "Gerenciar Campanha", viewName = "Site/Voluntario",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
-					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})*/
-public class SiteDoacaoModelView extends TEntityModelView<SiteDoacao>{
+					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
+public class SiteVoluntarioModelView extends TEntityModelView<SiteVoluntario>{
 	
 	private SimpleLongProperty id;
 	
-	@TTextReaderHtml(text="Site/Doação", 
+	@TTextReaderHtml(text="Site/Voluntario", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
@@ -64,31 +60,6 @@ public class SiteDoacaoModelView extends TEntityModelView<SiteDoacao>{
 	@TText(text="Item a ser exibido no site", textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty textoCadastro;
-	
-	
-	@TReaderHtml
-	@TLabel(text="Descrição")
-	@TTextField(maxLength=100, node=@TNode(requestFocus=true, parse = true), required=true)
-	@THBox(	pane=@TPane(children={"descricao","link","valor", "ordem"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="descricao", priority=Priority.ALWAYS), 
-						@TPriority(field="link", priority=Priority.ALWAYS), 
-   				   		@TPriority(field="valor", priority=Priority.NEVER)}))
-	private SimpleStringProperty descricao;
-	
-	@TReaderHtml
-	@TLabel(text="Link")
-	@TTextField(maxLength=400)
-	private SimpleStringProperty link;
-	
-	@TReaderHtml
-	@TLabel(text = "Valor")
-	@TBigDecimalField(textInputControl=@TTextInputControl(promptText="Valor", parse = true))
-	private SimpleDoubleProperty valor;
-	
-	@TReaderHtml
-	@TLabel(text="Ordem")
-	@TNumberSpinnerField(maxValue = 100)
-	private SimpleIntegerProperty ordem;
 	
 	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "Ativado"), 
 			@TCodeValue(code = "DESATIVADO", value = "Desativado")})
@@ -99,8 +70,21 @@ public class SiteDoacaoModelView extends TEntityModelView<SiteDoacao>{
 	})
 	private SimpleStringProperty status;
 	
+	@TLabel(text="Descrição")
+	@TReaderHtml
+	@THTMLEditor(/*required=true*/)
+	@TTabPane(tabs = { @TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"descricao"})), text = "Conteudo"),
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"image"})), text = "Imagem")
+			
+	})
+	private SimpleStringProperty descricao;
 	
-	public SiteDoacaoModelView(SiteDoacao entidade) {
+	@TFieldBox(node=@TNode(id="img", parse = true))
+	@TSelectImageField(source=TEnvironment.LOCAL, target=TEnvironment.REMOTE, remoteOwner="somos")
+	private SimpleObjectProperty<ITFileBaseModel> image;
+	
+	
+	public SiteVoluntarioModelView(SiteVoluntario entidade) {
 		super(entidade);
 	}
 	
@@ -118,7 +102,7 @@ public class SiteDoacaoModelView extends TEntityModelView<SiteDoacao>{
 
 	@Override
 	public SimpleStringProperty getDisplayProperty() {
-		return descricao;
+		return status;
 	}
 
 
@@ -153,39 +137,6 @@ public class SiteDoacaoModelView extends TEntityModelView<SiteDoacao>{
 		this.descricao = descricao;
 	}
 
-
-	/**
-	 * @return the link
-	 */
-	public SimpleStringProperty getLink() {
-		return link;
-	}
-
-
-	/**
-	 * @param link the link to set
-	 */
-	public void setLink(SimpleStringProperty link) {
-		this.link = link;
-	}
-
-
-	/**
-	 * @return the valor
-	 */
-	public SimpleDoubleProperty getValor() {
-		return valor;
-	}
-
-
-	/**
-	 * @param valor the valor to set
-	 */
-	public void setValor(SimpleDoubleProperty valor) {
-		this.valor = valor;
-	}
-
-
 	/**
 	 * @return the status
 	 */
@@ -203,18 +154,18 @@ public class SiteDoacaoModelView extends TEntityModelView<SiteDoacao>{
 
 
 	/**
-	 * @return the ordem
+	 * @return the image
 	 */
-	public SimpleIntegerProperty getOrdem() {
-		return ordem;
+	public SimpleObjectProperty<ITFileBaseModel> getImage() {
+		return image;
 	}
 
 
 	/**
-	 * @param ordem the ordem to set
+	 * @param image the image to set
 	 */
-	public void setOrdem(SimpleIntegerProperty ordem) {
-		this.ordem = ordem;
+	public void setImage(SimpleObjectProperty<ITFileBaseModel> image) {
+		this.image = image;
 	}
 
 
