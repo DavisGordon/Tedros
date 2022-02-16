@@ -157,7 +157,7 @@ public class MailingModelView extends TEntityModelView<Mailing> {
 		super(entity);
 		tituloEmail.setValue("[Covid Sem Fome] "+getModel().getTitulo());
 		conteudo.setValue("Olá #NOME#,<br> precisamos da sua ajuda para a campanha a ser realizada no dia #DATAACAO#, temos #QTDINSCRITOS# inscrito(s) e precisamos de #QTDMINVOL#, você pode se inscrever pelo #LINKPAINEL# em nosso site. <br><br> "
-		+getModel().getDescricao()+"<br><br>Equipe Covid Sem Fome<br>#LINKSITE#");
+		+getModel().getDescricao()+"<br><br>Equipe Social Movement<br>#LINKSITE#");
 		this.loadDisplayText(entity);
 	}
 	

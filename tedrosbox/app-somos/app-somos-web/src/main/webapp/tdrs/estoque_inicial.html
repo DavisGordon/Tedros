@@ -1,0 +1,158 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Tedros Web - Gestão SOMOS</title>
+		<meta charset="utf-8" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="assets/css/menu.css" />
+		<link rel="stylesheet" href="../assets/css/loader.css" />
+		<link rel="stylesheet" href="tdrs.css" />
+		
+		<noscript>
+			<link rel="stylesheet" href="assets/css/noscript.css" />
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		</noscript>
+		<script type="text/javascript">
+		/* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
+		function shm() {
+		  var x = document.getElementById("myTopnav");
+		  if (x.className === "topnav") {
+		    x.className += " responsive";
+		  } else {
+		    x.className = "topnav";
+		  }
+		}
+		</script>
+
+	</head>
+	<body class="is-preload">
+		<div class="topnav" id="myTopnav">
+		  <a href="../painelv.html" class="active"><img src="../images/logo/logo-pb-sob.png" alt="" /></a>
+		  <a href="prod.html" >Editar Produto</a>
+		  <a href="entrada.html" >Estoque / Entrada</a>
+		  <a href="saida.html" >Estoque / Saida</a>
+		  <a href="estoque.html" >Estoque / Visualizar</a>
+		  <a href="#editar" class="smooth-scroll-top">Configurar</a>
+		  <a href="#concluir" class="smooth-scroll-top">Concluir</a>
+		  <a href="javascript:void(0);" class="icon" onclick="shm()">
+		    <i class="fa fa-bars"></i>
+		  </a>
+
+		</div>
+		<!-- Wrapper -->
+		<div id="wrapper" class="divided">
+			<div id="lista"></div>
+			<section class="wrapper style2 align-left color1">
+				<div class="inner">
+				<header>
+					<h3>Pesquisar</h3>
+					<p class="major">Pesquise aqui por registros de saida na base de dados.
+					Caso queira informar uma nova utilização de produtos deslize abaixo ate
+					<a href="#editar">Saida de produtos do estoque</a>.  </p>
+				</header>
+				<div class="content">
+				<form >
+					<div class="fields">
+						<div class="field third">
+							<label for="cozF">Cozinha</label>
+							<select name="cozF" id="cozF">
+							</select>
+						</div>
+					</div>
+					<a href="javascript: filter()" class="button primary fit small icon solid fa-search">Pesquisar</a>
+					</form>
+					<div id="resultadoPesquisa" class="table-wrapper tableFixHead">
+						<table>
+							<thead>
+								<tr>
+									<th>Cod.</th>
+									<th>Produto</th>
+									<th>Cozinha</th>
+									<th>Qtd. Min</th>
+									<th>Qtd. Inicial</th>
+									<th>--</th>
+								</tr>
+							</thead>
+							<tbody id="tContent">
+							</tbody>
+						</table>
+					</div>
+				</div>
+				</div>
+			</section>
+
+			<div id="editar"></div>
+			<section class="wrapper style2 align-left color6">
+				<div class="inner">
+					<h3>Configurar Estoque inicial do produto</h3>
+					<p class="major">Informe aqui a quantidade inicial em estoque do produto
+					e a quantidade minima aceitavel.
+					Para concluir <a href="#concluir">salve os dados informados</a>
+					ou se preferir realize uma <a href="#pesquisar">pesquisa</a>.</p>
+				<div class="content contentLoad">
+					<div id="loader1000" class="loader">
+       					<div id="cssloader1000"><div></div></div>
+       				</div>
+					<form name="frm1000" id="frm1000" autocomplete="off" method="post" action="../api/tdrs/in/save">
+						<input type="hidden" name="idx" id="idx" value="1000" />
+						<div class="fields">
+							<div class="field third">
+								<label for="cozinha">Cozinha</label>
+								<select name="cozinha" id="cozinha">
+								</select>
+							</div>
+							<div class="field half">
+								<label for="produto">Produto</label>
+								<div class="autocomplete" style="width:300px;">
+    								<input id="produto" type="text" name="produto" placeholder="Filtrar pelo nome">
+    								<input type="hidden" name="prodId" id="prodId">
+  								</div>
+							</div>
+							<div class="field half">
+								<label for="quantidade">Quantidade inicial</label>
+								<input type="number" name="qtdInicial" id="qtdInicial" min="0" value="" />
+							</div>
+							<div class="field half">
+								<label for="quantidade">Quantidade minima</label>
+								<input type="number" name="qtdMinima" id="qtdMinima" min="1" value="" />
+							</div>
+							<input type="hidden" name="id" id="id">
+						</div>
+					</form>
+				</div>
+				</div>
+			</section>
+			<div id="concluir"></div>
+			<footer class="wrapper style1 align-center is-inactive ">
+				<div class="inner">
+					<h3>Concluir</h3>
+					<p class="major">Conclua esta tarefa clicando em Salvar ou
+					em Novo para informar uma novo registro.
+					Mas se desejar pode voltar para <a href="#pesquisar">realizar uma pesquisa</a>.</p>
+
+					<ul class="actions">
+						<li><a href="javascript: save()" class="button primary fit">Salvar</a></li>
+						<li><a href="javascript:newReg()" class="button  fit">Novo</a></li>
+					</ul>
+				</div>
+			</footer>
+
+
+			</div>
+	<!-- Scripts -->
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			<script src="estoque_inicial-full.js"></script>
+
+
+</body>
+</html>

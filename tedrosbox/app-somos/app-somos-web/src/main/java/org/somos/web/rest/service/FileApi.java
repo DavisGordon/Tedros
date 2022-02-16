@@ -58,6 +58,7 @@ public class FileApi {
                     .build();
         }
         catch ( Exception e ) {
+        	e.printStackTrace();
             return Response.status( Response.Status.NOT_FOUND ).entity( e.getMessage() ).build();
         }
     }

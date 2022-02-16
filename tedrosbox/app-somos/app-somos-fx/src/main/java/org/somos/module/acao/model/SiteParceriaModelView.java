@@ -45,23 +45,15 @@ import javafx.scene.text.TextAlignment;
 @TForm(name = "Site/Parceria", showBreadcrumBar=false)
 @TEjbService(serviceName = "ISiteParceriaControllerRemote", model=SiteParceria.class)
 @TListViewPresenter(paginator=@TPaginator(entityClass = SiteParceria.class, serviceName = "ISiteParceriaControllerRemote", show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Site/Parceria")))
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Site/Parceria", buildModesRadioButton=false)))
 @TSecurity(	id="SOMOS_SITEPARCERIA_FORM", 
 	appName = "#{somos.name}", moduleName = "Gerenciar Campanha", viewName = "Site/Parceria",
-	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
+	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class SiteParceriaModelView extends TEntityModelView<SiteParceria>{
 	
 	private SimpleLongProperty id;
 	
-	@TTextReaderHtml(text="Site/Parceria", 
-			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
-			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
-			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Item a ser exibido no site", textAlignment=TextAlignment.LEFT, 
-			textStyle = TTextStyle.LARGE)
-	private SimpleStringProperty textoCadastro;
 	
 	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "Ativado"), 
 			@TCodeValue(code = "DESATIVADO", value = "Desativado")})
@@ -74,7 +66,8 @@ public class SiteParceriaModelView extends TEntityModelView<SiteParceria>{
 	
 	@TLabel(text="Descrição")
 	@TReaderHtml
-	@THTMLEditor(/*required=true*/)
+	//@THTMLEditor(/*required=true*/)
+	@TTextAreaField(wrapText=true, control=@TControl(prefHeight=400, parse = true))
 	@TTabPane(tabs = { @TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"descricao"})), text = "Conteudo"),
 			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"image"})), text = "Imagem")
 			
@@ -106,23 +99,6 @@ public class SiteParceriaModelView extends TEntityModelView<SiteParceria>{
 	public SimpleStringProperty getDisplayProperty() {
 		return status;
 	}
-
-
-	/**
-	 * @return the textoCadastro
-	 */
-	public SimpleStringProperty getTextoCadastro() {
-		return textoCadastro;
-	}
-
-
-	/**
-	 * @param textoCadastro the textoCadastro to set
-	 */
-	public void setTextoCadastro(SimpleStringProperty textoCadastro) {
-		this.textoCadastro = textoCadastro;
-	}
-
 
 	/**
 	 * @return the descricao

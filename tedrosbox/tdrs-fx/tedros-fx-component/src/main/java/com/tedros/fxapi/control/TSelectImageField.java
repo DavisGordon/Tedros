@@ -353,9 +353,6 @@ public class TSelectImageField extends TRequiredSelectImage{
 		
 		// model property only one file can be selected
 		if(tModelProperty!=null) {
-			if(tModelProperty.getValue()!=null && tSelectedFileList.isEmpty()) {
-				addTarget(tModelProperty.getValue());
-			}
 			ChangeListener<ITFileBaseModel> modChl = (a,b,n)->{
 				if(n!=null) {
 					addTarget(n);
@@ -364,6 +361,10 @@ public class TSelectImageField extends TRequiredSelectImage{
 			};
 			repo.add("modChl", modChl);
 			tModelProperty.addListener(modChl);
+			
+			if(tModelProperty.getValue()!=null && tSelectedFileList.isEmpty()) {
+				addTarget(tModelProperty.getValue());
+			}
 		}
 		
 	}

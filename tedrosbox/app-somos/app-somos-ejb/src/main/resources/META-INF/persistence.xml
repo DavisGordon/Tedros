@@ -37,12 +37,14 @@
 		<class>org.somos.model.SiteContato</class>
 		<class>org.somos.model.SiteNoticia</class>
 		<class>org.somos.model.SiteTermo</class>
-		<class>org.somos.model.CsfImagem</class>
 		<class>org.somos.model.SiteParceria</class>
 		<class>org.somos.model.SiteVoluntario</class>
 		<class>org.somos.model.SiteSMDoacao</class>
 		<class>org.somos.model.SiteDoacaoTransferencia</class>
 		<class>org.somos.model.SitePontoColeta</class>
+		<class>org.somos.model.SiteEquipe</class>
+		<class>org.somos.model.SiteGaleria</class>
+		<class>org.somos.model.SiteMidiaSocial</class>
 		
 		<properties>
 		

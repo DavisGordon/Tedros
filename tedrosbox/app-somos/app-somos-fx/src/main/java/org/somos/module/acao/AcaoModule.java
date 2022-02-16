@@ -6,9 +6,12 @@ package org.somos.module.acao;
 import org.somos.module.acao.model.AcaoModelView;
 import org.somos.module.acao.model.SiteAboutModelView;
 import org.somos.module.acao.model.SiteContatoModelView;
+import org.somos.module.acao.model.SiteEquipeModelView;
+import org.somos.module.acao.model.SiteGaleriaModelView;
 import org.somos.module.acao.model.SiteNoticiaModelView;
 import org.somos.module.acao.model.SiteParceriaModelView;
 import org.somos.module.acao.model.SiteSMDoacaoModelView;
+import org.somos.module.acao.model.SiteSocialMidiaModelView;
 import org.somos.module.acao.model.SiteTermoModelView;
 import org.somos.module.acao.model.SiteVideoModelView;
 import org.somos.module.acao.model.SiteVoluntarioModelView;
@@ -40,10 +43,13 @@ public class AcaoModule extends TModule {
 				new TViewItem(TDynaGroupView.class, SiteContatoModelView.class, "Site/Home/Contatos"),
 				new TViewItem(TDynaGroupView.class, SiteVideoModelView.class, "Site/Home/Videos"),
 				new TViewItem(TDynaGroupView.class, SiteNoticiaModelView.class, "Site/Home/Noticias"),
+				new TViewItem(TDynaGroupView.class, SiteEquipeModelView.class, "Site/Home/Equipe"),
 				new TViewItem(TDynaGroupView.class, SiteTermoModelView.class, "Site/Meu Painel/Termo"),
+				new TViewItem(TDynaGroupView.class, SiteGaleriaModelView.class, "Site/Galeria"),
 				new TViewItem(TDynaGroupView.class, SiteSMDoacaoModelView.class, "Site/Doações"),
 				new TViewItem(TDynaGroupView.class, SiteParceriaModelView.class, "Site/Parceria"),
-				new TViewItem(TDynaGroupView.class, SiteVoluntarioModelView.class, "Site/Voluntario")
+				new TViewItem(TDynaGroupView.class, SiteVoluntarioModelView.class, "Site/Voluntario"),
+				new TViewItem(TDynaGroupView.class, SiteSocialMidiaModelView.class, "Site/Rodapé/Siga nos")
 				));
 	}
 

@@ -26,6 +26,7 @@ import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TSelectImageField;
 import com.tedros.fxapi.annotation.control.TTab;
 import com.tedros.fxapi.annotation.control.TTabPane;
+import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.form.TDetailForm;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
@@ -57,10 +58,10 @@ import javafx.scene.text.TextAlignment;
 @TForm(name = "Site/Doações", showBreadcrumBar=false)
 @TEjbService(serviceName = "ISiteSMDoacaoControllerRemote", model=SiteSMDoacao.class)
 @TListViewPresenter(paginator=@TPaginator(entityClass = SiteSMDoacao.class, serviceName = "ISiteSMDoacaoControllerRemote", show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Site/Doações")))
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Site/Doações", buildModesRadioButton=false)))
 @TSecurity(	id="SOMOS_SITEDOACOES_FORM", 
 	appName = "#{somos.name}", moduleName = "Gerenciar Campanha", viewName = "Site/Doações",
-	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
+	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class SiteSMDoacaoModelView extends TEntityModelView<SiteSMDoacao>{
 	
@@ -77,7 +78,8 @@ public class SiteSMDoacaoModelView extends TEntityModelView<SiteSMDoacao>{
 	
 	@TLabel(text="Descrição")
 	@TReaderHtml
-	@THTMLEditor(/*required=true*/control=@TControl(prefHeight=300, parse = true))
+	//@THTMLEditor(/*required=true*/control=@TControl(prefHeight=300, parse = true))
+	@TTextAreaField(wrapText=true, control=@TControl(prefHeight=400, parse = true))
 	@TTabPane(tabs = { @TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"descricao"})), text = "Conteudo"),
 			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"image"})), text = "Imagem"),
 			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"pontosColeta"})), text = "Pontos de coleta"),

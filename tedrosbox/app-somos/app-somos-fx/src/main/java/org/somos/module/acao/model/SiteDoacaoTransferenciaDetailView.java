@@ -10,6 +10,7 @@ import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TSelectImageField;
 import com.tedros.fxapi.annotation.control.TTab;
 import com.tedros.fxapi.annotation.control.TTabPane;
+import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.form.TDetailForm;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
@@ -27,7 +28,8 @@ public class SiteDoacaoTransferenciaDetailView extends TEntityModelView<SiteDoac
 	
 	@TLabel(text="Descrição")
 	@TReaderHtml
-	@THTMLEditor(/*required=true*/control=@TControl(prefHeight=250, parse = true))
+	//@THTMLEditor(/*required=true*/control=@TControl(prefHeight=250, parse = true))
+	@TTextAreaField(wrapText=true, control=@TControl(prefHeight=250, parse = true))
 	@TTabPane(tabs = { @TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"descricao"})), text = "Conteudo"),
 			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"image"})), text = "Imagem")
 			

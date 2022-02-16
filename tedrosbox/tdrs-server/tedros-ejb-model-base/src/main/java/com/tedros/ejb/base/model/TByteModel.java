@@ -20,7 +20,6 @@ public class TByteModel implements ITByteModel, Serializable {
 	private static final long serialVersionUID = 940276317128115769L;
 	private byte[] bytes;
 	
-	
 	@Override
 	public byte[] getBytes() {
 		return bytes;

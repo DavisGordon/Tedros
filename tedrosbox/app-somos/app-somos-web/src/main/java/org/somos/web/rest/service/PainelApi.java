@@ -339,7 +339,7 @@ public class PainelApi {
 			info.put("nome", WordUtils.capitalizeFully(p.getNome()));
 			info.put("status", p.getStatusVoluntario());
 			info.put("sexo", p.getSexo());
-			
+			info.put("estrategico", Boolean.toString(p.isVoluntarioEstrategico()));
 			return new RestModel<>(info, "200", "OK");
 		}catch (Exception e) {
 			return new RestModel<>(null, "500", error.getValue());

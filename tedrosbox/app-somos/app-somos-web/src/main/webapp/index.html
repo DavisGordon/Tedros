@@ -40,18 +40,15 @@
 					<nav id="menu">
 						<h2>Menu</h2>
 						<ul>
-							<!-- <li><a href="index.html">Home</a></li> -->
 							<li><a href="#intro">Introducão</a></li>
-							<!-- <li><a href="#videos">Vídeos</a></li> -->
 							<li><a href="#acoes">Ações</a></li>
 							<li><a href="#contatos">Contatos</a></li>
 							<li><a href="#parceiros">Parceiros</a></li>
-							<li><a href="#equipe">Equipe</a></li>
 							<li><a href="doacoes.html">Doações</a></li>
 							<li><a href="parceria.html">Parceria</a></li>
 							<li><a href="voluntario.html">Voluntário</a></li>
+							<li><a href="mural.html">Mural</a></li>
 							<li><a href="painelv.html">Meu painel</a></li>
-							<!-- <li><a href="elements.html">Elements</a></li> -->
 						</ul>
 					</nav>
 
@@ -66,10 +63,10 @@
 										movidas a tentar ajudar o próximo com nosso tempo, 
 										energia e conhecimento. 
 										Aqui encontrará toda informação sobre a ONG, como surgiu,
-										Oque fazemos, Como e Onde. 
+										O que fazemos, Como e Onde. 
 										Quando estiver a vontade, venha ajudar, <span class="somos">SOMOS</span> o apoio de que 
-										muitos precisam. Doe, patrocine seja um voluntario, faça a 
-										diferença não seje indiferente!
+										muitos precisam. Doe, patrocine seja um voluntário, faça a 
+										diferença não fique indiferente!
 										</p>
 								</template>
 								<template id="welcomeLoggedUserTemplate">
@@ -123,11 +120,13 @@
 							<section id="intro">
 								<div class="box alt">
 									<div class="row gtr-uniform">
-										<div class="col-12">
-											<span class="image fit">
-												<img src="images/pic/pic1.2.jpg" alt="" />
-											</span>
-										</div>
+										<template id="aboutImgTemplate">
+											<div class="col-12">
+												<span class="image fit">
+													<img id="aboutImg" src="" alt="" />
+												</span>
+											</div>
+										</template>
 										<div class="col-12">
 											<p id="aboutContent" class="sm-txt"></p>
 										</div>
@@ -186,7 +185,7 @@
 												<p class="sm-txt-bold"></p>
 												<p class="sm-txt"></p>
 												<ul class="actions fit small">
-													<li><a href="#" class="button primary fit">Participar</a></li>
+													<li><a href="voluntario.html" class="button primary fit">Participar</a></li>
 												</ul>
 												<hr>
 											</div>
@@ -225,46 +224,13 @@
 							<section>
 								<div class="box alt">
 									<div class="row gtr-uniform">
-										<div class="col-4 col-12-small">
-											<span class="image fit">
-												<img src="images/parceiro/par3.png" />
-											</span>
-										</div>
-										<div class="col-4 col-12-small">
-											<span class="image fit">
-												<img src="images/parceiro/par2.png" />
-											</span>
-										</div>
-										<div class="col-4 col-12-small">
-											<span class="image fit">
-												<img src="images/parceiro/par4.png" />
-											</span>
-										</div>
-										<div class="col-4 col-12-small">
-											<span class="image fit">
-												<img src="images/parceiro/par1.png" />
-											</span>
-										</div>
-										<div class="col-4 col-12-small">
-											<span class="image fit">
-												<img src="images/parceiro/par5.png" />
-											</span>
-										</div>
-										<div class="col-4 col-12-small">
-											<span class="image fit">
-												<img src="images/parceiro/par6.png" />
-											</span>
-										</div>
-										<div class="col-4 col-12-small">
-											<span class="image fit">
-												<img src="images/parceiro/par7.png" />
-											</span>
-										</div>
-										<div class="col-4 col-12-small">
-											<span class="image fit">
-												<img alt="Tedros" src="images/parceiro/tedros.png" />
-											</span>
-										</div>
+										<template id="parceiroTemplate">
+											<div class="col-4 col-12-small">
+												<span class="image">
+													<img class="logo-par" src="" />
+												</span>
+											</div>
+										</template>
 									</div>
 								</div>
 							</section>
@@ -277,7 +243,17 @@
 								<span class="sm-title">Equipe estratégica voluntária</span>
 							</header>
 							<section>
-								<p><span class="image left"><img src="images/vol/vjac.png" alt="" /></span>
+								<template id="equipeTemplate">
+									<div>
+										<p>
+											<span class="image left"><img class="avatar" src="" alt="" /></span>
+											 <h3 class="nomev"></h3> 
+											 <span class="sm-txt-italic" style="color: red;"></span><br>
+											 <span class="sm-txt"></span>
+										</p>
+									</div>
+								</template>
+								<!--<p><span class="image left"><img src="images/vol/vjac.png" alt="" /></span>
 								 <h3>Jacqueline Dun</h3> <span class="sm-txt-italic" style="color: red;">administrativo / financeiro / parcerias</span><br>
 								 <span class="sm-txt">Graduada em Biomedicina, com pós-graduação na Fundação Oswaldo Cruz e Monitoria de Ensaios Clínicos. 
 								 Jacqueline atua na área de pesquisa e é especialista em Gestão de saúde publica e privada. 
@@ -343,7 +319,7 @@
 								 <span class="sm-txt">Diretor, ator e editor. Igor começou sua carreira nos anos 90 com publicidade e se formou em cinema em 2006. 
 								  Foi então que passou a produzir, editar e dirigir filmes publicitários em importantes produtoras. Hoje, Igor é 
 								  assistente de direção na Rede Globo e atua como diretor artístico em produtoras parceiras. </span>
-								 </p>	
+								 </p>	-->
 							</section>
 						</div>
 					</div>
@@ -351,15 +327,17 @@
 				<!-- Footer -->
 					<footer id="footer">
 						<div class="inner">
-							<section>
-								<h2>Siga nos</h2>
-								<ul class="icons">
-									<li><a href="#" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a></li>
-									<li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
-									<li><a href="#" class="icon solid style2 fa-phone"><span class="label">Phone</span></a></li>
-									<li><a href="#" class="icon solid style2 fa-envelope"><span class="label">Email</span></a></li>
-								</ul>
-							</section>
+							<template id="siganosTemplate">
+								<section>
+									<h2>Siga nos</h2>
+									<ul id="siganosContent" class="icons">
+										<!--<li><a href="#" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a></li>
+										<li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
+										<li><a href="#" class="icon solid style2 fa-phone"><span class="label">Phone</span></a></li>
+										<li><a href="#" class="icon solid style2 fa-envelope"><span class="label">Email</span></a></li>-->
+									</ul>
+								</section>
+							</template>
 							<ul class="copyright">
 								<li>&copy; SOMOS. All rights reserved</li>
 								<li>Desenvolvido por: <a href="https://www.linkedin.com/in/davis-gordon-dun">Davis Gordon Dun</a>
@@ -378,6 +356,7 @@
 			<script src="assets/js/main.js"></script>
 			<script src="assets/js/jquery.form.js"></script>
 			<script src="assets/js/sm-full.js"></script>
+			<script src="assets/js/footer.js"></script>
 
 	</body>
 </html>

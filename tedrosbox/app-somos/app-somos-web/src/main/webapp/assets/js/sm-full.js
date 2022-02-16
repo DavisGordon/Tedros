@@ -3,8 +3,74 @@ $(document).ready(function() {
 	carregarAbout();
 	carregarVideos();
 	carregarContatos();
+	loadParceiro();
+	loadEquipe();
+	loadFooter();
 });
 
+function buildParceiro(l){
+	if(l){
+		l.forEach(function (o){
+			let t = $($('#parceiroTemplate').html());
+			if(o.image)
+				$('.logo-par', t).prop('src', 'api/f/i/'+o.image);
+			$('#parceiroTemplate').before(t);
+		});
+	}
+}
+
+function loadParceiro(){
+	$.ajax
+    ({ 
+        url: 'api/sm/galeria/p',
+        type: 'get',
+        dataType:'json',
+        headers : {'Content-Type' : 'application/json'},
+        success: function(r)
+        {
+        	buildParceiro(r.data);
+    	},
+		statusCode: {
+		    404: function() {
+		    }
+		  }
+	}); 
+}
+
+
+function buildEquipe(l){
+	if(l){
+		l.forEach(function (o){
+		let t = $($('#equipeTemplate').html());
+		$('.nomev', t).html(o.nome);
+		$('.sm-txt-italic', t).html(o.cargo);
+		$('.sm-txt', t).html(o.descricao);
+		if(o.image)
+		$('.avatar', t).prop('src', 'api/f/i/'+o.image);
+		
+		$('#equipeTemplate').before(t);
+		});
+		
+	}
+}
+
+function loadEquipe(){
+	$.ajax
+    ({ 
+        url: 'api/sm/equipe',
+        type: 'get',
+        dataType:'json',
+        headers : {'Content-Type' : 'application/json'},
+        success: function(r)
+        {
+        	buildEquipe(r.data);
+    	},
+		statusCode: {
+		    404: function() {
+		    }
+		  }
+	}); 
+}
 
 function buildPage(n){
 	if(n){
@@ -146,9 +212,13 @@ function ltpj(callBack){
 	}); 
 }
 
-
-function setAbout(txt){
-	$("#aboutContent").html(txt);
+function setAbout(obj){
+	if(obj.image){
+		let t = $($('#aboutImgTemplate').html());
+		$('#aboutImg', t).prop('src', 'api/f/i/'+obj.image);
+		$('#aboutImgTemplate').before(t);
+	}
+	$("#aboutContent").html(obj.descricao);
 	$("#aboutContent:contains('SOMOS')").html(function(_, html) {
 	   return html.replace(/(SOMOS)/g, '<span class="somos">$1</span>');
 	});
@@ -165,7 +235,7 @@ function carregarAbout(){
 		{
 			if(result.code == "200"){
 				 if(result.data){
-					setAbout(result.data.descricao);
+					setAbout(result.data);
 				 }
 			}
 		}

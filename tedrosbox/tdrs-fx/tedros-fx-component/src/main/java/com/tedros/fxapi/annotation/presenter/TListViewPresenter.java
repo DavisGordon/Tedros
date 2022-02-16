@@ -23,6 +23,7 @@ public @interface TListViewPresenter {
 	
 	public double listViewMaxWidth() default 250;
 	public double listViewMinWidth() default 250;
+	public boolean refreshListViewAfterActions() default false;
 	
 	public TPaginator paginator() default @TPaginator(entityClass = ITEntity.class, serviceName = "");
 	

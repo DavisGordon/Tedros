@@ -44,6 +44,7 @@
 							<li><a href="doacoes.html">Doações</a></li>
 							<li><a href="parceria.html">Parceria</a></li>
 							<li><a href="voluntario.html">Voluntario</a></li>
+							<li><a href="mural.html">Mural</a></li>
 						</ul>
 					</nav>
 
@@ -57,20 +58,20 @@
 								<div class="box alt">
 									<div class="row gtr-uniform">
 										<template id="welcomeTemplate">
-										<div class="col-12">
-											<p class="sm-txt">
-												<span class="image right">
-													<img  src="images/icon/icon2.jpg" alt="" />
-												</span>
-												Olá <span id="userLogged" class="sm-txt-bold"></span>, que alegria ver você aqui.<br>
-												Este é o seu painel, aqui você pode informar seus dados pessoais.<br> 
-												Para uma melhor experiencia sua sessão permanecera aberta e somente sera encerrada 
-												se realizar o logout pelo botão abaixo.
-											</p>
-											<ul class="actions">
-												<li><a href="javascript: logout()" class="button fit primary">Logout</a></li>
-											</ul>
-										</div>
+											<div class="col-12">
+												<p class="sm-txt">
+													<span class="image right">
+														<img  src="images/icon/icon2.jpg" alt="" />
+													</span>
+													Olá <span id="userLogged" class="sm-txt-bold"></span>, que alegria ver você aqui.<br>
+													Este é o seu painel, aqui você pode informar seus dados pessoais.<br> 
+													Para uma melhor experiencia sua sessão permanecera aberta e somente sera encerrada 
+													se realizar o logout pelo botão abaixo.
+												</p>
+												<ul id="painelActions" class="actions">
+													<li><a href="javascript: logout()" class="button fit primary">Logout</a></li>
+												</ul>
+											</div>
 										</template>
 										<template id="loginTemplate">
 										<div id="loginCol" class="col-12">
@@ -98,7 +99,6 @@
 														<li>Para definir uma nova senha clique <a href="javascript: newpass()" >aqui</a></li>
 													</ul>
 												</form>
-												
 											</p>
 										</div>
 									</template>
@@ -215,15 +215,17 @@
 				<!-- Footer -->
 					<footer id="footer">
 						<div class="inner">
-							<section>
-								<h2>Siga nos</h2>
-								<ul class="icons">
-									<li><a href="#" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a></li>
-									<li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
-									<li><a href="#" class="icon solid style2 fa-phone"><span class="label">Phone</span></a></li>
-									<li><a href="#" class="icon solid style2 fa-envelope"><span class="label">Email</span></a></li>
-								</ul>
-							</section>
+							<template id="siganosTemplate">
+								<section>
+									<h2>Siga nos</h2>
+									<ul id="siganosContent" class="icons">
+										<!--<li><a href="#" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a></li>
+										<li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
+										<li><a href="#" class="icon solid style2 fa-phone"><span class="label">Phone</span></a></li>
+										<li><a href="#" class="icon solid style2 fa-envelope"><span class="label">Email</span></a></li>-->
+									</ul>
+								</section>
+							</template>
 							<ul class="copyright">
 								<li>&copy; SOMOS. All rights reserved</li>
 								<li>Desenvolvido por: <a href="https://www.linkedin.com/in/davis-gordon-dun">Davis Gordon Dun</a>
@@ -242,6 +244,7 @@
 			<script src="assets/js/main.js"></script>
     		<script src="assets/js/jquery.form.js"></script> 
 			<script src="assets/js/painelv.js"></script>
+			<script src="assets/js/footer.js"></script>
 
 	</body>
 </html>

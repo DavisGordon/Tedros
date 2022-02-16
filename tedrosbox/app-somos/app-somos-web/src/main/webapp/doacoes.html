@@ -42,7 +42,8 @@
 							<li><a href="index.html">Home</a></li>
 							<li><a href="voluntario.html">Voluntário</a></li>
 							<li><a href="parceria.html">Parceria</a></li>
-							<li><a href="index.html">Meu painel</a></li>
+							<li><a href="mural.html">Mural</a></li>
+							<li><a href="painelv.html">Meu painel</a></li>
 						</ul>
 					</nav>
 
@@ -57,27 +58,27 @@
 									<div class="row gtr-uniform">
 										<div class="col-12">
 											<p class="sm-txt">
-												<span class="image right">
-													<img src="images/campanha/pontocoleta.png" alt="" /></span>
-												Text introdutorio <br>
-												Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus euismod. 
-												Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac 
-												adipiscing accumsan faucibus. Vestibulum ante ipsum primis in faucibus lorem ipsum dolor sit amet 
-												nullam adipiscing eu felis.</p>
+												<template id="doaImgTemplate">
+													<span class="image right">
+														<img id="doaImg" src="" alt="" />
+													</span>
+												</template>
+												<span id="doaContent"></span>
+											</p>
+											<template id="ponColTemplate">
 											<span class="sm-title">Pontos de coleta</span>
-											<ul>
-												<li class="sm-txt">Café do alto - Rua Paschoal Carlos Magno, 143 - Santa Teresa;</li>
-												<li class="sm-txt">Rio Tap Beer House - Travessa dos Tamoios, 32 - LOJA B e C - Flamengo;</li>
-												<li class="sm-txt">Belga Burguer - Rua Adalberto Ferreira, Praça Cláudio Coutinho, 177 - Leblon.</li>
-											</ul>
+											<ul id="ponColContent"></ul>
+											</template>
 										</div>
 										<div class="col-12">
 											<span class="sm-title">Transferencia bancaria</span>
 											<p class="sm-txt">
-												<span class="image left"><img src="images/campanha/picpay.png" alt="" /></span>
-												Para doações em dinheiro utilize:<br>
-												Pix :164.307.437-72<br>
-												PicPay: @covidsemfome
+												<template id="traImgTemplate">
+													<span class="image left">
+														<img id="traImg" src="" alt="" />
+													</span>
+												</template>
+												<span id="traContent"></span>
 											</p>
 										</div>
 										
@@ -90,15 +91,17 @@
 				<!-- Footer -->
 					<footer id="footer">
 						<div class="inner">
-							<section>
-								<h2>Siga nos</h2>
-								<ul class="icons">
-									<li><a href="#" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a></li>
-									<li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
-									<li><a href="#" class="icon solid style2 fa-phone"><span class="label">Phone</span></a></li>
-									<li><a href="#" class="icon solid style2 fa-envelope"><span class="label">Email</span></a></li>
-								</ul>
-							</section>
+							<template id="siganosTemplate">
+								<section>
+									<h2>Siga nos</h2>
+									<ul id="siganosContent" class="icons">
+										<!--<li><a href="#" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a></li>
+										<li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
+										<li><a href="#" class="icon solid style2 fa-phone"><span class="label">Phone</span></a></li>
+										<li><a href="#" class="icon solid style2 fa-envelope"><span class="label">Email</span></a></li>-->
+									</ul>
+								</section>
+							</template>
 							<ul class="copyright">
 								<li>&copy; SOMOS. All rights reserved</li>
 								<li>Desenvolvido por: <a href="https://www.linkedin.com/in/davis-gordon-dun">Davis Gordon Dun</a>
@@ -115,6 +118,8 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<script src="assets/js/sm-d-full.js"></script>
+			<script src="assets/js/footer.js"></script>
 
 	</body>
 </html>

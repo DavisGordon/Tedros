@@ -81,7 +81,26 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 					getView().tShowModal(new TMessageBox(e), true);
 					e.printStackTrace();
 				}
+				
+				/*if(tAnnotation.refreshListViewAfterActions()) {
+					TPresenterAction a = new TPresenterAction(TActionType.SAVE, TActionType.DELETE) {
+
+						@Override
+						public boolean runBefore() {
+							// TODO Auto-generated method stub
+							return false;
+						}
+
+						@Override
+						public void runAfter() {
+							loadModels();
+						}
+					};
+					super.addAction(a);
+				}*/
 			}
+			
+			
 			
 			loadModels();
 		}

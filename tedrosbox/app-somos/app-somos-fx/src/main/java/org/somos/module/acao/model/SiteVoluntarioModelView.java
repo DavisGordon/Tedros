@@ -15,6 +15,7 @@ import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TSelectImageField;
 import com.tedros.fxapi.annotation.control.TTab;
 import com.tedros.fxapi.annotation.control.TTabPane;
+import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.form.TDetailForm;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
@@ -25,6 +26,7 @@ import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
+import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.control.TText.TTextStyle;
@@ -43,23 +45,14 @@ import javafx.scene.text.TextAlignment;
 @TForm(name = "Site/Voluntario", showBreadcrumBar=false)
 @TEjbService(serviceName = "ISiteVoluntarioControllerRemote", model=SiteVoluntario.class)
 @TListViewPresenter(paginator=@TPaginator(entityClass = SiteVoluntario.class, serviceName = "ISiteVoluntarioControllerRemote", show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Site/Voluntario")))
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Site/Voluntario", buildModesRadioButton=false)))
 @TSecurity(	id="SOMOS_SITEVOLUNTARIO_FORM", 
 	appName = "#{somos.name}", moduleName = "Gerenciar Campanha", viewName = "Site/Voluntario",
-	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
+	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class SiteVoluntarioModelView extends TEntityModelView<SiteVoluntario>{
 	
 	private SimpleLongProperty id;
-	
-	@TTextReaderHtml(text="Site/Voluntario", 
-			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
-			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
-			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Item a ser exibido no site", textAlignment=TextAlignment.LEFT, 
-			textStyle = TTextStyle.LARGE)
-	private SimpleStringProperty textoCadastro;
 	
 	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "Ativado"), 
 			@TCodeValue(code = "DESATIVADO", value = "Desativado")})
@@ -72,7 +65,8 @@ public class SiteVoluntarioModelView extends TEntityModelView<SiteVoluntario>{
 	
 	@TLabel(text="Descrição")
 	@TReaderHtml
-	@THTMLEditor(/*required=true*/)
+	//@THTMLEditor(/*required=true*/)
+	@TTextAreaField(wrapText=true, control=@TControl(prefHeight=400, parse = true))
 	@TTabPane(tabs = { @TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"descricao"})), text = "Conteudo"),
 			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"image"})), text = "Imagem")
 			
@@ -105,21 +99,6 @@ public class SiteVoluntarioModelView extends TEntityModelView<SiteVoluntario>{
 		return status;
 	}
 
-
-	/**
-	 * @return the textoCadastro
-	 */
-	public SimpleStringProperty getTextoCadastro() {
-		return textoCadastro;
-	}
-
-
-	/**
-	 * @param textoCadastro the textoCadastro to set
-	 */
-	public void setTextoCadastro(SimpleStringProperty textoCadastro) {
-		this.textoCadastro = textoCadastro;
-	}
 
 
 	/**

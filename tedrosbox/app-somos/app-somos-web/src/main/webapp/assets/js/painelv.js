@@ -1,25 +1,8 @@
 $(document).ready(function() { 
 	loadUserInfo();
+	loadFooter();
 });
 
-
-function logout(){
-	$.ajax
-    ({ 
-        url: 'api/painel/logout',
-        type: 'get',
-        dataType:'json',
-        headers : {'Content-Type' : 'application/json'},
-        success: function(result)
-        {
-        	if(result.code == "200"){
-        		location.href = 'painelv.html';
-        	}else{
-        		alert(result.message);
-        	}
-    	}
-	}); 
-}
 
 
 function newpass() { 
@@ -55,15 +38,9 @@ function loadJS(){
 	myScript.setAttribute("src", l + "/assets/js/painelu.js");
 	document.body.appendChild(myScript);
 }
-
-function buildPage(n){
-	if(n){
-		if($('#loginCol')){
-			$('#loginCol').hide();
-		}
-		let t = $($('#welcomeTemplate').html());
-		$('#userLogged', t).text(n.nome);
-		$('#welcomeTemplate').before(t);
+var loggedUser;
+function buildPage(){
+	if(loggedUser){
 		loadJS();
 	}else{
 		let t1 = $($('#loginTemplate').html());
@@ -112,7 +89,8 @@ function loadUserInfo(){
         headers : {'Content-Type' : 'application/json'},
         success: function(r)
         {
-        	buildPage(r.data);
+			loggedUser = r.data;
+        	buildPage();
     	},
 		statusCode: {
 		    401: function() {

@@ -39,14 +39,14 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
 @TFormReaderHtml
-@TForm(name = "Site/Videos", showBreadcrumBar=false)
+@TForm(name = "Home/Videos", showBreadcrumBar=false)
 @TEjbService(serviceName = "ISiteVideoControllerRemote", model=SiteVideo.class)
 @TListViewPresenter(listViewMinWidth=380, listViewMaxWidth=380,
 	paginator=@TPaginator(entityClass = SiteVideo.class, serviceName = "ISiteVideoControllerRemote", show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Site/Videos")))
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Home/Videos", buildModesRadioButton=false)))
 @TSecurity(	id="SOMOS_SITEVIDEO_FORM", 
-	appName = "#{somos.name}", moduleName = "Gerenciar Campanha", viewName = "Site/Videos",
-	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
+	appName = "#{somos.name}", moduleName = "Gerenciar Campanha", viewName = "Site/Home/Videos",
+	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class SiteVideoModelView extends TEntityModelView<SiteVideo>{
 	

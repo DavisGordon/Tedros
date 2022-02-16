@@ -1,7 +1,39 @@
 $(document).ready(function() { 
 	$('#frm').ajaxForm( { beforeSubmit: validate, success: showResponse, error: showResponse  } );
-	
+	loadInfo();
+	loadFooter();
 });
+
+
+function setInfo(obj){
+	if(obj.image){
+		let t = $($('#volImgTemplate').html());
+		$('#volImg', t).prop('src', 'api/f/i/'+obj.image);
+		$('#volImgTemplate').before(t);
+	}
+	$("#volContent").html(obj.descricao);
+	$("#volContent:contains('SOMOS')").html(function(_, html) {
+	   return html.replace(/(SOMOS)/g, '<span class="somos">$1</span>');
+	});
+}
+
+function loadInfo(){
+	$.ajax
+	({ 
+		url: 'api/sm/voluntarios',
+		type: 'get',
+		dataType:'json',
+		headers : {'Content-Type' : 'application/json'},
+		success: function(result)
+		{
+			if(result.code == "200"){
+				 if(result.data){
+					setInfo(result.data);
+				 }
+			}
+		}
+	}); 
+}
 
 
 function validate(formData, jqForm, options) { 

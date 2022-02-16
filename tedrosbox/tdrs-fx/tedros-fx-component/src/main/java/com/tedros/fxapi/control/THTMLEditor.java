@@ -28,6 +28,7 @@ public class THTMLEditor extends TRequiredHTMLEditor {
 	/**
 	 * 
 	 */
+	@SuppressWarnings("unused")
 	public THTMLEditor(SimpleStringProperty property) {
 		
 		editor = new HTMLEditor();

@@ -39,14 +39,14 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
 @TFormReaderHtml
-@TForm(name = "Site/Noticias", showBreadcrumBar=false)
+@TForm(name = "Home/Noticias", showBreadcrumBar=false)
 @TEjbService(serviceName = "ISiteNoticiaControllerRemote", model=SiteNoticia.class)
 @TListViewPresenter(listViewMinWidth=380, listViewMaxWidth=380,
 	paginator=@TPaginator(entityClass = SiteNoticia.class, serviceName = "ISiteNoticiaControllerRemote", show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Site/Noticias")))
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Home/Noticias", buildModesRadioButton=false)))
 @TSecurity(	id="SOMOS_SITENOTICIA_FORM", 
-	appName = "#{somos.name}", moduleName = "Gerenciar Campanha", viewName = "Site/Noticias",
-	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
+	appName = "#{somos.name}", moduleName = "Gerenciar Campanha", viewName = "Site/Home/Noticias",
+	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class SiteNoticiaModelView extends TEntityModelView<SiteNoticia>{
 	
