@@ -4,66 +4,48 @@ import org.somos.model.SiteAbout;
 
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
-import com.tedros.fxapi.annotation.TCodeValue;
+import com.tedros.ejb.base.model.ITFileBaseModel;
+import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
+import com.tedros.fxapi.annotation.control.TSelectImageField;
+import com.tedros.fxapi.annotation.control.TTab;
+import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
+import com.tedros.fxapi.annotation.form.TDetailForm;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
-import com.tedros.fxapi.annotation.reader.TReaderHtml;
-import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
-import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.annotation.view.TPaginator;
-import com.tedros.fxapi.control.TText.TTextStyle;
-import com.tedros.fxapi.domain.THtmlConstant;
-import com.tedros.fxapi.domain.TStyleParameter;
+import com.tedros.fxapi.domain.TEnvironment;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
-import javafx.scene.text.TextAlignment;
 
 @TFormReaderHtml
-@TForm(name = "Site/Conheça", showBreadcrumBar=false)
+@TForm(name = "Home/Intodução", showBreadcrumBar=false)
 @TEjbService(serviceName = "ISiteAboutControllerRemote", model=SiteAbout.class)
-@TListViewPresenter(paginator=@TPaginator(entityClass = SiteAbout.class, serviceName = "ISiteAboutControllerRemote", show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Site/Conheça")))
+@TListViewPresenter(refreshListViewAfterActions=true,
+		paginator=@TPaginator(entityClass = SiteAbout.class, serviceName = "ISiteAboutControllerRemote", show=true),
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Home/Intodução", buildModesRadioButton=false)))
 @TSecurity(	id="SOMOS_SITEABOUT_FORM", 
-	appName = "#{somos.name}", moduleName = "Gerenciar Campanha", viewName = "Site/Conheça",
-	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
+	appName = "#{somos.name}", moduleName = "Gerenciar Campanha", viewName = "Site/Home/Intodução",
+	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class SiteAboutModelView extends TEntityModelView<SiteAbout>{
 	
 	private SimpleLongProperty id;
 	
-	@TTextReaderHtml(text="Site/Conheça", 
-			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
-			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
-			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Item a ser exibido no site", textAlignment=TextAlignment.LEFT, 
-			textStyle = TTextStyle.LARGE)
-	private SimpleStringProperty textoCadastro;
-	
-	
-	@TReaderHtml
-	@TLabel(text="Descrição")
-	@TTextAreaField(required=true, maxLength=4000, wrapText=true,
-	node=@TNode(requestFocus=true, parse = true),
-	control=@TControl(prefHeight=300, parse = true))
-	private SimpleStringProperty descricao;
-	
-	@TReaderHtml(codeValues={@TCodeValue(code = "ATIVADO", value = "Ativado"), 
-			@TCodeValue(code = "DESATIVADO", value = "Desativado")})
 	@TLabel(text="Status")
 	@THorizontalRadioGroup(alignment=Pos.TOP_LEFT, required=true, spacing=4,
 	radioButtons = {@TRadioButtonField(text="Ativado", userData="ATIVADO"), 
@@ -71,6 +53,28 @@ public class SiteAboutModelView extends TEntityModelView<SiteAbout>{
 	})
 	private SimpleStringProperty status;
 	
+	/*@TReaderHtml
+	@TLabel(text="Descrição")
+	@TTextAreaField(required=true, maxLength=4000, wrapText=true,
+	node=@TNode(requestFocus=true, parse = true),
+	control=@TControl(prefHeight=300, parse = true))
+	private SimpleStringProperty descricao;*/
+	
+	@TLabel(text="Descrição")
+	//@THTMLEditor(/*required=true*/control=@TControl(prefHeight=300, parse = true))
+	@TTextAreaField(wrapText=true, control=@TControl(prefHeight=400, parse = true))
+	
+	@TTabPane(tabs = { 
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"descricao"})), text = "Conteudo"),
+			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"image"})), text = "Imagem")
+			
+	})
+	private SimpleStringProperty descricao;
+	
+
+	@TFieldBox(node=@TNode(id="img", parse = true))
+	@TSelectImageField(source=TEnvironment.LOCAL, target=TEnvironment.REMOTE, remoteOwner="somos")
+	private SimpleObjectProperty<ITFileBaseModel> image;
 	
 	public SiteAboutModelView(SiteAbout entidade) {
 		super(entidade);
@@ -91,22 +95,6 @@ public class SiteAboutModelView extends TEntityModelView<SiteAbout>{
 	@Override
 	public SimpleStringProperty getDisplayProperty() {
 		return status;
-	}
-
-
-	/**
-	 * @return the textoCadastro
-	 */
-	public SimpleStringProperty getTextoCadastro() {
-		return textoCadastro;
-	}
-
-
-	/**
-	 * @param textoCadastro the textoCadastro to set
-	 */
-	public void setTextoCadastro(SimpleStringProperty textoCadastro) {
-		this.textoCadastro = textoCadastro;
 	}
 
 
@@ -138,6 +126,22 @@ public class SiteAboutModelView extends TEntityModelView<SiteAbout>{
 	 */
 	public void setStatus(SimpleStringProperty status) {
 		this.status = status;
+	}
+
+
+	/**
+	 * @return the image
+	 */
+	public SimpleObjectProperty<ITFileBaseModel> getImage() {
+		return image;
+	}
+
+
+	/**
+	 * @param image the image to set
+	 */
+	public void setImage(SimpleObjectProperty<ITFileBaseModel> image) {
+		this.image = image;
 	}
 
 

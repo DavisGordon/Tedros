@@ -33,7 +33,7 @@ import javafx.scene.web.WebView;
 public abstract class TVBoxForm<M extends ITModelView<?>> 
 extends VBox implements ITModelForm<M> {
 	
-	private final TFormEngine<M, TVBoxForm<M>> formEngine;
+	protected final TFormEngine<M, TVBoxForm<M>> formEngine;
 	@SuppressWarnings("rawtypes")
 	private ITPresenter presenter;
 	

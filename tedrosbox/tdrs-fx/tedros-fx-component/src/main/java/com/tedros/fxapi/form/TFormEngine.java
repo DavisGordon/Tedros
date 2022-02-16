@@ -54,7 +54,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	private TObjectRepository tObjectRepository = new TObjectRepository();
 	private final TTriggerLoader<M, ITModelForm<M>> triggerLoader;
 	private ChangeListener<Boolean> chl = (ob, o, n) -> {
-		if(n) { 
+		if(n && mode!=null) { 
 			buildTriggers();
 			runSetting();
 		}
@@ -84,12 +84,12 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void setReaderMode(){
-		mode = TViewMode.READER;
 		
 		if(TDebugConfig.detailParseExecution)
 			System.out.println("[TFormEngine][ReadeMode][initialized]");
 		
 		resetForm();
+		mode = TViewMode.READER;
 		buildModelViewLoader();
 		
 		try {
@@ -164,11 +164,11 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	}
 
 	public void setEditMode(){
-		mode = TViewMode.EDIT;
 		if(TDebugConfig.detailParseExecution)
 			System.out.println("[TFormEngine][EditMode][initialized]");
 		
 		resetForm();
+		mode = TViewMode.EDIT;
 		buildModelViewLoader();
 		this.loaded.bind(this.modelViewLoader.allLoadedProperty());
 		try {
@@ -184,6 +184,10 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	
 	public ReadOnlyBooleanProperty loadedProperty() {
 		return loaded;
+	}
+	
+	public void setLoaded(boolean loaded) {
+		this.loaded.setValue(loaded);
 	}
 	
 	public void reloadForm(){
@@ -234,7 +238,8 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 		return (this.associatedObjectsMap.containsKey(name)) ? this.associatedObjectsMap.get(name) : null;
 	}
 
-	private void resetForm() {
+	public void resetForm() {
+		this.mode = null;
 		this.tObjectRepository.clear();
 		this.loaded.unbind();
 		this.loaded.setValue(false);

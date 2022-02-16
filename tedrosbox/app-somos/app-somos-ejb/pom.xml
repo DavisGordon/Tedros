@@ -20,8 +20,8 @@
 		<profile>
 		  <id>prod</id>
 		  <properties>
-		    <srv.host>http://www.covidsemfome.com.br/</srv.host>
-		    <csf.email>covidsemfome@gmail.com</csf.email>
+		    <srv.host>http://www.somossocial.org.br/</srv.host>
+		    <csf.email>tedrosbox@gmail.com</csf.email>
 		    <srv.email.template.path>/home/somos/email_boasvindas.html</srv.email.template.path>
 		    <srv.email.resource.path>/home/somos/smtpAccount.properties</srv.email.resource.path>
 		  </properties>
@@ -52,6 +52,13 @@
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-ejb-service-base</artifactId>
+	  		<version>8-1.0</version>
+	  		<scope>compile</scope>
+	  	</dependency>
+	  
+	  <dependency>
+	  		<groupId>com.tedros</groupId>
+	  		<artifactId>tedros-core-ejb-client</artifactId>
 	  		<version>8-1.0</version>
 	  		<scope>compile</scope>
 	  	</dependency>

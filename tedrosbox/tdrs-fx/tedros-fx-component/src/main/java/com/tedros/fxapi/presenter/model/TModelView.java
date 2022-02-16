@@ -433,6 +433,22 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 						}else if(propertyFieldType == ObservableMap.class ){
 							propertyObj = (ObservableMap)FXCollections.observableMap((Map)new HashMap());
 							propertySetMethod.invoke(propertyObj);
+						}else if(propertyFieldType == TSimpleFileProperty.class) {
+							Class entityClass = null;
+							
+							for(Annotation annotation : field.getDeclaredAnnotations())
+								if(annotation instanceof TModelViewType ){
+									TModelViewType tAnnotation = (TModelViewType) annotation;
+									entityClass = tAnnotation.modelClass();
+								}
+							if(entityClass!=null) {
+								propertyObj = propertyFieldType.getConstructor(ITFileBaseModel.class).newInstance(entityClass.newInstance());
+								propertySetMethod.invoke(this, propertyObj);
+							}else {
+								propertyObj = propertyFieldType.newInstance();
+								propertySetMethod.invoke(this, propertyObj);
+							}
+							
 						}else{
 							propertyObj = propertyFieldType.newInstance();
 							propertySetMethod.invoke(this, propertyObj);

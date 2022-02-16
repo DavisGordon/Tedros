@@ -25,9 +25,9 @@ import org.somos.server.pessoa.bo.PessoaBO;
 import org.somos.server.producer.Item;
 
 import com.tedros.util.TDateUtil;
+import com.tedros.util.TFileUtil;
 import com.tedros.util.TSMTPUtil;
 import com.tedros.util.TSentEmailException;
-import com.tedros.util.TFileUtil;
 
 /**
  * @author Davis Gordon
@@ -69,6 +69,24 @@ public class EmailBO {
 	
 	public void enviar(boolean debug, String to, String subject, String content, boolean html) throws TSentEmailException{
 		util.sent(debug, emailAccount.getValue(), to, subject, content, html);
+	}
+	
+	public void enviarEmailPropostaAjuda(String empresa, String nome, String contato,
+			String tipoAjuda, String desc, String endereco) throws EmailBusinessException, TSentEmailException {
+		String content = "Um contato de um possivel parceiro acaba de ser realizado pelo site. "
+				+ "<br>Empresa: "+(empresa!=null?empresa:"")
+				+ "<br>Nome: "+(nome!=null?nome:"")
+				+ "<br>Contato: "+(contato!=null?contato:"")
+				+ "<br>Tipo Ajuda: "+(tipoAjuda!=null?tipoAjuda:"")
+				+ "<br>Gostaria de ajudar: "+(desc!=null?desc:"")
+				+ "<br>Endereço: "+(endereco!=null?endereco:"");
+		
+		String to = pessBO.getEnderecoEstrategicoEmail();
+		if(to.isEmpty())
+			throw new EmailBusinessException("Não foi identificado nenhum voluntário estrategico para envio de email.");
+		
+		util.sent(false, emailAccount.getValue(), to, PROJECT+" Contato de possivel parceiro realizado pelo site", content, true);
+		
 	}
 	
 	public void enviarEmailBoasVindas(Pessoa p) throws TSentEmailException, EmailBusinessException{

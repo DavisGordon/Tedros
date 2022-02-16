@@ -55,6 +55,14 @@ public class Pessoa extends TEntity {
 	@Column(length=80, nullable = true)
 	private String profissao;
 	
+	/**
+	 * "1", value = "Operacional"
+	 * "2", value = "Estratégico"
+	 * "3", value = "Estratégico (Receber emails)
+	 * "4", value = "Doador/Filatrópico"
+	 * "5", value = "Cadastro/Site"
+	 * "6", value = "Outro"
+	 * */
 	@Column(length=1, nullable = true)
 	private String tipoVoluntario;
 	
@@ -111,6 +119,23 @@ public class Pessoa extends TEntity {
 	
 	public Pessoa(String nome) {
 		this.nome = nome;
+	}
+	
+	/**
+	 * "1", value = "Operacional"
+	 * "2", value = "Estratégico"
+	 * "3", value = "Estratégico (Receber emails)
+	 * "4", value = "Doador/Filatrópico"
+	 * "5", value = "Cadastro/Site"
+	 * "6", value = "Outro"
+	 * */
+	public  boolean isVoluntarioEstrategico() {
+		return (this.tipoVoluntario!=null && 
+				(this.tipoVoluntario.equals("2") || this.tipoVoluntario.equals("3")));
+	}
+	
+	public  boolean isVoluntarioOperacional() {
+		return (this.tipoVoluntario!=null && this.tipoVoluntario.equals("1") );
 	}
 	
 	public boolean isTermoAdesaoNecessario(Set<TipoAjuda> lst) {

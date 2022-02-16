@@ -59,9 +59,9 @@ public class EmailTemplateForm extends TVBoxForm<MailingModelView> {
 		return mode;
 	}
 	
-	@SuppressWarnings("resource")
 	public void settReaderMode(){
 		mode = TViewMode.READER;
+		super.formEngine.resetForm();
 		if(getChildren()!=null){
 			try{
 				getChildren().clear();
@@ -116,8 +116,9 @@ public class EmailTemplateForm extends TVBoxForm<MailingModelView> {
             }
         });
 		
-		
+		super.formEngine.setLoaded(true);
 		tInitializeReader();
+		
 	}
 	
 	public void settEditMode(){

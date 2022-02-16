@@ -17,6 +17,7 @@ import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Named;
@@ -34,7 +35,7 @@ import com.tedros.util.TResourceUtil;
  * @author Davis Gordon
  *
  */
-@RequestScoped
+@ApplicationScoped
 public class ResourceProducer {
 	
 	@EJB
@@ -91,7 +92,7 @@ public class ResourceProducer {
 	
 	
 	@Produces
-	@RequestScoped
+	@ApplicationScoped
 	@Named("loggedUser")
 	public Item<TUser> getUser(){
 		String login = webProp.getProperty("user.login");
@@ -105,7 +106,7 @@ public class ResourceProducer {
 	
 	
 	@Produces
-	@RequestScoped
+	@ApplicationScoped
 	@Named("errorMsg")
 	public Item<String> getErrorMsg(){
 		return  new Item<>(TWebMessage.ERROR);

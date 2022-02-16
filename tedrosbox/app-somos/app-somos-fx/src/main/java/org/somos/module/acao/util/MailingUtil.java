@@ -36,8 +36,8 @@ public class MailingUtil {
 		DateFormat df = new SimpleDateFormat(pattern);
 		
 		
-		String lp = "<a href='"+siteurl+"/voluntario.html'>Painel</a>";
-		String ls = "<a href='"+siteurl+"/index.html'>www.covidsemfome.com.br</a>";
+		String lp = "<a href='"+siteurl+"/painelv.html'>Painel</a>";
+		String ls = "<a href='"+siteurl+"/index.html'>www.somossocial.org.br</a>";
 		
 		String qmv = mailing.getQtdMinVoluntarios() == null ? "" : mailing.getQtdMinVoluntarios().toString(); 
 		String qxv = mailing.getQtdMaxVoluntarios() == null ? "" : mailing.getQtdMaxVoluntarios().toString(); 

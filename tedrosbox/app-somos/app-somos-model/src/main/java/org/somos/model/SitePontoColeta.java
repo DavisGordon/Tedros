@@ -66,7 +66,7 @@ public class SitePontoColeta extends TEntity {
 	 * @param descricao the descricao to set
 	 */
 	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+		this.descricao = SiteHelper.cleanHtml(descricao);
 	}
 
 

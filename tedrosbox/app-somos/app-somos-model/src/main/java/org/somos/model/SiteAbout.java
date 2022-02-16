@@ -3,8 +3,12 @@
  */
 package org.somos.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -12,6 +16,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.somos.domain.DomainSchema;
 import org.somos.domain.DomainTables;
 
+import com.tedros.common.model.TFileEntity;
 import com.tedros.ejb.base.entity.TEntity;
 
 /**
@@ -30,6 +35,10 @@ public class SiteAbout extends TEntity {
 
 	@Column(nullable = false)
 	private String descricao;
+
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="image_id")
+	private TFileEntity image;
 	
 	@Column(length=60, nullable = false)
 	private String status;
@@ -60,7 +69,7 @@ public class SiteAbout extends TEntity {
 	 * @param descricao the descricao to set
 	 */
 	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+		this.descricao = SiteHelper.cleanHtml(descricao);
 	}
 
 	/**
@@ -75,6 +84,20 @@ public class SiteAbout extends TEntity {
 	 */
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	/**
+	 * @return the image
+	 */
+	public TFileEntity getImage() {
+		return image;
+	}
+
+	/**
+	 * @param image the image to set
+	 */
+	public void setImage(TFileEntity image) {
+		this.image = image;
 	}
 	
 }

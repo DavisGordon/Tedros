@@ -15,6 +15,7 @@ import com.tedros.util.TDateUtil;
  *
  */
 public final class ApiUtils {
+	
 
 	public static String formatDateHourToView(Date data){
 		if(data==null)

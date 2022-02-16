@@ -9,6 +9,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<link rel="stylesheet" href="assets/css/somos.css" />
+		<link rel="stylesheet" href="assets/css/loader.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
 	<body class="is-preload">
@@ -42,7 +43,8 @@
 							<li><a href="index.html">Home</a></li>
 							<li><a href="doacoes.html">Doações</a></li>
 							<li><a href="voluntario.html">Voluntário</a></li>
-							<li><a href="index.html">Meu painel</a></li>
+							<li><a href="mural.html">Mural</a></li>
+							<li><a href="painelv.html">Meu painel</a></li>
 						</ul>
 					</nav>
 
@@ -57,51 +59,51 @@
 									<div class="row gtr-uniform">
 										<div class="col-12">
 											<p class="sm-txt">
-												<span class="image right">
-													<img src="images/icon/icon1.jpg" alt="" />
-												</span>
-												Text introdutorio <br>
-												Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus euismod. 
-												Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac 
-												adipiscing accumsan faucibus. Vestibulum ante ipsum primis in faucibus lorem ipsum dolor sit amet 
-												nullam adipiscing eu felis.
+												<template id="parImgTemplate">
+													<span class="image right">
+														<img id="parImg" src="" alt="" />
+													</span>
+												</template>
+												<span id="parContent"></span>
 											</p>
 											
 										</div>
 										<div class="col-12">
-											<span class="sm-title">Titulo</span>
-											<p class="sm-txt">
-												<span class="image left">
-													<img  src="images/icon/icon6.jpg" alt="" />
-												</span>
-												Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus euismod.
-												Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac 
-												adipiscing accumsan faucibus. Vestibulum ante ipsum primis in faucibus lorem ipsum dolor sit amet 
-												nullam adipiscing eu felis.
-											</p>
-										</div>
-										<div class="col-12">
-											<span class="sm-title">Seja um ponto de coleta</span>
-											<p class="sm-txt">
-												<!-- <span class="image right">
-													<img src="images/campanha/sejapontocoleta.png" alt="" />
-												</span> -->
-												<form>
-													<div class="row gtr-uniform">
-														<div class="col-6 col-12-xsmall">
-															<input type="text" name="nome" id="nome"  placeholder="Nome" />
-															<label for="nome">Nome</label>
+											<span class="sm-title">Entre em contato</span>
+											<div class="contentLoad">
+												<p class="sm-sub-title">Ajude quem ajuda!</p>
+												<div id="loader" class="loader">
+													<div id="cssloader"><div></div></div>
+												</div>
+												<form name="frm" id="frm" method="post" action="api/sm/ajudar">
+													<div class="fields">
+														<div class="field half">
+															<input type="text" name="emp" id="emp"  placeholder="Razão Social" />
+															<label for="emp">Empresa</label>
 														</div>
-														<div class="col-6 col-12-xsmall">
+														<div class="field half">
+															<input type="text" name="nome" id="nome"  placeholder="Nome do representante" />
+															<label for="nome">Representante Legal</label>
+														</div>
+														<div class="field half">
 															<input type="text" name="contato" id="contato"  placeholder="Tel/E-mail" />
 															<label for="nome">Contato</label>
 														</div>
-														<div class="col-12">
-															<textarea  name="endereco" id="endereco"  placeholder="Endereço do ponto de coleta">
+														<div class="field half">
+															<select name="tipoAjuda" id="tipoAjuda" >
+															</select>
+															<label for="nome">Tipo de ajuda</label>
+														</div>
+														<div class="field">
+															<textarea name="desc" id="desc"  placeholder="Escreva aqui"></textarea>
+															<label for="nome">Como gostaria de ajudar</label>
+														</div>
+														<div class="field">
+															<textarea  name="endereco" id="endereco"  placeholder="Endereço da empresa">
 															</textarea>
 															<label for="nome">Endereço</label>
 														</div>
-														<div class="col-12">
+														<div class="field">
 															<ul class="actions">
 																<li><input type="submit" value="Enviar" class="primary" /></li>
 																<li><input type="reset" value="Limpar" /></li>
@@ -110,7 +112,7 @@
 														</div>
 													</div>
 												</form>
-											</p>
+											</div>
 										</div>
 									</div>
 								</div>		
@@ -121,15 +123,13 @@
 				<!-- Footer -->
 					<footer id="footer">
 						<div class="inner">
-							<section>
-								<h2>Siga nos</h2>
-								<ul class="icons">
-									<li><a href="#" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a></li>
-									<li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
-									<li><a href="#" class="icon solid style2 fa-phone"><span class="label">Phone</span></a></li>
-									<li><a href="#" class="icon solid style2 fa-envelope"><span class="label">Email</span></a></li>
-								</ul>
-							</section>
+							<template id="siganosTemplate">
+								<section>
+									<h2>Siga nos</h2>
+									<ul id="siganosContent" class="icons">
+									</ul>
+								</section>
+							</template>
 							<ul class="copyright">
 								<li>&copy; SOMOS. All rights reserved</li>
 								<li>Desenvolvido por: <a href="https://www.linkedin.com/in/davis-gordon-dun">Davis Gordon Dun</a>
@@ -146,6 +146,9 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<script src="assets/js/jquery.form.js"></script>
+			<script src="assets/js/sm-p-full.js"></script>
+			<script src="assets/js/footer.js"></script>
 
 	</body>
 </html>

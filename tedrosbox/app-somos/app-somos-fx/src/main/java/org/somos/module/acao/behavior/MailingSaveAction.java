@@ -1,6 +1,7 @@
 package org.somos.module.acao.behavior;
 
 import java.io.File;
+import java.util.Properties;
 
 import org.somos.model.Mailing;
 import org.somos.module.acao.model.MailingModelView;
@@ -10,12 +11,17 @@ import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.util.TFileUtil;
+import com.tedros.util.TResourceUtil;
 import com.tedros.util.TedrosFolderEnum;
 
 public class MailingSaveAction extends TPresenterAction {
 
+	private String siteurl;
+	
 	public MailingSaveAction() {
 		super(TActionType.SAVE);
+		Properties prop = TResourceUtil.getPropertiesFromConfFolder("remote-config.properties");
+		siteurl = prop.getProperty("siteurl");
 	}
 
 	@Override
@@ -26,6 +32,8 @@ public class MailingSaveAction extends TPresenterAction {
 		String path = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+"/email_template.html";
 		File file = new File(path);
 		String html = TFileUtil.readFile(file);
+
+		html = html.replace("#HOST#", siteurl);
 		html = html.replace("#CONTENT#", str);
 		mailing.setHtml(html);
 		return true;

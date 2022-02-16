@@ -6,6 +6,7 @@
  */
 package org.somos.server.website.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -15,9 +16,10 @@ import javax.ejb.TransactionAttributeType;
 
 import org.somos.ejb.controller.ISiteVoluntarioController;
 import org.somos.model.SiteVoluntario;
-import org.somos.model.SiteVoluntario;
 import org.somos.server.base.service.TStatelessService;
 
+import com.tedros.common.model.TFileEntity;
+import com.tedros.core.ejb.controller.TFileEntityController;
 import com.tedros.ejb.base.controller.ITSecurityController;
 import com.tedros.ejb.base.controller.TSecureEjbController;
 import com.tedros.ejb.base.result.TResult;
@@ -39,6 +41,9 @@ public class SiteVoluntarioController extends TSecureEjbController<SiteVoluntari
 	
 	@EJB
 	private TStatelessService<SiteVoluntario> serv;
+	
+	@EJB
+	private TFileEntityController fileServ; 
 
 	@EJB
 	private ITSecurityController securityController;
@@ -55,6 +60,17 @@ public class SiteVoluntarioController extends TSecureEjbController<SiteVoluntari
 
 	@Override
 	public TResult<SiteVoluntario> save(TAccessToken token, SiteVoluntario e) {
+		
+		List<TFileEntity> filesToRem = new ArrayList<>();
+		if(!e.isNew()) {
+			try {
+				SiteVoluntario  x = serv.findById(e);
+				if((x.getImage()!=null && e.getImage()==null) ||
+						(x.getImage()!=null && e.getImage()!=null && !x.getImage().getId().equals(e.getImage().getId())))
+					filesToRem.add(x.getImage());
+			} catch (Exception e1) {
+			}
+		}
 		
 		if(e.getStatus().equals("ATIVADO")) {
 			SiteVoluntario ex = new SiteVoluntario();
@@ -73,6 +89,13 @@ public class SiteVoluntarioController extends TSecureEjbController<SiteVoluntari
 			}
 		}
 		
-		return super.save(token, e);
+		TResult<SiteVoluntario> res = super.save(token, e);
+		
+		if(!filesToRem.isEmpty()) {
+			for(TFileEntity f : filesToRem)
+				fileServ.remove(token, f);
+		}
+		
+		return res;
 	}
 }

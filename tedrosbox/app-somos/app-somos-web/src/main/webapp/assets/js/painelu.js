@@ -1,11 +1,39 @@
+if($('#loginCol')){
+	$('#loginCol').hide();
+}
+let t = $($('#welcomeTemplate').html());
+$('#userLogged', t).text(loggedUser.nome);
+$('#welcomeTemplate').before(t);
+
+if(loggedUser.estrategico=='true')
+	$('#painelActions').prepend('<li><a href="tdrs/prod.html" class="button fit primary">Tedros Web (Gestão)</a></li>')
 
 let t1 = $($('#userFrmTemplate').html());
 $('#userFrmTemplate').before(t1);
 $('#frm1000').ajaxForm( { beforeSubmit: validateUD, success: showResponseUD  } );
-	
+	//
 loadUfs(function () {
 	loadUser();
 });
+
+function logout(){
+	$.ajax
+    ({ 
+        url: 'api/painel/logout',
+        type: 'get',
+        dataType:'json',
+        headers : {'Content-Type' : 'application/json'},
+        success: function(result)
+        {
+        	if(result.code == "200"){
+        		location.href = 'painelv.html';
+        	}else{
+        		alert(result.message);
+        	}
+    	}
+	}); 
+}
+
 function showLoader(className, form){
 	var loader = document.getElementById('loader'+form.idx.value);
 	if(className != ''){

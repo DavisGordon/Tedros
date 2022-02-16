@@ -17,8 +17,8 @@
 		<profile>
 		  <id>prod</id>
 		  <properties>
-		    <hit.file>/home/csf/hit.txt</hit.file>
-		    <user.file>/home/csf/user.properties</user.file>
+		    <hit.file>/home/somos/hit.txt</hit.file>
+		    <user.file>/home/somos/user.properties</user.file>
 		  </properties>
 		</profile>
 		<profile>
