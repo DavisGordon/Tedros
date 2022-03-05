@@ -1,8 +1,6 @@
 package com.tedros.core.style;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -88,22 +86,22 @@ public enum TStyleResourceValue {
 	public static void loadCustomValues(boolean reload){	
 		if(null==panelCustomProp || reload){
 			panelCustomProp = new Properties();
-			String propFilePath = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+TStyleResourceName.PANEL_CUSTOM_STYLE;
+			String propFilePath = TThemeUtil.getThemeFolder()+TStyleResourceName.PANEL_CUSTOM_STYLE;
 			try {
 				InputStream is = new FileInputStream(propFilePath);
-				
 				panelCustomProp.load(is);
+				is.close();
 			} catch (Exception  e1) {
 				e1.printStackTrace();
 			}
 		}
 		if(null==backgroundProp || reload){
 			backgroundProp = new Properties();
-			String propFilePath = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+TStyleResourceName.BACKGROUND_STYLE;
+			String propFilePath = TThemeUtil.getThemeFolder()+TStyleResourceName.BACKGROUND_STYLE;
 			try {
 				InputStream is = new FileInputStream(propFilePath);
-				
 				backgroundProp.load(is);
+				is.close();
 			} catch (Exception  e1) {
 				e1.printStackTrace();
 			}
@@ -118,10 +116,8 @@ public enum TStyleResourceValue {
 			try {
 				InputStream is = new FileInputStream(propFilePath);				
 				defaultProp.load(is);
-			} catch (FileNotFoundException  e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e) {
+				is.close();
+			}catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

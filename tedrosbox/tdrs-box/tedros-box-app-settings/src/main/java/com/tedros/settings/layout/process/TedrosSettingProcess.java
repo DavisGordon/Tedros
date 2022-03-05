@@ -8,6 +8,7 @@ import java.util.Properties;
 
 import com.tedros.core.style.TStyleResourceName;
 import com.tedros.core.style.TStyleResourceValue;
+import com.tedros.core.style.TThemeUtil;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.fxapi.process.TModelProcess;
@@ -50,7 +51,7 @@ public class TedrosSettingProcess extends TModelProcess<PainelModel>{
 	
 	private void saveValues(PainelModel model) throws Exception{
 		
-		String propFilePath = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+TStyleResourceName.PANEL_CUSTOM_STYLE;
+		String propFilePath = TThemeUtil.getThemeFolder()+TStyleResourceName.PANEL_CUSTOM_STYLE;
 		FileOutputStream fos = new FileOutputStream(propFilePath);
 		Properties prop = new Properties();
 		
@@ -99,6 +100,7 @@ public class TedrosSettingProcess extends TModelProcess<PainelModel>{
 		
 		
 		prop.store(fos, "custom styles");
+		fos.close();
 	}
 	
 	private String getDoubleConvertedValue(Double value){

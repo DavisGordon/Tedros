@@ -203,7 +203,7 @@ public class TViewItem implements ITGroupViewItem {
 	 */
 	@Override
 	public final ITView<?> getViewInstance(ITModule module) {
-		if(view == null){
+		if(view == null && module!=null){
 			try {
 				view = getViewClass().getConstructor(ITModule.class, Class.class).newInstance(module, getModelViewClass());
 				viewInitializedProperty();

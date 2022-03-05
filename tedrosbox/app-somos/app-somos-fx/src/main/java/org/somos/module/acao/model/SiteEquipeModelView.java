@@ -38,7 +38,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 
 @TFormReaderHtml
-@TForm(name = "Home/Equipe", showBreadcrumBar=false)
+@TForm(name = "Home/Equipe", showBreadcrumBar=false, scroll=false)
 @TEjbService(serviceName = "ISiteEquipeControllerRemote", model=SiteEquipe.class)
 @TListViewPresenter(refreshListViewAfterActions=true,
 		paginator=@TPaginator(entityClass = SiteEquipe.class, serviceName = "ISiteEquipeControllerRemote", show=true),
@@ -83,7 +83,8 @@ public class SiteEquipeModelView extends TEntityModelView<SiteEquipe>{
 	
 
 	@TFieldBox(node=@TNode(id="img", parse = true))
-	@TSelectImageField(source=TEnvironment.LOCAL, target=TEnvironment.REMOTE, remoteOwner="somos")
+	@TSelectImageField(source=TEnvironment.LOCAL, target=TEnvironment.REMOTE, 
+	remoteOwner="somos", maxFileSize=300000)
 	private SimpleObjectProperty<ITFileBaseModel> image;
 	
 	public SiteEquipeModelView(SiteEquipe entidade) {

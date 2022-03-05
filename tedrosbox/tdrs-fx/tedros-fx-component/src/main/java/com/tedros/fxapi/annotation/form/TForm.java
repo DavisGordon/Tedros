@@ -25,4 +25,6 @@ public @interface TForm {
 	public String readerCssId() default "t-reader";
 	
 	public String style() default "";
+	
+	public boolean scroll() default true;
 }

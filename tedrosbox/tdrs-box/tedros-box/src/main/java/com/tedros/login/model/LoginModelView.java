@@ -33,7 +33,8 @@ import javafx.scene.text.TextAlignment;
 
 
 @TPresenter(modelClass=Login.class, behavior=@TBehavior(type=LoginBehavior.class), 
-	decorator=@TDecorator(type=LoginDecorator.class, saveButtonText="#{tedros.validateUser}", viewTitle="#{tedros.login.view.title}"), 
+	decorator=@TDecorator(type=LoginDecorator.class, saveButtonText="#{tedros.validateUser}",
+	viewTitle="#{tedros.login.view.title}"), 
 	type = TDynaPresenter.class)
 @TEntityProcess(entity=TUser.class, process=TLoginProcess.class)
 public class LoginModelView extends TModelView<Login> {

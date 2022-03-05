@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -66,12 +67,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 
 public class TSelectImageField extends TRequiredSelectImage{
 
 	
 	private static final String SOURCE = "source";
 	private static final String TARGET = "target";
+	private static final String DEFIMAGE = "defimage";
 	@SuppressWarnings("rawtypes")
 	private ObservableList<TEventHandler> tEventHandlerList;
 	private final ObservableList<ITFileBaseModel> tFileList;
@@ -82,6 +85,8 @@ public class TSelectImageField extends TRequiredSelectImage{
 	private SimpleDoubleProperty tMaxFileSizeProperty = new SimpleDoubleProperty();
 	private SimpleBooleanProperty tPreLoadBytes = new SimpleBooleanProperty();
 	private SimpleObjectProperty<TImageExtension> tImageExtensionProperty = new SimpleObjectProperty<>();
+	
+	private TDirectoryField directoryField;
 	
 	private TEnvironment tFileSource;
 	private TEnvironment tFileTarget;
@@ -117,13 +122,11 @@ public class TSelectImageField extends TRequiredSelectImage{
 						: remoteFileOwner;
 		this.tFileList = FXCollections.observableArrayList();
 		this.tEventHandlerList =  FXCollections.observableArrayList();
-		this.tPreLoadBytes.setValue(preLoadFileBytes);
 		initialize();
 		buildListener();
-		if(tFileSource.equals(TEnvironment.LOCAL))
-			buildSource();
-		else
-			callRemoteService();
+		callBuild();
+		this.tPreLoadBytes.setValue(preLoadFileBytes);
+		
 	}
 	
 	public TSelectImageField(ObservableList<ITFileBaseModel> property, TEnvironment source, TEnvironment target, 
@@ -139,15 +142,22 @@ public class TSelectImageField extends TRequiredSelectImage{
 						: remoteFileOwner;
 		this.tFileList = FXCollections.observableArrayList();
 		this.tEventHandlerList =  FXCollections.observableArrayList();
-		this.tPreLoadBytes.setValue(preLoadFileBytes);
 		initialize();
 		buildListener();
+		callBuild();
+		this.tPreLoadBytes.setValue(preLoadFileBytes);
+		
+	}
+	
+	private void callBuild() {
 		if(tFileSource.equals(TEnvironment.LOCAL))
-			buildSource();
+			if(!tSelectedFileList.isEmpty()) 
+				buildTarget();
+			else
+				buildSource();
 		else
 			callRemoteService();
 	}
-	
 	
 	/**
 	 * Initialize propertys
@@ -184,15 +194,15 @@ public class TSelectImageField extends TRequiredSelectImage{
 		
 		
 		scrollPane.maxWidth(Double.MAX_VALUE);
-		scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+		scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		scrollPane.setStyle("-fx-background-color: transparent;");
 	
 		mainPane = new BorderPane();
 		
 		if(tFileSource.equals(TEnvironment.LOCAL)) {
-			TDirectoryField df = new TDirectoryField(TedrosContext.getStage());
-			df.settUserHomeAsInitialDirectory();
+			directoryField = new TDirectoryField(TedrosContext.getStage());
+			directoryField.settUserHomeAsInitialDirectory();
 			ChangeListener<File> dfChl = (a,b,n)->{
 				if(!tFileList.isEmpty())
 					tFileList.clear();
@@ -216,8 +226,8 @@ public class TSelectImageField extends TRequiredSelectImage{
 				}
 			};
 			repo.add("dfChl", dfChl);
-			df.tFileProperty().addListener(new WeakChangeListener<>(dfChl));
-			envToolbar.getItems().add(df);
+			directoryField.tFileProperty().addListener(new WeakChangeListener<>(dfChl));
+			envToolbar.getItems().add(directoryField);
 		}else{
 			loadBtn = new TButton();
 			loadBtn.setId("t-last-button");
@@ -245,12 +255,25 @@ public class TSelectImageField extends TRequiredSelectImage{
 	public void settHeight(double height) {
 		scrollPane.setMaxHeight(height);
 	}
+	
+	private String getScrollContentType() {
+		return this.getScrollContentType(scrollPane.getContent());
+	}
+	
+	private String getScrollContentType(Node n) {
+		if(n!=null && n instanceof ImageView) 
+			return DEFIMAGE;
+		else if(n!=null && n instanceof FlowPane)
+			return n.getId();
+		else return "";
+	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void buildListener() {
 		ChangeListener<Node> scrlChl = (a,b,n)->{
 			if(n!=null) {
-				if(n instanceof ImageView) {
+				String c = this.getScrollContentType(n);
+				if(c.equals(DEFIMAGE)) {
 					this.text.setText(iEngine.getString("#{tedros.fxapi.label.select.file}"));
 					this.remBtn.setDisable(true);
 					this.backBtn.setDisable(true);
@@ -260,7 +283,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 					if(tSelectedFileList.isEmpty()) {
 						targetPane = null;
 					}
-				}else if(n instanceof FlowPane && n.getId().equals(SOURCE)) {
+				}else if(c.equals(SOURCE)) {
 					this.text.setText(iEngine.getString("#{tedros.fxapi.label.select.file}"));
 					this.remBtn.setDisable(true);
 					this.backBtn.setDisable(true);
@@ -268,7 +291,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 					if(tSelectedFileList.isEmpty()) {
 						targetPane = null;
 					}
-				}else if(n instanceof FlowPane && n.getId().equals(TARGET)) {
+				}else if(c.equals(TARGET)) {
 					this.text.setText(iEngine.getString("#{tedros.fxapi.label.selected}"));
 					this.remBtn.setDisable(false);
 					this.backBtn.setDisable(false);
@@ -346,7 +369,10 @@ public class TSelectImageField extends TRequiredSelectImage{
 		
 		// max file size
 		ChangeListener<Double> chl1 = (a,b,n)->{
-			buildSource();
+			if(getScrollContentType().equals(TARGET))
+				buildTarget();
+			else
+				buildSource();
 		};
 		this.repo.add("chl1", chl1);
 		this.tMaxFileSizeProperty.addListener(new WeakChangeListener(chl1));
@@ -431,6 +457,24 @@ public class TSelectImageField extends TRequiredSelectImage{
 						if(!((ITFileEntity) m).isNew()) {
 							TButton dBtn = new TButton();
 							dBtn.setText(iEngine.getString("#{tedros.fxapi.button.download}"));
+							dBtn.setOnAction(e->{
+								TButton b = (TButton) e.getSource();
+								DirectoryChooser dc = new DirectoryChooser();
+								dc.setTitle(iEngine.getString("#{tedros.fxapi.button.select}"));
+								dc.setInitialDirectory(new File(System.getProperty("user.home")));
+								final File file = dc.showDialog(TedrosContext.getStage());
+					            if (file != null) {
+					            	ITFileBaseModel x = (ITFileBaseModel) b.getUserData();
+									File df = new File(file.getPath()+File.separator+x.getFileName());
+									try {
+										FileUtils.copyInputStreamToFile(new ByteArrayInputStream(x.getByte().getBytes()), df);
+									} catch (IOException e1) {
+										e1.printStackTrace();
+									}
+					            }
+					            	
+							});
+							dBtn.setUserData(m);
 							tb.getItems().add(dBtn);
 						}
 						TButton rBtn = new TButton();
@@ -549,7 +593,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 	 * @throws IOException
 	 */
 	private Image buildDefImg() throws FileNotFoundException, IOException {
-		String path = TedrosFolderEnum.IMAGES_FOLDER.getFullPath()+"default-image-large.jpg";
+		String path = TedrosFolderEnum.IMAGES_FOLDER.getFullPath()+"default-image.jpg";
 		File f =  new File(path);
 		InputStream is = new FileInputStream(f);
 		Image img = new Image(is);
@@ -693,6 +737,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 			if(n.equals(State.SUCCEEDED)) {
 				TResult<List<TFileEntity>> r = p.getValue();
 				if(r.getValue()!=null && !r.getValue().isEmpty()) {
+					this.tFileList.clear();
 					this.tFileList.addAll(r.getValue());
 				}
 			}
@@ -749,6 +794,26 @@ public class TSelectImageField extends TRequiredSelectImage{
 	
 	public void settMaxFileSize(double max) {
 		this.tMaxFileSizeProperty.setValue(max);
+	}
+	
+	public void settScroll(boolean scroll) {
+		if(scroll) {
+			this.scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+			this.scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		}else {
+
+			this.scrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
+			this.scrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
+		}
+	}
+	
+	public void settLocalFolder(String path) {
+		if(this.directoryField!=null) {
+			File f = new File(path);
+			if(f.isDirectory()) {
+				this.directoryField.settFile(f);
+			}
+		}
 	}
 	
 	public <T extends Event> void addTEventHandler(TEventHandler<T> tEventHandler) {

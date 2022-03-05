@@ -9,6 +9,6 @@ public class TTabParser extends TAnnotationParser<TTab, Tab>{
 
 	@Override
 	public void parse(TTab annotation, Tab object, String... byPass) throws Exception {
-		super.parse(annotation, object, "content");
+		super.parse(annotation, object, "content", "scroll");
 	}
 }

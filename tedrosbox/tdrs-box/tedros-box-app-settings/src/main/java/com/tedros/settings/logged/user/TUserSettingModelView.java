@@ -3,14 +3,20 @@
  */
 package com.tedros.settings.logged.user;
 
+import com.tedros.core.context.TedrosContext;
 import com.tedros.core.security.model.TProfile;
 import com.tedros.core.security.model.TUser;
 import com.tedros.fxapi.annotation.TObservableValue;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
+import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TPasswordField;
+import com.tedros.fxapi.annotation.control.TRadioButtonField;
+import com.tedros.fxapi.annotation.control.TShowField;
+import com.tedros.fxapi.annotation.control.TShowField.TField;
 import com.tedros.fxapi.annotation.control.TTextField;
+import com.tedros.fxapi.annotation.control.TVerticalRadioGroup;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
@@ -64,35 +70,21 @@ public class TUserSettingModelView extends TEntityModelView<TUser> {
 	private SimpleStringProperty password;
 	
 	@TLabel(text = "#{tedros.profile}")
-	@TComboBoxField(firstItemTex="#{tedros.select}")
-	private SimpleObjectProperty<TProfileModelView> activeProfile;
+	@TShowField(fields=@TField(name="name"))
+	private SimpleObjectProperty<TProfile> activeProfile;
 
 	@TLabel(text = "#{tedros.language}")
-	@TComboBoxField(items=LanguageBuilder.class)
+	@TVerticalRadioGroup(radioButtons= {@TRadioButtonField(text = "English", userData = "en"),
+			@TRadioButtonField(text = "Português", userData = "pt")})
 	private SimpleStringProperty language;
 	
-	
-	@TModelViewType(modelClass=TProfile.class, modelViewClass=TProfileModelView.class, required=true)
-	private ITObservableList<TProfileModelView> profiles;
-
 	
 	private SimpleStringProperty lastPassword;
 	
 	public TUserSettingModelView(TUser entity) {
 		super(entity);
 		copyPassword();
-		
-		/*TimelineBuilder.create().keyFrames(
-	            new KeyFrame(Duration.millis(20000), 
-	                new EventHandler<ActionEvent>() {
-	                    public void handle(ActionEvent t) {
-	                    	profiles.add(new TProfileModelView(new TProfile(RandomStringUtils.randomAlphanumeric(4), RandomStringUtils.randomAlphanumeric(12))));
-	                    }
-	                })
-	        )
-	        .cycleCount(Animation.INDEFINITE)
-	        .build()
-	        .play();*/
+		language.setValue(TedrosContext.getLocale().getLanguage());
 	}
 
 	private void copyPassword() {
@@ -104,6 +96,7 @@ public class TUserSettingModelView extends TEntityModelView<TUser> {
 	public void reload(TUser model) {
 		super.reload(model);
 		copyPassword();
+		language.setValue(TedrosContext.getLocale().getLanguage());
 	}
 
 	/* (non-Javadoc)
@@ -163,20 +156,6 @@ public class TUserSettingModelView extends TEntityModelView<TUser> {
 	}
 
 	/**
-	 * @return the profiles
-	 */
-	public ITObservableList<TProfileModelView> getProfiles() {
-		return profiles;
-	}
-
-	/**
-	 * @param profiles the profiles to set
-	 */
-	public void setProfiles(ITObservableList<TProfileModelView> profiles) {
-		this.profiles = profiles;
-	}
-
-	/**
 	 * @return the language
 	 */
 	public SimpleStringProperty getLanguage() {
@@ -193,14 +172,14 @@ public class TUserSettingModelView extends TEntityModelView<TUser> {
 	/**
 	 * @return the activeProfile
 	 */
-	public SimpleObjectProperty<TProfileModelView> getActiveProfile() {
+	public SimpleObjectProperty<TProfile> getActiveProfile() {
 		return activeProfile;
 	}
 
 	/**
 	 * @param activeProfile the activeProfile to set
 	 */
-	public void setActiveProfile(SimpleObjectProperty<TProfileModelView> activeProfile) {
+	public void setActiveProfile(SimpleObjectProperty<TProfile> activeProfile) {
 		this.activeProfile = activeProfile;
 	}
 

@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.style.TStyleResourceName;
 import com.tedros.core.style.TStyleResourceValue;
+import com.tedros.core.style.TThemeUtil;
 import com.tedros.util.TColorUtil;
 import com.tedros.util.TFileUtil;
 import com.tedros.util.TedrosFolderEnum;
@@ -38,14 +39,15 @@ public abstract class TedrosStyle {
 		
 		Properties panelCustomProp = new Properties();
 		Properties defaultProp = new Properties();
-		String panelCustomPropFilePath = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+TStyleResourceName.PANEL_CUSTOM_STYLE;
-		String defaultFilePath = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+TStyleResourceName.DEFAULT_STYLE;
+		String panelCustomPropFilePath = TThemeUtil.getThemeFolder()+TStyleResourceName.PANEL_CUSTOM_STYLE;
+		String defaultFilePath =TedrosFolderEnum.CONF_FOLDER.getFullPath()+TStyleResourceName.DEFAULT_STYLE;
 		try {
 			InputStream is = new FileInputStream(defaultFilePath);
 			defaultProp.load(is);
+			is.close();
 			is = new FileInputStream(panelCustomPropFilePath);
 			panelCustomProp.load(is);
-			
+			is.close();
 			for(Object e : defaultProp.keySet()){
 				String key = (String) e;
 				cssContent = cssContent.replaceAll("%"+key+"%", defaultProp.getProperty(key));
@@ -63,7 +65,7 @@ public abstract class TedrosStyle {
 			e1.printStackTrace();
 		}
 		
-		path = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+"/custom-styles.css";
+		path = TThemeUtil.getThemeFolder()+"custom-styles.css";
 		File cssFile = new File(path);
 		if(!cssFile.isFile())
 			return;

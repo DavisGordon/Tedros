@@ -13,7 +13,7 @@ public class LayoutIconImageView extends TImageView {
 	
 	@Override
 	public String getImagePathName() {
-		return "com/tedros/settings/layout/icon/custom.png";
+		return "com/tedros/settings/layout/icon/icon.png";
 	}
 
 }

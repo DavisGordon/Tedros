@@ -8,7 +8,6 @@ import com.tedros.ejb.base.model.ITFileBaseModel;
 import com.tedros.fxapi.annotation.TCodeValue;
 import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TFieldBox;
-import com.tedros.fxapi.annotation.control.THTMLEditor;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
@@ -24,25 +23,19 @@ import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
-import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
-import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.annotation.view.TPaginator;
-import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.domain.TEnvironment;
-import com.tedros.fxapi.domain.THtmlConstant;
-import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
-import javafx.scene.text.TextAlignment;
 
 @TFormReaderHtml
-@TForm(name = "Site/Parceria", showBreadcrumBar=false)
+@TForm(name = "Site/Parceria", showBreadcrumBar=false, scroll=false)
 @TEjbService(serviceName = "ISiteParceriaControllerRemote", model=SiteParceria.class)
 @TListViewPresenter(paginator=@TPaginator(entityClass = SiteParceria.class, serviceName = "ISiteParceriaControllerRemote", show=true),
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Site/Parceria", buildModesRadioButton=false)))
@@ -75,7 +68,8 @@ public class SiteParceriaModelView extends TEntityModelView<SiteParceria>{
 	private SimpleStringProperty descricao;
 	
 	@TFieldBox(node=@TNode(id="img", parse = true))
-	@TSelectImageField(source=TEnvironment.LOCAL, target=TEnvironment.REMOTE, remoteOwner="somos")
+	@TSelectImageField(source=TEnvironment.LOCAL, target=TEnvironment.REMOTE, 
+	remoteOwner="somos", maxFileSize=300000)
 	private SimpleObjectProperty<ITFileBaseModel> image;
 	
 	

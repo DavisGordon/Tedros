@@ -106,13 +106,13 @@ public class EstoqueConfigModelView extends TEntityModelView<EstoqueConfig> {
 	
 	@TReaderHtml
 	@TLabel(text="Quantidade Minima")
-	@TNumberSpinnerField(maxValue = 1000000, minValue=0, zeroValidation=TZeroValidation.GREATHER_THAN_ZERO)
+	@TNumberSpinnerField(maxValue = 1000000, minValue=0, zeroValidation=TZeroValidation.NONE)
 	private SimpleIntegerProperty qtdMinima;
 	
 	
 	@TReaderHtml
 	@TLabel(text="Quantidade Inicial")
-	@TNumberSpinnerField(maxValue = 1000000, minValue=0, zeroValidation=TZeroValidation.GREATHER_THAN_ZERO)
+	@TNumberSpinnerField(maxValue = 1000000, minValue=0, zeroValidation=TZeroValidation.NONE)
 	private SimpleIntegerProperty qtdInicial;
 	
 	public EstoqueConfigModelView(EstoqueConfig entity) {
