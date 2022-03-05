@@ -9,6 +9,7 @@ public enum TStyleResourceName {
 	CUSTOM_STYLE ("custom-style.properties"),
 	PANEL_CUSTOM_STYLE ("panel-custom-style.properties"),
 	BACKGROUND_STYLE ("background-style.properties"),
+	THEME ("theme.properties"),
 	LANGUAGE ("language.properties");
 	
 	private String prop;

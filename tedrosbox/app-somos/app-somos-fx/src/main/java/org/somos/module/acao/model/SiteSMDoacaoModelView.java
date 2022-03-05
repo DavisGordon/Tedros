@@ -1,14 +1,8 @@
 package org.somos.module.acao.model;
 
-import java.util.List;
-
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-
 import org.somos.model.SiteDoacaoTransferencia;
 import org.somos.model.SitePontoColeta;
 import org.somos.model.SiteSMDoacao;
-import org.somos.model.Voluntario;
 
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
@@ -18,7 +12,6 @@ import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TDetailField;
 import com.tedros.fxapi.annotation.control.TDetailListField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
-import com.tedros.fxapi.annotation.control.THTMLEditor;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewType;
@@ -36,26 +29,20 @@ import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.reader.TDetailReaderHtml;
 import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
-import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
-import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.collections.ITObservableList;
-import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.domain.TEnvironment;
-import com.tedros.fxapi.domain.THtmlConstant;
-import com.tedros.fxapi.domain.TStyleParameter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
-import javafx.scene.text.TextAlignment;
 
 @TFormReaderHtml
-@TForm(name = "Site/Doações", showBreadcrumBar=false)
+@TForm(name = "Site/Doações", showBreadcrumBar=false, scroll=false)
 @TEjbService(serviceName = "ISiteSMDoacaoControllerRemote", model=SiteSMDoacao.class)
 @TListViewPresenter(paginator=@TPaginator(entityClass = SiteSMDoacao.class, serviceName = "ISiteSMDoacaoControllerRemote", show=true),
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Site/Doações", buildModesRadioButton=false)))
@@ -89,7 +76,8 @@ public class SiteSMDoacaoModelView extends TEntityModelView<SiteSMDoacao>{
 	private SimpleStringProperty descricao;
 	
 	@TFieldBox(node=@TNode(id="img", parse = true))
-	@TSelectImageField(source=TEnvironment.LOCAL, target=TEnvironment.REMOTE, remoteOwner="somos")
+	@TSelectImageField(source=TEnvironment.LOCAL, target=TEnvironment.REMOTE, 
+	remoteOwner="somos", maxFileSize=300000)
 	private SimpleObjectProperty<ITFileBaseModel> image;
 	
 	@TFieldBox(node=@TNode(id="pontocol", parse = true))

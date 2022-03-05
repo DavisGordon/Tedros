@@ -51,11 +51,20 @@ public class EstoqueItemModel implements Serializable{
 			Integer qtdAjuste) {
 		this.id = id;
 		this.produto = produto;
-		this.qtdMinima = qtdMinima;
-		this.qtdInicial = qtdInicial;
-		this.qtdCalculado = qtdCalculado;
-		this.qtdAjuste = qtdAjuste;
+		this.qtdMinima = validate(qtdMinima);
+		this.qtdInicial = validate(qtdInicial);
+		this.qtdCalculado = validate(qtdCalculado);
+		this.qtdAjuste = validate(qtdAjuste);
 	}
+
+	/**
+	 * @param qtd
+	 * @return
+	 */
+	private int validate(Integer qtd) {
+		return qtd==null ? 0 : qtd;
+	}
+	
 
 	/**
 	 * @return the id

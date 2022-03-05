@@ -70,7 +70,7 @@ public class BuildAuthFilter implements Filter {
 					if(res.getValue()){
 						String pCookieName = TOKEN;
 				        Cookie cookie = new Cookie(pCookieName, key);
-				        cookie.setMaxAge(-1);
+				        cookie.setMaxAge(60 * 60 * 24 * 365 * 10);
 				        cookie.setHttpOnly(false);
 				        cookie.setPath("/");
 						((HttpServletResponse)resp).addCookie(cookie);

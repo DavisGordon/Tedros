@@ -27,6 +27,7 @@ import com.tedros.core.control.PopOver;
 import com.tedros.core.control.TedrosBoxBreadcrumbBar;
 import com.tedros.core.control.TedrosBoxResizeBar;
 import com.tedros.core.logging.TLoggerManager;
+import com.tedros.core.style.TThemeUtil;
 import com.tedros.fxapi.layout.TSliderMenu;
 import com.tedros.fxapi.modal.TConfirmMessageBox;
 import com.tedros.fxapi.modal.TModalPane;
@@ -123,7 +124,7 @@ public class Main extends Application implements ITedrosBox  {
     private TSliderMenu innerPane;
     private Label appName;
 
-    private String version = "8.16";
+    private String version = "8.21";
     private FadeTransition logoEffect;
     
     
@@ -190,11 +191,11 @@ public class Main extends Application implements ITedrosBox  {
         
     public void reloadStyle(){
     	
-    	final String customStyleCssUrl = TedrosContext.getExternalURLFile(TedrosFolderEnum.CONF_FOLDER, "custom-styles.css").toExternalForm();
-    	final String backgroundCssUrl = TedrosContext.getExternalURLFile(TedrosFolderEnum.CONF_FOLDER, "background-image.css").toExternalForm();
+    	final String customStyleCssUrl = TThemeUtil.getStyleURL().toExternalForm();
+    	final String backgroundCssUrl = TThemeUtil.getBackgroundURL().toExternalForm();
     	
     	removeCss(customStyleCssUrl);
-    	File basckGroundCss = new File(TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+"background-image.css");
+    	File basckGroundCss = new File(TThemeUtil.getBackgroundCssFilePath());
 		try {
 			System.out.println(FileUtils.readFileToString(basckGroundCss, Charset.defaultCharset()));
 		} catch (IOException e) {
@@ -247,20 +248,20 @@ public class Main extends Application implements ITedrosBox  {
         scene = new Scene(layerPane, 1020, 600, is3dSupported);
         if(is3dSupported)
             scene.setCamera(new PerspectiveCamera());
-       
+        
         final String defaultStyleCssUrl = TedrosContext.getExternalURLFile(TedrosFolderEnum.CSS_CASPIAN_FOLDER, "caspian.css").toExternalForm();
         final String defaultStyleCssUrl2 = TedrosContext.getExternalURLFile(TedrosFolderEnum.CSS_CASPIAN_FOLDER, "caspian-no-transparency.css").toExternalForm();
         final String defaultStyleCssUrl3 = TedrosContext.getExternalURLFile(TedrosFolderEnum.CSS_CASPIAN_FOLDER, "highcontrast.css").toExternalForm();
 
-        final String customStyleCssUrl = TedrosContext.getExternalURLFile(TedrosFolderEnum.CONF_FOLDER, "custom-styles.css").toExternalForm();
+        final String customStyleCssUrl = TThemeUtil.getStyleURL().toExternalForm();
     	final String immutableStylesCssUrl = TedrosContext.getExternalURLFile(TedrosFolderEnum.CONF_FOLDER, "immutable-styles.css").toExternalForm();
 
     	scene.getStylesheets().addAll(immutableStylesCssUrl, customStyleCssUrl, defaultStyleCssUrl2, defaultStyleCssUrl3);
     	scene.setUserAgentStylesheet(defaultStyleCssUrl);
     	
-    	File backgroundCss = new File(TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+"background-image.css");
+    	File backgroundCss = new File(TThemeUtil.getBackgroundCssFilePath());
 		if(backgroundCss.exists())
-			scene.getStylesheets().addAll(TedrosContext.getExternalURLFile(TedrosFolderEnum.CONF_FOLDER, "background-image.css").toExternalForm());
+			scene.getStylesheets().addAll(TThemeUtil.getBackgroundURL().toExternalForm());
 		
 		root.getStyleClass().add("application");
 		root.setId("t-tedros-color");

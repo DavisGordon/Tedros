@@ -9,6 +9,7 @@ public class TSelectImageParser extends TControlFieldParser<com.tedros.fxapi.ann
 	@Override
 	public void parse(com.tedros.fxapi.annotation.control.TSelectImageField ann, TSelectImageField control, String... byPass) throws Exception {
 		
+		control.settScroll(ann.scroll());
 		if(!(ann.imageViewEvents().length==1 && ann.imageViewEvents()[0]==TEventHandler.class)) {
 			for(Class<? extends TEventHandler> c : ann.imageViewEvents()) {
 				TEventHandler ev = c.newInstance();
@@ -23,5 +24,7 @@ public class TSelectImageParser extends TControlFieldParser<com.tedros.fxapi.ann
 		control.settPreLoadBytes(ann.preLoadFileBytes());
 		control.settMaxFileSize(ann.maxFileSize());	
 		control.settHeight(ann.height());
+		if(!"".equals(ann.localFolder()))
+			control.settLocalFolder(ann.localFolder());
 	}
 }

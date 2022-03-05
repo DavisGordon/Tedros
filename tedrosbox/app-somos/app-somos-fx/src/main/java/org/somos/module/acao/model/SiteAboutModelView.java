@@ -33,7 +33,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 
 @TFormReaderHtml
-@TForm(name = "Home/Intodução", showBreadcrumBar=false)
+@TForm(name = "Home/Intodução", showBreadcrumBar=false, scroll=false)
 @TEjbService(serviceName = "ISiteAboutControllerRemote", model=SiteAbout.class)
 @TListViewPresenter(refreshListViewAfterActions=true,
 		paginator=@TPaginator(entityClass = SiteAbout.class, serviceName = "ISiteAboutControllerRemote", show=true),
@@ -53,15 +53,8 @@ public class SiteAboutModelView extends TEntityModelView<SiteAbout>{
 	})
 	private SimpleStringProperty status;
 	
-	/*@TReaderHtml
-	@TLabel(text="Descrição")
-	@TTextAreaField(required=true, maxLength=4000, wrapText=true,
-	node=@TNode(requestFocus=true, parse = true),
-	control=@TControl(prefHeight=300, parse = true))
-	private SimpleStringProperty descricao;*/
 	
 	@TLabel(text="Descrição")
-	//@THTMLEditor(/*required=true*/control=@TControl(prefHeight=300, parse = true))
 	@TTextAreaField(wrapText=true, control=@TControl(prefHeight=400, parse = true))
 	
 	@TTabPane(tabs = { 
@@ -73,7 +66,8 @@ public class SiteAboutModelView extends TEntityModelView<SiteAbout>{
 	
 
 	@TFieldBox(node=@TNode(id="img", parse = true))
-	@TSelectImageField(source=TEnvironment.LOCAL, target=TEnvironment.REMOTE, remoteOwner="somos")
+	@TSelectImageField(source=TEnvironment.LOCAL, target=TEnvironment.REMOTE, 
+	remoteOwner="somos", maxFileSize=300000)
 	private SimpleObjectProperty<ITFileBaseModel> image;
 	
 	public SiteAboutModelView(SiteAbout entidade) {

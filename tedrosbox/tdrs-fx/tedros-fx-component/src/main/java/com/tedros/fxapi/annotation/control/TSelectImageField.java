@@ -137,6 +137,18 @@ public @interface TSelectImageField {
 	 * </pre>
 	 * */
 	public double height() default 450;
+	
+	/**
+	 * <pre>
+	 * {@link com.tedros.fxapi.control.TSelectImageField} Class
+	 * 
+	 * Specify the  the local folder path to initialize the component
+	 * 
+	 * Default value: Empty String
+	 * </pre>
+	 * */
+	public String localFolder() default "";
+	
 	/**
 	 * <pre>
 	 * {@link com.tedros.fxapi.control.TSelectImageField} Class
@@ -191,9 +203,11 @@ public @interface TSelectImageField {
 	 * Property description:
 	 * 
 	 * Defines the maximum file size.
+	 * 
+	 * Default value: 1500000 (1.5Mb)
 	 * </pre>
 	 * */
-	public double maxFileSize() default -1;
+	public double maxFileSize() default 1500000;
 	
 	/**
 	 * <pre>
@@ -221,7 +235,17 @@ public @interface TSelectImageField {
 	 * </pre>
 	 * */
 	public double fitHeight() default 250;
-	
+
+	/**
+	 * <pre>
+	 * {@link com.tedros.fxapi.control.TSelectImageField} Class
+	 * 
+	 * Sets the scroll state.
+	 * 
+	 * Default value: true.
+	 * </pre>
+	 * */
+	public boolean scroll() default true;
 	/**
 	 * <pre>
 	 * {@link com.tedros.fxapi.control.TSelectImageField} Class
@@ -230,12 +254,12 @@ public @interface TSelectImageField {
 	 * 
 	 * Property description:
 	 * 
-	 * If true the bytes of the file will load at start.
+	 * If false the bytes of the file will load only on the mouse over.
 	 * 
-	 * Default value: false.
+	 * Default value: true.
 	 * </pre>
 	 * */
-	public boolean preLoadFileBytes() default false;
+	public boolean preLoadFileBytes() default true;
 	
 	
 	/**

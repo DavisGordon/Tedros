@@ -28,7 +28,7 @@ public class TUserSettingsPane extends StackPane {
     	ObservableList l = FXCollections.observableArrayList(umv);
     	TDynaView<TUserSettingModelView> v = new TDynaView<>(TUserSettingModelView.class, l, false);
     	v.tLoad();
-    	v.setMinHeight(400);
+    	v.setMinHeight(420);
 		super.getChildren().add(v);
 				
 		

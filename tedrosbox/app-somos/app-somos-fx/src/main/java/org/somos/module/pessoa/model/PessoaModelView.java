@@ -235,7 +235,7 @@ public class PessoaModelView extends TEntityModelView<Pessoa>{
 	@TReaderHtml
 	@TLabel(text="Email (Login no painel)")
 	@TTextField(maxLength=80)
-	@TFieldSet(fields = { "loginName", "password" }, region=@TRegion(maxWidth=400, parse = true),
+	@TFieldSet(fields = { "loginName", "password" }, region=@TRegion(maxWidth=500, parse = true),
 		legend = "Credenciais para acesso ao painel do voluntário ")
 	@TValidator(validatorClass = CredenciaisPainelValidator.class, associatedFieldsName={"password"})
 	private SimpleStringProperty loginName;

@@ -21,7 +21,7 @@
 		  <id>prod</id>
 		  <properties>
 		    <srv.host>http://www.somossocial.org.br/</srv.host>
-		    <csf.email>tedrosbox@gmail.com</csf.email>
+		    <csf.email>contato.somossocial@gmail.com</csf.email>
 		    <srv.email.template.path>/home/somos/email_boasvindas.html</srv.email.template.path>
 		    <srv.email.resource.path>/home/somos/smtpAccount.properties</srv.email.resource.path>
 		  </properties>
@@ -33,7 +33,7 @@
 		  </activation>
 		  <properties>
 		    <srv.host>http://localhost:8081/app-somos-web/</srv.host>
-		    <csf.email>tedrosbox@gmail.com</csf.email>
+		    <csf.email>contato.somossocial@gmail.com</csf.email>
 		    <srv.email.template.path>C://usr//somos//email_boasvindas.html</srv.email.template.path>
 		    <srv.email.resource.path>C://usr//somos//smtpAccount.properties</srv.email.resource.path>
 		  </properties>

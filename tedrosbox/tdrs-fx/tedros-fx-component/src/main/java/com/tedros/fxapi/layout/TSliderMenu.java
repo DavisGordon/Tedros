@@ -94,7 +94,8 @@ public class TSliderMenu extends StackPane {
 	    );
 	    
 	    ChangeListener<Duration> chd = (a,b,n)->{
-	    	sliderContent.getChildren().get(0).setVisible(!n.equals(Duration.ZERO));
+	    	for(Node c : sliderContent.getChildren()) 
+	    		c.setVisible(!n.equals(Duration.ZERO));
 	    };
 	    repo.add("chd", chd);
 	    timeline.currentTimeProperty().addListener(new WeakChangeListener<>(chd));
@@ -142,14 +143,16 @@ public class TSliderMenu extends StackPane {
 	}
 
 	public void settMenuContent(Node node){
-		this.sliderContent.getChildren().add(0, node);
+		this.sliderContent.getChildren().clear();
+		this.sliderContent.getChildren().add(node);
 		this.settMenuVisible(this.tMenuOpenedProperty.getValue());
+		node.setVisible(this.tMenuOpenedProperty.getValue());
 	}
 	
 	public void tClearMenuContent() {
 		if(this.sliderContent.getChildren().size()==1) {
 			this.sliderContent.getChildren().clear();
-			this.repo.remove("mev");
+			//this.repo.remove("mev");
 		}
 		
 	}

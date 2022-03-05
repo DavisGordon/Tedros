@@ -8,6 +8,7 @@ package com.tedros.fxapi.control;
 
 import java.io.File;
 
+import com.tedros.core.TInternationalizationEngine;
 import com.tedros.fxapi.control.action.TEventHandler;
 
 import javafx.beans.property.ObjectProperty;
@@ -57,6 +58,7 @@ public class TDirectoryField extends StackPane {
 	private ChangeListener<File> fileListener;
 	private ChangeListener<File> initialDirectoryListener;
 	
+	private TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
 	
 	public TDirectoryField(final Stage stage) {	
 		appStage = stage;
@@ -74,7 +76,7 @@ public class TDirectoryField extends StackPane {
 		toolbar.autosize();
 		
 		filePathLabel.setId("t-label");
-		selectButton.setText("Selecionar");
+		selectButton.setText(iEngine.getString("#{tedros.fxapi.button.select.folder}"));
 		cleanButton.setText("Limpar");
 		
 		setAlignment(toolbar, Pos.CENTER_LEFT);
@@ -97,7 +99,7 @@ public class TDirectoryField extends StackPane {
 		
 		fileProperty = new SimpleObjectProperty<>();
 		directoryChooser = new DirectoryChooser();
-		directoryChooser.setTitle("Selecionar pasta");
+		directoryChooser.setTitle(iEngine.getString("#{tedros.fxapi.button.select}"));
 		selectButton = new Button();
 		directoryNameField = new TTextField();
 		initialDirectoryProperty = new SimpleObjectProperty<>();

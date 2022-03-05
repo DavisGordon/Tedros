@@ -183,6 +183,17 @@ public @interface TTab  {
 	* </pre>
 	**/
 	public boolean disable() default false;
+	
+	/**
+	* <pre>
+	* {@link Tab} Class
+	* 
+	*  Sets the scroll state of this tab. 
+	*  
+	*  Default value: true
+	* </pre>
+	**/
+	boolean scroll() default true;
 
 	/**
 	* <pre>

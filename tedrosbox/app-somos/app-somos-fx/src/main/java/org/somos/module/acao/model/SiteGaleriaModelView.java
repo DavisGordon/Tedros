@@ -35,7 +35,7 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
 
 @TFormReaderHtml
-@TForm(name = "Site/Galeria", showBreadcrumBar=false)
+@TForm(name = "Site/Galeria", showBreadcrumBar=false, scroll=false)
 @TEjbService(serviceName = "ISiteGaleriaControllerRemote", model=SiteGaleria.class)
 @TListViewPresenter(refreshListViewAfterActions=true,
 		paginator=@TPaginator(entityClass = SiteGaleria.class, serviceName = "ISiteGaleriaControllerRemote", show=true),
@@ -77,7 +77,8 @@ public class SiteGaleriaModelView extends TEntityModelView<SiteGaleria>{
 	
 	
 	@TFieldBox(node=@TNode(id="img", parse = true))
-	@TSelectImageField(source=TEnvironment.LOCAL, target=TEnvironment.REMOTE, remoteOwner="somos")
+	@TSelectImageField(source=TEnvironment.LOCAL, target=TEnvironment.REMOTE, 
+	remoteOwner="somos", maxFileSize=300000)
 	private SimpleObjectProperty<ITFileBaseModel> image;
 	
 	public SiteGaleriaModelView(SiteGaleria entidade) {
