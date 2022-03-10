@@ -13,5 +13,13 @@ package com.tedros.fxapi.control;
  *
  */
 public class TColorPickerField extends TRequiredColorPicker {
+
+	/**
+	 * 
+	 */
+	public TColorPickerField() {
+		super();
+		super.tRequiredNodeProperty().setValue(this);
+	}
 	
 }

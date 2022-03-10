@@ -61,7 +61,7 @@ public class THTMLEditor extends TRequiredHTMLEditor {
         		htmlProperty.addListener(listener);
         	}
         });
-        
+        super.tRequiredNodeProperty().setValue(gettHTMLEditor());
 	}
 
 	@Override

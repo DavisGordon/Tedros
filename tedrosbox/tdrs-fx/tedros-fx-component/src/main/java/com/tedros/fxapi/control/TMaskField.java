@@ -54,6 +54,7 @@ public class TMaskField extends TRequiredTextField {
 		
 		textProperty().addListener(listener);
 		setMask(mask);
+		super.tRequiredNodeProperty().setValue(this);
 	}
 	
 	/**

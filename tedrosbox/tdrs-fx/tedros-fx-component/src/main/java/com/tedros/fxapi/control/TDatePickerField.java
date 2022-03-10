@@ -14,5 +14,13 @@ package com.tedros.fxapi.control;
  *
  */
 public class TDatePickerField extends TRequiredDatePicker {
+
+	/**
+	 * 
+	 */
+	public TDatePickerField() {
+		super();
+		super.tRequiredNodeProperty().setValue(this);
+	}
 	
 }

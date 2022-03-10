@@ -10,7 +10,6 @@ import com.tedros.fxapi.presenter.model.TModelView;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
@@ -168,17 +167,6 @@ implements ITDecorator<TDynaPresenter<M>>{
 	public void addItemInTHeaderToolBar(Node... item) {
 		final ITDynaView<M> view = getView();
 		view.gettHeaderToolBar().getItems().addAll(item);
-		
-		Node lastNode = null;
-		for(Node node : view.gettHeaderToolBar().getItems()){
-			if(!(node instanceof Button) && (lastNode!=null && lastNode instanceof Button) ){
-				lastNode.setId("t-last-button");
-			}
-			lastNode = node;
-		}
-		if(lastNode instanceof Button)
-			lastNode.setId("t-last-button");;
-		
 	}
 	
 	/**

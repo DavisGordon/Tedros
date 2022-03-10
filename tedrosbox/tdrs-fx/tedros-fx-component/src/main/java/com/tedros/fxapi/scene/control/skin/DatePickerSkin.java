@@ -86,9 +86,11 @@ public final class DatePickerSkin extends HBox implements Skin<DatePicker> {
 
     public DatePickerSkin(final DatePicker datePicker) {
         this.datePicker = datePicker;
+        datePicker.setId("t-input-box");
 
         calendarView = new CalendarView(datePicker.getLocale());
         textField = new TextField();
+        textField.setId("t-input-text");
 
         calendarView.setEffect(new DropShadow());
 

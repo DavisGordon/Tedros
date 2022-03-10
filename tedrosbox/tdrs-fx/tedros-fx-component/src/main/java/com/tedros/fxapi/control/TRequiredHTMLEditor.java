@@ -7,7 +7,9 @@ import com.tedros.app.component.ITComponent;
 
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.HTMLEditor;
 
@@ -15,13 +17,14 @@ import javafx.scene.web.HTMLEditor;
  * @author Davis Gordon
  *
  */
-public abstract class TRequiredHTMLEditor extends VBox implements ITField, ITComponent{
+public abstract class TRequiredHTMLEditor extends VBox implements ITRequirable, ITComponent{
 
 	private String t_componentId;
 	private TRequiredFieldHelper helper;
+	private SimpleObjectProperty<Node> tRequiredNodeProperty = new SimpleObjectProperty<>();
 	
 	public TRequiredHTMLEditor() {
-		this.helper = new TRequiredFieldHelper(gettHTMLEditor(), tValueProperty(), true);
+		this.helper = new TRequiredFieldHelper(this, true);
 	}
 	
 	@Override
@@ -63,5 +66,12 @@ public abstract class TRequiredHTMLEditor extends VBox implements ITField, ITCom
 	@Override
 	public void settComponentId(String id) {
 		t_componentId = id;
+	}
+
+	/**
+	 * @return the tRequiredNodeProperty
+	 */
+	public SimpleObjectProperty<Node> tRequiredNodeProperty() {
+		return tRequiredNodeProperty;
 	}
 }
