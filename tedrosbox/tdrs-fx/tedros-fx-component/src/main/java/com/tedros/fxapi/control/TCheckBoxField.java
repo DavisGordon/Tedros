@@ -18,11 +18,13 @@ public class TCheckBoxField extends TRequiredCheckBox {
 	
 	public TCheckBoxField() {
 		getStyleClass().addAll("box-input","t-form-control-label");
+		super.tRequiredNodeProperty().setValue(this);
 	}
 	
 	public TCheckBoxField(String text) {
 		super(text);
 		getStyleClass().addAll("box-input","t-form-control-label");
+		super.tRequiredNodeProperty().setValue(this);
 	}
 	
 }

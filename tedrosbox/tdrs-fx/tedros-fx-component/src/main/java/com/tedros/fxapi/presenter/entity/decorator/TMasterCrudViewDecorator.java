@@ -82,6 +82,7 @@ extends TDynaViewCrudBaseDecorator<M> {
 		
 		
 		tListViewPane = new StackPane();
+		tListViewPane.getStyleClass().add("t-panel-background-color");
 		// build the list view box
 		tListViewLayout = new VBox();
 		tListViewLayout.maxWidth(listViewMaxWidth+2);

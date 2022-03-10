@@ -12,6 +12,7 @@ import com.tedros.core.context.TedrosContext;
 import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
+import com.tedros.fxapi.control.TButton;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.layout.TBreadcrumbForm;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
@@ -162,13 +163,13 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildPrintButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tPrintButton = new Button();
+			tPrintButton = new TButton();
 			tPrintButton.setText(iEngine.getString(tPresenter==null 
 					? TAnnotationDefaultValue.TVIEW_printButtonText 
 							: tPresenter.decorator().printButtonText()));
 			tPrintButton.setId("t-button");
 		}else{
-			tPrintButton = new Button();
+			tPrintButton = new TButton();
 			tPrintButton.setText(iEngine.getString(text));
 			tPrintButton.setId("t-button");
 		}
@@ -193,13 +194,13 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildEditButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tEditButton = new Button();
+			tEditButton = new TButton();
 			tEditButton.setText(iEngine.getString(tPresenter==null 
 					? TAnnotationDefaultValue.TVIEW_editButtonText 
 							: tPresenter.decorator().editButtonText()));
 			tEditButton.setId("t-button");
 		}else{
-			tEditButton = new Button();
+			tEditButton = new TButton();
 			tEditButton.setText(iEngine.getString(text));
 			tEditButton.setId("t-button");
 		}
@@ -224,13 +225,13 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildCancelButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tCancelButton = new Button();
+			tCancelButton = new TButton();
 			tCancelButton.setText(iEngine.getString(tPresenter==null 
 					? TAnnotationDefaultValue.TVIEW_cancelButtonText 
 							: tPresenter.decorator().cancelButtonText()));
 			tCancelButton.setId("t-button");
 		}else {
-			tCancelButton = new Button();
+			tCancelButton = new TButton();
 			tCancelButton.setText(iEngine.getString(text));
 			tCancelButton.setId("t-button");
 		}
@@ -251,13 +252,13 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildImportButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tImportButton = new Button();
+			tImportButton = new TButton();
 			tImportButton.setText(iEngine.getString(tPresenter==null 
 					? TAnnotationDefaultValue.TVIEW_importButtonText 
 							: tPresenter.decorator().importButtonText()));
 			tImportButton.setId("t-button");
 		}else {
-			tImportButton = new Button();
+			tImportButton = new TButton();
 			tImportButton.setText(iEngine.getString(text));
 			tImportButton.setId("t-button");
 		}
@@ -278,13 +279,13 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildSaveButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tSaveButton = new Button();
+			tSaveButton = new TButton();
 			tSaveButton.setText(iEngine.getString(tPresenter==null 
 					? TAnnotationDefaultValue.TVIEW_saveButtonText 
 							: tPresenter.decorator().saveButtonText()));
 			tSaveButton.setId("t-button");
 		}else {
-			tSaveButton = new Button();
+			tSaveButton = new TButton();
 			tSaveButton.setText(iEngine.getString(text));
 			tSaveButton.setId("t-button");
 		}
@@ -309,13 +310,13 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildDeleteButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tDeleteButton = new Button();
+			tDeleteButton = new TButton();
 			tDeleteButton.setText(iEngine.getString(tPresenter==null 
 					? TAnnotationDefaultValue.TVIEW_deleteButtonText 
 							: tPresenter.decorator().deleteButtonText()));
 			tDeleteButton.setId("t-button");
 		}else {
-			tDeleteButton = new Button();
+			tDeleteButton = new TButton();
 			tDeleteButton.setText(iEngine.getString(text));
 			tDeleteButton.setId("t-button");
 		}
@@ -340,13 +341,13 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildNewButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tNewButton = new Button();
+			tNewButton = new TButton();
 			tNewButton.setText(iEngine.getString(tPresenter==null 
 					? TAnnotationDefaultValue.TVIEW_newButtonText 
 							: tPresenter.decorator().newButtonText()));
 			tNewButton.setId("t-button");
 		}else {
-			tNewButton = new Button();
+			tNewButton = new TButton();
 			tNewButton.setText(iEngine.getString(text));
 			tNewButton.setId("t-button");
 		}
@@ -365,7 +366,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	 * </p>
 	 * */
 	public void buildColapseButton(String text) {
-		tColapseButton = new Button();
+		tColapseButton = new TButton();
 		tColapseButton.setText(iEngine.getString(StringUtils.isBlank(text) 
 				? TAnnotationDefaultValue.TVIEW_colapse 
 						: text));
@@ -382,7 +383,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	}
 
 	/**
-	 * 	Get the new button.
+	 * 	Get the new TButton.
 	 * */
 	public Button gettNewButton() {
 		return tNewButton;

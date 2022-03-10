@@ -126,7 +126,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 		buildListener();
 		callBuild();
 		this.tPreLoadBytes.setValue(preLoadFileBytes);
-		
+		super.tRequiredNodeProperty().setValue(gettComponent());
 	}
 	
 	public TSelectImageField(ObservableList<ITFileBaseModel> property, TEnvironment source, TEnvironment target, 
@@ -146,7 +146,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 		buildListener();
 		callBuild();
 		this.tPreLoadBytes.setValue(preLoadFileBytes);
-		
+		super.tRequiredNodeProperty().setValue(gettComponent());
 	}
 	
 	private void callBuild() {

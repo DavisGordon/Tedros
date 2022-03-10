@@ -9,6 +9,8 @@ import com.tedros.fxapi.presenter.model.TModelView;
 
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 
@@ -16,13 +18,14 @@ import javafx.scene.layout.VBox;
  * @author Davis Gordon
  *
  */
-public abstract class TRequiredModal extends VBox implements ITField, ITComponent{
+public abstract class TRequiredModal extends VBox implements ITRequirable, ITComponent{
 
 	private String t_componentId;
 	private TRequiredFieldHelper helper;
+	private SimpleObjectProperty<Node> tRequiredNodeProperty = new SimpleObjectProperty<>();
     
     public TRequiredModal() {
-		this.helper = new TRequiredFieldHelper(gettListView(), tValueProperty(), true);
+		this.helper = new TRequiredFieldHelper(this,  true);
 	}
     
     @Override
@@ -67,5 +70,12 @@ public abstract class TRequiredModal extends VBox implements ITField, ITComponen
 	@Override
 	public void settComponentId(String id) {
 		t_componentId = id;
+	}
+
+	/**
+	 * @return the tRequiredNodeProperty
+	 */
+	public SimpleObjectProperty<Node> tRequiredNodeProperty() {
+		return tRequiredNodeProperty;
 	}
 }

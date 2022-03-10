@@ -6,7 +6,6 @@ package com.tedros.fxapi.control;
 import com.tedros.core.module.TObjectRepository;
 import com.tedros.fxapi.effect.TEffectUtil;
 
-import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -29,34 +28,50 @@ public class TRequiredFieldHelper {
 	private static String REQUIRED_DEFAULT_STYLE = "required";
 	private static String REQUIRED_CHECKBOX_STYLE = "box-required";
 	private Effect requiredEffect;
-	private final String requiredStyle;
+	private String requiredStyle;
 	private final Boolean addEffect;
-	
-	private final Node requiredNode;
-	private final Observable observableValue;
-	
 	private SimpleBooleanProperty requirementAccomplishedProperty;
 	private SimpleBooleanProperty requiredProperty; 
+	
+	private ITRequirable component;
 	 
     private TObjectRepository repo = new TObjectRepository();
     
-	/**
-	 * @param requiredNode
-	 */
-	public TRequiredFieldHelper(Node requiredNode, Observable observableValue, Boolean addEffect) {
-		this.requiredNode = requiredNode;
-		this.observableValue = observableValue;
+    public TRequiredFieldHelper(String requiredStyle, ITRequirable component, Boolean addEffect) {
+		this.component = component;
 		this.addEffect = addEffect;
-		if(requiredNode instanceof Pane) {
-			this.requiredStyle = REQUIRED_PANE_STYLE;
-		}else if(requiredNode instanceof CheckBox) {
-			this.requiredStyle = REQUIRED_CHECKBOX_STYLE;
-		}else {
-			this.requiredStyle = REQUIRED_DEFAULT_STYLE;
-		}		
+		this.requiredStyle = requiredStyle;
+		ChangeListener<Node> l = (a,o,n)->{
+			buildNotNullListener();
+			buildRequiredProperty();
+		};
+		repo.add("trnp", l);
+		this.component.tRequiredNodeProperty().addListener(new WeakChangeListener<>(l));
+		
 		buildRequiredEffect();
-		buildNotNullListener();
-		buildRequiredProperty();
+	}
+    
+	public TRequiredFieldHelper(ITRequirable component, Boolean addEffect) {
+		this.component = component;
+		this.addEffect = addEffect;
+		
+		ChangeListener<Node> l = (a,o,n)->{
+			if(n==null) 
+				return;
+			if(n instanceof Pane) {
+				this.requiredStyle = REQUIRED_PANE_STYLE;
+			}else if(n instanceof CheckBox) {
+				this.requiredStyle = REQUIRED_CHECKBOX_STYLE;
+			}else {
+				this.requiredStyle = REQUIRED_DEFAULT_STYLE;
+			}
+			buildNotNullListener();
+			buildRequiredProperty();
+		};
+		repo.add("trnp", l);
+		this.component.tRequiredNodeProperty().addListener(new WeakChangeListener<>(l));
+		
+		buildRequiredEffect();
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -64,21 +79,21 @@ public class TRequiredFieldHelper {
 		this.requiredProperty = new SimpleBooleanProperty();
 		ChangeListener<Boolean> rpchl = (a,b,n)->{
 			if(n){
-				this.requiredNode.getStyleClass().add(requiredStyle);
+				component.tRequiredNodeProperty().getValue().getStyleClass().add(requiredStyle);
 				buildRequirementAccomplishedProperty();
-				if(observableValue instanceof ObservableValue)
-					((ObservableValue)observableValue).addListener((ChangeListener)repo.get(LISTENER_KEY));
+				if(component.tValueProperty() instanceof ObservableValue)
+					((ObservableValue)component.tValueProperty()).addListener((ChangeListener)repo.get(LISTENER_KEY));
 				else
-					((ObservableList)observableValue).addListener((ListChangeListener)repo.get(LISTENER_KEY));
+					((ObservableList)component.tValueProperty()).addListener((ListChangeListener)repo.get(LISTENER_KEY));
 				validate();
 	    	}else{
 	    		requirementAccomplishedProperty = null;
 	    		removeEffect();
-	    		this.requiredNode.getStyleClass().remove(requiredStyle);
-	    		if(observableValue instanceof ObservableValue)
-					((ObservableValue)observableValue).removeListener((ChangeListener)repo.get(LISTENER_KEY));
+	    		component.tRequiredNodeProperty().getValue().getStyleClass().remove(requiredStyle);
+	    		if(component.tValueProperty() instanceof ObservableValue)
+					((ObservableValue)component.tValueProperty()).removeListener((ChangeListener)repo.get(LISTENER_KEY));
 				else
-					((ObservableList)observableValue).removeListener((ListChangeListener)repo.get(LISTENER_KEY));
+					((ObservableList)component.tValueProperty()).removeListener((ListChangeListener)repo.get(LISTENER_KEY));
 				
 	    	}
 		};
@@ -89,14 +104,15 @@ public class TRequiredFieldHelper {
 	/**
 	 * 
 	 */
+	@SuppressWarnings("rawtypes")
 	private void validate() {
-		if(observableValue instanceof ObservableList) {
-			if(TRequiredValidation.isRequired((ObservableList)observableValue))
+		if(component.tValueProperty() instanceof ObservableList) {
+			if(TRequiredValidation.isRequired((ObservableList)component.tValueProperty()))
 				applyEffect();
 			else
 				removeEffect();
 		}else {
-			if(TRequiredValidation.isRequired(((ObservableValue)observableValue).getValue()))
+			if(TRequiredValidation.isRequired(((ObservableValue)component.tValueProperty()).getValue()))
 				applyEffect();
 			else
 				removeEffect();
@@ -115,7 +131,7 @@ public class TRequiredFieldHelper {
 
 	@SuppressWarnings("rawtypes")
 	private void buildNotNullListener(){
-		if(observableValue instanceof ObservableList){
+		if(component.tValueProperty() instanceof ObservableList){
 			ListChangeListener x = c ->{
 				if(TRequiredValidation.isRequired(c.getList()))
 					applyEffect();
@@ -142,19 +158,19 @@ public class TRequiredFieldHelper {
 	private void removeEffect() {
 		if(requirementAccomplishedProperty!=null)
 			requirementAccomplishedProperty.set(true);
-		this.requiredNode.getStyleClass().remove(this.requiredStyle+"-not-ok");
-		this.requiredNode.getStyleClass().add(this.requiredStyle+"-ok");
+		component.tRequiredNodeProperty().getValue().getStyleClass().remove(this.requiredStyle+"-not-ok");
+		component.tRequiredNodeProperty().getValue().getStyleClass().add(this.requiredStyle+"-ok");
 		if(addEffect)
-			this.requiredNode.setEffect(null);
+			component.tRequiredNodeProperty().getValue().setEffect(null);
 	}
 
 	private void applyEffect() {
 		if(requirementAccomplishedProperty!=null)
 			requirementAccomplishedProperty.set(false);
-		this.requiredNode.getStyleClass().remove(this.requiredStyle+"-ok");
-		this.requiredNode.getStyleClass().add(this.requiredStyle+"-not-ok");
+		component.tRequiredNodeProperty().getValue().getStyleClass().remove(this.requiredStyle+"-ok");
+		component.tRequiredNodeProperty().getValue().getStyleClass().add(this.requiredStyle+"-not-ok");
 		if(addEffect)
-			this.requiredNode.setEffect(requiredEffect);
+			component.tRequiredNodeProperty().getValue().setEffect(requiredEffect);
 	}
 	
 	public SimpleBooleanProperty requiredProperty() {

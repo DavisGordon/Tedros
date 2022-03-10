@@ -13,5 +13,13 @@ package com.tedros.fxapi.control;
  *
  */
 public class TComboBoxField<T extends Object> extends TRequiredComboBox<T> {
+
+	/**
+	 * 
+	 */
+	public TComboBoxField() {
+		super();
+		super.tRequiredNodeProperty().setValue(this);
+	}
 	
 }

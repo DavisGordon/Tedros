@@ -10,6 +10,8 @@ import com.tedros.app.component.ITComponent;
 
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 
 /**
@@ -18,13 +20,14 @@ import javafx.scene.control.TextArea;
  * @author Davis Gordon
  *
  */
-public abstract class TRequiredTextArea extends TextArea implements ITField, ITComponent {
+public abstract class TRequiredTextArea extends TextArea implements ITRequirable, ITComponent {
 
 	private String t_componentId; 
 	private TRequiredFieldHelper helper;
+	private SimpleObjectProperty<Node> tRequiredNodeProperty = new SimpleObjectProperty<>();
 	
 	public TRequiredTextArea() {
-		this.helper = new TRequiredFieldHelper(this, tValueProperty(), true);
+		this.helper = new TRequiredFieldHelper(this, true);
 	}
 	
 	@Override
@@ -62,6 +65,13 @@ public abstract class TRequiredTextArea extends TextArea implements ITField, ITC
 	@Override
 	public void settComponentId(String id) {
 		t_componentId = id;
+	}
+
+	/**
+	 * @return the tRequiredNodeProperty
+	 */
+	public SimpleObjectProperty<Node> tRequiredNodeProperty() {
+		return tRequiredNodeProperty;
 	}
 	
 }

@@ -128,6 +128,7 @@ public class TSelectionModal extends TRequiredModal {
 		tListView.setMinWidth(width);
 		tListView.setMaxHeight(height);
 		tListView.setMinHeight(height);
+		super.tRequiredNodeProperty().setValue(tListView);
 		
     }
 	

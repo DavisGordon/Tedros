@@ -1,9 +1,9 @@
 package com.tedros.fxapi.presenter.dynamic.decorator;
 
-import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
+import com.tedros.fxapi.control.TButton;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TModelView;
@@ -86,13 +86,13 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildCloseButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tCloseButton = new Button();
+			tCloseButton = new TButton();
 			tCloseButton.setText(iEngine.getString(tPresenter==null 
 							? TAnnotationDefaultValue.TVIEW_closeButtonText 
 									: tPresenter.decorator().closeButtonText()));
 			tCloseButton.setId("t-button");
 		}else {
-			tCloseButton = new Button();
+			tCloseButton = new TButton();
 			tCloseButton.setText(iEngine.getString(text));
 			tCloseButton.setId("t-button");
 		}
@@ -106,7 +106,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	 * */
 	public void buildActionButton(String text) {
 		
-		tActionButton = new Button();
+		tActionButton = new TButton();
 		tActionButton.setText(iEngine.getString(text));
 		tActionButton.setId("t-button");
 		
@@ -128,13 +128,13 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildCleanButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tCleanButton = new Button();
+			tCleanButton = new TButton();
 			tCleanButton.setText(iEngine.getString(tPresenter==null 
 					? TAnnotationDefaultValue.TVIEW_cleanButtonText 
 							: tPresenter.decorator().cleanButtonText()));
 			tCleanButton.setId("t-button");
 		}else {
-			tCleanButton = new Button();
+			tCleanButton = new TButton();
 			tCleanButton.setText(iEngine.getString(text));
 			tCleanButton.setId("t-button");
 		}

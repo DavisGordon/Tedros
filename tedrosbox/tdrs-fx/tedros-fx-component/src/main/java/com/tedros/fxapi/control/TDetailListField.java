@@ -47,6 +47,7 @@ public class TDetailListField extends TRequiredDetailField {
 						: new TDynaGroupView(module, tEntityViewClass, entityClass, details) ;
 		getChildren().add(view);
 		view.tLoad();
+		super.tRequiredNodeProperty().setValue(this);
 	}
 	
 	

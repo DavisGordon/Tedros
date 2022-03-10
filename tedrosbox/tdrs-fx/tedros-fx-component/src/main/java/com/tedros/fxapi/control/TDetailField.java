@@ -88,6 +88,8 @@ public class TDetailField extends TRequiredDetailField {
 		getChildren().add(pane);
 		if(this.tDetailProperty.getValue()!=null)
 			this.showForm(this.tDetailProperty.getValue());
+		
+		super.tRequiredNodeProperty().setValue(this);
 	}
 
 	/**

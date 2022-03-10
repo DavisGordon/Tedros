@@ -4,6 +4,7 @@ import com.tedros.core.TInternationalizationEngine;
 import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
+import com.tedros.fxapi.control.TButton;
 import com.tedros.fxapi.control.TLabel;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TModelView;
@@ -85,11 +86,11 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	 * */
 	public void buildAddButton(String text) {
 		if(text==null){
-			tAddButton = new Button();
+			tAddButton = new TButton();
 			tAddButton.setText(iEngine.getString(TAnnotationDefaultValue.TVIEW_addButtonText));
 			tAddButton.setId("t-button");
 		}else {
-			tAddButton = new Button();
+			tAddButton = new TButton();
 			tAddButton.setText(iEngine.getString(text));
 			tAddButton.setId("t-button");
 		}
@@ -111,13 +112,13 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildSelectAllButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tSelectAllButton = new Button();
+			tSelectAllButton = new TButton();
 			tSelectAllButton.setText(iEngine.getString(tPresenter==null 
 							? TAnnotationDefaultValue.TVIEW_selectAllButtonText 
 									: tPresenter.decorator().selectAllButtonText()));
 			tSelectAllButton.setId("t-button");
 		}else {
-			tSelectAllButton = new Button();
+			tSelectAllButton = new TButton();
 			tSelectAllButton.setText(iEngine.getString(text));
 			tSelectAllButton.setId("t-button");
 		}
@@ -139,13 +140,13 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildCancelButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tCancelButton = new Button();
+			tCancelButton = new TButton();
 			tCancelButton.setText(iEngine.getString(tPresenter==null 
 							? TAnnotationDefaultValue.TVIEW_cancelButtonText 
 									: tPresenter.decorator().cancelButtonText()));
 			tCancelButton.setId("t-button");
 		}else {
-			tCancelButton = new Button();
+			tCancelButton = new TButton();
 			tCancelButton.setText(iEngine.getString(text));
 			tCancelButton.setId("t-button");
 		}
@@ -167,13 +168,13 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildCloseButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tCloseButton = new Button();
+			tCloseButton = new TButton();
 			tCloseButton.setText(iEngine.getString(tPresenter==null 
 							? TAnnotationDefaultValue.TVIEW_closeButtonText 
 									: tPresenter.decorator().closeButtonText()));
 			tCloseButton.setId("t-button");
 		}else {
-			tCloseButton = new Button();
+			tCloseButton = new TButton();
 			tCloseButton.setText(iEngine.getString(text));
 			tCloseButton.setId("t-button");
 		}
@@ -195,13 +196,13 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildSearchButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tSearchButton = new Button();
+			tSearchButton = new TButton();
 			tSearchButton.setText(iEngine.getString(tPresenter==null 
 							? TAnnotationDefaultValue.TVIEW_searchButtonText 
 									: tPresenter.decorator().searchButtonText()));
 			tSearchButton.setId("t-button");
 		}else {
-			tSearchButton = new Button();
+			tSearchButton = new TButton();
 			tSearchButton.setText(iEngine.getString(text));
 			tSearchButton.setId("t-button");
 		}
@@ -223,13 +224,13 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildCleanButton(String text) {
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			tCleanButton = new Button();
+			tCleanButton = new TButton();
 			tCleanButton.setText(iEngine.getString(tPresenter==null 
 					? TAnnotationDefaultValue.TVIEW_cleanButtonText 
 							: tPresenter.decorator().cleanButtonText()));
 			tCleanButton.setId("t-button");
 		}else {
-			tCleanButton = new Button();
+			tCleanButton = new TButton();
 			tCleanButton.setText(iEngine.getString(text));
 			tCleanButton.setId("t-button");
 		}

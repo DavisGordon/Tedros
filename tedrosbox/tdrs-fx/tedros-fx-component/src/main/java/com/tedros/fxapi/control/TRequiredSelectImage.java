@@ -17,13 +17,14 @@ import javafx.scene.layout.StackPane;
  * @author Davis Gordon
  *
  */
-public abstract class TRequiredSelectImage extends StackPane implements ITField, ITComponent{
+public abstract class TRequiredSelectImage extends StackPane implements ITRequirable, ITComponent{
 
 	private String t_componentId;
 	private TRequiredFieldHelper helper;
+	private SimpleObjectProperty<Node> tRequiredNodeProperty = new SimpleObjectProperty<>();
 	
 	public TRequiredSelectImage() {
-		this.helper = new TRequiredFieldHelper(gettComponent(), tValueProperty(), false);
+		this.helper = new TRequiredFieldHelper(this, false);
 	}
 	
 	@Override
@@ -66,5 +67,12 @@ public abstract class TRequiredSelectImage extends StackPane implements ITField,
 	@Override
 	public void settComponentId(String id) {
 		t_componentId = id;
+	}
+
+	/**
+	 * @return the tRequiredNodeProperty
+	 */
+	public SimpleObjectProperty<Node> tRequiredNodeProperty() {
+		return tRequiredNodeProperty;
 	}
 }

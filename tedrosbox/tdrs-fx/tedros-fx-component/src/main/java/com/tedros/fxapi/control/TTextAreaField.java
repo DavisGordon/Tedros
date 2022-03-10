@@ -18,6 +18,14 @@ public class TTextAreaField extends TRequiredTextArea {
 	
 	private SimpleIntegerProperty maxLength;
 		
+	/**
+	 * 
+	 */
+	public TTextAreaField() {
+		super();
+		super.tRequiredNodeProperty().setValue(this);
+	}
+
 	@Override 
 	public void replaceText(int start, int end, String letter) {
 		 

@@ -9,4 +9,12 @@ package com.tedros.fxapi.control;
  */
 public class TListView<T> extends TRequiredListView<T> {
 
+	/**
+	 * 
+	 */
+	public TListView() {
+		super();
+		super.tRequiredNodeProperty().setValue(this);
+	}
+
 }

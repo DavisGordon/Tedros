@@ -6,6 +6,14 @@ import javafx.scene.control.RadioButton;
 
 public abstract class TRadioButtonGroup extends TRequiredToggleGroup {
 
+	/**
+	 * 
+	 */
+	public TRadioButtonGroup() {
+		super();
+		super.tRequiredNodeProperty().setValue(getBox());
+	}
+
 	public void addRadioButton(final RadioButton radioButton){
 		radioButton.setToggleGroup(this);
 		getBox().getChildren().add(radioButton);
