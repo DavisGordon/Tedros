@@ -1,60 +1,55 @@
 package com.tedros.fxapi.modal;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.core.model.ITModelView;
-import com.tedros.fxapi.control.TAccordion;
 import com.tedros.fxapi.control.TText;
 import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.control.validator.TFieldResult;
 import com.tedros.fxapi.control.validator.TValidatorResult;
-import com.tedros.fxapi.exception.TException;
 import com.tedros.fxapi.exception.TValidatorException;
-import com.tedros.fxapi.form.TFieldBox;
 
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.effect.BlurType;
-import javafx.scene.effect.DropShadow;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 
 public class TMessageBox extends StackPane {
 	
-	@FXML public ScrollPane messageScrollPane;
-	@FXML public VBox messageVBox;
+	public VBox msgListPane;
     
     public TMessageBox() {
-    	load(null);
+    	init();
     }
+    
+    public TMessageBox(String msg) {
+    	init();
+    	load(Arrays.asList(msg), TMessageType.GENERIC);
+	}
+    
     public TMessageBox(List<String> messages) {
-    	load(messages);
+    	init();
+    	load(messages, TMessageType.GENERIC);
 	}
     
-    public TMessageBox(Map<String, String> messages) {
-    	loadMap(messages);
+    public TMessageBox(Throwable e) {
+    	init();
+    	load(Arrays.asList(e.getMessage()), TMessageType.ERROR);
 	}
     
-    public TMessageBox(TException e) {
-    	load(Arrays.asList(e.getMessage()));
-	}
     
     @SuppressWarnings({"unchecked", "rawtypes"})
 	public TMessageBox(TValidatorException e) {
-    	
+    	init();
     	List<TValidatorResult<ITModelView>> results = (List<TValidatorResult<ITModelView>>) e.getValidatorResults();
     	List<String> messages = new ArrayList<>(0);
     	
@@ -77,108 +72,108 @@ public class TMessageBox extends StackPane {
     			}
     		}
     	}
-    	load(messages);
-	}
-    
-    public TMessageBox(Throwable e) {
-    	load(Arrays.asList(e.getMessage()));
-	}
-    
-    public TMessageBox(String msg) {
-    	load(Arrays.asList(msg));
-	}
-	private void loadMap(Map<String, String> messages) {
-		try{
-	    	loadFXML();
-	        
-			Map<String, Node> content = new HashMap<>();
-			if(messages!=null)
-		        for (String label : messages.keySet()) {
-		        	Text text = new Text(messages.get(label));
-		        	text.setWrappingWidth(350);
-		        	content.put(label, text);
-		        }
-			final TAccordion accordionMsg = new TAccordion(content);
-			accordionMsg.addItem(content);
-			messageVBox.getChildren().add(accordionMsg);
-					
-			
-    	}catch(Exception e){
-    		e.printStackTrace();
-    	}
-	}
-	public void loadFXML() throws IOException {
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("message.fxml"));
-		fxmlLoader.setRoot(this);
-		fxmlLoader.setController(this);
-		fxmlLoader.load();
-		//winBtn = new TWindowButtons(false, false, true);
+    	load(messages, TMessageType.WARNING);
 	}
 
-	private void load(List<String> messages) {
+    private void init() {
+    	this.msgListPane = new VBox();
+    	this.msgListPane.setSpacing(5);
+    	this.msgListPane.setAlignment(Pos.TOP_CENTER);
+    	this.msgListPane.setStyle("-fx-background-color: transparent");
+    	ScrollPane scroll = new ScrollPane();
+    	scroll.setFitToHeight(true);
+    	scroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+    	scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+    	scroll.setContent(msgListPane);
+    	scroll.setStyle("-fx-background-color: transparent");
+    	super.getChildren().add(scroll);
+    	StackPane.setAlignment(scroll, Pos.TOP_CENTER);
+    	super.setStyle("-fx-background-color: transparent");
+    	super.setMaxWidth(500);
+    	super.parentProperty().addListener((a,o,n)->{
+    		if(n!=null) {
+    			Pane p = (Pane) n;
+    			if(p.getHeight()==0)
+    				super.setMaxHeight(200);
+    			else
+    				super.setMaxHeight(p.getHeight()-50);
+    		}
+    	});
+    }
+  
+	private void load(List<String> messages, TMessageType type) {
 		try{
-	    	loadFXML();
-	    	setMaxWidth(400);
-	    	setMaxHeight(200);
-	    	
 	        if(messages!=null)
-		        for (String string : messages)
-					tAddMessage(string);
+		        for (String m : messages)
+					tAddMessage(m, type);
 			
     	}catch(Exception e){
     		e.printStackTrace();
     	}
 	}
 	
-	public void tAddMessage(ObservableList<? extends String> messages) {
-		messageVBox.getChildren().clear();
+	public void tAddMessages(ObservableList<? extends String> messages, TMessageType type) {
+		msgListPane.getChildren().clear();
 		if(messages!=null)
 	        for (String string : messages)
-				tAddMessage(string);
-
+				tAddMessage(string, type);
 	}
 	
+	public void tAddMessage(String msg) {
+		this.tAddMessage(msg, TMessageType.GENERIC);
+	}
+	
+	public void tAddMessages(ObservableList<TMessage> messages) {
+		msgListPane.getChildren().clear();
+		if(messages!=null)
+	        for (TMessage m : messages)
+				tAddMessage(m.getValue(), m.getType());
+	}
+	
+	public void tAddMessage(TMessage msg) {
+		this.tAddMessage(msg.getValue(), msg.getType());
+	}
+	
+	public void tAddInfoMessage(String info) {
+		this.tAddMessage(info, TMessageType.INFO);
+	}
+	
+	public void tAddWarningMessage(String warning) {
+		this.tAddMessage(warning, TMessageType.WARNING);
+	}
+	
+	public void tAddErrorMessage(String error) {
+		this.tAddMessage(error, TMessageType.ERROR);
+	}
 
-
-	public void tAddMessage(String string) {
+	public void tAddMessage(String string, TMessageType type) {
 		TText text = new TText(string);
-		text.settTextStyle(TTextStyle.MEDIUM);
+		text.settTextStyle(TTextStyle.LARGE);
 		text.setWrappingWidth(this.getMaxWidth()-100);
-		DropShadow ef = new DropShadow();
-		ef.setColor(Color.BLACK);
-		ef.setBlurType(BlurType.THREE_PASS_BOX);
-		ef.setRadius(15.119047619047619);
-		ef.setWidth(35.16666666666667);
-		ef.setHeight(35.16666666666667);
-		TFieldBox fieldBox = new TFieldBox(null, null, text, null);
-		fieldBox.setAlignment(Pos.CENTER);
-		fieldBox.setId("t-fieldbox-message");
-		fieldBox.setEffect(ef);
 		
-		messageVBox.getChildren().add(fieldBox);
+		HBox box = new HBox(8);
+		HBox.setHgrow(text, Priority.ALWAYS);
+		box.setAlignment(Pos.CENTER);
+		box.setId("t-fieldbox-message");
+		if(type==null || type.equals(TMessageType.GENERIC)) 
+			box.getChildren().addAll(text);
+		else {
+			StackPane icon = new StackPane();
+			icon.setId("t-"+type.name().toLowerCase()+"-icon");
+			icon.setMinSize(48, 48);
+			
+			box.getChildren().addAll(text, icon);
+		}
+		
+		msgListPane.getChildren().add(box);
 	}
 	
 	public VBox gettMessageVBox() {
-		return messageVBox;
+		return msgListPane;
 	}
 
 	public void settMessageVBox(VBox messageVBox) {
-		this.messageVBox = messageVBox;
-	}
-
-	public VBox getMessageVBox() {
-		return messageVBox;
-	}
-
-	public void setMessageVBox(VBox messageVBox) {
-		this.messageVBox = messageVBox;
-	}
-
-	public ScrollPane getMessageScrollPane() {
-		return messageScrollPane;
-	}
-	public void setMessageScrollPane(ScrollPane messageScrollPane) {
-		this.messageScrollPane = messageScrollPane;
+		this.msgListPane = messageVBox;
 	}
 
 }

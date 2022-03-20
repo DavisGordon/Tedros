@@ -15,11 +15,21 @@ import com.tedros.util.TedrosFolderEnum;
 public enum TStyleResourceValue {
 	
 	MAIN_COLOR,
-	MAIN_LIGHT_COLOR,
+	MAIN_COLOR_RED,
+	MAIN_COLOR_GREEN,
+	MAIN_COLOR_BLUE,
+	MAIN_COLOR_OPACITY,
 	MAIN_TEXT_COLOR,
+	TOPBAR_COLOR,
+	TOPBAR_COLOR_RED,
+	TOPBAR_COLOR_GREEN,
+	TOPBAR_COLOR_BLUE,
+	TOPBAR_COLOR_OPACITY,
 	TOPBAR_TEXT_COLOR,
-	LEFT_TOOLBAR_COLOR,
-	LEFT_TOOLBAR_TEXT_COLOR,
+	
+	APP_TEXT_COLOR,
+	APP_TEXT_SIZE,
+	
 	MAIN_PAGE_COLOR,
 	ROOT_BACKGROUND, 
 	ROOT_MAIN_COLOR, 
@@ -109,16 +119,15 @@ public enum TStyleResourceValue {
 		 
 	}
 	
-	static private void buildDefault(){
-		if(null==defaultProp){
+	static private void buildDefault(boolean reload){
+		if(null==defaultProp || reload){
 			defaultProp = new Properties();
-			String propFilePath = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+TStyleResourceName.DEFAULT_STYLE;
+			String propFilePath = TThemeUtil.getThemeFolder()+TStyleResourceName.DEFAULT_STYLE;
 			try {
 				InputStream is = new FileInputStream(propFilePath);				
 				defaultProp.load(is);
 				is.close();
 			}catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}	
@@ -146,7 +155,11 @@ public enum TStyleResourceValue {
 	}
 	
 	public String defaultStyle() {
-		buildDefault();
+		return defaultStyle(false);
+	}
+	
+	public String defaultStyle(boolean reloadValues) {
+		buildDefault(reloadValues);
 		if(defaultProp.containsKey(name()))
 			return  defaultProp.getProperty(name());
 		return null;

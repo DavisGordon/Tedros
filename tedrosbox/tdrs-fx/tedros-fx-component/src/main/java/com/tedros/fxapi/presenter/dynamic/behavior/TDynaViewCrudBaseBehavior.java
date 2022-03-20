@@ -27,7 +27,9 @@ import com.tedros.fxapi.exception.TValidatorException;
 import com.tedros.fxapi.form.ITModelForm;
 import com.tedros.fxapi.layout.TBreadcrumbForm;
 import com.tedros.fxapi.modal.TConfirmMessageBox;
+import com.tedros.fxapi.modal.TMessage;
 import com.tedros.fxapi.modal.TMessageBox;
+import com.tedros.fxapi.modal.TMessageType;
 import com.tedros.fxapi.presenter.behavior.TActionState;
 import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.behavior.TProcessResult;
@@ -622,11 +624,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 											}
 										});
 									}
-									addMessage(msg);
+									addMessage(new TMessage(TMessageType.INFO, msg));
 									setActionState(new TActionState(TActionType.SAVE, arg2, TProcessResult.SUCCESS));
 								} catch (Exception e) {	
 									e.printStackTrace();
-									addMessage(e.getMessage());
+									addMessage(new TMessage(TMessageType.ERROR, e.getMessage()));
 									
 								}
 							}
@@ -637,7 +639,14 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 							String msg = result.getResult().equals(EnumResult.OUTDATED) 
 									? iEngine.getString("#{tedros.fxapi.message.outdate}")
 											: result.getMessage();
-							addMessage(msg);
+							switch(result.getResult()) {
+								case ERROR:
+									addMessage(new TMessage(TMessageType.ERROR, msg));
+									break;
+								default:
+									addMessage(new TMessage(TMessageType.WARNING, msg));
+									break;
+							}
 							setActionState(new TActionState(TActionType.SAVE, arg2, TProcessResult.get(result.getResult()), result.getMessage()));	
 						}
 						
@@ -864,7 +873,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 														TResult result = resultados.get(0);
 														if(result.getResult().equals(EnumResult.ERROR)) {
 															System.out.println(result.getMessage());
-															addMessage(result.getMessage());
+															addMessage(new TMessage(TMessageType.ERROR, result.getMessage()));
 															setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.ERROR, result.getMessage()));
 														}else{
 															E entity = (E) result.getValue();
@@ -874,7 +883,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 																actionHelper.runAfter(TActionType.CANCEL);
 																setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.SUCCESS));
 															}else {
-																addMessage(iEngine.getString("#{tedros.fxapi.message.error}"));
+																addMessage(new TMessage(TMessageType.WARNING, iEngine.getString("#{tedros.fxapi.message.error}")));
 																setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.NO_RESULT));
 															}
 														}
@@ -981,7 +990,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 									TResult result = resultados.get(0);
 									if(result.getResult().equals(EnumResult.ERROR)) {
 										System.out.println(result.getMessage());
-										addMessage(result.getMessage());
+										addMessage(new TMessage(TMessageType.ERROR, result.getMessage()));
 										setActionState(new TActionState(TActionType.DELETE, arg2, TProcessResult.ERROR, result.getMessage()));
 									}else if(result.getResult().equals(EnumResult.WARNING)){
 										E entity = (E) result.getValue();
@@ -992,7 +1001,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 											removeAllListenerFromModelView();
 											setModelView(null);
 										}
-										addMessage(result.getMessage());
+										addMessage(new TMessage(TMessageType.WARNING, result.getMessage()));
 										setActionState(new TActionState(TActionType.DELETE, arg2, TProcessResult.WARNING, result.getMessage()));
 									}else
 									if(result.getResult().equals(EnumResult.SUCESS)){

@@ -1,28 +1,42 @@
 package com.tedros.core.context;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.TModule;
 import com.tedros.core.control.PopOver;
 import com.tedros.core.control.PopOver.ArrowLocation;
+import com.tedros.core.style.TStyleResourceValue;
+import com.tedros.util.TedrosFolderEnum;
 
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
+import javafx.scene.control.OverrunStyle;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Glow;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 
 class InternalViewPage extends Page{
@@ -71,22 +85,41 @@ class InternalViewPage extends Page{
     	if(context.getModuleDescriptor().getIconImageViewClass()!=null){
     		return context.getModuleDescriptor().getIconImageViewClass().newInstance();
     	}else{
+            Integer r =  Integer.valueOf(TStyleResourceValue.PANEL_BACKGROUND_RED.customStyle(true));
+            Integer g =  Integer.valueOf(TStyleResourceValue.PANEL_BACKGROUND_GREEN.customStyle());
+            Integer b =  Integer.valueOf(TStyleResourceValue.PANEL_BACKGROUND_BLUE.customStyle());
             
-        	/*ImageView imageView = new ImageView(new Image(TedrosContext.getExternalURLFile(TedrosFolderEnum.IMAGES_FOLDER, "icon-overlay.png").toString()));
+            Integer r1 =  RandomUtils.nextInt(0, 255);
+            Integer g1 =  RandomUtils.nextInt(0, 255);
+            Integer b1 =  RandomUtils.nextInt(0, 255);
+            
+        	ImageView imageView = new ImageView(
+        			new Image(TedrosContext.getExternalURLFile(TedrosFolderEnum.IMAGES_FOLDER, "icon-overlay.png").toString()));
             imageView.setMouseTransparent(true);
             Rectangle overlayHighlight = new Rectangle(-8,-8,130,130);
-            overlayHighlight.setFill(new LinearGradient(0,0.5,0,1,true, CycleMethod.NO_CYCLE, new Stop[]{ new Stop(0,Color.BLACK), new Stop(1,Color.web("#444444"))}));
+            overlayHighlight.setFill(
+            		new LinearGradient(0,0.5,0,1,true, CycleMethod.NO_CYCLE, 
+            				new Stop[]{ new Stop(0,Color.rgb(r, g, b)), 
+            						new Stop(1,Color.rgb(r1, g1, b1))})
+            );
             overlayHighlight.setOpacity(0.8);
             overlayHighlight.setMouseTransparent(true);
             overlayHighlight.setBlendMode(BlendMode.ADD);
+            
+            r =  Integer.valueOf(TStyleResourceValue.FORM_BACKGROUND_RED.customStyle());
+            g =  Integer.valueOf(TStyleResourceValue.FORM_BACKGROUND_GREEN.customStyle());
+            b =  Integer.valueOf(TStyleResourceValue.FORM_BACKGROUND_BLUE.customStyle());
+            Double o = 0.1;
+           
             Rectangle background = new Rectangle(-8,-8,130,130);
-            background.setFill(Color.web("#b9c0c5"));
+            background.setFill(Color.rgb(r, g, b, o));
             Group group = new Group(background);
             Rectangle clipRect = new Rectangle(114,114);
             clipRect.setArcWidth(38);
             clipRect.setArcHeight(38);
             group.setClip(clipRect);
-            Node content = createIconContent();
+            Label content = new Label(getName().trim());
+            content.setFont(Font.font("Bungee", FontWeight.BOLD, 30));
             if (content != null) {
                 content.setTranslateX((int)((114-content.getBoundsInParent().getWidth())/2)-(int)content.getBoundsInParent().getMinX());
                 content.setTranslateY((int)((114-content.getBoundsInParent().getHeight())/2)-(int)content.getBoundsInParent().getMinY());
@@ -94,9 +127,7 @@ class InternalViewPage extends Page{
             }
             group.getChildren().addAll(overlayHighlight,imageView);
             // Wrap in extra group as clip dosn't effect layout without it
-            //return new Group(group);*/
-            
-        	return null;
+            return new Group(group);
         }
     }
 
@@ -179,9 +210,12 @@ class InternalViewPage extends Page{
         	
         }else{
         	Button tile = new Button(getName().trim(),icon);
-            tile.setMinSize(140,145);
-            tile.setPrefSize(140,145);
-            tile.setMaxSize(140,145);
+        	tile.setWrapText(true);
+        	tile.setTextAlignment(TextAlignment.CENTER);
+        	tile.setTextOverrun(OverrunStyle.WORD_ELLIPSIS);
+          //  tile.setMinSize(140,145);
+           // tile.setPrefSize(140,145);
+            tile.setMaxSize(140,165);
             tile.setContentDisplay(ContentDisplay.TOP);
             tile.getStyleClass().clear();
             tile.getStyleClass().add("t-app-tile");

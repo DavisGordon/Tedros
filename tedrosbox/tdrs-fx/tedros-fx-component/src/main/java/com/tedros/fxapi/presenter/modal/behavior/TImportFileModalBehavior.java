@@ -130,7 +130,7 @@ extends TDynaViewActionBaseBehavior<M, E> {
 										: iEngine.getString("#{tedros.fxapi.message.import}");
 				
 						final TMessageBox tMessageBox = new TMessageBox();
-						tMessageBox.tAddMessage(msg);
+						tMessageBox.tAddInfoMessage(msg);
 						getView().tShowModal(tMessageBox, true);	
 							
 						if(result.getResult().equals(EnumResult.SUCESS)) {

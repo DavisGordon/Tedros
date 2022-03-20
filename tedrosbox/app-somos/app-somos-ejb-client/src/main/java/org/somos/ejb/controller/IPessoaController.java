@@ -16,6 +16,8 @@ public interface IPessoaController extends ITSecureEjbController<Pessoa>{
 	@SuppressWarnings("rawtypes")
 	public TResult pesquisar(TAccessToken token, String nome, Date dataNascimento, String tipo, String tipoDocumento, String numero);
 
+	public TResult pesquisar(TAccessToken token, String nome,  String status, Date dataInicio, Date dataFim);
+	
 	public TResult<Pessoa> saveFromSite(TAccessToken token, Pessoa entidade);
 	
 	public TResult recuperar(TAccessToken token, String loginName, String password);

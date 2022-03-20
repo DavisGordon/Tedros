@@ -12,6 +12,8 @@ import com.tedros.core.context.TedrosContext;
 import com.tedros.core.style.TThemeUtil;
 import com.tedros.ejb.base.model.TFileModel;
 import com.tedros.fxapi.control.action.TPresenterAction;
+import com.tedros.fxapi.modal.TMessage;
+import com.tedros.fxapi.modal.TMessageType;
 import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 import com.tedros.settings.layout.model.BackgroundImageModel;
@@ -35,7 +37,7 @@ public class BackgroundBehavior extends TDynaViewCrudBaseBehavior<BackgroundImag
 				
 				if(fm==null) {
 					String msg = TInternationalizationEngine.getInstance(null).getString("#{message.select.image}");
-					addMessage(msg);
+					addMessage(new TMessage(TMessageType.WARNING, msg));
 					return false;
 				}
 				

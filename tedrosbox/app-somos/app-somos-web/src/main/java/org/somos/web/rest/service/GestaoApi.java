@@ -48,6 +48,7 @@ import org.somos.web.rest.model.EstoqueConfigModel;
 import org.somos.web.rest.model.EstoqueItemModel;
 import org.somos.web.rest.model.EstoqueModel;
 import org.somos.web.rest.model.IdNomeModel;
+import org.somos.web.rest.model.PessoaModel;
 import org.somos.web.rest.model.ProdutoModel;
 import org.somos.web.rest.model.RestModel;
 import org.somos.web.rest.util.ApiUtils;
@@ -1056,5 +1057,93 @@ public class GestaoApi {
 		return ex;
 	}
 	
+	@SuppressWarnings("unchecked")
+	@GET
+	@Path("/filterPess/{nome}/{status}/{begin}/{end}")
+	public RestModel<List<PessoaModel>> filterPess(@PathParam("nome") String nome, 
+			@PathParam("status") String status, 
+			@PathParam("begin") String begin, 
+			@PathParam("end") String end){
+				
+		try {
+			if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+			
+			Date dti = !"x".equals(begin) ? ApiUtils.convertToDate(begin) : null;
+			Date dtf = !"x".equals(end) ? ApiUtils.convertToDate(end) : null;
+				
+			nome = "list_all".equals(nome) ? null : nome;
+			status = "list_all".equals(status) ? null : status;
+			 
+			TResult<List<Pessoa>> res = pessServ.pesquisar(appBean.getToken(), nome, status, dti, dtf);
+			List<PessoaModel> lst = new ArrayList<>();
+			
+			if(res.getValue()!=null)
+				for(Pessoa e : res.getValue()) {
+					lst.add(convert(e));
+				}
+			
+			return new RestModel<>(lst, "200", "OK");
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return new RestModel<>(null, "500", error.getValue());
+		}
+	}
+
+
+	private PessoaModel convert(Pessoa e) {
+		return new PessoaModel(e);
+	}
+
+	@GET
+	@Path("/pess/{id}")
+	public RestModel<PessoaModel> getPess(@PathParam("id") Long id){
+				
+		try {
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+			
+			Pessoa ex = findPessoaById(id);
+			return new RestModel<>(convert(ex), "200", "OK");
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return new RestModel<>(null, "500", error.getValue());
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@POST
+	@Path("/pess/save")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public RestModel<PessoaModel> savePess(PessoaModel  model){
+	
+		try{
+			 if(isAccessDenied())
+				return new RestModel<>(null, "404", ACCESS_DENIED);
+				
+			final Pessoa ex = model.getId()==null 
+					? new Pessoa() 
+							: this.findPessoaById(model.getId());
+					
+			ex.setStatusVoluntario(model.getStatus());
+			ex.setObservacao(model.getObservacao());
+			
+			TResult<Pessoa> res = pessServ.save(appBean.getToken(), ex);
+			
+			if(res.getResult().equals(EnumResult.SUCESS)) {
+				Pessoa p = res.getValue();
+				return new RestModel<>(convert(p), "200", "OK");
+			}else {
+				return new RestModel<>(null, "404",res.getMessage());
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return new RestModel<>(null, "500", error.getValue());
+		}
+		
+	}
 	
 }

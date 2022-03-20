@@ -17,6 +17,7 @@ import com.tedros.fxapi.domain.TViewMode;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.layout.Priority;
@@ -30,7 +31,7 @@ import javafx.scene.web.WebView;
  * @author Davis Gordon
  *
  */
-public abstract class TVBoxForm<M extends ITModelView<?>> 
+public class TVBoxForm<M extends ITModelView<?>> 
 extends VBox implements ITModelForm<M> {
 	
 	protected final TFormEngine<M, TVBoxForm<M>> formEngine;
@@ -180,6 +181,24 @@ extends VBox implements ITModelForm<M> {
 		return this.formEngine.getSetting();
 	}
 	
+	@Override
+	public void tInitializeForm() {
+		formatForm();
+	}
+
+	@Override
+	public void tInitializeReader() {
+		formatForm();
+		
+	}
 	
+	private void formatForm() {
+		autosize();
+		setSpacing(8);
+		setPadding(new Insets(10, 10, 10, 10));
+		setMaxHeight(Double.MAX_VALUE);
+		setMaxWidth(Double.MAX_VALUE);
+		addEndSpacer();
+	}
 
 }

@@ -26,7 +26,9 @@ import com.tedros.fxapi.exception.TValidatorException;
 import com.tedros.fxapi.form.ITForm;
 import com.tedros.fxapi.form.TBuildFormStatus;
 import com.tedros.fxapi.form.TFieldBox;
+import com.tedros.fxapi.modal.TMessage;
 import com.tedros.fxapi.modal.TMessageBox;
+import com.tedros.fxapi.modal.TMessageType;
 import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 import com.tedros.fxapi.util.TModelViewUtil;
@@ -45,7 +47,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WeakChangeListener;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker.State;
 import javafx.scene.control.Button;
@@ -139,16 +140,6 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 				
 				saveButton.setDisable(true);
 				
-				final ObservableList<String> mensagens = FXCollections.observableArrayList();
-				mensagens.addListener(new ListChangeListener<String>(){
-					@Override
-					public void onChanged(javafx.collections.ListChangeListener.Change<? extends String> c) {
-						final TMessageBox tMessageBox = new TMessageBox();
-						tMessageBox.tAddMessage(c.getList());
-						getView().tShowModal(tMessageBox, true);
-					}
-				});
-				
 				if(profileComboBox.isDisable()){
 					saveButton.setDisable(false);
 					LoginModelView modelView = getModelView();
@@ -189,7 +180,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 									TResult<TUser> result = resultados.get(0);
 									if(result.getResult().getValue() == EnumResult.ERROR.getValue()){
 										System.out.println(result.getMessage());
-										mensagens.add(result.getMessage());
+										addMessage(new TMessage(TMessageType.ERROR, result.getMessage()));
 									}else{
 										TUser entity = result.getValue();
 										if(entity!=null){
@@ -234,7 +225,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 			
 										if(result.getResult().getValue() == EnumResult.ERROR.getValue()){
 											System.out.println(result.getMessage());
-											mensagens.add(result.getMessage());
+											addMessage(new TMessage(TMessageType.ERROR, result.getMessage()));
 										}else{
 											try{
 												loadTedros(result.getValue());												

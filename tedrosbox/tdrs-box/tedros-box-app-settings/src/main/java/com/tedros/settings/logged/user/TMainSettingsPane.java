@@ -3,7 +3,6 @@
  */
 package com.tedros.settings.logged.user;
 
-import com.tedros.core.context.TedrosContext;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 
 import javafx.collections.FXCollections;

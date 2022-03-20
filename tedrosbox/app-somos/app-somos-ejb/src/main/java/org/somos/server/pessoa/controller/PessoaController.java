@@ -171,6 +171,18 @@ public class PessoaController extends TSecureEjbController<Pessoa> implements IP
 		
 	}
 	
+	@SuppressWarnings("rawtypes")
+	public TResult pesquisar(TAccessToken token, String nome,  String status, Date dataInicio, Date dataFim){
+		try{
+			List<Pessoa> list = getService().pesquisar(nome, null, status, dataInicio, dataFim, "nome", "asc");
+			return new TResult<List<Pessoa>>(EnumResult.SUCESS, list);
+		}catch(Exception e){
+			e.printStackTrace();
+			return new TResult<List<Pessoa>>(EnumResult.ERROR, e.getMessage());
+		}
+		
+	}
+	
 	public TResult<Pessoa> saveFromSite(TAccessToken token, Pessoa entidade) {
 		try{
 			

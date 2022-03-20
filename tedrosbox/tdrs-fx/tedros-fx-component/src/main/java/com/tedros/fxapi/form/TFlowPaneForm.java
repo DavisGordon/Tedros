@@ -17,6 +17,7 @@ import com.tedros.fxapi.domain.TViewMode;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.web.WebView;
@@ -28,7 +29,7 @@ import javafx.scene.web.WebView;
  *
  */
 
-public abstract class TFlowPaneForm<M extends ITModelView<?>> 
+public class TFlowPaneForm<M extends ITModelView<?>> 
 extends FlowPane implements ITModelForm<M> {
 	
 	@SuppressWarnings("rawtypes")
@@ -36,26 +37,34 @@ extends FlowPane implements ITModelForm<M> {
 	
 	private final TFormEngine<M, TFlowPaneForm<M>> formEngine;
 	
-	
 	public TFlowPaneForm(M modelView) {
 		this.formEngine = new TFormEngine<M, TFlowPaneForm<M>>(this, modelView);
 		this.formEngine.setEditMode();
 	}
-
-	public TFlowPaneForm(M modelView, Boolean readerMode) {
-		this.formEngine = new TFormEngine<M, TFlowPaneForm<M>>(this, modelView, readerMode);
+	
+	public TFlowPaneForm(M modelView, boolean readerMode) {
+		this.formEngine = new TFormEngine<>(this, modelView);
+		if(readerMode)
+			this.formEngine.setReaderMode();
+		else
+			this.formEngine.setEditMode();
 	}
 	
 	@SuppressWarnings("rawtypes")
 	public TFlowPaneForm(ITPresenter presenter, M modelView) {
 		this.presenter = presenter;
 		this.formEngine = new TFormEngine<M, TFlowPaneForm<M>>(this, modelView);
+		this.formEngine.setEditMode();
 	}
 	
 	@SuppressWarnings("rawtypes")
 	public TFlowPaneForm(ITPresenter presenter, M modelView, boolean readerMode) {
 		this.presenter = presenter;
 		this.formEngine = new TFormEngine<>(this, modelView, readerMode);
+		if(readerMode)
+			this.formEngine.setReaderMode();
+		else
+			this.formEngine.setEditMode();
 	}
 	
 	@Override
@@ -156,5 +165,26 @@ extends FlowPane implements ITModelForm<M> {
 	@Override
 	public TSetting gettSetting(){
 		return this.formEngine.getSetting();
+	}
+	
+
+	@Override
+	public void tInitializeForm() {
+		formatForm();
+	}
+
+	@Override
+	public void tInitializeReader() {
+		formatForm();
+		
+	}
+	
+	private void formatForm() {
+		autosize();
+		super.setHgap(8);
+		super.setVgap(8);
+		setPadding(new Insets(10, 10, 10, 10));
+		setMaxHeight(Double.MAX_VALUE);
+		setMaxWidth(Double.MAX_VALUE);
 	}
 }

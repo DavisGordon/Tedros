@@ -1,16 +1,11 @@
 package com.tedros.fxapi.modal;
 
-import java.io.IOException;
-
 import com.tedros.core.TInternationalizationEngine;
+import com.tedros.fxapi.control.TButton;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 
 public class TConfirmObjectMessageBox<T> extends TMessageBox {
@@ -25,35 +20,26 @@ public class TConfirmObjectMessageBox<T> extends TMessageBox {
 			tAddMessage(iEngine.getString(text));
 			confirm = new SimpleObjectProperty<>();
 			
-			Button yesBtn = new Button();
-			yesBtn.setId("t-last-button");
+			TButton yesBtn = new TButton();
 			yesBtn.setText(iEngine.getString("#{tedros.fxapi.button.yes}"));
 					
 			
-			Button noBtn = new Button();
-			noBtn.setId("t-last-button");
+			TButton noBtn = new TButton();
 			noBtn.setText(iEngine.getString("#{tedros.fxapi.button.no}"));
 					
 			HBox box = new HBox();
 			box.getChildren().addAll(yesBtn, noBtn);
-			box.setSpacing(10);
 			box.setAlignment(Pos.CENTER);
 			gettMessageVBox().getChildren().addAll(box);
 			
 			gettMessageVBox().setAlignment(Pos.CENTER);
 			
-			yesBtn.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent arg0) {
+			yesBtn.setOnAction(e -> {
 					confirm.set(object);
-				}
 			});
 			
-			noBtn.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent arg0) {
+			noBtn.setOnAction(e -> {
 					confirm.set(null);
-				}
 			});
 			
 		}catch(Exception e){
@@ -61,14 +47,6 @@ public class TConfirmObjectMessageBox<T> extends TMessageBox {
 		}
 	}
 	
-	public void loadFXML() throws IOException {
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("message.fxml"));
-		fxmlLoader.setRoot(this);
-		fxmlLoader.setController(this);
-		fxmlLoader.load();
-		//winBtn = new TWindowButtons(false, false, true);
-	}
-
 	public ReadOnlyObjectProperty<T> gettConfirmProperty() {
 		return confirm;
 	}

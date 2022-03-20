@@ -13,6 +13,8 @@ import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.fxapi.annotation.listener.TChangeListener;
 import com.tedros.fxapi.control.TSelectionModal;
 import com.tedros.fxapi.form.TFieldBox;
+import com.tedros.fxapi.modal.TMessage;
+import com.tedros.fxapi.modal.TMessageType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewSimpleBaseBehavior;
 import com.tedros.fxapi.process.TEntityProcess;
@@ -55,14 +57,14 @@ public class CarregarProdutoListener extends TChangeListener<Boolean> {
 						TResult result = resultados.get(0);
 						if(result.getResult().equals(EnumResult.ERROR)) {
 							System.out.println(result.getMessage());
-							((TDynaViewSimpleBaseBehavior)presenter.getBehavior()).addMessage(result.getMessage());
+							((TDynaViewSimpleBaseBehavior)presenter.getBehavior()).addMessage(new TMessage(TMessageType.ERROR, result.getMessage()));
 						}else{
 							Produto entity = (Produto) result.getValue();
 							modal.gettSelectedItems().clear();
 							if(entity!=null) {
 								modal.gettSelectedItems().add(new ProdutoFindModelView(entity));
 							}else {
-								((TDynaViewSimpleBaseBehavior)presenter.getBehavior()).addMessage("Produto não encontrado para o codigo informado!");
+								((TDynaViewSimpleBaseBehavior)presenter.getBehavior()).addMessage(new TMessage(TMessageType.WARNING, "Produto não encontrado para o codigo informado!"));
 							}
 						}
 					}

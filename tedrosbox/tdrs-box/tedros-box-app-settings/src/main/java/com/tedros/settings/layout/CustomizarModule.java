@@ -9,6 +9,7 @@ import com.tedros.fxapi.presenter.view.group.TGroupView;
 import com.tedros.fxapi.presenter.view.group.TViewItem;
 import com.tedros.settings.layout.model.BackgroundImageModelView;
 import com.tedros.settings.layout.model.PainelModelView;
+import com.tedros.settings.layout.model.TMainColorModelView;
 import com.tedros.settings.start.TConstant;
 
 @TSecurity(	id="T_CUSTOM_LAYOUT", appName="#{settings.app.name}", moduleName="#{settings.module.name}",	
@@ -20,6 +21,7 @@ public class CustomizarModule extends TModule {
 		
 		TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(TConstant.UUI);
 		tShowView(new TGroupView<>(this, iEngine.getString("#{settings.view.title}"), 
+				new TViewItem(TDynaGroupView.class, TMainColorModelView.class, iEngine.getString("#{color.base.painel.title}"), true),
 				new TViewItem(TDynaGroupView.class, PainelModelView.class, iEngine.getString("#{settings.form.name}"), true),
 				new TViewItem(TDynaGroupView.class, BackgroundImageModelView.class, iEngine.getString("#{background.painel.title}"))));
 		

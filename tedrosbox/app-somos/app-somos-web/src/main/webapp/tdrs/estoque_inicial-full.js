@@ -3,8 +3,6 @@ $(document).ready(function() {
 	loadCoz();
 	buildObj();
 	addEvents();
-	addEventsNewItem();
-
 });
 
 var curObj;

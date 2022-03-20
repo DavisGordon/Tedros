@@ -21,9 +21,6 @@ public class TedrosSettingDecorator extends TDynaViewCrudBaseDecorator<PainelMod
 	
 	private TDynaPresenter<ExampleViewModel> examplePresenter;
 	
-	private TComboBoxField<String> themes;
-	
-	
 	@Override
 	public void decorate() {
 		
@@ -34,14 +31,9 @@ public class TedrosSettingDecorator extends TDynaViewCrudBaseDecorator<PainelMod
 		setViewTitle("#{settings.form.name}");
 		buildSaveButton("#{label.button.apply}");
 		
-		themes = new TComboBoxField<>();
 		// add the buttons at the header tool bar
 		addItemInTHeaderToolBar(gettSaveButton());
-		Region space = new Region();
-		HBox.setHgrow(space, Priority.ALWAYS);
-		TLabel l = new TLabel("Temas: ");
-		super.addItemInTHeaderHorizontalLayout(space,l, themes);
-				
+		
 		final ScrollPane exampleScroll = new ScrollPane();
 		exampleScroll.setStyle("-fx-background-color: transparent;");
 		exampleScroll.setContent(exampleView);
@@ -66,10 +58,4 @@ public class TedrosSettingDecorator extends TDynaViewCrudBaseDecorator<PainelMod
 		return examplePresenter;
 	}
 
-	/**
-	 * @return the themes
-	 */
-	public TComboBoxField<String> getThemes() {
-		return themes;
-	}
 }

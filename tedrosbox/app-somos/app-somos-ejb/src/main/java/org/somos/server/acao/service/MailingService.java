@@ -66,7 +66,7 @@ public class MailingService extends TEjbService<Mailing> {
 						emailBO.enviar(false, to, m.getTituloEmail(), content, true);
 					}catch(Exception | TSentEmailException e){
 						e.printStackTrace();
-						msg += to + ", ";
+						msg += "".equals(msg) ? to : ", "+to;
 					}
 				}
 			}
@@ -181,7 +181,7 @@ public class MailingService extends TEjbService<Mailing> {
 			}
 			
 			if(!msg.isEmpty())
-				throw new MailingWarningException("Houve um problema no envio de mailing para os seguintes destinatarios: "+msg);
+				throw new MailingWarningException("Houve um problema no envio de email para os seguintes destinatarios: "+msg);
 		
 		}catch(MailingWarningException e){
 			throw e;
@@ -198,7 +198,7 @@ public class MailingService extends TEjbService<Mailing> {
 			emailBO.enviar(false, p.getLoginName(), m.getTituloEmail(), content, true);
 		}catch(Exception | TSentEmailException e){
 			e.printStackTrace();
-			msg += p.getNome() + ", ";
+			msg += "".equals(msg) ? p.getNome() : ", "+p.getNome();
 		}
 		return msg;
 	}
