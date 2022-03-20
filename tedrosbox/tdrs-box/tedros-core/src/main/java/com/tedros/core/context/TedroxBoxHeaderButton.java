@@ -27,7 +27,6 @@ public class TedroxBoxHeaderButton extends HBox{
 	public TedroxBoxHeaderButton(final Stage stage)
     {
 		super(4D);
-		
 		TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
         
         setMaxHeight(17);
@@ -37,38 +36,31 @@ public class TedroxBoxHeaderButton extends HBox{
         Button closeBtn = new Button();
         closeBtn.setId("t-window-close");
         closeBtn.setTooltip(new Tooltip(iEngine.getString("#{tedros.close}")));
-        closeBtn.setOnAction(new EventHandler<ActionEvent>() {
-        	@Override
-            public void handle(ActionEvent actionEvent){    
-        		TedrosProcess.stopAllServices();
-                Platform.exit();
-            }            
+        closeBtn.setOnAction(e -> {
+        	TedrosProcess.stopAllServices();
+        	Platform.exit();
         });
         Button minBtn = new Button();
         minBtn.setId("t-window-min");
         minBtn.setTooltip(new Tooltip(iEngine.getString("#{tedros.minimize}")));
-        minBtn.setOnAction(new EventHandler<ActionEvent>() {
-        	@Override
-            public void handle(ActionEvent actionEvent){
-                stage.setIconified(true);
-            }       
+        minBtn.setOnAction(e ->{
+        	stage.setIconified(true);
         });
         Button maxBtn = new Button();
         maxBtn.setId("t-window-max");
         maxBtn.setTooltip(new Tooltip(iEngine.getString("#{tedros.maximize}")));
-        maxBtn.setOnAction(new EventHandler<ActionEvent>() {
-
-            public void handle(ActionEvent actionEvent){
-                toogleMaximized();
-            }        
+        maxBtn.setOnAction(e ->{
+        	toogleMaximized();
         });
         HBox.setHgrow(closeBtn, Priority.ALWAYS);
         HBox.setHgrow(minBtn, Priority.ALWAYS);
         HBox.setHgrow(maxBtn, Priority.ALWAYS);
         setAlignment(Pos.CENTER);
-        setPadding(new Insets(2));
+        setPadding(new Insets(8, 8, 2, 8));
+        getStyleClass().add("t-panel-color");
+		setStyle("-fx-background-radius: 6; -fx-background-insets: 1;"); 
+		
         getChildren().addAll(minBtn, maxBtn, closeBtn);
-        //getChildren().add(maxBtn);
     }
 
     public void toogleMaximized()

@@ -6,7 +6,7 @@ $('#userLogged', t).text(loggedUser.nome);
 $('#welcomeTemplate').before(t);
 
 if(loggedUser.estrategico=='true')
-	$('#painelActions').prepend('<li><a href="tdrs/prod.html" class="button fit primary">Tedros Web (Gestão)</a></li>')
+	$('#painelActions').prepend('<li><a href="tdrs/main.html" class="button fit primary">Tedros Web (Gestão)</a></li>')
 
 let t1 = $($('#userFrmTemplate').html());
 $('#userFrmTemplate').before(t1);

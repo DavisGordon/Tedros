@@ -19,7 +19,9 @@ import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.control.validator.TControlValidator;
 import com.tedros.fxapi.control.validator.TValidatorResult;
 import com.tedros.fxapi.exception.TValidatorException;
+import com.tedros.fxapi.modal.TMessage;
 import com.tedros.fxapi.modal.TMessageBox;
+import com.tedros.fxapi.modal.TMessageType;
 import com.tedros.fxapi.presenter.behavior.TActionHelper;
 import com.tedros.fxapi.presenter.behavior.TActionState;
 import com.tedros.fxapi.presenter.behavior.TActionType;
@@ -57,8 +59,9 @@ extends TBehavior<M, TDynaPresenter<M>> {
 	private List<TAuthorizationType> userAuthorizations;
 	
 	private final ObjectProperty<TActionState<M>> actionStateProperty = new SimpleObjectProperty<>();
-	private final ObservableList<String> messagesProperty = FXCollections.observableArrayList();
+	private final ObservableList<TMessage> messagesProperty = FXCollections.observableArrayList();
     
+	@SuppressWarnings("unchecked")
 	@Override
 	public void load(){	
 		
@@ -82,18 +85,18 @@ extends TBehavior<M, TDynaPresenter<M>> {
 			this.modelProcessClass = tModelProcess.type();
 		}
 		
-		ListChangeListener<String> msgLtnr = c -> {
+		ListChangeListener<TMessage> msgLtnr = c -> {
 			if(showMessages) {
 				if(!c.getList().isEmpty()) {
 					final TMessageBox tMessageBox = new TMessageBox();
-					tMessageBox.tAddMessage(c.getList());
+					tMessageBox.tAddMessages((ObservableList<TMessage>) c.getList());
 					getView().tShowModal(tMessageBox, true);
 				}
 			}else if(!c.getList().isEmpty())
 				messagesProperty.clear();
 		};
 		super.getListenerRepository().add("msgLtnr", msgLtnr);
-		messagesProperty.addListener(new WeakListChangeListener<String>(msgLtnr));
+		messagesProperty.addListener(new WeakListChangeListener<>(msgLtnr));
 		
 		ChangeListener<Boolean> modalCleanMsgLtnr = (a, b, c) -> {
 			if(!c)
@@ -142,14 +145,14 @@ extends TBehavior<M, TDynaPresenter<M>> {
 	/**
 	 * Show a list of message in a modal view
 	 * */
-	public void addMessage(List<String> msgList) {
+	public void addMessage(List<TMessage> msgList) {
 		messagesProperty.addAll(msgList);
 	}
 	
 	/**
 	 * Show a message in a modal view
 	 * */
-	public void addMessage(String... msg) {
+	public void addMessage(TMessage... msg) {
 		messagesProperty.addAll(msg);
 	}
 	
@@ -301,7 +304,7 @@ extends TBehavior<M, TDynaPresenter<M>> {
 										model.reload(entity);
 										String msg = iEngine.getFormatedString("#{tedros.fxapi.message.process}", model.getDisplayProperty().getValue());
 										setActionState(new TActionState(action, arg2, TProcessResult.SUCCESS, msg, model));
-										addMessage(msg);
+										addMessage(new TMessage(TMessageType.INFO, msg));
 									}else {
 										setActionState(new TActionState(action, arg2, TProcessResult.NO_RESULT, model));
 									}
@@ -310,7 +313,14 @@ extends TBehavior<M, TDynaPresenter<M>> {
 									System.out.println(result.getMessage());
 									String msg = result.getMessage();
 									setActionState(new TActionState(action, arg2, TProcessResult.get(result.getResult()), msg, model));
-									addMessage(msg);
+									switch(result.getResult()) {
+									case ERROR:
+										addMessage(new TMessage(TMessageType.ERROR, msg));
+										break;
+									default:
+										addMessage(new TMessage(TMessageType.WARNING, msg));
+										break;
+									}
 								break;
 							}
 						break;

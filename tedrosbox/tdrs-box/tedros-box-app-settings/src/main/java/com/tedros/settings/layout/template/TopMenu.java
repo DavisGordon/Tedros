@@ -1,12 +1,8 @@
-package com.tedros.core.control;
+package com.tedros.settings.layout.template;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tedros.core.context.TedrosContext;
-
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
@@ -14,13 +10,13 @@ import javafx.scene.layout.HBox;
 /**
  * The TedrosBox BreadcrumbBar
  */
-public class TedrosBoxBreadcrumbBar extends HBox {
+public class TopMenu extends HBox {
 
     private String path;
     private String deliminator = "/";
     private List<Button> buttons = new ArrayList<Button>();
 
-    public TedrosBoxBreadcrumbBar() {
+     public TopMenu() {
         super(0);
         getStyleClass().setAll("breadcrumb-bar");
         setFillHeight(true);
@@ -52,9 +48,6 @@ public class TedrosBoxBreadcrumbBar extends HBox {
                 }
                 button.setVisible(true) ;
                 button.setText(parts[i]);
-                button.setOnAction(e -> {
-                	TedrosContext.setPagePathProperty(currentPath, true, true, true);
-                });
                 if (i == parts.length-1) {
                     if(i==0) {
                         button.getStyleClass().setAll("button","only-button");

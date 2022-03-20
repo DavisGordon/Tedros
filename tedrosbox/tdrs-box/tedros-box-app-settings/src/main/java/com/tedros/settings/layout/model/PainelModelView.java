@@ -1,5 +1,6 @@
 package com.tedros.settings.layout.model;
 
+import com.tedros.core.TInternationalizationEngine;
 import com.tedros.core.style.TStyleResourceValue;
 import com.tedros.fxapi.annotation.control.TCheckBoxField;
 import com.tedros.fxapi.annotation.control.TColorPickerField;
@@ -34,7 +35,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.paint.Color;
 
-@TForm(name="#{settings.form.name}")
+@TForm(name="#{settings.form.name}", editCssId="y")
 @TLabelDefaultSetting(position=TLabelPosition.TOP, textFill="#ffffff")
 @TModelProcess(type=TedrosSettingProcess.class)
 @TPresenter(type = TDynaPresenter.class, modelClass = PainelModel.class,
@@ -305,7 +306,8 @@ public class PainelModelView extends TModelView<PainelModel> {
 
 	@Override
 	public SimpleStringProperty getDisplayProperty() {
-		return new SimpleStringProperty("Tedros settings");
+		String s = TInternationalizationEngine.getInstance(null).getString("#{label.style}");
+		return new SimpleStringProperty(s);
 	}
 
 	public SimpleObjectProperty<Color> getPainelCorTexto() {

@@ -121,27 +121,19 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 
 	private void buildFormTask() {
 		this.buildFormStatusProperty.setValue(TBuildFormStatus.BUILDING);
-		Thread buildFormThread = new Thread(new Runnable() {
-		      @Override
-		      public void run() {
-				Platform.runLater(new Runnable() {
-		            @Override
-		            public void run() {
-		            	try {
-		            		@SuppressWarnings("unchecked")
-							ITModelForm<M> form = (ITModelForm<M>) (tMode.equals(TViewMode.READER) 
-		    						? TReaderFormBuilder.create(getModelView()).build() 
-		    								: TFormBuilder.create(getModelView()).presenter(getPresenter()).build());
-		    				setForm(form);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-		            }
-		          });
-		      	}
-			});
-		buildFormThread.setDaemon(true);
-		buildFormThread.start();
+		
+		Platform.runLater(()-> {
+            	try {
+            		@SuppressWarnings("unchecked")
+					ITModelForm<M> form = (ITModelForm<M>) (tMode.equals(TViewMode.READER) 
+    						? TReaderFormBuilder.create(getModelView()).build() 
+    								: TFormBuilder.create(getModelView()).presenter(getPresenter()).build());
+    				setForm(form);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+            
+          });
 	}
 
 	public void buildForm(TViewMode mode) {

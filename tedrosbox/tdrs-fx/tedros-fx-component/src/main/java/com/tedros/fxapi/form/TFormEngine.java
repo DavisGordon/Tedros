@@ -25,6 +25,7 @@ import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.reader.THtmlReader;
 import com.tedros.fxapi.util.TReflectionUtil;
 
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -171,15 +172,21 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 		mode = TViewMode.EDIT;
 		buildModelViewLoader();
 		this.loaded.bind(this.modelViewLoader.allLoadedProperty());
-		try {
-			if(StringUtils.isBlank(this.form.getId()))
-				this.form.setId("t-form");
-			this.modelViewLoader.loadEditFields(form.getChildren());
-			
-			initializeForm();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Thread taskThread = new Thread(()-> {
+			Platform.runLater(()-> {
+				try {
+					if(StringUtils.isBlank(this.form.getId()))
+						this.form.setId("t-form");
+					this.modelViewLoader.loadEditFields(form.getChildren());
+					
+					initializeForm();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
+		});
+		taskThread.setDaemon(true);
+		taskThread.start();
 	}
 	
 	public ReadOnlyBooleanProperty loadedProperty() {

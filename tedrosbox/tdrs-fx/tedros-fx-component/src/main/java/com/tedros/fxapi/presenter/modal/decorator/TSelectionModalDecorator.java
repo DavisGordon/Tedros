@@ -54,6 +54,7 @@ extends TDynaViewSelectionBaseDecorator<M> {
 		
 		VBox listBox = new VBox();
 		listBox.getChildren().addAll(super.gettListViewTitle(), super.gettListView());
+		listBox.getStyleClass().add("t-panel-background-color");
 		VBox.setVgrow(super.gettListView(), Priority.ALWAYS);
 		
 		super.addPaddingInTLeftContent(5, 15, 5, 15);

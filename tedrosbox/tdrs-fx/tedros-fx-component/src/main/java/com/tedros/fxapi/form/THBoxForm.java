@@ -17,6 +17,7 @@ import com.tedros.fxapi.domain.TViewMode;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -30,34 +31,42 @@ import javafx.scene.web.WebView;
  *
  */
 
-public abstract class THBoxForm<M extends ITModelView<?>> 
+public class THBoxForm<M extends ITModelView<?>> 
 extends HBox implements ITModelForm<M> {
 	
 	@SuppressWarnings("rawtypes")
 	private ITPresenter presenter;
 	
 	private final TFormEngine<M, THBoxForm<M>> formEngine;
-	
-	
+
 	public THBoxForm(M modelView) {
 		this.formEngine = new TFormEngine<M, THBoxForm<M>>(this, modelView);
 		this.formEngine.setEditMode();
 	}
 	
-	public THBoxForm(M modelView, Boolean readerMode) {
-		this.formEngine = new TFormEngine<M, THBoxForm<M>>(this, modelView, readerMode);
+	public THBoxForm(M modelView, boolean readerMode) {
+		this.formEngine = new TFormEngine<>(this, modelView);
+		if(readerMode)
+			this.formEngine.setReaderMode();
+		else
+			this.formEngine.setEditMode();
 	}
 	
 	@SuppressWarnings("rawtypes")
 	public THBoxForm(ITPresenter presenter, M modelView) {
 		this.presenter = presenter;
 		this.formEngine = new TFormEngine<M, THBoxForm<M>>(this, modelView);
+		this.formEngine.setEditMode();
 	}
 	
 	@SuppressWarnings("rawtypes")
 	public THBoxForm(ITPresenter presenter, M modelView, boolean readerMode) {
 		this.presenter = presenter;
 		this.formEngine = new TFormEngine<>(this, modelView, readerMode);
+		if(readerMode)
+			this.formEngine.setReaderMode();
+		else
+			this.formEngine.setEditMode();
 	}
 	
 	@Override
@@ -165,5 +174,22 @@ extends HBox implements ITModelForm<M> {
 	public TSetting gettSetting(){
 		return this.formEngine.getSetting();
 	}
+	@Override
+	public void tInitializeForm() {
+		formatForm();
+	}
+
+	@Override
+	public void tInitializeReader() {
+		formatForm();
+		
+	}
 	
+	private void formatForm() {
+		autosize();
+		super.setSpacing(8);
+		setPadding(new Insets(10, 10, 10, 10));
+		setMaxHeight(Double.MAX_VALUE);
+		setMaxWidth(Double.MAX_VALUE);
+	}
 }

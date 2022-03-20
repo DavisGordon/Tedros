@@ -34,13 +34,11 @@ public abstract class TedrosStyle {
 			return;
 		
 		String cssContent = TFileUtil.readFile(cssTemplate);
-		cssContent = cssContent.replaceAll("%TOPBAR_TEXT_COLOR%", "#FFFFFF");
-		cssContent = cssContent.replaceAll("%TOPBAR_COLOR%", "transparent");
 		
 		Properties panelCustomProp = new Properties();
 		Properties defaultProp = new Properties();
 		String panelCustomPropFilePath = TThemeUtil.getThemeFolder()+TStyleResourceName.PANEL_CUSTOM_STYLE;
-		String defaultFilePath =TedrosFolderEnum.CONF_FOLDER.getFullPath()+TStyleResourceName.DEFAULT_STYLE;
+		String defaultFilePath = TThemeUtil.getThemeFolder()+TStyleResourceName.DEFAULT_STYLE;
 		try {
 			InputStream is = new FileInputStream(defaultFilePath);
 			defaultProp.load(is);

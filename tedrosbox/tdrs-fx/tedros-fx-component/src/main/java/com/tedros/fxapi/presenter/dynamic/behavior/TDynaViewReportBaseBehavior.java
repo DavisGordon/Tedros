@@ -17,7 +17,9 @@ import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.exception.TException;
 import com.tedros.fxapi.exception.TValidatorException;
+import com.tedros.fxapi.modal.TMessage;
 import com.tedros.fxapi.modal.TMessageBox;
+import com.tedros.fxapi.modal.TMessageType;
 import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewReportBaseDecorator;
@@ -33,7 +35,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
@@ -300,20 +301,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * */
 	public void searchAction() {
 		if(actionHelper.runBefore(TActionType.SEARCH)){
-			
-			final ObservableList<String> mensagens = FXCollections.observableArrayList();
-			mensagens.addListener(new ListChangeListener<String>(){
-				@Override
-				public void onChanged(javafx.collections.ListChangeListener.Change<? extends String> c) {
-					final TMessageBox tMessageBox = new TMessageBox();
-					tMessageBox.tAddMessage(c.getList());
-					getView().tShowModal(tMessageBox, true);
-				}
-			});
-			
 			try{
 				if(getReportProcessClass()!=null){
-					runSearchReportProcess(mensagens);
+					runSearchReportProcess();
 				}else{
 					throw new TException("Error: No process configuration found in "+getModelViewClass().getSimpleName()+" model view class, use @TEntityProcess or @TModelProcess to do that.");
 				}
@@ -374,7 +364,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void runSearchReportProcess(final ObservableList<String> mensagens)
+	private void runSearchReportProcess()
 			throws Exception, TValidatorException, Throwable {
 		//recupera a lista de models views
 		//final ObservableList<M> modelsViewsList = this.decorator.gettListView().getItems(); 
@@ -411,13 +401,13 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 									setDisableModelActionButtons(false);
 							} catch (Exception e) 
 							{	
-								mensagens.add(iEngine.getString("#{tedros.fxapi.message.error}")+"\n"+e.getMessage());
+								addMessage(new TMessage(TMessageType.ERROR, iEngine.getString("#{tedros.fxapi.message.error}")+"\n"+e.getMessage()));
 								e.printStackTrace();
 							}
 						}
 						if(result.getResult().getValue() == EnumResult.ERROR.getValue()){
 							System.out.println(result.getMessage());
-							mensagens.add(result.getMessage());
+							addMessage(new TMessage(TMessageType.ERROR, result.getMessage()));
 						}
 					}
 					actionHelper.runAfter(TActionType.SEARCH);

@@ -3,6 +3,7 @@ package com.tedros.core.control;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.stage.Screen;
@@ -16,14 +17,11 @@ public class TedrosBoxResizeBar extends Region{
 	public TedrosBoxResizeBar(final Stage stage, final double stageMinimumWidthParam, final double stageMinimumHeightParam){
         setId("t-window-resize-button");
         setPrefSize(11D, 11D);
-        setOnMousePressed(new EventHandler<MouseEvent>() {
-        	@Override
-            public void handle(MouseEvent e)
-            {
-                dragOffsetX = (stage.getX() + stage.getWidth()) - e.getScreenX();
-                dragOffsetY = (stage.getY() + stage.getHeight()) - e.getScreenY();
-                e.consume();
-            }             
+        super.setCursor(Cursor.NW_RESIZE);
+        setOnMousePressed(e -> {
+        	dragOffsetX = (stage.getX() + stage.getWidth()) - e.getScreenX();
+        	dragOffsetY = (stage.getY() + stage.getHeight()) - e.getScreenY();
+        	e.consume();
         });
         
         setOnMouseDragged(new EventHandler<MouseEvent>() {
@@ -44,16 +42,10 @@ public class TedrosBoxResizeBar extends Region{
                 stage.setWidth(Math.max(stageMinimumWidth, maxX - stage.getX()));
                 stage.setHeight(Math.max(stageMinimumHeight, maxY - stage.getY()));
                 e.consume();
-            }            
-            
-           
+            }
         });
     }
 
     private double dragOffsetX;
     private double dragOffsetY;
-
-
-
-
 }

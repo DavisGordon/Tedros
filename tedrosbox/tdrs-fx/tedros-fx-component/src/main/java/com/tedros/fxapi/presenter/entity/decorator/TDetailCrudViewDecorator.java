@@ -94,7 +94,7 @@ extends TDynaViewCrudBaseDecorator<M>
 		tListViewLayout = new VBox();
 		tListViewLayout.getChildren().addAll(tListViewTitle, tListView);
 		tListViewLayout.maxWidth(listViewMaxWidth+2);
-		
+		tListViewLayout.getStyleClass().add("t-panel-background-color");
 		VBox.setVgrow(tListView, Priority.ALWAYS);
 		// add the list view box at the left 
 		
