@@ -6,7 +6,7 @@ import java.util.Comparator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.model.ITModelView;
 import com.tedros.core.module.TObjectRepository;
 import com.tedros.fxapi.effect.TEffectUtil;
@@ -88,7 +88,7 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 			this.repository.add("slcLblChl", slcLblChl);
 			this.tSelectedLabel.textProperty().addListener(new WeakChangeListener<>(slcLblChl));
 			
-			TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+			TLanguage iEngine = TLanguage.getInstance(null);
 			
 			this.tSourceLabel.setText(iEngine.getString(sourceLabelText));
 			this.tSelectedLabel.setText(iEngine.getString(selectedLabelText));

@@ -24,7 +24,7 @@ import org.reflections.util.ConfigurationBuilder;
 
 import com.tedros.core.ITedrosBox;
 import com.tedros.core.ModalMessage;
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.TSecurityDescriptor;
 import com.tedros.core.annotation.TApplication;
 import com.tedros.core.annotation.security.TAuthorizationType;
@@ -36,7 +36,7 @@ import com.tedros.core.style.TStyleResourceValue;
 import com.tedros.util.TClassUtil;
 import com.tedros.util.TFileUtil;
 import com.tedros.util.TedrosClassLoader;
-import com.tedros.util.TedrosFolderEnum;
+import com.tedros.util.TedrosFolder;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -113,7 +113,7 @@ public final class TedrosContext {
 		
 		try {
 			try(FileInputStream input = new FileInputStream(TFileUtil.getTedrosFolderPath()
-					+TedrosFolderEnum.CONF_FOLDER.getFolder()+"language.properties")){
+					+TedrosFolder.CONF_FOLDER.getFolder()+"language.properties")){
 				languageProp.load(input);
 				locale = new Locale(languageProp.getProperty("language"));
 			}
@@ -263,7 +263,7 @@ public final class TedrosContext {
 	}
 	
 	private static void addPropertiesFilesToClassPath(){
-		File folder = new File(TedrosFolderEnum.CONF_FOLDER.getFullPath());
+		File folder = new File(TedrosFolder.CONF_FOLDER.getFullPath());
 		
 		String file;
 		File[] listOfFiles = folder.listFiles();
@@ -271,7 +271,7 @@ public final class TedrosContext {
 			if(listOfFiles[i].isFile()){
 				file = listOfFiles[i].getName();
 				if (file.endsWith(".properties")){
-					file = TedrosFolderEnum.CONF_FOLDER.getFullPath()+file;
+					file = TedrosFolder.CONF_FOLDER.getFullPath()+file;
 					LOGGER.config("Loading file: "+file);
 					try {
 						
@@ -290,14 +290,14 @@ public final class TedrosContext {
 	
 	/**
 	 * Return an {@link URL} for a file in the Tedros folder at filesystem
-	 * @param tedrosFolderEnum
+	 * @param tedrosFolder
 	 * @param fileName
 	 * 
 	 * @return {@link URL}
 	 * */
-	public static URL getExternalURLFile(TedrosFolderEnum tedrosFolderEnum, String fileName){
+	public static URL getExternalURLFile(TedrosFolder tedrosFolder, String fileName){
 		try {
-			String path = TFileUtil.getTedrosFolderPath()+tedrosFolderEnum.getFolder()+fileName;
+			String path = TFileUtil.getTedrosFolderPath()+tedrosFolder.getFolder()+fileName;
 			return new File(path).toPath().toUri().toURL();//TUrlUtil.getURL(path);
 		} catch (MalformedURLException e) {
 			LOGGER.severe(e.toString());
@@ -309,7 +309,7 @@ public final class TedrosContext {
 	 * Return an {@link InputStream} object for an image in the tedros image folder at filesystem
 	 * */
 	public static InputStream getImageInputStream(String imageName) {
-		String path = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.IMAGES_FOLDER.getFolder()+imageName;
+		String path = TFileUtil.getTedrosFolderPath()+TedrosFolder.IMAGES_FOLDER.getFolder()+imageName;
 		try {
 			return TClassUtil.getFileInputStream(path);
 		} catch (FileNotFoundException e) {
@@ -322,7 +322,7 @@ public final class TedrosContext {
 	 * Return an {@link InputStream} object for the background image in the tedros image folder at filesystem
 	 * */
 	public static InputStream getBackGroundImageInputStream(String imageName) {
-		String path = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.BACKGROUND_IMAGES_FOLDER.getFolder()+imageName;
+		String path = TFileUtil.getTedrosFolderPath()+TedrosFolder.BACKGROUND_IMAGES_FOLDER.getFolder()+imageName;
 		try {
 			return TClassUtil.getFileInputStream(path);
 		} catch (FileNotFoundException e) {
@@ -530,7 +530,7 @@ public final class TedrosContext {
 	 * */
 	public static void setLocale(Locale locale) {
 		TedrosContext.locale = locale;
-		TInternationalizationEngine.reloadBundles();
+		TLanguage.reloadBundles();
 	}
 
 	public static void openDocument(String path) throws Exception {
@@ -541,7 +541,7 @@ public final class TedrosContext {
 		if(!f.isFile())
 			throw new Exception(path+" is not a file!");
 		if(!TFileUtil.open(f)) 
-			throw new Exception(TInternationalizationEngine.getInstance(null).getString("#{tedros.fxapi.message.os.not.support.operation}"));
+			throw new Exception(TLanguage.getInstance(null).getString("#{tedros.fxapi.message.os.not.support.operation}"));
 	}
 
 	public static void logOut() {

@@ -11,7 +11,7 @@ import com.tedros.core.style.TStyleResourceName;
 import com.tedros.core.style.TThemeUtil;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.ejb.base.model.TFileModel;
-import com.tedros.util.TedrosFolderEnum;
+import com.tedros.util.TedrosFolder;
 
 public class BackgroundImageModel implements ITModel {
 
@@ -25,7 +25,7 @@ public class BackgroundImageModel implements ITModel {
 			prop.load(is);
 			is.close();
 			if(StringUtils.isNotBlank(prop.getProperty("image"))){
-				String fp = TedrosFolderEnum.BACKGROUND_IMAGES_FOLDER.getFullPath() + prop.getProperty("image");
+				String fp = TedrosFolder.BACKGROUND_IMAGES_FOLDER.getFullPath() + prop.getProperty("image");
 				File f = new File(fp);
 				fileModel = new TFileModel(f);
 			}

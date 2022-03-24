@@ -13,7 +13,7 @@ import com.tedros.core.style.TStyleResourceValue;
 import com.tedros.core.style.TThemeUtil;
 import com.tedros.util.TColorUtil;
 import com.tedros.util.TFileUtil;
-import com.tedros.util.TedrosFolderEnum;
+import com.tedros.util.TedrosFolder;
 
 public abstract class TedrosStyle {
 
@@ -28,7 +28,7 @@ public abstract class TedrosStyle {
 	
 	public static void applyChanges(){
 		
-		String path = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+"/template.css";
+		String path = TFileUtil.getTedrosFolderPath()+TedrosFolder.CONF_FOLDER.getFolder()+"/template.css";
 		File cssTemplate = new File(path);
 		if(!cssTemplate.isFile())
 			return;

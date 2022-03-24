@@ -1,8 +1,8 @@
 package com.tedros.settings.layout.model;
 
-import com.tedros.util.TedrosFolderEnum;
+import com.tedros.util.TedrosFolder;
 
 public class BackgroundDomain {
 
-	static String FOLDER = TedrosFolderEnum.BACKGROUND_IMAGES_FOLDER.getFullPath();
+	static String FOLDER = TedrosFolder.BACKGROUND_IMAGES_FOLDER.getFullPath();
 }

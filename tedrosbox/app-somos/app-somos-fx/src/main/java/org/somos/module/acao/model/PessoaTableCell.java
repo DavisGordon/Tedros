@@ -9,7 +9,7 @@ package org.somos.module.acao.model;
 import org.somos.model.Contato;
 import org.somos.model.Pessoa;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.fxapi.control.TTableCell;
 
 /**

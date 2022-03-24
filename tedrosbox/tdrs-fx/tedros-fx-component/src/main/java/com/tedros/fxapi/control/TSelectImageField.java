@@ -17,7 +17,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.tedros.common.model.TFileEntity;
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.ejb.controller.TFileEntityController;
 import com.tedros.core.module.TObjectRepository;
@@ -36,7 +36,7 @@ import com.tedros.fxapi.form.TFieldBox;
 import com.tedros.fxapi.process.TCustomProcess;
 import com.tedros.fxapi.property.TBytesLoader;
 import com.tedros.fxapi.util.TFileBaseUtil;
-import com.tedros.util.TedrosFolderEnum;
+import com.tedros.util.TedrosFolder;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -107,7 +107,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 	private TButton loadBtn;
 	
 	private TObjectRepository repo = new TObjectRepository();
-	private TInternationalizationEngine iEngine;
+	private TLanguage iEngine;
 	
 	public TSelectImageField(SimpleObjectProperty<ITFileBaseModel> property, TEnvironment source, TEnvironment target, 
 			TImageExtension imgExtension, Boolean preLoadFileBytes, String...remoteFileOwner) {
@@ -163,7 +163,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 	 * Initialize propertys
 	 * */
 	private void initialize(){
-		iEngine = TInternationalizationEngine.getInstance(null);
+		iEngine = TLanguage.getInstance(null);
 		
 		envToolbar = new ToolBar();
 		envToolbar.setId("t-view-toolbar");
@@ -593,7 +593,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 	 * @throws IOException
 	 */
 	private Image buildDefImg() throws FileNotFoundException, IOException {
-		String path = TedrosFolderEnum.IMAGES_FOLDER.getFullPath()+"default-image.jpg";
+		String path = TedrosFolder.IMAGES_FOLDER.getFullPath()+"default-image.jpg";
 		File f =  new File(path);
 		InputStream is = new FileInputStream(f);
 		Image img = new Image(is);

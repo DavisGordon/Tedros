@@ -6,7 +6,7 @@ package com.tedros.settings.layout.template;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.settings.layout.icon.LayoutIconImageView;
 import com.tedros.util.TColorUtil;
@@ -48,7 +48,7 @@ public class TemplatePane extends StackPane {
 	
 	public TemplatePane() {
 		
-		TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+		TLanguage iEngine = TLanguage.getInstance(null);
 		
 		setDepthTest(DepthTest.DISABLE);
         getChildren().add(root);

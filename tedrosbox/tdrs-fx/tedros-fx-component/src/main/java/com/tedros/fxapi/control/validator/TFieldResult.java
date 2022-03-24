@@ -1,6 +1,6 @@
 package com.tedros.fxapi.control.validator;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 
 public class TFieldResult{
 	
@@ -9,7 +9,7 @@ public class TFieldResult{
 	private boolean valid;
 	private String message;
 	
-	private TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+	private TLanguage iEngine = TLanguage.getInstance(null);
 	
 	public TFieldResult() {
 		

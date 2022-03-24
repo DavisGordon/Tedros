@@ -10,7 +10,7 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 import com.tedros.Main;
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.security.model.TProfile;
 import com.tedros.core.security.model.TUser;
@@ -39,7 +39,7 @@ import com.tedros.login.model.TLoginProcess;
 import com.tedros.settings.security.model.TProfileModelView;
 import com.tedros.util.TEncriptUtil;
 import com.tedros.util.TFileUtil;
-import com.tedros.util.TedrosFolderEnum;
+import com.tedros.util.TedrosFolder;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
@@ -64,14 +64,14 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 	private TComboBoxField<String> languageComboBox;
 	private TComboBoxField<TProfileModelView> profileComboBox;
 	private Text profileText;
-	private TInternationalizationEngine iEngine;
+	private TLanguage iEngine;
 	
 	@Override
 	public void load() {
 		
 		super.load();
 		
-		iEngine = TInternationalizationEngine.getInstance(null);
+		iEngine = TLanguage.getInstance(null);
 		
 		loginDecorator = ((LoginDecorator) getPresenter().getDecorator());
 		
@@ -339,7 +339,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 	}
 	
 	private void saveLanguage(String language) throws IOException{
-		String propFilePath = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+TStyleResourceName.LANGUAGE;
+		String propFilePath = TFileUtil.getTedrosFolderPath()+TedrosFolder.CONF_FOLDER.getFolder()+TStyleResourceName.LANGUAGE;
 		FileOutputStream fos = new FileOutputStream(propFilePath);
 		Properties prop = new Properties();
 		prop.setProperty("language", language);

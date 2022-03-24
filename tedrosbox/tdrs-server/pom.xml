@@ -71,6 +71,7 @@
 		<module>tedros-ejb-model-base</module>
 		<module>tedros-ejb-service-base</module>
 		<module>tedros-common-model</module>
+		<module>tedros-webapp</module>
 	</modules>
  
  	<!-- REPOSITORIES -->

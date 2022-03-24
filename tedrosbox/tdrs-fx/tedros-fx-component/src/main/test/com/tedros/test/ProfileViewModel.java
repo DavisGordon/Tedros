@@ -8,14 +8,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.geometry.Pos;
-
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.tedros.fxapi.annotation.control.TBigDecimalField;
@@ -27,7 +19,6 @@ import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TIntegerField;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TLabelDefaultSetting;
-import com.tedros.fxapi.annotation.control.TLabelPosition;
 import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
 import com.tedros.fxapi.annotation.control.TPasswordField;
 import com.tedros.fxapi.annotation.control.TRadioButtonField;
@@ -37,8 +28,18 @@ import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.annotation.scene.control.TLabeled;
+import com.tedros.fxapi.domain.TLabelPosition;
 import com.tedros.fxapi.domain.TZeroValidation;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
+
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.geometry.Pos;
 
 
 //@TCrudForm(aligment=Pos.CENTER_LEFT, style="-fx-background-color: #ffffff;", width=400, formClass = null)
@@ -52,23 +53,23 @@ public class ProfileViewModel extends TEntityModelView<TCProfile> {
 	private SimpleStringProperty senha;
 	
 	@TLabel(text="campoInteger")
-	@TIntegerField(zeroValidation=TZeroValidation.MORE_THAN_ZERO)
+	@TIntegerField(zeroValidation=TZeroValidation.GREATHER_THAN_ZERO)
 	private SimpleIntegerProperty campoInteger;
 	
 	@TLabel(text="campoBigDecimal")
-	@TBigDecimalField(zeroValidation=TZeroValidation.MORE_THAN_ZERO)
+	@TBigDecimalField(zeroValidation=TZeroValidation.GREATHER_THAN_ZERO)
 	private SimpleObjectProperty<BigDecimal> campoBigDecimal;
 	
 	@TLabel(text="campoBigInteger")
-	@TBigIntegerField(zeroValidation=TZeroValidation.MORE_THAN_ZERO)
+	@TBigIntegerField(zeroValidation=TZeroValidation.GREATHER_THAN_ZERO)
 	private SimpleObjectProperty<BigInteger> campoBigInteger;
 	
 	@TLabel(text="campoNumberSpin", control=@TControl(prefWidth=200, parse = true))
-	@TNumberSpinnerField(maxValue = 100, zeroValidation=TZeroValidation.MORE_THAN_ZERO)
+	@TNumberSpinnerField(maxValue = 100, zeroValidation=TZeroValidation.GREATHER_THAN_ZERO)
 	private SimpleDoubleProperty campoNumberSpin ;
 	
 	@TLabel(text="campoSlider")
-	@TSliderField(max = 100, min = 0, showTickMarks=true, showTickLabels=true, snapToTicks=false, zeroValidation=TZeroValidation.MORE_THAN_ZERO)
+	@TSliderField(max = 100, min = 0, showTickMarks=true, showTickLabels=true, snapToTicks=false, zeroValidation=TZeroValidation.GREATHER_THAN_ZERO)
 	private SimpleDoubleProperty campoSlider;
 	
 	@TLabel(text="Nome")
@@ -89,7 +90,7 @@ public class ProfileViewModel extends TEntityModelView<TCProfile> {
 	private SimpleStringProperty endereco;
 	
 	@TLabel(text="Fun��es avan�adas")
-	@TCheckBoxField(label=@TLabel(text="Ativar"), control=@TControl(tooltip="ativar tudo", parse = true), required=true)
+	@TCheckBoxField(labeled=@TLabeled(text="Ativar", parse = true), control=@TControl(tooltip="ativar tudo", parse = true), required=true)
 	private SimpleBooleanProperty ativar;
 	
 	/*@TLabel(text="DESCRIÇÃO", position=TLabelPosition.TOP)
@@ -97,7 +98,7 @@ public class ProfileViewModel extends TEntityModelView<TCProfile> {
 	private SimpleStringProperty description;*/
 	
 	@TLabel(text="Quantidade", position=TLabelPosition.RIGHT)
-	@TDoubleField(zeroValidation=TZeroValidation.MORE_THAN_ZERO)
+	@TDoubleField(zeroValidation=TZeroValidation.GREATHER_THAN_ZERO)
 	private SimpleDoubleProperty quantidade;
 	
 	/*@TLabel(text="Sexo", position=TLabelPosition.BOTTOM)

@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.model.ITModelView;
 import com.tedros.ejb.base.entity.ITFileEntity;
 import com.tedros.ejb.base.model.ITFileModel;
@@ -35,14 +35,14 @@ public final class TControlValidator<E extends ITModelView> {
 	private static final String ZEROVALIDATION = "zeroValidation";
 	
 	private List<TValidatorResult<E>> list;
-	private TInternationalizationEngine iEngine;
+	private TLanguage iEngine;
 	
 	public TControlValidator() {
-		iEngine = TInternationalizationEngine.getInstance(null);
+		iEngine = TLanguage.getInstance(null);
 	}
 	
 	public TControlValidator(List<E> modelsView) throws Exception {
-		iEngine = TInternationalizationEngine.getInstance(null);
+		iEngine = TLanguage.getInstance(null);
 		validateModels(modelsView);
 	}
 	

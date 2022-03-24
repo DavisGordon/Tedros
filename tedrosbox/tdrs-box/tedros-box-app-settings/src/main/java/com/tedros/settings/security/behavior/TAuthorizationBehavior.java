@@ -10,7 +10,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.core.context.TedrosContext;
@@ -78,7 +78,7 @@ extends TDynaViewCrudBaseBehavior<TAuthorizationModelView, TAuthorization> {
 				@Override
 				public boolean runBefore() {
 					List<TAuthorization> authorizations = new ArrayList<>();
-					TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+					TLanguage iEngine = TLanguage.getInstance(null);
 					for (Class clazz : TedrosContext.getClassesAnnotatedWith(TSecurity.class) ) {
 						try {
 							

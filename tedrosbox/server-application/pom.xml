@@ -24,6 +24,13 @@
 	    <version>8-1.0</version>
 	</dependency>
 	
+	<dependency>
+	   <groupId>com.tedros</groupId>
+  		<artifactId>tedros-webapp</artifactId>
+	    <type>war</type>
+	    <version>8-1.0</version>
+	</dependency>
+	
 	<!-- 
 	<dependency>
 	   <groupId>com.tedros</groupId>
@@ -159,7 +166,11 @@
   					<type>war</type>
   				  </deployable>
 			      -->
-			     
+			      <deployable>
+			      	<groupId>com.tedros</groupId>
+  					<artifactId>tedros-webapp</artifactId>
+  					<type>war</type>
+  				  </deployable>
 			      <deployable>
 			      	<groupId>com.tedros</groupId>
   					<artifactId>app-somos-web</artifactId>

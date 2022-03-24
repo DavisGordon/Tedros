@@ -3,12 +3,12 @@ package com.tedros.core.context;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.TModule;
 import com.tedros.core.control.PopOver;
 import com.tedros.core.control.PopOver.ArrowLocation;
 import com.tedros.core.style.TStyleResourceValue;
-import com.tedros.util.TedrosFolderEnum;
+import com.tedros.util.TedrosFolder;
 
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -94,7 +94,7 @@ class InternalViewPage extends Page{
             Integer b1 =  RandomUtils.nextInt(0, 255);
             
         	ImageView imageView = new ImageView(
-        			new Image(TedrosContext.getExternalURLFile(TedrosFolderEnum.IMAGES_FOLDER, "icon-overlay.png").toString()));
+        			new Image(TedrosContext.getExternalURLFile(TedrosFolder.IMAGES_FOLDER, "icon-overlay.png").toString()));
             imageView.setMouseTransparent(true);
             Rectangle overlayHighlight = new Rectangle(-8,-8,130,130);
             overlayHighlight.setFill(
@@ -239,7 +239,7 @@ class InternalViewPage extends Page{
 		if(StringUtils.isNotBlank(desc)) {
 			PopOver popover = new PopOver();
 			tile.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> {
-				Label l = new Label(TInternationalizationEngine.getInstance(null).getString(desc));
+				Label l = new Label(TLanguage.getInstance(null).getString(desc));
 				l.setWrapText(true);
 				l.setMaxWidth(350);
 				StackPane p = new StackPane();

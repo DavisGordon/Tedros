@@ -1,6 +1,6 @@
 package com.tedros.settings.layout.decorator;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.fxapi.control.TComboBoxField;
 import com.tedros.fxapi.control.TLabel;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
@@ -31,7 +31,7 @@ public class MainColorDecorator extends TDynaViewCrudBaseDecorator<TMainColorMod
 			addItemInTHeaderToolBar(gettSaveButton());
 			Region space = new Region();
 			HBox.setHgrow(space, Priority.ALWAYS);
-			TLabel l = new TLabel(TInternationalizationEngine.getInstance(null).getString("#{label.theme}: "));
+			TLabel l = new TLabel(TLanguage.getInstance(null).getString("#{label.theme}: "));
 			super.addItemInTHeaderHorizontalLayout(space,l, themes);
 			
 			

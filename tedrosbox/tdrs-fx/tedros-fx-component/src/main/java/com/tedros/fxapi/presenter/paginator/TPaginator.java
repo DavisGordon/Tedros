@@ -6,7 +6,7 @@ package com.tedros.fxapi.presenter.paginator;
 
 import java.util.UUID;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.module.TObjectRepository;
 import com.tedros.fxapi.control.TButton;
 import com.tedros.fxapi.control.TComboBoxField;
@@ -65,7 +65,7 @@ public class TPaginator extends BorderPane {
 		setId("t-form");
 		paginationProperty = new SimpleObjectProperty<>();
 		
-		TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+		TLanguage iEngine = TLanguage.getInstance(null);
 		
 		repo = new TObjectRepository();
 		label = new TLabel();
@@ -204,7 +204,7 @@ public class TPaginator extends BorderPane {
 	}
 	
 	public void addOrderByOption(String text, String field) {
-		orderBy.getItems().add(new TOption<>(TInternationalizationEngine
+		orderBy.getItems().add(new TOption<>(TLanguage
 				.getInstance(null)
 				.getString(text), field));
 	}

@@ -10,6 +10,10 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import com.tedros.util.TFileUtil;
+import com.tedros.util.TUrlUtil;
+import com.tedros.util.TedrosFolder;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -28,10 +32,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import com.tedros.util.TFileUtil;
-import com.tedros.util.TUrlUtil;
-import com.tedros.util.TedrosFolderEnum;
 
 /**
  * DESCRIÇÃO DA CLASSE
@@ -63,12 +63,12 @@ public class Components extends Application {
         Scene scene = new Scene(layerPane, 1020, 600, false);
         
         // add css 
-        scene.getStylesheets().addAll(getExternalURLFile(TedrosFolderEnum.CONF_FOLDER, "custom-styles.css").toExternalForm(),
-        		getExternalURLFile(TedrosFolderEnum.CONF_FOLDER, "buttons.css").toExternalForm());
+        scene.getStylesheets().addAll(getExternalURLFile(TedrosFolder.CONF_FOLDER, "custom-styles.css").toExternalForm(),
+        		getExternalURLFile(TedrosFolder.CONF_FOLDER, "buttons.css").toExternalForm());
         
-        File backgroundCss = new File(TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+"background-image.css");
+        File backgroundCss = new File(TFileUtil.getTedrosFolderPath()+TedrosFolder.CONF_FOLDER.getFolder()+"background-image.css");
 		if(backgroundCss.exists()){
-			scene.getStylesheets().addAll(getExternalURLFile(TedrosFolderEnum.CONF_FOLDER, "background-image.css").toExternalForm());
+			scene.getStylesheets().addAll(getExternalURLFile(TedrosFolder.CONF_FOLDER, "background-image.css").toExternalForm());
 		}
 		
 		// create main toolbar
@@ -120,7 +120,7 @@ public class Components extends Application {
         stage.show();
 	}
 	
-	public static URL getExternalURLFile(TedrosFolderEnum tedrosFolderEnum, String fileName){
+	public static URL getExternalURLFile(TedrosFolder tedrosFolderEnum, String fileName){
 		try {
 			String path = TFileUtil.getTedrosFolderPath()+tedrosFolderEnum.getFolder()+fileName;
 			return TUrlUtil.getURL(path);

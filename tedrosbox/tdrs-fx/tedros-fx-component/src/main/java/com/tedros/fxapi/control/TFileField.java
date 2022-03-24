@@ -14,7 +14,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.control.PopOver;
 import com.tedros.fxapi.control.action.TEventHandler;
 import com.tedros.fxapi.domain.TFileExtension;
@@ -97,7 +97,7 @@ public class TFileField extends StackPane {
 	private EventHandler<ActionEvent> openEventHandler;
 	private EventHandler<ActionEvent> downloadEventHandler;
 	
-	TInternationalizationEngine iEngine;
+	TLanguage iEngine;
 	
 	public TFileField(final Stage stage) throws IOException {	
 		appStage = stage;
@@ -107,7 +107,7 @@ public class TFileField extends StackPane {
 
 	private void initialize() {
 		
-		iEngine = TInternationalizationEngine.getInstance(null);
+		iEngine = TLanguage.getInstance(null);
 		
 		fileProperty = new SimpleObjectProperty<>();
 		fileChooser = new FileChooser();
@@ -283,7 +283,7 @@ public class TFileField extends StackPane {
 	
 	private static void configureFileChooser(final FileChooser fileChooser, String[] extensions){
 		
-		fileChooser.setTitle(TInternationalizationEngine.getInstance(null).getString("#{tedros.fxapi.label.select.file}"));
+		fileChooser.setTitle(TLanguage.getInstance(null).getString("#{tedros.fxapi.label.select.file}"));
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home"))); 
         for(String ext : extensions){
         	if(ext!=null)

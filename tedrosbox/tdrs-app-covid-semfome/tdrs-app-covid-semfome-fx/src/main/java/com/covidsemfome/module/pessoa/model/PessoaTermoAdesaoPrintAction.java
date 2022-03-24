@@ -12,7 +12,7 @@ import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 import com.tedros.fxapi.util.HtmlPDFExportHelper;
 import com.tedros.util.TFileUtil;
-import com.tedros.util.TedrosFolderEnum;
+import com.tedros.util.TedrosFolder;
 
 /**
  * @author Davis Gordon
@@ -53,7 +53,7 @@ public class PessoaTermoAdesaoPrintAction extends TPresenterAction{
 			nome = "Empty name";
 		if(id==null)
 			id = 0;
-		String folderPath = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.EXPORT_FOLDER.getFolder();
+		String folderPath = TFileUtil.getTedrosFolderPath()+TedrosFolder.EXPORT_FOLDER.getFolder();
 		return folderPath +nome+" - Termo Adesao (v."+ id.toString()+").pdf" ;
 	}
 

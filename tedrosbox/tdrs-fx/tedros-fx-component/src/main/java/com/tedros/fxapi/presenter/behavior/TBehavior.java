@@ -1,7 +1,7 @@
 package com.tedros.fxapi.presenter.behavior;
 
 import com.tedros.core.ITModule;
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.module.TObjectRepository;
 import com.tedros.core.presenter.ITPresenter;
@@ -40,7 +40,7 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 	private SimpleObjectProperty<TBuildFormStatus> buildFormStatusProperty;
 	private SimpleObjectProperty<ITModelForm<M>> formProperty;
 	
-	protected TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+	protected TLanguage iEngine = TLanguage.getInstance(null);
 	
 	@SuppressWarnings("unchecked")
 	public TBehavior() {

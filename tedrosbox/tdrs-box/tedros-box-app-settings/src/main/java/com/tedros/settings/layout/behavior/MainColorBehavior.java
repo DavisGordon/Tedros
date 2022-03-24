@@ -23,7 +23,7 @@ import com.tedros.settings.layout.model.MainColor;
 import com.tedros.settings.layout.model.PainelModelView;
 import com.tedros.settings.layout.model.TMainColorModelView;
 import com.tedros.settings.layout.template.TemplatePane;
-import com.tedros.util.TedrosFolderEnum;
+import com.tedros.util.TedrosFolder;
 
 import javafx.application.Platform;
 
@@ -58,7 +58,7 @@ public class MainColorBehavior extends TDynaViewCrudBaseBehavior<TMainColorModel
 		form.tAddAssociatedObject(TemplatePane.class.getSimpleName(), decorator.getTemplate());
 		TComboBoxField<String> themes = decorator.getThemes();
 		
-		File tf = new File(TedrosFolderEnum.THEME_FOLDER.getFullPath());
+		File tf = new File(TedrosFolder.THEME_FOLDER.getFullPath());
 		if(tf.isDirectory()) {
 			for(File f : tf.listFiles()) {
 				if(f.isDirectory()) {
@@ -70,7 +70,7 @@ public class MainColorBehavior extends TDynaViewCrudBaseBehavior<TMainColorModel
 		themes.getSelectionModel().select(ct);
 		themes.getSelectionModel().selectedItemProperty().addListener((a,o,n)->{
 			try {
-				String propFilePath = TedrosFolderEnum.CONF_FOLDER.getFullPath()+TStyleResourceName.THEME;
+				String propFilePath = TedrosFolder.CONF_FOLDER.getFullPath()+TStyleResourceName.THEME;
 				FileOutputStream fos = new FileOutputStream(propFilePath);
 				Properties prop = new Properties();
 				prop.setProperty("apply", n);

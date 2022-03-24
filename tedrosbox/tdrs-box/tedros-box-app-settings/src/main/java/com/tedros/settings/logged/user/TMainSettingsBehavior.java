@@ -13,14 +13,14 @@ import javafx.scene.control.ScrollPane;
 
 public class TMainSettingsBehavior extends TSaveViewBehavior<TMainSettingsModelView, MainSettings> {
 
-	//private TInternationalizationEngine iEngine;
+	//private TLanguage iEngine;
 	
 	@Override
 	public void load() {
 		
 		super.load();
 		
-		//iEngine = TInternationalizationEngine.getInstance(null);
+		//iEngine = TLanguage.getInstance(null);
 		
 		addAction(new TPresenterAction(TActionType.SAVE) {
 

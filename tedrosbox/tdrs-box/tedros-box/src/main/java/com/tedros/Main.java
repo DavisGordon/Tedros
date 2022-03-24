@@ -15,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.core.ITModule;
 import com.tedros.core.ITedrosBox;
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.TModule;
 import com.tedros.core.context.Page;
 import com.tedros.core.context.Pages;
@@ -39,7 +39,7 @@ import com.tedros.settings.logged.user.TMainSettingsPane;
 import com.tedros.settings.logged.user.TUserSettingsPane;
 import com.tedros.util.TFileUtil;
 import com.tedros.util.TZipUtil;
-import com.tedros.util.TedrosFolderEnum;
+import com.tedros.util.TedrosFolder;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
@@ -248,12 +248,12 @@ public class Main extends Application implements ITedrosBox  {
         if(is3dSupported)
             scene.setCamera(new PerspectiveCamera());
         
-        final String defaultStyleCssUrl = TedrosContext.getExternalURLFile(TedrosFolderEnum.CSS_CASPIAN_FOLDER, "caspian.css").toExternalForm();
-        final String defaultStyleCssUrl2 = TedrosContext.getExternalURLFile(TedrosFolderEnum.CSS_CASPIAN_FOLDER, "caspian-no-transparency.css").toExternalForm();
-        final String defaultStyleCssUrl3 = TedrosContext.getExternalURLFile(TedrosFolderEnum.CSS_CASPIAN_FOLDER, "highcontrast.css").toExternalForm();
+        final String defaultStyleCssUrl = TedrosContext.getExternalURLFile(TedrosFolder.CSS_CASPIAN_FOLDER, "caspian.css").toExternalForm();
+        final String defaultStyleCssUrl2 = TedrosContext.getExternalURLFile(TedrosFolder.CSS_CASPIAN_FOLDER, "caspian-no-transparency.css").toExternalForm();
+        final String defaultStyleCssUrl3 = TedrosContext.getExternalURLFile(TedrosFolder.CSS_CASPIAN_FOLDER, "highcontrast.css").toExternalForm();
 
         final String customStyleCssUrl = TThemeUtil.getStyleURL().toExternalForm();
-    	final String immutableStylesCssUrl = TedrosContext.getExternalURLFile(TedrosFolderEnum.CONF_FOLDER, "immutable-styles.css").toExternalForm();
+    	final String immutableStylesCssUrl = TedrosContext.getExternalURLFile(TedrosFolder.CONF_FOLDER, "immutable-styles.css").toExternalForm();
 
     	scene.getStylesheets().addAll(immutableStylesCssUrl, customStyleCssUrl, defaultStyleCssUrl2, defaultStyleCssUrl3);
     	scene.setUserAgentStylesheet(defaultStyleCssUrl);
@@ -312,7 +312,7 @@ public class Main extends Application implements ITedrosBox  {
         appName.setCursor(Cursor.HAND);
         
         appName.setOnMouseClicked(e -> {
-        	String tt = TInternationalizationEngine.getInstance(null).getFormatedString("#{tedros.tooltip}", version);
+        	String tt = TLanguage.getInstance(null).getFormatedString("#{tedros.tooltip}", version);
         	Label l = new Label(tt);
         	l.setFont(Font.font(11));
         	PopOver p = new PopOver();
@@ -504,7 +504,7 @@ public class Main extends Application implements ITedrosBox  {
 	
 	@SuppressWarnings("rawtypes")
 	public void buildSettingsPane() {
-		TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+		TLanguage iEngine = TLanguage.getInstance(null);
 		
 		if(settingsAcc!=null &&  leftMenuPane.getChildren().contains(settingsAcc)) {
 			for(TitledPane t : settingsAcc.getPanes())
@@ -771,9 +771,9 @@ public class Main extends Application implements ITedrosBox  {
      * */    
     @Override 
     public void start(Stage primaryStage) throws Exception {
-    	TInternationalizationEngine.addResourceBundle(null, "TedrosLoginLabels", getClass().getClassLoader());
-    	TInternationalizationEngine.addResourceBundle(null, "TCoreLabels", TedrosContext.class.getClassLoader());
-		TInternationalizationEngine.addResourceBundle(null, "TLabels", TPresenter.class.getClassLoader());
+    	TLanguage.addResourceBundle(null, "TedrosLoginLabels", getClass().getClassLoader());
+    	TLanguage.addResourceBundle(null, "TCoreLabels", TedrosContext.class.getClassLoader());
+		TLanguage.addResourceBundle(null, "TLabels", TPresenter.class.getClassLoader());
         init(primaryStage);
         primaryStage.show();
         

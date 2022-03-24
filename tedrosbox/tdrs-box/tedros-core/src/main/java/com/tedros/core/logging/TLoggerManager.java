@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.tedros.util.TFileUtil;
-import com.tedros.util.TedrosFolderEnum;
+import com.tedros.util.TedrosFolder;
 
 /**
  * The Logger manager
@@ -35,7 +35,7 @@ public class TLoggerManager {
             //formatterTxt = new SimpleFormatter();
             
             consoleHandler = new ConsoleHandler();
-            fileHandler = new FileHandler(TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.LOG_FOLDER.getFolder() + "Logging.txt");
+            fileHandler = new FileHandler(TFileUtil.getTedrosFolderPath()+TedrosFolder.LOG_FOLDER.getFolder() + "Logging.txt");
             
             fileHandler.setFormatter(formatterTxt);
             consoleHandler.setFormatter(formatterTxt);

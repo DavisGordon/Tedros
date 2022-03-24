@@ -9,7 +9,7 @@ import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.util.TFileUtil;
-import com.tedros.util.TedrosFolderEnum;
+import com.tedros.util.TedrosFolder;
 
 public class MailingSaveAction extends TPresenterAction {
 
@@ -22,7 +22,7 @@ public class MailingSaveAction extends TPresenterAction {
 		TDynaPresenter<MailingModelView> presenter = getPresenter();
 		final Mailing mailing = (Mailing) presenter.getBehavior().getModelView().getModel();
 		String str = MailingUtil.buildConteudo(mailing);
-		String path = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+"/email_template.html";
+		String path = TFileUtil.getTedrosFolderPath()+TedrosFolder.CONF_FOLDER.getFolder()+"/email_template.html";
 		File file = new File(path);
 		String html = TFileUtil.readFile(file);
 		html = html.replace("#CONTENT#", str);

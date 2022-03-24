@@ -13,7 +13,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.text.Text;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.fxapi.annotation.text.TText;
 
 
@@ -35,7 +35,7 @@ implements ITControlBuilder<com.tedros.fxapi.control.TText, SimpleStringProperty
 
 			@Override
 			public void changed(ObservableValue<? extends String> arg0,String arg1, String arg2) {
-				property.setValue(TInternationalizationEngine.getInstance(null).getString(arg2));
+				property.setValue(TLanguage.getInstance(null).getString(arg2));
 			}
 		});
 		callParser(tAnnotation, control);

@@ -10,7 +10,7 @@ import com.tedros.app.process.ITProcess;
 import com.tedros.core.ITApplication;
 import com.tedros.core.ITModule;
 import com.tedros.core.TAppDescriptor;
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.TModuleDescriptor;
 import com.tedros.core.annotation.security.TAuthorizationType;
 
@@ -26,7 +26,7 @@ public final class TAppContext {
 	
 	private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
-	private TInternationalizationEngine iEngine;
+	private TLanguage iEngine;
 	
 	private final TAppDescriptor appDescriptor;
 	
@@ -46,13 +46,13 @@ public final class TAppContext {
 			if(appDescriptor.getResourceNameList()!=null){
 				LOGGER.info("Start loading app resources to the Internationalization Engine:");
 				for(String bundle : appDescriptor.getResourceNameList()){
-					TInternationalizationEngine.addResourceBundle(appDescriptor.getUniversalUniqueIdentifier(), bundle, appStarterClass.getClassLoader());
+					TLanguage.addResourceBundle(appDescriptor.getUniversalUniqueIdentifier(), bundle, appStarterClass.getClassLoader());
 					LOGGER.info(bundle + " added.");
 				}
 				LOGGER.info("Finish loading app resources to the Internationalization Engine.");
 			}
 			
-			iEngine = TInternationalizationEngine.getInstance(appDescriptor.getUniversalUniqueIdentifier());
+			iEngine = TLanguage.getInstance(appDescriptor.getUniversalUniqueIdentifier());
 								
 			if(appDescriptor.getSecurityDescriptor()!=null){
 				if(!TedrosContext.isUserAuthorized(appDescriptor.getSecurityDescriptor(), TAuthorizationType.APP_ACCESS)){

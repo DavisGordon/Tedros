@@ -1,6 +1,6 @@
 package com.tedros.core.context;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -27,7 +27,7 @@ public class TedroxBoxHeaderButton extends HBox{
 	public TedroxBoxHeaderButton(final Stage stage)
     {
 		super(4D);
-		TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+		TLanguage iEngine = TLanguage.getInstance(null);
         
         setMaxHeight(17);
         backupWindowBounds = null;

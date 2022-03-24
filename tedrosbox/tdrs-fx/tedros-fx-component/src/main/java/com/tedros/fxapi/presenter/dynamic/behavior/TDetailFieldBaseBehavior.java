@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 import com.tedros.core.ITModule;
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.fxapi.annotation.control.TTableView;
@@ -76,7 +76,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	    	ITFieldBuilder controlBuilder = (ITFieldBuilder) arrControl[1];
 	    	((ITBuilder) controlBuilder).setComponentDescriptor(new TComponentDescriptor(null, model, null));
 	    	TableView tableView = (TableView) ((ITControlBuilder) controlBuilder).build(tableViewAnn, getModels());
-	    	tableView.setTooltip(new Tooltip(TInternationalizationEngine
+	    	tableView.setTooltip(new Tooltip(TLanguage
 					.getInstance(null)
 					.getString("#{tedros.fxapi.label.double.click.select}")));
 	    	

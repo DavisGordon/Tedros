@@ -10,7 +10,7 @@ import java.net.URL;
 import java.util.Properties;
 
 import com.tedros.core.context.TedrosContext;
-import com.tedros.util.TedrosFolderEnum;
+import com.tedros.util.TedrosFolder;
 
 /**
  * @author Davis Gordon
@@ -22,7 +22,7 @@ public final  class TThemeUtil {
 	private static final String STYLE_CSS = "custom-styles.css";
 	
 	public static String getCurrentTheme() {
-		String propFilePath = TedrosFolderEnum.CONF_FOLDER.getFullPath()+"theme.properties";
+		String propFilePath = TedrosFolder.CONF_FOLDER.getFullPath()+"theme.properties";
 		Properties prop = new Properties();
 		try {
 			InputStream is = new FileInputStream(propFilePath);
@@ -37,7 +37,7 @@ public final  class TThemeUtil {
 	}
 
 	public static String getThemeFolder() {
-		return TedrosFolderEnum.THEME_FOLDER.getFullPath()+ getCurrentTheme()+File.separator;
+		return TedrosFolder.THEME_FOLDER.getFullPath()+ getCurrentTheme()+File.separator;
 	}
 	
 	public static String getBackgroundFilePath() {
@@ -57,12 +57,12 @@ public final  class TThemeUtil {
 	}
 	
 	public static URL getBackgroundURL() {
-		return TedrosContext.getExternalURLFile(TedrosFolderEnum.THEME_FOLDER, 
+		return TedrosContext.getExternalURLFile(TedrosFolder.THEME_FOLDER, 
 				getCurrentTheme()+File.separator+BACKGROUND_CSS);
 	}
 	
 	public static URL getStyleURL() {
-		return TedrosContext.getExternalURLFile(TedrosFolderEnum.THEME_FOLDER, 
+		return TedrosContext.getExternalURLFile(TedrosFolder.THEME_FOLDER, 
 				getCurrentTheme()+File.separator+STYLE_CSS);
 	}
 }

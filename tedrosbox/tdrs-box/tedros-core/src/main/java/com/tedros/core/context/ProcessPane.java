@@ -13,13 +13,13 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import com.tedros.app.process.ITProcess;
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 
 public class ProcessPane extends BorderPane {
 	
 	private VBox processVBox;
 	private ScrollPane processLayer;
-	private TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+	private TLanguage iEngine = TLanguage.getInstance(null);
 	
 	public ProcessPane() {
 		

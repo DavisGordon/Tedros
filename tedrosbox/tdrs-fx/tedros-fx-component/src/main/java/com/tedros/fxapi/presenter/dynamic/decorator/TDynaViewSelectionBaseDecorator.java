@@ -1,6 +1,6 @@
 package com.tedros.fxapi.presenter.dynamic.decorator;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
@@ -54,7 +54,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 		tListView.autosize();
 		tListView.setMaxWidth(listViewMaxWidth);
 		tListView.setMinWidth(listViewMinWidth);
-		tListView.setTooltip(new Tooltip(TInternationalizationEngine
+		tListView.setTooltip(new Tooltip(TLanguage
 				.getInstance(null)
 				.getString("#{tedros.fxapi.label.double.click.remove}")));
 		

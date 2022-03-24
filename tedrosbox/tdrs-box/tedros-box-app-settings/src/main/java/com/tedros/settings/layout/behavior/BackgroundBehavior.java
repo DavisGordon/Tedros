@@ -7,7 +7,7 @@ import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.style.TThemeUtil;
 import com.tedros.ejb.base.model.TFileModel;
@@ -19,7 +19,7 @@ import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 import com.tedros.settings.layout.model.BackgroundImageModel;
 import com.tedros.settings.layout.model.BackgroundImageModelView;
 import com.tedros.util.TFileUtil;
-import com.tedros.util.TedrosFolderEnum;
+import com.tedros.util.TedrosFolder;
 
 public class BackgroundBehavior extends TDynaViewCrudBaseBehavior<BackgroundImageModelView, BackgroundImageModel> {
 
@@ -36,12 +36,12 @@ public class BackgroundBehavior extends TDynaViewCrudBaseBehavior<BackgroundImag
 				TFileModel fm = mv.getModel().getFileModel();
 				
 				if(fm==null) {
-					String msg = TInternationalizationEngine.getInstance(null).getString("#{message.select.image}");
+					String msg = TLanguage.getInstance(null).getString("#{message.select.image}");
 					addMessage(new TMessage(TMessageType.WARNING, msg));
 					return false;
 				}
 				
-				String bp = TedrosFolderEnum.BACKGROUND_IMAGES_FOLDER.getFullPath();
+				String bp = TedrosFolder.BACKGROUND_IMAGES_FOLDER.getFullPath();
 				try {
 					File f = fm.getFile();
 					if(!fm.getFilePath().equals(bp)) {

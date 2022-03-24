@@ -1,6 +1,6 @@
 package com.tedros.settings.layout;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.TModule;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
@@ -19,7 +19,7 @@ public class CustomizarModule extends TModule {
 	@Override
 	public void tStart() {
 		
-		TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(TConstant.UUI);
+		TLanguage iEngine = TLanguage.getInstance(TConstant.UUI);
 		tShowView(new TGroupView<>(this, iEngine.getString("#{settings.view.title}"), 
 				new TViewItem(TDynaGroupView.class, TMainColorModelView.class, iEngine.getString("#{color.base.painel.title}"), true),
 				new TViewItem(TDynaGroupView.class, PainelModelView.class, iEngine.getString("#{settings.form.name}"), true),

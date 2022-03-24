@@ -3,7 +3,7 @@ package com.tedros.fxapi.layout;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.context.TEntry;
 import com.tedros.fxapi.form.ITForm;
 import com.tedros.fxapi.form.group.TGroupFormControl;
@@ -37,7 +37,7 @@ public class TBreadcrumbForm extends HBox {
 	private TGroupFormControl tGroupFormControl;
 	private List<Button> tButtonList = new ArrayList<Button>();
 	private ListChangeListener<TEntry<Object>> entryListChangeListener;
-	private TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+	private TLanguage iEngine = TLanguage.getInstance(null);
     
     public TBreadcrumbForm(StackPane formSpace) {
     	super(0);

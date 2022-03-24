@@ -8,82 +8,34 @@ package com.tedros.test;
 
 
 import java.io.File;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+
+import com.tedros.core.context.TedrosContext;
+import com.tedros.fxapi.form.TDefaultForm;
+import com.tedros.test.component.file.FileTestModel;
+import com.tedros.test.component.file.FileTestModelView;
+import com.tedros.util.TFileUtil;
+import com.tedros.util.TUrlUtil;
+import com.tedros.util.TedrosFolder;
 
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.TimelineBuilder;
 import javafx.application.Application;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBoxBuilder;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import com.tedros.context.TedrosContext;
-import com.tedros.fxapi.control.TBigDecimalField;
-import com.tedros.fxapi.control.TBigIntegerField;
-import com.tedros.fxapi.control.TDoubleField;
-import com.tedros.fxapi.control.TIntegerField;
-import com.tedros.fxapi.control.TLongField;
-import com.tedros.fxapi.control.validator.TControlValidator;
-import com.tedros.fxapi.control.validator.TFieldResult;
-import com.tedros.fxapi.control.validator.TValidatorResult;
-import com.tedros.fxapi.form.TDefaultForm;
-import com.tedros.fxapi.form.THBoxForm;
-import com.tedros.fxapi.form.TVBoxForm;
-import com.tedros.fxapi.modal.TConfirmMessageBox;
-import com.tedros.fxapi.modal.TMessageBox;
-import com.tedros.fxapi.reader.TBigDecimalReader;
-import com.tedros.fxapi.reader.TBigIntegerReader;
-import com.tedros.fxapi.reader.TBooleanReader;
-import com.tedros.fxapi.reader.TDoubleReader;
-import com.tedros.fxapi.reader.TFloatReader;
-import com.tedros.fxapi.reader.TIntegerReader;
-import com.tedros.fxapi.reader.TLongReader;
-import com.tedros.fxapi.reader.TStringReader;
-import com.tedros.test.component.file.FileTestModel;
-import com.tedros.test.component.file.FileTestModelView;
-import com.tedros.util.TFileUtil;
-import com.tedros.util.TUrlUtil;
-import com.tedros.util.TedrosFolderEnum;
 
 /**
  * DESCRIÇÃO DA CLASSE
@@ -108,14 +60,14 @@ public class Main extends Application {
 		
 		root.setId("t-tedros-color");
         
-        final String customStyleCssUrl = TedrosContext.getExternalURLFile(TedrosFolderEnum.CONF_FOLDER, "custom-styles.css").toExternalForm();
-    	final String immutableStylesCssUrl = TedrosContext.getExternalURLFile(TedrosFolderEnum.CONF_FOLDER, "immutable-styles.css").toExternalForm();
+        final String customStyleCssUrl = TedrosContext.getExternalURLFile(TedrosFolder.CONF_FOLDER, "custom-styles.css").toExternalForm();
+    	final String immutableStylesCssUrl = TedrosContext.getExternalURLFile(TedrosFolder.CONF_FOLDER, "immutable-styles.css").toExternalForm();
     	 
     	scene.getStylesheets().addAll(customStyleCssUrl, immutableStylesCssUrl);
     
-    	File backgroundCss = new File(TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+"background-image.css");
+    	File backgroundCss = new File(TFileUtil.getTedrosFolderPath()+TedrosFolder.CONF_FOLDER.getFolder()+"background-image.css");
 		if(backgroundCss.exists()){
-			scene.getStylesheets().addAll(TedrosContext.getExternalURLFile(TedrosFolderEnum.CONF_FOLDER, "background-image.css").toExternalForm());
+			scene.getStylesheets().addAll(TedrosContext.getExternalURLFile(TedrosFolder.CONF_FOLDER, "background-image.css").toExternalForm());
 		}
         
         
@@ -220,14 +172,14 @@ public class Main extends Application {
 		//scene = new Scene(root, 1920, 1080, false);
 		scene = new Scene(root, 800, 300, false);
         
-        final String customStyleCssUrl = TedrosContext.getExternalURLFile(TedrosFolderEnum.CONF_FOLDER, "custom-styles.css").toExternalForm();
-    	final String immutableStylesCssUrl = TedrosContext.getExternalURLFile(TedrosFolderEnum.CONF_FOLDER, "immutable-styles.css").toExternalForm();
+        final String customStyleCssUrl = TedrosContext.getExternalURLFile(TedrosFolder.CONF_FOLDER, "custom-styles.css").toExternalForm();
+    	final String immutableStylesCssUrl = TedrosContext.getExternalURLFile(TedrosFolder.CONF_FOLDER, "immutable-styles.css").toExternalForm();
     	 
     	scene.getStylesheets().addAll(customStyleCssUrl, immutableStylesCssUrl);
     
-    	File backgroundCss = new File(TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+"background-image.css");
+    	File backgroundCss = new File(TFileUtil.getTedrosFolderPath()+TedrosFolder.CONF_FOLDER.getFolder()+"background-image.css");
 		if(backgroundCss.exists()){
-			scene.getStylesheets().addAll(TedrosContext.getExternalURLFile(TedrosFolderEnum.CONF_FOLDER, "background-image.css").toExternalForm());
+			scene.getStylesheets().addAll(TedrosContext.getExternalURLFile(TedrosFolder.CONF_FOLDER, "background-image.css").toExternalForm());
 		}
         
         stage.setScene(scene);
@@ -242,9 +194,9 @@ public class Main extends Application {
 		launch(args);
 	}
 	
-	public static URL getExternalURLFile(TedrosFolderEnum tedrosFolderEnum, String fileName){
+	public static URL getExternalURLFile(TedrosFolder TedrosFolder, String fileName){
 		try {
-			String path = TFileUtil.getTedrosFolderPath()+tedrosFolderEnum.getFolder()+fileName;
+			String path = TFileUtil.getTedrosFolderPath()+TedrosFolder.getFolder()+fileName;
 			return TUrlUtil.getURL(path);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
