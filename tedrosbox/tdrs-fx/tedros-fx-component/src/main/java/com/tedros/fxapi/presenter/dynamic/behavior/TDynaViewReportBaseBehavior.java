@@ -5,7 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 import com.tedros.core.ITModule;
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.context.TedrosContext;
@@ -27,7 +27,7 @@ import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.process.TReportProcess;
 import com.tedros.fxapi.process.TReportProcessEnum;
 import com.tedros.util.TFileUtil;
-import com.tedros.util.TedrosFolderEnum;
+import com.tedros.util.TedrosFolder;
 
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -479,8 +479,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				Platform.runLater(new Runnable() {
 		            @Override
 		            public void run() {
-		                if(!TFileUtil.open(new File(TedrosFolderEnum.EXPORT_FOLDER.getFullPath()))) {
-		                	Label label = new Label(TInternationalizationEngine.getInstance(null).getString("#{tedros.fxapi.message.os.not.support.operation}"));
+		                if(!TFileUtil.open(new File(TedrosFolder.EXPORT_FOLDER.getFullPath()))) {
+		                	Label label = new Label(TLanguage.getInstance(null).getString("#{tedros.fxapi.message.os.not.support.operation}"));
 		        			label.setId("t-label");
 		        			label.setStyle(	"-fx-font: Arial; "+
 		        							"-fx-font-size: 1.0em; "+

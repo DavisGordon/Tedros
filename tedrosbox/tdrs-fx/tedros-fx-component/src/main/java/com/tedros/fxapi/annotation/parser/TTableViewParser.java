@@ -2,7 +2,7 @@ package com.tedros.fxapi.annotation.parser;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableNestedColumn;
 import com.tedros.fxapi.annotation.control.TTableSubColumn;
@@ -219,7 +219,7 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 	
 	private TableColumn getColumn(Object obj, String text){
 		TableColumn tableColumn = null;
-		text = TInternationalizationEngine.getInstance(null).getString(text);
+		text = TLanguage.getInstance(null).getString(text);
 		if(obj instanceof TableView){
 			TableView tbv = (TableView) obj;
 			for(Object o : tbv.getColumns()){

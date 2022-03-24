@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.tedros.core.ITModule;
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.TModule;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.context.TedrosContext;
@@ -110,7 +110,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	    	ITFieldBuilder controlBuilder = (ITFieldBuilder) arrControl[1];
 	    	((ITBuilder) controlBuilder).setComponentDescriptor(new TComponentDescriptor(null, model, null));
 	    	TableView tableView = (TableView) ((ITControlBuilder) controlBuilder).build(tableViewAnn, this.searchResultList);
-	    	tableView.setTooltip(new Tooltip(TInternationalizationEngine
+	    	tableView.setTooltip(new Tooltip(TLanguage
 					.getInstance(null)
 					.getString("#{tedros.fxapi.label.double.click.select}")));
 	    	

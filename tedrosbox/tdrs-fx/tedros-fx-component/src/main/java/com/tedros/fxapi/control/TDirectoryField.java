@@ -8,7 +8,7 @@ package com.tedros.fxapi.control;
 
 import java.io.File;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.fxapi.control.action.TEventHandler;
 
 import javafx.beans.property.ObjectProperty;
@@ -58,7 +58,7 @@ public class TDirectoryField extends StackPane {
 	private ChangeListener<File> fileListener;
 	private ChangeListener<File> initialDirectoryListener;
 	
-	private TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+	private TLanguage iEngine = TLanguage.getInstance(null);
 	
 	public TDirectoryField(final Stage stage) {	
 		appStage = stage;

@@ -3,7 +3,7 @@ package com.tedros.fxapi.presenter.view.group;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.tedros.core.ITModule;
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.presenter.ITGroupPresenter;
 import com.tedros.core.presenter.view.ITGroupViewItem;
@@ -31,7 +31,7 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 	private SimpleStringProperty tViewTitle;
 	private TGroupView<ITGroupPresenter> mainView;
 	private ObservableList<ITGroupViewItem> groupViewItemList;
-	private TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+	private TLanguage iEngine = TLanguage.getInstance(null);
 	private ITModule module;
 	
 	private ITGroupViewItem itemSelected;

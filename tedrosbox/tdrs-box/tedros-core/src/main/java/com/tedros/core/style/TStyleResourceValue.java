@@ -7,7 +7,7 @@ import java.util.Properties;
 import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.util.TFileUtil;
-import com.tedros.util.TedrosFolderEnum;
+import com.tedros.util.TedrosFolder;
 
 /**
  * The enum with possible values for style resources

@@ -6,7 +6,7 @@
  */
 package org.somos.module.pessoa.table;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.fxapi.control.TTableCell;
 
 /**
@@ -19,7 +19,7 @@ public class TipoContatoTableCell extends TTableCell{
 
 	
 	public String processItem(Object item) {
-		TInternationalizationEngine iEn = TInternationalizationEngine.getInstance(null);
+		TLanguage iEn = TLanguage.getInstance(null);
 		
 		
 		if(item!=null) {

@@ -1,11 +1,5 @@
 package com.tedros.test.component.file;
 
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
-import javafx.geometry.Pos;
-import javafx.scene.text.TextAlignment;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -13,12 +7,18 @@ import com.tedros.ejb.base.model.TFileModel;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TFileField;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TListFileField;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
+import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.presenter.model.TModelView;
-import com.tedros.fxapi.property.TSimpleFileModelProperty;
+import com.tedros.fxapi.property.TSimpleFileProperty;
+
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
+import javafx.scene.text.TextAlignment;
 
 public class FileTestModelView extends TModelView<FileTestModel> {
 
@@ -26,17 +26,18 @@ public class FileTestModelView extends TModelView<FileTestModel> {
 	private SimpleLongProperty id;
 	
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Teste", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, node=@TNode(id="t-form-title-text", parse = true))
+	@TText(text="Teste", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, node=@TNode(id="t-form-title-text", parse = true), 
+	textStyle = TTextStyle.MEDIUM)
 	private SimpleStringProperty texto;
 	
 	
 	@TLabel(text="Imagem de fundo")
 	@TFileField(showImage=true)
-	private TSimpleFileModelProperty<TFileModel> selectedFile;
+	private TSimpleFileProperty<TFileModel> selectedFile;
 	
 	@TLabel(text="Imagens")
-	@TListFileField
-	private ObservableList<TSimpleFileModelProperty<TFileModel>> fileList;
+	@TFileField
+	private ObservableList<TSimpleFileProperty<TFileModel>> fileList;
 	
 	public FileTestModelView(FileTestModel model) {
 		super(model);
@@ -57,19 +58,19 @@ public class FileTestModelView extends TModelView<FileTestModel> {
 		return null;
 	}
 
-	public TSimpleFileModelProperty<TFileModel> getSelectedFile() {
+	public TSimpleFileProperty<TFileModel> getSelectedFile() {
 		return selectedFile;
 	}
 
-	public void setSelectedFile(TSimpleFileModelProperty<TFileModel> selectedFile) {
+	public void setSelectedFile(TSimpleFileProperty<TFileModel> selectedFile) {
 		this.selectedFile = selectedFile;
 	}
 
-	public ObservableList<TSimpleFileModelProperty<TFileModel>> getFileList() {
+	public ObservableList<TSimpleFileProperty<TFileModel>> getFileList() {
 		return fileList;
 	}
 
-	public void setFileList(ObservableList<TSimpleFileModelProperty<TFileModel>> fileList) {
+	public void setFileList(ObservableList<TSimpleFileProperty<TFileModel>> fileList) {
 		this.fileList = fileList;
 	}
 	

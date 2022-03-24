@@ -1,7 +1,7 @@
 package com.tedros.fxapi.presenter.decorator;
 
 import com.tedros.core.ITModule;
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.presenter.ITPresenter;
 import com.tedros.core.presenter.view.ITView;
@@ -15,7 +15,7 @@ implements ITDecorator<P> {
 	private P presenter;
 	private StackPane screenSaverPane;
 	
-	protected TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null); 
+	protected TLanguage iEngine = TLanguage.getInstance(null); 
 
 	@Override
 	public StackPane getScreenSaverPane() {

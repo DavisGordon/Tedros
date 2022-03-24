@@ -15,7 +15,7 @@ import com.tedros.fxapi.process.TModelProcess;
 import com.tedros.settings.layout.model.PainelModel;
 import com.tedros.util.TColorUtil;
 import com.tedros.util.TFileUtil;
-import com.tedros.util.TedrosFolderEnum;
+import com.tedros.util.TedrosFolder;
 
 import javafx.scene.paint.Color;
 

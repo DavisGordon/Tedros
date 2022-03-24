@@ -15,7 +15,7 @@ import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.util.HtmlPDFExportHelper;
 import com.tedros.util.TFileUtil;
-import com.tedros.util.TedrosFolderEnum;
+import com.tedros.util.TedrosFolder;
 
 /**
  * @author Davis Gordon
@@ -55,7 +55,7 @@ public class TermoAdesaoPrintAction extends TPresenterAction{
 		String pattern = "dd-MM-yyyy HH-mm";
 		DateFormat df = new SimpleDateFormat(pattern);
 		String k = data!=null ? " "+df.format(data) : "";
-		String folderPath = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.EXPORT_FOLDER.getFolder();
+		String folderPath = TFileUtil.getTedrosFolderPath()+TedrosFolder.EXPORT_FOLDER.getFolder();
 		return folderPath + nome + k +".pdf" ;
 	}
 

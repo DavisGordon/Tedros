@@ -93,7 +93,7 @@ public final class TFileUtil {
 	}
 
 	public static String getTedrosFolderPath(){
-		return TedrosFolderEnum.ROOT_FOLDER.getFullPath();
+		return TedrosFolder.ROOT_FOLDER.getFullPath();
 	}
 	
 	public static boolean open(File file){

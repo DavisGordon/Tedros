@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Properties;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.security.model.TUser;
 import com.tedros.core.style.TStyleResourceName;
@@ -13,7 +13,7 @@ import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.entity.behavior.TSaveViewBehavior;
 import com.tedros.util.TFileUtil;
-import com.tedros.util.TedrosFolderEnum;
+import com.tedros.util.TedrosFolder;
 
 public class TUserSettingBehavior extends TSaveViewBehavior<TUserSettingModelView, TUser> {
 
@@ -24,7 +24,7 @@ public class TUserSettingBehavior extends TSaveViewBehavior<TUserSettingModelVie
 		
 		super.load();
 		
-		iEngine = TInternationalizationEngine.getInstance(null);
+		iEngine = TLanguage.getInstance(null);
 		
 		super.addAction(new TPresenterAction(TActionType.SAVE) {
 
@@ -82,7 +82,7 @@ public class TUserSettingBehavior extends TSaveViewBehavior<TUserSettingModelVie
 	}
 	
 	private void saveLanguage(String language) throws IOException{
-		String propFilePath = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+TStyleResourceName.LANGUAGE;
+		String propFilePath = TFileUtil.getTedrosFolderPath()+TedrosFolder.CONF_FOLDER.getFolder()+TStyleResourceName.LANGUAGE;
 		FileOutputStream fos = new FileOutputStream(propFilePath);
 		Properties prop = new Properties();
 		prop.setProperty("language", language);

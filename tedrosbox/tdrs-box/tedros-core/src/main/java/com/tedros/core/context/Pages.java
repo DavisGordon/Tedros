@@ -1,6 +1,6 @@
 package com.tedros.core.context;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 
 
 public class Pages{
@@ -10,7 +10,7 @@ public class Pages{
     	
 	public Pages(){
         root = new AllPagesPage();
-        modules = new CategoryPage(TInternationalizationEngine.getInstance(null).getString("#{tedros.modules}"), new Page[0]);
+        modules = new CategoryPage(TLanguage.getInstance(null).getString("#{tedros.modules}"), new Page[0]);
         root.getChildren().add(modules);
         
     }

@@ -24,13 +24,13 @@ public final class TModuleDescriptor implements Comparable<TModuleDescriptor> {
 	private Class<? extends TImageView> iconImageViewClass;
 	private Class<? extends TImageView> menuIconImageViewClass;
 	private final TSecurityDescriptor securityDescriptor;
-	private TInternationalizationEngine iEngine;
+	private TLanguage iEngine;
 	
 	public TModuleDescriptor(String applicationName, String universalUniqueIdentifier, String menu,  String moduleName, String description, 
 			Class<? extends TModule> type, Class<? extends TImageView> iconImageViewClass, Class<? extends TImageView> menuIconImageViewClass, 
 			TSecurityDescriptor securityDescriptor) {
 		
-		iEngine = TInternationalizationEngine.getInstance(applicationUUID);
+		iEngine = TLanguage.getInstance(applicationUUID);
 		
 		if(StringUtils.isBlank(applicationName) 
 				|| StringUtils.isBlank(menu)

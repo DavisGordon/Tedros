@@ -10,7 +10,7 @@ import java.lang.annotation.Annotation;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.style.TStyleResourceValue;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
@@ -81,7 +81,7 @@ final class THtmlBoxBuilder {
 		if(position ==  null)
 			position = TLabelPosition.TOP;
 		
-		TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+		TLanguage iEngine = TLanguage.getInstance(null);
 		
 		if(position == TLabelPosition.TOP || position == TLabelPosition.DEFAULT){
 			box.append(topTemplate.toString()

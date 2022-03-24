@@ -3,7 +3,7 @@
  */
 package com.tedros.fxapi.form;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 
 /**
  * @author Davis Gordon
@@ -22,6 +22,6 @@ public enum TBuildFormStatus {
 	}
 	
 	public String getValue() {
-		return TInternationalizationEngine.getInstance(null).getString(value);
+		return TLanguage.getInstance(null).getString(value);
 	}
 }

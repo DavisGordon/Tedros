@@ -46,7 +46,7 @@ public class ModalMessage extends VBox{
         explPane.setCenter(explanation);
         BorderPane.setMargin(explanation, new Insets(5, 5, 5, 5));
 
-        TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+        TLanguage iEngine = TLanguage.getInstance(null);
         
         // create title
         Label title = new Label("warning");//new Label(iEngine.getString("#{tedros.warning}"));

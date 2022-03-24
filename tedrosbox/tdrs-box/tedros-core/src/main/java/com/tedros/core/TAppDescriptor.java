@@ -59,7 +59,7 @@ public class TAppDescriptor {
 	
 	private final TSecurityDescriptor securityDescriptor;
 	
-	private TInternationalizationEngine iEngine;
+	private TLanguage iEngine;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public TAppDescriptor(Class appClass) 
@@ -68,7 +68,7 @@ public class TAppDescriptor {
 		
 		TApplication tApplication = (TApplication) appStarterClass.getAnnotation(TApplication.class);
 		
-		iEngine = TInternationalizationEngine.getInstance(tApplication.universalUniqueIdentifier());
+		iEngine = TLanguage.getInstance(tApplication.universalUniqueIdentifier());
 		
 		this.name = tApplication.name();
 		this.universalUniqueIdentifier = tApplication.universalUniqueIdentifier();

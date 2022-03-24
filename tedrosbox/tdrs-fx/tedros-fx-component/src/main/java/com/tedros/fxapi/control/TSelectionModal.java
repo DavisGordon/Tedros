@@ -3,7 +3,7 @@
  */
 package com.tedros.fxapi.control;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.TModule;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.context.TedrosContext;
@@ -68,7 +68,7 @@ public class TSelectionModal extends TRequiredModal {
 			height = 150;
 		}
 		boolean disable = !(this.tSelectedItems!=null && !this.tSelectedItems.isEmpty());
-		TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+		TLanguage iEngine = TLanguage.getInstance(null);
 		
 		tFindButton = new TButton(iEngine.getString("#{tedros.fxapi.button.search}"));
 		tRemoveButton = new TButton(iEngine.getString("#{tedros.fxapi.button.delete}"));

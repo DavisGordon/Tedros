@@ -6,7 +6,7 @@ package com.tedros.settings.security.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.security.model.TAuthorization;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TLabelDefaultSetting;
@@ -118,7 +118,7 @@ public final class TAuthorizationTableView extends TEntityModelView<TAuthorizati
 	 */
 	private void loadDisplayText(TAuthorization model) {
 		if(!model.isNew()){
-			TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+			TLanguage iEngine = TLanguage.getInstance(null);
 			String str = (appName.getValue()==null ? "" : iEngine.getString(appName.getValue())+" / " )
 					+ (moduleName.getValue()!=null ? iEngine.getString(moduleName.getValue()) +" / " : "")
 					+ (viewName.getValue()!=null ? iEngine.getString(viewName.getValue()) +" / ": "")

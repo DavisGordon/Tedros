@@ -3,7 +3,7 @@ package com.tedros.fxapi.builder;
 import java.lang.annotation.Annotation;
 
 import com.tedros.core.ITModule;
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.fxapi.annotation.parser.TAnnotationParser;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
@@ -16,7 +16,7 @@ public abstract class TBuilder implements ITBuilder {
 	
 	private TComponentDescriptor componentDescriptor;
 	
-	protected TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+	protected TLanguage iEngine = TLanguage.getInstance(null);
 	
 	public TComponentDescriptor getComponentDescriptor() {
 		return componentDescriptor;

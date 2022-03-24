@@ -15,7 +15,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.core.ITModule;
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.util.TReflectionUtil;
@@ -58,7 +58,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 	private final String[] SKIPMETHODS = {"builder","parser","parse","equals", "getClass", "wait", "hashCode", "toString", "notify", "notifyAll", "annotationType"};
 	
 	private TComponentDescriptor componentDescriptor;
-	protected TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+	protected TLanguage iEngine = TLanguage.getInstance(null);
 	
 	/**
 	 * <pre>

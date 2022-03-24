@@ -1,6 +1,6 @@
 package com.tedros.fxapi.modal;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.fxapi.control.TButton;
 
 import javafx.beans.property.ReadOnlyIntegerProperty;
@@ -17,7 +17,7 @@ public class TConfirmMessageBox extends TMessageBox {
 	public TConfirmMessageBox(String text) {
 		try{
 			
-			TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+			TLanguage iEngine = TLanguage.getInstance(null);
 			
 			tAddMessage(iEngine.getString(text));
 			confirm = new SimpleIntegerProperty(-1);

@@ -14,7 +14,7 @@ public final class TResourceUtil {
 	public static Properties getPropertiesFromConfFolder(String propertieFileName){
 		Properties prop = null;
 		try {
-			String propFilePath = TFileUtil.getTedrosFolderPath()+TedrosFolderEnum.CONF_FOLDER.getFolder()+propertieFileName;
+			String propFilePath = TFileUtil.getTedrosFolderPath()+TedrosFolder.CONF_FOLDER.getFolder()+propertieFileName;
 			InputStream is = new FileInputStream(propFilePath);
 			prop = new Properties();
 			prop.load(is);

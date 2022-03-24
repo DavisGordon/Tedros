@@ -8,7 +8,7 @@ import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.app.component.ITComponent;
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.domain.TLayoutType;
 import com.tedros.fxapi.form.TFieldBox;
@@ -170,12 +170,12 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 	
 	private TFieldBox buildFieldBox(String value, TShowFieldValue f) {
 		TLabel l = StringUtils.isNotBlank(f.getLabel()) 
-				? new TLabel(TInternationalizationEngine.getInstance(null).getString(f.getLabel())) 
+				? new TLabel(TLanguage.getInstance(null).getString(f.getLabel())) 
 						: null;
 		if(l!=null)
 			l.setId("t-form-control-label");
 		
-		Node c = buildNode(TInternationalizationEngine.getInstance(null).getString(value));
+		Node c = buildNode(TLanguage.getInstance(null).getString(value));
 		TFieldBox box =  new TFieldBox(f.getName(), l, c, f.getLabelPosition());
 		if(descriptor!=null)
 			TFieldBoxBuilder.parse(descriptor, box);

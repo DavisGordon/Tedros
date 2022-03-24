@@ -1,6 +1,6 @@
 package com.tedros.settings.layout.model;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.style.TStyleResourceValue;
 import com.tedros.fxapi.annotation.control.TCheckBoxField;
 import com.tedros.fxapi.annotation.control.TColorPickerField;
@@ -306,7 +306,7 @@ public class PainelModelView extends TModelView<PainelModel> {
 
 	@Override
 	public SimpleStringProperty getDisplayProperty() {
-		String s = TInternationalizationEngine.getInstance(null).getString("#{label.style}");
+		String s = TLanguage.getInstance(null).getString("#{label.style}");
 		return new SimpleStringProperty(s);
 	}
 

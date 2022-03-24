@@ -3,7 +3,7 @@
  */
 package com.tedros.fxapi.control;
 
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.core.module.TObjectRepository;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.collections.ITObservableList;
@@ -54,7 +54,7 @@ public class TDetailField extends TRequiredDetailField {
 		this.pane = new BorderPane();
 		this.tDetailProperty = detail;
 		if(showButtons) {
-			TInternationalizationEngine iEngine = TInternationalizationEngine.getInstance(null);
+			TLanguage iEngine = TLanguage.getInstance(null);
 			ToolBar bar = new ToolBar();
 			bar.setId("t-view-toolbar");
 			this.tClearButton = new Button();

@@ -8,7 +8,7 @@ package com.covidsemfome.module.acao.model;
 
 import com.covidsemfome.model.Contato;
 import com.covidsemfome.model.Pessoa;
-import com.tedros.core.TInternationalizationEngine;
+import com.tedros.core.TLanguage;
 import com.tedros.fxapi.control.TTableCell;
 
 /**
