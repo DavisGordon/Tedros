@@ -13,7 +13,7 @@
   <artifactId>tdrs-app-covid-semfome-webapp</artifactId>
   <packaging>war</packaging>
   
-  <version>8-1.0</version>
+  <version>8-2.0</version>
   <name>Covid Sem Fome Webapp</name>
   
 	<profiles>
@@ -48,14 +48,14 @@
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-core-ejb-client</artifactId>
-	  		<version>8-1.0</version>
+	  		<version>8-2.0</version>
 	  		<scope>compile</scope>
 	  	</dependency>
 	  	
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-util</artifactId>
-	  		<version>8-1.0</version>
+	  		<version>8-2.0</version>
 	  		<scope>compile</scope>
 	  	</dependency>
 	  	
