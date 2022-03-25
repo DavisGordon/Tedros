@@ -5,7 +5,7 @@
 	<parent>
     <artifactId>tedrosbox</artifactId>
     <groupId>com.tedros</groupId>
-    <version>8-1.0</version>
+    <version>8-2.0</version>
   </parent>
   	<artifactId>tdrs-app-covid-semfome</artifactId>
   	<version>8-2.2</version>

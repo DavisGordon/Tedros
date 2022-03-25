@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.tedros</groupId>
     <artifactId>tedrosbox</artifactId>
-    <version>8-1.0</version>
+    <version>8-2.0</version>
   </parent>
   
   <artifactId>server-application</artifactId>
@@ -17,18 +17,12 @@
 	    <version>${h2.version}</version>
 	</dependency>
 	
-	<dependency>
-	   <groupId>com.tedros</groupId>
-  		<artifactId>app-somos-web</artifactId>
-	    <type>war</type>
-	    <version>8-1.0</version>
-	</dependency>
 	
 	<dependency>
 	   <groupId>com.tedros</groupId>
   		<artifactId>tedros-webapp</artifactId>
 	    <type>war</type>
-	    <version>8-1.0</version>
+	    <version>8-2.0</version>
 	</dependency>
 	
 	<!-- 
@@ -36,37 +30,17 @@
 	   <groupId>com.tedros</groupId>
   		<artifactId>tdrs-app-covid-semfome-webapp</artifactId>
 	    <type>war</type>
-	    <version>8-1.0</version>
-	</dependency>
-	
-	<dependency>
-	   <groupId>com.tedros</groupId>
-  		<artifactId>editor-web-webapp</artifactId>
-	    <type>war</type>
-	    <version>8-1.0</version>
+	    <version>8-2.0</version>
 	</dependency> -->
 	
 	<dependency>
 	    <groupId>com.tedros</groupId>
 	    <artifactId>tedros-core-ejb-ear</artifactId>
 	    <type>ear</type>
-	    <version>8-1.0</version>
+	    <version>8-2.0</version>
 	</dependency>
 	
-	<dependency>
-		<groupId>com.tedros</groupId>
-		 <artifactId>app-somos-ejb-ear</artifactId>
-		 <type>ear</type>
-		<version>8-1.0</version>
-	</dependency>
-	
-	<!-- <dependency>
-	    <groupId>com.tedros</groupId>
-	    <artifactId>editor-web-ejb-ear</artifactId>
-	    <type>ear</type>
-	    <version>8-1.0</version>
-	</dependency> 
-	
+	<!-- 
 	<dependency>
 		<groupId>com.tedros</groupId>
 		 <artifactId>tdrs-app-covid-semfome-ejb-ear</artifactId>
@@ -129,36 +103,25 @@
 		              <configfile>true</configfile>
 		              <overwrite>true</overwrite>
 		            </copy>
-		           <!--  <copy>
-		              <file>${project.basedir}/files/tomcat-users.xml</file>
-		              <tofile>conf/tomcat-users.xml</tofile>
-		              <configfile>true</configfile>
-		              <overwrite>true</overwrite>
-		            </copy> -->
 		          </files>
 			    </configuration>
 			    <deployables>
 			      
 			      <deployable>
 			        <groupId>com.tedros</groupId>
-			        <artifactId>app-somos-ejb-ear</artifactId>
-			      	<type>ear</type>
-			      </deployable>
-			      <deployable>
-			        <groupId>com.tedros</groupId>
 			        <artifactId>tedros-core-ejb-ear</artifactId>
 			        <type>ear</type>
 			      </deployable>
+			      <deployable>
+			      	<groupId>com.tedros</groupId>
+  					<artifactId>tedros-webapp</artifactId>
+  					<type>war</type>
+  				  </deployable>
 			     <!--  
 			     <deployable>
 			        <groupId>com.tedros</groupId>
 			        <artifactId>tdrs-app-covid-semfome-ejb-ear</artifactId>
 			      	<type>ear</type>
-			      </deployable>
-			     <deployable>
-			        <groupId>com.tedros</groupId>
-			        <artifactId>editor-web-ejb-ear</artifactId>
-			        <type>ear</type>
 			      </deployable>
 			      <deployable>
 			      	<groupId>com.tedros</groupId>
@@ -166,16 +129,6 @@
   					<type>war</type>
   				  </deployable>
 			      -->
-			      <deployable>
-			      	<groupId>com.tedros</groupId>
-  					<artifactId>tedros-webapp</artifactId>
-  					<type>war</type>
-  				  </deployable>
-			      <deployable>
-			      	<groupId>com.tedros</groupId>
-  					<artifactId>app-somos-web</artifactId>
-  					<type>war</type>
-  				  </deployable>
 			    </deployables>
 			    <packager>
 			      <outputLocation>${project.build.directory}/tomcat-packaged</outputLocation>
