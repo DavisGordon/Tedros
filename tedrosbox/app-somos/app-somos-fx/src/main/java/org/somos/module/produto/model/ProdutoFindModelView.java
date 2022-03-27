@@ -45,10 +45,11 @@ public class ProdutoFindModelView extends TEntityModelView<Produto>{
 	
 	private SimpleStringProperty displayText;
 	
-	@TLabel(text="Codigo")
-	@TTextField(maxLength=20, required = true, 
-	textInputControl=@TTextInputControl(promptText="Codigo do produto", parse = true), 
-				control=@TControl(tooltip="Codigo de referencia", parse = true))
+
+	@TLabel(text="#{label.code}")
+	@TTextField(maxLength=20, required = true, node=@TNode(requestFocus=true, parse = true),
+	textInputControl=@TTextInputControl(promptText="#{label.product.code}", parse = true), 
+				control=@TControl(tooltip="#{label.ref.code}", parse = true))
 	@THBox(	pane=@TPane(children={"codigo","nome"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="codigo", priority=Priority.NEVER), 
 						@TPriority(field="nome", priority=Priority.ALWAYS)}))

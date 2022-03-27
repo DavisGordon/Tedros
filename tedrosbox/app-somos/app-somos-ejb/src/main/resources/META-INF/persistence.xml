@@ -7,44 +7,9 @@
 		
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<jta-data-source>tedrosDataSource</jta-data-source>
-		<class>org.somos.model.Doacao</class>
-		
-		<class>org.somos.model.Contato</class> 
-		<class>org.somos.model.Documento</class>
-		<class>org.somos.model.Endereco</class>
-		<class>org.somos.model.UF</class>
-		<class>org.somos.model.Pessoa</class>
-		<class>org.somos.model.User</class>
-		<class>org.somos.model.Acao</class>
-		<class>org.somos.model.Voluntario</class>
-		<class>org.somos.model.TipoAjuda</class>
-		<class>org.somos.model.Cozinha</class>
-		<class>org.somos.model.Entrada</class>
-		<class>org.somos.model.EntradaItem</class>
-		<class>org.somos.model.Estoque</class>
-		<class>org.somos.model.EstoqueConfig</class>
-		<class>org.somos.model.EstoqueItem</class>
-		<class>org.somos.model.Saida</class>
-		<class>org.somos.model.SaidaItem</class>
 		<class>org.somos.model.Produto</class>
 		<class>com.tedros.common.model.TFileEntity</class>
 		<class>com.tedros.common.model.TByteEntity</class>
-		<class>org.somos.model.TermoAdesao</class>
-		<class>org.somos.model.PessoaTermoAdesao</class>
-		<class>org.somos.model.SiteDoacao</class>
-		<class>org.somos.model.SiteVideo</class>
-		<class>org.somos.model.SiteAbout</class>
-		<class>org.somos.model.SiteContato</class>
-		<class>org.somos.model.SiteNoticia</class>
-		<class>org.somos.model.SiteTermo</class>
-		<class>org.somos.model.SiteParceria</class>
-		<class>org.somos.model.SiteVoluntario</class>
-		<class>org.somos.model.SiteSMDoacao</class>
-		<class>org.somos.model.SiteDoacaoTransferencia</class>
-		<class>org.somos.model.SitePontoColeta</class>
-		<class>org.somos.model.SiteEquipe</class>
-		<class>org.somos.model.SiteGaleria</class>
-		<class>org.somos.model.SiteMidiaSocial</class>
 		
 		<properties>
 		

@@ -81,7 +81,6 @@
 		<module>tdrs-fx</module>
 		<module>tdrs-miscellaneous</module>
 		<module>tdrs-server</module>
-		<module>app-somos</module>
 		<module>server-application</module>
 	</modules>
 

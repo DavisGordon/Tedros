@@ -12,7 +12,7 @@ import org.somos.ejb.controller.IProdutoReportController;
 import org.somos.model.Produto;
 import org.somos.report.model.ProdutoItemModel;
 import org.somos.report.model.ProdutoReportModel;
-import org.somos.server.estoque.service.ProdutoService;
+import org.somos.server.produto.service.ProdutoService;
 
 import com.tedros.ejb.base.controller.ITSecurityController;
 import com.tedros.ejb.base.result.TResult;

@@ -3,9 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
   	
 	<parent>
-		<groupId>com.tedros</groupId>
-		<artifactId>app-somos</artifactId>
-		<version>8-1.0</version>
+		<groupId>org.somos</groupId>
+  		<artifactId>app-somos</artifactId>
+  		<version>snapshot-0.0.1</version>
 	</parent>	
 	
   	<artifactId>app-somos-fx</artifactId>
@@ -17,13 +17,13 @@
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-fx-component</artifactId>
-	  		<version>8-1.0</version>
+	  		<version>${tedros.fx}</version>
 	  	</dependency>
 	  	
 	  	<dependency>
-	  		<groupId>com.tedros</groupId>
+	  		<groupId>org.somos</groupId>
 	  		<artifactId>app-somos-ejb-client</artifactId>
-	  		<version>8-1.0</version>
+	  		<version>snapshot-0.0.1</version>
 	  	</dependency>
 	  	
   	</dependencies> 

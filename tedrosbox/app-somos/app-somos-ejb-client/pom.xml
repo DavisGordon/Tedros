@@ -4,9 +4,9 @@
 	
 	<!-- PARENT INFO -->
 	<parent>
-		<groupId>com.tedros</groupId>
-		<artifactId>app-somos</artifactId>
-		<version>8-1.0</version>
+		<groupId>org.somos</groupId>
+  		<artifactId>app-somos</artifactId>
+  		<version>snapshot-0.0.1</version>
 	</parent>
 	
 	<!-- MODULE INFO -->  
@@ -19,9 +19,9 @@
 	<!-- DEPENDENCIES -->
   	<dependencies>
 	  	<dependency>
-	  		<groupId>com.tedros</groupId>
+	  		<groupId>org.somos</groupId>
 	  		<artifactId>app-somos-model</artifactId>
-	  		<version>8-1.0</version>
+	  		<version>snapshot-0.0.1</version>
 	  		<scope>compile</scope>
 	  	</dependency>
 	  	

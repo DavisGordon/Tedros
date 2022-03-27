@@ -2,6 +2,6 @@ package org.somos.domain;
 
 public interface DomainSchema {
 	
-	public static final String riosemfome = "riosemfome"; 
+	public static final String riosemfome = "myschema"; 
 
 }

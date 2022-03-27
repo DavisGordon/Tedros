@@ -48,7 +48,7 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TFormReaderHtml
-@TForm(name = "Produto")
+@TForm(name = "#{view.prod}")
 @TEjbService(serviceName = "IProdutoControllerRemote", model=Produto.class)
 @TListViewPresenter(listViewMinWidth=350, listViewMaxWidth=350,
 	paginator=@TPaginator(entityClass = Produto.class, serviceName = "IProdutoControllerRemote",
@@ -58,7 +58,7 @@ import javafx.scene.text.TextAlignment;
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Produtos", buildImportButton=true),
 	behavior=@TBehavior(importModelViewClass=ProdutoImportModelView.class, runNewActionAfterSave=true)))
 @TSecurity(	id="SOMOS_CADPROD_FORM", 
-	appName = "#{somos.name}", moduleName = "Administrativo", viewName = "Produtos",
+	appName = "#{myapp.name}", moduleName = "#{module.adm}", viewName = "#{view.prod}",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class ProdutoModelView extends TEntityModelView<Produto> {
@@ -68,20 +68,20 @@ public class ProdutoModelView extends TEntityModelView<Produto> {
 	
 	private SimpleStringProperty displayText = new SimpleStringProperty();
 
-	@TTextReaderHtml(text="Produto", 
+	@TTextReaderHtml(text="#{label.product}", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Dados do Produto", textAlignment=TextAlignment.LEFT, 
+	@TText(text="#{label.product.data}", textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty header;
 	
 	@TReaderHtml
-	@TLabel(text="Codigo")
+	@TLabel(text="#{label.code}")
 	@TTextField(maxLength=20, required = true, node=@TNode(requestFocus=true, parse = true),
-	textInputControl=@TTextInputControl(promptText="Codigo do produto", parse = true), 
-				control=@TControl(tooltip="Codigo de referencia", parse = true))
+	textInputControl=@TTextInputControl(promptText="#{label.product.code}", parse = true), 
+				control=@TControl(tooltip="#{label.ref.code}", parse = true))
 	@THBox(	pane=@TPane(children={"codigo","nome"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="codigo", priority=Priority.NEVER), 
 						@TPriority(field="nome", priority=Priority.ALWAYS)}))
@@ -94,10 +94,8 @@ public class ProdutoModelView extends TEntityModelView<Produto> {
 	private SimpleStringProperty nome;
 	
 	@TReaderHtml
-	@TLabel(text="Marca")
-	@TTextField(maxLength=20,
-	textInputControl=@TTextInputControl(promptText="Marca do produto", parse = true), 
-				control=@TControl(tooltip="Insira a marca", parse = true))
+	@TLabel(text="#{label.trademark}")
+	@TTextField(maxLength=20)
 	@THBox(	pane=@TPane(children={"marca","medida","unidadeMedida"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="marca", priority=Priority.ALWAYS), 
 						@TPriority(field="unidadeMedida", priority=Priority.NEVER), 
@@ -105,21 +103,19 @@ public class ProdutoModelView extends TEntityModelView<Produto> {
 	private SimpleStringProperty marca;
 	
 	@TReaderHtml
-	@TLabel(text="Descrição")
+	@TLabel(text="#{label.description}")
 	@TTextAreaField(control=@TControl(prefWidth=250, prefHeight=50, parse = true), 
 	wrapText=true, maxLength=120, prefRowCount=4)
 	private SimpleStringProperty descricao;
 	
 	@TReaderHtml
-	@TLabel(text="Unidade de medida")
+	@TLabel(text="#{label.unit.measure}")
 	@TComboBoxField(items=UnidadeMedidaBuilder.class)
 	private SimpleStringProperty unidadeMedida;
 	
 	@TReaderHtml
-	@TLabel(text="Medida")
-	@TTextField(maxLength=10, 
-			textInputControl=@TTextInputControl(promptText="Medida", parse = true), 
-						control=@TControl(tooltip="Insira a medida", parse = true))
+	@TLabel(text="#{label.measure}")
+	@TTextField(maxLength=10)
 	private SimpleStringProperty  medida;
 	
 	public ProdutoModelView(Produto entity) {

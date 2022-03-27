@@ -4,9 +4,9 @@
 	
 	<!-- PARENT INFO -->
 	<parent>
-		<groupId>com.tedros</groupId>
-		<artifactId>app-somos</artifactId>
-		<version>8-1.0</version>
+		<groupId>org.somos</groupId>
+  		<artifactId>app-somos</artifactId>
+  		<version>snapshot-0.0.1</version>
 	</parent>
 	
 	<!-- MODULE INFO -->
@@ -21,14 +21,14 @@
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-ejb-model-base</artifactId>
-	  		<version>8-1.0</version>
+	  		<version>${tedros.jee}</version>
 	  		<scope>compile</scope>
 	  	</dependency>
 	  	
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-common-model</artifactId>
-	  		<version>8-1.0</version>
+	  		<version>${tedros.jee}</version>
 	  	</dependency>
 	  
 	  	<dependency>

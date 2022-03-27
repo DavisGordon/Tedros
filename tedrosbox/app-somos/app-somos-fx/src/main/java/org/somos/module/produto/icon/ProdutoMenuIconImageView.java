@@ -18,7 +18,7 @@ public class ProdutoMenuIconImageView extends TImageView {
 	
    @Override
 	public String getImagePathName() {
-	   return "org/somos/module/produto/icon/menu_icon3.png";
+	   return "org/somos/module/produto/icon/menu_icon16.png";
 	}
 
 }

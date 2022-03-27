@@ -1,29 +1,20 @@
 package org.somos.module.produto;
 
-import org.somos.module.produto.model.EntradaModelView;
 import org.somos.module.produto.model.ProdutoModelView;
-import org.somos.module.produto.model.SaidaModelView;
 
 import com.tedros.core.TModule;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
-import com.tedros.fxapi.presenter.view.group.TGroupPresenter;
-import com.tedros.fxapi.presenter.view.group.TGroupView;
-import com.tedros.fxapi.presenter.view.group.TViewItem;
-/*
-@TSecurity(	id="SOMOS_PRODUTO_MODULE", appName = "#{somos.name}", 
-moduleName = "Administrativo", 
-allowedAccesses=TAuthorizationType.MODULE_ACCESS)*/
+
+@TSecurity(	id="SOMOS_PRODUTO_MODULE", appName = "#{myapp.name}", 
+moduleName = "#{module.adm}", 
+allowedAccesses=TAuthorizationType.MODULE_ACCESS)
 public class ProdutoModule extends TModule {
 
 	@Override
 	public void tStart() {
-		tShowView(new TGroupView<TGroupPresenter>(this, "Produto", 
-				new TViewItem(TDynaView.class, ProdutoModelView.class, "Produtos"),
-				new TViewItem(TDynaView.class, EntradaModelView.class, "Entrada"),
-				new TViewItem(TDynaView.class, SaidaModelView.class, "Saida")
-				));
+		tShowView(new TDynaView<>( ProdutoModelView.class));
 	}
 
 }
