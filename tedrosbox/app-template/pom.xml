@@ -1,0 +1,109 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  	<modelVersion>4.0.0</modelVersion>
+  
+  	<groupId>com.tedros.template</groupId>
+  	<artifactId>app-template</artifactId>
+  	<version>snapshot-0.0.1</version>
+  
+ 	 <packaging>pom</packaging>
+  
+  	<name>App Template Project</name>
+  	<description>App TedrosBox and jee project templates</description>
+  
+ 	<organization>
+		<name>Tedros</name>
+	</organization>
+  	
+  	<!-- PROPERTIES -->
+	<properties>
+		<app.version>snapshot-0.0.1</app.version>
+		<tedros.fx>8-2.0</tedros.fx>
+		<tedros.jee>8-2.0</tedros.jee>
+		<javafx.version>1.8.0_261</javafx.version>
+		<java.version>1.8</java.version>
+		<maven.compiler.target>1.8</maven.compiler.target>
+    	<maven.compiler.source>1.8</maven.compiler.source>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.home>C:\Program Files\Java\jdk1.8.0_102\bin</java.home>
+		
+		<commons-collections.version>4.4</commons-collections.version>
+		<commons.logging.version>1.2</commons.logging.version>
+		<commons.io.version>2.7</commons.io.version>
+		<commons.lang.version>3.12.0</commons.lang.version>
+		<commons.text.version>1.9</commons.text.version>
+		
+		<!-- Define the version of OPEN HTML TO PDF in the properties section of your POM. -->  	       
+	  	<openhtml.version>1.0.8</openhtml.version>
+		
+		<junit.version>4.13</junit.version>
+		<cargo.version>1.6.7</cargo.version>
+		<h2.version>1.4.199</h2.version>
+		<eclipselink.version>2.7.7</eclipselink.version>
+		<jackson.jaxrs.json.provider>2.11.2</jackson.jaxrs.json.provider>
+		
+		<javaee.api.version>7.0-2</javaee.api.version>
+		<openejb.version>7.1.3</openejb.version>
+		<tomee.version>7.1.3</tomee.version>
+		<tomee.ejb.url>http://127.0.0.1:8080/tomee/ejb</tomee.ejb.url>
+	
+	
+	
+	</properties>
+	
+  	<!-- DEVELOPERS -->
+	<developers>
+		<developer>
+			<id>davis.dun</id>
+			<name>Davis Gordon Dun</name>
+			<email>tedrosbox@gmail.com</email>
+			<organization>Tedros</organization>
+		</developer>
+	</developers>
+  
+  	<!-- BUILD -->
+  	<build>
+    	<plugins>
+      		<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-compiler-plugin</artifactId>
+        		<version>3.3</version>
+        		<configuration>
+          			<source>${java.version}</source>
+          			<target>${java.version}</target>
+        		</configuration>
+      		</plugin>
+      		
+      		<plugin>
+	          <groupId>org.apache.maven.plugins</groupId>
+	          <artifactId>maven-archetype-plugin</artifactId>
+	          <version>3.0.0</version>
+	        </plugin>  	
+  		</plugins>
+  		
+        	
+ 	</build>
+ 
+ 	<!-- MODULES -->
+	
+	<!-- REPOSITORIES -->
+	<repositories>
+		<repository>
+			<id>oss.sonatype.org</id>
+			<name>OSS Sonatype Staging</name>
+			<url>https://oss.sonatype.org/content/groups/staging</url>
+		</repository>
+		<repository>
+			<id>apache.releases.https</id>
+			<name>Apache</name>
+			<url>https://repository.apache.org/service/local/staging/deploy/maven2</url>
+		</repository>
+  	</repositories>
+  
+  <modules>
+    <module>app-template-ejb</module>
+    <module>app-template-ejb-client</module>
+    <module>app-template-ejb-ear</module>
+    <module>app-template-model</module>
+    <module>app-template-fx</module>
+  </modules>
+</project>

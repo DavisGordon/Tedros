@@ -49,8 +49,8 @@
 	  	</dependency> -->
 	  	 
 	  	 <dependency>
-	  		<groupId>org.somos</groupId>
-	  		<artifactId>app-somos-fx</artifactId>
+	  		<groupId>com.tedros.template</groupId>
+	  		<artifactId>app-template-fx</artifactId>
 	  		<version>snapshot-0.0.1</version>
 	  		<scope>compile</scope>
 	  		<exclusions>

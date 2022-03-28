@@ -82,7 +82,7 @@
 		<module>tdrs-miscellaneous</module>
 		<module>tdrs-server</module>
 		<module>server-application</module>
-	</modules>
+  </modules>
 
 
 </project>

@@ -55,7 +55,7 @@
 	
 	<dependency>
 		<groupId>com.tedros</groupId>
-		 <artifactId>app-somos-ejb-ear</artifactId>
+		 <artifactId>app-template-ejb-ear</artifactId>
 		 <type>ear</type>
 		<version>8-1.0</version>
 	</dependency>
