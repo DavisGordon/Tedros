@@ -1,5 +1,5 @@
 <beans>
 	<interceptors>
-    	<class>com.tedros.template.ejb.base.security.TSecurityInterceptor</class>
+    	<class>com.template.ejb.base.security.TSecurityInterceptor</class>
   	</interceptors>
 </beans>

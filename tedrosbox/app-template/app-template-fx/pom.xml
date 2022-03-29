@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
   	
 	<parent>
-		<groupId>com.tedros.template</groupId>
+		<groupId>com.template</groupId>
   		<artifactId>app-template</artifactId>
   		<version>snapshot-0.0.1</version>
 	</parent>	
@@ -21,7 +21,7 @@
 	  	</dependency>
 	  	
 	  	<dependency>
-	  		<groupId>com.tedros.template</groupId>
+	  		<groupId>com.template</groupId>
 	  		<artifactId>app-template-ejb-client</artifactId>
 	  		<version>snapshot-0.0.1</version>
 	  	</dependency>
