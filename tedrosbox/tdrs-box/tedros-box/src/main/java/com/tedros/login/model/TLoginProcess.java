@@ -6,7 +6,6 @@ package com.tedros.login.model;
 import java.util.List;
 
 import com.tedros.core.ejb.controller.ITLoginController;
-import com.tedros.core.ejb.controller.TUserController;
 import com.tedros.core.security.model.TUser;
 import com.tedros.core.service.remote.ServiceLocator;
 import com.tedros.ejb.base.result.TResult;
@@ -30,7 +29,6 @@ import com.tedros.fxapi.process.TEntityProcess;
 		super(TUser.class, SERV_NAME);
 	} 
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean runBefore(List<TResult<TUser>> resultList) {
 		ServiceLocator loc = ServiceLocator.getInstance();
@@ -43,8 +41,8 @@ import com.tedros.fxapi.process.TEntityProcess;
 			}
 			
 			if(user!=null){
-				TUserController service = (TUserController) loc.lookup("TUserControllerRemote");
-				resultList.add(service.save(user.getAccessToken(), user));
+				ITLoginController service = (ITLoginController) loc.lookup(SERV_NAME);
+				resultList.add(service.saveActiveProfile(user.getAccessToken(), user.getActiveProfile(), user.getId()));
 				user = null;
 			}
 		} catch (Exception e) {

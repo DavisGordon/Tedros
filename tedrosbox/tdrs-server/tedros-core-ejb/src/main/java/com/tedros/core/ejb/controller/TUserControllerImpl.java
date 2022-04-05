@@ -10,11 +10,16 @@ import com.tedros.core.security.model.TUser;
 import com.tedros.ejb.base.controller.ITSecurityController;
 import com.tedros.ejb.base.controller.TSecureEjbController;
 import com.tedros.ejb.base.security.ITSecurity;
-import com.tedros.ejb.base.security.TRemoteSecurity;
+import com.tedros.ejb.base.security.TAccessPolicie;
+import com.tedros.ejb.base.security.TBeanPolicie;
+import com.tedros.ejb.base.security.TBeanSecurity;
+import com.tedros.ejb.base.security.TSecurityInterceptor;
 import com.tedros.ejb.base.service.ITEjbService;
 
-@TRemoteSecurity
+@TSecurityInterceptor
 @Stateless(name="TUserController")
+@TBeanSecurity(@TBeanPolicie(id="T_CUSTOM_SECURITY_USER", 
+policie= {TAccessPolicie.APP_ACCESS, TAccessPolicie.VIEW_ACCESS}))
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class TUserControllerImpl extends TSecureEjbController<TUser> implements	ITSecurity, TUserController {
 
@@ -33,6 +38,6 @@ public class TUserControllerImpl extends TSecureEjbController<TUser> implements	
 	public ITSecurityController getSecurityController() {
 		return security;
 	}
-
+	
 	
 }

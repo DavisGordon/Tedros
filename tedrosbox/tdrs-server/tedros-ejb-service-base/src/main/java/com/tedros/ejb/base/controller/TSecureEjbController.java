@@ -16,6 +16,9 @@ import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.ejb.base.security.TAccessToken;
+import com.tedros.ejb.base.security.TActionPolicie;
+import com.tedros.ejb.base.security.TMethodPolicie;
+import com.tedros.ejb.base.security.TMethodSecurity;
 import com.tedros.ejb.base.service.ITEjbService;
 
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
@@ -24,7 +27,7 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 	
 	protected abstract ITEjbService<E> getService();
 	
-	
+	@TMethodSecurity({@TMethodPolicie(policie = {TActionPolicie.EDIT, TActionPolicie.READ})})
 	public TResult<E> findById(TAccessToken token, E entidade) {
 		try{
 			entidade = getService().findById(entidade);
@@ -34,6 +37,8 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 		}
 	}
 	
+	@TMethodSecurity({
+	@TMethodPolicie(policie = {TActionPolicie.EDIT, TActionPolicie.READ, TActionPolicie.SEARCH})})
 	public TResult<E> find(TAccessToken token, E entidade) {
 		try{
 			entidade = getService().find(entidade);
@@ -43,6 +48,8 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 		}
 	}
 	
+	@TMethodSecurity({
+	@TMethodPolicie(policie = {TActionPolicie.EDIT, TActionPolicie.READ, TActionPolicie.SEARCH})})
 	public TResult<List<E>> findAll(TAccessToken token, E entity){
 		try{
 			List<E> list = getService().findAll(entity);
@@ -54,6 +61,7 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 	}
 
 	@Override
+	@TMethodSecurity({@TMethodPolicie(policie = {TActionPolicie.SAVE, TActionPolicie.NEW})})
 	public TResult<E> save(TAccessToken token, E entidade) {
 		try{
 			E e = getService().save(entidade);
@@ -64,6 +72,7 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 	}
 
 	@Override
+	@TMethodSecurity({@TMethodPolicie(policie = {TActionPolicie.DELETE}, id = "")})
 	public TResult<E> remove(TAccessToken token, E entidade) {
 		try{
 			getService().remove(entidade);
@@ -75,6 +84,8 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 	}
 
 	@Override
+	@TMethodSecurity({
+	@TMethodPolicie(policie = {TActionPolicie.EDIT, TActionPolicie.READ, TActionPolicie.SEARCH}, id = "")})
 	public TResult<List<E>> listAll(TAccessToken token, Class<? extends ITEntity> entidade) {
 		
 		try{
@@ -87,6 +98,8 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 	}
 
 	@Override
+	@TMethodSecurity({
+	@TMethodPolicie(policie = {TActionPolicie.EDIT, TActionPolicie.READ, TActionPolicie.SEARCH}, id = "")})
 	public TResult<Map<String, Object>> pageAll(TAccessToken token, E entidade, int firstResult, int maxResult, boolean orderByAsc) {
 		try{
 			Long count  = getService().countAll(entidade.getClass());
@@ -105,6 +118,8 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 	}
 
 	@Override
+	@TMethodSecurity({
+	@TMethodPolicie(policie = {TActionPolicie.EDIT, TActionPolicie.READ, TActionPolicie.SEARCH}, id = "")})
 	public TResult<Map<String, Object>> findAll(TAccessToken token, E entidade, int firstResult, int maxResult, boolean orderByAsc, boolean containsAnyKeyWords) {
 		try{
 			Number count  =  getService().countFindAll(entidade, containsAnyKeyWords);

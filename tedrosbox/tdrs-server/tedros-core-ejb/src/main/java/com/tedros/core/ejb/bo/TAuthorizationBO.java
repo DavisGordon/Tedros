@@ -8,22 +8,23 @@ import javax.inject.Inject;
 
 import org.apache.commons.collections4.ListUtils;
 
-import com.tedros.core.ejb.eao.TAuthorizationEao;
+import com.tedros.core.ejb.eao.TCoreEAO;
 import com.tedros.core.security.model.TAuthorization;
 import com.tedros.core.security.model.TProfile;
 import com.tedros.ejb.base.bo.TGenericBO;
+import com.tedros.ejb.base.eao.TGenericEAO;
 
 @RequestScoped
 public class TAuthorizationBO extends TGenericBO<TAuthorization> {
 	
 	@Inject
-	private TAuthorizationEao eao;
+	private TCoreEAO<TAuthorization> eao;
 	
 	@Inject
-	private TProfileBO pBO;
+	private TCoreBO<TProfile> pBO;
 	
 	@Override
-	public TAuthorizationEao getEao() {
+	public TGenericEAO<TAuthorization> getEao() {
 		return eao;
 	}
 	

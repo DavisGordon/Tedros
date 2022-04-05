@@ -72,12 +72,7 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		setModelViewList(presenter.getModelViews());
 		
 		buildUserAuthorizations();
-		
-		if(isUserNotAuthorized(TAuthorizationType.VIEW_ACCESS)){
-			StackPane accessDenied = new StackPane();
-			accessDenied.setId("t-access-denied");
-			getView().tShowModal(accessDenied, false);
-		}
+		verifyViewAccessAutorization();
 		
 		final com.tedros.fxapi.annotation.process.TModelProcess tModelProcess = getPresenter().getModelProcessAnnotation();
 		
@@ -99,11 +94,24 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		messagesProperty.addListener(new WeakListChangeListener<>(msgLtnr));
 		
 		ChangeListener<Boolean> modalCleanMsgLtnr = (a, b, c) -> {
-			if(!c)
+			if(!c) {
 				messagesProperty.clear();
+				verifyViewAccessAutorization();
+			}
 		};
 		super.getListenerRepository().add("modalCleanMsgLtnr", modalCleanMsgLtnr);
 		getView().tModalVisibleProperty().addListener(new WeakChangeListener<Boolean>(modalCleanMsgLtnr));
+	}
+
+	/**
+	 * 
+	 */
+	protected void verifyViewAccessAutorization() {
+		if(isUserNotAuthorized(TAuthorizationType.VIEW_ACCESS)){
+			StackPane accessDenied = new StackPane();
+			accessDenied.setId("t-access-denied");
+			getView().tShowModal(accessDenied, false);
+		}
 	}
 	
 	@SuppressWarnings("unchecked")

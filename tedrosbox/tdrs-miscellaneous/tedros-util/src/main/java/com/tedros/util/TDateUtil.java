@@ -9,6 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
+ * 
+ * The project date patterns
+ * 
  * @author Davis Gordon
  *
  */
@@ -17,11 +20,8 @@ public class TDateUtil {
 	public static final String DDMMYYYY = "dd/MM/yyyy";
 	public static final String DDMMYYYY_HHMM = "dd/MM/yyyy HH:mm";
 	
-	/**
-	 * 
-	 */
+	
 	public TDateUtil() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	public static synchronized String getFormatedDate(Date data, String pattern){

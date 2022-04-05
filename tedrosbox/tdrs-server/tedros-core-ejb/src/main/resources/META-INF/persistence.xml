@@ -11,6 +11,8 @@
 		<class>com.tedros.core.security.model.TUser</class>
 		<class>com.tedros.core.security.model.TProfile</class>
 		<class>com.tedros.core.security.model.TAuthorization</class>
+		<class>com.tedros.core.setting.model.TPropertie</class>
+		<class>com.tedros.core.security.model.TAuditLog</class>
 		<class>com.tedros.common.model.TByteEntity</class>	
 		<class>com.tedros.common.model.TFileEntity</class>
 		

@@ -1,7 +1,9 @@
 package com.tedros.core.security.model;
 
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -100,6 +102,12 @@ public class TProfile extends TEntity {
 		
 		return sb.toString();
 	}
+	
+	public List<TAuthorization> getAutorizations(String securityId) {
+		return autorizations!=null ? autorizations.parallelStream().filter(e -> {
+			return e.getSecurityId().equals(securityId);
+		}).collect(Collectors.toList()) : new ArrayList<>();
+	}
 
 	public List<TAuthorization> getAutorizations() {
 		return autorizations;
@@ -108,5 +116,6 @@ public class TProfile extends TEntity {
 	public void setAutorizations(List<TAuthorization> autorizations) {
 		this.autorizations = autorizations;
 	}
+	
 	
 }

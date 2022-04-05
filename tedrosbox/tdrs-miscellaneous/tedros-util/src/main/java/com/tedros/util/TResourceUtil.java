@@ -18,6 +18,7 @@ public final class TResourceUtil {
 			InputStream is = new FileInputStream(propFilePath);
 			prop = new Properties();
 			prop.load(is);
+			is.close();
 		} catch (Exception  e1) {
 			e1.printStackTrace();
 		}

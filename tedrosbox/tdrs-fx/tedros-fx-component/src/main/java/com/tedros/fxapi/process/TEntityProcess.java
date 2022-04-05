@@ -13,6 +13,7 @@ import com.tedros.ejb.base.controller.ITEjbController;
 import com.tedros.ejb.base.controller.ITSecureEjbController;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.result.TResult.EnumResult;
 
 
 /**
@@ -210,8 +211,8 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 	        		}
 	        		
         		} catch (Exception e) {
-					setException(e);
-					e.printStackTrace();
+        			setException(e);
+					buildExceptionResult(resultList, e);	
 				} finally {
 					loc.close();
 				}
@@ -220,6 +221,16 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
         	    return resultList;
         	}
 		};
+	}
+
+	/**
+	 * @param resultList
+	 * @param e
+	 */
+	protected void buildExceptionResult(List<TResult<E>> resultList, Exception e) {
+		e.printStackTrace();
+		TResult<E> result = new TResult<>(EnumResult.ERROR, true, e.getCause().getMessage());
+		resultList.add(result);
 	}
 
 }

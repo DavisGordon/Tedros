@@ -1,7 +1,10 @@
 package com.tedros.login.model;
 
+import java.util.Properties;
+
 import com.tedros.core.security.model.TProfile;
 import com.tedros.ejb.base.model.ITModel;
+import com.tedros.util.TResourceUtil;
 
 public class Login implements ITModel {
 
@@ -11,6 +14,16 @@ public class Login implements ITModel {
 	
 	private TProfile profile;
 	
+	private String url;
+	private String serverIp;
+	
+	public Login() {
+		Properties p = TResourceUtil.getPropertiesFromConfFolder("remote-config.properties");
+		if(p!=null){
+			url = p.getProperty("url");
+			serverIp = p.getProperty("server_ip");
+		}
+	}
 	
 	public String getLanguage() {
 		return language;
@@ -35,6 +48,30 @@ public class Login implements ITModel {
 	}
 	public void setProfile(TProfile profile) {
 		this.profile = profile;
+	}
+	/**
+	 * @return the url
+	 */
+	public String getUrl() {
+		return url;
+	}
+	/**
+	 * @param url the url to set
+	 */
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	/**
+	 * @return the serverIp
+	 */
+	public String getServerIp() {
+		return serverIp;
+	}
+	/**
+	 * @param serverIp the serverIp to set
+	 */
+	public void setServerIp(String serverIp) {
+		this.serverIp = serverIp;
 	}
 	
 	

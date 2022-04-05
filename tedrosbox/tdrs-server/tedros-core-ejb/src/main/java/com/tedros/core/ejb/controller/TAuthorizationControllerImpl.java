@@ -14,12 +14,20 @@ import com.tedros.ejb.base.controller.TSecureEjbController;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.ejb.base.security.ITSecurity;
+import com.tedros.ejb.base.security.TAccessPolicie;
 import com.tedros.ejb.base.security.TAccessToken;
-import com.tedros.ejb.base.security.TRemoteSecurity;
+import com.tedros.ejb.base.security.TActionPolicie;
+import com.tedros.ejb.base.security.TBeanPolicie;
+import com.tedros.ejb.base.security.TBeanSecurity;
+import com.tedros.ejb.base.security.TMethodPolicie;
+import com.tedros.ejb.base.security.TMethodSecurity;
+import com.tedros.ejb.base.security.TSecurityInterceptor;
 import com.tedros.ejb.base.service.ITEjbService;
 
-@TRemoteSecurity
+@TSecurityInterceptor
 @Stateless(name="TAuthorizationController")
+@TBeanSecurity(@TBeanPolicie(id="T_CUSTOM_SECURITY_AUTHORIZATION", 
+policie= {TAccessPolicie.APP_ACCESS, TAccessPolicie.VIEW_ACCESS}))
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class TAuthorizationControllerImpl extends TSecureEjbController<TAuthorization> implements TAuthorizationController, ITSecurity {
 
@@ -34,8 +42,9 @@ public class TAuthorizationControllerImpl extends TSecureEjbController<TAuthoriz
 		return serv;
 	}
 	
-	@SuppressWarnings("rawtypes")
 	@Override
+	@SuppressWarnings("rawtypes")
+	@TMethodSecurity(@TMethodPolicie(policie={TActionPolicie.NEW}))
 	public TResult process(TAccessToken token, List<TAuthorization> newLst) {
 		try{
 			List<TAuthorization> oldLst = serv.listAll(TAuthorization.class);
