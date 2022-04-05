@@ -36,6 +36,9 @@ public class TUser extends TEntity {
 	@Column(name = "active", length=1)
 	private String active;
 	
+	@Column(length=1)
+	private String accessLogEnable;
+	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(	name=DomainTables.user_profile,
 				schema=DomainSchema.tedros_core,
@@ -150,6 +153,20 @@ public class TUser extends TEntity {
 	 */
 	public void setAccessToken(TAccessToken accessToken) {
 		this.accessToken = accessToken;
+	}
+
+	/**
+	 * @return the accessLogEnable
+	 */
+	public String getAccessLogEnable() {
+		return accessLogEnable;
+	}
+
+	/**
+	 * @param accessLogEnable the accessLogEnable to set
+	 */
+	public void setAccessLogEnable(String accessLogEnable) {
+		this.accessLogEnable = accessLogEnable;
 	}
 
 	

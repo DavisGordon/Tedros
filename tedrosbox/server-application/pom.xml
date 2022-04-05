@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.tedros</groupId>
     <artifactId>tedrosbox</artifactId>
-    <version>8-2.0</version>
+    <version>8-3.0</version>
   </parent>
   
   <artifactId>server-application</artifactId>
@@ -22,7 +22,7 @@
 	   <groupId>com.tedros</groupId>
   		<artifactId>tedros-webapp</artifactId>
 	    <type>war</type>
-	    <version>8-2.0</version>
+	    <version>8-3.0</version>
 	</dependency>
 	
 	<!-- 
@@ -30,14 +30,14 @@
 	   <groupId>com.tedros</groupId>
   		<artifactId>tdrs-app-covid-semfome-webapp</artifactId>
 	    <type>war</type>
-	    <version>8-2.0</version>
+	    <version>8-3.0</version>
 	</dependency> -->
 	
 	<dependency>
 	    <groupId>com.tedros</groupId>
 	    <artifactId>tedros-core-ejb-ear</artifactId>
 	    <type>ear</type>
-	    <version>8-2.0</version>
+	    <version>8-3.0</version>
 	</dependency>
 	
 	<!-- 

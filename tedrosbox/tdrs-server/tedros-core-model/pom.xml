@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.tedros</groupId>
 		<artifactId>tdrs-server</artifactId>
-		<version>8-2.0</version>
+		<version>8-3.0</version>
 	</parent>
 	
 	<!-- MODULE INFO -->
@@ -23,7 +23,7 @@
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-ejb-model-base</artifactId>
-	  		<version>8-2.0</version>
+	  		<version>8-3.0</version>
 	  		<scope>compile</scope>
 	  	</dependency>
   
@@ -55,5 +55,15 @@
       		</plugin>
   		</plugins>
  	</build>
+ 	
+ 	
+ 	<distributionManagement>
+	   <repository>
+	     <id>githubTedrosApp</id>
+	     <name>GitHub Tedros Apache Maven Packages</name>
+	     <url>https://maven.pkg.github.com/tedros-box/package</url>
+		 <uniqueVersion>false</uniqueVersion>
+	   </repository>
+	</distributionManagement>
   
 </project>

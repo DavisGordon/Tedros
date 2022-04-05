@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
   	<groupId>com.tedros</groupId>
   	<artifactId>tedrosbox</artifactId>
-  	<version>8-2.0</version>
+  	<version>8-3.0</version>
   	<packaging>pom</packaging>
   	
   	<name>tedros box</name>
@@ -83,6 +83,15 @@
 		<module>tdrs-server</module>
 		<module>server-application</module>
 	</modules>
-
-
+	
+	
+ 	<distributionManagement>
+	   <repository>
+	     <id>githubTedrosApp</id>
+	     <name>GitHub Tedros Apache Maven Packages</name>
+	     <url>https://maven.pkg.github.com/tedros-box/package</url>
+		 <uniqueVersion>false</uniqueVersion>
+	   </repository>
+	</distributionManagement>
+	
 </project>

@@ -5,17 +5,30 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.tedros.core.security.model.TUser;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
+import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TFieldBox;
+import com.tedros.fxapi.annotation.control.THyperlinkField;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TPasswordField;
+import com.tedros.fxapi.annotation.control.TTab;
+import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.annotation.control.TTextField;
+import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.effect.TDropShadow;
 import com.tedros.fxapi.annotation.effect.TEffect;
+import com.tedros.fxapi.annotation.form.TDetailForm;
+import com.tedros.fxapi.annotation.layout.THBox;
+import com.tedros.fxapi.annotation.layout.THGrow;
+import com.tedros.fxapi.annotation.layout.TPane;
+import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEntityProcess;
 import com.tedros.fxapi.annotation.scene.TNode;
+import com.tedros.fxapi.annotation.scene.control.TButtonBase;
+import com.tedros.fxapi.annotation.scene.control.TLabeled;
+import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.builder.LanguageBuilder;
 import com.tedros.fxapi.control.TText.TTextStyle;
@@ -29,6 +42,8 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
+import javafx.scene.layout.Priority;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
 
@@ -40,7 +55,16 @@ import javafx.scene.text.TextAlignment;
 public class LoginModelView extends TModelView<Login> {
 	
 	private SimpleLongProperty id;
-	
+	@TTabPane(tabs = { 
+			@TTab(closable=false, content = @TContent(detailForm=
+				@TDetailForm(fields={"title", "user",
+						"language", "profileText","profile"})), 
+				text = "#{tedros.log.in}"), 
+			@TTab(closable=false, content = @TContent(detailForm=
+				@TDetailForm(fields={"header", "url", "serverIp","theme",
+						"searchAppsText","searchApps"})), 
+				text = "#{tedros.config}")
+	})
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-title", 
 			effect=@TEffect(dropShadow=@TDropShadow, parse = false), parse = true))
 	@TText(text="#{tedros.login.form.title}", textAlignment=TextAlignment.LEFT, 
@@ -49,6 +73,9 @@ public class LoginModelView extends TModelView<Login> {
 	
 	@TLabel(text = "#{tedros.login.user}")
 	@TTextField(required=true, node=@TNode(requestFocus=true, parse = true))
+	@THBox(pane=@TPane(children= {"user", "password"}), spacing=10, fillHeight=true,
+			hgrow=@THGrow(priority={@TPriority(field="user", priority=Priority.ALWAYS), 
+				   		@TPriority(field="password", priority=Priority.ALWAYS) }))
 	private SimpleStringProperty user;
 	
 	@TLabel(text = "#{tedros.login.password}")
@@ -62,13 +89,51 @@ public class LoginModelView extends TModelView<Login> {
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-info", 
 			effect=@TEffect(dropShadow=@TDropShadow, parse = false), parse = true))
 	@TText(text="#{tedros.profileText}", wrappingWidth=480, textAlignment=TextAlignment.LEFT, 
-		textStyle=TTextStyle.MEDIUM)
+		textStyle=TTextStyle.LARGE)
 	private SimpleStringProperty profileText;
 	
 	@TLabel(text = "#{tedros.profile}")
 	@TComboBoxField(firstItemTex="#{tedros.select}",
 		node=@TNode(disable=true, parse=true))
 	private SimpleObjectProperty<TProfileModelView> profile;
+	
+	//
+	
+	@TText(text="#{tedros.config.header}", 
+	textAlignment=TextAlignment.LEFT, 
+	textStyle = TTextStyle.LARGE)
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-title", 
+	effect=@TEffect(dropShadow=@TDropShadow, parse = false), parse = true))
+	private SimpleStringProperty header;
+	
+	@TLabel(text="#{tedros.serverip}")
+	@TTextField(node=@TNode(requestFocus=true, parse = true),
+	textInputControl=@TTextInputControl(promptText="#{tedros.serverip.text}", parse = true),
+	required=true)
+	private SimpleStringProperty serverIp;
+	
+	@TLabel(text="#{tedros.serverUrl}")
+	@TTextField(node=@TNode(requestFocus=true, parse = true),
+	textInputControl=@TTextInputControl(promptText="#{tedros.serverurl.text}", parse = true),
+	required=true)
+	private SimpleStringProperty url;
+	
+	
+	@TLabel(text = "#{tedros.theme}")
+	@TComboBoxField(firstItemTex="#{tedros.select}")
+	private SimpleStringProperty theme;
+	
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-info", 
+			effect=@TEffect(dropShadow=@TDropShadow, parse = false), parse = true))
+	@TText(text="#{tedros.searchAppsText}",  textAlignment=TextAlignment.LEFT, 
+		textStyle=TTextStyle.LARGE)
+	private SimpleStringProperty searchAppsText;
+	
+	@THyperlinkField(labeled=@TLabeled(text="#{tedros.searchApps}", 
+			font=@TFont(size=20, weight=FontWeight.BOLD), parse = true),
+			buttonBase=@TButtonBase(onAction=SearchAppsEventBuilder.class))
+	private SimpleStringProperty searchApps;
+			
 	
 	public LoginModelView() {
 		super(new Login());
@@ -149,6 +214,90 @@ public class LoginModelView extends TModelView<Login> {
 
 	public void setProfileText(SimpleStringProperty profileText) {
 		this.profileText = profileText;
+	}
+
+	/**
+	 * @return the header
+	 */
+	public SimpleStringProperty getHeader() {
+		return header;
+	}
+
+	/**
+	 * @param header the header to set
+	 */
+	public void setHeader(SimpleStringProperty header) {
+		this.header = header;
+	}
+
+	/**
+	 * @return the serverIp
+	 */
+	public SimpleStringProperty getServerIp() {
+		return serverIp;
+	}
+
+	/**
+	 * @param serverIp the serverIp to set
+	 */
+	public void setServerIp(SimpleStringProperty serverIp) {
+		this.serverIp = serverIp;
+	}
+
+	/**
+	 * @return the theme
+	 */
+	public SimpleStringProperty getTheme() {
+		return theme;
+	}
+
+	/**
+	 * @param theme the theme to set
+	 */
+	public void setTheme(SimpleStringProperty theme) {
+		this.theme = theme;
+	}
+
+	/**
+	 * @return the searchAppsText
+	 */
+	public SimpleStringProperty getSearchAppsText() {
+		return searchAppsText;
+	}
+
+	/**
+	 * @param searchAppsText the searchAppsText to set
+	 */
+	public void setSearchAppsText(SimpleStringProperty searchAppsText) {
+		this.searchAppsText = searchAppsText;
+	}
+
+	/**
+	 * @return the searchApps
+	 */
+	public SimpleStringProperty getSearchApps() {
+		return searchApps;
+	}
+
+	/**
+	 * @param searchApps the searchApps to set
+	 */
+	public void setSearchApps(SimpleStringProperty searchApps) {
+		this.searchApps = searchApps;
+	}
+
+	/**
+	 * @return the url
+	 */
+	public SimpleStringProperty getUrl() {
+		return url;
+	}
+
+	/**
+	 * @param url the url to set
+	 */
+	public void setUrl(SimpleStringProperty url) {
+		this.url = url;
 	}
 
 }

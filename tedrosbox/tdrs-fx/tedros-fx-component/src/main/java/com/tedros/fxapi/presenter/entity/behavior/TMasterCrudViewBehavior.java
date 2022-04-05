@@ -3,20 +3,25 @@ package com.tedros.fxapi.presenter.entity.behavior;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.exception.TException;
+import com.tedros.fxapi.modal.TMessage;
 import com.tedros.fxapi.modal.TMessageBox;
+import com.tedros.fxapi.modal.TMessageType;
 import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
@@ -82,27 +87,9 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 					e.printStackTrace();
 				}
 				
-				/*if(tAnnotation.refreshListViewAfterActions()) {
-					TPresenterAction a = new TPresenterAction(TActionType.SAVE, TActionType.DELETE) {
-
-						@Override
-						public boolean runBefore() {
-							// TODO Auto-generated method stub
-							return false;
-						}
-
-						@Override
-						public void runAfter() {
-							loadModels();
-						}
-					};
-					super.addAction(a);
-				}*/
 			}
-			
-			
-			
-			loadModels();
+			if(!isUserNotAuthorized(TAuthorizationType.VIEW_ACCESS))
+				loadModels();
 		}
 	
 	@SuppressWarnings("unchecked")
@@ -117,45 +104,53 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 						TResult<Map<String, Object>> resultados = (TResult<Map<String, Object>>) process.getValue();
 						
 						if(resultados != null) {
-						
-							Map<String, Object> result =  resultados.getValue();
-							ObservableList<M> models = getModels();
-							if(models==null) {
-								models = FXCollections.observableArrayList();
-								setModelViewList(models);
-							}
 							
-							for(E e : (List<E>) result.get("list")){
-								try {
-									M model = (M) getModelViewClass().getConstructor(getEntityClass()).newInstance(e);
-									models.add(model);
-								} catch (InstantiationException
-										| IllegalAccessException
-										| IllegalArgumentException
-										| InvocationTargetException
-										| NoSuchMethodException
-										| SecurityException e1) 
-								{
-									e1.printStackTrace();
+							if(resultados.getResult().equals(EnumResult.SUCESS)) {
+						
+								Map<String, Object> result =  resultados.getValue();
+								ObservableList<M> models = getModels();
+								if(models==null) {
+									models = FXCollections.observableArrayList();
+									setModelViewList(models);
+								}
+								
+								for(E e : (List<E>) result.get("list")){
+									try {
+										M model = (M) getModelViewClass().getConstructor(getEntityClass()).newInstance(e);
+										models.add(model);
+									} catch (Exception e1) {
+										e1.printStackTrace();
+									}
+								}
+								loadListView();
+								processPagination((long)result.get("total"));
+							
+							}else {
+								String msg = resultados.getMessage();
+								System.out.println(msg);
+								switch(resultados.getResult()) {
+									case ERROR:
+										addMessage(new TMessage(TMessageType.ERROR, msg));
+										break;
+									default:
+										addMessage(new TMessage(TMessageType.WARNING, msg));
+										break;
 								}
 							}
-							
-							loadListView();
-							processPagination((long)result.get("total"));
 							getListenerRepository().remove("processloadlistviewCL");
 						}
 					}
 				};
 				
 				super.getListenerRepository().add("processloadlistviewCL", prcl);
+				
 				try {
 					E entity = super.getEntityClass().newInstance();
 					process.pageAll(entity, this.decorator.gettPaginator().getPagination());
 					bindProgressIndicator(process);
 					process.stateProperty().addListener(new WeakChangeListener(prcl));
 					process.startProcess();
-				} catch (InstantiationException | IllegalAccessException e) {
-					// TODO Auto-generated catch block
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				
@@ -171,29 +166,40 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 							List<?> resultados = process.getValue();
 							
 							if(!resultados.isEmpty()) {
-							
-								TResult result = (TResult<?>) resultados.get(0);
-								if(result.getValue()!=null && result.getValue() instanceof List<?>){
-									ObservableList<M> models = getModels();
-									if(models==null) {
-										models = FXCollections.observableArrayList();
-										setModelViewList(models);
-									}
-									for(E e : (List<E>) result.getValue()){
-										try {
-											M model = (M) getModelViewClass().getConstructor(getEntityClass()).newInstance(e);
-											models.add(model);
-										} catch (InstantiationException
-												| IllegalAccessException
-												| IllegalArgumentException
-												| InvocationTargetException
-												| NoSuchMethodException
-												| SecurityException e1) 
-										{
-											e1.printStackTrace();
+								List<TMessage> msgs = new ArrayList<>();
+								for(Object obj : resultados) {
+									//TResult result = (TResult<?>) resultados.get(0);
+									TResult result = (TResult<?>) obj;
+									if(result.getResult().equals(EnumResult.SUCESS)) {
+										if(result.getValue()!=null && result.getValue() instanceof List){
+											ObservableList<M> models = getModels();
+											if(models==null) {
+												models = FXCollections.observableArrayList();
+												setModelViewList(models);
+											}
+											for(E e : (List<E>) result.getValue()){
+												try {
+													M model = (M) getModelViewClass().getConstructor(getEntityClass()).newInstance(e);
+													models.add(model);
+												} catch (Exception e1) {
+													e1.printStackTrace();
+												}
+											}
+										}
+									}else {
+										String msg = result.getMessage();
+										System.out.println(msg);
+										switch(result.getResult()) {
+											case ERROR:
+												msgs.add(new TMessage(TMessageType.ERROR, msg));
+												break;
+											default:
+												msgs.add(new TMessage(TMessageType.WARNING, msg));
+												break;
 										}
 									}
 								}
+								addMessage(msgs);
 							}else{
 								ObservableList<M> models = getModels();
 								if(models==null) {
@@ -273,8 +279,8 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void paginate(TPagination pagination) throws TException {
-		final String id = UUID.randomUUID().toString();
+	protected void paginate(TPagination pagination) throws TException {
+		final String chlId = UUID.randomUUID().toString();
 		TPaginationProcess<E> process = new TPaginationProcess<E>(super.getEntityClass(), this.paginatorServiceName) {};
 		ChangeListener<State> prcl = (arg0, arg1, arg2) -> {
 			
@@ -283,32 +289,39 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 				TResult<Map<String, Object>> resultados = (TResult<Map<String, Object>>) process.getValue();
 				
 				if(resultados != null) {
-				
-					Map<String, Object> result =  resultados.getValue();
-					ObservableList<M> models = getModels();
-					models.clear();
-					
-					for(E e : (List<E>) result.get("list")){
-						try {
-							M model = (M) getModelViewClass().getConstructor(getEntityClass()).newInstance(e);
-							models.add(model);
-						} catch (InstantiationException
-								| IllegalAccessException
-								| IllegalArgumentException
-								| InvocationTargetException
-								| NoSuchMethodException
-								| SecurityException e1) 
-						{
-							e1.printStackTrace();
+					if(resultados.getResult().equals(EnumResult.SUCESS)) {
+						Map<String, Object> result =  resultados.getValue();
+						ObservableList<M> models = getModels();
+						models.clear();
+						
+						for(E e : (List<E>) result.get("list")){
+							try {
+								M model = (M) getModelViewClass().getConstructor(getEntityClass()).newInstance(e);
+								models.add(model);
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
+						}
+						processPagination((long)result.get("total"));
+					}else {
+						String msg = resultados.getMessage();
+						System.out.println(msg);
+						switch(resultados.getResult()) {
+							case ERROR:
+								addMessage(new TMessage(TMessageType.ERROR, msg));
+								break;
+							default:
+								addMessage(new TMessage(TMessageType.WARNING, msg));
+								break;
 						}
 					}
-					processPagination((long)result.get("total"));
-					getListenerRepository().remove(id);
+					getListenerRepository().remove(chlId);
 				}
 			}
 		};
 		
-		super.getListenerRepository().add(id, prcl);
+		super.getListenerRepository().add(chlId, prcl);
+		
 		if(StringUtils.isNotBlank(pagination.getSearch())) {
 			
 			try {

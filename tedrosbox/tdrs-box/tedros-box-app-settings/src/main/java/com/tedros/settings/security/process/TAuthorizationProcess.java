@@ -40,9 +40,10 @@ public class TAuthorizationProcess extends TEntityProcess<TAuthorization> {
 			try {
 				TUser user = TedrosContext.getLoggedUser();
 				TAuthorizationController serv = loc.lookup("TAuthorizationControllerRemote");
-				res.add(serv.process(user.getAccessToken(), lst));
-			} catch (NamingException e) {
-				e.printStackTrace();
+				TResult<TAuthorization> r = serv.process(user.getAccessToken(), lst);
+				res.add(r);
+			} catch (Exception e) {
+				super.buildExceptionResult(res, e);
 			}finally {
 				loc.close();
 			}

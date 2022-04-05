@@ -15,5 +15,7 @@ import com.tedros.ejb.base.security.TAccessToken;
 public interface ITSecurityController{
 
 	boolean isAccessGranted(TAccessToken clent);
+
+	public boolean isPolicieAllowed(TAccessToken token, String securityId, String... action);
 	
 }

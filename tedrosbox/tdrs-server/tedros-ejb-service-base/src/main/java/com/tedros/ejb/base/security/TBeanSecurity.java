@@ -1,15 +1,18 @@
 package com.tedros.ejb.base.security;
 
-import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import javax.interceptor.InterceptorBinding;
-
-@InterceptorBinding
-@Target({ TYPE, METHOD })
+@Target({ TYPE })
 @Retention(RUNTIME)
-public @interface TRemoteSecurity {}
+public @interface TBeanSecurity {
+	
+	/**
+	 * The security policies defined in the application to be respected on the server.
+	 * */
+	public TBeanPolicie[] value() default {};
+	
+}

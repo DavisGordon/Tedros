@@ -1,5 +1,6 @@
 package com.tedros.login.behavior;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,10 +12,13 @@ import java.util.logging.Logger;
 
 import com.tedros.Main;
 import com.tedros.core.TLanguage;
+import com.tedros.core.TModule;
+import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.security.model.TProfile;
 import com.tedros.core.security.model.TUser;
 import com.tedros.core.style.TStyleResourceName;
+import com.tedros.core.style.TThemeUtil;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.fxapi.control.TComboBoxField;
@@ -30,12 +34,18 @@ import com.tedros.fxapi.modal.TMessage;
 import com.tedros.fxapi.modal.TMessageBox;
 import com.tedros.fxapi.modal.TMessageType;
 import com.tedros.fxapi.presenter.behavior.TActionType;
+import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
+import com.tedros.fxapi.presenter.view.group.TGroupPresenter;
 import com.tedros.fxapi.util.TModelViewUtil;
 import com.tedros.login.decorator.LoginDecorator;
 import com.tedros.login.model.Login;
 import com.tedros.login.model.LoginModelView;
 import com.tedros.login.model.TLoginProcess;
+import com.tedros.settings.layout.model.BackgroundImageModel;
+import com.tedros.settings.layout.model.BackgroundImageModelView;
+import com.tedros.settings.layout.model.PainelModelView;
+import com.tedros.settings.layout.model.TMainColorModelView;
 import com.tedros.settings.security.model.TProfileModelView;
 import com.tedros.util.TEncriptUtil;
 import com.tedros.util.TFileUtil;
@@ -49,6 +59,9 @@ import javafx.beans.value.WeakChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker.State;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.WeakEventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 
@@ -65,6 +78,12 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 	private TComboBoxField<TProfileModelView> profileComboBox;
 	private Text profileText;
 	private TLanguage iEngine;
+	
+
+	private TTextField ipTextField;
+	private TTextField urlTextField;
+
+	private TComboBoxField<String> themeComboBox;
 	
 	@Override
 	public void load() {
@@ -130,8 +149,6 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 			public void runAfter() {
 			}
 		});
-		
-		
 		
 		addAction(new TPresenterAction(TActionType.SAVE) {
 			
@@ -302,6 +319,76 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 		
 		TFieldBox profileTextFieldBox = form.gettFieldBox("profileText");//  language
 		profileText = (Text) profileTextFieldBox.gettControl();
+		
+		TFieldBox ipTextFieldBox = form.gettFieldBox("serverIp");//  ip
+		ipTextField = (TTextField) ipTextFieldBox.gettControl();
+
+		TFieldBox urlTextFieldBox = form.gettFieldBox("url");//  url
+		urlTextField = (TTextField) urlTextFieldBox.gettControl();
+		
+		TFieldBox themeFieldBox = form.gettFieldBox("theme");//  theme
+		themeComboBox = (TComboBoxField<String>) themeFieldBox.gettControl();
+		this.buildConfigEvents();
+	}
+	
+	private void buildConfigEvents() {
+		EventHandler<ActionEvent> ev = e ->{
+			saveRemoteConfig();
+		};
+		super.getListenerRepository().add("ipevh", ev);
+		ipTextField.setOnAction(new WeakEventHandler<>(ev));
+		
+		EventHandler<ActionEvent> ev1 = e ->{
+			saveRemoteConfig();
+		};
+		super.getListenerRepository().add("urlevh", ev1);
+		urlTextField.setOnAction(new WeakEventHandler<>(ev1));
+		
+		File tf = new File(TedrosFolder.THEME_FOLDER.getFullPath());
+		if(tf.isDirectory()) {
+			for(File f : tf.listFiles()) {
+				if(f.isDirectory()) {
+					themeComboBox.getItems().add(f.getName());
+				}
+			}
+		}
+		String ct = TThemeUtil.getCurrentTheme();
+		themeComboBox.getSelectionModel().select(ct);
+		themeComboBox.getSelectionModel().selectedItemProperty().addListener((a,o,n)->{
+			try {
+				String propFilePath = TedrosFolder.CONF_FOLDER.getFullPath()+TStyleResourceName.THEME;
+				FileOutputStream fos = new FileOutputStream(propFilePath);
+				Properties prop = new Properties();
+				prop.setProperty("apply", n);
+				prop.store(fos, "current theme");
+				fos.close();
+				Platform.runLater(() ->{
+					TedrosContext.reloadStyle();
+				});
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+		
+	}
+
+	/**
+	 * 
+	 */
+	protected void saveRemoteConfig() {
+		try {
+			Login m = (Login) super.getModelView().getModel();
+			String propFilePath = TedrosFolder.CONF_FOLDER.getFullPath()+"remote-config.properties";
+			FileOutputStream fos = new FileOutputStream(propFilePath);
+			Properties prop = new Properties();
+			prop.setProperty("url", m.getUrl());
+			prop.setProperty("server_ip", m.getServerIp());
+			prop.store(fos, "Url for lookup jndi");
+			fos.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	
 	@Override

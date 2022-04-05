@@ -13,6 +13,7 @@ import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TSelectionModalPresenter;
@@ -24,7 +25,9 @@ import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.collections.TFXCollections;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
 import com.tedros.fxapi.domain.TViewMode;
+import com.tedros.fxapi.modal.TMessage;
 import com.tedros.fxapi.modal.TMessageBox;
+import com.tedros.fxapi.modal.TMessageType;
 import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewSelectionBaseDecorator;
@@ -293,7 +296,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		if(actionHelper.runBefore(TActionType.SELECTED_ITEM)){
 			if(new_val==null)
 				return;
-			if(!getModels().contains(new_val)) {
+			if(getModels().parallelStream().filter(e->{
+				return e.equals(new_val);
+			}).count()==0) {
+			//if(!getModels().contains(new_val)) {
 				if(!allowsMultipleSel)
 					getModels().clear();
 				getModels().add((M) new_val);
@@ -332,33 +338,37 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				TResult<Map<String, Object>> resultados = (TResult<Map<String, Object>>) process.getValue();
 				
 				if(resultados != null) {
-				
-					Map<String, Object> result =  resultados.getValue();
-					//ObservableList<M> models = getModels();
-					if(this.searchResultList==null) {
-						this.searchResultList = TFXCollections.iTObservableList();
-						//setModelViewList(models);
-					}else
-						this.searchResultList.clear();
-					
-					for(E e : (List<E>) result.get("list")){
-						try {
-							M model = (M) this.paginatorModelViewClass.getConstructor(modelClass).newInstance(e);
-							this.searchResultList.add(model);
-						} catch (InstantiationException
-								| IllegalAccessException
-								| IllegalArgumentException
-								| InvocationTargetException
-								| NoSuchMethodException
-								| SecurityException e1) 
-						{
-							e1.printStackTrace();
+					if(resultados.getResult().equals(EnumResult.SUCESS)) {
+						Map<String, Object> result =  resultados.getValue();
+						if(this.searchResultList==null) {
+							this.searchResultList = TFXCollections.iTObservableList();
+						}else
+							this.searchResultList.clear();
+						
+						for(E e : (List<E>) result.get("list")){
+							try {
+								M model = (M) this.paginatorModelViewClass.getConstructor(modelClass).newInstance(e);
+								this.searchResultList.add(model);
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
+						}
+						
+						processPagination((long)result.get("total"));
+					}else {
+						String msg = resultados.getMessage();
+						System.out.println(msg);
+						switch(resultados.getResult()) {
+							case ERROR:
+								addMessage(new TMessage(TMessageType.ERROR, msg));
+								break;
+							default:
+								addMessage(new TMessage(TMessageType.WARNING, msg));
+								break;
 						}
 					}
-					
-					processPagination((long)result.get("total"));
+				
 					getListenerRepository().remove(id);
-					
 					actionHelper.runAfter(TActionType.SEARCH);
 				}
 			}

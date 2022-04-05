@@ -30,5 +30,9 @@ public class TSecurityController implements ITSecurityController {
 	public boolean isAccessGranted(TAccessToken e) {
 		return serv.isAssigned(e);
 	}
+	@Override
+	public boolean isPolicieAllowed(TAccessToken token, String securityId, String... action) {
+		return serv.isActionGranted(token, securityId, action);
+	}
 
 }
