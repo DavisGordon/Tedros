@@ -29,6 +29,7 @@ import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.domain.TLabelPosition;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
+import com.tedros.settings.security.action.TAuthorizationLoadAction;
 import com.tedros.settings.security.behavior.TAuthorizationBehavior;
 
 import javafx.beans.property.SimpleLongProperty;
@@ -48,7 +49,7 @@ import javafx.scene.layout.Priority;
 		show=true),
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{security.authorization.view.title}", 
 		 buildDeleteButton=false, buildCollapseButton=false, newButtonText="#{label.load}"),
-	behavior=@TBehavior(type=TAuthorizationBehavior.class)
+	behavior=@TBehavior(type=TAuthorizationBehavior.class, action=TAuthorizationLoadAction.class)
 	))
 @TSecurity(	id="T_CUSTOM_SECURITY_AUTHORIZATION", 
 	appName="#{settings.app.name}", 

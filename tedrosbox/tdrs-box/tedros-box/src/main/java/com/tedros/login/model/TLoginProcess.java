@@ -3,14 +3,20 @@
  */
 package com.tedros.login.model;
 
+import java.net.ConnectException;
+import java.net.UnknownHostException;
+import java.rmi.RemoteException;
 import java.util.List;
 
 import com.tedros.core.ejb.controller.ITLoginController;
+import com.tedros.core.security.model.TAuthorization;
 import com.tedros.core.security.model.TUser;
 import com.tedros.core.service.remote.ServiceLocator;
 import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.process.TEntityProcess;
+import com.tedros.settings.security.action.TAuthorizationLoadAction;
 
 /**
  * @author Davis Gordon
@@ -19,10 +25,7 @@ import com.tedros.fxapi.process.TEntityProcess;
  public class TLoginProcess extends TEntityProcess<TUser> {
 	
 	private static final String SERV_NAME = "ITLoginControllerRemote";
-	
-	private String login;
-	private String password;
-	
+	private int operation;
 	private TUser user;
 	
 	public TLoginProcess() throws TProcessException {
@@ -33,37 +36,60 @@ import com.tedros.fxapi.process.TEntityProcess;
 	public boolean runBefore(List<TResult<TUser>> resultList) {
 		ServiceLocator loc = ServiceLocator.getInstance();
 		try {
-			if(login!=null && password!=null){
-				ITLoginController service = (ITLoginController) loc.lookup(SERV_NAME);
-				resultList.add(service.login(login, password));
-				login = null;
-				password = null;
-			}
-			
-			if(user!=null){
-				ITLoginController service = (ITLoginController) loc.lookup(SERV_NAME);
+			ITLoginController service = (ITLoginController) loc.lookup(SERV_NAME);
+			switch (operation) {
+			case 1:
+				resultList.add(service.login(user.getLogin(), user.getPassword()));
+				break;
+			case 2:
+				List<TAuthorization> lst= TAuthorizationLoadAction.getAppsSecurityPolicie();
+				resultList.add(service.createFirstUser(user, lst));
+				break;
+			case 3:
 				resultList.add(service.saveActiveProfile(user.getAccessToken(), user.getActiveProfile(), user.getId()));
-				user = null;
+				 break;
+			case 4:
+				TResult<Boolean> f = service.isSystemWithoutUsers();
+				EnumResult e = f.getValue() ? EnumResult.SUCESS : EnumResult.WARNING;
+				TResult<TUser> res = new TResult<>(e);
+				resultList.add(res);
+				 break;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			String msg = (e.getCause() instanceof ConnectException 
+					|| e.getCause() instanceof RemoteException)
+					? "SERVER_FAIL"
+					: e.getCause().getMessage();
+			TResult<TUser> res = new TResult<>(EnumResult.ERROR, msg);
+			resultList.add(res);
 		}finally {
 			loc.close();
 		}
 		
 		return false;
 	}
-
-	public void setUser(TUser user) {
+	
+	public void login(TUser user) {
 		this.user = user;
+		this.operation = 1;
 	}
 	
-	public void setLogin(String login) {
-		this.login = login;
+	public void firstUser(TUser user) {
+		this.user = user;
+		this.operation = 2;
 	}
 	
-	public void setPassword(String password) {
-		this.password = password;
+	public void setActiveProfile(TUser user) {
+		this.user = user;
+		this.operation = 3;
 	}
+	
+	public void isSystemWithoutUsers() {
+		this.user = null;
+		this.operation = 4;
+	}
+	
+	
 
 }

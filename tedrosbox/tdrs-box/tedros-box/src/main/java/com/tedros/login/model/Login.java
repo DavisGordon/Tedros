@@ -8,6 +8,7 @@ import com.tedros.util.TResourceUtil;
 
 public class Login implements ITModel {
 
+	private String name;
 	private String user;
 	private String password;
 	private String language;
@@ -72,6 +73,20 @@ public class Login implements ITModel {
 	 */
 	public void setServerIp(String serverIp) {
 		this.serverIp = serverIp;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	

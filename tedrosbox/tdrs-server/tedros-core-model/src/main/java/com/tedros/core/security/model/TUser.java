@@ -52,6 +52,7 @@ public class TUser extends TEntity {
 	
 	private TAccessToken accessToken;
 	
+	
 	public TUser() {
 		
 	}
