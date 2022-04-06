@@ -12,8 +12,6 @@ import java.util.logging.Logger;
 
 import com.tedros.Main;
 import com.tedros.core.TLanguage;
-import com.tedros.core.TModule;
-import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.security.model.TProfile;
 import com.tedros.core.security.model.TUser;
@@ -34,24 +32,19 @@ import com.tedros.fxapi.modal.TMessage;
 import com.tedros.fxapi.modal.TMessageBox;
 import com.tedros.fxapi.modal.TMessageType;
 import com.tedros.fxapi.presenter.behavior.TActionType;
-import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
-import com.tedros.fxapi.presenter.view.group.TGroupPresenter;
 import com.tedros.fxapi.util.TModelViewUtil;
 import com.tedros.login.decorator.LoginDecorator;
 import com.tedros.login.model.Login;
 import com.tedros.login.model.LoginModelView;
 import com.tedros.login.model.TLoginProcess;
-import com.tedros.settings.layout.model.BackgroundImageModel;
-import com.tedros.settings.layout.model.BackgroundImageModelView;
-import com.tedros.settings.layout.model.PainelModelView;
-import com.tedros.settings.layout.model.TMainColorModelView;
 import com.tedros.settings.security.model.TProfileModelView;
 import com.tedros.util.TEncriptUtil;
 import com.tedros.util.TFileUtil;
 import com.tedros.util.TedrosFolder;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -70,16 +63,17 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
 	private SimpleObjectProperty<TUser> loggedUserProperty;
+	private SimpleBooleanProperty serverOkProperty;
+	private SimpleBooleanProperty sysWithoutUserProperty;
 	private LoginDecorator loginDecorator;
 	private Button saveButton;
 	private TTextField userTextField;
 	private TPasswordField passwordField;
+	private TTextField nameField;
 	private TComboBoxField<String> languageComboBox;
 	private TComboBoxField<TProfileModelView> profileComboBox;
 	private Text profileText;
 	private TLanguage iEngine;
-	
-
 	private TTextField ipTextField;
 	private TTextField urlTextField;
 
@@ -87,21 +81,42 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 	
 	@Override
 	public void load() {
-		
 		super.load();
-		
 		iEngine = TLanguage.getInstance(null);
-		
 		loginDecorator = ((LoginDecorator) getPresenter().getDecorator());
-		
 		saveButton = loginDecorator.gettSaveButton();
-		
 		loggedUserProperty = new SimpleObjectProperty<>();
+		sysWithoutUserProperty = new SimpleBooleanProperty(false);
+		serverOkProperty = new SimpleBooleanProperty(true);
 		
-		loggedUserProperty.addListener(new ChangeListener<TUser>() {
-
-			@Override
-			public void changed(ObservableValue<? extends TUser> arg0, TUser oldVal, TUser newVal) {
+		ChangeListener<Boolean> sOkChl = (a,o,n)->{
+			//nameField.setDisable(!n);
+			userTextField.setDisable(!n);
+			passwordField.setDisable(!n);
+			profileComboBox.setDisable(!n);
+			loginDecorator.gettSaveButton().setDisable(!n);
+			String msg = (!n) 
+					? iEngine.getString("#{tedros.server.out.text}") 
+							: (this.sysWithoutUserProperty.getValue()) 
+							? iEngine.getString("#{tedros.sys.without.user}")
+								: iEngine.getString("#{tedros.profileText}");
+			this.profileText.setText(msg);
+		};
+		super.getListenerRepository().add("sOkChl", sOkChl);
+		this.serverOkProperty.addListener(new WeakChangeListener<>(sOkChl));
+		
+		
+		ChangeListener<Boolean> swouChl = (a,o,n)->{
+			nameField.setDisable(!n);
+			String msg = (n) 
+							? iEngine.getString("#{tedros.sys.without.user}")
+								: iEngine.getString("#{tedros.profileText}");
+			this.profileText.setText(msg);
+		};
+		super.getListenerRepository().add("swouChl", swouChl);
+		this.sysWithoutUserProperty.addListener(new WeakChangeListener<>(swouChl));
+		
+		ChangeListener<TUser> usrChl = (a, oldVal, newVal)-> {
 				
 				profileComboBox.getItems().clear();
 				
@@ -112,7 +127,10 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 					userTextField.setDisable(true);
 					passwordField.setDisable(true);
 					languageComboBox.setDisable(true);
+					ipTextField.setDisable(true);
+					urlTextField.setDisable(true);
 					profileComboBox.setDisable(false);
+					
 					
 					List<TProfileModelView> profiles  = new TModelViewUtil<TProfileModelView, TProfile>
 					(TProfileModelView.class, TProfile.class, new ArrayList<>(newVal.getProfiles())).convertToModelViewList();
@@ -123,14 +141,15 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 					userTextField.setDisable(false);
 					passwordField.setDisable(false);
 					languageComboBox.setDisable(false);
+					ipTextField.setDisable(false);
+					urlTextField.setDisable(false);
 					profileComboBox.setDisable(true);
 					profileText.setText(iEngine.getString("#{tedros.profileText}"));
 					saveButton.setText(iEngine.getString("#{tedros.validateUser}"));
 				}
-			}
-		});
-		
-		
+			};
+		super.getListenerRepository().add("usrChl", usrChl);
+		loggedUserProperty.addListener(new WeakChangeListener<>(usrChl));
 		
 		addAction(new TPresenterAction(TActionType.NEW) {
 
@@ -168,25 +187,21 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 						validateModels(modelsViewsList);
 						
 						Login model = (Login) getModelView().getModel();
-						
+						final String name = model.getName();
 						final String userLogin = model.getUser();
 						final String password = model.getPassword();
 						
-						if(userLogin.toLowerCase().equals("owner") && password.equals("dgd")){
-							try{
-								TUser tUser = new TUser("Owner", "owner");
-								loadTedros(tUser);
-								return false;
-							}catch(Exception e){
-								saveButton.setDisable(false);
-								e.printStackTrace();
-							}
-						}
+						TUser u = new TUser();
+						u.setName(name);
+						u.setLogin(userLogin);
+						u.setPassword(TEncriptUtil.encript(password));
 						
 						final TLoginProcess process  = (TLoginProcess) createEntityProcess();
-						process.setLogin(userLogin);
-						process.setPassword(TEncriptUtil.encript(password));
-						//process.setPassword(password);
+						if(sysWithoutUserProperty.getValue())
+							process.firstUser(u);
+						else
+							process.login(u);
+						
 						process.stateProperty().addListener(new ChangeListener<State>() {
 							@Override
 							public void changed(ObservableValue<? extends State> arg0, State arg1, State arg2) {
@@ -229,7 +244,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 							user.setActiveProfile(selectedProfile.getModel());
 							
 							final TLoginProcess process  = (TLoginProcess) createEntityProcess();
-							process.setUser(user);
+							process.setActiveProfile(user);
 							process.stateProperty().addListener(new ChangeListener<State>() {
 								@Override
 								public void changed(ObservableValue<? extends State> arg0, State arg1, State arg2) {
@@ -303,9 +318,52 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 		newAction();
 	}
 
+	/**
+	 * 
+	 */
+	private void verifySysUsers() {
+		try {
+			final TLoginProcess process  = (TLoginProcess) createEntityProcess();
+			process.isSystemWithoutUsers();
+			ChangeListener<State> swouProcChl = (a,o,n)->{
+				if(n.equals(State.SUCCEEDED)) {
+					List<TResult<TUser>> lst = process.getValue();
+					TResult<TUser> res = lst.get(0);
+					switch(res.getResult()) {
+					case ERROR:
+						this.sysWithoutUserProperty.setValue(false);
+						if(res.getMessage().equals("SERVER_FAIL"))
+							this.serverOkProperty.setValue(false);
+						else
+							addMessage(new TMessage(TMessageType.ERROR, res.getMessage()));
+						break;
+					case SUCESS:
+						this.sysWithoutUserProperty.setValue(true);
+						this.serverOkProperty.setValue(true);
+						break;
+					case WARNING:
+						this.sysWithoutUserProperty.setValue(false);
+						this.serverOkProperty.setValue(true);
+						break;
+					}
+					super.getListenerRepository().remove("swouProcChl");
+				}
+			};
+			super.getListenerRepository().add("swouProcChl", swouProcChl);
+			process.stateProperty().addListener(new WeakChangeListener<>(swouProcChl));
+			super.runProcess(process);
+		} catch (Throwable e2) {
+			e2.printStackTrace();
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	private void getControls(ITForm form) {
-		TFieldBox userFieldBox = form.gettFieldBox("user");//  language
+		TFieldBox nameFieldBox = form.gettFieldBox("name");//  name
+		nameField = (TTextField) nameFieldBox.gettControl();
+		nameField.setDisable(true);
+		
+		TFieldBox userFieldBox = form.gettFieldBox("user");//  user
 		userTextField = (TTextField) userFieldBox.gettControl();
 		
 		TFieldBox passwordFieldBox = form.gettFieldBox("password");// password 
@@ -329,6 +387,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 		TFieldBox themeFieldBox = form.gettFieldBox("theme");//  theme
 		themeComboBox = (TComboBoxField<String>) themeFieldBox.gettControl();
 		this.buildConfigEvents();
+		verifySysUsers();
 	}
 	
 	private void buildConfigEvents() {
@@ -377,6 +436,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 	 */
 	protected void saveRemoteConfig() {
 		try {
+			
 			Login m = (Login) super.getModelView().getModel();
 			String propFilePath = TedrosFolder.CONF_FOLDER.getFullPath()+"remote-config.properties";
 			FileOutputStream fos = new FileOutputStream(propFilePath);
@@ -385,8 +445,10 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 			prop.setProperty("server_ip", m.getServerIp());
 			prop.store(fos, "Url for lookup jndi");
 			fos.close();
+			
+			this.verifySysUsers();
+			
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}

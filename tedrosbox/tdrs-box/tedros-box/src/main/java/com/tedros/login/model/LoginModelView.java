@@ -27,6 +27,7 @@ import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEntityProcess;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TButtonBase;
+import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.scene.control.TLabeled;
 import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
@@ -57,7 +58,7 @@ public class LoginModelView extends TModelView<Login> {
 	private SimpleLongProperty id;
 	@TTabPane(tabs = { 
 			@TTab(closable=false, content = @TContent(detailForm=
-				@TDetailForm(fields={"title", "user",
+				@TDetailForm(fields={"title", "name", "user",
 						"language", "profileText","profile"})), 
 				text = "#{tedros.log.in}"), 
 			@TTab(closable=false, content = @TContent(detailForm=
@@ -70,6 +71,10 @@ public class LoginModelView extends TModelView<Login> {
 	@TText(text="#{tedros.login.form.title}", textAlignment=TextAlignment.LEFT, 
 			textStyle=TTextStyle.LARGE)
 	private SimpleStringProperty title;
+	
+	@TLabel(text = "#{tedros.login.name}")
+	@TTextField()
+	private SimpleStringProperty name;
 	
 	@TLabel(text = "#{tedros.login.user}")
 	@TTextField(required=true, node=@TNode(requestFocus=true, parse = true))
@@ -107,15 +112,13 @@ public class LoginModelView extends TModelView<Login> {
 	private SimpleStringProperty header;
 	
 	@TLabel(text="#{tedros.serverip}")
-	@TTextField(node=@TNode(requestFocus=true, parse = true),
-	textInputControl=@TTextInputControl(promptText="#{tedros.serverip.text}", parse = true),
-	required=true)
+	@TTextField(control=@TControl(tooltip="#{tedros.press.enter.tooltip}", parse = true),
+	textInputControl=@TTextInputControl(promptText="#{tedros.serverip.text}", parse = true))
 	private SimpleStringProperty serverIp;
 	
 	@TLabel(text="#{tedros.serverUrl}")
-	@TTextField(node=@TNode(requestFocus=true, parse = true),
-	textInputControl=@TTextInputControl(promptText="#{tedros.serverurl.text}", parse = true),
-	required=true)
+	@TTextField(control=@TControl(tooltip="#{tedros.press.enter.tooltip}", parse = true),
+	textInputControl=@TTextInputControl(promptText="#{tedros.serverurl.text}", parse = true))
 	private SimpleStringProperty url;
 	
 	
@@ -298,6 +301,20 @@ public class LoginModelView extends TModelView<Login> {
 	 */
 	public void setUrl(SimpleStringProperty url) {
 		this.url = url;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public SimpleStringProperty getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(SimpleStringProperty name) {
+		this.name = name;
 	}
 
 }

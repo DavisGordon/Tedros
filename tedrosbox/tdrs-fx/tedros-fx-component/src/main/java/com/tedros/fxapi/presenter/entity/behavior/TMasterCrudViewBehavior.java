@@ -279,7 +279,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected void paginate(TPagination pagination) throws TException {
+	public void paginate(TPagination pagination) throws TException {
 		final String chlId = UUID.randomUUID().toString();
 		TPaginationProcess<E> process = new TPaginationProcess<E>(super.getEntityClass(), this.paginatorServiceName) {};
 		ChangeListener<State> prcl = (arg0, arg1, arg2) -> {

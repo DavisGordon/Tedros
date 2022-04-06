@@ -1,18 +1,21 @@
 package com.tedros.core.ejb.controller;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
-import com.tedros.core.ejb.domain.TPropertieKey;
-import com.tedros.core.ejb.service.TPropertieService;
+import com.tedros.core.ejb.service.TAuthorizationService;
+import com.tedros.core.ejb.service.TCoreService;
 import com.tedros.core.ejb.service.TSecurityService;
 import com.tedros.core.ejb.service.TUserService;
+import com.tedros.core.security.model.TAuthorization;
 import com.tedros.core.security.model.TProfile;
 import com.tedros.core.security.model.TUser;
-import com.tedros.core.setting.model.TPropertie;
-import com.tedros.core.setting.model.TType;
 import com.tedros.ejb.base.controller.ITSecurityController;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
@@ -29,7 +32,10 @@ public class TLoginController implements ITLoginController, ITSecurity {
 	private TUserService serv;
 	
 	@EJB
-	private TPropertieService propServ;
+	private TAuthorizationService autServ;
+	
+	@EJB
+	private TCoreService<TProfile> profServ;
 	
 	@EJB
 	private ITSecurityController securityController;
@@ -38,19 +44,42 @@ public class TLoginController implements ITLoginController, ITSecurity {
 	private TSecurityService securityService;
 	
 	@Override
-	public TResult<Boolean> isInitialConfigEnable() {
+	public TResult<TUser> createFirstUser(TUser user, List<TAuthorization> newLst) {
+		try{
+			if(serv.listAll(TUser.class).isEmpty()) {
+				List<TAuthorization> lst = autServ.listAll(TAuthorization.class);
+				autServ.process(newLst, lst);
+				lst = autServ.listAll(TAuthorization.class);
+				
+				TProfile p = new TProfile();
+				p.setName("Master");
+				p.setDescription("The master profile created for the first user.");
+				p.setAutorizations(lst);
+				p = profServ.save(p);
+				
+				Set<TProfile> profs = new HashSet<>();
+				user.setProfiles(profs);
+				
+				user = serv.save(user);
+				user = serv.login(user.getLogin(), user.getPassword());
+				
+				return new TResult<>(EnumResult.SUCESS, user);
+			}else {
+				return new TResult<>(EnumResult.WARNING, "The system already have users.");
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			return new TResult<>(EnumResult.ERROR, e.getMessage());
+		}
+	}
+	
+	@Override
+	public TResult<Boolean> isSystemWithoutUsers() {
 		
 		try{
-			Boolean enabled = false; 
-			TPropertie p = new TPropertie();
-			p.setKey(TPropertieKey.ENABLE_INITIAL_CONFIG.getValue());
-			p.setType(TType.SYSTEM);
-			p = propServ.find(p);
+			Boolean f = serv.listAll(TUser.class).isEmpty();
 			
-			if(p==null || (p!=null && p.getValue()!=null && p.getValue().equals("true")))
-				enabled = true;
-			
-			return new TResult<>(EnumResult.SUCESS, enabled);
+			return new TResult<>(EnumResult.SUCESS, f);
 		}catch(Exception e){
 			e.printStackTrace();
 			return new TResult<>(EnumResult.ERROR, e.getMessage());
