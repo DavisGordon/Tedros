@@ -122,8 +122,7 @@ public class Main extends Application implements ITedrosBox  {
     private Accordion settingsAcc;
     private TSliderMenu innerPane;
     private Label appName;
-
-    private String version = "8.24";
+    
     private FadeTransition logoEffect;
     private ChangeListener<Number> effectChl;
     
@@ -152,7 +151,7 @@ public class Main extends Application implements ITedrosBox  {
 		//create tedros directory if is not exists
     	File folder = new File(outputFolder+"/.tedros");
     	if(folder.exists()){ 
-    		if(new File(outputFolder+"/.tedros"+"/tedrosbox__V"+version+".txt").exists())
+    		if(new File(outputFolder+"/.tedros"+"/tedrosbox__V"+TedrosRelease.version+".txt").exists())
     			return false;
     		TFileUtil.delete(folder);
     	}
@@ -312,7 +311,7 @@ public class Main extends Application implements ITedrosBox  {
         appName.setCursor(Cursor.HAND);
         
         appName.setOnMouseClicked(e -> {
-        	String tt = TLanguage.getInstance(null).getFormatedString("#{tedros.tooltip}", version);
+        	String tt = TLanguage.getInstance(null).getFormatedString("#{tedros.tooltip}", TedrosRelease.version);
         	Label l = new Label(tt);
         	l.setFont(Font.font(11));
         	PopOver p = new PopOver();

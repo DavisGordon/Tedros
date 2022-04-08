@@ -22,6 +22,7 @@ import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.fxapi.control.TComboBoxField;
 import com.tedros.fxapi.control.TPasswordField;
 import com.tedros.fxapi.control.TTextField;
+import com.tedros.fxapi.control.TVerticalRadioGroup;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.exception.TValidatorException;
@@ -56,6 +57,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.Toggle;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 
 public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Login> {
@@ -70,7 +73,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 	private TTextField userTextField;
 	private TPasswordField passwordField;
 	private TTextField nameField;
-	private TComboBoxField<String> languageComboBox;
+	private TVerticalRadioGroup languageField;
 	private TComboBoxField<TProfileModelView> profileComboBox;
 	private Text profileText;
 	private TLanguage iEngine;
@@ -101,6 +104,8 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 							? iEngine.getString("#{tedros.sys.without.user}")
 								: iEngine.getString("#{tedros.profileText}");
 			this.profileText.setText(msg);
+			Region f = (Region) super.getForm();
+			f.layout();
 		};
 		super.getListenerRepository().add("sOkChl", sOkChl);
 		this.serverOkProperty.addListener(new WeakChangeListener<>(sOkChl));
@@ -112,6 +117,8 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 							? iEngine.getString("#{tedros.sys.without.user}")
 								: iEngine.getString("#{tedros.profileText}");
 			this.profileText.setText(msg);
+			Region f = (Region) super.getForm();
+			f.layout();
 		};
 		super.getListenerRepository().add("swouChl", swouChl);
 		this.sysWithoutUserProperty.addListener(new WeakChangeListener<>(swouChl));
@@ -123,10 +130,11 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 				if(newVal!=null){
 					saveButton.disarm();
 					saveButton.setText(iEngine.getString("#{tedros.login}"));
-					
+					nameField.setText(newVal.getName());
+					nameField.setDisable(true);
 					userTextField.setDisable(true);
 					passwordField.setDisable(true);
-					languageComboBox.setDisable(true);
+					languageField.setDisable(true);
 					ipTextField.setDisable(true);
 					urlTextField.setDisable(true);
 					profileComboBox.setDisable(false);
@@ -137,15 +145,19 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 					
 					profileComboBox.getItems().addAll(profiles);
 					profileText.setText(iEngine.getFormatedString("#{tedros.selectProfile}", newVal.getName()));
+					Region f = (Region) super.getForm();
+					f.layout();
 				}else{
 					userTextField.setDisable(false);
 					passwordField.setDisable(false);
-					languageComboBox.setDisable(false);
+					languageField.setDisable(false);
 					ipTextField.setDisable(false);
 					urlTextField.setDisable(false);
 					profileComboBox.setDisable(true);
 					profileText.setText(iEngine.getString("#{tedros.profileText}"));
 					saveButton.setText(iEngine.getString("#{tedros.validateUser}"));
+					Region f = (Region) super.getForm();
+					f.layout();
 				}
 			};
 		super.getListenerRepository().add("usrChl", usrChl);
@@ -156,7 +168,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 			@Override
 			public boolean runBefore() {
 				Login login = new Login();
-				login.setLanguage(TedrosContext.getLocale().getLanguage().toUpperCase());
+				login.setLanguage(TedrosContext.getLocale().getLanguage().toLowerCase());
 				LoginModelView model = new LoginModelView(login);
 				setViewMode(TViewMode.EDIT);
 				setModelView(model);
@@ -321,6 +333,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 	/**
 	 * 
 	 */
+	@SuppressWarnings("incomplete-switch")
 	private void verifySysUsers() {
 		try {
 			final TLoginProcess process  = (TLoginProcess) createEntityProcess();
@@ -370,7 +383,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 		passwordField = (TPasswordField) passwordFieldBox.gettControl();
 		
 		TFieldBox tFieldBox = form.gettFieldBox("language");// password language
-		languageComboBox = (TComboBoxField<String>) tFieldBox.gettControl();
+		languageField = (TVerticalRadioGroup) tFieldBox.gettControl();
 		
 		TFieldBox profileFieldBox = form.gettFieldBox("profile");//  language
 		profileComboBox = (TComboBoxField<TProfileModelView>) profileFieldBox.gettControl();
@@ -391,6 +404,22 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 	}
 	
 	private void buildConfigEvents() {
+		ChangeListener<Toggle> lanChl = (a,o,n)->{
+			try {
+				final String language = (String) n.getUserData();
+				saveLanguage(language);
+				TedrosContext.setLocale(new Locale(language));
+				TedrosContext.logOut();
+				LOGGER.info("Language setted.");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+				super.addMessage(new TMessage(TMessageType.ERROR, e1.getMessage()));
+			}
+			
+		};
+		super.getListenerRepository().add("lanChl", lanChl);
+		languageField.selectedToggleProperty().addListener(new WeakChangeListener<>(lanChl));
+		
 		EventHandler<ActionEvent> ev = e ->{
 			saveRemoteConfig();
 		};
@@ -470,16 +499,9 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 		
 		profileText.setText(iEngine.getString("#{tedros.loading}"));
 		LOGGER.info(iEngine.getString("#{tedros.loading}"));
-		
-		Login model = (Login) getModelView().getModel();
-		final String language = model.getLanguage();
-		saveLanguage(language);
-		LOGGER.info("Language setted.");
-		
 		TedrosContext.setLoggedUser(user);
 		LOGGER.info("User "+user.getName()+" setted. ");
 		
-		TedrosContext.setLocale(new Locale(language));
 		TedrosContext.searchApps();
 		Main.getTedros().buildSettingsPane();
 		Main.getTedros().buildApplicationMenu();

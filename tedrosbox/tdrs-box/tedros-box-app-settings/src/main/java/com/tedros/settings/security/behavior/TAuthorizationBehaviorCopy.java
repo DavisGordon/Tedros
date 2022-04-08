@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.tedros.core.TLanguage;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
+import com.tedros.core.context.TReflections;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.security.model.TAuthorization;
 import com.tedros.ejb.base.result.TResult;
@@ -79,7 +80,7 @@ extends TDynaViewCrudBaseBehavior<TAuthorizationModelView, TAuthorization> {
 				public boolean runBefore() {
 					List<TAuthorization> authorizations = new ArrayList<>();
 					TLanguage iEngine = TLanguage.getInstance(null);
-					for (Class clazz : TedrosContext.getClassesAnnotatedWith(TSecurity.class) ) {
+					for (Class clazz : TReflections.getInstance().getClassesAnnotatedWith(TSecurity.class) ) {
 						try {
 							
 							TSecurity tSecurity = (TSecurity) clazz.getAnnotation(TSecurity.class);

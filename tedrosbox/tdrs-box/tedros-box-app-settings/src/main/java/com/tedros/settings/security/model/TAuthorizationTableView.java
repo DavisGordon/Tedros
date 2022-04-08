@@ -3,6 +3,7 @@
  */
 package com.tedros.settings.security.model;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -30,6 +31,7 @@ import com.tedros.fxapi.presenter.modal.behavior.TSelectionModalBehavior;
 import com.tedros.fxapi.presenter.modal.decorator.TSelectionModalDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.layout.Priority;
@@ -96,6 +98,7 @@ public final class TAuthorizationTableView extends TEntityModelView<TAuthorizati
 	public TAuthorizationTableView(TAuthorization entity) {
 		super(entity);
 		loadDisplayText(model);
+		
 	}
 	
 	@Override
@@ -125,6 +128,15 @@ public final class TAuthorizationTableView extends TEntityModelView<TAuthorizati
 					+ (type.getValue()!=null ? type.getValue(): "");
 			displayText.setValue(str);
 		}
+	}
+	
+	@Override
+	public Observable getProperty(String f) {
+		SimpleStringProperty p = (SimpleStringProperty) super.getProperty(f);
+		String v = p.getValue();
+		if(StringUtils.isNotBlank(v) && (f.equals("appName") || f.equals("moduleName") || f.equals("viewName"))) 
+			p.setValue(TLanguage.getInstance().getString(v));
+		return p;
 	}
 	
 	/* (non-Javadoc)

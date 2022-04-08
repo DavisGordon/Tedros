@@ -45,9 +45,9 @@ public final class TDefaultDetailForm<M extends ITModelView<?>> extends TFlowPan
 		setOrientation(Orientation.HORIZONTAL);
 		setPrefWrapLength(USE_COMPUTED_SIZE);
 		setPadding(new Insets(10, 10, 10, 10));
-		setPrefHeight(USE_COMPUTED_SIZE);
-		setMaxHeight(Double.MAX_VALUE);
-		setMaxWidth(Double.MAX_VALUE);
+		//setPrefHeight(USE_COMPUTED_SIZE);
+		//setMaxHeight(Double.MAX_VALUE);
+		//setMaxWidth(Double.MAX_VALUE);
 		
 	}
 

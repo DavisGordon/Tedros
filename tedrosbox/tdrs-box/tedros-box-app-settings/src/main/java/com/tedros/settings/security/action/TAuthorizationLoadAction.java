@@ -5,12 +5,14 @@ package com.tedros.settings.security.action;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.core.TLanguage;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
+import com.tedros.core.context.TReflections;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.security.model.TAuthorization;
 import com.tedros.ejb.base.result.TResult;
@@ -50,7 +52,8 @@ public class TAuthorizationLoadAction extends TPresenterAction {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean runBefore() {
-		List<TAuthorization> authorizations = getAppsSecurityPolicie();
+		List<TAuthorization> authorizations = getAppsSecurityPolicie( 
+				TReflections.getInstance().getClassesAnnotatedWith(TSecurity.class));
 		
 		try {
 			TDynaViewSimpleBaseBehavior behavior =  (TDynaViewSimpleBaseBehavior) ((TDynaPresenter)super.getPresenter()).getBehavior();
@@ -110,11 +113,11 @@ public class TAuthorizationLoadAction extends TPresenterAction {
 	 * @param iEngine
 	 * @return
 	 */
-	public static List<TAuthorization> getAppsSecurityPolicie() {
+	public static List<TAuthorization> getAppsSecurityPolicie(Set<Class<?>> classes) {
 
 		TLanguage iEngine = TLanguage.getInstance(null);
 		List<TAuthorization> authorizations = new ArrayList<>();
-		for (Class clazz : TedrosContext.getClassesAnnotatedWith(TSecurity.class) ) {
+		for (Class clazz : classes ) {
 			try {
 				
 				TSecurity tSecurity = (TSecurity) clazz.getAnnotation(TSecurity.class);
