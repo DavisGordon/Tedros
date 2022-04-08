@@ -65,7 +65,15 @@ class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 						return Integer.compare(o1.getOrder(), o2.getOrder());
 					}
 				});
-				for(TFieldDescriptor fd : super.getFieldDescriptorList()) {
+				super.getFieldDescriptorList().stream().forEachOrdered(fd->{
+					if(!(!fd.isLoaded() || (fd.isLoaded() && fd.hasParent()))) {
+						if(fd.hasLayout())
+							nodesLoaded.add(fd.getLayout());
+						else
+							nodesLoaded.add(fd.getComponent());
+					}
+				});
+				/*for(TFieldDescriptor fd : super.getFieldDescriptorList()) {
 					if(!fd.isLoaded() || (fd.isLoaded() && fd.hasParent()))
 						continue;
 				
@@ -73,7 +81,7 @@ class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 						nodesLoaded.add(fd.getLayout());
 					else
 						nodesLoaded.add(fd.getComponent());
-				}
+				}*/
 			}
 			
 		};
@@ -111,7 +119,18 @@ class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 						}
 					});
 					descriptor.setMode(TViewMode.EDIT);
-					for(TFieldDescriptor fd : layoutFd) {
+					layoutFd.stream().forEachOrdered(fd->{
+						if(!fd.isLoaded()){
+			            	try {
+								TComponentDescriptor cd = new TComponentDescriptor(descriptor, fd.getFieldName());
+			            		TControlLayoutBuilder builder = new TControlLayoutBuilder();
+			            		 builder.getLayoutField(cd);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					});
+					/*for(TFieldDescriptor fd : layoutFd) {
 						if(fd.isLoaded())
 							continue;
 		            	try {
@@ -121,13 +140,39 @@ class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 						} catch (Exception e) {
 							e.printStackTrace();
 						}    
-					}
+					}*/
 				}
 			});
 		
 		
-		
-		for(TFieldDescriptor fd : controlsFd) {
+		controlsFd.parallelStream().forEach(fd->{
+			if(!fd.isLoaded()){
+				Thread taskThread = new Thread(new Runnable() {
+				      @Override
+				      public void run() {
+						Platform.runLater(new Runnable() {
+				            @Override
+				            public void run() {
+				            	try {
+									TComponentDescriptor cd = new TComponentDescriptor(descriptor, fd.getFieldName());
+				            		
+				            		TControlLayoutBuilder builder = new TControlLayoutBuilder();
+				            		
+				            		builder.getControlField(cd);
+									lessOne();
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+								
+				            }
+				          });
+				      	}
+					});
+				taskThread.setDaemon(true);
+				taskThread.start();
+			}
+		});
+		/*for(TFieldDescriptor fd : controlsFd) {
 			if(fd.isLoaded())
 				continue;
 			Thread taskThread = new Thread(new Runnable() {
@@ -154,7 +199,7 @@ class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 			taskThread.setDaemon(true);
 			taskThread.start();
 			
-		}
+		}*/
 		
 		if(TDebugConfig.detailParseExecution){
 			long endTime = System.nanoTime();

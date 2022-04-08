@@ -9,20 +9,22 @@ import com.tedros.core.security.model.TProfile;
 import com.tedros.core.security.model.TUser;
 import com.tedros.fxapi.annotation.TObservableValue;
 import com.tedros.fxapi.annotation.control.TCheckBoxField;
+import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TOptionsList;
 import com.tedros.fxapi.annotation.control.TPasswordField;
 import com.tedros.fxapi.annotation.control.TPickListField;
+import com.tedros.fxapi.annotation.control.TTab;
+import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.annotation.control.TTextField;
+import com.tedros.fxapi.annotation.form.TDetailForm;
 import com.tedros.fxapi.annotation.form.TForm;
-import com.tedros.fxapi.annotation.layout.TAccordion;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
-import com.tedros.fxapi.annotation.layout.TTitledPane;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
@@ -74,12 +76,14 @@ public class TUserModelView extends TEntityModelView<TUser> {
 
 	private SimpleLongProperty id;
 	
-	@TAccordion(expandedPane="main", node=@TNode(id="UserAcc",parse = true),
-			panes={
-					@TTitledPane(text="Principal", node=@TNode(id="main",parse = true), expanded=true,
-							fields={"header", "name", "login", "active"}),
-					@TTitledPane(text="Detalhe", node=@TNode(id="detail",parse = true),
-						fields={"profilesText","profiles"})})
+	@TTabPane(tabs = { 
+			@TTab(closable=false, scroll=false, content = @TContent(detailForm=
+				@TDetailForm(fields={"header", "name", "login", "active"})), 
+				text = "#{label.main}"), 
+			@TTab(closable=false, content = @TContent(detailForm=
+				@TDetailForm(fields={"profilesText","profiles"})), 
+				text = "#{label.detail}")
+	})
 	@TReaderHtml(htmlTemplateForControlValue="<h2 style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 				cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 				cssForHtmlBox="", cssForContentValue="")

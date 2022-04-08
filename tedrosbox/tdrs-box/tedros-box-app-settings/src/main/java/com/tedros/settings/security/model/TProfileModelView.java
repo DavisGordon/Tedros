@@ -7,16 +7,18 @@ import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.core.security.model.TAuthorization;
 import com.tedros.core.security.model.TProfile;
+import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TMultipleSelectionModal;
+import com.tedros.fxapi.annotation.control.TTab;
+import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
+import com.tedros.fxapi.annotation.form.TDetailForm;
 import com.tedros.fxapi.annotation.form.TForm;
-import com.tedros.fxapi.annotation.layout.TAccordion;
-import com.tedros.fxapi.annotation.layout.TTitledPane;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEntityProcess;
@@ -57,12 +59,14 @@ public final class TProfileModelView extends TEntityModelView<TProfile> {
 	
 	private SimpleLongProperty id;
 	
-	@TAccordion(expandedPane="main", node=@TNode(id="profileAcc",parse = true),
-			panes={
-					@TTitledPane(text="Principal", node=@TNode(id="main",parse = true), expanded=true,
-							fields={"textoCadastro", "name", "description"}),
-					@TTitledPane(text="Detalhe", node=@TNode(id="detail",parse = true),
-						fields={"autorizations"})})
+	@TTabPane(tabs = { 
+			@TTab(closable=false, scroll=false, content = @TContent(detailForm=
+				@TDetailForm(fields={"textoCadastro", "name", "description"})), 
+				text = "#{label.main}"), 
+			@TTab(closable=false, content = @TContent(detailForm=
+				@TDetailForm(fields={"autorizations"})), 
+				text = "#{label.detail}")
+	})
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
 	@TText(text="#{label.profile.header}", textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)

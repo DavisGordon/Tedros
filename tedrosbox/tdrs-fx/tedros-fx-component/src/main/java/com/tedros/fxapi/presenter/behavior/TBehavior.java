@@ -72,27 +72,27 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 		    		form.settPresenter(this.presenter);
 				
 		    	TForm ann = form.gettModelView().getClass().getAnnotation(TForm.class);
-		    	
-				ScrollPane scroll = new ScrollPane();
-			    scroll.setId("t-form-scroll");
-			    scroll.setContent((Node)form);
-			    scroll.setFitToWidth(true);
-			    //scroll.setFitToHeight(true);
+		    	if(ann!=null && !ann.scroll()) {
+		    		((Region)form).layout();
+			    	getView().gettFormSpace().getChildren().clear();
+			    	getView().gettFormSpace().getChildren().add((Node)form);
+		    	}else {
+		    		((Region)form).layout();
+					ScrollPane scroll = new ScrollPane();
+				    scroll.setId("t-form-scroll");
+				    scroll.setContent((Node)form);
+				    scroll.setFitToWidth(true);
+				    //scroll.setFitToHeight(true);
+				    scroll.maxHeight(Double.MAX_VALUE);
+				    scroll.maxWidth(Double.MAX_VALUE);
+				    scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+				    scroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+				    scroll.setStyle("-fx-background-color: transparent;");
 			    	
-			    scroll.maxHeight(Double.MAX_VALUE);
-			    scroll.maxWidth(Double.MAX_VALUE);
-			    if(ann!=null && !ann.scroll()) {
-			    	scroll.setVbarPolicy(ScrollBarPolicy.NEVER);
-			    	scroll.setHbarPolicy(ScrollBarPolicy.NEVER);
-			    }else {
-			    	scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-			    	scroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
-			    }
-			    scroll.setStyle("-fx-background-color: transparent;");
-		    	
-		    	((Region)form).layout();
-		    	getView().gettFormSpace().getChildren().clear();
-		    	getView().gettFormSpace().getChildren().add(scroll);
+			    	((Region)form).layout();
+			    	getView().gettFormSpace().getChildren().clear();
+			    	getView().gettFormSpace().getChildren().add(scroll);
+		    	}
 			}
 		};
 		listenerRepository.add("formPropCL", formCL);

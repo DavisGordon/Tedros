@@ -5,30 +5,28 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.annotation.Annotation;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.naming.NamingException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.reflections.Reflections;
-import org.reflections.util.ConfigurationBuilder;
 
 import com.tedros.core.ITedrosBox;
 import com.tedros.core.ModalMessage;
 import com.tedros.core.TLanguage;
+import com.tedros.core.TModule;
 import com.tedros.core.TSecurityDescriptor;
 import com.tedros.core.annotation.TApplication;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.ejb.controller.ITLoginController;
+import com.tedros.core.presenter.view.ITView;
 import com.tedros.core.security.model.TAuthorization;
 import com.tedros.core.security.model.TUser;
 import com.tedros.core.service.remote.ServiceLocator;
@@ -38,7 +36,6 @@ import com.tedros.util.TFileUtil;
 import com.tedros.util.TedrosClassLoader;
 import com.tedros.util.TedrosFolder;
 
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -50,7 +47,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 /**
@@ -88,8 +84,6 @@ public final class TedrosContext {
 	private static boolean PAGE_ADDHISTORY; 
 	private static boolean PAGE_SWAPVIEWS;
 	private static boolean showContextInitializationErrorMessages;
-	
-	private static Reflections annotationDb;
 	
 	private static SimpleDateFormat sdf;
 	
@@ -159,42 +153,17 @@ public final class TedrosContext {
 	}
 	
 	/**
-	 * Return a {@link Set} of class with this specific annotation type. 
-	 * */
-	public static Set<Class<?>> getClassesAnnotatedWith(Class<? extends Annotation> annotationClass){
-		return annotationDb.getTypesAnnotatedWith(annotationClass);
-	}
-	
-	/**
 	 * To be executed once at the start phase, search all class 
 	 * with {@link TApplication} that describe an app and their modules 
 	 * but none app will be loaded. 
 	 * */
 	public static void searchApps() {
 		
-		if(annotationDb!=null)
-			return;
-		
 		LOGGER.info("Starting load application list to context.");
 		
 		try {
-			String[] packages = null;
-			Properties p = new Properties();
-			try(InputStream input = TedrosContext.class.getClassLoader().getResourceAsStream("app-packages.properties")){
-					p.load(input);
-					if(p.containsKey("packages"))
-						packages = ((String)p.get("packages")).split(",");
-			}
-			
-			
-			annotationDb = (packages!=null) 
-					? new Reflections(new ConfigurationBuilder()
-							.forPackages(packages))
-						: new Reflections();
-
-			getClassesAnnotatedWith(TApplication.class)
+			TReflections.getInstance().getClassesAnnotatedWith(TApplication.class)
 			.forEach(c -> TedrosAppManager.getInstance().addApplication(c));
-			
 		} catch (Exception e1 ) {
 			e1.printStackTrace();
 			updateInitializationErrorMessage(e1.getMessage());
@@ -365,6 +334,8 @@ public final class TedrosContext {
 	 * @param node
 	 * */
 	public static void showModal(Node node){
+		if(MODAL!=null)
+			hideModal();
 		MODAL = node;
 		showModalProperty.set(true);
 	}
@@ -373,6 +344,10 @@ public final class TedrosContext {
 	 * Hide the opened modal.
 	 * */
 	public static void hideModal(){
+		if(MODAL instanceof ITView)
+        	((ITView)MODAL).gettPresenter().invalidate();
+		else if(MODAL instanceof TModule)
+			((TModule)MODAL).tStop();
 		MODAL = null;
 		showModalProperty.set(false);
 	}

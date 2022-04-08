@@ -92,6 +92,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Observable tValueProperty() {
 		return value;
@@ -163,7 +164,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 			}
 		}else {
 			String v = getValue(obj);
-			Node c = buildNode(v);
+			Node c = buildNode(TLanguage.getInstance(null).getString(v));
 			pane.getChildren().add(c);
 		}
 	}

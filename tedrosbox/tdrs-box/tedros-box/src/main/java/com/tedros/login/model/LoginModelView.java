@@ -7,16 +7,18 @@ import com.tedros.core.security.model.TUser;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TFieldBox;
-import com.tedros.fxapi.annotation.control.THyperlinkField;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TPasswordField;
+import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TTab;
 import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
+import com.tedros.fxapi.annotation.control.TVerticalRadioGroup;
 import com.tedros.fxapi.annotation.effect.TDropShadow;
 import com.tedros.fxapi.annotation.effect.TEffect;
 import com.tedros.fxapi.annotation.form.TDetailForm;
+import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TPane;
@@ -26,12 +28,8 @@ import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEntityProcess;
 import com.tedros.fxapi.annotation.scene.TNode;
-import com.tedros.fxapi.annotation.scene.control.TButtonBase;
 import com.tedros.fxapi.annotation.scene.control.TControl;
-import com.tedros.fxapi.annotation.scene.control.TLabeled;
-import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.annotation.text.TText;
-import com.tedros.fxapi.builder.LanguageBuilder;
 import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TModelView;
@@ -44,10 +42,9 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
-
+@TForm(name = "#{tedros.login.view.title}", scroll=false)
 @TPresenter(modelClass=Login.class, behavior=@TBehavior(type=LoginBehavior.class), 
 	decorator=@TDecorator(type=LoginDecorator.class, saveButtonText="#{tedros.validateUser}",
 	viewTitle="#{tedros.login.view.title}"), 
@@ -57,13 +54,12 @@ public class LoginModelView extends TModelView<Login> {
 	
 	private SimpleLongProperty id;
 	@TTabPane(tabs = { 
-			@TTab(closable=false, content = @TContent(detailForm=
-				@TDetailForm(fields={"title", "name", "user",
-						"language", "profileText","profile"})), 
+			@TTab(closable=false, scroll=false, content = @TContent(detailForm=
+				@TDetailForm(fields={"title", "name", "user", "profileText","profile"})), 
 				text = "#{tedros.log.in}"), 
 			@TTab(closable=false, content = @TContent(detailForm=
 				@TDetailForm(fields={"header", "url", "serverIp","theme",
-						"searchAppsText","searchApps"})), 
+						"language"})), 
 				text = "#{tedros.config}")
 	})
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-title", 
@@ -88,7 +84,8 @@ public class LoginModelView extends TModelView<Login> {
 	private SimpleStringProperty password;
 	
 	@TLabel(text = "#{tedros.language}")
-	@TComboBoxField(items=LanguageBuilder.class, required=true)
+	@TVerticalRadioGroup(radioButtons= {@TRadioButtonField(text = "English", userData = "en"),
+			@TRadioButtonField(text = "Português", userData = "pt")})
 	private SimpleStringProperty language;
 	
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-info", 
@@ -125,18 +122,6 @@ public class LoginModelView extends TModelView<Login> {
 	@TLabel(text = "#{tedros.theme}")
 	@TComboBoxField(firstItemTex="#{tedros.select}")
 	private SimpleStringProperty theme;
-	
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-info", 
-			effect=@TEffect(dropShadow=@TDropShadow, parse = false), parse = true))
-	@TText(text="#{tedros.searchAppsText}",  textAlignment=TextAlignment.LEFT, 
-		textStyle=TTextStyle.LARGE)
-	private SimpleStringProperty searchAppsText;
-	
-	@THyperlinkField(labeled=@TLabeled(text="#{tedros.searchApps}", 
-			font=@TFont(size=20, weight=FontWeight.BOLD), parse = true),
-			buttonBase=@TButtonBase(onAction=SearchAppsEventBuilder.class))
-	private SimpleStringProperty searchApps;
-			
 	
 	public LoginModelView() {
 		super(new Login());
@@ -259,34 +244,6 @@ public class LoginModelView extends TModelView<Login> {
 	 */
 	public void setTheme(SimpleStringProperty theme) {
 		this.theme = theme;
-	}
-
-	/**
-	 * @return the searchAppsText
-	 */
-	public SimpleStringProperty getSearchAppsText() {
-		return searchAppsText;
-	}
-
-	/**
-	 * @param searchAppsText the searchAppsText to set
-	 */
-	public void setSearchAppsText(SimpleStringProperty searchAppsText) {
-		this.searchAppsText = searchAppsText;
-	}
-
-	/**
-	 * @return the searchApps
-	 */
-	public SimpleStringProperty getSearchApps() {
-		return searchApps;
-	}
-
-	/**
-	 * @param searchApps the searchApps to set
-	 */
-	public void setSearchApps(SimpleStringProperty searchApps) {
-		this.searchApps = searchApps;
 	}
 
 	/**

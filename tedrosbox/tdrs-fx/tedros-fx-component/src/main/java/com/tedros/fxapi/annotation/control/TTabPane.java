@@ -22,7 +22,6 @@ import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.scene.layout.TRegion;
 import com.tedros.fxapi.builder.ITFieldBuilder;
 import com.tedros.fxapi.builder.TTabPaneBuilder;
-import com.tedros.fxapi.domain.TDefaultValues;
 
 import javafx.geometry.Side;
 import javafx.scene.Node;
@@ -107,12 +106,10 @@ public @interface TTabPane  {
 	
 	/**
 	 * <pre>
-	 * The {@link Control} settings.
-	 * 
-	 * Default value: @TControl(prefWidth=250) 
+	 * The {@link Control} settings. 
 	 * </pre>
 	 * */
-	public TControl control() default @TControl(prefWidth=TDefaultValues.LABEL_WIDTH, parse = true);
+	public TControl control() default @TControl( parse = false);
 	
 	/**
 	 * <pre>

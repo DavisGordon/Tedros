@@ -4,10 +4,11 @@
 package com.tedros.login.model;
 
 import java.net.ConnectException;
-import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.util.List;
 
+import com.tedros.core.annotation.security.TSecurity;
+import com.tedros.core.context.TReflections;
 import com.tedros.core.ejb.controller.ITLoginController;
 import com.tedros.core.security.model.TAuthorization;
 import com.tedros.core.security.model.TUser;
@@ -42,7 +43,8 @@ import com.tedros.settings.security.action.TAuthorizationLoadAction;
 				resultList.add(service.login(user.getLogin(), user.getPassword()));
 				break;
 			case 2:
-				List<TAuthorization> lst= TAuthorizationLoadAction.getAppsSecurityPolicie();
+				List<TAuthorization> lst= TAuthorizationLoadAction
+				.getAppsSecurityPolicie(TReflections.getInstance().getClassesAnnotatedWith(TSecurity.class));
 				resultList.add(service.createFirstUser(user, lst));
 				break;
 			case 3:

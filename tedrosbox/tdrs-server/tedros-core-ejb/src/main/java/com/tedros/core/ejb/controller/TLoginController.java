@@ -58,8 +58,9 @@ public class TLoginController implements ITLoginController, ITSecurity {
 				p = profServ.save(p);
 				
 				Set<TProfile> profs = new HashSet<>();
+				profs.add(p);
 				user.setProfiles(profs);
-				
+				user.setActive("T");
 				user = serv.save(user);
 				user = serv.login(user.getLogin(), user.getPassword());
 				

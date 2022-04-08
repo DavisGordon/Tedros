@@ -21,6 +21,14 @@ public @interface TApplication {
 	 * */
 	public String name();
 	
+	/**<pre>
+	 * The root package name defined for this project.
+	 * The system will look for the security directives here
+	 * Ex: com.myproject
+	 * </pre>
+	 * */
+	public String packageName();
+	
 	/**
 	 * An universal unique identifier for the application. 
 	 * */

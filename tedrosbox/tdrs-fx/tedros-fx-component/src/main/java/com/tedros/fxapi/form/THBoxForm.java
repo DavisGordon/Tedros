@@ -189,7 +189,5 @@ extends HBox implements ITModelForm<M> {
 		autosize();
 		super.setSpacing(8);
 		setPadding(new Insets(10, 10, 10, 10));
-		setMaxHeight(Double.MAX_VALUE);
-		setMaxWidth(Double.MAX_VALUE);
 	}
 }

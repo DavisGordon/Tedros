@@ -13,7 +13,7 @@ import com.tedros.settings.security.TedrosAppSecurity;
 import com.tedros.settings.security.icon.SecurityIconImageView;
 import com.tedros.settings.security.icon.SecurityMenuIconImageView;
 
-@TApplication(name="#{settings.app.name}", universalUniqueIdentifier=TConstant.UUI,
+@TApplication(name="#{settings.app.name}", packageName = "com.tedros.settings", universalUniqueIdentifier=TConstant.UUI,
 module = {@TModule(type=CustomizarModule.class, name="#{settings.module.name}", menu = "#{settings.menu.title}", 
 					icon=LayoutIconImageView.class, menuIcon=LayoutMenuIconImageView.class),
 		@TModule(type=TedrosAppSecurity.class, name="Security", menu = "#{settings.menu.title}", 
