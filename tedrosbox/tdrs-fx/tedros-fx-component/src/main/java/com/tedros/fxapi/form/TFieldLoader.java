@@ -69,11 +69,6 @@ public abstract class TFieldLoader<M extends ITModelView<?>> {
 	}
 	
 	protected void loadEditFieldBox(final TFieldDescriptor tFieldDescriptor, boolean bcontrol) throws Exception{
-		
-		/*int x=0;
-		if(tFieldDescriptor.getFieldName().equals("painelCorTexto"))
-			x=1;*/
-		
 		descriptor.setMode(TViewMode.EDIT);
 		descriptor.setFieldDescriptor(tFieldDescriptor);
 		

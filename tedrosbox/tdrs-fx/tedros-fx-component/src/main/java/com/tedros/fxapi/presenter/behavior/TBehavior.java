@@ -128,7 +128,8 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 					ITModelForm<M> form = (ITModelForm<M>) (tMode.equals(TViewMode.READER) 
     						? TReaderFormBuilder.create(getModelView()).build() 
     								: TFormBuilder.create(getModelView()).presenter(getPresenter()).build());
-    				setForm(form);
+            		
+            		setForm(form);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

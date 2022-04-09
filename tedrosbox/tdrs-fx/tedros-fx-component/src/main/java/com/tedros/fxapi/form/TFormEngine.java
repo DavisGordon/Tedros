@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -54,10 +55,16 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	private SimpleBooleanProperty loaded = new SimpleBooleanProperty(false);
 	private TObjectRepository tObjectRepository = new TObjectRepository();
 	private final TTriggerLoader<M, ITModelForm<M>> triggerLoader;
+	Long startTime;
 	private ChangeListener<Boolean> chl = (ob, o, n) -> {
 		if(n && mode!=null) { 
 			buildTriggers();
 			runSetting();
+			if(TDebugConfig.detailParseExecution){
+    			long endTime = System.nanoTime();
+    			long duration = (endTime - startTime);
+    			System.out.println("[TFormEngine][ModelView: "+getModelView().getClass().getSimpleName()+"][Build duration: "+(duration/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration/1000000))+"s] ");
+    		}
 		}
 	};
 	
@@ -86,8 +93,10 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void setReaderMode(){
 		
-		if(TDebugConfig.detailParseExecution)
+		if(TDebugConfig.detailParseExecution) {
+			startTime = System.nanoTime();
 			System.out.println("[TFormEngine][ReadeMode][initialized]");
+		}
 		
 		resetForm();
 		mode = TViewMode.READER;
@@ -158,6 +167,11 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		if(TDebugConfig.detailParseExecution){
+			long endTime = System.nanoTime();
+			long duration = (endTime - startTime);
+			System.out.println("[TFormEngine][ModelView: "+getModelView().getClass().getSimpleName()+"][Build duration: "+(duration/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration/1000000))+"s] ");
+		}
 	}
 
 	private void buildModelViewLoader() {
@@ -165,8 +179,10 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	}
 
 	public void setEditMode(){
-		if(TDebugConfig.detailParseExecution)
+		if(TDebugConfig.detailParseExecution) {
+			startTime = System.nanoTime();
 			System.out.println("[TFormEngine][EditMode][initialized]");
+		}
 		
 		resetForm();
 		mode = TViewMode.EDIT;

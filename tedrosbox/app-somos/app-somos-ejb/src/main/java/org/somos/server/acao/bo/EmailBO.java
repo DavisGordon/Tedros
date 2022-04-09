@@ -47,6 +47,18 @@ public class EmailBO {
 	private Item<String> host;
 	
 	@Inject
+	@Named("emailSmtpHost")
+	private Item<String> smtpHost;
+
+	@Inject
+	@Named("emailSmtpPort")
+	private Item<String> smtpPort;
+
+	@Inject
+	@Named("emailSmtpSocketPort")
+	private Item<String> socketPort;
+	
+	@Inject
 	@Named("emailUser")
 	private Item<String> emailAccount;
 	
@@ -62,8 +74,8 @@ public class EmailBO {
 	
 	@PostConstruct
 	public void init(){
-		util = TSMTPUtil.getInstance("smtp.gmail.com", "587", "javax.net.ssl.SSLSocketFactory", 
-				"true", "587", emailAccount.getValue(), passAccount.getValue());
+		util = TSMTPUtil.getInstance(smtpHost.getValue(), socketPort.getValue(), "javax.net.ssl.SSLSocketFactory", 
+				"true", smtpPort.getValue(), emailAccount.getValue(), passAccount.getValue());
 	}
 	
 	
