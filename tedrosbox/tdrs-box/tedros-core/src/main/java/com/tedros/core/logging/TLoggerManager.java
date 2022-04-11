@@ -20,27 +20,31 @@ public class TLoggerManager {
 	static private FileHandler fileHandler;
     static private Formatter formatterTxt;
 
-    static public void setup() throws IOException {
+    static public void setup()  {
             
-            Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-            logger.setLevel(Level.FINEST);
-            
-            Logger rootLogger = Logger.getLogger("");
-            Handler[] handlers = rootLogger.getHandlers();
-            if (handlers[0] instanceof ConsoleHandler) {
-                    rootLogger.removeHandler(handlers[0]);
-            }
-            
-            formatterTxt = new TLoggerFormatter();
-            //formatterTxt = new SimpleFormatter();
-            
-            consoleHandler = new ConsoleHandler();
-            fileHandler = new FileHandler(TFileUtil.getTedrosFolderPath()+TedrosFolder.LOG_FOLDER.getFolder() + "Logging.txt");
-            
-            fileHandler.setFormatter(formatterTxt);
-            consoleHandler.setFormatter(formatterTxt);
-            
-            logger.addHandler(fileHandler);
-            logger.addHandler(consoleHandler);
+            try {
+				Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+				logger.setLevel(Level.FINEST);
+				
+				Logger rootLogger = Logger.getLogger("");
+				Handler[] handlers = rootLogger.getHandlers();
+				if (handlers[0] instanceof ConsoleHandler) {
+				        rootLogger.removeHandler(handlers[0]);
+				}
+				
+				formatterTxt = new TLoggerFormatter();
+				//formatterTxt = new SimpleFormatter();
+				
+				consoleHandler = new ConsoleHandler();
+				fileHandler = new FileHandler(TFileUtil.getTedrosFolderPath()+TedrosFolder.LOG_FOLDER.getFolder() + "Logging.txt");
+				
+				fileHandler.setFormatter(formatterTxt);
+				consoleHandler.setFormatter(formatterTxt);
+				
+				logger.addHandler(fileHandler);
+				logger.addHandler(consoleHandler);
+			} catch (SecurityException | IOException e) {
+				e.printStackTrace();
+			}
     }
 }

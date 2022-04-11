@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.stream.Streams;
 
 import com.tedros.core.ITModule;
 import com.tedros.core.TLanguage;
@@ -90,6 +91,10 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 		}
 	}
 	
+	private class TInner<I>{
+		I value = null;
+	}
+	
 	/**
 	 * <pre>
 	 * Parse the annotation to the given object
@@ -119,8 +124,8 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 		
 		//long startTime = System.nanoTime();
 		
-		Annotation defaultSetting = null;
-		Map<String, Object> defaultParams = null;
+		TInner<Annotation> defaultSetting = new TInner<>();
+		TInner<Map<String, Object>> defaultParams = new TInner<>();
 		
 		final Map<String, Object> runAfter = new HashMap<String, Object>(0);
 			
@@ -135,90 +140,84 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 					exclusive.add(s.substring(1));
 			}
 		}
-		
-		Method[] metodos = annotation.getClass().getDeclaredMethods();
+	
+		List<Method> metodos = Arrays.asList(annotation.getClass().getDeclaredMethods());
 		try{
-			for (Method method : metodos) {
+			metodos.parallelStream().forEach(method-> {
 				String key = method.getName();
 								
-				if(ArrayUtils.contains(SKIPMETHODS, key))
-					continue;
+				if(!ArrayUtils.contains(SKIPMETHODS, key)) {
 				
-				Object value = method.invoke(annotation);
-				
-				if(value instanceof Annotation){
-					Method parseMethod = TReflectionUtil.getParseMethod((Annotation) value);
-					if(parseMethod != null){
-						boolean parse = (boolean) parseMethod.invoke(value);
-						if(!parse)
-							continue;
+					try {
+						Object value = method.invoke(annotation);
+						
+						boolean skip = false;
+						
+						if(value instanceof Annotation){
+							Method parseMethod = TReflectionUtil.getParseMethod((Annotation) value);
+							if(parseMethod != null){
+								boolean parse = (boolean) parseMethod.invoke(value);
+								if(!parse)
+									skip = true;;
+							}
+						}else if(value instanceof Class && (Modifier.isAbstract(((Class)value).getModifiers()) || Modifier.isInterface(((Class)value).getModifiers()))){
+							skip = true;
+						}
+						
+						if(!skip) {
+						
+							if(byPass!=null && byPass.length>0){
+								if(exclusive.size()>0 && !exclusive.contains(key)){
+									skip = true;
+								}else if(exclusive.isEmpty() && ArrayUtils.contains(byPass, key)){
+									skip = true;
+								}
+							}
+							if(!skip) {
+								// �grow needs the pane first  
+								if(key.contains("grow")){
+									runAfter.put(key, value);
+									skip = true;
+								}
+								if(!skip) {
+									if(defaultSetting.value==null)
+										defaultSetting.value = getDefaultSetting(annotation);
+									
+									if(defaultParams.value==null)
+										defaultParams.value = (defaultSetting.value!=null) ? TReflectionUtil.readAnnotation(defaultSetting.value) : null;
+									
+									run(key, annotation, defaultSetting.value, value, defaultParams.value, object);
+								}
+							}
+						}
+						
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-				}else if(value instanceof Class && (Modifier.isAbstract(((Class)value).getModifiers()) || Modifier.isInterface(((Class)value).getModifiers()))){
-					continue;
 				}
-				
-				/*int y=0; 
-				if(key.contains("node") || key.contains("labeled"))
-					y=1;*/
-				
-				if(byPass!=null && byPass.length>0){
-					if(exclusive.size()>0 && !exclusive.contains(key)){
-						continue;
-					}else if(exclusive.isEmpty() && ArrayUtils.contains(byPass, key)){
-						continue;
-					}
-				}
-				
-				// �grow needs the pane first  
-				if(key.contains("grow")){
-					runAfter.put(key, value);
-					continue;
-				}
-				
-				if(defaultSetting==null)
-					defaultSetting = getDefaultSetting(annotation);
-				
-				if(defaultParams==null)
-					defaultParams = (defaultSetting!=null) ? TReflectionUtil.readAnnotation(defaultSetting) : null;
-				
-				//long startTime2 = System.nanoTime();
-				run(key, annotation, defaultSetting, value, defaultParams, object);
-				//long endTime2 = System.nanoTime();
-				//long duration2 = (endTime2 - startTime2);
-				//if(TDebugConfig.detailParseExecution)
-					//System.out.println("[TAnnotationParser][Annotation: "+TReflectionUtil.getAnnotationName(annotation)+"][attribute: "+key+"][Parser duration: "+(duration2/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration2/1000000))+"s] ");
-			}
+			});
 			
 			if(!runAfter.isEmpty()){
 				
-				if(defaultSetting==null)
-					defaultSetting = getDefaultSetting(annotation);
+				if(defaultSetting.value==null)
+					defaultSetting.value = getDefaultSetting(annotation);
 				
-				if(defaultParams==null)
-					defaultParams = (defaultSetting!=null) ? TReflectionUtil.readAnnotation(defaultSetting) : null;
+				if(defaultParams.value==null)
+					defaultParams.value = (defaultSetting.value!=null) ? TReflectionUtil.readAnnotation(defaultSetting.value) : null;
 				
 				Iterator entries = runAfter.entrySet().iterator();
 				while (entries.hasNext()) {
 				  Entry thisEntry = (Entry) entries.next();
 				  String key = (String) thisEntry.getKey();
 				  Object value = thisEntry.getValue();
-				  //long startTime2 = System.nanoTime();
-				  run(key, annotation, defaultSetting, value, defaultParams, object);
-				  //long endTime2 = System.nanoTime();
-				  //long duration2 = (endTime2 - startTime2);
-				  //if(TDebugConfig.detailParseExecution)
-				//	  System.out.println("[TAnnotationParser][Annotation: "+TReflectionUtil.getAnnotationName(annotation)+"][attribute: "+key+"][Parser duration: "+(duration2/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration2/1000000))+"s] ");
+				 run(key, annotation, defaultSetting.value, value, defaultParams.value, object);
 				}
 			}
 			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
-		//long endTime = System.nanoTime();
-		//long duration = (endTime - startTime);
-		//if(TDebugConfig.detailParseExecution)
-		//	System.out.println("[TAnnotationParser][Annotation: "+TReflectionUtil.getAnnotationName(annotation)+"][Parser duration: "+(duration/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration/1000000))+"s] ");
 	}
 	
 	/**
@@ -258,7 +257,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 			}catch(Exception e){
 				if(tmp!=null)
 					System.err.println(tmp);
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 	}

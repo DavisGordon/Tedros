@@ -12,6 +12,9 @@ import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.ejb.base.security.ITSecurity;
 import com.tedros.ejb.base.security.TAccessToken;
+import com.tedros.ejb.base.security.TActionPolicie;
+import com.tedros.ejb.base.security.TMethodPolicie;
+import com.tedros.ejb.base.security.TMethodSecurity;
 import com.tedros.ejb.base.service.ITEjbImportService;
 
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
@@ -22,6 +25,7 @@ public abstract class TEjbImportController<E extends ITEntity> implements ITEjbI
 	
 	@Override
 	@SuppressWarnings("rawtypes")
+	@TMethodSecurity({@TMethodPolicie(policie = {TActionPolicie.SAVE})})
 	public TResult getImportRules(TAccessToken token) {
 		try{
 			ITImportModel value = getService().getImportRules();
@@ -35,6 +39,7 @@ public abstract class TEjbImportController<E extends ITEntity> implements ITEjbI
 
 	@Override
 	@SuppressWarnings("rawtypes")
+	@TMethodSecurity({@TMethodPolicie(policie = {TActionPolicie.SAVE})})
 	public TResult importFile(TAccessToken token, ITFileEntity entity) {
 		try{
 			List<E> res = getService().importFile(entity);

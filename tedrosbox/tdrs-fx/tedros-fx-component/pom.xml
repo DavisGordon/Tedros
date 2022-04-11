@@ -28,7 +28,7 @@
 	  	</dependency>
 	  	
 	  	 <dependency>
-	  		<groupId>com.oracle</groupId>
+	  		<groupId>com.tedros</groupId>
 	  		<artifactId>jfxrt</artifactId>
 	  		<version>${javafx.version}</version>
 		</dependency> 

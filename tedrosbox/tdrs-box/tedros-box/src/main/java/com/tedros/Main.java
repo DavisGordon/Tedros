@@ -137,7 +137,6 @@ public class Main extends Application implements ITedrosBox  {
         try {
         	String outputFolder = System.getProperty("user.home");
         	boolean extract = checkAndBuildTedrosBoxFolder(outputFolder);
-			TLoggerManager.setup();
 			if(extract)
 				extractZip(outputFolder);
 		} catch (IOException e) {
@@ -218,6 +217,8 @@ public class Main extends Application implements ITedrosBox  {
 
     @SuppressWarnings({"rawtypes", "unchecked"})
 	private void init(Stage primaryStage) {
+    	TLoggerManager.setup();
+		
     	stage = primaryStage;
     	TedrosContext.setApplication(this);
     	tedros = this;
@@ -778,19 +779,7 @@ public class Main extends Application implements ITedrosBox  {
         
        // TedrosProcessManager.addProcess(TTomeeServerService.class);
     }
-   /* public void colapseMenuBar() {
-		if(expandedTollBar){
-			if(this.leftMenuPane.getChildren().contains(settingsAcc))
-				this.leftMenuPane.getChildren().remove(settingsAcc);
-			//splitPane.setDividerPosition(0, 0.0038);
-			expandedTollBar = false;
-		}else{
-			if(!this.leftMenuPane.getChildren().contains(settingsAcc))
-				this.leftMenuPane.getChildren().add(settingsAcc);
-			//splitPane.setDividerPosition(0, 0.197);
-			expandedTollBar = true;
-		}
-	}*/
+  
 
 	public static void main(String[] args) { 
     	launch(args); 
