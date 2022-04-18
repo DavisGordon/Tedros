@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.tedros</groupId>
 		<artifactId>tdrs-server</artifactId>
-		<version>8-3.0</version>
+		<version>8-3.0.1</version>
 	</parent>
 	
 	<!-- MODULE INFO -->

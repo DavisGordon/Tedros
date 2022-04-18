@@ -2,5 +2,4 @@
 <tomcat-users>
   <role rolename="manager-script"/>
   <user name="admin" password="" roles="manager-script"/>
-   <user name="owner" password="dgd" roles="manager-script"/>
 </tomcat-users>

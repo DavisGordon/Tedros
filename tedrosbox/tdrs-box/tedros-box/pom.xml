@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.tedros</groupId>
 		<artifactId>tdrs-box</artifactId>
-		<version>8-3.0</version>
+		<version>8-3.0.1</version>
 	</parent>
 	
 	<!-- MODULE INFO -->
@@ -26,7 +26,7 @@
 	  	 <dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>app-somos-fx</artifactId>
-	  		<version>8-3.0</version>
+	  		<version>8-3.0.1</version>
 	  		<scope>compile</scope>
 	  		<exclusions>
 	  			<exclusion>
@@ -39,7 +39,7 @@
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-box-app-settings</artifactId>
-	  		<version>8-3.0</version>
+	  		<version>8-3.0.1</version>
 	  		<scope>compile</scope>
 	  	</dependency>
 	  	
@@ -48,7 +48,7 @@
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-fx-component</artifactId>
-	  		<version>8-3.0</version>
+	  		<version>8-3.0.1</version>
 	  		<scope>compile</scope>
 	  		<exclusions>
 	  			<exclusion>

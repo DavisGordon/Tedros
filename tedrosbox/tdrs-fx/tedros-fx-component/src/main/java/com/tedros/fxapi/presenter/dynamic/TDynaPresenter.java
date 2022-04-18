@@ -7,10 +7,6 @@ import com.tedros.core.ITModule;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.parser.TStackPaneParser;
-import com.tedros.fxapi.annotation.presenter.TDetailListViewPresenter;
-import com.tedros.fxapi.annotation.presenter.TDetailTableViewPresenter;
-import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
-import com.tedros.fxapi.annotation.presenter.TSelectionModalPresenter;
 import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.process.TEntityProcess;
 import com.tedros.fxapi.annotation.process.TModelProcess;
@@ -134,7 +130,13 @@ public class TDynaPresenter<M extends TModelView>	extends TPresenter<ITDynaView<
 				if(ann instanceof com.tedros.fxapi.annotation.presenter.TPresenter) {
 					tPresenter = (com.tedros.fxapi.annotation.presenter.TPresenter) ann;
 					break;
-				}
+				}else {
+					Annotation presenter = TReflectionUtil.getTPresenter(ann);
+					if(presenter!=null) {
+						tPresenter = (com.tedros.fxapi.annotation.presenter.TPresenter) presenter;
+						break;
+					}
+				}/*
 				if(ann instanceof TListViewPresenter) {
 					tPresenter = ((TListViewPresenter) ann).presenter();
 					break;
@@ -150,7 +152,7 @@ public class TDynaPresenter<M extends TModelView>	extends TPresenter<ITDynaView<
 				if(ann instanceof TDetailListViewPresenter) {
 					tPresenter = ((TDetailListViewPresenter) ann).presenter();
 					break;
-				}
+				}*/
 			}
 		}
 		
