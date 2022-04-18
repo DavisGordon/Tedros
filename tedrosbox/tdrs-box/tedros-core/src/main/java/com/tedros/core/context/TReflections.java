@@ -5,7 +5,9 @@ package com.tedros.core.context;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.util.Properties;
@@ -30,12 +32,20 @@ public final class TReflections {
 	 * 
 	 */
 	private TReflections() {
+		loadPackages();
+	}
+
+	/**
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 */
+	public TReflections loadPackages()  {
 		try {
-			String[] packages = null;
 			String propFilePath = TedrosFolder.CONF_FOLDER.getFullPath()+APP_PACKAGES_PROPERTIES;
 			if(!(new File(propFilePath).isFile()))
 				TReflections.createAppPackagesIndex();
 			
+			String[] packages = null;
 			Properties p = new Properties();
 			try(InputStream input = new FileInputStream(propFilePath)){
 					p.load(input);
@@ -47,12 +57,11 @@ public final class TReflections {
 					? new Reflections(new ConfigurationBuilder()
 							.forPackages(packages))
 						: new Reflections();
-					
-					
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 				
+		return this;
 	}
 	
 	/**
@@ -82,7 +91,6 @@ public final class TReflections {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
 
 	public static TReflections getInstance() {

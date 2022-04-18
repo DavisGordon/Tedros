@@ -52,8 +52,11 @@ public class TAuthorizationLoadAction extends TPresenterAction {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean runBefore() {
+		TReflections.createAppPackagesIndex();
 		List<TAuthorization> authorizations = getAppsSecurityPolicie( 
-				TReflections.getInstance().getClassesAnnotatedWith(TSecurity.class));
+				TReflections.getInstance()
+				.loadPackages()
+				.getClassesAnnotatedWith(TSecurity.class));
 		
 		try {
 			TDynaViewSimpleBaseBehavior behavior =  (TDynaViewSimpleBaseBehavior) ((TDynaPresenter)super.getPresenter()).getBehavior();

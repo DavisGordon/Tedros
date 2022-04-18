@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -290,16 +291,37 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 										Method setter = clazz.getMethod("set"+StringUtils.capitalize(f.getName()), f.getType());
 										
 										if(isTypeOf(f.getType(), Number.class)) {
-											Object num = numClass == Number.class 
+											try {
+												if(value.contains(".") && !(f.getType()==Double.class || f.getType()==BigDecimal.class || f.getType()==Float.class))
+													value = value.substring(0, value.indexOf("."));
+												
+												Object num = numClass == Number.class 
 													? f.getType().getConstructor(String.class).newInstance(value)
 															: numClass.getConstructor(String.class).newInstance(value);
-											setter.invoke(model,  num);
-											
+													setter.invoke(model,  num);
+											}catch(Exception pe) {
+												pe.printStackTrace();
+												throw new RuntimeException("Error at Row "+idx+" field "+f.getName()
+												+" of type "+f.getType().getSimpleName()+(
+														StringUtils.isNoneBlank(rule.column())?" Column: "+rule.column():"")
+												+" while convert  "+value
+														+" to "+f.getType().getSimpleName()
+														+", detail: "+pe.getMessage());
+											}
 										}else if(f.getType() == Date.class) {
 											String pattern = rule.datePattern();
-											Date data = DateUtils.parseDate(value, pattern);
-											setter.invoke(model, data);
-											
+											try {
+												Date data = DateUtils.parseDate(value, pattern);
+												setter.invoke(model, data);
+											}catch(Exception pe) {
+												pe.printStackTrace();
+												throw new RuntimeException("Error at Row "+idx+" field "+f.getName()
+												+" of type "+f.getType().getSimpleName()+(
+														StringUtils.isNoneBlank(rule.column())?" Column: "+rule.column():"")
+												+" while parse date "+value
+														+" to "+pattern
+														+", detail: "+pe.getMessage());
+											}
 										}else if(f.getType() == String.class) {
 											if(numClass!=Number.class)
 												value = prepareNumberValue(numClass, value);
@@ -314,16 +336,10 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 										
 									} catch (NoSuchMethodException | SecurityException | 
 											IllegalAccessException | IllegalArgumentException | 
-											InvocationTargetException | InstantiationException e) {
+											InvocationTargetException e) {
 										e.printStackTrace();
 										throw new RuntimeException(e);
-									} catch (ParseException e) {
-										e.printStackTrace();
-										throw new RuntimeException(e);
-									} catch (Exception e) {
-										e.printStackTrace();
-										throw new RuntimeException(e);
-									}
+									} 
 								});
 								E saved = getBusinessObject().save(model);
 								res.add(saved);
@@ -343,7 +359,7 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 				    // line is not visible here.
 				}
 			}
-		}catch(Exception e){
+		}catch(IOException e){
 		    e.printStackTrace();
 		    throw new RuntimeException(e);
 		}finally{
@@ -404,18 +420,40 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 								
 								if(isTypeOf(f.getType(), Number.class)) {
 									
-									String value = getCellDataAsString(cell);
-									Object num = numClass == Number.class 
+									String value = getCellDataAsString(cell); 
+									if(value.contains(".") && !(f.getType()==Double.class || f.getType()==BigDecimal.class || f.getType()==Float.class))
+										value = value.substring(0, value.indexOf("."));
+									
+									try {
+										Object num = numClass == Number.class 
 											? f.getType().getConstructor(String.class).newInstance(value)
 													: numClass.getConstructor(String.class).newInstance(value);
-									setter.invoke(model,  num);
-									
+										setter.invoke(model,  num);
+									}catch(Exception pe) {
+										pe.printStackTrace();
+										throw new RuntimeException("Error at Row "+r.getRowNum()+" field "+f.getName()
+										+" of type "+f.getType().getSimpleName()+(
+												StringUtils.isNoneBlank(rule.column())?" Column: "+rule.column():"")
+										+" while convert  "+value
+												+" to "+f.getType().getSimpleName()
+												+", detail: "+pe.getMessage());
+									}
 								}else if(f.getType() == Date.class) {
 									
 									String value = getCellDataAsString(cell);
 									String pattern = rule.datePattern();
-									Date data = DateUtils.parseDate(value, pattern);
-									setter.invoke(model, data);
+									try {
+										Date data = DateUtils.parseDate(value, pattern);
+										setter.invoke(model, data);
+									}catch(ParseException pe) {
+										pe.printStackTrace();
+										throw new RuntimeException("Error at Row "+r.getRowNum()+" field "+f.getName()
+										+" of type "+f.getType().getSimpleName()+(
+												StringUtils.isNoneBlank(rule.column())?" Column: "+rule.column():"")
+										+" while parse date "+value
+												+" to "+pattern
+												+", detail: "+pe.getMessage());
+									}
 									
 								}else if(f.getType() == String.class) {
 									String value = getCellDataAsString(cell);
@@ -432,16 +470,10 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 								
 							} catch (NoSuchMethodException | SecurityException | 
 									IllegalAccessException | IllegalArgumentException | 
-									InvocationTargetException | InstantiationException e) {
+									InvocationTargetException e) {
 								e.printStackTrace();
 								throw new RuntimeException(e);
-							} catch (ParseException e) {
-								e.printStackTrace();
-								throw new RuntimeException(e);
-							} catch (Exception e) {
-								e.printStackTrace();
-								throw new RuntimeException(e);
-							}
+							} 
 						});
 						E saved = getBusinessObject().save(model);
 						res.add(saved);
@@ -573,7 +605,8 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 	
 
 	protected String getCellDataAsString(Cell cell){
-		
+		if(cell==null)
+			return "";
 	     switch(cell.getCellType()){
 	        case STRING : return cell.getStringCellValue();
 	        case NUMERIC : return String.valueOf(cell.getNumericCellValue());

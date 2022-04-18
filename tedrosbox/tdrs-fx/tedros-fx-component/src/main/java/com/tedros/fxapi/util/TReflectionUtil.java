@@ -188,7 +188,9 @@ public final class TReflectionUtil {
 			if(method!=null){
 				return (TPresenter) method.invoke(annotation);
 			}
-		} catch (Exception e) {
+		} catch (NoSuchMethodException e) {
+			return null;
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
 		return null;

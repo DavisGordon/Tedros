@@ -10,7 +10,7 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import com.tedros.Main;
+import com.tedros.TedrosBox;
 import com.tedros.core.TLanguage;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.security.model.TProfile;
@@ -503,8 +503,8 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 		LOGGER.info("User "+user.getName()+" setted. ");
 		
 		TedrosContext.searchApps();
-		Main.getTedros().buildSettingsPane();
-		Main.getTedros().buildApplicationMenu();
+		TedrosBox.getTedros().buildSettingsPane();
+		TedrosBox.getTedros().buildApplicationMenu();
 		
 		TedrosContext.hideModal();
 	}

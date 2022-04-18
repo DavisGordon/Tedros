@@ -10,10 +10,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.stream.Streams;
 
 import com.tedros.core.ITModule;
 import com.tedros.core.TLanguage;
@@ -128,10 +128,6 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 		TInner<Map<String, Object>> defaultParams = new TInner<>();
 		
 		final Map<String, Object> runAfter = new HashMap<String, Object>(0);
-			
-		/*int x= 0;
-		if(annotation instanceof TStringProperty)
-			x= 0;*/
 		
 		List<String> exclusive = new ArrayList<>(0);
 		if(byPass!=null && byPass.length>0){
@@ -141,9 +137,9 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 			}
 		}
 	
-		List<Method> metodos = Arrays.asList(annotation.getClass().getDeclaredMethods());
+		Stream<Method> metodos = Stream.of(annotation.getClass().getDeclaredMethods());
 		try{
-			metodos.parallelStream().forEach(method-> {
+			metodos.parallel().forEach(method-> {
 				String key = method.getName();
 								
 				if(!ArrayUtils.contains(SKIPMETHODS, key)) {

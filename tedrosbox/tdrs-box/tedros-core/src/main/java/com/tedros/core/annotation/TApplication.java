@@ -47,7 +47,7 @@ public @interface TApplication {
 	/**
 	 * A list of module of the application
 	 * */
-	public TModule[] module();
+	public TModule[] module() default {};
 	
 	/**
 	 * A list of application process to be executed at startup  

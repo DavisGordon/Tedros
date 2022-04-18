@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.tedros</groupId>
 		<artifactId>tdrs-box</artifactId>
-		<version>8-3.0</version>
+		<version>8-3.0.1</version>
 	</parent>
 	
 	<!-- MODULE INFO -->
@@ -22,13 +22,13 @@
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-fx-component</artifactId>
-	  		<version>8-3.0</version>
+	  		<version>8-3.0.1</version>
 	  	</dependency>
 	  	
 	  	<!-- <dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-core</artifactId>
-	  		<version>8-3.0</version>
+	  		<version>8-3.0.1</version>
 	  	</dependency> -->
 	  	
 	    <dependency>
