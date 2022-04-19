@@ -45,6 +45,10 @@
 		<class>org.somos.model.SiteEquipe</class>
 		<class>org.somos.model.SiteGaleria</class>
 		<class>org.somos.model.SiteMidiaSocial</class>
+		<class>org.somos.model.Associado</class>
+		<class>org.somos.model.FormaAjuda</class>
+		<class>org.somos.model.AjudaCampanha</class>
+		<class>org.somos.model.Campanha</class>
 		
 		<properties>
 		

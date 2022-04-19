@@ -49,6 +49,11 @@ public interface DomainTables {
 	final static String site_conteudo = "site_conteudo";
 	final static String component_template = "component_template";
 	final static String css_class = "css_class";
+	final static String associado = "associado";
+	final static String campanha = "campanha";
+	final static String formaAjuda = "forma_ajuda";
+	final static String ajudaCampanha = "ajuda_campanha";
+	
 }
 
 
