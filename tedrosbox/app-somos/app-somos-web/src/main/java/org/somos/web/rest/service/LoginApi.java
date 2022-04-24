@@ -27,14 +27,7 @@ import com.tedros.ejb.base.result.TResult.EnumResult;
 @Path("/auth")
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
-public class LoginApi {
-	
-	@Inject
-	@Named("errorMsg")
-	private Item<String> error;
-	
-	@Inject
-	private AppBean appBean;
+public class LoginApi  extends BaseApi{
 	
 	@EJB
 	private IPessoaController pessServ;

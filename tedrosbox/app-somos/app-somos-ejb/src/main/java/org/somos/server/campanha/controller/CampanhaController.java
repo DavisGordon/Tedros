@@ -13,13 +13,12 @@ import javax.ejb.TransactionAttributeType;
 
 import org.somos.ejb.controller.ICampanhaController;
 import org.somos.model.Campanha;
-import org.somos.server.base.service.TStatelessService;
+import org.somos.server.campanha.service.CampanhaService;
 
 import com.tedros.ejb.base.controller.ITSecurityController;
 import com.tedros.ejb.base.controller.TSecureEjbController;
 import com.tedros.ejb.base.security.ITSecurity;
 import com.tedros.ejb.base.security.TRemoteSecurity;
-import com.tedros.ejb.base.service.ITEjbService;
 
 /**
  * DESCRIÇÃO DA CLASSE
@@ -33,13 +32,13 @@ import com.tedros.ejb.base.service.ITEjbService;
 public class CampanhaController extends TSecureEjbController<Campanha> implements ICampanhaController, ITSecurity {
 	
 	@EJB
-	private TStatelessService<Campanha> serv;
+	private CampanhaService serv;
 	
 	@EJB
 	private ITSecurityController securityController;
 
 	@Override
-	public ITEjbService<Campanha> getService() {
+	public CampanhaService getService() {
 		return serv;
 	}
 

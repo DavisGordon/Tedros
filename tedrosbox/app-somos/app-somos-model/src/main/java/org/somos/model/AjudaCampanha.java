@@ -5,6 +5,7 @@ package org.somos.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -27,11 +28,11 @@ public class AjudaCampanha extends TEntity {
 	 */
 	private static final long serialVersionUID = 8838010836519979624L;
 
-	@ManyToOne()
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="id_assoc", nullable=false, updatable=false)
 	private Associado associado;
 	
-	@ManyToOne()
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="id_camp", nullable=false, updatable=false)
 	private Campanha campanha;
 	
@@ -44,7 +45,7 @@ public class AjudaCampanha extends TEntity {
 	@Column(length=60)
 	private String periodo;
 	
-	@ManyToOne()
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="id_for_ajuda", nullable=false, updatable=false)
 	private FormaAjuda formaAjuda;
 

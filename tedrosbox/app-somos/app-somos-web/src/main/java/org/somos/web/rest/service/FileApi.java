@@ -5,15 +5,10 @@ package org.somos.web.rest.service;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
-
-import org.somos.web.bean.AppBean;
-import org.somos.web.producer.Item;
 
 import com.tedros.common.model.TFileEntity;
 import com.tedros.core.ejb.controller.TFileEntityController;
@@ -25,15 +20,8 @@ import com.tedros.ejb.base.result.TResult;
  */
 @Path("/f")
 @RequestScoped
-public class FileApi {
+public class FileApi extends BaseApi {
 
-	@Inject
-	@Named("errorMsg")
-	private Item<String> error;
-	
-	@Inject
-	private AppBean appBean;
-	
 	@EJB
 	private TFileEntityController serv;
 	

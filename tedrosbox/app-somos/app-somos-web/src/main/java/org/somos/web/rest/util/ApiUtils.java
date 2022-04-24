@@ -26,6 +26,15 @@ public final class ApiUtils {
 		return df.format(data);
 	}
 	
+	public static String formatDateToView(Date data){
+		if(data==null)
+			return null;
+		
+		String pattern = "dd/MM/yyyy";
+		DateFormat df = new SimpleDateFormat(pattern);
+		return df.format(data);
+	}
+	
 	/**
 	 * @param data
 	 * @return

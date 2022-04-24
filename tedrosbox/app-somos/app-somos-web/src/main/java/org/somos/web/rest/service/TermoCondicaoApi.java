@@ -2,9 +2,6 @@ package org.somos.web.rest.service;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Any;
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -18,9 +15,6 @@ import org.somos.ejb.controller.IPessoaController;
 import org.somos.ejb.controller.ISiteTermoController;
 import org.somos.model.Pessoa;
 import org.somos.model.SiteTermo;
-import org.somos.web.bean.AppBean;
-import org.somos.web.bean.CovidUserBean;
-import org.somos.web.producer.Item;
 import org.somos.web.rest.model.RestModel;
 import org.somos.web.rest.model.SiteModel;
 
@@ -30,17 +24,7 @@ import com.tedros.ejb.base.result.TResult.EnumResult;
 @Path("/termo")
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
-public class TermoCondicaoApi {
-	
-	@Inject
-	@Named("errorMsg")
-	private Item<String> error;
-	
-	@Inject @Any
-	private CovidUserBean covidUserBean;
-	
-	@Inject
-	private AppBean appBean;
+public class TermoCondicaoApi extends LoggedUserBaseApi{
 	
 	@EJB
 	private IPessoaController pessServ;

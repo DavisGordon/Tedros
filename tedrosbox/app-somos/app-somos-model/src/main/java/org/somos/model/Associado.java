@@ -4,10 +4,13 @@
 package org.somos.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -28,7 +31,7 @@ public class Associado extends TEntity {
 
 	private static final long serialVersionUID = 4090673678878783748L;
 
-	@OneToOne()
+	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="id_pess", nullable=false, updatable=false)
 	private Pessoa pessoa;
 	
@@ -38,6 +41,9 @@ public class Associado extends TEntity {
 	
 	@Column(length=5)
 	private String aceitaEmails;
+	
+	@OneToMany(mappedBy="associado", fetch=FetchType.EAGER)
+	private List<AjudaCampanha> ajudaCampanhas;
 
 	/**
 	 * @return the pessoa
@@ -79,6 +85,20 @@ public class Associado extends TEntity {
 	 */
 	public void setAceitaEmails(String aceitaEmails) {
 		this.aceitaEmails = aceitaEmails;
+	}
+
+	/**
+	 * @return the ajudaCampanhas
+	 */
+	public List<AjudaCampanha> getAjudaCampanhas() {
+		return ajudaCampanhas;
+	}
+
+	/**
+	 * @param ajudaCampanhas the ajudaCampanhas to set
+	 */
+	public void setAjudaCampanhas(List<AjudaCampanha> ajudaCampanhas) {
+		this.ajudaCampanhas = ajudaCampanhas;
 	}
 	
 	

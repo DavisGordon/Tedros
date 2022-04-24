@@ -2,11 +2,48 @@ $(document).ready(function() {
 	loadUserInfo();
 	carregarAbout();
 	carregarVideos();
+	loadCampanha();
 	carregarContatos();
 	loadParceiro();
 	loadEquipe();
 	loadFooter();
 });
+function buildCampanha(l){
+	if(l && l.length>0){
+		$('.campanha-container').show();
+		var idx = 1;
+		l.forEach(function (o){
+			let t = $($('#campanhaTemplate').html());
+			$('.numbertext', t).html(idx +" / "+ l.length);
+			$('.text', t).html(o.titulo);
+			if(o.image)
+				$('.imgSlide', t).prop('src', 'api/f/i/'+o.image);
+			$('#campanhaTemplate').before(t);
+			$('#dots').append("<span class='dot' onclick='currentSlide("+idx+")'></span>");
+			idx++;
+		});
+		startSlides();
+	}else
+		$('.campanha-container').hide();
+}
+
+function loadCampanha(){
+	$.ajax
+    ({ 
+        url: 'api/sm/campanhas',
+        type: 'get',
+        dataType:'json',
+        headers : {'Content-Type' : 'application/json'},
+        success: function(r)
+        {
+        	buildCampanha(r.data);
+    	},
+		statusCode: {
+		    404: function() {
+		    }
+		  }
+	}); 
+}
 
 function buildParceiro(l){
 	if(l){

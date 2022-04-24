@@ -61,8 +61,9 @@ public class FormaAjudaModelView extends TEntityModelView<FormaAjuda> {
 		
 	@TReaderHtml
 	@TLabel(text="Tipo")
-	@TTextField(maxLength=60, required = true, textInputControl=@TTextInputControl(promptText="Pix, Boleto, Dinheiro, Produtos...", parse = true), 
-				control=@TControl(tooltip="Informe a forma de ajuda que uma campanha pode precisar", parse = true))
+	@TTextField(maxLength=60, required = true, 
+		textInputControl=@TTextInputControl(promptText="Pix, Boleto, Dinheiro, Produtos...", parse = true), 
+		control=@TControl(tooltip="Informe a forma de ajuda que uma campanha pode precisar", parse = true))
 	private SimpleStringProperty tipo;
 	
 	@TReaderHtml
@@ -132,6 +133,20 @@ public class FormaAjudaModelView extends TEntityModelView<FormaAjuda> {
 	 */
 	public void setTipo(SimpleStringProperty tipo) {
 		this.tipo = tipo;
+	}
+
+	/**
+	 * @return the detalhe
+	 */
+	public SimpleStringProperty getDetalhe() {
+		return detalhe;
+	}
+
+	/**
+	 * @param detalhe the detalhe to set
+	 */
+	public void setDetalhe(SimpleStringProperty detalhe) {
+		this.detalhe = detalhe;
 	}
 	
 }

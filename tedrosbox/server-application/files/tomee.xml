@@ -14,5 +14,4 @@
   PoolPreparedStatements true
   DefaultAutoCommit true
 </Resource>
-
 </tomee>

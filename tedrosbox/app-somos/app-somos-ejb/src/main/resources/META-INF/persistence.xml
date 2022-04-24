@@ -7,7 +7,6 @@
 		
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<jta-data-source>tedrosDataSource</jta-data-source>
-		<class>org.somos.model.Doacao</class>
 		
 		<class>org.somos.model.Contato</class> 
 		<class>org.somos.model.Documento</class>
@@ -49,6 +48,7 @@
 		<class>org.somos.model.FormaAjuda</class>
 		<class>org.somos.model.AjudaCampanha</class>
 		<class>org.somos.model.Campanha</class>
+		<class>org.somos.model.Periodo</class>
 		
 		<properties>
 		

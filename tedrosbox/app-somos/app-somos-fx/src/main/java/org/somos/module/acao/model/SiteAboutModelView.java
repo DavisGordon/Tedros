@@ -64,7 +64,6 @@ public class SiteAboutModelView extends TEntityModelView<SiteAbout>{
 	})
 	private SimpleStringProperty descricao;
 	
-
 	@TFieldBox(node=@TNode(id="img", parse = true))
 	@TSelectImageField(source=TEnvironment.LOCAL, target=TEnvironment.REMOTE, 
 	remoteOwner="somos", maxFileSize=300000)

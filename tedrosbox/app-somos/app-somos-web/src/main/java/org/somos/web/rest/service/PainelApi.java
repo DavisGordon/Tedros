@@ -9,9 +9,6 @@ import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Any;
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -25,6 +22,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
 import org.somos.ejb.controller.IAcaoController;
+import org.somos.ejb.controller.IAssociadoController;
 import org.somos.ejb.controller.IAutUserController;
 import org.somos.ejb.controller.IPessoaController;
 import org.somos.ejb.controller.ITermoAdesaoController;
@@ -41,9 +39,6 @@ import org.somos.model.TermoAdesao;
 import org.somos.model.TipoAjuda;
 import org.somos.model.UF;
 import org.somos.model.Voluntario;
-import org.somos.web.bean.AppBean;
-import org.somos.web.bean.CovidUserBean;
-import org.somos.web.producer.Item;
 import org.somos.web.rest.model.AcaoModel;
 import org.somos.web.rest.model.RestModel;
 import org.somos.web.rest.model.TermoAdesaoModel;
@@ -60,18 +55,8 @@ import com.tedros.ejb.base.result.TResult.EnumResult;
 @RequestScoped
 @Path("/painel")
 @Produces(MediaType.APPLICATION_JSON + "; charset=UTF-8")
-public class PainelApi {
+public class PainelApi extends LoggedUserBaseApi{
 	
-	@Inject
-	@Named("errorMsg")
-	private Item<String> error;
-	
-	@Inject @Any
-	private CovidUserBean covidUserBean;
-	
-	@Inject
-	private AppBean appBean;
-
 	@EJB
 	private IPessoaController pessServ;
 	
@@ -335,6 +320,7 @@ public class PainelApi {
 		
 		try{
 			Pessoa p = covidUserBean.getUser().getPessoa();
+			
 			Map<String, String> info = new HashMap<>();
 			info.put("nome", WordUtils.capitalizeFully(p.getNome()));
 			info.put("status", p.getStatusVoluntario());

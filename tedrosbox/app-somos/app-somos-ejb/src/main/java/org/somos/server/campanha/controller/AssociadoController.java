@@ -13,11 +13,16 @@ import javax.ejb.TransactionAttributeType;
 
 import org.somos.ejb.controller.IAssociadoController;
 import org.somos.model.Associado;
+import org.somos.model.Pessoa;
 import org.somos.server.base.service.TStatelessService;
+import org.somos.server.campanha.service.AssociadoService;
 
 import com.tedros.ejb.base.controller.ITSecurityController;
 import com.tedros.ejb.base.controller.TSecureEjbController;
+import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.ejb.base.security.ITSecurity;
+import com.tedros.ejb.base.security.TAccessToken;
 import com.tedros.ejb.base.security.TRemoteSecurity;
 import com.tedros.ejb.base.service.ITEjbService;
 
@@ -33,7 +38,7 @@ import com.tedros.ejb.base.service.ITEjbService;
 public class AssociadoController extends TSecureEjbController<Associado> implements IAssociadoController, ITSecurity {
 	
 	@EJB
-	private TStatelessService<Associado> serv;
+	private AssociadoService serv;
 	
 	@EJB
 	private ITSecurityController securityController;
@@ -48,6 +53,16 @@ public class AssociadoController extends TSecureEjbController<Associado> impleme
 	 */
 	public ITSecurityController getSecurityController() {
 		return securityController;
+	}
+
+	@Override
+	public TResult<Associado> recuperar(TAccessToken token, Pessoa p) {
+		try {
+			Associado e = serv.recuperar(p);
+			return new TResult<>(EnumResult.SUCESS, e);
+		}catch(Exception e) {
+			return super.processException(token, null, e);
+		}
 	}
 
 	

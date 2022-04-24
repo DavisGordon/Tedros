@@ -6,6 +6,9 @@
  */
 package org.somos.server.base.service;
 
+import java.util.concurrent.TimeUnit;
+
+import javax.ejb.AccessTimeout;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;

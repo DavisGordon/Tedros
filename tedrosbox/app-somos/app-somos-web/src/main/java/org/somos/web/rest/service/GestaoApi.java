@@ -7,9 +7,6 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Any;
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -39,9 +36,6 @@ import org.somos.model.Pessoa;
 import org.somos.model.Produto;
 import org.somos.model.Saida;
 import org.somos.model.SaidaItem;
-import org.somos.web.bean.AppBean;
-import org.somos.web.bean.CovidUserBean;
-import org.somos.web.producer.Item;
 import org.somos.web.rest.model.EstocavelItemModel;
 import org.somos.web.rest.model.EstocavelModel;
 import org.somos.web.rest.model.EstoqueConfigModel;
@@ -63,19 +57,9 @@ import com.tedros.ejb.base.result.TResult.EnumResult;
 @RequestScoped
 @Path("/tdrs")
 @Produces(MediaType.APPLICATION_JSON + "; charset=UTF-8")
-public class GestaoApi {
+public class GestaoApi extends LoggedUserBaseApi{
 	
 	private static final String ACCESS_DENIED = "Você não possui permissão para executar esta operação";
-
-	@Inject
-	@Named("errorMsg")
-	private Item<String> error;
-	
-	@Inject @Any
-	private CovidUserBean covidUserBean;
-	
-	@Inject
-	private AppBean appBean;
 
 	@EJB
 	private IProdutoController prodServ;

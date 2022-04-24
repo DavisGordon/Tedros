@@ -4,16 +4,20 @@
 package org.somos.model;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
 import org.somos.domain.DomainSchema;
 import org.somos.domain.DomainTables;
@@ -28,10 +32,6 @@ import com.tedros.ejb.base.entity.TEntity;
 @Entity
 @Table(name = DomainTables.campanha, schema = DomainSchema.riosemfome)
 public class Campanha extends TEntity {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -8277145664737419416L;
 
 	@Column(length=120, nullable=false)
@@ -39,9 +39,6 @@ public class Campanha extends TEntity {
 	
 	@Column(length=2000, nullable=false)
 	private String desc;
-	
-	@Column(length=120)
-	private String periodos;
 	
 	@Column(length=120)
 	private String valores;
@@ -59,11 +56,21 @@ public class Campanha extends TEntity {
 	@Column(length=15)
 	private String status;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="id_img", nullable=true, updatable=true)
 	private TFileEntity image;
 	
-	private List<FormaAjuda> formasAjuda;
+	@ManyToMany(fetch=FetchType.EAGER)
+	@JoinTable(name=DomainTables.campanha_periodo, schema=DomainSchema.riosemfome,
+	uniqueConstraints=@UniqueConstraint(name="campanhaPeriodoUK", columnNames = { "camp_id", "per_id" }),
+	joinColumns=@JoinColumn(name="camp_id"), inverseJoinColumns=@JoinColumn(name="per_id"))
+	private Set<Periodo> periodos;
+	
+	@ManyToMany(fetch=FetchType.EAGER)
+	@JoinTable(name=DomainTables.campanha_formaajuda,  schema=DomainSchema.riosemfome,
+	uniqueConstraints=@UniqueConstraint(name="campanhaFormaAjudaUK", columnNames = { "camp_id", "fajuda_id" }),
+	joinColumns=@JoinColumn(name="camp_id"), inverseJoinColumns=@JoinColumn(name="fajuda_id"))
+	private Set<FormaAjuda> formasAjuda;
 
 	/**
 	 * @return the titulo
@@ -91,20 +98,6 @@ public class Campanha extends TEntity {
 	 */
 	public void setDesc(String desc) {
 		this.desc = desc;
-	}
-
-	/**
-	 * @return the periodos
-	 */
-	public String getPeriodos() {
-		return periodos;
-	}
-
-	/**
-	 * @param periodos the periodos to set
-	 */
-	public void setPeriodos(String periodos) {
-		this.periodos = periodos;
 	}
 
 	/**
@@ -194,16 +187,29 @@ public class Campanha extends TEntity {
 	/**
 	 * @return the formasAjuda
 	 */
-	public List<FormaAjuda> getFormasAjuda() {
+	public Set<FormaAjuda> getFormasAjuda() {
 		return formasAjuda;
 	}
 
 	/**
 	 * @param formasAjuda the formasAjuda to set
 	 */
-	public void setFormasAjuda(List<FormaAjuda> formasAjuda) {
+	public void setFormasAjuda(Set<FormaAjuda> formasAjuda) {
 		this.formasAjuda = formasAjuda;
 	}
-	
-	
+
+	/**
+	 * @param periodos the periodos to set
+	 */
+	public void setPeriodos(Set<Periodo> periodos) {
+		this.periodos = periodos;
+	}
+
+	/**
+	 * @return the periodos
+	 */
+	public Set<Periodo> getPeriodos() {
+		return periodos;
+	}
+
 }

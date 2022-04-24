@@ -15,7 +15,7 @@ import org.somos.module.estoque.icon.EstoqueMenuIconImageView;
 import org.somos.module.pessoa.CadastroDePessoaModule;
 import org.somos.module.pessoa.icon.PessoaIconImageView;
 import org.somos.module.pessoa.icon.PessoaMenuIconImageView;
-import org.somos.module.report.DoacaoReportModule;
+import org.somos.module.report.ReportModule;
 import org.somos.module.report.icon.RelatoriosIconImageView;
 import org.somos.module.report.icon.RelatoriosMenuIconImageView;
 import org.somos.module.tipoAjuda.TipoAjudaModule;
@@ -45,7 +45,7 @@ module = {
 			@TModule(type=MailingModule.class, name="Mailing", menu="Gerenciar Campanha", 
 					icon=MailingIconImageView.class, menuIcon=MailingMenuIconImageView.class,
 					description="Crie e envie e-mails a um grupo de pessoas sobre uma determinada ação."),
-			@TModule(type=DoacaoReportModule.class, name="Relatórios", menu="Administrativo", 
+			@TModule(type=ReportModule.class, name="Relatórios", menu="Administrativo", 
 					icon=RelatoriosIconImageView.class, menuIcon=RelatoriosMenuIconImageView.class,
 					description="Gere relatórios que ajudem nos processos administrativos."),
 			@TModule(type=CadastroDePessoaModule.class, name="#{label.person}", menu="Administrativo", 

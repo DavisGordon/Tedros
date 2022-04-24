@@ -53,6 +53,9 @@ public interface DomainTables {
 	final static String campanha = "campanha";
 	final static String formaAjuda = "forma_ajuda";
 	final static String ajudaCampanha = "ajuda_campanha";
+	final static String periodo = "periodo";
+	static final String campanha_formaajuda = "campanha_formaajuda";
+	static final String campanha_periodo = "campanha_periodo";
 	
 }
 
