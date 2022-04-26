@@ -14,4 +14,9 @@ public interface IAssociadoController extends ITSecureEjbController<Associado>{
 	 
 	TResult<Associado> recuperar(TAccessToken token, Pessoa p);
 	
+	TResult<Associado> ajudarCampanha(TAccessToken token, Pessoa p, 
+			Long idCamp, String valor, String periodo, Long idForma);
+	
+	 TResult<Associado> cancelarAjuda(TAccessToken token, Pessoa p, Long idCamp);
+	
 }

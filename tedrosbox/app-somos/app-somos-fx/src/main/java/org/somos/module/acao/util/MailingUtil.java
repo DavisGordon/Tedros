@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
+import org.somos.model.CampanhaMailConfig;
 import org.somos.model.Mailing;
 
 import com.tedros.util.TResourceUtil;
@@ -27,6 +28,24 @@ public class MailingUtil {
 
 	public static String buildTemplateLink(){
 		return siteurl+"/email_template.html";
+	}
+	
+
+	public static String buildConteudo(final CampanhaMailConfig mailing){
+		
+		String lc = "<a href='"+siteurl+"/campanha.html'>Campanhas</a>";
+		String lp = "<a href='"+siteurl+"/painelv.html'>Painel</a>";
+		String ls = "<a href='"+siteurl+"/index.html'>www.somossocial.org.br</a>";
+		
+		String str = mailing.getConteudo();
+		if(mailing.getCampanha()!=null) {
+			str = str.replaceAll("#TITULOCAMPANHA#", mailing.getCampanha().getTitulo());
+		}
+		str = str.replaceAll("#LINKPAINEL#", lp);
+		str = str.replaceAll("#LINKSITE#", ls);
+		str = str.replaceAll("#LINKCAMPANHA#", lc);
+		
+		return str;
 	}
 	
 	public static String buildConteudo(final Mailing mailing){

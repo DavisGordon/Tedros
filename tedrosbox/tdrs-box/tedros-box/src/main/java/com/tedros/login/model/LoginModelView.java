@@ -11,6 +11,7 @@ import com.tedros.fxapi.annotation.control.TPasswordField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.effect.TDropShadow;
 import com.tedros.fxapi.annotation.effect.TEffect;
+import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
@@ -31,7 +32,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.text.TextAlignment;
 
-
+@TForm(name = "#{tedros.login.view.title}", scroll=false)
 @TPresenter(modelClass=Login.class, behavior=@TBehavior(type=LoginBehavior.class), 
 	decorator=@TDecorator(type=LoginDecorator.class, saveButtonText="#{tedros.validateUser}",
 	viewTitle="#{tedros.login.view.title}"), 

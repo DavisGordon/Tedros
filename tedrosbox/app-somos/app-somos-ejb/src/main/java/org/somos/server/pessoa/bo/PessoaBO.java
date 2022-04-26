@@ -14,7 +14,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import org.somos.helper.TermoAdesaoHelper;
-import org.somos.model.Contato;
 import org.somos.model.Pessoa;
 import org.somos.model.PessoaTermoAdesao;
 import org.somos.model.TermoAdesao;
@@ -96,27 +95,12 @@ public class PessoaBO extends TGenericBO<Pessoa> {
 		List<Pessoa> lst = this.getListaEstrategicoEmail();
 		if(lst!=null){
 			for (Pessoa p : lst) {
-				String e = getEmail(p);
+				String e = p.getEmail();
 				if(e!=null)
-					str += ((str.isEmpty()) ?"":",") + getEmail(p);
+					str += ((str.isEmpty()) ?"":",") + e;
 			}
 		}
 		return str;
-	}
-	
-	public String getEmail(Pessoa p) {
-		if(p.getLoginName()!=null){
-			 return p.getLoginName();
-		}else{
-			if(p.getContatos()!= null){
-				for(Contato c : p.getContatos()){
-					if(c.getTipo().equals("1")){
-						return c.getDescricao();
-					}
-				}
-			}
-		}
-		return null;
 	}
 	
 	public Pessoa recuperar(String loginName, String password){

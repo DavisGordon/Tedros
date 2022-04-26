@@ -388,11 +388,6 @@ public class GestaoApi extends LoggedUserBaseApi{
 			return new RestModel<>(null, "500", error.getValue());
 		}
 	}
-
-	private boolean isAccessDenied() {
-		int tv = Integer.valueOf(this.covidUserBean.getUser().getPessoa().getTipoVoluntario());
-		return (tv<2||tv>3);
-	}
 	
 	@DELETE
 	@Path("/in/del/{id}")

@@ -6,6 +6,7 @@ package org.somos.model;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -42,7 +43,10 @@ public class Associado extends TEntity {
 	@Column(length=5)
 	private String aceitaEmails;
 	
-	@OneToMany(mappedBy="associado", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="associado", 
+			fetch=FetchType.EAGER, 
+			orphanRemoval=true,
+			cascade=CascadeType.ALL)
 	private List<AjudaCampanha> ajudaCampanhas;
 
 	/**

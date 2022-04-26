@@ -56,7 +56,7 @@ public interface DomainTables {
 	final static String periodo = "periodo";
 	static final String campanha_formaajuda = "campanha_formaajuda";
 	static final String campanha_periodo = "campanha_periodo";
-	
+	static final String campanha_mail_config = "campanha_mail_config";
 }
 
 

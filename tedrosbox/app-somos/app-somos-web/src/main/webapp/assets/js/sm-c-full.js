@@ -1,6 +1,7 @@
 $(document).ready(function() { 
 	$('#campanhaLoading').show();
 	$('#campanhaAviso').hide();
+	$('#processandoAjuda').hide();
 	loadUserInfo();
 	loadFooter();
 });
@@ -28,7 +29,8 @@ function buildCampanha(l){
 			if(o.valores){
 				$('#valDiv', t).show();
 				o.valores.forEach(function (v, i){
-					var r = '<input type="radio" id="val'+idx+'-'+i+'" name="valRadio'+idx+'" value="'+v+'">'+
+					var chk = o.valor && o.valor==v ? 'checked' : '';
+					var r = '<input type="radio" '+chk+' id="val'+idx+'-'+i+'" name="valRadio'+idx+'" value="'+v+'">'+
 							'<label for="val'+idx+'-'+i+'">'+v+'</label>';
 					$('#valDiv', t).append(r);
 				});
@@ -39,7 +41,8 @@ function buildCampanha(l){
 			if(o.periodos){
 				$('#perDiv', t).show();
 				o.periodos.forEach(function (v, i){
-					var r = '<input type="radio" id="per'+idx+'-'+i+'" name="perRadio'+idx+'" value="'+v+'">'+
+					var chk = o.periodo && o.periodo==v ? 'checked' : '';
+					var r = '<input type="radio" '+chk+' id="per'+idx+'-'+i+'" name="perRadio'+idx+'" value="'+v+'">'+
 							'<label for="per'+idx+'-'+i+'">'+v+'</label>';
 					$('#perDiv', t).append(r);
 				});
@@ -50,7 +53,8 @@ function buildCampanha(l){
 			if(o.formas){
 				$('#forDiv', t).show();
 				o.formas.forEach(function (v, i){
-					var tr = '<tr><td><input type="radio" id="for'+idx+'-'+i+'" name="forRadio'+idx+'" value="'+v.id+'">'+
+					var chk = o.assIdForma && o.assIdForma==v.id ? 'checked' : '';
+					var tr = '<tr><td><input type="radio" '+chk+' id="for'+idx+'-'+i+'" name="forRadio'+idx+'" value="'+v.id+'">'+
 					'<label for="for'+idx+'-'+i+'">'+v.nome+'</label></td><td>'+v.desc+'</td></tr>';
 					$('#forTb', t).append(tr);
 				});
@@ -59,15 +63,39 @@ function buildCampanha(l){
 				$('#forDiv', t).hide();
 			}
 			if(loggedUser){
-				$('#ajudarBtn', t).append("<a href='javascript:ajudar(\""+idx+"\")' class='button primary fit'>Quero ajudar</a>");
+				var btn = o.associado && o.associado=='x' ? "Alterar" : "Quero ajudar nesta campanha";
+				$('#ajudarBtn', t).append("<li><a href='javascript:ajudar(\""+idx+"\")' class='button primary fit'>"+btn+"</a></li>");
+				if(o.associado && o.associado)
+					$('#ajudarBtn', t).append("<li><a href='javascript:cancelar(\""+o.id+"\", \""+o.titulo+"\")' class='button small fit'>Cancelar ajuda</a></li>");
+				
 				$('#ajudarBtn', t).append('<input type="hidden" id="camp'+idx+'" value="'+o.id+'" >');
 			}else
-				$('#ajudarBtn', t).append('<a href="painelv.html" class="button fit">Faça o login e volte aqui para ajudar!</a>');
-			$('#campTemplate').before(t);
+				$('#ajudarBtn', t).append('<li><a href="painelv.html" class="button fit">Para ajudar faça login primeiro</a></li>');
+			$('#campanhasContainer').append(t);
 		});
 	}else{
 		$('#campanhaLoading').hide();
 		$('#campanhaAviso').show();
+	}
+}
+
+function cancelar(id, titulo){
+	if(confirm('Deseja realmente cancelar sua ajuda na campanha '+titulo+'?')){
+		$('#campanhasContainer').empty();
+		$('#processandoAjuda').show();
+		$.ajax
+		({ 
+		    url: 'api/painel/campanha/cancelar/'+id,
+		    type: 'delete',
+		    dataType:'json',
+		    headers : {'Content-Type' : 'application/json'},
+		    success: function(result)
+		    {
+		    	loadCampanha('painel');
+				$('#processandoAjuda').hide();
+				alert("Sua participação foi cancelada!");
+			}
+		}); 
 	}
 }
 
@@ -93,17 +121,36 @@ function ajudar(idx){
 				if(!pFor) s += s!='' ?  ', Forma de ajuda' : 'Forma de ajuda';
 			} 
 			if(s!='')
-			alert('Favor preencher o(s) campo(s) '+s);
-			else
-			alert('sel= '+pVal+' '+pPer+' '+pFor+' '+pCamp);
+				alert('Favor preencher o(s) campo(s) '+s);
+			else{
+				$('#campanhasContainer').empty();
+				$('#processandoAjuda').show();
+				var curObj = {'id':pCamp, 'valor':pVal, 'periodo':pPer, 'assIdForma':pFor };
+				$.ajax
+				({ 
+				    url: 'api/painel/campanha/ajudar',
+				    type: 'PUT',
+				    dataType:'json',
+				    data: JSON.stringify(curObj),
+				    contentType: 'application/json',
+				    headers : {'Content-Type' : 'application/json'},
+				    success: function(r)
+				    {
+				    	buildCampanha(r.data);
+						$('#processandoAjuda').hide();
+				    	alert('Obrigado '+loggedUser.nome+'!\n'+
+						'Em breve enviaremos para seu email os dados para concluir esta ajuda!');
+					}
+				});
+			}
 		}
 	}
 }
 
-function loadCampanha(){
+function loadCampanha(t){
 	$.ajax
     ({ 
-        url: 'api/sm/campanhas',
+        url: 'api/'+t+'/campanhas',
         type: 'get',
         dataType:'json',
         headers : {'Content-Type' : 'application/json'},
@@ -128,11 +175,11 @@ function loadUserInfo(){
         success: function(r)
         {
 			loggedUser = r.data;
-        	loadCampanha();
+        	loadCampanha('painel');
     	},
 		statusCode: {
 		    401: function() {
-		      loadCampanha();
+		      loadCampanha('sm');
 		    },
 			409: function() {
 			  location.href = 'termo.html';

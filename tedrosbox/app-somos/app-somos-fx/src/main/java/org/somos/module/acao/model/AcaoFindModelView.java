@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.somos.model.Acao;
+import org.somos.module.acao.table.AcaoDateCellCallBack;
+import org.somos.module.acao.table.AcaoItemTableView;
 
 import com.tedros.fxapi.annotation.control.TCallbackFactory;
 import com.tedros.fxapi.annotation.control.TCellValueFactory;

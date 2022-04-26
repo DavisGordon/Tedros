@@ -5,9 +5,7 @@ package org.somos.web.rest.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -47,6 +45,14 @@ public class CampanhaModel implements Serializable {
 	private List<String> periodos;
 	
 	private List<IdNomeDescModel> formas;
+	
+	private Long assIdForma;
+	
+	private String valor;
+	
+	private String periodo;
+	
+	private String associado;
 	
 	public CampanhaModel() {
 	}
@@ -226,5 +232,77 @@ public class CampanhaModel implements Serializable {
 	 */
 	public void setFormas(List<IdNomeDescModel> formas) {
 		this.formas = formas;
+	}
+
+
+
+	/**
+	 * @return the assIdForma
+	 */
+	public Long getAssIdForma() {
+		return assIdForma;
+	}
+
+
+
+	/**
+	 * @param assIdForma the assIdForma to set
+	 */
+	public void setAssIdForma(Long assIdForma) {
+		this.assIdForma = assIdForma;
+	}
+
+
+
+	/**
+	 * @return the valor
+	 */
+	public String getValor() {
+		return valor;
+	}
+
+
+
+	/**
+	 * @param valor the valor to set
+	 */
+	public void setValor(String valor) {
+		this.valor = valor;
+	}
+
+
+
+	/**
+	 * @return the periodo
+	 */
+	public String getPeriodo() {
+		return periodo;
+	}
+
+
+
+	/**
+	 * @param periodo the periodo to set
+	 */
+	public void setPeriodo(String periodo) {
+		this.periodo = periodo;
+	}
+
+
+
+	/**
+	 * @return the associado
+	 */
+	public String getAssociado() {
+		return associado;
+	}
+
+
+
+	/**
+	 * @param associado the associado to set
+	 */
+	public void setAssociado(String associado) {
+		this.associado = associado;
 	}
 }

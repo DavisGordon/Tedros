@@ -1,17 +1,17 @@
 package org.somos.start;
 
 import org.somos.module.acao.AcaoModule;
-import org.somos.module.acao.MailingModule;
 import org.somos.module.acao.icon.AcaoIconImageView;
 import org.somos.module.acao.icon.AcaoMenuIconImageView;
-import org.somos.module.acao.icon.MailingIconImageView;
-import org.somos.module.acao.icon.MailingMenuIconImageView;
 import org.somos.module.cozinha.CozinhaModule;
 import org.somos.module.cozinha.icon.CozinhaIconImageView;
 import org.somos.module.cozinha.icon.CozinhaMenuIconImageView;
 import org.somos.module.estoque.EstoqueModule;
 import org.somos.module.estoque.icon.EstoqueIconImageView;
 import org.somos.module.estoque.icon.EstoqueMenuIconImageView;
+import org.somos.module.mailing.MailingModule;
+import org.somos.module.mailing.icon.MailingIconImageView;
+import org.somos.module.mailing.icon.MailingMenuIconImageView;
 import org.somos.module.pessoa.CadastroDePessoaModule;
 import org.somos.module.pessoa.icon.PessoaIconImageView;
 import org.somos.module.pessoa.icon.PessoaMenuIconImageView;

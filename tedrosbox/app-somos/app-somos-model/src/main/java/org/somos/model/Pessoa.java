@@ -367,6 +367,38 @@ public class Pessoa extends TEntity {
 					return e;
 		return null;
 	}
+	
+	public String getEmail() {
+		if(getLoginName()!=null){
+			 return getLoginName();
+		}else{
+			if(getContatos()!= null){
+				for(Contato c : getContatos()){
+					if(c.getTipo().equals("1")){
+						return c.getDescricao();
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	public String getTodosContatos() {
+		String str = "";
+		if(getLoginName()!=null)
+			 str = getLoginName();
+		
+		if(getContatos()!= null){
+			for(Contato c : getContatos()){
+				if(!str.contains(c.getDescricao())) {
+					if(!"".equals(str)) str += ", ";
+					str += c.getDescricao();
+				}
+			}
+		}
+		
+		return str;
+	}
 
 
 	/**

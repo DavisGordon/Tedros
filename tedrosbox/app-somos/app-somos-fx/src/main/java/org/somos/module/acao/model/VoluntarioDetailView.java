@@ -7,6 +7,9 @@ import org.somos.model.Pessoa;
 import org.somos.model.TipoAjuda;
 import org.somos.model.Voluntario;
 import org.somos.module.pessoa.model.PessoaFindModelView;
+import org.somos.module.pessoa.table.PessoaContatoCallback;
+import org.somos.module.pessoa.table.PessoaNomeCallback;
+import org.somos.module.pessoa.table.PessoaProfissaoCallback;
 import org.somos.module.tipoAjuda.model.TipoAjudaFindModelView;
 import org.somos.module.tipoAjuda.model.TipoAjudaModelView;
 

@@ -3,12 +3,17 @@
  */
 package org.somos.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
 import org.somos.domain.DomainSchema;
 import org.somos.domain.DomainTables;
@@ -20,12 +25,10 @@ import com.tedros.ejb.base.entity.TEntity;
  *
  */
 @Entity
-@Table(name = DomainTables.ajudaCampanha, schema = DomainSchema.riosemfome)
+@Table(name = DomainTables.ajudaCampanha, schema = DomainSchema.riosemfome, 
+uniqueConstraints=@UniqueConstraint(name="ajudaCampanhaUK", columnNames = { "id_assoc", "id_camp" }))
 public class AjudaCampanha extends TEntity {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 8838010836519979624L;
 
 	@ManyToOne(fetch=FetchType.EAGER)
@@ -46,8 +49,12 @@ public class AjudaCampanha extends TEntity {
 	private String periodo;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="id_for_ajuda", nullable=false, updatable=false)
+	@JoinColumn(name="id_for_ajuda", updatable=false)
 	private FormaAjuda formaAjuda;
+	
+	@Column
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataProcessado;
 
 	/**
 	 * @return the associado
@@ -131,6 +138,20 @@ public class AjudaCampanha extends TEntity {
 	 */
 	public void setFormaAjuda(FormaAjuda formaAjuda) {
 		this.formaAjuda = formaAjuda;
+	}
+
+	/**
+	 * @return the dataProcessado
+	 */
+	public Date getDataProcessado() {
+		return dataProcessado;
+	}
+
+	/**
+	 * @param dataProcessado the dataProcessado to set
+	 */
+	public void setDataProcessado(Date dataProcessado) {
+		this.dataProcessado = dataProcessado;
 	}
 	
 }

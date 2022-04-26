@@ -2,8 +2,6 @@ package org.somos.web.rest.service;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -16,8 +14,6 @@ import javax.ws.rs.core.MediaType;
 import org.somos.ejb.controller.IAutUserController;
 import org.somos.ejb.controller.IPessoaController;
 import org.somos.model.User;
-import org.somos.web.bean.AppBean;
-import org.somos.web.producer.Item;
 import org.somos.web.rest.model.LoginModel;
 import org.somos.web.rest.model.RestModel;
 

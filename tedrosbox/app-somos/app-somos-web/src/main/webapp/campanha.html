@@ -54,12 +54,16 @@
 							<header>
 								<p class="sm-title">Campanhas</p>
 							</header>
+							<p id="processandoAjuda" style="display:none" class="sm-txt fnt-large">
+								Processando ...
+							</p>
 							<p id="campanhaLoading" class="sm-txt fnt-large">
 								Buscando as campanhas ...
 							</p>
 							<p id="campanhaAviso" style="display:none" class="sm-txt fnt-large">
 								Não há campanhas no momento.
 							</p>
+							<div id="campanhasContainer"></div>
 							<template id="campTemplate">
 								<section>
 									<div class="box alt">
@@ -104,14 +108,14 @@
 											
 											</div>
 											<div class="col-12">
-												<ul class="actions stacked">
-													<li id="ajudarBtn"></li>
+												<ul id="ajudarBtn" class="actions stacked">
 												</ul>
 											</div>
 										</div>
 									</div>		
 								</section>
 							</template>
+						
 						</div>
 					</div>
 

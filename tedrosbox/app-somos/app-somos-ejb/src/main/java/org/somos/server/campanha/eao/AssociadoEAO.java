@@ -3,6 +3,7 @@
  */
 package org.somos.server.campanha.eao;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.somos.model.Associado;
@@ -23,7 +24,11 @@ public class AssociadoEAO extends TGenericEAO<Associado> {
 		Query qry = getEntityManager().createQuery(sbf.toString());
 		qry.setParameter("pess", p.getId());
 		
-		return (Associado) qry.getSingleResult();
+		try {
+			return (Associado) qry.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 	
 	

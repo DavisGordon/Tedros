@@ -83,6 +83,38 @@ public class EmailBO {
 		util.sent(debug, emailAccount.getValue(), to, subject, content, html);
 	}
 	
+	public void enviarEmailAjudaCampanha(String titulo, String nome, String contato,
+			String valor, String periodo, String forma) throws EmailBusinessException, TSentEmailException {
+		String content = "Uma inscrição em uma das campanhas acaba de ser realizado pelo site. "
+				+ "<br>Campanha: "+titulo
+				+ "<br>Nome: "+(nome!=null?nome:"")
+				+ "<br>Contato: "+(contato!=null?contato:"")
+				+ "<br>Valor: "+(valor!=null?valor:"")
+				+ "<br>Periodo: "+(periodo!=null?periodo:"")
+				+ "<br>Forma de ajuda: "+(forma!=null?forma:"");
+		
+		String to = pessBO.getEnderecoEstrategicoEmail();
+		if(to.isEmpty())
+			throw new EmailBusinessException("Não foi identificado nenhum voluntário estrategico para envio de email.");
+		
+		util.sent(false, emailAccount.getValue(), to, PROJECT+" Inscrição em campanha realizado pelo site", content, true);
+		
+	}
+	
+	public void enviarEmailCancelarAjudaCampanha(String titulo, String nome, String contato) throws EmailBusinessException, TSentEmailException {
+		String content = "Um cancelamento de ajuda em uma das campanhas acaba de ser realizado pelo site. "
+				+ "<br>Campanha: "+titulo
+				+ "<br>Nome: "+(nome!=null?nome:"")
+				+ "<br>Contato: "+(contato!=null?contato:"");
+		
+		String to = pessBO.getEnderecoEstrategicoEmail();
+		if(to.isEmpty())
+			throw new EmailBusinessException("Não foi identificado nenhum voluntário estrategico para envio de email.");
+		
+		util.sent(false, emailAccount.getValue(), to, PROJECT+" Cancelamento de ajuda em campanha realizado pelo site", content, true);
+		
+	}
+	
 	public void enviarEmailPropostaAjuda(String empresa, String nome, String contato,
 			String tipoAjuda, String desc, String endereco) throws EmailBusinessException, TSentEmailException {
 		String content = "Um contato de um possivel parceiro acaba de ser realizado pelo site. "
@@ -125,7 +157,7 @@ public class EmailBO {
 		
 		Calendar c = Calendar.getInstance();
 		for(Pessoa p : pess) {
-			String to = pessBO.getEmail(p);
+			String to = p.getEmail();
 			if(to==null ||  (p.getStatus()!=null && p.getStatus().equals("DESATIVADO")))
 				continue;
 			
