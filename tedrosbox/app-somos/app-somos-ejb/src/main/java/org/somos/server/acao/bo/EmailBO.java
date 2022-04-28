@@ -70,6 +70,10 @@ public class EmailBO {
 	@Named("emailTemplatePath")
 	private Item<String> templPath;
 	
+	@Inject
+	@Named("mailingTemplatePath")
+	private Item<String> mailingTemplPath;
+	
 	private TSMTPUtil util;
 	
 	@PostConstruct
@@ -81,6 +85,10 @@ public class EmailBO {
 	
 	public void enviar(boolean debug, String to, String subject, String content, boolean html) throws TSentEmailException{
 		util.sent(debug, emailAccount.getValue(), to, subject, content, html);
+	}
+	
+	public void enviarMailing(boolean debug, String to, String subject, String content) throws TSentEmailException, EmailBusinessException{
+		util.sent(debug, emailAccount.getValue(), to, subject, this.gerarMailing(content), true);
 	}
 	
 	public void enviarEmailAjudaCampanha(String titulo, String nome, String contato,
@@ -266,6 +274,20 @@ public class EmailBO {
 		String msg = TFileUtil.readFile(htmlTemplate);
 		msg = msg.replaceAll("#NOME#", nome);
 		msg = msg.replaceAll("#HOST#", host.getValue());
+		
+		return msg;
+	}
+	
+	private String gerarMailing(String content) throws EmailBusinessException {
+		
+		//File htmlTemplate = new File("C:/usr/covidsemfome/email_boasvindas.html");
+		File htmlTemplate = new File(this.mailingTemplPath.getValue());
+		
+		if(!htmlTemplate.isFile())
+			throw new EmailBusinessException("TEMPLATE DE EMAIL NAO ENCONTRADO") ;
+		
+		String msg = TFileUtil.readFile(htmlTemplate);
+		msg = msg.replaceAll("#CONTENT#", content);
 		
 		return msg;
 	}

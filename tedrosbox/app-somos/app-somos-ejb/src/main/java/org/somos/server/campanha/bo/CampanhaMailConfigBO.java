@@ -6,6 +6,7 @@ package org.somos.server.campanha.bo;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
+import org.somos.model.AjudaCampanha;
 import org.somos.model.CampanhaMailConfig;
 import org.somos.server.campanha.eao.CampanhaMailConfigEAO;
 
@@ -26,5 +27,11 @@ public class CampanhaMailConfigBO extends TGenericBO<CampanhaMailConfig> {
 	public ITGenericEAO<CampanhaMailConfig> getEao() {
 		return eao;
 	}
-
+	
+	public String prepareContent(CampanhaMailConfig cmc, AjudaCampanha ac) {
+		String c = cmc.getConteudo();
+		c = c.replaceAll("#NOME#", ac.getAssociado().getPessoa().getNome());
+		return c;
+	}
+	
 }

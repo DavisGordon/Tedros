@@ -30,6 +30,9 @@ public class Periodo extends TEntity {
 	
 	@Column(length=15, nullable=false)
 	private String code;
+	
+	@Column
+	private int totalDias;
 
 	/**
 	 * @return the nome
@@ -57,6 +60,20 @@ public class Periodo extends TEntity {
 	 */
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	/**
+	 * @return the totalDias
+	 */
+	public int getTotalDias() {
+		return totalDias;
+	}
+
+	/**
+	 * @param totalDias the totalDias to set
+	 */
+	public void setTotalDias(int totalDias) {
+		this.totalDias = totalDias;
 	}
 	
 	

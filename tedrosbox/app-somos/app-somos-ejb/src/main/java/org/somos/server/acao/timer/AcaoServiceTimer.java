@@ -11,6 +11,7 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.ScheduleExpression;
@@ -22,11 +23,11 @@ import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
 import javax.inject.Inject;
 
+import org.somos.ejb.controller.ICampanhaMailConfigController;
 import org.somos.model.Acao;
 import org.somos.model.Pessoa;
 import org.somos.model.Voluntario;
 import org.somos.server.acao.service.AcaoService;
-import org.somos.server.acao.service.VoluntarioService;
 import org.somos.server.exception.EmailBusinessException;
 import org.somos.server.pessoa.service.PessoaService;
 
@@ -48,15 +49,19 @@ public class AcaoServiceTimer {
 	private AcaoService serv;
 	
 	@Inject 
-	private VoluntarioService vServ;
-	
-	@Inject 
 	private PessoaService pServ;
 
+	@EJB
+	private ICampanhaMailConfigController cmcServ;
+	
     @PostConstruct
     private void construct() {
+
+        final TimerConfig campanhas = new TimerConfig("campanhas", false);
         final TimerConfig programadas = new TimerConfig("programadas", false);
         final TimerConfig volAtivos = new TimerConfig("voluntariosAtivos", false);
+        
+        timerService.createCalendarTimer(new ScheduleExpression().minute(54).hour(22), campanhas); 
         timerService.createCalendarTimer(new ScheduleExpression().minute(0).hour(12), programadas);
         timerService.createCalendarTimer(new ScheduleExpression().dayOfWeek("Fri").minute(0).hour(22), volAtivos);
 
@@ -64,7 +69,9 @@ public class AcaoServiceTimer {
 
     @Timeout
     public void timeout(Timer timer) {
-        if ("programadas".equals(timer.getInfo())) {
+    if ("campanhas".equals(timer.getInfo())) {
+    	this.cmcServ.processarMailing();
+    }else if ("programadas".equals(timer.getInfo())) {
             List<Acao> lst = serv.listAcoesProgramadasParaDecisao();
             if(lst!=null && !lst.isEmpty()) {
             	try {

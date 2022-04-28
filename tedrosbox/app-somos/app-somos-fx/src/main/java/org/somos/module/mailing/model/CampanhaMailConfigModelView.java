@@ -10,11 +10,14 @@ import org.somos.module.acao.campanha.model.CampanhaFindModelView;
 import org.somos.module.acao.campanha.model.FormaAjudaModelView;
 import org.somos.module.mailing.form.CampanhaEmailTemplateForm;
 
+import com.tedros.fxapi.annotation.TCodeValue;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
+import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TOneSelectionModal;
 import com.tedros.fxapi.annotation.control.TOptionsList;
+import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
@@ -30,6 +33,7 @@ import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEjbService;
+import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.text.TText;
@@ -111,6 +115,14 @@ public class CampanhaMailConfigModelView extends TEntityModelView<CampanhaMailCo
 			wrappingWidth=650, textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.CUSTOM)
 	private SimpleStringProperty textoChaves;
+	
+	@TLabel(text="Status")
+	@THorizontalRadioGroup(required=true, alignment=Pos.CENTER_LEFT, spacing=4, 
+	radioButtons={
+			@TRadioButtonField(text = "Ativado", userData = "ATIVADO"),
+			@TRadioButtonField(text = "Desativado", userData = "DESATIVADO")
+			})
+	private SimpleStringProperty status;
 
 
 	public CampanhaMailConfigModelView(CampanhaMailConfig entity) {
@@ -247,6 +259,20 @@ public class CampanhaMailConfigModelView extends TEntityModelView<CampanhaMailCo
 	 */
 	public void setFormaAjuda(SimpleObjectProperty<FormaAjuda> formaAjuda) {
 		this.formaAjuda = formaAjuda;
+	}
+
+	/**
+	 * @return the status
+	 */
+	public SimpleStringProperty getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(SimpleStringProperty status) {
+		this.status = status;
 	}
 		
 	

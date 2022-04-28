@@ -9,7 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import org.somos.domain.DomainSchema;
 import org.somos.domain.DomainTables;
@@ -42,6 +41,10 @@ public class CampanhaMailConfig extends TEntity {
 	
 	@Column(nullable=false)
 	private String conteudo;
+	
+
+	@Column(length=15)
+	private String status;
 
 	/**
 	 * @return the campanha
@@ -97,6 +100,20 @@ public class CampanhaMailConfig extends TEntity {
 	 */
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
+	}
+
+	/**
+	 * @return the status
+	 */
+	public String getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 

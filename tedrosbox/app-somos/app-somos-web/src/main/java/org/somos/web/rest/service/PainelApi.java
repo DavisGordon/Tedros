@@ -14,6 +14,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.somos.ejb.controller.IAjudaCampanhaController;
 import org.somos.ejb.controller.IAssociadoController;
 import org.somos.ejb.controller.ICampanhaController;
 import org.somos.model.AjudaCampanha;
@@ -41,7 +42,9 @@ public class PainelApi extends PainelAcoesApi{
 	
 	@EJB 
 	private IAssociadoController assServ;
-	
+
+	@EJB 
+	private IAjudaCampanhaController acServ;
 	
 	@PUT
 	@Path("/campanha/ajudar")
@@ -94,6 +97,8 @@ public class PainelApi extends PainelAcoesApi{
 	@Path("/campanhas")
 	public RestModel<List<CampanhaModel>> getCampanhas(){
 		try {
+			
+			TResult<List<AjudaCampanha>> x = acServ.recuperar(appBean.getToken(), null, null, "Trimestral", 90);
 			
 			Pessoa p = covidUserBean.getUser().getPessoa();
 			

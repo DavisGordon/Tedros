@@ -133,6 +133,12 @@ public class ResourceProducer {
 		return new Item<>(p.getProperty("srv.email.template.path"));
 	}
 	
+	@Produces
+	@RequestScoped
+	@Named("mailingTemplatePath")
+	public Item<String> getMailingTemplatePath(){
+		return new Item<>(p.getProperty("mailing.template.path"));
+	}
 	
 	@Produces
 	@RequestScoped
