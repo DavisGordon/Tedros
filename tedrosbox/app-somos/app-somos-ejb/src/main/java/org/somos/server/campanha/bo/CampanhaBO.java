@@ -3,6 +3,8 @@
  */
 package org.somos.server.campanha.bo;
 
+import java.util.List;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
@@ -25,6 +27,10 @@ public class CampanhaBO extends TGenericBO<Campanha> {
 	@Override
 	public ITGenericEAO<Campanha> getEao() {
 		return eao;
+	}
+	
+	public List<Campanha> listarValidos(){
+		return eao.listarValidos();
 	}
 
 }

@@ -49,7 +49,7 @@ public class AjudaCampanha extends TEntity {
 	private String periodo;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="id_for_ajuda", updatable=false)
+	@JoinColumn(name="id_for_ajuda")
 	private FormaAjuda formaAjuda;
 	
 	@Column
@@ -152,6 +152,16 @@ public class AjudaCampanha extends TEntity {
 	 */
 	public void setDataProcessado(Date dataProcessado) {
 		this.dataProcessado = dataProcessado;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "AjudaCampanha [associado=" + associado + ", campanha=" + campanha + ", valor=" + valor + ", status="
+				+ status + ", periodo=" + periodo + ", formaAjuda=" + formaAjuda + ", dataProcessado=" + dataProcessado
+				+ "]";
 	}
 	
 }

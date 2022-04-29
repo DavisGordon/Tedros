@@ -104,6 +104,14 @@ public class Associado extends TEntity {
 	public void setAjudaCampanhas(List<AjudaCampanha> ajudaCampanhas) {
 		this.ajudaCampanhas = ajudaCampanhas;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return  pessoa.toString();
+	}
 	
 	
 	

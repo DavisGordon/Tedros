@@ -6,6 +6,8 @@
  */
 package org.somos.server.campanha.controller;
 
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -17,7 +19,10 @@ import org.somos.server.campanha.service.CampanhaService;
 
 import com.tedros.ejb.base.controller.ITSecurityController;
 import com.tedros.ejb.base.controller.TSecureEjbController;
+import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.result.TResult.EnumResult;
 import com.tedros.ejb.base.security.ITSecurity;
+import com.tedros.ejb.base.security.TAccessToken;
 import com.tedros.ejb.base.security.TRemoteSecurity;
 
 /**
@@ -47,6 +52,15 @@ public class CampanhaController extends TSecureEjbController<Campanha> implement
 	 */
 	public ITSecurityController getSecurityController() {
 		return securityController;
+	}
+	
+
+	public TResult<List<Campanha>> listarValidos(TAccessToken token){
+		try {
+			return new TResult<>(EnumResult.SUCESS, serv.listarValidos());
+		} catch (Exception e) {
+			return super.processException(token, null, e);
+		}
 	}
 
 	

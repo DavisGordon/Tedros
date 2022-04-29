@@ -3,6 +3,8 @@
  */
 package org.somos.server.campanha.service;
 
+import java.util.List;
+
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -30,6 +32,11 @@ public class CampanhaService extends TEjbService<Campanha>  {
 	@Override
 	public TGenericBO<Campanha> getBussinesObject() {
 		return bo;
+	}
+	
+
+	public List<Campanha> listarValidos(){
+		return bo.listarValidos();
 	}
 	
 }

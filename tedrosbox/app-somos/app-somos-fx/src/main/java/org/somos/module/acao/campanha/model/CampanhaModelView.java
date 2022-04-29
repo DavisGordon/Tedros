@@ -155,7 +155,8 @@ public class CampanhaModelView extends TEntityModelView<Campanha> {
 	
 	@TReaderHtml
 	@TLabel(text="Forma de ajuda")
-	@TPickListField(selectedLabel="Selecionados", sourceLabel="Opções", 
+	@TPickListField(selectedLabel="Selecionados", 
+	sourceLabel="Opções", required=true, 
 	optionsList=@TOptionsList(serviceName="IFormaAjudaControllerRemote", 
 	entityClass = FormaAjuda.class, optionModelViewClass=FormaAjudaModelView.class))
 	@TModelViewType(modelClass = FormaAjuda.class, modelViewClass=FormaAjudaModelView.class)

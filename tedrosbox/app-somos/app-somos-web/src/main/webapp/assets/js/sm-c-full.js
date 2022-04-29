@@ -16,6 +16,11 @@ function buildCampanha(l){
 				$('#campImg', t).prop('src', 'api/f/i/'+o.image);
 			$('#titulo', t).html(o.titulo);
 			$('#desc', t).html(o.desc);
+			if(o.dataFim){
+				$('#dtFimDiv', t).show();
+				$('#dtFim', t).html(o.dataFim);
+			}else
+				$('#dtFimDiv', t).hide();
 			if(o.meta){
 				$('#metaDiv', t).show();
 				$('#meta', t).html(o.meta);

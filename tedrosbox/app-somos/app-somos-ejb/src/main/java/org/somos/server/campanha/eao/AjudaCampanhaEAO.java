@@ -26,7 +26,8 @@ public class AjudaCampanhaEAO extends TGenericEAO<AjudaCampanha> {
 		StringBuffer sbf = new StringBuffer("select distinct e from AjudaCampanha e "
 				+ "join e.campanha c "
 				+ "left join e.formaAjuda fa "
-				+ "where 1=1 ");
+				+ "where c.status='ATIVADO' "
+				+ "and (c.dataFim is null or c.dataFim >= SQL('CURRENT_DATE')) ");
 		
 		if(fa!=null && c==null) {
 			sbf.append("and fa.id = :faId ");

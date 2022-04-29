@@ -193,6 +193,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 				try {
 					if(StringUtils.isBlank(this.form.getId()))
 						this.form.setId("t-form");
+					
 					this.modelViewLoader.loadEditFields(form.getChildren());
 					
 					initializeForm();

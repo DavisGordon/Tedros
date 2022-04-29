@@ -115,6 +115,15 @@ public class CampanhaMailConfig extends TEntity {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "CampanhaMailConfig [titulo=" + titulo + ", status=" + status + ", formaAjuda=" + formaAjuda
+				+ ", campanha=" + campanha + "]";
+	}
 	
 
 	

@@ -10,7 +10,6 @@ import org.somos.module.acao.campanha.model.CampanhaFindModelView;
 import org.somos.module.acao.campanha.model.FormaAjudaModelView;
 import org.somos.module.mailing.form.CampanhaEmailTemplateForm;
 
-import com.tedros.fxapi.annotation.TCodeValue;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
@@ -33,7 +32,6 @@ import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEjbService;
-import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.text.TText;
@@ -105,13 +103,14 @@ public class CampanhaMailConfigModelView extends TEntityModelView<CampanhaMailCo
 	private SimpleObjectProperty<Campanha> campanha;
 	
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Chaves para substituição, insira a chave desejada para inserir uma informação. ex: #NOME# será substituido pelo nome do voluntário.", 
+	@TText(text="Chaves para substituição, insira a chave desejada para inserir uma informação. "
+			+ "ex: #NOME# será substituido pelo nome do asdociado e #VALOR# pelo valor de ajuda escolhido pelo mesmo.", 
 	wrappingWidth=650, textAlignment=TextAlignment.LEFT, 
 	textStyle = TTextStyle.CUSTOM)
 	private SimpleStringProperty tituloBoxEmail;
 	
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="#NOME# #TITULOCAMPANHA# #LINKCAMPANHA# #LINKSITE#", 
+	@TText(text="#NOME# #TITULOCAMPANHA# #FORMAAJUDA# #VALOR# #DATAFIM# #LINKCAMPANHA# #LINKSITE#", 
 			wrappingWidth=650, textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.CUSTOM)
 	private SimpleStringProperty textoChaves;
@@ -128,8 +127,13 @@ public class CampanhaMailConfigModelView extends TEntityModelView<CampanhaMailCo
 	public CampanhaMailConfigModelView(CampanhaMailConfig entity) {
 		super(entity);
 		if(entity.getConteudo()==null)
-			conteudo.setValue("Olá #NOME#,<br> obrigado por nos ajudar nesta campanha "
-					+ "segue os dados para efetuar a ajuda: <br><br> ");
+			conteudo.setValue("Olá #NOME#,<br> obrigado por nos ajudar na campanha #TITULOCAMPANHA#! "
+					+ "Estamos enviando este email com os dados necessarios para efetuar a sua contribuição:"
+					+ "<br><br>Sua opção foi ajudar atraves de #FORMAAJUDA# com o valor de #VALOR#.<hr>"
+					+ "**DIGITE AQUI OS DADOS NECESSARIOS PARA QUE O ASSOCIADO REALIZE O PAGAMENTO**<hr>"
+					+ "Na pagina #LINKCAMPANHA# você pode ver todas as nossas campanhas, alterar ou cancelar "
+					+ "aquelas que optou ajudar.<br><br>Sua ajuda é essencial na vida de muitas pessoas, "
+					+ "obrigado.<br>Deus te abençõe!");
 		
 	}
 	

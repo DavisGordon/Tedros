@@ -12,10 +12,8 @@ import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.form.TVBoxForm;
 
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.web.WebView;
 
@@ -27,16 +25,12 @@ public class CampanhaEmailTemplateForm extends TVBoxForm<CampanhaMailConfigModel
 
 	private TViewMode mode;
 	private WebView webView;
-	private CampanhaEmailTemplateForm _this;
-	
 	public CampanhaEmailTemplateForm(CampanhaMailConfigModelView modelView) {
 		super(modelView);
-		_this = this;
 	}
 	
 	public CampanhaEmailTemplateForm(CampanhaMailConfigModelView modelView, Boolean reader ) {
 		super(modelView, false);
-		_this = this;
 		if(reader)
 			settReaderMode();
 	}
@@ -44,13 +38,11 @@ public class CampanhaEmailTemplateForm extends TVBoxForm<CampanhaMailConfigModel
 	@SuppressWarnings("rawtypes")
 	public CampanhaEmailTemplateForm(ITPresenter presenter, CampanhaMailConfigModelView modelView) {
 		super(presenter, modelView);
-		_this = this;
 	}
 	
 	@SuppressWarnings("rawtypes")
 	public CampanhaEmailTemplateForm(ITPresenter presenter, CampanhaMailConfigModelView modelView, Boolean reader ) {
 		super(presenter, modelView, reader);
-		_this = this;
 	}
 	
 	@Override
@@ -75,11 +67,8 @@ public class CampanhaEmailTemplateForm extends TVBoxForm<CampanhaMailConfigModel
 		tAddFormItem(webView);
 		webView.setDisable(true);
 		
-		ChangeListener<Number> hListener = new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-				webView.setPrefHeight((double) arg2);
-			}
+		ChangeListener<Number> hListener = (arg0, arg1, arg2)-> {
+			webView.setPrefHeight((double) arg2);
 		};
 		((Pane)this).heightProperty().addListener(hListener);
 		
@@ -88,10 +77,7 @@ public class CampanhaEmailTemplateForm extends TVBoxForm<CampanhaMailConfigModel
 		
 		final StringBuffer sbf = new StringBuffer(str);
 		
-		webView.sceneProperty().addListener(new ChangeListener<Scene>() {
-
-	        @Override
-	        public void changed(ObservableValue<? extends Scene> observable, Scene oldValue, Scene scene) {
+		webView.sceneProperty().addListener(( observable,  oldValue,  scene) ->{
 	            if (scene != null) {
 	                webView.setMaxSize(getScene().getWidth(), getScene().getHeight());
 	                webView.maxWidthProperty().bind(getScene().widthProperty());
@@ -101,19 +87,14 @@ public class CampanhaEmailTemplateForm extends TVBoxForm<CampanhaMailConfigModel
 	                webView.maxWidthProperty().unbind();
 	                webView.maxHeightProperty().unbind();
 	            }
-	        }
-	    });
+	        });
 		
 		webView.getEngine().load(MailingUtil.buildTemplateLink());
 		
-		webView.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
-            public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
+		webView.getEngine().getLoadWorker().stateProperty().addListener(( ov, oldState, newState)-> {
                 if (newState == Worker.State.SUCCEEDED) {
                     webView.getEngine().executeScript("document.getElementById('content').innerHTML = \""+sbf.toString().replace("\r\n", " ").replace("\n", " ")+"\"");
-		
-                }
-            }
-        });
+                }});
 		
 		super.formEngine.setLoaded(true);
 		tInitializeReader();

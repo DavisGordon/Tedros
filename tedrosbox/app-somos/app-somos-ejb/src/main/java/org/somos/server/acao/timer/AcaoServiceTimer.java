@@ -61,7 +61,7 @@ public class AcaoServiceTimer {
         final TimerConfig programadas = new TimerConfig("programadas", false);
         final TimerConfig volAtivos = new TimerConfig("voluntariosAtivos", false);
         
-        timerService.createCalendarTimer(new ScheduleExpression().minute(54).hour(22), campanhas); 
+        timerService.createCalendarTimer(new ScheduleExpression().minute(16).hour(22), campanhas); 
         timerService.createCalendarTimer(new ScheduleExpression().minute(0).hour(12), programadas);
         timerService.createCalendarTimer(new ScheduleExpression().dayOfWeek("Fri").minute(0).hour(22), volAtivos);
 

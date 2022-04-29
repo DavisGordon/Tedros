@@ -58,5 +58,13 @@ public class FormaAjuda extends TEntity {
 	public void setDetalhe(String detalhe) {
 		this.detalhe = detalhe;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "FormaAjuda [id=" + getId() + ", tipo=" + tipo + "]";
+	}
 	
 }

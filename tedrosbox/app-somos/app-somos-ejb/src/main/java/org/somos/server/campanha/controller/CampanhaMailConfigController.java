@@ -16,6 +16,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.apache.commons.lang.StringUtils;
 import org.somos.ejb.controller.ICampanhaMailConfigController;
 import org.somos.model.AjudaCampanha;
 import org.somos.model.CampanhaMailConfig;
@@ -73,11 +74,31 @@ public class CampanhaMailConfigController extends TSecureEjbController<CampanhaM
 			List<CampanhaMailConfig> lst = serv.findAll(ex);
 			List<AjudaCampanha> enviados = new ArrayList<>();
 			if(lst!=null && !lst.isEmpty()) {
+				StringBuilder  error = new StringBuilder("");
 				for(CampanhaMailConfig cmc : lst) {
-					List<AjudaCampanha> novosLst = acServ.naoProcessados(cmc.getCampanha(), cmc.getFormaAjuda());
-					enviarMailing(enviados, cmc, novosLst);
-					List<AjudaCampanha> perLst = acServ.processarNoPeriodo(cmc.getCampanha(), cmc.getFormaAjuda());
-					enviarMailing(enviados, cmc, perLst);
+					String fail;
+					try {
+						List<AjudaCampanha> novosLst = acServ.naoProcessados(cmc.getCampanha(), cmc.getFormaAjuda());
+						fail = enviarMailing(enviados, cmc, novosLst);
+						if(StringUtils.isNotBlank(fail))
+							error.append(fail);
+					}catch(Exception e) {
+						error.append("<hr>Erro tentar buscar as ajudas de campanha do tipo não processadas ");
+						error.append("<br>"+cmc.toString());
+						error.append("<br>Msg: "+e.getMessage());
+						error.append("<br>Cause: "+e.getCause().getMessage());
+					}
+					try {
+						List<AjudaCampanha> perLst = acServ.processarNoPeriodo(cmc.getCampanha(), cmc.getFormaAjuda());
+						fail = enviarMailing(enviados, cmc, perLst);
+						if(StringUtils.isNotBlank(fail))
+							error.append(fail);
+					}catch(Exception e) {
+						error.append("<hr>Erro tentar buscar as ajudas de campanha do tipo processar no periodo ");
+						error.append("<br>"+cmc.toString());
+						error.append("<br>Msg: "+e.getMessage());
+						error.append("<br>Cause: "+e.getCause().getMessage());
+					}
 				}
 				
 				if(!enviados.isEmpty()) {
@@ -87,8 +108,21 @@ public class CampanhaMailConfigController extends TSecureEjbController<CampanhaM
 							acServ.save(ac);
 						} catch (Exception e) {
 							e.printStackTrace();
+							error.append("<hr>Ertir ao tentar salvar AjudaCampanha:");
+							error.append("<br>"+ac.toString());
+							error.append("<br>Msg: "+e.getMessage());
+							error.append("<br>Cause: "+e.getCause().getMessage());
 						}
 					});
+					try {
+						emailBo.enviarEmailAjudaCampanhaRealizado(enviados);
+						String x = error.toString();
+						if(StringUtils.isNotBlank(x))
+							emailBo.enviarEmailErro(x);
+						
+					} catch (EmailBusinessException | TSentEmailException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}catch(Exception e) {
@@ -96,16 +130,18 @@ public class CampanhaMailConfigController extends TSecureEjbController<CampanhaM
 		}
 	}
 
-	private void enviarMailing(List<AjudaCampanha> enviados, CampanhaMailConfig cmc, List<AjudaCampanha> novosLst) {
-		novosLst.parallelStream().forEach(ac->{
+	private String enviarMailing(List<AjudaCampanha> enviados, CampanhaMailConfig cmc, List<AjudaCampanha> novosLst) {
+		StringBuilder  error = new StringBuilder("");
+		novosLst.forEach(ac->{
 			String content = serv.prepareContent(cmc, ac);
 			try {
 				emailBo.enviarMailing(false, ac.getAssociado().getPessoa().getEmail(), cmc.getTitulo(), content);
 				enviados.add(ac);
 			} catch (TSentEmailException | EmailBusinessException e) {
 				e.printStackTrace();
+				error.append("<hr>"+ac.getAssociado().getPessoa().getEmail()+", "+ cmc.getTitulo()+"<br> "+ content);
 			}
-			
 		});
+		return error.toString();
 	}
 }

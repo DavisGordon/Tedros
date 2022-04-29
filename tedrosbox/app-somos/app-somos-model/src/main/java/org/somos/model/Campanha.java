@@ -212,4 +212,13 @@ public class Campanha extends TEntity {
 		return periodos;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Campanha [id=" + getId() + ", titulo=" + titulo + ", dataFim=" + dataFim + ", status=" + status
+				+ "]";
+	}
+
 }

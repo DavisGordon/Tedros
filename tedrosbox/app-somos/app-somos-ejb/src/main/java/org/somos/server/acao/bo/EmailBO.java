@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.somos.model.Acao;
+import org.somos.model.AjudaCampanha;
 import org.somos.model.Contato;
 import org.somos.model.Pessoa;
 import org.somos.model.TipoAjuda;
@@ -89,6 +90,40 @@ public class EmailBO {
 	
 	public void enviarMailing(boolean debug, String to, String subject, String content) throws TSentEmailException, EmailBusinessException{
 		util.sent(debug, emailAccount.getValue(), to, subject, this.gerarMailing(content), true);
+	}
+	
+	public void enviarEmailErro(String erro) throws EmailBusinessException, TSentEmailException {
+		
+		String to = pessBO.getEnderecoEstrategicoEmail();
+		if(to.isEmpty())
+			throw new EmailBusinessException("Não foi identificado nenhum voluntário estrategico para envio de email.");
+		
+		util.sent(false, emailAccount.getValue(), to, PROJECT+"[ERRO TECNICO] ", erro, true);
+		
+	}
+	
+	public void enviarEmailAjudaCampanhaRealizado(List<AjudaCampanha> enviados) throws EmailBusinessException, TSentEmailException {
+		StringBuilder content = new StringBuilder("Foi realizado o envio dos seguintes emails de campanha:<br>");
+		enviados.forEach(ac->{
+			String nome = ac.getAssociado().getPessoa().getNome();
+			String contato = ac.getAssociado().getPessoa().getTodosContatos();
+			String valor = ac.getValor();
+			String periodo = ac.getPeriodo();
+			String forma = ac.getFormaAjuda()!=null?ac.getFormaAjuda().getTipo():null;
+			
+			content.append("<hr>Campanha: "+ac.getCampanha().getTitulo());
+			content.append("<br>Nome: "+(nome!=null?nome:""));
+			content.append("<br>Contato: "+(contato!=null?contato:""));
+			content.append("<br>Valor: "+(valor!=null?valor:""));
+			content.append("<br>Periodo: "+(periodo!=null?periodo:""));
+			content.append("<br>Forma de ajuda: "+(forma!=null?forma:""));
+		});
+		String to = pessBO.getEnderecoEstrategicoEmail();
+		if(to.isEmpty())
+			throw new EmailBusinessException("Não foi identificado nenhum voluntário estrategico para envio de email.");
+		
+		util.sent(false, emailAccount.getValue(), to, PROJECT+" Mailing campanhas de ajuda", content.toString(), true);
+		
 	}
 	
 	public void enviarEmailAjudaCampanha(String titulo, String nome, String contato,

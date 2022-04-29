@@ -45,9 +45,7 @@ public class SiteOthersPageApi extends SiteAcaoApi{
 	@Path("/campanhas")
 	public RestModel<List<CampanhaModel>> getCampanhas(){
 		try {
-			Campanha ex = new Campanha();
-			ex.setStatus("ATIVADO");
-			TResult<List<Campanha>> res = caServ.findAll(appBean.getToken(), ex);
+			TResult<List<Campanha>> res = caServ.listarValidos(appBean.getToken());
 			List<CampanhaModel> l = new ArrayList<>();
 			if(res.getResult().equals(EnumResult.SUCESS)){
 				
