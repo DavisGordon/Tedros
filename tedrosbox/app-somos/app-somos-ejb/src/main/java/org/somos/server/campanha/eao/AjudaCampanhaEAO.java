@@ -22,7 +22,7 @@ import com.tedros.ejb.base.eao.TGenericEAO;
 public class AjudaCampanhaEAO extends TGenericEAO<AjudaCampanha> {
 
 	@SuppressWarnings("unchecked")
-	public List<AjudaCampanha> recuperar(Campanha c, FormaAjuda fa, String p, Integer diasAtras){
+	public List<AjudaCampanha> listarParaProcessamento(Campanha c, FormaAjuda fa){
 		StringBuffer sbf = new StringBuffer("select distinct e from AjudaCampanha e "
 				+ "join e.campanha c "
 				+ "left join e.formaAjuda fa "
@@ -38,14 +38,8 @@ public class AjudaCampanhaEAO extends TGenericEAO<AjudaCampanha> {
 			if(fa!=null)
 				sbf.append("and fa.id = :faId ");
 		}
-		if(p!=null && diasAtras!=null) {
-			sbf.append("and (e.periodo = :p and ( ");
-			sbf.append("FUNC('datediff', 'DAY', e.dataProcessado, CURRENT_DATE) > :ini ");
-			sbf.append("and FUNC('datediff', 'DAY', e.dataProcessado, CURRENT_DATE) <= :fim)) ");
-		}else 
-			sbf.append("and e.dataProcessado is null ");
-			
-		//datediff(DAY, ac.insert_date, current_date) > 15
+		
+		sbf.append("and e.dataProximo <= CURRENT_DATE ");
 		
 		Query qry = getEntityManager().createQuery(sbf.toString());
 		 
@@ -53,12 +47,6 @@ public class AjudaCampanhaEAO extends TGenericEAO<AjudaCampanha> {
 			qry.setParameter("cId", c.getId());
 		if(fa!=null)
 			qry.setParameter("faId", fa.getId());
-		if(p!=null && diasAtras!=null) {
-			qry.setParameter("p", p);
-			qry.setParameter("ini", diasAtras-1);
-			qry.setParameter("fim", diasAtras+2);
-		}
-		
 		
 		return qry.getResultList();
 	}

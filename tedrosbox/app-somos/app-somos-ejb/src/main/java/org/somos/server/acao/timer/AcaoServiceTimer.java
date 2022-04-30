@@ -21,13 +21,15 @@ import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
-import org.somos.ejb.controller.ICampanhaMailConfigController;
 import org.somos.model.Acao;
 import org.somos.model.Pessoa;
 import org.somos.model.Voluntario;
 import org.somos.server.acao.service.AcaoService;
+import org.somos.server.campanha.service.CampanhaMailConfigService;
 import org.somos.server.exception.EmailBusinessException;
 import org.somos.server.pessoa.service.PessoaService;
 
@@ -37,9 +39,10 @@ import com.tedros.util.TSentEmailException;
  * @author Davis Gordon
  *
  */
+@Startup
 @Singleton
 @Lock(LockType.READ) // allows timers to execute in parallel
-@Startup
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class AcaoServiceTimer {
 
 	@Resource
@@ -52,7 +55,7 @@ public class AcaoServiceTimer {
 	private PessoaService pServ;
 
 	@EJB
-	private ICampanhaMailConfigController cmcServ;
+	private CampanhaMailConfigService cmcServ;
 	
     @PostConstruct
     private void construct() {
@@ -61,7 +64,7 @@ public class AcaoServiceTimer {
         final TimerConfig programadas = new TimerConfig("programadas", false);
         final TimerConfig volAtivos = new TimerConfig("voluntariosAtivos", false);
         
-        timerService.createCalendarTimer(new ScheduleExpression().minute(16).hour(22), campanhas); 
+        timerService.createCalendarTimer(new ScheduleExpression().minute(00).hour(10), campanhas); 
         timerService.createCalendarTimer(new ScheduleExpression().minute(0).hour(12), programadas);
         timerService.createCalendarTimer(new ScheduleExpression().dayOfWeek("Fri").minute(0).hour(22), volAtivos);
 

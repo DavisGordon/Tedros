@@ -70,7 +70,6 @@ public final class TSMTPUtil {
 	 
 	    /** Ativa Debug para sessão */
 	    session.setDebug(debug);
-	    to = "davis.dun@gmail.com";
 	 
 	    try {
 	 

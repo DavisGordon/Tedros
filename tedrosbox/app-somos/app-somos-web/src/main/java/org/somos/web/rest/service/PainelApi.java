@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.somos.ejb.controller.IAssociadoController;
 import org.somos.ejb.controller.ICampanhaController;
+import org.somos.ejb.controller.ICampanhaMailConfigController;
 import org.somos.model.AjudaCampanha;
 import org.somos.model.Associado;
 import org.somos.model.Campanha;
@@ -42,6 +43,9 @@ public class PainelApi extends PainelAcoesApi{
 	@EJB 
 	private IAssociadoController assServ;
 	
+	@EJB
+	private ICampanhaMailConfigController cmcServ;
+	
 	@PUT
 	@Path("/campanha/ajudar")
 	public RestModel<List<CampanhaModel>> ajudar(CampanhaModel m){
@@ -53,6 +57,9 @@ public class PainelApi extends PainelAcoesApi{
 					m.getId(), m.getValor(), m.getPeriodo(), m.getAssIdForma());
 			
 			if(res.getResult().equals(EnumResult.SUCESS)){
+				
+				cmcServ.processarMailing(appBean.getToken());
+				
 				Associado a = res.getValue();
 				return processarCampanhas(a);
 			

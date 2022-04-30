@@ -3,7 +3,8 @@
  */
 package org.somos.server.campanha.bo;
 
-import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
@@ -37,23 +38,30 @@ public class AjudaCampanhaBO extends TGenericBO<AjudaCampanha> {
 		return eao;
 	}
 	
-	public List<AjudaCampanha> recuperar(Campanha c, FormaAjuda fa, String p, Integer diasAtras){
-		return eao.recuperar(c, fa, p, diasAtras);
+	public List<AjudaCampanha> listarParaProcessamento(Campanha c, FormaAjuda fa){
+		return eao.listarParaProcessamento(c, fa);
 	}
 	
-	public List<AjudaCampanha> naoProcessados(Campanha c, FormaAjuda fa){
-		return eao.recuperar(c, fa, null, null);
+	public void processar(AjudaCampanha ac) {
+		
 	}
 	
-	public List<AjudaCampanha> processarNoPeriodo(Campanha c, FormaAjuda fa){
+	public void setProcessado(AjudaCampanha ac){
 		try {
-			List<Periodo> l = pEao.listAll(Periodo.class);
-			List<AjudaCampanha> lst = new ArrayList<>();
-			l.forEach(p->{
-				lst.addAll(eao.recuperar(c, fa, p.getNome(), p.getTotalDias()));
-			});
+			Periodo p = new Periodo();
+			p.setNome(ac.getPeriodo());
+			p = pEao.find(p);
 			
-			return lst;
+			ac.setDataProcessado(new Date());
+			
+			if(p.getTotalDias()!=null) {
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.DAY_OF_MONTH, p.getTotalDias());
+				ac.setDataProximo(cal.getTime());
+			}else
+				ac.setDataProximo(null);
+				
+			
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

@@ -6,10 +6,12 @@ import javax.ejb.Remote;
 import org.somos.model.CampanhaMailConfig;
 
 import com.tedros.ejb.base.controller.ITSecureEjbController;
+import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.security.TAccessToken;
 
 @Remote 
 @LocalBean
 public interface ICampanhaMailConfigController extends ITSecureEjbController<CampanhaMailConfig>{
 	
-	void processarMailing();
+	TResult<Boolean> processarMailing(TAccessToken token);
 }

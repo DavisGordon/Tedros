@@ -53,9 +53,13 @@ public class AjudaCampanha extends TEntity {
 	private FormaAjuda formaAjuda;
 	
 	@Column
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date dataProcessado;
 
+	@Column
+	@Temporal(TemporalType.DATE)
+	private Date dataProximo;
+	
 	/**
 	 * @return the associado
 	 */
@@ -162,6 +166,20 @@ public class AjudaCampanha extends TEntity {
 		return "AjudaCampanha [associado=" + associado + ", campanha=" + campanha + ", valor=" + valor + ", status="
 				+ status + ", periodo=" + periodo + ", formaAjuda=" + formaAjuda + ", dataProcessado=" + dataProcessado
 				+ "]";
+	}
+
+	/**
+	 * @return the dataProximo
+	 */
+	public Date getDataProximo() {
+		return dataProximo;
+	}
+
+	/**
+	 * @param dataProximo the dataProximo to set
+	 */
+	public void setDataProximo(Date dataProximo) {
+		this.dataProximo = dataProximo;
 	}
 	
 }

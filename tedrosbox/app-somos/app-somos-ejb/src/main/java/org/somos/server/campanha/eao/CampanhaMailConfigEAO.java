@@ -16,4 +16,5 @@ import com.tedros.ejb.base.eao.TGenericEAO;
 @RequestScoped
 public class CampanhaMailConfigEAO extends TGenericEAO<CampanhaMailConfig> {
 
+	
 }

@@ -37,16 +37,12 @@ public class AjudaCampanhaService extends TEjbService<AjudaCampanha>  {
 		return bo;
 	}
 	
-	public List<AjudaCampanha> recuperar(Campanha c, FormaAjuda fa, String p, Integer diasAtras){
-		return bo.recuperar(c, fa, p, diasAtras);
+	public List<AjudaCampanha> listarParaProcessamento(Campanha c, FormaAjuda fa){
+		return bo.listarParaProcessamento(c, fa);
 	}
 	
-	public List<AjudaCampanha> naoProcessados(Campanha c, FormaAjuda fa){
-		return bo.naoProcessados(c, fa);
-	}
-	
-	public List<AjudaCampanha> processarNoPeriodo(Campanha c, FormaAjuda fa){
-		return bo.processarNoPeriodo(c, fa);
+	public void setProcessado(AjudaCampanha ac){
+		bo.setProcessado(ac);;
 	}
 	
 }

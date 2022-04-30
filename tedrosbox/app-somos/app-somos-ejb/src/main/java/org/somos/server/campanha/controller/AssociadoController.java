@@ -7,6 +7,7 @@
 package org.somos.server.campanha.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 
 import javax.ejb.EJB;
@@ -155,6 +156,7 @@ public class AssociadoController extends TSecureEjbController<Associado> impleme
 			ac.setCampanha(c);
 			ac.setValor(valor);
 			ac.setPeriodo(periodo);
+			ac.setDataProximo(new Date());
 			
 			a = serv.save(a);
 			

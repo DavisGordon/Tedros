@@ -3,6 +3,9 @@
  */
 package org.somos.server.campanha.service;
 
+import java.util.List;
+
+import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -28,13 +31,32 @@ public class CampanhaMailConfigService extends TEjbService<CampanhaMailConfig>  
 	@Inject
 	private CampanhaMailConfigBO bo;
 	
+
+	@EJB
+	private AjudaCampanhaService acServ;
+	
 	@Override
 	public TGenericBO<CampanhaMailConfig> getBussinesObject() {
 		return bo;
 	}
 	
-	public String prepareContent(CampanhaMailConfig cmc, AjudaCampanha ac) {
-		return bo.prepareContent(cmc, ac);
+	public void processarMailing() {
+		try {
+			List<AjudaCampanha> enviados = bo.processarMailing();
+			if(!enviados.isEmpty()) {
+				enviados.forEach(ac->{
+					try {
+						acServ.setProcessado(ac);
+						acServ.save(ac);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				});
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
+
 	
 }
