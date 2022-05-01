@@ -6,6 +6,7 @@
  */
 package org.somos.module.pessoa;
 
+import org.somos.module.pessoa.model.AssociadoModelView;
 import org.somos.module.pessoa.model.PessoaModelView;
 import org.somos.module.pessoa.model.TermoAdesaoModelView;
 
@@ -32,7 +33,8 @@ public class CadastroDePessoaModule extends TModule{
 	public void tStart() {
 		tShowView(new TGroupView<TGroupPresenter>(this, "Gerenciar Pessoas Voluntárias", 
 				new TViewItem(TDynaGroupView.class, PessoaModelView.class, "Pessoas"),
-				new TViewItem(TDynaGroupView.class, TermoAdesaoModelView.class, "Termos de Adesão Modelo")
+				new TViewItem(TDynaGroupView.class, TermoAdesaoModelView.class, "Termos de Adesão Modelo"),
+				new TViewItem(TDynaGroupView.class, AssociadoModelView.class, "Associados em campanha")
 				));
 	}
 }

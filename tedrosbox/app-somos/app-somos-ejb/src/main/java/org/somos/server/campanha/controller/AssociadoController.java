@@ -128,7 +128,6 @@ public class AssociadoController extends TSecureEjbController<Associado> impleme
 			if(a==null) {
 				a = new Associado();
 				a.setPessoa(p);
-				a.setAceitaEmails("Sim");
 				a.setAjudaCampanhas(new ArrayList<>());
 				a.getAjudaCampanhas().add(ac);
 			}else if(a.getAjudaCampanhas()!=null && !a.getAjudaCampanhas().isEmpty()) {

@@ -35,13 +35,7 @@ public class PessoaTableCell extends TTableCell{
 			switch (field) {
 			case 1 : return p.getNome();
 			case 2 : return p.getProfissao()!=null ? p.getProfissao() : "";
-			case 3 : 
-				String t = "";
-				if(p.getContatos()!=null && !p.getContatos().isEmpty()) {
-					for(Contato c : p.getContatos())
-						t += t.equals("") ? c.getDescricao() : ", "+c.getDescricao();
-				}
-				return t;
+			case 3 : return p.getTodosContatos();
 			}
 			
 		}

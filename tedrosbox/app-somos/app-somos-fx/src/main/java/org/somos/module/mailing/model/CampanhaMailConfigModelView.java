@@ -10,6 +10,8 @@ import org.somos.module.acao.campanha.model.CampanhaFindModelView;
 import org.somos.module.acao.campanha.model.FormaAjudaModelView;
 import org.somos.module.mailing.form.CampanhaEmailTemplateForm;
 
+import com.tedros.core.annotation.security.TAuthorizationType;
+import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TFieldBox;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
@@ -60,10 +62,10 @@ import javafx.scene.text.TextAlignment;
 					@TOption(text = "Titulo", value = "titulo")}),
 	presenter=@TPresenter(behavior = @TBehavior(saveAllModels=false, saveOnlyChangedModels=false), 
 		decorator = @TDecorator(viewTitle="Campanha Mailing Config", listTitle="Configuração", readerModeTitle="Ver email")))
-/*@TSecurity(	id="SOMOS_CAMPANHA_MAIL_CONFIG_FORM", 
+@TSecurity(	id="SOMOS_CAMPANHA_MAIL_CONFIG_FORM", 
 	appName = "#{somos.name}", moduleName = "Gerenciar Campanha", viewName = "Campanha Mail Config",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.SAVE, TAuthorizationType.NEW,
-			TAuthorizationType.DELETE, TAuthorizationType.EDIT, TAuthorizationType.READ})*/
+			TAuthorizationType.DELETE, TAuthorizationType.EDIT, TAuthorizationType.READ})
 public class CampanhaMailConfigModelView extends TEntityModelView<CampanhaMailConfig> {
 	
 	private SimpleLongProperty id;

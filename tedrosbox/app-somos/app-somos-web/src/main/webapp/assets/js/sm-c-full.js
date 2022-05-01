@@ -36,7 +36,7 @@ function buildCampanha(l){
 				o.valores.forEach(function (v, i){
 					var chk = o.valor && o.valor==v ? 'checked' : '';
 					var r = '<input type="radio" '+chk+' id="val'+idx+'-'+i+'" name="valRadio'+idx+'" value="'+v+'">'+
-							'<label for="val'+idx+'-'+i+'">'+v+'</label>';
+							'<label class="sm-txt-bold" for="val'+idx+'-'+i+'">'+v+'</label>';
 					$('#valDiv', t).append(r);
 				});
 			}else{
@@ -48,7 +48,7 @@ function buildCampanha(l){
 				o.periodos.forEach(function (v, i){
 					var chk = o.periodo && o.periodo==v ? 'checked' : '';
 					var r = '<input type="radio" '+chk+' id="per'+idx+'-'+i+'" name="perRadio'+idx+'" value="'+v+'">'+
-							'<label for="per'+idx+'-'+i+'">'+v+'</label>';
+							'<label class="sm-txt-bold"  for="per'+idx+'-'+i+'">'+v+'</label>';
 					$('#perDiv', t).append(r);
 				});
 			}else{
@@ -60,7 +60,7 @@ function buildCampanha(l){
 				o.formas.forEach(function (v, i){
 					var chk = o.assIdForma && o.assIdForma==v.id ? 'checked' : '';
 					var tr = '<tr><td><input type="radio" '+chk+' id="for'+idx+'-'+i+'" name="forRadio'+idx+'" value="'+v.id+'">'+
-					'<label for="for'+idx+'-'+i+'">'+v.nome+'</label></td><td>'+v.desc+'</td></tr>';
+					'<label class="sm-txt-bold"  for="for'+idx+'-'+i+'">'+v.nome+'</label></td><td>'+v.desc+'</td></tr>';
 					$('#forTb', t).append(tr);
 				});
 			}else{
