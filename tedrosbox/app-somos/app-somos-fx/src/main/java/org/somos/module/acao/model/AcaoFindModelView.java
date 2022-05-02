@@ -123,6 +123,7 @@ public class AcaoFindModelView extends TEntityModelView<Acao> {
 		}
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void buildListener() {
 		
 		ChangeListener idListener =  super.getListenerRepository().get("displayText");

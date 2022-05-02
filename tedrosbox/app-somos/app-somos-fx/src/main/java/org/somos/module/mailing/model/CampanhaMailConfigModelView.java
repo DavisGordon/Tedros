@@ -78,7 +78,7 @@ public class CampanhaMailConfigModelView extends TEntityModelView<CampanhaMailCo
 	private SimpleStringProperty textoCadastro;
 	
 	@TLabel(text="Titulo do email")
-	@TTextField(maxLength=25, node=@TNode(requestFocus=true, parse = true),
+	@TTextField(maxLength=120, node=@TNode(requestFocus=true, parse = true),
 	textInputControl=@TTextInputControl(promptText="Insira um titulo", parse = true),
 	required=true)
 	private SimpleStringProperty titulo;

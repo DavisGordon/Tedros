@@ -16,15 +16,12 @@ import javafx.util.Callback;
  * @author Davis Gordon
  *
  */
+@SuppressWarnings("rawtypes")
 public class TipoContatoCallback implements Callback<TableColumn, TableCell> {
-
-	
 
 	@Override
 	public TableCell call(TableColumn tipo) {
-		TipoContatoTableCell t = new TipoContatoTableCell();
-		
-		return t;
+		return new TipoContatoTableCell();
 	}
 	
 }

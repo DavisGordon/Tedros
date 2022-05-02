@@ -12,7 +12,4 @@ public class FormaAjudaCellCallBack implements Callback <CellDataFeatures<AjudaC
 	public ObservableValue<String> call(CellDataFeatures<AjudaCampanhaTableView, ObservableValue<FormaAjuda>> param) {
 		return  new SimpleStringProperty( param.getValue().getFormaAjuda().getValue().getTipo());
 	}
-	
-	
-	
 }

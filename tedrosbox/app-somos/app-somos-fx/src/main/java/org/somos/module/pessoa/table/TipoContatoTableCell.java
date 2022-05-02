@@ -15,12 +15,12 @@ import com.tedros.fxapi.control.TTableCell;
  * @author Davis Gordon
  *
  */
+@SuppressWarnings("rawtypes")
 public class TipoContatoTableCell extends TTableCell{
 
 	
 	public String processItem(Object item) {
 		TLanguage iEn = TLanguage.getInstance(null);
-		
 		
 		if(item!=null) {
 			String tipo = (String) item;

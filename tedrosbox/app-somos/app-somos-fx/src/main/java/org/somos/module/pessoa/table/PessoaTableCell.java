@@ -6,10 +6,8 @@
  */
 package org.somos.module.pessoa.table;
 
-import org.somos.model.Contato;
 import org.somos.model.Pessoa;
 
-import com.tedros.core.TLanguage;
 import com.tedros.fxapi.control.TTableCell;
 
 /**
@@ -18,24 +16,22 @@ import com.tedros.fxapi.control.TTableCell;
  * @author Davis Gordon
  *
  */
+@SuppressWarnings("rawtypes")
 public class PessoaTableCell extends TTableCell{
 
-	private int field;
+	private String text;
 	
-	/**
-	 * @param field
-	 */
-	public PessoaTableCell(int field) {
-		this.field = field;
+	public PessoaTableCell(String text) {
+		this.text = text;
 	}
 
 	public String processItem(Object item) {
 		if(item!=null && item instanceof Pessoa) {
 			Pessoa p = (Pessoa) item;
-			switch (field) {
-			case 1 : return p.getNome();
-			case 2 : return p.getProfissao()!=null ? p.getProfissao() : "";
-			case 3 : return p.getTodosContatos();
+			switch (text) {
+			case "Nome" : return p.getNome();
+			case "Profissão" : return p.getProfissao()!=null ? p.getProfissao() : "";
+			case "Contato" : return p.getTodosContatos();
 			}
 			
 		}

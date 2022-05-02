@@ -37,8 +37,6 @@ import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.scene.layout.TRegion;
-import com.tedros.fxapi.annotation.text.TFont;
-import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.domain.THtmlConstant;
@@ -51,7 +49,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
-import javafx.scene.text.TextAlignment;
 
 @TFormReaderHtml
 @TForm(name = "Estoque gerado automaticamente", showBreadcrumBar=true)
@@ -153,6 +150,7 @@ public class EstoqueModelView extends TEntityModelView<Estoque> {
 	/**
 	 * @return the id
 	 */
+	@Override
 	public SimpleLongProperty getId() {
 		return id;
 	}
@@ -160,6 +158,7 @@ public class EstoqueModelView extends TEntityModelView<Estoque> {
 	/**
 	 * @param id the id to set
 	 */
+	@Override
 	public void setId(SimpleLongProperty id) {
 		this.id = id;
 	}

@@ -7,6 +7,7 @@ import org.somos.model.Documento;
 import org.somos.model.Endereco;
 import org.somos.model.Pessoa;
 import org.somos.model.PessoaTermoAdesao;
+import org.somos.module.pessoa.validator.CredenciaisPainelValidator;
 
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;

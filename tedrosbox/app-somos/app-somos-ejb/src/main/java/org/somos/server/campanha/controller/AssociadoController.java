@@ -125,6 +125,8 @@ public class AssociadoController extends TSecureEjbController<Associado> impleme
 			Associado a = serv.recuperar(p);
 			AjudaCampanha ac = new AjudaCampanha();
 			
+			boolean flagReProcess = false;
+			
 			if(a==null) {
 				a = new Associado();
 				a.setPessoa(p);
@@ -141,6 +143,11 @@ public class AssociadoController extends TSecureEjbController<Associado> impleme
 					a.getAjudaCampanhas().add(ac);
 			}
 			
+			if(!ac.isNew() && 
+				((ac.getFormaAjuda()!=null && idForma!=null && !ac.getFormaAjuda().getId().equals(idForma)) 
+					|| (ac.getValor()!=null && valor!=null && !ac.getValor().equals(valor))))
+				flagReProcess = true;
+			
 			if(idForma!=null) {
 				FormaAjuda fa = new FormaAjuda();
 				fa.setId(idForma);
@@ -151,12 +158,24 @@ public class AssociadoController extends TSecureEjbController<Associado> impleme
 			Campanha c = new Campanha();
 			c.setId(idCamp);
 			c = cServ.findById(c);
+			
+			if(ac.isNew()) {
+				ac.setDataProximo(new Date());
+				ac.setPeriodo(periodo);
+			}else { 
+				if (flagReProcess) {
+					ac.setDataProximo(new Date());
+					ac.setPeriodo(periodo);
+				}else if(ac.getPeriodo()!=null && periodo!=null 
+						&& !ac.getPeriodo().equals(periodo)) {
+					ac.setPeriodo(periodo);
+					acServ.setDataProximo(ac);
+				}else
+					ac.setPeriodo(periodo);
+			}
 			ac.setAssociado(a);
 			ac.setCampanha(c);
 			ac.setValor(valor);
-			ac.setPeriodo(periodo);
-			ac.setDataProximo(new Date());
-			
 			a = serv.save(a);
 			
 			try {

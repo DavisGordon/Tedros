@@ -17,13 +17,11 @@ import javafx.util.Callback;
  *
  */
 @SuppressWarnings("rawtypes")
-public class FormaAjudaCallback implements Callback<TableColumn, TableCell> {
-
-	
+public class PessoaCallback implements Callback<TableColumn, TableCell> {
 
 	@Override
 	public TableCell call(TableColumn tipo) {
-		return new FormaAjudaTableCell();
+		return new PessoaTableCell(tipo.getText());
 	}
 	
 }

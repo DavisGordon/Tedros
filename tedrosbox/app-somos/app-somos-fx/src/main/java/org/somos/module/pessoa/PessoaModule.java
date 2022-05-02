@@ -27,7 +27,7 @@ import com.tedros.fxapi.presenter.view.group.TViewItem;
  */
 @TSecurity(	id="SOMOS_CADPESS_MODULE", appName = "#{somos.name}", moduleName = "Administrativo", 
 			allowedAccesses=TAuthorizationType.MODULE_ACCESS)
-public class CadastroDePessoaModule extends TModule{
+public class PessoaModule extends TModule{
 
 	@Override
 	public void tStart() {

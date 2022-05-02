@@ -12,7 +12,7 @@ import org.somos.module.estoque.icon.EstoqueMenuIconImageView;
 import org.somos.module.mailing.MailingModule;
 import org.somos.module.mailing.icon.MailingIconImageView;
 import org.somos.module.mailing.icon.MailingMenuIconImageView;
-import org.somos.module.pessoa.CadastroDePessoaModule;
+import org.somos.module.pessoa.PessoaModule;
 import org.somos.module.pessoa.icon.PessoaIconImageView;
 import org.somos.module.pessoa.icon.PessoaMenuIconImageView;
 import org.somos.module.report.ReportModule;
@@ -48,7 +48,7 @@ module = {
 			@TModule(type=ReportModule.class, name="Relatórios", menu="Administrativo", 
 					icon=RelatoriosIconImageView.class, menuIcon=RelatoriosMenuIconImageView.class,
 					description="Gere relatórios que ajudem nos processos administrativos."),
-			@TModule(type=CadastroDePessoaModule.class, name="#{label.person}", menu="Administrativo", 
+			@TModule(type=PessoaModule.class, name="#{label.person}", menu="Administrativo", 
 					icon=PessoaIconImageView.class, menuIcon=PessoaMenuIconImageView.class,
 					description="Gerencie aqui todas as pessoas envolvidas no projeto, voluntarios e "
 							+ "filantropicos cadastrados pelo site e também os termos de adesão."),

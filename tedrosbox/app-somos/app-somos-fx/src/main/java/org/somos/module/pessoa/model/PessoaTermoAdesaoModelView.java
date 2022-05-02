@@ -5,6 +5,8 @@ package org.somos.module.pessoa.model;
 
 import org.somos.model.PessoaTermoAdesao;
 import org.somos.model.TipoAjuda;
+import org.somos.module.pessoa.action.PessoaTermoAdesaoNewAction;
+import org.somos.module.pessoa.action.PessoaTermoAdesaoPrintAction;
 import org.somos.module.tipoAjuda.model.TipoAjudaModelView;
 
 import com.tedros.fxapi.annotation.TCodeValue;

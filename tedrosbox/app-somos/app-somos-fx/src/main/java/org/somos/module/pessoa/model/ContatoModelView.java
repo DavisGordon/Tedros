@@ -9,6 +9,7 @@ package org.somos.module.pessoa.model;
 import org.somos.model.Contato;
 import org.somos.module.pessoa.table.TipoContatoCallback;
 import org.somos.module.pessoa.trigger.TTipoContatoTrigger;
+import org.somos.module.pessoa.validator.DocumentoEmailValidator;
 
 import com.tedros.fxapi.annotation.TCodeValue;
 import com.tedros.fxapi.annotation.control.TCallbackFactory;
@@ -82,7 +83,7 @@ public class ContatoModelView extends TEntityModelView<Contato> {
 	node=@TNode(requestFocus=true, parse = true),
 	textInputControl=@TTextInputControl(promptText="E-mail, telefone, celuar...", parse = true),
 	required=true)
-	@TValidator(validatorClass = DocumentoValidator.class, associatedFieldsName={"tipo"})
+	@TValidator(validatorClass = DocumentoEmailValidator.class, associatedFieldsName={"tipo"})
 	private SimpleStringProperty descricao;
 	
 	public ContatoModelView(Contato entidade) {

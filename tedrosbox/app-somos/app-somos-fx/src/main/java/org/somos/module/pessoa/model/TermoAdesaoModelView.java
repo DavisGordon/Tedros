@@ -4,6 +4,7 @@
 package org.somos.module.pessoa.model;
 
 import org.somos.model.TermoAdesao;
+import org.somos.module.pessoa.action.TermoAdesaoPrintAction;
 import org.somos.module.pessoa.process.TermoAdesaoProcess;
 
 import com.tedros.core.annotation.security.TAuthorizationType;

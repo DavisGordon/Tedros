@@ -46,13 +46,17 @@ public class AjudaCampanhaBO extends TGenericBO<AjudaCampanha> {
 		
 	}
 	
+	
 	public void setProcessado(AjudaCampanha ac){
+		ac.setDataProcessado(new Date());
+		setDataProximo(ac);
+	}
+
+	public void setDataProximo(AjudaCampanha ac) {
 		try {
 			Periodo p = new Periodo();
 			p.setNome(ac.getPeriodo());
 			p = pEao.find(p);
-			
-			ac.setDataProcessado(new Date());
 			
 			if(p.getTotalDias()!=null) {
 				Calendar cal = Calendar.getInstance();
@@ -60,11 +64,11 @@ public class AjudaCampanhaBO extends TGenericBO<AjudaCampanha> {
 				ac.setDataProximo(cal.getTime());
 			}else
 				ac.setDataProximo(null);
-				
 			
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
+	
 
 }

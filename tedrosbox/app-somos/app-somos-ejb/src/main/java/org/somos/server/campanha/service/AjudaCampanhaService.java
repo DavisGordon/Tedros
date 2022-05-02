@@ -45,4 +45,8 @@ public class AjudaCampanhaService extends TEjbService<AjudaCampanha>  {
 		bo.setProcessado(ac);;
 	}
 	
+	public void setDataProximo(AjudaCampanha ac) {
+		bo.setDataProximo(ac);
+	}
+	
 }

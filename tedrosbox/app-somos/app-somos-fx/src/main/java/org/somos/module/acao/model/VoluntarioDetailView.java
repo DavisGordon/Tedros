@@ -7,9 +7,7 @@ import org.somos.model.Pessoa;
 import org.somos.model.TipoAjuda;
 import org.somos.model.Voluntario;
 import org.somos.module.pessoa.model.PessoaFindModelView;
-import org.somos.module.pessoa.table.PessoaContatoCallback;
-import org.somos.module.pessoa.table.PessoaNomeCallback;
-import org.somos.module.pessoa.table.PessoaProfissaoCallback;
+import org.somos.module.pessoa.table.PessoaCallback;
 import org.somos.module.tipoAjuda.model.TipoAjudaFindModelView;
 import org.somos.module.tipoAjuda.model.TipoAjudaModelView;
 
@@ -60,11 +58,11 @@ import javafx.scene.layout.Priority;
 				),
 		tableView=@TTableView(editable=true, control=@TControl(prefHeight=180,parse = true),
 			columns = { @TTableColumn(cellValue="pessoa", text = "Nome", resizable=true,
-							cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=PessoaNomeCallback.class))), 
+							cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=PessoaCallback.class))), 
 						@TTableColumn(cellValue="pessoa", text = "Profissão", resizable=true,
-							cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=PessoaProfissaoCallback.class))), 
+							cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=PessoaCallback.class))), 
 						@TTableColumn(cellValue="pessoa", text = "Contato", resizable=true,
-							cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=PessoaContatoCallback.class))), 
+							cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=PessoaCallback.class))), 
 						@TTableColumn(cellValue="tiposAjudaDesc", text = "Tipos de ajuda", resizable=true)
 				}))
 public class VoluntarioDetailView extends TEntityModelView<Voluntario> {

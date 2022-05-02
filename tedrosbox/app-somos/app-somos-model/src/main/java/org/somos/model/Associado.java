@@ -32,7 +32,6 @@ public class Associado extends TEntity {
 	@JoinColumn(name="id_pess", nullable=false, updatable=false)
 	private Pessoa pessoa;
 	
-	
 	@OneToMany(mappedBy="associado", 
 			fetch=FetchType.EAGER, 
 			orphanRemoval=true,
