@@ -10,12 +10,15 @@ import com.tedros.core.context.TedrosContext;
 import com.tedros.core.module.TObjectRepository;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.collections.ITObservableList;
+import com.tedros.fxapi.collections.TFXCollections;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaGroupView;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.util.TEntityListViewCallback;
 
+import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WeakChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.collections.WeakListChangeListener;
@@ -58,11 +61,34 @@ public class TEditEntityModal extends TRequiredModal {
 	
 	private TObjectRepository repo = new TObjectRepository();
 	
+	@SuppressWarnings("unchecked")
+	public TEditEntityModal(Property item, double width, double height, double modalWidth, double modalHeight) {
+		ITObservableList items = TFXCollections.iTObservableList();
+		if(item.getValue()!=null)
+			items.add(item.getValue());
+		items.addListener(new ListChangeListener() {
+			@Override
+			public void onChanged(Change c) {
+				if(c.getList().isEmpty())
+					item.setValue(null);
+				else
+					item.setValue(c.getList().get(0));
+			}
+			
+		});
+		init(items, width, height, modalWidth, modalHeight);
+	}
+	
 	/**
 	 * 
 	 */
-	@SuppressWarnings({"unchecked" })
-	public TEditEntityModal(ITObservableList items, double width, double height, double modalWidth, double modalHeight) {
+	public TEditEntityModal(ITObservableList items, double width, double height,
+			double modalWidth, double modalHeight) {
+		init(items, width, height, modalWidth, modalHeight);
+	}
+	
+	private void init(ITObservableList items, double width, double height,
+			double modalWidth, double modalHeight) {
 		this.tSelectedItems = items;
 		this.width = width;
 		this.height = (height<100) ? 150 : height;

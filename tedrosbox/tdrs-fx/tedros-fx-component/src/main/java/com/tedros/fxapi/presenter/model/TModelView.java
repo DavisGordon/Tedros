@@ -19,6 +19,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -170,6 +171,46 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	 * */
 	@Transient
 	public abstract SimpleStringProperty getDisplayProperty();
+
+
+	/**
+	 * <pre>
+	 * Show the fields values as the format param 
+	 * </pre>
+	 * */
+	@SuppressWarnings("unchecked")
+	protected void formatFieldsToDisplay(String format, ObservableValue<?>... fields) {
+		
+		setDisplayValue(format, fields);
+		
+		int i = 0;
+		for(ObservableValue<?> ob : fields) {
+			String lid = "tDisplayFieldIdx_"+(i++);
+			ChangeListener<Object> chl = (ChangeListener<Object>) getListenerRepository().get(lid);
+			if(chl==null) {
+				chl = (a,o,n) -> {
+					setDisplayValue(format, fields);
+				};
+				addListener(lid, chl);
+			}else
+				ob.removeListener(chl);
+			
+			ob.addListener(chl);
+		}
+		
+	}
+
+	/**
+	 * @param format
+	 * @param fields
+	 */
+	private void setDisplayValue(String format, ObservableValue<?>... fields) {
+		String[] arr = new String[] {};
+		for(ObservableValue<?> f : fields) {
+			arr = ArrayUtils.add(arr, f.getValue()!=null ? f.getValue().toString() : "");
+		}
+		this.getDisplayProperty().setValue(String.format(format, arr));
+	}
 	
 	/**
 	 * <pre>

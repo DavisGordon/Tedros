@@ -1,10 +1,19 @@
 package com.tedros.fxapi.presenter.modal.behavior;
 
+import java.util.Arrays;
+
+import com.tedros.core.TModule;
 import com.tedros.core.annotation.security.TAuthorizationType;
+import com.tedros.core.context.TedrosAppManager;
+import com.tedros.core.context.TedrosContext;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.control.action.TPresenterAction;
+import com.tedros.fxapi.exception.TValidatorException;
+import com.tedros.fxapi.modal.TMessageBox;
+import com.tedros.fxapi.presenter.behavior.TActionState;
 import com.tedros.fxapi.presenter.behavior.TActionType;
+import com.tedros.fxapi.presenter.behavior.TProcessResult;
 import com.tedros.fxapi.presenter.modal.decorator.TEditModalDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.util.TEntityListViewCallback;
@@ -13,6 +22,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
@@ -33,22 +45,77 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		
 	public void initialize() {
 		
-			configCancelAction();
-			configColapseButton();
-			configNewButton();
-			configSaveButton();
-			configDeleteButton();
-			configImportButton();
-			configPrintButton();
-			
-			configCancelButton();
-			
-			configListViewChangeListener();
-			configListViewCallBack();
-			
-			if(!isUserNotAuthorized(TAuthorizationType.VIEW_ACCESS))
-				this.loadListView();
+		configCancelAction();
+		configColapseButton();
+		configNewButton();
+		configSaveButton();
+		configDeleteButton();
+		configImportButton();
+		configPrintButton();
+		
+		configCancelButton();
+		configCloseButton();
+		
+		configListViewChangeListener();
+		configListViewCallBack();
+		
+		if(!isUserNotAuthorized(TAuthorizationType.VIEW_ACCESS))
+			this.loadListView();
+	}
+	
+
+	/**
+	 * Config the close button 
+	 * */
+	public void configCloseButton() {
+		final Button cleanButton = this.decorator.gettCloseButton();
+			cleanButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					closeAction();
+				}
+			});
+	}
+	
+	/**
+	 * Perform this action when close button onAction is triggered.
+	 * */
+	@SuppressWarnings("unchecked")
+	public void closeAction() {
+		if(actionHelper.runBefore(TActionType.CLOSE)){
+			try{
+				
+				//recupera a lista de models views
+				final ObservableList<M> modelsViewsList = (ObservableList<M>) ((saveAllModels && getModels()!=null) 
+						? getModels() 
+								: getModelView()!=null 
+								? FXCollections.observableList(Arrays.asList(getModelView())) 
+										: null) ;
+								
+				if(modelsViewsList != null)
+					validateModels(modelsViewsList);
+				
+				closeModal();
+				
+			}catch(TValidatorException e){
+				getView().tShowModal(new TMessageBox(e), true);
+				setActionState(new TActionState<>(TActionType.CLOSE, TProcessResult.FINISHED));
+			} catch (Throwable e) {
+				e.printStackTrace();
+				getView().tShowModal(new TMessageBox(e), true);
+				setActionState(new TActionState<>(TActionType.CLOSE, TProcessResult.ERROR));
+			}
 		}
+		actionHelper.runAfter(TActionType.CLOSE);
+	}
+	
+
+	private void closeModal() {
+		super.invalidate();
+		TedrosAppManager.getInstance()
+		.getModuleContext((TModule)TedrosContext.getView()).getCurrentViewContext()
+		.getPresenter().getView().tHideModal();
+	}
 	
 	protected void configCancelAction() {
 		addAction(new TPresenterAction(TActionType.CANCEL) {
