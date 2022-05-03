@@ -12,6 +12,7 @@ import com.tedros.fxapi.annotation.control.TEditEntityModal;
 import com.tedros.fxapi.collections.ITObservableList;
 
 import javafx.beans.Observable;
+import javafx.beans.property.SimpleObjectProperty;
 
 
 /**
@@ -29,7 +30,10 @@ implements ITControlBuilder<com.tedros.fxapi.control.TEditEntityModal, Observabl
 	public com.tedros.fxapi.control.TEditEntityModal build(final Annotation annotation, final Observable attrProperty) throws Exception {
 		TEditEntityModal tAnnotation = (TEditEntityModal) annotation;
 		com.tedros.fxapi.control.TEditEntityModal control =
-				new com.tedros.fxapi.control.TEditEntityModal( (ITObservableList) attrProperty, tAnnotation.width(), tAnnotation.height(), tAnnotation.modalWidth(), tAnnotation.modalHeight());
+				(attrProperty instanceof ITObservableList) 
+					? new com.tedros.fxapi.control.TEditEntityModal( (ITObservableList) attrProperty, tAnnotation.width(), tAnnotation.height(), tAnnotation.modalWidth(), tAnnotation.modalHeight())
+		: new com.tedros.fxapi.control.TEditEntityModal( (SimpleObjectProperty) attrProperty, tAnnotation.width(), tAnnotation.height(), tAnnotation.modalWidth(), tAnnotation.modalHeight());
+		
 		control.settModelViewClass(tAnnotation.modelViewClass());
 		control.settModelClass(tAnnotation.modelClass());
 		callParser(tAnnotation, control);

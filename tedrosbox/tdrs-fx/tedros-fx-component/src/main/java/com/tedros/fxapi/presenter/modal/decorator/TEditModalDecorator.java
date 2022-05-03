@@ -10,11 +10,14 @@ import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TEditModalPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
+import com.tedros.fxapi.control.TButton;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
+import com.tedros.fxapi.presenter.model.TModelView;
 
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Priority;
@@ -30,6 +33,9 @@ extends TDynaViewCrudBaseDecorator<M> {
     private Label 		tListViewTitle;
     private ListView<M> tListView;
     private TProgressIndicator tListViewProgressIndicator;
+    
+
+	private Button tCloseButton;
     
     private double listViewMaxWidth = 250;
     private double listViewMinWidth = 250;
@@ -116,12 +122,43 @@ extends TDynaViewCrudBaseDecorator<M> {
 			nodes = ArrayUtils.add(nodes, gettCancelButton());
 		}
 		
+		buildCloseButton(null);
+		nodes = ArrayUtils.add(nodes, gettCloseButton());
+		
 		if(nodes.length>0)
 			addItemInTHeaderToolBar(nodes);
 		
 		
 		// set padding at rigth in left content pane
 		addPaddingInTLeftContent(0, 4, 0, 0);
+	}
+	
+	/**
+	 * <p>
+	 * Build a button for the close action.<br><br>
+	 * 
+	 * If the parameter was null this will use the text set up
+	 * in @{@link TPresenter}{decorator= @{@link TDecorator}{closeButtonText=''}} 
+	 * but if the given {@link TModelView} was not annotated with {@link TPresenter} 
+	 * or with a custom view annotation which contains a {@link TPresenter} 
+	 * a default string (TAnnotationDefaultValue.TVIEW_closeButtonText) will be used.<br><br> 
+	 * 
+	 * This will initialize with "t-button" id.
+	 * </p>
+	 * */
+	public void buildCloseButton(String text) {
+		if(text==null){
+			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
+			tCloseButton = new TButton();
+			tCloseButton.setText(iEngine.getString(tPresenter==null 
+							? TAnnotationDefaultValue.TVIEW_closeButtonText 
+									: tPresenter.decorator().closeButtonText()));
+			tCloseButton.setId("t-button");
+		}else {
+			tCloseButton = new TButton();
+			tCloseButton.setText(iEngine.getString(text));
+			tCloseButton.setId("t-button");
+		}
 	}
 
 	protected void configBreadcrumBar() {
@@ -200,6 +237,20 @@ extends TDynaViewCrudBaseDecorator<M> {
 	 */
 	public TProgressIndicator gettListViewProgressIndicator() {
 		return tListViewProgressIndicator;
+	}
+
+	/**
+	 * @return the tCloseButton
+	 */
+	public Button gettCloseButton() {
+		return tCloseButton;
+	}
+
+	/**
+	 * @param tCloseButton the tCloseButton to set
+	 */
+	public void settCloseButton(Button tCloseButton) {
+		this.tCloseButton = tCloseButton;
 	}
 
 }

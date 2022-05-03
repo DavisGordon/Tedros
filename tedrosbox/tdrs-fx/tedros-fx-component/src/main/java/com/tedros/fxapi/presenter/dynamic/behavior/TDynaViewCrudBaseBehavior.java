@@ -86,11 +86,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	
 	private TDynaViewCrudBaseDecorator<M> decorator;
 
-	private boolean saveAllModels;
-	private boolean saveOnlyChangedModel;
-	private boolean runNewActionAfterSave;
+	protected boolean saveAllModels;
+	protected boolean saveOnlyChangedModel;
+	protected boolean runNewActionAfterSave;
 
-	private boolean skipConfigBreadcrumb;
+	protected boolean skipConfigBreadcrumb;
 	
 	@SuppressWarnings("unchecked")
 	public void load(){
@@ -577,7 +577,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 								: null) ;
 						
 		if(modelsViewsList == null)
-			throw new Exception("No value was find to be saved!");
+			throw new Exception("None entity found to save!");
 						
 		// valida os models views
 		validateModels(modelsViewsList);
