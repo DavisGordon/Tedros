@@ -125,7 +125,7 @@ implements ITControlBuilder<com.tedros.fxapi.control.TComboBoxField, Property<Ob
 													e1.printStackTrace();
 												}
 											}else
-												System.out.println(T_ITENTITY_WARNING);
+												control.getItems().add(e);//System.out.println(T_ITENTITY_WARNING);
 										}
 									}
 									Object value = attrProperty.getValue();
@@ -139,9 +139,9 @@ implements ITControlBuilder<com.tedros.fxapi.control.TComboBoxField, Property<Ob
 											}
 												
 										}else
-											System.out.println(T_ITENTITY_WARNING);
+											control.setValue(value);//System.out.println(T_ITENTITY_WARNING);
 									}else
-										control.setValue(attrProperty.getValue());
+										control.setValue(value);
 								}
 						}
 					}

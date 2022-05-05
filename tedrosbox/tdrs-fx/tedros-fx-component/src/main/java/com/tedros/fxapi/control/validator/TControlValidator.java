@@ -66,6 +66,8 @@ public final class TControlValidator<E extends ITModelView> {
 		if(list==null);
 			list = new ArrayList<>(0);
 		for (E tModelView : modelsView) {
+			if(tModelView==null)
+				continue;
 			List<TFieldDescriptor> fiels = TReflectionUtil.getFieldDescriptorList(tModelView);
 			TValidatorResult<E> result = new TValidatorResult(tModelView);
 			for (TFieldDescriptor fd : fiels){
@@ -130,7 +132,8 @@ public final class TControlValidator<E extends ITModelView> {
 					ITModelView detailModelView = (ITModelView) ((ObjectProperty)object).getValue();  
 					lst = Arrays.asList(detailModelView);
 				}
-				
+				if(lst==null)
+					continue;
 				results = (List<TValidatorResult>) validator.validate(lst);
 				if(results.size()>0)
 					for (TValidatorResult tValidatorResult : results) 
