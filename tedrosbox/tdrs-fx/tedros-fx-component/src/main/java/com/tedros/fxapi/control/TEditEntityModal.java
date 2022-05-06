@@ -7,12 +7,16 @@ import com.tedros.core.TLanguage;
 import com.tedros.core.TModule;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.context.TedrosContext;
+import com.tedros.core.control.PopOver;
 import com.tedros.core.module.TObjectRepository;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.collections.TFXCollections;
+import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaGroupView;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
+import com.tedros.fxapi.presenter.modal.behavior.TEditModalBehavior;
+import com.tedros.fxapi.presenter.modal.decorator.TEditModalDecorator;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.util.TEntityListViewCallback;
 
@@ -25,6 +29,8 @@ import javafx.collections.WeakListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
@@ -32,6 +38,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.util.Callback;
 
 /**
@@ -59,10 +66,13 @@ public class TEditEntityModal extends TRequiredModal {
 	private double width;
 	private double height;
 	
+	private boolean singleEntity;
+	
 	private TObjectRepository repo = new TObjectRepository();
 	
 	@SuppressWarnings("unchecked")
 	public TEditEntityModal(Property item, double width, double height, double modalWidth, double modalHeight) {
+		this.singleEntity = true;
 		ITObservableList items = TFXCollections.iTObservableList();
 		if(item.getValue()!=null)
 			items.add(item.getValue());
@@ -84,9 +94,11 @@ public class TEditEntityModal extends TRequiredModal {
 	 */
 	public TEditEntityModal(ITObservableList items, double width, double height,
 			double modalWidth, double modalHeight) {
+		this.singleEntity = false;
 		init(items, width, height, modalWidth, modalHeight);
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void init(ITObservableList items, double width, double height,
 			double modalWidth, double modalHeight) {
 		this.tSelectedItems = items;
@@ -122,6 +134,15 @@ public class TEditEntityModal extends TRequiredModal {
 			//pane.getStyleClass().add("t-panel-color");
 			pane.setStyle("-fx-background-radius: 20 20 20 20;");
 			view.tLoad();
+			
+			if(this.singleEntity) {
+				TDynaPresenter p = (TDynaPresenter) view.gettPresenter();
+				TEditModalDecorator dr = (TEditModalDecorator) p.getDecorator();
+				TEditModalBehavior bh = (TEditModalBehavior) p.getBehavior();
+				dr.setSingleMode();
+				bh.setSingleMode();
+			}
+			
 			TedrosAppManager.getInstance()
 			.getModuleContext((TModule)TedrosContext.getView()).getCurrentViewContext()
 			.getPresenter().getView().tShowModal(pane, false);
@@ -131,19 +152,39 @@ public class TEditEntityModal extends TRequiredModal {
 		
 		//remove event
 		EventHandler<ActionEvent> rev = e -> {
-			int index = tListView.getSelectionModel().getSelectedIndex();
-			tListView.getSelectionModel().clearSelection();
-			tListView.getItems().remove(index);
+			if(singleEntity && super.requiredProperty().getValue()) {
+				showRequiredPopMsg();
+			}else {
+				int index = tListView.getSelectionModel().getSelectedIndex();
+				tListView.getSelectionModel().clearSelection();
+				tListView.getItems().remove(index);
+			}
 		};
 		repo.add("rev", rev);
 		tRemoveButton.setOnAction(new WeakEventHandler<>(rev));
 		
 		//clear event
 		EventHandler<ActionEvent> cev = e -> {
-			tSelectedItems.clear();;
+			if(singleEntity && super.requiredProperty().getValue()) {
+				showRequiredPopMsg();
+			}else 
+				tSelectedItems.clear();
 		};
 		repo.add("cev", cev);
 		tClearButton.setOnAction(new WeakEventHandler<>(cev));
+	}
+
+	/**
+	 * 
+	 */
+	private void showRequiredPopMsg() {
+		Label l = new Label(TLanguage.getInstance().getString("#{tedros.fxapi.validator.required}"));
+		l.setFont(Font.font(11));
+		PopOver p = new PopOver();
+		p.setCloseButtonEnabled(true);
+		p.setContentNode(l);
+		p.getRoot().setPadding(new Insets(10));
+		p.show(tListView);
 	}
 	
 	private void buildListView() {

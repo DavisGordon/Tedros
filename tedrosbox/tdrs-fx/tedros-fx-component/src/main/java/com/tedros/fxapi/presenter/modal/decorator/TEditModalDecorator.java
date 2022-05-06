@@ -133,6 +133,19 @@ extends TDynaViewCrudBaseDecorator<M> {
 		addPaddingInTLeftContent(0, 4, 0, 0);
 	}
 	
+	public void setSingleMode() {
+		Node[] nodes = new Node[0];
+		if(gettColapseButton()!=null)
+			nodes = ArrayUtils.add(nodes, gettColapseButton());
+		if(gettNewButton()!=null)
+			nodes = ArrayUtils.add(nodes, gettNewButton());
+		if(nodes.length>0) {
+			final ITDynaView<M> view = getView();
+			view.gettHeaderToolBar().getItems().removeAll(nodes);
+		}
+		this.hideListContent();
+	}
+	
 	/**
 	 * <p>
 	 * Build a button for the close action.<br><br>
