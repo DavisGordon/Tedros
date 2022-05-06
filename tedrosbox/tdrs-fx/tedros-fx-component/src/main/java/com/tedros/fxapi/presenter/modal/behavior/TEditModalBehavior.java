@@ -35,6 +35,7 @@ public class TEditModalBehavior<M extends TEntityModelView, E extends ITEntity>
 extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M, E> {
 	
 	protected TEditModalDecorator<M> decorator;
+	private boolean singleMode = false;
 		
 	@Override
 	public void load() {
@@ -61,6 +62,44 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		
 		if(!isUserNotAuthorized(TAuthorizationType.VIEW_ACCESS))
 			this.loadListView();
+	}
+	
+	public void setSingleMode() {
+		this.singleMode = true;
+		super.runNewActionAfterSave = false;
+		this.colapseAction();
+		if(!getModels().isEmpty() && super.getModelView()==null) {
+			super.setModelView(getModels().get(0));
+		}else {
+			super.newAction();
+		}
+		if(decorator.gettDeleteButton()!=null)
+			super.addAction(new TPresenterAction(TActionType.DELETE) {
+	
+				@Override
+				public boolean runBefore() {
+					return true;
+				}
+	
+				@Override
+				public void runAfter() {
+					newAction();
+				}
+			});
+		if(decorator.gettCancelButton()!=null)
+			super.addAction(new TPresenterAction(TActionType.CANCEL) {
+	
+				@Override
+				public boolean runBefore() {
+					return true;
+				}
+	
+				@Override
+				public void runAfter() {
+					setModelView(getModels().get(0));
+				}
+				
+			});
 	}
 	
 
@@ -210,7 +249,8 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	}
 
 	public void showListView() {
-		this.decorator.showListContent();
+		if(!this.singleMode)
+			this.decorator.showListContent();
 	}
 	
 	public boolean processNewEntityBeforeBuildForm(M model) {
