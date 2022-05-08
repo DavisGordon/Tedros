@@ -50,6 +50,7 @@
 		<class>org.somos.model.Campanha</class>
 		<class>org.somos.model.Periodo</class>
 		<class>org.somos.model.CampanhaMailConfig</class>
+		<class>org.somos.model.DetalheAjuda</class>
 		
 		<properties>
 		

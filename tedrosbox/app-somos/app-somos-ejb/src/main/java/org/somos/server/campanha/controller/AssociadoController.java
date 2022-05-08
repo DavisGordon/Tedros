@@ -19,6 +19,7 @@ import org.somos.ejb.controller.IAssociadoController;
 import org.somos.model.AjudaCampanha;
 import org.somos.model.Associado;
 import org.somos.model.Campanha;
+import org.somos.model.DetalheAjuda;
 import org.somos.model.FormaAjuda;
 import org.somos.model.Pessoa;
 import org.somos.server.base.service.TStatelessService;
@@ -118,8 +119,10 @@ public class AssociadoController extends TSecureEjbController<Associado> impleme
 		}
 	}
 	
+	
+	
 	public TResult<Associado> ajudarCampanha(TAccessToken token, Pessoa p, 
-			Long idCamp, String valor, String periodo, Long idForma){
+			Long idCamp, String valor, String periodo, Long idForma, DetalheAjuda detAjuda){
 		try {
 			
 			Associado a = serv.recuperar(p);
@@ -176,6 +179,10 @@ public class AssociadoController extends TSecureEjbController<Associado> impleme
 			ac.setAssociado(a);
 			ac.setCampanha(c);
 			ac.setValor(valor);
+			
+			if(detAjuda!=null)
+				ac.setDetalheAjuda(detAjuda);
+			
 			a = serv.save(a);
 			
 			try {

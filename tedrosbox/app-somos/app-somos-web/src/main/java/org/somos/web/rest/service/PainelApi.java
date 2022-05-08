@@ -20,9 +20,12 @@ import org.somos.ejb.controller.ICampanhaMailConfigController;
 import org.somos.model.AjudaCampanha;
 import org.somos.model.Associado;
 import org.somos.model.Campanha;
+import org.somos.model.DetalheAjuda;
 import org.somos.model.Pessoa;
 import org.somos.web.rest.model.CampanhaModel;
+import org.somos.web.rest.model.DetalheAjudaModel;
 import org.somos.web.rest.model.RestModel;
+import org.somos.web.rest.util.ApiUtils;
 
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.EnumResult;
@@ -53,8 +56,27 @@ public class PainelApi extends PainelAcoesApi{
 		try {
 			Pessoa p = covidUserBean.getUser().getPessoa();
 			
+			DetalheAjuda da = null;
+			
+			DetalheAjudaModel dam = m.getDetalheAjuda();
+			if(dam!=null) {
+				da = new DetalheAjuda();
+				da.setTipo(dam.getTipo());
+				da.setExecutor(dam.getExecutor());
+				da.setDetalhe(dam.getDetalhe());
+				da.setIdTransacao(dam.getIdTransacao());
+				da.setStatusTransacao(dam.getStatusTransacao());
+				da.setIdPagamento(dam.getIdPagamento());
+				da.setStatusPagamento(dam.getStatusPagamento());
+				da.setValorPagamento(dam.getValorPagamento());
+				
+				String dhp = dam.getDataHoraPagamento();
+				if(dhp!=null)
+					da.setDataHoraPagamento(ApiUtils.convertToDateTime(dhp));
+			}
+			
 			TResult<Associado> res = assServ.ajudarCampanha(appBean.getToken(), p, 
-					m.getId(), m.getValor(), m.getPeriodo(), m.getAssIdForma());
+					m.getId(), m.getValor(), m.getPeriodo(), m.getAssIdForma(), da);
 			
 			if(res.getResult().equals(EnumResult.SUCESS)){
 				
@@ -94,6 +116,29 @@ public class PainelApi extends PainelAcoesApi{
 			return new RestModel<>(null, "500", error.getValue());
 		}
 		
+	}
+	
+
+	@SuppressWarnings("unchecked")
+	@GET
+	@Path("/campanha/{id}")
+	public RestModel<CampanhaModel> getCampanha(@PathParam("id") Long id){
+		try {
+			Campanha c = new Campanha();
+			c.setId(id);
+			
+			TResult<Campanha> res = caServ.findById(appBean.getToken(), c);
+			if(res.getResult().equals(EnumResult.SUCESS)){
+				return new RestModel<>(new CampanhaModel(res.getValue()), "200", "");
+			}else{
+				return new RestModel<>(null, "404", res.getResult().equals(EnumResult.WARNING) 
+						? res.getMessage()  
+								: error.getValue() );
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new RestModel<>(null, "500", error.getValue());
+		}
 	}
 	
 	@GET

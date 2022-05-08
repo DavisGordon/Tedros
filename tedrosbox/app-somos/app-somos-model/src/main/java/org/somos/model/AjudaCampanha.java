@@ -10,10 +10,10 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
 
 import org.somos.domain.DomainSchema;
 import org.somos.domain.DomainTables;
@@ -25,8 +25,7 @@ import com.tedros.ejb.base.entity.TEntity;
  *
  */
 @Entity
-@Table(name = DomainTables.ajudaCampanha, schema = DomainSchema.riosemfome, 
-uniqueConstraints=@UniqueConstraint(name="ajudaCampanhaUK", columnNames = { "id_assoc", "id_camp" }))
+@Table(name = DomainTables.ajudaCampanha, schema = DomainSchema.riosemfome)
 public class AjudaCampanha extends TEntity {
 
 	private static final long serialVersionUID = 8838010836519979624L;
@@ -51,6 +50,10 @@ public class AjudaCampanha extends TEntity {
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="id_for_ajuda")
 	private FormaAjuda formaAjuda;
+	
+	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="id_detalhe")
+	private DetalheAjuda detalheAjuda;
 	
 	@Column
 	@Temporal(TemporalType.DATE)
@@ -180,6 +183,20 @@ public class AjudaCampanha extends TEntity {
 	 */
 	public void setDataProximo(Date dataProximo) {
 		this.dataProximo = dataProximo;
+	}
+
+	/**
+	 * @return the detalheAjuda
+	 */
+	public DetalheAjuda getDetalheAjuda() {
+		return detalheAjuda;
+	}
+
+	/**
+	 * @param detalheAjuda the detalheAjuda to set
+	 */
+	public void setDetalheAjuda(DetalheAjuda detalheAjuda) {
+		this.detalheAjuda = detalheAjuda;
 	}
 	
 }

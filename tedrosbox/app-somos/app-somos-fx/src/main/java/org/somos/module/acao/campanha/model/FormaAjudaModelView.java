@@ -9,12 +9,19 @@ import org.somos.model.FormaAjuda;
 
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
+import com.tedros.fxapi.annotation.TCodeValue;
 import com.tedros.fxapi.annotation.control.TFieldBox;
+import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
+import com.tedros.fxapi.annotation.control.TRadioButtonField;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.form.TForm;
+import com.tedros.fxapi.annotation.layout.THBox;
+import com.tedros.fxapi.annotation.layout.THGrow;
+import com.tedros.fxapi.annotation.layout.TPane;
+import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEjbService;
@@ -32,6 +39,7 @@ import com.tedros.fxapi.presenter.model.TEntityModelView;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
+import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
 /**
@@ -62,9 +70,23 @@ public class FormaAjudaModelView extends TEntityModelView<FormaAjuda> {
 	@TReaderHtml
 	@TLabel(text="Tipo")
 	@TTextField(maxLength=60, required = true, 
-		textInputControl=@TTextInputControl(promptText="Pix, Boleto, Dinheiro, Produtos...", parse = true), 
+		textInputControl=@TTextInputControl(promptText="Pix, PayPal, PicPay, Deposito, Produtos...", parse = true), 
 		control=@TControl(tooltip="Informe a forma de ajuda que uma campanha pode precisar", parse = true))
+	@THBox(	pane=@TPane(children={"tipo","tercerizado"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="tipo", priority=Priority.ALWAYS), 
+   				   		@TPriority(field="tercerizado", priority=Priority.ALWAYS) }))
 	private SimpleStringProperty tipo;
+	
+
+	@TLabel(text="Tecerizado (Ex: PayPal)")
+	@TReaderHtml(codeValues={@TCodeValue(code = "Sim", value = "Sim"),
+			@TCodeValue(code = "Não", value = "Não")})
+	@THorizontalRadioGroup(alignment=Pos.CENTER_LEFT, spacing=4, 
+	radioButtons={
+			@TRadioButtonField(text = "Sim", userData = "Sim"),
+			@TRadioButtonField(text = "Não", userData = "Não")
+			})
+	private SimpleStringProperty tercerizado;
 	
 	@TReaderHtml
 	@TLabel(text="Detalhe")
@@ -147,6 +169,20 @@ public class FormaAjudaModelView extends TEntityModelView<FormaAjuda> {
 	 */
 	public void setDetalhe(SimpleStringProperty detalhe) {
 		this.detalhe = detalhe;
+	}
+
+	/**
+	 * @return the tercerizado
+	 */
+	public SimpleStringProperty getTercerizado() {
+		return tercerizado;
+	}
+
+	/**
+	 * @param tercerizado the tercerizado to set
+	 */
+	public void setTercerizado(SimpleStringProperty tercerizado) {
+		this.tercerizado = tercerizado;
 	}
 	
 }

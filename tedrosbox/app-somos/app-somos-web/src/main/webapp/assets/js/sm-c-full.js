@@ -55,9 +55,12 @@ function buildCampanha(l){
 				$('#perDiv', t).append("<input type='hidden' id='per"+idx+"n' >");
 				$('#perDiv', t).hide();
 			}
+			var hideCancelar = false;
 			if(o.formas){
 				$('#forDiv', t).show();
 				o.formas.forEach(function (v, i){
+					if(o.assIdForma==v.id && v.terc && v.terc=='Sim')
+						hideCancelar = true;
 					var chk = o.assIdForma && o.assIdForma==v.id ? 'checked' : '';
 					var tr = '<tr><td><input type="radio" '+chk+' id="for'+idx+'-'+i+'" name="forRadio'+idx+'" value="'+v.id+'">'+
 					'<label class="sm-txt-bold"  for="for'+idx+'-'+i+'">'+v.nome+'</label></td><td>'+v.desc+'</td></tr>';
@@ -68,9 +71,9 @@ function buildCampanha(l){
 				$('#forDiv', t).hide();
 			}
 			if(loggedUser){
-				var btn = o.associado && o.associado=='x' ? "Alterar" : "Quero ajudar nesta campanha";
+				var btn = o.associado && o.associado=='x' ? "Quero ajudar mais" : "Quero ajudar";
 				$('#ajudarBtn', t).append("<li><a href='javascript:ajudar(\""+idx+"\")' class='button primary fit'>"+btn+"</a></li>");
-				if(o.associado && o.associado)
+				if(o.associado && o.associado=='x' && !hideCancelar)
 					$('#ajudarBtn', t).append("<li><a href='javascript:cancelar(\""+o.id+"\", \""+o.titulo+"\")' class='button small fit'>Cancelar ajuda</a></li>");
 				
 				$('#ajudarBtn', t).append('<input type="hidden" id="camp'+idx+'" value="'+o.id+'" >');
@@ -111,7 +114,7 @@ function ajudar(idx){
 	}else{
 		if(idx){
 			var s = '';
-			var pVal, pPer, pFor, pCamp;
+			var pVal, pPer, pFor, pForDesc, pCamp;
 			pCamp = $('#camp'+idx).val();
 			if(!document.getElementById('val'+idx+'n')){
 				pVal = $("input[id|='val"+idx+"']:checked").val();
@@ -123,11 +126,25 @@ function ajudar(idx){
 			} 
 			if(!document.getElementById('for'+idx+'n')){
 				pFor = $("input[id|='for"+idx+"']:checked").val();
+				$("input[id|='for"+idx+"']:checked").each(function() {
+				    var idVal = $(this).attr("id");
+				    pForDesc = $("label[for='"+idVal+"']").text();
+				});
 				if(!pFor) s += s!='' ?  ', Forma de ajuda' : 'Forma de ajuda';
 			} 
 			if(s!='')
 				alert('Favor preencher o(s) campo(s) '+s);
 			else{
+				if(pForDesc && pForDesc=="PayPal"){
+					if(pPer=="Unica"){
+						location = "paypal_capture.html?c="+pCamp+"&v="+pVal+"&p="+pPer+"&fid="+pFor+"&fd="+pForDesc;
+					}else if(pPer=="Mensal"){
+						location = "paypal_subscription.html?c="+pCamp+"&v="+pVal+"&p="+pPer+"&fid="+pFor+"&fd="+pForDesc;
+					}else{
+						alert("Para esta forma de ajuda somente os periodos Unica e Mensal são aceitos!")
+					}
+					
+				}else{
 				$('#campanhasContainer').empty();
 				$('#processandoAjuda').show();
 				var curObj = {'id':pCamp, 'valor':pVal, 'periodo':pPer, 'assIdForma':pFor };
@@ -147,6 +164,7 @@ function ajudar(idx){
 						'Em breve enviaremos para seu email os dados para concluir esta ajuda!');
 					}
 				});
+			}
 			}
 		}
 	}

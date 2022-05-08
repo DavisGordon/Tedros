@@ -44,7 +44,7 @@ public class CampanhaModel implements Serializable {
 
 	private List<String> periodos;
 	
-	private List<IdNomeDescModel> formas;
+	private List<FormaAjudaModel> formas;
 	
 	private Long assIdForma;
 	
@@ -54,11 +54,11 @@ public class CampanhaModel implements Serializable {
 	
 	private String associado;
 	
+	private DetalheAjudaModel detalheAjuda;
+	
 	public CampanhaModel() {
 	}
 	
-
-
 	public CampanhaModel(Campanha e) {
 		this.id = e.getId();
 		this.titulo =e.getTitulo();
@@ -83,11 +83,9 @@ public class CampanhaModel implements Serializable {
 		if(e.getFormasAjuda()!=null && !e.getFormasAjuda().isEmpty()) {
 			this.formas = new ArrayList<>();
 			for(FormaAjuda v : e.getFormasAjuda())
-				this.formas.add(new IdNomeDescModel(v.getId(), v.getTipo(), v.getDetalhe()));
+				this.formas.add(new FormaAjudaModel(v.getId(), v.getTipo(), v.getDetalhe(), v.getTercerizado()));
 		}
 	}
-
-
 
 	/**
 	 * @return the titulo
@@ -208,33 +206,19 @@ public class CampanhaModel implements Serializable {
 		return id;
 	}
 
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-
-
 	/**
 	 * @return the formas
 	 */
-	public List<IdNomeDescModel> getFormas() {
+	public List<FormaAjudaModel> getFormas() {
 		return formas;
 	}
-
-
 
 	/**
 	 * @param formas the formas to set
 	 */
-	public void setFormas(List<IdNomeDescModel> formas) {
+	public void setFormas(List<FormaAjudaModel> formas) {
 		this.formas = formas;
 	}
-
-
 
 	/**
 	 * @return the assIdForma
@@ -243,16 +227,12 @@ public class CampanhaModel implements Serializable {
 		return assIdForma;
 	}
 
-
-
 	/**
 	 * @param assIdForma the assIdForma to set
 	 */
 	public void setAssIdForma(Long assIdForma) {
 		this.assIdForma = assIdForma;
 	}
-
-
 
 	/**
 	 * @return the valor
@@ -261,16 +241,12 @@ public class CampanhaModel implements Serializable {
 		return valor;
 	}
 
-
-
 	/**
 	 * @param valor the valor to set
 	 */
 	public void setValor(String valor) {
 		this.valor = valor;
 	}
-
-
 
 	/**
 	 * @return the periodo
@@ -279,16 +255,12 @@ public class CampanhaModel implements Serializable {
 		return periodo;
 	}
 
-
-
 	/**
 	 * @param periodo the periodo to set
 	 */
 	public void setPeriodo(String periodo) {
 		this.periodo = periodo;
 	}
-
-
 
 	/**
 	 * @return the associado
@@ -297,12 +269,31 @@ public class CampanhaModel implements Serializable {
 		return associado;
 	}
 
-
-
 	/**
 	 * @param associado the associado to set
 	 */
 	public void setAssociado(String associado) {
 		this.associado = associado;
+	}
+
+	/**
+	 * @return the detalheAjuda
+	 */
+	public DetalheAjudaModel getDetalheAjuda() {
+		return detalheAjuda;
+	}
+
+	/**
+	 * @param detalheAjuda the detalheAjuda to set
+	 */
+	public void setDetalheAjuda(DetalheAjudaModel detalheAjuda) {
+		this.detalheAjuda = detalheAjuda;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
 	}
 }

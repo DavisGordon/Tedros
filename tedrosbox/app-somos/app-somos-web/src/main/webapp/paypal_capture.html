@@ -21,45 +21,24 @@
 						<div class="inner">
 
 							<!-- Logo -->
-								<a href="index.html" class="logo">
+								<a href="#" class="logo">
 									<span class="symbol"><img src="images/elementos/elem2-small.png" alt="" /></span>
 									<span class="sm-txt">Social Movement</span>
 								</a>
-
-							<!-- Nav -->
-								<nav>
-									<ul>
-										<li><a href="#menu">Menu</a></li>
-									</ul>
-								</nav>
-
 						</div>
 					</header>
-
-				<!-- Menu -->
-					<nav id="menu">
-						<h2>Menu</h2>
-						<ul>
-							<li><a href="index.html">Home</a></li>
-							<li><a href="doacoes.html">Doações</a></li>
-							<li><a href="voluntario.html">Voluntário</a></li>
-							<li><a href="parceria.html">Parceria</a></li>
-							<li><a href="mural.html">Mural</a></li>
-							<li><a href="painelv.html">Meu painel</a></li>
-						</ul>
-					</nav>
 
 				<!-- Main -->
 					<div id="main">
 						<div class="inner">
 							<header>
-								<p class="sm-title">Campanhas</p>
+								<p class="sm-title">Ajudar Campanha</p>
 							</header>
 							<p id="processandoAjuda" style="display:none" class="sm-txt fnt-large">
 								Processando ...
 							</p>
 							<p id="campanhaLoading" class="sm-txt fnt-large">
-								Buscando as campanhas ...
+								Buscando a campanha ...
 							</p>
 							<p id="campanhaAviso" style="display:none" class="sm-txt fnt-large">
 								Não há campanhas no momento.
@@ -78,43 +57,11 @@
 												<span  id="titulo" class="sm-title"></span>
 												<p id="desc" class="sm-txt"></p>
 											</div>
-											<div id="dtFimDiv" class="col-4">
-												<span class="sm-sub-title">Data Fim</span>
-												<p id="dtFim" class="sm-txt"></p>
-											</div>
-											<div id="metaDiv" class="col-4">
-												<span class="sm-sub-title">Meta</span>
-												<p id="meta" class="sm-txt"></p>
-											</div>
-											<div id="angaDiv" class="col-4">
-												<span class="sm-sub-title">Angariado</span>
-												<p id="angariado" class="sm-txt"></p>
-											</div>
-											<div id="valDiv" class="col-12">
+											<div id="valDiv" class="col-6">
 												<span class="sm-sub-title">Valor</span><br>
 											</div>
-											<div id="perDiv" class="col-12">
+											<div id="perDiv" class="col-6">
 												<span class="sm-sub-title">Periodo</span><br>
-											</div>
-											<div id="forDiv" class="col-12">
-												<span class="sm-sub-title">Forma de ajuda</span>
-												<div class="table-wrapper">
-													<table>
-														<thead>
-															<tr>
-																<th>Tipo</th>
-																<th>Descrição</th>
-															</tr>
-														</thead>
-														<tbody id="forTb">
-														</tbody>
-													</table>
-												</div>
-											
-											</div>
-											<div class="col-12">
-												<ul id="ajudarBtn" class="actions stacked">
-												</ul>
 											</div>
 										</div>
 									</div>		
@@ -124,7 +71,7 @@
 								<div class="box alt">
 									<div class="row gtr-uniform">
 										<div class="col-12">
-											<div class="paypal-container" ></div>
+											<div id="paypal-button-container"></div>
 										</div>
 									</div>
 								</div>
@@ -152,13 +99,13 @@
 			</div>
 
 		<!-- Scripts -->
-		<script src="https://www.paypal.com/sdk/js?client-id=AaXcCYUp35enzH4oZnQMhgdBBiZki0XvkeziFQKXy7kqWMPbsA6gSlxBRp9fDAhsabk4aPetJiWqZmxy&currency=BRL&locale=en_BR&&components=buttons&vault=true&intent=subscription"></script>
+		<script src="https://www.paypal.com/sdk/js?client-id=AaXcCYUp35enzH4oZnQMhgdBBiZki0XvkeziFQKXy7kqWMPbsA6gSlxBRp9fDAhsabk4aPetJiWqZmxy&currency=BRL&locale=en_BR&components=buttons&intent=capture"></script>
 		<script src="assets/js/jquery.min.js"></script>
 		<script src="assets/js/browser.min.js"></script>
 		<script src="assets/js/breakpoints.min.js"></script>
 		<script src="assets/js/util.js"></script>
 		<script src="assets/js/main.js"></script>
-		<script src="assets/js/sm-c-full.js"></script>
+		<script src="assets/js/sm-c-pp-c.js"></script>
 		<script src="assets/js/footer.js"></script>
 
 	</body>

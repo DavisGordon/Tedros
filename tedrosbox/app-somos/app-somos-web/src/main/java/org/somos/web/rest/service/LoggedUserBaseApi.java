@@ -64,6 +64,7 @@ public class LoggedUserBaseApi extends BaseApi {
 			Pessoa p = covidUserBean.getUser().getPessoa();
 			
 			Map<String, String> info = new HashMap<>();
+			info.put("id", Long.toString(p.getId()));
 			info.put("nome", WordUtils.capitalizeFully(p.getNome()));
 			info.put("status", p.getStatusVoluntario());
 			info.put("sexo", p.getSexo());

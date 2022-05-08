@@ -30,6 +30,9 @@ public class FormaAjuda extends TEntity {
 	
 	@Column(length=2000)
 	private String detalhe;
+	
+	@Column(length=3)
+	private String tercerizado;
 
 	/**
 	 * @return the tipo
@@ -65,6 +68,20 @@ public class FormaAjuda extends TEntity {
 	@Override
 	public String toString() {
 		return "FormaAjuda [id=" + getId() + ", tipo=" + tipo + "]";
+	}
+
+	/**
+	 * @return the tercerizado
+	 */
+	public String getTercerizado() {
+		return tercerizado;
+	}
+
+	/**
+	 * @param tercerizado the tercerizado to set
+	 */
+	public void setTercerizado(String tercerizado) {
+		this.tercerizado = tercerizado;
 	}
 	
 }

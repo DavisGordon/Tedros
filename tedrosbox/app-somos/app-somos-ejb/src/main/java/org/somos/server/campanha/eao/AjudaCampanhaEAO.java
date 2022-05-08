@@ -27,6 +27,7 @@ public class AjudaCampanhaEAO extends TGenericEAO<AjudaCampanha> {
 				+ "join e.campanha c "
 				+ "left join e.formaAjuda fa "
 				+ "where c.status='ATIVADO' "
+				//+ "and (fa.tercerizado is null or fa.tercerizado = 'Não' )"
 				+ "and (c.dataFim is null or c.dataFim >= SQL('CURRENT_DATE')) ");
 		
 		if(fa!=null && c==null) {
