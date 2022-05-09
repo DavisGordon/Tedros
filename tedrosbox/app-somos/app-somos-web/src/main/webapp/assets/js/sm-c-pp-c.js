@@ -103,9 +103,9 @@ function ajudar(detalhe){
 				headers : {'Content-Type' : 'application/json'},
 				success: function(r)
 				{
-				$('#paypal-button-container')
-				.html("<p class='sm-txt-bold fnt-large'>Obrigado pela sua ajuda!<br>Deus te abençõe abundantemente!</p><br><ul class='actions stacked'><li><a href='campanha.html' class='button primary fit'>Voltar</a></li></ul>");
-				
+					var msg = "<span class='sm-txt-bold fnt-large'>Transação realizado com sucesso!</span><br>Codigo: "+detalhe.idTransacao+"<br>";
+					$('#paypal-button-container')
+					.html("<p class='sm-txt'>"+msg+"Obrigado pela sua ajuda!<br>Deus te abençõe abundantemente!</p><br><ul class='actions stacked'><li><a href='campanha.html' class='button primary fit'>Voltar</a></li></ul>");
 				}
 			});
 			

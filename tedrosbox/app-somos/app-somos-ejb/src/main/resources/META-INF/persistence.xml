@@ -51,6 +51,7 @@
 		<class>org.somos.model.Periodo</class>
 		<class>org.somos.model.CampanhaMailConfig</class>
 		<class>org.somos.model.DetalheAjuda</class>
+		<class>org.somos.model.ValorAjuda</class>
 		
 		<properties>
 		

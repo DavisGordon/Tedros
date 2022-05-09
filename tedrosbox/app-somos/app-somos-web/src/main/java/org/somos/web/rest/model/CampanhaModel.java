@@ -6,12 +6,14 @@ package org.somos.web.rest.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.somos.model.Campanha;
 import org.somos.model.FormaAjuda;
 import org.somos.model.Periodo;
+import org.somos.model.ValorAjuda;
 import org.somos.web.rest.util.ApiUtils;
 
 /**
@@ -32,7 +34,7 @@ public class CampanhaModel implements Serializable {
 	
 	private String desc;
 	
-	private List<String> valores;
+	private List<ValorAjudaModel> valores;
 	
 	private String meta;
 	
@@ -65,9 +67,10 @@ public class CampanhaModel implements Serializable {
 		this.desc = e.getDesc();
 		if(e.getValores()!=null) {
 			this.valores = new ArrayList<>();
-			String[] a = e.getValores().split(",");
-			for(String v : a)
-				this.valores.add(v);
+			 e.getValores().stream().sorted().forEach(v->{
+				 valores.add(new ValorAjudaModel(v));
+			 });
+			 valores.sort(null);
 		}
 		this.meta = e.getMeta();
 		this.angariado = e.getAngariado();
@@ -118,14 +121,14 @@ public class CampanhaModel implements Serializable {
 	/**
 	 * @return the valores
 	 */
-	public List<String> getValores() {
+	public List<ValorAjudaModel> getValores() {
 		return valores;
 	}
 
 	/**
 	 * @param valores the valores to set
 	 */
-	public void setValores(List<String> valores) {
+	public void setValores(List<ValorAjudaModel> valores) {
 		this.valores = valores;
 	}
 

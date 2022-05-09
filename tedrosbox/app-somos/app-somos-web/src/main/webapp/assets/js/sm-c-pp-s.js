@@ -7,6 +7,7 @@ $(document).ready(function() {
 	pPer = urlParams.get('p');
 	pFor = urlParams.get('fid');
 	pForDesc = urlParams.get('fd');
+	pPlano = urlParams.get('pl');
 	if(pCamp){
 		$('#campanhaLoading').show();
 		$('#campanhaAviso').hide();
@@ -15,7 +16,7 @@ $(document).ready(function() {
 	}
 	loadFooter();
 });
-var pVal, pPer, pFor, pForDesc, pCamp;
+var pVal, pPer, pFor, pForDesc, pCamp, pPlano;
 function buildCampanha(l){
 	if(l && l.length>0){
 		$('#campanhaLoading').hide();
@@ -50,7 +51,7 @@ function buildCampanha(l){
 		             createSubscription: function(data, actions) {
 		               return actions.subscription.create({
 		                 /* Creates the subscription */
-		                 plan_id: 'P-9NW33321M3871482CMJ3SFVI',
+		                 plan_id: pPlano, //'P-9NW33321M3871482CMJ3SFVI',
 		                 quantity: 1 // The quantity of the product for a subscription
 		               });
 		             },
@@ -97,8 +98,9 @@ function ajudar(detalhe){
 				headers : {'Content-Type' : 'application/json'},
 				success: function(r)
 				{
-				$('#paypal-button-container')
-				.html("<p class='sm-txt-bold fnt-large'>Obrigado pela sua ajuda!<br>Deus te abençõe abundantemente!</p><br><ul class='actions stacked'><li><a href='campanha.html' class='button primary fit'>Voltar</a></li></ul>");
+					var msg = "<span class='sm-txt-bold fnt-large'>Subscrição realizado com sucesso!</span><br>Codigo: "+detalhe.idTransacao+"<br>";
+					$('#paypal-button-container')
+					.html("<p class='sm-txt'>"+msg+"Obrigado pela sua ajuda!<br>Deus te abençõe abundantemente!</p><br><ul class='actions stacked'><li><a href='campanha.html' class='button primary fit'>Voltar</a></li></ul>");
 				
 				}
 			});

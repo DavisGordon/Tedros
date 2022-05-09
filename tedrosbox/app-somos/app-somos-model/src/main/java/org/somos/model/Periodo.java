@@ -20,9 +20,6 @@ import com.tedros.ejb.base.entity.TEntity;
 @Table(name = DomainTables.periodo, schema = DomainSchema.riosemfome)
 public class Periodo extends TEntity {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -5505163709895306039L;
 
 	@Column(length=20, nullable=false)
@@ -33,6 +30,7 @@ public class Periodo extends TEntity {
 	
 	@Column
 	private Integer totalDias;
+	
 
 	/**
 	 * @return the nome
@@ -75,6 +73,5 @@ public class Periodo extends TEntity {
 	public void setTotalDias(Integer totalDias) {
 		this.totalDias = totalDias;
 	}
-	
-	
+
 }

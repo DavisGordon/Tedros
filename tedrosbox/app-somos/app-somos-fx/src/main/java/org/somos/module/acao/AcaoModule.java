@@ -5,6 +5,7 @@ package org.somos.module.acao;
 
 import org.somos.module.acao.campanha.model.CampanhaModelView;
 import org.somos.module.acao.campanha.model.FormaAjudaModelView;
+import org.somos.module.acao.campanha.model.ValorAjudaModelView;
 import org.somos.module.acao.model.AcaoModelView;
 import org.somos.module.acao.model.SiteAboutModelView;
 import org.somos.module.acao.model.SiteContatoModelView;
@@ -43,6 +44,7 @@ public class AcaoModule extends TModule {
 				new TViewItem(TDynaGroupView.class, AcaoModelView.class, "Ação"),
 				new TViewItem(TDynaGroupView.class, CampanhaModelView.class, "Campanha de ajuda"),
 				new TViewItem(TDynaGroupView.class, FormaAjudaModelView.class, "Forma de ajuda em campanha"),
+				new TViewItem(TDynaGroupView.class, ValorAjudaModelView.class, "Valor de ajuda em campanha"),
 				new TViewItem(TDynaGroupView.class, SiteAboutModelView.class, "Site/Home/Introdução"),
 				new TViewItem(TDynaGroupView.class, SiteContatoModelView.class, "Site/Home/Contatos"),
 				new TViewItem(TDynaGroupView.class, SiteVideoModelView.class, "Site/Home/Videos"),

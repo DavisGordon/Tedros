@@ -40,9 +40,6 @@ public class Campanha extends TEntity {
 	@Column(length=2000, nullable=false)
 	private String desc;
 	
-	@Column(length=120)
-	private String valores;
-	
 	@Column(length=30)
 	private String meta;
 	
@@ -65,6 +62,12 @@ public class Campanha extends TEntity {
 	uniqueConstraints=@UniqueConstraint(name="campanhaPeriodoUK", columnNames = { "camp_id", "per_id" }),
 	joinColumns=@JoinColumn(name="camp_id"), inverseJoinColumns=@JoinColumn(name="per_id"))
 	private Set<Periodo> periodos;
+
+	@ManyToMany(fetch=FetchType.EAGER)
+	@JoinTable(name=DomainTables.campanha_valor, schema=DomainSchema.riosemfome,
+	uniqueConstraints=@UniqueConstraint(name="campanhaValorUK", columnNames = { "camp_id", "val_id" }),
+	joinColumns=@JoinColumn(name="camp_id"), inverseJoinColumns=@JoinColumn(name="val_id"))
+	private Set<ValorAjuda> valores;
 	
 	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name=DomainTables.campanha_formaajuda,  schema=DomainSchema.riosemfome,
@@ -98,20 +101,6 @@ public class Campanha extends TEntity {
 	 */
 	public void setDesc(String desc) {
 		this.desc = desc;
-	}
-
-	/**
-	 * @return the valores
-	 */
-	public String getValores() {
-		return valores;
-	}
-
-	/**
-	 * @param valores the valores to set
-	 */
-	public void setValores(String valores) {
-		this.valores = valores;
 	}
 
 	/**
@@ -219,6 +208,20 @@ public class Campanha extends TEntity {
 	public String toString() {
 		return "Campanha [id=" + getId() + ", titulo=" + titulo + ", dataFim=" + dataFim + ", status=" + status
 				+ "]";
+	}
+
+	/**
+	 * @return the valores
+	 */
+	public Set<ValorAjuda> getValores() {
+		return valores;
+	}
+
+	/**
+	 * @param valores the valores to set
+	 */
+	public void setValores(Set<ValorAjuda> valores) {
+		this.valores = valores;
 	}
 
 }

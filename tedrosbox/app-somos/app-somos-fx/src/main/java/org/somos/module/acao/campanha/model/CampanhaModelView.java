@@ -10,6 +10,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.somos.model.Campanha;
 import org.somos.model.FormaAjuda;
 import org.somos.model.Periodo;
+import org.somos.model.ValorAjuda;
 
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
@@ -29,7 +30,6 @@ import com.tedros.fxapi.annotation.control.TTab;
 import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
-import com.tedros.fxapi.annotation.control.TTextInputControl;
 import com.tedros.fxapi.annotation.form.TDetailForm;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.THBox;
@@ -43,7 +43,6 @@ import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.reader.TTextReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
-import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.text.TText;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.control.TText.TTextStyle;
@@ -76,11 +75,11 @@ public class CampanhaModelView extends TEntityModelView<Campanha> {
 	@TTabPane(tabs = { 
 			@TTab(closable=false, content =
 				@TContent(detailForm=@TDetailForm(
-						fields={"titulo","desc","valores","dataFim"})), 
+						fields={"titulo","desc","meta","dataFim"})), 
 				text = "Dados da campanha"),
-			@TTab(closable=false, content =
+			@TTab(closable=false, scroll=true, content =
 				@TContent(detailForm=@TDetailForm(
-					fields={"periodos","formasAjuda"})), 
+					fields={"valores","formasAjuda"})), 
 				text = "Periodicidade e Formas de Ajuda"),
 			@TTab(closable=false, content = 
 				@TContent(detailForm=@TDetailForm(fields={"image"})), 
@@ -107,19 +106,11 @@ public class CampanhaModelView extends TEntityModelView<Campanha> {
 	private SimpleStringProperty desc;
 	
 	@TReaderHtml
-	@TLabel(text="Valores")
-	@TTextField(maxLength=120, 
-			textInputControl=@TTextInputControl(promptText="10,100,5000... 1Kg,5Kg... 1Litro,5Litros", parse = true), 
-			control=@TControl(tooltip="Informe os valores separados por virgula", parse = true))
-	@THBox(	pane=@TPane(children={"valores","meta","angariado"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="valores", priority=Priority.ALWAYS), 
-   				   		@TPriority(field="meta", priority=Priority.NEVER),
-   				   		@TPriority(field="angariado", priority=Priority.NEVER) }))
-	private SimpleStringProperty valores;
-	
-	@TReaderHtml
 	@TLabel(text="Meta")
 	@TTextField(maxLength=30)
+	@THBox(	pane=@TPane(children={"meta","angariado"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="meta", priority=Priority.ALWAYS),
+   				   		@TPriority(field="angariado", priority=Priority.ALWAYS) }))
 	private SimpleStringProperty meta;
 	
 	@TReaderHtml
@@ -146,7 +137,16 @@ public class CampanhaModelView extends TEntityModelView<Campanha> {
 	private SimpleStringProperty status;
 
 	@TReaderHtml
-	@TLabel(text="Periodicidade")
+	@TPickListField(selectedLabel="Selecionados", sourceLabel="Valores", 
+	optionsList=@TOptionsList(serviceName="IValorAjudaControllerRemote", 
+	entityClass = ValorAjuda.class, optionModelViewClass=ValorAjudaModelView.class))
+	@TModelViewType(modelClass = ValorAjuda.class, modelViewClass=ValorAjudaModelView.class)
+	@THBox(	pane=@TPane(children={"valores","periodos"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="valores", priority=Priority.ALWAYS),
+   				   		@TPriority(field="periodos", priority=Priority.ALWAYS) }))
+	private ITObservableList<ValorAjudaModelView> valores;
+	
+	@TReaderHtml
 	@TPickListField(selectedLabel="Selecionados", sourceLabel="Periodos", 
 	optionsList=@TOptionsList(serviceName="IPeriodoControllerRemote", 
 	entityClass = Periodo.class, optionModelViewClass=PeriodoModelView.class))
@@ -154,9 +154,8 @@ public class CampanhaModelView extends TEntityModelView<Campanha> {
 	private ITObservableList<PeriodoModelView> periodos;
 	
 	@TReaderHtml
-	@TLabel(text="Forma de ajuda")
 	@TPickListField(selectedLabel="Selecionados", 
-	sourceLabel="Opções", required=true, 
+	sourceLabel="Forma de ajuda", required=true, 
 	optionsList=@TOptionsList(serviceName="IFormaAjudaControllerRemote", 
 	entityClass = FormaAjuda.class, optionModelViewClass=FormaAjudaModelView.class))
 	@TModelViewType(modelClass = FormaAjuda.class, modelViewClass=FormaAjudaModelView.class)
@@ -245,20 +244,6 @@ public class CampanhaModelView extends TEntityModelView<Campanha> {
 	 */
 	public void setDesc(SimpleStringProperty desc) {
 		this.desc = desc;
-	}
-
-	/**
-	 * @return the valores
-	 */
-	public SimpleStringProperty getValores() {
-		return valores;
-	}
-
-	/**
-	 * @param valores the valores to set
-	 */
-	public void setValores(SimpleStringProperty valores) {
-		this.valores = valores;
 	}
 
 	/**
@@ -357,6 +342,20 @@ public class CampanhaModelView extends TEntityModelView<Campanha> {
 	 */
 	public void setImage(SimpleObjectProperty<ITFileBaseModel> image) {
 		this.image = image;
+	}
+
+	/**
+	 * @return the valores
+	 */
+	public ITObservableList<ValorAjudaModelView> getValores() {
+		return valores;
+	}
+
+	/**
+	 * @param valores the valores to set
+	 */
+	public void setValores(ITObservableList<ValorAjudaModelView> valores) {
+		this.valores = valores;
 	}
 
 }

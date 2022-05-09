@@ -34,9 +34,10 @@ function buildCampanha(l){
 			if(o.valores){
 				$('#valDiv', t).show();
 				o.valores.forEach(function (v, i){
-					var chk = o.valor && o.valor==v ? 'checked' : '';
-					var r = '<input type="radio" '+chk+' id="val'+idx+'-'+i+'" name="valRadio'+idx+'" value="'+v+'">'+
-							'<label class="sm-txt-bold" for="val'+idx+'-'+i+'">'+v+'</label>';
+					var chk = o.valor && o.valor==v.valor ? 'checked' : '';
+					var r = '<input type="radio" '+chk+' id="val'+idx+'-'+i+'" name="valRadio'+idx+'" value="'+v.valor+'">'+
+							'<label class="sm-txt-bold" for="val'+idx+'-'+i+'">'+v.valor+'</label>' +
+							'<input type="hidden" id="plval'+idx+'-'+i+'" value="'+v.plano+'" >';
 					$('#valDiv', t).append(r);
 				});
 			}else{
@@ -114,9 +115,12 @@ function ajudar(idx){
 	}else{
 		if(idx){
 			var s = '';
-			var pVal, pPer, pFor, pForDesc, pCamp;
+			var pVal, pPer, pFor, pForDesc, pCamp, pPlano;
 			pCamp = $('#camp'+idx).val();
 			if(!document.getElementById('val'+idx+'n')){
+				var id = $("input[id|='val"+idx+"']:checked").attr('id');
+				if(id)
+					pPlano = $("#pl"+id).val();
 				pVal = $("input[id|='val"+idx+"']:checked").val();
 				if(!pVal) s += 'Valor';
 			} 
@@ -139,7 +143,11 @@ function ajudar(idx){
 					if(pPer=="Unica"){
 						location = "paypal_capture.html?c="+pCamp+"&v="+pVal+"&p="+pPer+"&fid="+pFor+"&fd="+pForDesc;
 					}else if(pPer=="Mensal"){
-						location = "paypal_subscription.html?c="+pCamp+"&v="+pVal+"&p="+pPer+"&fid="+pFor+"&fd="+pForDesc;
+						if(pPlano && pPlano!="null")
+							location = "paypal_subscription.html?c="+pCamp+"&v="+pVal+"&p="+pPer+"&fid="+pFor+"&fd="+pForDesc+"&pl="+pPlano;
+						else
+							alert('Desculpe no momento este valor não esta disponivel para doações mensais para esta forma de ajuda, '+
+							'tente outro valor, obrigado.');
 					}else{
 						alert("Para esta forma de ajuda somente os periodos Unica e Mensal são aceitos!")
 					}
