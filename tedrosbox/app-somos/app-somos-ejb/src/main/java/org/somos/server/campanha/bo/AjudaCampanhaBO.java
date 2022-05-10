@@ -58,7 +58,7 @@ public class AjudaCampanhaBO extends TGenericBO<AjudaCampanha> {
 			p.setNome(ac.getPeriodo());
 			p = pEao.find(p);
 			
-			if(p.getTotalDias()!=null) {
+			if(ac.getDetalheAjuda()==null && p.getTotalDias()!=null) {
 				Calendar cal = Calendar.getInstance();
 				cal.add(Calendar.DAY_OF_MONTH, p.getTotalDias());
 				ac.setDataProximo(cal.getTime());

@@ -53,6 +53,15 @@ public class DetalheAjuda extends TEntity {
 
 	@Column
 	private String detalhe;
+	
+	public String getDesc() {
+		String desc = tipo;
+		desc += ", Empresa: "+executor;
+		desc += ", Codigo da Transação: "+idTransacao;
+		if(statusTransacao!=null)
+			desc += ", Staus: "+statusTransacao;
+		return desc;
+	}
 
 	/**
 	 * @return the tipo

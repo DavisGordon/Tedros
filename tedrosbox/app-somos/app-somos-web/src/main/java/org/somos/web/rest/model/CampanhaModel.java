@@ -6,14 +6,12 @@ package org.somos.web.rest.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.somos.model.Campanha;
 import org.somos.model.FormaAjuda;
 import org.somos.model.Periodo;
-import org.somos.model.ValorAjuda;
 import org.somos.web.rest.util.ApiUtils;
 
 /**

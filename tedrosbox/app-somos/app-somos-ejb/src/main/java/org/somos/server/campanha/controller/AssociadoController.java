@@ -6,7 +6,6 @@
  */
 package org.somos.server.campanha.controller;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
@@ -76,38 +75,35 @@ public class AssociadoController extends TSecureEjbController<Associado> impleme
 		return securityController;
 	}
 	
-	public TResult<Associado> cancelarAjuda(TAccessToken token, Pessoa p, Long idCamp){
+	public TResult<Associado> cancelarAjuda(TAccessToken token, Pessoa p, Long id){
 		try {
 			
 			Associado a = serv.recuperar(p);
 			if(a!=null) { 
+				boolean cancelado = false;
 				String nome = a.getPessoa().getNome();
 				String titulo = null;
 				String contato = a.getPessoa().getTodosContatos();
 				if(a.getAjudaCampanhas()!=null) {
 					Optional<AjudaCampanha> op = a.getAjudaCampanhas().stream().filter(e->{
-						return e.getCampanha().getId().equals(idCamp);
+						return e.getId().equals(id);
 					}).findFirst();
 					
 					if(op.isPresent()) {
 						AjudaCampanha ac = op.get();
-						a.getAjudaCampanhas().remove(ac);
-						ac.setAssociado(null);
 						titulo = ac.getCampanha().getTitulo();
+						cancelado = ac.cancelarAjuda();
 					}
 				}
 				
-				if(a.getAjudaCampanhas()!=null && !a.getAjudaCampanhas().isEmpty())
+				if(cancelado) {
 					a = serv.save(a);
-				else {
-					serv.remove(a);
-					return new TResult<>(EnumResult.SUCESS, null);
-				}
-				if(titulo!=null) {
-					try {
-						serv.enviarEmailCancelarAjudaCampanha(titulo, nome, contato);
-					} catch (EmailBusinessException | TSentEmailException e) {
-						e.printStackTrace();
+					if(titulo!=null) {
+						try {
+							serv.enviarEmailCancelarAjudaCampanha(titulo, nome, contato);
+						} catch (EmailBusinessException | TSentEmailException e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}
@@ -126,59 +122,27 @@ public class AssociadoController extends TSecureEjbController<Associado> impleme
 		try {
 			
 			Associado a = serv.recuperar(p);
-			AjudaCampanha ac = new AjudaCampanha();
-			
-			boolean flagReProcess = false;
 			
 			if(a==null) {
 				a = new Associado();
 				a.setPessoa(p);
-				a.setAjudaCampanhas(new ArrayList<>());
-				a.getAjudaCampanhas().add(ac);
-			}else if(a.getAjudaCampanhas()!=null && !a.getAjudaCampanhas().isEmpty()) {
-				Optional<AjudaCampanha> op = a.getAjudaCampanhas().stream().filter(e->{
-					return e.getCampanha().getId().equals(idCamp);
-				}).findFirst();
-				
-				if(op.isPresent())
-					ac = op.get();
-				else
-					a.getAjudaCampanhas().add(ac);
-			}
-			
-			if(!ac.isNew() && 
-				((ac.getFormaAjuda()!=null && idForma!=null && !ac.getFormaAjuda().getId().equals(idForma)) 
-					|| (ac.getValor()!=null && valor!=null && !ac.getValor().equals(valor))))
-				flagReProcess = true;
-			
-			if(idForma!=null) {
-				FormaAjuda fa = new FormaAjuda();
-				fa.setId(idForma);
-				fa = faServ.findById(fa);
-				ac.setFormaAjuda(fa);
 			}
 			
 			Campanha c = new Campanha();
 			c.setId(idCamp);
 			c = cServ.findById(c);
 			
-			if(ac.isNew()) {
-				ac.setDataProximo(new Date());
-				ac.setPeriodo(periodo);
-			}else { 
-				if (flagReProcess) {
-					ac.setDataProximo(new Date());
-					ac.setPeriodo(periodo);
-				}else if(ac.getPeriodo()!=null && periodo!=null 
-						&& !ac.getPeriodo().equals(periodo)) {
-					ac.setPeriodo(periodo);
-					acServ.setDataProximo(ac);
-				}else
-					ac.setPeriodo(periodo);
-			}
+			AjudaCampanha ac = new AjudaCampanha();
 			ac.setAssociado(a);
 			ac.setCampanha(c);
 			ac.setValor(valor);
+			ac.setDataProximo(new Date());
+			ac.setPeriodo(periodo);
+			
+			FormaAjuda fa = new FormaAjuda();
+			fa.setId(idForma);
+			fa = faServ.findById(fa);
+			ac.setFormaAjuda(fa);
 			
 			if(detAjuda!=null)
 				ac.setDetalheAjuda(detAjuda);

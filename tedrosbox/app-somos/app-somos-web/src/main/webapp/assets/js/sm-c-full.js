@@ -6,6 +6,30 @@ $(document).ready(function() {
 	loadFooter();
 });
 
+function buildAjudaCampanha(l){
+	if(l && l.length>0){
+		$('#meuhistorico').show();
+		$('#historicoContainer').empty();
+		l.forEach(function (o, idx){
+			let t = $($('#historicoTemplate').html());
+			var color = idx%2==0 ? '#D6EAF8' : '#ffffff';
+			$('.col-4', t).css('background-color: '+color+';');
+			$('#histTitulo', t).text(o.titulo);
+			$('#histDesc', t).text(o.desc);
+			if(o.detalhe){
+				$('#histAction', t).text(o.detalhe.desc);
+			}else
+				$('#histAction', t)
+				.html("<ul class='actions stacked'><li><a href='javascript:cancelar(\""+o.id+"\", \""+o.titulo+"\")' class='button small fit'>Cancelar</a></li></ul>");
+			
+			$('#historicoContainer').append(t);
+		});
+	}else{
+		$('#meuhistorico').hide();
+	}
+}
+
+
 function buildCampanha(l){
 	if(l && l.length>0){
 		$('#campanhaLoading').hide();
@@ -34,8 +58,7 @@ function buildCampanha(l){
 			if(o.valores){
 				$('#valDiv', t).show();
 				o.valores.forEach(function (v, i){
-					var chk = o.valor && o.valor==v.valor ? 'checked' : '';
-					var r = '<input type="radio" '+chk+' id="val'+idx+'-'+i+'" name="valRadio'+idx+'" value="'+v.valor+'">'+
+					var r = '<input type="radio" id="val'+idx+'-'+i+'" name="valRadio'+idx+'" value="'+v.valor+'">'+
 							'<label class="sm-txt-bold" for="val'+idx+'-'+i+'">'+v.valor+'</label>' +
 							'<input type="hidden" id="plval'+idx+'-'+i+'" value="'+v.plano+'" >';
 					$('#valDiv', t).append(r);
@@ -47,8 +70,7 @@ function buildCampanha(l){
 			if(o.periodos){
 				$('#perDiv', t).show();
 				o.periodos.forEach(function (v, i){
-					var chk = o.periodo && o.periodo==v ? 'checked' : '';
-					var r = '<input type="radio" '+chk+' id="per'+idx+'-'+i+'" name="perRadio'+idx+'" value="'+v+'">'+
+					var r = '<input type="radio" id="per'+idx+'-'+i+'" name="perRadio'+idx+'" value="'+v+'">'+
 							'<label class="sm-txt-bold"  for="per'+idx+'-'+i+'">'+v+'</label>';
 					$('#perDiv', t).append(r);
 				});
@@ -56,14 +78,10 @@ function buildCampanha(l){
 				$('#perDiv', t).append("<input type='hidden' id='per"+idx+"n' >");
 				$('#perDiv', t).hide();
 			}
-			var hideCancelar = false;
 			if(o.formas){
 				$('#forDiv', t).show();
 				o.formas.forEach(function (v, i){
-					if(o.assIdForma==v.id && v.terc && v.terc=='Sim')
-						hideCancelar = true;
-					var chk = o.assIdForma && o.assIdForma==v.id ? 'checked' : '';
-					var tr = '<tr><td><input type="radio" '+chk+' id="for'+idx+'-'+i+'" name="forRadio'+idx+'" value="'+v.id+'">'+
+					var tr = '<tr><td><input type="radio" id="for'+idx+'-'+i+'" name="forRadio'+idx+'" value="'+v.id+'">'+
 					'<label class="sm-txt-bold"  for="for'+idx+'-'+i+'">'+v.nome+'</label></td><td>'+v.desc+'</td></tr>';
 					$('#forTb', t).append(tr);
 				});
@@ -72,10 +90,10 @@ function buildCampanha(l){
 				$('#forDiv', t).hide();
 			}
 			if(loggedUser){
-				var btn = o.associado && o.associado=='x' ? "Quero ajudar mais" : "Quero ajudar";
+				var btn =  "Quero ajudar";
 				$('#ajudarBtn', t).append("<li><a href='javascript:ajudar(\""+idx+"\")' class='button primary fit'>"+btn+"</a></li>");
-				if(o.associado && o.associado=='x' && !hideCancelar)
-					$('#ajudarBtn', t).append("<li><a href='javascript:cancelar(\""+o.id+"\", \""+o.titulo+"\")' class='button small fit'>Cancelar ajuda</a></li>");
+				//if(o.associado && o.associado=='x' && !hideCancelar)
+				//	$('#ajudarBtn', t).append("<li><a href='javascript:cancelar(\""+o.id+"\", \""+o.titulo+"\")' class='button small fit'>Cancelar ajuda</a></li>");
 				
 				$('#ajudarBtn', t).append('<input type="hidden" id="camp'+idx+'" value="'+o.id+'" >');
 			}else
@@ -90,8 +108,7 @@ function buildCampanha(l){
 
 function cancelar(id, titulo){
 	if(confirm('Deseja realmente cancelar sua ajuda na campanha '+titulo+'?')){
-		$('#campanhasContainer').empty();
-		$('#processandoAjuda').show();
+		$('#historicoContainer').empty();
 		$.ajax
 		({ 
 		    url: 'api/painel/campanha/cancelar/'+id,
@@ -100,8 +117,7 @@ function cancelar(id, titulo){
 		    headers : {'Content-Type' : 'application/json'},
 		    success: function(result)
 		    {
-		    	loadCampanha('painel');
-				$('#processandoAjuda').hide();
+		    	buildAjudaCampanha(result.data);
 				alert("Sua participação foi cancelada!");
 			}
 		}); 
@@ -155,7 +171,7 @@ function ajudar(idx){
 				}else{
 				$('#campanhasContainer').empty();
 				$('#processandoAjuda').show();
-				var curObj = {'id':pCamp, 'valor':pVal, 'periodo':pPer, 'assIdForma':pFor };
+				var curObj = {'idCampanha':pCamp, 'valor':pVal, 'periodo':pPer, 'idFormaAjuda':pFor };
 				$.ajax
 				({ 
 				    url: 'api/painel/campanha/ajudar',
@@ -166,10 +182,11 @@ function ajudar(idx){
 				    headers : {'Content-Type' : 'application/json'},
 				    success: function(r)
 				    {
-				    	buildCampanha(r.data);
-						$('#processandoAjuda').hide();
-				    	alert('Obrigado '+loggedUser.nome+'!\n'+
+						alert('Obrigado '+loggedUser.nome+'!\n'+
 						'Em breve enviaremos para seu email os dados para concluir esta ajuda!');
+				    	buildAjudaCampanha(r.data);
+						$('#processandoAjuda').hide();
+				    	loadCampanha();
 					}
 				});
 			}
@@ -178,16 +195,35 @@ function ajudar(idx){
 	}
 }
 
-function loadCampanha(t){
+function loadCampanha(){
 	$.ajax
     ({ 
-        url: 'api/'+t+'/campanhas',
+        url: 'api/sm/campanhas',
         type: 'get',
         dataType:'json',
         headers : {'Content-Type' : 'application/json'},
         success: function(r)
         {
         	buildCampanha(r.data);
+    	},
+		statusCode: {
+		    404: function() {
+		    }
+		  }
+	}); 
+}
+
+
+function loadAjudaCampanha(){
+	$.ajax
+    ({ 
+        url: 'api/painel/campanha/associado',
+        type: 'get',
+        dataType:'json',
+        headers : {'Content-Type' : 'application/json'},
+        success: function(r)
+        {
+        	buildAjudaCampanha(r.data);
     	},
 		statusCode: {
 		    404: function() {
@@ -206,11 +242,12 @@ function loadUserInfo(){
         success: function(r)
         {
 			loggedUser = r.data;
-        	loadCampanha('painel');
+        	loadCampanha();
+			loadAjudaCampanha()
     	},
 		statusCode: {
 		    401: function() {
-		      loadCampanha('sm');
+		      loadCampanha();
 		    },
 			409: function() {
 			  location.href = 'termo.html';

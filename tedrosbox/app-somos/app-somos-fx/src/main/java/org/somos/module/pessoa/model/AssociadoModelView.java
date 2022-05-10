@@ -9,6 +9,7 @@ import org.somos.model.Pessoa;
 import org.somos.module.pessoa.table.AjudaCampanhaTableView;
 import org.somos.module.pessoa.table.CampanhaCellCallBack;
 import org.somos.module.pessoa.table.DateCallback;
+import org.somos.module.pessoa.table.DetalheAjudaCellCallBack;
 import org.somos.module.pessoa.table.FormaAjudaCellCallBack;
 
 import com.tedros.core.annotation.security.TAuthorizationType;
@@ -56,10 +57,12 @@ public class AssociadoModelView extends TEntityModelView<Associado> {
 	@TTableView(editable=true, tableMenuButtonVisible=true,
 			columns = { @TTableColumn(cellValue="campanha", text = "Campanha", prefWidth=50, resizable=true,
 					cellValueFactory=@TCellValueFactory(parse=true, value=@TCallbackFactory(parse=true, value=CampanhaCellCallBack.class))), 
-						@TTableColumn(cellValue="valor", text = "Valor",  resizable=true),
-						@TTableColumn(cellValue="periodo", text = "Periodo", resizable=true), 
+						@TTableColumn(cellValue="valor", text = "Valor", prefWidth=20, resizable=true),
+						@TTableColumn(cellValue="periodo", text = "Periodo", prefWidth=20,  resizable=true), 
 						@TTableColumn(cellValue="formaAjuda", text = "Forma Ajuda", prefWidth=20, resizable=true,
 								cellValueFactory=@TCellValueFactory(parse=true, value=@TCallbackFactory(parse=true, value=FormaAjudaCellCallBack.class))), 
+						@TTableColumn(cellValue="detalheAjuda", text = "Detalhes", resizable=true,
+						cellValueFactory=@TCellValueFactory(parse=true, value=@TCallbackFactory(parse=true, value=DetalheAjudaCellCallBack.class))), 
 						@TTableColumn(cellValue="dataProcessado", text = "Enviado em", resizable=true,
 								cellFactory=@TCellFactory(parse = true, callBack=@TCallbackFactory(parse=true, value=DateCallback.class))), 
 						@TTableColumn(cellValue="dataProximo", text = "Proximo envio", resizable=true,

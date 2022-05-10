@@ -7,6 +7,9 @@ import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.somos.model.DetalheAjuda;
+import org.somos.web.rest.util.ApiUtils;
+
 /**
  * @author Davis Gordon
  *
@@ -36,6 +39,30 @@ public class DetalheAjudaModel implements Serializable{
 	private String dataHoraPagamento;
 
 	private String detalhe;
+	
+	private String desc;
+
+	public DetalheAjudaModel() {
+		super();
+	}
+
+	public DetalheAjudaModel(DetalheAjuda e) {
+		super();
+		this.tipo = e.getTipo();
+		this.executor = e.getExecutor();
+		this.idTransacao = e.getIdTransacao();
+		this.statusTransacao = e.getStatusTransacao();
+		this.valorPagamento = e.getValorPagamento();
+		this.dataHoraPagamento = e.getDataHoraPagamento()!=null 
+				? ApiUtils.formatDateHourToView(e.getDataHoraPagamento()) :
+					null;
+				
+		desc = "Tipo: "+tipo;
+		desc += ", Empresa: "+executor;
+		desc += ", Codigo da Transação: "+idTransacao;
+		if(statusTransacao!=null)
+			desc += ", Staus: "+statusTransacao;
+	}
 
 	/**
 	 * @return the tipo
@@ -161,5 +188,19 @@ public class DetalheAjudaModel implements Serializable{
 	 */
 	public void setDetalhe(String detalhe) {
 		this.detalhe = detalhe;
+	}
+
+	/**
+	 * @return the desc
+	 */
+	public String getDesc() {
+		return desc;
+	}
+
+	/**
+	 * @param desc the desc to set
+	 */
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
 }

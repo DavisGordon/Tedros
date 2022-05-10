@@ -87,7 +87,7 @@ function ajudar(detalhe){
 			$('#paypal-button-container')
 			.html("<p  class='sm-txt fnt-large'>Atualizando seus dados sobre sua ajuda... </p>");
 			
-			var curObj = {'id':pCamp, 'valor':pVal, 'periodo':pPer, 'assIdForma':pFor, 'detalheAjuda': detalhe };
+			var curObj = {'idCampanha':pCamp, 'valor':pVal, 'periodo':pPer, 'idFormaAjuda':pFor, 'detalhe': detalhe };
 			$.ajax
 			({ 
 				url: 'api/painel/campanha/ajudar',

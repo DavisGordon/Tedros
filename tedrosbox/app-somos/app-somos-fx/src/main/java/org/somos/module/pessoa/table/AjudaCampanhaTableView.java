@@ -7,6 +7,7 @@ import java.util.Date;
 
 import org.somos.model.AjudaCampanha;
 import org.somos.model.Campanha;
+import org.somos.model.DetalheAjuda;
 import org.somos.model.FormaAjuda;
 
 import com.tedros.fxapi.presenter.model.TEntityModelView;
@@ -32,6 +33,8 @@ public class AjudaCampanhaTableView extends TEntityModelView<AjudaCampanha> {
 	private SimpleStringProperty periodo;
 	
 	private SimpleObjectProperty<FormaAjuda> formaAjuda;
+	
+	private SimpleObjectProperty<DetalheAjuda> detalheAjuda;
 	
 	private SimpleObjectProperty<Date> dataProcessado;
 
@@ -157,6 +160,20 @@ public class AjudaCampanhaTableView extends TEntityModelView<AjudaCampanha> {
 	public SimpleStringProperty getDisplayProperty() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	 * @return the detalheAjuda
+	 */
+	public SimpleObjectProperty<DetalheAjuda> getDetalheAjuda() {
+		return detalheAjuda;
+	}
+
+	/**
+	 * @param detalheAjuda the detalheAjuda to set
+	 */
+	public void setDetalheAjuda(SimpleObjectProperty<DetalheAjuda> detalheAjuda) {
+		this.detalheAjuda = detalheAjuda;
 	}
 
 }

@@ -2,7 +2,6 @@ package org.somos.web.rest.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -17,11 +16,11 @@ import javax.ws.rs.core.MediaType;
 import org.somos.ejb.controller.IAssociadoController;
 import org.somos.ejb.controller.ICampanhaController;
 import org.somos.ejb.controller.ICampanhaMailConfigController;
-import org.somos.model.AjudaCampanha;
 import org.somos.model.Associado;
 import org.somos.model.Campanha;
 import org.somos.model.DetalheAjuda;
 import org.somos.model.Pessoa;
+import org.somos.web.rest.model.AjudaCampanhaModel;
 import org.somos.web.rest.model.CampanhaModel;
 import org.somos.web.rest.model.DetalheAjudaModel;
 import org.somos.web.rest.model.RestModel;
@@ -51,14 +50,14 @@ public class PainelApi extends PainelAcoesApi{
 	
 	@PUT
 	@Path("/campanha/ajudar")
-	public RestModel<List<CampanhaModel>> ajudar(CampanhaModel m){
+	public RestModel<List<AjudaCampanhaModel>> ajudar(AjudaCampanhaModel m){
 				
 		try {
 			Pessoa p = covidUserBean.getUser().getPessoa();
 			
 			DetalheAjuda da = null;
 			
-			DetalheAjudaModel dam = m.getDetalheAjuda();
+			DetalheAjudaModel dam = m.getDetalhe();
 			if(dam!=null) {
 				da = new DetalheAjuda();
 				da.setTipo(dam.getTipo());
@@ -76,14 +75,14 @@ public class PainelApi extends PainelAcoesApi{
 			}
 			
 			TResult<Associado> res = assServ.ajudarCampanha(appBean.getToken(), p, 
-					m.getId(), m.getValor(), m.getPeriodo(), m.getAssIdForma(), da);
+					m.getIdCampanha(), m.getValor(), m.getPeriodo(), m.getIdFormaAjuda(), da);
 			
 			if(res.getResult().equals(EnumResult.SUCESS)){
 				
 				cmcServ.processarMailing(appBean.getToken());
 				
 				Associado a = res.getValue();
-				return processarCampanhas(a);
+				return processarAjudaCampanhas(a);
 			
 			}else if(res.getResult().equals(EnumResult.WARNING)){
 				return new RestModel<>(null, "404", res.getMessage());
@@ -98,13 +97,13 @@ public class PainelApi extends PainelAcoesApi{
 	
 	@DELETE
 	@Path("/campanha/cancelar/{id}")
-	public RestModel<List<CampanhaModel>> cancelar(@PathParam("id") Long id){
+	public RestModel<List<AjudaCampanhaModel>> cancelar(@PathParam("id") Long id){
 				
 		try {
 			TResult<Associado> res = assServ.cancelarAjuda(appBean.getToken(), covidUserBean.getUser().getPessoa(), id);
 			if(res.getResult().equals(EnumResult.SUCESS)){
 				Associado a = res.getValue();
-				return processarCampanhas(a);
+				return processarAjudaCampanhas(a);
 			
 			}else if(res.getResult().equals(EnumResult.WARNING)){
 				return new RestModel<>(null, "404", res.getMessage());
@@ -142,15 +141,14 @@ public class PainelApi extends PainelAcoesApi{
 	}
 	
 	@GET
-	@Path("/campanhas")
-	public RestModel<List<CampanhaModel>> getCampanhas(){
+	@Path("/campanha/associado")
+	public RestModel<List<AjudaCampanhaModel>> getAjudaCampanha(){
 		try {
-			
 			Pessoa p = covidUserBean.getUser().getPessoa();
 			
 			TResult<Associado> res = assServ.recuperar(appBean.getToken(), p);
 			if(res.getResult().equals(EnumResult.SUCESS)){
-				return this.processarCampanhas(res.getValue());
+				return this.processarAjudaCampanhas(res.getValue());
 			}else{
 				return new RestModel<>(new ArrayList<>(), "404", res.getResult().equals(EnumResult.WARNING) 
 						? res.getMessage()  
@@ -162,38 +160,13 @@ public class PainelApi extends PainelAcoesApi{
 		}
 	}
 
-
-	private RestModel<List<CampanhaModel>> processarCampanhas(Associado a) {
-		TResult<List<Campanha>> r = caServ.listarValidos(appBean.getToken());
-		List<CampanhaModel> l = new ArrayList<>();
-		if(r.getResult().equals(EnumResult.SUCESS)){
-			
-			if(r.getValue()!=null) 
-				for(Campanha c : r.getValue()) {
-					CampanhaModel cm = new CampanhaModel(c);
-					if(a!=null && a.getAjudaCampanhas()!=null) {
-						Optional<AjudaCampanha> op = a.getAjudaCampanhas().stream().filter(ac->{
-							return ac.getCampanha().getId().equals(c.getId());
-						}).findFirst();
-						
-						if(op.isPresent()) {
-							AjudaCampanha ac = op.get();
-							cm.setAssociado("x");
-							cm.setValor(ac.getValor());
-							cm.setPeriodo(ac.getPeriodo());
-							if(ac.getFormaAjuda()!=null)
-								cm.setAssIdForma(ac.getFormaAjuda().getId());
-						}
-					}
-					
-					l.add(cm);
-				}
-			return new RestModel<>(l, "200", "");
-		}else if(r.getResult().equals(EnumResult.WARNING)){
-			return new RestModel<>(null, "404", r.getMessage());
-		}else {
-			return new RestModel<>(null, "500", error.getValue() );
-		}
+	public RestModel<List<AjudaCampanhaModel>> processarAjudaCampanhas(Associado a) {
+		List<AjudaCampanhaModel> l = new ArrayList<>();
+		if(a.getAjudaCampanhas()!=null)
+			a.getAjudaCampanhas().forEach(e->{
+				l.add(new AjudaCampanhaModel(e));
+			});
+		return new RestModel<>(l,"200","");
 	}
-	
+
 }
