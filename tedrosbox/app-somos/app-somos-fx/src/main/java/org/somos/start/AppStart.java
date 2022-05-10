@@ -39,19 +39,21 @@ module = {
 			@TModule(type=TipoAjudaModule.class, name="Tipos de Ajuda", menu="Gerenciar Campanha", 
 					icon=TipoAjudaIconImageView.class, menuIcon=TipoAjudaMenuIconImageView.class,
 					description="Edite aqui os Tipos de Ajuda que os voluntarios podem executar."),
-			@TModule(type=AcaoModule.class, name="Ação/Site", menu="Gerenciar Campanha", 
+			@TModule(type=AcaoModule.class, name="Ação & WebSite", menu="Gerenciar Campanha", 
 					icon=AcaoIconImageView.class, menuIcon=AcaoMenuIconImageView.class,
-					description="Administre aqui as ações/campanhas e algumas informações do site"),
+					description="Administre aqui as ações, campanhas de ajuda e outras informações do website"),
 			@TModule(type=MailingModule.class, name="Mailing", menu="Gerenciar Campanha", 
 					icon=MailingIconImageView.class, menuIcon=MailingMenuIconImageView.class,
-					description="Crie e envie e-mails a um grupo de pessoas sobre uma determinada ação."),
+					description="Crie e envie e-mails a um grupo de pessoas sobre uma determinada ação. "
+							+ "Configure os emails das campanhas de ajuda."),
 			@TModule(type=ReportModule.class, name="Relatórios", menu="Administrativo", 
 					icon=RelatoriosIconImageView.class, menuIcon=RelatoriosMenuIconImageView.class,
 					description="Gere relatórios que ajudem nos processos administrativos."),
 			@TModule(type=PessoaModule.class, name="#{label.person}", menu="Administrativo", 
 					icon=PessoaIconImageView.class, menuIcon=PessoaMenuIconImageView.class,
-					description="Gerencie aqui todas as pessoas envolvidas no projeto, voluntarios e "
-							+ "filantropicos cadastrados pelo site e também os termos de adesão."),
+					description="Gerencie aqui todas as pessoas envolvidas no projeto, associados"
+							+ " em campanha, voluntarios e filantropicos cadastrados pelo website "
+							+ "e os termos de adesão."),
 			@TModule(type=CozinhaModule.class, name="Local de Produção", menu="Administrativo", 
 					icon=CozinhaIconImageView.class, menuIcon=CozinhaMenuIconImageView.class,
 					description="Edite aqui os locais (cozinhas) de produção, necessario "

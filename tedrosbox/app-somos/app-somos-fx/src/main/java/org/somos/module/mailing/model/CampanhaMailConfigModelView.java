@@ -107,13 +107,13 @@ public class CampanhaMailConfigModelView extends TEntityModelView<CampanhaMailCo
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
 	@TText(text="Chaves para substituição, insira a chave desejada para inserir uma informação. "
 			+ "ex: #NOME# será substituido pelo nome do asdociado e #VALOR# pelo valor de ajuda escolhido pelo mesmo.", 
-	wrappingWidth=650, textAlignment=TextAlignment.LEFT, 
+	wrappingWidth=750, textAlignment=TextAlignment.LEFT, 
 	textStyle = TTextStyle.CUSTOM)
 	private SimpleStringProperty tituloBoxEmail;
 	
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
 	@TText(text="#NOME# #TITULOCAMPANHA# #FORMAAJUDA# #VALOR# #DATAFIM# #LINKCAMPANHA# #LINKSITE#", 
-			wrappingWidth=650, textAlignment=TextAlignment.LEFT, 
+			wrappingWidth=750, textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.CUSTOM)
 	private SimpleStringProperty textoChaves;
 	

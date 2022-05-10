@@ -72,18 +72,6 @@ import javafx.scene.text.TextAlignment;
 							TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class CampanhaModelView extends TEntityModelView<Campanha> {
 
-	@TTabPane(tabs = { 
-			@TTab(closable=false, content =
-				@TContent(detailForm=@TDetailForm(
-						fields={"titulo","desc","meta","dataFim"})), 
-				text = "Dados da campanha"),
-			@TTab(closable=false, scroll=true, content =
-				@TContent(detailForm=@TDetailForm(
-					fields={"valores","formasAjuda"})), 
-				text = "Periodicidade e Formas de Ajuda"),
-			@TTab(closable=false, content = 
-				@TContent(detailForm=@TDetailForm(fields={"image"})), 
-				text = "Imagem")})
 	private SimpleLongProperty id;
 	
 	@TTextReaderHtml(text="Campanha de Ajuda", 
@@ -98,6 +86,18 @@ public class CampanhaModelView extends TEntityModelView<Campanha> {
 	@TReaderHtml
 	@TLabel(text="Titulo")
 	@TTextField(maxLength=120, required = true)
+	@TTabPane(tabs = { 
+			@TTab(closable=false, content =
+				@TContent(detailForm=@TDetailForm(
+						fields={"titulo","desc","meta","dataFim"})), 
+				text = "Dados da campanha"),
+			@TTab(closable=false, scroll=true, content =
+				@TContent(detailForm=@TDetailForm(
+					fields={"valores","formasAjuda"})), 
+				text = "Valores, Periodo e Formas de Ajuda"),
+			@TTab(closable=false, content = 
+				@TContent(detailForm=@TDetailForm(fields={"image"})), 
+				text = "Imagem")})
 	private SimpleStringProperty titulo;
 	
 	@TReaderHtml

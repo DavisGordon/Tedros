@@ -103,7 +103,7 @@ public class ValorAjuda extends TEntity implements Comparable<ValorAjuda>{
 	public int compareTo(ValorAjuda o) {
 		if(o!=null && NumberUtils.isCreatable(valor) && NumberUtils.isCreatable(o.getValor())){
 			BigDecimal v1 = new BigDecimal(valor);
-			BigDecimal v2 = new BigDecimal(valor);
+			BigDecimal v2 = new BigDecimal(o.getValor());
 			return v1.compareTo(v2);
 		}
 		

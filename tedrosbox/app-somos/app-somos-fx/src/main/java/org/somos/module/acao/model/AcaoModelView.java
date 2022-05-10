@@ -87,9 +87,9 @@ import javafx.scene.text.TextAlignment;
 		orderBy = {@TOption(text = "Codigo", value = "id"), 
 					@TOption(text = "Titulo", value = "titulo"), 
 					@TOption(text = "Data", value = "data")}),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Ação / Campanha")))
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="Ação")))
 @TSecurity(	id="SOMOS_SITEACAO_FORM", 
-	appName = "#{somos.name}", moduleName = "Gerenciar Campanha", viewName = "Ação / Campanha",
+	appName = "#{somos.name}", moduleName = "Gerenciar Campanha", viewName = "Ação",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 public class AcaoModelView extends TEntityModelView<Acao> {
@@ -103,7 +103,7 @@ public class AcaoModelView extends TEntityModelView<Acao> {
    				   		@TPriority(field="textoCadastro", priority=Priority.ALWAYS) }))
 	private SimpleLongProperty id;
 	
-	@TTextReaderHtml(text="Ação / Campanha", 
+	@TTextReaderHtml(text="Ação", 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
