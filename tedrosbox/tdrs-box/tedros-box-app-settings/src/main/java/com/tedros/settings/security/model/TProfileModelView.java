@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
+import com.tedros.core.domain.DomainApp;
+import com.tedros.core.ejb.controller.TProfileController;
 import com.tedros.core.security.model.TAuthorization;
 import com.tedros.core.security.model.TProfile;
 import com.tedros.fxapi.annotation.control.TContent;
@@ -21,7 +23,7 @@ import com.tedros.fxapi.annotation.form.TDetailForm;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
-import com.tedros.fxapi.annotation.process.TEntityProcess;
+import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.reader.TDetailReader;
 import com.tedros.fxapi.annotation.reader.TReader;
 import com.tedros.fxapi.annotation.scene.TNode;
@@ -32,7 +34,7 @@ import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
-import com.tedros.settings.security.process.TProfileProcess;
+import com.tedros.settings.security.table.TAuthorizationTableView;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -43,18 +45,18 @@ import javafx.scene.text.TextAlignment;
  * @author Davis Gordon
  */
 @TForm(name="#{security.profile.form.name}", showBreadcrumBar=true, editCssId="")
+@TEjbService(serviceName = TProfileController.JNDI_NAME, model=TProfile.class)
 @TPresenter(type=TDynaPresenter.class,
 			modelClass=TProfile.class,
 			decorator=@TDecorator(	type=TMasterCrudViewDecorator.class, 
 									viewTitle="#{security.profile.view.title}", 
 									listTitle="#{security.profile.list.title}"))
-@TSecurity(	id="T_CUSTOM_SECURITY_PROFILE", 
+@TSecurity(	id=DomainApp.PROFILE_FORM_ID, 
 			appName="#{settings.app.name}", 
 			moduleName="#{label.profile}", 
 			viewName="#{security.profile.view.title}",
 			allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 			   					TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
-@TEntityProcess(entity=TProfile.class, process=TProfileProcess.class)
 public final class TProfileModelView extends TEntityModelView<TProfile> {
 	
 	private SimpleLongProperty id;
@@ -87,8 +89,8 @@ public final class TProfileModelView extends TEntityModelView<TProfile> {
 	private SimpleStringProperty description;
 	
 	@TDetailReader(label=@TLabel(text="Authorization"))
-	@TMultipleSelectionModal(modelClass = TAuthorization.class, modelViewClass = TAuthorizationTableView.class,
-	width=600, height=350)
+	@TMultipleSelectionModal(width=600, height=350,
+	modelClass = TAuthorization.class, modelViewClass = TAuthorizationTableView.class)
 	@TModelViewType(modelClass=TAuthorization.class, modelViewClass=TAuthorizationTableView.class)
 	private ITObservableList<TAuthorizationTableView> autorizations;
 

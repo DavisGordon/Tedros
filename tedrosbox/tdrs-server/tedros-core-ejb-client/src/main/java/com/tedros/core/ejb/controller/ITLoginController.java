@@ -14,6 +14,9 @@ import com.tedros.ejb.base.security.TAccessToken;
 @Remote
 public interface ITLoginController extends ITBaseController{
 	
+
+	static final String JNDI_NAME = "ITLoginControllerRemote";
+	
 	TResult<TUser> login(String login, String password);
 	
 	TResult<TUser> createFirstUser(TUser user, List<TAuthorization> authorizations);

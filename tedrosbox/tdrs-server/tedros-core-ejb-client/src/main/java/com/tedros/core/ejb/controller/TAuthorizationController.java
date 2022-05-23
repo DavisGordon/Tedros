@@ -12,6 +12,8 @@ import com.tedros.ejb.base.security.TAccessToken;
 @Remote
 public interface TAuthorizationController extends ITSecureEjbController<TAuthorization>{
 
+	static final String JNDI_NAME = "TAuthorizationControllerRemote";
+	
 	@SuppressWarnings("rawtypes")
 	TResult process(TAccessToken token, List<TAuthorization> newLst);
 

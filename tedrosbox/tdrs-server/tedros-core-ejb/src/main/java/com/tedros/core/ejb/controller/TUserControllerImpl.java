@@ -5,6 +5,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
+import com.tedros.core.domain.DomainApp;
 import com.tedros.core.ejb.service.TUserService;
 import com.tedros.core.security.model.TUser;
 import com.tedros.ejb.base.controller.ITSecurityController;
@@ -18,7 +19,7 @@ import com.tedros.ejb.base.service.ITEjbService;
 
 @TSecurityInterceptor
 @Stateless(name="TUserController")
-@TBeanSecurity(@TBeanPolicie(id="T_CUSTOM_SECURITY_USER", 
+@TBeanSecurity(@TBeanPolicie(id=DomainApp.USER_FORM_ID, 
 policie= {TAccessPolicie.APP_ACCESS, TAccessPolicie.VIEW_ACCESS}))
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class TUserControllerImpl extends TSecureEjbController<TUser> implements	ITSecurity, TUserController {

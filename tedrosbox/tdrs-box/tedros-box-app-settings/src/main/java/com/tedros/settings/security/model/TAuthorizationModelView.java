@@ -9,6 +9,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import com.tedros.core.TLanguage;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
+import com.tedros.core.domain.DomainApp;
+import com.tedros.core.ejb.controller.TAuthorizationController;
 import com.tedros.core.security.model.TAuthorization;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
@@ -43,15 +45,15 @@ import javafx.scene.layout.Priority;
  */
 @TFormReaderHtml
 @TForm(name = "#{security.authorization.form.name}", showBreadcrumBar=true)
-@TEjbService(serviceName = "TAuthorizationControllerRemote", model=TAuthorization.class)
+@TEjbService(serviceName = TAuthorizationController.JNDI_NAME, model=TAuthorization.class)
 @TListViewPresenter(listViewMinWidth=500,
-	paginator=@TPaginator(entityClass = TAuthorization.class, serviceName = "TAuthorizationControllerRemote",
-		show=true),
+	paginator=@TPaginator(entityClass = TAuthorization.class, 
+	serviceName = TAuthorizationController.JNDI_NAME, show=true),
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{security.authorization.view.title}", 
 		 buildDeleteButton=false, buildCollapseButton=false, newButtonText="#{label.load}"),
 	behavior=@TBehavior(type=TAuthorizationBehavior.class, action=TAuthorizationLoadAction.class)
 	))
-@TSecurity(	id="T_CUSTOM_SECURITY_AUTHORIZATION", 
+@TSecurity(	id=DomainApp.AUTHORIZATION_FORM_ID, 
 	appName="#{settings.app.name}", 
 	moduleName="#{label.authorization}", 
 	viewName="#{security.authorization.view.title}",

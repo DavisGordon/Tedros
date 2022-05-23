@@ -96,7 +96,8 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	
 				@Override
 				public void runAfter() {
-					setModelView(getModels().get(0));
+					if(!getModels().isEmpty())
+						setModelView(getModels().get(0));
 				}
 				
 			});

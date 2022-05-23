@@ -7,7 +7,7 @@ import javax.ejb.TransactionAttributeType;
 
 import com.tedros.core.domain.DomainApp;
 import com.tedros.core.ejb.service.TCoreService;
-import com.tedros.core.security.model.TProfile;
+import com.tedros.core.owner.model.TOwner;
 import com.tedros.ejb.base.controller.ITSecurityController;
 import com.tedros.ejb.base.controller.TSecureEjbController;
 import com.tedros.ejb.base.security.ITSecurity;
@@ -18,20 +18,20 @@ import com.tedros.ejb.base.security.TSecurityInterceptor;
 import com.tedros.ejb.base.service.ITEjbService;
 
 @TSecurityInterceptor
-@Stateless(name="TProfileController")
-@TBeanSecurity(@TBeanPolicie(id=DomainApp.PROFILE_FORM_ID, 
+@Stateless(name="TOwnerController")
+@TBeanSecurity(@TBeanPolicie(id=DomainApp.OWNER_FORM_ID, 
 policie= {TAccessPolicie.APP_ACCESS, TAccessPolicie.VIEW_ACCESS}))
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
-public class TProfileControllerImpl extends TSecureEjbController<TProfile> implements TProfileController, ITSecurity {
+public class TOwnerControllerImpl extends TSecureEjbController<TOwner> implements TOwnerController, ITSecurity {
 
 	@EJB
-	private TCoreService<TProfile> serv;
+	private TCoreService<TOwner> serv;
 	
 	@EJB
 	private ITSecurityController securityController;
 
 	@Override
-	public ITEjbService<TProfile> getService() {
+	public ITEjbService<TOwner> getService() {
 		return serv;
 	}
 

@@ -5,6 +5,8 @@ package com.tedros.settings.security.model;
 
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
+import com.tedros.core.domain.DomainApp;
+import com.tedros.core.ejb.controller.TUserController;
 import com.tedros.core.security.model.TProfile;
 import com.tedros.core.security.model.TUser;
 import com.tedros.fxapi.annotation.TObservableValue;
@@ -62,11 +64,11 @@ import javafx.scene.text.TextAlignment;
  */
 @TForm(name="#{security.user.form.name}", showBreadcrumBar=true, editCssId="")
 @TFormReaderHtml
-@TEjbService(serviceName = "TUserControllerRemote", model=TUser.class)
+@TEjbService(serviceName = TUserController.JNDI_NAME, model=TUser.class)
 @TPresenter(type=TDynaPresenter.class, 
 			decorator=@TDecorator(type = TMasterCrudViewDecorator.class, viewTitle="#{security.user.view.title}", listTitle="#{security.user.list.title}"),
 			behavior=@TBehavior(type=TMasterCrudViewBehavior.class))
-@TSecurity(	id="T_CUSTOM_SECURITY_USER", 
+@TSecurity(	id=DomainApp.USER_FORM_ID, 
 			appName="#{settings.app.name}", 
 			moduleName="#{label.user}", 
 			viewName="#{security.user.view.title}",
