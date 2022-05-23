@@ -1,6 +1,6 @@
 package com.tedros.settings.security.callback;
 
-import com.tedros.settings.security.model.TAuthorizationTableView;
+import com.tedros.settings.security.table.TAuthorizationTableView;
 
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn.CellDataFeatures;

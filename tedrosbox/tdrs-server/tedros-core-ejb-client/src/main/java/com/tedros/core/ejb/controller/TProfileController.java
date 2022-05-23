@@ -8,5 +8,6 @@ import com.tedros.ejb.base.controller.ITSecureEjbController;
 @Remote
 public interface TProfileController extends ITSecureEjbController<TProfile>{
 
-	
+
+	static final String JNDI_NAME = "TProfileControllerRemote";
 }

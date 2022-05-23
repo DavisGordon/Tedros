@@ -21,6 +21,7 @@ import com.tedros.fxapi.builder.NullRectangle2DWebEventBuilder;
 import com.tedros.fxapi.builder.NullStringBooleanCallBackBuilder;
 import com.tedros.fxapi.builder.NullStringWebEventBuilder;
 import com.tedros.fxapi.builder.NullWebErrorEventBuilder;
+import com.tedros.util.TedrosFolder;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.web.PopupFeatures;
@@ -42,10 +43,22 @@ import javafx.util.Callback;
 public @interface TWebEngine {
 	
 	/**
+	 * This constant indicate the parser to use the /user.folder/.tedros/MODULE as the root folder
+	 * */
+	public static final String MODULE_FOLDER = "file:MODULE_FOLDER";
+	
+	/**
 	* <pre>
 	* {@link WebEngine} Class
 	* 
 	*  Loads a Web page into this engine.
+	*  
+	*  For local html files use the constant TWebEngine.MODULE_FOLDER.
+	*  This constant sets the MODULE folder in /user.name/.tedros/MODULE/ 
+	*  as root folder.
+	*  
+	*  Example:
+	*  load=TWebEngine.MODULE_FOLDER+"/geolocation/location.html"
 	* </pre> 
 	**/
 	public String load() default "";

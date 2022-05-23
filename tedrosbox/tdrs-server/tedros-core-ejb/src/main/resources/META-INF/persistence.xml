@@ -15,6 +15,7 @@
 		<class>com.tedros.core.security.model.TAuditLog</class>
 		<class>com.tedros.common.model.TByteEntity</class>	
 		<class>com.tedros.common.model.TFileEntity</class>
+		<class>com.tedros.core.owner.model.TOwner</class>
 		
 		
 		<properties>

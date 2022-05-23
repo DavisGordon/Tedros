@@ -4,6 +4,7 @@ import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.fxapi.modal.TMessageBox;
 import com.tedros.fxapi.presenter.entity.decorator.TSaveViewDecorator;
 import com.tedros.fxapi.presenter.model.TModelView;
+import com.tedros.fxapi.util.TModelViewUtil;
 
 @SuppressWarnings({ "rawtypes" })
 public class TSaveViewBehavior<M extends TModelView, E extends ITEntity>
@@ -24,10 +25,10 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 			configSaveButton();
 			configModesRadio();
 			
-			M model = (M) super.getModels().get(0);
+			M model = super.getModels()!=null && !super.getModels().isEmpty()
+					? (M) super.getModels().get(0)
+							: getPresenter().getModelViewClass().newInstance();
 			setModelView(model);
-			//showForm(TViewMode.EDIT);
-			
 			
 		}catch(Throwable e){
 			getView().tShowModal(new TMessageBox(e), true);
