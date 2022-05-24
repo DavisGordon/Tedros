@@ -39,7 +39,7 @@ import com.tedros.login.decorator.LoginDecorator;
 import com.tedros.login.model.Login;
 import com.tedros.login.model.LoginModelView;
 import com.tedros.login.model.TLoginProcess;
-import com.tedros.settings.security.model.TProfileModelView;
+import com.tedros.settings.security.model.TProfileMV;
 import com.tedros.util.TEncriptUtil;
 import com.tedros.util.TFileUtil;
 import com.tedros.util.TedrosFolder;
@@ -74,7 +74,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 	private TPasswordField passwordField;
 	private TTextField nameField;
 	private TVerticalRadioGroup languageField;
-	private TComboBoxField<TProfileModelView> profileComboBox;
+	private TComboBoxField<TProfileMV> profileComboBox;
 	private Text profileText;
 	private TLanguage iEngine;
 	private TTextField ipTextField;
@@ -140,8 +140,8 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 					profileComboBox.setDisable(false);
 					
 					
-					List<TProfileModelView> profiles  = new TModelViewUtil<TProfileModelView, TProfile>
-					(TProfileModelView.class, TProfile.class, new ArrayList<>(newVal.getProfiles())).convertToModelViewList();
+					List<TProfileMV> profiles  = new TModelViewUtil<TProfileMV, TProfile>
+					(TProfileMV.class, TProfile.class, new ArrayList<>(newVal.getProfiles())).convertToModelViewList();
 					
 					profileComboBox.getItems().addAll(profiles);
 					profileText.setText(iEngine.getFormatedString("#{tedros.selectProfile}", newVal.getName()));
@@ -249,7 +249,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 					}
 				}else{
 					
-					TProfileModelView selectedProfile = profileComboBox.getSelectionModel().getSelectedItem();
+					TProfileMV selectedProfile = profileComboBox.getSelectionModel().getSelectedItem();
 					if(selectedProfile!=null){
 						try{
 							final TUser user = loggedUserProperty.getValue();
@@ -386,7 +386,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 		languageField = (TVerticalRadioGroup) tFieldBox.gettControl();
 		
 		TFieldBox profileFieldBox = form.gettFieldBox("profile");//  language
-		profileComboBox = (TComboBoxField<TProfileModelView>) profileFieldBox.gettControl();
+		profileComboBox = (TComboBoxField<TProfileMV>) profileFieldBox.gettControl();
 		
 		TFieldBox profileTextFieldBox = form.gettFieldBox("profileText");//  language
 		profileText = (Text) profileTextFieldBox.gettControl();

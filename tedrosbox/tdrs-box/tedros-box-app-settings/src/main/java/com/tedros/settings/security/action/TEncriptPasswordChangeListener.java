@@ -8,7 +8,7 @@ import javafx.beans.value.ObservableValue;
 import com.tedros.fxapi.annotation.listener.TChangeListener;
 import com.tedros.fxapi.control.TPasswordField;
 import com.tedros.fxapi.form.ITForm;
-import com.tedros.settings.security.model.TUserModelView;
+import com.tedros.settings.security.model.TUserMV;
 import com.tedros.util.TEncriptUtil;
 
 /**
@@ -20,7 +20,7 @@ public class TEncriptPasswordChangeListener extends TChangeListener<Boolean> {
 	@Override
 	public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldVal, Boolean newVal) {
 		if(!newVal){
-			final TUserModelView modelView = (TUserModelView) getComponentDescriptor().getModelView();
+			final TUserMV modelView = (TUserMV) getComponentDescriptor().getModelView();
 			if((modelView.getPassword()!=null && modelView.getLastPassword()!=null && 
 					modelView.getPassword().getValue()!=null && modelView.getLastPassword().getValue()==null) ||
 					(modelView.getPassword()!=null && modelView.getLastPassword()!=null 

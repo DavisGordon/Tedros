@@ -700,7 +700,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			M model = null;
 			if(this.actionHelper.runBefore(TActionType.NEW)){
 					final Class<E> entityClass = getEntityClass();
-					model = (M) getModelViewClass().getConstructor(entityClass).newInstance(entityClass.newInstance());
+					model = entityClass!=null 
+							? (M) getModelViewClass().getConstructor(entityClass).newInstance(entityClass.newInstance())
+									: getModelViewClass().newInstance();
 					
 					if(processNewEntityBeforeBuildForm(model)) {
 						super.formProperty().addListener(new ChangeListener<ITModelForm>() {

@@ -5,8 +5,6 @@ package com.tedros.settings.security.process;
 
 import java.util.List;
 
-import javax.naming.NamingException;
-
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.ejb.controller.TAuthorizationController;
 import com.tedros.core.security.model.TAuthorization;
@@ -23,7 +21,7 @@ import com.tedros.fxapi.process.TEntityProcess;
 public class TAuthorizationProcess extends TEntityProcess<TAuthorization> {
 
 	public TAuthorizationProcess() throws TProcessException {
-		super(TAuthorization.class, "TAuthorizationControllerRemote");
+		super(TAuthorization.class, TAuthorizationController.JNDI_NAME);
 	}
 	
 	private List<TAuthorization> lst = null;
@@ -39,7 +37,7 @@ public class TAuthorizationProcess extends TEntityProcess<TAuthorization> {
 			ServiceLocator loc = ServiceLocator.getInstance();
 			try {
 				TUser user = TedrosContext.getLoggedUser();
-				TAuthorizationController serv = loc.lookup("TAuthorizationControllerRemote");
+				TAuthorizationController serv = loc.lookup(TAuthorizationController.JNDI_NAME);
 				TResult<TAuthorization> r = serv.process(user.getAccessToken(), lst);
 				res.add(r);
 			} catch (Exception e) {

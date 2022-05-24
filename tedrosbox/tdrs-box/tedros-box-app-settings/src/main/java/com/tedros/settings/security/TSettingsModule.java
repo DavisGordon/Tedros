@@ -12,9 +12,10 @@ import com.tedros.fxapi.presenter.dynamic.view.TDynaGroupView;
 import com.tedros.fxapi.presenter.view.group.TGroupPresenter;
 import com.tedros.fxapi.presenter.view.group.TGroupView;
 import com.tedros.fxapi.presenter.view.group.TViewItem;
-import com.tedros.settings.security.model.TAuthorizationModelView;
-import com.tedros.settings.security.model.TProfileModelView;
-import com.tedros.settings.security.model.TUserModelView;
+import com.tedros.settings.security.model.TAuthorizationMV;
+import com.tedros.settings.security.model.TOwnerMV;
+import com.tedros.settings.security.model.TProfileMV;
+import com.tedros.settings.security.model.TUserMV;
 
 /**
  * @author Davis Gordon
@@ -29,9 +30,10 @@ public class TSettingsModule extends TModule {
 	public void tStart() {
 		
 		tShowView(new TGroupView<TGroupPresenter>(this, "#{security.view.title}", 
-				new TViewItem(TDynaGroupView.class, TAuthorizationModelView.class, "#{label.authorization}"),
-				new TViewItem(TDynaGroupView.class, TProfileModelView.class, "#{label.profile}"),
-				new TViewItem(TDynaGroupView.class, TUserModelView.class, "#{label.user}")
+				new TViewItem(TDynaGroupView.class, TOwnerMV.class, "#{owner.view}"),
+				new TViewItem(TDynaGroupView.class, TAuthorizationMV.class, "#{label.authorization}"),
+				new TViewItem(TDynaGroupView.class, TProfileMV.class, "#{label.profile}"),
+				new TViewItem(TDynaGroupView.class, TUserMV.class, "#{label.user}")
 				));
 		
 	}

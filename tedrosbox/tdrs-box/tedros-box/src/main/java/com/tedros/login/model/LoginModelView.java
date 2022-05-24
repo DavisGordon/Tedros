@@ -35,7 +35,7 @@ import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.login.behavior.LoginBehavior;
 import com.tedros.login.decorator.LoginDecorator;
-import com.tedros.settings.security.model.TProfileModelView;
+import com.tedros.settings.security.model.TProfileMV;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -97,7 +97,7 @@ public class LoginModelView extends TModelView<Login> {
 	@TLabel(text = "#{tedros.profile}")
 	@TComboBoxField(firstItemTex="#{tedros.select}",
 		node=@TNode(disable=true, parse=true))
-	private SimpleObjectProperty<TProfileModelView> profile;
+	private SimpleObjectProperty<TProfileMV> profile;
 	
 	//
 	
@@ -188,11 +188,11 @@ public class LoginModelView extends TModelView<Login> {
 		this.title = title;
 	}
 
-	public SimpleObjectProperty<TProfileModelView> getProfile() {
+	public SimpleObjectProperty<TProfileMV> getProfile() {
 		return profile;
 	}
 
-	public void setProfile(SimpleObjectProperty<TProfileModelView> profile) {
+	public void setProfile(SimpleObjectProperty<TProfileMV> profile) {
 		this.profile = profile;
 	}
 
