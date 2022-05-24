@@ -25,10 +25,12 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 			configSaveButton();
 			configModesRadio();
 			
-			M model = super.getModels()!=null && !super.getModels().isEmpty()
-					? (M) super.getModels().get(0)
-							: getPresenter().getModelViewClass().newInstance();
-			setModelView(model);
+			if(super.getModels()!=null && !super.getModels().isEmpty()) {
+				M model = (M) super.getModels().get(0);
+				setModelView(model);
+			}else {
+				super.newAction();
+			}
 			
 		}catch(Throwable e){
 			getView().tShowModal(new TMessageBox(e), true);

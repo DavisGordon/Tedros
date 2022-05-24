@@ -4,29 +4,29 @@ import javafx.geometry.Insets;
 
 import com.tedros.core.presenter.ITPresenter;
 import com.tedros.fxapi.form.TVBoxForm;
-import com.tedros.settings.layout.model.ExampleViewModel;
+import com.tedros.settings.layout.model.ExampleMV;
 
-public class ExampleForm extends TVBoxForm<ExampleViewModel> {
+public class ExampleForm extends TVBoxForm<ExampleMV> {
 
 	public ExampleForm() {
-		super(new ExampleViewModel());
+		super(new ExampleMV());
 	}
 	
-	public ExampleForm(ExampleViewModel model) {
+	public ExampleForm(ExampleMV model) {
 		super(model);
 	}
 	
-	public ExampleForm(ExampleViewModel model, Boolean reader) {
+	public ExampleForm(ExampleMV model, Boolean reader) {
 		super(model, reader);
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public ExampleForm(ITPresenter presenter, ExampleViewModel model) {
+	public ExampleForm(ITPresenter presenter, ExampleMV model) {
 		super(presenter, model);
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public ExampleForm(ITPresenter presenter, ExampleViewModel model, Boolean reader) {
+	public ExampleForm(ITPresenter presenter, ExampleMV model, Boolean reader) {
 		super(presenter, model, reader);
 	}
 

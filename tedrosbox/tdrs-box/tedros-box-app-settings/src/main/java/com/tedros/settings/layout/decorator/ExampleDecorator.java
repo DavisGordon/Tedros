@@ -6,16 +6,16 @@ import javafx.geometry.Pos;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
-import com.tedros.settings.layout.model.ExampleViewModel;
+import com.tedros.settings.layout.model.ExampleMV;
 
-public class ExampleDecorator extends TDynaViewCrudBaseDecorator<ExampleViewModel> {
+public class ExampleDecorator extends TDynaViewCrudBaseDecorator<ExampleMV> {
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void decorate() {
 		
 		// get the view
-		final ITDynaView<ExampleViewModel> view = getPresenter().getView();
+		final ITDynaView<ExampleMV> view = getPresenter().getView();
 		
 		view.gettFormSpace().setPrefWidth(400);
 		view.gettFormSpace().setAlignment(Pos.TOP_LEFT);

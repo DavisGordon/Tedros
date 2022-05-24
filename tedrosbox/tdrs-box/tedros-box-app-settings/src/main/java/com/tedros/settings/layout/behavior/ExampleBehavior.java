@@ -17,14 +17,14 @@ import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.reader.TTextReader;
 import com.tedros.settings.layout.decorator.ExampleDecorator;
-import com.tedros.settings.layout.form.EntityExampleForm;
-import com.tedros.settings.layout.model.ExampleViewModel;
+import com.tedros.settings.layout.model.Example;
+import com.tedros.settings.layout.model.ExampleMV;
 import com.tedros.util.TColorUtil;
 
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 
-public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleViewModel, EntityExampleForm> {
+public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleMV, Example> {
 
 	@Override
 	public void load() {
@@ -35,7 +35,7 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleViewModel,
 
 			@Override
 			public boolean runBefore() {
-				ExampleViewModel model = new ExampleViewModel();
+				ExampleMV model = new ExampleMV();
 				setViewMode(TViewMode.EDIT);
 				setModelView(model);
 				editEntity(model);
@@ -65,13 +65,13 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleViewModel,
 		ExampleDecorator decorator = getDecorator();
 		decorator.gettEditModeRadio().setStyle(style.toString());
 		decorator.gettReadModeRadio().setStyle(style.toString());
-		((TDynaView<ExampleViewModel>) decorator.getView()).gettViewTitle().setStyle(style.toString());
+		((TDynaView<ExampleMV>) decorator.getView()).gettViewTitle().setStyle(style.toString());
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void processFieldSetBorderAndTextColor(String color, String size){
-		final ITModelForm<ExampleViewModel> form = getForm();
-		Node node = ((TDefaultForm<ExampleViewModel>) ((TProgressIndicatorForm) form).gettForm()).lookup("#stringField-fieldSet");
+		final ITModelForm<ExampleMV> form = getForm();
+		Node node = ((TDefaultForm<ExampleMV>) ((TProgressIndicatorForm) form).gettForm()).lookup("#stringField-fieldSet");
 		if(node instanceof TFieldSet){
 			TFieldSet fieldSet = (TFieldSet) node;
 			
@@ -91,8 +91,8 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleViewModel,
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void processFieldSetLegendBackgroundColor(Color panelColor){
-		final ITModelForm<ExampleViewModel> form = getForm();
-		Node node = ((TDefaultForm<ExampleViewModel>) ((TProgressIndicatorForm) form).gettForm()).lookup("#stringField-fieldSet");
+		final ITModelForm<ExampleMV> form = getForm();
+		Node node = ((TDefaultForm<ExampleMV>) ((TProgressIndicatorForm) form).gettForm()).lookup("#stringField-fieldSet");
 		if(node instanceof TFieldSet){
 			
 			java.awt.Color rgb = TColorUtil.hex2Rgb(TColorUtil.toHexadecimal(panelColor));
@@ -129,7 +129,7 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleViewModel,
 						"-fx-padding: 20 20 20 20;"+
 						"-fx-spacing: 8;";
 		
-		TDynaView<ExampleViewModel> view = getView();
+		TDynaView<ExampleMV> view = getView();
 		
 		view.gettHeaderHorizontalLayout().setStyle(tHeaderBox);
 		view.gettViewTitleLayout().setStyle(tViewTitleBox);
@@ -268,7 +268,7 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleViewModel,
 	}
 
 	@Override
-	public boolean processNewEntityBeforeBuildForm(ExampleViewModel model) {
+	public boolean processNewEntityBeforeBuildForm(ExampleMV model) {
 		return true;
 		
 	}
