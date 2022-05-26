@@ -40,6 +40,7 @@ import com.tedros.fxapi.presenter.entity.behavior.TSaveViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TSaveViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.settings.security.action.TOwnerNewAction;
+import com.tedros.settings.start.TConstant;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -72,7 +73,7 @@ public class TOwnerMV extends TEntityModelView<TOwner> {
 			@TTab(closable=false, scroll=false, content = @TContent(detailForm=
 				@TDetailForm(fields={"header", "name", "tel", "token"})), 
 				text = "#{label.main}"), 
-			@TTab(closable=false, content = @TContent(detailForm=
+			@TTab(closable=false, scroll=false, content = @TContent(detailForm=
 				@TDetailForm(fields={"logo"})), 
 				text = "#{label.logo}")
 	})
@@ -116,7 +117,8 @@ public class TOwnerMV extends TEntityModelView<TOwner> {
 	private SimpleStringProperty token;
 	
 	@TFieldBox(node=@TNode(id="img", parse = true))
-	@TSelectImageField(source=TEnvironment.LOCAL, target=TEnvironment.REMOTE)
+	@TSelectImageField(source=TEnvironment.LOCAL, target=TEnvironment.REMOTE, fitHeight=-1,
+	remoteOwner=DomainApp.MNEMONIC)
 	private SimpleObjectProperty<ITFileEntity> logo;
 	
 	public TOwnerMV() {
