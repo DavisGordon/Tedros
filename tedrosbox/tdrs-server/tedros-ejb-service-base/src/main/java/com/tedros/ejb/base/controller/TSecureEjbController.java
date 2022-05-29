@@ -14,7 +14,7 @@ import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
-import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult.TState;
 import com.tedros.ejb.base.security.TAccessToken;
 import com.tedros.ejb.base.security.TActionPolicie;
 import com.tedros.ejb.base.security.TMethodPolicie;
@@ -31,7 +31,7 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 	public TResult<E> findById(TAccessToken token, E entidade) {
 		try{
 			entidade = getService().findById(entidade);
-			return new TResult<E>(EnumResult.SUCESS, entidade);
+			return new TResult<E>(TState.SUCCESS, entidade);
 		}catch(Exception e){
 			return processException(token, entidade, e);
 		}
@@ -42,7 +42,7 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 	public TResult<E> find(TAccessToken token, E entidade) {
 		try{
 			entidade = getService().find(entidade);
-			return new TResult<E>(EnumResult.SUCESS, entidade);
+			return new TResult<E>(TState.SUCCESS, entidade);
 		}catch(Exception e){
 			return processException(token, entidade, e);
 		}
@@ -53,7 +53,7 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 	public TResult<List<E>> findAll(TAccessToken token, E entity){
 		try{
 			List<E> list = getService().findAll(entity);
-			return new TResult<List<E>>(EnumResult.SUCESS, list);
+			return new TResult<List<E>>(TState.SUCCESS, list);
 			
 		}catch(Exception e){
 			return processException(token, entity, e);
@@ -65,7 +65,7 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 	public TResult<E> save(TAccessToken token, E entidade) {
 		try{
 			E e = getService().save(entidade);
-			return new TResult<E>(EnumResult.SUCESS, e);
+			return new TResult<E>(TState.SUCCESS, e);
 		}catch(Exception e){
 			return processException(token, entidade, e);
 		}
@@ -76,7 +76,7 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 	public TResult<E> remove(TAccessToken token, E entidade) {
 		try{
 			getService().remove(entidade);
-			return new TResult<E>(EnumResult.SUCESS);
+			return new TResult<E>(TState.SUCCESS);
 			
 		}catch(Exception e){
 			return processException(token, entidade, e);
@@ -90,7 +90,7 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 		
 		try{
 			List<E> list = getService().listAll(entidade);
-			return new TResult<List<E>>(EnumResult.SUCESS, list);
+			return new TResult<List<E>>(TState.SUCCESS, list);
 			
 		}catch(Exception e){
 			return processException(token, null, e);
@@ -110,7 +110,7 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 			map.put("total", count);
 			map.put("list", list);
 			
-			return new TResult<>(EnumResult.SUCESS, map);
+			return new TResult<>(TState.SUCCESS, map);
 			
 		}catch(Exception e){
 			return processException(token, entidade, e);
@@ -130,7 +130,7 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 			map.put("total", count.longValue());
 			map.put("list", list);
 			
-			return new TResult<>(EnumResult.SUCESS, map);
+			return new TResult<>(TState.SUCCESS, map);
 			
 		}catch(Exception e){
 			return processException(token, entidade, e);
@@ -145,16 +145,16 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 			
 			String message = (result.getValue()==null) ? "REMOVED" : "OUTDATED";
 			
-			return (T) new TResult<>(EnumResult.OUTDATED, message, result.getValue());
+			return (T) new TResult<>(TState.OUTDATED, message, result.getValue());
 		}else if(e instanceof EJBTransactionRolledbackException) {
 			if(this.isTheCause(e, JdbcSQLIntegrityConstraintViolationException.class))
-				return (T) new TResult<>(EnumResult.ERROR,true, "This operation cant be done to preserve data integrity!");
+				return (T) new TResult<>(TState.ERROR,true, "This operation cant be done to preserve data integrity!");
 			else
-				return (T) new TResult<>(EnumResult.ERROR,true, e.getCause().getMessage());
+				return (T) new TResult<>(TState.ERROR,true, e.getCause().getMessage());
 		}else if(e instanceof EJBException) {
-			return (T) new TResult<>(EnumResult.ERROR,true, e.getCause().getMessage());
+			return (T) new TResult<>(TState.ERROR,true, e.getCause().getMessage());
 		}else{
-			return (T) new TResult<>(EnumResult.ERROR, e.getMessage());
+			return (T) new TResult<>(TState.ERROR, e.getMessage());
 		}
 	}
 	

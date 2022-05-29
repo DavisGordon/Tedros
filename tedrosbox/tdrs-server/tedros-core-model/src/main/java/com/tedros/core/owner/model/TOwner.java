@@ -24,7 +24,7 @@ import com.tedros.ejb.base.entity.TEntity;
  *
  */
 @Entity
-@Table(name = DomainTables.owner, schema = DomainSchema.tedros_core)
+@Table(name = DomainTables.towner, schema = DomainSchema.tedros_core)
 public class TOwner extends TEntity {
 	
 	private static final long serialVersionUID = -1562113535146439905L;

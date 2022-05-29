@@ -13,7 +13,7 @@ import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
-import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult.TState;
 import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TSelectionModalPresenter;
@@ -338,7 +338,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				TResult<Map<String, Object>> resultados = (TResult<Map<String, Object>>) process.getValue();
 				
 				if(resultados != null) {
-					if(resultados.getResult().equals(EnumResult.SUCESS)) {
+					if(resultados.getState().equals(TState.SUCCESS)) {
 						Map<String, Object> result =  resultados.getValue();
 						if(this.searchResultList==null) {
 							this.searchResultList = TFXCollections.iTObservableList();
@@ -358,7 +358,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 					}else {
 						String msg = resultados.getMessage();
 						System.out.println(msg);
-						switch(resultados.getResult()) {
+						switch(resultados.getState()) {
 							case ERROR:
 								addMessage(new TMessage(TMessageType.ERROR, msg));
 								break;

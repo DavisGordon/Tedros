@@ -3,7 +3,7 @@ package com.tedros.ejb.base.result;
 import java.io.Serializable;
 
 /**
- * A Service result.
+ * A Service state.
  * 
  *  @author Davis Gordon
  * 
@@ -14,20 +14,20 @@ public class TResult<E> implements Serializable {
 	private static final long serialVersionUID = -7635310661063307949L;
 	
 	/**
-	 * SUCESS(1),
+	 * SUCCESS(1),
 	 * ERROR(-1),
 	 * OUTDATED(-2),
 	 * WARNING(0);
 	 * */
-	public enum EnumResult {
-		SUCESS(1),
+	public enum TState {
+		SUCCESS(1),
 		ERROR(-1),
 		OUTDATED(-2),
 		WARNING(0);
 		
 		private int value;
 		
-		private EnumResult(int value) {
+		private TState(int value) {
 			this.value = value;
 		}
 		
@@ -37,7 +37,7 @@ public class TResult<E> implements Serializable {
 	}
 	
 	private boolean priorityMessage = false;
-	private EnumResult result;
+	private TState state;
 	private String message;
 	private E value;
 	
@@ -45,44 +45,44 @@ public class TResult<E> implements Serializable {
 		
 	}
 	
-	public TResult(EnumResult result) {
-		this.result = result;
+	public TResult(TState state) {
+		this.state = state;
 	}
 	
-	public TResult(EnumResult result, String message) {
-		this.result = result;
+	public TResult(TState state, String message) {
+		this.state = state;
 		this.message = message;
 	}
 	
-	public TResult(EnumResult result, boolean priorityMessage, String message) {
-		this.result = result;
+	public TResult(TState state, boolean priorityMessage, String message) {
+		this.state = state;
 		this.message = message;
 		this.priorityMessage = priorityMessage;
 	}
 	
-	public TResult(EnumResult result, String message, E value) {
-		this.result = result;
+	public TResult(TState state, String message, E value) {
+		this.state = state;
 		this.message = message;
 		this.value = value;
 	}
 	
-	public TResult(EnumResult result, boolean priorityMessage, String message, E value) {
-		this.result = result;
+	public TResult(TState state, boolean priorityMessage, String message, E value) {
+		this.state = state;
 		this.message = message;
 		this.value = value;
 		this.priorityMessage = priorityMessage;
 	}
 	
-	public TResult(EnumResult result, E value) {
-		this.result = result;
+	public TResult(TState state, E value) {
+		this.state = state;
 		this.value = value;
 	}
 	
-	public EnumResult getResult() {
-		return result;
+	public TState getState() {
+		return state;
 	}
-	public void setResult(EnumResult result) {
-		this.result = result;
+	public void setState(TState state) {
+		this.state = state;
 	}
 	public String getMessage() {
 		return message;

@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
-import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult.TState;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.view.TPaginator;
@@ -105,7 +105,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 						
 						if(resultados != null) {
 							
-							if(resultados.getResult().equals(EnumResult.SUCESS)) {
+							if(resultados.getState().equals(TState.SUCCESS)) {
 						
 								Map<String, Object> result =  resultados.getValue();
 								ObservableList<M> models = getModels();
@@ -128,7 +128,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 							}else {
 								String msg = resultados.getMessage();
 								System.out.println(msg);
-								switch(resultados.getResult()) {
+								switch(resultados.getState()) {
 									case ERROR:
 										addMessage(new TMessage(TMessageType.ERROR, msg));
 										break;
@@ -170,7 +170,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 								for(Object obj : resultados) {
 									//TResult result = (TResult<?>) resultados.get(0);
 									TResult result = (TResult<?>) obj;
-									if(result.getResult().equals(EnumResult.SUCESS)) {
+									if(result.getState().equals(TState.SUCCESS)) {
 										if(result.getValue()!=null && result.getValue() instanceof List){
 											ObservableList<M> models = getModels();
 											if(models==null) {
@@ -189,7 +189,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 									}else {
 										String msg = result.getMessage();
 										System.out.println(msg);
-										switch(result.getResult()) {
+										switch(result.getState()) {
 											case ERROR:
 												msgs.add(new TMessage(TMessageType.ERROR, msg));
 												break;
@@ -289,7 +289,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 				TResult<Map<String, Object>> resultados = (TResult<Map<String, Object>>) process.getValue();
 				
 				if(resultados != null) {
-					if(resultados.getResult().equals(EnumResult.SUCESS)) {
+					if(resultados.getState().equals(TState.SUCCESS)) {
 						Map<String, Object> result =  resultados.getValue();
 						ObservableList<M> models = getModels();
 						models.clear();
@@ -306,7 +306,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 					}else {
 						String msg = resultados.getMessage();
 						System.out.println(msg);
-						switch(resultados.getResult()) {
+						switch(resultados.getState()) {
 							case ERROR:
 								addMessage(new TMessage(TMessageType.ERROR, msg));
 								break;

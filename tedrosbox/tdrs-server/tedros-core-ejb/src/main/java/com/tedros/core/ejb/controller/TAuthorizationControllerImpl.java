@@ -13,7 +13,7 @@ import com.tedros.core.security.model.TAuthorization;
 import com.tedros.ejb.base.controller.ITSecurityController;
 import com.tedros.ejb.base.controller.TSecureEjbController;
 import com.tedros.ejb.base.result.TResult;
-import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult.TState;
 import com.tedros.ejb.base.security.ITSecurity;
 import com.tedros.ejb.base.security.TAccessPolicie;
 import com.tedros.ejb.base.security.TAccessToken;
@@ -50,10 +50,10 @@ public class TAuthorizationControllerImpl extends TSecureEjbController<TAuthoriz
 		try{
 			List<TAuthorization> oldLst = serv.listAll(TAuthorization.class);
 			List<String> msg = serv.process(newLst, oldLst);
-			return new TResult<List<String>>(EnumResult.SUCESS, msg);
+			return new TResult<List<String>>(TState.SUCCESS, msg);
 		}catch(Exception e){
 			e.printStackTrace();
-			return new TResult(EnumResult.ERROR, e.getMessage());
+			return new TResult(TState.ERROR, e.getMessage());
 		}
 	}
 

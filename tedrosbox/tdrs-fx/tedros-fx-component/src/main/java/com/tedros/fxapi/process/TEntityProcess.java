@@ -13,7 +13,7 @@ import com.tedros.ejb.base.controller.ITEjbController;
 import com.tedros.ejb.base.controller.ITSecureEjbController;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
-import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult.TState;
 
 
 /**
@@ -229,7 +229,7 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 	 */
 	protected void buildExceptionResult(List<TResult<E>> resultList, Exception e) {
 		e.printStackTrace();
-		TResult<E> result = new TResult<>(EnumResult.ERROR, true, e.getCause().getMessage());
+		TResult<E> result = new TResult<>(TState.ERROR, true, e.getCause().getMessage());
 		resultList.add(result);
 	}
 

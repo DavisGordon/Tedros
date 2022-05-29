@@ -12,7 +12,7 @@ import com.tedros.core.ejb.service.TFileEntityService;
 import com.tedros.ejb.base.controller.ITSecurityController;
 import com.tedros.ejb.base.controller.TSecureEjbController;
 import com.tedros.ejb.base.result.TResult;
-import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult.TState;
 import com.tedros.ejb.base.security.ITSecurity;
 import com.tedros.ejb.base.security.TAccessToken;
 import com.tedros.ejb.base.security.TSecurityInterceptor;
@@ -32,10 +32,10 @@ public class TFileEntityControllerImpl extends TSecureEjbController<TFileEntity>
 	public TResult<List<TFileEntity>> find(TAccessToken token, List<String> owner, List<String> ext, Long maxSize, boolean loaded){
 		try {
 			List<TFileEntity> l = serv.find(owner, ext, maxSize, loaded);
-			return new TResult<>(EnumResult.SUCESS, l);
+			return new TResult<>(TState.SUCCESS, l);
 		}catch(Exception e){
 			e.printStackTrace();
-			return new TResult<>(EnumResult.ERROR, e.getMessage());
+			return new TResult<>(TState.ERROR, e.getMessage());
 		}
 	}
 	
@@ -46,10 +46,10 @@ public class TFileEntityControllerImpl extends TSecureEjbController<TFileEntity>
 			
 			serv.loadBytes(entity);
 			
-			return new TResult<TFileEntity>(EnumResult.SUCESS, entity);
+			return new TResult<TFileEntity>(TState.SUCCESS, entity);
 		}catch(Exception e){
 			e.printStackTrace();
-			return new TResult<TFileEntity>(EnumResult.ERROR, e.getMessage());
+			return new TResult<TFileEntity>(TState.ERROR, e.getMessage());
 		}
 	}
 	
@@ -62,10 +62,10 @@ public class TFileEntityControllerImpl extends TSecureEjbController<TFileEntity>
 			
 			serv.loadBytes(entity);
 			
-			return new TResult<TFileEntity>(EnumResult.SUCESS, entity);
+			return new TResult<TFileEntity>(TState.SUCCESS, entity);
 		}catch(Exception e){
 			e.printStackTrace();
-			return new TResult<TFileEntity>(EnumResult.ERROR, e.getMessage());
+			return new TResult<TFileEntity>(TState.ERROR, e.getMessage());
 		}
 	}
 

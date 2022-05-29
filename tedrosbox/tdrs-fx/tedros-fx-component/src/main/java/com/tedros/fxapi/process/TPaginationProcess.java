@@ -15,7 +15,7 @@ import com.tedros.ejb.base.controller.ITEjbController;
 import com.tedros.ejb.base.controller.ITSecureEjbController;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
-import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult.TState;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.presenter.paginator.TPagination;
 
@@ -142,7 +142,7 @@ public abstract class TPaginationProcess<E extends ITEntity> extends TProcess<TR
         		} catch (Exception e) {
 					setException(e);
 					e.printStackTrace();
-					result = new TResult<>(EnumResult.ERROR,true, e.getCause().getMessage());
+					result = new TResult<>(TState.ERROR,true, e.getCause().getMessage());
 				}finally {
 					loc.close();
 				}

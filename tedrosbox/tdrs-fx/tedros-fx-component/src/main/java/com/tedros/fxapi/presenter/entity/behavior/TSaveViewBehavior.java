@@ -4,7 +4,6 @@ import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.fxapi.modal.TMessageBox;
 import com.tedros.fxapi.presenter.entity.decorator.TSaveViewDecorator;
 import com.tedros.fxapi.presenter.model.TModelView;
-import com.tedros.fxapi.util.TModelViewUtil;
 
 @SuppressWarnings({ "rawtypes" })
 public class TSaveViewBehavior<M extends TModelView, E extends ITEntity>
