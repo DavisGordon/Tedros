@@ -8,7 +8,7 @@ public interface DomainTables {
 	final static String module_autorization = "module_autorization";
 	final static String profile_autorization = "profile_autorization";
 	final static String authorization = "autorization";
-	final static String owner = "owner";
+	final static String towner = "towner";
 	final static String propertie = "propertie";
 	final static String profile = "profile";
 	final static String user = "user";

@@ -14,7 +14,7 @@ import com.tedros.core.security.model.TAuthorization;
 import com.tedros.core.security.model.TUser;
 import com.tedros.core.service.remote.ServiceLocator;
 import com.tedros.ejb.base.result.TResult;
-import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult.TState;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.process.TEntityProcess;
 import com.tedros.settings.security.action.TAuthorizationLoadAction;
@@ -52,7 +52,7 @@ import com.tedros.settings.security.action.TAuthorizationLoadAction;
 				 break;
 			case 4:
 				TResult<Boolean> f = service.isSystemWithoutUsers();
-				EnumResult e = f.getValue() ? EnumResult.SUCESS : EnumResult.WARNING;
+				TState e = f.getValue() ? TState.SUCCESS : TState.WARNING;
 				TResult<TUser> res = new TResult<>(e);
 				resultList.add(res);
 				 break;
@@ -63,7 +63,7 @@ import com.tedros.settings.security.action.TAuthorizationLoadAction;
 					|| e.getCause() instanceof RemoteException)
 					? "SERVER_FAIL"
 					: e.getCause().getMessage();
-			TResult<TUser> res = new TResult<>(EnumResult.ERROR, msg);
+			TResult<TUser> res = new TResult<>(TState.ERROR, msg);
 			resultList.add(res);
 		}finally {
 			loc.close();

@@ -18,7 +18,7 @@ import com.tedros.core.security.model.TUser;
 import com.tedros.core.style.TStyleResourceName;
 import com.tedros.core.style.TThemeUtil;
 import com.tedros.ejb.base.result.TResult;
-import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult.TState;
 import com.tedros.fxapi.control.TComboBoxField;
 import com.tedros.fxapi.control.TPasswordField;
 import com.tedros.fxapi.control.TTextField;
@@ -222,7 +222,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 									if(resultados.isEmpty())
 										return;
 									TResult<TUser> result = resultados.get(0);
-									if(result.getResult().getValue() == EnumResult.ERROR.getValue()){
+									if(result.getState().getValue() == TState.ERROR.getValue()){
 										System.out.println(result.getMessage());
 										addMessage(new TMessage(TMessageType.ERROR, result.getMessage()));
 									}else{
@@ -267,7 +267,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 										
 										TResult<TUser> result = resultados.get(0);
 			
-										if(result.getResult().getValue() == EnumResult.ERROR.getValue()){
+										if(result.getState().getValue() == TState.ERROR.getValue()){
 											System.out.println(result.getMessage());
 											addMessage(new TMessage(TMessageType.ERROR, result.getMessage()));
 										}else{
@@ -342,7 +342,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 				if(n.equals(State.SUCCEEDED)) {
 					List<TResult<TUser>> lst = process.getValue();
 					TResult<TUser> res = lst.get(0);
-					switch(res.getResult()) {
+					switch(res.getState()) {
 					case ERROR:
 						this.sysWithoutUserProperty.setValue(false);
 						if(res.getMessage().equals("SERVER_FAIL"))
@@ -350,7 +350,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 						else
 							addMessage(new TMessage(TMessageType.ERROR, res.getMessage()));
 						break;
-					case SUCESS:
+					case SUCCESS:
 						this.sysWithoutUserProperty.setValue(true);
 						this.serverOkProperty.setValue(true);
 						break;

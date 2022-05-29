@@ -3,8 +3,6 @@
  */
 package com.tedros.settings.util;
 
-import java.util.List;
-
 import javax.naming.NamingException;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,11 +13,8 @@ import com.tedros.core.ejb.controller.TOwnerController;
 import com.tedros.core.owner.model.TOwner;
 import com.tedros.core.service.remote.ServiceLocator;
 import com.tedros.ejb.base.result.TResult;
-import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult.TState;
 import com.tedros.fxapi.exception.TException;
-import com.tedros.fxapi.modal.TMessage;
-import com.tedros.fxapi.modal.TMessageType;
-import com.tedros.settings.security.model.TOwnerMV;
 
 /**
  * @author Davis Gordon
@@ -31,19 +26,14 @@ public final class TSettingsUtil {
 
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public TOwner getOwner() throws TException {
 		ServiceLocator loc = ServiceLocator.getInstance();
+		TOwner e = null;
 		try {
 			TOwnerController serv = loc.lookup(TOwnerController.JNDI_NAME);
-			TResult res = serv.listAll(TedrosContext.getLoggedUser().getAccessToken(), TOwner.class);
-			if(res.getResult().equals(EnumResult.SUCESS)) {
-				List<TOwner> l = (List<TOwner>) res.getValue();
-				if(l!=null && !l.isEmpty()) {
-					TOwner e = l.get(0);
-					return e;
-				}else
-					return null;
+			TResult<TOwner> res = serv.getOwner(TedrosContext.getLoggedUser().getAccessToken());
+			if(res.getState().equals(TState.SUCCESS)) {
+				e = res.getValue();
 			}else {
 				String msg = res.getMessage();
 				if(StringUtils.isBlank(msg))
@@ -52,11 +42,13 @@ public final class TSettingsUtil {
 				throw new TException(msg);
 			}
 			
-		} catch (NamingException e) {
-			throw new TException(e.getMessage());
+		} catch (NamingException ex) {
+			throw new TException(ex.getMessage());
 		}finally{
 			loc.close();
 		}
+		
+		return e;
 	}
 
 }

@@ -305,8 +305,8 @@ extends TBehavior<M, TDynaPresenter<M>> {
 							if(resultados.isEmpty())
 								return;
 							TResult result = resultados.get(0);
-							switch(result.getResult()) {
-								case SUCESS:
+							switch(result.getState()) {
+								case SUCCESS:
 									E entity = (E) result.getValue();
 									if(entity!=null){
 										model.reload(entity);
@@ -320,8 +320,8 @@ extends TBehavior<M, TDynaPresenter<M>> {
 								default:
 									System.out.println(result.getMessage());
 									String msg = result.getMessage();
-									setActionState(new TActionState(action, arg2, TProcessResult.get(result.getResult()), msg, model));
-									switch(result.getResult()) {
+									setActionState(new TActionState(action, arg2, TProcessResult.get(result.getState()), msg, model));
+									switch(result.getState()) {
 									case ERROR:
 										addMessage(new TMessage(TMessageType.ERROR, msg));
 										break;

@@ -10,7 +10,7 @@ import com.tedros.core.style.TStyleResourceName;
 import com.tedros.core.style.TStyleResourceValue;
 import com.tedros.core.style.TThemeUtil;
 import com.tedros.ejb.base.result.TResult;
-import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult.TState;
 import com.tedros.fxapi.process.TModelProcess;
 import com.tedros.settings.layout.model.TMainColor;
 import com.tedros.util.TColorUtil;
@@ -39,10 +39,10 @@ public class TMainColorProcess extends TModelProcess<TMainColor>{
 		try{
 			saveValues(obj);
 			result.setMessage("Dados salvo com sucesso!");
-			result.setResult(EnumResult.SUCESS);
+			result.setState(TState.SUCCESS);
 		}catch(Exception e){
 			result.setMessage(e.getMessage());
-			result.setResult(EnumResult.ERROR);
+			result.setState(TState.ERROR);
 		}
 		return Arrays.asList(result);
 	}

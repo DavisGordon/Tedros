@@ -17,7 +17,7 @@ import com.tedros.core.presenter.ITPresenter;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.ejb.base.result.TResult;
-import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult.TState;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.collections.TFXCollections;
@@ -604,7 +604,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 							return;
 						}
 						TResult result = resultados.get(0);
-						if(result.getResult().equals(EnumResult.SUCESS)){
+						if(result.getState().equals(TState.SUCCESS)){
 							E entity = (E) result.getValue();
 							if(entity!=null){
 								try {
@@ -636,10 +636,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 								actionHelper.runAfter(TActionType.SAVE);
 						}else{
 							System.out.println(result.getMessage());
-							String msg = result.getResult().equals(EnumResult.OUTDATED) 
+							String msg = result.getState().equals(TState.OUTDATED) 
 									? iEngine.getString("#{tedros.fxapi.message.outdate}")
 											: result.getMessage();
-							switch(result.getResult()) {
+							switch(result.getState()) {
 								case ERROR:
 									addMessage(new TMessage(TMessageType.ERROR, msg));
 									break;
@@ -647,7 +647,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 									addMessage(new TMessage(TMessageType.WARNING, msg));
 									break;
 							}
-							setActionState(new TActionState(TActionType.SAVE, arg2, TProcessResult.get(result.getResult()), result.getMessage()));	
+							setActionState(new TActionState(TActionType.SAVE, arg2, TProcessResult.get(result.getState()), result.getMessage()));	
 						}
 						
 					}else {
@@ -873,7 +873,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 														if(resultados.isEmpty())
 															return;
 														TResult result = resultados.get(0);
-														if(result.getResult().equals(EnumResult.ERROR)) {
+														if(result.getState().equals(TState.ERROR)) {
 															System.out.println(result.getMessage());
 															addMessage(new TMessage(TMessageType.ERROR, result.getMessage()));
 															setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.ERROR, result.getMessage()));
@@ -990,11 +990,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 									if(resultados.isEmpty())
 										return;
 									TResult result = resultados.get(0);
-									if(result.getResult().equals(EnumResult.ERROR)) {
+									if(result.getState().equals(TState.ERROR)) {
 										System.out.println(result.getMessage());
 										addMessage(new TMessage(TMessageType.ERROR, result.getMessage()));
 										setActionState(new TActionState(TActionType.DELETE, arg2, TProcessResult.ERROR, result.getMessage()));
-									}else if(result.getResult().equals(EnumResult.WARNING)){
+									}else if(result.getState().equals(TState.WARNING)){
 										E entity = (E) result.getValue();
 										if(entity!=null){
 											selected.reload(entity);
@@ -1006,7 +1006,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 										addMessage(new TMessage(TMessageType.WARNING, result.getMessage()));
 										setActionState(new TActionState(TActionType.DELETE, arg2, TProcessResult.WARNING, result.getMessage()));
 									}else
-									if(result.getResult().equals(EnumResult.SUCESS)){
+									if(result.getState().equals(TState.SUCCESS)){
 										remove();
 										removeAllListenerFromModelView();
 										setModelView(null);

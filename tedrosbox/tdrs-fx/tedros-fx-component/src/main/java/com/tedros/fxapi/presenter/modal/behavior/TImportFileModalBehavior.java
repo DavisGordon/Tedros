@@ -8,7 +8,7 @@ import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.model.ITImportModel;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.ejb.base.result.TResult;
-import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult.TState;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.exception.TProcessException;
@@ -133,7 +133,7 @@ extends TDynaViewActionBaseBehavior<M, E> {
 						tMessageBox.tAddInfoMessage(msg);
 						getView().tShowModal(tMessageBox, true);	
 							
-						if(result.getResult().equals(EnumResult.SUCESS)) {
+						if(result.getState().equals(TState.SUCCESS)) {
 							
 							List<ITEntity> lst = (List) result.getValue();
 							for(ITEntity e : lst ) {

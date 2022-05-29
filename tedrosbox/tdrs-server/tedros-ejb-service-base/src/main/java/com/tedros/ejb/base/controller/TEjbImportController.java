@@ -9,7 +9,7 @@ import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.entity.ITFileEntity;
 import com.tedros.ejb.base.model.ITImportModel;
 import com.tedros.ejb.base.result.TResult;
-import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult.TState;
 import com.tedros.ejb.base.security.ITSecurity;
 import com.tedros.ejb.base.security.TAccessToken;
 import com.tedros.ejb.base.security.TActionPolicie;
@@ -29,11 +29,11 @@ public abstract class TEjbImportController<E extends ITEntity> implements ITEjbI
 	public TResult getImportRules(TAccessToken token) {
 		try{
 			ITImportModel value = getService().getImportRules();
-			return new TResult<ITImportModel>(EnumResult.SUCESS, value);
+			return new TResult<ITImportModel>(TState.SUCCESS, value);
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			return new TResult<String>(EnumResult.ERROR,true, e.getMessage());
+			return new TResult<String>(TState.ERROR,true, e.getMessage());
 		}
 	}
 
@@ -43,11 +43,11 @@ public abstract class TEjbImportController<E extends ITEntity> implements ITEjbI
 	public TResult importFile(TAccessToken token, ITFileEntity entity) {
 		try{
 			List<E> res = getService().importFile(entity);
-			return new TResult<List<E>>(EnumResult.SUCESS, res);
+			return new TResult<List<E>>(TState.SUCCESS, res);
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			return new TResult<String>(EnumResult.ERROR,true, e.getMessage());
+			return new TResult<String>(TState.ERROR,true, e.getMessage());
 		}
 	}
 	

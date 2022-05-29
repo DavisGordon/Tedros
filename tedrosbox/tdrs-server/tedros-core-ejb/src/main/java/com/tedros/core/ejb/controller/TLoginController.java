@@ -18,7 +18,7 @@ import com.tedros.core.security.model.TProfile;
 import com.tedros.core.security.model.TUser;
 import com.tedros.ejb.base.controller.ITSecurityController;
 import com.tedros.ejb.base.result.TResult;
-import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult.TState;
 import com.tedros.ejb.base.security.ITSecurity;
 import com.tedros.ejb.base.security.TAccessToken;
 import com.tedros.ejb.base.security.TSecurityInterceptor;
@@ -64,13 +64,13 @@ public class TLoginController implements ITLoginController, ITSecurity {
 				user = serv.save(user);
 				user = serv.login(user.getLogin(), user.getPassword());
 				
-				return new TResult<>(EnumResult.SUCESS, user);
+				return new TResult<>(TState.SUCCESS, user);
 			}else {
-				return new TResult<>(EnumResult.WARNING, "The system already have users.");
+				return new TResult<>(TState.WARNING, "The system already have users.");
 			}
 		}catch(Exception e){
 			e.printStackTrace();
-			return new TResult<>(EnumResult.ERROR, e.getMessage());
+			return new TResult<>(TState.ERROR, e.getMessage());
 		}
 	}
 	
@@ -80,10 +80,10 @@ public class TLoginController implements ITLoginController, ITSecurity {
 		try{
 			Boolean f = serv.listAll(TUser.class).isEmpty();
 			
-			return new TResult<>(EnumResult.SUCESS, f);
+			return new TResult<>(TState.SUCCESS, f);
 		}catch(Exception e){
 			e.printStackTrace();
-			return new TResult<>(EnumResult.ERROR, e.getMessage());
+			return new TResult<>(TState.ERROR, e.getMessage());
 		}
 	}
 	
@@ -91,10 +91,10 @@ public class TLoginController implements ITLoginController, ITSecurity {
 	public TResult<TUser> login(String login, String password) {
 		try{
 			TUser entity = serv.login(login, password);
-			return new TResult<TUser>(EnumResult.SUCESS, entity);
+			return new TResult<TUser>(TState.SUCCESS, entity);
 		}catch(Exception e){
 			e.printStackTrace();
-			return new TResult<TUser>(EnumResult.ERROR, e.getMessage());
+			return new TResult<TUser>(TState.ERROR, e.getMessage());
 		}
 	}
 	
@@ -102,10 +102,10 @@ public class TLoginController implements ITLoginController, ITSecurity {
 	public TResult<TUser> saveActiveProfile(TAccessToken token, TProfile profile, Long userId) {
 		try {
 			TUser user = this.serv.saveActiveProfile(profile, userId);
-			return new TResult<TUser>(EnumResult.SUCESS, user);
+			return new TResult<TUser>(TState.SUCCESS, user);
 		}catch(Exception e){
 			e.printStackTrace();
-			return new TResult<TUser>(EnumResult.ERROR, e.getMessage());
+			return new TResult<TUser>(TState.ERROR, e.getMessage());
 		}
 	}
 
@@ -113,10 +113,10 @@ public class TLoginController implements ITLoginController, ITSecurity {
 	public TResult<Boolean> logout(TAccessToken token) {
 		try {
 			this.securityService.remove(token);
-			return new TResult<>(EnumResult.SUCESS, true);
+			return new TResult<>(TState.SUCCESS, true);
 		}catch(Exception e) {
 			e.printStackTrace();
-			return new TResult<>(EnumResult.ERROR, e.getMessage(), false);
+			return new TResult<>(TState.ERROR, e.getMessage(), false);
 		}
 	}
 

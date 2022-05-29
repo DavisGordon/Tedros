@@ -23,7 +23,7 @@ import com.tedros.core.service.remote.ServiceLocator;
 import com.tedros.ejb.base.controller.ITEjbReportController;
 import com.tedros.ejb.base.model.ITReportModel;
 import com.tedros.ejb.base.result.TResult;
-import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult.TState;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.util.TedrosFolder;
 
@@ -149,10 +149,10 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 			JasperExportManager.exportReportToPdfFile(print, f);
 			inputStream.close();
 			runAfterExport(params);
-			return new TResult<>(EnumResult.SUCESS, f, model);
+			return new TResult<>(TState.SUCCESS, f, model);
 		}catch(Exception e){
 			LOGGER.severe(e.toString());
-			return new TResult<>(EnumResult.ERROR, e.getMessage());
+			return new TResult<>(TState.ERROR, e.getMessage());
 		}
 	}
 
@@ -176,10 +176,10 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 			exporter.exportReport();
 			inputStream.close();
 			runAfterExport(params);
-			return new TResult<>(EnumResult.SUCESS, f, model);
+			return new TResult<>(TState.SUCCESS, f, model);
 		}catch(Exception e){
 			LOGGER.severe(e.toString());
-			return new TResult<>(EnumResult.ERROR, e.getMessage());
+			return new TResult<>(TState.ERROR, e.getMessage());
 		}
 	}
 	

@@ -16,7 +16,7 @@ import com.tedros.core.context.TReflections;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.security.model.TAuthorization;
 import com.tedros.ejb.base.result.TResult;
-import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult.TState;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.exception.TException;
 import com.tedros.fxapi.exception.TProcessException;
@@ -69,7 +69,7 @@ public class TAuthorizationLoadAction extends TPresenterAction {
 					
 					if(lst != null) {
 						TResult res = lst.get(0);
-						if(res.getResult().equals(EnumResult.SUCESS)) {
+						if(res.getState().equals(TState.SUCCESS)) {
 							List<String> msg = (List<String>) res.getValue();
 							if(!msg.isEmpty()) {
 								TMessageBox tMessageBox = new TMessageBox(msg);
@@ -89,7 +89,7 @@ public class TAuthorizationLoadAction extends TPresenterAction {
 						}else {
 							String msg = res.getMessage();
 							System.out.println(msg);
-							switch(res.getResult()) {
+							switch(res.getState()) {
 								case ERROR:
 									behavior.addMessage(new TMessage(TMessageType.ERROR, msg));
 									break;

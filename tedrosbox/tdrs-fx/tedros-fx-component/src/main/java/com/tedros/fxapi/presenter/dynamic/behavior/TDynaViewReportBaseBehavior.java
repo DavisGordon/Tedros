@@ -12,7 +12,7 @@ import com.tedros.core.context.TedrosContext;
 import com.tedros.core.control.PopOver;
 import com.tedros.ejb.base.model.ITReportModel;
 import com.tedros.ejb.base.result.TResult;
-import com.tedros.ejb.base.result.TResult.EnumResult;
+import com.tedros.ejb.base.result.TResult.TState;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.exception.TException;
@@ -336,7 +336,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				public void changed(ObservableValue<? extends State> arg0, State arg1, State arg2) {
 					if(arg2.equals(State.SUCCEEDED)){
 						TResult<E> result = (TResult<E>) runningProcess.getValue();
-						if(result.getResult().getValue() == EnumResult.SUCESS.getValue()){
+						if(result.getState().getValue() == TState.SUCCESS.getValue()){
 							String msg = iEngine.getFormatedString("#{tedros.fxapi.message.export}", result.getMessage());
 							getView().tShowModal(new TMessageBox(msg), true);
 							try {
@@ -345,7 +345,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 								getView().tShowModal(new TMessageBox(e), true);
 							}
 						}
-						if(result.getResult().getValue() == EnumResult.ERROR.getValue()){
+						if(result.getState().getValue() == TState.ERROR.getValue()){
 							System.out.println(result.getMessage());
 							String msg = iEngine.getFormatedString("#{tedros.fxapi.message.error}");
 							getView().tShowModal(new TMessageBox(msg), true);
@@ -405,7 +405,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 								e.printStackTrace();
 							}
 						}
-						if(result.getResult().getValue() == EnumResult.ERROR.getValue()){
+						if(result.getState().getValue() == TState.ERROR.getValue()){
 							System.out.println(result.getMessage());
 							addMessage(new TMessage(TMessageType.ERROR, result.getMessage()));
 						}
