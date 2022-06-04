@@ -103,7 +103,7 @@ public class TEditEntityModal extends TRequiredModal {
 			double modalWidth, double modalHeight) {
 		this.tSelectedItems = items;
 		this.width = width;
-		this.height = (height<100) ? 150 : height;
+		this.height = (height<50) ? 50 : height;
 		
 		boolean disable = !(this.tSelectedItems!=null && !this.tSelectedItems.isEmpty());
 		TLanguage iEngine = TLanguage.getInstance(null);

@@ -7,7 +7,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.tedros.common.model.TFileEntity;
 import com.tedros.core.module.TObjectRepository;
 import com.tedros.ejb.base.entity.ITFileEntity;
 import com.tedros.ejb.base.model.ITFileBaseModel;
@@ -164,11 +163,7 @@ public class TSimpleFileProperty<T extends ITFileBaseModel> extends SimpleObject
 			}
 	
 		}else{
-			try {
-				setValue((T) new TFileModel());
-			}catch(ClassCastException e) {
-				setValue((T) new TFileEntity());
-			}
+			setValue((T) new TFileModel());
 		}
 	}
 	
