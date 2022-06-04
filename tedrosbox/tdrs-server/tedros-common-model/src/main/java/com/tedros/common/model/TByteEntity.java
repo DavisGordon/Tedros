@@ -4,7 +4,6 @@ import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -20,9 +19,6 @@ import com.tedros.ejb.base.entity.TEntity;
 public class TByteEntity extends TEntity implements ITByteEntity{
 
 	private static final long serialVersionUID = -4185266706929273739L;
-	
-	@OneToOne(optional=false, mappedBy="byteEntity")
-	private TFileEntity fileEntity;
 		
 	@Lob
 	@Basic(fetch=FetchType.LAZY)
@@ -36,14 +32,6 @@ public class TByteEntity extends TEntity implements ITByteEntity{
 	@Override
 	public void setBytes(byte[] bytes) {
 		this.bytes = bytes;
-	}
-
-	public final TFileEntity getFileEntity() {
-		return fileEntity;
-	}
-
-	public final void setFileEntity(TFileEntity fileEntity) {
-		this.fileEntity = fileEntity;
 	}
 	
 	@Override

@@ -687,9 +687,8 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 							}else {
 								property.setValue(obj);
 							}
-						}else
+						}else if(!(property instanceof TSimpleFileProperty))
 							property.setValue(null);
-							
 						
 						// gera os ChangeListener(s)
 						if(buildListener)
