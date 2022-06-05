@@ -1,14 +1,14 @@
 /**
  * 
  */
-package com.tedros.settings.security.action;
+package com.tedros.settings.properties.action;
 
 import javafx.beans.value.ObservableValue;
 
 import com.tedros.fxapi.annotation.listener.TChangeListener;
 import com.tedros.fxapi.control.TPasswordField;
 import com.tedros.fxapi.form.ITForm;
-import com.tedros.settings.security.model.TUserMV;
+import com.tedros.settings.properties.model.TUserMV;
 import com.tedros.util.TEncriptUtil;
 
 /**

@@ -1,7 +1,5 @@
 package com.tedros.settings.layout.decorator;
 
-import com.tedros.fxapi.control.TComboBoxField;
-import com.tedros.fxapi.control.TLabel;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
@@ -11,9 +9,6 @@ import com.tedros.settings.layout.model.TPanelMV;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
 public class TPanelDecorator extends TDynaViewCrudBaseDecorator<TPanelMV>
@@ -28,7 +23,7 @@ public class TPanelDecorator extends TDynaViewCrudBaseDecorator<TPanelMV>
 		TDynaView<ExampleMV> exampleView = new TDynaView<>(examplePresenter); 
 		exampleView.tLoad();
 		
-		setViewTitle("#{settings.form.name}");
+		setViewTitle("#{view.colors}");
 		buildSaveButton("#{label.button.apply}");
 		
 		// add the buttons at the header tool bar

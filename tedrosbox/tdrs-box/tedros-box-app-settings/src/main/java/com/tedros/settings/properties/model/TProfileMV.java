@@ -1,4 +1,4 @@
-package com.tedros.settings.security.model;
+package com.tedros.settings.properties.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -34,7 +34,7 @@ import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
-import com.tedros.settings.security.table.TAuthorizationTV;
+import com.tedros.settings.properties.table.TAuthorizationTV;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -49,12 +49,12 @@ import javafx.scene.text.TextAlignment;
 @TPresenter(type=TDynaPresenter.class,
 			modelClass=TProfile.class,
 			decorator=@TDecorator(	type=TMasterCrudViewDecorator.class, 
-									viewTitle="#{security.profile.view.title}", 
+									viewTitle="#{view.profile}", 
 									listTitle="#{security.profile.list.title}"))
 @TSecurity(	id=DomainApp.PROFILE_FORM_ID, 
-			appName="#{settings.app.name}", 
-			moduleName="#{label.profile}", 
-			viewName="#{security.profile.view.title}",
+			appName="#{app.settings}", 
+			moduleName="#{module.propertie}", 
+			viewName="#{view.profile}",
 			allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 			   					TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public final class TProfileMV extends TEntityModelView<TProfile> {

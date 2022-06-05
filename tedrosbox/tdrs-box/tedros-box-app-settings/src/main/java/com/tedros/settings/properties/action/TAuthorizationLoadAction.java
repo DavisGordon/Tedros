@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tedros.settings.security.action;
+package com.tedros.settings.properties.action;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +27,8 @@ import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewSimpleBaseBehavior;
 import com.tedros.fxapi.presenter.paginator.TPagination;
-import com.tedros.settings.security.behavior.TAuthorizationBehavior;
-import com.tedros.settings.security.process.TAuthorizationProcess;
+import com.tedros.settings.properties.behavior.TAuthorizationBehavior;
+import com.tedros.settings.properties.process.TAuthorizationProcess;
 
 import javafx.beans.value.ChangeListener;
 import javafx.concurrent.Worker.State;

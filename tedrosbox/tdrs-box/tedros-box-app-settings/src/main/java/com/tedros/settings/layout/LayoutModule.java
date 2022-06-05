@@ -13,7 +13,7 @@ import com.tedros.settings.layout.model.TPanelMV;
 import com.tedros.settings.layout.model.TMainColorMV;
 import com.tedros.settings.start.TConstant;
 
-@TSecurity(	id=DomainApp.LAYOUT_MODULE_ID, appName="#{settings.app.name}", moduleName="#{settings.module.name}",	
+@TSecurity(	id=DomainApp.LAYOUT_MODULE_ID, appName="#{app.settings}", moduleName="#{module.layout}",	
 			allowedAccesses=TAuthorizationType.MODULE_ACCESS)
 public class LayoutModule extends TModule {
 	
@@ -21,10 +21,10 @@ public class LayoutModule extends TModule {
 	public void tStart() {
 		
 		TLanguage iEngine = TLanguage.getInstance(TConstant.UUI);
-		tShowView(new TGroupView<>(this, iEngine.getString("#{settings.view.title}"), 
-				new TViewItem(TDynaGroupView.class, TMainColorMV.class, iEngine.getString("#{color.base.painel.title}"), true),
-				new TViewItem(TDynaGroupView.class, TPanelMV.class, iEngine.getString("#{settings.form.name}"), true),
-				new TViewItem(TDynaGroupView.class, TBackgroundImageMV.class, iEngine.getString("#{background.painel.title}"))));
+		tShowView(new TGroupView<>(this, iEngine.getString("#{view.layout}"), 
+				new TViewItem(TDynaGroupView.class, TMainColorMV.class, iEngine.getString("#{view.themes}"), true),
+				new TViewItem(TDynaGroupView.class, TPanelMV.class, iEngine.getString("#{view.colors}"), true),
+				new TViewItem(TDynaGroupView.class, TBackgroundImageMV.class, iEngine.getString("#{view.background}"))));
 		
 	}
 

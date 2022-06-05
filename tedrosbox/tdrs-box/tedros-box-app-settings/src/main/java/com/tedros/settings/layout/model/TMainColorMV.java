@@ -36,10 +36,10 @@ import javafx.scene.paint.Color;
  * @author Davis Gordon
  *
  */
-@TForm(name = "#{color.base.painel.title}", scroll=false, editCssId="x")
+@TForm(name = "#{view.themes}", scroll=false, editCssId="x")
 @TModelProcess(type=TMainColorProcess.class)
 @TPresenter(type=TDynaPresenter.class, modelClass=TMainColor.class, 
-decorator=@TDecorator(type=TMainColorDecorator.class, viewTitle="#{color.base.painel.title}"), 
+decorator=@TDecorator(type=TMainColorDecorator.class, viewTitle="#{view.themes}"), 
 behavior=@TBehavior(type=TMainColorBehavior.class))
 public class TMainColorMV extends TEntityModelView<TMainColor> {
 

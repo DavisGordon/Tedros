@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tedros.settings.security.model;
+package com.tedros.settings.properties.model;
 
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
@@ -39,7 +39,7 @@ import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.entity.behavior.TSaveViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TSaveViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
-import com.tedros.settings.security.action.TOwnerNewAction;
+import com.tedros.settings.properties.action.TOwnerNewAction;
 import com.tedros.settings.start.TConstant;
 
 import javafx.beans.property.SimpleLongProperty;
@@ -59,13 +59,13 @@ import javafx.scene.text.TextAlignment;
 @TPresenter(type=TDynaPresenter.class, 
 			decorator=@TDecorator(type = TSaveViewDecorator.class, viewTitle="#{owner.view}"),
 			behavior=@TBehavior(type=TSaveViewBehavior.class, action=TOwnerNewAction.class))
-@TSecurity(	id=DomainApp.OWNER_FORM_ID, 
+/*@TSecurity(	id=DomainApp.OWNER_FORM_ID, 
 			appName="#{settings.app.name}", 
 			moduleName="#{label.owner}", 
 			viewName="#{owner.view}",
 			allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 			   					TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
-public class TOwnerMV extends TEntityModelView<TOwner> {
+*/public class TOwnerMV extends TEntityModelView<TOwner> {
 
 	private SimpleLongProperty id;
 	

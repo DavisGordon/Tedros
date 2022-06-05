@@ -20,9 +20,9 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 @TSetting(TBackgroundSetting.class)
-@TForm(name = "#{background.painel.title}", scroll=false)
+@TForm(name = "#{view.background}", scroll=false)
 @TPresenter(type=TDynaPresenter.class, 
-decorator=@TDecorator(type=TBackgroundDecorator.class, viewTitle="#{background.painel.title}"), 
+decorator=@TDecorator(type=TBackgroundDecorator.class, viewTitle="#{view.background}"), 
 behavior=@TBehavior(type=TBackgroundBehavior.class))
 public class TBackgroundImageMV extends TModelView<TBackgroundImage> {
 	

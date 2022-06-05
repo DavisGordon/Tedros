@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tedros.settings.security.model;
+package com.tedros.settings.properties.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -31,8 +31,8 @@ import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.domain.TLabelPosition;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
-import com.tedros.settings.security.action.TAuthorizationLoadAction;
-import com.tedros.settings.security.behavior.TAuthorizationBehavior;
+import com.tedros.settings.properties.action.TAuthorizationLoadAction;
+import com.tedros.settings.properties.behavior.TAuthorizationBehavior;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -49,14 +49,14 @@ import javafx.scene.layout.Priority;
 @TListViewPresenter(listViewMinWidth=500,
 	paginator=@TPaginator(entityClass = TAuthorization.class, 
 	serviceName = TAuthorizationController.JNDI_NAME, show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{security.authorization.view.title}", 
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{view.authorization}", 
 		 buildDeleteButton=false, buildCollapseButton=false, newButtonText="#{label.load}"),
 	behavior=@TBehavior(type=TAuthorizationBehavior.class, action=TAuthorizationLoadAction.class)
 	))
 @TSecurity(	id=DomainApp.AUTHORIZATION_FORM_ID, 
-	appName="#{settings.app.name}", 
-	moduleName="#{label.authorization}", 
-	viewName="#{security.authorization.view.title}",
+	appName="#{app.settings}", 
+	moduleName="#{module.propertie}", 
+	viewName="#{view.authorization}",
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, 
 			TAuthorizationType.READ, TAuthorizationType.SAVE, TAuthorizationType.NEW})
 public final class TAuthorizationMV extends TEntityModelView<TAuthorization> {
