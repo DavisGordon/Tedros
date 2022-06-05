@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tedros.settings.security.process;
+package com.tedros.settings.properties.process;
 
 import java.util.List;
 

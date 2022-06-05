@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tedros.settings.security.action;
+package com.tedros.settings.properties.action;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.entity.behavior.TSaveViewBehavior;
 import com.tedros.fxapi.process.TEntityProcess;
-import com.tedros.settings.security.model.TOwnerMV;
+import com.tedros.settings.properties.model.TOwnerMV;
 
 import javafx.concurrent.Worker.State;
 
@@ -73,7 +73,7 @@ public class TOwnerNewAction extends TPresenterAction {
 		p.list();
 		p.startProcess();
 		/*try {
-			TOwner e = new TSettingsUtil().getOwner();
+			TOwner e = new TOwnerProperties().getOwner();
 			if(e!=null) {
 				bv.setModelView(new TOwnerMV(e));
 			}else

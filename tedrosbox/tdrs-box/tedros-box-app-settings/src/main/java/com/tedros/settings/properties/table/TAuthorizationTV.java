@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tedros.settings.security.table;
+package com.tedros.settings.properties.table;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;

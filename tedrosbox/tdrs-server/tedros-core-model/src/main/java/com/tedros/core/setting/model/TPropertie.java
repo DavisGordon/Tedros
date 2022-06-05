@@ -1,12 +1,17 @@
 package com.tedros.core.setting.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.tedros.common.model.TFileEntity;
 import com.tedros.core.domain.DomainSchema;
 import com.tedros.core.domain.DomainTables;
 import com.tedros.ejb.base.entity.TEntity;
@@ -19,6 +24,9 @@ public class TPropertie extends TEntity {
 	private static final long serialVersionUID = -3294433359406122382L;
 
 	@Column(length=40, nullable = false)
+	private String name;
+	
+	@Column(length=20, nullable = false)
 	private String key;
 	
 	@Column
@@ -30,6 +38,10 @@ public class TPropertie extends TEntity {
 	@Column(length=20)
 	@Enumerated(EnumType.STRING)
 	private TType type;
+
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="file_id")
+	private TFileEntity file;
 	
 	public TPropertie() {
 		
@@ -89,6 +101,34 @@ public class TPropertie extends TEntity {
 	 */
 	public void setType(TType type) {
 		this.type = type;
+	}
+
+	/**
+	 * @return the file
+	 */
+	public TFileEntity getFile() {
+		return file;
+	}
+
+	/**
+	 * @param file the file to set
+	 */
+	public void setFile(TFileEntity file) {
+		this.file = file;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 

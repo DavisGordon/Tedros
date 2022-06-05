@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tedros.settings.security.model;
+package com.tedros.settings.properties.model;
 
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
@@ -49,7 +49,7 @@ import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.entity.behavior.TMasterCrudViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
-import com.tedros.settings.security.action.TEncriptPasswordChangeListener;
+import com.tedros.settings.properties.action.TEncriptPasswordChangeListener;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
@@ -66,12 +66,13 @@ import javafx.scene.text.TextAlignment;
 @TForm(name="#{security.user.form.name}", showBreadcrumBar=true, editCssId="")
 @TEjbService(serviceName = TUserController.JNDI_NAME, model=TUser.class)
 @TPresenter(type=TDynaPresenter.class, 
-			decorator=@TDecorator(type = TMasterCrudViewDecorator.class, viewTitle="#{security.user.view.title}", listTitle="#{security.user.list.title}"),
+			decorator=@TDecorator(type = TMasterCrudViewDecorator.class, 
+			viewTitle="#{view.user}", listTitle="#{security.user.list.title}"),
 			behavior=@TBehavior(type=TMasterCrudViewBehavior.class))
 @TSecurity(	id=DomainApp.USER_FORM_ID, 
-			appName="#{settings.app.name}", 
-			moduleName="#{label.user}", 
-			viewName="#{security.user.view.title}",
+			appName="#{app.settings}", 
+			moduleName="#{module.propertie}", 
+			viewName="#{view.user}",
 			allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 			   					TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public class TUserMV extends TEntityModelView<TUser> {
