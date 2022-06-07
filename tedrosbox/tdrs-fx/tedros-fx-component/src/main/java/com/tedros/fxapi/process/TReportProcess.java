@@ -3,6 +3,9 @@
  */
 package com.tedros.fxapi.process;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -44,6 +47,12 @@ import net.sf.jasperreports.export.SimpleXlsReportConfiguration;
 @SuppressWarnings("rawtypes")
 public abstract class TReportProcess<M extends ITReportModel> extends TProcess<TResult<M>> {
 
+	protected static final String PARAM_SUBREPORT_DIR = "SUBREPORT_DIR";
+
+	protected static final String PARAM_LOGO = "logo";
+
+	protected static final String REPORT_ORG = "report_org";
+
 	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
 	private M model;
@@ -51,6 +60,10 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 	private String reportName;
 	private String folderPath;
 	private String serviceJndiName;
+	
+	private String organization;
+	private String subReportDir;
+	private InputStream logoInputStream;
 	
 	
 	public TReportProcess(String serviceJndiName, String reportName) throws TProcessException {
@@ -60,6 +73,27 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 		LOGGER.setLevel(Level.ALL);
 	}
 	
+	/**
+	 * @param organization the organization to set
+	 */
+	public void setOrganization(String organization) {
+		this.organization = organization;
+	}
+
+	/**
+	 * @param logoInputStream the logoInputStream to set
+	 */
+	public void setLogoInputStream(InputStream logoInputStream) {
+		this.logoInputStream = logoInputStream;
+	}
+
+	/**
+	 * @param subReportDir the subReportDir to set
+	 */
+	public void setSubReportDir(String subReportDir) {
+		this.subReportDir = subReportDir;
+	}
+
 	public void search(M model){
 		this.model = model;
 		this.action = TReportProcessEnum.SEARCH;
@@ -141,6 +175,8 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 	protected TResult<M> runExportPdf() throws JRException {
 		try{
 			Map<String, Object> params = getReportParameters();
+			addSubReportDirParam(params);
+			addCustomLogoAndOrgParams(params);
 			InputStream inputStream = getJasperInputStream();
 			String f = getDestFile();
 			List dataList = model.getResult();
@@ -148,6 +184,8 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 			JasperPrint print = JasperFillManager.fillReport(inputStream, params, beanColDataSource);
 			JasperExportManager.exportReportToPdfFile(print, f);
 			inputStream.close();
+			if(this.logoInputStream!=null)
+				this.logoInputStream.close();
 			runAfterExport(params);
 			return new TResult<>(TState.SUCCESS, f, model);
 		}catch(Exception e){
@@ -159,6 +197,8 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 	protected TResult<M> runExportXls() throws JRException {
 		try{
 			Map<String, Object> params = getReportParameters();
+			addSubReportDirParam(params);
+			addCustomLogoAndOrgParams(params);
 			InputStream inputStream = getJasperInputStream();
 			String f = getDestFile();
 			List dataList = model.getResult();
@@ -175,11 +215,40 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 			exporter.setConfiguration(configuration);
 			exporter.exportReport();
 			inputStream.close();
+			if(this.logoInputStream!=null)
+				this.logoInputStream.close();
 			runAfterExport(params);
 			return new TResult<>(TState.SUCCESS, f, model);
 		}catch(Exception e){
 			LOGGER.severe(e.toString());
 			return new TResult<>(TState.ERROR, e.getMessage());
+		}
+	}
+
+	/**
+	 * @param params
+	 */
+	protected void addSubReportDirParam(Map<String, Object> params) {
+		if(this.subReportDir!=null && !params.containsKey(PARAM_SUBREPORT_DIR))
+			params.put(PARAM_SUBREPORT_DIR, this.subReportDir);
+	}
+	
+	/**
+	 * @param params
+	 */
+	protected void addCustomLogoAndOrgParams(Map<String, Object> params) {
+		if(!params.containsKey(PARAM_LOGO)) {
+			if(this.logoInputStream==null) {
+				try {
+					this.logoInputStream = new FileInputStream(new File(TedrosFolder.IMAGES_FOLDER.getFullPath()+"logo-tedros-medium.png"));
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+			params.put(PARAM_LOGO, this.logoInputStream);
+		}
+		if(!params.containsKey(REPORT_ORG) && this.organization!=null) {
+			params.put(REPORT_ORG, this.organization);
 		}
 	}
 	

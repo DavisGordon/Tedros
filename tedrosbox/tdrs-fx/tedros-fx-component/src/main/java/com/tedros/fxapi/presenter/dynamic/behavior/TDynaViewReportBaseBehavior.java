@@ -1,15 +1,21 @@
 package com.tedros.fxapi.presenter.dynamic.behavior;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.List;
 
+import com.tedros.common.model.TFileEntity;
 import com.tedros.core.ITModule;
 import com.tedros.core.TLanguage;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.control.PopOver;
+import com.tedros.core.domain.TSystemPropertie;
+import com.tedros.core.ejb.controller.TPropertieController;
+import com.tedros.core.setting.model.TPropertie;
 import com.tedros.ejb.base.model.ITReportModel;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.TState;
@@ -24,6 +30,7 @@ import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewReportBaseDecorator;
 import com.tedros.fxapi.presenter.model.TModelView;
+import com.tedros.fxapi.process.TEntityProcess;
 import com.tedros.fxapi.process.TReportProcess;
 import com.tedros.fxapi.process.TReportProcessEnum;
 import com.tedros.util.TFileUtil;
@@ -60,6 +67,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	private Class<? extends TReportProcess> reportProcessClass;
 	
 	private TDynaViewReportBaseDecorator<M> decorator;
+	
+	private String organization;
+	private TFileEntity logotype;
 
 	@SuppressWarnings("unchecked")
 	public void load(){
@@ -84,14 +94,54 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			// set the custom behavior actions
 			loadAction(presenter, tBehavior.action());
 			
-			// set the form settings
-			//setFormName((tForm!=null) ? tForm.name() : "@TForm(name='SET A NAME')");
+			TEntityProcess<TPropertie> pp = new TEntityProcess(TPropertie.class, TPropertieController.JNDI_NAME) {};
+			pp.stateProperty().addListener((a,o,n)->{
+				if(n.equals(State.SUCCEEDED)) {
+					proccessResult(pp);
+				}
+			});
+			TPropertie ex = new TPropertie();
+			ex.setKey(TSystemPropertie.ORGANIZATION.getValue());
+			pp.find(ex);
+			pp.startProcess();
+			
+			TEntityProcess<TPropertie> pp1 = new TEntityProcess(TPropertie.class, TPropertieController.JNDI_NAME) {};
+			pp1.stateProperty().addListener((a,o,n)->{
+				if(n.equals(State.SUCCEEDED)) {
+					proccessResult(pp1);
+				}
+			});
+			TPropertie ex1 = new TPropertie();
+			ex1.setKey(TSystemPropertie.REPORT_LOGOTYPE.getValue());
+			pp1.find(ex1);
+			pp1.startProcess();
 			
 			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		
+	}
+
+	/**
+	 * @param pp
+	 */
+	private void proccessResult(TEntityProcess<TPropertie> pp) {
+		List<TResult<TPropertie>> l = pp.getValue();
+		if(l!=null && !l.isEmpty()) {
+			TResult<TPropertie> r = l.get(0);
+			if(r.getState().equals(TState.SUCCESS)) {
+				TPropertie p = r.getValue();
+				if(p.getKey().equals(TSystemPropertie.ORGANIZATION.getValue()) 
+						&& p.getValue()!=null) {
+					this.organization = p.getValue();
+				}
+				if(p.getKey().equals(TSystemPropertie.REPORT_LOGOTYPE.getValue()) 
+						&& p.getFile()!=null) {
+					this.logotype = p.getFile();
+				}
+			}
+		}
 	}
 	
 	/**
@@ -325,7 +375,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		try {
 			runningProcess  = createProcess();
 		
-		
+			if(this.organization!=null)
+				runningProcess.setOrganization(organization);
+			if(this.logotype!=null) 
+				runningProcess.setLogoInputStream(new ByteArrayInputStream(this.logotype.getByte().getBytes()));
+			
 			if(type.equals(TReportProcessEnum.EXPORT_XLS))
 				runningProcess.exportXLS((ITReportModel) getModelView().getModel(), folderPath);
 			else

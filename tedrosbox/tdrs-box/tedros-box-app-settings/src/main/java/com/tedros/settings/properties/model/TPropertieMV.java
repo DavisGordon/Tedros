@@ -15,6 +15,12 @@ import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.form.TForm;
+import com.tedros.fxapi.annotation.layout.THBox;
+import com.tedros.fxapi.annotation.layout.THGrow;
+import com.tedros.fxapi.annotation.layout.TPane;
+import com.tedros.fxapi.annotation.layout.TPriority;
+import com.tedros.fxapi.annotation.layout.TVBox;
+import com.tedros.fxapi.annotation.layout.TVGrow;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
@@ -31,6 +37,7 @@ import com.tedros.fxapi.property.TSimpleFileProperty;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.layout.Priority;
 
 /**
  * @author Davis Gordon
@@ -51,11 +58,17 @@ import javafx.beans.property.SimpleStringProperty;
 			   					TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public class TPropertieMV extends TEntityModelView<TPropertie> {
 
+	@THBox(	pane=@TPane(children={"name","description"}), spacing=10, fillHeight=true,
+			hgrow=@THGrow(priority={@TPriority(field="name", priority=Priority.ALWAYS), 
+								@TPriority(field="description", priority=Priority.ALWAYS)}))
 	private SimpleLongProperty id;
 	
 	@TReaderHtml
 	@TLabel(text="#{label.name}")
 	@TTextField(maxLength=40, required=true)
+	@TVBox(	pane=@TPane(children={"name","key"}), spacing=10, fillWidth=true,
+	vgrow=@TVGrow(priority={@TPriority(field="name", priority=Priority.ALWAYS), 
+						@TPriority(field="key", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty name;
 	
 	@TReaderHtml
@@ -64,14 +77,17 @@ public class TPropertieMV extends TEntityModelView<TPropertie> {
 	private SimpleStringProperty key;
 	
 	@TReaderHtml
-	@TLabel(text="#{label.value}")
-	@TTextAreaField(wrapText=true, prefRowCount=4)
-	private SimpleStringProperty value;
+	@TLabel(text="#{label.description}")
+	@TTextAreaField(maxLength=500, wrapText=true, prefRowCount=2)
+	@TVBox(	pane=@TPane(children={"description", "value"}), spacing=10, fillWidth=true,
+	vgrow=@TVGrow(priority={@TPriority(field="value", priority=Priority.ALWAYS), 
+						@TPriority(field="description", priority=Priority.ALWAYS)}))
+	private SimpleStringProperty description;
 	
 	@TReaderHtml
-	@TLabel(text="#{label.description}")
-	@TTextAreaField(maxLength=500, wrapText=true, prefRowCount=6)
-	private SimpleStringProperty description;
+	@TLabel(text="#{label.value}")
+	@TTextAreaField(wrapText=true, prefRowCount=2)
+	private SimpleStringProperty value;
 	
 	@TLabel(text="#{label.file}")
 	@TFileField(propertyValueType=TFileModelType.ENTITY, preLoadFileBytes=true,

@@ -2,9 +2,8 @@ package com.tedros.util;
 
 
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import javax.activation.DataHandler;
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -13,6 +12,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.mail.util.ByteArrayDataSource;
 
 public final class TSMTPUtil {
 	
@@ -44,8 +44,8 @@ public final class TSMTPUtil {
 	
 	private TSMTPUtil(String smtpHost, String smtpSocketPort, String smtpSocketClass, 
 			String smtpAuth, String smtpPort, final String userName, final String password){
+		
 		props = new Properties();
-	    /** Parâmetros de conexão com servidor Gmail */
 	    props.put("mail.smtp.host", smtpHost);
 	    props.put("mail.smtp.socketFactory.port", smtpSocketPort);
 	    props.put("mail.smtp.socketFactory.class", smtpSocketClass);
@@ -65,33 +65,52 @@ public final class TSMTPUtil {
 	  	    
 	}
 	
-	  public void sent(boolean debug, String from, String to, String subject, String content, boolean html) throws TSentEmailException {
-	   
-	 
-	    /** Ativa Debug para sessão */
+
+	public void send(boolean debug, String from, String to, String subject, String content, boolean html, 
+			String attachFile, byte[] attach) throws TSentEmailException {
+		// enable/disable debug
 	    session.setDebug(debug);
-	 
 	    try {
-	 
-	      Message message = new MimeMessage(session);
-	      message.setFrom(new InternetAddress(from)); 
-	      //Remetente
-	    //Destinatário(s)
-	      Address[] toUser = InternetAddress.parse(to);  
-	 
-	      message.setRecipients(Message.RecipientType.TO, toUser);
-	      message.setSubject(subject);//Assunto
-	      
-	      if(html) 
-	    	  message.setContent(content, "text/html; charset=utf-8");
-	      else
-	    	  message.setText(content);
-	      
-	      /**Método para enviar a mensagem criada*/
-	      Transport.send(message);
-	 
-	     } catch (MessagingException e) {
-	        throw new TSentEmailException(e);
+	    	Message message = new MimeMessage(session);
+	    	message.setFrom(new InternetAddress(from)); 
+	    	Address[] toUser = InternetAddress.parse(to); 
+	    	message.setRecipients(Message.RecipientType.TO, toUser);
+	    	message.setSubject(subject);
+	    	
+	    	if(html)
+	    		message.setContent(content, "text/html; charset=utf-8");
+	    	else
+	    		message.setText(content);
+	    	
+	    	if(attach!=null && attachFile!=null) {
+		    	ByteArrayDataSource bds = new ByteArrayDataSource(attach, attachFile); 
+		    	message.setDataHandler(new DataHandler(bds)); 
+		    	message.setFileName(bds.getName()); 
+	    	}
+	    	Transport.send(message);
+	    } catch (MessagingException e) {
+	    		throw new TSentEmailException(e);
 	    }
-	  }
 	}
+	
+	public void send(boolean debug, String from, String to, String subject, String content, boolean html) throws TSentEmailException {
+		// enable/disable debug
+	    session.setDebug(debug);
+	    try {
+	    	Message message = new MimeMessage(session);
+	    	message.setFrom(new InternetAddress(from)); 
+	    	Address[] toUser = InternetAddress.parse(to); 
+	    	message.setRecipients(Message.RecipientType.TO, toUser);
+	    	message.setSubject(subject);
+	    	
+	    	if(html)
+	    		message.setContent(content, "text/html; charset=utf-8");
+	    	else
+	    		message.setText(content);
+	    	
+	    	Transport.send(message);
+	    } catch (MessagingException e) {
+	    		throw new TSentEmailException(e);
+	    }
+	}
+}

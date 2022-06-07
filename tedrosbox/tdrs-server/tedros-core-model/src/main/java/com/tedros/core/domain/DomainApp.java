@@ -17,7 +17,6 @@ public interface DomainApp {
 	static final String PROFILE = "PROFILE";
 	static final String USER = "USER";
 	static final String LAYOUT = "LAYOUT";
-	static final String OWNER = "OWNER";
 	static final String PROPERTIE = "PROPERTIE";
 	static final String SETTINGS = "SETTINGS";
 	static final String SEP = SEPARATOR;
@@ -41,10 +40,6 @@ public interface DomainApp {
 	static final String LAYOUT_FORM_ID = MNEMONIC + SEP + LAYOUT + SEP + FORM;
 	static final String LAYOUT_VIEW_ID = MNEMONIC + SEP + LAYOUT + SEP + VIEW;
 	static final String LAYOUT_MODULE_ID = MNEMONIC + SEP + LAYOUT + SEP + MODULE;
-	
-	static final String OWNER_FORM_ID = MNEMONIC + SEP + OWNER + SEP + FORM;
-	static final String OWNER_VIEW_ID = MNEMONIC + SEP + OWNER + SEP + VIEW;
-	static final String OWNER_MODULE_ID = MNEMONIC + SEP + OWNER + SEP + MODULE;
 
 	static final String PROPERTIE_FORM_ID = MNEMONIC + SEP + PROPERTIE + SEP + FORM;
 	static final String PROPERTIE_VIEW_ID = MNEMONIC + SEP + PROPERTIE + SEP + VIEW;
