@@ -50,6 +50,7 @@ public class TPropertieEao extends TGenericEAO<TPropertie> {
 		TFileEntity v;
 		try{
 			v = (TFileEntity) qry.getSingleResult();
+			getEntityManager().detach(v);
 		}catch(NoResultException e){
 			v = null;
 		}
