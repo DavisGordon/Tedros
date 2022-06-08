@@ -40,6 +40,7 @@ import com.tedros.ejb.base.annotation.TFileType;
 import com.tedros.ejb.base.annotation.THeaderType;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.entity.ITFileEntity;
+import com.tedros.ejb.base.exception.TBusinessException;
 import com.tedros.ejb.base.model.ITImportModel;
 
 /**

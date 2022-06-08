@@ -3,6 +3,8 @@
  */
 package com.tedros.core.notify.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -38,6 +40,24 @@ public class TNotifyLog extends TEntity {
 	
 	@Column(length=500)
 	private String description;
+
+	/**
+	 * 
+	 */
+	public TNotifyLog() {
+	}
+
+	/**
+	 * @param notify
+	 * @param state
+	 * @param description
+	 */
+	public TNotifyLog(TNotify notify, TState state, String description) {
+		this.notify = notify;
+		this.state = state;
+		this.description = description;
+		super.setInsertDate(new Date());
+	}
 
 	/**
 	 * @return the notify
