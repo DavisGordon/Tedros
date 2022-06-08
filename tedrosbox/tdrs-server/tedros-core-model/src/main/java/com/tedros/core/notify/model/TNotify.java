@@ -3,21 +3,24 @@
  */
 package com.tedros.core.notify.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.Lob;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.tedros.common.model.TFileEntity;
 import com.tedros.core.domain.DomainSchema;
 import com.tedros.core.domain.DomainTables;
 import com.tedros.ejb.base.entity.TEntity;
@@ -47,12 +50,9 @@ public class TNotify extends TEntity {
 	@Column(length=40, nullable=false)
 	private String charset;
 	
-	@Column(length=120)
-	private String attachName;
-	
-	@Lob
-	@Basic(fetch=FetchType.EAGER)
-	private byte[] attachFile;
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="file_id")
+	private TFileEntity file;
 	
 	@Column
 	@Temporal(TemporalType.TIMESTAMP)
@@ -65,6 +65,12 @@ public class TNotify extends TEntity {
 	@OneToMany(mappedBy="notify")
 	private List<TNotifyLog> eventLog;
 
+	public void addEventLog(TState state, String desc) {
+		if(eventLog==null)
+			eventLog = new ArrayList<>();
+		eventLog.add(new TNotifyLog(this, state, desc));
+	}
+	
 	/**
 	 * @return the refCode
 	 */
@@ -136,34 +142,6 @@ public class TNotify extends TEntity {
 	}
 
 	/**
-	 * @return the attachName
-	 */
-	public String getAttachName() {
-		return attachName;
-	}
-
-	/**
-	 * @param attachName the attachName to set
-	 */
-	public void setAttachName(String attachName) {
-		this.attachName = attachName;
-	}
-
-	/**
-	 * @return the attachFile
-	 */
-	public byte[] getAttachFile() {
-		return attachFile;
-	}
-
-	/**
-	 * @param attachFile the attachFile to set
-	 */
-	public void setAttachFile(byte[] attachFile) {
-		this.attachFile = attachFile;
-	}
-
-	/**
 	 * @return the sentTime
 	 */
 	public Date getSentTime() {
@@ -203,6 +181,20 @@ public class TNotify extends TEntity {
 	 */
 	public void setEventLog(List<TNotifyLog> eventLog) {
 		this.eventLog = eventLog;
+	}
+
+	/**
+	 * @return the file
+	 */
+	public TFileEntity getFile() {
+		return file;
+	}
+
+	/**
+	 * @param file the file to set
+	 */
+	public void setFile(TFileEntity file) {
+		this.file = file;
 	}
 	
 }
