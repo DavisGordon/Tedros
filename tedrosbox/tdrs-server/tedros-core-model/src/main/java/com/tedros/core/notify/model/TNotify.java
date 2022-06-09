@@ -3,6 +3,7 @@
  */
 package com.tedros.core.notify.model;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -53,10 +54,18 @@ public class TNotify extends TEntity {
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="file_id")
 	private TFileEntity file;
+
+	@Column
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date scheduleTime;
 	
 	@Column
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date sentTime;
+	private Date processedTime;
+	
+	@Column
+	@Enumerated(EnumType.STRING)
+	private TAction action;
 	
 	@Column
 	@Enumerated(EnumType.STRING)
@@ -64,6 +73,13 @@ public class TNotify extends TEntity {
 	
 	@OneToMany(mappedBy="notify")
 	private List<TNotifyLog> eventLog;
+
+	/**
+	 * 
+	 */
+	public TNotify() {
+		refCode = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+	}
 
 	public void addEventLog(TState state, String desc) {
 		if(eventLog==null)
@@ -142,20 +158,6 @@ public class TNotify extends TEntity {
 	}
 
 	/**
-	 * @return the sentTime
-	 */
-	public Date getSentTime() {
-		return sentTime;
-	}
-
-	/**
-	 * @param sentTime the sentTime to set
-	 */
-	public void setSentTime(Date sentTime) {
-		this.sentTime = sentTime;
-	}
-
-	/**
 	 * @return the state
 	 */
 	public TState getState() {
@@ -195,6 +197,48 @@ public class TNotify extends TEntity {
 	 */
 	public void setFile(TFileEntity file) {
 		this.file = file;
+	}
+
+	/**
+	 * @return the scheduleTime
+	 */
+	public Date getScheduleTime() {
+		return scheduleTime;
+	}
+
+	/**
+	 * @param scheduleTime the scheduleTime to set
+	 */
+	public void setScheduleTime(Date scheduleTime) {
+		this.scheduleTime = scheduleTime;
+	}
+
+	/**
+	 * @return the action
+	 */
+	public TAction getAction() {
+		return action;
+	}
+
+	/**
+	 * @param action the action to set
+	 */
+	public void setAction(TAction action) {
+		this.action = action;
+	}
+
+	/**
+	 * @return the processedTime
+	 */
+	public Date getProcessedTime() {
+		return processedTime;
+	}
+
+	/**
+	 * @param processedTime the processedTime to set
+	 */
+	public void setProcessedTime(Date processedTime) {
+		this.processedTime = processedTime;
 	}
 	
 }

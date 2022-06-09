@@ -3,7 +3,6 @@
  */
 package com.tedros.core.ejb.eao;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
@@ -23,11 +22,11 @@ public class TNotifyEao extends TGenericEAO<TNotify> {
 	@SuppressWarnings("unchecked")
 	public List<TNotify> listToProcess(){
 		StringBuilder sb = new StringBuilder();
-		sb.append("select e from TNotify e where e.state in :state");
+		sb.append("select e from TNotify e where e.state = :state");
 		
 		Query qry = getEntityManager().createQuery(sb.toString());
 		
-		qry.setParameter("state", Arrays.asList(TState.RESEND, TState.WAITING));
+		qry.setParameter("state", TState.QUEUED);
 		
 		return qry.getResultList();
 	}
