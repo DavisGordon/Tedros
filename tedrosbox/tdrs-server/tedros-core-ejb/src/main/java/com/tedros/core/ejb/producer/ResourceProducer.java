@@ -58,5 +58,12 @@ public class ResourceProducer {
 	public String getSmtpSocketPort(){
 		return propBO.getValue(TSystemPropertie.SMTP_SOCKET_PORT.getValue());
 	}
+	
+	@Produces
+	@RequestScoped
+	@Named(DomainPropertie.NOTIFY_INTERVAL_TIMER)
+	public String getNotifyInterval(){
+		return propBO.getValue(TSystemPropertie.NOTIFY_INTERVAL_TIMER.getValue());
+	}
 
 }

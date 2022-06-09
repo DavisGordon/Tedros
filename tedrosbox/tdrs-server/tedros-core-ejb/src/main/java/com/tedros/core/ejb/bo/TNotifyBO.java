@@ -7,6 +7,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import com.tedros.core.ejb.eao.TNotifyEao;
+import com.tedros.core.notify.model.TAction;
 import com.tedros.core.notify.model.TNotify;
 import com.tedros.core.notify.model.TState;
 import com.tedros.ejb.base.bo.TGenericBO;
@@ -34,14 +35,16 @@ public class TNotifyBO extends TGenericBO<TNotify> {
 			else
 				emailBO.send(false, e.getTo(), e.getSubject(), e.getContent(), true);
 	
+			e.setAction(TAction.NONE);
 			e.setState(TState.SENT);
-			e.setSentTime(new Date());
+			e.setProcessedTime(new Date());
 			e.addEventLog(TState.SENT, null);
 			
 		} catch (Throwable e1) {
 			e1.printStackTrace();
+			e.setAction(TAction.NONE);
 			e.setState(TState.ERROR);
-			e.setSentTime(null);
+			e.setProcessedTime(new Date());
 			e.addEventLog(TState.ERROR, e1.getMessage());
 		}
 	}

@@ -18,4 +18,5 @@ public interface DomainPropertie {
 	static final String SMTP_PASS= "SMTP_PASS";
 	static final String SMTP_PORT = "SMTP_PORT";
 	static final String SMTP_SOCKET_PORT= "SMTP_SOCKET_PORT";
+	static final String NOTIFY_INTERVAL_TIMER = "NOTIFY_INTERVAL_TIMER";
 }
