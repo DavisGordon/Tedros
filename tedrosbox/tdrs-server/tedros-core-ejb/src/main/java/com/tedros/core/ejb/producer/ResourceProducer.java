@@ -25,45 +25,45 @@ public class ResourceProducer {
 	@Produces
 	@RequestScoped
 	@Named(DomainPropertie.SMTP_HOST)
-	public String getSmtpHost(){
-		return propBO.getValue(TSystemPropertie.SMTP_HOST.getValue());
+	public Item<String> getSmtpHost(){
+		return new Item<>(propBO.getValue(TSystemPropertie.SMTP_HOST.getValue()));
 	}
 	
 	@Produces
 	@RequestScoped
 	@Named(DomainPropertie.SMTP_USER)
-	public String getSmtpUser(){
-		return propBO.getValue(TSystemPropertie.SMTP_USER.getValue());
+	public Item<String> getSmtpUser(){
+		return new Item<>(propBO.getValue(TSystemPropertie.SMTP_USER.getValue()));
 	}
 	
 	@Produces
 	@RequestScoped
 	@Named(DomainPropertie.SMTP_PASS)
-	public String getSmtpPass(){
-		return propBO.getValue(TSystemPropertie.SMTP_PASS.getValue());
+	public Item<String> getSmtpPass(){
+		return new Item<>(propBO.getValue(TSystemPropertie.SMTP_PASS.getValue()));
 	}
 	
 
 	@Produces
 	@RequestScoped
 	@Named(DomainPropertie.SMTP_PORT)
-	public String getSmtpPort(){
-		return propBO.getValue(TSystemPropertie.SMTP_PORT.getValue());
+	public Item<String> getSmtpPort(){
+		return new Item<>(propBO.getValue(TSystemPropertie.SMTP_PORT.getValue()));
 	}
 	
 
 	@Produces
 	@RequestScoped
 	@Named(DomainPropertie.SMTP_SOCKET_PORT)
-	public String getSmtpSocketPort(){
-		return propBO.getValue(TSystemPropertie.SMTP_SOCKET_PORT.getValue());
+	public Item<String> getSmtpSocketPort(){
+		return new Item<>(propBO.getValue(TSystemPropertie.SMTP_SOCKET_PORT.getValue()));
 	}
 	
 	@Produces
 	@RequestScoped
 	@Named(DomainPropertie.NOTIFY_INTERVAL_TIMER)
-	public String getNotifyInterval(){
-		return propBO.getValue(TSystemPropertie.NOTIFY_INTERVAL_TIMER.getValue());
+	public Item<String> getNotifyInterval(){
+		return new Item<>(propBO.getValue(TSystemPropertie.NOTIFY_INTERVAL_TIMER.getValue()));
 	}
 
 }

@@ -75,6 +75,7 @@ public class TNotifyControllerImpl extends TSecureEjbController<TNotify> impleme
 			e.addEventLog(TState.CANCELED, null);
 			break;
 		case SEND:
+			e.setState(null);
 			serv.process(e);
 			break;
 		case TO_QUEUE:

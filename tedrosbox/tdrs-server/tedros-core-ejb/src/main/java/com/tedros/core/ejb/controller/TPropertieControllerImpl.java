@@ -5,9 +5,13 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import com.tedros.common.model.TFileEntity;
 import com.tedros.core.domain.DomainApp;
+import com.tedros.core.domain.TSystemPropertie;
 import com.tedros.core.ejb.service.TPropertieService;
+import com.tedros.core.ejb.timer.TNotifyTimer;
 import com.tedros.core.setting.model.TPropertie;
 import com.tedros.ejb.base.controller.ITSecurityController;
 import com.tedros.ejb.base.controller.TSecureEjbController;
@@ -32,6 +36,9 @@ public class TPropertieControllerImpl extends TSecureEjbController<TPropertie> i
 	private TPropertieService serv;
 	
 	@EJB
+	private TNotifyTimer timer;
+	
+	@EJB
 	private ITSecurityController securityController;
 
 	@Override
@@ -44,6 +51,18 @@ public class TPropertieControllerImpl extends TSecureEjbController<TPropertie> i
 	 */
 	public ITSecurityController getSecurityController() {
 		return securityController;
+	}
+	
+	@Override
+	public TResult<TPropertie> save(TAccessToken token, TPropertie e) {
+
+		if(e.getKey().equals(TSystemPropertie.NOTIFY_INTERVAL_TIMER.getValue()))
+			if(e.getValue()!=null && NumberUtils.isCreatable(e.getValue())) {
+				timer.start(e.getValue());
+			}else
+				timer.stop();
+		
+		return super.save(token, e);
 	}
 
 	@Override

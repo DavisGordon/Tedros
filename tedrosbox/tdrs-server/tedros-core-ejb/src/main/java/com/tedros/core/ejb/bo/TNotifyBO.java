@@ -72,18 +72,18 @@ public class TNotifyBO extends TGenericBO<TNotify> {
 	}
 
 
+	@SuppressWarnings("incomplete-switch")
 	private void validate(TNotify e) {
-		String v;
-		switch(e.getState()) {
-		case CANCELED:
-			v = "canceled";
-			break;
-		case SENT:
-			v = "already sent";
-			break;
-		default:
-			v = null;
-		}
+		String v=null;
+		if(e.getState()!=null)
+			switch(e.getState()) {
+			case CANCELED:
+				v = "canceled";
+				break;
+			case SENT:
+				v = "already sent";
+				break;
+			}
 		if(v!=null)
 			throw new TBusinessException("This notification cant be done until it was "+v);
 	}
