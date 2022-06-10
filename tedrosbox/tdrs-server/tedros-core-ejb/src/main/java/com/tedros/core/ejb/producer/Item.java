@@ -25,7 +25,7 @@ public class Item<T> {
 	/**
 	 * @return the value
 	 */
-	public T getValue() {
+	public T get() {
 		return value;
 	}
 	

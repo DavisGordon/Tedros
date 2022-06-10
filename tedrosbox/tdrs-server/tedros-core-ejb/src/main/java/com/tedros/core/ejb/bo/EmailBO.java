@@ -5,12 +5,12 @@ package com.tedros.core.ejb.bo;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.tedros.common.model.TFileEntity;
 import com.tedros.core.domain.DomainPropertie;
+import com.tedros.core.ejb.producer.Item;
 import com.tedros.util.TSMTPUtil;
 import com.tedros.util.TSentEmailException;
 
@@ -23,23 +23,23 @@ public class EmailBO {
 	
 	@Inject
 	@Named(DomainPropertie.SMTP_HOST)
-	private Instance<String> smtpHost;
+	private Item<String> smtpHost;
 
 	@Inject
 	@Named(DomainPropertie.SMTP_PORT)
-	private Instance<String> smtpPort;
+	private Item<String> smtpPort;
 
 	@Inject
 	@Named(DomainPropertie.SMTP_SOCKET_PORT)
-	private Instance<String> socketPort;
+	private Item<String> socketPort;
 	
 	@Inject
 	@Named(DomainPropertie.SMTP_USER)
-	private Instance<String> emailAccount;
+	private Item<String> emailAccount;
 	
 	@Inject
 	@Named(DomainPropertie.SMTP_PASS)
-	private Instance<String> passAccount;
+	private Item<String> passAccount;
 	
 	private TSMTPUtil util;
 	

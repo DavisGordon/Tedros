@@ -19,13 +19,13 @@ import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.tedros.core.domain.DomainPropertie;
+import com.tedros.core.ejb.producer.Item;
 import com.tedros.core.ejb.service.TNotifyService;
 import com.tedros.core.notify.model.TNotify;
 
@@ -45,7 +45,7 @@ public class TNotifyTimer {
 	
 	@Inject
 	@Named(DomainPropertie.NOTIFY_INTERVAL_TIMER)
-	private Instance<String> initialInterval;
+	private Item<String> initialInterval;
 
 	@Resource
     private TimerService timerService;
@@ -72,15 +72,12 @@ public class TNotifyTimer {
 	 */
 	public void start(String interval) {
 		stop();
-		final TimerConfig notify = new TimerConfig(DEFAULT, true);
         if(interval!=null && NumberUtils.isCreatable(interval)) {
+        	final TimerConfig notify = new TimerConfig(DEFAULT, true);
         	defaultTimer = timerService
         			.createCalendarTimer(new ScheduleExpression()
         					.minute(interval), notify);
-        }else
-        	defaultTimer = timerService
-        	.createCalendarTimer(new ScheduleExpression()
-        			.minute("60"), notify);
+        }
 		
 	}
     

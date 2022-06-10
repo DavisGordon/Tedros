@@ -48,9 +48,6 @@ public class TNotify extends TEntity {
 	@Column(nullable=false)
 	private String content;
 	
-	@Column(length=40, nullable=false)
-	private String charset;
-	
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="file_id")
 	private TFileEntity file;
@@ -71,7 +68,9 @@ public class TNotify extends TEntity {
 	@Enumerated(EnumType.STRING)
 	private TState state;
 	
-	@OneToMany(mappedBy="notify")
+	@OneToMany(mappedBy="notify", 
+	cascade=CascadeType.ALL, 
+	fetch=FetchType.EAGER)
 	private List<TNotifyLog> eventLog;
 
 	/**
@@ -141,20 +140,6 @@ public class TNotify extends TEntity {
 	 */
 	public void setContent(String content) {
 		this.content = content;
-	}
-
-	/**
-	 * @return the charset
-	 */
-	public String getCharset() {
-		return charset;
-	}
-
-	/**
-	 * @param charset the charset to set
-	 */
-	public void setCharset(String charset) {
-		this.charset = charset;
 	}
 
 	/**

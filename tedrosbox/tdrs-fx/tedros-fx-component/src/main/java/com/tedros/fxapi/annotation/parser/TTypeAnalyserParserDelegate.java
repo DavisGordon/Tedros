@@ -69,6 +69,7 @@ public class TTypeAnalyserParserDelegate {
 			if(((Class)obj)==ITGenericBuilder.class)
 				return null;
 			ITGenericBuilder builder = (ITGenericBuilder) ((Class)obj).newInstance();
+			builder.setComponentDescriptor(descriptor);
 			return builder.build();
 		}
 		

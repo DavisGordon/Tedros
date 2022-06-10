@@ -9,9 +9,25 @@ package com.tedros.core.notify.model;
  */
 public enum TState {
 	
-	QUEUED,
-	SCHEDULED,
-	SENT,
-	CANCELED,
-	ERROR;
+	QUEUED ("#{label.queued}"),
+	SCHEDULED ("#{label.scheduled}"),
+	SENT ("#{label.sent}"),
+	CANCELED ("#{label.canceled}"),
+	ERROR ("#{label.error}");
+
+	private String value;
+
+	/**
+	 * @param value
+	 */
+	private TState(String value) {
+		this.value = value;
+	}
+
+	/**
+	 * @return the value
+	 */
+	public String getValue() {
+		return value;
+	}
 }
