@@ -17,6 +17,7 @@
 		<class>com.tedros.common.model.TFileEntity</class>
 		<class>com.tedros.core.notify.model.TNotify</class>
 		<class>com.tedros.core.notify.model.TNotifyLog</class>
+		<class>com.tedros.common.model.TMimeType</class>
 		
 		
 		<properties>

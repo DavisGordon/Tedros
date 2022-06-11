@@ -13,6 +13,7 @@ import com.tedros.fxapi.presenter.view.group.TGroupPresenter;
 import com.tedros.fxapi.presenter.view.group.TGroupView;
 import com.tedros.fxapi.presenter.view.group.TViewItem;
 import com.tedros.settings.properties.model.TAuthorizationMV;
+import com.tedros.settings.properties.model.TMimeTypeMV;
 import com.tedros.settings.properties.model.TNotifyMV;
 import com.tedros.settings.properties.model.TProfileMV;
 import com.tedros.settings.properties.model.TPropertieMV;
@@ -35,7 +36,8 @@ public class TSettingsModule extends TModule {
 				new TViewItem(TDynaGroupView.class, TAuthorizationMV.class, "#{view.authorization}"),
 				new TViewItem(TDynaGroupView.class, TProfileMV.class, "#{view.profile}"),
 				new TViewItem(TDynaGroupView.class, TUserMV.class, "#{view.user}"),
-				new TViewItem(TDynaGroupView.class, TNotifyMV.class, "#{view.notify}")
+				new TViewItem(TDynaGroupView.class, TNotifyMV.class, "#{view.notify}"),
+				new TViewItem(TDynaGroupView.class, TMimeTypeMV.class, "#{view.mimetype}")
 				));
 		
 	}
