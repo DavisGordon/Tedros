@@ -5,13 +5,17 @@ import java.util.Properties;
 
 import javax.activation.DataHandler;
 import javax.mail.Address;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
 public final class TSMTPUtil {
@@ -77,17 +81,29 @@ public final class TSMTPUtil {
 	    	message.setRecipients(Message.RecipientType.TO, toUser);
 	    	message.setSubject(subject);
 	    	
+	    	BodyPart messageBodyPart = new MimeBodyPart(); 
+	    	
 	    	if(html)
-	    		message.setContent(content, "text/html; charset=utf-8");
+	    		messageBodyPart.setContent(content, "text/html; charset=utf-8");
 	    	else
-	    		message.setText(content);
+	    		messageBodyPart.setText(content);
+	    	
+	    	Multipart multipart = new MimeMultipart();
+	    	multipart.addBodyPart(messageBodyPart);
 	    	
 	    	if(attach!=null && attachFile!=null) {
-		    	ByteArrayDataSource bds = new ByteArrayDataSource(attach, attachFile); 
-		    	message.setDataHandler(new DataHandler(bds)); 
-		    	message.setFileName(bds.getName()); 
+		    	ByteArrayDataSource bds = 
+		    			new ByteArrayDataSource(attach, attachFile.trim()
+		    					.replaceAll(" ", "_"));
+		    	MimeBodyPart attachmentPart = new MimeBodyPart();
+		    	attachmentPart.setDataHandler(new DataHandler(bds)); 
+		    	attachmentPart.setFileName(bds.getName()); 
+		    	multipart.addBodyPart(attachmentPart);
 	    	}
+	    	
+	    	message.setContent(multipart);
 	    	Transport.send(message);
+	    	
 	    } catch (MessagingException e) {
 	    		throw new TSentEmailException(e);
 	    }

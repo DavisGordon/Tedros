@@ -1,25 +1,15 @@
 /**
  * 
  */
-package com.tedros.settings.properties.model;
+package com.tedros.settings.properties.table;
 
 import java.util.Date;
 
 import com.tedros.core.TLanguage;
 import com.tedros.core.notify.model.TNotifyLog;
 import com.tedros.core.notify.model.TState;
-import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TShowField;
-import com.tedros.fxapi.annotation.control.TShowField.TField;
-import com.tedros.fxapi.annotation.presenter.TBehavior;
-import com.tedros.fxapi.annotation.presenter.TDecorator;
-import com.tedros.fxapi.annotation.presenter.TDetailListViewPresenter;
-import com.tedros.fxapi.annotation.presenter.TPresenter;
-import com.tedros.fxapi.presenter.entity.behavior.TDetailCrudViewBehavior;
-import com.tedros.fxapi.presenter.entity.decorator.TDetailCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.settings.start.TConstant;
-import com.tedros.util.TDateUtil;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -29,31 +19,17 @@ import javafx.beans.property.SimpleStringProperty;
  * @author Davis Gordon
  *
  */
-@TDetailListViewPresenter(presenter=@TPresenter(
-behavior = @TBehavior(type = TDetailCrudViewBehavior.class), 
-decorator = @TDecorator(type = TDetailCrudViewDecorator.class, 
-buildModesRadioButton=false, buildDeleteButton=false, buildNewButton=false, buildSaveButton=false, 
-viewTitle="#{label.event.log}")))
+public class TNotifyLogTV extends TEntityModelView<TNotifyLog> {
 
-public class TNotifyLogMV extends TEntityModelView<TNotifyLog> {
-
-	
 	private SimpleLongProperty id;
 
-	@TLabel(text="#{label.state}")
-	@TShowField()
 	private SimpleObjectProperty<TState> state;
-	
 
-	@TLabel(text="#{label.description}")
-	@TShowField()
 	private SimpleStringProperty description;
-	
-	@TLabel(text="#{label.date.insert}")
-	@TShowField(fields= {@TField(pattern=TDateUtil.DDMMYYYY_HHMM)})
+
 	private SimpleObjectProperty<Date> insertDate;
 	
-	public TNotifyLogMV(TNotifyLog entity) {
+	public TNotifyLogTV(TNotifyLog entity) {
 		super(entity);
 	}
 

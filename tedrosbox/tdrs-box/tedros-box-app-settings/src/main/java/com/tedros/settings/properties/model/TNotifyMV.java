@@ -14,10 +14,11 @@ import com.tedros.core.notify.model.TAction;
 import com.tedros.core.notify.model.TNotify;
 import com.tedros.core.notify.model.TNotifyLog;
 import com.tedros.core.notify.model.TState;
+import com.tedros.fxapi.annotation.control.TCallbackFactory;
+import com.tedros.fxapi.annotation.control.TCellValueFactory;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
-import com.tedros.fxapi.annotation.control.TEditEntityModal;
 import com.tedros.fxapi.annotation.control.TFileField;
 import com.tedros.fxapi.annotation.control.THTMLEditor;
 import com.tedros.fxapi.annotation.control.TLabel;
@@ -26,13 +27,18 @@ import com.tedros.fxapi.annotation.control.TShowField;
 import com.tedros.fxapi.annotation.control.TShowField.TField;
 import com.tedros.fxapi.annotation.control.TTab;
 import com.tedros.fxapi.annotation.control.TTabPane;
+import com.tedros.fxapi.annotation.control.TTableColumn;
+import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextField;
 import com.tedros.fxapi.annotation.form.TDetailForm;
+import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
+import com.tedros.fxapi.annotation.layout.TMargin;
 import com.tedros.fxapi.annotation.layout.TPane;
 import com.tedros.fxapi.annotation.layout.TPriority;
 import com.tedros.fxapi.annotation.layout.TVBox;
+import com.tedros.fxapi.annotation.layout.TVBoxMargin;
 import com.tedros.fxapi.annotation.layout.TVGrow;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.annotation.presenter.TDecorator;
@@ -41,12 +47,16 @@ import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.annotation.scene.control.TInsets;
 import com.tedros.fxapi.builder.DateTimeFormatBuilder;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.domain.TFileExtension;
 import com.tedros.fxapi.domain.TFileModelType;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.property.TSimpleFileProperty;
+import com.tedros.settings.properties.table.TNotifyLogDateCallBack;
+import com.tedros.settings.properties.table.TNotifyLogStateCallBack;
+import com.tedros.settings.properties.table.TNotifyLogTV;
 import com.tedros.util.TDateUtil;
 
 import javafx.beans.property.SimpleLongProperty;
@@ -58,6 +68,7 @@ import javafx.scene.layout.Priority;
  * @author Davis Gordon
  *
  */
+@TForm(name = "", scroll=true)
 @TEjbService(serviceName = TNotifyController.JNDI_NAME, model=TNotify.class)
 @TListViewPresenter(presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{view.notify}",
 buildModesRadioButton=false),
@@ -71,9 +82,13 @@ allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,
 public class TNotifyMV extends TEntityModelView<TNotify> {
 
 	@TTabPane(tabs = { 
-		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"text", "file"})), text = "#{label.main.data}"),
-			@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"eventLog"})), text = "#{label.event.log}")
-		})
+		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"text"})),
+			scroll=true, text = "#{label.main.data}"),
+		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"file"})),
+			scroll=true, text = "#{label.attach.file}"),
+		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"eventLog"})),
+			text = "#{label.event.log}")
+	})
 	private SimpleLongProperty id;
 	
 
@@ -124,19 +139,25 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 	@THTMLEditor(control=@TControl( maxHeight=500, parse = true))
 	private SimpleStringProperty content;
 	
-	@TLabel(text="#{label.attach.file}")
 	@TFileField(propertyValueType=TFileModelType.ENTITY, preLoadFileBytes=true,
 	extensions= {TFileExtension.ALL_FILES}, showFilePath=true)
-	@TVBox(	pane=@TPane(children={"summary","file"}), spacing=10, fillWidth=true,
-	vgrow=@TVGrow(priority={@TPriority(field="summary", priority=Priority.ALWAYS), 
-						@TPriority(field="file", priority=Priority.ALWAYS)}))
+	@TVBox(	pane=@TPane(children={"file"}), spacing=10, fillWidth=true,
+	margin=@TVBoxMargin(margin= {@TMargin(field="file", insets=@TInsets(top=50))}),
+	vgrow=@TVGrow(priority={@TPriority(field="file", priority=Priority.ALWAYS)}))
 	@TModelViewType(modelClass=TFileEntity.class)
 	private TSimpleFileProperty<TFileEntity> file;
 	
-	@TLabel(text="#{label.event.log}")
-	@TEditEntityModal(height=60, modelClass = TNotifyLog.class, modelViewClass=TNotifyLogMV.class)
-	@TModelViewType(modelClass = TNotifyLog.class, modelViewClass=TNotifyLogMV.class)
-	private ITObservableList<TNotifyLogMV> eventLog;
+	@TTableView(columns = { 
+		@TTableColumn(text = "#{label.date.insert}", cellValue="insertDate", prefWidth=40,
+			cellValueFactory=@TCellValueFactory(parse=true,
+			value=@TCallbackFactory(parse=true, value=TNotifyLogDateCallBack.class))),
+		@TTableColumn(text = "#{label.state}", cellValue="state",
+			cellValueFactory=@TCellValueFactory(parse=true,
+			value=@TCallbackFactory(parse=true, value=TNotifyLogStateCallBack.class))),
+		@TTableColumn(text = "#{label.description}", cellValue="description")
+	})
+	@TModelViewType(modelClass = TNotifyLog.class, modelViewClass=TNotifyLogTV.class)
+	private ITObservableList<TNotifyLogTV> eventLog;
 	
 
 	public TNotifyMV(TNotify entity) {
@@ -244,14 +265,14 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 	/**
 	 * @return the eventLog
 	 */
-	public ITObservableList<TNotifyLogMV> getEventLog() {
+	public ITObservableList<TNotifyLogTV> getEventLog() {
 		return eventLog;
 	}
 
 	/**
 	 * @param eventLog the eventLog to set
 	 */
-	public void setEventLog(ITObservableList<TNotifyLogMV> eventLog) {
+	public void setEventLog(ITObservableList<TNotifyLogTV> eventLog) {
 		this.eventLog = eventLog;
 	}
 

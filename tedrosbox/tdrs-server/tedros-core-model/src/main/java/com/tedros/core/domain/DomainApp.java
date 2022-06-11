@@ -18,6 +18,7 @@ public interface DomainApp {
 	static final String USER = "USER";
 	static final String LAYOUT = "LAYOUT";
 	static final String PROPERTIE = "PROPERTIE";
+	static final String MIMETYPE = "MIMETYPE";
 	static final String NOTIFY = "NOTIFY";
 	static final String SETTINGS = "SETTINGS";
 	static final String SEP = SEPARATOR;
@@ -49,6 +50,12 @@ public interface DomainApp {
 	static final String NOTIFY_FORM_ID = MNEMONIC + SEP + NOTIFY + SEP + FORM;
 	static final String NOTIFY_VIEW_ID = MNEMONIC + SEP + NOTIFY + SEP + VIEW;
 	static final String NOTIFY_MODULE_ID = MNEMONIC + SEP + NOTIFY + SEP + MODULE;
+	
+
+	static final String MIMETYPE_FORM_ID = MNEMONIC + SEP + MIMETYPE + SEP + FORM;
+	static final String MIMETYPE_VIEW_ID = MNEMONIC + SEP + MIMETYPE + SEP + VIEW;
+	static final String MIMETYPE_MODULE_ID = MNEMONIC + SEP + MIMETYPE + SEP + MODULE;
+
 
 
 }
