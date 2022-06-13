@@ -11,7 +11,7 @@ import java.lang.annotation.Annotation;
 import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
-import com.tedros.fxapi.annotation.control.TRadioButtonField;
+import com.tedros.fxapi.annotation.control.TRadioButton;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -68,7 +68,7 @@ implements ITControlBuilder<com.tedros.fxapi.control.THorizontalRadioGroup, Prop
 		
 		callParser(tAnnotation, control);
 		
-		for(TRadioButtonField tRb : tAnnotation.radioButtons()){
+		for(TRadioButton tRb : tAnnotation.radioButtons()){
 			final RadioButton radioBtn = new RadioButton(iEngine.getString(tRb.text()));
 			if(tRb.alignment()!=null) radioBtn.setAlignment(tRb.alignment());
 			if(tRb.width()>0) radioBtn.setPrefWidth(tRb.width());

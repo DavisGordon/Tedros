@@ -71,7 +71,7 @@ public final class TSMTPUtil {
 	
 
 	public void send(boolean debug, String from, String to, String subject, String content, boolean html, 
-			String attachFile, byte[] attach) throws TSentEmailException {
+			String attachFile, byte[] attach, String mimeType) throws TSentEmailException {
 		// enable/disable debug
 	    session.setDebug(debug);
 	    try {
@@ -93,8 +93,8 @@ public final class TSMTPUtil {
 	    	
 	    	if(attach!=null && attachFile!=null) {
 		    	ByteArrayDataSource bds = 
-		    			new ByteArrayDataSource(attach, attachFile.trim()
-		    					.replaceAll(" ", "_"));
+		    			new ByteArrayDataSource(attach, mimeType);
+		    	bds.setName(attachFile);
 		    	MimeBodyPart attachmentPart = new MimeBodyPart();
 		    	attachmentPart.setDataHandler(new DataHandler(bds)); 
 		    	attachmentPart.setFileName(bds.getName()); 

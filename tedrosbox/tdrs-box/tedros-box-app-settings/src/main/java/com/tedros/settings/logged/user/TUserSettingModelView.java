@@ -9,7 +9,7 @@ import com.tedros.core.security.model.TUser;
 import com.tedros.fxapi.annotation.TObservableValue;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TPasswordField;
-import com.tedros.fxapi.annotation.control.TRadioButtonField;
+import com.tedros.fxapi.annotation.control.TRadioButton;
 import com.tedros.fxapi.annotation.control.TShowField;
 import com.tedros.fxapi.annotation.control.TShowField.TField;
 import com.tedros.fxapi.annotation.control.TTextField;
@@ -68,8 +68,8 @@ public class TUserSettingModelView extends TEntityModelView<TUser> {
 	private SimpleObjectProperty<TProfile> activeProfile;
 
 	@TLabel(text = "#{tedros.language}")
-	@TVerticalRadioGroup(radioButtons= {@TRadioButtonField(text = "English", userData = "en"),
-			@TRadioButtonField(text = "Português", userData = "pt")})
+	@TVerticalRadioGroup(radioButtons= {@TRadioButton(text = "English", userData = "en"),
+			@TRadioButton(text = "Português", userData = "pt")})
 	private SimpleStringProperty language;
 	
 	

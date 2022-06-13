@@ -9,8 +9,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.tedros.common.model.TFileEntity;
+import com.tedros.common.model.TMimeType;
 import com.tedros.core.domain.DomainPropertie;
 import com.tedros.core.ejb.producer.Item;
+import com.tedros.ejb.base.exception.TBusinessException;
 import com.tedros.util.TSMTPUtil;
 import com.tedros.util.TSentEmailException;
 
@@ -19,7 +21,10 @@ import com.tedros.util.TSentEmailException;
  *
  */
 @RequestScoped
-public class EmailBO {
+public class TEmailBO {
+	
+	@Inject
+	private TCoreBO<TMimeType> mimeTypeBO;
 	
 	@Inject
 	@Named(DomainPropertie.SMTP_HOST)
@@ -54,9 +59,23 @@ public class EmailBO {
 	}
 	
 
-	public void send(boolean debug, String to, String subject, String content, boolean html, TFileEntity file) throws TSentEmailException{
-		util.send(debug, emailAccount.get(), to, subject, content, html, file.getFileName(), file.getByte().getBytes());
-	}
+	public void send(boolean debug, String to, String subject, String content, boolean html, 
+			TFileEntity file) throws TSentEmailException{
+		
+		TMimeType e = new TMimeType();
+		e.setExtension("."+file.getFileExtension());
+		try {
+			e = mimeTypeBO.find(e);
+			if(e==null)
+				throw new TBusinessException("Cannot find the mime type to file extension ."
+			+file.getFileExtension());
+			
+			util.send(debug, emailAccount.get(), to, subject, content, html, 
+					file.getFileName(), file.getByte().getBytes(), e.getType());
+	
+		} catch (Exception e1) {
+			throw new RuntimeException(e1);
+		}}
 	
 	
 }

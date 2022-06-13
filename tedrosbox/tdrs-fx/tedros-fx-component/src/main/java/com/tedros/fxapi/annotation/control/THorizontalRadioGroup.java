@@ -168,7 +168,7 @@ public @interface THorizontalRadioGroup {
 	 * 
 	 * </pre>
 	 * */
-	public TRadioButtonField[] radioButtons();
+	public TRadioButton[] radioButtons();
 	
 	/**
 	 * <pre>

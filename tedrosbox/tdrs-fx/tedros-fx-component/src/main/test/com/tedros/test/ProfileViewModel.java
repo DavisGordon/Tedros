@@ -21,7 +21,7 @@ import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TLabelDefaultSetting;
 import com.tedros.fxapi.annotation.control.TNumberSpinnerField;
 import com.tedros.fxapi.annotation.control.TPasswordField;
-import com.tedros.fxapi.annotation.control.TRadioButtonField;
+import com.tedros.fxapi.annotation.control.TRadioButton;
 import com.tedros.fxapi.annotation.control.TSliderField;
 import com.tedros.fxapi.annotation.control.TTextAreaField;
 import com.tedros.fxapi.annotation.control.TTextField;
@@ -108,8 +108,8 @@ public class ProfileViewModel extends TEntityModelView<TCProfile> {
 	@TLabel(text="Escolha")
 	@THorizontalRadioGroup(spacing=5, required=true, alignment= Pos.CENTER_LEFT
 			,radioButtons={
-			@TRadioButtonField(userData="M", text="Masculino"),
-			@TRadioButtonField(userData="F", text="Feminino")
+			@TRadioButton(userData="M", text="Masculino"),
+			@TRadioButton(userData="F", text="Feminino")
 			
 	})
 	private SimpleStringProperty sexo;

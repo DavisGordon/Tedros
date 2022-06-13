@@ -76,7 +76,7 @@ public class TNotifyTimer {
         	final TimerConfig notify = new TimerConfig(DEFAULT, true);
         	defaultTimer = timerService
         			.createCalendarTimer(new ScheduleExpression()
-        					.minute(interval), notify);
+        					.minute("*/"+interval).hour("*"), notify);
         }
 		
 	}

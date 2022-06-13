@@ -14,7 +14,7 @@ import com.tedros.core.ejb.controller.TAuthorizationController;
 import com.tedros.core.security.model.TAuthorization;
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TLabel;
-import com.tedros.fxapi.annotation.control.TRadioButtonField;
+import com.tedros.fxapi.annotation.control.TRadioButton;
 import com.tedros.fxapi.annotation.control.TShowField;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.layout.THBox;
@@ -107,8 +107,8 @@ public final class TAuthorizationMV extends TEntityModelView<TAuthorization> {
 	@TReaderHtml
 	@TLabel(text="#{label.enabled}", position=TLabelPosition.LEFT)
 	@THorizontalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
-	radioButtons = {@TRadioButtonField(text="#{label.yes}", userData="S"), 
-					@TRadioButtonField(text="#{label.no}", userData="N")
+	radioButtons = {@TRadioButton(text="#{label.yes}", userData="S"), 
+					@TRadioButton(text="#{label.no}", userData="N")
 	})
 	private SimpleStringProperty enabled;
 

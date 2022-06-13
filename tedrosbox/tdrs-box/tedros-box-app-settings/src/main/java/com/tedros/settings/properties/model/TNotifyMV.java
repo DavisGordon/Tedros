@@ -16,13 +16,14 @@ import com.tedros.core.notify.model.TNotifyLog;
 import com.tedros.core.notify.model.TState;
 import com.tedros.fxapi.annotation.control.TCallbackFactory;
 import com.tedros.fxapi.annotation.control.TCellValueFactory;
-import com.tedros.fxapi.annotation.control.TComboBoxField;
 import com.tedros.fxapi.annotation.control.TContent;
+import com.tedros.fxapi.annotation.control.TConverter;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TFileField;
 import com.tedros.fxapi.annotation.control.THTMLEditor;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewType;
+import com.tedros.fxapi.annotation.control.TRadioButton;
 import com.tedros.fxapi.annotation.control.TShowField;
 import com.tedros.fxapi.annotation.control.TShowField.TField;
 import com.tedros.fxapi.annotation.control.TTab;
@@ -30,8 +31,10 @@ import com.tedros.fxapi.annotation.control.TTabPane;
 import com.tedros.fxapi.annotation.control.TTableColumn;
 import com.tedros.fxapi.annotation.control.TTableView;
 import com.tedros.fxapi.annotation.control.TTextField;
+import com.tedros.fxapi.annotation.control.TVerticalRadioGroup;
 import com.tedros.fxapi.annotation.form.TDetailForm;
 import com.tedros.fxapi.annotation.form.TForm;
+import com.tedros.fxapi.annotation.form.TSetting;
 import com.tedros.fxapi.annotation.layout.THBox;
 import com.tedros.fxapi.annotation.layout.THGrow;
 import com.tedros.fxapi.annotation.layout.TMargin;
@@ -69,10 +72,11 @@ import javafx.scene.layout.Priority;
  *
  */
 @TForm(name = "", scroll=true)
+@TSetting(TNotifyMVSetting.class)
 @TEjbService(serviceName = TNotifyController.JNDI_NAME, model=TNotify.class)
 @TListViewPresenter(presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{view.notify}",
 buildModesRadioButton=false),
-	behavior=@TBehavior(saveOnlyChangedModels=false)))
+	behavior=@TBehavior(saveOnlyChangedModels=false, saveAllModels=false)))
 @TSecurity(id=DomainApp.NOTIFY_FORM_ID,
 appName="#{app.settings}", 
 moduleName="#{module.propertie}", 
@@ -120,8 +124,13 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 	private SimpleStringProperty to;
 	
 	@TLabel(text="#{label.action}")
-	@TComboBoxField(firstItemTex="#{label.select}",
-	items=ActionsBuilder.class)
+	@TVerticalRadioGroup(
+		converter=@TConverter(parse = true, type = ActionConverter.class),
+		radioButtons = { @TRadioButton(text = "#{label.none}", userData = "#{label.none}" ),
+				@TRadioButton(text = "#{label.send}", userData = "#{label.send}" ),
+				@TRadioButton(text = "#{label.to.queue}", userData = "#{label.to.queue}" ),
+				@TRadioButton(text = "#{label.to.schedule}", userData = "#{label.to.schedule}" ) 
+		})
 	private SimpleObjectProperty<TAction> action;
 	
 	@TLabel(text="#{label.schedule.date.time}")
