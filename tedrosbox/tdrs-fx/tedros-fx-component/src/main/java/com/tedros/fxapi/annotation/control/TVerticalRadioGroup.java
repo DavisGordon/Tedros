@@ -138,7 +138,23 @@ public @interface TVerticalRadioGroup {
 	
 	/**
 	 * <pre>
-	 * {@link com.tedros.fxapi.control.THorizontalRadioGroup} Class
+	 * {@link com.tedros.fxapi.control.TVerticalRadioGroup} Class
+	 * 
+	 * A custom converter 
+	 * 
+	 * Property description:
+	 * 
+	 * Specify a converter between the radio button string value and the field Object value
+	 * 
+	 * </pre>
+	 * */
+	public TConverter converter() 
+	default @TConverter(parse = false, type = com.tedros.fxapi.form.TConverter.class);
+	
+	
+	/**
+	 * <pre>
+	 * {@link com.tedros.fxapi.control.TVerticalRadioGroup} Class
 	 * 
 	 * Sets the value of the property required.
 	 * 
@@ -153,7 +169,7 @@ public @interface TVerticalRadioGroup {
 	
 	/**
 	 * <pre>
-	 * {@link com.tedros.fxapi.control.THorizontalRadioGroup} Class
+	 * {@link com.tedros.fxapi.control.TVerticalRadioGroup} Class
 	 * 
 	 * Sets the value of the property radioButtons.
 	 * 
@@ -163,7 +179,7 @@ public @interface TVerticalRadioGroup {
 	 * 
 	 * </pre>
 	 * */
-	public TRadioButtonField[] radioButtons();
+	public TRadioButton[] radioButtons();
 	
 	/**
 	 * <pre>

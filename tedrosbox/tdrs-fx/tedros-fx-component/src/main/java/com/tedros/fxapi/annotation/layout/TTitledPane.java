@@ -41,8 +41,8 @@ import com.tedros.fxapi.domain.TLayoutType;
  *  <i>@</i>TLabel(text="Choose a book:", control=<i>@</i>TControl(prefWidth=500))
  *  <i>@</i>TVerticalRadioGroup(spacing=5, required=true, alignment= Pos.CENTER_LEFT
  *          ,radioButtons={
- *          <i>@</i>TRadioButtonField(userData="A", text="The Java Programming Language"),
- *          <i>@</i>TRadioButtonField(userData="B", text="The Java Language Specification")
+ *          <i>@</i>TRadioButton(userData="A", text="The Java Programming Language"),
+ *          <i>@</i>TRadioButton(userData="B", text="The Java Language Specification")
  *  })
  *  private SimpleStringProperty <strong style="color:red">optionsField</strong>;
  *

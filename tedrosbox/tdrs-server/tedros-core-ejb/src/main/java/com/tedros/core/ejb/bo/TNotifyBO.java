@@ -17,7 +17,7 @@ import com.tedros.ejb.base.exception.TBusinessException;
 public class TNotifyBO extends TGenericBO<TNotify> {
 	
 	@Inject
-	private EmailBO emailBO;
+	private TEmailBO emailBO;
 	
 	@Inject
 	private TNotifyEao eao;

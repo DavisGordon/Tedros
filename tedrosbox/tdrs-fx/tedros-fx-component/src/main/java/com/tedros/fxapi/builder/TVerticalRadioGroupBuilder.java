@@ -10,8 +10,9 @@ import java.lang.annotation.Annotation;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.tedros.fxapi.annotation.control.TRadioButtonField;
+import com.tedros.fxapi.annotation.control.TRadioButton;
 import com.tedros.fxapi.annotation.control.TVerticalRadioGroup;
+import com.tedros.fxapi.form.TConverter;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -20,10 +21,7 @@ import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.Tooltip;
 
 
@@ -40,36 +38,48 @@ implements ITControlBuilder<com.tedros.fxapi.control.TVerticalRadioGroup, Proper
 
 	@SuppressWarnings({"unchecked"})
 	public com.tedros.fxapi.control.TVerticalRadioGroup build(final Annotation annotation, final Property attrProperty) throws Exception {
+		
 		TVerticalRadioGroup tAnnotation = (TVerticalRadioGroup) annotation;
+		final TConverter conv = 
+		(tAnnotation.converter().parse() && tAnnotation.converter().type()!=TConverter.class) 
+			? tAnnotation.converter().type().newInstance() 
+			: null;
+			
+		if(conv!=null)
+			conv.setComponentDescriptor(super.getComponentDescriptor());
+		
 		final com.tedros.fxapi.control.TVerticalRadioGroup control = new com.tedros.fxapi.control.TVerticalRadioGroup();
-		control.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-			@Override
-			public void changed(ObservableValue<? extends Toggle> arg0, Toggle arg1, Toggle new_toggle) {
+		
+		control.selectedToggleProperty().addListener((a,o,n)->{
 				
-				if(new_toggle == null){
-					attrProperty.setValue(new_toggle);
-					return;
-				}
-				
-				if(attrProperty instanceof SimpleStringProperty)
-					attrProperty.setValue((String)new_toggle.getUserData());
-				if(attrProperty instanceof SimpleDoubleProperty)
-					attrProperty.setValue(Double.valueOf((String)new_toggle.getUserData()));
-				if(attrProperty instanceof SimpleLongProperty)
-					attrProperty.setValue(Long.valueOf((String)new_toggle.getUserData()));
-				if(attrProperty instanceof SimpleIntegerProperty)
-					attrProperty.setValue(Integer.valueOf((String)new_toggle.getUserData()));
-				if(attrProperty instanceof SimpleBooleanProperty)
-					attrProperty.setValue(Boolean.valueOf((String)new_toggle.getUserData()));
-				if(attrProperty instanceof SimpleFloatProperty)
-					attrProperty.setValue(Float.valueOf((String)new_toggle.getUserData()));
-				
+			if(n == null){
+				attrProperty.setValue(n);
+				return;
 			}
+				
+			if(conv!=null) {
+				conv.setIn(n.getUserData());
+				attrProperty.setValue(conv.getOut());
+			}else{
+				if(attrProperty instanceof SimpleStringProperty)
+					attrProperty.setValue((String)n.getUserData());
+				if(attrProperty instanceof SimpleDoubleProperty)
+					attrProperty.setValue(Double.valueOf((String)n.getUserData()));
+				if(attrProperty instanceof SimpleLongProperty)
+					attrProperty.setValue(Long.valueOf((String)n.getUserData()));
+				if(attrProperty instanceof SimpleIntegerProperty)
+					attrProperty.setValue(Integer.valueOf((String)n.getUserData()));
+				if(attrProperty instanceof SimpleBooleanProperty)
+					attrProperty.setValue(Boolean.valueOf((String)n.getUserData()));
+				if(attrProperty instanceof SimpleFloatProperty)
+					attrProperty.setValue(Float.valueOf((String)n.getUserData()));
+			}
+			
 		});
 		
 		callParser(tAnnotation, control);
 				
-		for(TRadioButtonField tRb : tAnnotation.radioButtons()){
+		for(TRadioButton tRb : tAnnotation.radioButtons()){
 			final RadioButton radioBtn = new RadioButton(iEngine.getString(tRb.text()));
 			if(tRb.alignment()!=null) radioBtn.setAlignment(tRb.alignment());
 			if(tRb.width()>0) radioBtn.setPrefWidth(tRb.width());
@@ -83,9 +93,16 @@ implements ITControlBuilder<com.tedros.fxapi.control.TVerticalRadioGroup, Proper
 			radioBtn.setDisable(tRb.disable());
 			radioBtn.setWrapText(tRb.wrapText());
 			radioBtn.setUserData(tRb.userData());
-			if(attrProperty.getValue()!=null && tRb.userData()!=null){
-				if(attrProperty.getValue().toString().equals(tRb.userData()))
-					radioBtn.setSelected(true);
+			if(attrProperty.getValue()!=null){
+				if(conv!=null) {
+					conv.setIn(tRb.userData());
+					Object obj = conv.getOut();
+					if(attrProperty.getValue().equals(obj))
+						radioBtn.setSelected(true);
+				}else
+					if(attrProperty.getValue().toString().equals(tRb.userData()))
+						radioBtn.setSelected(true);
+				
 			}else
 				radioBtn.setSelected(tRb.selected());
 			

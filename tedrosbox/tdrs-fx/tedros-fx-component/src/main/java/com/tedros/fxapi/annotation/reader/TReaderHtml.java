@@ -153,7 +153,7 @@ public @interface TReaderHtml {
 	 * codeValues={ <b  style='color:green'> @TCodeValue(code="1", value="#{label.identity}")</b>, <b  style='color:red'> @TCodeValue(code="2", value="#{label.cpf}")</b>})
 	 * 	
 	 * @THorizontalRadioGroup(required=true, alignment=Pos.CENTER_LEFT, spacing=4, 
-	 * radioButtons={ <b  style='color:green'> @TRadioButtonField(text = "#{label.identity}", userData = "1")</b>, <b  style='color:red'> @TRadioButtonField(text = "#{label.cpf}", userData = "2")</b>})
+	 * radioButtons={ <b  style='color:green'> @TRadioButton(text = "#{label.identity}", userData = "1")</b>, <b  style='color:red'> @TRadioButton(text = "#{label.cpf}", userData = "2")</b>})
 	 * private SimpleStringProperty tipo;
 	 * </code><pre>
 	 *  

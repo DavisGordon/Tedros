@@ -10,6 +10,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import com.tedros.core.TLanguage;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.annotation.control.TComboBoxField;
@@ -39,8 +40,6 @@ import javafx.util.Callback;
 public final class TComboBoxFieldBuilder 
 extends TBuilder
 implements ITControlBuilder<com.tedros.fxapi.control.TComboBoxField, Property<Object>> {
-	
-	private static final String T_ITENTITY_WARNING = "\n\nError: To TComboBoxField field for ITEntity values is necessary set the optionsList propertie.\nEx: @TComboBoxField(optionsList=@TOptionsList(optionsProcessClass=GrupoOptionProcess.class, optionModelViewClass=GrupoModelView.class, entityClass=Grupo.class)\n\n";
 	
 	@SuppressWarnings({"unchecked"})
 	public com.tedros.fxapi.control.TComboBoxField build(final Annotation annotation, final Property<Object> attrProperty) throws Exception {

@@ -6,7 +6,6 @@ import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.tedros.common.domain.DomainSchema;
@@ -36,15 +35,12 @@ public class TByteEntity extends TEntity implements ITByteEntity{
 	
 	@Override
 	public boolean equals(Object obj) {
-		return EqualsBuilder.reflectionEquals(this, obj, false);
+		return super.equals(obj);
 	}
 	
 	@Override
 	public int hashCode() {
-		if(bytes==null)
-			return HashCodeBuilder.reflectionHashCode(this, "bytes");
-		else
-			return HashCodeBuilder.reflectionHashCode(this, false);
+		return HashCodeBuilder.reflectionHashCode(this, "bytes");
 	}
 
 }
