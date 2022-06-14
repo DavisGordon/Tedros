@@ -1,0 +1,8 @@
+package com.tedros.tools.module.scheme.model;
+
+import com.tedros.util.TedrosFolder;
+
+public class TBackgroundDomain {
+
+	static String FOLDER = TedrosFolder.BACKGROUND_IMAGES_FOLDER.getFullPath();
+}

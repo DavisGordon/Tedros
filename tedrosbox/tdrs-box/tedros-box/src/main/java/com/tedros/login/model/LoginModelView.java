@@ -35,7 +35,7 @@ import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.login.behavior.LoginBehavior;
 import com.tedros.login.decorator.LoginDecorator;
-import com.tedros.settings.properties.model.TProfileMV;
+import com.tedros.tools.module.user.model.TProfileMV;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
