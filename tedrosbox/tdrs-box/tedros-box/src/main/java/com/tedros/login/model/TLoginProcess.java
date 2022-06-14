@@ -17,7 +17,7 @@ import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.TState;
 import com.tedros.fxapi.exception.TProcessException;
 import com.tedros.fxapi.process.TEntityProcess;
-import com.tedros.settings.properties.action.TAuthorizationLoadAction;
+import com.tedros.tools.module.user.action.TAuthorizationLoadAction;
 
 /**
  * @author Davis Gordon

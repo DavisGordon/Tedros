@@ -39,7 +39,7 @@ import com.tedros.login.decorator.LoginDecorator;
 import com.tedros.login.model.Login;
 import com.tedros.login.model.LoginModelView;
 import com.tedros.login.model.TLoginProcess;
-import com.tedros.settings.properties.model.TProfileMV;
+import com.tedros.tools.module.user.model.TProfileMV;
 import com.tedros.util.TEncriptUtil;
 import com.tedros.util.TFileUtil;
 import com.tedros.util.TedrosFolder;
