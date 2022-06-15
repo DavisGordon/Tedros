@@ -34,6 +34,7 @@ import com.tedros.fxapi.presenter.entity.behavior.TMasterCrudViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.property.TSimpleFileProperty;
+import com.tedros.tools.util.ToolsKey;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -44,16 +45,16 @@ import javafx.scene.layout.Priority;
  *
  */
 @TFormReaderHtml
-@TForm(name="#{form.propertie}",  editCssId="")
+@TForm(name="",  editCssId="")
 @TEjbService(serviceName = TPropertieController.JNDI_NAME, model=TPropertie.class)
 @TPresenter(type=TDynaPresenter.class, 
 			decorator=@TDecorator(type = TMasterCrudViewDecorator.class, 
-			viewTitle="#{view.propertie}"),
+			viewTitle=ToolsKey.VIEW_PROPERTIE),
 			behavior=@TBehavior(type=TMasterCrudViewBehavior.class))
 @TSecurity(	id=DomainApp.PROPERTIE_FORM_ID, 
-			appName="#{app.tools}", 
-			moduleName="#{module.preferences}", 
-			viewName="#{view.propertie}",
+			appName=ToolsKey.APP_TOOLS, 
+			moduleName=ToolsKey.MODULE_PREFERENCES, 
+			viewName=ToolsKey.VIEW_PROPERTIE,
 			allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 			   					TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public class TPropertieMV extends TEntityModelView<TPropertie> {
@@ -64,7 +65,7 @@ public class TPropertieMV extends TEntityModelView<TPropertie> {
 	private SimpleLongProperty id;
 	
 	@TReaderHtml
-	@TLabel(text="#{label.name}")
+	@TLabel(text=ToolsKey.NAME)
 	@TTextField(maxLength=40, required=true)
 	@TVBox(	pane=@TPane(children={"name","key"}), spacing=10, fillWidth=true,
 	vgrow=@TVGrow(priority={@TPriority(field="name", priority=Priority.ALWAYS), 
@@ -72,12 +73,12 @@ public class TPropertieMV extends TEntityModelView<TPropertie> {
 	private SimpleStringProperty name;
 	
 	@TReaderHtml
-	@TLabel(text="#{label.key}")
+	@TLabel(text=ToolsKey.KEY)
 	@TTextField(maxLength=25, required=true)
 	private SimpleStringProperty key;
 	
 	@TReaderHtml
-	@TLabel(text="#{label.description}")
+	@TLabel(text=ToolsKey.DESCRIPTION)
 	@TTextAreaField(maxLength=500, wrapText=true, prefRowCount=2)
 	@TVBox(	pane=@TPane(children={"description", "value"}), spacing=10, fillWidth=true,
 	vgrow=@TVGrow(priority={@TPriority(field="value", priority=Priority.ALWAYS), 
@@ -85,11 +86,11 @@ public class TPropertieMV extends TEntityModelView<TPropertie> {
 	private SimpleStringProperty description;
 	
 	@TReaderHtml
-	@TLabel(text="#{label.value}")
+	@TLabel(text=ToolsKey.VALUE)
 	@TTextAreaField(wrapText=true, prefRowCount=2)
 	private SimpleStringProperty value;
 	
-	@TLabel(text="#{label.file}")
+	@TLabel(text=ToolsKey.FILE)
 	@TFileField(propertyValueType=TFileModelType.ENTITY, preLoadFileBytes=true,
 	extensions= {TFileExtension.ALL_FILES}, showFilePath=true, showImage=true)
 	@TModelViewType(modelClass=TFileEntity.class)

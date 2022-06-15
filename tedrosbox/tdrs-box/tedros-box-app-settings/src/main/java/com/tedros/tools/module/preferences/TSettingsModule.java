@@ -14,24 +14,22 @@ import com.tedros.fxapi.presenter.view.group.TGroupView;
 import com.tedros.fxapi.presenter.view.group.TViewItem;
 import com.tedros.tools.module.preferences.model.TMimeTypeMV;
 import com.tedros.tools.module.preferences.model.TPropertieMV;
+import com.tedros.tools.util.ToolsKey;
 
 /**
  * @author Davis Gordon
  *
  */
-@TSecurity(	id=DomainApp.SETTINGS_MODULE_ID, appName="#{app.tools}", moduleName="#{module.preferences}", 
-			allowedAccesses=TAuthorizationType.MODULE_ACCESS)
+@TSecurity(id=DomainApp.SETTINGS_MODULE_ID, appName=ToolsKey.APP_TOOLS, 
+moduleName=ToolsKey.MODULE_PREFERENCES, allowedAccesses=TAuthorizationType.MODULE_ACCESS)
 public class TSettingsModule extends TModule {
-	
 	
 	@Override
 	public void tStart() {
 		
-		tShowView(new TGroupView<TGroupPresenter>(this, "#{view.system.propertie}", 
-				new TViewItem(TDynaGroupView.class, TPropertieMV.class, "#{view.propertie}"),
-				new TViewItem(TDynaGroupView.class, TMimeTypeMV.class, "#{view.mimetype}")
+		tShowView(new TGroupView<TGroupPresenter>(this, ToolsKey.VIEW_SYSTEM_SETTINGS, 
+				new TViewItem(TDynaGroupView.class, TPropertieMV.class, ToolsKey.VIEW_PROPERTIE),
+				new TViewItem(TDynaGroupView.class, TMimeTypeMV.class, ToolsKey.VIEW_MIMETYPE)
 				));
-		
 	}
-
 }

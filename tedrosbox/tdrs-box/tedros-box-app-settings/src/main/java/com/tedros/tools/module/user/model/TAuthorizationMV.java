@@ -33,6 +33,7 @@ import com.tedros.fxapi.domain.TLabelPosition;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.tools.module.user.action.TAuthorizationLoadAction;
 import com.tedros.tools.module.user.behaviour.TAuthorizationBehavior;
+import com.tedros.tools.util.ToolsKey;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -44,19 +45,19 @@ import javafx.scene.layout.Priority;
  *
  */
 @TFormReaderHtml
-@TForm(name = "#{security.authorization.form.name}", showBreadcrumBar=true)
+@TForm(name = ToolsKey.SECURITY_AUTHORIZATION_FORM_NAME, showBreadcrumBar=true)
 @TEjbService(serviceName = TAuthorizationController.JNDI_NAME, model=TAuthorization.class)
 @TListViewPresenter(listViewMinWidth=500,
 	paginator=@TPaginator(entityClass = TAuthorization.class, 
 	serviceName = TAuthorizationController.JNDI_NAME, show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{view.authorization}", 
-		 buildDeleteButton=false, buildCollapseButton=false, newButtonText="#{label.load}"),
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle=ToolsKey.VIEW_AUTHORIZATION, 
+		 buildDeleteButton=false, buildCollapseButton=false, newButtonText=ToolsKey.LOAD),
 	behavior=@TBehavior(type=TAuthorizationBehavior.class, action=TAuthorizationLoadAction.class)
 	))
 @TSecurity(	id=DomainApp.AUTHORIZATION_FORM_ID, 
-	appName="#{app.tools}", 
-	moduleName="#{module.user}", 
-	viewName="#{view.authorization}",
+	appName=ToolsKey.APP_TOOLS, 
+	moduleName=ToolsKey.MODULE_USER, 
+	viewName=ToolsKey.VIEW_AUTHORIZATION,
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, 
 			TAuthorizationType.READ, TAuthorizationType.SAVE, TAuthorizationType.NEW})
 public final class TAuthorizationMV extends TEntityModelView<TAuthorization> {
@@ -66,7 +67,7 @@ public final class TAuthorizationMV extends TEntityModelView<TAuthorization> {
 	private SimpleStringProperty displayText;
 	
 	@TReaderHtml
-	@TLabel(text="#{label.securityId}")
+	@TLabel(text=ToolsKey.SECURITYID)
 	@THBox(	pane=@TPane(children={"securityId","appName","moduleName","viewName"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="securityId", priority=Priority.NEVER), 
 		   		@TPriority(field="appName", priority=Priority.NEVER),
@@ -76,22 +77,22 @@ public final class TAuthorizationMV extends TEntityModelView<TAuthorization> {
 	private SimpleStringProperty securityId;
 	
 	@TReaderHtml
-	@TLabel(text="#{label.appName}")
+	@TLabel(text=ToolsKey.APPNAME)
 	@TShowField
 	private SimpleStringProperty appName;
 	
 	@TReaderHtml
-	@TLabel(text="#{label.moduleName}")
+	@TLabel(text=ToolsKey.MODULENAME)
 	@TShowField
 	private SimpleStringProperty moduleName;
 	
 	@TReaderHtml
-	@TLabel(text="#{label.viewName}")
+	@TLabel(text=ToolsKey.VIEWNAME)
 	@TShowField
 	private SimpleStringProperty viewName;
 	
 	@TReaderHtml
-	@TLabel(text="#{label.type}")
+	@TLabel(text=ToolsKey.TYPE)
 	@TShowField
 	@THBox(	pane=@TPane(children={"type","typeDescription"}), spacing=10, fillHeight=true,
 			hgrow=@THGrow(priority={@TPriority(field="type", priority=Priority.NEVER), 
@@ -100,15 +101,15 @@ public final class TAuthorizationMV extends TEntityModelView<TAuthorization> {
 	private SimpleStringProperty type;
 	
 	@TReaderHtml
-	@TLabel(text="#{label.permission}")
+	@TLabel(text=ToolsKey.PERMISSION)
 	@TShowField
 	private SimpleStringProperty typeDescription;
 	
 	@TReaderHtml
-	@TLabel(text="#{label.enabled}", position=TLabelPosition.LEFT)
+	@TLabel(text=ToolsKey.ENABLED, position=TLabelPosition.LEFT)
 	@THorizontalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
-	radioButtons = {@TRadioButton(text="#{label.yes}", userData="S"), 
-					@TRadioButton(text="#{label.no}", userData="N")
+	radioButtons = {@TRadioButton(text=ToolsKey.YES, userData="S"), 
+					@TRadioButton(text=ToolsKey.NO, userData="N")
 	})
 	private SimpleStringProperty enabled;
 

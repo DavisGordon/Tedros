@@ -50,6 +50,7 @@ import com.tedros.fxapi.presenter.entity.behavior.TMasterCrudViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.tools.module.user.action.TEncriptPasswordChangeListener;
+import com.tedros.tools.util.ToolsKey;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
@@ -63,16 +64,16 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TFormReaderHtml
-@TForm(name="#{security.user.form.name}", showBreadcrumBar=true, editCssId="")
+@TForm(name=ToolsKey.SECURITY_USER_FORM_NAME, showBreadcrumBar=true, editCssId="")
 @TEjbService(serviceName = TUserController.JNDI_NAME, model=TUser.class)
 @TPresenter(type=TDynaPresenter.class, 
 			decorator=@TDecorator(type = TMasterCrudViewDecorator.class, 
-			viewTitle="#{view.user}", listTitle="#{security.user.list.title}"),
+			viewTitle=ToolsKey.VIEW_USER, listTitle=ToolsKey.SECURITY_USER_LIST_TITLE),
 			behavior=@TBehavior(type=TMasterCrudViewBehavior.class))
 @TSecurity(	id=DomainApp.USER_FORM_ID, 
-			appName="#{app.tools}", 
-			moduleName="#{module.user}", 
-			viewName="#{view.user}",
+			appName=ToolsKey.APP_TOOLS, 
+			moduleName=ToolsKey.MODULE_USER, 
+			viewName=ToolsKey.VIEW_USER,
 			allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 			   					TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public class TUserMV extends TEntityModelView<TUser> {
@@ -82,33 +83,33 @@ public class TUserMV extends TEntityModelView<TUser> {
 	@TTabPane(tabs = { 
 			@TTab(closable=false, scroll=false, content = @TContent(detailForm=
 				@TDetailForm(fields={"header", "name", "login", "active"})), 
-				text = "#{label.main}"), 
+				text = ToolsKey.MAIN), 
 			@TTab(closable=false, content = @TContent(detailForm=
 				@TDetailForm(fields={"profilesText","profiles"})), 
-				text = "#{label.detail}")
+				text = ToolsKey.DETAIL)
 	})
 	@TReaderHtml(htmlTemplateForControlValue="<h2 style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 				cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 				cssForHtmlBox="", cssForContentValue="")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-pane", parse = true))
-	@TText(text="#{label.user.header}", textAlignment=TextAlignment.LEFT, 
+	@TText(text=ToolsKey.USER_HEADER, textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty header;
 	
 	@TReaderHtml
-	@TLabel(text="#{label.name}:")
+	@TLabel(text=ToolsKey.NAME)
 	@TTextField(maxLength=100, required=true)
 	private SimpleStringProperty name;
 	
 	@TReaderHtml
-	@TLabel(text="#{label.userLogin}:")
+	@TLabel(text=ToolsKey.USERLOGIN)
 	@TTextField(maxLength=100, required=true)
 	@THBox(	pane=@TPane(children={"login","password"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="login", priority=Priority.NEVER), 
 		   		@TPriority(field="password", priority=Priority.NEVER)}))
 	private SimpleStringProperty login;
 	
-	@TLabel(text="#{label.password}:")
+	@TLabel(text=ToolsKey.PASSWORD)
 	@TPasswordField(required=true, 
 		node=@TNode(focusedProperty=@TReadOnlyBooleanProperty(
 				observableValue=@TObservableValue(addListener=TEncriptPasswordChangeListener.class), 
@@ -117,20 +118,20 @@ public class TUserMV extends TEntityModelView<TUser> {
 	private SimpleStringProperty password;
 	
 	@TReaderHtml
-	@TLabel(text="#{label.active}:", position=TLabelPosition.LEFT)
-	@TCheckBoxField(labeled=@TLabeled(text="#{label.active}", parse = true))
+	@TLabel(text=ToolsKey.ACTIVE, position=TLabelPosition.LEFT)
+	@TCheckBoxField(labeled=@TLabeled(text=ToolsKey.ACTIVE, parse = true))
 	private SimpleBooleanProperty active;
 	
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="#{label.profilesText}", textAlignment=TextAlignment.LEFT, 
+	@TText(text=ToolsKey.PROFILESTEXT, textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE, mode=TViewMode.EDIT)
 	private SimpleStringProperty profilesText;
 	
-	@TTableReaderHtml(label=@TLabel(text="#{label.profiles}:"), 
+	@TTableReaderHtml(label=@TLabel(text=ToolsKey.PROFILES), 
 		column = { 	@TColumnReader(field = "name", name = "Name"), 
 					@TColumnReader(field = "description", name = "Description")})
-	@TPickListField(selectedLabel="#{label.selected}", 
-			sourceLabel="#{label.profiles}", required=true,
+	@TPickListField(selectedLabel=ToolsKey.SELECTED, 
+			sourceLabel=ToolsKey.PROFILES, required=true,
 			optionsList=@TOptionsList(entityClass=TProfile.class,
 						optionModelViewClass=TProfileMV.class, serviceName = "TProfileControllerRemote"))
 	@TModelViewType(modelClass=TProfile.class, modelViewClass=TProfileMV.class, required=true)
@@ -141,18 +142,6 @@ public class TUserMV extends TEntityModelView<TUser> {
 	public TUserMV(TUser entity) {
 		super(entity);
 		copyPassword();
-		
-		/*TimelineBuilder.create().keyFrames(
-	            new KeyFrame(Duration.millis(20000), 
-	                new EventHandler<ActionEvent>() {
-	                    public void handle(ActionEvent t) {
-	                    	profiles.add(new TProfileMV(new TProfile(RandomStringUtils.randomAlphanumeric(4), RandomStringUtils.randomAlphanumeric(12))));
-	                    }
-	                })
-	        )
-	        .cycleCount(Animation.INDEFINITE)
-	        .build()
-	        .play();*/
 	}
 
 	private void copyPassword() {

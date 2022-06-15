@@ -21,6 +21,7 @@ import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
+import com.tedros.tools.util.ToolsKey;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -31,15 +32,15 @@ import javafx.beans.property.SimpleStringProperty;
  */
 
 @TFormReaderHtml
-@TForm(name = "#{form.mimetype}", showBreadcrumBar=true, scroll=false)
+@TForm(name = "", showBreadcrumBar=true, scroll=false)
 @TEjbService(serviceName = TMimeTypeController.JNDI_NAME, model=TMimeType.class)
 @TListViewPresenter(
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{view.mimetype}", buildImportButton=true),
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle=ToolsKey.VIEW_MIMETYPE, buildImportButton=true),
 	behavior=@TBehavior(importModelViewClass=TMimeTypeImportMV.class, runNewActionAfterSave=true)))
 @TSecurity(	id=DomainApp.MIMETYPE_FORM_ID,  
-	appName="#{app.tools}", 
-	moduleName="#{module.preferences}", 
-	viewName="#{view.mimetype}",
+	appName=ToolsKey.APP_TOOLS, 
+	moduleName=ToolsKey.MODULE_PREFERENCES, 
+	viewName=ToolsKey.VIEW_MIMETYPE,
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 
@@ -48,19 +49,19 @@ public class TMimeTypeMV extends TEntityModelView<TMimeType> {
 	private SimpleLongProperty id;
 	
 	@TReaderHtml
-	@TLabel(text="#{label.mimetype.ext}")
+	@TLabel(text=ToolsKey.MIMETYPE_EXT)
 	@TTextField(maxLength=10, 
 	node=@TNode(requestFocus=true, parse = true),
 	required=true)
 	private SimpleStringProperty extension;
 	
 	@TReaderHtml
-	@TLabel(text="#{label.mimetype.type}")
+	@TLabel(text=ToolsKey.MIMETYPE_TYPE)
 	@TTextField(maxLength=500, required=true)
 	private SimpleStringProperty type;
 	
 	@TReaderHtml
-	@TLabel(text="#{label.description}")
+	@TLabel(text=ToolsKey.DESCRIPTION)
 	@TTextAreaField(maxLength=500, wrapText=true, prefRowCount=4)
 	private SimpleStringProperty description;
 

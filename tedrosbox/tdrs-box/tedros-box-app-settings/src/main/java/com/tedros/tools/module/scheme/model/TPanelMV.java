@@ -73,7 +73,7 @@ public class TPanelMV extends TModelView<TPanel> {
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> painelCorFundo;
 	
-	@TLabel(text="#{label.opacit}")
+	@TLabel(text="#{label.opacity}")
 	@TSliderField(max = 1, min = 0,
 		majorTickUnit=0.5, blockIncrement=0.01,
 		minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
@@ -107,7 +107,7 @@ public class TPanelMV extends TModelView<TPanel> {
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> botaoCorBorda;
 	
-	@TLabel(text="#{label.opacit}")
+	@TLabel(text="#{label.opacity}")
 	@TSliderField(max = 1, min = 0,
 			majorTickUnit=0.5, blockIncrement=0.01,
 					minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
@@ -169,7 +169,7 @@ public class TPanelMV extends TModelView<TPanel> {
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> formCorFundo;
 	
-	@TLabel(text="#{label.opacit}")
+	@TLabel(text="#{label.opacity}")
 	@TSliderField(max = 1, min = 0,
 			majorTickUnit=0.5, blockIncrement=0.01,
 			minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
@@ -217,7 +217,7 @@ public class TPanelMV extends TModelView<TPanel> {
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> readerCorFundo;
 	
-	@TLabel(text="#{label.opacit}")
+	@TLabel(text="#{label.opacity}")
 	@TSliderField(max = 1, min = 0,
 			majorTickUnit=0.5, blockIncrement=0.01,
 			minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
