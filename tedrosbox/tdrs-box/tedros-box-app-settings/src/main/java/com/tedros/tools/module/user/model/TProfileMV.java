@@ -35,6 +35,7 @@ import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.tools.module.user.table.TAuthorizationTV;
+import com.tedros.tools.util.ToolsKey;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -44,17 +45,17 @@ import javafx.scene.text.TextAlignment;
 /**
  * @author Davis Gordon
  */
-@TForm(name="#{security.profile.form.name}", showBreadcrumBar=true, editCssId="")
+@TForm(name=ToolsKey.SECURITY_PROFILE_FORM_NAME, showBreadcrumBar=true, editCssId="")
 @TEjbService(serviceName = TProfileController.JNDI_NAME, model=TProfile.class)
 @TPresenter(type=TDynaPresenter.class,
 			modelClass=TProfile.class,
 			decorator=@TDecorator(	type=TMasterCrudViewDecorator.class, 
-									viewTitle="#{view.profile}", 
-									listTitle="#{security.profile.list.title}"))
+									viewTitle=ToolsKey.VIEW_PROFILE, 
+									listTitle=ToolsKey.SECURITY_PROFILE_LIST_TITLE))
 @TSecurity(	id=DomainApp.PROFILE_FORM_ID, 
-			appName="#{app.tools}", 
-			moduleName="#{module.user}", 
-			viewName="#{view.profile}",
+			appName=ToolsKey.APP_TOOLS, 
+			moduleName=ToolsKey.MODULE_USER, 
+			viewName=ToolsKey.VIEW_PROFILE,
 			allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 			   					TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public final class TProfileMV extends TEntityModelView<TProfile> {
@@ -64,27 +65,27 @@ public final class TProfileMV extends TEntityModelView<TProfile> {
 	@TTabPane(tabs = { 
 			@TTab(closable=false, scroll=false, content = @TContent(detailForm=
 				@TDetailForm(fields={"textoCadastro", "name", "description"})), 
-				text = "#{label.main}"), 
+				text = ToolsKey.MAIN), 
 			@TTab(closable=false, content = @TContent(detailForm=
 				@TDetailForm(fields={"autorizations"})), 
-				text = "#{label.detail}")
+				text = ToolsKey.DETAIL)
 	})
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="#{label.profile.header}", textAlignment=TextAlignment.LEFT, 
+	@TText(text=ToolsKey.PROFILE_HEADER, textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty textoCadastro;
 	
 	@TReader
-	@TLabel(text="#{label.name}")
+	@TLabel(text=ToolsKey.NAME)
 	@TTextField(maxLength=100, required=true,
-				textInputControl=@TTextInputControl(promptText="#{prompt.profile.name}", parse=true), 
+				textInputControl=@TTextInputControl(promptText=ToolsKey.PROMPT_PROFILE_NAME, parse=true), 
 				control=@TControl(minWidth=100, parse=true))
 	private SimpleStringProperty name;
 	
 	@TReader
-	@TLabel(text="#{label.description}")
+	@TLabel(text=ToolsKey.DESCRIPTION)
 	@TTextAreaField(maxLength=600, 
-					textInputControl=@TTextInputControl(promptText="#{prompt.profile.description}", parse=true),
+					textInputControl=@TTextInputControl(promptText=ToolsKey.PROMPT_PROFILE_DESCRIPTION, parse=true),
 					prefRowCount=3)
 	private SimpleStringProperty description;
 	

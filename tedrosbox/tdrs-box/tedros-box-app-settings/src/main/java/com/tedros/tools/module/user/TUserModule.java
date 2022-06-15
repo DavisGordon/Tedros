@@ -15,12 +15,13 @@ import com.tedros.fxapi.presenter.view.group.TViewItem;
 import com.tedros.tools.module.user.model.TAuthorizationMV;
 import com.tedros.tools.module.user.model.TProfileMV;
 import com.tedros.tools.module.user.model.TUserMV;
+import com.tedros.tools.util.ToolsKey;
 
 /**
  * @author Davis Gordon
  *
  */
-@TSecurity(	id=DomainApp.USER_MODULE_ID, appName="#{app.tools}", moduleName="#{module.user}", 
+@TSecurity(	id=DomainApp.USER_MODULE_ID, appName=ToolsKey.APP_TOOLS, moduleName=ToolsKey.MODULE_USER, 
 			allowedAccesses=TAuthorizationType.MODULE_ACCESS)
 public class TUserModule extends TModule {
 	
@@ -28,10 +29,10 @@ public class TUserModule extends TModule {
 	@Override
 	public void tStart() {
 		
-		tShowView(new TGroupView<TGroupPresenter>(this, "#{view.system.propertie}",
-				new TViewItem(TDynaGroupView.class, TAuthorizationMV.class, "#{view.authorization}"),
-				new TViewItem(TDynaGroupView.class, TProfileMV.class, "#{view.profile}"),
-				new TViewItem(TDynaGroupView.class, TUserMV.class, "#{view.user}")
+		tShowView(new TGroupView<TGroupPresenter>(this, ToolsKey.VIEW_USER_SETTINGS,
+				new TViewItem(TDynaGroupView.class, TAuthorizationMV.class, ToolsKey.VIEW_AUTHORIZATION),
+				new TViewItem(TDynaGroupView.class, TProfileMV.class, ToolsKey.VIEW_PROFILE),
+				new TViewItem(TDynaGroupView.class, TUserMV.class, ToolsKey.VIEW_USER)
 				));
 		
 	}

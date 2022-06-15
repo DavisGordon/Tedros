@@ -12,8 +12,9 @@ import com.tedros.tools.module.scheme.model.TBackgroundImageMV;
 import com.tedros.tools.module.scheme.model.TMainColorMV;
 import com.tedros.tools.module.scheme.model.TPanelMV;
 import com.tedros.tools.start.TConstant;
+import com.tedros.tools.util.ToolsKey;
 
-@TSecurity(	id=DomainApp.LAYOUT_MODULE_ID, appName="#{app.tools}", moduleName="#{module.scheme}",	
+@TSecurity(	id=DomainApp.LAYOUT_MODULE_ID, appName=ToolsKey.APP_TOOLS, moduleName=ToolsKey.MODULE_SCHEME,	
 			allowedAccesses=TAuthorizationType.MODULE_ACCESS)
 public class SchemeModule extends TModule {
 	
@@ -21,10 +22,10 @@ public class SchemeModule extends TModule {
 	public void tStart() {
 		
 		TLanguage iEngine = TLanguage.getInstance(TConstant.UUI);
-		tShowView(new TGroupView<>(this, iEngine.getString("#{view.layout}"), 
-				new TViewItem(TDynaGroupView.class, TMainColorMV.class, iEngine.getString("#{view.themes}"), true),
-				new TViewItem(TDynaGroupView.class, TPanelMV.class, iEngine.getString("#{view.colors}"), true),
-				new TViewItem(TDynaGroupView.class, TBackgroundImageMV.class, iEngine.getString("#{view.background}"))));
+		tShowView(new TGroupView<>(this, iEngine.getString(ToolsKey.VIEW_LAYOUT), 
+				new TViewItem(TDynaGroupView.class, TMainColorMV.class, iEngine.getString(ToolsKey.VIEW_THEMES), true),
+				new TViewItem(TDynaGroupView.class, TPanelMV.class, iEngine.getString(ToolsKey.VIEW_COLORS), true),
+				new TViewItem(TDynaGroupView.class, TBackgroundImageMV.class, iEngine.getString(ToolsKey.VIEW_BACKGROUND))));
 		
 	}
 

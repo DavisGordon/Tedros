@@ -25,6 +25,7 @@ import com.tedros.tools.module.scheme.behaviour.TMainColorBehavior;
 import com.tedros.tools.module.scheme.decorator.TMainColorDecorator;
 import com.tedros.tools.module.scheme.process.TMainColorProcess;
 import com.tedros.tools.module.scheme.trigger.TMainColorTrigger;
+import com.tedros.tools.util.ToolsKey;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleLongProperty;
@@ -36,10 +37,10 @@ import javafx.scene.paint.Color;
  * @author Davis Gordon
  *
  */
-@TForm(name = "#{view.themes}", scroll=false, editCssId="x")
+@TForm(name = ToolsKey.VIEW_THEMES, scroll=false, editCssId="x")
 @TModelProcess(type=TMainColorProcess.class)
 @TPresenter(type=TDynaPresenter.class, modelClass=TMainColor.class, 
-decorator=@TDecorator(type=TMainColorDecorator.class, viewTitle="#{view.themes}"), 
+decorator=@TDecorator(type=TMainColorDecorator.class, viewTitle=ToolsKey.VIEW_THEMES), 
 behavior=@TBehavior(type=TMainColorBehavior.class))
 public class TMainColorMV extends TEntityModelView<TMainColor> {
 
@@ -61,7 +62,7 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 	@TTrigger(triggerClass=TMainColorTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> mainCorFundo;
 	
-	@TLabel(text="#{label.opacit}")
+	@TLabel(text="#{label.opacity}")
 	@TSliderField(max = 1, min = 0,
 		majorTickUnit=0.5, blockIncrement=0.01,
 		minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
@@ -81,7 +82,7 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 	@TTrigger(triggerClass=TMainColorTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> navCorFundo;
 	
-	@TLabel(text="#{label.opacit}")
+	@TLabel(text="#{label.opacity}")
 	@TSliderField(max = 1, min = 0,
 		majorTickUnit=0.5, blockIncrement=0.01,
 		minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 

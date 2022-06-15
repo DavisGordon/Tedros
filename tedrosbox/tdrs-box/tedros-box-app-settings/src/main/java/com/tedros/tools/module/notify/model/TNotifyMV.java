@@ -61,6 +61,7 @@ import com.tedros.tools.module.notify.converter.ActionConverter;
 import com.tedros.tools.module.notify.table.TNotifyLogDateCallBack;
 import com.tedros.tools.module.notify.table.TNotifyLogStateCallBack;
 import com.tedros.tools.module.notify.table.TNotifyLogTV;
+import com.tedros.tools.util.ToolsKey;
 import com.tedros.util.TDateUtil;
 
 import javafx.beans.property.SimpleLongProperty;
@@ -79,8 +80,8 @@ import javafx.scene.layout.Priority;
 buildModesRadioButton=false),
 	behavior=@TBehavior(saveOnlyChangedModels=false, saveAllModels=false)))
 @TSecurity(id=DomainApp.NOTIFY_FORM_ID,
-appName="#{app.tools}", 
-moduleName="#{module.notify}", 
+appName=ToolsKey.APP_TOOLS, 
+moduleName=ToolsKey.MODULE_NOTIFY, 
 viewName="#{view.notify}",
 allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,  
    					TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})

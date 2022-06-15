@@ -29,6 +29,7 @@ import com.tedros.fxapi.presenter.modal.behavior.TImportFileModalBehavior;
 import com.tedros.fxapi.presenter.modal.decorator.TImportFileModalDecorator;
 import com.tedros.fxapi.presenter.model.TImportModelView;
 import com.tedros.fxapi.property.TSimpleFileProperty;
+import com.tedros.tools.util.ToolsKey;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -40,24 +41,24 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TEjbService(serviceName = TMimeTypeImportController.JNDI_NAME, model=TMimeTypeImport.class)
-@TPresenter(decorator = @TDecorator(type=TImportFileModalDecorator.class, viewTitle="#{view.mimetype.imp}"),
+@TPresenter(decorator = @TDecorator(type=TImportFileModalDecorator.class, viewTitle=ToolsKey.VIEW_MIMETYPE_IMP),
 			behavior = @TBehavior(type=TImportFileModalBehavior.class, 
 			importedEntityClass=TMimeType.class, importedModelViewClass=TMimeTypeMV.class))
 public class TMimeTypeImportMV extends TImportModelView<TMimeTypeImport> {
 
-	@TTextReaderHtml(text="#{import.text}", 
+	@TTextReaderHtml(text=ToolsKey.IMPORT_TEXT, 
 			htmlTemplateForControlValue="<h2 id='"+THtmlConstant.ID+"' name='"+THtmlConstant.NAME+"' style='"+THtmlConstant.STYLE+"'>"+THtmlConstant.CONTENT+"</h2>",
 			cssForControlValue="width:100%; padding:8px; background-color: "+TStyleParameter.PANEL_BACKGROUND_COLOR+";",
 			cssForHtmlBox="", cssForContentValue="color:"+TStyleParameter.PANEL_TEXT_COLOR+";")
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", effect=@TEffect(dropShadow=@TDropShadow, parse=true), parse = true))
-	@TText(text="#{import.up.file}", textAlignment=TextAlignment.LEFT, 
+	@TText(text=ToolsKey.IMPORT_UP_FILE, textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty texto;
 	
 	@TReaderHtml
 	private SimpleStringProperty rules;
 	
-	@TLabel(text="#{label.file}")
+	@TLabel(text=ToolsKey.FILE)
 	@TFileField(propertyValueType=TFileModelType.ENTITY, 
 	extensions= {TFileExtension.CSV}, moreExtensions= {"*.xls", "*.xlsx"},
 	showFilePath=true, required=true)

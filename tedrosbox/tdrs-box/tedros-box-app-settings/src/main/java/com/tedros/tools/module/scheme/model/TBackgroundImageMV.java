@@ -14,15 +14,16 @@ import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.tools.module.scheme.behaviour.TBackgroundBehavior;
 import com.tedros.tools.module.scheme.decorator.TBackgroundDecorator;
+import com.tedros.tools.util.ToolsKey;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 @TSetting(TBackgroundSetting.class)
-@TForm(name = "#{view.background}", scroll=false)
+@TForm(name = ToolsKey.VIEW_BACKGROUND, scroll=false)
 @TPresenter(type=TDynaPresenter.class, 
-decorator=@TDecorator(type=TBackgroundDecorator.class, viewTitle="#{view.background}"), 
+decorator=@TDecorator(type=TBackgroundDecorator.class, viewTitle=ToolsKey.VIEW_BACKGROUND), 
 behavior=@TBehavior(type=TBackgroundBehavior.class))
 public class TBackgroundImageMV extends TModelView<TBackgroundImage> {
 	

@@ -5,6 +5,7 @@ import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.tools.module.scheme.model.ExampleMV;
 import com.tedros.tools.module.scheme.model.TPanelMV;
+import com.tedros.tools.util.ToolsKey;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -23,7 +24,7 @@ public class TPanelDecorator extends TDynaViewCrudBaseDecorator<TPanelMV>
 		TDynaView<ExampleMV> exampleView = new TDynaView<>(examplePresenter); 
 		exampleView.tLoad();
 		
-		setViewTitle("#{view.colors}");
+		setViewTitle(ToolsKey.VIEW_COLORS);
 		buildSaveButton("#{label.button.apply}");
 		
 		// add the buttons at the header tool bar

@@ -19,19 +19,20 @@ import com.tedros.tools.module.scheme.icon.SchemeMenuIcon;
 import com.tedros.tools.module.user.TUserModule;
 import com.tedros.tools.module.user.icon.TUserIcon;
 import com.tedros.tools.module.user.icon.TUserMenuIcon;
+import com.tedros.tools.util.ToolsKey;
 
-@TApplication(name="#{app.tools}", packageName = "com.tedros.tools", universalUniqueIdentifier=TConstant.UUI,
-module = {@TModule(type=SchemeModule.class, name="#{module.scheme}", menu = "#{menu.tools}", 
+@TApplication(name=ToolsKey.APP_TOOLS, packageName = "com.tedros.tools", universalUniqueIdentifier=TConstant.UUI,
+module = {@TModule(type=SchemeModule.class, name=ToolsKey.MODULE_SCHEME, menu = ToolsKey.MENU_TOOLS, 
 			icon=SchemeIcon.class, menuIcon=SchemeMenuIcon.class),
-		@TModule(type=TSettingsModule.class, name="#{module.preferences}", menu = "#{menu.tools}", 
+		@TModule(type=TSettingsModule.class, name=ToolsKey.MODULE_PREFERENCES, menu = ToolsKey.MENU_TOOLS, 
 			icon=SettingsIcon.class, menuIcon=SettingsMenuIcon.class),
-		@TModule(type=TUserModule.class, name="#{module.user}", menu = "#{menu.tools}", 
+		@TModule(type=TUserModule.class, name=ToolsKey.MODULE_USER, menu = ToolsKey.MENU_TOOLS, 
 			icon=TUserIcon.class, menuIcon=TUserMenuIcon.class),
-		@TModule(type=TNotifyModule.class, name="#{module.notify}", menu = "#{menu.tools}", 
+		@TModule(type=TNotifyModule.class, name=ToolsKey.MODULE_NOTIFY, menu = ToolsKey.MENU_TOOLS, 
 			icon=NotifyIcon.class, menuIcon=NotifyMenuIcon.class)
 })
 @TResourceBundle(resourceName={"TToolsLabels", "TCommonLabels", "TCoreLabels"})
-@TSecurity(id=DomainApp.MNEMONIC, appName="#{app.tools}", allowedAccesses=TAuthorizationType.APP_ACCESS)
+@TSecurity(id=DomainApp.MNEMONIC, appName=ToolsKey.APP_TOOLS, allowedAccesses=TAuthorizationType.APP_ACCESS)
 public class AppStart implements ITApplication {
 
 	@Override
