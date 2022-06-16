@@ -1,16 +1,14 @@
 package com.tedros.tools.module.scheme.decorator;
 
+import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
+import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
+import com.tedros.tools.module.scheme.model.ExampleMV;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
-import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
-import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
-import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
-import com.tedros.tools.module.scheme.model.ExampleMV;
-
 public class ExampleDecorator extends TDynaViewCrudBaseDecorator<ExampleMV> {
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void decorate() {
 		

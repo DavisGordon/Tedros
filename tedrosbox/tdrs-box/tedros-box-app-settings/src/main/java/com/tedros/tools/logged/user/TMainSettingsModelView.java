@@ -13,6 +13,7 @@ import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.entity.decorator.TSaveViewDecorator;
 import com.tedros.fxapi.presenter.model.TModelView;
+import com.tedros.tools.util.ToolsKey;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -25,13 +26,13 @@ import javafx.scene.text.FontWeight;
 
 @TPresenter(type=TDynaPresenter.class, 
 			decorator=@TDecorator(type = TSaveViewDecorator.class, 
-			buildModesRadioButton=false, saveButtonText="#{label.exit}" ),
+			buildModesRadioButton=false, saveButtonText=ToolsKey.EXIT ),
 			behavior=@TBehavior(type=TMainSettingsBehavior.class, saveOnlyChangedModels=false))
 public class TMainSettingsModelView extends TModelView<MainSettings> {
 
 	private SimpleLongProperty id;
 	
-	@THyperlinkField(labeled=@TLabeled(text="#{label.logout}", 
+	@THyperlinkField(labeled=@TLabeled(text=ToolsKey.LOGOUT, 
 			font=@TFont(size=4, weight=FontWeight.BOLD), parse = true),
 			buttonBase=@TButtonBase(onAction=LogoutEventBuilder.class))
 	private SimpleStringProperty logout;

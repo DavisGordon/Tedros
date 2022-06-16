@@ -57,6 +57,7 @@ import com.tedros.fxapi.domain.TFileExtension;
 import com.tedros.fxapi.domain.TFileModelType;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.property.TSimpleFileProperty;
+import com.tedros.tools.module.notify.behaviour.TNotifyBehaviour;
 import com.tedros.tools.module.notify.converter.ActionConverter;
 import com.tedros.tools.module.notify.table.TNotifyLogDateCallBack;
 import com.tedros.tools.module.notify.table.TNotifyLogStateCallBack;
@@ -76,24 +77,24 @@ import javafx.scene.layout.Priority;
 @TForm(name = "", scroll=true)
 @TSetting(TNotifyMVSetting.class)
 @TEjbService(serviceName = TNotifyController.JNDI_NAME, model=TNotify.class)
-@TListViewPresenter(presenter=@TPresenter(decorator = @TDecorator(viewTitle="#{view.notify}",
+@TListViewPresenter(presenter=@TPresenter(decorator = @TDecorator(viewTitle=ToolsKey.VIEW_NOTIFY,
 buildModesRadioButton=false),
-	behavior=@TBehavior(saveOnlyChangedModels=false, saveAllModels=false)))
+	behavior=@TBehavior(type=TNotifyBehaviour.class, saveOnlyChangedModels=false, saveAllModels=false)))
 @TSecurity(id=DomainApp.NOTIFY_FORM_ID,
 appName=ToolsKey.APP_TOOLS, 
 moduleName=ToolsKey.MODULE_NOTIFY, 
-viewName="#{view.notify}",
+viewName=ToolsKey.VIEW_NOTIFY,
 allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,  
    					TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public class TNotifyMV extends TEntityModelView<TNotify> {
 
 	@TTabPane(tabs = { 
 		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"text"})),
-			scroll=true, text = "#{label.main.data}"),
+			scroll=true, text = ToolsKey.MAIN_DATA),
 		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"file"})),
-			scroll=true, text = "#{label.attach.file}"),
+			scroll=true, text = ToolsKey.ATTACH_FILE),
 		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"eventLog"})),
-			text = "#{label.event.log}")
+			text = ToolsKey.EVENT_LOG)
 	})
 	private SimpleLongProperty id;
 	
@@ -103,7 +104,7 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 					@TPriority(field="content", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty text;
 	
-	@TLabel(text="#{label.ref.code}")
+	@TLabel(text=ToolsKey.REF_CODE)
 	@TShowField
 	@TVBox(	pane=@TPane(children={"refCode","subject","to","action","scheduleTime","state","processedTime"}), spacing=10, fillWidth=true,
 	vgrow=@TVGrow(priority={@TPriority(field="refCode", priority=Priority.ALWAYS), 
@@ -115,35 +116,35 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 						@TPriority(field="processedTime", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty refCode;
 	
-	@TLabel(text="#{label.subject}")
+	@TLabel(text=ToolsKey.SUBJECT)
 	@TTextField(maxLength=120, 
 	node=@TNode(requestFocus=true, parse = true),
 	required=true)
 	private SimpleStringProperty subject;
 	
-	@TLabel(text="#{label.send.to}")
+	@TLabel(text=ToolsKey.SEND_TO)
 	@TTextField(maxLength=400, required=true)
 	private SimpleStringProperty to;
 	
-	@TLabel(text="#{label.action}")
+	@TLabel(text=ToolsKey.ACTION)
 	@TVerticalRadioGroup(
 		converter=@TConverter(parse = true, type = ActionConverter.class),
-		radioButtons = { @TRadioButton(text = "#{label.none}", userData = "#{label.none}" ),
-				@TRadioButton(text = "#{label.send}", userData = "#{label.send}" ),
-				@TRadioButton(text = "#{label.to.queue}", userData = "#{label.to.queue}" ),
-				@TRadioButton(text = "#{label.to.schedule}", userData = "#{label.to.schedule}" ) 
+		radioButtons = { @TRadioButton(text = ToolsKey.NONE, userData = ToolsKey.NONE ),
+				@TRadioButton(text = ToolsKey.NONE, userData = ToolsKey.SEND ),
+				@TRadioButton(text = ToolsKey.TO_QUEUE, userData = ToolsKey.TO_QUEUE ),
+				@TRadioButton(text = ToolsKey.TO_SCHEDULE, userData = ToolsKey.TO_SCHEDULE ) 
 		})
 	private SimpleObjectProperty<TAction> action;
 	
-	@TLabel(text="#{label.schedule.date.time}")
+	@TLabel(text=ToolsKey.SCHEDULE_DATE_TIME)
 	@TDatePickerField(dateFormat=DateTimeFormatBuilder.class)
 	private SimpleObjectProperty<Date> scheduleTime;
 	
-	@TLabel(text="#{label.state}")
+	@TLabel(text=ToolsKey.STATE)
 	@TShowField()
 	private SimpleObjectProperty<TState> state;
 
-	@TLabel(text="#{label.date.processed}")
+	@TLabel(text=ToolsKey.DATE_PROCESSED)
 	@TShowField(fields= {@TField(pattern=TDateUtil.DDMMYYYY_HHMM)})
 	private SimpleObjectProperty<Date> processedTime;
 	
@@ -159,13 +160,13 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 	private TSimpleFileProperty<TFileEntity> file;
 	
 	@TTableView(columns = { 
-		@TTableColumn(text = "#{label.date.insert}", cellValue="insertDate", prefWidth=40,
+		@TTableColumn(text = ToolsKey.DATE_INSERT, cellValue="insertDate", prefWidth=40,
 			cellValueFactory=@TCellValueFactory(parse=true,
 			value=@TCallbackFactory(parse=true, value=TNotifyLogDateCallBack.class))),
-		@TTableColumn(text = "#{label.state}", cellValue="state",
+		@TTableColumn(text = ToolsKey.STATE, cellValue="state",
 			cellValueFactory=@TCellValueFactory(parse=true,
 			value=@TCallbackFactory(parse=true, value=TNotifyLogStateCallBack.class))),
-		@TTableColumn(text = "#{label.description}", cellValue="description")
+		@TTableColumn(text = ToolsKey.DESCRIPTION, cellValue="description")
 	})
 	@TModelViewType(modelClass = TNotifyLog.class, modelViewClass=TNotifyLogTV.class)
 	private ITObservableList<TNotifyLogTV> eventLog;

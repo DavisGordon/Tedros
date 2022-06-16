@@ -25,6 +25,7 @@ import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
+import com.tedros.tools.util.ToolsKey;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -34,11 +35,11 @@ import javafx.beans.property.SimpleStringProperty;
  * @author Davis Gordon
  *
  */
-@TForm(name="#{security.user.form.name}")
+@TForm(name=ToolsKey.SECURITY_USER_FORM_NAME)
 @TFormReaderHtml
 @TPresenter(type=TDynaPresenter.class, 
 			decorator=@TDecorator(type = TUserSettingDecorator.class, 
-			buildModesRadioButton=false, saveButtonText="#{label.apply}" ),
+			buildModesRadioButton=false, saveButtonText=ToolsKey.APPLY ),
 			behavior=@TBehavior(type=TUserSettingBehavior.class, saveOnlyChangedModels=false))
 @TEjbService(model=TUser.class, serviceName = "TUserControllerRemote")
 public class TUserSettingModelView extends TEntityModelView<TUser> {
@@ -46,16 +47,16 @@ public class TUserSettingModelView extends TEntityModelView<TUser> {
 	private SimpleLongProperty id;
 	
 
-	@TLabel(text="#{label.name}:")
+	@TLabel(text=ToolsKey.NAME)
 	@TTextField(maxLength=100, required=true, control=@TControl(maxWidth=180, parse = true))
 	private SimpleStringProperty name;
 	
 	
-	@TLabel(text="#{label.userLogin}:")
+	@TLabel(text=ToolsKey.USERLOGIN)
 	@TTextField(maxLength=100, required=true, control=@TControl(maxWidth=180, parse = true))
 	private SimpleStringProperty login;
 	
-	@TLabel(text="#{label.password}:")
+	@TLabel(text=ToolsKey.PASSWORD)
 	@TPasswordField(required=true, control=@TControl(maxWidth=180, parse = true),
 		node=@TNode(focusedProperty=@TReadOnlyBooleanProperty(
 				observableValue=@TObservableValue(addListener=TEncriptPasswordChangeListener.class), 
