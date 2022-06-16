@@ -4,6 +4,7 @@ public interface ToolsKey {
 
 	static final String APP_TOOLS = "#{app.tools}";
 	static final String BACKGROUND_PAINEL_TITLE = "#{background.painel.title}";
+	static final String BOLD = "#{label.bold}";
 	static final String COLOR_BASE_PAINEL_TITLE = "#{color.base.painel.title}";
 	static final String FORM_MIMETYPE = "#{form.mimetype}";
 	static final String IMPORT_TEXT = "#{import.text}";

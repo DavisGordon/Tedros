@@ -4,9 +4,9 @@ import com.tedros.core.TLanguage;
 import com.tedros.fxapi.control.TComboBoxField;
 import com.tedros.fxapi.control.TLabel;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
-import com.tedros.tools.module.scheme.model.TBackgroundImageMV;
 import com.tedros.tools.module.scheme.model.TMainColorMV;
 import com.tedros.tools.module.scheme.template.TemplatePane;
+import com.tedros.tools.util.ToolsKey;
 
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -24,14 +24,14 @@ public class TMainColorDecorator extends TDynaViewCrudBaseDecorator<TMainColorMV
 		
 		try {
 			setViewTitle(null);
-			buildSaveButton("#{label.button.apply}");
+			buildSaveButton(ToolsKey.BUTTON_APPLY);
 			
 			themes = new TComboBoxField<>();
 			// add the buttons at the header tool bar
 			addItemInTHeaderToolBar(gettSaveButton());
 			Region space = new Region();
 			HBox.setHgrow(space, Priority.ALWAYS);
-			TLabel l = new TLabel(TLanguage.getInstance(null).getString("#{label.theme}: "));
+			TLabel l = new TLabel(TLanguage.getInstance(null).getString(ToolsKey.THEME+": "));
 			super.addItemInTHeaderHorizontalLayout(space,l, themes);
 			
 			

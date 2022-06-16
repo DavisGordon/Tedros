@@ -1,30 +1,25 @@
 /**
  * 
  */
-package com.tedros.fxapi.control;
+package com.tedros.tools.control;
 
+import com.tedros.app.component.ITComponent;
 import com.tedros.core.TLanguage;
 import com.tedros.core.TModule;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.control.PopOver;
 import com.tedros.core.module.TObjectRepository;
+import com.tedros.core.notify.model.TNotify;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.collections.ITObservableList;
-import com.tedros.fxapi.collections.TFXCollections;
-import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
+import com.tedros.fxapi.control.TButton;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaGroupView;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
-import com.tedros.fxapi.presenter.modal.behavior.TEditModalBehavior;
-import com.tedros.fxapi.presenter.modal.decorator.TEditModalDecorator;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.util.TEntityListViewCallback;
+import com.tedros.tools.module.notify.model.TNotifyMV;
 
-import javafx.beans.property.Property;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.WeakChangeListener;
-import javafx.collections.ListChangeListener;
-import javafx.collections.WeakListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
@@ -41,59 +36,36 @@ import javafx.scene.text.Font;
 import javafx.util.Callback;
 
 /**
- * Open a modal to search and select items
+ * Open a notify modal 
  * 
  * @author Davis Gordon
  *
  */
 @SuppressWarnings("rawtypes")
-public class TEditEntityModal extends TRequiredModal {
+public class TNotifyModal extends VBox implements ITComponent {
 	
-	private ITObservableList<TModelView> tSelectedItems;
+	private ITObservableList<TNotifyMV> tSelectedItems;
 	
-	private ListView<TModelView> tListView;
+	private ListView<TNotifyMV> tListView;
 	
 	private TButton tEditButton;
-	private TButton tRemoveButton;
-	private TButton tClearButton;
 	
 	private TDynaView view;
 
-	private Class<? extends TModelView> tModelViewClass;
-	private Class<? extends ITModel> tModelClass;
+	private Class<? extends TModelView> tModelViewClass = TNotifyMV.class;
+	private Class<? extends ITModel> tModelClass = TNotify.class;
 
 	private double width;
 	private double height;
 	
-	private boolean singleEntity;
-	
 	private TObjectRepository repo = new TObjectRepository();
 	
-	@SuppressWarnings("unchecked")
-	public TEditEntityModal(Property item, double width, double height, double modalWidth, double modalHeight) {
-		this.singleEntity = true;
-		ITObservableList items = TFXCollections.iTObservableList();
-		if(item.getValue()!=null)
-			items.add(item.getValue());
-		items.addListener(new ListChangeListener() {
-			@Override
-			public void onChanged(Change c) {
-				if(c.getList().isEmpty())
-					item.setValue(null);
-				else
-					item.setValue(c.getList().get(0));
-			}
-			
-		});
-		init(items, width, height, modalWidth, modalHeight);
-	}
 	
 	/**
 	 * 
 	 */
-	public TEditEntityModal(ITObservableList items, double width, double height,
+	public TNotifyModal(ITObservableList items, double width, double height,
 			double modalWidth, double modalHeight) {
-		this.singleEntity = false;
 		init(items, width, height, modalWidth, modalHeight);
 	}
 	
@@ -108,18 +80,13 @@ public class TEditEntityModal extends TRequiredModal {
 		TLanguage iEngine = TLanguage.getInstance(null);
 		
 		tEditButton = new TButton(iEngine.getString("#{tedros.fxapi.button.edit}"));
-		tRemoveButton = new TButton(iEngine.getString("#{tedros.fxapi.button.delete}"));
-		tClearButton = new TButton(iEngine.getString("#{tedros.fxapi.button.clean}"));
-		tClearButton.setId("t-last-button");
 		
 		this.buildListView();
 		this.configSelectedListView();
 		
 		HBox box = new HBox();
-		box.getChildren().addAll(tEditButton, tRemoveButton, tClearButton);
+		box.getChildren().addAll(tEditButton);
 		
-		tRemoveButton.setDisable(true);
-		tClearButton.setDisable(disable);
 		VBox.setVgrow(tListView, Priority.ALWAYS);
 		this.getChildren().addAll(tListView, box);
 		
@@ -134,14 +101,6 @@ public class TEditEntityModal extends TRequiredModal {
 			pane.setStyle("-fx-background-radius: 20 20 20 20;");
 			view.tLoad();
 			
-			if(this.singleEntity) {
-				TDynaPresenter p = (TDynaPresenter) view.gettPresenter();
-				TEditModalDecorator dr = (TEditModalDecorator) p.getDecorator();
-				TEditModalBehavior bh = (TEditModalBehavior) p.getBehavior();
-				dr.setSingleMode();
-				bh.setSingleMode();
-			}
-			
 			TedrosAppManager.getInstance()
 			.getModuleContext((TModule)TedrosContext.getView()).getCurrentViewContext()
 			.getPresenter().getView().tShowModal(pane, false);
@@ -149,28 +108,6 @@ public class TEditEntityModal extends TRequiredModal {
 		repo.add("fev", fev);
 		tEditButton.setOnAction(new WeakEventHandler<>(fev));
 		
-		//remove event
-		EventHandler<ActionEvent> rev = e -> {
-			if(singleEntity && super.requiredProperty().getValue()) {
-				showRequiredPopMsg();
-			}else {
-				int index = tListView.getSelectionModel().getSelectedIndex();
-				tListView.getSelectionModel().clearSelection();
-				tListView.getItems().remove(index);
-			}
-		};
-		repo.add("rev", rev);
-		tRemoveButton.setOnAction(new WeakEventHandler<>(rev));
-		
-		//clear event
-		EventHandler<ActionEvent> cev = e -> {
-			if(singleEntity && super.requiredProperty().getValue()) {
-				showRequiredPopMsg();
-			}else 
-				tSelectedItems.clear();
-		};
-		repo.add("cev", cev);
-		tClearButton.setOnAction(new WeakEventHandler<>(cev));
 	}
 
 	/**
@@ -194,8 +131,6 @@ public class TEditEntityModal extends TRequiredModal {
 		tListView.setMinWidth(width);
 		tListView.setMaxHeight(height);
 		tListView.setMinHeight(height);
-		super.tRequiredNodeProperty().setValue(tListView);
-		
     }
 	
 	@SuppressWarnings({ "unchecked" })
@@ -203,23 +138,11 @@ public class TEditEntityModal extends TRequiredModal {
 		tListView.setItems(tSelectedItems);
 		tListView.setEditable(true);
 		tListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		Callback<ListView<TModelView>, ListCell<TModelView>> callBack = (Callback<ListView<TModelView>, ListCell<TModelView>>) 
+		Callback<ListView<TNotifyMV>, ListCell<TNotifyMV>> callBack = (Callback<ListView<TNotifyMV>, ListCell<TNotifyMV>>) 
 				 new TEntityListViewCallback();
 		
 		tListView.setCellFactory(callBack);
 		
-		ListChangeListener<TModelView> icl = (o) -> {
-			boolean disable = o.getList().isEmpty();
-			tClearButton.setDisable(disable);
-		};
-		repo.add("icl", icl);
-		tListView.getItems().addListener(new WeakListChangeListener(icl));
-		
-		ChangeListener<TModelView> selchl = (o, old, n) -> {
-			tRemoveButton.setDisable(n==null);
-		};
-		repo.add("selchl", selchl);
-		tListView.getSelectionModel().selectedItemProperty().addListener(new WeakChangeListener(selchl));
 	}
 
 	public void invalidate() {
@@ -229,7 +152,7 @@ public class TEditEntityModal extends TRequiredModal {
 	/**
 	 * @return the tListView
 	 */
-	public ListView<TModelView> gettListView() {
+	public ListView<TNotifyMV> gettListView() {
 		return tListView;
 	}
 
@@ -240,19 +163,6 @@ public class TEditEntityModal extends TRequiredModal {
 		return tEditButton;
 	}
 
-	/**
-	 * @return the tRemoveButton
-	 */
-	public TButton gettRemoveButton() {
-		return tRemoveButton;
-	}
-
-	/**
-	 * @return the tClearButton
-	 */
-	public TButton gettClearButton() {
-		return tClearButton;
-	}
 
 	/**
 	 * @param tModelViewClass the tModelViewClass to set
@@ -264,7 +174,7 @@ public class TEditEntityModal extends TRequiredModal {
 	/**
 	 * @return the tSelectedItems
 	 */
-	public ITObservableList<TModelView> gettSelectedItems() {
+	public ITObservableList<TNotifyMV> gettSelectedItems() {
 		return tSelectedItems;
 	}
 
@@ -273,6 +183,18 @@ public class TEditEntityModal extends TRequiredModal {
 	 */
 	public void settModelClass(Class<? extends ITModel> tModelClass) {
 		this.tModelClass = tModelClass;
+	}
+
+	@Override
+	public String gettComponentId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void settComponentId(String id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

@@ -14,8 +14,8 @@ import com.tedros.tools.module.scheme.model.TPanelMV;
 import com.tedros.tools.start.TConstant;
 import com.tedros.tools.util.ToolsKey;
 
-@TSecurity(	id=DomainApp.LAYOUT_MODULE_ID, appName=ToolsKey.APP_TOOLS, moduleName=ToolsKey.MODULE_SCHEME,	
-			allowedAccesses=TAuthorizationType.MODULE_ACCESS)
+@TSecurity(id=DomainApp.LAYOUT_MODULE_ID, appName=ToolsKey.APP_TOOLS, 
+moduleName=ToolsKey.MODULE_SCHEME, allowedAccesses=TAuthorizationType.MODULE_ACCESS)
 public class SchemeModule extends TModule {
 	
 	@Override
@@ -26,10 +26,5 @@ public class SchemeModule extends TModule {
 				new TViewItem(TDynaGroupView.class, TMainColorMV.class, iEngine.getString(ToolsKey.VIEW_THEMES), true),
 				new TViewItem(TDynaGroupView.class, TPanelMV.class, iEngine.getString(ToolsKey.VIEW_COLORS), true),
 				new TViewItem(TDynaGroupView.class, TBackgroundImageMV.class, iEngine.getString(ToolsKey.VIEW_BACKGROUND))));
-		
 	}
-
-	
-
-
 }

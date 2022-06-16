@@ -25,7 +25,7 @@ public class TPanelDecorator extends TDynaViewCrudBaseDecorator<TPanelMV>
 		exampleView.tLoad();
 		
 		setViewTitle(ToolsKey.VIEW_COLORS);
-		buildSaveButton("#{label.button.apply}");
+		buildSaveButton(ToolsKey.BUTTON_APPLY);
 		
 		// add the buttons at the header tool bar
 		addItemInTHeaderToolBar(gettSaveButton());

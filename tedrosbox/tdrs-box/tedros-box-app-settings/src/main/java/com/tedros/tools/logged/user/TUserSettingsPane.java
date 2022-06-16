@@ -17,9 +17,6 @@ import javafx.scene.layout.StackPane;
  */
 public class TUserSettingsPane extends StackPane {
 
-	/**
-	 * 
-	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public TUserSettingsPane() {
 		TUser usr = TedrosContext.getLoggedUser();
@@ -30,10 +27,5 @@ public class TUserSettingsPane extends StackPane {
     	v.tLoad();
     	v.setMinHeight(420);
 		super.getChildren().add(v);
-				
-		
 	}
-
-	
-
 }
