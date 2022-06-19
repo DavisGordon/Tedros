@@ -1,5 +1,6 @@
 package com.tedros.core.presenter;
 
+import com.tedros.core.model.ITModelView;
 import com.tedros.core.presenter.view.ITGroupViewItem;
 import com.tedros.core.presenter.view.ITView;
 
@@ -11,6 +12,16 @@ import javafx.collections.ObservableList;
  * */
 @SuppressWarnings("rawtypes")
 public interface ITGroupPresenter<V extends ITView<ITGroupPresenter>> extends ITPresenter<V> {
+	
+	/**
+	 * Lookup and show the associated view of the modelView and load the modelView
+	 * */
+	<M extends ITModelView> void lookupAndLoadModelView(M modelView);
+	
+	/**
+	 * Lookup and show the associated view of the modelView class
+	 * */
+	<M extends ITModelView> void lookupAndShowView(Class<M> modelViewClass);
 	
 	/**
 	 * Sets a title for the group view

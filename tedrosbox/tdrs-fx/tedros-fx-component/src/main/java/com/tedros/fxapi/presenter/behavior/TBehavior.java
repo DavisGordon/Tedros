@@ -3,6 +3,7 @@ package com.tedros.fxapi.presenter.behavior;
 import com.tedros.core.ITModule;
 import com.tedros.core.TLanguage;
 import com.tedros.core.context.TedrosAppManager;
+import com.tedros.core.model.ITModelView;
 import com.tedros.core.module.TObjectRepository;
 import com.tedros.core.presenter.ITPresenter;
 import com.tedros.core.presenter.view.ITView;
@@ -233,9 +234,10 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 		return  this.presenter==null ? null : (V) this.presenter.getView();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public  void setModelView(TModelView modelView) {
-		this.modelViewProperty.setValue(modelView);
+	public  void setModelView(ITModelView modelView) {
+		this.modelViewProperty.setValue((M)modelView);
 	}
 
 	@Override

@@ -10,11 +10,13 @@ public class CommonsLabelBuilder {
 	}
 
 	public static void main(String[] args) {
-		ResourceBundle r = ResourceBundle.getBundle("TToolsLabels", Locale.ENGLISH);
+		ResourceBundle r = ResourceBundle.getBundle("TLabels", Locale.ENGLISH);
 		r.keySet().stream().sorted((a,b)->{
 			return a.compareToIgnoreCase(b);
 		}).forEach(k->{
-			String c = k.replaceAll("\\.", "_").toUpperCase().replaceFirst("LABEL_", "");
+			String c = k.replaceAll("\\.", "_").toUpperCase()
+					.replaceFirst("TEDROS_FXAPI_", "")
+					.replaceFirst("LABEL_", "");
 			System.out.println("static final String "+c+" = \"#{"+k+"}\";");
 		});
 	}

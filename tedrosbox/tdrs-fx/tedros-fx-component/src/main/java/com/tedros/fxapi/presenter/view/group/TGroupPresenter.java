@@ -1,19 +1,25 @@
 package com.tedros.fxapi.presenter.view.group;
 
+import java.util.Optional;
+
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.tedros.core.ITModule;
 import com.tedros.core.TLanguage;
 import com.tedros.core.context.TedrosAppManager;
+import com.tedros.core.model.ITModelView;
 import com.tedros.core.presenter.ITGroupPresenter;
 import com.tedros.core.presenter.view.ITGroupViewItem;
 import com.tedros.core.presenter.view.ITView;
+import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
+import com.tedros.fxapi.presenter.model.TModelView;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Menu;
@@ -249,6 +255,110 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 		this.module = module;
 		String uuid = TedrosAppManager.getInstance().getModuleContext(module).getModuleDescriptor().getApplicationUUID();
 		iEngine.setCurrentUUID(uuid);
+	}
+	
+
+	@Override
+	public <M extends ITModelView> void lookupAndLoadModelView(M modelView) {
+		ITGroupViewItem item = findItem(modelView.getClass());
+		if(item==null)
+			throw new RuntimeException("The class "+modelView.getClass().getSimpleName()+" has no item add in this TGroupPresenter ");
+    	MenuItem mi = this.getMenuItem(item);
+		if(mi!=null) {
+			ListChangeListener<Node> chl = buildListener(modelView);
+			mainView.gettFormSpace().getChildren().addListener(chl);
+			mi.fire();
+		}
+	}
+	
+	@Override
+	public <M extends ITModelView> void lookupAndShowView(Class<M> modelViewClass) {
+		ITGroupViewItem item = findItem(modelViewClass);
+		if(item==null)
+			throw new RuntimeException("The class "+modelViewClass.getSimpleName()+" has no item add in this TGroupPresenter ");
+    	MenuItem mi = this.getMenuItem(item);
+		if(mi!=null) 
+			mi.fire();
+	}
+
+
+
+	private MenuItem getMenuItem(ITGroupViewItem item) {
+		final ToolBar tGroupToolbar = mainView.gettGroupToolbar(); 
+    	MenuBar mb = null;
+    	Optional<Node> op = tGroupToolbar.getItems().stream()
+    			.filter(p->{
+    				return p instanceof MenuBar;
+    			}).findFirst();
+    	if(op.isPresent()) {
+    		mb = (MenuBar) op.get();
+			for(Menu m : mb.getMenus()){
+				Optional<MenuItem> mop = m.getItems().stream().filter(p->{
+					return p.getText().equals(iEngine.getString(item.getButtonTitle()));
+				}).findFirst();
+				
+				if(mop.isPresent()) {
+					return mop.get();
+				}
+			}
+    	}
+		return null;
+	}
+	
+	/**
+	 * @param modelView
+	 * @return
+	 */
+	private <M extends ITModelView> ListChangeListener<Node> buildListener(M modelView) {
+		ListChangeListener<Node> chl = new ListChangeListener<Node>() {
+			@Override
+			public void onChanged(Change c) {
+				if(c.next() && c.wasAdded()) {
+					Node n = (Node) c.getList().get(0);
+					if(n instanceof ITView) {
+						ITView v = (ITView) n;
+						if(!v.gettPresenter().isViewLoaded()){
+							v.gettPresenter().viewLoadedProperty().addListener((a,o,b)->{
+								if(b) 
+									loadModel(modelView, v);
+							});
+						}else
+							loadModel(modelView, v);
+					}
+				}
+			}
+			/**
+			 * @param modelView
+			 * @param v
+			 */
+			private <V extends ITModelView> void loadModel(V modelView, ITView v) {
+				TDynaPresenter p = (TDynaPresenter) v.gettPresenter();
+				p.getBehavior().setModelView((TModelView) modelView);
+				mainView.gettFormSpace().getChildren().removeListener(this);
+			}
+			
+		};
+		return chl;
+	}
+
+	/**
+	 * @param modelView
+	 * @return
+	 */
+	private <M extends ITModelView> ITGroupViewItem findItem(Class<M> modelViewClass) {
+		Optional<ITGroupViewItem> op = groupViewItemList.stream()
+				.filter(p->{
+					return p.getModelViewClass()==modelViewClass;
+				}).findFirst();
+		ITGroupViewItem item = op.isPresent() 
+				? op.get()
+						: null;
+		return item;
+	}
+
+	@Override
+	public void loadModelView(ITModelView modelView) {
+		this.lookupAndLoadModelView(modelView);
 	}
 
 }

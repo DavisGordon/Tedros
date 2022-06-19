@@ -1,13 +1,14 @@
 package com.tedros.fxapi.presenter.behavior;
 
-import javafx.collections.ObservableList;
-
+import com.tedros.core.model.ITModelView;
 import com.tedros.core.module.TObjectRepository;
 import com.tedros.core.presenter.ITPresenter;
 import com.tedros.core.presenter.view.ITView;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.form.ITModelForm;
 import com.tedros.fxapi.presenter.model.TModelView;
+
+import javafx.collections.ObservableList;
 
 @SuppressWarnings("rawtypes")
 public interface ITBehavior<M extends TModelView, P extends ITPresenter> {
@@ -18,7 +19,8 @@ public interface ITBehavior<M extends TModelView, P extends ITPresenter> {
 	
 	public <V extends ITView> V getView();
 	
-	public void setModelView(M modelView);
+	public void setModelView(ITModelView modelView);
+	
 	
 	public void removeAllListenerFromModelView();
 	

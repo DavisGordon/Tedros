@@ -18,6 +18,7 @@ import com.tedros.fxapi.presenter.dynamic.view.TDynaGroupView;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.util.TEntityListViewCallback;
+import com.tedros.tools.module.notify.TNotifyModule;
 import com.tedros.tools.module.notify.model.TNotifyMV;
 
 import javafx.event.ActionEvent;
@@ -92,6 +93,13 @@ public class TNotifyModal extends VBox implements ITComponent {
 		
 		//Open modal event
 		EventHandler<ActionEvent> fev = e -> {
+			StringBuilder pp = new StringBuilder();
+			TNotify m = new TNotify();
+			m.setSubject("kkkkkkk");
+			
+			TedrosAppManager.getInstance().loadInModule(TNotifyModule.class, new TNotifyMV(m));
+			/*
+			
 			StackPane pane = new StackPane();
 			view = new TDynaGroupView(tModelViewClass, tModelClass, tSelectedItems);
 			pane.setMaxSize(modalWidth, modalHeight);
@@ -103,7 +111,7 @@ public class TNotifyModal extends VBox implements ITComponent {
 			
 			TedrosAppManager.getInstance()
 			.getModuleContext((TModule)TedrosContext.getView()).getCurrentViewContext()
-			.getPresenter().getView().tShowModal(pane, false);
+			.getPresenter().getView().tShowModal(pane, false);*/
 		};
 		repo.add("fev", fev);
 		tEditButton.setOnAction(new WeakEventHandler<>(fev));
