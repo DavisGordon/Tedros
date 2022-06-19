@@ -39,6 +39,12 @@ public class TNotify extends TEntity {
 	@Column(length=20)
 	private String refCode;
 	
+	@Column(length=100)
+	private String calledBy;
+	
+	@Column(length=60)
+	private String appUUID;
+	
 	@Column(length=120, nullable=false)
 	private String subject;
 	
@@ -224,6 +230,34 @@ public class TNotify extends TEntity {
 	 */
 	public void setProcessedTime(Date processedTime) {
 		this.processedTime = processedTime;
+	}
+
+	/**
+	 * @return the calledBy
+	 */
+	public String getCalledBy() {
+		return calledBy;
+	}
+
+	/**
+	 * @param calledBy the calledBy to set
+	 */
+	public void setCalledBy(String calledBy) {
+		this.calledBy = calledBy;
+	}
+
+	/**
+	 * @return the appUUID
+	 */
+	public String getAppUUID() {
+		return appUUID;
+	}
+
+	/**
+	 * @param appUUID the appUUID to set
+	 */
+	public void setAppUUID(String appUUID) {
+		this.appUUID = appUUID;
 	}
 	
 }

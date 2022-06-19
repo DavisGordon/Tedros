@@ -3,6 +3,9 @@ package com.tedros.core;
 import com.tedros.core.context.InternalView;
 import com.tedros.core.context.TModuleContext;
 import com.tedros.core.context.TedrosAppManager;
+import com.tedros.core.model.ITModelView;
+import com.tedros.core.presenter.ITGroupPresenter;
+import com.tedros.core.presenter.view.ITGroupView;
 import com.tedros.core.presenter.view.ITView;
 
 import javafx.animation.FadeTransition;
@@ -55,5 +58,32 @@ public abstract class TModule extends InternalView implements ITModule {
 			context = null;
 		}
 		return flag;
+	}
+
+	@Override
+	public void tStart() {
+		
+	}
+
+	@SuppressWarnings({ "rawtypes" })
+	@Override
+	public <M extends ITModelView> void tLookupViewAndLoadModelView(M modelView) {
+		super.getChildren().forEach(n->{
+			if(n instanceof ITView) {
+				((ITView)n).gettPresenter().loadModelView(modelView);
+			}
+		});
+		
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public <M extends ITModelView> void tLookupAndShowView(Class<M> modelViewClass) {
+		super.getChildren().forEach(n->{
+			if(n instanceof ITGroupView) {
+				((ITGroupPresenter)((ITGroupView)n).gettPresenter()).lookupAndShowView(modelViewClass);
+			}
+		});
+		
 	}
 }

@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.util.Arrays;
 
 import com.tedros.core.ITModule;
+import com.tedros.core.model.ITModelView;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.parser.TStackPaneParser;
@@ -29,7 +30,7 @@ import javafx.scene.layout.StackPane;
  *  @author Davis Gordon
  * */
 @SuppressWarnings("rawtypes")
-public class TDynaPresenter<M extends TModelView>	extends TPresenter<ITDynaView<M>> {
+public class TDynaPresenter<M extends TModelView> extends TPresenter<ITDynaView<M>> implements ITDynaPresenter<M> {
 	
 	private ITDecorator<TDynaPresenter<M>> 		decorator;
 	private ITBehavior<M, TDynaPresenter<M>> 	behavior;
@@ -136,23 +137,7 @@ public class TDynaPresenter<M extends TModelView>	extends TPresenter<ITDynaView<
 						tPresenter = (com.tedros.fxapi.annotation.presenter.TPresenter) presenter;
 						break;
 					}
-				}/*
-				if(ann instanceof TListViewPresenter) {
-					tPresenter = ((TListViewPresenter) ann).presenter();
-					break;
 				}
-				if(ann instanceof TSelectionModalPresenter) {
-					tPresenter = ((TSelectionModalPresenter) ann).presenter();
-					break;
-				}
-				if(ann instanceof TDetailTableViewPresenter) {
-					tPresenter = ((TDetailTableViewPresenter) ann).presenter();
-					break;
-				}
-				if(ann instanceof TDetailListViewPresenter) {
-					tPresenter = ((TDetailListViewPresenter) ann).presenter();
-					break;
-				}*/
 			}
 		}
 		
@@ -220,10 +205,18 @@ public class TDynaPresenter<M extends TModelView>	extends TPresenter<ITDynaView<
 	
 	// getters and setters
 
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.dynamic.ITDynaPresenter#getDecorator()
+	 */
+	@Override
 	public ITDecorator<TDynaPresenter<M>> getDecorator() {
 		return decorator;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.dynamic.ITDynaPresenter#getBehavior()
+	 */
+	@Override
 	public ITBehavior<M, TDynaPresenter<M>> getBehavior() {
 		return behavior;
 	}
@@ -268,6 +261,10 @@ public class TDynaPresenter<M extends TModelView>	extends TPresenter<ITDynaView<
 		this.modelView = model;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.dynamic.ITDynaPresenter#getModelClass()
+	 */
+	@Override
 	public Class<? extends ITModel> getModelClass() {
 		return modelClass;
 	}
@@ -284,8 +281,17 @@ public class TDynaPresenter<M extends TModelView>	extends TPresenter<ITDynaView<
 			return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.dynamic.ITDynaPresenter#canInvalidate()
+	 */
 	@Override
 	public String canInvalidate() {
 		return behavior.canInvalidate();
+	}
+
+	@Override
+	public void loadModelView(ITModelView modelView) {
+		this.behavior.setModelView(modelView);
+		
 	}
 }

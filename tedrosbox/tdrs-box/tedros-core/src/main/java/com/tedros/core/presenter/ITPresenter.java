@@ -1,6 +1,7 @@
 package com.tedros.core.presenter;
 
 import com.tedros.core.ITModule;
+import com.tedros.core.model.ITModelView;
 import com.tedros.core.presenter.view.ITView;
 
 import javafx.beans.property.BooleanProperty;
@@ -33,12 +34,20 @@ public interface ITPresenter<V extends ITView> {
 	 * */
 	public void loadView();
 	
+	/**
+	 * Set the view
+	 * */
 	public void setView(V view);
 	
 	/**
 	 * Initialize the presenter
 	 * */
 	public void initialize();
+	
+	/**
+	 * Load the model view 
+	 * */
+	public void loadModelView(ITModelView modelView);
 	
 	/**
 	 * invalidate the presenter

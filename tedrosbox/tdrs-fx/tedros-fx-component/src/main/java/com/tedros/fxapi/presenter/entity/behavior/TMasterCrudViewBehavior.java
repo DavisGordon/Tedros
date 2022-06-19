@@ -255,7 +255,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void loadListView() {
+	protected void loadListView() {
 		final ObservableList<M> models = getModels();
 		final ListView<M> listView = this.decorator.gettListView();
 		listView.setItems((ObservableList<M>) (models==null ? FXCollections.observableArrayList() : models));

@@ -72,7 +72,7 @@ public final class TedrosContext {
 	private static StringProperty initializationErrorMessageStringProperty;
 	
 	//private static Stage stage;
-	private static Node currentView;
+	private static SimpleObjectProperty<Node> currentViewProperty;
 	
 	private static TUser loggedUser;
 	
@@ -123,7 +123,8 @@ public final class TedrosContext {
 		
 		LOGGER.info("Starting context...");
 		updateMessage("Starting context...");
-		//collapseMenu = true;
+
+		currentViewProperty = new SimpleObjectProperty<>();
 		pageProperty = new SimpleObjectProperty<Page>();
 		pagePathProperty = new SimpleStringProperty();
 		showModalProperty = new SimpleBooleanProperty();
@@ -483,14 +484,18 @@ public final class TedrosContext {
 	 * Set the current view
 	 * */
 	public static final void setView(Node view){
-		currentView = view;	
+		currentViewProperty.setValue(view);	
 	}
 	
 	/**
 	 * Get the current view
 	 * */
 	public static final Node getView(){
-		return currentView;
+		return currentViewProperty.getValue();
+	}
+	
+	public static final ReadOnlyObjectProperty viewProperty() {
+		return currentViewProperty;
 	}
 	
 	/**
@@ -561,18 +566,5 @@ public final class TedrosContext {
 		return main;
 	}
 
-	/**
-	 * @return the collapseMenu
-	 *//*
-	public static boolean isCollapseMenu() {
-		return collapseMenu;
-	}
-
-	*//**
-	 * @param collapseMenu the collapseMenu to set
-	 *//*
-	public static void setCollapseMenu(boolean collapseMenu) {
-		TedrosContext.collapseMenu = collapseMenu;
-	}*/
 	
 }
