@@ -62,6 +62,8 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		
 		if(!isUserNotAuthorized(TAuthorizationType.VIEW_ACCESS))
 			this.loadListView();
+		else
+			super.setViewStateAsReady();
 	}
 	
 	public void setSingleMode() {

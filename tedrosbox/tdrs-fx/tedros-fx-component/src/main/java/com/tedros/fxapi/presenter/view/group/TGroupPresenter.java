@@ -13,9 +13,8 @@ import com.tedros.core.presenter.view.ITGroupViewItem;
 import com.tedros.core.presenter.view.ITView;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
-import com.tedros.fxapi.presenter.model.TModelView;
 
-import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -100,9 +99,16 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 		
 	}
 	
+	public void loadView() {
+		
+	}
+	
 	private void showView(final ITGroupViewItem item) {
 		try {
+			this.viewLoadedProperty.unbind();
 			final ITView<?> view = item.getViewInstance(getModule());
+			this.viewLoadedProperty.bind(view.gettPresenter().viewLoadedProperty());
+			
 			final StackPane formSpacePane = this.mainView.gettFormSpace();
 			if(this.headerItensJoined!=null && this.headerPaneJoined!=null && !formSpacePane.getChildren().isEmpty()) {
 				this.mainView.gettGroupToolbar().getItems().removeAll(headerItensJoined);
@@ -153,8 +159,8 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 	}
 	
 	@Override
-    public void loadView() {
-    	viewLoadedProperty.setValue(true);
+    public void setViewLoaded(boolean loaded) {
+    	viewLoadedProperty.setValue(loaded);
     }
     
     @Override
@@ -163,7 +169,7 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
     }
     
     @Override
-    public BooleanProperty viewLoadedProperty() {
+    public ReadOnlyBooleanProperty viewLoadedProperty() {
     	return viewLoadedProperty;
     }
 	
@@ -231,20 +237,22 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 	
 	@Override
 	public String canInvalidate() {
-		
+		StringBuilder msg = new StringBuilder();
 		if(groupViewItemList!=null){
-			for (ITGroupViewItem itGroupViewItem : groupViewItemList) {
-				ITView view = itGroupViewItem.getViewInstance(getModule());
-				if(view!=null) {
-					String msg = view.gettPresenter().canInvalidate();
-					if(msg!=null) {
-						return msg;
-					}
-				}
-			}
+			groupViewItemList.stream()
+			.filter(p-> {
+				return p.isViewInitialized();
+			}).forEach(i -> {
+				ITView v = i.getViewInstance(getModule());
+				String m = v.gettPresenter().canInvalidate();
+				if(m!=null)
+					msg.append(i.getButtonTitle())
+					.append(": ")
+					.append(m)
+					.append("\n");
+			});
 		}
-		return null;
-	
+		return msg.toString().isEmpty() ? null : msg.toString();
 	}
 
 	public ITModule getModule() {
@@ -333,7 +341,7 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 			 */
 			private <V extends ITModelView> void loadModel(V modelView, ITView v) {
 				TDynaPresenter p = (TDynaPresenter) v.gettPresenter();
-				p.getBehavior().setModelView((TModelView) modelView);
+				p.loadModelView(modelView);
 				mainView.gettFormSpace().getChildren().removeListener(this);
 			}
 			

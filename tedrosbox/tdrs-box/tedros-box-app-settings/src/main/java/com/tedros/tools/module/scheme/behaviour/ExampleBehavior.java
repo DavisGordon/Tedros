@@ -36,9 +36,8 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleMV, Exampl
 			@Override
 			public boolean runBefore() {
 				ExampleMV model = new ExampleMV();
-				setViewMode(TViewMode.EDIT);
 				setModelView(model);
-				editEntity(model);
+				showForm(TViewMode.EDIT);
 				return false;
 			}
 

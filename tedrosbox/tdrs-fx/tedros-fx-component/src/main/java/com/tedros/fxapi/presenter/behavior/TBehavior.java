@@ -7,6 +7,7 @@ import com.tedros.core.model.ITModelView;
 import com.tedros.core.module.TObjectRepository;
 import com.tedros.core.presenter.ITPresenter;
 import com.tedros.core.presenter.view.ITView;
+import com.tedros.core.presenter.view.TViewState;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.form.ITModelForm;
@@ -40,6 +41,7 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 	private SimpleBooleanProperty invalidateProperty;
 	private SimpleObjectProperty<TBuildFormStatus> buildFormStatusProperty;
 	private SimpleObjectProperty<ITModelForm<M>> formProperty;
+	private ChangeListener<TBuildFormStatus> loadChl ;
 	
 	protected TLanguage iEngine = TLanguage.getInstance(null);
 	
@@ -118,6 +120,19 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 		};
 		listenerRepository.add("invalidateModelAndRepo", invCL);
 		invalidateProperty.addListener(new WeakChangeListener<>(invCL));
+		
+
+		loadChl = new ChangeListener<TBuildFormStatus>() {
+			@Override
+			public void changed(ObservableValue<? extends TBuildFormStatus> a, TBuildFormStatus o,
+					TBuildFormStatus n) {
+				if(n!=null && n.equals(TBuildFormStatus.FINISHED)) {
+					setViewStateAsReady();
+				}
+			}
+		};
+		buildFormStatusProperty.addListener(loadChl);
+		
 	}
 
 	private void buildFormTask() {
@@ -135,6 +150,11 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 				}
             
           });
+	}
+	
+	public void setViewStateAsReady() {
+		buildFormStatusProperty().removeListener(loadChl);
+		getPresenter().getView().settState(TViewState.READY);
 	}
 
 	public void buildForm(TViewMode mode) {

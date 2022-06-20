@@ -6,6 +6,7 @@ import com.tedros.core.control.TProgressIndicator;
 import com.tedros.core.presenter.ITPresenter;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 
@@ -74,6 +75,22 @@ public interface ITView<P extends ITPresenter>{
 	 * Loads the view
 	 * */
 	public void tLoad();
+	
+	/**
+	 * Set the view state
+	 * */
+	public void settState(TViewState state);
+	
+	/**
+	 * @return the view state
+	 * */
+	public TViewState gettState();
+
+	/**
+	 * @return the stateProperty
+	 */
+	public ReadOnlyObjectProperty<TViewState> tStateProperty();
+	
 
 		
 }

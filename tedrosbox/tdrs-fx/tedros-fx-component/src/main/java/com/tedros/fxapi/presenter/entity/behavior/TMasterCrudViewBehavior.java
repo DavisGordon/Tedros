@@ -90,6 +90,8 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 			}
 			if(!isUserNotAuthorized(TAuthorizationType.VIEW_ACCESS))
 				loadModels();
+			else
+				setViewStateAsReady();
 		}
 	
 	@SuppressWarnings("unchecked")
@@ -259,10 +261,8 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		final ObservableList<M> models = getModels();
 		final ListView<M> listView = this.decorator.gettListView();
 		listView.setItems((ObservableList<M>) (models==null ? FXCollections.observableArrayList() : models));
-		listView.setEditable(true);
-		listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		super.getListenerRepository().remove("processloadlistviewCL");
-		final M mv = getPresenter().getModelView();
+		final M mv = super.getModelView(); //getPresenter().getModelView();
 		processModelView(mv);
 		
 		if(this.decorator.gettPaginator()!=null) {

@@ -9,9 +9,12 @@ package com.tedros.fxapi.presenter;
 import com.tedros.core.ITModule;
 import com.tedros.core.presenter.ITPresenter;
 import com.tedros.core.presenter.view.ITView;
+import com.tedros.core.presenter.view.TViewState;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 /**
  * DESCRIÇÃO DA CLASSE
@@ -45,7 +48,8 @@ public abstract class TPresenter<V extends ITView> implements ITPresenter<V> {
 		return this.view;
 	}
 	 
-    public final void setView(V view) {
+    @SuppressWarnings("unchecked")
+	public final void setView(V view) {
         if (view == null) {
             throw new NullPointerException("view cannot be null.");
         }
@@ -55,11 +59,21 @@ public abstract class TPresenter<V extends ITView> implements ITPresenter<V> {
         }
  
         this.view = view;
+        ChangeListener<TViewState> chl = new ChangeListener<TViewState>() {
+			@Override
+			public void changed(ObservableValue<? extends TViewState> a, TViewState o, TViewState n) {
+				if(n!=null && n.equals(TViewState.READY)) {
+					setViewLoaded(true);
+					getView().tStateProperty().removeListener(this);
+				}
+			}
+		};
+		this.view.tStateProperty().addListener(chl);
     }
     
     @Override
-    public void loadView() {
-    	viewLoadedProperty.setValue(true);
+    public void setViewLoaded(boolean loaded) {
+    	viewLoadedProperty.setValue(loaded);
     }
     
     @Override

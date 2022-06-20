@@ -26,7 +26,6 @@ public class TBackgroundBehavior extends TDynaViewCrudBaseBehavior<TBackgroundIm
 	public void load(){
 		super.load();
 		super.configSaveButton();
-		super.setModelView(new TBackgroundImageMV(new TBackgroundImage()));
 		super.addAction(new TPresenterAction(TActionType.SAVE) {
 
 			@Override
@@ -84,6 +83,8 @@ public class TBackgroundBehavior extends TDynaViewCrudBaseBehavior<TBackgroundIm
 			}
 			
 		});
+		
+		super.setModelView(new TBackgroundImageMV(new TBackgroundImage()));
 	}
 	
 	@Override

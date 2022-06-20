@@ -4,7 +4,7 @@ import com.tedros.core.ITModule;
 import com.tedros.core.model.ITModelView;
 import com.tedros.core.presenter.view.ITView;
 
-import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 
 /**
  * The presenter responsable to load the view.
@@ -22,7 +22,7 @@ public interface ITPresenter<V extends ITView> {
 	/**
 	 * The view loaded property to bind
 	 * */
-	public BooleanProperty viewLoadedProperty();
+	public ReadOnlyBooleanProperty viewLoadedProperty();
 	
 	/**
 	 * Returns the view
@@ -33,6 +33,11 @@ public interface ITPresenter<V extends ITView> {
 	 * Load the view
 	 * */
 	public void loadView();
+	
+	/**
+	 * Set the viewLoadedProperty
+	 * */
+	public void setViewLoaded(boolean loaded);
 	
 	/**
 	 * Set the view

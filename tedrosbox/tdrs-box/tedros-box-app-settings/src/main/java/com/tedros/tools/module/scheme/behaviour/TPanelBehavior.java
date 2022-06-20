@@ -10,9 +10,6 @@ import com.tedros.tools.module.scheme.model.TPanel;
 import com.tedros.tools.module.scheme.model.TPanelMV;
 import com.tedros.tools.module.scheme.style.TedrosStyleUtil;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-
 public class TPanelBehavior extends TDynaViewCrudBaseBehavior<TPanelMV, TPanel> {
 	
 	@Override

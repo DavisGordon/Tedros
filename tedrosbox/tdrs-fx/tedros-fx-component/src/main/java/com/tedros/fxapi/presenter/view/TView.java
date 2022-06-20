@@ -6,9 +6,12 @@ import java.net.URL;
 import com.tedros.core.control.TProgressIndicator;
 import com.tedros.core.presenter.ITPresenter;
 import com.tedros.core.presenter.view.ITView;
+import com.tedros.core.presenter.view.TViewState;
 import com.tedros.fxapi.modal.TModalPane;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
@@ -19,11 +22,11 @@ public abstract class TView<P extends ITPresenter>
 extends StackPane implements ITView<P>{
 
 	private URL fxmlURL;
+	private String tViewId;
 	private final P presenter;
 	private TModalPane modalPane;
-	
 	private TProgressIndicator progressIndicator;
-	private String tViewId;
+	private SimpleObjectProperty<TViewState> stateProperty= new SimpleObjectProperty<>(TViewState.CREATED);
 	
 	public TView(P presenter) {
 		this.presenter = presenter;
@@ -41,6 +44,7 @@ extends StackPane implements ITView<P>{
 	public void tInitializePresenter(){
 		if(this.presenter == null)
 			throw new IllegalStateException();
+
 		this.presenter.setView(this);
 		this.presenter.initialize();
 	}
@@ -54,7 +58,7 @@ extends StackPane implements ITView<P>{
 		
 		if(gettFxmlURL()==null)
 			throw new IllegalArgumentException("ERROR: FXML not defined!");
-		
+
 		try{
 			FXMLLoader fxmlLoader = new FXMLLoader(gettFxmlURL());
 			fxmlLoader.setRoot(this);
@@ -86,8 +90,9 @@ extends StackPane implements ITView<P>{
 	 * Fecha modal
 	 * */
 	public void tHideModal() {
-		if(modalPane!=null)
+		if(modalPane!=null) {
 			modalPane.hideModal();
+		}
 	}
 
 	public TProgressIndicator gettProgressIndicator() {
@@ -124,13 +129,29 @@ extends StackPane implements ITView<P>{
 	}
 	
 	private void initializeModalPane() {
-		if(modalPane==null)
+		if(modalPane==null) {
 			modalPane = new TModalPane(this);
+		}
 	}
 
 	private void initializeProgressIndicator() {
 		if(progressIndicator==null)
 			progressIndicator = new TProgressIndicator(this);
+	}
+	
+	public void settState(TViewState state) {
+		this.stateProperty.setValue(state);
+	}
+	
+	public TViewState gettState() {
+		return this.stateProperty.getValue();
+	}
+
+	/**
+	 * @return the stateProperty
+	 */
+	public ReadOnlyObjectProperty<TViewState> tStateProperty() {
+		return stateProperty;
 	}
 	
 	

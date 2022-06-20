@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import com.tedros.core.ITModule;
 import com.tedros.core.model.ITModelView;
+import com.tedros.core.presenter.view.TViewState;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.parser.TStackPaneParser;
@@ -13,6 +14,7 @@ import com.tedros.fxapi.annotation.process.TEntityProcess;
 import com.tedros.fxapi.annotation.process.TModelProcess;
 import com.tedros.fxapi.annotation.process.TReportProcess;
 import com.tedros.fxapi.descriptor.TComponentDescriptor;
+import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.exception.TErrorType;
 import com.tedros.fxapi.presenter.TPresenter;
 import com.tedros.fxapi.presenter.behavior.ITBehavior;
@@ -21,6 +23,9 @@ import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.util.TReflectionUtil;
 
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.StackPane;
 
@@ -165,6 +170,11 @@ public class TDynaPresenter<M extends TModelView> extends TPresenter<ITDynaView<
 	@Override
 	public void loadView() {
 		
+		if(!super.getView().gettState().equals(TViewState.CREATED))
+			return;
+		
+		super.getView().settState(TViewState.LOADING);
+		
 		decorator.setPresenter(this);
 		decorator.decorate();
 		
@@ -189,8 +199,6 @@ public class TDynaPresenter<M extends TModelView> extends TPresenter<ITDynaView<
 		}
 		
 		behavior.load();
-		
-		super.loadView();
 	}
 	
 	// private methods
@@ -289,9 +297,29 @@ public class TDynaPresenter<M extends TModelView> extends TPresenter<ITDynaView<
 		return behavior.canInvalidate();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void loadModelView(ITModelView modelView) {
-		this.behavior.setModelView(modelView);
+		if(getView().gettState().equals(TViewState.READY)) {
+			this.behavior.setViewMode(TViewMode.EDIT);
+			this.behavior.setModelView(modelView);
+		}else {
+			this.modelView = (M) modelView;
+			ChangeListener<TViewState> bchl = new ChangeListener<TViewState>(){
+				@Override
+				public void changed(ObservableValue<? extends TViewState> a, TViewState o, TViewState n) {
+					if(n!=null && n.equals(TViewState.READY) 
+							&& (getBehavior().getModelView()==null || 
+									getBehavior().getModelView()!= modelView)) {
+						getBehavior().setViewMode(TViewMode.EDIT);
+						getBehavior().setModelView((TModelView) modelView);
+					}
+					if(n!=null && n.equals(TViewState.READY))
+						getView().tStateProperty().removeListener(this);
+				}
+			};
+			getView().tStateProperty().addListener(bchl);
+		}
 		
 	}
 }
