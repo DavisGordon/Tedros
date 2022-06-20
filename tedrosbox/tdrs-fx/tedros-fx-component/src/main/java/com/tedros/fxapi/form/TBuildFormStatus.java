@@ -11,9 +11,9 @@ import com.tedros.core.TLanguage;
  */
 public enum TBuildFormStatus {
 	STARTING ("#{tedros.fxapi.status.starting}"),
-	BUILDING("#{tedros.fxapi.status.starting}"),
+	BUILDING("#{tedros.fxapi.status.building}"),
 	LOADING("#{tedros.fxapi.status.loading}"),
-	FINISHED("#{tedros.fxapi.status.starting}");
+	FINISHED("#{tedros.fxapi.status.finished}");
 	
 	private String value;
 	

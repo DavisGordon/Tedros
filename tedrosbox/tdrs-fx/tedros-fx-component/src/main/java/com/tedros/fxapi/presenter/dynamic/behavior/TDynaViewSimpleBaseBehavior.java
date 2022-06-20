@@ -12,6 +12,7 @@ import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.presenter.ITPresenter;
 import com.tedros.core.presenter.view.ITView;
+import com.tedros.core.presenter.view.TViewState;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.fxapi.annotation.process.TEjbService;
@@ -28,6 +29,7 @@ import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.behavior.TBehavior;
 import com.tedros.fxapi.presenter.behavior.TProcessResult;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
+import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewSimpleBaseDecorator;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.process.TModelProcess;
 
@@ -48,10 +50,13 @@ import javafx.scene.layout.StackPane;
 public abstract class TDynaViewSimpleBaseBehavior<M extends TModelView, E extends ITModel> 
 extends TBehavior<M, TDynaPresenter<M>> {
 	
+	private TDynaViewSimpleBaseDecorator decorator;
+	
 	protected TActionHelper actionHelper = new TActionHelper();
 	
 	private Class<? extends TModelProcess> modelProcessClass;
 	private Class<M> modelViewClass;
+	
 	private boolean skipChangeValidation;
 	private boolean skipRequiredValidation;
 	private boolean showMessages = true;
@@ -60,12 +65,14 @@ extends TBehavior<M, TDynaPresenter<M>> {
 	
 	private final ObjectProperty<TActionState<M>> actionStateProperty = new SimpleObjectProperty<>();
 	private final ObservableList<TMessage> messagesProperty = FXCollections.observableArrayList();
-    
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void load(){	
 		
 		final TDynaPresenter<M> presenter = getPresenter(); 
+		
+		this.decorator = (TDynaViewSimpleBaseDecorator) this.getPresenter().getDecorator();
 		
 		this.modelViewClass = presenter.getModelViewClass();
 		setModelView(presenter.getModelView());
@@ -101,6 +108,12 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		};
 		super.getListenerRepository().add("modalCleanMsgLtnr", modalCleanMsgLtnr);
 		getView().tModalVisibleProperty().addListener(new WeakChangeListener<Boolean>(modalCleanMsgLtnr));
+	}
+	
+	public void showScreenSaver() {
+		if(!getView().gettState().equals(TViewState.READY))
+			super.setViewStateAsReady();
+		decorator.showScreenSaver();
 	}
 
 	/**

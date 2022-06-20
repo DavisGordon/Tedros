@@ -19,6 +19,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
@@ -74,6 +75,9 @@ extends TDynaViewCrudBaseDecorator<M> {
 		tListView.autosize();
 		tListView.setMaxWidth(listViewMaxWidth);
 		tListView.setMinWidth(listViewMinWidth);
+		tListView.setEditable(true);
+		tListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+		
 		
 		// build the label for the list view
 		tListViewTitle = new Label(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_listTitle : tPresenter.decorator().listTitle()));

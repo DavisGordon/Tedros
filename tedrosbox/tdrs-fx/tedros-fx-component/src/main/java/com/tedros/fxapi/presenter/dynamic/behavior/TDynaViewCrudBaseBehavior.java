@@ -165,7 +165,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				decorator.gettBreadcrumbForm().tEntryListProperty().clear();
 			super.clearForm();
 			setDisableModelActionButtons(true);
-			this.decorator.showScreenSaver();
+			showScreenSaver();
 			return;
 		}
 			
@@ -174,8 +174,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				decorator.gettBreadcrumbForm().tEntryListProperty().clear();
 			showForm(getViewMode());
 			setDisableModelActionButtons(false);
-			
-		}
+		}else
+			super.showScreenSaver();
 	}
 	
 	protected void runAfterBuildForm(ITModelForm<M> form) {
@@ -792,13 +792,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		}
 	}
 	
-	
 	public void editEntity(TModelView model) {
 		showForm(TViewMode.EDIT);
-		
 	}
 	
-
 	public TDynaPresenter getModulePresenter() {
 				
 		ITModule module = getPresenter().getModule() ;
