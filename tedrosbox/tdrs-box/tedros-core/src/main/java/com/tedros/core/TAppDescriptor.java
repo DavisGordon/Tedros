@@ -155,4 +155,14 @@ public class TAppDescriptor {
 		return resourceNameList;
 	}
 
+	/**
+	 * @return the appStarterClass
+	 */
+	@SuppressWarnings("rawtypes")
+	public Class getAppStarterClass() {
+		return appStarterClass;
+	}
+	
+	
+
 }

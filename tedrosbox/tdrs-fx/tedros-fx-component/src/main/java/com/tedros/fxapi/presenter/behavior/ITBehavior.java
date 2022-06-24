@@ -32,6 +32,8 @@ public interface ITBehavior<M extends TModelView, P extends ITPresenter> {
 	
 	public TObjectRepository getListenerRepository();
 	
+	public void loadModelView(ITModelView modelView);
+	
 	/**
 	 * Set the form mode. 
 	 * */

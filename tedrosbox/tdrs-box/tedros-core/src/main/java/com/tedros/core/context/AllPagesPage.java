@@ -8,16 +8,19 @@ package com.tedros.core.context;
 import javafx.scene.Node;
 
 
-public class AllPagesPage extends Page
-{
+public class AllPagesPage extends Page{
 
-    public AllPagesPage()
-    {
+    public AllPagesPage(){
         super("All");
     }
 
-    public Node createModule()
-    {
+    @Override
+    public Node createModule(){
         return null;
     }
+
+	@Override
+	public Node getModule() {
+		return null;
+	}
 }

@@ -32,8 +32,12 @@ abstract class TedrosAppLoader {
 	
 	@SuppressWarnings("rawtypes")
 	protected void addApplication(Class appStarterClass){
-		appContexts.add(new TAppContext(appStarterClass));
-		LOGGER.info("App "+appStarterClass.getCanonicalName()+" added!");
+		if(!appContexts.stream().anyMatch(p->{
+			return p.getAppDescriptor().getAppStarterClass() == appStarterClass;
+		})) {
+			appContexts.add(new TAppContext(appStarterClass));
+			LOGGER.info("App "+appStarterClass.getCanonicalName()+" added!");
+		}
 	}
 	
 	public ObservableList<TAppContext> getAppContexts() {

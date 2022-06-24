@@ -55,12 +55,15 @@ class InternalViewPage extends Page{
         setMenuIcon();
     }
     
+    public Node getModule() {
+    	return (TModule) context.getModule();
+    }
+    
 	public Node createModule(){
     	try {
             // create view
     		context.buildModule();
-            final TModule view = (TModule) context.getModule();
-            return view;            
+            return getModule();
         } catch (Exception e) {
             e.printStackTrace();
             return new Text("Failed to create view because of ["+e.getMessage()+"]");

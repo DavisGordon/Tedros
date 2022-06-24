@@ -42,7 +42,10 @@ class InternalViewHelper {
     	
         Map<String, CategoryPage> categoryPageMap = new HashMap<String, CategoryPage>();
         for (TModuleContext  context : contexts) {
-        	String oneSampleUrl = context.getAppContext().getAppDescriptor().getName()+"/"+context.getModuleDescriptor().getMenu()+"/"+context.getModuleDescriptor().getModuleName();
+        	String oneSampleUrl = context.getAppContext()
+        			.getAppDescriptor().getName()+"/"
+        			+context.getModuleDescriptor().getMenu()+"/"
+        			+context.getModuleDescriptor().getModuleName();
         	try{
 	            // create module page
 	            InternalViewPage internalViewPage = new InternalViewPage(context);

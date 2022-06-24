@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import com.tedros.core.model.ITModelView;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.fxapi.control.action.TPresenterAction;
 import com.tedros.fxapi.domain.TViewMode;
@@ -72,5 +73,10 @@ extends TDetailFieldBaseBehavior<M, E> {
 	@Override
 	public String canInvalidate() {
 		return null;
+	}
+
+	@Override
+	public void loadModelView(ITModelView modelView) {
+		super.setModelView(modelView);
 	}
 }

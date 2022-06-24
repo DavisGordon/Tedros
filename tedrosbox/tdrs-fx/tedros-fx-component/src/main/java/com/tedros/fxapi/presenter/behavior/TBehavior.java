@@ -254,6 +254,11 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 		return  this.presenter==null ? null : (V) this.presenter.getView();
 	}
 	
+	@Override
+	public void loadModelView(ITModelView modelView) {
+		setModelView(modelView);
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public  void setModelView(ITModelView modelView) {

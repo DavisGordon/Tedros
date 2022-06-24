@@ -4,11 +4,12 @@ import java.lang.reflect.InvocationTargetException;
 
 import com.tedros.ejb.base.model.ITReportModel;
 import com.tedros.fxapi.domain.TViewMode;
+import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewReportBaseBehavior;
 import com.tedros.fxapi.presenter.model.TModelView;
 
 @SuppressWarnings({ "rawtypes" })
 public class TDataSetReportBehavior<M extends TModelView, E extends ITReportModel>
-extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewReportBaseBehavior<M, E> {
+extends TDynaViewReportBaseBehavior<M, E> {
 	
 		
 	@Override
@@ -40,8 +41,6 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewReportBaseBehavior<
 	}
 	
 	
-	
-
 	@Override
 	public void colapseAction() {
 		// TODO Auto-generated method stub
@@ -52,5 +51,4 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewReportBaseBehavior<
 	public String canInvalidate() {
 		return null;
 	}
-		
 }
