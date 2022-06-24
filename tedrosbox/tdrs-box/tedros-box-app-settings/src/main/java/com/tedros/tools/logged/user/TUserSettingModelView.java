@@ -20,9 +20,9 @@ import com.tedros.fxapi.annotation.presenter.TDecorator;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
 import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.property.TReadOnlyBooleanProperty;
-import com.tedros.fxapi.annotation.reader.TFormReaderHtml;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
+import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.tools.util.ToolsKey;
@@ -36,7 +36,6 @@ import javafx.beans.property.SimpleStringProperty;
  *
  */
 @TForm(name=ToolsKey.SECURITY_USER_FORM_NAME)
-@TFormReaderHtml
 @TPresenter(type=TDynaPresenter.class, 
 			decorator=@TDecorator(type = TUserSettingDecorator.class, 
 			buildModesRadioButton=false, saveButtonText=ToolsKey.APPLY ),
@@ -46,29 +45,34 @@ public class TUserSettingModelView extends TEntityModelView<TUser> {
 
 	private SimpleLongProperty id;
 	
+	public static final int SIZE = 350;
+	
 
-	@TLabel(text=ToolsKey.NAME)
-	@TTextField(maxLength=100, required=true, control=@TControl(maxWidth=180, parse = true))
+	@TLabel(text=ToolsKey.NAME, font=@TFont(size=10))
+	@TTextField(maxLength=100, required=true, 
+	control=@TControl(maxWidth=SIZE, parse = true))
 	private SimpleStringProperty name;
 	
 	
-	@TLabel(text=ToolsKey.USERLOGIN)
-	@TTextField(maxLength=100, required=true, control=@TControl(maxWidth=180, parse = true))
+	@TLabel(text=ToolsKey.USERLOGIN, font=@TFont(size=10))
+	@TTextField(maxLength=100, required=true, 
+	control=@TControl(maxWidth=SIZE, parse = true))
 	private SimpleStringProperty login;
 	
-	@TLabel(text=ToolsKey.PASSWORD)
-	@TPasswordField(required=true, control=@TControl(maxWidth=180, parse = true),
+	@TLabel(text=ToolsKey.PASSWORD, font=@TFont(size=10))
+	@TPasswordField(required=true, 
+	control=@TControl(maxWidth=SIZE, parse = true),
 		node=@TNode(focusedProperty=@TReadOnlyBooleanProperty(
 				observableValue=@TObservableValue(addListener=TEncriptPasswordChangeListener.class), 
 				parse = true), 
 		parse = true))
 	private SimpleStringProperty password;
 	
-	@TLabel(text = "#{tedros.profile}")
+	@TLabel(text = "#{tedros.profile}", font=@TFont(size=10))
 	@TShowField(fields=@TField(name="name"))
 	private SimpleObjectProperty<TProfile> activeProfile;
 
-	@TLabel(text = "#{tedros.language}")
+	@TLabel(text = "#{tedros.language}", font=@TFont(size=10))
 	@TVerticalRadioGroup(radioButtons= {@TRadioButton(text = "English", userData = "en"),
 			@TRadioButton(text = "Português", userData = "pt")})
 	private SimpleStringProperty language;

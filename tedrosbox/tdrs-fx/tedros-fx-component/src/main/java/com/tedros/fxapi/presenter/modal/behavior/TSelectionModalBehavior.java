@@ -76,5 +76,6 @@ extends TDynaViewSelectionBaseBehavior<M, E> {
 	public String canInvalidate() {
 		return null;
 	}
-		
+
+
 }

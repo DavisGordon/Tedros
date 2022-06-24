@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.Iterator;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,10 +23,12 @@ import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.context.TedroxBoxHeaderButton;
 import com.tedros.core.control.PopOver;
+import com.tedros.core.control.PopOver.ArrowLocation;
 import com.tedros.core.control.TedrosBoxBreadcrumbBar;
 import com.tedros.core.control.TedrosBoxResizeBar;
 import com.tedros.core.logging.TLoggerManager;
 import com.tedros.core.style.TThemeUtil;
+import com.tedros.fxapi.control.TLabel;
 import com.tedros.fxapi.layout.TSliderMenu;
 import com.tedros.fxapi.modal.TConfirmMessageBox;
 import com.tedros.fxapi.modal.TModalPane;
@@ -60,6 +61,7 @@ import javafx.scene.Node;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -80,6 +82,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.PopupWindow.AnchorLocation;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -313,7 +316,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
         
         appName.setOnMouseClicked(e -> {
         	String tt = TLanguage.getInstance(null).getFormatedString("#{tedros.tooltip}", TedrosRelease.version);
-        	Label l = new Label(tt);
+        	TLabel l = new TLabel(tt);
         	l.setFont(Font.font(11));
         	PopOver p = new PopOver();
         	p.setCloseButtonEnabled(true);
@@ -375,9 +378,36 @@ public class TedrosBox extends Application implements ITedrosBox  {
         pageToolBar = new ToolBar();
         pageToolBar.setId("t-tedros-toolbar");
         pageToolBar.setMaxSize(Double.MAX_VALUE, Control.USE_PREF_SIZE);
+        
+        Button infoButton = new Button("Info");
+        infoButton.getStyleClass().setAll("button","first-button");
+        infoButton.setOnAction(e->{
+        	PopOver p = new PopOver();
+        	p.setHeaderAlwaysVisible(true);
+        	p.setAutoFix(true);
+        	p.setCloseButtonEnabled(true);
+        	p.setArrowLocation(ArrowLocation.TOP_LEFT);
+        	p.show(infoButton);
+        	p.setContentNode(this.settingsAcc);
+        });
+        
+        final Button forwardButton = new Button(" > ");
+        forwardButton.getStyleClass().setAll("button","last-button");
+        forwardButton.setOnAction(e->{
+        	this.forward();
+        });
+        
+        final Button backButton = new Button(" < ");
+        backButton.getStyleClass().setAll("button","middle-button");
+        backButton.setOnAction(e->{
+        	this.back();
+        });
+
+        pageToolBar.getItems().addAll(infoButton, backButton, forwardButton);
+        
         // Inicio breadcrumbar
         breadcrumbBar = new TedrosBoxBreadcrumbBar();
-        pageToolBar.getItems().addAll(breadcrumbBar);
+        pageToolBar.getItems().add(breadcrumbBar);
         // Fim breadcrumbar 
                 
         // create page area
@@ -482,11 +512,13 @@ public class TedrosBox extends Application implements ITedrosBox  {
         currentPagePath = "";
         changingPage = false;
         pageArea.getChildren().clear();
+        TedrosContext.setView(null);
         breadcrumbBar.setPath("");
     	innerPane.settMenuOpened(false);
     	innerPane.tClearMenuContent();
     	innerPane.settMenuVisible(false);
     	mainPane.setTop(null);
+    	cleanHistory();
     }
     
     
@@ -495,25 +527,38 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		pages = new Pages();
     	menuTree.setRoot(pages.getRoot());
     	pages.parseModules();
+    	if(this.currentPage!=null) {
+    		Node n = currentPage.getModule();
+    		if(n!=null && n instanceof ITModule)
+    			((ITModule)n).tStop();
+    		this.currentPage = null;
+    		this.currentPagePath = null;
+    	}
+    		
+        TedrosContext.setView(null);
         // goto initial page
         goToPage(pages.getModules());
         innerPane.settMenuContent(leftMenuPane);
     	innerPane.settMenuVisible(true);
     	mainPane.setTop(this.pageToolBar);
+    	cleanHistory();
     }
-	
+
 	@SuppressWarnings("rawtypes")
 	public void buildSettingsPane() {
 		TLanguage iEngine = TLanguage.getInstance(null);
 		
-		if(settingsAcc!=null &&  leftMenuPane.getChildren().contains(settingsAcc)) {
+		if(settingsAcc!=null) {
 			for(TitledPane t : settingsAcc.getPanes())
-				((TDynaPresenter)((TDynaView)((StackPane)t.getContent()).getChildren().get(0)).gettPresenter()).invalidate();
-			leftMenuPane.getChildren().remove(settingsAcc);
+				((TDynaPresenter)((TDynaView)((StackPane)t.getContent())
+						.getChildren().get(0))
+						.gettPresenter()).invalidate();
+			
+			settingsAcc.getPanes().clear();
+		}else {
+			settingsAcc = new Accordion();
+			settingsAcc.autosize();
 		}
-		settingsAcc = new Accordion();
-		settingsAcc.autosize();
-		
         TitledPane t = new TitledPane();
         t.setText(iEngine.getString("#{tedros.setting.user}"));
         t.setContent(new TUserSettingsPane());
@@ -524,8 +569,8 @@ public class TedrosBox extends Application implements ITedrosBox  {
        // settingsAcc.getStyleClass().add("t-settings-page");
         t.getStyleClass().add("t-settings-header");
         t2.getStyleClass().add("t-settings-header");
+        settingsAcc.setExpandedPane(t);
         settingsAcc.getPanes().addAll(t, t2);
-        leftMenuPane.getChildren().add(settingsAcc);
 	}
     
     public Node buildLogin(){
@@ -560,16 +605,13 @@ public class TedrosBox extends Application implements ITedrosBox  {
     
     public void goToPage(String pagePath){
        TedrosContext.setPageProperty(pages.getPage(pagePath), true, false, true);
-    	//goToPage(pages.getPage(pagePath));
     }
 
     public void goToPage(String pagePath, boolean force){
     	TedrosContext.setPageProperty(pages.getPage(pagePath), true, force, true);
-        //goToPage(pages.getPage(pagePath), true, force, true);
     }
 
     public void goToPage(Page page){
-        //goToPage(page, true, false, true);
     	TedrosContext.setPageProperty(page, true, false, true);
     }
 
@@ -610,7 +652,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     		callPage(page, addHistory, force, swapViews);
     }
     
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({ "unchecked" })
 	private void callPage(Page page, boolean addHistory, boolean force, boolean swapViews){
         if(page == null)
             return;
@@ -619,11 +661,19 @@ public class TedrosBox extends Application implements ITedrosBox  {
         
         changingPage = true;
         if(swapViews){
-            Node view = page.createModule();
+        	
+        	boolean created = false;
+  
+            Node view = page.getModule();
+            if(view==null) {
+            	view = page.createModule();
+            	created = true;
+            }
+            
             if(view == null)
                 view = new Region();
             if(force || view != TedrosContext.getView()){
-            	boolean change = true;
+            	/*boolean change = true;
                 Iterator i = pageArea.getChildren().iterator();
                 do{
                     if(!i.hasNext())
@@ -641,12 +691,13 @@ public class TedrosBox extends Application implements ITedrosBox  {
                 if(!change) {
                 	changingPage = false;
                 	return;
-                }
+                }*/
                 	
                 Node content;
                 if(view instanceof ITModule){
                 	
-                	((ITModule)view).tStart();
+                	if(created)
+                		((ITModule)view).tStart();
                 	
                 	ScrollPane scrollPane = new ScrollPane();
                     scrollPane.setContent(view);
@@ -654,19 +705,15 @@ public class TedrosBox extends Application implements ITedrosBox  {
                     scrollPane.setFitToHeight(true);
                     scrollPane.setMinWidth(725);
                     scrollPane.getStyleClass().add("noborder-scroll-pane");
-                   // scrollPane.setStyle("-fx-background-color: transparent; -fx-padding: 20 20 20 0;");
                     content = scrollPane;
-                    
-                   // this.expandedTollBar = TedrosContext.isCollapseMenu(); //true;
-                    //colapseMenuBar();
                 }else {
                 	content = view;
                 	content.setStyle("-fx-background-color: transparent;");
-                	//this.expandedTollBar = false;
-                   // colapseMenuBar();
                 }
                 pageArea.getChildren().setAll(content);
                 TedrosContext.setView(view);
+                addHistory(addHistory, page);
+                
             }
         }
         
@@ -682,8 +729,118 @@ public class TedrosBox extends Application implements ITedrosBox  {
         System.gc();
         Runtime.getRuntime().runFinalization();
     }
+
+	/**
+	 * @param addHistory
+	 */
+	private void addHistory(boolean addHistory, Page page) {
+		if(addHistory && currentPage!=null 
+				&& currentPage.getModule() instanceof ITModule){
+			Page p =  currentPage;
+		    history.push(p);
+		    resizeHistory();
+		    if(page.getModule() instanceof ITModule)
+		    	cleanForward();
+		}
+	}
+
+	/**
+	 * 
+	 */
+	private void resizeHistory() {
+		if(history.size()>2) {
+			Page rem = history.remove(0);
+			Node n = rem.getModule();
+			if(n instanceof ITModule)
+				((ITModule)n).tStop();
+		}
+	}
        
-    public void showModalMessage(Node message) {
+    /**
+	 * Check if current call stack was from back or forward button's action
+	 * 
+	 * @return True if current call was caused by action on back or forward button
+	 */
+	public boolean isFromForwardOrBackButton() {
+	    return fromForwardOrBackButton;
+	}
+
+	/**
+	 * Got to previous page in history
+	 */
+	public void back() {
+	    fromForwardOrBackButton = true;
+	    if (!history.isEmpty()) {      
+	        Page prevPage = (Page) history.pop();
+	        if(currentPage!=null 
+	        		&& currentPage.getModule() instanceof ITModule)
+	        	forwardHistory.push(currentPage);
+	        TedrosContext.setPageProperty(prevPage,false, false, true);
+	    }
+	    fromForwardOrBackButton = false;
+	    this.printHistory();
+	}
+
+	/**
+	 * Go to next page in history if there is one
+	 */
+	public void forward() {
+	    fromForwardOrBackButton = true;
+	    if (!forwardHistory.isEmpty()) {
+	        Page prevPage = (Page) forwardHistory.pop();
+	        if(currentPage!=null 
+	        		&& currentPage.getModule() instanceof ITModule) {
+	        	history.push(currentPage);
+	        	resizeHistory();
+	        }
+	        TedrosContext.setPageProperty(prevPage,false, false, true);
+	    }
+	    fromForwardOrBackButton = false;
+	    this.printHistory();
+	}
+
+	private void printHistory() {
+	    System.out.print("   HISTORY = ");
+	    for (Object o :history) {
+	    	Page page = (Page) o;
+	        System.out.print(page.getName()+"->");
+	    }
+	    System.out.print("   ["+currentPage.getName()+"]");
+	    for (Object o :forwardHistory) {
+	    	Page page = (Page) o;
+	        System.out.print(page.getName()+"->");
+	    }
+	    System.out.print("\n");
+	}
+
+	/**
+	 * 
+	 */
+	private void cleanHistory() {
+		history.stream().forEach(p->{
+			Node n = p.getModule();
+			if(n!=null && n instanceof ITModule) {
+				((ITModule)n).tStop();
+			}
+		});
+		history.clear();
+		cleanForward();
+	}
+
+	/**
+	 * 
+	 */
+	private void cleanForward() {
+		forwardHistory.stream().forEach(p->{
+			Node n = p.getModule();
+			if(n!=null && n instanceof ITModule) {
+				((ITModule)n).tStop();
+			}
+		});
+		forwardHistory.clear();
+	}
+
+	public void showModalMessage(Node message) {
         modalMessage.getChildren().add(message);
         modalMessage.setOpacity(0);
         modalMessage.setVisible(true);
@@ -719,41 +876,6 @@ public class TedrosBox extends Application implements ITedrosBox  {
                 new KeyValue(modalMessage.opacityProperty(),0, Interpolator.EASE_BOTH)
         ));
         tl.play();
-    }
-    
-    /**
-     * Check if current call stack was from back or forward button's action
-     * 
-     * @return True if current call was caused by action on back or forward button
-     */
-    public boolean isFromForwardOrBackButton() {
-        return fromForwardOrBackButton;
-    }
-    
-    /**
-     * Got to previous page in history
-     */
-	public void back() {
-        fromForwardOrBackButton = true;
-        if (!history.isEmpty()) {      
-            Page prevPage = (Page) history.pop();
-            forwardHistory.push(currentPage);
-            TedrosContext.setPageProperty(prevPage,false, false, true);
-        }
-        fromForwardOrBackButton = false;
-    }
-
-    /**
-     * Go to next page in history if there is one
-     */
-	public void forward() {
-        fromForwardOrBackButton = true;
-        if (!forwardHistory.isEmpty()) {
-            Page prevPage = (Page) forwardHistory.pop();
-            history.push(currentPage);
-            TedrosContext.setPageProperty(prevPage,false, false, true);
-        }
-        fromForwardOrBackButton = false;
     }
     
     /**

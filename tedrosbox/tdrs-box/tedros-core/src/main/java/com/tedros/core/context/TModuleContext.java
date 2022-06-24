@@ -35,15 +35,6 @@ public final class TModuleContext implements Comparable<TModuleContext>{
 		this.viewContexts =  new ArrayList<>();//FXCollections.observableArrayList();
 	}
 	
-	/*public void setContext(TEntry<Object> entry){
-		if(tEntry!=null){
-			ITModule module = getModule();
-			if(module != null)
-				module.tStop();
-		}
-		this.tEntry = entry;
-	}*/
-	
 	public TModuleDescriptor getModuleDescriptor() {
 		return descriptor;
 	}
@@ -69,6 +60,8 @@ public final class TModuleContext implements Comparable<TModuleContext>{
 				return false;
 		}
 		viewContexts.clear();
+		currentViewContext = null;
+		module = null;
 		return true;
 	}
 	

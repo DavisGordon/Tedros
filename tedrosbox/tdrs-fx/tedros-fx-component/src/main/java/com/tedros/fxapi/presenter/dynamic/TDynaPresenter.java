@@ -23,7 +23,6 @@ import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.util.TReflectionUtil;
 
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -302,7 +301,7 @@ public class TDynaPresenter<M extends TModelView> extends TPresenter<ITDynaView<
 	public void loadModelView(ITModelView modelView) {
 		if(getView().gettState().equals(TViewState.READY)) {
 			this.behavior.setViewMode(TViewMode.EDIT);
-			this.behavior.setModelView(modelView);
+			this.behavior.loadModelView(modelView);
 		}else {
 			this.modelView = (M) modelView;
 			ChangeListener<TViewState> bchl = new ChangeListener<TViewState>(){
@@ -312,7 +311,7 @@ public class TDynaPresenter<M extends TModelView> extends TPresenter<ITDynaView<
 							&& (getBehavior().getModelView()==null || 
 									getBehavior().getModelView()!= modelView)) {
 						getBehavior().setViewMode(TViewMode.EDIT);
-						getBehavior().setModelView((TModelView) modelView);
+						getBehavior().loadModelView((TModelView) modelView);
 					}
 					if(n!=null && n.equals(TViewState.READY))
 						getView().tStateProperty().removeListener(this);

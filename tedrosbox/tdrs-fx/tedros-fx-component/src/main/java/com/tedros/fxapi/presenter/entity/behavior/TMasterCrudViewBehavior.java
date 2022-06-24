@@ -11,6 +11,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.core.annotation.security.TAuthorizationType;
+import com.tedros.core.model.ITModelView;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.ejb.base.result.TResult;
 import com.tedros.ejb.base.result.TResult.TState;
@@ -413,6 +414,13 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void loadModelView(ITModelView m) {
+		this.addInListView((M) m);
+		this.processListViewSelectedItem((M) m);
+	}
+	
 	public void remove() {
 		final ListView<M> listView = this.decorator.gettListView();
 		int index = getModels().indexOf(getModelView());
@@ -436,10 +444,17 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	}
 	
 	public boolean processNewEntityBeforeBuildForm(M model) {
+		addInListView(model);
+		return false;
+	}
+
+	/**
+	 * @param model
+	 */
+	private void addInListView(M model) {
 		final ListView<M> list = this.decorator.gettListView();
 		list.getItems().add(model);
 		list.selectionModelProperty().get().select(list.getItems().size()-1);
-		return false;
 	}
 	
 	@Override

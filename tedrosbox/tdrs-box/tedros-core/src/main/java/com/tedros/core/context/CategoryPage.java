@@ -19,14 +19,22 @@ import javafx.scene.layout.VBox;
  *
  */
 public class CategoryPage extends Page {
+	
+	private Node module;
 
     public CategoryPage(String name, Page ... pages) {
         super(name);
+        super.setExpanded(true);
         getChildren().addAll(Arrays.asList(pages));
+    }
+    
+    public Node getModule() {
+    	return module;
     }
 
     @SuppressWarnings("restriction")
-	@Override public Node createModule() {
+	@Override 
+	public Node createModule() {
         // split children
         List<InternalViewPage> directChildren = new ArrayList<InternalViewPage>();
         List<CategoryPage> categoryChildren = new ArrayList<CategoryPage>();
@@ -98,7 +106,9 @@ public class CategoryPage extends Page {
         scrollPane.setStyle("-fx-background-color: transparent;");
         scrollPane.setFitToWidth(true);
         scrollPane.setContent(hb);
-        return scrollPane;
+        
+        module = scrollPane;
+        return module;
     }
 
     private void addAllCategoriesTiles(CategoryPage categoryPage, TilePane pane) {

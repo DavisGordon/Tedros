@@ -2,11 +2,12 @@ package com.tedros.fxapi.presenter.entity.behavior;
 
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.modal.TMessageBox;
+import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewSimpleBaseBehavior;
 import com.tedros.fxapi.presenter.model.TModelView;
 
 @SuppressWarnings({ "rawtypes" })
 public class TViewBehavior<M extends TModelView, E extends ITModel>
-extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewSimpleBaseBehavior<M, E> {
+extends TDynaViewSimpleBaseBehavior<M, E> {
 		
 	@Override
 	public void load() {
@@ -34,5 +35,4 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewSimpleBaseBehavior<
 	public String canInvalidate() {
 		return null;
 	}
-
 }

@@ -35,6 +35,8 @@ public abstract class Page extends TreeItem<String> {
     }
 
     public abstract Node createModule();
+    
+    public abstract Node getModule();
 
     /** 
      * find a child with a '/' deliminated path 

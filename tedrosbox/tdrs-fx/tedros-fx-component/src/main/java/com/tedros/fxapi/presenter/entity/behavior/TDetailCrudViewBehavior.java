@@ -2,6 +2,7 @@ package com.tedros.fxapi.presenter.entity.behavior;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import com.tedros.core.model.ITModelView;
 import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.fxapi.annotation.presenter.TBehavior;
 import com.tedros.fxapi.control.action.TPresenterAction;
@@ -31,7 +32,7 @@ import javafx.util.Callback;
 
 @SuppressWarnings({ "rawtypes" })
 public class TDetailCrudViewBehavior<M extends TEntityModelView, E extends ITEntity>
-extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M, E> {
+extends TDynaViewCrudBaseBehavior<M, E> {
 	
 	private TDetailCrudViewDecorator<M> decorator;
 
@@ -115,14 +116,8 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		
 	protected void configListView() {
 		
-		ChangeListener<M> chl = (a0, old_, new_) -> {
-			if(new_==null) {
-				setModelView(null);
-				showListView();
-			}else{
-				selectedItemAction(new_);
-				hideListView();
-			}
+		ChangeListener<M> chl = (a, o, n) -> {
+			this.processListViewSelectedItem(n);
 		};
 		
 		super.getListenerRepository().add("listviewselecteditemviewCL", chl);
@@ -156,10 +151,17 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	}
 
 	public boolean processNewEntityBeforeBuildForm(M model) {
+		addInListView(model);
+		return false;
+	}
+
+	/**
+	 * @param model
+	 */
+	private void addInListView(M model) {
 		final ListView<M> list = this.decorator.gettListView();
 		list.getItems().add(model);
 		list.selectionModelProperty().get().select(list.getItems().size()-1);
-		return false;
 	}
 	
 	@Override
@@ -220,6 +222,24 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		final TDynaPresenter presenter = getModulePresenter();
 		final TDynaViewCrudBaseBehavior behavior = (TDynaViewCrudBaseBehavior)presenter.getBehavior();
 		behavior.addBreadcrumbFormChangeListener();
+	}
+	
+	protected void processListViewSelectedItem(M m) {
+		if(m==null) {
+			setModelView(null);
+			showListView();
+		}else{
+			selectedItemAction(m);
+			hideListView();
+		}
+	}
+
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void loadModelView(ITModelView m) {
+		this.addInListView((M) m);
+		this.processListViewSelectedItem((M) m);
 	}
 	
 }

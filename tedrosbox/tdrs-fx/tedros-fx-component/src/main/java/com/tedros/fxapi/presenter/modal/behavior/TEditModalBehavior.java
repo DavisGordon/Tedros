@@ -14,6 +14,7 @@ import com.tedros.fxapi.modal.TMessageBox;
 import com.tedros.fxapi.presenter.behavior.TActionState;
 import com.tedros.fxapi.presenter.behavior.TActionType;
 import com.tedros.fxapi.presenter.behavior.TProcessResult;
+import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 import com.tedros.fxapi.presenter.modal.decorator.TEditModalDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.util.TEntityListViewCallback;
@@ -32,7 +33,7 @@ import javafx.util.Callback;
 
 @SuppressWarnings({ "rawtypes" })
 public class TEditModalBehavior<M extends TEntityModelView, E extends ITEntity>
-extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M, E> {
+extends TDynaViewCrudBaseBehavior<M, E> {
 	
 	protected TEditModalDecorator<M> decorator;
 	private boolean singleMode = false;
@@ -262,6 +263,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		list.selectionModelProperty().get().select(list.getItems().size()-1);
 		return false;
 	}
+
 	
 	@Override
 	public boolean invalidate() {
