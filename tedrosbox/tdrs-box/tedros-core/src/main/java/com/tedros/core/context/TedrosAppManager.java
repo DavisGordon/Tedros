@@ -36,7 +36,7 @@ public final class TedrosAppManager extends TedrosAppLoader {
 				}
 			});
 		});
-		TedrosContext.setPagePathProperty(pp.toString(), true, true, false);
+		TedrosContext.setPagePathProperty(pp.toString(), true, false, true);
 	}
 	
 
