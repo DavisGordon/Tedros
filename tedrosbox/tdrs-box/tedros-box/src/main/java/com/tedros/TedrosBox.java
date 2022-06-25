@@ -378,9 +378,9 @@ public class TedrosBox extends Application implements ITedrosBox  {
         pageToolBar = new ToolBar();
         pageToolBar.setId("t-tedros-toolbar");
         pageToolBar.setMaxSize(Double.MAX_VALUE, Control.USE_PREF_SIZE);
-        
-        Button infoButton = new Button("Info");
-        infoButton.getStyleClass().setAll("button","first-button");
+       
+        Button infoButton = new Button();
+        infoButton.getStyleClass().addAll("info");
         infoButton.setOnAction(e->{
         	PopOver p = new PopOver();
         	p.setHeaderAlwaysVisible(true);
@@ -391,19 +391,24 @@ public class TedrosBox extends Application implements ITedrosBox  {
         	p.setContentNode(this.settingsAcc);
         });
         
-        final Button forwardButton = new Button(" > ");
-        forwardButton.getStyleClass().setAll("button","last-button");
+        final Button forwardButton = new Button("");
+        forwardButton.getStyleClass().addAll("forward");
         forwardButton.setOnAction(e->{
         	this.forward();
         });
         
-        final Button backButton = new Button(" < ");
-        backButton.getStyleClass().setAll("button","middle-button");
+        final Button backButton = new Button();
+        backButton.getStyleClass().addAll("back");
         backButton.setOnAction(e->{
         	this.back();
         });
-
-        pageToolBar.getItems().addAll(infoButton, backButton, forwardButton);
+        HBox btnBox = new HBox();
+        btnBox.getChildren().addAll(infoButton, backButton, forwardButton);
+        HBox.setMargin(infoButton, new Insets(0,10,0,0));
+        HBox.setMargin(backButton, new Insets(0,10,0,0));
+        HBox.setMargin(forwardButton, new Insets(0,10,0,0));
+        
+        pageToolBar.getItems().add(btnBox);
         
         // Inicio breadcrumbar
         breadcrumbBar = new TedrosBoxBreadcrumbBar();
@@ -559,9 +564,11 @@ public class TedrosBox extends Application implements ITedrosBox  {
 			settingsAcc = new Accordion();
 			settingsAcc.autosize();
 		}
+		TUserSettingsPane u = new TUserSettingsPane();
+		u.setMinWidth(350);
         TitledPane t = new TitledPane();
         t.setText(iEngine.getString("#{tedros.setting.user}"));
-        t.setContent(new TUserSettingsPane());
+        t.setContent(u);
         
         TitledPane t2 = new TitledPane();
         t2.setText(iEngine.getString("#{tedros.setting.main}"));

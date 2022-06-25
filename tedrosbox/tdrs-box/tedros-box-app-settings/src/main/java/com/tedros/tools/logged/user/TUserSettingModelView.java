@@ -6,6 +6,7 @@ package com.tedros.tools.logged.user;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.security.model.TProfile;
 import com.tedros.core.security.model.TUser;
+import com.tedros.fxapi.annotation.TIgnoreField;
 import com.tedros.fxapi.annotation.TObservableValue;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TPasswordField;
@@ -45,23 +46,17 @@ public class TUserSettingModelView extends TEntityModelView<TUser> {
 
 	private SimpleLongProperty id;
 	
-	public static final int SIZE = 350;
-	
-
 	@TLabel(text=ToolsKey.NAME, font=@TFont(size=10))
-	@TTextField(maxLength=100, required=true, 
-	control=@TControl(maxWidth=SIZE, parse = true))
+	@TTextField(maxLength=100, required=true)
 	private SimpleStringProperty name;
 	
 	
 	@TLabel(text=ToolsKey.USERLOGIN, font=@TFont(size=10))
-	@TTextField(maxLength=100, required=true, 
-	control=@TControl(maxWidth=SIZE, parse = true))
+	@TTextField(maxLength=100, required=true)
 	private SimpleStringProperty login;
 	
 	@TLabel(text=ToolsKey.PASSWORD, font=@TFont(size=10))
-	@TPasswordField(required=true, 
-	control=@TControl(maxWidth=SIZE, parse = true),
+	@TPasswordField(required=true,
 		node=@TNode(focusedProperty=@TReadOnlyBooleanProperty(
 				observableValue=@TObservableValue(addListener=TEncriptPasswordChangeListener.class), 
 				parse = true), 
