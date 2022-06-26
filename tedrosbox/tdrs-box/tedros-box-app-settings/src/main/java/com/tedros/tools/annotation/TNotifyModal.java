@@ -37,6 +37,7 @@ import javafx.scene.layout.VBox;
  * @author Davis Gordon
  *
  */
+@Deprecated
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface TNotifyModal  {

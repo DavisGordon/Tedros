@@ -240,7 +240,7 @@ public class TTabDetailPresenter<M extends TEntityModelView> {
 					return;
 				
 				final TConfirmMessageBox confirm = new TConfirmMessageBox("Deseja realmente excluir o registro: "+getModel().getDisplayProperty()+" ?");
-				confirm.gettConfirmProperty().addListener(new ChangeListener<Number>() {
+				confirm.tConfirmProperty().addListener(new ChangeListener<Number>() {
 					@Override
 					public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 						if(arg2.equals(1)){

@@ -5,16 +5,13 @@ package com.tedros.tools.control;
 
 import com.tedros.app.component.ITComponent;
 import com.tedros.core.TLanguage;
-import com.tedros.core.TModule;
 import com.tedros.core.context.TedrosAppManager;
-import com.tedros.core.context.TedrosContext;
 import com.tedros.core.control.PopOver;
 import com.tedros.core.module.TObjectRepository;
 import com.tedros.core.notify.model.TNotify;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.control.TButton;
-import com.tedros.fxapi.presenter.dynamic.view.TDynaGroupView;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.util.TEntityListViewCallback;
@@ -31,7 +28,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
@@ -42,6 +38,7 @@ import javafx.util.Callback;
  * @author Davis Gordon
  *
  */
+@Deprecated
 @SuppressWarnings("rawtypes")
 public class TNotifyModal extends VBox implements ITComponent {
 	

@@ -48,7 +48,7 @@ public class TMainSettingsBehavior extends TSaveViewBehavior<TMainSettingsModelV
 			    		};
 			    		
 			    		TConfirmMessageBox confirm = new TConfirmMessageBox(msg);
-			    		confirm.gettConfirmProperty().addListener(chl);
+			    		confirm.tConfirmProperty().addListener(chl);
 			    		TedrosContext.showModal(confirm);
 			    	}
 		    	}else
