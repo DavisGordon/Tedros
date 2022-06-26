@@ -22,6 +22,7 @@ import javafx.collections.ObservableList;
  * @author Davis Gordon
  *
  */
+@Deprecated
 @SuppressWarnings("rawtypes")
 public class TNotifyModalBuilder 
 extends TBuilder

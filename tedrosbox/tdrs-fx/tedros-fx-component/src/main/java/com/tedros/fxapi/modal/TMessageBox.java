@@ -93,9 +93,7 @@ public class TMessageBox extends StackPane {
     	super.parentProperty().addListener((a,o,n)->{
     		if(n!=null) {
     			Pane p = (Pane) n;
-    			if(p.getHeight()==0)
-    				super.setMaxHeight(200);
-    			else
+    			if(p.getHeight()>=200)
     				super.setMaxHeight(p.getHeight()-50);
     		}
     	});

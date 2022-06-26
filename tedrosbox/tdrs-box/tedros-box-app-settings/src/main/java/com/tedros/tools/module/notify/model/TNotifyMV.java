@@ -51,6 +51,8 @@ import com.tedros.fxapi.annotation.process.TEjbService;
 import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.annotation.scene.control.TControl;
 import com.tedros.fxapi.annotation.scene.control.TInsets;
+import com.tedros.fxapi.annotation.view.TOption;
+import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.builder.DateTimeFormatBuilder;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.domain.TFileExtension;
@@ -77,7 +79,16 @@ import javafx.scene.layout.Priority;
 @TForm(name = "", scroll=true)
 @TSetting(TNotifyMVSetting.class)
 @TEjbService(serviceName = TNotifyController.JNDI_NAME, model=TNotify.class)
-@TListViewPresenter(presenter=@TPresenter(decorator = @TDecorator(viewTitle=ToolsKey.VIEW_NOTIFY,
+@TListViewPresenter(listViewMinWidth=400, 
+paginator=@TPaginator(entityClass = TNotify.class, 
+		serviceName = TNotifyController.JNDI_NAME, 
+		searchFieldName="subject", modelViewClass=TNotifyMV.class, 
+		orderBy= {@TOption(text = ToolsKey.SUBJECT, value = "subject"), 
+				@TOption(text = ToolsKey.SEND_TO, value = "to"), 
+				@TOption(text = ToolsKey.CALLED_BY, value = "calledBy") },
+		showSearchField=true,
+		show=true),
+		presenter=@TPresenter(decorator = @TDecorator(viewTitle=ToolsKey.VIEW_NOTIFY,
 buildModesRadioButton=false),
 	behavior=@TBehavior(type=TNotifyBehaviour.class, saveOnlyChangedModels=false, saveAllModels=false)))
 @TSecurity(id=DomainApp.NOTIFY_FORM_ID,
@@ -87,6 +98,8 @@ viewName=ToolsKey.VIEW_NOTIFY,
 allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,  
    					TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public class TNotifyMV extends TEntityModelView<TNotify> {
+	
+	private SimpleStringProperty display = new SimpleStringProperty();
 
 	@TTabPane(tabs = { 
 		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"text"})),
@@ -148,8 +161,15 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 	@TShowField(fields= {@TField(pattern=TDateUtil.DDMMYYYY_HHMM)})
 	private SimpleObjectProperty<Date> processedTime;
 	
-	@THTMLEditor(control=@TControl( maxHeight=500, parse = true))
+	@THTMLEditor(control=@TControl( maxHeight=450, parse = true))
+	@TVBox(	pane=@TPane(children={"content","calledBy"}), spacing=10, fillWidth=true,
+	vgrow=@TVGrow(priority={@TPriority(field="content", priority=Priority.ALWAYS), 
+						@TPriority(field="calledBy", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty content;
+	
+	@TLabel(text=ToolsKey.CALLED_BY)
+	@TShowField()
+	private SimpleStringProperty calledBy;
 	
 	@TFileField(propertyValueType=TFileModelType.ENTITY, preLoadFileBytes=true,
 	extensions= {TFileExtension.ALL_FILES}, showFilePath=true)
@@ -174,7 +194,15 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 
 	public TNotifyMV(TNotify entity) {
 		super(entity);
+		super.formatFieldsToDisplay("%s / %s / %s", subject, to, calledBy);
 	}
+	
+	@Override
+	public void reload(TNotify model) {
+		// TODO Auto-generated method stub
+		super.reload(model);
+		super.formatFieldsToDisplay("%s / %s / %s", subject, to, calledBy);
+		}
 
 	/**
 	 * @return the id
@@ -290,7 +318,7 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 
 	@Override
 	public SimpleStringProperty getDisplayProperty() {
-		return subject;
+		return display;
 	}
 
 	/**
@@ -347,6 +375,20 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 	 */
 	public void setProcessedTime(SimpleObjectProperty<Date> processedTime) {
 		this.processedTime = processedTime;
+	}
+
+	/**
+	 * @return the calledBy
+	 */
+	public SimpleStringProperty getCalledBy() {
+		return calledBy;
+	}
+
+	/**
+	 * @param calledBy the calledBy to set
+	 */
+	public void setCalledBy(SimpleStringProperty calledBy) {
+		this.calledBy = calledBy;
 	}
 	
 }

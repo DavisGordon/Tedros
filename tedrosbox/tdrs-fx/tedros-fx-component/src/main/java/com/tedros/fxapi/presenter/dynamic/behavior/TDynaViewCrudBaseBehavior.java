@@ -847,7 +847,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 					String message = iEngine.getFormatedString("#{tedros.fxapi.message.cancel}");
 					
 					final TConfirmMessageBox confirm = new TConfirmMessageBox(message);
-					confirm.gettConfirmProperty().addListener(new ChangeListener<Number>() {
+					confirm.tConfirmProperty().addListener(new ChangeListener<Number>() {
 						@SuppressWarnings("unchecked")
 						@Override
 						public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
@@ -942,7 +942,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			String message = iEngine.getFormatedString("#{tedros.fxapi.message.delete}", getModelView().getDisplayProperty().getValue()==null ? "" : getModelView().getDisplayProperty().getValue());
 			
 			final TConfirmMessageBox confirm = new TConfirmMessageBox(message);
-			confirm.gettConfirmProperty().addListener(new ChangeListener<Number>() {
+			confirm.tConfirmProperty().addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 					if(arg2.equals(1)){

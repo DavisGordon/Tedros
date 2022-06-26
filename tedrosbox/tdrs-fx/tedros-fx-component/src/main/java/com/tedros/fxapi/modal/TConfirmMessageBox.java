@@ -56,7 +56,7 @@ public class TConfirmMessageBox extends TMessageBox {
 		}
 	}
 	
-	public ReadOnlyIntegerProperty gettConfirmProperty() {
+	public ReadOnlyIntegerProperty tConfirmProperty() {
 		return confirm;
 	}
 	
