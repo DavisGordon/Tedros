@@ -46,6 +46,7 @@ public class TPaginator extends BorderPane {
 	private double maxItens = 100.0;
 	private int lastEnd;
 	private String lastButton;
+	private String searchFieldName = null;
 	
 	private TSlider slider;
 	private TButton searchButton;
@@ -273,9 +274,32 @@ public class TPaginator extends BorderPane {
 	}
 	
 	private TPagination buildPagination(int start){
-		String orderBy = this.orderBy!=null && this.orderBy.getValue()!=null ? this.orderBy.getValue().getValue() : null;
-		boolean orderAsc = this.orderByType!=null ? (boolean) this.orderByType.getSelectedToggle().getUserData() : true;
-		return new TPagination(search!=null ? search.getText() : null, orderBy, orderAsc, start, (int) slider.getValue());
+		String orderBy = getOrderBy();
+		boolean orderAsc = getOrderAsc();
+		return new TPagination(searchFieldName!=null ? searchFieldName : null, 
+				search!=null ? search.getText() : null, 
+				orderBy, orderAsc, start, getTotalRows());
+	}
+
+	/**
+	 * @return
+	 */
+	public int getTotalRows() {
+		return (int) slider.getValue();
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean getOrderAsc() {
+		return this.orderByType!=null ? (boolean) this.orderByType.getSelectedToggle().getUserData() : true;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getOrderBy() {
+		return this.orderBy!=null && this.orderBy.getValue()!=null ? this.orderBy.getValue().getValue() : null;
 	}
 	
 	public TPagination getPagination(){
@@ -292,6 +316,20 @@ public class TPaginator extends BorderPane {
 	
 	public void invalidate() {
 		repo.clear();
+	}
+
+	/**
+	 * @return the searchFieldName
+	 */
+	public String getSearchFieldName() {
+		return searchFieldName;
+	}
+
+	/**
+	 * @param searchFieldName the searchFieldName to set
+	 */
+	public void setSearchFieldName(String searchFieldName) {
+		this.searchFieldName = searchFieldName;
 	}
 
 }

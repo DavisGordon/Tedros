@@ -15,7 +15,7 @@ import java.util.List;
  * @author davis.dun
  *
  */
-public interface ITReportModel<M extends ITModel> extends ITModel, Serializable {
+public interface ITReportModel<M extends ITReportItemModel<?>> extends ITModel, Serializable {
 
 	public String getOrderBy();
 	
