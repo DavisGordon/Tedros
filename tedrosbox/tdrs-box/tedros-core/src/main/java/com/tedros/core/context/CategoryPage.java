@@ -48,7 +48,7 @@ public class CategoryPage extends Page {
         }
         
         // create main column
-        VBox main = new VBox(8) {
+        VBox main = new VBox(2) {
             // stretch to allways fill height of scrollpane
             @Override protected double computePrefHeight(double width) {
                 return Math.max(
@@ -68,7 +68,7 @@ public class CategoryPage extends Page {
         main.getChildren().add(header);
         // add direct children
         if(!directChildren.isEmpty()) {
-            TilePane directChildFlow = new TilePane(8,8);
+            TilePane directChildFlow = new TilePane(4,4);
             directChildFlow.setPrefColumns(1);
             directChildFlow.getStyleClass().add("t-category-page-flow");
             for (InternalViewPage internalViewPage:directChildren) {
@@ -85,7 +85,7 @@ public class CategoryPage extends Page {
             categoryHeader.getStyleClass().add("t-category-header");
             main.getChildren().add(categoryHeader);
             // add direct children
-            TilePane directChildFlow = new TilePane(8,8);
+            TilePane directChildFlow = new TilePane(4,4);
             directChildFlow.setPrefColumns(1);
             directChildFlow.getStyleClass().add("t-category-page-flow");
             directChildFlow.setStyle("-fx-background-color: transparent;");
@@ -96,8 +96,8 @@ public class CategoryPage extends Page {
         HBox hb = new HBox();
         Region lr = new Region();
         Region rr = new Region();
-        lr.setPrefWidth(80);
-        rr.setPrefWidth(80);
+        lr.setPrefWidth(40);
+        rr.setPrefWidth(40);
         hb.getChildren().addAll(lr, main, rr);
         HBox.setHgrow(main, Priority.ALWAYS);
         // wrap in scroll pane

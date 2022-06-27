@@ -1,7 +1,7 @@
 package com.tedros.fxapi.domain;
 
 public interface TLabelKey {
-
+	
 	static final String BUTTON_ADD = "#{tedros.fxapi.button.add}";
 	static final String BUTTON_APPLY = "#{tedros.fxapi.button.apply}";
 	static final String BUTTON_BACK = "#{tedros.fxapi.button.back}";
@@ -74,6 +74,7 @@ public interface TLabelKey {
 	static final String STATUS_FINISHED = "#{tedros.fxapi.status.finished}";
 	static final String STATUS_LOADING = "#{tedros.fxapi.status.loading}";
 	static final String STATUS_STARTING = "#{tedros.fxapi.status.starting}";
+	static final String TABLE_MENU_TOOLTIP = "#{tedros.fxapi.table.menu.tooltip}";
 	static final String VALIDATOR_CHECKREQUIRED = "#{tedros.fxapi.validator.checkRequired}";
 	static final String VALIDATOR_FUTURE_DATE = "#{tedros.fxapi.validator.future.date}";
 	static final String VALIDATOR_GREATHERTHANZERO = "#{tedros.fxapi.validator.greatherThanZero}";
@@ -87,3 +88,4 @@ public interface TLabelKey {
 	static final String VIEW_TITLE = "#{tedros.fxapi.view.title}";
 
 }
+

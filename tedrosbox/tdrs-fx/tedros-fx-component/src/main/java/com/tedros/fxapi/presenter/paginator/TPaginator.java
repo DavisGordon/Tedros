@@ -131,13 +131,11 @@ public class TPaginator extends BorderPane {
 			search = new TTextField();
 			search.setMaxHeight(searchButton.getHeight());
 			//search.setMaxWidth(100);
-			
 			ToolBar h1 = new ToolBar();
 			h1.setId("t-view-toolbar");
 			//HBox.setHgrow(search, Priority.ALWAYS);
-			h1.getItems().addAll(search, searchButton, clearButton);
-			
-			box.getChildren().add(h1);
+			h1.getItems().addAll(searchButton, clearButton);
+			box.getChildren().addAll(search, h1);
 		}
 		
 		if(showOrderBy) {
