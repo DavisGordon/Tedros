@@ -9,7 +9,7 @@ import java.util.List;
  * @author Davis Gordon
  *
  */
-public abstract class TReportModel<M extends ITModel> implements ITReportModel<M> {
+public abstract class TReportModel<M extends ITReportItemModel<?>> implements ITReportModel<M> {
 
 	private static final long serialVersionUID = -6958152044379424961L;
 

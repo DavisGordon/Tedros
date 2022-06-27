@@ -182,7 +182,7 @@ public @interface TTableView {
 	* </pre>
 	**/
 	@SuppressWarnings("rawtypes")
-	public Class<ITColumnResizePolicyCallBackBuilder> columnResizePolicy() default ITColumnResizePolicyCallBackBuilder.class;
+	public Class<? extends ITColumnResizePolicyCallBackBuilder> columnResizePolicy() default ITColumnResizePolicyCallBackBuilder.class;
 
 	/**
 	* <pre>
@@ -192,7 +192,7 @@ public @interface TTableView {
 	* </pre>
 	**/
 	@SuppressWarnings("rawtypes")
-	public Class<ITRowFactoryCallBackBuilder> rowFactory() default ITRowFactoryCallBackBuilder.class;
+	public Class<? extends ITRowFactoryCallBackBuilder> rowFactory() default ITRowFactoryCallBackBuilder.class;
 
 	/**
 	* <pre>
@@ -202,7 +202,7 @@ public @interface TTableView {
 	* </pre>
 	**/
 	@SuppressWarnings("rawtypes")
-	public Class<ITNodeBuilder> placeholder() default ITNodeBuilder.class;
+	public Class<? extends ITNodeBuilder> placeholder() default ITNodeBuilder.class;
 
 	/**
 	* <pre>
@@ -245,12 +245,6 @@ public @interface TTableView {
 	**/
 	public boolean editable() default false;
 
-
-	
-	
-	
-	
-	
 	/**
 	* <pre>
 	* {@link TableView} Class

@@ -423,6 +423,8 @@ public final class TedrosContext {
 		PAGE_ADDHISTORY = addHistory;
 		PAGE_SWAPVIEWS = swapViews;
 		PAGE_FORCE = force;
+		if(pageProperty.getValue()!=null && pageProperty.getValue()==page)
+			pageProperty.set(null);
 		pageProperty.set(page);
 	}
 	

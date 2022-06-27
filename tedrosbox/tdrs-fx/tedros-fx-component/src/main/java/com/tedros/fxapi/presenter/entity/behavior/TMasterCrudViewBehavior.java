@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
@@ -39,7 +40,6 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Worker.State;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
 import javafx.util.Callback;
 
 @SuppressWarnings({ "rawtypes" })
@@ -74,12 +74,12 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 			configListViewChangeListener();
 			configListViewCallBack();
 			
-			
 			TListViewPresenter tAnnotation = getPresenter().getModelViewClass().getAnnotation(TListViewPresenter.class);
 			if(tAnnotation!=null){
 				tPagAnn = tAnnotation.paginator();
 				this.paginatorServiceName = tPagAnn.serviceName();
 				this.searchFieldName = tPagAnn.searchFieldName();
+				this.decorator.gettPaginator().setSearchFieldName(searchFieldName);
 				try {
 					if(tPagAnn.showSearchField() && StringUtils.isBlank(this.searchFieldName))
 						throw new TException("The property searchFieldName in TPaginator annotation is required when showSearhField is true.");
@@ -98,7 +98,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	@SuppressWarnings("unchecked")
 	public void loadModels() {
 		try{
-			if(tPagAnn!=null && tPagAnn.show()) {
+			if(isPaginateEnabled()) {
 				TPaginationProcess process = new TPaginationProcess(super.getEntityClass(), this.paginatorServiceName) {};
 				ChangeListener<State> prcl = (arg0, arg1, arg2) -> {
 					
@@ -235,6 +235,13 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 		
 	}
 
+	/**
+	 * @return
+	 */
+	private boolean isPaginateEnabled() {
+		return tPagAnn!=null && tPagAnn.show();
+	}
+
 	protected void configCancelAction() {
 		addAction(new TPresenterAction(TActionType.CANCEL) {
 
@@ -331,8 +338,8 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 				Method setter = null;
 				do {
 					try {
-						Field f = target.getDeclaredField(this.searchFieldName);
-						setter = target.getMethod("set"+StringUtils.capitalize(searchFieldName), f.getType());
+						Field f = target.getDeclaredField(pagination.getSearchFieldName());
+						setter = target.getMethod("set"+StringUtils.capitalize(pagination.getSearchFieldName()), f.getType());
 						break;
 					} catch (NoSuchFieldException | SecurityException e) {
 						target = target.getSuperclass();
@@ -417,8 +424,37 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	@SuppressWarnings("unchecked")
 	@Override
 	public void loadModelView(ITModelView m) {
-		this.addInListView((M) m);
-		this.processListViewSelectedItem((M) m);
+		M mv = (M) m;
+		ITEntity e = (ITEntity) mv.getModel();
+		if(e.isNew()) {
+			this.addInListView((M) m);
+			this.processListViewSelectedItem((M) m);
+		}else{
+			if(this.isPaginateEnabled()) {
+				String orderBy = this.decorator.gettPaginator().getOrderBy();
+				boolean orderAsc = this.decorator.gettPaginator().getOrderAsc();
+				int totalRows = this.decorator.gettPaginator().getTotalRows();
+				try {
+					this.paginate(new TPagination("id", 
+							e.getId().toString(), 
+									orderBy, orderAsc, 0, totalRows));
+				} catch (TException e1) {
+					e1.printStackTrace();
+				}
+			}else {
+				final ListView<M> list = this.decorator.gettListView();
+				Optional<M>  op = list.getItems().stream().filter(p->{
+					return !p.getEntity().isNew() && p.getEntity().getId().equals(e.getId());
+				}).findFirst();
+				if(op.isPresent()) {
+					list.selectionModelProperty().get().select(mv);
+					this.processListViewSelectedItem((M) m);
+				}else {
+					this.addInListView((M) m);
+					this.processListViewSelectedItem((M) m);
+				}
+			}
+		}
 	}
 	
 	public void remove() {

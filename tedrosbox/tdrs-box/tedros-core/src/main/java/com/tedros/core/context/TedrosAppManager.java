@@ -36,40 +36,52 @@ public final class TedrosAppManager extends TedrosAppLoader {
 				}
 			});
 		});
-		TedrosContext.setPagePathProperty(pp.toString(), true, false, true);
+		TedrosContext.setPagePathProperty(pp.toString(), true, true, true);
 	}
 	
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void goToModule(Class<? extends ITModule> moduleClass, Class<? extends ITModelView> modelViewClass) {
-		ChangeListener<Node> chl = new ChangeListener<Node>() {
-			@Override
-			public void changed(ObservableValue<? extends Node> a, Node o, Node n) {
-				if(n instanceof ITModule && n.getClass()==moduleClass) {
-					ITModule m = (ITModule) n;
-					m.tLookupAndShowView(modelViewClass);
-					TedrosContext.viewProperty().removeListener(this);
+		Node v = (Node) TedrosContext.viewProperty().getValue();
+		if(v instanceof ITModule && v.getClass()==moduleClass) {
+			ITModule m = (ITModule) v;
+			m.tLookupAndShowView(modelViewClass);
+		}else {
+			ChangeListener<Node> chl = new ChangeListener<Node>() {
+				@Override
+				public void changed(ObservableValue<? extends Node> a, Node o, Node n) {
+					if(n instanceof ITModule && n.getClass()==moduleClass) {
+						ITModule m = (ITModule) n;
+						m.tLookupAndShowView(modelViewClass);
+						TedrosContext.viewProperty().removeListener(this);
+					}
 				}
-			}
-		};
-		TedrosContext.viewProperty().addListener(chl);
-		goToModule(moduleClass);
+			};
+			TedrosContext.viewProperty().addListener(chl);
+			goToModule(moduleClass);
+		}
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void loadInModule(Class<? extends ITModule> moduleClass, ITModelView modelView) {
-		ChangeListener<Node> chl = new ChangeListener<Node>() {
-			@Override
-			public void changed(ObservableValue<? extends Node> a, Node o, Node n) {
-				if(n instanceof ITModule && n.getClass()==moduleClass) {
-					ITModule m = (ITModule) n;
-					m.tLookupViewAndLoadModelView(modelView);
-					TedrosContext.viewProperty().removeListener(this);
+		Node v = (Node) TedrosContext.viewProperty().getValue();
+		if(v instanceof ITModule && v.getClass()==moduleClass) {
+			ITModule m = (ITModule) v;
+			m.tLookupViewAndLoadModelView(modelView);
+		}else {
+			ChangeListener<Node> chl = new ChangeListener<Node>() {
+				@Override
+				public void changed(ObservableValue<? extends Node> a, Node o, Node n) {
+					if(n instanceof ITModule && n.getClass()==moduleClass) {
+						ITModule m = (ITModule) n;
+						m.tLookupViewAndLoadModelView(modelView);
+						TedrosContext.viewProperty().removeListener(this);
+					}
 				}
-			}
-		};
-		TedrosContext.viewProperty().addListener(chl);
-		goToModule(moduleClass);
+			};
+			TedrosContext.viewProperty().addListener(chl);
+			goToModule(moduleClass);
+		}
 	}
 	
 	/**

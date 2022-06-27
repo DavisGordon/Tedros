@@ -11,6 +11,7 @@ package com.tedros.fxapi.presenter.paginator;
  */
 public class TPagination {
 
+	private String searchFieldName;
 	private String search;
 	private String orderBy;
 	private boolean orderByAsc;
@@ -27,6 +28,23 @@ public class TPagination {
 	 * @param totalRows
 	 */
 	public TPagination(String search, String orderBy, boolean orderByAsc, int start, int totalRows) {
+		this.search = search;
+		this.orderBy = orderBy;
+		this.orderByAsc = orderByAsc;
+		this.start = start;
+		this.totalRows = totalRows;
+	}
+	/**
+	 * @param searchFieldName
+	 * @param search
+	 * @param orderBy
+	 * @param orderByAsc
+	 * @param start
+	 * @param totalRows
+	 */
+	public TPagination(String searchFieldName, String search, String orderBy, boolean orderByAsc, int start,
+			int totalRows) {
+		this.searchFieldName = searchFieldName;
 		this.search = search;
 		this.orderBy = orderBy;
 		this.orderByAsc = orderByAsc;
@@ -62,6 +80,12 @@ public class TPagination {
 	 */
 	public boolean isOrderByAsc() {
 		return orderByAsc;
+	}
+	/**
+	 * @return the searchFieldName
+	 */
+	public String getSearchFieldName() {
+		return searchFieldName;
 	}
 	
 	
