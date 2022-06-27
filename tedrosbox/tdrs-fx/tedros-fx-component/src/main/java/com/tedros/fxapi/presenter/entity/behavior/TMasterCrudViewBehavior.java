@@ -77,17 +77,18 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 			TListViewPresenter tAnnotation = getPresenter().getModelViewClass().getAnnotation(TListViewPresenter.class);
 			if(tAnnotation!=null){
 				tPagAnn = tAnnotation.paginator();
-				this.paginatorServiceName = tPagAnn.serviceName();
-				this.searchFieldName = tPagAnn.searchFieldName();
-				this.decorator.gettPaginator().setSearchFieldName(searchFieldName);
-				try {
-					if(tPagAnn.showSearchField() && StringUtils.isBlank(this.searchFieldName))
-						throw new TException("The property searchFieldName in TPaginator annotation is required when showSearhField is true.");
-				}catch(TException e){
-					getView().tShowModal(new TMessageBox(e), true);
-					e.printStackTrace();
+				if(tPagAnn.show()) {
+					this.paginatorServiceName = tPagAnn.serviceName();
+					this.searchFieldName = tPagAnn.searchFieldName();
+					this.decorator.gettPaginator().setSearchFieldName(searchFieldName);
+					try {
+						if(tPagAnn.showSearchField() && StringUtils.isBlank(this.searchFieldName))
+							throw new TException("The property searchFieldName in TPaginator annotation is required when showSearhField is true.");
+					}catch(TException e){
+						getView().tShowModal(new TMessageBox(e), true);
+						e.printStackTrace();
+					}
 				}
-				
 			}
 			if(!isUserNotAuthorized(TAuthorizationType.VIEW_ACCESS))
 				loadModels();
@@ -425,7 +426,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 	@Override
 	public void loadModelView(ITModelView m) {
 		M mv = (M) m;
-		ITEntity e = (ITEntity) mv.getModel();
+		E e = (E) mv.getModel();
 		if(e.isNew()) {
 			this.addInListView((M) m);
 			this.processListViewSelectedItem((M) m);
@@ -435,9 +436,7 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 				boolean orderAsc = this.decorator.gettPaginator().getOrderAsc();
 				int totalRows = this.decorator.gettPaginator().getTotalRows();
 				try {
-					this.paginate(new TPagination("id", 
-							e.getId().toString(), 
-									orderBy, orderAsc, 0, totalRows));
+					this.paginateLoadedModel(e, new TPagination(null, orderBy, orderAsc, 0, totalRows));
 				} catch (TException e1) {
 					e1.printStackTrace();
 				}
@@ -456,6 +455,64 @@ extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M,
 			}
 		}
 	}
+	
+
+	@SuppressWarnings("unchecked")
+	public void paginateLoadedModel(E entity, TPagination pagination) throws TException {
+		final String chlId = UUID.randomUUID().toString();
+		TPaginationProcess<E> process = new TPaginationProcess<E>(super.getEntityClass(), this.paginatorServiceName) {};
+		ChangeListener<State> prcl = (arg0, arg1, arg2) -> {
+			
+			if(arg2.equals(State.SUCCEEDED)){
+				
+				TResult<Map<String, Object>> resultados = (TResult<Map<String, Object>>) process.getValue();
+				
+				if(resultados != null) {
+					if(resultados.getState().equals(TState.SUCCESS)) {
+						Map<String, Object> result =  resultados.getValue();
+						ObservableList<M> models = getModels();
+						models.clear();
+						
+						for(E e : (List<E>) result.get("list")){
+							try {
+								M model = (M) getModelViewClass().getConstructor(getEntityClass()).newInstance(e);
+								models.add(model);
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
+						}
+						processPagination((long)result.get("total"));
+						if(models.size()==1){
+							M mv = models.get(0);
+							final ListView<M> list = this.decorator.gettListView();
+							list.selectionModelProperty().get().select(mv);
+							this.processListViewSelectedItem(mv);
+						}
+					}else {
+						String msg = resultados.getMessage();
+						System.out.println(msg);
+						switch(resultados.getState()) {
+							case ERROR:
+								addMessage(new TMessage(TMessageType.ERROR, msg));
+								break;
+							default:
+								addMessage(new TMessage(TMessageType.WARNING, msg));
+								break;
+						}
+					}
+					getListenerRepository().remove(chlId);
+				}
+			}
+		};
+		
+		super.getListenerRepository().add(chlId, prcl);
+		process.findAll(entity, pagination);
+		bindProgressIndicator(process);
+		process.stateProperty().addListener(new WeakChangeListener(prcl));
+		process.startProcess();
+	}
+
+	
 	
 	public void remove() {
 		final ListView<M> listView = this.decorator.gettListView();

@@ -172,6 +172,7 @@ class InternalViewPage extends Page{
 	        final Label moduleName = new Label(getName().trim());
 	        moduleName.setId("t-module-name");
 	        moduleName.setWrapText(true);
+	        moduleName.setMaxWidth(214);
 	        
 	        final DropShadow shadow = new DropShadow();
 	        shadow.setBlurType(BlurType.THREE_PASS_BOX);
@@ -243,6 +244,7 @@ class InternalViewPage extends Page{
 			PopOver popover = new PopOver();
 			tile.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> {
 				Label l = new Label(TLanguage.getInstance(null).getString(desc));
+				l.setId("t-label");
 				l.setWrapText(true);
 				l.setMaxWidth(350);
 				StackPane p = new StackPane();
@@ -255,8 +257,6 @@ class InternalViewPage extends Page{
 		    	popover.setAnimated(true);
 		    	popover.setAutoHide(true);
 		    	popover.setMaxWidth(350);
-		    	
-		    	
 		    	popover.show(tile);
 			});
 			tile.addEventHandler(MouseEvent.MOUSE_EXITED, e -> {
