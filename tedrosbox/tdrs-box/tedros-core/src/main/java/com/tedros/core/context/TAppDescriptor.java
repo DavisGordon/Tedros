@@ -1,12 +1,13 @@
 /**
  * 
  */
-package com.tedros.core;
+package com.tedros.core.context;
 
 import java.util.Arrays;
 import java.util.List;
 
 import com.tedros.app.process.ITProcess;
+import com.tedros.core.TLanguage;
 import com.tedros.core.annotation.TApplication;
 import com.tedros.core.annotation.TModule;
 import com.tedros.core.annotation.TResourceBundle;

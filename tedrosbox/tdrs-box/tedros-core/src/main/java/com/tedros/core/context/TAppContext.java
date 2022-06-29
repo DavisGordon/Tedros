@@ -4,14 +4,13 @@
 package com.tedros.core.context;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import com.tedros.app.process.ITProcess;
 import com.tedros.core.ITApplication;
 import com.tedros.core.ITModule;
-import com.tedros.core.TAppDescriptor;
 import com.tedros.core.TLanguage;
-import com.tedros.core.TModuleDescriptor;
 import com.tedros.core.annotation.security.TAuthorizationType;
 
 import javafx.collections.FXCollections;
@@ -85,23 +84,36 @@ public final class TAppContext {
 		}
 	}
 	
-	public TModuleContext findModuleContext(ITModule module){
-		for (TModuleContext tModuleContext : moduleContextList) {
-			if(tModuleContext.getModule()!=null && tModuleContext.getModule().equals(module)){
-				return tModuleContext;
-			}
-		}
+	/**
+	 * Return the context of the module class
+	 * */
+	public TModuleContext findModuleContext(Class<? extends ITModule> moduleClass){
+		Optional<TModuleContext> op = moduleContextList.stream().filter(m->{
+			return m.getModuleDescriptor().getType()==moduleClass;
+		}).findFirst();
 		
-		return null;
+		return op.isPresent() 
+				? op.get()
+						: null;
+	}
+	
+	/**
+	 * Return the context of the loaded module
+	 * */
+	public TModuleContext findModuleContext(ITModule module){
+		Optional<TModuleContext> op = moduleContextList.stream().filter(m->{
+			return m.getModule()!=null && m.getModule().equals(module);
+		}).findFirst();
+		
+		return op.isPresent() 
+				? op.get()
+						: null;
 	}
 	
 	public boolean isModuleContextPresent(ITModule module){
-		for (TModuleContext tModuleContext : moduleContextList) {
-			if(tModuleContext.getModule().equals(module)){
-				return true;
-			}	
-		}
-		return false;
+		return moduleContextList.stream().filter(m->{
+			return m.getModule()!=null && m.getModule().equals(module);
+		}).findAny().isPresent();
 	}
 	
 	public void removeModuleContext(ITModule module){

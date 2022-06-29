@@ -6,9 +6,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.tedros.app.process.ITProcess;
-import com.tedros.core.TSecurityDescriptor;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
+import com.tedros.core.context.TSecurityDescriptor;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.presenter.ITPresenter;
 import com.tedros.core.presenter.view.ITView;
