@@ -57,6 +57,7 @@ import com.tedros.fxapi.builder.DateTimeFormatBuilder;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.domain.TFileExtension;
 import com.tedros.fxapi.domain.TFileModelType;
+import com.tedros.fxapi.domain.TLabelKey;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.property.TSimpleFileProperty;
 import com.tedros.tools.module.notify.behaviour.TNotifyBehaviour;
@@ -99,7 +100,7 @@ allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,
    					TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public class TNotifyMV extends TEntityModelView<TNotify> {
 	
-	private SimpleStringProperty display = new SimpleStringProperty();
+	private SimpleStringProperty displayProperty = new SimpleStringProperty();
 
 	@TTabPane(tabs = { 
 		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"text"})),
@@ -162,14 +163,26 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 	private SimpleObjectProperty<Date> processedTime;
 	
 	@THTMLEditor(control=@TControl( maxHeight=450, parse = true))
-	@TVBox(	pane=@TPane(children={"content","calledBy"}), spacing=10, fillWidth=true,
+	@TVBox(	pane=@TPane(children={"content","integratedViewName"}), spacing=10, fillWidth=true,
 	vgrow=@TVGrow(priority={@TPriority(field="content", priority=Priority.ALWAYS), 
-						@TPriority(field="calledBy", priority=Priority.ALWAYS)}))
+						@TPriority(field="integratedViewName", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty content;
 	
-	@TLabel(text=ToolsKey.CALLED_BY)
+	@TLabel(text=TLabelKey.INTEGRATED_BY)
 	@TShowField()
-	private SimpleStringProperty calledBy;
+	@THBox(pane=@TPane(children={"integratedViewName", "integratedDate", "integratedModulePath"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="integratedViewName", priority=Priority.SOMETIMES), 
+			@TPriority(field="integratedDate", priority=Priority.ALWAYS), 
+			@TPriority(field="integratedModulePath", priority=Priority.ALWAYS)}))
+	private SimpleStringProperty integratedViewName;
+	
+	@TLabel(text=TLabelKey.INTEGRATED_DATE)
+	@TShowField()
+	private SimpleObjectProperty<Date> integratedDate;
+	
+	@TLabel(text=TLabelKey.INTEGRATED_LINK)
+	@TShowField()
+	private SimpleStringProperty integratedModulePath;
 	
 	@TFileField(propertyValueType=TFileModelType.ENTITY, preLoadFileBytes=true,
 	extensions= {TFileExtension.ALL_FILES}, showFilePath=true)
@@ -194,14 +207,14 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 
 	public TNotifyMV(TNotify entity) {
 		super(entity);
-		super.formatFieldsToDisplay("%s / %s / %s", subject, to, calledBy);
+		super.formatFieldsToDisplay("%s / %s / %s", subject, to, integratedViewName);
 	}
 	
 	@Override
 	public void reload(TNotify model) {
 		// TODO Auto-generated method stub
 		super.reload(model);
-		super.formatFieldsToDisplay("%s / %s / %s", subject, to, calledBy);
+		super.formatFieldsToDisplay("%s / %s / %s", subject, to, integratedViewName);
 		}
 
 	/**
@@ -318,7 +331,7 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 
 	@Override
 	public SimpleStringProperty getDisplayProperty() {
-		return display;
+		return displayProperty;
 	}
 
 	/**
@@ -378,17 +391,46 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 	}
 
 	/**
-	 * @return the calledBy
+	 * @return the integratedViewName
 	 */
-	public SimpleStringProperty getCalledBy() {
-		return calledBy;
+	public SimpleStringProperty getIntegratedViewName() {
+		return integratedViewName;
 	}
 
 	/**
-	 * @param calledBy the calledBy to set
+	 * @param integratedViewName the integratedViewName to set
 	 */
-	public void setCalledBy(SimpleStringProperty calledBy) {
-		this.calledBy = calledBy;
+	public void setIntegratedViewName(SimpleStringProperty integratedViewName) {
+		this.integratedViewName = integratedViewName;
 	}
+
+	/**
+	 * @return the integratedDate
+	 */
+	public SimpleObjectProperty<Date> getIntegratedDate() {
+		return integratedDate;
+	}
+
+	/**
+	 * @param integratedDate the integratedDate to set
+	 */
+	public void setIntegratedDate(SimpleObjectProperty<Date> integratedDate) {
+		this.integratedDate = integratedDate;
+	}
+
+	/**
+	 * @return the integratedModulePath
+	 */
+	public SimpleStringProperty getIntegratedModulePath() {
+		return integratedModulePath;
+	}
+
+	/**
+	 * @param integratedModulePath the integratedModulePath to set
+	 */
+	public void setIntegratedModulePath(SimpleStringProperty integratedModulePath) {
+		this.integratedModulePath = integratedModulePath;
+	}
+
 	
 }

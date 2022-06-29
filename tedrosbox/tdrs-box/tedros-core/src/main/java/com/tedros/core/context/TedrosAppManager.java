@@ -22,23 +22,24 @@ public final class TedrosAppManager extends TedrosAppLoader {
 		return instance;
 	}
 	
-	public void goToModule(Class<? extends ITModule> moduleClass) {
-		StringBuilder pp = new StringBuilder();
-		getAppContexts()
-		.stream().forEach(c->{
-			c.getModulesContext().stream()
-			.forEach(m->{
-				if(m.getModuleDescriptor().getType()==moduleClass) {
-					pp.append(TLanguage.getInstance().getString("#{tedros.modules}/"));
-					pp.append(m.getModuleDescriptor().getApplicationName()+"/");
-					pp.append(m.getModuleDescriptor().getMenu()+"/");
-					pp.append(m.getModuleDescriptor().getModuleName());
-				}
-			});
-		});
-		TedrosContext.setPagePathProperty(pp.toString(), true, true, true);
+	/**
+	 * @param moduleClass
+	 * @return
+	 */
+	public TModuleContext getModuleContext(Class<? extends ITModule> moduleClass) {
+		for(TAppContext a : this.getAppContexts()){
+			TModuleContext mc = a.findModuleContext(moduleClass);
+			if(mc!=null)
+				return mc;
+		}
+		return null;
 	}
 	
+	public void goToModule(Class<? extends ITModule> moduleClass) {
+		String path = getModuleContext(moduleClass).getModuleDescriptor().getPath();
+		TedrosContext.setPagePathProperty(TLanguage.getInstance().getString(path), true, true, true);
+	}
+
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void goToModule(Class<? extends ITModule> moduleClass, Class<? extends ITModelView> modelViewClass) {

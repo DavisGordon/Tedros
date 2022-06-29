@@ -1,5 +1,6 @@
 package com.tedros.core.context;
 
+import com.tedros.core.TCoreKeys;
 import com.tedros.core.TLanguage;
 
 
@@ -10,7 +11,7 @@ public class Pages{
     	
 	public Pages(){
         root = new AllPagesPage();
-        modules = new CategoryPage(TLanguage.getInstance(null).getString("#{tedros.modules}"), new Page[0]);
+        modules = new CategoryPage(TLanguage.getInstance(null).getString(TCoreKeys.MENU_ROOT), new Page[0]);
         root.getChildren().add(modules);
         
     }

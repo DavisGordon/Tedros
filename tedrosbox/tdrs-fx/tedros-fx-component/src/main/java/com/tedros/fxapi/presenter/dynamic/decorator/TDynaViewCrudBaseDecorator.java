@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.tedros.core.TSecurityDescriptor;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
+import com.tedros.core.context.TSecurityDescriptor;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
 import com.tedros.fxapi.annotation.presenter.TDecorator;

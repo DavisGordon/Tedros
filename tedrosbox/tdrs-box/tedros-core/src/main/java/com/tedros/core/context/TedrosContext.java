@@ -22,7 +22,6 @@ import com.tedros.core.ITedrosBox;
 import com.tedros.core.ModalMessage;
 import com.tedros.core.TLanguage;
 import com.tedros.core.TModule;
-import com.tedros.core.TSecurityDescriptor;
 import com.tedros.core.annotation.TApplication;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.ejb.controller.ITLoginController;

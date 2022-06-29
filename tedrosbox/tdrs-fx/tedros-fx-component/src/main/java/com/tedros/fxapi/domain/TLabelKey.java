@@ -1,7 +1,6 @@
 package com.tedros.fxapi.domain;
 
 public interface TLabelKey {
-	
 	static final String BUTTON_ADD = "#{tedros.fxapi.button.add}";
 	static final String BUTTON_APPLY = "#{tedros.fxapi.button.apply}";
 	static final String BUTTON_BACK = "#{tedros.fxapi.button.back}";
@@ -35,6 +34,9 @@ public interface TLabelKey {
 	static final String DOUBLE_CLICK_SELECT = "#{tedros.fxapi.label.double.click.select}";
 	static final String FALSE = "#{tedros.fxapi.label.false}";
 	static final String FILTER = "#{tedros.fxapi.label.filter}";
+	static final String INTEGRATED_BY = "#{tedros.fxapi.label.integrated.by}";
+	static final String INTEGRATED_DATE = "#{tedros.fxapi.label.integrated.date}";
+	static final String INTEGRATED_LINK = "#{tedros.fxapi.label.integrated.link}";
 	static final String LOCAL_FILES = "#{tedros.fxapi.label.local.files}";
 	static final String OPTIONS = "#{tedros.fxapi.label.options}";
 	static final String ORDERBY = "#{tedros.fxapi.label.orderby}";
@@ -87,5 +89,6 @@ public interface TLabelKey {
 	static final String VIEW_MODAL_SELECTION_TITLE = "#{tedros.fxapi.view.modal.selection.title}";
 	static final String VIEW_TITLE = "#{tedros.fxapi.view.title}";
 
+	
 }
 

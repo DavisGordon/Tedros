@@ -2,7 +2,6 @@ package com.tedros.core.context;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.tedros.core.TSecurityDescriptor;
 import com.tedros.core.presenter.ITPresenter;
 import com.tedros.core.presenter.view.ITView;
 
