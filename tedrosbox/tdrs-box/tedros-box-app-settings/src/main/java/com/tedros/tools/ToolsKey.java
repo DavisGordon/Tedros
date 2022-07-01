@@ -1,4 +1,4 @@
-package com.tedros.tools.util;
+package com.tedros.tools;
 
 public interface ToolsKey {
 

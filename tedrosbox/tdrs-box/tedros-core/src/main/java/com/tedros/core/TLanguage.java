@@ -95,10 +95,12 @@ public class TLanguage {
 	public String getString(String key){
 		String value = find(currentUUID, key);
 		
-		if(key.equals(value)){
+		if(tStripTagUtil.isTagPresent(value)){
 			for (String uuid : bundles.keySet()) {
-				value = find(uuid, key);
-				if(!key.equals(value))
+				if(currentUUID!=null && currentUUID.equals(uuid))
+					continue;
+				value = find(uuid, value);
+				if(!tStripTagUtil.isTagPresent(value))
 					return value;
 			}
 		}

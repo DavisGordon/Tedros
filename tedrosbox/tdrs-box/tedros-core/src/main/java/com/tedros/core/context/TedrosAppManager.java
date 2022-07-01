@@ -1,7 +1,6 @@
 package com.tedros.core.context;
 
 import com.tedros.core.ITModule;
-import com.tedros.core.TLanguage;
 import com.tedros.core.model.ITModelView;
 
 import javafx.beans.value.ChangeListener;
@@ -37,7 +36,7 @@ public final class TedrosAppManager extends TedrosAppLoader {
 	
 	public void goToModule(Class<? extends ITModule> moduleClass) {
 		String path = getModuleContext(moduleClass).getModuleDescriptor().getPath();
-		TedrosContext.setPagePathProperty(TLanguage.getInstance().getString(path), true, true, true);
+		TedrosContext.setPagePathProperty(path, true, true, true);
 	}
 
 

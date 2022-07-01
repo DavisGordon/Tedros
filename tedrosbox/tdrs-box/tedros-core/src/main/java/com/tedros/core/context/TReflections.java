@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 
@@ -17,6 +18,7 @@ import org.reflections.Reflections;
 import org.reflections.util.ConfigurationBuilder;
 
 import com.tedros.core.annotation.TApplication;
+import com.tedros.core.model.ITModelView;
 import com.tedros.util.TedrosFolder;
 
 /**
@@ -55,6 +57,7 @@ public final class TReflections {
 			
 			repo = (packages!=null) 
 					? new Reflections(new ConfigurationBuilder()
+							.useParallelExecutor()
 							.forPackages(packages))
 						: new Reflections();
 		} catch (IOException e) {
@@ -67,11 +70,26 @@ public final class TReflections {
 	/**
 	 * Return a {@link Set} of class with this specific annotation type. 
 	 * */
+	@SuppressWarnings("rawtypes")
+	public Class<? extends ITModelView> getModelViewClass(String modelViewClassName){
+		Optional<Class<? extends ITModelView>> op = repo.getSubTypesOf(ITModelView.class)
+				.parallelStream()
+				.filter(p->{
+					return p.getClass().getName().equals(modelViewClassName);
+				}).findFirst();
+		return op.isPresent() 
+				? op.get() 
+						: null;
+	}
+	
+	/**
+	 * Return a {@link Set} of class with this specific annotation type. 
+	 * */
 	public Set<Class<?>> getClassesAnnotatedWith(Class<? extends Annotation> annotationClass){
 		return repo.getTypesAnnotatedWith(annotationClass);
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void createAppPackagesIndex() {
 		try {
 			Reflections ref = new Reflections();

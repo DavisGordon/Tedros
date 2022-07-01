@@ -3,9 +3,9 @@ package com.tedros.tools.module.scheme.decorator;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
+import com.tedros.tools.ToolsKey;
 import com.tedros.tools.module.scheme.model.ExampleMV;
 import com.tedros.tools.module.scheme.model.TPanelMV;
-import com.tedros.tools.util.ToolsKey;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

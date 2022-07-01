@@ -49,8 +49,8 @@ import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.entity.behavior.TMasterCrudViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
+import com.tedros.tools.ToolsKey;
 import com.tedros.tools.module.user.action.TEncriptPasswordChangeListener;
-import com.tedros.tools.util.ToolsKey;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;

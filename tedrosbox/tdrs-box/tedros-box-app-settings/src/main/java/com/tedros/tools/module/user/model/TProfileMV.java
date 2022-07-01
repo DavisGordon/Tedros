@@ -34,8 +34,8 @@ import com.tedros.fxapi.control.TText.TTextStyle;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
+import com.tedros.tools.ToolsKey;
 import com.tedros.tools.module.user.table.TAuthorizationTV;
-import com.tedros.tools.util.ToolsKey;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;

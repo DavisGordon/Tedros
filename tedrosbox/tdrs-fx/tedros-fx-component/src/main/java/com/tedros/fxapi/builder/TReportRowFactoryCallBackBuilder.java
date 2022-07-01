@@ -12,7 +12,7 @@ import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.model.ITModelView;
 import com.tedros.ejb.base.model.ITModel;
 import com.tedros.ejb.base.model.ITReportItemModel;
-import com.tedros.fxapi.domain.TLabelKey;
+import com.tedros.fxapi.TFxKey;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.util.TModelViewUtil;
 
@@ -35,7 +35,7 @@ public abstract class TReportRowFactoryCallBackBuilder<M extends TModelView<? ex
 	@Override
 	List<MenuItem> getMenuItems(TableView<M> table, TableRow<M> row) {
 		TLanguage iE = TLanguage.getInstance();
-		MenuItem edit = new MenuItem(iE.getString(TLabelKey.BUTTON_EDIT));
+		MenuItem edit = new MenuItem(iE.getString(TFxKey.BUTTON_EDIT));
 		edit.setOnAction(e->{
 			M mv = row.getItem();
 			ITModel model = mv.getModel().getModel();

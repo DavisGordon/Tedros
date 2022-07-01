@@ -23,11 +23,11 @@ import com.tedros.fxapi.domain.TLayoutType;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TModelView;
+import com.tedros.tools.ToolsKey;
 import com.tedros.tools.module.scheme.behaviour.TPanelBehavior;
 import com.tedros.tools.module.scheme.decorator.TPanelDecorator;
 import com.tedros.tools.module.scheme.process.TPanelProcess;
 import com.tedros.tools.module.scheme.trigger.TPanelTrigger;
-import com.tedros.tools.util.ToolsKey;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;

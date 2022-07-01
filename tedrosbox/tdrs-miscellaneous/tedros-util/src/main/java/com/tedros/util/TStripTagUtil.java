@@ -1,5 +1,7 @@
 package com.tedros.util;
 
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -7,7 +9,6 @@ public class TStripTagUtil {
 
 	public static final String OPEN_TAG = "#{";
 	public static final String CLOSE_TAG = "}";
-	private static final String OPEN_TAG_EXPRESSION = "#\\{";
 	
 	public synchronized String[] getTags(String content){
 		if(StringUtils.isBlank(content))
@@ -21,7 +22,7 @@ public class TStripTagUtil {
 	}
 	
 	public synchronized String replaceTag(String content, String key, String value){
-		return content.replaceAll(OPEN_TAG_EXPRESSION+key+CLOSE_TAG, value.toString());
+		return content.replaceAll(Pattern.quote(OPEN_TAG+key+CLOSE_TAG), value);
 	}
 	
 	public synchronized boolean isTagPresent(String content){

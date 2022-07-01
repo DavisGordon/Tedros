@@ -13,7 +13,7 @@ import com.tedros.fxapi.annotation.text.TFont;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.entity.decorator.TSaveViewDecorator;
 import com.tedros.fxapi.presenter.model.TModelView;
-import com.tedros.tools.util.ToolsKey;
+import com.tedros.tools.ToolsKey;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;

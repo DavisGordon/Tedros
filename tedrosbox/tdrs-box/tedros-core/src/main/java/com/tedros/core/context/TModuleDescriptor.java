@@ -16,11 +16,11 @@ import com.tedros.core.image.TImageView;
  * */
 public final class TModuleDescriptor implements Comparable<TModuleDescriptor> {
 
-	String applicationName;
-	String applicationUUID;
-	String menu;
-	String moduleName;
-	String description;
+	private String applicationName;
+	private String applicationUUID;
+	private String menu;
+	private String moduleName;
+	private String description;
 	
 	@Transient
 	private Class<? extends TModule> type;
@@ -101,12 +101,12 @@ public final class TModuleDescriptor implements Comparable<TModuleDescriptor> {
 		return description;
 	}
 	
-	public String getSourcePath() {
+	public String getPathKeys() {
 		return TCoreKeys.MENU_ROOT + "/"+ this.applicationName +"/"+ this.menu +"/"+ this.moduleName;
 	}
 	
 	public String getPath() {
-		return iEngine.getString(getSourcePath());
+		return TLanguage.getInstance().getString(getPathKeys());
 	}
 	
 }

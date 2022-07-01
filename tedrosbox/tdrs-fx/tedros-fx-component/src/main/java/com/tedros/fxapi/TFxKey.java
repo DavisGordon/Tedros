@@ -1,6 +1,6 @@
-package com.tedros.fxapi.domain;
+package com.tedros.fxapi;
 
-public interface TLabelKey {
+public interface TFxKey {
 	static final String BUTTON_ADD = "#{tedros.fxapi.button.add}";
 	static final String BUTTON_APPLY = "#{tedros.fxapi.button.apply}";
 	static final String BUTTON_BACK = "#{tedros.fxapi.button.back}";
