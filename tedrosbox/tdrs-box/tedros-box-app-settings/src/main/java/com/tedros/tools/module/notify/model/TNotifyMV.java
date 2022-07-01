@@ -22,6 +22,7 @@ import com.tedros.fxapi.annotation.control.TConverter;
 import com.tedros.fxapi.annotation.control.TDatePickerField;
 import com.tedros.fxapi.annotation.control.TFileField;
 import com.tedros.fxapi.annotation.control.THTMLEditor;
+import com.tedros.fxapi.annotation.control.TIntegratedLinkField;
 import com.tedros.fxapi.annotation.control.TLabel;
 import com.tedros.fxapi.annotation.control.TModelViewType;
 import com.tedros.fxapi.annotation.control.TRadioButton;
@@ -181,7 +182,7 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 	private SimpleObjectProperty<Date> integratedDate;
 	
 	@TLabel(text=TFxKey.INTEGRATED_LINK)
-	@TShowField()
+	@TIntegratedLinkField
 	private SimpleStringProperty integratedModulePath;
 	
 	@TFileField(propertyValueType=TFileModelType.ENTITY, preLoadFileBytes=true,
@@ -207,14 +208,14 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 
 	public TNotifyMV(TNotify entity) {
 		super(entity);
-		super.formatFieldsToDisplay("%s / %s / %s", subject, to, integratedViewName);
+		super.formatFieldsToDisplay("%s / %s", subject, to);
 	}
 	
 	@Override
 	public void reload(TNotify model) {
 		// TODO Auto-generated method stub
 		super.reload(model);
-		super.formatFieldsToDisplay("%s / %s / %s", subject, to, integratedViewName);
+		super.formatFieldsToDisplay("%s / %s", subject, to);
 		}
 
 	/**
