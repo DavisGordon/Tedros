@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.core.ITModule;
 import com.tedros.core.ITedrosBox;
+import com.tedros.core.TCoreKeys;
 import com.tedros.core.TLanguage;
 import com.tedros.core.TModule;
 import com.tedros.core.context.Page;
@@ -28,6 +29,7 @@ import com.tedros.core.control.TedrosBoxBreadcrumbBar;
 import com.tedros.core.control.TedrosBoxResizeBar;
 import com.tedros.core.logging.TLoggerManager;
 import com.tedros.core.style.TThemeUtil;
+import com.tedros.fxapi.TFxKey;
 import com.tedros.fxapi.control.TLabel;
 import com.tedros.fxapi.layout.TSliderMenu;
 import com.tedros.fxapi.modal.TConfirmMessageBox;
@@ -887,8 +889,8 @@ public class TedrosBox extends Application implements ITedrosBox  {
     @Override 
     public void start(Stage primaryStage) throws Exception {
     	TLanguage.addResourceBundle(null, "TedrosLoginLabels", TedrosRelease.class.getClassLoader());
-    	TLanguage.addResourceBundle(null, "TCoreLabels", TedrosContext.class.getClassLoader());
-		TLanguage.addResourceBundle(null, "TLabels", TPresenter.class.getClassLoader());
+    	TLanguage.addResourceBundle(null, "TCoreLabels", TCoreKeys.class.getClassLoader());
+		TLanguage.addResourceBundles(null, TFxKey.class.getClassLoader(), "TFx", "TUsual");
         init(primaryStage);
         primaryStage.show();
         

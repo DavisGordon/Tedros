@@ -31,9 +31,9 @@ import com.tedros.fxapi.annotation.reader.TReaderHtml;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.domain.TLabelPosition;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
+import com.tedros.tools.ToolsKey;
 import com.tedros.tools.module.user.action.TAuthorizationLoadAction;
 import com.tedros.tools.module.user.behaviour.TAuthorizationBehavior;
-import com.tedros.tools.util.ToolsKey;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;

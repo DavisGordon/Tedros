@@ -406,7 +406,6 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	/**
 	 * Return the {@link ObservableValue} created to the field name. 
 	 * */
-	@SuppressWarnings("rawtypes")
 	public Observable getProperty(String fieldName) {
 		return  propertys.get(fieldName);
 	}

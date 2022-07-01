@@ -21,11 +21,11 @@ import com.tedros.fxapi.domain.TLabelPosition;
 import com.tedros.fxapi.domain.TViewMode;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
+import com.tedros.tools.ToolsKey;
 import com.tedros.tools.module.scheme.behaviour.TMainColorBehavior;
 import com.tedros.tools.module.scheme.decorator.TMainColorDecorator;
 import com.tedros.tools.module.scheme.process.TMainColorProcess;
 import com.tedros.tools.module.scheme.trigger.TMainColorTrigger;
-import com.tedros.tools.util.ToolsKey;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleLongProperty;

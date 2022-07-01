@@ -1,6 +1,6 @@
-package com.tedros.tools.util;
+package com.tedros.fxapi;
 
-public interface CommonKey {
+public interface TUsualKey {
 	
 	static final String ACTIVE = "#{label.active}";
 	static final String ADDITIONAL_DATA = "#{label.additional.data}";

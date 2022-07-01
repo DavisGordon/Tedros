@@ -12,6 +12,8 @@ import java.util.Date;
 public interface ITIntegrable {
 	
 	void setIntegratedEntityId(Long id);
+
+	void setIntegratedEntity(String className);
 	
 	void setIntegratedModelView(String className);
 	
@@ -22,6 +24,8 @@ public interface ITIntegrable {
 	void setIntegratedAppUUID(String appUUID);
 	
 	Long getIntegratedEntityId();
+	
+	String getIntegratedEntity();
 	
 	String getIntegratedModelView();
 	

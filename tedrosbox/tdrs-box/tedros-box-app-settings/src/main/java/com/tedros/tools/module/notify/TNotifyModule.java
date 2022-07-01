@@ -9,8 +9,8 @@ import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.core.domain.DomainApp;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
+import com.tedros.tools.ToolsKey;
 import com.tedros.tools.module.notify.model.TNotifyMV;
-import com.tedros.tools.util.ToolsKey;
 
 /**
  * @author Davis Gordon

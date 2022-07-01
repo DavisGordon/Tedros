@@ -7,6 +7,7 @@ import com.tedros.core.annotation.TResourceBundle;
 import com.tedros.core.annotation.security.TAuthorizationType;
 import com.tedros.core.annotation.security.TSecurity;
 import com.tedros.core.domain.DomainApp;
+import com.tedros.tools.ToolsKey;
 import com.tedros.tools.module.notify.TNotifyModule;
 import com.tedros.tools.module.notify.icon.NotifyIcon;
 import com.tedros.tools.module.notify.icon.NotifyMenuIcon;
@@ -19,7 +20,6 @@ import com.tedros.tools.module.scheme.icon.SchemeMenuIcon;
 import com.tedros.tools.module.user.TUserModule;
 import com.tedros.tools.module.user.icon.TUserIcon;
 import com.tedros.tools.module.user.icon.TUserMenuIcon;
-import com.tedros.tools.util.ToolsKey;
 
 @TApplication(name=ToolsKey.APP_TOOLS, packageName = "com.tedros.tools", universalUniqueIdentifier=TConstant.UUI,
 module = {@TModule(type=SchemeModule.class, name=ToolsKey.MODULE_SCHEME, menu = ToolsKey.MENU_TOOLS, 
@@ -31,7 +31,7 @@ module = {@TModule(type=SchemeModule.class, name=ToolsKey.MODULE_SCHEME, menu = 
 		@TModule(type=TNotifyModule.class, name=ToolsKey.MODULE_NOTIFY, menu = ToolsKey.MENU_TOOLS, 
 			icon=NotifyIcon.class, menuIcon=NotifyMenuIcon.class)
 })
-@TResourceBundle(resourceName={"TToolsLabels", "TCommonLabels", "TCoreLabels"})
+@TResourceBundle(resourceName={"TToolsLabels"})
 @TSecurity(id=DomainApp.MNEMONIC, appName=ToolsKey.APP_TOOLS, allowedAccesses=TAuthorizationType.APP_ACCESS)
 public class AppStart implements ITApplication {
 

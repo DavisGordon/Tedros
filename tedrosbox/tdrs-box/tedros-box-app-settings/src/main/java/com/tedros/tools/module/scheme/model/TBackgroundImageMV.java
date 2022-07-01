@@ -12,9 +12,9 @@ import com.tedros.fxapi.annotation.scene.TNode;
 import com.tedros.fxapi.domain.TEnvironment;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.model.TModelView;
+import com.tedros.tools.ToolsKey;
 import com.tedros.tools.module.scheme.behaviour.TBackgroundBehavior;
 import com.tedros.tools.module.scheme.decorator.TBackgroundDecorator;
-import com.tedros.tools.util.ToolsKey;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;

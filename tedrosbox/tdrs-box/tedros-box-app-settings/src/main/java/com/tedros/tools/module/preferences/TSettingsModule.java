@@ -12,9 +12,9 @@ import com.tedros.fxapi.presenter.dynamic.view.TDynaGroupView;
 import com.tedros.fxapi.presenter.view.group.TGroupPresenter;
 import com.tedros.fxapi.presenter.view.group.TGroupView;
 import com.tedros.fxapi.presenter.view.group.TViewItem;
+import com.tedros.tools.ToolsKey;
 import com.tedros.tools.module.preferences.model.TMimeTypeMV;
 import com.tedros.tools.module.preferences.model.TPropertieMV;
-import com.tedros.tools.util.ToolsKey;
 
 /**
  * @author Davis Gordon

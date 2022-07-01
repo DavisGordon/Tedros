@@ -24,6 +24,10 @@ public class TReceptiveEntity extends TEntity implements ITIntegrable {
 	
 	@Column(length=1512)
 	private String integratedModelView;
+	
+
+	@Column(length=1512)
+	private String integratedEntity;
 
 	@Column(length=2512)
 	private String integratedModulePath;
@@ -136,5 +140,19 @@ public class TReceptiveEntity extends TEntity implements ITIntegrable {
 	 */
 	public void setIntegratedViewName(String integratedViewName) {
 		this.integratedViewName = integratedViewName;
+	}
+
+	/**
+	 * @return the integratedEntity
+	 */
+	public String getIntegratedEntity() {
+		return integratedEntity;
+	}
+
+	/**
+	 * @param integratedEntity the integratedEntity to set
+	 */
+	public void setIntegratedEntity(String integratedEntity) {
+		this.integratedEntity = integratedEntity;
 	}
 }

@@ -14,6 +14,7 @@ import com.tedros.core.notify.model.TAction;
 import com.tedros.core.notify.model.TNotify;
 import com.tedros.core.notify.model.TNotifyLog;
 import com.tedros.core.notify.model.TState;
+import com.tedros.fxapi.TFxKey;
 import com.tedros.fxapi.annotation.control.TCallbackFactory;
 import com.tedros.fxapi.annotation.control.TCellValueFactory;
 import com.tedros.fxapi.annotation.control.TContent;
@@ -57,15 +58,14 @@ import com.tedros.fxapi.builder.DateTimeFormatBuilder;
 import com.tedros.fxapi.collections.ITObservableList;
 import com.tedros.fxapi.domain.TFileExtension;
 import com.tedros.fxapi.domain.TFileModelType;
-import com.tedros.fxapi.domain.TLabelKey;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.property.TSimpleFileProperty;
+import com.tedros.tools.ToolsKey;
 import com.tedros.tools.module.notify.behaviour.TNotifyBehaviour;
 import com.tedros.tools.module.notify.converter.ActionConverter;
 import com.tedros.tools.module.notify.table.TNotifyLogDateCallBack;
 import com.tedros.tools.module.notify.table.TNotifyLogStateCallBack;
 import com.tedros.tools.module.notify.table.TNotifyLogTV;
-import com.tedros.tools.util.ToolsKey;
 import com.tedros.util.TDateUtil;
 
 import javafx.beans.property.SimpleLongProperty;
@@ -90,17 +90,17 @@ paginator=@TPaginator(entityClass = TNotify.class,
 		showSearchField=true,
 		show=true),
 		presenter=@TPresenter(decorator = @TDecorator(viewTitle=ToolsKey.VIEW_NOTIFY,
-buildModesRadioButton=false),
+			buildModesRadioButton=false),
 	behavior=@TBehavior(type=TNotifyBehaviour.class, saveOnlyChangedModels=false, saveAllModels=false)))
 @TSecurity(id=DomainApp.NOTIFY_FORM_ID,
 appName=ToolsKey.APP_TOOLS, 
 moduleName=ToolsKey.MODULE_NOTIFY, 
 viewName=ToolsKey.VIEW_NOTIFY,
 allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,  
-   					TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
+	   				TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public class TNotifyMV extends TEntityModelView<TNotify> {
 	
-	private SimpleStringProperty displayProperty = new SimpleStringProperty();
+	private SimpleStringProperty display;
 
 	@TTabPane(tabs = { 
 		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"text"})),
@@ -168,7 +168,7 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 						@TPriority(field="integratedViewName", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty content;
 	
-	@TLabel(text=TLabelKey.INTEGRATED_BY)
+	@TLabel(text=TFxKey.INTEGRATED_BY)
 	@TShowField()
 	@THBox(pane=@TPane(children={"integratedViewName", "integratedDate", "integratedModulePath"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="integratedViewName", priority=Priority.SOMETIMES), 
@@ -176,11 +176,11 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 			@TPriority(field="integratedModulePath", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty integratedViewName;
 	
-	@TLabel(text=TLabelKey.INTEGRATED_DATE)
-	@TShowField()
+	@TLabel(text=TFxKey.INTEGRATED_DATE)
+	@TShowField(fields= {@TField(pattern=TDateUtil.DDMMYYYY_HHMM)})
 	private SimpleObjectProperty<Date> integratedDate;
 	
-	@TLabel(text=TLabelKey.INTEGRATED_LINK)
+	@TLabel(text=TFxKey.INTEGRATED_LINK)
 	@TShowField()
 	private SimpleStringProperty integratedModulePath;
 	
@@ -331,7 +331,7 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 
 	@Override
 	public SimpleStringProperty getDisplayProperty() {
-		return displayProperty;
+		return display;
 	}
 
 	/**
@@ -430,6 +430,20 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 	 */
 	public void setIntegratedModulePath(SimpleStringProperty integratedModulePath) {
 		this.integratedModulePath = integratedModulePath;
+	}
+
+	/**
+	 * @return the display
+	 */
+	public SimpleStringProperty getDisplay() {
+		return display;
+	}
+
+	/**
+	 * @param display the display to set
+	 */
+	public void setDisplay(SimpleStringProperty display) {
+		this.display = display;
 	}
 
 	

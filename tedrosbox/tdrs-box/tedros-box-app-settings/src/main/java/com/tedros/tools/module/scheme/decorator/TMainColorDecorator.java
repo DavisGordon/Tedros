@@ -4,9 +4,9 @@ import com.tedros.core.TLanguage;
 import com.tedros.fxapi.control.TComboBoxField;
 import com.tedros.fxapi.control.TLabel;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
+import com.tedros.tools.ToolsKey;
 import com.tedros.tools.module.scheme.model.TMainColorMV;
 import com.tedros.tools.module.scheme.template.TemplatePane;
-import com.tedros.tools.util.ToolsKey;
 
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;

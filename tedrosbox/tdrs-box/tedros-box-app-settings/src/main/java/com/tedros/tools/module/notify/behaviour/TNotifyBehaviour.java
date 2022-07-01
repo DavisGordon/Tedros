@@ -8,8 +8,8 @@ import com.tedros.core.TModule;
 import com.tedros.core.context.TedrosAppManager;
 import com.tedros.core.context.TedrosContext;
 import com.tedros.core.notify.model.TNotify;
+import com.tedros.fxapi.TFxKey;
 import com.tedros.fxapi.control.TButton;
-import com.tedros.fxapi.domain.TLabelKey;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.entity.behavior.TMasterCrudViewBehavior;
 import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
@@ -33,7 +33,7 @@ public class TNotifyBehaviour extends TMasterCrudViewBehavior<TNotifyMV, TNotify
 		//ObservableList<TNotifyMV> lst = presenter.getModelViews();
 		if(super.getModels()!=null) {
 			TButton closeBtn = new TButton();
-			closeBtn.setText(TLanguage.getInstance().getString(TLabelKey.BUTTON_CLOSE));
+			closeBtn.setText(TLanguage.getInstance().getString(TFxKey.BUTTON_CLOSE));
 			((TMasterCrudViewDecorator<TNotifyMV>)presenter.getDecorator()).addItemInTHeaderToolBar(closeBtn);
 			EventHandler<ActionEvent> ev = e ->{
 				super.invalidate();
