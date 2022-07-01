@@ -1,6 +1,7 @@
 package com.tedros.core.context;
 
 import com.tedros.core.ITModule;
+import com.tedros.core.TLanguage;
 import com.tedros.core.model.ITModelView;
 
 import javafx.beans.value.ChangeListener;
@@ -82,6 +83,45 @@ public final class TedrosAppManager extends TedrosAppLoader {
 			TedrosContext.viewProperty().addListener(chl);
 			goToModule(moduleClass);
 		}
+	}
+	
+	@SuppressWarnings({"rawtypes"})
+	public void loadInModule(String modulePath, ITModelView modelView) {
+		String path = TLanguage.getInstance().getString(modulePath);
+		Node v = (Node) TedrosContext.viewProperty().getValue();
+		if(v instanceof ITModule) {
+			ITModule m = (ITModule) v;
+			if(this.getModuleContext(m).getModuleDescriptor().getPath().equals(path))
+				m.tLookupViewAndLoadModelView(modelView);
+			else {
+				listenView(modelView, path);
+				TedrosContext.setPagePathProperty(path, true, true, true);
+			}
+		}else {
+			listenView(modelView, path);
+			TedrosContext.setPagePathProperty(path, true, true, true);
+		}
+	}
+
+	/**
+	 * @param modelView
+	 * @param path
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void listenView(ITModelView modelView, String path) {
+		ChangeListener<Node> chl = new ChangeListener<Node>() {
+			@Override
+			public void changed(ObservableValue<? extends Node> a, Node o, Node n) {
+				if(n instanceof ITModule) {
+					ITModule m = (ITModule) n;
+					if(getModuleContext(m).getModuleDescriptor().getPath().equals(path)) {
+						m.tLookupViewAndLoadModelView(modelView);
+						TedrosContext.viewProperty().removeListener(this);
+					}
+				}
+			}
+		};
+		TedrosContext.viewProperty().addListener(chl);
 	}
 	
 	/**

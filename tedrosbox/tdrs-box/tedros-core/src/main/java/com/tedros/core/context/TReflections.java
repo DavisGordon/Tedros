@@ -75,7 +75,7 @@ public final class TReflections {
 		Optional<Class<? extends ITModelView>> op = repo.getSubTypesOf(ITModelView.class)
 				.parallelStream()
 				.filter(p->{
-					return p.getClass().getName().equals(modelViewClassName);
+					return p.getName().equals(modelViewClassName);
 				}).findFirst();
 		return op.isPresent() 
 				? op.get() 

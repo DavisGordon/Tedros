@@ -3,6 +3,14 @@
  */
 package com.tedros.fxapi.control;
 
+import com.tedros.core.TLanguage;
+import com.tedros.core.context.TReflections;
+import com.tedros.core.context.TedrosAppManager;
+import com.tedros.core.model.ITModelView;
+import com.tedros.fxapi.presenter.model.TEntityModelView;
+import com.tedros.fxapi.util.TModelViewUtil;
+import com.tedros.fxapi.util.TReflectionUtil;
+
 import javafx.scene.Node;
 import javafx.scene.control.Hyperlink;
 
@@ -20,20 +28,34 @@ public class TIntegratedLink extends Hyperlink {
 	/**
 	 * @param arg0
 	 */
-	public TIntegratedLink(String arg0) {
-		super(arg0);
+	public TIntegratedLink(String path) {
+		super(TLanguage.getInstance().getString(path));
+		this.tModulePath = path;
+		init();
 	}
 
 	/**
 	 * @param arg0
 	 * @param arg1
 	 */
-	public TIntegratedLink(String arg0, Node arg1) {
-		super(arg0, arg1);
+	public TIntegratedLink(String path, Node arg1) {
+		super(TLanguage.getInstance().getString(path), arg1);
+		this.tModulePath = path;
+		init();
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void init(){
-		
+		super.setOnAction(e->{
+			Class<? extends ITModelView> mvCls = TReflections.getInstance().getModelViewClass(tModelViewClassName);
+			Class mCls = TReflectionUtil.getGenericParamClass(mvCls, 0);
+			
+			if(mvCls!=null && mCls!=null) {
+				ITModelView mv = TModelViewUtil.buildModelView(mvCls, mCls);
+				((TEntityModelView)mv).getId().setValue(tEntityId);
+				TedrosAppManager.getInstance().loadInModule(tModulePath, mv);
+			}
+		});
 	}
 
 	/**
