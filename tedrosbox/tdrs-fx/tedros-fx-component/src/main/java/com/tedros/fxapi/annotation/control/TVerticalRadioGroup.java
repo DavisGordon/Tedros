@@ -42,7 +42,8 @@ public @interface TVerticalRadioGroup {
 	 *</pre> 
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITControlBuilder<com.tedros.fxapi.control.TVerticalRadioGroup, Property>> builder() default TVerticalRadioGroupBuilder.class;
+	public Class<? extends ITControlBuilder<com.tedros.fxapi.control.TVerticalRadioGroup, Property>> builder() 
+			default TVerticalRadioGroupBuilder.class;
 	
 	/**
 	 * <pre>
@@ -52,7 +53,8 @@ public @interface TVerticalRadioGroup {
 	 * </pre>
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITAnnotationParser>[] parser() default {TVerticalRadioGroupParser.class, TVBoxParser.class};
+	public Class<? extends ITAnnotationParser>[] parser() 
+	default {TVerticalRadioGroupParser.class, TVBoxParser.class};
 	
 	
 	/**
