@@ -1,7 +1,6 @@
 package com.tedros.fxapi;
 
 public interface TUsualKey {
-	
 	static final String ACTIVE = "#{label.active}";
 	static final String ADDITIONAL_DATA = "#{label.additional.data}";
 	static final String ADDRESS = "#{label.address}";
@@ -9,6 +8,7 @@ public interface TUsualKey {
 	static final String ADMIN_AREA = "#{label.admin.area}";
 	static final String APPLY = "#{label.apply}";
 	static final String ATTRIBUTE = "#{label.attribute}";
+	static final String ATTRIBUTES = "#{label.attributes}";
 	static final String AUTOR = "#{label.autor}";
 	static final String BIRTHDATE = "#{label.birthdate}";
 	static final String CAPITAL = "#{label.capital}";
@@ -19,6 +19,8 @@ public interface TUsualKey {
 	static final String CITY = "#{label.city}";
 	static final String CNPJ = "#{label.cnpj}";
 	static final String CODE = "#{label.code}";
+	static final String COMMON = "#{label.common}";
+	static final String COMPANY = "#{label.company}";
 	static final String COMPLEMENT = "#{label.complement}";
 	static final String COMPONENT = "#{label.component}";
 	static final String COMPONENTS = "#{label.components}";
@@ -45,16 +47,20 @@ public interface TUsualKey {
 	static final String DONATIONS = "#{label.donations}";
 	static final String EDIT_CONTENT = "#{label.edit.content}";
 	static final String EMAIL = "#{label.email}";
+	static final String EMPLOYEE = "#{label.employee}";
+	static final String EMPLOYER = "#{label.employer}";
 	static final String ENABLE = "#{label.enable}";
 	static final String ENABLED = "#{label.enabled}";
 	static final String EVENTS = "#{label.events}";
 	static final String EXTENSION = "#{label.extension}";
 	static final String FEMALE = "#{label.female}";
+	static final String FEMININE = "#{label.feminine}";
 	static final String FILE = "#{label.file}";
 	static final String FILE_DESCRIPTION = "#{label.file.description}";
 	static final String FILE_EXTENSION = "#{label.file.extension}";
 	static final String FILTERS = "#{label.filters}";
 	static final String FLAG = "#{label.flag}";
+	static final String GENDER = "#{label.gender}";
 	static final String GIVER = "#{label.giver}";
 	static final String HEADER = "#{label.header}";
 	static final String HEIGHT = "#{label.height}";
@@ -75,10 +81,12 @@ public interface TUsualKey {
 	static final String MAP = "#{label.map}";
 	static final String MAP_TYPE = "#{label.map.type}";
 	static final String MAPQUEST_KEY = "#{label.mapquest.key}";
+	static final String MASCULINE = "#{label.masculine}";
 	static final String MASTER = "#{label.master}";
 	static final String MIME_TYPE = "#{label.mime.type}";
 	static final String NAME = "#{label.name}";
 	static final String NEIGHBORHOOD = "#{label.neighborhood}";
+	static final String NEUTER = "#{label.neuter}";
 	static final String NICKNAME = "#{label.nickname}";
 	static final String NO = "#{label.no}";
 	static final String NUMERIC_CODE = "#{label.numeric.code}";
@@ -96,6 +104,7 @@ public interface TUsualKey {
 	static final String PAGES = "#{label.pages}";
 	static final String PASSWORD = "#{label.password}";
 	static final String PERCENTAGE = "#{label.percentage}";
+	static final String PHONE = "#{label.phone}";
 	static final String PICTURES = "#{label.pictures}";
 	static final String PLACE_TYPE = "#{label.place.type}";
 	static final String POPULATION = "#{label.population}";
@@ -111,6 +120,7 @@ public interface TUsualKey {
 	static final String SELECTED = "#{label.selected}";
 	static final String SEX = "#{label.sex}";
 	static final String SIZE = "#{label.size}";
+	static final String STAFF = "#{label.staff}";
 	static final String STATE = "#{label.state}";
 	static final String STATUS = "#{label.status}";
 	static final String STREET_TYPE = "#{label.street.type}";

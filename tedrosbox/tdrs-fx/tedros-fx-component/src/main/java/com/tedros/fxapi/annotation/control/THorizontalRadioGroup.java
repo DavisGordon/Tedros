@@ -42,7 +42,8 @@ public @interface THorizontalRadioGroup {
 	 *</pre> 
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITControlBuilder<com.tedros.fxapi.control.THorizontalRadioGroup, Property>> builder() default THorizontalRadioGroupBuilder.class;
+	public Class<? extends ITControlBuilder<com.tedros.fxapi.control.THorizontalRadioGroup, Property>> builder() 
+			default THorizontalRadioGroupBuilder.class;
 	
 	/**
 	 * <pre>
@@ -52,7 +53,8 @@ public @interface THorizontalRadioGroup {
 	 * </pre>
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITAnnotationParser>[] parser() default {THorizontalRadioGroupParser.class, THBoxParser.class};
+	public Class<? extends ITAnnotationParser>[] parser() 
+	default {THorizontalRadioGroupParser.class, THBoxParser.class};
 	
 	
 	/**
@@ -140,6 +142,23 @@ public @interface THorizontalRadioGroup {
 	* </pre>
 	**/
 	public boolean fillHeight() default false;
+	
+
+	/**
+	 * <pre>
+	 * {@link com.tedros.fxapi.control.TVerticalRadioGroup} Class
+	 * 
+	 * A custom converter 
+	 * 
+	 * Property description:
+	 * 
+	 * Specify a converter between the radio button string value and the field Object value
+	 * 
+	 * </pre>
+	 * */
+	public TConverter converter() 
+	default @TConverter(parse = false, type = com.tedros.fxapi.form.TConverter.class);
+	
 	
 	/**
 	 * <pre>

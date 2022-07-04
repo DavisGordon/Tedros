@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.tedros.fxapi.annotation.control.THorizontalRadioGroup;
 import com.tedros.fxapi.annotation.control.TRadioButton;
+import com.tedros.fxapi.form.TConverter;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -39,30 +40,47 @@ implements ITControlBuilder<com.tedros.fxapi.control.THorizontalRadioGroup, Prop
 
 	@SuppressWarnings({"unchecked"})
 	public com.tedros.fxapi.control.THorizontalRadioGroup build(final Annotation annotation, final Property attrProperty) throws Exception {
+		
 		THorizontalRadioGroup tAnnotation = (THorizontalRadioGroup) annotation;
+		
+		final TConverter conv = 
+				(tAnnotation.converter().parse() && tAnnotation.converter().type()!=TConverter.class) 
+					? tAnnotation.converter().type().newInstance() 
+					: null;
+					
+		if(conv!=null)
+			conv.setComponentDescriptor(super.getComponentDescriptor());
+				
+				
+		
 		final com.tedros.fxapi.control.THorizontalRadioGroup control = new com.tedros.fxapi.control.THorizontalRadioGroup();
 		control.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			@Override
-			public void changed(ObservableValue<? extends Toggle> arg0, Toggle arg1, Toggle new_toggle) {
+			public void changed(ObservableValue<? extends Toggle> arg0, Toggle arg1, Toggle n) {
 				
-				if(new_toggle == null){
-					attrProperty.setValue(new_toggle);
+				if(n == null){
+					attrProperty.setValue(n);
 					return;
 				}
 				
-				if(attrProperty instanceof SimpleStringProperty)
-					attrProperty.setValue((String)new_toggle.getUserData());
-				if(attrProperty instanceof SimpleDoubleProperty)
-					attrProperty.setValue(Double.valueOf((String)new_toggle.getUserData()));
-				if(attrProperty instanceof SimpleLongProperty)
-					attrProperty.setValue(Long.valueOf((String)new_toggle.getUserData()));
-				if(attrProperty instanceof SimpleIntegerProperty)
-					attrProperty.setValue(Integer.valueOf((String)new_toggle.getUserData()));
-				if(attrProperty instanceof SimpleBooleanProperty)
-					attrProperty.setValue(Boolean.valueOf((String)new_toggle.getUserData()));
-				if(attrProperty instanceof SimpleFloatProperty)
-					attrProperty.setValue(Float.valueOf((String)new_toggle.getUserData()));
+				if(conv!=null) {
+					conv.setIn(n.getUserData());
+					attrProperty.setValue(conv.getOut());
+				}else{
 				
+				if(attrProperty instanceof SimpleStringProperty)
+					attrProperty.setValue((String)n.getUserData());
+				if(attrProperty instanceof SimpleDoubleProperty)
+					attrProperty.setValue(Double.valueOf((String)n.getUserData()));
+				if(attrProperty instanceof SimpleLongProperty)
+					attrProperty.setValue(Long.valueOf((String)n.getUserData()));
+				if(attrProperty instanceof SimpleIntegerProperty)
+					attrProperty.setValue(Integer.valueOf((String)n.getUserData()));
+				if(attrProperty instanceof SimpleBooleanProperty)
+					attrProperty.setValue(Boolean.valueOf((String)n.getUserData()));
+				if(attrProperty instanceof SimpleFloatProperty)
+					attrProperty.setValue(Float.valueOf((String)n.getUserData()));
+				}
 			}
 		});
 		
@@ -82,9 +100,16 @@ implements ITControlBuilder<com.tedros.fxapi.control.THorizontalRadioGroup, Prop
 			radioBtn.setDisable(tRb.disable());
 			radioBtn.setWrapText(tRb.wrapText());
 			radioBtn.setUserData(tRb.userData());
-			if(attrProperty.getValue()!=null && tRb.userData()!=null){
-				if(attrProperty.getValue().toString().equals(tRb.userData()))
-					radioBtn.setSelected(true);
+			if(attrProperty.getValue()!=null){
+				if(conv!=null) {
+					conv.setIn(tRb.userData());
+					Object obj = conv.getOut();
+					if(attrProperty.getValue().equals(obj))
+						radioBtn.setSelected(true);
+				}else
+					if(attrProperty.getValue().toString().equals(tRb.userData()))
+						radioBtn.setSelected(true);
+				
 			}else
 				radioBtn.setSelected(tRb.selected());
 			
