@@ -23,7 +23,7 @@ public class TNotifyModule extends TModule {
 	
 	@Override
 	public void tStart() {
-		tShowView(new TDynaView<TNotifyMV>(TNotifyMV.class));
+		tShowView(new TDynaView<TNotifyMV>(this, TNotifyMV.class));
 	}
 
 }

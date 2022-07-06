@@ -28,6 +28,7 @@ public interface TUsualKey {
 	static final String CONTACTS = "#{label.contacts}";
 	static final String CONTENT = "#{label.content}";
 	static final String CONTENTS = "#{label.contents}";
+	static final String CORPORATE_NAME = "#{label.corporate.name}";
 	static final String COUNTRY = "#{label.country}";
 	static final String COUNTRY_CODE = "#{label.country.code}";
 	static final String CPF = "#{label.cpf}";
@@ -51,6 +52,7 @@ public interface TUsualKey {
 	static final String EMPLOYER = "#{label.employer}";
 	static final String ENABLE = "#{label.enable}";
 	static final String ENABLED = "#{label.enabled}";
+	static final String END_ACTIVITIES = "#{label.end.activities}";
 	static final String EVENTS = "#{label.events}";
 	static final String EXTENSION = "#{label.extension}";
 	static final String FEMALE = "#{label.female}";
@@ -64,6 +66,7 @@ public interface TUsualKey {
 	static final String GIVER = "#{label.giver}";
 	static final String HEADER = "#{label.header}";
 	static final String HEIGHT = "#{label.height}";
+	static final String HIRING_DATE = "#{label.hiring.date}";
 	static final String HOUSE = "#{label.house}";
 	static final String HOUSENUMBER = "#{label.housenumber}";
 	static final String IDD_CODE = "#{label.idd.code}";
@@ -113,6 +116,7 @@ public interface TUsualKey {
 	static final String REF_CODE = "#{label.ref.code}";
 	static final String REPEAT = "#{label.repeat}";
 	static final String REPORTS = "#{label.reports}";
+	static final String RESIGNATION_DATE = "#{label.resignation.date}";
 	static final String RESULT = "#{label.result}";
 	static final String RESULT_ORDER = "#{label.result.order}";
 	static final String SELECT = "#{label.select}";
@@ -121,6 +125,7 @@ public interface TUsualKey {
 	static final String SEX = "#{label.sex}";
 	static final String SIZE = "#{label.size}";
 	static final String STAFF = "#{label.staff}";
+	static final String START_ACTIVITIES = "#{label.start.activities}";
 	static final String STATE = "#{label.state}";
 	static final String STATUS = "#{label.status}";
 	static final String STREET_TYPE = "#{label.street.type}";
@@ -131,6 +136,7 @@ public interface TUsualKey {
 	static final String TITLE = "#{label.title}";
 	static final String TOKEN = "#{label.token}";
 	static final String TOTAL_AREA = "#{label.total.area}";
+	static final String TRADE_NAME = "#{label.trade.name}";
 	static final String TYPE = "#{label.type}";
 	static final String VALUE = "#{label.value}";
 	static final String VERSION = "#{label.version}";
@@ -140,6 +146,4 @@ public interface TUsualKey {
 	static final String WORK = "#{label.work}";
 	static final String WORKNUMBER = "#{label.worknumber}";
 	static final String YES = "#{label.yes}";
-
-
 }
