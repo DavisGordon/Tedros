@@ -10,6 +10,7 @@ public interface TUsualKey {
 	static final String ATTRIBUTE = "#{label.attribute}";
 	static final String ATTRIBUTES = "#{label.attributes}";
 	static final String AUTOR = "#{label.autor}";
+	static final String BEGIN = "#{label.begin}";
 	static final String BIRTHDATE = "#{label.birthdate}";
 	static final String CAPITAL = "#{label.capital}";
 	static final String CCTLD = "#{label.cctld}";
@@ -52,6 +53,7 @@ public interface TUsualKey {
 	static final String EMPLOYER = "#{label.employer}";
 	static final String ENABLE = "#{label.enable}";
 	static final String ENABLED = "#{label.enabled}";
+	static final String END = "#{label.end}";
 	static final String END_ACTIVITIES = "#{label.end.activities}";
 	static final String EVENTS = "#{label.events}";
 	static final String EXTENSION = "#{label.extension}";

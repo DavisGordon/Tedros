@@ -141,7 +141,7 @@ public class TPaginator extends BorderPane {
 		if(showOrderBy) {
 
 			orderBy = new TComboBoxField<>();
-			orderBy.setPromptText(iEngine.getString("#{tedros.fxapi.label.orderby}"));
+			orderBy.setPromptText(iEngine.getString("#{tedros.fxapi.label.sort.by}"));
 			ChangeListener<TOption<String>> eh = (a0, a1, a2) ->{
 				lastButton = null;
 				paginationProperty.setValue(buildPagination(0));
@@ -165,8 +165,8 @@ public class TPaginator extends BorderPane {
 			repo.add("orderByType", eh1);
 			orderByType.selectedToggleProperty().addListener(new WeakChangeListener<>(eh1));
 			
-			RadioButton ascRadioBtn = new RadioButton(iEngine.getString("#{tedros.fxapi.label.orderby.asc}")); 
-			RadioButton descRadioBtn = new RadioButton(iEngine.getString("#{tedros.fxapi.label.orderby.desc}")); 
+			RadioButton ascRadioBtn = new RadioButton(iEngine.getString("#{tedros.fxapi.label.sort.by.asc}")); 
+			RadioButton descRadioBtn = new RadioButton(iEngine.getString("#{tedros.fxapi.label.sort.by.desc}")); 
 			ascRadioBtn.setSelected(true);
 			ascRadioBtn.setUserData(true);
 			descRadioBtn.setUserData(false);

@@ -39,15 +39,16 @@ public interface TFxKey {
 	static final String INTEGRATED_LINK = "#{tedros.fxapi.label.integrated.link}";
 	static final String LOCAL_FILES = "#{tedros.fxapi.label.local.files}";
 	static final String OPTIONS = "#{tedros.fxapi.label.options}";
-	static final String ORDERBY = "#{tedros.fxapi.label.orderby}";
-	static final String ORDERBY_ASC = "#{tedros.fxapi.label.orderby.asc}";
-	static final String ORDERBY_DESC = "#{tedros.fxapi.label.orderby.desc}";
 	static final String PAGINATION = "#{tedros.fxapi.label.pagination}";
 	static final String REMOTE_FILES = "#{tedros.fxapi.label.remote.files}";
 	static final String RESULT = "#{tedros.fxapi.label.result}";
 	static final String SELECT_FILE = "#{tedros.fxapi.label.select.file}";
 	static final String SELECTED = "#{tedros.fxapi.label.selected}";
 	static final String SELECTION = "#{tedros.fxapi.label.selection}";
+	static final String SORT_BY = "#{tedros.fxapi.label.sort.by}";
+	static final String SORT_BY_ASC = "#{tedros.fxapi.label.sort.by.asc}";
+	static final String SORT_BY_DESC = "#{tedros.fxapi.label.sort.by.desc}";
+	static final String SORT_TYPE = "#{tedros.fxapi.label.sort.type}";
 	static final String TRUE = "#{tedros.fxapi.label.true}";
 	static final String MESSAGE_CANCEL = "#{tedros.fxapi.message.cancel}";
 	static final String MESSAGE_CANNOT_OPEN_FILE = "#{tedros.fxapi.message.cannot.open.file}";
@@ -88,7 +89,4 @@ public interface TFxKey {
 	static final String VIEW_MODAL_EDIT_TITLE = "#{tedros.fxapi.view.modal.edit.title}";
 	static final String VIEW_MODAL_SELECTION_TITLE = "#{tedros.fxapi.view.modal.selection.title}";
 	static final String VIEW_TITLE = "#{tedros.fxapi.view.title}";
-
-	
 }
-
