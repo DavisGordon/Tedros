@@ -27,9 +27,9 @@ import javafx.scene.control.TableView;
 @SuppressWarnings("rawtypes")
 public abstract class TReportRowFactoryCallBackBuilder<M extends TModelView<? extends ITReportItemModel>> extends TContextMenuRowFactoryCallBackBuilder<M> {
 
-	protected abstract Class<? extends ITModule> getTargetModuleClass();
+	protected abstract Class<? extends ITModule> getTargetModuleClass(Class<? extends ITModelView> modelViewClass);
 	
-	protected abstract Class<? extends TModelView> getTargetModelViewClass();
+	protected abstract Class<? extends TModelView> getTargetModelViewClass(Class<? extends ITModel> modelClass);
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -39,9 +39,9 @@ public abstract class TReportRowFactoryCallBackBuilder<M extends TModelView<? ex
 		edit.setOnAction(e->{
 			M mv = row.getItem();
 			ITModel model = mv.getModel().getModel();
-			TModelViewUtil mvu = new TModelViewUtil(getTargetModelViewClass(), model.getClass(), model);
+			TModelViewUtil mvu = new TModelViewUtil(getTargetModelViewClass(model.getClass()), model.getClass(), model);
 			ITModelView target = mvu.convertToModelView();
-			TedrosAppManager.getInstance().loadInModule(getTargetModuleClass(), target);
+			TedrosAppManager.getInstance().loadInModule(getTargetModuleClass(target.getClass()), target);
 		});
 		return Arrays.asList(edit);
 	}
