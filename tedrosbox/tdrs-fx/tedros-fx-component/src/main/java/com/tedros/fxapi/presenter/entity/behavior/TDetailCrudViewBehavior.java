@@ -31,7 +31,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.util.Callback;
 
 @SuppressWarnings({ "rawtypes" })
-public class TDetailCrudViewBehavior<M extends TEntityModelView, E extends ITEntity>
+public class TDetailCrudViewBehavior<M extends TEntityModelView<E>, E extends ITEntity>
 extends TDynaViewCrudBaseBehavior<M, E> {
 	
 	private TDetailCrudViewDecorator<M> decorator;

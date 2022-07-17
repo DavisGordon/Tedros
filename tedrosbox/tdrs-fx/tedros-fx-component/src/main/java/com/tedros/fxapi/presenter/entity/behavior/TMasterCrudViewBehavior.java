@@ -25,7 +25,8 @@ import com.tedros.fxapi.modal.TMessage;
 import com.tedros.fxapi.modal.TMessageBox;
 import com.tedros.fxapi.modal.TMessageType;
 import com.tedros.fxapi.presenter.behavior.TActionType;
-import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
+import com.tedros.fxapi.presenter.decorator.ITListViewDecorator;
+import com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.presenter.paginator.TPagination;
 import com.tedros.fxapi.process.TEntityProcess;
@@ -43,18 +44,19 @@ import javafx.scene.control.ListView;
 import javafx.util.Callback;
 
 @SuppressWarnings({ "rawtypes" })
-public class TMasterCrudViewBehavior<M extends TEntityModelView, E extends ITEntity>
-extends com.tedros.fxapi.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior<M, E> {
+public class TMasterCrudViewBehavior<M extends TEntityModelView<E>, E extends ITEntity>
+extends TDynaViewCrudBaseBehavior<M, E> {
 	
 	private String paginatorServiceName;
 	private String searchFieldName;
 	private TPaginator tPagAnn = null;
-	protected TMasterCrudViewDecorator<M> decorator;
+	protected ITListViewDecorator<M> decorator;
 		
+	@SuppressWarnings("unchecked")
 	@Override
 	public void load() {
 		super.load();
-		this.decorator = (TMasterCrudViewDecorator<M>) getPresenter().getDecorator();
+		this.decorator = (ITListViewDecorator<M>) getPresenter().getDecorator();
 		initialize();
 	}
 		

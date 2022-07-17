@@ -205,9 +205,11 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	 * @param fields
 	 */
 	private void setDisplayValue(String format, ObservableValue<?>... fields) {
-		String[] arr = new String[] {};
+		Object[] arr = new Object[] {};
 		for(ObservableValue<?> f : fields) {
-			arr = ArrayUtils.add(arr, f.getValue()!=null ? f.getValue().toString() : "");
+			Object o = f.getValue();
+			o = o instanceof ITModel ? o.toString() : o;
+			arr = ArrayUtils.add(arr, o!=null ? o : "");
 		}
 		this.getDisplayProperty().setValue(String.format(format, arr));
 	}
