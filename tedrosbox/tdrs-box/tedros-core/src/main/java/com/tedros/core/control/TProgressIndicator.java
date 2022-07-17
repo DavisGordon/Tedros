@@ -12,8 +12,6 @@ import javafx.animation.Animation.Status;
 import javafx.animation.FadeTransition;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
@@ -112,16 +110,11 @@ public class TProgressIndicator {
         ft.setCycleCount(FadeTransition.INDEFINITE);
         ft.setAutoReverse(true);
         
-        progressIndicator.visibleProperty().addListener(new ChangeListener<Boolean>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
-				if(arg2)
-					ft.play();
-				else
-					ft.stop();
-			}
-        	
+        progressIndicator.visibleProperty().addListener((a,b,n)-> {
+        	if(n)
+				ft.play();
+			else
+				ft.stop();
         });
 	}
 }

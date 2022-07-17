@@ -2,31 +2,28 @@ package com.tedros.fxapi.presenter.entity.decorator;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import com.tedros.fxapi.annotation.TAnnotationDefaultValue;
+import com.tedros.core.control.TProgressIndicator;
+import com.tedros.ejb.base.entity.ITEntity;
 import com.tedros.fxapi.annotation.form.TForm;
 import com.tedros.fxapi.annotation.presenter.TListViewPresenter;
 import com.tedros.fxapi.annotation.presenter.TPresenter;
+import com.tedros.fxapi.presenter.decorator.ITListViewDecorator;
+import com.tedros.fxapi.presenter.decorator.TListViewHelper;
 import com.tedros.fxapi.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import com.tedros.fxapi.presenter.dynamic.view.ITDynaView;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
+import com.tedros.fxapi.presenter.paginator.TPaginator;
 
 import javafx.scene.Node;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-@SuppressWarnings("rawtypes")
-public class TDetailCrudViewDecorator<M extends TEntityModelView> 
-extends TDynaViewCrudBaseDecorator<M>
- {
+public class TDetailCrudViewDecorator<M extends TEntityModelView<? extends ITEntity>> 
+extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M>{
 	
-	private VBox 		tListViewLayout;
-    private Label 		tListViewTitle;
-    private ListView<M> tListView;
-    
-    private double listViewMaxWidth = 250;
-    private double listViewMinWidth = 250;
+	private TListViewHelper<M> helper;
  
 	public void decorate() {
 		
@@ -41,13 +38,6 @@ extends TDynaViewCrudBaseDecorator<M>
 		
 		addItemInTCenterContent(view.gettFormSpace());
 		setViewTitle(null);
-		
-		// get the list view settings
-		TListViewPresenter tAnnotation = getPresenter().getModelViewClass().getAnnotation(TListViewPresenter.class);
-		if(tAnnotation!=null){
-			listViewMaxWidth = tAnnotation.listViewMaxWidth();
-			listViewMinWidth = tAnnotation.listViewMinWidth();
-		}
 		
 		buildColapseButton(null);
 		buildNewButton(null);
@@ -74,92 +64,158 @@ extends TDynaViewCrudBaseDecorator<M>
 		
 		// set padding at rigth in left content pane
 		addPaddingInTLeftContent(0, 4, 0, 0);
+
+		// get the list view settings
+		TListViewPresenter tAnnotation = getPresenter().getModelViewClass().getAnnotation(TListViewPresenter.class);
+		String title = tPresenter!=null ? tPresenter.decorator().listTitle() : null;
+		if(tAnnotation!=null)
+			helper = new TListViewHelper<>(title, tAnnotation.listViewMaxWidth(), tAnnotation.listViewMinWidth(), null);
+		else
+			helper = new TListViewHelper<>(title, 250, 250, null);
 		
-		// build the list view
-		tListView = new ListView<>();
-		tListView.setCache(false);
-		tListView.autosize();
-		tListView.setMaxWidth(listViewMaxWidth);
-		tListView.setMinWidth(listViewMinWidth);
-		//tListView.setPrefHeight(120);
-		
-		
-		// build the label for the list view
-		tListViewTitle = new Label();
-		tListViewTitle.setText(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_listTitle : tPresenter.decorator().listTitle()));
-		tListViewTitle.setId("t-title-label");
-		tListViewTitle.maxWidth(listViewMaxWidth);
-		
-		// build the list view box
-		tListViewLayout = new VBox();
-		tListViewLayout.getChildren().addAll(tListViewTitle, tListView);
-		tListViewLayout.maxWidth(listViewMaxWidth+2);
-		tListViewLayout.getStyleClass().add("t-panel-background-color");
-		VBox.setVgrow(tListView, Priority.ALWAYS);
 		// add the list view box at the left 
-		
-		addItemInTLeftContent(tListViewLayout);
-		
+		addItemInTLeftContent(helper.gettListViewPane());
 	}
 	
-	
+
+    /* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.entity.decorator.ITListViewDecorator#isListContentVisible()
+	 */
+    @Override
 	public boolean isListContentVisible() {
     	final ITDynaView<M> view = getView();
-		return view.gettLeftContent().getChildren().contains(tListViewLayout);
+		return view.gettLeftContent().getChildren().contains(helper.gettListViewPane());
     }
     
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.entity.decorator.ITListViewDecorator#hideListContent()
+	 */
+	@Override
 	public void hideListContent() {
 		final ITDynaView<M> view = getView();
-		view.gettLeftContent().getChildren().remove(tListViewLayout);
+		view.gettLeftContent().getChildren().remove(helper.gettListViewPane());
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.entity.decorator.ITListViewDecorator#showListContent()
+	 */
+	@Override
 	public void showListContent() {
-		addItemInTLeftContent(tListViewLayout);
+		addItemInTLeftContent(helper.gettListViewPane());
 		
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.entity.decorator.ITListViewDecorator#gettListViewLayout()
+	 */
+	@Override
 	public VBox gettListViewLayout() {
-		return tListViewLayout;
+		return helper.gettListViewLayout();
 	}
-
 	
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.entity.decorator.ITListViewDecorator#settListViewLayout(javafx.scene.layout.VBox)
+	 */
+	@Override
 	public void settListViewLayout(VBox tListViewLayout) {
-		this.tListViewLayout = tListViewLayout;
+		helper.settListViewLayout(tListViewLayout);
 	}
-
-
+	
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.entity.decorator.ITListViewDecorator#gettListViewTitle()
+	 */
+	@Override
 	public Label gettListViewTitle() {
-		return tListViewTitle;
+		return helper.gettListViewTitle();
 	}
-
 	
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.entity.decorator.ITListViewDecorator#settListViewTitle(javafx.scene.control.Label)
+	 */
+	@Override
 	public void settListViewTitle(Label tListViewTitle) {
-		this.tListViewTitle = tListViewTitle;
+		helper.settListViewTitle(tListViewTitle);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.entity.decorator.ITListViewDecorator#gettListView()
+	 */
+	@Override
 	public ListView<M> gettListView() {
-		return tListView;
+		return helper.gettListView();
 	}
-
 	
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.entity.decorator.ITListViewDecorator#settListView(javafx.scene.control.ListView)
+	 */
+	@Override
 	public void settListView(ListView<M> tListView) {
-		this.tListView = tListView;
+		helper.settListView(tListView);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.entity.decorator.ITListViewDecorator#getListViewMaxWidth()
+	 */
+	@Override
 	public double getListViewMaxWidth() {
-		return listViewMaxWidth;
+		return helper.getListViewMaxWidth().get();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.entity.decorator.ITListViewDecorator#setListViewMaxWidth(double)
+	 */
+	@Override
 	public void setListViewMaxWidth(double listViewMaxWidth) {
-		this.listViewMaxWidth = listViewMaxWidth;
+		helper.getListViewMaxWidth().setValue(listViewMaxWidth);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.entity.decorator.ITListViewDecorator#getListViewMinWidth()
+	 */
+	@Override
 	public double getListViewMinWidth() {
-		return listViewMinWidth;
+		return helper.getListViewMinWidth().get();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.entity.decorator.ITListViewDecorator#setListViewMinWidth(double)
+	 */
+	@Override
 	public void setListViewMinWidth(double listViewMinWidth) {
-		this.listViewMinWidth = listViewMinWidth;
+		helper.getListViewMinWidth().setValue(listViewMinWidth);
 	}
+
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.entity.decorator.ITListViewDecorator#gettPaginator()
+	 */
+	@Override
+	public TPaginator gettPaginator() {
+		return helper.gettPaginator();
+	}
+
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.entity.decorator.ITListViewDecorator#settPaginator(com.tedros.fxapi.presenter.paginator.TPaginator)
+	 */
+	@Override
+	public void settPaginator(TPaginator tPaginator) {
+		helper.settPaginator(tPaginator);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.entity.decorator.ITListViewDecorator#gettPaginatorAccordion()
+	 */
+	@Override
+	public Accordion gettPaginatorAccordion() {
+		return helper.gettPaginatorAccordion();
+	}
+
+	/* (non-Javadoc)
+	 * @see com.tedros.fxapi.presenter.entity.decorator.ITListViewDecorator#gettListViewProgressIndicator()
+	 */
+	@Override
+	public TProgressIndicator gettListViewProgressIndicator() {
+		return helper.gettListViewProgressIndicator();
+	}
+
 
 }

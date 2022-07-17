@@ -31,8 +31,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.util.Callback;
 
-@SuppressWarnings({ "rawtypes" })
-public class TEditModalBehavior<M extends TEntityModelView, E extends ITEntity>
+public class TEditModalBehavior<M extends TEntityModelView<E>, E extends ITEntity>
 extends TDynaViewCrudBaseBehavior<M, E> {
 	
 	protected TEditModalDecorator<M> decorator;
