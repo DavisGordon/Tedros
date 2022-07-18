@@ -34,7 +34,6 @@ import com.tedros.fxapi.control.TLabel;
 import com.tedros.fxapi.layout.TSliderMenu;
 import com.tedros.fxapi.modal.TConfirmMessageBox;
 import com.tedros.fxapi.modal.TModalPane;
-import com.tedros.fxapi.presenter.TPresenter;
 import com.tedros.fxapi.presenter.dynamic.TDynaPresenter;
 import com.tedros.fxapi.presenter.dynamic.view.TDynaView;
 import com.tedros.login.model.LoginModelView;
@@ -742,7 +741,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	 * 
 	 */
 	private void resizeHistory() {
-		if(history.size()>2) {
+		if(history.size()>=TedrosContext.getTotalPageHistory()) {
 			Page rem = history.remove(0);
 			Node n = rem.getModule();
 			if(n instanceof ITModule)

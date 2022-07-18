@@ -9,6 +9,8 @@ package com.tedros.core.domain;
  */
 public enum TSystemPropertie {
 	
+	DEFAULT_COUNTRY_ISO2("sys.country.iso2"),
+	TOTAL_PAGE_HISTORY ("sys.page.history"),
 	OWNER ("sys.owner"),
 	TOKEN ("sys.token"),
 	ORGANIZATION ("sys.org"),

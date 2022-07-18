@@ -46,12 +46,9 @@ public class TLanguage {
 		}
 	}
 	
-	
-	
 	private TLanguage(String appUUID) {
 		this.currentUUID = appUUID;
 		TLanguage.tStripTagUtil = new TStripTagUtil();
-				
 		validUUID();
 	}
 
