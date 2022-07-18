@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.naming.NamingException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import com.tedros.core.ITedrosBox;
 import com.tedros.core.ModalMessage;
@@ -24,12 +25,16 @@ import com.tedros.core.TLanguage;
 import com.tedros.core.TModule;
 import com.tedros.core.annotation.TApplication;
 import com.tedros.core.annotation.security.TAuthorizationType;
+import com.tedros.core.domain.TSystemPropertie;
 import com.tedros.core.ejb.controller.ITLoginController;
+import com.tedros.core.ejb.controller.TPropertieController;
 import com.tedros.core.presenter.view.ITView;
 import com.tedros.core.security.model.TAuthorization;
 import com.tedros.core.security.model.TUser;
 import com.tedros.core.service.remote.ServiceLocator;
 import com.tedros.core.style.TStyleResourceValue;
+import com.tedros.ejb.base.result.TResult;
+import com.tedros.ejb.base.result.TResult.TState;
 import com.tedros.util.TClassUtil;
 import com.tedros.util.TFileUtil;
 import com.tedros.util.TedrosClassLoader;
@@ -37,11 +42,14 @@ import com.tedros.util.TedrosFolder;
 
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -61,6 +69,10 @@ public final class TedrosContext {
 	
 	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
+	private static final String DEFAULT_COUNTRY_ISO2 = "BR";
+	private static final int DEFAULT_TOTAL_PAGE_HISTORY = 3;
+	private static final int MAX_TOTAL_PAGE_HISTORY = 10;
+	
 	private static TedrosClassLoader tedrosClassLoader;
 	private static ObjectProperty<Page> pageProperty;
 	private static StringProperty pagePathProperty;
@@ -68,6 +80,8 @@ public final class TedrosContext {
 	private static BooleanProperty showModalProperty;
 	private static BooleanProperty reloadStyleProperty;
 	private static StringProperty contextStringProperty;
+	private static IntegerProperty totalPageHistoryProperty;
+	private static StringProperty countryIso2Property;
 	private static StringProperty initializationErrorMessageStringProperty;
 	
 	//private static Stage stage;
@@ -130,6 +144,8 @@ public final class TedrosContext {
 		showModalMessageProperty = new SimpleBooleanProperty();		
 		initializationErrorMessageStringProperty = new SimpleStringProperty("");
 		reloadStyleProperty = new SimpleBooleanProperty(true);
+		totalPageHistoryProperty = new SimpleIntegerProperty(DEFAULT_TOTAL_PAGE_HISTORY);
+		countryIso2Property = new SimpleStringProperty(DEFAULT_COUNTRY_ISO2);
 		MODAL_MESSAGE = new ModalMessage("");
 		
 		LOGGER.info("Context started!");
@@ -150,6 +166,45 @@ public final class TedrosContext {
 	protected static void updateInitializationErrorMessage(String message){
 		showContextInitializationErrorMessages = true;
 		initializationErrorMessageStringProperty.set(initializationErrorMessageStringProperty.get() + sdf.format(Calendar.getInstance().getTime()) + " " + message+"\n");
+	}
+	
+	public static void loadCustomProperties() {
+		
+		LOGGER.info("Starting load custom system properties.");
+		
+		ServiceLocator loc = ServiceLocator.getInstance();
+		try {
+			TPropertieController serv = loc.lookup(TPropertieController.JNDI_NAME);
+			TResult<String> res = serv.getValue(TedrosContext.loggedUser.getAccessToken(), 
+					TSystemPropertie.DEFAULT_COUNTRY_ISO2.getValue());
+			if(res.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res.getValue())) {
+				setCountryIso2(res.getValue());
+				LOGGER.info("- Propertie "+TSystemPropertie.DEFAULT_COUNTRY_ISO2.getValue()+" loaded.");
+			}else{
+				setCountryIso2(DEFAULT_COUNTRY_ISO2);
+				LOGGER.info("- Propertie "+TSystemPropertie.DEFAULT_COUNTRY_ISO2.getValue()+" set to default value "+DEFAULT_COUNTRY_ISO2);
+			}
+			TResult<String> res1 = serv.getValue(TedrosContext.loggedUser.getAccessToken(), 
+					TSystemPropertie.TOTAL_PAGE_HISTORY.getValue());
+			if(res1.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res1.getValue())) {
+				if(NumberUtils.isCreatable(res1.getValue())) {
+					setTotalPageHistory(Integer.valueOf(res1.getValue()));
+					LOGGER.info("- Propertie "+TSystemPropertie.TOTAL_PAGE_HISTORY.getValue()+" loaded.");
+				}else {
+					LOGGER.info("- The Propertie "+TSystemPropertie.DEFAULT_COUNTRY_ISO2.getValue()
+					+" not loaded because the value "+res1.getValue()+" cant be converted to integer number.");
+				}
+			}else{
+				setTotalPageHistory(DEFAULT_TOTAL_PAGE_HISTORY);
+				LOGGER.info("- Propertie "+TSystemPropertie.TOTAL_PAGE_HISTORY.getValue()+" set to default value "+DEFAULT_TOTAL_PAGE_HISTORY);
+			}
+		} catch (NamingException e) {
+			LOGGER.severe("Error loading custom system properties: "+ e.toString());
+			e.printStackTrace();
+		}finally {
+			loc.close();
+			LOGGER.info("Finish load custom system properties.");
+		}
 	}
 	
 	/**
@@ -375,6 +430,53 @@ public final class TedrosContext {
 	}
 	
 	/**
+	 * Set the total page history.
+	 * */
+	public static void setTotalPageHistory(int total){
+		if(total>=MAX_TOTAL_PAGE_HISTORY ) {
+			total = MAX_TOTAL_PAGE_HISTORY;
+			LOGGER.info("- Propertie "+TSystemPropertie.TOTAL_PAGE_HISTORY.getValue()
+			+" cant be greater than "+MAX_TOTAL_PAGE_HISTORY+" set to default value "+DEFAULT_TOTAL_PAGE_HISTORY);
+		}
+		totalPageHistoryProperty.setValue(total);;
+	}
+	
+	/**
+	 * Set the country iso2.
+	 * */
+	public static void setCountryIso2(String iso2){
+		countryIso2Property.setValue(iso2);
+	}
+	
+	/**
+	 * Get the total page history.
+	 * */
+	public static Integer getTotalPageHistory(){
+		return totalPageHistoryProperty.get();
+	}
+	
+	/**
+	 * Get the country iso2.
+	 * */
+	public static String getCountryIso2(){
+		return countryIso2Property.get();
+	}
+	
+	/**
+	 * total page history property to listen.
+	 * */
+	public static ReadOnlyIntegerProperty totalPageHistoryProperty(){
+		return totalPageHistoryProperty;
+	}
+	
+	/**
+	 * country iso2 property to listen.
+	 * */
+	public static ReadOnlyStringProperty countryIso2Property(){
+		return countryIso2Property;
+	}
+	
+	/**
 	 * show modal property to listen.
 	 * */
 	public static ReadOnlyBooleanProperty showModalProperty(){
@@ -498,6 +600,8 @@ public final class TedrosContext {
 	public static final ReadOnlyObjectProperty viewProperty() {
 		return currentViewProperty;
 	}
+	
+	
 	
 	/**
 	 * Get the {@link Locale}

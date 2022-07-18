@@ -35,6 +35,7 @@ import com.tedros.fxapi.presenter.entity.decorator.TMasterCrudViewDecorator;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.property.TSimpleFileProperty;
 import com.tedros.tools.ToolsKey;
+import com.tedros.tools.module.preferences.action.ReloadPropertiesAction;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -50,7 +51,8 @@ import javafx.scene.layout.Priority;
 @TPresenter(type=TDynaPresenter.class, 
 			decorator=@TDecorator(type = TMasterCrudViewDecorator.class, 
 			viewTitle=ToolsKey.VIEW_PROPERTIE),
-			behavior=@TBehavior(type=TMasterCrudViewBehavior.class))
+			behavior=@TBehavior(type=TMasterCrudViewBehavior.class, 
+			action=ReloadPropertiesAction.class))
 @TSecurity(	id=DomainApp.PROPERTIE_FORM_ID, 
 			appName=ToolsKey.APP_TOOLS, 
 			moduleName=ToolsKey.MODULE_PREFERENCES, 
