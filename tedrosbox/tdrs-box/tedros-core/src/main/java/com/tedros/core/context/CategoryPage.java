@@ -24,7 +24,6 @@ public class CategoryPage extends Page {
 
     public CategoryPage(String name, Page ... pages) {
         super(name);
-        super.setExpanded(true);
         getChildren().addAll(Arrays.asList(pages));
     }
     
@@ -32,7 +31,6 @@ public class CategoryPage extends Page {
     	return module;
     }
 
-    @SuppressWarnings("restriction")
 	@Override 
 	public Node createModule() {
         // split children

@@ -6,6 +6,8 @@ public interface TUsualKey {
 	static final String ADDRESS = "#{label.address}";
 	static final String ADDRESS_CODE = "#{label.address.code}";
 	static final String ADMIN_AREA = "#{label.admin.area}";
+	static final String AGREEMENT = "#{label.agreement}";
+	static final String AGREEMENTS = "#{label.agreements}";
 	static final String AMOUNT = "#{label.amount}";
 	static final String APPLY = "#{label.apply}";
 	static final String ATTRIBUTE = "#{label.attribute}";
@@ -31,8 +33,10 @@ public interface TUsualKey {
 	static final String CONTACTS = "#{label.contacts}";
 	static final String CONTENT = "#{label.content}";
 	static final String CONTENTS = "#{label.contents}";
+	static final String CONTRACT = "#{label.contract}";
 	static final String CONTRACTED = "#{label.contracted}";
 	static final String CONTRACTOR = "#{label.contractor}";
+	static final String CONTRACTS = "#{label.contracts}";
 	static final String CORPORATE_NAME = "#{label.corporate.name}";
 	static final String COUNTRY = "#{label.country}";
 	static final String COUNTRY_CODE = "#{label.country.code}";
@@ -86,6 +90,7 @@ public interface TUsualKey {
 	static final String LANG_CODE = "#{label.lang.code}";
 	static final String LANG_NAME = "#{label.lang.name}";
 	static final String LAST_NAME = "#{label.last.name}";
+	static final String LEGAL_PERSON = "#{label.legal.person}";
 	static final String LOGO = "#{label.logo}";
 	static final String MAIN = "#{label.main}";
 	static final String MAIN_DATA = "#{label.main.data}";
@@ -98,6 +103,7 @@ public interface TUsualKey {
 	static final String MASTER = "#{label.master}";
 	static final String MIME_TYPE = "#{label.mime.type}";
 	static final String NAME = "#{label.name}";
+	static final String NATURAL_PERSON = "#{label.natural.person}";
 	static final String NEIGHBORHOOD = "#{label.neighborhood}";
 	static final String NEUTER = "#{label.neuter}";
 	static final String NICKNAME = "#{label.nickname}";
@@ -134,6 +140,7 @@ public interface TUsualKey {
 	static final String RESIGNATION_DATE = "#{label.resignation.date}";
 	static final String RESULT = "#{label.result}";
 	static final String RESULT_ORDER = "#{label.result.order}";
+	static final String SEARCH = "#{label.search}";
 	static final String SELECT = "#{label.select}";
 	static final String SELECT_IMAGE = "#{label.select.image}";
 	static final String SELECTED = "#{label.selected}";

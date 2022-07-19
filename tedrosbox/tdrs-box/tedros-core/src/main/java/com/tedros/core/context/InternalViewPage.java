@@ -124,7 +124,7 @@ class InternalViewPage extends Page{
             Label content = new Label(getName().trim());
             content.setFont(Font.font("Bungee", FontWeight.BOLD, 30));
             if (content != null) {
-                content.setTranslateX((int)((114-content.getBoundsInParent().getWidth())/2)-(int)content.getBoundsInParent().getMinX());
+                content.setTranslateX((int)((114-content.getBoundsInParent().getWidth())/3)-(int)content.getBoundsInParent().getMinX());
                 content.setTranslateY((int)((114-content.getBoundsInParent().getHeight())/2)-(int)content.getBoundsInParent().getMinY());
                 group.getChildren().add(content);
             }
