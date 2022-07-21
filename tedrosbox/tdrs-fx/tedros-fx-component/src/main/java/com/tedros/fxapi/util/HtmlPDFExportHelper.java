@@ -31,6 +31,25 @@ public final class HtmlPDFExportHelper {
 	}
 	
 	/**
+	 * @param output
+	 * @param html
+	 * @throws Exception 
+	 */
+	public static void generate(String output, String html) throws Exception {
+		if(StringUtils.isNotBlank(html)) {
+			TPdfUtil.convert(html, output);
+			TedrosContext.openDocument(output);
+		}
+	}
+	
+	public static void generate(String output, Document doc) throws Exception {
+		if(doc != null) {
+			TPdfUtil.generate(doc, output);
+			TedrosContext.openDocument(output);
+		}
+	}
+	
+	/**
 	 * @param presenter
 	 * @param output
 	 * @param html
@@ -39,8 +58,7 @@ public final class HtmlPDFExportHelper {
 	public static void generate(TDynaPresenter presenter, String output, String html) {
 		if(StringUtils.isNotBlank(html)) {
 			try {
-				TPdfUtil.convert(html, output);
-				TedrosContext.openDocument(output);
+				generate(output, html);
 				String msg = TLanguage.getInstance(null)
 						.getFormatedString("#{tedros.fxapi.message.export}", output);
 				presenter.getDecorator().getView().tShowModal(new TMessageBox(msg), true);
@@ -53,11 +71,11 @@ public final class HtmlPDFExportHelper {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public static void generate(TDynaPresenter presenter, String output, Document doc) {
 		if(doc != null) {
 			try {
-				TPdfUtil.generate(doc, output);
-				TedrosContext.openDocument(output);
+				generate(output, doc);
 				String msg = TLanguage.getInstance(null)
 						.getFormatedString("#{tedros.fxapi.message.export}", output);
 				presenter.getDecorator().getView().tShowModal(new TMessageBox(msg), true);

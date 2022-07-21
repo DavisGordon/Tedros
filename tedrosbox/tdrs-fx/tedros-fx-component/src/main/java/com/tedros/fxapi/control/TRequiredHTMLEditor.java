@@ -28,9 +28,9 @@ public abstract class TRequiredHTMLEditor extends VBox implements ITRequirable, 
 	}
 	
 	@Override
-	@SuppressWarnings({ "unchecked", "hiding" })
+	@SuppressWarnings({ "unchecked" })
 	public <T extends Observable> T tValueProperty() {
-		return (T) gettHTMLProperty();
+		return (T) tHTMLProperty();
 	}
     
 	public void setRequired(boolean required){
@@ -51,7 +51,7 @@ public abstract class TRequiredHTMLEditor extends VBox implements ITRequirable, 
     
 	public abstract HTMLEditor gettHTMLEditor();
 
-	public abstract SimpleStringProperty gettHTMLProperty();
+	public abstract SimpleStringProperty tHTMLProperty();
 	
 	@Override
 	public void settFieldStyle(String style) {
