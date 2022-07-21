@@ -16,8 +16,17 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.eclipse.persistence.annotations.Cache;
+import org.eclipse.persistence.annotations.CacheCoordinationType;
+import org.eclipse.persistence.annotations.CacheType;
 
-
+@Cache(
+	type=CacheType.WEAK, // Cache everything until the JVM decides memory is low.
+	size=64000,  // Use 64,000 as the initial cache size.
+	expiry=360000,  // 6 minutes
+	coordinationType=CacheCoordinationType.INVALIDATE_CHANGED_OBJECTS  
+	// if cache coordination is used, only send invalidation messages.
+)
 @MappedSuperclass
 public  class TEntity implements ITEntity {
 
