@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -30,12 +29,12 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 	public EntityManager getEntityManager() {
 		return em;
 	}
-	
+	/*
 	@PostConstruct
 	protected void init(){
 		getEntityManager().setProperty("javax.persistence.cache.retrieveMode", "BYPASS");
 		//getEntityManager().setProperty("javax.persistence.cache.storeMode", "BYPASS");
-	}
+	}*/
 	
 	@SuppressWarnings("unchecked")
 	public E findById(E entity)throws Exception{
@@ -43,19 +42,17 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 		afterFind(e);
 		return e;
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public E find(E entity)throws Exception{
 		
 		ReadAllQuery query = new ReadAllQuery(entity.getClass());
 		query.setExampleObject(entity);
-		List<E> results = (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
+		List<E> results = executeAndGetList(query);
 		E e = (results!=null && results.size()>0) ? results.get(0) : null;
 		afterFind(e);
 		return e;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<E> findAll(E entity)throws Exception{
 		
 		ReadAllQuery query = new ReadAllQuery(entity.getClass());
@@ -65,9 +62,8 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 		policy.addSpecialOperation(String.class, "like");
 		query.setQueryByExamplePolicy(policy);
 		
-		return (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
+		return executeAndGetList(query);
 	}
-	
 	
 	
 	public void beforePersist(E entity)throws Exception{
@@ -158,7 +154,8 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 		CriteriaQuery<E> cq = (CriteriaQuery<E>) cb.createQuery(entity);
 		Root<E> root = (Root<E>) cq.from(entity);
 		cq.select(root);
-		List<E> lst = em.createQuery(cq).getResultList();
+		//List<E> lst = em.createQuery(cq).getResultList();
+		List<E> lst = executeAndGetList(cq);
 		afterListAll(lst);
 		return lst;
 	}
@@ -176,7 +173,7 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 		else
 			cq.orderBy(cb.desc(root.get("id")));
 		
-		List<E> lst = em.createQuery(cq).getResultList();
+		List<E> lst = this.executeAndGetList(cq); //em.createQuery(cq).getResultList();
 		afterListAll(lst);
 		return lst;
 	}
@@ -206,8 +203,8 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 		afterPageAll(lst);
 		return lst;
 	}
-	
-	@SuppressWarnings("unchecked")
+
+
 	public List<E> findAll(E entity, int firstResult, int maxResult, boolean orderByAsc, boolean containsAnyKeyWords)throws Exception{
 		
 		ReadAllQuery query = new ReadAllQuery(entity.getClass());
@@ -228,7 +225,7 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 		query.setFirstResult(firstResult);
 		query.setMaxRows(maxResult+firstResult);
 		
-		List<E> lst = (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
+		List<E> lst = (List<E>) this.executeAndGetList(query); //((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
 		afterFindAll(lst);
 		return lst;
 	}
@@ -246,7 +243,8 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 		query.addCount();
 		
 		//List<E> lst = (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
-		ReportQueryResult res = (ReportQueryResult) ((Vector)((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query)).get(0);
+		//ReportQueryResult res = (ReportQueryResult) ((Vector)((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query)).get(0);
+		ReportQueryResult res = (ReportQueryResult) ((Vector)((JpaEntityManager) em.getDelegate()).createQuery(query).getResultList()).get(0);
 		Integer total = (Integer) res.get("COUNT");
 		return  total;
 	}
@@ -258,6 +256,49 @@ public class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Long> cq = (CriteriaQuery<Long>) cb.createQuery(Long.class);
 		cq.select(cb.count(cq.from(entity)));
-		return (Long) em.createQuery(cq).getSingleResult();
+		return (Long) this.executeAndGet(cq) ;//em.createQuery(cq).getSingleResult();
 	}
+	
+	/**
+	 * @param query
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	protected List<E> executeAndGetList(ReadAllQuery query) {
+		List<E> results = (List<E>) ((JpaEntityManager)em.getDelegate()).createQuery(query).getResultList();
+		//List<E> results = (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
+		return results;
+	}
+	
+	/**
+	 * @param cq
+	 * @return
+	 */
+	protected List<E> executeAndGetList(CriteriaQuery<E> cq) {
+		List<E> results = (List<E>) ((JpaEntityManager)em.getDelegate()).createQuery(cq).getResultList();
+		//List<E> results = (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
+		return results;
+	}
+	
+	/**
+	 * @param query
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	protected <T> T executeAndGet(ReadAllQuery query) {
+		T results = (T) ((JpaEntityManager)em.getDelegate()).createQuery(query).getSingleResult();
+		//List<E> results = (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
+		return results;
+	}
+	
+	/**
+	 * @param cq
+	 * @return
+	 */
+	protected <T> T executeAndGet(CriteriaQuery<T> cq) {
+		T results = (T) ((JpaEntityManager)em.getDelegate()).createQuery(cq).getSingleResult();
+		//List<E> results = (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
+		return results;
+	}
+	
 }
