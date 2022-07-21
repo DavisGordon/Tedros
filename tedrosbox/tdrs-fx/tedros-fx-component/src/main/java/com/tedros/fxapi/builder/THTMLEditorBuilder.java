@@ -26,8 +26,10 @@ implements ITControlBuilder<com.tedros.fxapi.control.THTMLEditor, SimpleStringPr
 	public com.tedros.fxapi.control.THTMLEditor build(final Annotation annotation, final SimpleStringProperty attrProperty) throws Exception {
 	
 		final THTMLEditor tAnnotation = (THTMLEditor) annotation;
-		final com.tedros.fxapi.control.THTMLEditor control = new com.tedros.fxapi.control.THTMLEditor(attrProperty);
-        
+		final com.tedros.fxapi.control.THTMLEditor control = 
+				new com.tedros.fxapi.control.THTMLEditor();
+		control.settHtml(attrProperty.getValue());
+        control.tHTMLProperty().bindBidirectional(attrProperty);
 		
 		callParser(tAnnotation, control);
 		

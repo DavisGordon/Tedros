@@ -83,8 +83,19 @@ public @interface THTMLEditor  {
 	 * Default value: <b>HTML editor.</b> 
 	 * </pre>
 	 * */
-	public String htmlText() default "<b>HTML editor.</b>";
+	public String html() default "";
 	
+	/**
+	 * <pre>
+	 * The {@link HTMLEditor} properties.
+	 * 
+	 * Show the print and pdf export action buttons .
+	 * 
+	 * Default value: false
+	 * </pre>
+	 * */
+	
+	public boolean showActionsToolBar() default false;
 	/**
 	 * <pre>
 	 * {@link TRequiredHTMLEditor} Class
