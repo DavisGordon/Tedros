@@ -29,12 +29,15 @@
 		<commons.io.version>2.7</commons.io.version>
 		<commons.lang.version>3.12.0</commons.lang.version>
 		<commons.text.version>1.9</commons.text.version>
+		<commons.compress.version>1.21</commons.compress.version>
+		
+		<apache.poi>4.1.2</apache.poi>
 		
 		<!-- Define the version of OPEN HTML TO PDF in the properties section of your POM. -->  	       
 	  	<openhtml.version>1.0.8</openhtml.version>
 		
 		<junit.version>4.13</junit.version>
-		<cargo.version>1.6.7</cargo.version>
+		<cargo.version>1.9.13</cargo.version>
 		<h2.version>1.4.199</h2.version>
 		<eclipselink.version>2.7.7</eclipselink.version>
 		<jackson.jaxrs.json.provider>2.11.2</jackson.jaxrs.json.provider>

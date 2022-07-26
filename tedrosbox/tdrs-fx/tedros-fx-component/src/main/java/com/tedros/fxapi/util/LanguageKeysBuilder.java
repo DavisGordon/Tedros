@@ -1,4 +1,4 @@
-package com.tedros.util;
+package com.tedros.fxapi.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;

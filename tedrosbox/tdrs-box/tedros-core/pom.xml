@@ -39,7 +39,12 @@
 	  		<version>${javafx.version}</version>
 		</dependency> 
 		
-	
+	  	<dependency>
+			<groupId>org.apache.tomee</groupId>
+			<artifactId>openejb-client</artifactId>
+			<version>${openejb.version}</version>
+		</dependency>
+	  	
 		<!-- https://mvnrepository.com/artifact/org.scannotation/scannotation -->
 		<dependency>
 		    <groupId>org.reflections</groupId>

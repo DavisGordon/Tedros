@@ -19,45 +19,40 @@
   	<description>The tedros base ejb service</description>
 
 	<!-- DEPENDENCIES -->
-    <dependencies>  	
-	  	<dependency>
-	  		<groupId>com.tedros</groupId>
-	  		<artifactId>tedros-util</artifactId>
-	  		<version>8-3.0.1</version>
-	  		<scope>compile</scope>
-	  	</dependency>
-	  	
+    <dependencies>  
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-ejb-model-base</artifactId>
 	  		<version>8-3.0.1</version>
 	  		<scope>compile</scope>
 	  	</dependency>
-	  
-	  <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+	  	
 		<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi</artifactId>
-		    <version>4.1.2</version>
+		    <version>${apache.poi}</version>
+		    <scope>provided</scope>
 		</dependency>
+		
 	  	<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi-ooxml</artifactId>
-		    <version>4.1.2</version>
+		    <version>${apache.poi}</version>
+		    <scope>provided</scope>
 		</dependency>
 	  
 		<dependency>
 		    <groupId>com.h2database</groupId>
 		    <artifactId>h2</artifactId>
 		    <version>${h2.version}</version>
-		    <scope>compile</scope>
+		    <scope>provided</scope>
 		</dependency>
 	  
 	  	<dependency>
 		   	<groupId>org.eclipse.persistence</groupId>
 		   	<artifactId>eclipselink</artifactId>
 		   	<version>${eclipselink.version}</version>
-		   	<scope>compile</scope>
+		   	<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
@@ -74,32 +69,6 @@
 	      	<scope>provided</scope>
 	    </dependency>
 	    
-	    <!-- <dependency>
-		    <groupId>org.apache.deltaspike.core</groupId>
-		    <artifactId>deltaspike-core-api</artifactId>
-		    <scope>compile</scope>
-		</dependency>
-
-		<dependency>
-		    <groupId>org.apache.deltaspike.core</groupId>
-		    <artifactId>deltaspike-core-impl</artifactId>
-		    <scope>runtime</scope>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.apache.deltaspike.modules</groupId>
-		    <artifactId>deltaspike-security-module-api</artifactId>
-		    <version>${deltaspike.version}</version>
-		    <scope>compile</scope>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.apache.deltaspike.modules</groupId>
-		    <artifactId>deltaspike-security-module-impl</artifactId>
-		    <version>${deltaspike.version}</version>
-		    <scope>runtime</scope>
-		</dependency> -->
-	  
 	    <dependency>
 	      	<groupId>junit</groupId>
 	      	<artifactId>junit</artifactId>
