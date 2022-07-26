@@ -31,13 +31,13 @@
 	  		<artifactId>tedros-util</artifactId>
 	  		<version>8-3.0.1</version>
 	  	</dependency>
-	  	
+	  	<!-- 
 		<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi</artifactId>
 		    <version>3.17</version>
 		    <scope>compile</scope>
-		</dependency>
+		</dependency> -->
 	  	
 	  	
 	  	<dependency>

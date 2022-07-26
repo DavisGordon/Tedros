@@ -36,6 +36,7 @@
 			<groupId>org.apache.tomee</groupId>
 			<artifactId>openejb-client</artifactId>
 			<version>${openejb.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	  	
 	  	
