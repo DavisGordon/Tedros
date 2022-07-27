@@ -11,8 +11,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.tedros.common.model.TFileEntity;
-import com.tedros.core.model.ITModelView;
 import com.tedros.fxapi.annotation.parser.ITAnnotationParser;
 import com.tedros.fxapi.annotation.parser.TFileFieldParser;
 import com.tedros.fxapi.annotation.parser.TStackPaneParser;
@@ -28,6 +26,7 @@ import com.tedros.fxapi.control.action.TEventHandler;
 import com.tedros.fxapi.domain.TDefaultValues;
 import com.tedros.fxapi.domain.TFileExtension;
 import com.tedros.fxapi.domain.TFileModelType;
+import com.tedros.fxapi.presenter.model.TEntityModelView;
 import com.tedros.fxapi.presenter.model.TModelView;
 import com.tedros.fxapi.property.TSimpleFileProperty;
 
@@ -331,6 +330,34 @@ public @interface TFileField {
 	 * <pre>
 	 * {@link com.tedros.fxapi.control.TFileField} Class
 	 * 
+	 * Sets the initial directory.
+	 * 
+	 * Property description:
+	 * 
+	 * See the constants USER_HOME, TEDROS_ROOT, TEDROS_MODULE
+	 * 
+	 * Default value: USER_HOME
+	 * </pre>
+	 * */
+	public String initialDirectory() default USER_HOME;
+	
+	/**
+	 * The component will change this constant with the user home directory path
+	 * */
+	static final String USER_HOME = "user.home";
+	/**
+	 * The component will change this constant with the user tedros root directory path
+	 * */
+	static final String TEDROS_ROOT = "tedros.root";
+	/**
+	 * The component will change this constant with the tedros module directory path
+	 * */
+	static final String TEDROS_MODULE = "tedros.module";
+	
+	/**
+	 * <pre>
+	 * {@link com.tedros.fxapi.control.TFileField} Class
+	 * 
 	 * Sets the value of the property required.
 	 * 
 	 * Property description:
@@ -350,9 +377,10 @@ public @interface TFileField {
 	 * 
 	 * Property description:
 	 * 
-	 * Defines the action to the open button
+	 * Defines an action to the open button
 	 * </pre>
 	 * */
+	@SuppressWarnings("rawtypes")
 	public Class<? extends TEventHandler> openAction() default TEventHandler.class;
 	
 	/**
@@ -363,23 +391,11 @@ public @interface TFileField {
 	 * 
 	 * Property description:
 	 * 
-	 * Defines the action to the clean button
+	 * Defines an action to the clean button
 	 * </pre>
 	 * */
+	@SuppressWarnings("rawtypes")
 	public Class<? extends TEventHandler> cleanAction() default TEventHandler.class;
-	
-	/**
-	 * <pre>
-	 * {@link com.tedros.fxapi.control.TFileField} Class
-	 * 
-	 * Sets the value to the loadAction property.
-	 * 
-	 * Property description:
-	 * 
-	 * Defines the action to the load button
-	 * </pre>
-	 * */
-	public Class<? extends TEventHandler> loadAction() default TEventHandler.class;
 	
 	/**
 	 * <pre>
@@ -389,23 +405,25 @@ public @interface TFileField {
 	 * 
 	 * Property description:
 	 * 
-	 * Defines the action to the select button
+	 * Defines an action to the select button
 	 * </pre>
 	 * */
+	@SuppressWarnings("rawtypes")
 	public Class<? extends TEventHandler> selectAction() default TEventHandler.class;
 	
 	/**
 	 * <pre>
 	 * {@link com.tedros.fxapi.control.TFileField} Class
 	 * 
-	 * Sets the value to the imageClickAction property.
+	 * Sets the value to the imageAction property.
 	 * 
 	 * Property description:
 	 * 
-	 * Defines the action to the image click event
+	 * Defines an action to the ImageView
 	 * </pre>
 	 * */
-	public Class<? extends TEventHandler> imageClickAction() default TEventHandler.class;
+	@SuppressWarnings("rawtypes")
+	public Class<? extends TEventHandler> imageAction() default TEventHandler.class;
 	
 	
 }

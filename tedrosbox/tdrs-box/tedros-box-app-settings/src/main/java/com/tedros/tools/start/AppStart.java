@@ -20,6 +20,7 @@ import com.tedros.tools.module.scheme.icon.SchemeMenuIcon;
 import com.tedros.tools.module.user.TUserModule;
 import com.tedros.tools.module.user.icon.TUserIcon;
 import com.tedros.tools.module.user.icon.TUserMenuIcon;
+import com.tedros.tools.resource.AppResource;
 
 @TApplication(name=ToolsKey.APP_TOOLS, packageName = "com.tedros.tools", universalUniqueIdentifier=TConstant.UUI,
 module = {@TModule(type=SchemeModule.class, name=ToolsKey.MODULE_SCHEME, menu = ToolsKey.MENU_TOOLS, 
@@ -37,7 +38,7 @@ public class AppStart implements ITApplication {
 
 	@Override
 	public void start() {
-		
+		new AppResource().copyToFolder();
 	}
 	
 }

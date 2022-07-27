@@ -166,8 +166,11 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	}
 
 	private void extractZip(String outputFolder) {
-		InputStream zipFile = TedrosRelease.class.getResourceAsStream("TedrosBox.zip");
-    	TZipUtil.unZip(zipFile, outputFolder);
+		try(InputStream zipFile = TedrosRelease.class.getResourceAsStream("TedrosBox.zip")){
+			TZipUtil.unZip(zipFile, outputFolder);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
     
     public Stage getStage(){

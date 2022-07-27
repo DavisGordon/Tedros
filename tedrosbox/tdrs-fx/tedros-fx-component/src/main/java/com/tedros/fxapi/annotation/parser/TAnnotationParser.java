@@ -252,7 +252,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 				}
 			}catch(Exception e){
 				if(tmp!=null)
-					System.err.println(tmp);
+					System.err.println(tmp+ " " +e.getMessage());
 				//e.printStackTrace();
 			}
 		}

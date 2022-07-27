@@ -77,6 +77,7 @@ public class TFileField extends StackPane {
 	private SimpleLongProperty bytesEntityIdProperty;
 	
 	private String[] extensions;
+	private String initialDirectory = System.getProperty("user.home");
 	
 	private Double minFileSize;
 	private Double maxFileSize;
@@ -88,11 +89,15 @@ public class TFileField extends StackPane {
 	private boolean showImage;
 	private boolean showFilePath;
 	
+	@SuppressWarnings("rawtypes")
 	private TEventHandler openAction;
+	@SuppressWarnings("rawtypes")
 	private TEventHandler cleanAction;
-	private TEventHandler loadAction;
+	//private TEventHandler loadAction;
+	@SuppressWarnings("rawtypes")
 	private TEventHandler selectAction;
-	private TEventHandler imageClickAction;
+	@SuppressWarnings("rawtypes")
+	private TEventHandler imageAction;
 	
 	private EventHandler<ActionEvent> openEventHandler;
 	private EventHandler<ActionEvent> downloadEventHandler;
@@ -180,17 +185,6 @@ public class TFileField extends StackPane {
 				
 			}
 		});	
-				/*
-				new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> arg0,	Number arg1, Number arg2) {
-				if(arg2!=null && byteArrayProperty.getValue()==null){
-					setLoadByteAction();
-				}else if(byteArrayProperty.getValue()!=null){
-					setOpenAction();
-				}
-			}						
-		});*/
 		
 		byteArrayProperty.addListener(new ChangeListener<byte[]>() {
 			@Override
@@ -281,10 +275,9 @@ public class TFileField extends StackPane {
 		p.show(selectButton);
 	}
 	
-	private static void configureFileChooser(final FileChooser fileChooser, String[] extensions){
-		
+	private void configureFileChooser(final FileChooser fileChooser, String[] extensions){
 		fileChooser.setTitle(TLanguage.getInstance(null).getString("#{tedros.fxapi.label.select.file}"));
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home"))); 
+        fileChooser.setInitialDirectory(new File(this.initialDirectory)); 
         for(String ext : extensions){
         	if(ext!=null)
         		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(ext, ext));
@@ -548,6 +541,7 @@ public class TFileField extends StackPane {
 		return fileNameField.textProperty();
 	}
 
+	@SuppressWarnings("unchecked")
 	private void loadImageView(byte[] arg2) {
 		if((fileNameProperty!=null && StringUtils.isNotBlank(fileNameProperty.getValue()))){
 			String[] arr = TFileExtension.ALL_IMAGES.getExtension();
@@ -575,20 +569,10 @@ public class TFileField extends StackPane {
 						showModal(msg);
 						cleanField();
 					}else{
-						/*
-						if(imageClickAction!=null){
-							if(imageView!=null && imageView.getOnMouseClicked()==null){
-								imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-									@Override
-									public void handle(MouseEvent arg0) {
-										if(!imageClickAction.runBefore(arg0))
-											return;
-										if(!imageClickAction.runAfter(arg0))
-											return;
-									}
-								});
-							}
-						}*/
+						
+						if(imageAction!=null){
+							imageView.addEventHandler(this.imageAction.getEventType(), this.imageAction);
+						}
 						
 						imageView.setImage(image);
 						
@@ -598,43 +582,61 @@ public class TFileField extends StackPane {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public final TEventHandler getOpenAction() {
 		return openAction;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public final void setOpenAction(TEventHandler openAction) {
 		this.openAction = openAction;
+		this.openButton.addEventHandler(openAction.getEventType(), openAction);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public final TEventHandler getCleanAction() {
 		return cleanAction;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public final void setCleanAction(TEventHandler cleanAction) {
 		this.cleanAction = cleanAction;
+		this.cleanButton.addEventHandler(cleanAction.getEventType(), cleanAction);
 	}
 
-	public final TEventHandler getLoadAction() {
-		return loadAction;
-	}
-
-	public final void setLoadAction(TEventHandler loadAction) {
-		this.loadAction = loadAction;
-	}
-
+	
+	@SuppressWarnings("rawtypes")
 	public final TEventHandler getSelectAction() {
 		return selectAction;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public final void setSelectAction(TEventHandler selectAction) {
 		this.selectAction = selectAction;
+		this.selectButton.addEventHandler(selectAction.getEventType(), selectAction);
 	}
 
-	public final TEventHandler getImageClickAction() {
-		return imageClickAction;
+	@SuppressWarnings("rawtypes")
+	public final TEventHandler getImageAction() {
+		return imageAction;
 	}
 
-	public final void setImageClickAction(TEventHandler imageClickAction) {
-		this.imageClickAction = imageClickAction;
+	@SuppressWarnings("rawtypes")
+	public final void setImageAction(TEventHandler imageClickAction) {
+		this.imageAction = imageClickAction;
+	}
+
+	/**
+	 * @return the initialDirectory
+	 */
+	public String getInitialDirectory() {
+		return initialDirectory;
+	}
+
+	/**
+	 * @param initialDirectory the initialDirectory to set
+	 */
+	public void setInitialDirectory(String initialDirectory) {
+		this.initialDirectory = initialDirectory;
 	}
 }
