@@ -1,17 +1,20 @@
 package com.tedros.fxapi.annotation.parser;
 
+import java.io.File;
+
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.tedros.fxapi.annotation.control.TFileField;
 import com.tedros.fxapi.control.action.TEventHandler;
 import com.tedros.fxapi.domain.TFileExtension;
+import com.tedros.util.TedrosFolder;
 
 public class TFileFieldParser extends TAnnotationParser<TFileField, com.tedros.fxapi.control.TFileField> {
 	
 	@Override
 	public void parse(TFileField tAnnotation, com.tedros.fxapi.control.TFileField control, String...byPass) throws Exception {
 		
-		super.parse(tAnnotation, control, "openAction","loadAction", "imageClickAction", "cleanAction", "selectAction", "control", "textInputControl", "extensions", "moreExtensions");
+		super.parse(tAnnotation, control, "initialDirectory", "openAction","imageAction", "cleanAction", "selectAction", "control", "textInputControl", "extensions", "moreExtensions");
 		
 		TControlParser cp = new TControlParser();
 		TTextInputControlParse ticp = new TTextInputControlParse();
@@ -28,17 +31,25 @@ public class TFileFieldParser extends TAnnotationParser<TFileField, com.tedros.f
 			extensions = ArrayUtils.addAll(extensions, tAnnotation.moreExtensions());
 		control.setExtensions(extensions);
 		
+		String initFolder = tAnnotation.initialDirectory();
+		if(initFolder.contains(TFileField.USER_HOME))
+			initFolder = initFolder.replace(TFileField.USER_HOME, System.getProperty("user.home")+File.separator);
+		else if(initFolder.contains(TFileField.TEDROS_ROOT))
+			initFolder = initFolder.replace(TFileField.TEDROS_ROOT, TedrosFolder.ROOT_FOLDER.getFullPath());
+		else if(initFolder.contains(TFileField.TEDROS_MODULE))
+			initFolder = initFolder.replace(TFileField.TEDROS_MODULE, TedrosFolder.MODULE_FOLDER.getFullPath());
+		
+		control.setInitialDirectory(initFolder);
+		
 		try {
 			if(tAnnotation.openAction() != TEventHandler.class)
 				control.setOpenAction(tAnnotation.openAction().newInstance());
 			if(tAnnotation.cleanAction() != TEventHandler.class)
 				control.setCleanAction(tAnnotation.cleanAction().newInstance());
-			if(tAnnotation.loadAction() != TEventHandler.class)
-				control.setLoadAction(tAnnotation.loadAction().newInstance());
 			if(tAnnotation.selectAction() != TEventHandler.class)
 				control.setSelectAction(tAnnotation.selectAction().newInstance());
-			if(tAnnotation.imageClickAction() != TEventHandler.class)
-				control.setImageClickAction(tAnnotation.imageClickAction().newInstance());
+			if(tAnnotation.imageAction() != TEventHandler.class)
+				control.setImageAction(tAnnotation.imageAction().newInstance());
 		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
