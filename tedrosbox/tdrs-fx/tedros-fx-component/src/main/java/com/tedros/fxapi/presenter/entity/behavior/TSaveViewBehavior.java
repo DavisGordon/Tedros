@@ -47,14 +47,12 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 
 	@Override
 	public void colapseAction() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public boolean processNewEntityBeforeBuildForm(M model) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 		
 }

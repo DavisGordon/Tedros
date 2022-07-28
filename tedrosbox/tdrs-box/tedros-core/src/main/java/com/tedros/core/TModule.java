@@ -46,7 +46,7 @@ public abstract class TModule extends InternalView implements ITModule {
 	
 	public String canStop() {
 		TModuleContext context = TedrosAppManager.getInstance().getModuleContext(this);
-		return context.canStop();
+		return context!=null ? context.canStop() : null;
 	}
 	
 	@Override

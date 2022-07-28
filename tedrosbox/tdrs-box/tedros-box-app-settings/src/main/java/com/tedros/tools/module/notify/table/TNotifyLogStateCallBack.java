@@ -2,7 +2,6 @@ package com.tedros.tools.module.notify.table;
 
 import com.tedros.core.TLanguage;
 import com.tedros.core.notify.model.TState;
-import com.tedros.tools.start.TConstant;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -15,7 +14,7 @@ public class TNotifyLogStateCallBack implements Callback <CellDataFeatures<TNoti
 	public ObservableValue<String> call(CellDataFeatures<TNotifyLogTV, ObservableValue<TState>> param) {
 		TState d = param.getValue().getState().getValue();
 		return (d!=null) 
-				? new SimpleStringProperty(TLanguage.getInstance(TConstant.UUI).getString(d.getValue()))
+				? new SimpleStringProperty(TLanguage.getInstance().getString(d.getValue()))
 						: new SimpleStringProperty();
 	}
 	
