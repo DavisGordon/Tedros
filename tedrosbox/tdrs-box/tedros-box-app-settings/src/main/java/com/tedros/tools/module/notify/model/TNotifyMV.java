@@ -16,6 +16,7 @@ import com.tedros.core.notify.model.TNotifyLog;
 import com.tedros.core.notify.model.TState;
 import com.tedros.fxapi.TFxKey;
 import com.tedros.fxapi.annotation.control.TCallbackFactory;
+import com.tedros.fxapi.annotation.control.TCellFactory;
 import com.tedros.fxapi.annotation.control.TCellValueFactory;
 import com.tedros.fxapi.annotation.control.TContent;
 import com.tedros.fxapi.annotation.control.TConverter;
@@ -57,6 +58,7 @@ import com.tedros.fxapi.annotation.view.TOption;
 import com.tedros.fxapi.annotation.view.TPaginator;
 import com.tedros.fxapi.builder.DateTimeFormatBuilder;
 import com.tedros.fxapi.collections.ITObservableList;
+import com.tedros.fxapi.control.tablecell.TMediumDateTimeCallback;
 import com.tedros.fxapi.domain.TFileExtension;
 import com.tedros.fxapi.domain.TFileModelType;
 import com.tedros.fxapi.presenter.model.TEntityModelView;
@@ -64,7 +66,6 @@ import com.tedros.fxapi.property.TSimpleFileProperty;
 import com.tedros.tools.ToolsKey;
 import com.tedros.tools.module.notify.behaviour.TNotifyBehaviour;
 import com.tedros.tools.module.notify.converter.ActionConverter;
-import com.tedros.tools.module.notify.table.TNotifyLogDateCallBack;
 import com.tedros.tools.module.notify.table.TNotifyLogStateCallBack;
 import com.tedros.tools.module.notify.table.TNotifyLogTV;
 import com.tedros.util.TDateUtil;
@@ -194,9 +195,9 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 	private TSimpleFileProperty<TFileEntity> file;
 	
 	@TTableView(columns = { 
-		@TTableColumn(text = ToolsKey.DATE_INSERT, cellValue="insertDate", prefWidth=40,
-			cellValueFactory=@TCellValueFactory(parse=true,
-			value=@TCallbackFactory(parse=true, value=TNotifyLogDateCallBack.class))),
+		@TTableColumn(text = ToolsKey.DATE_INSERT, cellValue="insertDate", 
+				cellFactory=@TCellFactory(parse = true, 
+				callBack=@TCallbackFactory(parse=true, value=TMediumDateTimeCallback.class))), 
 		@TTableColumn(text = ToolsKey.STATE, cellValue="state",
 			cellValueFactory=@TCellValueFactory(parse=true,
 			value=@TCallbackFactory(parse=true, value=TNotifyLogStateCallBack.class))),
@@ -211,13 +212,6 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 		super.formatFieldsToDisplay("%s / %s", subject, to);
 	}
 	
-	@Override
-	public void reload(TNotify model) {
-		// TODO Auto-generated method stub
-		super.reload(model);
-		super.formatFieldsToDisplay("%s / %s", subject, to);
-		}
-
 	/**
 	 * @return the id
 	 */

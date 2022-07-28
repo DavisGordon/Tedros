@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.tedros</groupId>
     <artifactId>tedrosbox</artifactId>
-    <version>8-3.0.1</version>
+    <version>8-3.1.0</version>
   </parent>
   
   <artifactId>server-application</artifactId>
@@ -11,19 +11,12 @@
   <description>The server application project configuration</description>
   
   <dependencies>
-  	
-	<dependency>
-	   <groupId>com.tedros</groupId>
-  		<artifactId>tedros-webapp</artifactId>
-	    <type>war</type>
-	    <version>8-3.0.1</version>
-	</dependency>
 	
 	<dependency>
 	    <groupId>com.tedros</groupId>
 	    <artifactId>tedros-core-ejb-ear</artifactId>
 	    <type>ear</type>
-	    <version>8-3.0.1</version>
+	    <version>8-3.1.0</version>
 	</dependency>
 	
 	<dependency>
@@ -31,22 +24,60 @@
 	    <artifactId>poi</artifactId>
 	    <version>${apache.poi}</version>
 	</dependency>
+	<dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml-schemas</artifactId>
+      <version>4.1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.virtuald</groupId>
+      <artifactId>curvesapi</artifactId>
+      <version>1.06</version>
+    </dependency>
   	<dependency>
 	    <groupId>org.apache.poi</groupId>
 	    <artifactId>poi-ooxml</artifactId>
 	    <version>${apache.poi}</version>
 	</dependency>
+	<dependency>
+      <groupId>org.apache.xmlbeans</groupId>
+      <artifactId>xmlbeans</artifactId>
+      <version>3.1.0</version>
+    </dependency>
+     <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.2</version>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.17</version>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.13</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-math3</artifactId>
+      <version>3.6.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>SparseBitSet</artifactId>
+      <version>1.2</version>
+    </dependency>
   
 	<dependency>
 	    <groupId>com.h2database</groupId>
 	    <artifactId>h2</artifactId>
 	    <version>${h2.version}</version>
-	</dependency>
-  
-  	<dependency>
-	   	<groupId>org.eclipse.persistence</groupId>
-	   	<artifactId>eclipselink</artifactId>
-	   	<version>${eclipselink.version}</version>
 	</dependency>
 	
 	<dependency>
@@ -73,10 +104,34 @@
   		<version>${commons.compress.version}</version>
   	</dependency>
   	
-  	<dependency>
+	<dependency>
 	  	<groupId>org.apache.commons</groupId>
 	  	<artifactId>commons-collections4</artifactId>
 	  	<version>${commons-collections.version}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>javax.mail</groupId>
+	    <artifactId>javax.mail-api</artifactId>
+	    <version>1.5.6</version>
+	</dependency>
+
+	<dependency>
+	    <groupId>com.sun.mail</groupId>
+	    <artifactId>javax.mail</artifactId>
+	    <version>1.5.1</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>com.sun.mail</groupId>
+	    <artifactId>smtp</artifactId>
+	    <version>1.5.6</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>javax.activation</groupId>
+		<artifactId>activation</artifactId>
+		<version>1.1</version>
 	</dependency>
   </dependencies>
   	<build>
@@ -105,10 +160,42 @@
 				    <groupId>org.apache.poi</groupId>
 				    <artifactId>poi-ooxml</artifactId>
 				</dependency>
-			  	<dependency>
-				   	<groupId>org.eclipse.persistence</groupId>
-				   	<artifactId>eclipselink</artifactId>
-				</dependency>
+				 <dependency>
+			      <groupId>org.apache.poi</groupId>
+			      <artifactId>poi-ooxml-schemas</artifactId>
+			    </dependency> 
+			    <dependency>
+			      <groupId>commons-logging</groupId>
+			      <artifactId>commons-logging</artifactId>
+			    </dependency>
+			    <dependency>
+			      <groupId>commons-codec</groupId>
+			      <artifactId>commons-codec</artifactId>
+			    </dependency>
+			    <dependency>
+			      <groupId>org.apache.commons</groupId>
+			      <artifactId>commons-math3</artifactId>
+			    </dependency>
+			    <dependency>
+			      <groupId>com.zaxxer</groupId>
+			      <artifactId>SparseBitSet</artifactId>
+			    </dependency>
+				<dependency>
+			      <groupId>org.apache.xmlbeans</groupId>
+			      <artifactId>xmlbeans</artifactId>
+			    </dependency>
+			    <dependency>
+			      <groupId>org.apache.poi</groupId>
+			      <artifactId>poi-ooxml-schemas</artifactId>
+			    </dependency>
+			    <dependency>
+			      <groupId>org.apache.commons</groupId>
+			      <artifactId>commons-compress</artifactId>
+			    </dependency>
+			    <dependency>
+			      <groupId>com.github.virtuald</groupId>
+			      <artifactId>curvesapi</artifactId>
+			    </dependency>
 				<dependency>
 				   	<groupId>commons-io</groupId>
 				   	<artifactId>commons-io</artifactId>
@@ -128,6 +215,22 @@
 			  	<dependency>
 				  	<groupId>org.apache.commons</groupId>
 				  	<artifactId>commons-collections4</artifactId>
+				</dependency>
+				<dependency>
+				    <groupId>javax.mail</groupId>
+				    <artifactId>javax.mail-api</artifactId>
+				</dependency>
+				<dependency>
+				    <groupId>com.sun.mail</groupId>
+				    <artifactId>javax.mail</artifactId>
+				</dependency>
+				<dependency>
+				    <groupId>com.sun.mail</groupId>
+				    <artifactId>smtp</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>javax.activation</groupId>
+					<artifactId>activation</artifactId>
 				</dependency>
 	          </dependencies>
 		    </container>
@@ -166,29 +269,11 @@
 	          </files>
 		    </configuration>
 		    <deployables>
-		      
 		      <deployable>
 		        <groupId>com.tedros</groupId>
 		        <artifactId>tedros-core-ejb-ear</artifactId>
 		        <type>ear</type>
 		      </deployable>
-		      <deployable>
-		      	<groupId>com.tedros</groupId>
-						<artifactId>tedros-webapp</artifactId>
-						<type>war</type>
-					  </deployable>
-		     <!--  
-		     <deployable>
-		        <groupId>com.tedros</groupId>
-		        <artifactId>tdrs-app-covid-semfome-ejb-ear</artifactId>
-		      	<type>ear</type>
-		      </deployable>
-		      <deployable>
-		      	<groupId>com.tedros</groupId>
-						<artifactId>tdrs-app-covid-semfome-webapp</artifactId>
-						<type>war</type>
-					  </deployable>
-		      -->
 		    </deployables>
 		    <packager>
 		      <outputLocation>${project.build.directory}/tomcat-packaged</outputLocation>

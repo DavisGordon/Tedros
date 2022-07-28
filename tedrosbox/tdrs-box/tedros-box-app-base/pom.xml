@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.tedros</groupId>
 		<artifactId>tdrs-box</artifactId>
-		<version>8-3.0.1</version>
+		<version>8-3.1.0</version>
 	</parent>
 	
 	<!-- MODULE INFO -->
@@ -23,13 +23,13 @@
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-ejb-model-base</artifactId>
-	  		<version>8-3.0.1</version>
+	  		<version>8-3.1.0</version>
 	  	</dependency>
 	  	
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-util</artifactId>
-	  		<version>8-3.0.1</version>
+	  		<version>8-3.1.0</version>
 	  	</dependency>
 	  	<!-- 
 		<dependency>
