@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.tedros</groupId>
 		<artifactId>tdrs-server</artifactId>
-		<version>8-3.1.0</version>
+		<version>8-3.1.1</version>
 	</parent>
 	
 	<!-- MODULE INFO -->
@@ -23,13 +23,13 @@
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-core-model</artifactId>
-	  		<version>8-3.1.0</version>
+	  		<version>8-3.1.1</version>
 	  	</dependency>
   	
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-common-model</artifactId>
-	  		<version>8-3.1.0</version>
+	  		<version>8-3.1.1</version>
 	  	</dependency>
 	  	
 	  	<dependency>
@@ -65,7 +65,7 @@
  	
  	<distributionManagement>
 	   <repository>
-	     <id>githubTedrosApp</id>
+	     <id>Tedros-Box</id>
 	     <name>GitHub Tedros Apache Maven Packages</name>
 	     <url>https://maven.pkg.github.com/tedros-box/package</url>
 		 <uniqueVersion>false</uniqueVersion>

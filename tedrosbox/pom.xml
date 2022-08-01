@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
   	<groupId>com.tedros</groupId>
   	<artifactId>tedrosbox</artifactId>
-  	<version>8-3.1.0</version>
+  	<version>8-3.1.1</version>
   	<packaging>pom</packaging>
   	
   	<name>tedros box</name>
@@ -100,7 +100,7 @@
 			<url>https://repository.apache.org/service/local/staging/deploy/maven2</url>
 		</repository>
 		<repository>
-			<id>githubTedrosApp</id>
+			<id>Tedros-Box</id>
 			<name>Tedros</name>
 			<url>https://maven.pkg.github.com/tedros-box/package</url>
 		</repository>
@@ -108,7 +108,7 @@
   	
  	<distributionManagement>
 	   <repository>
-	     <id>githubTedrosApp</id>
+	     <id>Tedros-Box</id>
 	     <name>GitHub Tedros Apache Maven Packages</name>
 	     <url>https://maven.pkg.github.com/tedros-box/package</url>
 		 <uniqueVersion>false</uniqueVersion>

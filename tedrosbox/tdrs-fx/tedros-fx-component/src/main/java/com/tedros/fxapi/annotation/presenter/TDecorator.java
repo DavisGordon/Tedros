@@ -84,8 +84,6 @@ public @interface TDecorator {
 	 * */
 	public String closeButtonText() default TAnnotationDefaultValue.TVIEW_closeButtonText;
 	
-	
-	
 	/**
 	 * <pre>
 	 * Set the clean button text
@@ -114,7 +112,6 @@ public @interface TDecorator {
 	 * */
 	public String pdfButtonText() default TAnnotationDefaultValue.TVIEW_pdfButtonText;
 
-	
 	/**
 	 * <pre>
 	 * Set the Open Export Folder button text
@@ -237,9 +234,9 @@ public @interface TDecorator {
 	 * <pre>
 	 * Build the Modes Radio button
 	 * 
-	 * Default value: true
+	 * Default value: false
 	 * </pre>
 	 * */
-	public boolean buildModesRadioButton() default true;
+	public boolean buildModesRadioButton() default false;
 	
 }
