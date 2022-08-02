@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.tedros</groupId>
 		<artifactId>tdrs-box</artifactId>
-		<version>8-3.1.1</version>
+		<version>8-3.1.2</version>
 	</parent>
 	
 	<!-- MODULE INFO -->
@@ -23,13 +23,13 @@
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-ejb-model-base</artifactId>
-	  		<version>8-3.1.1</version>
+	  		<version>8-3.1.2</version>
 	  	</dependency>
 	  	
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-util</artifactId>
-	  		<version>8-3.1.1</version>
+	  		<version>8-3.1.2</version>
 	  	</dependency>
 	  	
 	  	<dependency>
@@ -76,7 +76,33 @@
 	      <scope>test</scope>
 	    </dependency>
   	</dependencies>
-  	
+  	<build>
+  		<plugins>
+      		<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-compiler-plugin</artifactId>
+        		<version>3.3</version>
+        		<configuration>
+          			<source>${java.version}</source>
+          			<target>${java.version}</target>
+        		</configuration>
+      		</plugin>
+      		<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-source-plugin</artifactId>
+		        <version>3.2.1</version>
+		        <executions>
+		          <execution>
+		            <id>attach-sources</id>
+		            <phase>verify</phase>
+		            <goals>
+		              <goal>jar-no-fork</goal>
+		            </goals>
+		          </execution>
+		        </executions>
+		      </plugin>
+  		</plugins>
+	</build>
  	<distributionManagement>
 	   <repository>
 	     <id>Tedros-Box</id>
