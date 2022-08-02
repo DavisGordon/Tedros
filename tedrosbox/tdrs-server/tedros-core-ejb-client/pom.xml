@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.tedros</groupId>
 		<artifactId>tdrs-server</artifactId>
-		<version>8-3.1.1</version>
+		<version>8-3.1.2</version>
 	</parent>
 	
 	<!-- MODULE INFO -->
@@ -23,13 +23,13 @@
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-core-model</artifactId>
-	  		<version>8-3.1.1</version>
+	  		<version>8-3.1.2</version>
 	  	</dependency>
   	
 	  	<dependency>
 	  		<groupId>com.tedros</groupId>
 	  		<artifactId>tedros-common-model</artifactId>
-	  		<version>8-3.1.1</version>
+	  		<version>8-3.1.2</version>
 	  	</dependency>
 	  	
 	  	<dependency>
@@ -59,6 +59,20 @@
           			<target>${java.version}</target>
         		</configuration>
       		</plugin>
+      		<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-source-plugin</artifactId>
+		        <version>3.2.1</version>
+		        <executions>
+		          <execution>
+		            <id>attach-sources</id>
+		            <phase>verify</phase>
+		            <goals>
+		              <goal>jar-no-fork</goal>
+		            </goals>
+		          </execution>
+		        </executions>
+		      </plugin>
   		</plugins>
  	</build>
  	
