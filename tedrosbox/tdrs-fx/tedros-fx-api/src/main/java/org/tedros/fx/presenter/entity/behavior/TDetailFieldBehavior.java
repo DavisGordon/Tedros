@@ -1,0 +1,81 @@
+package org.tedros.fx.presenter.entity.behavior;
+
+import java.lang.reflect.InvocationTargetException;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.tedros.core.model.ITModelView;
+import org.tedros.fx.control.action.TPresenterAction;
+import org.tedros.fx.domain.TViewMode;
+import org.tedros.fx.presenter.behavior.TActionType;
+import org.tedros.fx.presenter.dynamic.TDynaPresenter;
+import org.tedros.fx.presenter.dynamic.behavior.TDetailFieldBaseBehavior;
+import org.tedros.fx.presenter.dynamic.behavior.TDynaViewSimpleBaseBehavior;
+import org.tedros.fx.presenter.model.TEntityModelView;
+import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.server.entity.ITEntity;
+
+@SuppressWarnings({ "rawtypes" })
+public class TDetailFieldBehavior<M extends TEntityModelView, E extends ITEntity>
+extends TDetailFieldBaseBehavior<M, E> {
+	
+	public void load() {
+		super.load();
+		initialize();
+	}
+	
+	public void initialize() {
+		super.configAddButton();
+		super.configCleanButton();
+		super.configRemoveButton();
+		
+		try {
+			TModelView model = (M) super.getModelViewClass().getConstructor(entityClass).newInstance(entityClass.newInstance());
+			setModelView(model);
+			super.showForm(TViewMode.EDIT);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void addAction(TPresenterAction action) {
+		boolean flag = false;
+		if(action!=null && action.getTypes()!=null) { 
+			for(TActionType a : new TActionType[] {TActionType.REMOVE, TActionType.CLEAN, TActionType.ADD})
+				if(ArrayUtils.contains(action.getTypes(), a)) {
+					flag = true;
+					break;
+				}	
+		}else
+			flag = true;
+		if(flag) {
+			super.addAction(action);
+		}else {
+			final TDynaPresenter presenter = getModulePresenter();
+			final TDynaViewSimpleBaseBehavior behavior = (TDynaViewSimpleBaseBehavior) presenter.getBehavior(); 
+			behavior.addAction(action);
+		}
+	}
+	
+
+	public void setDisableModelActionButtons(boolean flag) {
+		if(decorator.gettAddButton()!=null)
+			decorator.gettAddButton().setDisable(flag);
+		if(decorator.gettRemoveButton()!=null)
+			decorator.gettRemoveButton().setDisable(flag);
+		if(decorator.gettCleanButton()!=null)
+			decorator.gettCleanButton().setDisable(flag);
+	}
+
+
+	@Override
+	public String canInvalidate() {
+		return null;
+	}
+
+	@Override
+	public void loadModelView(ITModelView modelView) {
+		super.setModelView(modelView);
+	}
+}

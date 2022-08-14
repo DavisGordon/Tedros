@@ -6,9 +6,9 @@
 	
 	<!-- PARENT INFO -->
 	<parent>
-		<groupId>com.tedros</groupId>
+		<groupId>org.tedros</groupId>
 		<artifactId>tdrs-server</artifactId>
-		<version>8-3.1.2</version>
+		<version>8-4.0.0</version>
 	</parent>
 	
 	<!-- MODULE INFO -->
@@ -21,9 +21,9 @@
 	<!-- DEPENDENCIES -->
  	<dependencies>  
 	  	<dependency>
-	  		<groupId>com.tedros</groupId>
-	  		<artifactId>tedros-ejb-model-base</artifactId>
-	  		<version>8-3.1.2</version>
+	  		<groupId>org.tedros</groupId>
+	  		<artifactId>tedros-server-client-api</artifactId>
+	  		<version>8-4.0.0</version>
 	  		<scope>compile</scope>
 	  	</dependency>
 	  

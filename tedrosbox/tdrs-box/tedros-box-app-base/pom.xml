@@ -6,9 +6,9 @@
 	
 	<!-- PARENT INFO -->
 	<parent>
-		<groupId>com.tedros</groupId>
+		<groupId>org.tedros</groupId>
 		<artifactId>tdrs-box</artifactId>
-		<version>8-3.1.2</version>
+		<version>8-4.0.0</version>
 	</parent>
 	
 	<!-- MODULE INFO -->
@@ -21,15 +21,15 @@
   	<!-- DEPENDENCIES -->
 	<dependencies>
 	  	<dependency>
-	  		<groupId>com.tedros</groupId>
-	  		<artifactId>tedros-ejb-model-base</artifactId>
-	  		<version>8-3.1.2</version>
+	  		<groupId>org.tedros</groupId>
+	  		<artifactId>tedros-server-client-api</artifactId>
+	  		<version>8-4.0.0</version>
 	  	</dependency>
 	  	
 	  	<dependency>
-	  		<groupId>com.tedros</groupId>
+	  		<groupId>org.tedros</groupId>
 	  		<artifactId>tedros-util</artifactId>
-	  		<version>8-3.1.2</version>
+	  		<version>8-4.0.0</version>
 	  	</dependency>
 	  	
 	  	<dependency>
@@ -45,7 +45,7 @@
 	       </exclusions>
 		 </dependency>
 		 <dependency>
-		    <groupId>com.tedros</groupId>
+		    <groupId>org.tedros</groupId>
 		    <artifactId>olap4j</artifactId>
 		    <version>0.9.7.309-JS-3</version>
 		</dependency>
@@ -58,7 +58,7 @@
 	  	</dependency>
 	  
 	  	<dependency>
-	  		<groupId>com.tedros</groupId>
+	  		<groupId>org.tedros</groupId>
 	  		<artifactId>jfxrt</artifactId>
 	  		<version>${javafx.version}</version>
 		</dependency>
