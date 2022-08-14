@@ -1,0 +1,20 @@
+package org.tedros.fx.annotation.parser;
+
+import org.tedros.fx.annotation.listener.TChangeListener;
+import org.tedros.fx.annotation.listener.TInvalidationListener;
+import org.tedros.fx.annotation.property.TBooleanProperty;
+
+import javafx.beans.property.BooleanProperty;
+
+public class TBooleanPropertyParser extends TAnnotationParser<TBooleanProperty, BooleanProperty>{
+
+	@Override
+	public void parse(TBooleanProperty annotation, BooleanProperty object, String... byPass) throws Exception {
+		if(annotation.observable().addListener()!=TInvalidationListener.class)
+			callParser(annotation.observable(), object, getComponentDescriptor());
+		if(annotation.observableValue().addListener()!=TChangeListener.class)
+			callParser(annotation.observableValue(), object, getComponentDescriptor());
+		
+	}
+		
+}

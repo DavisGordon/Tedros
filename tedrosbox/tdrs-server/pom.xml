@@ -5,9 +5,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<!-- PARENT INFO -->
 	<parent>
-		<groupId>com.tedros</groupId>
+		<groupId>org.tedros</groupId>
 		<artifactId>tedrosbox</artifactId>
-		<version>8-3.1.2</version>
+		<version>8-4.0.0</version>
 	</parent>
 	
 	<!-- PROJECT -->
@@ -68,8 +68,8 @@
 		<module>tedros-core-ejb-client</module>
 		<module>tedros-core-ejb-ear</module>
 		<module>tedros-core-model</module>
-		<module>tedros-ejb-model-base</module>
-		<module>tedros-ejb-service-base</module>
+		<module>tedros-server-client-api</module>
+		<module>tedros-server-api</module>
 		<module>tedros-common-model</module>
 		<module>tedros-webapp</module>
 	</modules>

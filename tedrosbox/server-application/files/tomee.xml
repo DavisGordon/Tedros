@@ -7,7 +7,7 @@
   
   <Resource id="tedrosDataSource" type="DataSource">
   JdbcDriver org.h2.Driver
-  JdbcUrl jdbc:h2:tcp://localhost/~/.tedros/DATA/db;INIT=RUNSCRIPT FROM '~/.tedros/CONF/init.sql';
+  JdbcUrl jdbc:h2:tcp://localhost/~/.tedrosData/h2/db;INIT=RUNSCRIPT FROM '~/.tedrosData/init.sql';
   UserName tdrs
   Password xpto
   JtaManaged true

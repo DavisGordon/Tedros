@@ -1,0 +1,37 @@
+package org.tedros.core.cdi.bo;
+
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+
+import org.tedros.core.cdi.eao.TUserEao;
+import org.tedros.server.cdi.bo.TGenericBO;
+
+import org.tedros.core.security.model.TProfile;
+import org.tedros.core.security.model.TUser;
+
+@RequestScoped
+public class TUserBO extends TGenericBO<TUser> {
+	
+	@Inject
+	private TUserEao eao;
+	
+	@Override
+	public TUserEao getEao() {
+		return eao;
+	}
+
+	public TUser getUserByLoginPassword(String login, String password) {
+		return eao.getUserByLoginPassword(login, password);
+	}
+	
+	public TUser saveActiveProfile(TProfile profile, Long userId) throws Exception{
+		TUser user = new TUser();
+		user.setId(userId);
+		user = findById(user);
+		user.setActiveProfile(profile);
+		save(user);
+		return user;
+	}
+	
+
+}

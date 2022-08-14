@@ -6,9 +6,9 @@
 	
 	<!-- PARENT INFO -->
 	<parent>
-		<groupId>com.tedros</groupId>
+		<groupId>org.tedros</groupId>
 		<artifactId>tdrs-box</artifactId>
-		<version>8-3.1.2</version>
+		<version>8-4.0.0</version>
 	</parent>
 	
 	<!-- MODULE INFO -->
@@ -24,18 +24,18 @@
 	  	<!-- APPS -->
 	  	 
 	  	<dependency>
-	  		<groupId>com.tedros</groupId>
+	  		<groupId>org.tedros</groupId>
 	  		<artifactId>tedros-box-app-settings</artifactId>
-	  		<version>8-3.1.2</version>
+	  		<version>8-4.0.0</version>
 	  		<scope>compile</scope>
 	  	</dependency>
 	  	
 	  	<!-- END APPS -->
 	  	
 	  	<dependency>
-	  		<groupId>com.tedros</groupId>
-	  		<artifactId>tedros-fx-component</artifactId>
-	  		<version>8-3.1.2</version>
+	  		<groupId>org.tedros</groupId>
+	  		<artifactId>tedros-fx-api</artifactId>
+	  		<version>8-4.0.0</version>
 	  		<scope>compile</scope>
 	  		<exclusions>
 	  			<exclusion>
@@ -105,7 +105,7 @@
 			  <configuration>
 			  	<archive>
 			      <manifest>
-			        <mainClass>com.tedros.Main</mainClass>
+			        <mainClass>org.tedros.Main</mainClass>
 			      </manifest>
 			    </archive>
 			    <descriptorRefs>

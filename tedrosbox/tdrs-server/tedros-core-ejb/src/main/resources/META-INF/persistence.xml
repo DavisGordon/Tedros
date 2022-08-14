@@ -8,16 +8,16 @@
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<jta-data-source>tedrosDataSource</jta-data-source>
 		
-		<class>com.tedros.core.security.model.TUser</class>
-		<class>com.tedros.core.security.model.TProfile</class>
-		<class>com.tedros.core.security.model.TAuthorization</class>
-		<class>com.tedros.core.setting.model.TPropertie</class>
-		<class>com.tedros.core.security.model.TAuditLog</class>
-		<class>com.tedros.common.model.TByteEntity</class>	
-		<class>com.tedros.common.model.TFileEntity</class>
-		<class>com.tedros.core.notify.model.TNotify</class>
-		<class>com.tedros.core.notify.model.TNotifyLog</class>
-		<class>com.tedros.common.model.TMimeType</class>
+		<class>org.tedros.core.security.model.TUser</class>
+		<class>org.tedros.core.security.model.TProfile</class>
+		<class>org.tedros.core.security.model.TAuthorization</class>
+		<class>org.tedros.core.setting.model.TPropertie</class>
+		<class>org.tedros.core.security.model.TAuditLog</class>
+		<class>org.tedros.common.model.TByteEntity</class>	
+		<class>org.tedros.common.model.TFileEntity</class>
+		<class>org.tedros.core.notify.model.TNotify</class>
+		<class>org.tedros.core.notify.model.TNotifyLog</class>
+		<class>org.tedros.common.model.TMimeType</class>
 		
 		
 		<properties>
