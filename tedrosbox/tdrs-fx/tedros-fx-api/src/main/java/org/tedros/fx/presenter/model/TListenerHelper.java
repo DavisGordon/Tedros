@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.tedros.core.module.TObjectRepository;
+import org.tedros.core.repository.TRepository;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.property.TSimpleFileProperty;
 import org.tedros.fx.util.TReflectionUtil;
@@ -51,14 +51,14 @@ class TListenerHelper<M extends ITModel> {
 	
 	private 	TModelView<M> 				tModelView;
 	protected 	Map<String, Set<String>> 	listenerKeys 		= new HashMap<>();
-	protected 	TObjectRepository 		tObjectRepository = new TObjectRepository();
+	protected 	TRepository 		tObjectRepository = new TRepository();
 	
 	/**
 	 * Constructor
 	 * */
 	protected TListenerHelper(TModelView<M> tModelView) {
 		this.tModelView = tModelView;
-		tObjectRepository = new TObjectRepository();
+		tObjectRepository = new TRepository();
 	}
 	
 	/**
@@ -98,7 +98,7 @@ class TListenerHelper<M extends ITModel> {
 		return listenerKeys;
 	}
 	
-	protected TObjectRepository getListenerRepository() {
+	protected TRepository getListenerRepository() {
 		return tObjectRepository;
 	}
 	

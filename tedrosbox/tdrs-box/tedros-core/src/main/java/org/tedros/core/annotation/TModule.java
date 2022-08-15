@@ -5,8 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.tedros.core.image.TImageView;
-
 /**
  * Define a module of an application
  * 
@@ -42,14 +40,14 @@ public @interface TModule {
 	public Class<? extends org.tedros.core.TModule> type();
 	
 	/**
-	 * The module icon to show in app painel
+	 * The module icon to show in the main panel
 	 * */
-	public Class<? extends TImageView> icon() default TImageView.class;
+	public String icon() default "";
 	
 	/**
-	 * The module icon to show in menu
+	 * The module icon to show in the main menu
 	 * */
-	public Class<? extends TImageView> menuIcon() default TImageView.class;
+	public String menuIcon() default "";
 	
 
 }

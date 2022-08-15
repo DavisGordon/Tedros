@@ -7,12 +7,10 @@ import java.beans.Transient;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -23,7 +21,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.tedros.core.model.ITModelView;
-import org.tedros.core.module.TObjectRepository;
+import org.tedros.core.repository.TRepository;
 import org.tedros.fx.annotation.control.TModelViewType;
 import org.tedros.fx.chart.TAreaChartField;
 import org.tedros.fx.collections.ITObservableList;
@@ -423,7 +421,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		
 		LOGGER.log(Level.FINEST, "Starting load fields.");
 		
-		final List<Field> modelFields = new ArrayList<>();
+		final Map<String, Field> modelFields = new HashMap<>();
 		final Field[] propertyFields = this.getClass().getDeclaredFields();
 		Class superClass = this.model.getClass();
 		
@@ -436,7 +434,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		if(target != null){
 			while(TReflectionUtil.isImplemented(superClass, target)){
 				for(Field f : superClass.getDeclaredFields())
-					modelFields.add(f);
+					modelFields.put(f.getName(), f);
 				superClass = superClass.getSuperclass();
 			}
 		}
@@ -502,13 +500,8 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 					*/
 					
 					// recupera o campo equivalente no model
-					Field entityField = null;
-					for (final Field f : modelFields) {
-						if(f.getName().equals(propertyFieldName)){
-							entityField = f;
-							break;
-						}
-					}
+					Field entityField = modelFields.get(propertyFieldName);
+					
 					if(entityField==null)
 						continue;
 					
@@ -744,8 +737,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 					LOGGER.severe(e.toString());
 				}
 				break;
-			}
-				
+			}	
 		}
 	}
 
@@ -807,7 +799,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	}
 
 	@Override
-	public TObjectRepository getListenerRepository() {
+	public TRepository getListenerRepository() {
 		return tListenerHelper.getListenerRepository();
 	}
 	

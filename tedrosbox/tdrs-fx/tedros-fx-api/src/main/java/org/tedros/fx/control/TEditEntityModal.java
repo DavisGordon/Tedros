@@ -8,7 +8,7 @@ import org.tedros.core.TModule;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.control.PopOver;
-import org.tedros.core.module.TObjectRepository;
+import org.tedros.core.repository.TRepository;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.collections.TFXCollections;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
@@ -67,7 +67,7 @@ public class TEditEntityModal extends TRequiredModal {
 	
 	private boolean singleEntity;
 	
-	private TObjectRepository repo = new TObjectRepository();
+	private TRepository repo = new TRepository();
 	
 	@SuppressWarnings("unchecked")
 	public TEditEntityModal(Property item, double width, double height, double modalWidth, double modalHeight) {

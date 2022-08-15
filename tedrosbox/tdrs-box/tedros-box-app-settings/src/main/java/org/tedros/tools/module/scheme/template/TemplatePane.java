@@ -7,8 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.tedros.core.TLanguage;
+import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
-import org.tedros.tools.module.scheme.icon.SchemeIcon;
+import org.tedros.tools.module.scheme.SchemeModule;
 import org.tedros.util.TColorUtil;
 
 import javafx.geometry.Insets;
@@ -134,7 +135,9 @@ public class TemplatePane extends StackPane {
         root.setCenter(mainPane);
         root.setStyle("-fx-background-color: transparent;");
         
-        tile = new Button(iEngine.getString("#{label.app.title}"), new SchemeIcon());
+        ImageView icon = TedrosAppManager.getInstance().getModuleContext(SchemeModule.class).getIcon();
+        
+        tile = new Button(iEngine.getString("#{label.app.title}"), icon);
         tile.setMinSize(140,145);
         tile.setPrefSize(140,145);
         tile.setMaxSize(140,145);

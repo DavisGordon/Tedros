@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.tedros.core.model.ITModelView;
-import org.tedros.core.module.TObjectRepository;
+import org.tedros.core.repository.TRepository;
 import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.descriptor.TFieldDescriptor;
 import org.tedros.fx.domain.TViewMode;
@@ -21,7 +21,7 @@ public abstract class TFieldLoader<M extends ITModelView<?>> {
 	
 	private SimpleBooleanProperty allLoaded = new SimpleBooleanProperty(false);
 	private SimpleIntegerProperty totalToLoad = new SimpleIntegerProperty();
-	protected TObjectRepository repo = new TObjectRepository();
+	protected TRepository repo = new TRepository();
 	protected final TComponentDescriptor descriptor;
 	
 	public TFieldLoader(M modelView, ITModelForm<M> form) {

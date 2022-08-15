@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.model.ITModelView;
-import org.tedros.core.module.TObjectRepository;
+import org.tedros.core.repository.TRepository;
 import org.tedros.fx.annotation.TDebugConfig;
 import org.tedros.fx.builder.ITReaderHtmlBuilder;
 import org.tedros.fx.descriptor.TComponentDescriptor;
@@ -52,7 +52,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	private ObservableList<Node> fields;
 	private WebView webView;
 	private SimpleBooleanProperty loaded = new SimpleBooleanProperty(false);
-	private TObjectRepository tObjectRepository = new TObjectRepository();
+	private TRepository tObjectRepository = new TRepository();
 	private final TTriggerLoader<M, ITModelForm<M>> triggerLoader;
 	Long startTime;
 	private ChangeListener<Boolean> chl = (ob, o, n) -> {
@@ -295,7 +295,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	/**
 	 * @return the tObjectRepository
 	 */
-	public TObjectRepository getObjectRepository() {
+	public TRepository getObjectRepository() {
 		return tObjectRepository;
 	}
 	

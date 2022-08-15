@@ -1,21 +1,21 @@
 /**
  * 
  */
-package org.tedros.core.module;
+package org.tedros.core.repository;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A listener repository
+ * An object repository
  * 
  * @author Davis Gordon
  */
-public class TObjectRepository {
+public class TRepository {
 	
 	private Map<String, Object> repository;
 	
-	public TObjectRepository() {
+	public TRepository() {
 		repository = new HashMap<>();
 	}
 	

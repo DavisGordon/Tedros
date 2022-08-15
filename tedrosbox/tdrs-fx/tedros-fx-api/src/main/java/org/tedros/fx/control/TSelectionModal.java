@@ -7,7 +7,7 @@ import org.tedros.core.TLanguage;
 import org.tedros.core.TModule;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
-import org.tedros.core.module.TObjectRepository;
+import org.tedros.core.repository.TRepository;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.presenter.dynamic.view.TDynaGroupView;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
@@ -54,7 +54,7 @@ public class TSelectionModal extends TRequiredModal {
 	private double width;
 	private double height;
 	
-	private TObjectRepository repo = new TObjectRepository();
+	private TRepository repo = new TRepository();
 	
 	/**
 	 * 

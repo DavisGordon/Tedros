@@ -4,7 +4,7 @@ import java.util.Map;
 
 import java.util.Set;
 
-import org.tedros.core.module.TObjectRepository;
+import org.tedros.core.repository.TRepository;
 import org.tedros.server.model.ITModel;
 
 import javafx.beans.InvalidationListener;
@@ -46,7 +46,7 @@ public interface ITModelView<M extends ITModel> {
 	/**
 	 * Returns the listener repository
 	 * */
-	public TObjectRepository getListenerRepository();
+	public TRepository getListenerRepository();
 	
 	/**
 	 * Adds a {@link InvalidationListener} on the repository 

@@ -3,7 +3,7 @@ package org.tedros.fx.layout;
 
 
 import org.tedros.core.context.TedrosContext;
-import org.tedros.core.module.TObjectRepository;
+import org.tedros.core.repository.TRepository;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -38,7 +38,7 @@ public class TSliderMenu extends StackPane {
 	private StackPane btnPane;
 	
 	private SimpleBooleanProperty tMenuOpenedProperty;
-	private TObjectRepository repo = new TObjectRepository();
+	private TRepository repo = new TRepository();
 
 	public TSliderMenu(Node content) {
 		super(content);

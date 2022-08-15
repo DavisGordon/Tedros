@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.tedros.core.model.ITModelView;
-import org.tedros.core.module.TObjectRepository;
 import org.tedros.core.presenter.ITPresenter;
+import org.tedros.core.repository.TRepository;
 import org.tedros.fx.descriptor.TFieldDescriptor;
 import org.tedros.fx.domain.TViewMode;
 
@@ -143,7 +143,7 @@ extends FlowPane implements ITModelForm<M> {
 	}
 	
 	@Override
-	public TObjectRepository gettObjectRepository() {
+	public TRepository gettObjectRepository() {
 		return this.formEngine.getObjectRepository();
 	}
 

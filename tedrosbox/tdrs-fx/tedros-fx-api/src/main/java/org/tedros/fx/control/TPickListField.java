@@ -7,7 +7,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TLanguage;
 import org.tedros.core.model.ITModelView;
-import org.tedros.core.module.TObjectRepository;
+import org.tedros.core.repository.TRepository;
 import org.tedros.fx.effect.TEffectUtil;
 
 import javafx.beans.Observable;
@@ -47,7 +47,7 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 	    private Effect notNullEffect;
 	    private ListChangeListener<E> notNullListener;
 	    private SimpleBooleanProperty requiredProperty;
-	    private TObjectRepository repository = new TObjectRepository();
+	    private TRepository repository = new TRepository();
 	    private Comparator<E> comparator = (x, y) -> {
 			return x.getDisplayProperty().getValue().compareTo(y.getDisplayProperty().getValue());
 		};

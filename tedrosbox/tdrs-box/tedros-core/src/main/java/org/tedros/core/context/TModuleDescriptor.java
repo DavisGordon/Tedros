@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TCoreKeys;
 import org.tedros.core.TLanguage;
 import org.tedros.core.TModule;
-import org.tedros.core.image.TImageView;
 
 /**
  * The module descriptor
@@ -23,13 +22,13 @@ public final class TModuleDescriptor implements Comparable<TModuleDescriptor> {
 	
 	@Transient
 	private Class<? extends TModule> type;
-	private Class<? extends TImageView> iconImageViewClass;
-	private Class<? extends TImageView> menuIconImageViewClass;
+	private String icon;
+	private String menuIcon;
 	private final TSecurityDescriptor securityDescriptor;
 	private TLanguage iEngine;
 	
 	public TModuleDescriptor(String applicationName, String universalUniqueIdentifier, String menu,  String moduleName, String description, 
-			Class<? extends TModule> type, Class<? extends TImageView> iconImageViewClass, Class<? extends TImageView> menuIconImageViewClass, 
+			Class<? extends TModule> type, String icon, String menuIcon, 
 			TSecurityDescriptor securityDescriptor) {
 		
 		iEngine = TLanguage.getInstance(applicationUUID);
@@ -45,8 +44,8 @@ public final class TModuleDescriptor implements Comparable<TModuleDescriptor> {
 		this.moduleName = moduleName;
 		this.description = description;
 		this.type = type;
-		this.iconImageViewClass = iconImageViewClass;
-		this.menuIconImageViewClass = menuIconImageViewClass;
+		this.icon = icon;
+		this.menuIcon = menuIcon;
 		this.securityDescriptor = securityDescriptor;
 	}
 	
@@ -66,12 +65,12 @@ public final class TModuleDescriptor implements Comparable<TModuleDescriptor> {
 		return type;
 	}
 	
-	public Class<? extends TImageView> getIconImageViewClass() {
-		return iconImageViewClass;
+	public String getIcon() {
+		return icon;
 	}
 	
-	public Class<? extends TImageView> getMenuIconImageViewClass() {
-		return menuIconImageViewClass;
+	public String getMenuIcon() {
+		return menuIcon;
 	}
 	
 	public TSecurityDescriptor getSecurityDescriptor() {

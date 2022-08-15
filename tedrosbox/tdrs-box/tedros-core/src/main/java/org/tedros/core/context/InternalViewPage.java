@@ -70,22 +70,19 @@ class InternalViewPage extends Page{
     }
 
 	private void setMenuIcon() {
-		if(context.getModuleDescriptor().getMenuIconImageViewClass()!=null){
-			try {
-				ImageView icon = context.getModuleDescriptor().getMenuIconImageViewClass().newInstance();
-				icon.setFitHeight(24);
-				icon.setFitWidth(24);
-				setGraphic(icon);
-			} catch (InstantiationException | IllegalAccessException e) {
-				e.printStackTrace();
-			}
+		ImageView icon = context.getMenuIcon();
+		if(icon!=null){
+			icon.setFitHeight(24);
+			icon.setFitWidth(24);
+			setGraphic(icon);
         }
 	}
     
     private Node getIcon() throws InstantiationException, IllegalAccessException {
     	
-    	if(context.getModuleDescriptor().getIconImageViewClass()!=null){
-    		return context.getModuleDescriptor().getIconImageViewClass().newInstance();
+    	ImageView icon = context.getIcon();
+    	if(icon!=null){
+    		return icon;
     	}else{
             Integer r =  Integer.valueOf(TStyleResourceValue.PANEL_BACKGROUND_RED.customStyle(true));
             Integer g =  Integer.valueOf(TStyleResourceValue.PANEL_BACKGROUND_GREEN.customStyle());

@@ -19,7 +19,7 @@ import org.tedros.common.model.TFileEntity;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.controller.TFileEntityController;
-import org.tedros.core.module.TObjectRepository;
+import org.tedros.core.repository.TRepository;
 import org.tedros.core.security.model.TUser;
 import org.tedros.core.service.remote.ServiceLocator;
 import org.tedros.fx.control.TText.TTextStyle;
@@ -105,7 +105,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 	private TButton remBtn;
 	private TButton loadBtn;
 	
-	private TObjectRepository repo = new TObjectRepository();
+	private TRepository repo = new TRepository();
 	private TLanguage iEngine;
 	
 	public TSelectImageField(SimpleObjectProperty<ITFileBaseModel> property, TEnvironment source, TEnvironment target, 
