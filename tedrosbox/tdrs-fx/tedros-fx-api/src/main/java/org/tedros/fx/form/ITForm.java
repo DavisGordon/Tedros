@@ -2,8 +2,8 @@ package org.tedros.fx.form;
 
 import java.util.Map;
 
-import org.tedros.core.module.TObjectRepository;
 import org.tedros.core.presenter.ITPresenter;
+import org.tedros.core.repository.TRepository;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.collections.ObservableList;
@@ -35,7 +35,7 @@ public interface ITForm {
 	
 	public ObservableList<Node> getChildren();
 	
-	public TObjectRepository gettObjectRepository();
+	public TRepository gettObjectRepository();
 	
 	public void tDispose();
 	

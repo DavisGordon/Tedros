@@ -1,9 +1,9 @@
 package org.tedros.fx.presenter.behavior;
 
 import org.tedros.core.model.ITModelView;
-import org.tedros.core.module.TObjectRepository;
 import org.tedros.core.presenter.ITPresenter;
 import org.tedros.core.presenter.view.ITView;
+import org.tedros.core.repository.TRepository;
 import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.form.ITModelForm;
 import org.tedros.fx.presenter.model.TModelView;
@@ -30,7 +30,7 @@ public interface ITBehavior<M extends TModelView, P extends ITPresenter> {
 	
 	public <T extends TModelView> T getModelView();
 	
-	public TObjectRepository getListenerRepository();
+	public TRepository getListenerRepository();
 	
 	public void loadModelView(ITModelView modelView);
 	

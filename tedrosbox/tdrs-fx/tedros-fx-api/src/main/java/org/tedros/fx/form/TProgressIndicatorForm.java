@@ -8,8 +8,8 @@ import java.util.Map;
 
 import org.tedros.core.control.TProgressIndicator;
 import org.tedros.core.model.ITModelView;
-import org.tedros.core.module.TObjectRepository;
 import org.tedros.core.presenter.ITPresenter;
+import org.tedros.core.repository.TRepository;
 import org.tedros.fx.descriptor.TFieldDescriptor;
 import org.tedros.fx.domain.TViewMode;
 
@@ -99,7 +99,7 @@ public class TProgressIndicatorForm<M extends ITModelView<?>> extends StackPane 
 	}
 
 	@Override
-	public TObjectRepository gettObjectRepository() {
+	public TRepository gettObjectRepository() {
 		return this.form.gettObjectRepository();
 	}
 

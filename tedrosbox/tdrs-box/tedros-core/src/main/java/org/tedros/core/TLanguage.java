@@ -199,7 +199,9 @@ public class TLanguage {
 		if(appUUID==null)
 			appUUID = GLOBAL_UUID;
 		
-		return (bundles.containsKey(appUUID) && bundles.get(appUUID).containsKey(bundle) )  ? bundles.get(appUUID).get(bundle) : null;
+		return (bundles.containsKey(appUUID) && bundles.get(appUUID).containsKey(bundle) ) 
+				? bundles.get(appUUID).get(bundle) 
+						: null;
 		
 	}
 

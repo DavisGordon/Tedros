@@ -11,6 +11,6 @@ import org.tedros.core.domain.DomainApp;
  */
 public interface TConstant {
 
-	public static final String UUI = DomainApp.MNEMONIC+"_19780222";
-	
+	static final String UUI = DomainApp.MNEMONIC+"_19780222";
+	static final String ICONS_FOLDER = "app_tools_icons/";
 }

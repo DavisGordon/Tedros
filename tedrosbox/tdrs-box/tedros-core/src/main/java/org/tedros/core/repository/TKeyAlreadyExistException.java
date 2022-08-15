@@ -1,4 +1,4 @@
-package org.tedros.core.module;
+package org.tedros.core.repository;
 
 /**
  * A {@link RuntimeException} throws when a key already exist. 

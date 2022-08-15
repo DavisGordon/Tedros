@@ -3,12 +3,17 @@
  */
 package org.tedros.core.context;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.ITModule;
 import org.tedros.core.presenter.view.ITView;
+
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  * The module context.
@@ -78,6 +83,35 @@ public final class TModuleContext implements Comparable<TModuleContext>{
 			tEntry.addEntry(key, value);
 		return null;
 	}
+	
+
+	public ImageView getIcon() {
+		String path = getModuleDescriptor().getIcon();
+    	return getIconImageView(path);
+	}
+	
+	public ImageView getMenuIcon() {
+		String path = getModuleDescriptor().getMenuIcon();
+    	return getIconImageView(path);
+	}
+
+	/**
+	 * @param path
+	 * @return
+	 */
+	private ImageView getIconImageView(String path) {
+		ImageView icon = null;
+		if(path!=null){
+    		try(InputStream is = this.getClass().getClassLoader().getResourceAsStream(path))
+    		{
+    			icon =  new ImageView(new Image(is));
+    		} catch (IOException e) {
+				e.printStackTrace();
+			}
+    	}
+    	return icon;
+	}
+	
 	
 	@Override
 	public int compareTo(TModuleContext o) {

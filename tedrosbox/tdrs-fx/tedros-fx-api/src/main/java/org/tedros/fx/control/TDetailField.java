@@ -4,7 +4,7 @@
 package org.tedros.fx.control;
 
 import org.tedros.core.TLanguage;
-import org.tedros.core.module.TObjectRepository;
+import org.tedros.core.repository.TRepository;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.form.ITModelForm;
 import org.tedros.fx.form.TFormBuilder;
@@ -41,7 +41,7 @@ public class TDetailField extends TRequiredDetailField {
 	
 	private ITModelForm form;
 	private Property<TModelView> tDetailProperty;
-	private TObjectRepository repository = new TObjectRepository();
+	private TRepository repository = new TRepository();
 	private Class<? extends TModelView> tModelViewClass;
 	private Class<? extends ITModel> tModelClass;
 	

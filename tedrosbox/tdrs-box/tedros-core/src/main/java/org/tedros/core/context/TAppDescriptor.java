@@ -12,7 +12,6 @@ import org.tedros.core.annotation.TApplication;
 import org.tedros.core.annotation.TModule;
 import org.tedros.core.annotation.TResourceBundle;
 import org.tedros.core.annotation.security.TSecurity;
-import org.tedros.core.image.TImageView;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -98,8 +97,8 @@ public class TAppDescriptor {
 			
 			final TModuleDescriptor tModuleDescriptor = new TModuleDescriptor(tApplication.name(), universalUniqueIdentifier, 
 					tModule.menu(), tModule.name(), tModule.description(), tModule.type(), 
-					(tModule.icon()==TImageView.class ? null : tModule.icon()), 
-					(tModule.menuIcon()==TImageView.class ? null : tModule.menuIcon()), tsd);
+					(tModule.icon().equals("") ? null : tModule.icon()), 
+					(tModule.menuIcon().equals("") ? null : tModule.menuIcon()), tsd);
 			
 			moduleDescriptorList.add(tModuleDescriptor);
 		}

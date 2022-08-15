@@ -4,7 +4,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.tedros.core.module.TObjectRepository;
+import org.tedros.core.repository.TRepository;
 import org.tedros.fx.annotation.reader.TFileReader;
 import org.tedros.fx.annotation.scene.image.TImageView;
 import org.tedros.fx.control.TFileField;
@@ -35,7 +35,7 @@ public class SimpleFileEntityProperty<T extends ITFileEntity> extends SimpleObje
 	private SimpleObjectProperty<byte[]> bytesProperty;
 	private SimpleLongProperty bytesEntityIdProperty;
 
-	private TObjectRepository repo;
+	private TRepository repo;
 	
 	/*
 	public TSimpleFileEntityProperty() {
@@ -60,7 +60,7 @@ public class SimpleFileEntityProperty<T extends ITFileEntity> extends SimpleObje
 	*/
 	private void initialize(){
 		
-		this.repo = new TObjectRepository();
+		this.repo = new TRepository();
 		this.fileNameProperty = new SimpleStringProperty();
 		this.fileExtensionProperty = new SimpleStringProperty();
 		this.fileSizeProperty = new SimpleLongProperty();

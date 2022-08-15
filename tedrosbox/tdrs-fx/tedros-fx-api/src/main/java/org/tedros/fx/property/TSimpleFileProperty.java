@@ -6,7 +6,7 @@ import java.io.IOException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.tedros.core.module.TObjectRepository;
+import org.tedros.core.repository.TRepository;
 import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.model.ITFileBaseModel;
 import org.tedros.server.model.ITFileModel;
@@ -30,7 +30,7 @@ public class TSimpleFileProperty<T extends ITFileBaseModel> extends SimpleObject
 	private SimpleStringProperty tFilePathProperty;
 	private SimpleLongProperty bytesEntityIdProperty;
 	
-	private TObjectRepository repo;
+	private TRepository repo;
 	
 	
 	public TSimpleFileProperty() {
@@ -54,7 +54,7 @@ public class TSimpleFileProperty<T extends ITFileBaseModel> extends SimpleObject
 	}
 	
 	private void initialize(){
-		this.repo = new TObjectRepository();
+		this.repo = new TRepository();
 		this.tFileProperty = new SimpleObjectProperty<>();
 		this.tFileNameProperty = new SimpleStringProperty();
 		this.tFileExtensionProperty = new SimpleStringProperty();

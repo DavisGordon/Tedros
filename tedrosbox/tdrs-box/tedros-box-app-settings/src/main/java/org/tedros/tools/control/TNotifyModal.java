@@ -7,8 +7,8 @@ import org.tedros.app.component.ITComponent;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.control.PopOver;
-import org.tedros.core.module.TObjectRepository;
 import org.tedros.core.notify.model.TNotify;
+import org.tedros.core.repository.TRepository;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.control.TButton;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
@@ -56,7 +56,7 @@ public class TNotifyModal extends VBox implements ITComponent {
 	private double width;
 	private double height;
 	
-	private TObjectRepository repo = new TObjectRepository();
+	private TRepository repo = new TRepository();
 	
 	
 	/**

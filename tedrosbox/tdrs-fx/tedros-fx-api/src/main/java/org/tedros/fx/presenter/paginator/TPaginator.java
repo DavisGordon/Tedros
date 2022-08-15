@@ -7,7 +7,7 @@ package org.tedros.fx.presenter.paginator;
 import java.util.UUID;
 
 import org.tedros.core.TLanguage;
-import org.tedros.core.module.TObjectRepository;
+import org.tedros.core.repository.TRepository;
 import org.tedros.fx.control.TButton;
 import org.tedros.fx.control.TComboBoxField;
 import org.tedros.fx.control.THorizontalRadioGroup;
@@ -59,7 +59,7 @@ public class TPaginator extends BorderPane {
 	
 	private SimpleObjectProperty<TPagination> paginationProperty;
 	
-	private TObjectRepository repo;
+	private TRepository repo;
 	
 	public TPaginator(boolean showSearch, boolean showOrderBy) {
 		
@@ -68,7 +68,7 @@ public class TPaginator extends BorderPane {
 		
 		TLanguage iEngine = TLanguage.getInstance(null);
 		
-		repo = new TObjectRepository();
+		repo = new TRepository();
 		label = new TLabel();
 		label.setId("t-title-label");
 		lastButton = null;

@@ -24,8 +24,8 @@ public abstract class TAppResource {
 	/**
 	 * 
 	 */
-	public TAppResource(String folder) {
-		this.folder = folder;
+	public TAppResource(String moduleFolder) {
+		this.folder = moduleFolder;
 	}
 	
 	public String getFolderPath() {
@@ -37,6 +37,9 @@ public abstract class TAppResource {
 	}
 	
 	public  void copyToFolder() {
+		if(arr.length == 0)
+			return;
+		
 		for(String ref : arr) {
 			File f = new File(this.getFolderPath()+ref);
 			if(!f.isFile()) {

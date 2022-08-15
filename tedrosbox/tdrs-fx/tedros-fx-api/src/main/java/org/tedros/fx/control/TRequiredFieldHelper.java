@@ -3,7 +3,7 @@
  */
 package org.tedros.fx.control;
 
-import org.tedros.core.module.TObjectRepository;
+import org.tedros.core.repository.TRepository;
 import org.tedros.fx.effect.TEffectUtil;
 
 import javafx.beans.property.SimpleBooleanProperty;
@@ -35,7 +35,7 @@ public class TRequiredFieldHelper {
 	
 	private ITRequirable component;
 	 
-    private TObjectRepository repo = new TObjectRepository();
+    private TRepository repo = new TRepository();
     
     public TRequiredFieldHelper(String requiredStyle, ITRequirable component, Boolean addEffect) {
 		this.component = component;

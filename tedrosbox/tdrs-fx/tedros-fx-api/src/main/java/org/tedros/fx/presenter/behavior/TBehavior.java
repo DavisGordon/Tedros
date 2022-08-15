@@ -4,10 +4,10 @@ import org.tedros.core.ITModule;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.model.ITModelView;
-import org.tedros.core.module.TObjectRepository;
 import org.tedros.core.presenter.ITPresenter;
 import org.tedros.core.presenter.view.ITView;
 import org.tedros.core.presenter.view.TViewState;
+import org.tedros.core.repository.TRepository;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.form.ITModelForm;
@@ -37,7 +37,7 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 	private SimpleObjectProperty<TModelView> modelViewProperty;
 	private ObservableList<M> models;
 	private TViewMode tMode;
-	private TObjectRepository listenerRepository;
+	private TRepository listenerRepository;
 	private SimpleBooleanProperty invalidateProperty;
 	private SimpleObjectProperty<TBuildFormStatus> buildFormStatusProperty;
 	private SimpleObjectProperty<ITModelForm<M>> formProperty;
@@ -50,7 +50,7 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 		modelViewProperty = new SimpleObjectProperty<>();
 		formProperty = new SimpleObjectProperty<>();
 		invalidateProperty = new SimpleBooleanProperty(false);
-		listenerRepository = new TObjectRepository();
+		listenerRepository = new TRepository();
 		buildFormStatusProperty = new SimpleObjectProperty();
 		
 		
@@ -224,7 +224,7 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 	/**
 	 * @return the listenerRepository
 	 */
-	public TObjectRepository getListenerRepository() {
+	public TRepository getListenerRepository() {
 		return listenerRepository;
 	}
 

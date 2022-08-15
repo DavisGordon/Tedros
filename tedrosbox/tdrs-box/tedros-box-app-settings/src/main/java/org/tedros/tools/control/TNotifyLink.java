@@ -5,8 +5,8 @@ package org.tedros.tools.control;
 
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosAppManager;
-import org.tedros.core.module.TObjectRepository;
 import org.tedros.core.notify.model.TNotify;
+import org.tedros.core.repository.TRepository;
 import org.tedros.fx.builder.TGenericBuilder;
 import org.tedros.tools.module.notify.TNotifyModule;
 import org.tedros.tools.module.notify.model.TNotifyMV;
@@ -25,7 +25,7 @@ import javafx.scene.control.Hyperlink;
 public class TNotifyLink extends Hyperlink {
 	
 	private TGenericBuilder<TNotify> builder;
-	private TObjectRepository repo = new TObjectRepository();
+	private TRepository repo = new TRepository();
 	
 	public TNotifyLink(TGenericBuilder<TNotify> builder) {
 		this.builder = builder;
