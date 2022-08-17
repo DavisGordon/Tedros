@@ -49,7 +49,7 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 	    private SimpleBooleanProperty requiredProperty;
 	    private TRepository repository = new TRepository();
 	    private Comparator<E> comparator = (x, y) -> {
-			return x.getDisplayProperty().getValue().compareTo(y.getDisplayProperty().getValue());
+			return x.toStringProperty().getValue().compareTo(y.toStringProperty().getValue());
 		};
 	   
 		public TPickListField(String sourceLabel, String selectedLabel, 

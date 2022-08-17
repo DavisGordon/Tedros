@@ -32,7 +32,6 @@ import org.tedros.fx.property.TSimpleFileProperty;
 import org.tedros.tools.ToolsKey;
 import org.tedros.tools.start.TConstant;
 
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.text.TextAlignment;
@@ -68,21 +67,6 @@ public class TMimeTypeImportMV extends TImportModelView<TMimeTypeImport> {
 	
 	public TMimeTypeImportMV(TMimeTypeImport model) {
 		super(model);
-	}
-
-	@Override
-	public void setId(SimpleLongProperty id) {
-		
-	}
-
-	@Override
-	public SimpleLongProperty getId() {
-		return null;
-	}
-
-	@Override
-	public SimpleStringProperty getDisplayProperty() {
-		return null;
 	}
 
 	/**

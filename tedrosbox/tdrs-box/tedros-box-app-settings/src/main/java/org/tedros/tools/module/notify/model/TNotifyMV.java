@@ -70,7 +70,6 @@ import org.tedros.tools.module.notify.table.TNotifyLogStateCallBack;
 import org.tedros.tools.module.notify.table.TNotifyLogTV;
 import org.tedros.util.TDateUtil;
 
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.layout.Priority;
@@ -102,8 +101,6 @@ allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,
 	   				TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public class TNotifyMV extends TEntityModelView<TNotify> {
 	
-	private SimpleStringProperty display;
-
 	@TTabPane(tabs = { 
 		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"text"})),
 			scroll=true, text = ToolsKey.MAIN_DATA),
@@ -112,11 +109,10 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"eventLog"})),
 			text = ToolsKey.EVENT_LOG)
 	})
-	private SimpleLongProperty id;
-	
+	private SimpleStringProperty display;
 
 	@THBox(pane=@TPane(children={"refCode", "content"}), spacing=10, fillHeight=true,
-			hgrow=@THGrow(priority={@TPriority(field="refCode", priority=Priority.SOMETIMES), 
+			hgrow=@THGrow(priority={@TPriority(field="refCode", priority=Priority.ALWAYS), 
 					@TPriority(field="content", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty text;
 	
@@ -143,7 +139,7 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 	private SimpleStringProperty to;
 	
 	@TLabel(text=ToolsKey.ACTION)
-	@TVerticalRadioGroup(
+	@TVerticalRadioGroup(required=true,
 		converter=@TConverter(parse = true, type = ActionConverter.class),
 		radioButtons = { @TRadioButton(text = ToolsKey.NONE, userData = ToolsKey.NONE ),
 				@TRadioButton(text = ToolsKey.NONE, userData = ToolsKey.SEND ),
@@ -209,22 +205,9 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 
 	public TNotifyMV(TNotify entity) {
 		super(entity);
-		super.formatFieldsToDisplay("%s / %s", subject, to);
+		super.formatToString("%s / %s", subject, to);
 	}
 	
-	/**
-	 * @return the id
-	 */
-	public SimpleLongProperty getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(SimpleLongProperty id) {
-		this.id = id;
-	}
 
 	/**
 	 * @return the refCode
@@ -323,12 +306,7 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 	public void setEventLog(ITObservableList<TNotifyLogTV> eventLog) {
 		this.eventLog = eventLog;
 	}
-
-	@Override
-	public SimpleStringProperty getDisplayProperty() {
-		return display;
-	}
-
+	
 	/**
 	 * @return the text
 	 */

@@ -8,9 +8,11 @@ import org.tedros.tools.ToolsKey;
 import org.tedros.tools.module.scheme.model.TMainColorMV;
 import org.tedros.tools.module.scheme.template.TemplatePane;
 
+import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 
 public class TMainColorDecorator extends TDynaViewCrudBaseDecorator<TMainColorMV> {
 
@@ -38,6 +40,7 @@ public class TMainColorDecorator extends TDynaViewCrudBaseDecorator<TMainColorMV
 			this.template = new TemplatePane();
 			super.addItemInTLeftContent(getView().gettFormSpace());
 			super.addItemInTCenterContent(this.template);
+			StackPane.setMargin(template, new Insets(6));
 			
 			
 		} catch (Exception e) {

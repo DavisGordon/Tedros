@@ -26,7 +26,6 @@ import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.tools.ToolsKey;
 
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -42,8 +41,6 @@ import javafx.beans.property.SimpleStringProperty;
 @TEjbService(model=TUser.class, serviceName = "TUserControllerRemote")
 public class TUserSettingModelView extends TEntityModelView<TUser> {
 
-	private SimpleLongProperty id;
-	
 	@TLabel(text=ToolsKey.NAME, font=@TFont(size=10))
 	@TTextField(maxLength=100, required=true)
 	private SimpleStringProperty name;
@@ -92,26 +89,10 @@ public class TUserSettingModelView extends TEntityModelView<TUser> {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.presenter.model.TModelView#setId(javafx.beans.property.SimpleLongProperty)
+	 * @see com.tedros.fxapi.presenter.model.TModelView#toStringProperty()
 	 */
 	@Override
-	public void setId(SimpleLongProperty id) {
-		this.id = id;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.presenter.model.TModelView#getId()
-	 */
-	@Override
-	public SimpleLongProperty getId() {
-		return id;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.presenter.model.TModelView#getDisplayProperty()
-	 */
-	@Override
-	public SimpleStringProperty getDisplayProperty() {
+	public SimpleStringProperty toStringProperty() {
 		return name;
 	}
 

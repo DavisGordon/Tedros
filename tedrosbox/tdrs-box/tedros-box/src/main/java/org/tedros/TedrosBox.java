@@ -571,6 +571,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		}else {
 			settingsAcc = new Accordion();
 			settingsAcc.autosize();
+			//settingsAcc.getStyleClass().add("t-accordion");
 		}
 		TUserSettingsPane u = new TUserSettingsPane();
 		u.setMinWidth(350);

@@ -37,7 +37,6 @@ import org.tedros.fx.property.TSimpleFileProperty;
 import org.tedros.tools.ToolsKey;
 import org.tedros.tools.module.preferences.action.ReloadPropertiesAction;
 
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.layout.Priority;
 
@@ -64,7 +63,7 @@ public class TPropertieMV extends TEntityModelView<TPropertie> {
 	@THBox(	pane=@TPane(children={"name","description"}), spacing=10, fillHeight=true,
 			hgrow=@THGrow(priority={@TPriority(field="name", priority=Priority.ALWAYS), 
 								@TPriority(field="description", priority=Priority.ALWAYS)}))
-	private SimpleLongProperty id;
+	private SimpleStringProperty header;
 	
 	@TReaderHtml
 	@TLabel(text=ToolsKey.NAME)
@@ -103,31 +102,12 @@ public class TPropertieMV extends TEntityModelView<TPropertie> {
 		super(entity);
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.presenter.model.TModelView#setId(javafx.beans.property.SimpleLongProperty)
-	 */
-	@Override
-	public void setId(SimpleLongProperty id) {
-		this.id = id;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.presenter.model.TModelView#getId()
-	 */
-	@Override
-	public SimpleLongProperty getId() {
-		return id;
-	}
-
-
 	/**
 	 * @return the name
 	 */
 	public SimpleStringProperty getName() {
 		return name;
 	}
-
 
 	/**
 	 * @param name the name to set
@@ -136,22 +116,19 @@ public class TPropertieMV extends TEntityModelView<TPropertie> {
 		this.name = name;
 	}
 
-
 	/**
 	 * @return the key
 	 */
 	public SimpleStringProperty getKey() {
 		return key;
 	}
-
-
+	
 	/**
 	 * @param key the key to set
 	 */
 	public void setKey(SimpleStringProperty key) {
 		this.key = key;
 	}
-
 
 	/**
 	 * @return the value
@@ -160,14 +137,12 @@ public class TPropertieMV extends TEntityModelView<TPropertie> {
 		return value;
 	}
 
-
 	/**
 	 * @param value the value to set
 	 */
 	public void setValue(SimpleStringProperty value) {
 		this.value = value;
 	}
-
 
 	/**
 	 * @return the description
@@ -176,14 +151,12 @@ public class TPropertieMV extends TEntityModelView<TPropertie> {
 		return description;
 	}
 
-
 	/**
 	 * @param description the description to set
 	 */
 	public void setDescription(SimpleStringProperty description) {
 		this.description = description;
 	}
-
 
 	/**
 	 * @return the file
@@ -192,7 +165,6 @@ public class TPropertieMV extends TEntityModelView<TPropertie> {
 		return file;
 	}
 
-
 	/**
 	 * @param file the file to set
 	 */
@@ -200,10 +172,23 @@ public class TPropertieMV extends TEntityModelView<TPropertie> {
 		this.file = file;
 	}
 
-
 	@Override
-	public SimpleStringProperty getDisplayProperty() {
+	public SimpleStringProperty toStringProperty() {
 		return name;
+	}
+
+	/**
+	 * @return the header
+	 */
+	public SimpleStringProperty getHeader() {
+		return header;
+	}
+
+	/**
+	 * @param header the header to set
+	 */
+	public void setHeader(SimpleStringProperty header) {
+		this.header = header;
 	}
 
 }

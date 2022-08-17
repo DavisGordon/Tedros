@@ -54,8 +54,8 @@ public class TMessageBox extends StackPane {
     	
     	for(TValidatorResult<?> result : results){
     		
-    		String itemName = result.getModelView().getDisplayProperty()!=null 
-    				? result.getModelView().getDisplayProperty().getValue()
+    		String itemName = result.getModelView().toStringProperty()!=null 
+    				? result.getModelView().toStringProperty().getValue()
     				 : null;
     		
     		

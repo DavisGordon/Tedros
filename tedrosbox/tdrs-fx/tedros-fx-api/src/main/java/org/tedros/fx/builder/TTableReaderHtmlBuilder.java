@@ -233,7 +233,7 @@ implements ITReaderHtmlBuilder<TTableReaderHtml, Object> {
 			return ((Boolean)objectValue) ? tAnnotation.booleanValues().trueValue() : tAnnotation.booleanValues().falseValue();
 		
 		if(objectValue instanceof TModelView)
-			return ((TModelView)objectValue).getDisplayProperty().getValue();
+			return ((TModelView)objectValue).toStringProperty().getValue();
 		
 		return objectValue.toString();
 	}

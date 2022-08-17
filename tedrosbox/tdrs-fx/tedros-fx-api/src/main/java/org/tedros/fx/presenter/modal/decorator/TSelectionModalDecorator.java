@@ -5,10 +5,12 @@ import org.tedros.fx.presenter.dynamic.decorator.TDynaViewSelectionBaseDecorator
 import org.tedros.fx.presenter.dynamic.view.ITDynaView;
 import org.tedros.fx.presenter.model.TModelView;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 @SuppressWarnings("rawtypes")
@@ -52,7 +54,7 @@ extends TDynaViewSelectionBaseDecorator<M> {
 		
 		tAccordion.getPanes().addAll(tFilterTiTlePane, tResultTitlePane);
 		
-		VBox listBox = new VBox();
+		VBox listBox = new VBox(4);
 		listBox.getChildren().addAll(super.gettListViewTitle(), super.gettListView());
 		listBox.getStyleClass().add("t-panel-background-color");
 		VBox.setVgrow(super.gettListView(), Priority.ALWAYS);
@@ -60,6 +62,7 @@ extends TDynaViewSelectionBaseDecorator<M> {
 		super.addPaddingInTLeftContent(5, 15, 5, 15);
 		super.addItemInTLeftContent(listBox);
 		super.addItemInTCenterContent(tAccordion);
+		StackPane.setMargin(tAccordion, new Insets(0,0,0,3));
 		expandFilterPane();
 	}
 	

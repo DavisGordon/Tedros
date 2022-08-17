@@ -610,7 +610,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 									model.reload(entity);
 									String msg = result.isPriorityMessage() 
 											? result.getMessage()
-													: iEngine.getFormatedString("#{tedros.fxapi.message.save}", model.getDisplayProperty().getValue());
+													: iEngine.getFormatedString("#{tedros.fxapi.message.save}", model.toStringProperty().getValue());
 									if(runNewAction) {
 										getView().tModalVisibleProperty().addListener(new ChangeListener<Boolean>() {
 											@Override
@@ -938,7 +938,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			if(getModelView()==null)
 				return;
 			
-			String message = iEngine.getFormatedString("#{tedros.fxapi.message.delete}", getModelView().getDisplayProperty().getValue()==null ? "" : getModelView().getDisplayProperty().getValue());
+			String message = iEngine.getFormatedString("#{tedros.fxapi.message.delete}", getModelView().toStringProperty().getValue()==null 
+					? "" 
+						: getModelView().toStringProperty().getValue());
 			
 			final TConfirmMessageBox confirm = new TConfirmMessageBox(message);
 			confirm.tConfirmProperty().addListener(new ChangeListener<Number>() {

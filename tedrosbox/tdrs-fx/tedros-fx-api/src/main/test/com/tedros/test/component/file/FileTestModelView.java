@@ -22,8 +22,6 @@ import javafx.scene.text.TextAlignment;
 public class FileTestModelView extends TModelView<FileTestModel> {
 
 	
-	private SimpleLongProperty id;
-	
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
 	@TText(text="Teste", font=@TFont(size=22), textAlignment=TextAlignment.LEFT, node=@TNode(id="t-form-title-text", parse = true), 
 	textStyle = TTextStyle.MEDIUM)
@@ -43,17 +41,7 @@ public class FileTestModelView extends TModelView<FileTestModel> {
 	}
 
 	@Override
-	public void setId(SimpleLongProperty id) {
-		this.id = id;
-	}
-
-	@Override
-	public SimpleLongProperty getId() {
-		return id;
-	}
-
-	@Override
-	public SimpleStringProperty getDisplayProperty() {
+	public SimpleStringProperty toStringProperty() {
 		return null;
 	}
 

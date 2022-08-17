@@ -177,7 +177,7 @@ class TListenerHelper<M extends ITModel> {
 		
 		//TSimpleFileProperty
 		if(propertyFieldType == TSimpleFileProperty.class){
-			if(tModelView.isClassAFileBaseModel(entidadeFieldType)){
+			if(TCompatibleTypesHelper.isClassAFileBaseModel(entidadeFieldType)){
 				
 				InvalidationListener invalidationListener = new InvalidationListener() {
 					@Override
@@ -186,12 +186,12 @@ class TListenerHelper<M extends ITModel> {
 							final ITFileBaseModel fbm = (ITFileBaseModel) ((TSimpleFileProperty)property).getValue();
 							
 							if(fbm.getByte().getBytes()==null && fbm.getFileName()==null) {
-								if(tModelView.isClassAFileEntity(entidadeFieldType))
+								if(TCompatibleTypesHelper.isClassAFileEntity(entidadeFieldType))
 									entidadeSetMethod.invoke(tModelView.model, (ITFileEntity) null);
 								else
 									entidadeSetMethod.invoke(tModelView.model, (ITFileModel) null);
 							}else {
-								if(tModelView.isClassAFileEntity(entidadeFieldType))
+								if(TCompatibleTypesHelper.isClassAFileEntity(entidadeFieldType))
 									entidadeSetMethod.invoke(tModelView.model, (ITFileEntity) fbm);
 								else
 									entidadeSetMethod.invoke(tModelView.model, (ITFileModel) fbm);
@@ -214,7 +214,7 @@ class TListenerHelper<M extends ITModel> {
 		// ObjectProperty
 		if(ObjectProperty.class.isAssignableFrom(propertyFieldType)){
 			// ITEntity
-			if(tModelView.isClassAModel(entidadeFieldType)){
+			if(TCompatibleTypesHelper.isClassAModel(entidadeFieldType)){
 				
 				ChangeListener<Object> changeListener = new ChangeListener<Object>() {
 					@Override

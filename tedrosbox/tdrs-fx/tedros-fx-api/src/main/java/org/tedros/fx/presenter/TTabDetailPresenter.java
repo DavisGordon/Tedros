@@ -159,10 +159,10 @@ public class TTabDetailPresenter<M extends TEntityModelView> {
 		            	
 		        		if (item != null) {
 		        			
-		        			if(item.getDisplayProperty()==null)
+		        			if(item.toStringProperty()==null)
 		        				throw new RuntimeException(new TException("The method getDisplayProperty in "+modelViewClass.getSimpleName()+" must return a not null value!"));
 		        			
-		                	textProperty().bind(item.getDisplayProperty());
+		                	textProperty().bind(item.toStringProperty());
 		                	
 		                	if(item.getEntity().isNew())
 		                		setStyle("-fx-text-fill: green;");
@@ -239,7 +239,7 @@ public class TTabDetailPresenter<M extends TEntityModelView> {
 				if(getModel()==null)
 					return;
 				
-				final TConfirmMessageBox confirm = new TConfirmMessageBox("Deseja realmente excluir o registro: "+getModel().getDisplayProperty()+" ?");
+				final TConfirmMessageBox confirm = new TConfirmMessageBox("Deseja realmente excluir o registro: "+getModel().toStringProperty()+" ?");
 				confirm.tConfirmProperty().addListener(new ChangeListener<Number>() {
 					@Override
 					public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {

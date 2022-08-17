@@ -34,7 +34,6 @@ import org.tedros.tools.ToolsKey;
 import org.tedros.tools.module.user.action.TAuthorizationLoadAction;
 import org.tedros.tools.module.user.behaviour.TAuthorizationBehavior;
 
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
@@ -60,8 +59,6 @@ import javafx.scene.layout.Priority;
 	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, 
 			TAuthorizationType.READ, TAuthorizationType.SAVE, TAuthorizationType.NEW})
 public final class TAuthorizationMV extends TEntityModelView<TAuthorization> {
-	
-	private SimpleLongProperty id;
 	
 	private SimpleStringProperty displayText;
 	
@@ -146,28 +143,11 @@ public final class TAuthorizationMV extends TEntityModelView<TAuthorization> {
 		return EqualsBuilder.reflectionEquals(this, obj, false);
 	}
 
-	
 	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.presenter.model.TModelView#setId(javafx.beans.property.SimpleLongProperty)
+	 * @see com.tedros.fxapi.presenter.model.TModelView#toStringProperty()
 	 */
 	@Override
-	public void setId(SimpleLongProperty id) {
-		this.id = id;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.presenter.model.TModelView#getId()
-	 */
-	@Override
-	public SimpleLongProperty getId() {
-		return id;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.presenter.model.TModelView#getDisplayProperty()
-	 */
-	@Override
-	public SimpleStringProperty getDisplayProperty() {
+	public SimpleStringProperty toStringProperty() {
 		return this.displayText;
 	}
 
