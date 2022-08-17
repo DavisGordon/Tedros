@@ -7,6 +7,8 @@ import java.beans.Transient;
 
 import org.tedros.server.entity.ITEntity;
 
+import javafx.beans.property.SimpleLongProperty;
+
 
 /**
  * <pre>
@@ -50,6 +52,7 @@ import org.tedros.server.entity.ITEntity;
 public abstract class TEntityModelView<E extends ITEntity> 
 extends TModelView<E> {
 	
+	private SimpleLongProperty id;
 	
 	public TEntityModelView(final E entity) {
 		super(entity);
@@ -61,6 +64,20 @@ extends TModelView<E> {
 	@Transient
 	public E getEntity(){
 		return getModel();
+	}
+
+	/**
+	 * @return the id
+	 */
+	public SimpleLongProperty getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(SimpleLongProperty id) {
+		this.id = id;
 	}
 		
 }

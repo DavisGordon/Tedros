@@ -16,8 +16,11 @@ import java.util.Set;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.collections.TSimpleObservableList;
 import org.tedros.fx.property.TSimpleFileProperty;
+import org.tedros.fx.util.TReflectionUtil;
+import org.tedros.server.entity.ITEntity;
 import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.entity.TEntity;
+import org.tedros.server.model.ITFileBaseModel;
 import org.tedros.server.model.ITFileModel;
 import org.tedros.server.model.ITModel;
 
@@ -39,20 +42,18 @@ import javafx.collections.ObservableSet;
  * @author davis.dun
  *
  */
-class TCompatibleTypesHelper<M extends ITModel> {
-	
-	private TModelView<M> tModelView;
+class TCompatibleTypesHelper {
 	
 	@SuppressWarnings("rawtypes")
-	protected Map<Class, List<Class>> compatibleTypes;
+	static Map<Class, List<Class>> compatibleTypes;
 	
-	protected TCompatibleTypesHelper(TModelView<M> tModelView) {
-		this.tModelView = tModelView;
+	static {
 		loadTypesCompatibility();
 	}
 	
+	
 	@SuppressWarnings("rawtypes")
-	protected boolean isTypesCompatible(final Class propertyFieldType, Class typeToVerify) {
+	static boolean isTypesCompatible(final Class propertyFieldType, Class typeToVerify) {
 		
 		boolean compatible = compatibleTypes.get(propertyFieldType).contains(typeToVerify); 
 		
@@ -60,24 +61,49 @@ class TCompatibleTypesHelper<M extends ITModel> {
 			compatible = true;
 		
 		else if(!compatible && propertyFieldType == TSimpleFileProperty.class)
-			compatible = tModelView.isClassAFileBaseModel(typeToVerify);
+			compatible = isClassAFileBaseModel(typeToVerify);
 		
-		else if(!compatible && tModelView.isClassAnEntity(typeToVerify))
+		else if(!compatible && isClassAnEntity(typeToVerify))
 			compatible = compatibleTypes.get(propertyFieldType).contains(TEntity.class);
 		
-		else if(!compatible && tModelView.isClassAModel(typeToVerify))
+		else if(!compatible && isClassAModel(typeToVerify))
 			compatible = compatibleTypes.get(propertyFieldType).contains(ITModel.class);
 		
 		return compatible; 
 	}
 	
 	@SuppressWarnings("rawtypes")
-	protected boolean isCompatible(final Class propertyFieldType) {
+	static boolean isCompatible(final Class propertyFieldType) {
 		return compatibleTypes.containsKey(propertyFieldType);
+	}
+
+	@SuppressWarnings("rawtypes")
+	static boolean isClassAModel(Class clazz) {
+		return TReflectionUtil.isImplemented(clazz, ITModel.class);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	static boolean isClassAnEntity(Class clazz) {
+		return TReflectionUtil.isImplemented(clazz, ITEntity.class);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	static boolean isClassAFileBaseModel(Class clazz) {
+		return TReflectionUtil.isImplemented(clazz, ITFileBaseModel.class);
+	}
+
+	@SuppressWarnings("rawtypes")
+	static boolean isClassAFileModel(Class clazz) {
+		return TReflectionUtil.isImplemented(clazz, ITFileModel.class);
+	}
+
+	@SuppressWarnings("rawtypes")
+	static boolean isClassAFileEntity(Class clazz) {
+		return TReflectionUtil.isImplemented(clazz, ITFileEntity.class);
 	}
 	
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	private void loadTypesCompatibility(){
+	private static void loadTypesCompatibility(){
 		
 		compatibleTypes = new HashMap<>();
 		//compatibleTypes.put(SimpleObjectProperty.class, (List) Arrays.asList(ITModel.class, TEntity.class, ITFileEntity.class, ITFileModel.class, ITEntity.class, Color.class, Object.class, Date.class, byte[].class, BigDecimal.class, BigInteger.class, File.class, Enum.class));

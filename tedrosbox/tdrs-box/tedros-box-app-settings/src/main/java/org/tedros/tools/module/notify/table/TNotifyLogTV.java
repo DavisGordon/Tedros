@@ -9,9 +9,7 @@ import org.tedros.core.TLanguage;
 import org.tedros.core.notify.model.TNotifyLog;
 import org.tedros.core.notify.model.TState;
 import org.tedros.fx.presenter.model.TEntityModelView;
-import org.tedros.tools.start.TConstant;
 
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -21,8 +19,6 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class TNotifyLogTV extends TEntityModelView<TNotifyLog> {
 
-	private SimpleLongProperty id;
-
 	private SimpleObjectProperty<TState> state;
 
 	private SimpleStringProperty description;
@@ -31,20 +27,6 @@ public class TNotifyLogTV extends TEntityModelView<TNotifyLog> {
 	
 	public TNotifyLogTV(TNotifyLog entity) {
 		super(entity);
-	}
-
-	/**
-	 * @return the id
-	 */
-	public SimpleLongProperty getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(SimpleLongProperty id) {
-		this.id = id;
 	}
 
 	/**
@@ -90,8 +72,8 @@ public class TNotifyLogTV extends TEntityModelView<TNotifyLog> {
 	}
 
 	@Override
-	public SimpleStringProperty getDisplayProperty() {
-		return new SimpleStringProperty(TLanguage.getInstance(TConstant.UUI)
+	public SimpleStringProperty toStringProperty() {
+		return new SimpleStringProperty(TLanguage.getInstance()
 				.getString(state.getValue().getValue()));
 	}
 }

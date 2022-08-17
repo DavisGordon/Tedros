@@ -316,11 +316,6 @@ public class ProfileViewModel extends TEntityModelView<TCProfile> {
 		this.campoSlider = campoSlider;
 	}
 
-	@Override
-	public SimpleStringProperty getDisplayProperty() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	public final SimpleLongProperty getId() {
 		return id;

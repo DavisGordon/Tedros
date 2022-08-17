@@ -1,7 +1,6 @@
 package org.tedros.core.model;
 
 import java.util.Map;
-
 import java.util.Set;
 
 import org.tedros.core.repository.TRepository;
@@ -9,6 +8,7 @@ import org.tedros.server.model.ITModel;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -17,36 +17,46 @@ import javafx.collections.MapChangeListener;
 import javafx.collections.SetChangeListener;
 
 /**
- * The model view 
+ * The model view contract
  * */
 public interface ITModelView<M extends ITModel> {
 	
+	
 	/**
 	 * <pre>
-	 * Get the value to display in components.
+	 * The toString property 
+	 * @return SimpleStringProperty
 	 * </pre>
 	 * */
-	public SimpleStringProperty getDisplayProperty();
+	SimpleStringProperty toStringProperty();
+	
+	/**
+	 * <pre>
+	 * Format the toString value
+	 * </pre>
+	 * @see java.util.Formatter
+	 * */
+	void formatToString(String format, ObservableValue<?>... fields);
 	
 	/**
 	 * Removes all listener
 	 * */
-	public void removeAllListener();
+	void removeAllListener();
 	
 	/**
 	 * Removes the listener
 	 * */
-	public <T> T removeListener(String listenerId);
+	<T> T removeListener(String listenerId);
 	
 	/**
 	 * Returns all listeners key
 	 * */
-	public Map<String, Set<String>> getListenerKeys();
+	Map<String, Set<String>> getListenerKeys();
 	
 	/**
 	 * Returns the listener repository
 	 * */
-	public TRepository getListenerRepository();
+	TRepository getListenerRepository();
 	
 	/**
 	 * Adds a {@link InvalidationListener} on the repository 
@@ -54,7 +64,7 @@ public interface ITModelView<M extends ITModel> {
 	 * @param fieldName
 	 * @param invalidationListener
 	 */
-	public void addListener(final String fieldName, InvalidationListener invalidationListener);
+	void addListener(final String fieldName, InvalidationListener invalidationListener);
 	
 	/**
 	 * Adds a {@link ChangeListener} on the repository
@@ -63,7 +73,7 @@ public interface ITModelView<M extends ITModel> {
 	 * @param changeListener
 	 */
 	@SuppressWarnings("rawtypes")
-	public void addListener(final String fieldName, ChangeListener changeListener);
+	void addListener(final String fieldName, ChangeListener changeListener);
 	
 	/**
 	 * Adds a {@link MapChangeListener} on the repository
@@ -72,7 +82,7 @@ public interface ITModelView<M extends ITModel> {
 	 * @param changeListener
 	 */
 	@SuppressWarnings("rawtypes")
-	public void addListener(final String fieldName, final MapChangeListener mapChangeListener);
+	void addListener(final String fieldName, final MapChangeListener mapChangeListener);
 	
 	/**
 	 * Adds a {@link SetChangeListener} on the repository
@@ -81,7 +91,7 @@ public interface ITModelView<M extends ITModel> {
 	 * @param changeListener
 	 */
 	@SuppressWarnings("rawtypes")
-	public void addListener(final String fieldName, final SetChangeListener setChangeListener);
+	void addListener(final String fieldName, final SetChangeListener setChangeListener);
 
 	/**
 	 * Adds a {@link ListChangeListener} on the repository
@@ -90,8 +100,8 @@ public interface ITModelView<M extends ITModel> {
 	 * @param changeListener
 	 */
 	@SuppressWarnings("rawtypes")
-	public void addListener(final String fieldName, final ListChangeListener listChangeListener);
+	void addListener(final String fieldName, final ListChangeListener listChangeListener);
 
-	public Observable getProperty(String fieldName);
+	Observable getProperty(String fieldName);
 	
 }

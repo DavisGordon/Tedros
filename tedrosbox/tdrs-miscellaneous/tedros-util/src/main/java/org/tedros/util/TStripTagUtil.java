@@ -25,7 +25,7 @@ public class TStripTagUtil {
 		return content.replaceAll(Pattern.quote(OPEN_TAG+key+CLOSE_TAG), value);
 	}
 	
-	public synchronized boolean isTagPresent(String content){
+	public static boolean isTagPresent(String content){
 		return content!=null && content.contains(OPEN_TAG);
 	}
 	

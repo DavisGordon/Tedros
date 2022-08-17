@@ -4,13 +4,12 @@
 package org.tedros.fx.presenter.model;
 
 import java.beans.Transient;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -18,24 +17,20 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.tedros.core.TLanguage;
 import org.tedros.core.model.ITModelView;
 import org.tedros.core.repository.TRepository;
-import org.tedros.fx.annotation.control.TModelViewType;
 import org.tedros.fx.chart.TAreaChartField;
-import org.tedros.fx.collections.ITObservableList;
-import org.tedros.fx.collections.TFXCollections;
 import org.tedros.fx.exception.TErrorType;
 import org.tedros.fx.exception.TException;
 import org.tedros.fx.property.TSimpleFileProperty;
 import org.tedros.fx.util.TPropertyUtil;
 import org.tedros.fx.util.TReflectionUtil;
 import org.tedros.server.entity.ITEntity;
-import org.tedros.server.entity.ITFileEntity;
-import org.tedros.server.model.ITFileBaseModel;
 import org.tedros.server.model.ITFileModel;
 import org.tedros.server.model.ITModel;
+import org.tedros.util.TStripTagUtil;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -46,7 +41,6 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
@@ -109,11 +103,12 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	private 	boolean 					changed = false;
 	
 	private 	TListenerHelper<M> 			tListenerHelper;
-	private 	TCompatibleTypesHelper<M>	tCompatibleTypesHelper;
 	
-	private Map<String, Observable> propertys = new HashMap<>();
+	private 	Map<String, Observable> 	propertys = new HashMap<>();
 	
-	private String modelViewId;
+	private 	String						modelViewId;
+	
+	private 	SimpleStringProperty		display;
 	
 	/**
 	 * <pre>
@@ -123,15 +118,15 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	public TModelView(final M model) {
 		
 		LOGGER.setLevel(Level.FINEST);
-		
 		LOGGER.log(Level.FINEST, "Begin wrap the model " + model.getClass().getSimpleName() + " by the "+this.getClass().getSimpleName());
+		
+		this.display = new SimpleStringProperty();
 		this.modelViewId = UUID.randomUUID().toString(); 
 		this.model = model;
 		if(this.model==null)
 			return;
 		
 		tListenerHelper = new TListenerHelper<>(this);
-		tCompatibleTypesHelper = new TCompatibleTypesHelper<>(this);
 		
 		loadFields();
 		
@@ -149,34 +144,22 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 
 	/**
 	 * <pre>
-	 * Set the id value
-	 * </pre>
-	 * */
-	public abstract void setId(SimpleLongProperty id);
-	
-	/**
-	 * <pre>
-	 * Get the id value
-	 * </pre>
-	 * */
-	public abstract SimpleLongProperty getId();
-	
-	/**
-	 * <pre>
 	 * Get the value to display in components.
 	 * </pre>
 	 * */
 	@Transient
-	public abstract SimpleStringProperty getDisplayProperty();
-
+	public SimpleStringProperty toStringProperty() {
+		return display;
+	}
 
 	/**
 	 * <pre>
-	 * Show the fields values as the format param 
+	 * Format the toString value
 	 * </pre>
+	 * @see java.util.Formatter
 	 * */
 	@SuppressWarnings("unchecked")
-	protected void formatFieldsToDisplay(String format, ObservableValue<?>... fields) {
+	public void formatToString(String format, ObservableValue<?>... fields) {
 		
 		setDisplayValue(format, fields);
 		
@@ -205,9 +188,12 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		Object[] arr = new Object[] {};
 		for(ObservableValue<?> f : fields) {
 			Object o = f.getValue();
-			arr = ArrayUtils.add(arr, o!=null ? o : "");
+			if(o instanceof String && TStripTagUtil.isTagPresent((String) o))
+				arr = ArrayUtils.add(arr, TLanguage.getInstance().getString((String) o));
+			else
+				arr = ArrayUtils.add(arr, o!=null ? o : "");
 		}
-		this.getDisplayProperty().setValue(String.format(format, arr));
+		toStringProperty().setValue(String.format(format, arr));
 	}
 	
 	/**
@@ -222,54 +208,12 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	
 	/**
 	 * <pre>
-	 * Return a {@link List} of {@link TDetailInfo}, parsed by {@link TDetailView} annotation
-	 * in the {@link TModelView} instance and used by filters views like {@link TEntityFilterView} 
-	 * to build detail views in collections of models.   
-	 * 
-	 * 	Example:
-	 * 
-	 *	public class ExampleModelView extends TModelView&lt;ExampleModel&gt;{
-	 *		...
-	 *		<b><i>@</i>TDetailView</b>(formTitle="Documents", listTitle = "Document",
-	 *				propertyType=ITObservableList.class, entityClass=Document.class, 
-	 *				entityModelViewClass=DocumentModelView.class)
-	 *		<i>@</i>TModelViewType(entityClass=Document.class, modelViewClass=DocumentModelView.class)
-	 *		private ITObservableList&lt;DocumentModelView&gt; documents;
-	 * 		
-	 * 	
-	 * 		public ExampleModelView(ExampleModel model) {
-	 *			<b>super(model);</b>
-	 *		}
-	 *		...
-	 *		// getters and setters
-	 * 	}
-	 * 
-	 * 
-	 * </pre>
-	 * *
-	@Transient
-	public List<TDetailInfo> getDetailInfoList() throws Exception {
-		List<TDetailInfo> list = null;
-		for(final TFieldDescriptor f : TReflectionUtil.getTDetailFormAnnotatedFields(this)){
-			final TDetailInfo info = buildDetailInfo(f);
-			if(info!=null){
-				if(list==null) list = new ArrayList<>();
-				list.add(info);
-			}
-		}
-			
-		return list;
-	}*/
-	
-	/**
-	 * <pre>
 	 * Set a new model and reload the values in the model view propertys. 
 	 * </pre>
 	 * */
 	public void reload(M model) {
 		
 		LOGGER.log(Level.FINEST, "Reloading model " + model.getClass().getSimpleName() + " by the "+this.getClass().getSimpleName());
-		//this.removeAllListener();
 		this.model = model;
 		loadFields();
 		buildLastHashCode();
@@ -377,7 +321,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	 * */
 	@Override
 	public String toString() {
-		return (getDisplayProperty()!=null)? getDisplayProperty().getValue() : "";	
+		return toStringProperty().getValue()!=null ? toStringProperty().getValue() : "";	
 	}
 	
 	/**
@@ -422,7 +366,6 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		LOGGER.log(Level.FINEST, "Starting load fields.");
 		
 		final Map<String, Field> modelFields = new HashMap<>();
-		final Field[] propertyFields = this.getClass().getDeclaredFields();
 		Class superClass = this.model.getClass();
 		
 		Class<?> target = (TReflectionUtil.isImplemented(superClass, ITEntity.class)) 
@@ -438,255 +381,222 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 				superClass = superClass.getSuperclass();
 			}
 		}
+		
+		Map<String, TPropertyHelper> propertyMap = new HashMap<>();
+		target = ITModelView.class;
+		superClass = this.getClass();
+		
+		while(TReflectionUtil.isImplemented(superClass, target)){
+			if(!superClass.equals(TModelView.class)) {
+				Arrays.asList(superClass.getDeclaredFields()).stream()
+				.forEach(f->{
+					if(!propertyMap.containsKey(f.getName()))
+						try {
+							propertyMap.put(f.getName(), new TPropertyHelper(f, this));
+						} catch (Throwable e) {
+							e.printStackTrace();
+						}
+				});
+			}
+			superClass = superClass.getSuperclass();
+		}
+		
 		propertys.clear();
 		// percorre os campos do model view 
-		for (final Field field : propertyFields) {
-			
-			//LOGGER.log(Level.FINEST, field.getName()+" field found.");
-			
-			final String propertyFieldName = field.getName();
-			final Class propertyFieldType = field.getType();
-			//verifica se o tipo � compativel para bind
-			if(tCompatibleTypesHelper.isCompatible(propertyFieldType)){
+		propertyMap.values()
+		.parallelStream()
+		.forEach(h -> {
+			if(h.isElegible()){
 				try{
-					
-					// recupera o metodo get do property
-					final Method modelViewGetMethod = this.getClass().getMethod(GET+StringUtils.capitalize(propertyFieldName));
-					// recupera o metodo set do property
-					final Method propertySetMethod = this.getClass().getMethod(SET+StringUtils.capitalize(propertyFieldName), propertyFieldType);
-					Object propertyObj = modelViewGetMethod.invoke(this);
-					
-					boolean buildListener = false;
-					if(propertyObj==null){
-						buildListener = true;
-						if(TReflectionUtil.isImplemented(propertyFieldType, ITObservableList.class)){
-							propertyObj = (ITObservableList) TFXCollections.iTObservableList();
-							propertySetMethod.invoke(this, propertyObj);
-						}else if(TReflectionUtil.isImplemented(propertyFieldType, ObservableList.class)){
-							propertyObj = (ObservableList) FXCollections.observableArrayList();
-							propertySetMethod.invoke(this, propertyObj);
-						}else if(propertyFieldType == ObservableSet.class){
-							propertyObj = (ObservableSet)FXCollections.observableSet((Set)new HashSet());
-							propertySetMethod.invoke(propertyObj);
-						}else if(propertyFieldType == ObservableMap.class ){
-							propertyObj = (ObservableMap)FXCollections.observableMap((Map)new HashMap());
-							propertySetMethod.invoke(propertyObj);
-						}else if(propertyFieldType == TSimpleFileProperty.class) {
-							Class entityClass = null;
-							
-							for(Annotation annotation : field.getDeclaredAnnotations())
-								if(annotation instanceof TModelViewType ){
-									TModelViewType tAnnotation = (TModelViewType) annotation;
-									entityClass = tAnnotation.modelClass();
-								}
-							if(entityClass!=null) {
-								propertyObj = propertyFieldType.getConstructor(ITFileBaseModel.class).newInstance(entityClass.newInstance());
-								propertySetMethod.invoke(this, propertyObj);
-							}else {
-								propertyObj = propertyFieldType.newInstance();
-								propertySetMethod.invoke(this, propertyObj);
-							}
-							
-						}else{
-							propertyObj = propertyFieldType.newInstance();
-							propertySetMethod.invoke(this, propertyObj);
-						}
-					}
-					
-					/* //Used to stop at a specific field load at debug time
+					//Used to stop at a specific field load at debug time
 					 int x = 0;
-					if(propertyFieldName.contains("rootProjectFolder"))
+					if(h.name.contains("id"))
 						x = 1;
-					*/
 					
 					// recupera o campo equivalente no model
-					Field entityField = modelFields.get(propertyFieldName);
+					Field entityField = modelFields.get(h.name);
 					
-					if(entityField==null)
-						continue;
-					
-					final Class entityFieldType = entityField.getType();
-					// recupera o metodo set do atributo na entidade
-					final Method entidadeSetMethod = TReflectionUtil.getSetterMethod(this.model.getClass(), propertyFieldName, entityFieldType);
-					//final Method entidadeSetMethod = this.model.getClass().getMethod(SET+StringUtils.capitalize(propertyFieldName), entidadeFieldType);;
-					
-					// recupera o valor do campo na entidade
-					final Method entityGetMethod = TReflectionUtil.getGetterMethod(this.model.getClass(), propertyFieldName);
-					//final Method entidadeGetMethod = this.model.getClass().getMethod(GET+StringUtils.capitalize(propertyFieldName));
-					// recupera o objeto da entidade
-					final Object obj = entityGetMethod.invoke(this.model);
-					
-					if(TPropertyUtil.isCollectionObservableType(propertyFieldType)){
+					if(entityField!=null) {
 						
-						Class modelViewClass = null; 
-						Class entityClass = null;
+						final Class entityFieldType = entityField.getType();
+						// recupera o metodo set do atributo na entidade
+						final Method entidadeSetMethod = TReflectionUtil.getSetterMethod(this.model.getClass(), h.name, entityFieldType);
+						//final Method entidadeSetMethod = this.model.getClass().getMethod(SET+StringUtils.capitalize(h.name), entidadeFieldType);;
 						
-						for(Annotation annotation : field.getDeclaredAnnotations())
-							if(annotation instanceof TModelViewType ){
-								TModelViewType tAnnotation = (TModelViewType) annotation;
-								modelViewClass = tAnnotation.modelViewClass();
-								entityClass = tAnnotation.modelClass();
-							}
+						// recupera o valor do campo na entidade
+						final Method entityGetMethod = TReflectionUtil.getGetterMethod(this.model.getClass(), h.name);
+						//final Method entidadeGetMethod = this.model.getClass().getMethod(GET+StringUtils.capitalize(h.name));
+						// recupera o objeto da entidade
+						final Object obj = entityGetMethod.invoke(this.model);
 						
-						// ObservableList.class
-						if(TReflectionUtil.isImplemented(propertyFieldType, ObservableList.class)){ // OK
+						if(TPropertyUtil.isCollectionObservableType(h.type)){
 							
-							final ObservableList property = (ObservableList) propertyObj; 
-							
-							final ListChangeListener listener = (ListChangeListener) tListenerHelper.tObjectRepository.get(propertyFieldName); 
-									
-							if(listener!=null){
-								property.removeListener(listener);
-								property.clear();
+							Class modelViewClass = null; 
+							Class entityClass = null;
+							if(h.genericType!=null){
+								modelViewClass = h.genericType.modelViewClass();
+								entityClass = h.genericType.modelClass();
 							}
-							if(obj!=null){
-								for(Object o : (Collection) obj){
-									//if(o instanceof TModelView){
-									if(o instanceof ITModel){
-										if(modelViewClass==null && entityClass==null)
-											throw new Exception("\n\nT_ERROR "
-													+ "\nType: "+TErrorType.COLLECTION_CONFIGURATION
-													+ "\nFIELD: "+getClass().getSimpleName() + "."+propertyFieldName
-													+ "\n\n-Use the @TModelViewType annotation at field "+getClass().getSimpleName() + "."+propertyFieldName+"\n\n");
-										try{
-											if(modelViewClass!=TModelView.class && entityClass!=null)
-												property.add(modelViewClass.getConstructor(entityClass).newInstance(o));
-											else
-												property.add(o);
-										}catch(IllegalArgumentException e){
-											String error = "\n\nT_ERROR\nType: "+TErrorType.BUILD
-													+ "\nModel View class: "+modelViewClass.getName()+".class"
-													+ "\nModel View constructor argument type: "+entityClass.getName()+".class"
-													+ "\nModel to bind: "+o.getClass().getName()+".class"
-													+ "\n\n-Check the configuration of the field "+propertyFieldName+" at "+getClass().getName()+".java\n\n";
-											
-											LOGGER.severe(error);
-											LOGGER.severe(e.toString());
-											
-										}
-									}else if(o instanceof ITFileModel){
-										property.add(new TSimpleFileProperty<ITFileModel>((ITFileModel)o));
-									}
-								}
-							}
-							if(listener==null)
-								tListenerHelper.buildListListener(propertyFieldType, entityGetMethod, entidadeSetMethod, entityFieldType, property, propertyFieldName);
-							else
-								property.addListener(listener);
-							propertys.put(propertyFieldName, property);
-						} 
-						
-						// ObservableSet.class
-						if(propertyFieldType == ObservableSet.class){ // TODO: DEVE SER TESTADO
-							final ObservableSet property = (ObservableSet) propertyObj; // modelViewGetMethod.invoke(this);
 							
-							//TODO: TESTAR LISTENER REPO - BEGIN
-							/*final SetChangeListener listener = (changeListenersRepository!=null) 
-									? (SetChangeListener)changeListenersRepository.get(entidadeSetMethod.getName())
-											:null;*/
-							
-							final SetChangeListener listener = (SetChangeListener) tListenerHelper.tObjectRepository.get(propertyFieldName);
-							//END
-									
-							if(listener!=null){
-								property.removeListener(listener);
-								property.clear();
-							}
-							if(obj!=null)
-								for(Object o : (Collection) obj)
-									if(modelViewClass!=TModelView.class && entityClass!=null)
-										property.add(modelViewClass.getConstructor(entityClass).newInstance(o));
-									else
-										property.add(o);
-							if(listener==null)
-								tListenerHelper.buildSetListener(propertyFieldType, entityGetMethod, entidadeSetMethod, entityFieldType, property, propertyFieldName);
-							else
-								property.addListener(listener);
-							propertys.put(propertyFieldName, property);
-						}
-						
-						// ObservableMap.class
-						if(propertyFieldType == ObservableMap.class ){ // TODO: DEVE SER TESTADO
-							final ObservableMap property = (ObservableMap) propertyObj; //modelViewGetMethod.invoke(this);
-							if(!buildListener){
+							// ObservableList.class
+							if(TReflectionUtil.isImplemented(h.type, ObservableList.class)){ // OK
 								
-								//TODO: TESTAR LISTENER REPO - BEGIN
-								// final MapChangeListener listener = (MapChangeListener)changeListenersRepository.get(entidadeSetMethod.getName());
+								final ObservableList property = (ObservableList) h.value; 
 								
-								final MapChangeListener listener = (MapChangeListener)	tListenerHelper.tObjectRepository.get(propertyFieldName);
-								//END
-								
+								final ListChangeListener listener = (ListChangeListener) tListenerHelper.tObjectRepository.get(h.name); 
+										
 								if(listener!=null){
 									property.removeListener(listener);
 									property.clear();
 								}
-								
-								property.addListener(listener);
-							}
-							property.putAll((Map) obj);
-							if(buildListener)
-								tListenerHelper.buildMapListener(propertyFieldType, entityGetMethod, entidadeSetMethod, property, propertyFieldName);
-							propertys.put(propertyFieldName, property);
-						}
-					}else{
-					
-						final Property property = (Property) propertyObj; //modelViewGetMethod.invoke(this);
-						if(!tCompatibleTypesHelper.isTypesCompatible(propertyFieldType, entityFieldType)){
-							
-							String error = "\n\nTERROR :: FIELD "+propertyFieldName+" of type "+propertyFieldType.getSimpleName()+" in "+getClass().getSimpleName()
-									+" is not compatible for the type "+entityFieldType+" on "+getModel().getClass().getSimpleName()+"\n";
-							error += "TINFO :: TModelView "+ propertyFieldType.getSimpleName() +" compatible types: ";
-							for(Class c : tCompatibleTypesHelper.compatibleTypes.get(property.getClass()))
-								error += c.getSimpleName()+", ";
-							
-							throw new TException(error.substring(0, error.length()-2)+"\n");
-						}
-						
-						// seta o valor do property com o valor da entidade
-						if(obj!=null){
-							if(obj instanceof String && property instanceof BooleanProperty){
-								String v = (String) obj;
-								String literal = v.equals("1") || v.toUpperCase().trim().equals("T") ||  v.toUpperCase().trim().equals("TRUE")  
-												? "true" : "false";
-								property.setValue(new Boolean(literal));
-							}else if(obj instanceof ITModel) {
-								Class modelViewClass = null; 
-								Class entityClass = null;
-								
-								for(Annotation annotation : field.getDeclaredAnnotations())
-									if(annotation instanceof TModelViewType ){
-										TModelViewType tAnnotation = (TModelViewType) annotation;
-										modelViewClass = tAnnotation.modelViewClass();
-										entityClass = tAnnotation.modelClass();
+								if(obj!=null){
+									for(Object o : (Collection) obj){
+										//if(o instanceof TModelView){
+										if(o instanceof ITModel){
+											if(modelViewClass==null && entityClass==null)
+												throw new Exception("\n\nT_ERROR "
+														+ "\nType: "+TErrorType.COLLECTION_CONFIGURATION
+														+ "\nFIELD: "+getClass().getSimpleName() + "."+h.name
+														+ "\n\n-Use the @TModelViewType annotation at field "+getClass().getSimpleName() + "."+h.name+"\n\n");
+											try{
+												if(modelViewClass!=TModelView.class && entityClass!=null)
+													property.add(modelViewClass.getConstructor(entityClass).newInstance(o));
+												else
+													property.add(o);
+											}catch(IllegalArgumentException e){
+												String error = "\n\nT_ERROR\nType: "+TErrorType.BUILD
+														+ "\nModel View class: "+modelViewClass.getName()+".class"
+														+ "\nModel View constructor argument type: "+entityClass.getName()+".class"
+														+ "\nModel to bind: "+o.getClass().getName()+".class"
+														+ "\n\n-Check the configuration of the field "+h.name+" at "+getClass().getName()+".java\n\n";
+												
+												LOGGER.severe(error);
+												LOGGER.severe(e.toString());
+												
+											}
+										}else if(o instanceof ITFileModel){
+											property.add(new TSimpleFileProperty<ITFileModel>((ITFileModel)o));
+										}
 									}
-								try{
-									if(modelViewClass!=TModelView.class && entityClass!=null)
-										property.setValue(modelViewClass.getConstructor(entityClass).newInstance(obj));
-									else
-										property.setValue(obj);
-								}catch(IllegalArgumentException e){
-									String error = "\n\nT_ERROR\nType: "+TErrorType.BUILD
-											+ "\nModel View class: "+modelViewClass.getName()+".class"
-											+ "\nModel View constructor argument type: "+entityClass.getName()+".class"
-											+ "\nModel to bind: "+obj.getClass().getName()+".class"
-											+ "\n\n-Check the configuration of the field "+propertyFieldName+" at "+getClass().getName()+".java\n\n";
-									
-									LOGGER.severe(error);
-									LOGGER.severe(e.toString());
-									
 								}
-
-							}else {
-								property.setValue(obj);
+								if(listener==null)
+									tListenerHelper.buildListListener(h.type, entityGetMethod, entidadeSetMethod, entityFieldType, property, h.name);
+								else
+									property.addListener(listener);
+								propertys.put(h.name, property);
+							} 
+							
+							// ObservableSet.class
+							if(h.type == ObservableSet.class){ // TODO: DEVE SER TESTADO
+								final ObservableSet property = (ObservableSet) h.value; // modelViewGetMethod.invoke(this);
+								
+								//TODO: TESTAR LISTENER REPO - BEGIN
+								/*final SetChangeListener listener = (changeListenersRepository!=null) 
+										? (SetChangeListener)changeListenersRepository.get(entidadeSetMethod.getName())
+												:null;*/
+								
+								final SetChangeListener listener = (SetChangeListener) tListenerHelper.tObjectRepository.get(h.name);
+								//END
+										
+								if(listener!=null){
+									property.removeListener(listener);
+									property.clear();
+								}
+								if(obj!=null)
+									for(Object o : (Collection) obj)
+										if(modelViewClass!=TModelView.class && entityClass!=null)
+											property.add(modelViewClass.getConstructor(entityClass).newInstance(o));
+										else
+											property.add(o);
+								if(listener==null)
+									tListenerHelper.buildSetListener(h.type, entityGetMethod, entidadeSetMethod, entityFieldType, property, h.name);
+								else
+									property.addListener(listener);
+								propertys.put(h.name, property);
 							}
-						}else if(!(property instanceof TSimpleFileProperty))
-							property.setValue(null);
+							
+							// ObservableMap.class
+							if(h.type == ObservableMap.class ){ // TODO: DEVE SER TESTADO
+								final ObservableMap property = (ObservableMap) h.value; //modelViewGetMethod.invoke(this);
+								if(!h.buildListener){
+									
+									//TODO: TESTAR LISTENER REPO - BEGIN
+									// final MapChangeListener listener = (MapChangeListener)changeListenersRepository.get(entidadeSetMethod.getName());
+									
+									final MapChangeListener listener = (MapChangeListener)	tListenerHelper.tObjectRepository.get(h.name);
+									//END
+									
+									if(listener!=null){
+										property.removeListener(listener);
+										property.clear();
+									}
+									
+									property.addListener(listener);
+								}
+								property.putAll((Map) obj);
+								if(h.buildListener)
+									tListenerHelper.buildMapListener(h.type, entityGetMethod, entidadeSetMethod, property, h.name);
+								propertys.put(h.name, property);
+							}
+						}else{
 						
-						// gera os ChangeListener(s)
-						if(buildListener)
-							tListenerHelper.buildListeners(propertyFieldType, entityFieldType, property, entidadeSetMethod, obj, propertyFieldName);
-						
-						propertys.put(propertyFieldName, property);
+							final Property property = (Property) h.value; //modelViewGetMethod.invoke(this);
+							if(!TCompatibleTypesHelper.isTypesCompatible(h.type, entityFieldType)){
+								
+								String error = "\n\nTERROR :: FIELD "+h.name+" of type "+h.type.getSimpleName()+" in "+getClass().getSimpleName()
+										+" is not compatible for the type "+entityFieldType+" on "+getModel().getClass().getSimpleName()+"\n";
+								error += "TINFO :: TModelView "+ h.type.getSimpleName() +" compatible types: ";
+								for(Class c : TCompatibleTypesHelper.compatibleTypes.get(property.getClass()))
+									error += c.getSimpleName()+", ";
+								
+								throw new TException(error.substring(0, error.length()-2)+"\n");
+							}
+							
+							// seta o valor do property com o valor da entidade
+							if(obj!=null){
+								if(obj instanceof String && property instanceof BooleanProperty){
+									String v = (String) obj;
+									String literal = v.equals("1") || v.toUpperCase().trim().equals("T") ||  v.toUpperCase().trim().equals("TRUE")  
+													? "true" : "false";
+									property.setValue(new Boolean(literal));
+								}else if(obj instanceof ITModel) {
+									Class modelViewClass = null; 
+									Class entityClass = null;
+									
+									if(h.genericType!=null){
+										modelViewClass = h.genericType.modelViewClass();
+										entityClass = h.genericType.modelClass();
+									}
+									try{
+										if(modelViewClass!=TModelView.class && entityClass!=null)
+											property.setValue(modelViewClass.getConstructor(entityClass).newInstance(obj));
+										else
+											property.setValue(obj);
+									}catch(IllegalArgumentException e){
+										String error = "\n\nT_ERROR\nType: "+TErrorType.BUILD
+												+ "\nModel View class: "+modelViewClass.getName()+".class"
+												+ "\nModel View constructor argument type: "+entityClass.getName()+".class"
+												+ "\nModel to bind: "+obj.getClass().getName()+".class"
+												+ "\n\n-Check the configuration of the field "+h.name+" at "+getClass().getName()+".java\n\n";
+										
+										LOGGER.severe(error);
+										LOGGER.severe(e.toString());
+										
+									}
+	
+								}else {
+									property.setValue(obj);
+								}
+							}else if(!(property instanceof TSimpleFileProperty))
+								property.setValue(null);
+							
+							// gera os ChangeListener(s)
+							if(h.buildListener)
+								tListenerHelper.buildListeners(h.type, entityFieldType, property, entidadeSetMethod, obj, h.name);
+							
+							propertys.put(h.name, property);
+						}
+					
 					}
 					
 				}catch(Throwable e){				
@@ -694,77 +604,19 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 				}
 			}else{
 				
-				if(propertyFieldType == TAreaChartField.class)
-					continue;
-				
-				String types = "";
-				for (Class c : tCompatibleTypesHelper.compatibleTypes.keySet()) 
-					types += c.getSimpleName()+", ";
-				
-				LOGGER.log(Level.FINEST, propertyFieldName+" field of type "+propertyFieldType.getSimpleName()+" in "+getClass().getSimpleName()+" is not compatible for a TModelView!");
-				LOGGER.log(Level.FINEST, "TModelView compatible types: "+types.substring(0,types.length()-2));
-				
-			}
-		}
-		
-		for(final Field entidadeField : this.model.getClass().getSuperclass().getDeclaredFields()){
-			if(entidadeField.getName().equals("id")){
-				try{
-					final Class entidadeFieldType = entidadeField.getType();
-					// recupera o metodo set do atributo na entidade
-					final Method entidadeSetMethod = this.model.getClass().getMethod("setId", entidadeFieldType);
-					// recupera o valor do campo na entidade
-					final Method entidadeGetMethod = this.model.getClass().getMethod("getId");
-					// recupera o objeto da entidade
-					final Long id = (Long) entidadeGetMethod.invoke(this.model);
+				if(h.type != TAreaChartField.class) {
+					String types = "";
+					for (Class c : TCompatibleTypesHelper.compatibleTypes.keySet()) 
+						types += c.getSimpleName()+", ";
 					
-					final Method modelViewGetMethod = this.getClass().getMethod("getId");
-					
-					final Method propertySetMethod = this.getClass().getMethod("setId", SimpleLongProperty.class);
-					SimpleLongProperty propertyObj = (SimpleLongProperty) modelViewGetMethod.invoke(this);
-					if(propertyObj==null){
-						propertyObj = new SimpleLongProperty(id);
-						propertySetMethod.invoke(this, propertyObj);
-						tListenerHelper.buildListeners(SimpleLongProperty.class, entidadeFieldType, propertyObj, entidadeSetMethod, id, entidadeField.getName() );
-					}else{
-						propertyObj.setValue(id);
-						tListenerHelper.buildListeners(SimpleLongProperty.class, entidadeFieldType, propertyObj, entidadeSetMethod, id, entidadeField.getName());
-					}
-					
-					propertys.put(entidadeField.getName(), propertyObj);
-					
-				}catch(Exception e){
-					LOGGER.severe(e.toString());
+					LOGGER.log(Level.FINEST, h.name+" field of type "+h.type.getSimpleName()+" in "+getClass().getSimpleName()+" is not compatible for a TModelView!");
+					LOGGER.log(Level.FINEST, "TModelView compatible types: "+types.substring(0,types.length()-2));
 				}
-				break;
-			}	
-		}
+			}
+		});
+		
 	}
 
-	@SuppressWarnings("rawtypes")
-	protected boolean isClassAModel(Class clazz) {
-		return TReflectionUtil.isImplemented(clazz, ITModel.class);
-	}
-	
-	@SuppressWarnings("rawtypes")
-	protected boolean isClassAnEntity(Class clazz) {
-		return TReflectionUtil.isImplemented(clazz, ITEntity.class);
-	}
-	
-	@SuppressWarnings("rawtypes")
-	protected boolean isClassAFileBaseModel(Class clazz) {
-		return TReflectionUtil.isImplemented(clazz, ITFileBaseModel.class);
-	}
-
-	@SuppressWarnings("rawtypes")
-	protected boolean isClassAFileModel(Class clazz) {
-		return TReflectionUtil.isImplemented(clazz, ITFileModel.class);
-	}
-
-	@SuppressWarnings("rawtypes")
-	protected boolean isClassAFileEntity(Class clazz) {
-		return TReflectionUtil.isImplemented(clazz, ITFileEntity.class);
-	}
 
 	@Transient
 	protected void buildLastHashCode() {
@@ -776,11 +628,6 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	@Transient
 	protected void setLastHashCode(int lastHashCode) {
 		this.lastHashCode = lastHashCode;
-	}
-
-	@Transient
-	protected void setLastHashCodeProperty(SimpleIntegerProperty lastHashCodeProperty) {
-		this.lastHashCodeProperty = lastHashCodeProperty;
 	}
 
 	@Override

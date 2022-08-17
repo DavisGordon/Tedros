@@ -1,6 +1,5 @@
 package org.tedros.tools.module.scheme.model;
 
-import org.tedros.core.TLanguage;
 import org.tedros.core.style.TStyleResourceValue;
 import org.tedros.fx.annotation.control.TCheckBoxField;
 import org.tedros.fx.annotation.control.TColorPickerField;
@@ -16,6 +15,8 @@ import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.process.TModelProcess;
+import org.tedros.fx.annotation.property.TObservableListProperty;
+import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TControl;
 import org.tedros.fx.annotation.scene.control.TLabeled;
 import org.tedros.fx.domain.TLabelPosition;
@@ -31,7 +32,6 @@ import org.tedros.tools.module.scheme.trigger.TPanelTrigger;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.paint.Color;
@@ -44,10 +44,12 @@ import javafx.scene.paint.Color;
 	decorator=@TDecorator(type=TPanelDecorator.class))
 public class TPanelMV extends TModelView<TPanel> {
 	
+	private SimpleStringProperty display;
 	/**
 	 * Grupo customizar painel
 	 * */
-	@TAccordion(
+	@TAccordion(node=@TNode(parse = true, 
+			styleClass=@TObservableListProperty(addAll="t-accordion", parse=true)),
 			panes={
 					@TTitledPane(text=ToolsKey.SETTINGS_LAYOUT_PAINEL, fields={"painelCorTexto", "painelCorFundo", "painelTamTexto", "painelOpacidade"}),
 					@TTitledPane(text=ToolsKey.SETTINGS_LAYOUT_BUTTONS, fields={"botaoCorTexto", "botaoTamTexto", "botaoCorFundo", "botaoCorBorda","botaoOpacidade"}),
@@ -255,6 +257,8 @@ public class TPanelMV extends TModelView<TPanel> {
 	
 	public TPanelMV(TPanel entity) {
 		super(entity);
+		display.setValue("#{label.style}");
+		super.formatToString("%s", display);
 	}
 	
 	public void loadSavedValues() {
@@ -319,23 +323,6 @@ public class TPanelMV extends TModelView<TPanel> {
 		
 	}
 
-	@Override
-	public void setId(SimpleLongProperty id) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public SimpleLongProperty getId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public SimpleStringProperty getDisplayProperty() {
-		String s = TLanguage.getInstance(null).getString("#{label.style}");
-		return new SimpleStringProperty(s);
-	}
 
 	public SimpleObjectProperty<Color> getPainelCorTexto() {
 		return painelCorTexto;
@@ -528,6 +515,20 @@ public class TPanelMV extends TModelView<TPanel> {
 
 	public void setReaderTamTexto(SimpleDoubleProperty readerTamTexto) {
 		this.readerTamTexto = readerTamTexto;
+	}
+
+	/**
+	 * @return the display
+	 */
+	public SimpleStringProperty getDisplay() {
+		return display;
+	}
+
+	/**
+	 * @param display the display to set
+	 */
+	public void setDisplay(SimpleStringProperty display) {
+		this.display = display;
 	}
 
 	

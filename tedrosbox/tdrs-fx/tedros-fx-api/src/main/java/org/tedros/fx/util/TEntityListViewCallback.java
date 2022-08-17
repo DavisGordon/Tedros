@@ -48,10 +48,10 @@ public class TEntityListViewCallback<M extends TModelView> implements Callback<L
         			setGraphic(null);
         		}else {
         			//if(empty) {
-	        			if(item.getDisplayProperty()==null)
+	        			if(item.toStringProperty()==null)
 	        				throw new RuntimeException(new TException("The method getDisplayProperty must return a not null value!"));
 	        			
-	                	textProperty().bind(item.getDisplayProperty());
+	                	textProperty().bind(item.toStringProperty());
 	                	
 	                	validateNew(item);
 	                	
@@ -76,7 +76,7 @@ public class TEntityListViewCallback<M extends TModelView> implements Callback<L
 
 			private boolean validateNew(final M item) {
 				if(item.getModel() instanceof ITEntity && ((ITEntity)item.getModel()).isNew()){
-					if(StringUtils.isBlank(item.getDisplayProperty().getValue()))
+					if(StringUtils.isBlank(item.toStringProperty().getValue()))
 						setId(NEW_ITEM_EMPTY_CSS_ID);
 					else
 						setId(NEW_ITEM_CSS_ID);

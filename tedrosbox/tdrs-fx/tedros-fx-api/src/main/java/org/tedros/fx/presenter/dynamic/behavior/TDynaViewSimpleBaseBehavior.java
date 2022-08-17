@@ -323,7 +323,7 @@ extends TBehavior<M, TDynaPresenter<M>> {
 									E entity = (E) result.getValue();
 									if(entity!=null){
 										model.reload(entity);
-										String msg = iEngine.getFormatedString("#{tedros.fxapi.message.process}", model.getDisplayProperty().getValue());
+										String msg = iEngine.getFormatedString("#{tedros.fxapi.message.process}", model.toStringProperty().getValue());
 										setActionState(new TActionState(action, arg2, TProcessResult.SUCCESS, msg, model));
 										addMessage(new TMessage(TMessageType.INFO, msg));
 									}else {

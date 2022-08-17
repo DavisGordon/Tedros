@@ -23,7 +23,6 @@ import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.tools.ToolsKey;
 
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -32,7 +31,7 @@ import javafx.beans.property.SimpleStringProperty;
  */
 
 @TFormReaderHtml
-@TForm(name = "", showBreadcrumBar=true, scroll=false)
+@TForm(name = "", showBreadcrumBar=false, scroll=false)
 @TEjbService(serviceName = TMimeTypeController.JNDI_NAME, model=TMimeType.class)
 @TListViewPresenter(
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle=ToolsKey.VIEW_MIMETYPE, buildImportButton=true),
@@ -45,8 +44,6 @@ import javafx.beans.property.SimpleStringProperty;
 					TAuthorizationType.SAVE, TAuthorizationType.DELETE, TAuthorizationType.NEW})
 
 public class TMimeTypeMV extends TEntityModelView<TMimeType> {
-	
-	private SimpleLongProperty id;
 	
 	@TReaderHtml
 	@TLabel(text=ToolsKey.MIMETYPE_EXT)
@@ -67,20 +64,6 @@ public class TMimeTypeMV extends TEntityModelView<TMimeType> {
 
 	public TMimeTypeMV(TMimeType entity) {
 		super(entity);
-	}
-
-	/**
-	 * @return the id
-	 */
-	public SimpleLongProperty getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(SimpleLongProperty id) {
-		this.id = id;
 	}
 
 	/**
@@ -126,7 +109,7 @@ public class TMimeTypeMV extends TEntityModelView<TMimeType> {
 	}
 
 	@Override
-	public SimpleStringProperty getDisplayProperty() {
+	public SimpleStringProperty toStringProperty() {
 		return extension;
 	}
 

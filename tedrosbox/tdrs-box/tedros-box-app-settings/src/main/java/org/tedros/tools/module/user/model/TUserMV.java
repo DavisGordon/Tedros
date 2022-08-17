@@ -53,7 +53,6 @@ import org.tedros.tools.ToolsKey;
 import org.tedros.tools.module.user.action.TEncriptPasswordChangeListener;
 
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
@@ -77,8 +76,6 @@ import javafx.scene.text.TextAlignment;
 			allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 			   					TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public class TUserMV extends TEntityModelView<TUser> {
-
-	private SimpleLongProperty id;
 	
 	@TTabPane(tabs = { 
 			@TTab(closable=false, scroll=false, content = @TContent(detailForm=
@@ -158,24 +155,12 @@ public class TUserMV extends TEntityModelView<TUser> {
 	/* (non-Javadoc)
 	 * @see com.tedros.fxapi.presenter.model.TModelView#setId(javafx.beans.property.SimpleLongProperty)
 	 */
-	@Override
-	public void setId(SimpleLongProperty id) {
-		this.id = id;
-	}
 
 	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.presenter.model.TModelView#getId()
+	 * @see com.tedros.fxapi.presenter.model.TModelView#toStringProperty()
 	 */
 	@Override
-	public SimpleLongProperty getId() {
-		return id;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.presenter.model.TModelView#getDisplayProperty()
-	 */
-	@Override
-	public SimpleStringProperty getDisplayProperty() {
+	public SimpleStringProperty toStringProperty() {
 		return name;
 	}
 

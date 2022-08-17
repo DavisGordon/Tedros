@@ -13,6 +13,8 @@ import org.tedros.fx.presenter.paginator.TPaginator;
 import org.tedros.server.entity.ITEntity;
 
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -59,16 +61,18 @@ public class TListViewHelper<M extends TEntityModelView<? extends ITEntity>>{
 		
 		tListViewPane = new StackPane();
 		tListViewPane.getStyleClass().add("t-panel-background-color");
-		tListViewPane.maxWidthProperty().bind(listViewMaxWidth);
-		tListViewPane.minWidthProperty().bind(listViewMinWidth);
+		tListViewPane.setAlignment(Pos.CENTER);
+		//tListViewPane.maxWidthProperty().bind(listViewMaxWidth);
+		//tListViewPane.minWidthProperty().bind(listViewMinWidth);
 		
 		// build the list view box
-		tListViewLayout = new VBox();
-		
-		tListViewProgressIndicator = new TProgressIndicator(tListViewPane);
-		tListViewProgressIndicator.setSmallLogo();
+		tListViewLayout = new VBox(4);
+		StackPane.setMargin(tListViewLayout, new Insets(0, 2, 0, 0));
 		tListViewPane.getChildren().add(tListViewLayout);
 		VBox.setVgrow(tListView, Priority.ALWAYS);
+		tListViewLayout.setAlignment(Pos.CENTER);
+		tListViewProgressIndicator = new TProgressIndicator(tListViewPane);
+		tListViewProgressIndicator.setSmallLogo();
 		
 		if(paginator!=null){
 			if(paginator.show()) {
@@ -79,7 +83,7 @@ public class TListViewHelper<M extends TEntityModelView<? extends ITEntity>>{
 				
 				tPaginatorAccordion = new Accordion();
 				tPaginatorAccordion.autosize();
-				
+				//tPaginatorAccordion.getStyleClass().add("t-accordion");
 				TitledPane tp = new TitledPane(TLanguage.getInstance().getString("#{tedros.fxapi.label.pagination}"), tPaginator);
 				tPaginatorAccordion.getPanes().add(tp);
 				tPaginator.maxWidthProperty().bind(listViewMaxWidth);

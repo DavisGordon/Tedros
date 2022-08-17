@@ -32,7 +32,6 @@ import org.tedros.fx.presenter.modal.decorator.TSelectionModalDecorator;
 import org.tedros.fx.presenter.model.TEntityModelView;
 
 import javafx.beans.Observable;
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.layout.Priority;
 
@@ -56,8 +55,6 @@ import javafx.scene.layout.Priority;
 						@TTableColumn(cellValue="typeDescription", text = "#{label.permission}",  resizable=true)}), 
 		allowsMultipleSelections = true)
 public final class TAuthorizationTV extends TEntityModelView<TAuthorization> {
-	
-	private SimpleLongProperty id;
 	
 	private SimpleStringProperty displayText;
 	
@@ -139,27 +136,12 @@ public final class TAuthorizationTV extends TEntityModelView<TAuthorization> {
 		return p;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.presenter.model.TModelView#setId(javafx.beans.property.SimpleLongProperty)
-	 */
-	@Override
-	public void setId(SimpleLongProperty id) {
-		this.id = id;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.presenter.model.TModelView#getId()
-	 */
-	@Override
-	public SimpleLongProperty getId() {
-		return id;
-	}
-
+	
 	/* (non-Javadoc)
 	 * @see com.tedros.fxapi.presenter.model.TModelView#getDisplayProperty()
 	 */
 	@Override
-	public SimpleStringProperty getDisplayProperty() {
+	public SimpleStringProperty toStringProperty() {
 		return this.displayText;
 	}
 
@@ -178,11 +160,9 @@ public final class TAuthorizationTV extends TEntityModelView<TAuthorization> {
 		return moduleName;
 	}
 
-
 	public void setModuleName(SimpleStringProperty moduleName) {
 		this.moduleName = moduleName;
 	}
-
 
 	public SimpleStringProperty getType() {
 		return type;

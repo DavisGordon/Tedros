@@ -3,7 +3,6 @@
  */
 package org.tedros.tools.module.scheme.model;
 
-import org.tedros.core.TLanguage;
 import org.tedros.core.style.TStyleResourceValue;
 import org.tedros.fx.annotation.control.TColorPickerField;
 import org.tedros.fx.annotation.control.TLabel;
@@ -16,6 +15,8 @@ import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.process.TModelProcess;
+import org.tedros.fx.annotation.property.TObservableListProperty;
+import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TControl;
 import org.tedros.fx.domain.TLabelPosition;
 import org.tedros.fx.domain.TViewMode;
@@ -28,7 +29,6 @@ import org.tedros.tools.module.scheme.process.TMainColorProcess;
 import org.tedros.tools.module.scheme.trigger.TMainColorTrigger;
 
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.paint.Color;
@@ -44,9 +44,10 @@ decorator=@TDecorator(type=TMainColorDecorator.class, viewTitle=ToolsKey.VIEW_TH
 behavior=@TBehavior(type=TMainColorBehavior.class))
 public class TMainColorMV extends TEntityModelView<TMainColor> {
 
-	private SimpleLongProperty id;
+	private SimpleStringProperty display;
 	
-	@TAccordion(
+	@TAccordion(node=@TNode(parse = true, 
+			styleClass=@TObservableListProperty(addAll="t-accordion", parse=true)),
 			panes={
 					@TTitledPane(text=ToolsKey.MAIN_TITLE, fields={"mainCorTexto", "mainCorFundo","mainOpacidade"}),
 					@TTitledPane(text=ToolsKey.NAV_TITLE, fields={"navCorTexto", "navCorFundo","navOpacidade"}),
@@ -105,6 +106,8 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 	
 	public TMainColorMV(TMainColor entity) {
 		super(entity);
+		this.display.setValue("#{label.style}");
+		super.formatToString("%s", display);
 	}
 	
 	public void loadSavedValues() {
@@ -133,19 +136,6 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 		
 	}
 
-	/**
-	 * @return the id
-	 */
-	public SimpleLongProperty getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(SimpleLongProperty id) {
-		this.id = id;
-	}
 
 	/**
 	 * @return the mainCorTexto
@@ -232,13 +222,6 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 	}
 
 
-
-	@Override
-	public SimpleStringProperty getDisplayProperty() {
-		String s = TLanguage.getInstance(null).getString("#{label.style}");
-		return new SimpleStringProperty(s);
-	}
-
 	/**
 	 * @return the appCorTexto
 	 */
@@ -265,6 +248,20 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 	 */
 	public void setAppTamTexto(SimpleDoubleProperty appTamTexto) {
 		this.appTamTexto = appTamTexto;
+	}
+
+	/**
+	 * @return the display
+	 */
+	public SimpleStringProperty getDisplay() {
+		return display;
+	}
+
+	/**
+	 * @param display the display to set
+	 */
+	public void setDisplay(SimpleStringProperty display) {
+		this.display = display;
 	}
 
 }

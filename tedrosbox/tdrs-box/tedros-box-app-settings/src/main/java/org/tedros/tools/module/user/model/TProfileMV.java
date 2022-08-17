@@ -36,7 +36,6 @@ import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.tools.ToolsKey;
 import org.tedros.tools.module.user.table.TAuthorizationTV;
 
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.text.TextAlignment;
@@ -58,8 +57,6 @@ import javafx.scene.text.TextAlignment;
 			allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 			   					TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public final class TProfileMV extends TEntityModelView<TProfile> {
-	
-	private SimpleLongProperty id;
 	
 	@TTabPane(tabs = { 
 			@TTab(closable=false, scroll=false, content = @TContent(detailForm=
@@ -111,26 +108,10 @@ public final class TProfileMV extends TEntityModelView<TProfile> {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.presenter.model.TModelView#setId(javafx.beans.property.SimpleLongProperty)
+	 * @see com.tedros.fxapi.presenter.model.TModelView#toStringProperty()
 	 */
 	@Override
-	public void setId(SimpleLongProperty id) {
-		this.id = id;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.presenter.model.TModelView#getId()
-	 */
-	@Override
-	public SimpleLongProperty getId() {
-		return id;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.presenter.model.TModelView#getDisplayProperty()
-	 */
-	@Override
-	public SimpleStringProperty getDisplayProperty() {
+	public SimpleStringProperty toStringProperty() {
 		return name;
 	}
 

@@ -34,10 +34,8 @@ import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.login.behavior.LoginBehavior;
 import org.tedros.login.decorator.LoginDecorator;
-
 import org.tedros.tools.module.user.model.TProfileMV;
 
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
@@ -52,7 +50,6 @@ import javafx.scene.text.TextAlignment;
 @TEntityProcess(entity=TUser.class, process=TLoginProcess.class)
 public class LoginModelView extends TModelView<Login> {
 	
-	private SimpleLongProperty id;
 	@TTabPane(tabs = { 
 			@TTab(closable=false, scroll=false, content = @TContent(detailForm=
 				@TDetailForm(fields={"title", "name", "user", "profileText","profile"})), 
@@ -156,17 +153,7 @@ public class LoginModelView extends TModelView<Login> {
 	}
 
 	@Override
-	public void setId(SimpleLongProperty id) {
-		this.id = id;
-	}
-
-	@Override
-	public SimpleLongProperty getId() {
-		return id;
-	}
-
-	@Override
-	public SimpleStringProperty getDisplayProperty() {
+	public SimpleStringProperty toStringProperty() {
 		return user;
 	}
 	

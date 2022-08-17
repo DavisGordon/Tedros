@@ -104,7 +104,7 @@ implements ITReaderBuilder<TTextReader, Property> {
 				return new TStringReader("");
 			
 			if(objectValue instanceof TModelView){
-				return new TStringReader(((TModelView)objectValue).getDisplayProperty().getValue());
+				return new TStringReader(((TModelView)objectValue).toStringProperty().getValue());
 			}
 			
 			if(objectValue instanceof Number){

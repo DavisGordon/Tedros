@@ -14,10 +14,12 @@ import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.fx.presenter.paginator.TPaginator;
 import org.tedros.server.entity.ITEntity;
 
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class TMasterCrudViewDecorator<M extends TEntityModelView<? extends ITEntity>> 
@@ -114,7 +116,8 @@ extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M> {
 	}
 
 	protected void configFormSpace() {
-		addItemInTCenterContent(getPresenter().getView().gettFormSpace());
+		addItemInTCenterContent(getView().gettFormSpace());
+		StackPane.setMargin(getPresenter().getView().gettFormSpace(), new Insets(0,0,0,3));
 	}
 	
     /* (non-Javadoc)

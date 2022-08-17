@@ -159,19 +159,6 @@ public class ExampleMV extends TEntityModelView<Example> {
 		this.booleanField = booleanField;
 	}
 
-	@Override
-	public SimpleStringProperty getDisplayProperty() {
-		return null;
-	}
-
-	public final SimpleLongProperty getId() {
-		return id;
-	}
-
-	public final void setId(SimpleLongProperty id) {
-		this.id = id;
-	}
-
 	public SimpleStringProperty getText() {
 		return text;
 	}
