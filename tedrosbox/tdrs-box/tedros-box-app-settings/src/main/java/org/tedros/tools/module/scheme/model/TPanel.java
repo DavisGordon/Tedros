@@ -20,6 +20,8 @@ import javafx.scene.paint.Color;
  */
 public class TPanel implements ITModel {
 	
+	private static final long serialVersionUID = 1L;
+
 	private String modo;
 	
 	private Color painelCorTexto;

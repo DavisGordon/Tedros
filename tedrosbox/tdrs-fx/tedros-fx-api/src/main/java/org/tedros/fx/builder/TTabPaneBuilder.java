@@ -20,7 +20,10 @@ import org.tedros.fx.form.TControlLayoutReaderBuilder;
 import org.tedros.fx.html.THtmlLayoutGenerator;
 import org.tedros.fx.reader.THtmlReader;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
 
 
@@ -38,7 +41,15 @@ implements ITLayoutBuilder<TabPane> {
 	
 	public TabPane build(final Annotation annotation) throws Exception {
 		final TabPane tabPane = new TabPane();
-		tabPane.autosize();
+		tabPane.sceneProperty().addListener(new ChangeListener<Scene>(){
+			@Override
+			public void changed(ObservableValue<? extends Scene> arg0, Scene arg1, Scene ne) {
+				if(ne!=null) {
+					tabPane.sceneProperty().removeListener(this);
+					tabPane.layout();
+				}
+			}
+		});
 		callParser(annotation, tabPane);
 		return tabPane;
 	}

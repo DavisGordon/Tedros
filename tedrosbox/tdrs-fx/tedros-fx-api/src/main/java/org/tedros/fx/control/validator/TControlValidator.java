@@ -67,9 +67,9 @@ public final class TControlValidator<E extends ITModelView> {
 		for (E tModelView : modelsView) {
 			if(tModelView==null)
 				continue;
-			List<TFieldDescriptor> fiels = TReflectionUtil.getFieldDescriptorList(tModelView);
+			List<TFieldDescriptor> l = TReflectionUtil.getFieldDescriptorList(tModelView);
 			TValidatorResult<E> result = new TValidatorResult(tModelView);
-			for (TFieldDescriptor fd : fiels){
+			for (TFieldDescriptor fd : l){
 				if(TReflectionUtil.isIgnoreField(fd))
 					continue;
 				validateField(result, fd, tModelView);
@@ -81,23 +81,29 @@ public final class TControlValidator<E extends ITModelView> {
 	
 	@SuppressWarnings({"unchecked"})
 	private void validateField(final TValidatorResult<E> result, final TFieldDescriptor tFieldDescriptor, final E modelView) throws Exception {
-	
+		
 		final String fieldName = tFieldDescriptor.getFieldName();
-		final Method propertyGetMethod = modelView.getClass().getMethod(GET+StringUtils.capitalize(fieldName));
-		
-		String label = "";
-		
-		for (final Annotation annotation : (List<Annotation>) tFieldDescriptor.getAnnotations()) {
-			if (annotation instanceof TLabel){
-				TLabel tAnnotation = (TLabel) annotation;
-				label = tAnnotation.text();
-				continue;
+		Method propertyGetMethod = null;
+		try {
+			propertyGetMethod = modelView.getClass().getMethod(GET+StringUtils.capitalize(fieldName));
+		}catch(Exception e) {
+			return;
+		}
+		StringBuilder label = new StringBuilder("");
+		List<Annotation> lAnn = (List<Annotation>) tFieldDescriptor.getAnnotations();
+		lAnn.stream()
+		.forEach(a->{
+			if(a instanceof TLabel) {
+				TLabel l = (TLabel) a;
+				label.append(l.text());
 			}
+		});
+		for (final Annotation annotation : (List<Annotation>) tFieldDescriptor.getAnnotations()) {
 			
 			if(annotation instanceof TValidator){
 				
 				Object value = propertyGetMethod.invoke(modelView);
-				validateRequiredField(label, value, result, annotation);
+				validateRequiredField(label.toString(), value, result, annotation);
 				
 				TValidator tAnnotation = (TValidator) annotation;
 				org.tedros.fx.control.validator.TValidator validator = tAnnotation.validatorClass()
@@ -119,7 +125,6 @@ public final class TControlValidator<E extends ITModelView> {
 			}
 			
 			if (annotation instanceof TModelViewType && ((TModelViewType)annotation).modelViewClass()!=TModelView.class){
-				//final TDetailView tAnnotation = (TDetailView) annotation;
 				final TControlValidator validator = new TControlValidator();
 				List<ITModelView> lst = null;
 				List<TValidatorResult> results = null;
@@ -139,21 +144,10 @@ public final class TControlValidator<E extends ITModelView> {
 						list.add(tValidatorResult);
 				
 				continue;
-				
-				/*TODO: TESTAR E ARRANCAR
-				if(tAnnotation.propertyType() == ObservableList.class){
-					lst = ((ObservableList) propertyGetMethod.invoke(modelView));
-					results = (List<TValidatorResult>) validator.validate(lst);
-					if(results.size()>0)
-						for (TValidatorResult tValidatorResult : results) 
-							list.add(tValidatorResult);
-				}
-				continue;
-				*/
 			}
 		
 			Object value = propertyGetMethod.invoke(modelView);
-			validateRequiredField(label, value, result, annotation);
+			validateRequiredField(label.toString(), value, result, annotation);
 		}
 		
 	}

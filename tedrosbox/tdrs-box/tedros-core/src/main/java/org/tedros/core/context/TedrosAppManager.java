@@ -63,6 +63,7 @@ public final class TedrosAppManager extends TedrosAppLoader {
 		}
 	}
 	
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void loadInModule(Class<? extends ITModule> moduleClass, ITModelView modelView) {
 		Node v = (Node) TedrosContext.viewProperty().getValue();

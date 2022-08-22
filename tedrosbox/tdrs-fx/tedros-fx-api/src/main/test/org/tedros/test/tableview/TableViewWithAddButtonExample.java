@@ -1,4 +1,4 @@
-package com.tedros.test.tableview;
+package org.tedros.test.tableview;
 
 import javafx.application.Application;
 import javafx.beans.property.*;

@@ -49,6 +49,12 @@ public interface ITPresenter<V extends ITView> {
 	 * */
 	public void initialize();
 	
+
+	/**
+	 * Return true if this presenter can load the model view type
+	 * */
+	boolean canLoadModelView(Class<? extends ITModelView> modelViewClass);
+	
 	/**
 	 * Load the model view 
 	 * */
@@ -71,5 +77,6 @@ public interface ITPresenter<V extends ITView> {
 	public void setModule(ITModule module);
 
 	public String canInvalidate();
+
 	
 }

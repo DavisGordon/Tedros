@@ -266,6 +266,12 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 	
 
 	@Override
+    public boolean canLoadModelView(Class<? extends ITModelView> modelViewClasd) {
+    	return this.findItem(modelViewClasd)!=null;
+    }
+    
+
+	@Override
 	public <M extends ITModelView> void lookupAndLoadModelView(M modelView) {
 		ITGroupViewItem item = findItem(modelView.getClass());
 		if(item==null)

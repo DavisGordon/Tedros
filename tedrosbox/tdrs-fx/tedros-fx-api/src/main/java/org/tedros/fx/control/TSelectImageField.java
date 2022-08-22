@@ -173,7 +173,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 		text.settTextStyle(TTextStyle.LARGE);
 		
 		hbox = new HBox();
-		hbox.setId("t-header-box");
+		hbox.setId("t-group-header-box");
 		
 		viewBtn = new TButton();
 		viewBtn.setText(iEngine.getString("#{tedros.fxapi.button.view.selected}"));

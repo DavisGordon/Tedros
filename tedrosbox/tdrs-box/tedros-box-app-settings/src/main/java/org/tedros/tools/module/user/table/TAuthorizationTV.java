@@ -138,7 +138,7 @@ public final class TAuthorizationTV extends TEntityModelView<TAuthorization> {
 	
 	
 	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.presenter.model.TModelView#getDisplayProperty()
+	 * @see org.tedros.fx.presenter.model.TModelView#getDisplayProperty()
 	 */
 	@Override
 	public SimpleStringProperty toStringProperty() {

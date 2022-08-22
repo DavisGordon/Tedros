@@ -1,4 +1,4 @@
-package com.tedros.test.component.file;
+package org.tedros.test.component.file;
 
 import java.util.List;
 

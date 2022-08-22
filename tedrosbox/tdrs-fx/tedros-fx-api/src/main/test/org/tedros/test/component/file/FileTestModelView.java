@@ -1,4 +1,4 @@
-package com.tedros.test.component.file;
+package org.tedros.test.component.file;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -13,7 +13,6 @@ import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.fx.property.TSimpleFileProperty;
 import org.tedros.server.model.TFileModel;
 
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;

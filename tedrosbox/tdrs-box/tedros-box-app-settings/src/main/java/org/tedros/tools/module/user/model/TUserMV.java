@@ -131,7 +131,7 @@ public class TUserMV extends TEntityModelView<TUser> {
 			sourceLabel=ToolsKey.PROFILES, required=true,
 			optionsList=@TOptionsList(entityClass=TProfile.class,
 						optionModelViewClass=TProfileMV.class, serviceName = "TProfileControllerRemote"))
-	@TModelViewType(modelClass=TProfile.class, modelViewClass=TProfileMV.class, required=true)
+	@TModelViewType(modelClass=TProfile.class, modelViewClass=TProfileMV.class)
 	private ITObservableList<TProfileMV> profiles;
 	
 	private SimpleStringProperty lastPassword;
@@ -153,11 +153,11 @@ public class TUserMV extends TEntityModelView<TUser> {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.presenter.model.TModelView#setId(javafx.beans.property.SimpleLongProperty)
+	 * @see org.tedros.fx.presenter.model.TModelView#setId(javafx.beans.property.SimpleLongProperty)
 	 */
 
 	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.presenter.model.TModelView#toStringProperty()
+	 * @see org.tedros.fx.presenter.model.TModelView#toStringProperty()
 	 */
 	@Override
 	public SimpleStringProperty toStringProperty() {

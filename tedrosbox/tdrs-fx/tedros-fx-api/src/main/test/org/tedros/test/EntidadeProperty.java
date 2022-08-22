@@ -1,4 +1,4 @@
-package com.tedros.test;
+package org.tedros.test;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;

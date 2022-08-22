@@ -97,6 +97,7 @@ public final class TAppContext {
 						: null;
 	}
 	
+	
 	/**
 	 * Return the context of the loaded module
 	 * */

@@ -1,17 +1,18 @@
 package org.tedros.fx.util;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.core.model.ITModelView;
 import org.tedros.fx.annotation.TIgnoreField;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.builder.ITControlBuilder;
@@ -22,6 +23,7 @@ import org.tedros.fx.builder.ITReaderHtmlBuilder;
 import org.tedros.fx.builder.ITViewBuilder;
 import org.tedros.fx.descriptor.TFieldDescriptor;
 import org.tedros.fx.form.TConverter;
+import org.tedros.fx.presenter.model.TModelView;
 
 public final class TReflectionUtil {
 
@@ -391,10 +393,28 @@ public final class TReflectionUtil {
 	}
 	
 	
-	public static List<TFieldDescriptor> getFieldDescriptorList(Object model){
+	@SuppressWarnings("rawtypes")
+	public static List<TFieldDescriptor> getFieldDescriptorList(ITModelView model){
 		List<TFieldDescriptor> fieldsList = new ArrayList<>();
-		for (final Field field : model.getClass().getDeclaredFields())
-			fieldsList.add(new TFieldDescriptor(field));
+		List<String> k = new ArrayList<>();
+		Class target = ITModelView.class;
+		Class superClass = model.getClass();
+		
+		while(TReflectionUtil.isImplemented(superClass, target)){
+			if(!superClass.equals(TModelView.class)) {
+				Arrays.asList(superClass.getDeclaredFields()).stream()
+				.forEach(f->{
+					if(!k.contains(f.getName()))
+						try {
+							fieldsList.add(new TFieldDescriptor(f));
+							k.add(f.getName());
+						} catch (Throwable e) {
+							e.printStackTrace();
+						}
+				});
+			}
+			superClass = superClass.getSuperclass();
+		}
 		return fieldsList;
 	}
 	

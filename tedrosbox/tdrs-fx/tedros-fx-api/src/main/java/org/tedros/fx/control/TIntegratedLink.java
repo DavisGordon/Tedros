@@ -7,8 +7,8 @@ import org.tedros.core.TLanguage;
 import org.tedros.core.context.TReflections;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.model.ITModelView;
+import org.tedros.core.model.TModelViewUtil;
 import org.tedros.fx.presenter.model.TEntityModelView;
-import org.tedros.fx.util.TModelViewUtil;
 import org.tedros.fx.util.TReflectionUtil;
 
 import javafx.scene.Node;
