@@ -29,12 +29,4 @@ public @interface TModelViewType {
 	 * */
 	public Class<? extends ITModel> modelClass();
 	
-	/**
-	 * <pre>
-	 * Determines with this collection will be required.
-	 * 
-	 * Default value: false.
-	 * </pre>
-	 * */
-	public boolean required() default false;
 }

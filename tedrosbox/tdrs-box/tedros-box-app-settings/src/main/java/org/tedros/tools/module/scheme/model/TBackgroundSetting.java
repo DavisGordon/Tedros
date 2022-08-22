@@ -22,7 +22,7 @@ public class TBackgroundSetting extends TSetting {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.form.TSetting#run()
+	 * @see org.tedros.fx.form.TSetting#run()
 	 */
 	@Override
 	public void run() {

@@ -46,7 +46,7 @@ public class TMainColorBehavior extends TDynaViewCrudBaseBehavior<TMainColorMV, 
 	}
 	
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes"})
 	@Override
 	protected void runAfterBuildForm(ITModelForm form) {
 		

@@ -89,7 +89,7 @@ public class TUserSettingModelView extends TEntityModelView<TUser> {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.presenter.model.TModelView#toStringProperty()
+	 * @see org.tedros.fx.presenter.model.TModelView#toStringProperty()
 	 */
 	@Override
 	public SimpleStringProperty toStringProperty() {

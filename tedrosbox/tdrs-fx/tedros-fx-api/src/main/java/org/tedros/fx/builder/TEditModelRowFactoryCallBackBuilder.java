@@ -20,7 +20,6 @@ import org.tedros.fx.control.TButton;
 import org.tedros.fx.control.TLabel;
 import org.tedros.fx.modal.TModalPane;
 import org.tedros.fx.presenter.model.TModelView;
-import org.tedros.server.model.ITReportItemModel;
 
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableRow;
@@ -32,9 +31,7 @@ import javafx.scene.layout.VBox;
  * @author Davis Gordon
  *
  */
-@SuppressWarnings("rawtypes")
-public class TReportRowFactoryCallBackBuilder<M extends TModelView<? extends ITReportItemModel>> 
-extends TContextMenuRowFactoryCallBackBuilder<M> {
+public class TEditModelRowFactoryCallBackBuilder<M extends TModelView<?>> extends TContextMenuRowFactoryCallBackBuilder<M> {
 
 	@Override
 	List<MenuItem> getMenuItems(TableView<M> table, TableRow<M> row) {
@@ -44,7 +41,7 @@ extends TContextMenuRowFactoryCallBackBuilder<M> {
 			M mv = row.getItem();
 			
 			List<TLoader> l = TedrosModuleLoader.getInstance()
-			.getLoader(mv.getModel().getModel());
+			.getLoader(mv.getModel());
 			if(l.isEmpty()) {
 				TLog.severe(()->{return "The class "+mv.getClass().getSimpleName()
 						+" must be setting as loadable, see "+TLoadable.class.getSimpleName();});

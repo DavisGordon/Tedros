@@ -45,7 +45,7 @@ public class TAuthorizationLoadAction extends TPresenterAction {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.control.action.TPresenterAction#runBefore()
+	 * @see org.tedros.fx.control.action.TPresenterAction#runBefore()
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
@@ -151,7 +151,7 @@ public class TAuthorizationLoadAction extends TPresenterAction {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.tedros.fxapi.control.action.TPresenterAction#runAfter()
+	 * @see org.tedros.fx.control.action.TPresenterAction#runAfter()
 	 */
 	@Override
 	public void runAfter() {

@@ -4,13 +4,12 @@
  * TODOS OS DIREITOS RESERVADOS
  * 26/02/2014
  */
-package org.tedros.fx.util;
+package org.tedros.core.model;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.tedros.core.model.ITModelView;
 import org.tedros.server.model.ITModel;
 
 /**

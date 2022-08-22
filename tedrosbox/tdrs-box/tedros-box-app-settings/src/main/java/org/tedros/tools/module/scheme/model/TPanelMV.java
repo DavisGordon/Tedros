@@ -209,7 +209,8 @@ public class TPanelMV extends TModelView<TPanel> {
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
-	@TFieldSet(fields = { "readerCorTituloCampo", "readerTamTituloCampo" }, legend = "#{label.title}", layoutType=TLayoutType.VBOX)
+	@TFieldSet(fields = { "readerCorTituloCampo", "readerTamTituloCampo" }, 
+	legend = "#{label.title}", layoutType=TLayoutType.VBOX)
 	private SimpleObjectProperty<Color> readerCorTituloCampo;
 	
 	@TLabel(text=ToolsKey.FONT)
@@ -226,7 +227,8 @@ public class TPanelMV extends TModelView<TPanel> {
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
-	@TFieldSet(fields = { "readerCorTexto", "readerTamTexto" }, legend = ToolsKey.TEXT, layoutType=TLayoutType.VBOX)
+	@TFieldSet(fields = { "readerCorTexto", "readerTamTexto" }, 
+	legend = ToolsKey.TEXT, layoutType=TLayoutType.VBOX)
 	private SimpleObjectProperty<Color> readerCorTexto;
 	
 	@TLabel(text=ToolsKey.FONT)
@@ -242,7 +244,8 @@ public class TPanelMV extends TModelView<TPanel> {
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
-	@TFieldSet(fields = { "readerCorFundo", "readerOpacidade" }, legend = ToolsKey.BACKGROUND, layoutType=TLayoutType.VBOX)
+	@TFieldSet(fields = { "readerCorFundo", "readerOpacidade" }, 
+	legend = ToolsKey.BACKGROUND, layoutType=TLayoutType.VBOX)
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> readerCorFundo;
 	

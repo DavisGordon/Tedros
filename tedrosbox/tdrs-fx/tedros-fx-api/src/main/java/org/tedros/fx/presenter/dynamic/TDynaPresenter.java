@@ -321,4 +321,9 @@ public class TDynaPresenter<M extends TModelView> extends TPresenter<ITDynaView<
 		}
 		
 	}
+
+	@Override
+	public boolean canLoadModelView(Class<? extends ITModelView> modelViewClass) {
+		return this.modelViewClass == modelViewClass;
+	}
 }

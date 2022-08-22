@@ -4,7 +4,7 @@
  * TODOS OS DIREITOS RESERVADOS
  * 30/01/2014
  */
-package com.tedros.test;
+package org.tedros.test;
 
 import java.io.File;
 import java.net.MalformedURLException;

@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
 import org.tedros.core.model.ITModelView;
+import org.tedros.core.model.TModelViewUtil;
 import org.tedros.fx.annotation.reader.TDetailReader;
 import org.tedros.fx.annotation.reader.TDetailReaderHtml;
 import org.tedros.fx.collections.ITObservableList;
@@ -21,7 +22,6 @@ import org.tedros.fx.form.TDefaultForm;
 import org.tedros.fx.form.TReaderFormBuilder;
 import org.tedros.fx.html.THtmlLayoutGenerator;
 import org.tedros.fx.reader.THtmlReader;
-import org.tedros.fx.util.TModelViewUtil;
 import org.tedros.server.entity.ITEntity;
 import org.tedros.server.entity.TEntity;
 

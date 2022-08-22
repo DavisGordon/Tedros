@@ -49,6 +49,7 @@ public final class TModuleDescriptor implements Comparable<TModuleDescriptor> {
 		this.securityDescriptor = securityDescriptor;
 	}
 	
+	
 	public final String getApplicationName() {
 		return iEngine.getString(applicationName);
 	}

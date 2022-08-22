@@ -54,7 +54,7 @@ public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
 			    	scroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 			    }
 				scroll.setId("t-tab-content");
-				scroll.layout();
+				//scroll.layout();
 				
 				tab.setContent(scroll);
 			}

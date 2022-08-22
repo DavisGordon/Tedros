@@ -4,7 +4,7 @@
  * TODOS OS DIREITOS RESERVADOS
  * 09/11/2013
  */
-package com.tedros.test;
+package org.tedros.test;
 
 
 import java.io.File;

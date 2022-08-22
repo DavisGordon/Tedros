@@ -8,7 +8,7 @@ import java.util.logging.LogRecord;
 /**
  * A Logger formatter
  * */
-public class TLoggerFormatter extends Formatter{
+class TLoggerFormatter extends Formatter{
 	
 	private static final String SEPARATOR = " ";
 	private static final String PIPE = "|";

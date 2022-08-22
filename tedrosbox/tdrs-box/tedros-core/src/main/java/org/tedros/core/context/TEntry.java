@@ -44,7 +44,7 @@ public class TEntry<T> extends HashMap<String, T> {
 	@Override
 	public boolean equals(Object obj) {
 		
-		if(obj==null)
+		if(!(obj instanceof TEntry))
 			return false;
 		
 		TEntry<T> item = (TEntry<T>) obj;

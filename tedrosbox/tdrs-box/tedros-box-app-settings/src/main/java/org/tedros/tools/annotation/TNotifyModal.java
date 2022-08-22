@@ -28,7 +28,7 @@ import javafx.scene.layout.VBox;
 
 /**
  * <pre>
- * Build a {@link com.tedros.fxapi.control.TEditEntitynModal} component.
+ * Build a {@link org.tedros.fx.control.TEditEntitynModal} component.
  * 
  * This component opens a modal that allows a user to edit items. 
  * 
