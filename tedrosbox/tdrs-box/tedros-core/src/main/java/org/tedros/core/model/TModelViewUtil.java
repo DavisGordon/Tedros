@@ -6,7 +6,6 @@
  */
 package org.tedros.core.model;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,10 +44,9 @@ public final class TModelViewUtil<M extends ITModelView<?>, E extends ITModel> {
 			try {
 				modelView = (M) modelViewClass.getConstructor(modelClass).newInstance(model);
 				result.add(modelView);
-			} catch (InstantiationException | IllegalAccessException
-					| IllegalArgumentException | InvocationTargetException
-					| NoSuchMethodException | SecurityException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 		}
 		return result;
@@ -59,20 +57,17 @@ public final class TModelViewUtil<M extends ITModelView<?>, E extends ITModel> {
 		M modelView = null;
 		try {
 			modelView = (M) modelViewClass.getConstructor(modelClass).newInstance(model);
-		} catch (InstantiationException | IllegalAccessException
-				| IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e) {
+			return modelView;
+		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
-		return modelView;
 	}
 
 	public static <T> T buildModelView(Class<T> modelViewClass, Class<? extends ITModel> modelClass){
 		try {
 			return modelViewClass.getConstructor(modelClass).newInstance(modelClass.newInstance());
-		} catch (InstantiationException | IllegalAccessException
-				| IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}

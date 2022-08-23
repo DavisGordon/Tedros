@@ -23,25 +23,25 @@ import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.context.TedroxBoxHeaderButton;
 import org.tedros.core.control.PopOver;
+import org.tedros.core.control.PopOver.ArrowLocation;
 import org.tedros.core.control.TedrosBoxBreadcrumbBar;
 import org.tedros.core.control.TedrosBoxResizeBar;
-import org.tedros.core.control.PopOver.ArrowLocation;
 import org.tedros.core.logging.TLoggerManager;
 import org.tedros.core.style.TThemeUtil;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.control.TLabel;
 import org.tedros.fx.layout.TSliderMenu;
 import org.tedros.fx.modal.TConfirmMessageBox;
+import org.tedros.fx.modal.TMessageBox;
 import org.tedros.fx.modal.TModalPane;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
 import org.tedros.login.model.LoginModelView;
+import org.tedros.tools.logged.user.TMainSettingsPane;
+import org.tedros.tools.logged.user.TUserSettingsPane;
 import org.tedros.util.TFileUtil;
 import org.tedros.util.TZipUtil;
 import org.tedros.util.TedrosFolder;
-
-import org.tedros.tools.logged.user.TMainSettingsPane;
-import org.tedros.tools.logged.user.TUserSettingsPane;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
@@ -52,6 +52,7 @@ import javafx.application.Application;
 import javafx.application.ConditionalFeature;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.ListChangeListener.Change;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -455,7 +456,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
         modalMessage.setId("t-modal-dimmer");
         modalMessage.setOnMouseClicked(e-> {
         	e.consume();
-            TedrosContext.hideMessage();
+            TedrosContext.messageListProperty().clear();
         });
         modalMessage.setVisible(false);
         layerPane.getChildren().add(modalMessage);
@@ -475,12 +476,18 @@ public class TedrosBox extends Application implements ITedrosBox  {
 				goToPage(n, TedrosContext.isPageForce());
 		});
         // configura listener para exibir mensagens
-        TedrosContext.showModalMessageProperty()
-        .addListener((a,o,n)->{
-			if(n) {
+        TedrosContext.messageListProperty()
+        .addListener((Change c)->{
+			if(!c.getList().isEmpty()) {
 				imgLogo.opacityProperty().removeListener(effectChl);
 				logoEffect.play();
-				showModalMessage(TedrosContext.getMessage());
+				TMessageBox box = new TMessageBox();
+				box.setAlignment(Pos.CENTER);
+				box.setPrefHeight(400);
+				box.setMinHeight(400);
+				box.setMaxHeight(400);
+				box.tAddMessages(c.getList());
+				showModalMessage(box);
 			}else {
 				hideModalMessage();
 				imgLogo.opacityProperty().addListener(effectChl);
@@ -512,7 +519,6 @@ public class TedrosBox extends Application implements ITedrosBox  {
         getStage().setScene(scene);
         getStage().show();
         windowButtons.toogleMaximized();
-        TedrosContext.showContextInitializationErrorMessage();
         TedrosContext.showModal(buildLogin());
         
     }
@@ -838,8 +844,9 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		forwardHistory.clear();
 	}
 
-	public void showModalMessage(Node message) {
-        modalMessage.getChildren().add(message);
+	public void showModalMessage(Node node) {
+        modalMessage.getChildren().add(node);
+        StackPane.setAlignment(node, Pos.CENTER);
         modalMessage.setOpacity(0);
         modalMessage.setVisible(true);
         modalMessage.setCache(true);

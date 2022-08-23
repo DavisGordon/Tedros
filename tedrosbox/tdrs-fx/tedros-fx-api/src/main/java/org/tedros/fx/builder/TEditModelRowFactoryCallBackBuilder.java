@@ -5,8 +5,8 @@ package org.tedros.fx.builder;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
-import org.tedros.core.ModalMessage;
 import org.tedros.core.TLanguage;
 import org.tedros.core.annotation.TLoadable;
 import org.tedros.core.context.TLoader;
@@ -14,11 +14,11 @@ import org.tedros.core.context.TModuleContext;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.context.TedrosModuleLoader;
-import org.tedros.core.logging.TLog;
+import org.tedros.core.message.TMessage;
+import org.tedros.core.message.TMessageType;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.control.TButton;
 import org.tedros.fx.control.TLabel;
-import org.tedros.fx.modal.TModalPane;
 import org.tedros.fx.presenter.model.TModelView;
 
 import javafx.scene.control.MenuItem;
@@ -33,6 +33,8 @@ import javafx.scene.layout.VBox;
  */
 public class TEditModelRowFactoryCallBackBuilder<M extends TModelView<?>> extends TContextMenuRowFactoryCallBackBuilder<M> {
 
+	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	
 	@Override
 	List<MenuItem> getMenuItems(TableView<M> table, TableRow<M> row) {
 		TLanguage iE = TLanguage.getInstance();
@@ -43,15 +45,15 @@ public class TEditModelRowFactoryCallBackBuilder<M extends TModelView<?>> extend
 			List<TLoader> l = TedrosModuleLoader.getInstance()
 			.getLoader(mv.getModel());
 			if(l.isEmpty()) {
-				TLog.severe(()->{return "The class "+mv.getClass().getSimpleName()
-						+" must be setting as loadable, see "+TLoadable.class.getSimpleName();});
-				TedrosContext.showMessage(new ModalMessage(iE.getString(TFxKey.MESSAGE_ERROR)));
+				LOGGER.severe("The class "+mv.getClass().getSimpleName()
+						+" must be setting as loadable, see "+TLoadable.class.getSimpleName());
+				TedrosContext.showMessage(new TMessage(TMessageType.ERROR, iE.getString(TFxKey.MESSAGE_ERROR)));
 			}else {
 				if(l.size()==1) {
 					TLoader r = l.get(0);
 					if(!r.isLoadable()) {
-						TLog.severe(()->{return r.getMessage();});
-						TedrosContext.showMessage(new ModalMessage(iE.getString(TFxKey.MESSAGE_ERROR)));
+						LOGGER.severe(r.getMessage());
+						TedrosContext.showMessage(new TMessage(TMessageType.ERROR, iE.getString(TFxKey.MESSAGE_ERROR)));
 					}else {
 						r.loadInModule();
 					}
@@ -59,7 +61,7 @@ public class TEditModelRowFactoryCallBackBuilder<M extends TModelView<?>> extend
 					VBox vb = new VBox(3);
 					for(TLoader r : l) {
 						if(!r.isLoadable()) {
-							TLog.severe(()->{return r.getMessage();});
+							LOGGER.severe(r.getMessage());
 						}else {
 							TModuleContext ctx = TedrosAppManager.getInstance()
 							.getModuleContext(r.getModuleType());
@@ -76,9 +78,9 @@ public class TEditModelRowFactoryCallBackBuilder<M extends TModelView<?>> extend
 					}
 					
 					if(vb.getChildren().isEmpty())
-						TedrosContext.showMessage(new ModalMessage(iE.getString(TFxKey.MESSAGE_ERROR)));
+						TedrosContext.showMessage(new TMessage(TMessageType.ERROR, iE.getString(TFxKey.MESSAGE_ERROR)));
 					else
-						TedrosContext.showModal(new TModalPane(vb));
+						TedrosContext.showModal(vb);
 				}
 				
 			}

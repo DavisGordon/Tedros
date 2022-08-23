@@ -1,4 +1,4 @@
-package org.tedros.fx.modal;
+package org.tedros.core.message;
 
 public enum TMessageType {
 
