@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.tedros.fx.modal;
+package org.tedros.core.message;
 
 /**
  * @author Davis Gordon

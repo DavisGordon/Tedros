@@ -11,15 +11,15 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.annotation.security.TAuthorizationType;
+import org.tedros.core.message.TMessage;
+import org.tedros.core.message.TMessageType;
 import org.tedros.core.model.ITModelView;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
 import org.tedros.fx.annotation.view.TPaginator;
 import org.tedros.fx.control.action.TPresenterAction;
 import org.tedros.fx.exception.TException;
-import org.tedros.fx.modal.TMessage;
 import org.tedros.fx.modal.TMessageBox;
-import org.tedros.fx.modal.TMessageType;
 import org.tedros.fx.presenter.behavior.TActionType;
 import org.tedros.fx.presenter.decorator.ITListViewDecorator;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;

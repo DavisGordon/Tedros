@@ -3,9 +3,13 @@ package org.tedros.fx.modal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.core.message.TMessage;
+import org.tedros.core.message.TMessageType;
 import org.tedros.core.model.ITModelView;
+import org.tedros.fx.control.TButton;
 import org.tedros.fx.control.TText;
 import org.tedros.fx.control.TText.TTextStyle;
 import org.tedros.fx.control.validator.TFieldResult;
@@ -13,6 +17,7 @@ import org.tedros.fx.control.validator.TValidatorResult;
 import org.tedros.fx.exception.TValidatorException;
 
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
@@ -143,15 +148,23 @@ public class TMessageBox extends StackPane {
 		this.tAddMessage(error, TMessageType.ERROR);
 	}
 
-	public void tAddMessage(String string, TMessageType type) {
-		TText text = new TText(string);
-		text.settTextStyle(TTextStyle.LARGE);
-		text.setWrappingWidth(this.getMaxWidth()-100);
-		
-		HBox box = new HBox(8);
+	public void tAddMessage(String msg, String buttonText, Consumer<ActionEvent> buttonAction) {
+		TText text = buildText(msg);
+		HBox box = buildPane();
 		HBox.setHgrow(text, Priority.ALWAYS);
-		box.setAlignment(Pos.CENTER);
-		box.setId("t-fieldbox-message");
+		TButton btn = new TButton(buttonText);
+		btn.setOnAction(ev->{
+			buttonAction.accept(ev);
+		});
+		box.getChildren().addAll(text, btn);
+			
+		msgListPane.getChildren().add(box);
+	}
+	
+	public void tAddMessage(String string, TMessageType type) {
+		TText text = buildText(string);
+		HBox box = buildPane();
+		HBox.setHgrow(text, Priority.ALWAYS);
 		if(type==null || type.equals(TMessageType.GENERIC)) 
 			box.getChildren().addAll(text);
 		else {
@@ -163,6 +176,28 @@ public class TMessageBox extends StackPane {
 		}
 		
 		msgListPane.getChildren().add(box);
+	}
+
+	/**
+	 * @param text
+	 * @return
+	 */
+	private HBox buildPane() {
+		HBox box = new HBox(8);
+		box.setAlignment(Pos.CENTER);
+		box.setId("t-fieldbox-message");
+		return box;
+	}
+
+	/**
+	 * @param string
+	 * @return
+	 */
+	private TText buildText(String string) {
+		TText text = new TText(string);
+		text.settTextStyle(TTextStyle.LARGE);
+		text.setWrappingWidth(this.getMaxWidth()-100);
+		return text;
 	}
 	
 	public VBox gettMessageVBox() {

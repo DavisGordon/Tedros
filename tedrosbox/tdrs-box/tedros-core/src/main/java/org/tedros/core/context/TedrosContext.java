@@ -19,7 +19,6 @@ import javax.naming.NamingException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.tedros.core.ITedrosBox;
-import org.tedros.core.ModalMessage;
 import org.tedros.core.TLanguage;
 import org.tedros.core.TModule;
 import org.tedros.core.annotation.TApplication;
@@ -27,6 +26,8 @@ import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.controller.ITLoginController;
 import org.tedros.core.controller.TPropertieController;
 import org.tedros.core.domain.TSystemPropertie;
+import org.tedros.core.message.TMessage;
+import org.tedros.core.message.TMessageType;
 import org.tedros.core.presenter.view.ITView;
 import org.tedros.core.security.model.TAuthorization;
 import org.tedros.core.security.model.TUser;
@@ -52,6 +53,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 
@@ -73,22 +76,22 @@ public final class TedrosContext {
 	private static final int MAX_TOTAL_PAGE_HISTORY = 10;
 	
 	private static TedrosClassLoader tedrosClassLoader;
+	
 	private static ObjectProperty<Page> pageProperty;
 	private static StringProperty pagePathProperty;
-	private static BooleanProperty showModalMessageProperty;
 	private static BooleanProperty showModalProperty;
 	private static BooleanProperty reloadStyleProperty;
 	private static StringProperty contextStringProperty;
 	private static IntegerProperty totalPageHistoryProperty;
 	private static StringProperty countryIso2Property;
 	private static StringProperty initializationErrorMessageStringProperty;
+	private static ObservableList<TMessage> messageListProperty;
 	
 	//private static Stage stage;
 	private static SimpleObjectProperty<Node> currentViewProperty;
 	
 	private static TUser loggedUser;
 	
-	private static ModalMessage MODAL_MESSAGE;
 	private static Node MODAL;
 	
 	//private static boolean collapseMenu;
@@ -134,21 +137,28 @@ public final class TedrosContext {
 		contextStringProperty = new SimpleStringProperty("");
 		
 		LOGGER.info("Starting context...");
-		updateMessage("Starting context...");
 
 		currentViewProperty = new SimpleObjectProperty<>();
 		pageProperty = new SimpleObjectProperty<Page>();
 		pagePathProperty = new SimpleStringProperty();
-		showModalProperty = new SimpleBooleanProperty();
-		showModalMessageProperty = new SimpleBooleanProperty();		
+		showModalProperty = new SimpleBooleanProperty();	
 		initializationErrorMessageStringProperty = new SimpleStringProperty("");
 		reloadStyleProperty = new SimpleBooleanProperty(true);
 		totalPageHistoryProperty = new SimpleIntegerProperty(DEFAULT_TOTAL_PAGE_HISTORY);
 		countryIso2Property = new SimpleStringProperty(DEFAULT_COUNTRY_ISO2);
-		MODAL_MESSAGE = new ModalMessage("");
+		messageListProperty = FXCollections.observableArrayList();
+		
+		initializationErrorMessageStringProperty.addListener((a,o,n)->{
+			if(showContextInitializationErrorMessages){
+				messageListProperty.add(new TMessage(TMessageType.ERROR, n));
+			}
+		});
+		
+		contextStringProperty.addListener((a,o,n)->{
+			messageListProperty.add(new TMessage(TMessageType.INFO, n));
+		});
 		
 		LOGGER.info("Context started!");
-		updateMessage("Context started!");
 		
 	}
 	
@@ -157,10 +167,6 @@ public final class TedrosContext {
 	 * */
 	private TedrosContext(){
 	}	
-	
-	private static void updateMessage(String message){
-		contextStringProperty.set(contextStringProperty.get() + sdf.format(Calendar.getInstance().getTime()) +" "+ message+"\n");
-	}
 	
 	protected static void updateInitializationErrorMessage(String message){
 		showContextInitializationErrorMessages = true;
@@ -357,29 +363,14 @@ public final class TedrosContext {
 	/**
 	 * Show a modal with the errors at context initialization.
 	 * */
-	public static void showContextInitializationErrorMessage(){
-		if(showContextInitializationErrorMessages){
-			MODAL_MESSAGE = new ModalMessage(initializationErrorMessageStringProperty.get());
-			showModalMessageProperty.set(true);
-		}
-	}
-	
-	/**
-	 * Show a modal with the context message.
-	 * */
-	public static void showContextMessage(){
-		MODAL_MESSAGE = new ModalMessage(contextStringProperty.get());
-		showModalMessageProperty.set(true);
-	}
 	
 	/**
 	 * Open a modal with the message.
 	 * 
 	 * @param modalMessage
 	 * */
-	public static void showMessage(ModalMessage modalMessage){
-		MODAL_MESSAGE = modalMessage;
-		showModalMessageProperty.set(true);
+	public static void showMessage(TMessage... message){
+		messageListProperty.addAll(message);
 	}
 	
 	/**
@@ -404,21 +395,6 @@ public final class TedrosContext {
 			((TModule)MODAL).tStop();
 		MODAL = null;
 		showModalProperty.set(false);
-	}
-	
-	/**
-	 * Hide the opened modal with message.
-	 * */
-	public static void hideMessage(){
-		showModalMessageProperty.set(false);
-		MODAL_MESSAGE = new ModalMessage("");
-	}
-	
-	/**
-	 * Return the {@link ModalMessage}
-	 * */
-	public static ModalMessage getMessage(){
-		return MODAL_MESSAGE;
 	}
 	
 	/**
@@ -483,10 +459,10 @@ public final class TedrosContext {
 	}
 	
 	/**
-	 * show modal message property to listen.
+	 * message list
 	 * */
-	public static ReadOnlyBooleanProperty showModalMessageProperty(){
-		return showModalMessageProperty;
+	public static ObservableList messageListProperty(){
+		return messageListProperty;
 	}
 	
 	/**
