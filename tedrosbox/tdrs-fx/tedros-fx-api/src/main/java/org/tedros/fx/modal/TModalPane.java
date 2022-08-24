@@ -1,5 +1,7 @@
 package org.tedros.fx.modal;
 
+import java.util.function.Consumer;
+
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -32,12 +34,41 @@ public class TModalPane extends StackPane {
 		setVisible(false);
 	}
 	
+
 	/**
-	 * Abre modal
+	 * Open the modal
 	 * */
-	public void showModal(Node message, boolean closeModalOnMouseClick) {
-		setEventToCloseModal(closeModalOnMouseClick);
-		getChildren().add(message);
+	public void showModal(Node node) {
+		this.showModal(node,  null);
+	}
+	
+	/**
+	 * Open the modal
+	 * */
+	public void showModal(Node node, boolean closeModalOnMouseClick) {
+		if(closeModalOnMouseClick)
+			this.showModal(node, ev->{
+				ev.consume();
+				this.hideModal();
+			});
+		else
+			this.showModal(node);
+	}
+	
+	/**
+	 * Open the modal and consume the closeAction on the mouse clicked event
+	 * this not hide the modal.
+	 * */
+	public void showModal(Node node, Consumer<MouseEvent> closeAction) {
+		
+		if(closeAction!=null)
+			setOnMouseClicked(ev->{
+				closeAction.accept(ev);
+	        });
+		else
+			setOnMouseClicked(null);
+		
+		getChildren().add(node);
         setOpacity(0);
         setVisible(true);
         setCache(true);
@@ -56,9 +87,10 @@ public class TModalPane extends StackPane {
 	 }
 	
 	/**
-	 * Fecha modal
+	 * Close the modal and clean it 
 	 * */
 	public void hideModal() {
+		
         setCache(true);
         Timeline tl = new Timeline();
         tl.getKeyFrames().add(
@@ -75,16 +107,5 @@ public class TModalPane extends StackPane {
         tl.play();
 	}
 	
-	private void setEventToCloseModal(boolean addEvent) {
-		if(addEvent)
-			setOnMouseClicked(new EventHandler<MouseEvent>() {
-	            public void handle(MouseEvent t) {
-	                t.consume();
-	                hideModal();
-	            }
-	        });
-		else
-			setOnMouseClicked(null);
-	}
 	
 }

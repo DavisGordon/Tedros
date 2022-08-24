@@ -44,17 +44,11 @@ import org.tedros.util.TZipUtil;
 import org.tedros.util.TedrosFolder;
 
 import javafx.animation.FadeTransition;
-import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.ConditionalFeature;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener.Change;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -125,7 +119,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     private boolean changingPage;
     private double mouseDragOffsetX;
     private double mouseDragOffsetY;
-    private StackPane modalMessage;
+    private TModalPane modalMessage;
     private TModalPane tModalPane;
     private Accordion settingsAcc;
     private Label appName;
@@ -451,17 +445,9 @@ public class TedrosBox extends Application implements ITedrosBox  {
        
         root.getChildren().addAll(windowResizeButton);
         
-     // create modal dimmer, to dim screen when showing modal dialogs
-        modalMessage = new StackPane();
-        modalMessage.setId("t-modal-dimmer");
-        modalMessage.setOnMouseClicked(e-> {
-        	e.consume();
-            TedrosContext.messageListProperty().clear();
-        });
-        modalMessage.setVisible(false);
-        layerPane.getChildren().add(modalMessage);
-        
-        tModalPane = new TModalPane(innerPane);
+        // sets a modal pane for messages and nodes
+        //modalMessage = new TModalPane(layerPane);
+        //tModalPane = new TModalPane(innerPane);
         
         // configura listener para exibir view
         TedrosContext.pageProperty()
@@ -483,14 +469,18 @@ public class TedrosBox extends Application implements ITedrosBox  {
 				logoEffect.play();
 				TMessageBox box = new TMessageBox();
 				box.setAlignment(Pos.CENTER);
-				box.setPrefHeight(400);
-				box.setMinHeight(400);
-				box.setMaxHeight(400);
 				box.tAddMessages(c.getList());
-				showModalMessage(box);
+				modalMessage = new TModalPane(layerPane);
+				modalMessage.showModal(box, ev->{
+					TedrosContext.messageListProperty().clear();
+				});
 			}else {
-				hideModalMessage();
-				imgLogo.opacityProperty().addListener(effectChl);
+				if(modalMessage!=null) {
+					modalMessage.hideModal();
+					layerPane.getChildren().remove(modalMessage);
+					modalMessage = null;
+					imgLogo.opacityProperty().addListener(effectChl);
+				}
 			}
 		});
         
@@ -500,11 +490,13 @@ public class TedrosBox extends Application implements ITedrosBox  {
 				imgLogo.opacityProperty().removeListener(effectChl);
 				logoEffect.play();
 				tModalPane = new TModalPane(innerPane);
-				tModalPane.showModal(TedrosContext.getModal(), false);
+				tModalPane.showModal(TedrosContext.getModal());
 			}else {
-				tModalPane.hideModal();
-				innerPane.getChildren().remove(tModalPane);
-				imgLogo.opacityProperty().addListener(effectChl);
+				if(tModalPane!=null) {
+					tModalPane.hideModal();
+					innerPane.getChildren().remove(tModalPane);
+					imgLogo.opacityProperty().addListener(effectChl);
+				}
 			}
 		});
         
@@ -844,45 +836,6 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		forwardHistory.clear();
 	}
 
-	public void showModalMessage(Node node) {
-        modalMessage.getChildren().add(node);
-        StackPane.setAlignment(node, Pos.CENTER);
-        modalMessage.setOpacity(0);
-        modalMessage.setVisible(true);
-        modalMessage.setCache(true);
-        Timeline tl = new Timeline();
-        tl.getKeyFrames().add(
-            new KeyFrame(Duration.millis(400), 
-                new EventHandler<ActionEvent>() {
-                    public void handle(ActionEvent t) {
-                        modalMessage.setCache(false);
-                    }
-                },
-                new KeyValue(modalMessage.opacityProperty(),1, Interpolator.EASE_BOTH)
-        ));
-        tl.play();
-    }
-    
-    /**
-     * Hide any modal message that is shown
-     */
-    public void hideModalMessage() {
-        modalMessage.setCache(true);
-        Timeline tl = new Timeline();
-        tl.getKeyFrames().add(
-            new KeyFrame(Duration.millis(400), 
-                new EventHandler<ActionEvent>() {
-                    public void handle(ActionEvent t) {
-                        modalMessage.setCache(false);
-                        modalMessage.setVisible(false);
-                        modalMessage.getChildren().clear();
-                    }
-                },
-                new KeyValue(modalMessage.opacityProperty(),0, Interpolator.EASE_BOTH)
-        ));
-        tl.play();
-    }
-    
     /**
      * Reload the current page
      */
