@@ -22,6 +22,7 @@ import org.tedros.fx.modal.TMessageBox;
 import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.server.model.ITReportItemModel;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -68,8 +69,9 @@ extends TContextMenuRowFactoryCallBackBuilder<M> {
 							.getModuleContext(r.getModuleType());
 							
 							if(box==null)
-								box = new TMessageBox();
-							
+								box = new TMessageBox(iE.getString(TFxKey.MESSAGE_CHOOSE_ONE), null);
+
+							box.setAlignment(Pos.CENTER);
 							String name = ctx.getModuleDescriptor().getModuleName();
 							String btn = iE.getString(TFxKey.BUTTON_OPEN);
 							box.tAddMessage(name, btn, ev->{

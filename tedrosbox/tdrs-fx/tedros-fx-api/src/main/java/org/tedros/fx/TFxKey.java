@@ -52,6 +52,7 @@ public interface TFxKey {
 	static final String TRUE = "#{tedros.fxapi.label.true}";
 	static final String MESSAGE_CANCEL = "#{tedros.fxapi.message.cancel}";
 	static final String MESSAGE_CANNOT_OPEN_FILE = "#{tedros.fxapi.message.cannot.open.file}";
+	static final String MESSAGE_CHOOSE_ONE = "#{tedros.fxapi.message.choose.one}";
 	static final String MESSAGE_DELETE = "#{tedros.fxapi.message.delete}";
 	static final String MESSAGE_ERROR = "#{tedros.fxapi.message.error}";
 	static final String MESSAGE_ERROR_SAVE = "#{tedros.fxapi.message.error.save}";
