@@ -1,4 +1,7 @@
-package org.tedros.fx.presenter.dynamic.view;
+package org.tedros.api.presenter.view;
+
+import org.tedros.api.presenter.ITPresenter;
+import org.tedros.core.model.ITModelView;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
@@ -7,12 +10,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-import org.tedros.core.presenter.view.ITView;
-import org.tedros.fx.presenter.dynamic.TDynaPresenter;
-import org.tedros.fx.presenter.model.TModelView;
-
 @SuppressWarnings("rawtypes")
-public interface ITDynaView<M extends TModelView>  extends ITView<TDynaPresenter<M>>{
+public interface ITDynaView<M extends ITModelView> {
 
 	public VBox gettLayout();
 

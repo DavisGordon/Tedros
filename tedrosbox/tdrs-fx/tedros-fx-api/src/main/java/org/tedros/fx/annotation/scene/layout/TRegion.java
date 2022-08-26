@@ -1,7 +1,7 @@
 package org.tedros.fx.annotation.scene.layout;
 
+import org.tedros.api.parser.ITAnnotationParser;
 import org.tedros.fx.annotation.TAnnotationDefaultValue;
-import org.tedros.fx.annotation.parser.ITAnnotationParser;
 import org.tedros.fx.annotation.parser.TRegionParser;
 import org.tedros.fx.annotation.scene.control.TInsets;
 import org.tedros.fx.annotation.scene.control.TSize;

@@ -10,13 +10,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.descriptor.ITComponentDescriptor;
+import org.tedros.api.form.ITModelForm;
 import org.tedros.core.model.ITModelView;
 import org.tedros.core.style.TStyleResourceValue;
 import org.tedros.fx.annotation.TCodeValue;
 import org.tedros.fx.annotation.reader.TReaderHtml;
-import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.domain.THtmlConstant;
-import org.tedros.fx.form.ITModelForm;
 import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.fx.reader.THtmlReader;
 import org.tedros.fx.util.TMaskUtil;
@@ -48,7 +48,7 @@ implements ITReaderHtmlBuilder<TReaderHtml, Property> {
 	@SuppressWarnings("unchecked")
 	public THtmlReader build(final TReaderHtml tAnnotation, Property property) throws Exception {
 		
-		final TComponentDescriptor descriptor = getComponentDescriptor();
+		final ITComponentDescriptor descriptor = getComponentDescriptor();
 		final ITModelView modelView = descriptor.getModelView();
 		final String fieldName = descriptor.getFieldDescriptor().getFieldName();
 		//final String uuid = UUID.randomUUID().toString();

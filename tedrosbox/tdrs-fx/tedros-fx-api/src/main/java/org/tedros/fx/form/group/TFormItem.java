@@ -1,7 +1,7 @@
 package org.tedros.fx.form.group;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.tedros.fx.form.ITForm;
+import org.tedros.api.form.ITForm;
 
 public class TFormItem {
 	

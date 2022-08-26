@@ -7,15 +7,14 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.descriptor.ITComponentDescriptor;
+import org.tedros.api.descriptor.ITFieldDescriptor;
+import org.tedros.api.form.ITFieldBox;
+import org.tedros.api.form.ITForm;
+import org.tedros.api.parser.ITAnnotationParser;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.model.ITModelView;
-import org.tedros.fx.annotation.control.TLabel;
-import org.tedros.fx.annotation.parser.ITAnnotationParser;
-import org.tedros.fx.domain.TViewMode;
-import org.tedros.fx.form.ITForm;
-import org.tedros.fx.form.TFieldBox;
 import org.tedros.fx.util.TReflectionUtil;
-
-import com.sun.javafx.collections.MappingChange.Map;
 
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.BooleanExpression;
@@ -35,17 +34,17 @@ import javafx.scene.Node;
  * @author Davis Gordon
  * */
 @SuppressWarnings("rawtypes")
-public class TComponentDescriptor {
+public class TComponentDescriptor implements ITComponentDescriptor {
 	
 	private final ITForm form;
 	private final ITModelView modelView;
 	private BooleanProperty loaded = new SimpleBooleanProperty(false);
-	private final List<TFieldDescriptor> fieldDescriptorList;
+	private final List<ITFieldDescriptor> fieldDescriptorList;
 	private final List<String> fieldsNameList;
 	private final List<Annotation> modelViewAnnotationList;
 	private final ObservableMap<String, Node> components;
-	private final java.util.Map<String, TFieldBox> fieldBoxMap;
-	private TFieldDescriptor fieldDescriptor;
+	private final java.util.Map<String, ITFieldBox> fieldBoxMap;
+	private ITFieldDescriptor fieldDescriptor;
 	private TViewMode mode;
 	private String annotationPropertyInExecution;
 	private Class<? extends ITAnnotationParser> parserClassInExecution;
@@ -68,7 +67,7 @@ public class TComponentDescriptor {
 			loadFieldNameList(); 
 			
 			BooleanExpression be = null;
-			for (final TFieldDescriptor fd : fieldDescriptorList) {
+			for (final ITFieldDescriptor fd : fieldDescriptorList) {
 				if(fd.hasLayout() || fd.hasControl()) {
 					if(be==null)
 						be = BooleanBinding.booleanExpression(fd.loadedProperty());
@@ -88,7 +87,7 @@ public class TComponentDescriptor {
 	 * Used when one field need build another field.
 	 * </pre>
 	 * */
-	public TComponentDescriptor(TComponentDescriptor componentDescriptor, String fieldToBuild) {
+	public TComponentDescriptor(ITComponentDescriptor componentDescriptor, String fieldToBuild) {
 		this.form = componentDescriptor.getForm();
 		this.modelView = componentDescriptor.getModelView();
 		this.modelViewAnnotationList = componentDescriptor.getModelViewAnnotationList();
@@ -98,7 +97,7 @@ public class TComponentDescriptor {
 		this.mode = componentDescriptor.getMode();
 		this.fieldsNameList = componentDescriptor.getFieldNameList();
 		if(StringUtils.isNotBlank(fieldToBuild)){
-			for (final TFieldDescriptor fd : fieldDescriptorList) {
+			for (final ITFieldDescriptor fd : fieldDescriptorList) {
 				if(fd.getFieldName().equals(fieldToBuild)){
 					this.fieldDescriptor = fd;
 					break;
@@ -107,205 +106,170 @@ public class TComponentDescriptor {
 		}
 	}
 	
-	public  TFieldDescriptor getFieldDescriptor(String fieldName) {
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#getFieldDescriptor(java.lang.String)
+	 */
+	@Override
+	public  ITFieldDescriptor getFieldDescriptor(String fieldName) {
 		if(fieldName!=null)
-			for (final TFieldDescriptor fd : fieldDescriptorList) 
+			for (final ITFieldDescriptor fd : fieldDescriptorList) 
 				if(fd.getFieldName().equals(fieldName))
 					return fd;
 		
 		return null;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#isLoaded()
+	 */
+	@Override
 	public boolean isLoaded() {
 		return loaded.get();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#loadedProperty()
+	 */
+	@Override
 	public ReadOnlyBooleanProperty loadedProperty() {
 		return this.loaded;
 	}
 	
-	/**
-	 * <pre>
-	 * Return the {@link TLabel} of the field in execution
-	 * </pre>
-	 * @return {@link TLabel}
-	 * */
-	public TLabel getFieldLabelAnnotation() {
-		for(Annotation annotation : fieldDescriptor.getAnnotations())
-			if(annotation instanceof TLabel)
-				return (TLabel) annotation;
-		return null;
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#getFieldAnnotation(java.lang.Class)
+	 */
+	@Override
+	public <A extends Annotation> A getFieldAnnotation(Class<A> type) {
+		return fieldDescriptor.getAnnotation(type);
 	}
 	
-	/**
-	 * <pre>
-	 * Return a {@link List} of all {@link Annotation} used in the field. 
-	 * </pre>
-	 * 
-	 * @return {@link List} of {@link Annotation}
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#getFieldAnnotationList()
+	 */
+	@Override
 	public List<Annotation> getFieldAnnotationList(){
 		return fieldDescriptor.getAnnotations();
 	}
 	
-	/**
-	 * <pre>
-	 * Return a {@link List} of {@link TFieldDescriptor} of all fields in the model view. 
-	 * </pre>
-	 * 
-	 * @return {@link List} of {@link TFieldDescriptor}
-	 * */
-	public List<TFieldDescriptor> getFieldDescriptorList() {
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#getFieldDescriptorList()
+	 */
+	@Override
+	public List<ITFieldDescriptor> getFieldDescriptorList() {
 		return fieldDescriptorList;
 	}
 
-	/**
-	 * <pre>
-	 * Return the {@link ITForm} of the model view. 
-	 * </pre>
-	 * 
-	 * @return {@link ITForm}
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#getForm()
+	 */
+	@Override
 	public final ITForm getForm() {
 		return form;
 	}
 
 	
-	/**
-	 * <pre>
-	 * Return the {@link ITModelView} in execution.
-	 * </pre>
-	 * 
-	 * @return {@link ITModelView}
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#getModelView()
+	 */
+	@Override
 	public final ITModelView getModelView() {
 		return modelView;
 	}
 
-	/**
-	 * <pre>
-	 * Return a {@link List} of {@link String} with 
-	 * the name of all fields in the model view in execution. 
-	 * </pre>
-	 * 
-	 * @return {@link List} of {@link String}
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#getFieldNameList()
+	 */
+	@Override
 	public final List<String> getFieldNameList() {
 		return fieldsNameList;
 	}
 
-	/**
-	 * <pre>
-	 * Return a {@link List} of {@link Annotation} used in the model view declaration type.   
-	 * </pre>
-	 * 
-	 * @return {@link List} of {@link Annotation}
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#getModelViewAnnotationList()
+	 */
+	@Override
 	public final List<Annotation> getModelViewAnnotationList() {
 		return modelViewAnnotationList;
 	}
 
-	/**
-	 * <pre>
-	 * Return a {@link Map} of <{@link String}, {@link Node}> with all components builded at the present moment.
-	 * 
-	 * The key value represents the field name in the model view.
-	 * </pre>
-	 * 
-	 * @return {@link Map} of <{@link String}, {@link Node}>
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#getComponents()
+	 */
+	@Override
 	public final ObservableMap<String, Node> getComponents() {
 		return components;
 	}
 
-	/**
-	 * <pre>
-	 * Return the {@link TFieldDescriptor} of the field in execution.
-	 * </pre>
-	 * 
-	 * @return {@link TFieldDescriptor}
-	 * */
-	public synchronized final TFieldDescriptor getFieldDescriptor() {
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#getFieldDescriptor()
+	 */
+	@Override
+	public synchronized final ITFieldDescriptor getFieldDescriptor() {
 		return fieldDescriptor;
 	}
 
-	/**
-	 * <pre>
-	 * Set the {@link TFieldDescriptor} of the field in execution.
-	 * </pre>
-	 * */
-	public final void setFieldDescriptor(TFieldDescriptor fieldDescriptor) {
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#setFieldDescriptor(org.tedros.fx.descriptor.ITFieldDescriptor)
+	 */
+	@Override
+	public final void setFieldDescriptor(ITFieldDescriptor fieldDescriptor) {
 		this.fieldDescriptor = fieldDescriptor;
 	}
 
-	/**
-	 * <pre>
-	 * Return the {@link TViewMode} that indicates which mode are executing.
-	 * </pre>
-	 * 
-	 * @return {@link TViewMode}
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#getMode()
+	 */
+	@Override
 	public final TViewMode getMode() {
 		return mode;
 	}
 
-	/**
-	 * <pre>
-	 * Set the {@link TViewMode} that indicates which mode are executing.
-	 * </pre>
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#setMode(org.tedros.fx.domain.TViewMode)
+	 */
+	@Override
 	public final void setMode(TViewMode mode) {
 		this.mode = mode;
 	}
 
-	/**
-	 * <pre>
-	 * Return the annotation property name in execution by the parser. 
-	 * </pre>
-	 * 
-	 * @return {@link String}
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#getAnnotationPropertyInExecution()
+	 */
+	@Override
 	public final String getAnnotationPropertyInExecution() {
 		return annotationPropertyInExecution;
 	}
 
-	/**
-	 * <pre>
-	 * Set the annotation property name in execution by the parser. 
-	 * </pre>
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#setAnnotationPropertyInExecution(java.lang.String)
+	 */
+	@Override
 	public final void setAnnotationPropertyInExecution(
 			String annotationPropertyInExecution) {
 		this.annotationPropertyInExecution = annotationPropertyInExecution;
 	}
 
-	/**
-	 * <pre>
-	 * Return the class of the annotation parser in execution. 
-	 * </pre>
-	 * 
-	 * @return {@link Class} of {@link ITAnnotationParser} type. 
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#getParserClassInExecution()
+	 */
+	@Override
 	public final Class<? extends ITAnnotationParser> getParserClassInExecution() {
 		return parserClassInExecution;
 	}
 	
-	/**
-	 * <pre>
-	 * Set the class of the annotation parser in execution. 
-	 * </pre> 
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#setParserClassInExecution(java.lang.Class)
+	 */
+	@Override
 	public final void setParserClassInExecution(
 			Class<? extends ITAnnotationParser> parserClassInExecution) {
 		this.parserClassInExecution = parserClassInExecution;
 	}
 	
-	/**
-	 * <pre>
-	 * Return the value of the field in execution. 
-	 * </pre>
-	 * @return {@link Object}. 
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#getFieldValue()
+	 */
+	@Override
 	public Object getFieldValue() throws IllegalArgumentException, IllegalAccessException{
 		this.fieldDescriptor.getField().setAccessible(true);
 		final Object obj = this.fieldDescriptor.getField().get(this.modelView);
@@ -317,17 +281,22 @@ public class TComponentDescriptor {
 	 * Load the fieldsNameList
 	 * */
 	private void loadFieldNameList() {
-		for(final TFieldDescriptor f : fieldDescriptorList)
+		for(final ITFieldDescriptor f : fieldDescriptorList)
 			fieldsNameList.add(f.getFieldName());
 	}
 
-	public TFieldBox getFieldBox(String field) {
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#getFieldBox(java.lang.String)
+	 */
+	@Override
+	public ITFieldBox getFieldBox(String field) {
 		return this.fieldBoxMap.get(field);
 	}
-	/**
-	 * @return the fieldBoxMap
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.descriptor.ITComponentDescriptor#getFieldBoxMap()
 	 */
-	public java.util.Map<String, TFieldBox> getFieldBoxMap() {
+	@Override
+	public java.util.Map<String, ITFieldBox> getFieldBoxMap() {
 		return fieldBoxMap;
 	}
 	

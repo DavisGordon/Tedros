@@ -11,6 +11,9 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 import org.tedros.TedrosBox;
+import org.tedros.api.form.ITFieldBox;
+import org.tedros.api.form.ITForm;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.message.TMessage;
@@ -25,11 +28,8 @@ import org.tedros.fx.control.TPasswordField;
 import org.tedros.fx.control.TTextField;
 import org.tedros.fx.control.TVerticalRadioGroup;
 import org.tedros.fx.control.action.TPresenterAction;
-import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.exception.TValidatorException;
-import org.tedros.fx.form.ITForm;
 import org.tedros.fx.form.TBuildFormStatus;
-import org.tedros.fx.form.TFieldBox;
 import org.tedros.fx.modal.TMessageBox;
 import org.tedros.fx.presenter.behavior.TActionType;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
@@ -39,11 +39,10 @@ import org.tedros.login.model.LoginModelView;
 import org.tedros.login.model.TLoginProcess;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
+import org.tedros.tools.module.user.model.TProfileMV;
 import org.tedros.util.TEncriptUtil;
 import org.tedros.util.TFileUtil;
 import org.tedros.util.TedrosFolder;
-
-import org.tedros.tools.module.user.model.TProfileMV;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -373,32 +372,32 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 
 	@SuppressWarnings("unchecked")
 	private void getControls(ITForm form) {
-		TFieldBox nameFieldBox = form.gettFieldBox("name");//  name
+		ITFieldBox nameFieldBox = form.gettFieldBox("name");//  name
 		nameField = (TTextField) nameFieldBox.gettControl();
 		nameField.setDisable(true);
 		
-		TFieldBox userFieldBox = form.gettFieldBox("user");//  user
+		ITFieldBox userFieldBox = form.gettFieldBox("user");//  user
 		userTextField = (TTextField) userFieldBox.gettControl();
 		
-		TFieldBox passwordFieldBox = form.gettFieldBox("password");// password 
+		ITFieldBox passwordFieldBox = form.gettFieldBox("password");// password 
 		passwordField = (TPasswordField) passwordFieldBox.gettControl();
 		
-		TFieldBox tFieldBox = form.gettFieldBox("language");// password language
+		ITFieldBox tFieldBox = form.gettFieldBox("language");// password language
 		languageField = (TVerticalRadioGroup) tFieldBox.gettControl();
 		
-		TFieldBox profileFieldBox = form.gettFieldBox("profile");//  language
+		ITFieldBox profileFieldBox = form.gettFieldBox("profile");//  language
 		profileComboBox = (TComboBoxField<TProfileMV>) profileFieldBox.gettControl();
 		
-		TFieldBox profileTextFieldBox = form.gettFieldBox("profileText");//  language
+		ITFieldBox profileTextFieldBox = form.gettFieldBox("profileText");//  language
 		profileText = (Text) profileTextFieldBox.gettControl();
 		
-		TFieldBox ipTextFieldBox = form.gettFieldBox("serverIp");//  ip
+		ITFieldBox ipTextFieldBox = form.gettFieldBox("serverIp");//  ip
 		ipTextField = (TTextField) ipTextFieldBox.gettControl();
 
-		TFieldBox urlTextFieldBox = form.gettFieldBox("url");//  url
+		ITFieldBox urlTextFieldBox = form.gettFieldBox("url");//  url
 		urlTextField = (TTextField) urlTextFieldBox.gettControl();
 		
-		TFieldBox themeFieldBox = form.gettFieldBox("theme");//  theme
+		ITFieldBox themeFieldBox = form.gettFieldBox("theme");//  theme
 		themeComboBox = (TComboBoxField<String>) themeFieldBox.gettControl();
 		this.buildConfigEvents();
 		verifySysUsers();

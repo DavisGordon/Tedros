@@ -1,7 +1,7 @@
 package org.tedros.fx.form;
 
+import org.tedros.api.presenter.ITPresenter;
 import org.tedros.core.model.ITModelView;
-import org.tedros.core.presenter.ITPresenter;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;

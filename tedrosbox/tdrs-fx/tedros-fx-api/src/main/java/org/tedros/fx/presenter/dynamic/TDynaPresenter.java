@@ -3,9 +3,14 @@ package org.tedros.fx.presenter.dynamic;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 
+import org.tedros.api.descriptor.ITComponentDescriptor;
+import org.tedros.api.presenter.ITDynaPresenter;
+import org.tedros.api.presenter.behaviour.ITBehavior;
+import org.tedros.api.presenter.decorator.ITDecorator;
+import org.tedros.api.presenter.view.TViewMode;
+import org.tedros.api.presenter.view.TViewState;
 import org.tedros.core.ITModule;
 import org.tedros.core.model.ITModelView;
-import org.tedros.core.presenter.view.TViewState;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.parser.TStackPaneParser;
 import org.tedros.fx.annotation.process.TEjbService;
@@ -13,13 +18,9 @@ import org.tedros.fx.annotation.process.TEntityProcess;
 import org.tedros.fx.annotation.process.TModelProcess;
 import org.tedros.fx.annotation.process.TReportProcess;
 import org.tedros.fx.descriptor.TComponentDescriptor;
-import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.exception.TErrorType;
 import org.tedros.fx.presenter.TPresenter;
-import org.tedros.fx.presenter.behavior.ITBehavior;
-import org.tedros.fx.presenter.decorator.ITDecorator;
-import org.tedros.fx.presenter.dynamic.view.ITDynaView;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.presenter.dynamic.view.TDynaView;
 import org.tedros.fx.util.TReflectionUtil;
 import org.tedros.server.model.ITModel;
 
@@ -34,7 +35,8 @@ import javafx.scene.layout.StackPane;
  *  @author Davis Gordon
  * */
 @SuppressWarnings("rawtypes")
-public class TDynaPresenter<M extends TModelView> extends TPresenter<ITDynaView<M>> implements ITDynaPresenter<M> {
+public class TDynaPresenter<M extends ITModelView> extends TPresenter<TDynaView> 
+implements ITDynaPresenter<M> {
 	
 	private ITDecorator<TDynaPresenter<M>> 		decorator;
 	private ITBehavior<M, TDynaPresenter<M>> 	behavior;
@@ -177,7 +179,7 @@ public class TDynaPresenter<M extends TModelView> extends TPresenter<ITDynaView<
 		decorator.setPresenter(this);
 		decorator.decorate();
 		
-		TComponentDescriptor descriptor = new TComponentDescriptor(null, null, null);
+		ITComponentDescriptor descriptor = new TComponentDescriptor(null, null, null);
 		TStackPaneParser parser = new TStackPaneParser();
 		parser.setComponentDescriptor(descriptor);
 		try {
@@ -295,13 +297,30 @@ public class TDynaPresenter<M extends TModelView> extends TPresenter<ITDynaView<
 	public String canInvalidate() {
 		return behavior.canInvalidate();
 	}
+	
+	@Override
+	public boolean isLoadable(Class<? extends ITModelView> modelViewClass) {
+		return this.modelViewClass == modelViewClass;
+	}
 
+	@Override
+	public <T extends ITModelView> void lookupAndShow(Class<T> modelViewClass) {
+		if(modelViewClass == null)
+			throw new IllegalArgumentException("The modelViewClass argument cannot be null"); 
+		else if(modelViewClass != this.modelViewClass)
+			throw new IllegalArgumentException("The argument "+modelViewClass.getSimpleName()
+			+" is not acceptable, expected "+this.modelViewClass.getSimpleName()); 
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void loadModelView(ITModelView modelView) {
+	public <T extends ITModelView> void lookupAndShow(T modelView) {
+		if(modelView == null)
+			throw new IllegalArgumentException("The modelView argument cannot be null"); 
+		
 		if(getView().gettState().equals(TViewState.READY)) {
 			this.behavior.setViewMode(TViewMode.EDIT);
-			this.behavior.loadModelView(modelView);
+			this.behavior.loadModelView((M) modelView);
 		}else {
 			this.modelView = (M) modelView;
 			ChangeListener<TViewState> bchl = new ChangeListener<TViewState>(){
@@ -311,7 +330,7 @@ public class TDynaPresenter<M extends TModelView> extends TPresenter<ITDynaView<
 							&& (getBehavior().getModelView()==null || 
 									getBehavior().getModelView()!= modelView)) {
 						getBehavior().setViewMode(TViewMode.EDIT);
-						getBehavior().loadModelView((TModelView) modelView);
+						getBehavior().loadModelView( (M) modelView);
 					}
 					if(n!=null && n.equals(TViewState.READY))
 						getView().tStateProperty().removeListener(this);
@@ -319,11 +338,28 @@ public class TDynaPresenter<M extends TModelView> extends TPresenter<ITDynaView<
 			};
 			getView().tStateProperty().addListener(bchl);
 		}
-		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public boolean canLoadModelView(Class<? extends ITModelView> modelViewClass) {
-		return this.modelViewClass == modelViewClass;
+	public <T extends ITModelView> void lookupAndShow(ObservableList<T> modelsView) {
+		if(modelsView == null || modelsView.isEmpty())
+			throw new IllegalArgumentException("The modelsView argument cannot be null or empty"); 
+		
+		if(getView().gettState().equals(TViewState.READY)) {
+			this.behavior.setModelViewList((ObservableList<M>) modelsView);
+		}else {
+			this.modelViews = (ObservableList<M>) modelsView;
+			ChangeListener<TViewState> bchl = new ChangeListener<TViewState>(){
+				@Override
+				public void changed(ObservableValue<? extends TViewState> a, TViewState o, TViewState n) {
+					if(n!=null && n.equals(TViewState.READY) ) {
+						getBehavior().setModelViewList((ObservableList<M>) modelsView);
+						getView().tStateProperty().removeListener(this);
+					}
+				}
+			};
+			getView().tStateProperty().addListener(bchl);
+		}
 	}
 }

@@ -1,8 +1,8 @@
 package org.tedros.core.context;
 
 import org.apache.commons.lang3.StringUtils;
-import org.tedros.core.presenter.ITPresenter;
-import org.tedros.core.presenter.view.ITView;
+import org.tedros.api.presenter.ITPresenter;
+import org.tedros.api.presenter.view.ITView;
 
 /**
  * The view Context.

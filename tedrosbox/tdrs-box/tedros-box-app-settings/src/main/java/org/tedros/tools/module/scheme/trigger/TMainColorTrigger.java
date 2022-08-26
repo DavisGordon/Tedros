@@ -10,10 +10,10 @@ import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
 
+import org.tedros.api.form.ITModelForm;
 import org.tedros.fx.control.TColorPickerField;
 import org.tedros.fx.control.TSlider;
 import org.tedros.fx.control.trigger.TTrigger;
-import org.tedros.fx.form.ITModelForm;
 import org.tedros.fx.form.TFieldBox;
 import org.tedros.tools.module.scheme.model.TMainColorMV;
 import org.tedros.tools.module.scheme.template.TemplatePane;

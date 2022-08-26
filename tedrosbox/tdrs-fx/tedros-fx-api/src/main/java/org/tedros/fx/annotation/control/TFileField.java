@@ -11,7 +11,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.tedros.fx.annotation.parser.ITAnnotationParser;
+import org.tedros.api.parser.ITAnnotationParser;
 import org.tedros.fx.annotation.parser.TFileFieldParser;
 import org.tedros.fx.annotation.parser.TStackPaneParser;
 import org.tedros.fx.annotation.reader.TByteArrayReader;

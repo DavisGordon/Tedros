@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.annotation.security.TSecurity;
 import org.tedros.core.context.TSecurityDescriptor;
@@ -12,7 +13,6 @@ import org.tedros.fx.annotation.TAnnotationDefaultValue;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.control.TButton;
-import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.model.TModelView;
 

@@ -9,10 +9,10 @@ package org.tedros.fx.presenter;
 
 import java.util.Arrays;
 
+import org.tedros.api.form.ITModelForm;
+import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.model.ITModelView;
-import org.tedros.core.presenter.view.ITView;
 import org.tedros.fx.exception.TException;
-import org.tedros.fx.form.ITModelForm;
 import org.tedros.fx.form.TDefaultForm;
 import org.tedros.fx.modal.TConfirmMessageBox;
 import org.tedros.fx.presenter.model.TEntityModelView;

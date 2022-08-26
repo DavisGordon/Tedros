@@ -1,10 +1,11 @@
 package org.tedros.fx.presenter.decorator;
 
+import org.tedros.api.presenter.ITPresenter;
+import org.tedros.api.presenter.decorator.ITDecorator;
+import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.ITModule;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosAppManager;
-import org.tedros.core.presenter.ITPresenter;
-import org.tedros.core.presenter.view.ITView;
 
 import javafx.scene.layout.StackPane;
 

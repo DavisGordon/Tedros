@@ -9,14 +9,14 @@ package org.tedros.fx.builder;
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
+import org.tedros.api.descriptor.ITComponentDescriptor;
+import org.tedros.api.form.ITModelForm;
 import org.tedros.core.model.ITModelView;
 import org.tedros.core.model.TModelViewUtil;
 import org.tedros.fx.annotation.reader.TDetailReader;
 import org.tedros.fx.annotation.reader.TDetailReaderHtml;
 import org.tedros.fx.collections.ITObservableList;
-import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.domain.THtmlConstant;
-import org.tedros.fx.form.ITModelForm;
 import org.tedros.fx.form.TConverter;
 import org.tedros.fx.form.TDefaultForm;
 import org.tedros.fx.form.TReaderFormBuilder;
@@ -50,7 +50,7 @@ implements ITReaderHtmlBuilder<TDetailReaderHtml, Object> {
 	@SuppressWarnings("unchecked")
 	public THtmlReader build(final TDetailReaderHtml tAnnotation, final Object fieldObject) throws Exception {
 		
-		final TComponentDescriptor descriptor = getComponentDescriptor();
+		final ITComponentDescriptor descriptor = getComponentDescriptor();
 		final ITModelView modelView = descriptor.getModelView();
 		final String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 		final String fieldName = descriptor.getFieldDescriptor().getFieldName();
@@ -160,7 +160,7 @@ implements ITReaderHtmlBuilder<TDetailReaderHtml, Object> {
 		return layoutGenerator.getHtml();
 	}
 	
-	private void updateWebView(final TDetailReaderHtml tAnnotation, final Object fieldObject, final TComponentDescriptor descriptor,
+	private void updateWebView(final TDetailReaderHtml tAnnotation, final Object fieldObject, final ITComponentDescriptor descriptor,
 			final String uuid) {
 		WebView wv =  ((ITModelForm)descriptor.getForm()).gettWebView();
 		if(wv!=null){

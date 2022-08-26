@@ -1,7 +1,7 @@
 package org.tedros.fx.control.action;
 
 
-import org.tedros.fx.descriptor.TComponentDescriptor;
+import org.tedros.api.descriptor.ITComponentDescriptor;
 
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -10,7 +10,7 @@ import javafx.event.EventType;
 
 
 public abstract class TEventHandler<T extends Event> implements EventHandler<T> {
-	private TComponentDescriptor descriptor;
+	private ITComponentDescriptor descriptor;
 	private EventType<T> eventType;
 	
 	public TEventHandler(EventType<T> eventType) {
@@ -20,14 +20,14 @@ public abstract class TEventHandler<T extends Event> implements EventHandler<T> 
 	/**
 	 * @return the descriptor
 	 */
-	public TComponentDescriptor getDescriptor() {
+	public ITComponentDescriptor getDescriptor() {
 		return descriptor;
 	}
 
 	/**
 	 * @param descriptor the descriptor to set
 	 */
-	public void setDescriptor(TComponentDescriptor descriptor) {
+	public void setDescriptor(ITComponentDescriptor descriptor) {
 		this.descriptor = descriptor;
 	}
 

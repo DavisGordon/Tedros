@@ -1,6 +1,6 @@
-package org.tedros.core.presenter.view;
+package org.tedros.api.presenter.view;
 
-import org.tedros.core.presenter.ITGroupPresenter;
+import org.tedros.api.presenter.ITGroupPresenter;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;

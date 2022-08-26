@@ -8,12 +8,12 @@ package org.tedros.fx.presenter.view.group;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.tedros.api.presenter.ITPresenter;
+import org.tedros.api.presenter.view.ITGroupView;
+import org.tedros.api.presenter.view.ITGroupViewItem;
+import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.ITModule;
 import org.tedros.core.model.ITModelView;
-import org.tedros.core.presenter.ITPresenter;
-import org.tedros.core.presenter.view.ITGroupView;
-import org.tedros.core.presenter.view.ITGroupViewItem;
-import org.tedros.core.presenter.view.ITView;
 import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.fx.presenter.model.TModelView;
 

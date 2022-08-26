@@ -3,10 +3,10 @@ package org.tedros.fx.presenter.view;
 import java.io.IOException;
 import java.net.URL;
 
+import org.tedros.api.presenter.ITPresenter;
+import org.tedros.api.presenter.view.ITView;
+import org.tedros.api.presenter.view.TViewState;
 import org.tedros.core.control.TProgressIndicator;
-import org.tedros.core.presenter.ITPresenter;
-import org.tedros.core.presenter.view.ITView;
-import org.tedros.core.presenter.view.TViewState;
 import org.tedros.fx.modal.TModalPane;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;

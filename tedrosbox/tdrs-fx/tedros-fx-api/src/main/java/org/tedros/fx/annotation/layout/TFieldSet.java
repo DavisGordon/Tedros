@@ -11,7 +11,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.tedros.fx.annotation.parser.ITAnnotationParser;
+import org.tedros.api.parser.ITAnnotationParser;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.annotation.parser.TFieldSetParser;
 import org.tedros.fx.annotation.parser.TStackPaneParser;
 import org.tedros.fx.annotation.scene.TNode;
@@ -21,7 +22,6 @@ import org.tedros.fx.builder.ITLayoutBuilder;
 import org.tedros.fx.builder.TFieldSetBuilder;
 import org.tedros.fx.builder.TVBoxBuilder;
 import org.tedros.fx.domain.TLayoutType;
-import org.tedros.fx.domain.TViewMode;
 
 import javafx.scene.Node;
 import javafx.scene.layout.Region;

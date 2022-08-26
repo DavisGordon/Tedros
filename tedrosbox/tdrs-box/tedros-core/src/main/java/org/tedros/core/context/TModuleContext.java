@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.ITModule;
-import org.tedros.core.presenter.view.ITView;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

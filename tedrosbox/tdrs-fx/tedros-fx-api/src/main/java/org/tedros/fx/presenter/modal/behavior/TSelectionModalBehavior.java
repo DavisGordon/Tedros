@@ -2,8 +2,8 @@ package org.tedros.fx.presenter.modal.behavior;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.control.action.TPresenterAction;
-import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.presenter.behavior.TActionType;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewSelectionBaseBehavior;
 import org.tedros.fx.presenter.modal.decorator.TSelectionModalDecorator;

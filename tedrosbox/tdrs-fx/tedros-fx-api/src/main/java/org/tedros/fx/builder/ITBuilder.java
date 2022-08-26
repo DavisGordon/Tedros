@@ -1,11 +1,11 @@
 package org.tedros.fx.builder;
 
-import org.tedros.fx.descriptor.TComponentDescriptor;
+import org.tedros.api.descriptor.ITComponentDescriptor;
 
 public interface ITBuilder {
 	
-	public TComponentDescriptor getComponentDescriptor();
+	public ITComponentDescriptor getComponentDescriptor();
 	
-	public void setComponentDescriptor(TComponentDescriptor componentDescriptor);
+	public void setComponentDescriptor(ITComponentDescriptor componentDescriptor);
 	
 }

@@ -1,7 +1,7 @@
 package org.tedros.fx.annotation.parser;
 
+import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.fx.annotation.layout.TFieldSet;
-import org.tedros.fx.descriptor.TFieldDescriptor;
 
 import javafx.scene.Node;
 
@@ -28,7 +28,7 @@ public class TFieldSetParser extends TAnnotationParser<TFieldSet, org.tedros.fx.
 	}
 	
 	private void addNode(TFieldSet annotation, final org.tedros.fx.layout.TFieldSet object, String field) {
-		TFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor();
+		ITFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor();
 		if(fd.hasParent())
 			return;
 		Node node = null;

@@ -9,10 +9,10 @@ package org.tedros.fx.builder;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 
+import org.tedros.api.form.ITForm;
 import org.tedros.core.model.ITModelView;
 import org.tedros.core.model.TModelViewUtil;
 import org.tedros.fx.annotation.reader.TDetailReader;
-import org.tedros.fx.form.ITForm;
 import org.tedros.fx.form.TConverter;
 import org.tedros.fx.form.TReaderFormBuilder;
 import org.tedros.fx.layout.TFlowPane;

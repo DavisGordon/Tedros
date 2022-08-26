@@ -1,8 +1,8 @@
 package org.tedros.fx.annotation.parser;
 
+import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.fx.annotation.layout.TAccordion;
 import org.tedros.fx.annotation.layout.TTitledPane;
-import org.tedros.fx.descriptor.TFieldDescriptor;
 import org.tedros.fx.domain.TLayoutType;
 
 import javafx.geometry.Insets;
@@ -42,7 +42,7 @@ public class TAccordionParser extends TAnnotationParser<TAccordion, Accordion> {
 	}
 
 	private void addNode(final Pane object, String field) {
-		TFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor();
+		ITFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor();
 		if(fd.hasParent())
 			return;
 		Node node = null;

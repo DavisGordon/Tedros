@@ -10,6 +10,8 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.descriptor.ITComponentDescriptor;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TLabelDefaultSetting;
 import org.tedros.fx.annotation.parser.TAnnotationParser;
@@ -19,7 +21,6 @@ import org.tedros.fx.annotation.reader.TReader;
 import org.tedros.fx.annotation.reader.TReaderDefaultSetting;
 import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.domain.TLabelPosition;
-import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.util.TReflectionUtil;
 
 import javafx.scene.Node;
@@ -41,7 +42,7 @@ public final class TFieldBoxBuilder {
 	
 	private static TFieldBox generate(final Node control, final TComponentDescriptor descriptor) {
 		
-		final TLabel fieldLabel = (TLabel) descriptor.getFieldLabelAnnotation();
+		final TLabel fieldLabel = (TLabel) descriptor.getFieldAnnotation(TLabel.class);
 		final TLabelDefaultSetting tLabelDefaultSetting = (TLabelDefaultSetting) getDefaultSetting(fieldLabel, descriptor);
 		final String controlFieldName =  (String) descriptor.getFieldDescriptor().getFieldName();
 		TAnnotationParser<TLabel, Labeled> parser = null;
@@ -92,7 +93,7 @@ public final class TFieldBoxBuilder {
 	 * @param descriptor
 	 * @param fieldBox
 	 */
-	public static void parse(final TComponentDescriptor descriptor, TFieldBox fieldBox) {
+	public static void parse(final ITComponentDescriptor descriptor, TFieldBox fieldBox) {
 		org.tedros.fx.annotation.control.TFieldBox tAnnotation = (org.tedros.fx.annotation.control.TFieldBox) 
 				descriptor.getFieldDescriptor().getField().getAnnotation(org.tedros.fx.annotation.control.TFieldBox.class);
 		if(tAnnotation!=null){
@@ -104,7 +105,7 @@ public final class TFieldBoxBuilder {
 		}
 	}
 	
-	private static void setTLabelReaderSettings(TLabel tLabel, final Annotation defaultSetting, final TComponentDescriptor descriptor) {
+	private static void setTLabelReaderSettings(TLabel tLabel, final Annotation defaultSetting, final ITComponentDescriptor descriptor) {
 		
 		Annotation annotation = getReaderAnnotation(descriptor);
 		
@@ -142,14 +143,14 @@ public final class TFieldBoxBuilder {
 		}
 	}
 	
-	private static Annotation getReaderAnnotation(TComponentDescriptor descriptor){
+	private static Annotation getReaderAnnotation(ITComponentDescriptor descriptor){
 		Object[] arr = TReflectionUtil.getReaderBuilder(descriptor.getFieldAnnotationList());
 		if(arr!=null)
 			return (Annotation) arr[0];
 		return null;
 	}
 	
-	private static Annotation getDefaultSetting(Annotation annotation, final TComponentDescriptor descriptor) {
+	private static Annotation getDefaultSetting(Annotation annotation, final ITComponentDescriptor descriptor) {
 		if(annotation != null){
 			List<Annotation> typeAnnotations = (List<Annotation>) descriptor.getModelViewAnnotationList();
 			String nameToCompare = TReflectionUtil.getAnnotationName(annotation).toLowerCase()+"defaultsetting";

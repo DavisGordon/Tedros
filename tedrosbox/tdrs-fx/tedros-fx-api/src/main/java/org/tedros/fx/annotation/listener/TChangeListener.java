@@ -1,18 +1,18 @@
 package org.tedros.fx.annotation.listener;
 
-import org.tedros.fx.descriptor.TComponentDescriptor;
+import org.tedros.api.descriptor.ITComponentDescriptor;
 
 import javafx.beans.value.ChangeListener;
 
 public abstract class TChangeListener<T> implements ChangeListener<T> {
 
-	private TComponentDescriptor componentDescriptor;
+	private ITComponentDescriptor componentDescriptor;
 	
-	public TComponentDescriptor getComponentDescriptor() {
+	public ITComponentDescriptor getComponentDescriptor() {
 		return componentDescriptor;
 	}
 	
-	public void setComponentDescriptor(TComponentDescriptor componentDescriptor) {
+	public void setComponentDescriptor(ITComponentDescriptor componentDescriptor) {
 		this.componentDescriptor = componentDescriptor;
 	}
 	

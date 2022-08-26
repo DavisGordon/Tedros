@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.annotation.presenter.TBehavior;
-import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.exception.TProcessException;
 import org.tedros.fx.exception.TValidatorException;
 import org.tedros.fx.modal.TMessageBox;

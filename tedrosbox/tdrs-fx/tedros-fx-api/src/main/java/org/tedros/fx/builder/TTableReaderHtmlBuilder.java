@@ -22,14 +22,14 @@ import javafx.collections.ObservableList;
 import javafx.scene.web.WebView;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.descriptor.ITComponentDescriptor;
+import org.tedros.api.form.ITModelForm;
 import org.tedros.core.model.ITModelView;
 import org.tedros.core.style.TStyleResourceValue;
 import org.tedros.fx.annotation.reader.TColumnReader;
 import org.tedros.fx.annotation.reader.TTableReaderHtml;
 import org.tedros.fx.collections.ITObservableList;
-import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.domain.THtmlConstant;
-import org.tedros.fx.form.ITModelForm;
 import org.tedros.fx.form.TConverter;
 import org.tedros.fx.html.THtmlTableGenerator;
 import org.tedros.fx.html.THtmlTableGenerator.TColumn;
@@ -61,7 +61,7 @@ implements ITReaderHtmlBuilder<TTableReaderHtml, Object> {
 	@SuppressWarnings("unchecked")
 	public THtmlReader build(final TTableReaderHtml tAnnotation,final Object fieldObject) throws Exception {
 		
-		final TComponentDescriptor descriptor = getComponentDescriptor();
+		final ITComponentDescriptor descriptor = getComponentDescriptor();
 		final ITModelView modelView = descriptor.getModelView();
 		final String uuid = UUID.randomUUID().toString();
 		final String fieldName = descriptor.getFieldDescriptor().getFieldName();
@@ -238,7 +238,7 @@ implements ITReaderHtmlBuilder<TTableReaderHtml, Object> {
 		return objectValue.toString();
 	}
 
-	private void updateWebView(final TTableReaderHtml tAnnotation, final Object fieldObject, final TComponentDescriptor descriptor,
+	private void updateWebView(final TTableReaderHtml tAnnotation, final Object fieldObject, final ITComponentDescriptor descriptor,
 			final String uuid) {
 		WebView wv =  ((ITModelForm)descriptor.getForm()).gettWebView();
 		if(wv!=null){

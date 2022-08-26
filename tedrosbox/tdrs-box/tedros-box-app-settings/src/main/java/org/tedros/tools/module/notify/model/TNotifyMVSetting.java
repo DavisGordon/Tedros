@@ -3,11 +3,11 @@
  */
 package org.tedros.tools.module.notify.model;
 
+import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.core.TLanguage;
 import org.tedros.core.notify.model.TAction;
 import org.tedros.core.notify.model.TState;
 import org.tedros.fx.control.TVerticalRadioGroup;
-import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.form.TSetting;
 import org.tedros.tools.start.TConstant;
 
@@ -19,7 +19,7 @@ import javafx.scene.control.RadioButton;
  */
 public class TNotifyMVSetting extends TSetting {
 
-	public TNotifyMVSetting(TComponentDescriptor descriptor) {
+	public TNotifyMVSetting(ITComponentDescriptor descriptor) {
 		super(descriptor);
 	}
 

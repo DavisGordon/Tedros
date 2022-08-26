@@ -3,6 +3,7 @@ package org.tedros.fx.form;
 import java.util.UUID;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.tedros.api.form.ITFieldBox;
 import org.tedros.fx.control.ITField;
 import org.tedros.fx.domain.TLabelPosition;
 
@@ -26,7 +27,7 @@ import javafx.scene.layout.VBox;
  * 
  * @author Davis Gordon
  * */
-public class TFieldBox extends StackPane implements ITField {
+public class TFieldBox extends StackPane implements ITField, ITFieldBox {
 
 	private Node label;
 	private Node control;
@@ -90,56 +91,41 @@ public class TFieldBox extends StackPane implements ITField {
 		
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.form.ITFieldBox#tValueProperty()
+	 */
 	@Override
 	public Observable tValueProperty() {
 		return super.getChildren();
 	}
 	
-	/**
-	 * <pre>
-	 * Return the {@link Node} that represents the label, in the most of case they return a {@link Label},
-	 * but custom components can return other {@link Node}.
-	 * 
-	 * Example:
-	 * Label label = (Label) fieldBox.gettLabel();
-	 * </pre>
-	 * 
-	 * @return {@link Node}
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.form.ITFieldBox#gettLabel()
+	 */
+	@Override
 	public Node gettLabel() {
 		return label;
 	}
 
-	/**
-	 * <pre>
-	 * Return the {@link Node} that represents the control.
-	 * 
-	 * Example:
-	 * TTextField textField = (TTextField) fieldBox.gettControl();   
-	 * </pre>
-	 * 
-	 * @return {@link Node}
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.form.ITFieldBox#gettControl()
+	 */
+	@Override
 	public Node gettControl() {
 		return control;
 	}
 		
-	/**
-	 * <pre>
-	 * Return the field name in the model view which generates the control.   
-	 * </pre>
-	 * 
-	 * @return {@link String}
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.form.ITFieldBox#gettControlFieldName()
+	 */
+	@Override
 	public String gettControlFieldName() {
 		return controlFieldName;
 	}
 
-	/**
-	 * <pre>
-	 * Set style in the control.
-	 * </pre>
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.form.ITFieldBox#settFieldStyle(java.lang.String)
+	 */
 	@Override
 	public void settFieldStyle(String style) {
 		if(control!=null){

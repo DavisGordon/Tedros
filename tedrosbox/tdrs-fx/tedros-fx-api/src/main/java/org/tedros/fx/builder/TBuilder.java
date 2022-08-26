@@ -2,27 +2,27 @@ package org.tedros.fx.builder;
 
 import java.lang.annotation.Annotation;
 
+import org.tedros.api.descriptor.ITComponentDescriptor;
+import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.core.ITModule;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.fx.annotation.parser.TAnnotationParser;
-import org.tedros.fx.descriptor.TComponentDescriptor;
-import org.tedros.fx.descriptor.TFieldDescriptor;
 
 import javafx.scene.Node;
 
 
 public abstract class TBuilder implements ITBuilder {
 	
-	private TComponentDescriptor componentDescriptor;
+	private ITComponentDescriptor componentDescriptor;
 	
 	protected TLanguage iEngine = TLanguage.getInstance(null);
 	
-	public TComponentDescriptor getComponentDescriptor() {
+	public ITComponentDescriptor getComponentDescriptor() {
 		return componentDescriptor;
 	}
 	
-	public void setComponentDescriptor(TComponentDescriptor annotationDescriptor) {
+	public void setComponentDescriptor(ITComponentDescriptor annotationDescriptor) {
 		this.componentDescriptor = annotationDescriptor;
 		
 		try{
@@ -44,7 +44,7 @@ public abstract class TBuilder implements ITBuilder {
 	}
 	
 	protected Node getNode(String field) {
-		TFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor();
+		ITFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor();
 		
 		Node node = null;
 		if(fd.getFieldName().equals(field)) {

@@ -14,6 +14,8 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.descriptor.ITComponentDescriptor;
+import org.tedros.api.parser.ITAnnotationParser;
 import org.tedros.core.ITModule;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosAppManager;
@@ -57,7 +59,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 	private final static String GET = "get";
 	private final String[] SKIPMETHODS = {"builder","parser","parse","equals", "getClass", "wait", "hashCode", "toString", "notify", "notifyAll", "annotationType"};
 	
-	private TComponentDescriptor componentDescriptor;
+	private ITComponentDescriptor componentDescriptor;
 	protected TLanguage iEngine = TLanguage.getInstance(null);
 	
 	/**
@@ -65,7 +67,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 	 * Return the {@link TComponentDescriptor} in execution.
 	 * </pre>
 	 * */
-	public TComponentDescriptor getComponentDescriptor() {
+	public ITComponentDescriptor getComponentDescriptor() {
 		return componentDescriptor;
 	}
 	
@@ -74,7 +76,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 	 * Set the {@link TComponentDescriptor} to execution.
 	 * </pre>
 	 * */
-	public void setComponentDescriptor(TComponentDescriptor componentDescriptor) {
+	public void setComponentDescriptor(ITComponentDescriptor componentDescriptor) {
 		this.componentDescriptor = componentDescriptor;
 		
 		try{
@@ -221,7 +223,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 	 * </pre>
 	 * */
 	@SuppressWarnings("unchecked")
-	public static void callParser(final Annotation tAnnotation, final Object control, final TComponentDescriptor componentDescriptor) throws Exception {
+	public static void callParser(final Annotation tAnnotation, final Object control, final ITComponentDescriptor componentDescriptor) throws Exception {
 		Method parserMethod = TReflectionUtil.getParserMethod(tAnnotation);
 		if(parserMethod!=null){
 			String tmp = null;

@@ -6,7 +6,7 @@
  */
 package org.tedros.fx.form;
 
-import org.tedros.fx.descriptor.TComponentDescriptor;
+import org.tedros.api.descriptor.ITComponentDescriptor;
 
 
 
@@ -46,7 +46,7 @@ import org.tedros.fx.descriptor.TComponentDescriptor;
  */
 public abstract class TConverter<IN, OUT> {
 
-	private TComponentDescriptor componentDescriptor;
+	private ITComponentDescriptor componentDescriptor;
 	private IN value;
 	
 	public TConverter(IN value) {
@@ -76,12 +76,12 @@ public abstract class TConverter<IN, OUT> {
 	 * */
 	public abstract OUT getOut();
 
-	public final TComponentDescriptor getComponentDescriptor() {
+	public final ITComponentDescriptor getComponentDescriptor() {
 		return componentDescriptor;
 	}
 
 	public final void setComponentDescriptor(
-			TComponentDescriptor componentDescriptor) {
+			ITComponentDescriptor componentDescriptor) {
 		this.componentDescriptor = componentDescriptor;
 	}
 

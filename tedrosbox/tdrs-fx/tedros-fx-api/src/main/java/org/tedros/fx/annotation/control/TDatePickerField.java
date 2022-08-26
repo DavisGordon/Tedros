@@ -15,7 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import org.tedros.fx.annotation.parser.ITAnnotationParser;
+import org.tedros.api.parser.ITAnnotationParser;
 import org.tedros.fx.annotation.parser.TDatePickerParser;
 import org.tedros.fx.annotation.parser.TRequiredDatePickerParser;
 import org.tedros.fx.annotation.scene.TNode;

@@ -3,8 +3,8 @@ package org.tedros.fx.layout;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.tedros.core.presenter.view.ITGroupViewItem;
-import org.tedros.core.presenter.view.ITView;
+import org.tedros.api.presenter.view.ITGroupViewItem;
+import org.tedros.api.presenter.view.ITView;
 import org.tedros.fx.presenter.view.group.TGroupViewControl;
 import org.tedros.fx.presenter.view.group.TViewItem;
 

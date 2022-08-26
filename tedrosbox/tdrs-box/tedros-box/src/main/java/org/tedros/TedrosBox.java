@@ -644,7 +644,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     		m = (ITModule) ((ScrollPane)view).getContent();
     	
     	if(m!=null) {
-	    	String msg = m.canStop();
+	    	String msg = m.tCanStop();
 	    	if(msg==null) {
 	    		callPage(page, addHistory, force, swapViews);
 	    	}else {

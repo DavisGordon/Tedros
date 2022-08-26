@@ -3,7 +3,7 @@
  */
 package org.tedros.fx.builder;
 
-import org.tedros.fx.descriptor.TComponentDescriptor;
+import org.tedros.api.descriptor.ITComponentDescriptor;
 
 /**
  * @author Davis Gordon
@@ -11,7 +11,7 @@ import org.tedros.fx.descriptor.TComponentDescriptor;
  */
 public abstract class TGenericBuilder<T> implements ITGenericBuilder<T> {
 
-	private TComponentDescriptor descriptor;
+	private ITComponentDescriptor descriptor;
 	
 	/**
 	 * 
@@ -21,12 +21,12 @@ public abstract class TGenericBuilder<T> implements ITGenericBuilder<T> {
 	}
 
 	@Override
-	public TComponentDescriptor getComponentDescriptor() {
+	public ITComponentDescriptor getComponentDescriptor() {
 		return descriptor;
 	}
 
 	@Override
-	public void setComponentDescriptor(TComponentDescriptor componentDescriptor) {
+	public void setComponentDescriptor(ITComponentDescriptor componentDescriptor) {
 		this.descriptor = componentDescriptor;
 	}
 

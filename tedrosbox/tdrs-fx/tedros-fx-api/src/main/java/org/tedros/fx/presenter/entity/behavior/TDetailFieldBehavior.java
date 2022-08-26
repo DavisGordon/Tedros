@@ -3,15 +3,13 @@ package org.tedros.fx.presenter.entity.behavior;
 import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.tedros.core.model.ITModelView;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.control.action.TPresenterAction;
-import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.presenter.behavior.TActionType;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.dynamic.behavior.TDetailFieldBaseBehavior;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewSimpleBaseBehavior;
 import org.tedros.fx.presenter.model.TEntityModelView;
-import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.server.entity.ITEntity;
 
 @SuppressWarnings({ "rawtypes" })
@@ -29,7 +27,7 @@ extends TDetailFieldBaseBehavior<M, E> {
 		super.configRemoveButton();
 		
 		try {
-			TModelView model = (M) super.getModelViewClass().getConstructor(entityClass).newInstance(entityClass.newInstance());
+			M model = (M) super.getModelViewClass().getConstructor(entityClass).newInstance(entityClass.newInstance());
 			setModelView(model);
 			super.showForm(TViewMode.EDIT);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
@@ -75,7 +73,7 @@ extends TDetailFieldBaseBehavior<M, E> {
 	}
 
 	@Override
-	public void loadModelView(ITModelView modelView) {
+	public void loadModelView(M modelView) {
 		super.setModelView(modelView);
 	}
 }

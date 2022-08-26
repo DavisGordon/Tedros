@@ -1,9 +1,9 @@
-package org.tedros.core.presenter.view;
+package org.tedros.api.presenter.view;
 
 import java.net.URL;
 
+import org.tedros.api.presenter.ITPresenter;
 import org.tedros.core.control.TProgressIndicator;
-import org.tedros.core.presenter.ITPresenter;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;

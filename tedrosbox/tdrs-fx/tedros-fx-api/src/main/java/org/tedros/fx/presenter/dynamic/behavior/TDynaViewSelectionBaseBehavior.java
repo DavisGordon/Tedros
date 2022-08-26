@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.ITModule;
 import org.tedros.core.TLanguage;
 import org.tedros.core.TModule;
@@ -23,7 +24,6 @@ import org.tedros.fx.builder.ITFieldBuilder;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.collections.TFXCollections;
 import org.tedros.fx.descriptor.TComponentDescriptor;
-import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.modal.TMessageBox;
 import org.tedros.fx.presenter.behavior.TActionType;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;

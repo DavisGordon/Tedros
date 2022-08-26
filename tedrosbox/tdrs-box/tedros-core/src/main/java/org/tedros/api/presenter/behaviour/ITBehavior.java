@@ -1,17 +1,16 @@
-package org.tedros.fx.presenter.behavior;
+package org.tedros.api.presenter.behaviour;
 
+import org.tedros.api.form.ITModelForm;
+import org.tedros.api.presenter.ITPresenter;
+import org.tedros.api.presenter.view.ITView;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.model.ITModelView;
-import org.tedros.core.presenter.ITPresenter;
-import org.tedros.core.presenter.view.ITView;
 import org.tedros.core.repository.TRepository;
-import org.tedros.fx.domain.TViewMode;
-import org.tedros.fx.form.ITModelForm;
-import org.tedros.fx.presenter.model.TModelView;
 
 import javafx.collections.ObservableList;
 
 @SuppressWarnings("rawtypes")
-public interface ITBehavior<M extends TModelView, P extends ITPresenter> {
+public interface ITBehavior<M extends ITModelView, P extends ITPresenter> {
 	
 	public P getPresenter();
 	
@@ -19,7 +18,7 @@ public interface ITBehavior<M extends TModelView, P extends ITPresenter> {
 	
 	public <V extends ITView> V getView();
 	
-	public void setModelView(ITModelView modelView);
+	public void setModelView(M modelView);
 	
 	
 	public void removeAllListenerFromModelView();
@@ -28,11 +27,11 @@ public interface ITBehavior<M extends TModelView, P extends ITPresenter> {
 	
 	public <T> T removeListenerFromModelView(String listenerId);
 	
-	public <T extends TModelView> T getModelView();
+	public M getModelView();
 	
 	public TRepository getListenerRepository();
 	
-	public void loadModelView(ITModelView modelView);
+	public void loadModelView(M modelView);
 	
 	/**
 	 * Set the form mode. 

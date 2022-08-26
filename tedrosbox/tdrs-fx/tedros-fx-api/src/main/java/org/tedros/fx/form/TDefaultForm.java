@@ -1,7 +1,7 @@
 package org.tedros.fx.form;
 
+import org.tedros.api.presenter.ITPresenter;
 import org.tedros.core.model.ITModelView;
-import org.tedros.core.presenter.ITPresenter;
 
 public final class TDefaultForm<M extends ITModelView<?>> extends TVBoxForm<M> {
 

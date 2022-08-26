@@ -11,8 +11,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.tedros.api.parser.ITAnnotationParser;
 import org.tedros.fx.annotation.TAnnotationDefaultValue;
-import org.tedros.fx.annotation.parser.ITAnnotationParser;
 import org.tedros.fx.annotation.parser.TNumberSpinnerFieldParser;
 import org.tedros.fx.annotation.parser.TRequiredNumeberFieldParser;
 import org.tedros.fx.annotation.parser.TTNumberSpinnerFieldParser;

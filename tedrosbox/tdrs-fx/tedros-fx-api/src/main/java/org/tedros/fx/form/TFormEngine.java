@@ -15,13 +15,16 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.descriptor.ITFieldDescriptor;
+import org.tedros.api.form.ITFieldBox;
+import org.tedros.api.form.ITModelForm;
+import org.tedros.api.form.ITSetting;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.model.ITModelView;
 import org.tedros.core.repository.TRepository;
 import org.tedros.fx.annotation.TDebugConfig;
 import org.tedros.fx.builder.ITReaderHtmlBuilder;
 import org.tedros.fx.descriptor.TComponentDescriptor;
-import org.tedros.fx.descriptor.TFieldDescriptor;
-import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.reader.THtmlReader;
 import org.tedros.fx.util.TReflectionUtil;
 
@@ -44,7 +47,7 @@ import javafx.scene.web.WebView;
 public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M>>  {
 	
 	private TViewMode mode;
-	private TSetting setting;
+	private ITSetting setting;
 	private TModelViewLoader<M> modelViewLoader;
 	private final M modelView;
 	private final F form;
@@ -232,7 +235,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	}
 	
 	
-	public Map<String, TFieldBox> getFieldBoxMap() {
+	public Map<String, ITFieldBox> getFieldBoxMap() {
 		return (modelViewLoader!=null) ? modelViewLoader.getFieldBoxMap(): null;
 	}
 	
@@ -248,7 +251,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 		form.tInitializeReader();
 	}
 	
-	public List<TFieldDescriptor> getFieldDescriptorList(){
+	public List<ITFieldDescriptor> getFieldDescriptorList(){
 		return modelViewLoader.getFieldDescriptorList();
 	}
 		
@@ -329,7 +332,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	/**
 	 * @return the setting
 	 */
-	public TSetting getSetting() {
+	public ITSetting getSetting() {
 		return setting;
 	}
 	

@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.tedros.fx.form.ITModelForm;
+import org.tedros.api.form.ITModelForm;
 import org.tedros.fx.form.TDefaultForm;
 
 

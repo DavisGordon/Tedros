@@ -6,10 +6,10 @@
  */
 package org.tedros.fx.presenter;
 
+import org.tedros.api.presenter.ITPresenter;
+import org.tedros.api.presenter.view.ITView;
+import org.tedros.api.presenter.view.TViewState;
 import org.tedros.core.ITModule;
-import org.tedros.core.presenter.ITPresenter;
-import org.tedros.core.presenter.view.ITView;
-import org.tedros.core.presenter.view.TViewState;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;

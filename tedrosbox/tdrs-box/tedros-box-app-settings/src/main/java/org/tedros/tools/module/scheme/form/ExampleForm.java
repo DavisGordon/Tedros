@@ -1,6 +1,6 @@
 package org.tedros.tools.module.scheme.form;
 
-import org.tedros.core.presenter.ITPresenter;
+import org.tedros.api.presenter.ITPresenter;
 import org.tedros.fx.form.TVBoxForm;
 import org.tedros.tools.module.scheme.model.ExampleMV;
 

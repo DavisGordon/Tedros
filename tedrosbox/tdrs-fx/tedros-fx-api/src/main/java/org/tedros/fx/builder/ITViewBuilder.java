@@ -1,6 +1,6 @@
 package org.tedros.fx.builder;
 
-import org.tedros.core.presenter.view.ITView;
+import org.tedros.api.presenter.view.ITView;
 import org.tedros.fx.presenter.model.TModelView;
 
 @SuppressWarnings("rawtypes")

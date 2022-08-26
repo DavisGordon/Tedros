@@ -8,12 +8,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.core.TLanguage;
 import org.tedros.core.model.ITModelView;
 import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TModelViewType;
 import org.tedros.fx.annotation.control.TValidator;
-import org.tedros.fx.descriptor.TFieldDescriptor;
 import org.tedros.fx.domain.TZeroValidation;
 import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.fx.util.TReflectionUtil;
@@ -67,9 +67,9 @@ public final class TControlValidator<E extends ITModelView> {
 		for (E tModelView : modelsView) {
 			if(tModelView==null)
 				continue;
-			List<TFieldDescriptor> l = TReflectionUtil.getFieldDescriptorList(tModelView);
+			List<ITFieldDescriptor> l = TReflectionUtil.getFieldDescriptorList(tModelView);
 			TValidatorResult<E> result = new TValidatorResult(tModelView);
-			for (TFieldDescriptor fd : l){
+			for (ITFieldDescriptor fd : l){
 				if(TReflectionUtil.isIgnoreField(fd))
 					continue;
 				validateField(result, fd, tModelView);
@@ -80,7 +80,7 @@ public final class TControlValidator<E extends ITModelView> {
 	}
 	
 	@SuppressWarnings({"unchecked"})
-	private void validateField(final TValidatorResult<E> result, final TFieldDescriptor tFieldDescriptor, final E modelView) throws Exception {
+	private void validateField(final TValidatorResult<E> result, final ITFieldDescriptor tFieldDescriptor, final E modelView) throws Exception {
 		
 		final String fieldName = tFieldDescriptor.getFieldName();
 		Method propertyGetMethod = null;

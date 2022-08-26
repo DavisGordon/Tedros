@@ -3,6 +3,7 @@ package org.tedros.fx.presenter.dynamic.behavior;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.ITModule;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosAppManager;
@@ -13,7 +14,6 @@ import org.tedros.fx.builder.ITBuilder;
 import org.tedros.fx.builder.ITControlBuilder;
 import org.tedros.fx.builder.ITFieldBuilder;
 import org.tedros.fx.descriptor.TComponentDescriptor;
-import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.exception.TValidatorException;
 import org.tedros.fx.modal.TMessageBox;
 import org.tedros.fx.presenter.behavior.TActionType;
@@ -156,11 +156,12 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	/**
 	 * Perform this action when a model is selected.
 	 * */
+	@SuppressWarnings("unchecked")
 	public void selectedItemAction(TModelView new_val) {
 		if(actionHelper.runBefore(TActionType.SELECTED_ITEM)){
 			if(new_val==null)
 				return;
-			setModelView(new_val);
+			setModelView((M) new_val);
 			showForm(TViewMode.EDIT);
 		
 		}

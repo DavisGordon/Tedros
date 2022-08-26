@@ -11,11 +11,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.tedros.api.descriptor.ITFieldDescriptor;
+import org.tedros.api.form.ITModelForm;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.model.ITModelView;
 import org.tedros.fx.annotation.TDebugConfig;
 import org.tedros.fx.descriptor.TComponentDescriptor;
-import org.tedros.fx.descriptor.TFieldDescriptor;
-import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.util.TReflectionUtil;
 
 import javafx.application.Platform;
@@ -54,14 +55,14 @@ class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 		
 		initialize();
 		
-		final List<TFieldDescriptor> controlsFd = new ArrayList<>();
-		final List<TFieldDescriptor> layoutFd = new ArrayList<>();
+		final List<ITFieldDescriptor> controlsFd = new ArrayList<>();
+		final List<ITFieldDescriptor> layoutFd = new ArrayList<>();
 		
 		ChangeListener<Boolean> chl = (ob, o, n) ->{
 			if(n) {
-				super.getFieldDescriptorList().sort(new Comparator<TFieldDescriptor>() {
+				super.getFieldDescriptorList().sort(new Comparator<ITFieldDescriptor>() {
 					@Override
-					public int compare(TFieldDescriptor o1, TFieldDescriptor o2) {
+					public int compare(ITFieldDescriptor o1, ITFieldDescriptor o2) {
 						return Integer.compare(o1.getOrder(), o2.getOrder());
 					}
 				});
@@ -83,7 +84,7 @@ class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 		int order = 0;
 		for(final String fieldName : getFieldsName()){
 		
-			final TFieldDescriptor tFieldDescriptor = getFieldDescriptor(fieldName);
+			final ITFieldDescriptor tFieldDescriptor = getFieldDescriptor(fieldName);
 			
 			tFieldDescriptor.setOrder(order);
 			order++;
@@ -104,9 +105,9 @@ class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 		if(!layoutFd.isEmpty())
 			count.addListener((obj, o, n) ->{
 				if(n.intValue()==0) {
-					layoutFd.sort(new Comparator<TFieldDescriptor>() {
+					layoutFd.sort(new Comparator<ITFieldDescriptor>() {
 						@Override
-						public int compare(TFieldDescriptor o1, TFieldDescriptor o2) {
+						public int compare(ITFieldDescriptor o1, ITFieldDescriptor o2) {
 							return Integer.compare(o2.getOrder(), o1.getOrder());
 						}
 					});
@@ -174,7 +175,7 @@ class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 		
 		for(final String fieldName : getFieldsName()){
 		
-			final TFieldDescriptor tFieldDescriptor = getFieldDescriptor(fieldName);
+			final ITFieldDescriptor tFieldDescriptor = getFieldDescriptor(fieldName);
 			
 			if(TReflectionUtil.isIgnoreField(tFieldDescriptor) || tFieldDescriptor.isLoaded())
 				continue;

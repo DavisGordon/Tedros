@@ -11,11 +11,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.tedros.api.parser.ITAnnotationParser;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.annotation.TAnnotationDefaultValue;
 import org.tedros.fx.annotation.layout.TPane;
 import org.tedros.fx.annotation.layout.TVBoxMargin;
 import org.tedros.fx.annotation.layout.TVGrow;
-import org.tedros.fx.annotation.parser.ITAnnotationParser;
 import org.tedros.fx.annotation.parser.TRequiredModalParser;
 import org.tedros.fx.annotation.parser.TVBoxParser;
 import org.tedros.fx.annotation.scene.TNode;
@@ -24,7 +25,6 @@ import org.tedros.fx.builder.ITFieldBuilder;
 import org.tedros.fx.builder.TOneSelectionModalBuilder;
 import org.tedros.fx.builder.TTextFieldBuilder;
 import org.tedros.fx.control.TRequiredTextField;
-import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.server.model.ITModel;
 

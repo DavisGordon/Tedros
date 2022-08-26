@@ -9,6 +9,7 @@ package org.tedros.fx.form;
 import java.lang.annotation.Annotation;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.core.TLanguage;
 import org.tedros.core.style.TStyleResourceValue;
 import org.tedros.fx.annotation.control.TLabel;
@@ -64,7 +65,7 @@ final class THtmlBoxBuilder {
 		
 		TLabel fieldLabel = getLabelFromReader(annotation);
 		if(fieldLabel==null ||  StringUtils.isBlank(fieldLabel.text()))
-			fieldLabel = (TLabel) descriptor.getFieldLabelAnnotation();
+			fieldLabel = (TLabel) descriptor.getFieldAnnotation(TLabel.class);
 		
 		StringBuffer box = new StringBuffer();
 		
@@ -125,18 +126,19 @@ final class THtmlBoxBuilder {
 		return TReflectionUtil.getValue(annotation, "label");
 	}
 	
-	private static Annotation getReaderHtmlAnnotation(TComponentDescriptor descriptor){
+	private static Annotation getReaderHtmlAnnotation(ITComponentDescriptor descriptor){
 		Object[] arr = TReflectionUtil.getReaderHtmlBuilder(descriptor.getFieldAnnotationList());
 		if(arr!=null)
 			return (Annotation) arr[0];
 		return null;
 	}
 	
+	
 	private static String replaceTags(String styleContent) {
 		
 		styleContent = StringUtils.defaultIfBlank(styleContent, "");
 		
-		if(tStripTagUtil.isTagPresent(styleContent)){
+		if(TStripTagUtil.isTagPresent(styleContent)){
 			String[] keys = tStripTagUtil.getTags(styleContent);
 			for (String key : keys) {
 				TStyleResourceValue tResourceValue = TStyleResourceValue.getByName(key);

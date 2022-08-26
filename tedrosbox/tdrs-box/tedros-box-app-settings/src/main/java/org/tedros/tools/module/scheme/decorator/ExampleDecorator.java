@@ -1,7 +1,7 @@
 package org.tedros.tools.module.scheme.decorator;
 
+import org.tedros.api.presenter.view.ITDynaView;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
-import org.tedros.fx.presenter.dynamic.view.ITDynaView;
 import org.tedros.tools.module.scheme.model.ExampleMV;
 
 import javafx.geometry.Insets;

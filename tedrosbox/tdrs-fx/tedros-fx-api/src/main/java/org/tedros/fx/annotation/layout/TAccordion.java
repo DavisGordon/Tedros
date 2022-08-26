@@ -11,7 +11,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.tedros.fx.annotation.parser.ITAnnotationParser;
+import org.tedros.api.parser.ITAnnotationParser;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.annotation.parser.TAccordionParser;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TControl;
@@ -19,7 +20,6 @@ import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.builder.ITLayoutBuilder;
 import org.tedros.fx.builder.TAccordionBuilder;
 import org.tedros.fx.builder.TVBoxBuilder;
-import org.tedros.fx.domain.TViewMode;
 
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;

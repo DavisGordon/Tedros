@@ -2,7 +2,7 @@ package org.tedros.fx.presenter.report.behavior;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.tedros.fx.domain.TViewMode;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewReportBaseBehavior;
 import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.server.model.ITReportModel;

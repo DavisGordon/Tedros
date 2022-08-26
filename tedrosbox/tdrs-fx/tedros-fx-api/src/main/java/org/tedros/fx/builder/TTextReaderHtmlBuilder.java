@@ -11,13 +11,13 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.descriptor.ITComponentDescriptor;
+import org.tedros.api.form.ITModelForm;
 import org.tedros.core.model.ITModelView;
 import org.tedros.core.style.TStyleResourceValue;
 import org.tedros.fx.annotation.TCodeValue;
 import org.tedros.fx.annotation.reader.TTextReaderHtml;
-import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.domain.THtmlConstant;
-import org.tedros.fx.form.ITModelForm;
 import org.tedros.fx.reader.THtmlReader;
 import org.tedros.fx.util.TMaskUtil;
 import org.tedros.util.TStripTagUtil;
@@ -48,7 +48,7 @@ implements ITReaderHtmlBuilder<TTextReaderHtml, SimpleStringProperty> {
 	@SuppressWarnings("rawtypes")
 	public THtmlReader build(final TTextReaderHtml tAnnotation, SimpleStringProperty property) throws Exception {
 		
-		final TComponentDescriptor descriptor = getComponentDescriptor();
+		final ITComponentDescriptor descriptor = getComponentDescriptor();
 		final ITModelView modelView = descriptor.getModelView();
 		final String fieldName = descriptor.getFieldDescriptor().getFieldName();
 		final String uuid = UUID.randomUUID().toString();

@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.tedros.core.presenter.ITPresenter;
+import org.tedros.api.presenter.ITPresenter;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.server.model.ITModel;
 
