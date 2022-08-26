@@ -2,6 +2,7 @@ package org.tedros.fx.form;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.form.ITModelForm;
 import org.tedros.core.model.ITModelView;
 import org.tedros.fx.annotation.control.TTrigger;
 import org.tedros.fx.control.ITTriggeredable;
@@ -46,9 +47,9 @@ public class TTriggerLoader<M extends ITModelView<?>, F extends ITModelForm<M>> 
 				if(!buildTrigger)
 					return;
 				
-				TFieldBox source = this.form.gettFieldBox(fieldName);
+				TFieldBox source = (TFieldBox) this.form.gettFieldBox(fieldName);
 				TFieldBox target = (StringUtils.isNotBlank(tAnnotation.targetFieldName())) 
-						? this.form.gettFieldBox(tAnnotation.targetFieldName()) 
+						? (TFieldBox) this.form.gettFieldBox(tAnnotation.targetFieldName()) 
 								: null;
 						
 				if(source==null){
@@ -66,7 +67,7 @@ public class TTriggerLoader<M extends ITModelView<?>, F extends ITModelForm<M>> 
 					
 					for(String associatedFieldName : tAnnotation.associatedFieldBox())
 						if(!associatedFieldName.trim().equals(""))
-							trigger.addAssociatedField(this.form.gettFieldBox(associatedFieldName));
+							trigger.addAssociatedField((TFieldBox)this.form.gettFieldBox(associatedFieldName));
 					
 					final Node sourceControl = source.gettControl();
 					

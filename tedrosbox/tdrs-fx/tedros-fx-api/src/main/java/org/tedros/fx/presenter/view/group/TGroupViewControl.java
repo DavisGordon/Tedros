@@ -8,7 +8,7 @@ package org.tedros.fx.presenter.view.group;
 
 import java.util.List;
 
-import org.tedros.core.presenter.view.ITGroupViewItem;
+import org.tedros.api.presenter.view.ITGroupViewItem;
 
 /**
  * DESCRIÇÃO DA CLASSE

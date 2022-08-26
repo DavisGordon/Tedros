@@ -1,10 +1,10 @@
-package org.tedros.fx.form;
+package org.tedros.api.form;
 
 import java.util.List;
 
+import org.tedros.api.descriptor.ITFieldDescriptor;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.model.ITModelView;
-import org.tedros.fx.descriptor.TFieldDescriptor;
-import org.tedros.fx.domain.TViewMode;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -25,7 +25,7 @@ public interface ITModelForm<M extends ITModelView> extends ITForm {
 	
 	public void settEditMode();
 	
-	public List<TFieldDescriptor> gettFieldDescriptorList();
+	public List<ITFieldDescriptor> gettFieldDescriptorList();
 	
 	public void tAddAssociatedObject(final String name, final Object obj);
 	

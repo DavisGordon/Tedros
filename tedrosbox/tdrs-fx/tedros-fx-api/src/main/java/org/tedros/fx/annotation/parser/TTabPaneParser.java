@@ -1,10 +1,10 @@
 package org.tedros.fx.annotation.parser;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TTab;
 import org.tedros.fx.annotation.control.TTabPane;
-import org.tedros.fx.descriptor.TFieldDescriptor;
 
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -69,7 +69,7 @@ public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
 	
 
 	private void addNode(final Pane object, String field) {
-		TFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor();
+		ITFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor();
 		if(fd.hasParent())
 			return;
 		Node node = null;

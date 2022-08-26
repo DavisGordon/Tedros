@@ -3,7 +3,7 @@ package org.tedros.fx.control.trigger;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.tedros.fx.form.ITModelForm;
+import org.tedros.api.form.ITModelForm;
 import org.tedros.fx.form.TFieldBox;
 
 public abstract class TTrigger<T> {

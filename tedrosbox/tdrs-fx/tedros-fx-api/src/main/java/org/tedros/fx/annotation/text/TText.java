@@ -5,8 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.tedros.api.parser.ITAnnotationParser;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.annotation.control.TConverter;
-import org.tedros.fx.annotation.parser.ITAnnotationParser;
 import org.tedros.fx.annotation.parser.TTextParser;
 import org.tedros.fx.annotation.property.TBooleanProperty;
 import org.tedros.fx.annotation.property.TDoubleProperty;
@@ -19,7 +20,6 @@ import org.tedros.fx.builder.ITControlBuilder;
 import org.tedros.fx.builder.ITFieldBuilder;
 import org.tedros.fx.builder.TTextBuilder;
 import org.tedros.fx.control.TText.TTextStyle;
-import org.tedros.fx.domain.TViewMode;
 
 import javafx.geometry.VPos;
 import javafx.scene.Node;

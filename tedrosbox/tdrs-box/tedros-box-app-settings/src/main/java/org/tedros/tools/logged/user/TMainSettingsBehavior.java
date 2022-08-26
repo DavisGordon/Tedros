@@ -35,7 +35,7 @@ public class TMainSettingsBehavior extends TSaveViewBehavior<TMainSettingsModelV
 		    		m = (ITModule) ((ScrollPane)view).getContent();
 		    	
 		    	if(m!=null) {
-			    	String msg = m.canStop();
+			    	String msg = m.tCanStop();
 			    	if(msg==null) {
 			    		TedrosContext.exit();
 			    	}else {

@@ -1,6 +1,7 @@
 package org.tedros.fx.annotation.parser;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.core.TLanguage;
 import org.tedros.fx.annotation.control.TTableColumn;
 import org.tedros.fx.annotation.control.TTableNestedColumn;
@@ -50,7 +51,7 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 						tableNestedColumn.setCellValueFactory(buildPropertyValueFactory(tTableNestedColumn.cellValue()));
 						sbClnVf = true;
 					}
-					final TComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), null);
+					final ITComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), null);
 					callParser(tTableNestedColumn, tableNestedColumn, descriptor);
 				}
 				
@@ -60,7 +61,7 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 						clnVf = true;
 					}
 				}
-				final TComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), null);
+				final ITComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), null);
 				callParser(tTableSubColumn, tableSubColumn, descriptor);
 			}
 			
@@ -71,7 +72,7 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 				}
 			}
 			
-			final TComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), null);
+			final ITComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), null);
 			callParser(tTableColumn, tableColumn, descriptor);
 			
 			tableView.getColumns().add(tableColumn);
@@ -161,12 +162,19 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 			}
 		}
 		
-		
 		tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		
-		tableView.setEditable(true);
+		if(annotation.selectionModel().parse()) {
+			final ITComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), null);
+			callParser(annotation.selectionModel(), tableView.getSelectionModel(), descriptor);
+		}
+
+		if(annotation.focusModel().parse()) {
+			final ITComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), null);
+			callParser(annotation.focusModel(), tableView.getFocusModel(), descriptor);
+		}
 				
-		super.parse(annotation, tableView, "columns");
+		super.parse(annotation, tableView, "columns","selectionModel","focusModel");
 	}
 
 	/**

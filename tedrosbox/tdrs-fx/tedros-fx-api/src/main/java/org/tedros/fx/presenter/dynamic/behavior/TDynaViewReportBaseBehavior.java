@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.common.model.TFileEntity;
 import org.tedros.core.ITModule;
 import org.tedros.core.TLanguage;
@@ -19,7 +20,6 @@ import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
 import org.tedros.core.setting.model.TPropertie;
 import org.tedros.fx.annotation.presenter.TBehavior;
-import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.exception.TException;
 import org.tedros.fx.exception.TValidatorException;
 import org.tedros.fx.modal.TMessageBox;

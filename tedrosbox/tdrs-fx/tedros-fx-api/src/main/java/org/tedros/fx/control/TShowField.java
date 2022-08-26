@@ -6,9 +6,9 @@ package org.tedros.fx.control;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.app.component.ITComponent;
 import org.tedros.core.TLanguage;
-import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.domain.TLayoutType;
 import org.tedros.fx.form.TFieldBox;
 import org.tedros.fx.form.TFieldBoxBuilder;
@@ -44,7 +44,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 	@SuppressWarnings("rawtypes")
 	private Property value;
 	private TShowFieldValue[] fields;
-	private TComponentDescriptor descriptor;
+	private ITComponentDescriptor descriptor;
 	
 	private Pane pane;
 	/**
@@ -64,7 +64,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 		}
 	}
 	@SuppressWarnings("rawtypes")
-	public TShowField(TLayoutType layout, Property value, TComponentDescriptor descriptor ,TShowFieldValue... fields) {
+	public TShowField(TLayoutType layout, Property value, ITComponentDescriptor descriptor ,TShowFieldValue... fields) {
 		this.descriptor = descriptor;
 		this.layout = layout;
 		this.value = value;

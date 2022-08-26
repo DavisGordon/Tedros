@@ -1,8 +1,8 @@
-package org.tedros.core.presenter.view;
+package org.tedros.api.presenter.view;
 
+import org.tedros.api.presenter.ITPresenter;
 import org.tedros.core.ITModule;
 import org.tedros.core.model.ITModelView;
-import org.tedros.core.presenter.ITPresenter;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 

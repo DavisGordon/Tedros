@@ -1,6 +1,6 @@
 package org.tedros.tools.module.scheme.behaviour;
 
-import org.tedros.fx.form.ITModelForm;
+import org.tedros.api.form.ITModelForm;
 import org.tedros.fx.form.TDefaultForm;
 import org.tedros.fx.form.TProgressIndicatorForm;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;

@@ -11,7 +11,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.tedros.fx.domain.TViewMode;
+import org.tedros.api.presenter.view.TViewMode;
 
 /**
  * <pre>

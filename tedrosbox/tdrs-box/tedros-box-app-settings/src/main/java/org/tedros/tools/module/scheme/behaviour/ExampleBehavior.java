@@ -2,12 +2,13 @@ package org.tedros.tools.module.scheme.behaviour;
 
 import java.util.Map;
 
+import org.tedros.api.form.ITFieldBox;
+import org.tedros.api.form.ITModelForm;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.control.TCheckBoxField;
 import org.tedros.fx.control.THorizontalRadioGroup;
 import org.tedros.fx.control.TVerticalRadioGroup;
 import org.tedros.fx.control.action.TPresenterAction;
-import org.tedros.fx.domain.TViewMode;
-import org.tedros.fx.form.ITModelForm;
 import org.tedros.fx.form.TDefaultForm;
 import org.tedros.fx.form.TFieldBox;
 import org.tedros.fx.form.TProgressIndicatorForm;
@@ -177,10 +178,10 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleMV, Exampl
 	
 	public void processLabelStyle(Color textColor, String size) {
 		
-		final Map<String, TFieldBox> fieldBoxMap = getForm().gettFieldBoxMap();
+		final Map<String, ITFieldBox> fieldBoxMap = getForm().gettFieldBoxMap();
 		
 		for(String key : fieldBoxMap.keySet()){
-			TFieldBox fieldBox = fieldBoxMap.get(key);
+			ITFieldBox fieldBox = fieldBoxMap.get(key);
 			final Node label = fieldBox.gettLabel(); 
 			if(label!=null){
 				label.setStyle("-fx-text-fill: "+TColorUtil.toHexadecimal(textColor)+";"+ 
@@ -192,10 +193,10 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleMV, Exampl
 	
 	public void processTextStyle(Color textColor, String size) {
 		
-		final Map<String, TFieldBox> fieldBoxMap = getForm().gettFieldBoxMap();
+		final Map<String, ITFieldBox> fieldBoxMap = getForm().gettFieldBoxMap();
 		
 		for(String key : fieldBoxMap.keySet()){
-			TFieldBox fieldBox = fieldBoxMap.get(key);
+			ITFieldBox fieldBox = fieldBoxMap.get(key);
 			final Node node = fieldBox.gettControl();
 			if(node!=null && node instanceof TTextReader){
 				node.setStyle("-fx-fill: "+TColorUtil.toHexadecimal(textColor)+";"+ 
@@ -217,10 +218,10 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleMV, Exampl
 		
 		String borderHexColor = TColorUtil.toHexadecimal(inputBorderColor);
 		
-		final Map<String, TFieldBox> fieldBoxMap = getForm().gettFieldBoxMap();
+		final Map<String, ITFieldBox> fieldBoxMap = getForm().gettFieldBoxMap();
 		
 		for(String key : fieldBoxMap.keySet()){
-			TFieldBox fieldBox = fieldBoxMap.get(key);
+			TFieldBox fieldBox = (TFieldBox) fieldBoxMap.get(key);
 			
 			final Node node = fieldBox.gettControl(); 
 			if(node!=null){

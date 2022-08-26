@@ -3,6 +3,7 @@
  */
 package org.tedros.tools.module.scheme.model;
 
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.style.TStyleResourceValue;
 import org.tedros.fx.annotation.control.TColorPickerField;
 import org.tedros.fx.annotation.control.TLabel;
@@ -19,7 +20,6 @@ import org.tedros.fx.annotation.property.TObservableListProperty;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TControl;
 import org.tedros.fx.domain.TLabelPosition;
-import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.tools.ToolsKey;

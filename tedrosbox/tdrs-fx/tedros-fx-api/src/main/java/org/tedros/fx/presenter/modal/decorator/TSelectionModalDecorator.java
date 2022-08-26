@@ -1,8 +1,8 @@
 package org.tedros.fx.presenter.modal.decorator;
 
+import org.tedros.api.presenter.view.ITDynaView;
 import org.tedros.fx.annotation.presenter.TSelectionModalPresenter;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewSelectionBaseDecorator;
-import org.tedros.fx.presenter.dynamic.view.ITDynaView;
 import org.tedros.fx.presenter.model.TModelView;
 
 import javafx.geometry.Insets;

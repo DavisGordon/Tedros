@@ -1,10 +1,10 @@
 package org.tedros.fx.presenter.dynamic.decorator;
 
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.annotation.TAnnotationDefaultValue;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.control.TButton;
-import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.model.TModelView;
 

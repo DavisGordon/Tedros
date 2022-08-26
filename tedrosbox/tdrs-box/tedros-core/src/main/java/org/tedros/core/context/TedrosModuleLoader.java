@@ -14,6 +14,8 @@ import org.tedros.core.annotation.TLoadable;
 import org.tedros.core.model.ITModelView;
 import org.tedros.server.model.ITModel;
 
+import javafx.collections.ObservableList;
+
 /**
  * @author Davis Gordon
  *
@@ -66,11 +68,26 @@ public final class TedrosModuleLoader {
 			return e.get(MODEL) == model.getClass();
 		})
 		.forEach(e->{
-			l.add(new TLoader((Class) e.get(MODEL), (Class) e.get(MODELVIEW), (Class) e.get(MODULE), model, null));
+			l.add(new TLoader((Class) e.get(MODEL), (Class) e.get(MODELVIEW), (Class) e.get(MODULE), model, null, null, null));
 		});
 		return l;
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	public List<TLoader> getLoader(List<? extends ITModel> models) {
+		if(models == null || models.isEmpty())
+			throw new IllegalArgumentException("The models argument cannot be null or empty"); 
+		Class<? extends ITModel> cls = models.get(0).getClass();
+		List<TLoader> l = new ArrayList<>();
+		entries.stream()
+		.filter(e->{
+			return e.get(MODEL) == cls;
+		})
+		.forEach(e->{
+			l.add(new TLoader((Class) e.get(MODEL), (Class) e.get(MODELVIEW), (Class) e.get(MODULE), null, null, models, null));
+		});
+		return l;
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<TLoader> getLoader(ITModelView model) {
@@ -80,7 +97,23 @@ public final class TedrosModuleLoader {
 			return e.get(MODELVIEW) == model.getClass();
 		})
 		.forEach(e->{
-			l.add(new TLoader((Class) e.get(MODEL), (Class) e.get(MODELVIEW), (Class) e.get(MODULE), null, model));
+			l.add(new TLoader((Class) e.get(MODEL), (Class) e.get(MODELVIEW), (Class) e.get(MODULE), null, model, null, null));
+		});
+		return l;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<TLoader> getLoader(ObservableList<? extends ITModelView> modelsView) {
+		if(modelsView == null || modelsView.isEmpty())
+			throw new IllegalArgumentException("The modelsView argument cannot be null or empty"); 
+		Class<? extends ITModelView> cls = modelsView.get(0).getClass();
+		List<TLoader> l = new ArrayList<>();
+		entries.stream()
+		.filter(e->{
+			return e.get(MODELVIEW) == cls;
+		})
+		.forEach(e->{
+			l.add(new TLoader((Class) e.get(MODEL), (Class) e.get(MODELVIEW), (Class) e.get(MODULE), null, null, null, modelsView));
 		});
 		return l;
 	}
@@ -93,7 +126,7 @@ public final class TedrosModuleLoader {
 			return e.get(MODEL) == model;
 		})
 		.forEach(e->{
-			l.add(new TLoader((Class) e.get(MODEL), (Class) e.get(MODELVIEW), (Class) e.get(MODULE), null, null));
+			l.add(new TLoader((Class) e.get(MODEL), (Class) e.get(MODELVIEW), (Class) e.get(MODULE), null, null, null, null));
 		});
 		return l;
 	}
@@ -106,7 +139,7 @@ public final class TedrosModuleLoader {
 			return e.get(MODELVIEW) == model;
 		})
 		.forEach(e->{
-			l.add(new TLoader((Class) e.get(MODEL), (Class) e.get(MODELVIEW), (Class) e.get(MODULE), null, null));
+			l.add(new TLoader((Class) e.get(MODEL), (Class) e.get(MODELVIEW), (Class) e.get(MODULE), null, null, null, null));
 		});
 		return l;
 	}
@@ -120,7 +153,7 @@ public final class TedrosModuleLoader {
 			return e.get(MODULE) == module;
 		})
 		.forEach(e->{
-			l.add(new TLoader((Class) e.get(MODEL), (Class) e.get(MODELVIEW), (Class) e.get(MODULE), null, null));
+			l.add(new TLoader((Class) e.get(MODEL), (Class) e.get(MODELVIEW), (Class) e.get(MODULE), null, null, null, null));
 		});
 		return l;
 	}

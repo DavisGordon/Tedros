@@ -8,8 +8,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.tedros.api.parser.ITAnnotationParser;
 import org.tedros.fx.annotation.TAnnotationDefaultValue;
-import org.tedros.fx.annotation.parser.ITAnnotationParser;
 import org.tedros.fx.annotation.parser.TTableSubColumnParser;
 import org.tedros.fx.annotation.property.TBooleanProperty;
 import org.tedros.fx.annotation.property.TDoubleProperty;

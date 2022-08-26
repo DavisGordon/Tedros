@@ -1,8 +1,7 @@
-package org.tedros.core.presenter;
+package org.tedros.api.presenter;
 
+import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.ITModule;
-import org.tedros.core.model.ITModelView;
-import org.tedros.core.presenter.view.ITView;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 
@@ -50,16 +49,6 @@ public interface ITPresenter<V extends ITView> {
 	public void initialize();
 	
 
-	/**
-	 * Return true if this presenter can load the model view type
-	 * */
-	boolean canLoadModelView(Class<? extends ITModelView> modelViewClass);
-	
-	/**
-	 * Load the model view 
-	 * */
-	public void loadModelView(ITModelView modelView);
-	
 	/**
 	 * invalidate the presenter
 	 * @return 

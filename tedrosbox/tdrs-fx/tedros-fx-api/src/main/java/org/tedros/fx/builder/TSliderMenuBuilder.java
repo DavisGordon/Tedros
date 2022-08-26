@@ -8,8 +8,8 @@ package org.tedros.fx.builder;
 
 import java.lang.annotation.Annotation;
 
+import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.fx.descriptor.TComponentDescriptor;
-import org.tedros.fx.descriptor.TFieldDescriptor;
 import org.tedros.fx.domain.TLayoutType;
 import org.tedros.fx.form.TControlLayoutReaderBuilder;
 import org.tedros.fx.html.THtmlLayoutGenerator;
@@ -79,7 +79,7 @@ implements ITLayoutBuilder<TSliderMenu> {
 	}
 	
 	private Node getComponent(String field) {
-		TFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor();
+		ITFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor();
 		if(fd.hasParent())
 			return null;
 		Node node = null;

@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.descriptor.ITComponentDescriptor;
+import org.tedros.api.descriptor.ITFieldDescriptor;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.model.ITModelView;
 import org.tedros.fx.annotation.TDebugConfig;
 import org.tedros.fx.annotation.control.TLabel;
@@ -23,8 +26,6 @@ import org.tedros.fx.builder.ITLayoutBuilder;
 import org.tedros.fx.builder.ITReaderBuilder;
 import org.tedros.fx.builder.ITReaderHtmlBuilder;
 import org.tedros.fx.descriptor.TComponentDescriptor;
-import org.tedros.fx.descriptor.TFieldDescriptor;
-import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.property.TSimpleFileProperty;
 import org.tedros.fx.reader.THtmlReader;
 import org.tedros.fx.util.TReflectionUtil;
@@ -92,7 +93,7 @@ public final class TControlLayoutBuilder {
 		}
 	}
 	
-	public void getLayoutField(TComponentDescriptor descriptor) throws Exception{
+	public void getLayoutField(ITComponentDescriptor descriptor) throws Exception{
 		
 		Long startTime = TDebugConfig.detailParseExecution ? System.nanoTime() : null;
 		
@@ -115,7 +116,7 @@ public final class TControlLayoutBuilder {
 	}
 
 	@SuppressWarnings({"rawtypes"})
-	private void getLayout(TComponentDescriptor descriptor) throws Exception{
+	private void getLayout(ITComponentDescriptor descriptor) throws Exception{
 		
 		if(descriptor.getFieldDescriptor().isLoaded())
 			return;
@@ -141,7 +142,7 @@ public final class TControlLayoutBuilder {
 		if(layoutBuilder==null){
 			return;
 		}
-		TFieldDescriptor fd = descriptor.getFieldDescriptor();
+		ITFieldDescriptor fd = descriptor.getFieldDescriptor();
 		TFieldBox fieldBox = (TFieldBox) fd.getComponent();
 		Node layout = ((ITLayoutBuilder) layoutBuilder).build(layoutAnnotation);
 		descriptor.getComponents().put(fd.getFieldName(), layout);
@@ -267,7 +268,7 @@ public final class TControlLayoutBuilder {
 
 
 	@SuppressWarnings({"rawtypes"})
-	private final void getLayoutReader(TComponentDescriptor descriptor) throws Exception{
+	private final void getLayoutReader(ITComponentDescriptor descriptor) throws Exception{
 		
 		if(descriptor.getFieldDescriptor().isLoaded())
 			return;
@@ -298,7 +299,7 @@ public final class TControlLayoutBuilder {
 			return;
 		}
 		
-		TFieldDescriptor fd = descriptor.getFieldDescriptor();
+		ITFieldDescriptor fd = descriptor.getFieldDescriptor();
 		Node layout = null;
 		
 		if(!htmlReaderFlag){
@@ -378,7 +379,7 @@ public final class TControlLayoutBuilder {
 	}
 	
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	private Node buildControl(TComponentDescriptor descriptor, final ITModelView modelView, final Method modelViewGetMethod, ITFieldBuilder controlBuilder, Annotation controlAnnotation)
+	private Node buildControl(ITComponentDescriptor descriptor, final ITModelView modelView, final Method modelViewGetMethod, ITFieldBuilder controlBuilder, Annotation controlAnnotation)
 			throws IllegalAccessException, InvocationTargetException, Exception, NoSuchMethodException {
 		
 		
@@ -427,7 +428,7 @@ public final class TControlLayoutBuilder {
 		return node;
 	}
 	
-	private void applyEffects(TComponentDescriptor descriptor, Node control) throws Exception {
+	private void applyEffects(ITComponentDescriptor descriptor, Node control) throws Exception {
 		if(control==null){
 			System.err.println("WARNING: Control null to "+descriptor.getFieldDescriptor().getFieldName());
 			return;

@@ -12,10 +12,10 @@ import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.util.UUID;
 
+import org.tedros.api.form.ITForm;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.fx.annotation.scene.image.TImage;
 import org.tedros.fx.annotation.scene.image.TImageView;
-import org.tedros.fx.form.ITForm;
 import org.tedros.fx.property.TSimpleFileProperty;
 import org.tedros.server.entity.ITFileEntity;
 

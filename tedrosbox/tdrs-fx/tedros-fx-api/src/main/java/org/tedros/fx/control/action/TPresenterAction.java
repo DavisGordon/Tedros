@@ -2,7 +2,7 @@ package org.tedros.fx.control.action;
 
 import java.util.Arrays;
 
-import org.tedros.core.presenter.ITPresenter;
+import org.tedros.api.presenter.ITPresenter;
 import org.tedros.fx.presenter.behavior.TActionType;
 
 

@@ -3,11 +3,14 @@ package org.tedros.fx.form;
 import java.util.List;
 import java.util.Map;
 
+import org.tedros.api.descriptor.ITComponentDescriptor;
+import org.tedros.api.descriptor.ITFieldDescriptor;
+import org.tedros.api.form.ITFieldBox;
+import org.tedros.api.form.ITModelForm;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.model.ITModelView;
 import org.tedros.core.repository.TRepository;
 import org.tedros.fx.descriptor.TComponentDescriptor;
-import org.tedros.fx.descriptor.TFieldDescriptor;
-import org.tedros.fx.domain.TViewMode;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -38,7 +41,7 @@ public abstract class TFieldLoader<M extends ITModelView<?>> {
 		return this.allLoaded;
 	}
 	
-	protected List<TFieldDescriptor> getFieldDescriptorList(){
+	protected List<ITFieldDescriptor> getFieldDescriptorList(){
 		return descriptor.getFieldDescriptorList();
 	}
 	
@@ -53,22 +56,22 @@ public abstract class TFieldLoader<M extends ITModelView<?>> {
 		return descriptor.getComponents();
 	}
 	
-	protected TFieldBox geFieldBox(String fieldName){
+	protected ITFieldBox geFieldBox(String fieldName){
 		return descriptor.getFieldBox(fieldName);
 	}
 	
-	protected Map<String, TFieldBox> getFieldBoxMap() {
+	protected Map<String, ITFieldBox> getFieldBoxMap() {
 		return descriptor.getFieldBoxMap();
 	}
 	
-	protected final TFieldDescriptor getFieldDescriptor(final String fieldName){
-		for(final TFieldDescriptor field : descriptor.getFieldDescriptorList())
+	protected final ITFieldDescriptor getFieldDescriptor(final String fieldName){
+		for(final ITFieldDescriptor field : descriptor.getFieldDescriptorList())
 			if(field.getFieldName().equals(fieldName))
 				return field;
 		return null;
 	}
 	
-	protected void loadEditFieldBox(final TFieldDescriptor tFieldDescriptor, boolean bcontrol) throws Exception{
+	protected void loadEditFieldBox(final ITFieldDescriptor tFieldDescriptor, boolean bcontrol) throws Exception{
 		
 		/*int x=0;
 		if(tFieldDescriptor.getFieldName().equals("painelCorTexto"))
@@ -87,7 +90,7 @@ public abstract class TFieldLoader<M extends ITModelView<?>> {
 		
 	}
 	
-	protected void loadReaderFieldBox(final ObservableList<Node> nodesLoaded, final TFieldDescriptor tFieldDescriptor) throws Exception{
+	protected void loadReaderFieldBox(final ObservableList<Node> nodesLoaded, final ITFieldDescriptor tFieldDescriptor) throws Exception{
 		
 		descriptor.setMode(TViewMode.READER);
 		descriptor.setFieldDescriptor(tFieldDescriptor);
@@ -116,7 +119,7 @@ public abstract class TFieldLoader<M extends ITModelView<?>> {
 	/**
 	 * @return the descriptor
 	 */
-	TComponentDescriptor getDescriptor() {
+	ITComponentDescriptor getDescriptor() {
 		return descriptor;
 	}
 	

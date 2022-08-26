@@ -4,10 +4,10 @@ package org.tedros.fx.presenter.view.group;
 import java.net.URL;
 import java.util.List;
 
+import org.tedros.api.presenter.ITGroupPresenter;
+import org.tedros.api.presenter.view.ITGroupView;
+import org.tedros.api.presenter.view.ITGroupViewItem;
 import org.tedros.core.ITModule;
-import org.tedros.core.presenter.ITGroupPresenter;
-import org.tedros.core.presenter.view.ITGroupView;
-import org.tedros.core.presenter.view.ITGroupViewItem;
 import org.tedros.fx.presenter.view.TView;
 
 import javafx.collections.FXCollections;

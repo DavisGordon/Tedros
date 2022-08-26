@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.fx.annotation.TCursor;
 import org.tedros.fx.annotation.TDepthTest;
 import org.tedros.fx.annotation.listener.TChangeListener;
@@ -12,7 +13,6 @@ import org.tedros.fx.annotation.text.TFont;
 import org.tedros.fx.builder.ITEventHandlerBuilder;
 import org.tedros.fx.builder.ITGenericBuilder;
 import org.tedros.fx.builder.ITNodeBuilder;
-import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.domain.TBlendMode;
 import org.tedros.fx.domain.TPoint3D;
 import org.tedros.fx.form.TConverter;
@@ -24,7 +24,7 @@ import javafx.util.Callback;
 public class TTypeAnalyserParserDelegate {
 	
 	@SuppressWarnings("rawtypes")
-	public final static Object parse(Object obj, TComponentDescriptor descriptor) throws Exception{
+	public final static Object parse(Object obj, ITComponentDescriptor descriptor) throws Exception{
 		
 		if(obj instanceof Annotation){
 			return delegate((Annotation)obj);

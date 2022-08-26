@@ -13,7 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
-import org.tedros.core.model.ITModelView;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
 import org.tedros.fx.annotation.view.TPaginator;
@@ -422,15 +421,14 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			hideListView();
 		}
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	@Override
-	public void loadModelView(ITModelView m) {
-		M mv = (M) m;
-		E e = (E) mv.getModel();
+	public void loadModelView(M m) {
+		M mv = m;
+		E e = mv.getModel();
 		if(e.isNew()) {
-			this.addInListView((M) m);
-			this.processListViewSelectedItem((M) m);
+			this.addInListView(m);
+			this.processListViewSelectedItem(m);
 		}else{
 			if(this.isPaginateEnabled()) {
 				String orderBy = this.decorator.gettPaginator().getOrderBy();
@@ -448,10 +446,10 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 				}).findFirst();
 				if(op.isPresent()) {
 					list.selectionModelProperty().get().select(mv);
-					this.processListViewSelectedItem((M) m);
+					this.processListViewSelectedItem(m);
 				}else {
-					this.addInListView((M) m);
-					this.processListViewSelectedItem((M) m);
+					this.addInListView(m);
+					this.processListViewSelectedItem(m);
 				}
 			}
 		}

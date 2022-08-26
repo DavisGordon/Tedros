@@ -3,7 +3,7 @@
  */
 package org.tedros.fx.builder;
 
-import org.tedros.fx.descriptor.TComponentDescriptor;
+import org.tedros.api.descriptor.ITComponentDescriptor;
 
 /**
  * @author Davis Gordon
@@ -11,7 +11,7 @@ import org.tedros.fx.descriptor.TComponentDescriptor;
  */
 public abstract class TRowFactoryCallBackBuilder<S> implements ITRowFactoryCallBackBuilder<S> {
 
-	private TComponentDescriptor descriptor;
+	private ITComponentDescriptor descriptor;
 	
 	/**
 	 * 
@@ -24,7 +24,7 @@ public abstract class TRowFactoryCallBackBuilder<S> implements ITRowFactoryCallB
 	 * @see org.tedros.fx.builder.ITBuilder#getComponentDescriptor()
 	 */
 	@Override
-	public TComponentDescriptor getComponentDescriptor() {
+	public ITComponentDescriptor getComponentDescriptor() {
 		return descriptor;
 	}
 
@@ -32,7 +32,7 @@ public abstract class TRowFactoryCallBackBuilder<S> implements ITRowFactoryCallB
 	 * @see org.tedros.fx.builder.ITBuilder#setComponentDescriptor(org.tedros.fx.descriptor.TComponentDescriptor)
 	 */
 	@Override
-	public void setComponentDescriptor(TComponentDescriptor componentDescriptor) {
+	public void setComponentDescriptor(ITComponentDescriptor componentDescriptor) {
 		this.descriptor = componentDescriptor;
 	}
 

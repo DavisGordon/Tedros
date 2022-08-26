@@ -1,11 +1,11 @@
 package org.tedros.fx.presenter.entity.behavior;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.tedros.api.form.ITModelForm;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.model.ITModelView;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.control.action.TPresenterAction;
-import org.tedros.fx.domain.TViewMode;
-import org.tedros.fx.form.ITModelForm;
 import org.tedros.fx.form.TFormBuilder;
 import org.tedros.fx.form.TReaderFormBuilder;
 import org.tedros.fx.modal.TMessageBox;
@@ -234,11 +234,10 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 	}
 
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public void loadModelView(ITModelView m) {
-		this.addInListView((M) m);
-		this.processListViewSelectedItem((M) m);
+	public void loadModelView(M m) {
+		this.addInListView(m);
+		this.processListViewSelectedItem(m);
 	}
 	
 }

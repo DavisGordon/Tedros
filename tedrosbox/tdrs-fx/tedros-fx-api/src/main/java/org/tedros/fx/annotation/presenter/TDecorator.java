@@ -5,11 +5,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.tedros.api.presenter.decorator.ITDecorator;
 import org.tedros.fx.annotation.TAnnotationDefaultValue;
 import org.tedros.fx.annotation.layout.TPane;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.layout.TRegion;
-import org.tedros.fx.presenter.decorator.ITDecorator;
 import org.tedros.fx.presenter.entity.decorator.TMasterCrudViewDecorator;
 
 import javafx.scene.Node;

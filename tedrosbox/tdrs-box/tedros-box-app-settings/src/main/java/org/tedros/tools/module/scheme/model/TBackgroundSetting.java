@@ -3,8 +3,8 @@
  */
 package org.tedros.tools.module.scheme.model;
 
+import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.fx.control.TSelectImageField;
-import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.form.TSetting;
 
 /**
@@ -16,7 +16,7 @@ public class TBackgroundSetting extends TSetting {
 	/**
 	 * @param descriptor
 	 */
-	public TBackgroundSetting(TComponentDescriptor descriptor) {
+	public TBackgroundSetting(ITComponentDescriptor descriptor) {
 		super(descriptor);
 		// TODO Auto-generated constructor stub
 	}

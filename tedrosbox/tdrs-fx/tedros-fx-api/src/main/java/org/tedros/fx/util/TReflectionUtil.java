@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.core.model.ITModelView;
 import org.tedros.fx.annotation.TIgnoreField;
 import org.tedros.fx.annotation.presenter.TPresenter;
@@ -31,7 +32,7 @@ public final class TReflectionUtil {
 	public static final String ANNOTATION_EFFECT_PACKAGE = "org.tedros.fx.annotation.effect";
 	
 	
-	public static boolean isIgnoreField(final TFieldDescriptor tFieldDescriptor){
+	public static boolean isIgnoreField(final ITFieldDescriptor tFieldDescriptor){
 		for (Annotation annotation : tFieldDescriptor.getAnnotations())
 			if(annotation instanceof TIgnoreField)
 				return true;
@@ -394,8 +395,8 @@ public final class TReflectionUtil {
 	
 	
 	@SuppressWarnings("rawtypes")
-	public static List<TFieldDescriptor> getFieldDescriptorList(ITModelView model){
-		List<TFieldDescriptor> fieldsList = new ArrayList<>();
+	public static List<ITFieldDescriptor> getFieldDescriptorList(ITModelView model){
+		List<ITFieldDescriptor> fieldsList = new ArrayList<>();
 		List<String> k = new ArrayList<>();
 		Class target = ITModelView.class;
 		Class superClass = model.getClass();

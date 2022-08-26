@@ -8,8 +8,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.tedros.api.parser.ITAnnotationParser;
 import org.tedros.fx.annotation.TAnnotationDefaultValue;
-import org.tedros.fx.annotation.parser.ITAnnotationParser;
+import org.tedros.fx.annotation.parser.TMultipleSelectionModelParser;
+import org.tedros.fx.annotation.parser.TTableSelectionModelParser;
+import org.tedros.fx.annotation.parser.TTableViewFocusModelParser;
 import org.tedros.fx.annotation.parser.TTableViewParser;
 import org.tedros.fx.annotation.property.TBooleanProperty;
 import org.tedros.fx.annotation.property.TObjectProperty;
@@ -26,6 +29,8 @@ import org.tedros.fx.domain.TDefaultValues;
 
 import javafx.scene.Node;
 import javafx.scene.control.Control;
+import javafx.scene.control.MultipleSelectionModel;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView;
 
 /**
@@ -42,6 +47,34 @@ public @interface TTableView {
 	@Target(ElementType.ANNOTATION_TYPE)
 	public @interface TTableViewSelectionModel{
 		
+
+		/**
+		 * <pre>
+		 * The parser class for this annotation
+		 * 
+		 * Default value: {TTableSelectionModelParser.class, TMultipleSelectionModelParser.class}
+		 * </pre>
+		 * */
+		@SuppressWarnings("rawtypes")
+		public Class<? extends ITAnnotationParser>[] parser() 
+		default {TTableSelectionModelParser.class, TMultipleSelectionModelParser.class};
+		
+		
+		/**
+		* <pre>
+		* {@link MultipleSelectionModel} Class
+		* 
+		*  Sets the value of the property selectionMode. 
+		*  
+		*  Property description: 
+		*  
+		*  Specifies the selection mode to use in this selection model. 
+		*  The selection mode specifies how many items in the underlying 
+		*  data model can be selected at any one time. 
+		*  By default, the selection mode is SelectionMode.SINGLE.
+		* </pre>
+		**/
+		public SelectionMode selectionMode() default SelectionMode.SINGLE;
 		/**
 		* <pre>
 		* {@link TableView.TableViewSelectionModel} Class
@@ -78,12 +111,29 @@ public @interface TTableView {
 		**/
 		public TBooleanProperty cellSelectionEnabledProperty() default @TBooleanProperty(parse = false);
 
+		/**
+		 * <pre>
+		 * Set true to enable the parser execution 
+		 * </pre>
+		 * */
+		public boolean parse();
 
 	};
 	
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.ANNOTATION_TYPE)
 	public @interface TTableViewFocusModel{
+		
+		/**
+		 * <pre>
+		 * The parser class for this annotation
+		 * 
+		 * Default value: {TTableViewFocusModelParser}
+		 * </pre>
+		 * */
+		@SuppressWarnings("rawtypes")
+		public Class<? extends ITAnnotationParser>[] parser() 
+		default {TTableViewFocusModelParser.class};
 		
 		/**
 		* <pre>
@@ -108,6 +158,13 @@ public @interface TTableView {
 		* </pre>
 		**/
 		public TReadOnlyObjectProperty focusedCellProperty() default @TReadOnlyObjectProperty(parse = false);		
+	
+		/**
+		 * <pre>
+		 * Set true to enable the parser execution 
+		 * </pre>
+		 * */
+		public boolean parse();
 	}
 	/**
 	 *<pre>
@@ -219,7 +276,7 @@ public @interface TTableView {
 	*  that must match the type of the TableView itself.
 	* </pre>
 	**/
-	public TTableViewSelectionModel selectionModel() default @TTableViewSelectionModel();
+	public TTableViewSelectionModel selectionModel() default @TTableViewSelectionModel(parse=false);
 
 	/**
 	* <pre>
@@ -234,13 +291,19 @@ public @interface TTableView {
 	*  as the default focus model will suffice.
 	* </pre>
 	**/
-	public TTableViewFocusModel focusModel() default @TTableViewFocusModel;
+	public TTableViewFocusModel focusModel() default @TTableViewFocusModel(parse=false);
 
 	/**
 	* <pre>
 	* {@link TableView} Class
 	* 
-	*  Sets the value of the property editable. Property description: Specifies whether this TableView is editable - only if the TableView, the TableColumn (if applicable) and the TableCells within it are both editable will a TableCell be able to go into their editing state.
+	*  Sets the value of the property editable. 
+	*  
+	*  Property description: 
+	*  
+	*  Specifies whether this TableView is editable - only if the TableView, 
+	*  the TableColumn (if applicable) and the TableCells within it 
+	*  are both editable will a TableCell be able to go into their editing state.
 	* </pre>
 	**/
 	public boolean editable() default false;

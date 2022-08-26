@@ -5,8 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.tedros.api.presenter.behaviour.ITBehavior;
 import org.tedros.fx.control.action.TPresenterAction;
-import org.tedros.fx.presenter.behavior.ITBehavior;
 import org.tedros.fx.presenter.entity.behavior.TMasterCrudViewBehavior;
 import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.fx.presenter.model.TImportModelView;

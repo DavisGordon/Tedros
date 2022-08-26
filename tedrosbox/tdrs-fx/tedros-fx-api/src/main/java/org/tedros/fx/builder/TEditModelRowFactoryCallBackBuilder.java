@@ -18,17 +18,14 @@ import org.tedros.core.context.TedrosModuleLoader;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
 import org.tedros.fx.TFxKey;
-import org.tedros.fx.control.TButton;
-import org.tedros.fx.control.TLabel;
 import org.tedros.fx.modal.TMessageBox;
 import org.tedros.fx.presenter.model.TModelView;
 
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 /**
  * @author Davis Gordon
@@ -95,7 +92,17 @@ public class TEditModelRowFactoryCallBackBuilder<M extends TModelView<?>> extend
 				
 			}
 		});
-		return Arrays.asList(edit);
+		
+		final MenuItem remove  = new MenuItem(iE.getString(TFxKey.BUTTON_REMOVE));
+		remove.setOnAction(ev-> {
+		table.getItems().removeAll(
+				table.getSelectionModel().getSelectedItems());
+		});
+		// disable this menu item if nothing is selected:
+		remove.disableProperty().bind(
+		  Bindings.isEmpty(table.getSelectionModel().getSelectedItems()));
+		
+		return Arrays.asList(edit, remove);
 	}
 
 }

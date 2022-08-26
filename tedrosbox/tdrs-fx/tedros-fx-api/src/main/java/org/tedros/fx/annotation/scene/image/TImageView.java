@@ -9,7 +9,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import org.tedros.fx.annotation.parser.ITAnnotationParser;
+import org.tedros.api.parser.ITAnnotationParser;
 import org.tedros.fx.annotation.parser.TImageViewParser;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.builder.ITControlBuilder;

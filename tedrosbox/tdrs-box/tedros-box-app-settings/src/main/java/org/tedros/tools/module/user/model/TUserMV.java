@@ -3,6 +3,7 @@
  */
 package org.tedros.tools.module.user.model;
 
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.annotation.security.TSecurity;
 import org.tedros.core.controller.TUserController;
@@ -44,7 +45,6 @@ import org.tedros.fx.control.TText.TTextStyle;
 import org.tedros.fx.domain.THtmlConstant;
 import org.tedros.fx.domain.TLabelPosition;
 import org.tedros.fx.domain.TStyleParameter;
-import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.entity.behavior.TMasterCrudViewBehavior;
 import org.tedros.fx.presenter.entity.decorator.TMasterCrudViewDecorator;

@@ -1,7 +1,4 @@
-package org.tedros.fx.domain;
-
-import org.tedros.fx.annotation.reader.TReader;
-
+package org.tedros.api.presenter.view;
 
 /**
  * <pre>

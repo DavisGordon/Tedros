@@ -3,9 +3,9 @@
  */
 package org.tedros.tools.logged.user;
 
+import org.tedros.api.form.ITForm;
 import org.tedros.fx.annotation.listener.TChangeListener;
 import org.tedros.fx.control.TPasswordField;
-import org.tedros.fx.form.ITForm;
 import org.tedros.util.TEncriptUtil;
 
 import javafx.beans.value.ObservableValue;

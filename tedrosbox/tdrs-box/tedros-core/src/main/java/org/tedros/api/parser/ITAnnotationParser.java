@@ -1,8 +1,8 @@
-package org.tedros.fx.annotation.parser;
+package org.tedros.api.parser;
 
 import java.lang.annotation.Annotation;
 
-import org.tedros.fx.descriptor.TComponentDescriptor;
+import org.tedros.api.descriptor.ITComponentDescriptor;
 
 /**
  * <pre>
@@ -15,17 +15,17 @@ public interface ITAnnotationParser<A extends Annotation, T> {
 	
 	/**
 	 * <pre>
-	 * Return the {@link TComponentDescriptor} with component information to build.
+	 * Return the {@link ITComponentDescriptor} with component information to build.
 	 * </pre>
 	 * */
-	public TComponentDescriptor getComponentDescriptor();
+	public ITComponentDescriptor getComponentDescriptor();
 	
 	/**
 	 * <pre>
-	 * Set the {@link TComponentDescriptor} with component information to build.
+	 * Set the {@link ITComponentDescriptor} with component information to build.
 	 * </pre>
 	 * */
-	public void setComponentDescriptor(TComponentDescriptor componentDescriptor);
+	public void setComponentDescriptor(ITComponentDescriptor componentDescriptor);
 	
 	/**
 	 * <pre>

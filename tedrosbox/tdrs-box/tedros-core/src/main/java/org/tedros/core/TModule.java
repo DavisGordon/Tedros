@@ -1,14 +1,14 @@
 package org.tedros.core;
 
+import org.tedros.api.presenter.ITModelViewPresenter;
+import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.context.InternalView;
 import org.tedros.core.context.TModuleContext;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.model.ITModelView;
-import org.tedros.core.presenter.ITGroupPresenter;
-import org.tedros.core.presenter.view.ITGroupView;
-import org.tedros.core.presenter.view.ITView;
 
 import javafx.animation.FadeTransition;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.util.Duration;
 
@@ -44,7 +44,7 @@ public abstract class TModule extends InternalView implements ITModule {
 		}
 	}
 	
-	public String canStop() {
+	public String tCanStop() {
 		TModuleContext context = TedrosAppManager.getInstance().getModuleContext(this);
 		return context!=null ? context.canStop() : null;
 	}
@@ -65,25 +65,62 @@ public abstract class TModule extends InternalView implements ITModule {
 		
 	}
 
-	@SuppressWarnings({ "rawtypes" })
+
+	@SuppressWarnings({ "rawtypes"})
 	@Override
-	public <M extends ITModelView> void tLookupViewAndLoadModelView(M modelView) {
+	public <M extends ITModelView> void tLookupAndShow(Class<M> modelViewClass) {
+		if(modelViewClass == null)
+			throw new IllegalArgumentException("The modelViewClass argument cannot be null"); 
+		
 		super.getChildren().forEach(n->{
 			if(n instanceof ITView) {
-				((ITView)n).gettPresenter().loadModelView(modelView);
+				Object p = ((ITView)n).gettPresenter();
+				if(p instanceof ITModelViewPresenter) {
+					ITModelViewPresenter mvp = (ITModelViewPresenter) p;
+					if(mvp.isLoadable(modelViewClass))
+						((ITModelViewPresenter)p).lookupAndShow(modelViewClass);
+				}
+			}
+		});
+		
+	}
+	
+	@SuppressWarnings({ "rawtypes"})
+	@Override
+	public <M extends ITModelView> void tLookupAndShow(M modelView) {
+		if(modelView == null)
+			throw new IllegalArgumentException("The modelView argument cannot be null"); 
+		
+		super.getChildren().forEach(n->{
+			if(n instanceof ITView) {
+				Object p = ((ITView)n).gettPresenter();
+				if(p instanceof ITModelViewPresenter) {
+					ITModelViewPresenter mvp = (ITModelViewPresenter) p;
+					if(mvp.isLoadable(modelView.getClass()))
+						((ITModelViewPresenter)p).lookupAndShow(modelView);
+				}
+			}
+		});
+		
+	}
+	
+	@SuppressWarnings({ "rawtypes"})
+	@Override
+	public <M extends ITModelView> void tLookupAndShow(ObservableList<M> modelsView) {
+		if(modelsView == null || modelsView.isEmpty())
+			throw new IllegalArgumentException("The modelsView argument cannot be null or empty"); 
+		
+		super.getChildren().forEach(n->{
+			if(n instanceof ITView) {
+				Object p = ((ITView)n).gettPresenter();
+				if(p instanceof ITModelViewPresenter) {
+					ITModelViewPresenter mvp = (ITModelViewPresenter) p;
+					if(mvp.isLoadable(modelsView.get(0).getClass()))
+						((ITModelViewPresenter)p).lookupAndShow(modelsView);
+				}
 			}
 		});
 		
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
-	public <M extends ITModelView> void tLookupAndShowView(Class<M> modelViewClass) {
-		super.getChildren().forEach(n->{
-			if(n instanceof ITGroupView) {
-				((ITGroupPresenter)((ITGroupView)n).gettPresenter()).lookupAndShowView(modelViewClass);
-			}
-		});
-		
-	}
 }

@@ -1,5 +1,6 @@
 package org.tedros.tools.module.scheme.model;
 
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.style.TStyleResourceValue;
 import org.tedros.fx.annotation.control.TCheckBoxField;
 import org.tedros.fx.annotation.control.TColorPickerField;
@@ -21,7 +22,6 @@ import org.tedros.fx.annotation.scene.control.TControl;
 import org.tedros.fx.annotation.scene.control.TLabeled;
 import org.tedros.fx.domain.TLabelPosition;
 import org.tedros.fx.domain.TLayoutType;
-import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.tools.ToolsKey;

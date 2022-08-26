@@ -1,7 +1,7 @@
 package org.tedros.fx.presenter.entity.decorator;
 
+import org.tedros.api.presenter.view.ITDynaView;
 import org.tedros.fx.presenter.dynamic.decorator.TDetailFieldBaseDecorator;
-import org.tedros.fx.presenter.dynamic.view.ITDynaView;
 import org.tedros.fx.presenter.model.TEntityModelView;
 
 import javafx.scene.control.TableView;

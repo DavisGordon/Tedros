@@ -3,9 +3,9 @@ package org.tedros.fx.layout;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.tedros.api.form.ITForm;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TEntry;
-import org.tedros.fx.form.ITForm;
 import org.tedros.fx.form.group.TGroupFormControl;
 
 import javafx.beans.property.SimpleListProperty;

@@ -1,17 +1,18 @@
 package org.tedros.fx.presenter.view.group;
 
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.tedros.api.presenter.ITGroupPresenter;
+import org.tedros.api.presenter.view.ITDynaView;
+import org.tedros.api.presenter.view.ITGroupViewItem;
+import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.ITModule;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.model.ITModelView;
-import org.tedros.core.presenter.ITGroupPresenter;
-import org.tedros.core.presenter.view.ITGroupViewItem;
-import org.tedros.core.presenter.view.ITView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
-import org.tedros.fx.presenter.dynamic.view.ITDynaView;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
@@ -266,26 +267,16 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 	
 
 	@Override
-    public boolean canLoadModelView(Class<? extends ITModelView> modelViewClasd) {
+    public boolean isLoadable(Class<? extends ITModelView> modelViewClasd) {
     	return this.findItem(modelViewClasd)!=null;
     }
     
-
-	@Override
-	public <M extends ITModelView> void lookupAndLoadModelView(M modelView) {
-		ITGroupViewItem item = findItem(modelView.getClass());
-		if(item==null)
-			throw new RuntimeException("The class "+modelView.getClass().getSimpleName()+" has no item add in this TGroupPresenter ");
-    	MenuItem mi = this.getMenuItem(item);
-		if(mi!=null) {
-			ListChangeListener<Node> chl = buildListener(modelView);
-			mainView.gettFormSpace().getChildren().addListener(chl);
-			mi.fire();
-		}
-	}
 	
 	@Override
-	public <M extends ITModelView> void lookupAndShowView(Class<M> modelViewClass) {
+	public <M extends ITModelView> void lookupAndShow(Class<M> modelViewClass) {
+		if(modelViewClass == null)
+			throw new IllegalArgumentException("The modelViewClass argument cannot be null"); 
+		
 		ITGroupViewItem item = findItem(modelViewClass);
 		if(item==null)
 			throw new RuntimeException("The class "+modelViewClass.getSimpleName()+" has no item add in this TGroupPresenter ");
@@ -295,6 +286,54 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 	}
 
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public <M extends ITModelView> void lookupAndShow(M modelView) {
+		if(modelView == null)
+			throw new IllegalArgumentException("The modelView argument cannot be null"); 
+		
+		ITGroupViewItem item = findItem(modelView.getClass());
+		if(item==null)
+			throw new RuntimeException("The class "+modelView.getClass().getSimpleName()+" has no item add in this TGroupPresenter ");
+    	MenuItem mi = this.getMenuItem(item);
+		if(mi!=null) {
+			ListChangeListener<Node> chl = buildListener((v, l) -> {
+				TDynaPresenter p = (TDynaPresenter) v.gettPresenter();
+				p.lookupAndShow(modelView);
+				mainView.gettFormSpace().getChildren().removeListener(l);
+			});
+			mainView.gettFormSpace().getChildren().addListener(chl);
+			mi.fire();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <M extends ITModelView> void lookupAndShow(ObservableList<M> modelsView) {
+		if(modelsView == null || modelsView.isEmpty())
+			throw new IllegalArgumentException("The modelsView argument cannot be null or empty"); 
+		
+		if(modelsView.size()==1) {
+			this.lookupAndShow(modelsView.get(0));
+			return;
+		}
+		
+		Class<? extends ITModelView> cls = modelsView.get(0).getClass();
+		ITGroupViewItem item = findItem(cls);
+		if(item==null)
+			throw new RuntimeException("The class "+cls.getSimpleName()+" has no item add in this TGroupPresenter ");
+    	MenuItem mi = this.getMenuItem(item);
+		if(mi!=null) {
+			ListChangeListener<Node> chl = buildListener((v, l) -> {
+				TDynaPresenter p = (TDynaPresenter) v.gettPresenter();
+				p.lookupAndShow(modelsView);
+				mainView.gettFormSpace().getChildren().removeListener(l);
+			});
+			mainView.gettFormSpace().getChildren().addListener(chl);
+			mi.fire();
+		}
+		
+	}
 
 	private MenuItem getMenuItem(ITGroupViewItem item) {
 		final ToolBar tGroupToolbar = mainView.gettGroupToolbar(); 
@@ -317,12 +356,12 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
     	}
 		return null;
 	}
-	
+
 	/**
 	 * @param modelView
 	 * @return
 	 */
-	private <M extends ITModelView> ListChangeListener<Node> buildListener(M modelView) {
+	private <M extends ITModelView> ListChangeListener<Node> buildListener(BiConsumer<ITView, ListChangeListener> f) {
 		ListChangeListener<Node> chl = new ListChangeListener<Node>() {
 			@Override
 			public void onChanged(Change c) {
@@ -333,23 +372,13 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 						if(!v.gettPresenter().isViewLoaded()){
 							v.gettPresenter().viewLoadedProperty().addListener((a,o,b)->{
 								if(b) 
-									loadModel(modelView, v);
+									f.accept(v, this);
 							});
 						}else
-							loadModel(modelView, v);
+							f.accept(v, this);
 					}
 				}
 			}
-			/**
-			 * @param modelView
-			 * @param v
-			 */
-			private <V extends ITModelView> void loadModel(V modelView, ITView v) {
-				TDynaPresenter p = (TDynaPresenter) v.gettPresenter();
-				p.loadModelView(modelView);
-				mainView.gettFormSpace().getChildren().removeListener(this);
-			}
-			
 		};
 		return chl;
 	}
@@ -369,9 +398,5 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 		return item;
 	}
 
-	@Override
-	public void loadModelView(ITModelView modelView) {
-		this.lookupAndLoadModelView(modelView);
-	}
 
 }

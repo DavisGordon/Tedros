@@ -6,12 +6,15 @@ package org.tedros.fx.form;
 import java.util.List;
 import java.util.Map;
 
+import org.tedros.api.descriptor.ITFieldDescriptor;
+import org.tedros.api.form.ITFieldBox;
+import org.tedros.api.form.ITModelForm;
+import org.tedros.api.form.ITSetting;
+import org.tedros.api.presenter.ITPresenter;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.control.TProgressIndicator;
 import org.tedros.core.model.ITModelView;
-import org.tedros.core.presenter.ITPresenter;
 import org.tedros.core.repository.TRepository;
-import org.tedros.fx.descriptor.TFieldDescriptor;
-import org.tedros.fx.domain.TViewMode;
 
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -77,12 +80,12 @@ public class TProgressIndicatorForm<M extends ITModelView<?>> extends StackPane 
 	}
 
 	@Override
-	public TFieldBox gettFieldBox(String fieldName) {
+	public ITFieldBox gettFieldBox(String fieldName) {
 		return this.form.gettFieldBox(fieldName);
 	}
 
 	@Override
-	public Map<String, TFieldBox> gettFieldBoxMap() {
+	public Map<String, ITFieldBox> gettFieldBoxMap() {
 		return this.form.gettFieldBoxMap();
 	}
 
@@ -149,7 +152,7 @@ public class TProgressIndicatorForm<M extends ITModelView<?>> extends StackPane 
 	}
 
 	@Override
-	public List<TFieldDescriptor> gettFieldDescriptorList() {
+	public List<ITFieldDescriptor> gettFieldDescriptorList() {
 		return this.form.gettFieldDescriptorList();
 	}
 
@@ -175,7 +178,7 @@ public class TProgressIndicatorForm<M extends ITModelView<?>> extends StackPane 
 	
 
 	@Override
-	public TSetting gettSetting(){
+	public ITSetting gettSetting(){
 		return this.form.gettSetting();
 	}
 	

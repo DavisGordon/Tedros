@@ -11,6 +11,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.tedros.api.form.ITModelForm;
 import org.tedros.fx.annotation.control.TConverter;
 import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.parser.TAnnotationParser;
@@ -19,7 +20,6 @@ import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.shape.TShape;
 import org.tedros.fx.builder.ITReaderBuilder;
 import org.tedros.fx.builder.TDetailReaderBuilder;
-import org.tedros.fx.form.ITModelForm;
 import org.tedros.fx.form.TDefaultDetailForm;
 import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.fx.presenter.model.TModelView;

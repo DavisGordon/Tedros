@@ -1,7 +1,9 @@
 package org.tedros.core;
 
+import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.model.ITModelView;
-import org.tedros.core.presenter.view.ITView;
+
+import javafx.collections.ObservableList;
 
 /**
  * Define a module contract for an application
@@ -26,21 +28,33 @@ public interface ITModule {
 	@SuppressWarnings("rawtypes")
 	public void tShowView(ITView view);
 
-	public String canStop();
+	/**
+	 * Verify if the associated views can be stop.
+	 * 
+	 * Return a String message if it cannot be stop else empty/null 
+	 * @return String
+	 * */
+	public String tCanStop();
+	
+	/**
+	 * Lookup and show the associated view of the modelView class
+	 * */
+	@SuppressWarnings("rawtypes")
+	<M extends ITModelView> void tLookupAndShow(Class<M> modelViewClass);
 	
 
 	/**
 	 * Lookup and show the associated view of the modelView and load the modelView
 	 * */
 	@SuppressWarnings("rawtypes")
-	<M extends ITModelView> void tLookupViewAndLoadModelView(M modelView);
+	<M extends ITModelView> void tLookupAndShow(M modelView);
 	
+
 	/**
-	 * Lookup and show the associated view of the modelView class
+	 * Lookup and show the associated view of the modelView and load the modelView
 	 * */
 	@SuppressWarnings("rawtypes")
-	<M extends ITModelView> void tLookupAndShowView(Class<M> modelViewClass);
-	
+	<M extends ITModelView> void tLookupAndShow(ObservableList<M> modelsView);
 	
 
 }

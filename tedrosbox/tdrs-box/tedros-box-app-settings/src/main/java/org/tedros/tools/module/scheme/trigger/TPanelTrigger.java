@@ -10,12 +10,12 @@ import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
 
+import org.tedros.api.form.ITModelForm;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.control.TCheckBoxField;
 import org.tedros.fx.control.TColorPickerField;
 import org.tedros.fx.control.TSlider;
 import org.tedros.fx.control.trigger.TTrigger;
-import org.tedros.fx.domain.TViewMode;
-import org.tedros.fx.form.ITModelForm;
 import org.tedros.fx.form.TFieldBox;
 import org.tedros.tools.module.scheme.behaviour.ExampleBehavior;
 import org.tedros.tools.module.scheme.model.ExampleMV;

@@ -2,19 +2,19 @@ package org.tedros.fx.builder;
 
 import java.text.DateFormat;
 
-import org.tedros.fx.descriptor.TComponentDescriptor;
+import org.tedros.api.descriptor.ITComponentDescriptor;
 
 public class DateTimeFormatBuilder implements ITGenericBuilder<DateFormat>{
 
-	private TComponentDescriptor descriptor;
+	private ITComponentDescriptor descriptor;
 	
 	@Override
-	public TComponentDescriptor getComponentDescriptor() {
+	public ITComponentDescriptor getComponentDescriptor() {
 		return descriptor;
 	}
 
 	@Override
-	public void setComponentDescriptor(TComponentDescriptor componentDescriptor) {
+	public void setComponentDescriptor(ITComponentDescriptor componentDescriptor) {
 		descriptor = componentDescriptor;
 	}
 

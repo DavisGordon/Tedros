@@ -1,8 +1,8 @@
 package org.tedros.fx.annotation.parser;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.fx.annotation.layout.TPane;
-import org.tedros.fx.descriptor.TFieldDescriptor;
 import org.tedros.fx.exception.TException;
 
 import javafx.scene.Node;
@@ -22,7 +22,7 @@ public class TPaneParser extends TAnnotationParser<TPane, Pane> {
 	}
 
 	private void addNode(final Pane object, String field) {
-		TFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor();
+		ITFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor();
 		if(fd.hasParent())
 			return;
 		Node node = null;

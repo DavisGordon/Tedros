@@ -9,11 +9,14 @@ package org.tedros.fx.form;
 import java.util.List;
 import java.util.Map;
 
+import org.tedros.api.descriptor.ITFieldDescriptor;
+import org.tedros.api.form.ITFieldBox;
+import org.tedros.api.form.ITModelForm;
+import org.tedros.api.form.ITSetting;
+import org.tedros.api.presenter.ITPresenter;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.model.ITModelView;
-import org.tedros.core.presenter.ITPresenter;
 import org.tedros.core.repository.TRepository;
-import org.tedros.fx.descriptor.TFieldDescriptor;
-import org.tedros.fx.domain.TViewMode;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.collections.ObservableList;
@@ -99,7 +102,7 @@ extends HBox implements ITModelForm<M> {
 	}
 	
 	@Override
-	public Map<String, TFieldBox> gettFieldBoxMap() {
+	public Map<String, ITFieldBox> gettFieldBoxMap() {
 		return formEngine.getFieldBoxMap();
 	}
 
@@ -114,7 +117,7 @@ extends HBox implements ITModelForm<M> {
 		return formEngine.getModelView();
 	} 
 	
-	public List<TFieldDescriptor> gettFieldDescriptorList(){
+	public List<ITFieldDescriptor> gettFieldDescriptorList(){
 		return formEngine.getFieldDescriptorList();
 	}
 	
@@ -171,7 +174,7 @@ extends HBox implements ITModelForm<M> {
 	}
 	
 	@Override
-	public TSetting gettSetting(){
+	public ITSetting gettSetting(){
 		return this.formEngine.getSetting();
 	}
 	@Override

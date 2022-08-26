@@ -1,16 +1,16 @@
 package org.tedros.fx.presenter.behavior;
 
+import org.tedros.api.form.ITModelForm;
+import org.tedros.api.presenter.ITPresenter;
+import org.tedros.api.presenter.behaviour.ITBehavior;
+import org.tedros.api.presenter.view.ITView;
+import org.tedros.api.presenter.view.TViewMode;
+import org.tedros.api.presenter.view.TViewState;
 import org.tedros.core.ITModule;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosAppManager;
-import org.tedros.core.model.ITModelView;
-import org.tedros.core.presenter.ITPresenter;
-import org.tedros.core.presenter.view.ITView;
-import org.tedros.core.presenter.view.TViewState;
 import org.tedros.core.repository.TRepository;
 import org.tedros.fx.annotation.form.TForm;
-import org.tedros.fx.domain.TViewMode;
-import org.tedros.fx.form.ITModelForm;
 import org.tedros.fx.form.TBuildFormStatus;
 import org.tedros.fx.form.TFormBuilder;
 import org.tedros.fx.form.TProgressIndicatorForm;
@@ -34,7 +34,7 @@ import javafx.scene.layout.Region;
 public abstract class TBehavior<M extends TModelView, P extends ITPresenter> implements ITBehavior<M, P> {
 	
 	private P presenter;
-	private SimpleObjectProperty<TModelView> modelViewProperty;
+	private SimpleObjectProperty<M> modelViewProperty;
 	private ObservableList<M> models;
 	private TViewMode tMode;
 	private TRepository listenerRepository;
@@ -255,23 +255,21 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 	}
 	
 	@Override
-	public void loadModelView(ITModelView modelView) {
+	public void loadModelView(M modelView) {
 		setModelView(modelView);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	public  void setModelView(ITModelView modelView) {
+	public  void setModelView(M modelView) {
 		this.modelViewProperty.setValue((M)modelView);
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public <T extends TModelView> T getModelView() {
-		return (T) modelViewProperty.getValue();
+	public M getModelView() {
+		return modelViewProperty.getValue();
 	}
 
-	public SimpleObjectProperty<TModelView> modelViewProperty() {
+	public SimpleObjectProperty<M> modelViewProperty() {
 		return modelViewProperty;
 	}
 	

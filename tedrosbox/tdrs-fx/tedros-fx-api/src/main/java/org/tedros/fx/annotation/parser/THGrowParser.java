@@ -1,9 +1,9 @@
 package org.tedros.fx.annotation.parser;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.fx.annotation.layout.THGrow;
 import org.tedros.fx.annotation.layout.TPriority;
-import org.tedros.fx.descriptor.TFieldDescriptor;
 
 import javafx.scene.layout.HBox;
 
@@ -18,7 +18,7 @@ public class THGrowParser extends TAnnotationParser<THGrow, HBox> {
 			for (TPriority tPriority : arr) {
 				if(StringUtils.isBlank(tPriority.field()))
 					continue;
-				TFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor(tPriority.field());
+				ITFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor(tPriority.field());
 				if(fd!=null) {
 					if(currField.equals(tPriority.field()))
 						HBox.setHgrow(fd.getComponent(), tPriority.priority());

@@ -2,6 +2,7 @@ package org.tedros.fx.presenter.dynamic.behavior;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.ITModule;
 import org.tedros.core.TModule;
 import org.tedros.core.annotation.security.TAuthorizationType;
@@ -9,7 +10,6 @@ import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.process.TEjbService;
-import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.exception.TValidatorException;
 import org.tedros.fx.modal.TMessageBox;
 import org.tedros.fx.presenter.behavior.TActionType;

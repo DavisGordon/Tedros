@@ -1,7 +1,7 @@
 package org.tedros.fx.presenter.report.decorator;
 
+import org.tedros.api.presenter.view.ITDynaView;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewReportBaseDecorator;
-import org.tedros.fx.presenter.dynamic.view.ITDynaView;
 import org.tedros.fx.presenter.model.TModelView;
 
 @SuppressWarnings("rawtypes")

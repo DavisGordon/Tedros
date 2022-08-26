@@ -1,6 +1,7 @@
 package org.tedros.fx.presenter.entity.decorator;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.tedros.api.presenter.view.ITDynaView;
 import org.tedros.core.control.TProgressIndicator;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
@@ -8,7 +9,6 @@ import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.presenter.decorator.ITListViewDecorator;
 import org.tedros.fx.presenter.decorator.TListViewHelper;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
-import org.tedros.fx.presenter.dynamic.view.ITDynaView;
 import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.fx.presenter.paginator.TPaginator;
 import org.tedros.server.entity.ITEntity;

@@ -1,8 +1,8 @@
-package org.tedros.fx.form;
+package org.tedros.api.form;
 
 import java.util.Map;
 
-import org.tedros.core.presenter.ITPresenter;
+import org.tedros.api.presenter.ITPresenter;
 import org.tedros.core.repository.TRepository;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -19,9 +19,9 @@ public interface ITForm {
 	
 	public void tReloadForm();
 	
-	public TFieldBox gettFieldBox(String fieldName);
+	public ITFieldBox gettFieldBox(String fieldName);
 	
-	public Map<String, TFieldBox> gettFieldBoxMap();
+	public Map<String, ITFieldBox> gettFieldBoxMap();
 	
 	public void settPresenter(ITPresenter presenter);
 	
@@ -43,5 +43,5 @@ public interface ITForm {
 	
 	public boolean isLoaded();
 	
-	public TSetting gettSetting();
+	public ITSetting gettSetting();
 }

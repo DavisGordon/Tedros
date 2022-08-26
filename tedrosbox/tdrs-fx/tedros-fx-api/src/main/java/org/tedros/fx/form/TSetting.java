@@ -3,9 +3,12 @@
  */
 package org.tedros.fx.form;
 
+import org.tedros.api.descriptor.ITComponentDescriptor;
+import org.tedros.api.descriptor.ITFieldDescriptor;
+import org.tedros.api.form.ITFieldBox;
+import org.tedros.api.form.ITForm;
+import org.tedros.api.form.ITSetting;
 import org.tedros.core.model.ITModelView;
-import org.tedros.fx.descriptor.TComponentDescriptor;
-import org.tedros.fx.descriptor.TFieldDescriptor;
 
 import javafx.beans.Observable;
 
@@ -13,33 +16,39 @@ import javafx.beans.Observable;
  * @author Davis Gordon
  *
  */
-public abstract class TSetting {
+public abstract class TSetting implements ITSetting {
 	
-	private TComponentDescriptor descriptor;
+	private ITComponentDescriptor descriptor;
 
 	/**
 	 * @param descriptor
 	 * @param component
 	 */
-	public TSetting(TComponentDescriptor descriptor) {
+	public TSetting(ITComponentDescriptor descriptor) {
 		this.descriptor = descriptor;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.form.ITSetting#run()
+	 */
+	@Override
 	public abstract void run();
 
-	/**
-	 * @return the descriptor
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.form.ITSetting#getDescriptor()
 	 */
-	public TComponentDescriptor getDescriptor() {
+	@Override
+	public ITComponentDescriptor getDescriptor() {
 		return descriptor;
 	}
 
-	/**
-	 * @return the control
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.form.ITSetting#getControl(java.lang.String)
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T getControl(String field) {
-		TFieldDescriptor fd =  this.descriptor.getFieldDescriptor(field);
+		ITFieldDescriptor fd =  this.descriptor.getFieldDescriptor(field);
 		if(fd==null)
 			throw new IllegalStateException("The argument "+field+" has no result.");
 		T c = (T) fd.getControl();
@@ -48,12 +57,13 @@ public abstract class TSetting {
 		return c;
 	}
 	
-	/**
-	 * @return the layout
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.form.ITSetting#getLayout(java.lang.String)
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T getLayout(String field) {
-		TFieldDescriptor fd =  this.descriptor.getFieldDescriptor(field);
+		ITFieldDescriptor fd =  this.descriptor.getFieldDescriptor(field);
 		if(fd==null)
 			throw new IllegalStateException("The argument "+field+" has no result.");
 		
@@ -63,19 +73,21 @@ public abstract class TSetting {
 		return c;
 	}
 	
-	/**
-	 * @return the TFieldBox
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.form.ITSetting#getFieldBox(java.lang.String)
 	 */
-	public TFieldBox getFieldBox(String field) {
-		TFieldBox fb =  this.descriptor.getFieldBox(field);
+	@Override
+	public ITFieldBox getFieldBox(String field) {
+		ITFieldBox fb =  this.descriptor.getFieldBox(field);
 		if(fb==null)
 			throw new IllegalStateException("The argument "+field+" has no result.");
 		return fb;
 	}
 	
-	/**
-	 * @return the modelView registered observable property
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.form.ITSetting#getProperty(java.lang.String)
 	 */
+	@Override
 	public Observable getProperty(String field) {
 		Observable t = descriptor.getModelView().getProperty(field);
 		if(t==null)
@@ -84,17 +96,19 @@ public abstract class TSetting {
 		return t;
 	}
 	
-	/**
-	 * @return the modelView 
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.form.ITSetting#getModelView()
 	 */
+	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public <T extends ITModelView> T getModelView() {
 		return (T) descriptor.getModelView();
 	}
 	
-	/**
-	 * @return the form 
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.form.ITSetting#getForm()
 	 */
+	@Override
 	public ITForm getForm() {
 		return descriptor.getForm();
 	}

@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.descriptor.ITComponentDescriptor;
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.model.ITModelView;
 import org.tedros.fx.annotation.TDebugConfig;
 import org.tedros.fx.builder.ITBuilder;
@@ -15,7 +17,6 @@ import org.tedros.fx.builder.ITLayoutBuilder;
 import org.tedros.fx.builder.ITReaderBuilder;
 import org.tedros.fx.builder.ITReaderHtmlBuilder;
 import org.tedros.fx.descriptor.TComponentDescriptor;
-import org.tedros.fx.domain.TViewMode;
 import org.tedros.fx.reader.THtmlReader;
 import org.tedros.fx.util.TReflectionUtil;
 
@@ -236,7 +237,7 @@ public final class TControlLayoutReaderBuilder {
 		
 	}
 	
-	private static void registerComponent(final TComponentDescriptor descriptor, final Node node) {
+	private static void registerComponent(final ITComponentDescriptor descriptor, final Node node) {
 		descriptor.getComponents().put(descriptor.getFieldDescriptor().getFieldName(), node);
 	}
 	
