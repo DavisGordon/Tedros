@@ -468,7 +468,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 				imgLogo.opacityProperty().removeListener(effectChl);
 				logoEffect.play();
 				TMessageBox box = new TMessageBox();
-				box.setAlignment(Pos.CENTER);
+				//box.setAlignment(Pos.CENTER);
 				box.tAddMessages(c.getList());
 				modalMessage = new TModalPane(layerPane);
 				modalMessage.showModal(box, ev->{

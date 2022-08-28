@@ -33,9 +33,7 @@ public class TConfirmMessageBox extends TMessageBox {
 			//box.setSpacing(10);
 			box.setAlignment(Pos.CENTER);
 			
-			gettMessageVBox().getChildren().add(box);
-			
-			gettMessageVBox().setAlignment(Pos.CENTER);
+			super.messagesPane.add(box);
 			
 			yesBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override

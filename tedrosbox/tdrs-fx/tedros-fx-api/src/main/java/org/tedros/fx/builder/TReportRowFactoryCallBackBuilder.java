@@ -112,7 +112,7 @@ extends TContextMenuRowFactoryCallBackBuilder<M> {
 						if(box==null)
 							box = new TMessageBox(iE.getString(TFxKey.MESSAGE_CHOOSE_ONE), null);
 
-						box.setAlignment(Pos.CENTER);
+						//box.setAlignment(Pos.CENTER);
 						String name = ctx.getModuleDescriptor().getModuleName();
 						String btn = iE.getString(TFxKey.BUTTON_OPEN);
 						box.tAddMessage(name, btn, ev->{
