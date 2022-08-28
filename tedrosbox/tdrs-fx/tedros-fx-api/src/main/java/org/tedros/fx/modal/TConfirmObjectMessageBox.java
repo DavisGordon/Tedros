@@ -30,9 +30,7 @@ public class TConfirmObjectMessageBox<T> extends TMessageBox {
 			HBox box = new HBox();
 			box.getChildren().addAll(yesBtn, noBtn);
 			box.setAlignment(Pos.CENTER);
-			gettMessageVBox().getChildren().addAll(box);
-			
-			gettMessageVBox().setAlignment(Pos.CENTER);
+			super.messagesPane.addAll(box);
 			
 			yesBtn.setOnAction(e -> {
 					confirm.set(object);
