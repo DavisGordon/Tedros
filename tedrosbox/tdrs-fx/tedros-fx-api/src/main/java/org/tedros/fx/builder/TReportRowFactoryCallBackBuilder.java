@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.tedros.core.TLanguage;
 import org.tedros.core.annotation.TLoadable;
 import org.tedros.core.context.TLoader;
@@ -25,7 +26,6 @@ import org.tedros.server.model.ITModel;
 import org.tedros.server.model.ITReportItemModel;
 
 import javafx.beans.binding.Bindings;
-import javafx.geometry.Pos;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -43,7 +43,6 @@ extends TContextMenuRowFactoryCallBackBuilder<M> {
 	
 	@Override
 	List<MenuItem> getMenuItems(TableView<M> table, TableRow<M> row) {
-		
 		
 		final MenuItem open = new MenuItem(iE.getString(TFxKey.BUTTON_OPEN));
 		open.setOnAction(e->{
@@ -101,7 +100,7 @@ extends TContextMenuRowFactoryCallBackBuilder<M> {
 					r.loadInModule();
 				}
 			}else {
-				TMessageBox box = null;
+				List<TMessage> msgs = new ArrayList<>();;
 				for(TLoader r : l) {
 					if(!r.isLoadable()) {
 						LOGGER.severe(r.getMessage());
@@ -109,13 +108,9 @@ extends TContextMenuRowFactoryCallBackBuilder<M> {
 						TModuleContext ctx = TedrosAppManager.getInstance()
 						.getModuleContext(r.getModuleType());
 						
-						if(box==null)
-							box = new TMessageBox(iE.getString(TFxKey.MESSAGE_CHOOSE_ONE), null);
-
-						//box.setAlignment(Pos.CENTER);
 						String name = ctx.getModuleDescriptor().getModuleName();
 						String btn = iE.getString(TFxKey.BUTTON_OPEN);
-						box.tAddMessage(name, btn, ev->{
+						msgs.add(new TMessage(name, btn, ev->{
 							TedrosContext.hideModal();
 							try {
 								r.loadInModule();
@@ -123,14 +118,16 @@ extends TContextMenuRowFactoryCallBackBuilder<M> {
 								LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
 								TedrosContext.showMessage(new TMessage(TMessageType.ERROR, iE.getString(TFxKey.MESSAGE_ERROR)));
 							}
-						});
+						}));
 					}
 				}
 				
-				if(box==null)
-					TedrosContext.showMessage(new TMessage(TMessageType.ERROR, iE.getString(TFxKey.MESSAGE_ERROR)));
+				if(msgs.isEmpty())
+					TedrosContext.showMessage(
+						new TMessage(TMessageType.ERROR, iE.getString(TFxKey.MESSAGE_ERROR)));
 				else
-					TedrosContext.showModal(box);
+					TedrosContext.showModal( 
+						new TMessageBox(iE.getString(TFxKey.MESSAGE_CHOOSE_ONE), msgs));
 			}
 		}
 	}

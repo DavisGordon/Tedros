@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.tedros.api.presenter.view.TViewMode;
+import org.tedros.core.message.TMessageType;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.exception.TProcessException;
 import org.tedros.fx.exception.TValidatorException;
@@ -129,8 +130,7 @@ extends TDynaViewActionBaseBehavior<M, E> {
 								? result.getMessage()
 										: iEngine.getString("#{tedros.fxapi.message.import}");
 				
-						final TMessageBox tMessageBox = new TMessageBox();
-						tMessageBox.tAddInfoMessage(msg);
+						final TMessageBox tMessageBox = new TMessageBox(msg, TMessageType.INFO);
 						getView().tShowModal(tMessageBox, true);	
 							
 						if(result.getState().equals(TState.SUCCESS)) {

@@ -92,7 +92,7 @@ public class LoginModelView extends TModelView<Login> {
 	private SimpleStringProperty profileText;
 	
 	@TLabel(text = "#{tedros.profile}")
-	@TComboBoxField(firstItemTex="#{tedros.select}",
+	@TComboBoxField(firstItemText="#{tedros.select}",
 		node=@TNode(disable=true, parse=true))
 	private SimpleObjectProperty<TProfileMV> profile;
 	
@@ -117,7 +117,7 @@ public class LoginModelView extends TModelView<Login> {
 	
 	
 	@TLabel(text = "#{tedros.theme}")
-	@TComboBoxField(firstItemTex="#{tedros.select}")
+	@TComboBoxField(firstItemText="#{tedros.select}")
 	private SimpleStringProperty theme;
 	
 	public LoginModelView() {

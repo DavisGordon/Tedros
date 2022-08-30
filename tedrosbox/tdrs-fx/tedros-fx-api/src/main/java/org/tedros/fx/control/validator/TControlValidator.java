@@ -185,10 +185,14 @@ public final class TControlValidator<E extends ITModelView> {
 					return;
 				}
 				
-				if(propertyValue instanceof ITFileModel && ((ITFileModel)propertyValue).getFileSize()==0){
+				if(propertyValue instanceof ITFileModel && 
+						(((ITFileModel)propertyValue).getFileSize()==null 
+						|| ((ITFileModel)propertyValue).getFileSize()==0)){
 					fieldRequiredMessage(fieldLabel, result);
 					return;
-				}else if(propertyValue instanceof ITFileEntity && ((ITFileEntity)propertyValue).getFileSize()==0){
+				}else if(propertyValue instanceof ITFileEntity && 
+						(((ITFileEntity)propertyValue).getFileSize()==null 
+						|| ((ITFileEntity)propertyValue).getFileSize()==0)){
 					fieldRequiredMessage(fieldLabel, result);
 					return;
 				}else if(propertyValue instanceof Number){

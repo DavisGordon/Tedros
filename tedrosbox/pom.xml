@@ -17,6 +17,15 @@
   	
   	<!-- PROPERTIES -->
 	<properties>
+	
+	
+		<app.ext>8-2.0.0</app.ext>
+		<app.docs>8-2.0.0</app.docs>
+		<app.location>8-2.0.0</app.location>
+		<app.person>8-2.0.0</app.person>
+		<app.services>8-2.0.0</app.services>
+	
+	
 		<javafx.version>1.8.0_261</javafx.version>
 		<java.version>1.8</java.version>
 		<maven.compiler.target>1.8</maven.compiler.target>

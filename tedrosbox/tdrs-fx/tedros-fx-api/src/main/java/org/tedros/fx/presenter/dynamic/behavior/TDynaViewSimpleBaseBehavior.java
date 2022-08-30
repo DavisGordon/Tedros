@@ -66,6 +66,7 @@ extends TBehavior<M, TDynaPresenter<M>> {
 	private final ObjectProperty<TActionState<M>> actionStateProperty = new SimpleObjectProperty<>();
 	private final ObservableList<TMessage> messagesProperty = FXCollections.observableArrayList();
 	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void load(){	
@@ -89,9 +90,8 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		
 		ListChangeListener<TMessage> msgLtnr = c -> {
 			if(showMessages) {
-				if(!c.getList().isEmpty()) {
-					final TMessageBox tMessageBox = new TMessageBox();
-					tMessageBox.tAddMessages((ObservableList<TMessage>) c.getList());
+				if(c.next() && c.wasAdded()) {
+					final TMessageBox tMessageBox = new TMessageBox((List<TMessage>) c.getAddedSubList());
 					getView().tShowModal(tMessageBox, true);
 				}
 			}else if(!c.getList().isEmpty())

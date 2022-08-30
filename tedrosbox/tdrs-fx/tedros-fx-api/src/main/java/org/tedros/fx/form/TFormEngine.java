@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.api.form.ITFieldBox;
 import org.tedros.api.form.ITModelForm;
@@ -24,7 +25,6 @@ import org.tedros.core.model.ITModelView;
 import org.tedros.core.repository.TRepository;
 import org.tedros.fx.annotation.TDebugConfig;
 import org.tedros.fx.builder.ITReaderHtmlBuilder;
-import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.reader.THtmlReader;
 import org.tedros.fx.util.TReflectionUtil;
 
@@ -310,7 +310,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 		if(a!=null) {
 			Class<? extends TSetting> c = a.value();
 			try {
-				setting = c.getConstructor(TComponentDescriptor.class).newInstance(this.modelViewLoader.getDescriptor());
+				setting = c.getConstructor(ITComponentDescriptor.class).newInstance(this.modelViewLoader.getDescriptor());
 				setting.run();
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 					| InvocationTargetException | NoSuchMethodException | SecurityException e) {
