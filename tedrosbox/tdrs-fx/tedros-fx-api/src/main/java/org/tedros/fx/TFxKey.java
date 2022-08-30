@@ -17,6 +17,7 @@ public interface TFxKey {
 	static final String BUTTON_OPEN = "#{tedros.fxapi.button.open}";
 	static final String BUTTON_OPEN_FOLDER_EXPORT = "#{tedros.fxapi.button.open.folder.export}";
 	static final String BUTTON_PRINT = "#{tedros.fxapi.button.print}";
+	static final String BUTTON_RELOAD = "#{tedros.fxapi.button.reload}";
 	static final String BUTTON_REMOVE = "#{tedros.fxapi.button.remove}";
 	static final String BUTTON_REMOVEALL = "#{tedros.fxapi.button.removeAll}";
 	static final String BUTTON_SAVE = "#{tedros.fxapi.button.save}";

@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.core.TLanguage;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
 import org.tedros.core.model.ITModelView;
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.control.TButton;
 import org.tedros.fx.control.TText;
 import org.tedros.fx.control.TText.TTextStyle;
@@ -16,40 +18,34 @@ import org.tedros.fx.control.validator.TFieldResult;
 import org.tedros.fx.control.validator.TValidatorResult;
 import org.tedros.fx.exception.TValidatorException;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-public class TMessageBox extends StackPane {
+public class TMessageBox extends Pane {
 	
-	protected ObservableList<Node> messagesPane;
-	
-	private String header;
+	private ObservableList<TMessage> messages;
 
-	private DoubleProperty height;
+	protected double size = 0;
+	private String header;
+	protected VBox messagesPane;
+	protected TLanguage iEngine = TLanguage.getInstance(null);
 	
-	private ChangeListener<Number> resizeListener; 
-	
-	private VBox vb ;
-	private BorderPane bp;
-	
-    public TMessageBox() {
+    protected TMessageBox() {
     	init();
     }
     
@@ -65,27 +61,66 @@ public class TMessageBox extends StackPane {
     		load(Arrays.asList(msg), TMessageType.GENERIC);
 	}
     
-    public TMessageBox(List<String> messages) {
+    public TMessageBox(String msg, TMessageType type) {
     	init();
-    	load(messages, TMessageType.GENERIC);
+    	load(Arrays.asList(msg), type);
 	}
-
+    
+    public TMessageBox(String header, String msg, TMessageType type) {
+    	this.header = header;
+    	init();
+    	if(msg!=null)
+    		load(Arrays.asList(msg), type);
+	}
+    
     public TMessageBox(List<String> messages, String header) {
     	this.header = header;
     	init();
     	load(messages, TMessageType.GENERIC);
 	}
+
+    public TMessageBox(List<String> messages, TMessageType type) {
+    	init();
+    	load(messages, type);
+	}
+
+    public TMessageBox(String header, List<String> messages, TMessageType type) {
+    	this.header = header;
+    	init();
+    	load(messages, type);
+	}
+    
+    public TMessageBox(List<TMessage> messages) {
+    	init();
+    	load(messages);
+	}
+    
+    public TMessageBox(String header, List<TMessage> messages) {
+    	this.header = header;
+    	init();
+    	load(messages);
+	}
     
     public TMessageBox(Throwable e) {
     	init();
-    	load(Arrays.asList(e.getMessage()), TMessageType.ERROR);
+    	process(e);
 	}
     
     public TMessageBox(Throwable e, String header) {
     	this.header = header;
     	init();
-    	load(Arrays.asList(e.getMessage()), TMessageType.ERROR);
+    	process(e);
     }
+
+	/**
+	 * @param e
+	 */
+	public void process(Throwable e) {
+		String msg = e.getMessage();
+    	if(StringUtils.isBlank(msg))
+    		msg = TFxKey.MESSAGE_ERROR;
+    	load(Arrays.asList(msg), TMessageType.ERROR);
+	}
     
 	public TMessageBox(TValidatorException e) {
     	init();
@@ -129,59 +164,39 @@ public class TMessageBox extends StackPane {
 
     private void init() {
     	
-    	height = new SimpleDoubleProperty(header!=null ? 10 : 0);
     	
-    	messagesPane = FXCollections.observableArrayList();
+    	messages = FXCollections.observableArrayList();
     	
-    	vb = new VBox(5);
-    	vb.setAlignment(Pos.TOP_CENTER);
-    	vb.setStyle("-fx-background-color: transparent");
+    	messagesPane = new VBox(5);
+    	messagesPane.setAlignment(Pos.TOP_CENTER);
+    	messagesPane.setStyle("-fx-background-color: transparent");
 
-    	bp = new BorderPane();
-    	
-    	this.messagesPane.addListener((Change<? extends Node> c)->{
-    		if(c.next())
-    			vb.getChildren().addAll(c.getAddedSubList());
-    	});
+    	StackPane main = new StackPane();
     	
     	super.setStyle("-fx-background-color: transparent");
     	
     	setMaxWidth(530);
-    	resizeListener = (a,o,n)->{
-    		if(n!=null) {
-    			applyHeight(n.doubleValue(), bp);
-    		}
-    	};
-    	
     	super.sceneProperty().addListener((a,o,n)->{
-    		if(n!=null) {
-    			double x = ((Pane)super.getParent()).getHeight();
-    			super.setMaxHeight(x-40);
-    			applyHeight(/*height.getValue().doubleValue()*/x-50, bp);
-    	    	height.addListener(resizeListener);
-    	    	loadPanes();
+    		if(n==null){
+    			this.getChildren().clear();
+    			this.messagesPane = null;
+    			this.messages = null;
+    			this.iEngine = null;
     		}
     	});
-    }
-
-	/**
-	 * 
-	 */
-	private void loadPanes() {
+    	
 		ScrollPane scroll = new ScrollPane();
     	scroll.setFitToHeight(true);
     	scroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
     	scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
     	scroll.setStyle("-fx-background-color: transparent");
-    	scroll.setContent(vb);
     	scroll.setPadding(new Insets(8));
-    	bp.setCenter(scroll);
-		bp.setMaxWidth(530);
-		BorderPane.setAlignment(scroll, Pos.CENTER);
-		BorderPane.setMargin(scroll, new Insets(8,3,16,3));
-		super.getChildren().add(bp);
-    	
+		scroll.setContent(this.messagesPane);
+		
+    	VBox vb = new VBox(8);
+		
     	if(header!=null) {
+    		size = 50;
     		Label text = new Label(header);
     		text.setId("t-title-label");
     		StackPane sp = new StackPane();
@@ -190,86 +205,94 @@ public class TMessageBox extends StackPane {
     		sp.setStyle("-fx-background-radius: 20 20 0 0;");
     		StackPane.setAlignment(text, Pos.CENTER_LEFT);
     		StackPane.setMargin(text, new Insets(5,5,5,10));
-    		bp.setId("t-view");
-    		bp.setTop(sp);
+    		vb.setId("t-view");
+    		vb.getChildren().add(sp);
     	}
+		vb.getChildren().add(scroll);
+    	main.getChildren().add(vb);
+    	super.getChildren().add(main);
 	}
 
-	/**
-	 * @param v
-	 */
-	private void applyHeight(double v, Pane p) {
+    @Override 
+    protected void layoutChildren() {
+    	
+        List<Node> managed = getManagedChildren();
+        double height = getHeight();
+        double top = getInsets().getTop();
+        double left = getInsets().getLeft();
+        double bottom = getInsets().getBottom();
+        
+        double h = height - top - bottom;
+        double f = (size>h) ? h : size;
+        
+        for (int i = 0; i < managed.size(); i++) {
+            Node child = managed.get(i);
+            layoutInArea(child, left, top,
+            		530, f, 
+            		0, Insets.EMPTY, true, true, HPos.CENTER, VPos.CENTER);
+        }
+        
+    }  
+    
+	private void load(List<String> messages, TMessageType type) {
+        if(messages!=null)
+	        for (String m : messages)
+				tAddMessage(m, type, null, null);
+        addMessagePane();
+		this.messages.addListener((Change<? extends TMessage> c)->{
+    		if(c.next())
+    			this.addMessagePane(c.getAddedSubList());
+    	});
+			
+    	
+	}
+	
+	private void load(List<TMessage> messages) {
+		this.messages.addAll(messages);
+		addMessagePane();
+		this.messages.addListener((Change<? extends TMessage> c)->{
+    		if(c.next())
+    			this.addMessagePane(c.getAddedSubList());
+    	});
+	}
+	
+	protected void tAddMessage(String msg) {
+		this.tAddMessage(msg, TMessageType.GENERIC, null, null);
+	}
+	
+	private void addMessagePane() {
+		messages.forEach(t -> {
+			addMessagePane(t);
+		});
 		
-		if(super.getParent()!=null) {
-			double x = ((Pane)super.getParent()).getHeight();
-			if(v < (x-40)) {
-				p.setMinHeight(v);
-				p.setMaxHeight(v);
-				p.setPrefHeight(v);
+	}
+
+	private void addMessagePane(List<? extends TMessage> lst) {
+		lst.forEach(t -> {
+			addMessagePane(t);
+		});
+		
+	}
+	
+	private void addMessagePane(TMessage msg) {
+		if(!msg.isLoaded()) {
+			msg.setLoaded(true);
+			TText text = buildText(msg.getValue());
+			TButton btn = null;
+			if(msg.getButtonText()!=null) {
+				btn = new TButton(msg.getButtonText());
+				final Consumer<ActionEvent> action = msg.getButtonAction();
+				btn.setOnAction(ev->{
+					action.accept(ev);
+				});
 			}
+			HBox box = buildPane(text, msg.getType(), btn);
+			messagesPane.getChildren().add(box);
 		}
 	}
-
-  
-	private void load(List<String> messages, TMessageType type) {
-		try{
-	        if(messages!=null)
-		        for (String m : messages)
-					tAddMessage(m, type);
-			
-    	}catch(Exception e){
-    		e.printStackTrace();
-    	}
-	}
 	
-	public void tAddMessages(ObservableList<? extends String> messages, TMessageType type) {
-		messagesPane.clear();
-		if(messages!=null)
-	        for (String string : messages)
-				tAddMessage(string, type);
-	}
-	
-	public void tAddMessage(String msg) {
-		this.tAddMessage(msg, TMessageType.GENERIC);
-	}
-	
-	public void tAddMessages(ObservableList<TMessage> messages) {
-		messagesPane.clear();
-		if(messages!=null)
-	        for (TMessage m : messages)
-				tAddMessage(m.getValue(), m.getType());
-	}
-	
-	public void tAddMessage(TMessage msg) {
-		this.tAddMessage(msg.getValue(), msg.getType());
-	}
-	
-	public void tAddInfoMessage(String info) {
-		this.tAddMessage(info, TMessageType.INFO);
-	}
-	
-	public void tAddWarningMessage(String warning) {
-		this.tAddMessage(warning, TMessageType.WARNING);
-	}
-	
-	public void tAddErrorMessage(String error) {
-		this.tAddMessage(error, TMessageType.ERROR);
-	}
-
-	public void tAddMessage(String msg, String buttonText, Consumer<ActionEvent> buttonAction) {
-		TText text = buildText(msg);
-		TButton btn = new TButton(buttonText);
-		btn.setOnAction(ev->{
-			buttonAction.accept(ev);
-		});
-		HBox box = buildPane(text, null, btn);
-		messagesPane.add(box);
-	}
-	
-	public void tAddMessage(String string, TMessageType type) {
-		TText text = buildText(string);
-		HBox box = buildPane(text, type, null);
-		messagesPane.add(box);
+	private void tAddMessage(String value, TMessageType type, String buttonText, Consumer<ActionEvent> buttonAction) {
+		messages.add(new TMessage(type, value, buttonText, buttonAction));
 	}
 
 	/**
@@ -306,20 +329,23 @@ public class TMessageBox extends StackPane {
 		if(s==3)
 			text.setWrappingWidth(250);
 		
-		box.heightProperty().addListener((a,o,n)->{
-			if(n!=null) {
-				height.setValue(height.get() + n.doubleValue());
-			}
-		});
 		return box;
 	}
-	
 	
 	/**
 	 * @param string
 	 * @return
 	 */
 	private TText buildText(String string) {
+		
+		string = iEngine.getString(string);
+		
+		int p = 30;
+		int t = string.length();
+		double r = t<p ? 1 : t / p;
+		
+		size = size + (r*120);
+		
 		TText text = new TText(string);
 		text.settTextStyle(TTextStyle.LARGE);
 		text.setWrappingWidth(300);

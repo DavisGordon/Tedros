@@ -12,6 +12,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.tedros.api.parser.ITAnnotationParser;
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.TAnnotationDefaultValue;
 import org.tedros.fx.annotation.parser.TComboBoxParser;
 import org.tedros.fx.annotation.parser.TRequiredComboBoxParser;
@@ -230,10 +231,10 @@ public @interface TComboBoxField  {
 	 * 
 	 * The text to show on the first item.
 	 * 
-	 * Default value: Empty string.
+	 * Default value: TFxKey.BUTTON_SELECT.
 	 * </pre>
 	 * */
-	public String firstItemTex() default "";
+	public String firstItemText() default TFxKey.BUTTON_SELECT;
 
 	/**
 	 * <pre>

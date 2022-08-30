@@ -100,9 +100,9 @@ public class TModalPane extends StackPane {
             new KeyFrame(Duration.millis(400), 
                 new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent t) {
+                        getChildren().clear();
                         setCache(false);
                         setVisible(false);
-                        getChildren().clear();
                     }
                 },
                 new KeyValue(opacityProperty(),0, Interpolator.LINEAR)

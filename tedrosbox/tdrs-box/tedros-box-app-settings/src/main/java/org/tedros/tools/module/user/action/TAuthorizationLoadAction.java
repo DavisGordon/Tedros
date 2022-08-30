@@ -50,12 +50,12 @@ public class TAuthorizationLoadAction extends TPresenterAction {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public boolean runBefore() {
-		TReflections.createAppPackagesIndex();
+		/*TReflections.createAppPackagesIndex();
 		List<TAuthorization> authorizations = getAppsSecurityPolicie( 
 				TReflections.getInstance()
 				.loadPackages()
 				.getClassesAnnotatedWith(TSecurity.class));
-		
+		*/
 		try {
 			TDynaViewSimpleBaseBehavior behavior =  (TDynaViewSimpleBaseBehavior) ((TDynaPresenter)super.getPresenter()).getBehavior();
 			TAuthorizationProcess process = new TAuthorizationProcess();
@@ -70,7 +70,7 @@ public class TAuthorizationLoadAction extends TPresenterAction {
 						if(res.getState().equals(TState.SUCCESS)) {
 							List<String> msg = (List<String>) res.getValue();
 							if(!msg.isEmpty()) {
-								TMessageBox tMessageBox = new TMessageBox(msg);
+								TMessageBox tMessageBox = new TMessageBox(msg, TMessageType.GENERIC);
 								behavior.getView().tShowModal(tMessageBox, true);
 							}else{
 								TMessageBox tMessageBox = new TMessageBox(res.getMessage());
@@ -100,7 +100,8 @@ public class TAuthorizationLoadAction extends TPresenterAction {
 				}
 			};
 			process.stateProperty().addListener(prcl);
-			process.process(authorizations);
+			//process.process(authorizations);
+			process.savePolicies();
 			behavior.runProcess(process);
 			
 		} catch (TProcessException e) {

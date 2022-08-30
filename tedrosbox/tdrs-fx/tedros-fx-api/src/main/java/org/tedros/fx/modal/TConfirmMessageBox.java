@@ -1,6 +1,5 @@
 package org.tedros.fx.modal;
 
-import org.tedros.core.TLanguage;
 import org.tedros.fx.control.TButton;
 
 import javafx.beans.property.ReadOnlyIntegerProperty;
@@ -15,11 +14,9 @@ public class TConfirmMessageBox extends TMessageBox {
 	private SimpleIntegerProperty confirm;
 	
 	public TConfirmMessageBox(String text) {
-		try{
-			
-			TLanguage iEngine = TLanguage.getInstance(null);
-			
-			tAddMessage(iEngine.getString(text));
+		super(text);
+		try{	
+			size += 50;
 			confirm = new SimpleIntegerProperty(-1);
 			
 			TButton yesBtn = new TButton();
@@ -30,10 +27,9 @@ public class TConfirmMessageBox extends TMessageBox {
 			
 			HBox box = new HBox();
 			box.getChildren().addAll(yesBtn, noBtn);
-			//box.setSpacing(10);
 			box.setAlignment(Pos.CENTER);
 			
-			super.messagesPane.add(box);
+			super.messagesPane.getChildren().add(box);
 			
 			yesBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
