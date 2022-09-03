@@ -52,7 +52,7 @@ import javafx.collections.SetChangeListener;
 /**
  * <p>
  * This engine can bind all javafx property between a {@link TModelView} and a 
- * {@link ITModel}, listeners are build to listen changes in the propertys and 
+ * {@link ITModel}, listeners are build to listen changes in the properties and 
  * set the new values in the {@link ITModel}.
  * </p>
  * <h3>Sample Usage</h3>
@@ -104,7 +104,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	
 	private 	TListenerHelper<M> 			tListenerHelper;
 	
-	private 	Map<String, Observable> 	propertys = new HashMap<>();
+	private 	Map<String, Observable> 	properties = new HashMap<>();
 	
 	private 	String						modelViewId;
 	
@@ -112,7 +112,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	
 	/**
 	 * <pre>
-	 * Bind the propertys of this model view with the fields of the given model. 
+	 * Bind the properties of this model view with the fields of the given model. 
 	 * </pre>
 	 * */
 	public TModelView(final M model) {
@@ -208,7 +208,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	
 	/**
 	 * <pre>
-	 * Set a new model and reload the values in the model view propertys. 
+	 * Set a new model and reload the values in the model view properties. 
 	 * </pre>
 	 * */
 	public void reload(M model) {
@@ -349,14 +349,14 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	 * Return the {@link ObservableValue} created to the field name. 
 	 * */
 	public Observable getProperty(String fieldName) {
-		return  propertys.get(fieldName);
+		return properties.get(fieldName);
 	}
 	
 	/**
 	 * Register a property
 	 * */
 	protected void registerProperty(String fieldName, Observable value){
-		propertys.put(fieldName, value);
+		properties.put(fieldName, value);
 	}
 	
 
@@ -401,7 +401,8 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 			superClass = superClass.getSuperclass();
 		}
 		
-		propertys.clear();
+		properties.clear();
+		this.registerProperty("toStringProperty", display);
 		// percorre os campos do model view 
 		propertyMap.values()
 		.parallelStream()
@@ -409,10 +410,10 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 			if(h.isElegible()){
 				try{
 					//Used to stop at a specific field load at debug time
-					 int x = 0;
+					/* int x = 0;
 					if(h.name.contains("id"))
 						x = 1;
-					
+					*/
 					// recupera o campo equivalente no model
 					Field entityField = modelFields.get(h.name);
 					
@@ -483,7 +484,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 									tListenerHelper.buildListListener(h.type, entityGetMethod, entidadeSetMethod, entityFieldType, property, h.name);
 								else
 									property.addListener(listener);
-								propertys.put(h.name, property);
+								properties.put(h.name, property);
 							} 
 							
 							// ObservableSet.class
@@ -512,7 +513,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 									tListenerHelper.buildSetListener(h.type, entityGetMethod, entidadeSetMethod, entityFieldType, property, h.name);
 								else
 									property.addListener(listener);
-								propertys.put(h.name, property);
+								properties.put(h.name, property);
 							}
 							
 							// ObservableMap.class
@@ -536,7 +537,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 								property.putAll((Map) obj);
 								if(h.buildListener)
 									tListenerHelper.buildMapListener(h.type, entityGetMethod, entidadeSetMethod, property, h.name);
-								propertys.put(h.name, property);
+								properties.put(h.name, property);
 							}
 						}else{
 						
@@ -594,7 +595,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 							if(h.buildListener)
 								tListenerHelper.buildListeners(h.type, entityFieldType, property, entidadeSetMethod, obj, h.name);
 							
-							propertys.put(h.name, property);
+							properties.put(h.name, property);
 						}
 					
 					}
