@@ -526,7 +526,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     	innerPane.tClearMenuContent();
     	innerPane.settMenuVisible(false);
     	mainPane.setTop(null);
-    	cleanHistory();
+    	clearPageHistory();
     }
     
     
@@ -549,7 +549,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
         innerPane.settMenuContent(leftMenuPane);
     	innerPane.settMenuVisible(true);
     	mainPane.setTop(this.pageToolBar);
-    	cleanHistory();
+    	clearPageHistory();
     }
 
 	@SuppressWarnings("rawtypes")
@@ -732,7 +732,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		    history.push(p);
 		    resizeHistory();
 		    if(page.getModule() instanceof ITModule)
-		    	cleanForward(page);
+		    	clearForward(page);
 		}
 	}
 
@@ -808,7 +808,8 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	/**
 	 * 
 	 */
-	private void cleanHistory() {
+	@Override
+	public void clearPageHistory() {
 		history.stream().forEach(p->{
 			Node n = p.getModule();
 			if(n!=null && n instanceof ITModule) {
@@ -816,13 +817,13 @@ public class TedrosBox extends Application implements ITedrosBox  {
 			}
 		});
 		history.clear();
-		cleanForward(null);
+		clearForward(null);
 	}
 
 	/**
 	 * 
 	 */
-	private void cleanForward(Page page) {
+	private void clearForward(Page page) {
 		forwardHistory.stream().forEach(p->{
 			Node n = p.getModule();
 			if(n!=null && n instanceof ITModule 

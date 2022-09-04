@@ -13,6 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
+import org.tedros.core.model.TModelViewUtil;
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
 import org.tedros.fx.annotation.view.TPaginator;
@@ -37,8 +39,10 @@ import javafx.beans.value.WeakChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker.State;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.util.Callback;
 
 @SuppressWarnings({ "rawtypes" })
@@ -73,6 +77,10 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			
 			configListViewChangeListener();
 			configListViewCallBack();
+			configListViewContextMenu();
+			
+			if(getModels()==null)
+				super.setModelViewList(FXCollections.observableArrayList());
 			
 			TListViewPresenter tAnnotation = getPresenter().getModelViewClass().getAnnotation(TListViewPresenter.class);
 			if(tAnnotation!=null){
@@ -110,26 +118,17 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 						if(resultados != null) {
 							
 							if(resultados.getState().equals(TState.SUCCESS)) {
-						
 								Map<String, Object> result =  resultados.getValue();
 								ObservableList<M> models = getModels();
-								if(models==null) {
-									models = FXCollections.observableArrayList();
-									setModelViewList(models);
-								}
-								
+								models.clear();
+								TModelViewUtil<M,E> mvu = new TModelViewUtil<>(getModelViewClass(), getEntityClass());
 								for(E e : (List<E>) result.get("list")){
-									try {
-										M model = (M) getModelViewClass().getConstructor(getEntityClass()).newInstance(e);
-										models.add(model);
-									} catch (Exception e1) {
-										e1.printStackTrace();
-									}
+									M model = mvu.convertToModelView(e);
+									models.add(model);
 								}
-								loadListView();
 								processPagination((long)result.get("total"));
-							
-							}else {
+								loadListView();
+							}else{
 								String msg = resultados.getMessage();
 								System.out.println(msg);
 								switch(resultados.getState()) {
@@ -140,6 +139,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 										addMessage(new TMessage(TMessageType.WARNING, msg));
 										break;
 								}
+								setViewStateAsReady();
 							}
 							getListenerRepository().remove("processloadlistviewCL");
 						}
@@ -148,21 +148,17 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 				
 				super.getListenerRepository().add("processloadlistviewCL", prcl);
 				
-				try {
-					E entity = super.getEntityClass().newInstance();
-					process.pageAll(entity, this.decorator.gettPaginator().getPagination());
-					bindProgressIndicator(process);
-					process.stateProperty().addListener(new WeakChangeListener(prcl));
-					process.startProcess();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				TModelViewUtil<M,E> mvu = new TModelViewUtil<>(getModelViewClass(), getEntityClass());
+				E entity = mvu.getNewModelInstance();
+				process.pageAll(entity, this.decorator.gettPaginator().getPagination());
+				bindProgressIndicator(process);
+				process.stateProperty().addListener(new WeakChangeListener(prcl));
+				process.startProcess();
 				
 			} else {
-				// processo para listagem dos models
+				// list model process
 				final TEntityProcess<E> process  = (TEntityProcess<E>) createEntityProcess();
 				if(process!=null){
-					
 					ChangeListener<State> prcl = (arg0, arg1, arg2) -> {
 						
 						if(arg2.equals(State.SUCCEEDED)){
@@ -172,25 +168,18 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 							if(!resultados.isEmpty()) {
 								List<TMessage> msgs = new ArrayList<>();
 								for(Object obj : resultados) {
-									//TResult result = (TResult<?>) resultados.get(0);
 									TResult result = (TResult<?>) obj;
 									if(result.getState().equals(TState.SUCCESS)) {
 										if(result.getValue()!=null && result.getValue() instanceof List){
 											ObservableList<M> models = getModels();
-											if(models==null) {
-												models = FXCollections.observableArrayList();
-												setModelViewList(models);
-											}
+											models.clear();
+											TModelViewUtil<M,E> mvu = new TModelViewUtil<>(getModelViewClass(), getEntityClass());
 											for(E e : (List<E>) result.getValue()){
-												try {
-													M model = (M) getModelViewClass().getConstructor(getEntityClass()).newInstance(e);
-													models.add(model);
-												} catch (Exception e1) {
-													e1.printStackTrace();
-												}
+												M model = mvu.convertToModelView(e);
+												models.add(model);
 											}
 										}
-									}else {
+									}else{
 										String msg = result.getMessage();
 										System.out.println(msg);
 										switch(result.getState()) {
@@ -204,13 +193,8 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 									}
 								}
 								addMessage(msgs);
-							}else{
-								ObservableList<M> models = getModels();
-								if(models==null) {
-									models = FXCollections.observableArrayList();
-									setModelViewList(models);
-								}
 							}
+							
 							loadListView();
 							getListenerRepository().remove("processloadlistviewCL");
 						}
@@ -381,6 +365,30 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		this.decorator.gettListViewProgressIndicator().bind(process.runningProperty());
 	}
 	
+	private void configListViewContextMenu()  {
+		final ListView<M> listView = this.decorator.gettListView();
+		ContextMenu ctx = new ContextMenu();
+		MenuItem reload = new MenuItem(iEngine.getString(TFxKey.BUTTON_RELOAD));
+		reload.setOnAction(e->{
+			try {
+				if(this.isPaginateEnabled()) {
+					TPagination p = this.decorator.gettPaginator().paginationProperty().getValue();
+					if(p!=null)
+						this.paginate(p);
+				}else {
+					this.loadModels();
+				}
+			} catch (TException e1) {
+				e1.printStackTrace();
+			}
+				
+		});
+		
+		ctx.getItems().add(reload);
+		listView.setContextMenu(ctx);
+	}
+	
+	
 	@SuppressWarnings("unchecked")
 	private void configListViewCallBack() {
 		TBehavior tBehavior = getPresenter().getPresenterAnnotation().behavior();
@@ -421,7 +429,13 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			hideListView();
 		}
 	}
-
+	
+	@Override
+	public void loadModelViewList(ObservableList<M> models) {
+		super.loadModelViewList(models);
+		this.processPagination((long) models.size());
+	}
+	
 	@Override
 	public void loadModelView(M m) {
 		M mv = m;

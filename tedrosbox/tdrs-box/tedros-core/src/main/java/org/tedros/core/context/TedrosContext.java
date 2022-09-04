@@ -405,6 +405,13 @@ public final class TedrosContext {
 	}
 	
 	/**
+	 * Clear the page history
+	 * */
+	public static void clearPageHistory() {
+		main.clearPageHistory();
+	}
+	
+	/**
 	 * Set the total page history.
 	 * */
 	public static void setTotalPageHistory(int total){

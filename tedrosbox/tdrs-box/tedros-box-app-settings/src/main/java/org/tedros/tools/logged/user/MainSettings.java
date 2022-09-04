@@ -17,6 +17,8 @@ public class MainSettings implements ITEntity {
 	private static final long serialVersionUID = -6136496020963798031L;
 	
 	private Long id;
+	
+	private String clearHistory;
 
 	private String logout;
 	
@@ -133,6 +135,22 @@ public class MainSettings implements ITEntity {
 	 */
 	public void setCollapseMenu(boolean collapseMenu) {
 		this.collapseMenu = collapseMenu;
+	}
+
+
+	/**
+	 * @return the clearHistory
+	 */
+	public String getClearHistory() {
+		return clearHistory;
+	}
+
+
+	/**
+	 * @param clearHistory the clearHistory to set
+	 */
+	public void setClearHistory(String clearHistory) {
+		this.clearHistory = clearHistory;
 	}
 
 

@@ -4,8 +4,6 @@ public interface ToolsKey {
 
 	static final String APP_TOOLS = "#{app.tools}";
 	static final String BACKGROUND_PAINEL_TITLE = "#{background.painel.title}";
-	static final String BOLD = "#{label.bold}";
-	static final String CALLED_BY = "#{label.called.by}";
 	static final String COLOR_BASE_PAINEL_TITLE = "#{color.base.painel.title}";
 	static final String FORM_MIMETYPE = "#{form.mimetype}";
 	static final String IMPORT_TEXT = "#{import.text}";
@@ -19,12 +17,15 @@ public interface ToolsKey {
 	static final String AUTHORIZATION = "#{label.authorization}";
 	static final String BACKGROUND = "#{label.background}";
 	static final String BACKGROUNDIMAGE = "#{label.backgroundimage}";
+	static final String BOLD = "#{label.bold}";
 	static final String BORDER = "#{label.border}";
 	static final String BUTTON_APPLY = "#{label.button.apply}";
 	static final String BUTTON_SAVE = "#{label.button.save}";
+	static final String CALLED_BY = "#{label.called.by}";
 	static final String CANCEL = "#{label.cancel}";
 	static final String CANCELED = "#{label.canceled}";
 	static final String CENTER = "#{label.center}";
+	static final String CLEAR_HISTORY = "#{label.clear.history}";
 	static final String CLOSE = "#{label.close}";
 	static final String COLLAPSE_MENU = "#{label.collapse.menu}";
 	static final String COLLAPSE_MENU_TOOLTIP = "#{label.collapse.menu.tooltip}";
@@ -62,6 +63,7 @@ public interface ToolsKey {
 	static final String NAV_TITLE = "#{label.nav.title}";
 	static final String NO = "#{label.no}";
 	static final String NONE = "#{label.none}";
+	static final String NOTIFY_LINK = "#{label.notify.link}";
 	static final String OPACITY = "#{label.opacity}";
 	static final String ORGANIZATION = "#{label.organization}";
 	static final String OWNER = "#{label.owner}";
