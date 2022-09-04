@@ -12,57 +12,60 @@ import javafx.collections.ObservableList;
 @SuppressWarnings("rawtypes")
 public interface ITBehavior<M extends ITModelView, P extends ITPresenter> {
 	
-	public P getPresenter();
+	P getPresenter();
 	
-	public void setPresenter(P presenter);
+	void setPresenter(P presenter);
 	
-	public <V extends ITView> V getView();
+	<V extends ITView> V getView();
 	
-	public void setModelView(M modelView);
+	void setModelView(M modelView);
 	
 	
-	public void removeAllListenerFromModelView();
+	void removeAllListenerFromModelView();
 	
-	public void removeAllListenerFromModelViewList();
+	void removeAllListenerFromModelViewList();
 	
-	public <T> T removeListenerFromModelView(String listenerId);
+	<T> T removeListenerFromModelView(String listenerId);
 	
-	public M getModelView();
+	M getModelView();
 	
-	public TRepository getListenerRepository();
+	TRepository getListenerRepository();
 	
-	public void loadModelView(M modelView);
+	void loadModelView(M modelView);
 	
 	/**
 	 * Set the form mode. 
 	 * */
-	public void setViewMode(TViewMode mode);
+	void setViewMode(TViewMode mode);
 	
 	/**
 	 * Get the form mode
 	 * */
-	public TViewMode getViewMode();
+	TViewMode getViewMode();
 	
-	public void setModelViewList(ObservableList<M> models); 
+	void setModelViewList(ObservableList<M> models); 
 	
-	public ObservableList<M> getModels();
+
+	void loadModelViewList(ObservableList<M> models); 
 	
-	public void load();
+	ObservableList<M> getModels();
 	
-	public String getFormName();
+	void load();
 	
-	public void setForm(ITModelForm form);
+	String getFormName();
 	
-	public ITModelForm<M> getForm();
+	void setForm(ITModelForm form);
 	
-	public String getApplicationUUID();
+	ITModelForm<M> getForm();
+	
+	String getApplicationUUID();
 	
 	/**
 	 * invalidate the behavior
 	 * @return 
 	 * */
-	public boolean invalidate();
+	boolean invalidate();
 	
-	public String canInvalidate();
+	String canInvalidate();
 
 }

@@ -12,14 +12,16 @@ import javafx.stage.Stage;
  */
 public interface ITedrosBox {
 
-	public Node buildLogin();
+	Node buildLogin();
 	
-	public void buildApplicationMenu();
+	void buildApplicationMenu();
 	
-	public void buildSettingsPane();
+	void buildSettingsPane();
 	
-	public Stage getStage();
+	Stage getStage();
+	
+	void clearPageHistory();
     
-    public void logout();
+    void logout();
 	
 }

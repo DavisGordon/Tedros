@@ -29,6 +29,11 @@ import javafx.scene.text.FontWeight;
 			behavior=@TBehavior(type=TMainSettingsBehavior.class, saveOnlyChangedModels=false))
 public class TMainSettingsModelView extends TModelView<MainSettings> {
 
+	@THyperlinkField(labeled=@TLabeled(text=ToolsKey.CLEAR_HISTORY, 
+			font=@TFont(size=4, weight=FontWeight.BOLD), parse = true),
+			buttonBase=@TButtonBase(onAction=ClearHistoryEventBuilder.class))
+	private SimpleStringProperty clearHistory;
+	
 	@THyperlinkField(labeled=@TLabeled(text=ToolsKey.LOGOUT, 
 			font=@TFont(size=4, weight=FontWeight.BOLD), parse = true),
 			buttonBase=@TButtonBase(onAction=LogoutEventBuilder.class))
@@ -56,6 +61,20 @@ public class TMainSettingsModelView extends TModelView<MainSettings> {
 	 */
 	public void setLogout(SimpleStringProperty logout) {
 		this.logout = logout;
+	}
+
+	/**
+	 * @return the clearHistory
+	 */
+	public SimpleStringProperty getClearHistory() {
+		return clearHistory;
+	}
+
+	/**
+	 * @param clearHistory the clearHistory to set
+	 */
+	public void setClearHistory(SimpleStringProperty clearHistory) {
+		this.clearHistory = clearHistory;
 	}
 
 }

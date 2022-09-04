@@ -347,14 +347,14 @@ implements ITDynaPresenter<M> {
 			throw new IllegalArgumentException("The modelsView argument cannot be null or empty"); 
 		
 		if(getView().gettState().equals(TViewState.READY)) {
-			this.behavior.setModelViewList((ObservableList<M>) modelsView);
+			this.behavior.loadModelViewList((ObservableList<M>) modelsView);
 		}else {
 			this.modelViews = (ObservableList<M>) modelsView;
 			ChangeListener<TViewState> bchl = new ChangeListener<TViewState>(){
 				@Override
 				public void changed(ObservableValue<? extends TViewState> a, TViewState o, TViewState n) {
 					if(n!=null && n.equals(TViewState.READY) ) {
-						getBehavior().setModelViewList((ObservableList<M>) modelsView);
+						getBehavior().loadModelViewList((ObservableList<M>) modelsView);
 						getView().tStateProperty().removeListener(this);
 					}
 				}

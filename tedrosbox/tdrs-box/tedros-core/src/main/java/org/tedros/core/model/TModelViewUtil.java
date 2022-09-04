@@ -37,7 +37,28 @@ public final class TModelViewUtil<M extends ITModelView<?>, E extends ITModel> {
 		this.models.add(model);
 	}
 	
+	public TModelViewUtil(Class<M> modelViewClass, Class<E> modelClass) {
+		this.modelViewClass = modelViewClass;
+		this.modelClass = modelClass;
+		this.models = new ArrayList<>();
+	}
+	
 	public List<M> convertToModelViewList() {
+		List<M> result = new ArrayList<>(models.size());
+		for (E model : models) {
+			M modelView;
+			try {
+				modelView = (M) modelViewClass.getConstructor(modelClass).newInstance(model);
+				result.add(modelView);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		}
+		return result;
+	}
+	
+	public List<M> convertToModelViewList(List<E> models) {
 		List<M> result = new ArrayList<>(models.size());
 		for (E model : models) {
 			M modelView;
@@ -63,6 +84,26 @@ public final class TModelViewUtil<M extends ITModelView<?>, E extends ITModel> {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	public M convertToModelView(E model){
+		M modelView = null;
+		try {
+			modelView = (M) modelViewClass.getConstructor(modelClass).newInstance(model);
+			return modelView;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public E getNewModelInstance() {
+		try {
+			return this.modelClass.newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
 
 	public static <T> T buildModelView(Class<T> modelViewClass, Class<? extends ITModel> modelClass){
 		try {
@@ -71,6 +112,5 @@ public final class TModelViewUtil<M extends ITModelView<?>, E extends ITModel> {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-
 	}
 }

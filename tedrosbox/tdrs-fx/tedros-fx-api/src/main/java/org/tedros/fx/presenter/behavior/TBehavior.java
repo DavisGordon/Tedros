@@ -277,6 +277,16 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 	public void setModelViewList(ObservableList<M> models) {
 		this.models = models;
 	}
+	
+	@Override
+	public void loadModelViewList(ObservableList<M> models) {
+		if(this.models == null)
+			this.setModelViewList(models);
+		else {
+			this.models.clear();
+			this.models.addAll(models);
+		}
+	}
 
 	@Override
 	public ObservableList<M> getModels() {
