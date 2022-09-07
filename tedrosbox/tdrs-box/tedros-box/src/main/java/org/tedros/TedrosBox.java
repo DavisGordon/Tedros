@@ -397,11 +397,41 @@ public class TedrosBox extends Application implements ITedrosBox  {
         forwardButton.setOnAction(e->{
         	this.forward();
         });
-        
+        forwardButton.setOnMouseEntered(ev->{
+        	PopOver pvr = new PopOver();
+        	pvr.setHeaderAlwaysVisible(false);
+        	pvr.setAutoFix(true);
+        	pvr.setCloseButtonEnabled(false);
+        	pvr.setArrowLocation(ArrowLocation.TOP_LEFT);
+        	pvr.show(forwardButton);
+        	pvr.setContentNode(new TLabel(String.valueOf(this.forwardHistory.size())));
+        	forwardButton.setUserData(pvr);
+        });
+        forwardButton.setOnMouseExited(ev->{
+        	PopOver pvr =  (PopOver) forwardButton.getUserData();
+        	if(pvr!=null)
+        		pvr.hide();
+        });
         final Button backButton = new Button();
         backButton.getStyleClass().addAll("back");
         backButton.setOnAction(e->{
         	this.back();
+        });
+        backButton.setOnMouseEntered(ev->{
+        	PopOver pvr = new PopOver();
+        	pvr.setAutoHide(true);
+        	pvr.setHeaderAlwaysVisible(false);
+        	pvr.setAutoFix(true);
+        	pvr.setCloseButtonEnabled(false);
+        	pvr.setArrowLocation(ArrowLocation.TOP_LEFT);
+        	pvr.show(backButton);
+        	pvr.setContentNode(new TLabel(String.valueOf(this.history.size())));
+        	backButton.setUserData(pvr);
+        });
+        backButton.setOnMouseExited(ev->{
+        	PopOver pvr =  (PopOver) backButton.getUserData();
+        	if(pvr!=null)
+        		pvr.hide();
         });
         HBox btnBox = new HBox();
         btnBox.getChildren().addAll(infoButton, backButton, forwardButton);
