@@ -60,6 +60,7 @@ public interface TFxKey {
 	static final String MESSAGE_EXPORT = "#{tedros.fxapi.message.export}";
 	static final String MESSAGE_FILE_MAX_SIZE = "#{tedros.fxapi.message.file.max.size}";
 	static final String MESSAGE_FILE_MIN_SIZE = "#{tedros.fxapi.message.file.min.size}";
+	static final String MESSAGE_HITORY_REMOVED = "#{tedros.fxapi.message.hitory.removed}";
 	static final String MESSAGE_IMAGE_MAX_HEIGHT = "#{tedros.fxapi.message.image.max.height}";
 	static final String MESSAGE_IMAGE_MAX_WIDTH = "#{tedros.fxapi.message.image.max.width}";
 	static final String MESSAGE_IMAGE_MIN_HEIGHT = "#{tedros.fxapi.message.image.min.height}";

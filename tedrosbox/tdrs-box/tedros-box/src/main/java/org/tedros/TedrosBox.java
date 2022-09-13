@@ -497,15 +497,12 @@ public class TedrosBox extends Application implements ITedrosBox  {
 			if(!c.getList().isEmpty()) {
 				imgLogo.opacityProperty().removeListener(effectChl);
 				logoEffect.play();
-				//modalMessage = new TModalPane(layerPane);
 				modalMessage.showModal(new TMessageBox(c.getList()), ev->{
 					TedrosContext.messageListProperty().clear();
 				});
 			}else {
 				if(modalMessage!=null) {
 					modalMessage.hideModal();
-					//layerPane.getChildren().remove(modalMessage);
-					//modalMessage = null;
 					imgLogo.opacityProperty().addListener(effectChl);
 				}
 			}
@@ -516,12 +513,10 @@ public class TedrosBox extends Application implements ITedrosBox  {
 			if(newValue && TedrosContext.getModal() != null) {
 				imgLogo.opacityProperty().removeListener(effectChl);
 				logoEffect.play();
-				//tModalPane = new TModalPane(innerPane);
 				tModalPane.showModal(TedrosContext.getModal());
 			}else {
 				if(tModalPane!=null) {
 					tModalPane.hideModal();
-					//innerPane.getChildren().remove(tModalPane);
 					imgLogo.opacityProperty().addListener(effectChl);
 				}
 			}

@@ -408,9 +408,9 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 			try {
 				final String language = (String) n.getUserData();
 				saveLanguage(language);
+				LOGGER.info("Language setted.");
 				TedrosContext.setLocale(new Locale(language));
 				TedrosContext.logOut();
-				LOGGER.info("Language setted.");
 			} catch (IOException e1) {
 				e1.printStackTrace();
 				super.addMessage(new TMessage(TMessageType.ERROR, e1.getMessage()));
