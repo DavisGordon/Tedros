@@ -22,6 +22,7 @@ public interface TUsualKey {
 	static final String CELLPHONE = "#{label.cellphone}";
 	static final String CENTER = "#{label.center}";
 	static final String CITY = "#{label.city}";
+	static final String CIVIL_STATUS = "#{label.civil.status}";
 	static final String CNPJ = "#{label.cnpj}";
 	static final String CODE = "#{label.code}";
 	static final String COMMON = "#{label.common}";
@@ -99,6 +100,7 @@ public interface TUsualKey {
 	static final String MAP = "#{label.map}";
 	static final String MAP_TYPE = "#{label.map.type}";
 	static final String MAPQUEST_KEY = "#{label.mapquest.key}";
+	static final String MARRIED = "#{label.married}";
 	static final String MASCULINE = "#{label.masculine}";
 	static final String MASTER = "#{label.master}";
 	static final String MIME_TYPE = "#{label.mime.type}";
@@ -144,11 +146,13 @@ public interface TUsualKey {
 	static final String SELECT = "#{label.select}";
 	static final String SELECT_IMAGE = "#{label.select.image}";
 	static final String SELECTED = "#{label.selected}";
+	static final String SEPARATED = "#{label.separated}";
 	static final String SERVICE = "#{label.service}";
 	static final String SERVICE_TYPE = "#{label.service.type}";
 	static final String SERVICE_TYPES = "#{label.service.types}";
 	static final String SERVICES = "#{label.services}";
 	static final String SEX = "#{label.sex}";
+	static final String SINGLE = "#{label.single}";
 	static final String SIZE = "#{label.size}";
 	static final String STAFF = "#{label.staff}";
 	static final String START_ACTIVITIES = "#{label.start.activities}";
@@ -169,6 +173,7 @@ public interface TUsualKey {
 	static final String VERSION = "#{label.version}";
 	static final String WARN = "#{label.warn}";
 	static final String WARN_PROCESS = "#{label.warn.process}";
+	static final String WIDOWED = "#{label.widowed}";
 	static final String WIDTH = "#{label.width}";
 	static final String WORK = "#{label.work}";
 	static final String WORKNUMBER = "#{label.worknumber}";
