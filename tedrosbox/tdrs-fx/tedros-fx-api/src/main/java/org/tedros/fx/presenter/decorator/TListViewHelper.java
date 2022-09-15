@@ -77,10 +77,11 @@ public class TListViewHelper<M extends TEntityModelView<? extends ITEntity>>{
 		if(paginator!=null){
 			if(paginator.show()) {
 				tPaginator = new TPaginator(paginator.showSearchField(), paginator.showOrderBy());
-				if(paginator.showOrderBy())
+				if(paginator.showOrderBy()) {
 					for(org.tedros.fx.annotation.view.TOption o : paginator.orderBy())
 						tPaginator.addOrderByOption(o.text(), o.value());
-				
+					tPaginator.setOrderBy(paginator.orderBy()[0].value());
+				}
 				tPaginatorAccordion = new Accordion();
 				tPaginatorAccordion.autosize();
 				//tPaginatorAccordion.getStyleClass().add("t-accordion");
