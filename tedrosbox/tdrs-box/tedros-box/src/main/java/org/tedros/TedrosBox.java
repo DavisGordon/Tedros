@@ -47,6 +47,9 @@ import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.ConditionalFeature;
 import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.geometry.Insets;
@@ -123,6 +126,8 @@ public class TedrosBox extends Application implements ITedrosBox  {
     private TModalPane tModalPane;
     private Accordion settingsAcc;
     private Label appName;
+    private StringProperty historySize;
+    private StringProperty forwardSize;
     
     private FadeTransition logoEffect;
     private ChangeListener<Number> effectChl;
@@ -392,6 +397,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
         	infoPopOver.setContentNode(this.settingsAcc);
         });
         infoPopOver = null;
+        forwardSize = new SimpleStringProperty(String.valueOf(this.forwardHistory.size()));
         final Button forwardButton = new Button("");
         forwardButton.getStyleClass().addAll("forward");
         forwardButton.setOnAction(e->{
@@ -404,14 +410,20 @@ public class TedrosBox extends Application implements ITedrosBox  {
         	pvr.setCloseButtonEnabled(false);
         	pvr.setArrowLocation(ArrowLocation.TOP_LEFT);
         	pvr.show(forwardButton);
-        	pvr.setContentNode(new TLabel(String.valueOf(this.forwardHistory.size())));
+        	TLabel l = new TLabel();
+        	l.textProperty().bind(forwardSize);
+        	pvr.setContentNode(l);
         	forwardButton.setUserData(pvr);
         });
         forwardButton.setOnMouseExited(ev->{
         	PopOver pvr =  (PopOver) forwardButton.getUserData();
+        	TLabel l = (TLabel) pvr.getContentNode();
+        	l.textProperty().unbind();
         	if(pvr!=null)
         		pvr.hide();
+        	forwardButton.setUserData(null);
         });
+        historySize = new SimpleStringProperty(String.valueOf(this.history.size()));
         final Button backButton = new Button();
         backButton.getStyleClass().addAll("back");
         backButton.setOnAction(e->{
@@ -425,13 +437,18 @@ public class TedrosBox extends Application implements ITedrosBox  {
         	pvr.setCloseButtonEnabled(false);
         	pvr.setArrowLocation(ArrowLocation.TOP_LEFT);
         	pvr.show(backButton);
-        	pvr.setContentNode(new TLabel(String.valueOf(this.history.size())));
+        	TLabel l = new TLabel();
+        	l.textProperty().bind(historySize);
+        	pvr.setContentNode(l);
         	backButton.setUserData(pvr);
         });
         backButton.setOnMouseExited(ev->{
         	PopOver pvr =  (PopOver) backButton.getUserData();
+        	TLabel l = (TLabel) pvr.getContentNode();
+        	l.textProperty().unbind();
         	if(pvr!=null)
         		pvr.hide();
+        	backButton.setUserData(null);
         });
         HBox btnBox = new HBox();
         btnBox.getChildren().addAll(infoButton, backButton, forwardButton);
@@ -758,6 +775,8 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		    resizeHistory();
 		    if(page.getModule() instanceof ITModule)
 		    	clearForward(page);
+		    historySize.setValue(String.valueOf(history.size()));
+		    forwardSize.setValue(String.valueOf(forwardHistory.size()));
 		}
 	}
 
@@ -792,6 +811,9 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	        if(currentPage!=null 
 	        		&& currentPage.getModule() instanceof ITModule)
 	        	forwardHistory.push(currentPage);
+
+		    historySize.setValue(String.valueOf(history.size()));
+		    forwardSize.setValue(String.valueOf(forwardHistory.size()));
 	        TedrosContext.setPageProperty(prevPage,false, false, true);
 	    }
 	    fromForwardOrBackButton = false;
@@ -810,6 +832,8 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	        	history.push(currentPage);
 	        	resizeHistory();
 	        }
+		    historySize.setValue(String.valueOf(history.size()));
+		    forwardSize.setValue(String.valueOf(forwardHistory.size()));
 	        TedrosContext.setPageProperty(prevPage,false, false, true);
 	    }
 	    fromForwardOrBackButton = false;
@@ -842,6 +866,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 			}
 		});
 		history.clear();
+	    historySize.setValue(String.valueOf(history.size()));
 		clearForward(null);
 	}
 
@@ -857,6 +882,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 			}
 		});
 		forwardHistory.clear();
+	    forwardSize.setValue(String.valueOf(forwardHistory.size()));
 	}
 
     /**

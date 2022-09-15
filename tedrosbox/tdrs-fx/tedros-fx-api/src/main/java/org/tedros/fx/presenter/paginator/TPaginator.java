@@ -4,8 +4,10 @@
 package org.tedros.fx.presenter.paginator;
 
 
+import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TLanguage;
 import org.tedros.core.repository.TRepository;
 import org.tedros.fx.control.TButton;
@@ -298,6 +300,22 @@ public class TPaginator extends BorderPane {
 	 */
 	public String getOrderBy() {
 		return this.orderBy!=null && this.orderBy.getValue()!=null ? this.orderBy.getValue().getValue() : null;
+	}
+	
+	public void setOrderBy(int index) {
+		if(index>=0 && this.orderBy!=null)
+			this.orderBy.getSelectionModel().select(index);
+	}
+	
+	public void setOrderBy(String fieldName) {
+		if(StringUtils.isNotBlank(fieldName) && this.orderBy!=null) {
+			Optional<TOption<String>> op = this.orderBy.getItems().stream()
+			.filter(e->{
+				return e.getValue().equals(fieldName);
+			}).findFirst();
+			if(op.isPresent()) 
+				this.orderBy.getSelectionModel().select(op.get());
+		}
 	}
 	
 	public TPagination getPagination(){
