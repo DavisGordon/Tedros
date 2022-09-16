@@ -376,11 +376,18 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 		nameField = (TTextField) nameFieldBox.gettControl();
 		nameField.setDisable(true);
 		
+		EventHandler<ActionEvent> ev1 = e ->{
+			super.saveAction();
+		};
+		super.getListenerRepository().add("valUserPassEvh", ev1);
+		
 		ITFieldBox userFieldBox = form.gettFieldBox("user");//  user
 		userTextField = (TTextField) userFieldBox.gettControl();
+		userTextField.setOnAction(new WeakEventHandler<>(ev1));
 		
 		ITFieldBox passwordFieldBox = form.gettFieldBox("password");// password 
-		passwordField = (TPasswordField) passwordFieldBox.gettControl();
+		passwordField = (TPasswordField) passwordFieldBox.gettControl();	
+		passwordField.setOnAction(new WeakEventHandler<>(ev1));
 		
 		ITFieldBox tFieldBox = form.gettFieldBox("language");// password language
 		languageField = (TVerticalRadioGroup) tFieldBox.gettControl();
