@@ -23,8 +23,10 @@ public interface TFxKey {
 	static final String BUTTON_SAVE = "#{tedros.fxapi.button.save}";
 	static final String BUTTON_SEARCH = "#{tedros.fxapi.button.search}";
 	static final String BUTTON_SELECT = "#{tedros.fxapi.button.select}";
+	static final String BUTTON_SELECT_FILE = "#{tedros.fxapi.button.select.file}";
 	static final String BUTTON_SELECT_FOLDER = "#{tedros.fxapi.button.select.folder}";
 	static final String BUTTON_SELECTALL = "#{tedros.fxapi.button.selectAll}";
+	static final String BUTTON_SEND = "#{tedros.fxapi.button.send}";
 	static final String BUTTON_VIEW_SELECTED = "#{tedros.fxapi.button.view.selected}";
 	static final String BUTTON_YES = "#{tedros.fxapi.button.yes}";
 	static final String HYPERLINK_READ_EXPORT = "#{tedros.fxapi.hyperlink.read.export}";

@@ -640,7 +640,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 					? ((ITFileEntity)m).getDescription()
 							: m.getFileName();
 			if(m.getFileSize()!=null)
-				s += " ("+m.getFileSize().toString()+" bytes)";
+				s += " ("+ FileUtils.byteCountToDisplaySize(m.getFileSize())+")";
 			l.setText(s);
 		}
 		TFieldBox fb = new TFieldBox(null, l, imgView, TLabelPosition.BOTTOM);

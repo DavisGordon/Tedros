@@ -107,6 +107,7 @@ public interface ToolsKey {
 	static final String MENU_TOOLS = "#{menu.tools}";
 	static final String MESSAGE_SELECT_IMAGE = "#{message.select.image}";
 	static final String MIMETYPE_IMPORT_RULE_DESC = "#{mimetype.import.rule.desc}";
+	static final String MODULE_CHAT = "#{module.chat}";
 	static final String MODULE_NOTIFY = "#{module.notify}";
 	static final String MODULE_PREFERENCES = "#{module.preferences}";
 	static final String MODULE_SCHEME = "#{module.scheme}";
@@ -135,6 +136,7 @@ public interface ToolsKey {
 	static final String TEMPLATE_MENU = "#{template.menu}";
 	static final String VIEW_AUTHORIZATION = "#{view.authorization}";
 	static final String VIEW_BACKGROUND = "#{view.background}";
+	static final String VIEW_CHAT = "#{view.chat}";
 	static final String VIEW_COLORS = "#{view.colors}";
 	static final String VIEW_LAYOUT = "#{view.layout}";
 	static final String VIEW_MIMETYPE = "#{view.mimetype}";
