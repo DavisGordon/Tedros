@@ -212,6 +212,15 @@ public class TFileModel implements ITFileModel, Serializable {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		
+		return (fileName != null ? fileName : "")
+				+ (fileSize != null ?  " ("+FileUtils.byteCountToDisplaySize(fileSize)+")" : "");
+	}
 
 	
 	

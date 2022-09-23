@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.tedros.common.domain.DomainSchema;
@@ -135,6 +136,16 @@ public class TFileEntity extends TEntity implements ITFileEntity {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		
+		return (fileName != null ? fileName : "")
+				+ (fileSize != null ?  " ("+FileUtils.byteCountToDisplaySize(fileSize)+")" : "");
 	}
 
 	
