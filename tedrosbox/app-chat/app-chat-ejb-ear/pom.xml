@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+ 	<modelVersion>4.0.0</modelVersion>
+	
+	<!-- PARENT INFO -->
+	<parent>
+		<groupId>org.tedros</groupId>
+  		<artifactId>app-chat</artifactId>
+  		<version>8-4.0.0</version>
+	</parent>
+	
+	<!-- MODULE INFO -->
+  	<artifactId>app-chat-ejb-ear</artifactId>
+  	<packaging>ear</packaging>
+
+  	<name>app-chat-ejb-ear</name>
+  	<url>The ear project to deploy</url>
+  
+  	<!-- DEPENDENCIES -->
+	<dependencies>
+		<dependency>
+	  		<groupId>org.tedros</groupId>
+	  		<artifactId>app-chat-ejb</artifactId>
+	  		<version>8-4.0.0</version>
+	  		<scope>compile</scope>
+	  		<type>ejb</type>
+	  	</dependency>
+  	
+	  	<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${h2.version}</version>
+		</dependency>
+		
+	 	<dependency>
+	    	<groupId>junit</groupId>
+	    	<artifactId>junit</artifactId>
+	    	<version>${junit.version}</version>
+	    	<scope>test</scope>
+	  	</dependency>
+	</dependencies>
+	
+	<!-- BUILD -->
+	<build>
+    	<plugins>
+    		 <plugin>
+	    		<groupId>org.apache.openejb.maven</groupId>
+	    		<artifactId>tomee-maven-plugin</artifactId>
+	    		<version>1.7.1</version>
+			    <configuration>
+			    	<tomeeVersion>${tomee.version}</tomeeVersion>
+			    	<tomeeClassifier>webprofile</tomeeClassifier>
+			    	<tomeeHost>localhost</tomeeHost>
+			    	<tomeeHttpPort>8080</tomeeHttpPort>
+			 		
+			 		<url>${tomee.ejb.url}</url>
+					<server>Tomee</server>
+					<path>${project.basedir}/target/${project.build.finalName}</path>
+					
+					<synchronization>
+				    	<extensions>
+				        	<extension>.class</extension><!--  if you want to update each time you build with mvn compile -->
+				      	</extensions>
+				    </synchronization>
+				    <reloadOnUpdate>true</reloadOnUpdate>
+			 		<libDir>lib</libDir>
+			    	<debug>false</debug>
+		      		<debugPort>5005</debugPort>
+		      		<args>-Dfoo=bar</args>
+		      		<config>${project.basedir}/src/test/tomee/conf</config>
+			        <libs>
+			        	<lib>com.h2database:h2:${h2.version}</lib>
+			        </libs> 
+		      		<apps>
+			        	<app>${project.groupId}:${project.artifactId}:${project.version}:ear</app>
+			      	</apps>
+			      	<libs>
+			        	<lib>com.h2database:h2:${h2.version}</lib>
+			          	<lib>remove:openjpa-</lib>
+			      	</libs>
+			   	</configuration>
+	  		</plugin> 
+	  
+	      	<plugin>
+	        	<groupId>org.apache.maven.plugins</groupId>
+	        	<artifactId>maven-ear-plugin</artifactId>
+	        	<version>2.10</version>
+	        	<!-- configuring the ear plugin -->
+	        	<configuration>
+	        		<defaultLibBundleDir>lib</defaultLibBundleDir>
+	        		<!-- <outputDirectory>${project.basedir}/target/${project.build.finalName}</outputDirectory> -->
+	          		<modules>
+	            		<ejbModule>
+	              			<groupId>org.tedros</groupId>
+	              			<artifactId>app-chat-ejb</artifactId>
+	            		</ejbModule>
+	          		</modules>
+	          		<fileNameMapping>no-version</fileNameMapping>
+	        	</configuration>
+	      	</plugin>
+	      	
+      		<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-compiler-plugin</artifactId>
+        		<version>3.3</version>
+        		<configuration>
+          			<source>${java.version}</source>
+          			<target>${java.version}</target>
+        		</configuration>
+      		</plugin>
+	      	
+    	</plugins>
+  	</build>
+	
+</project>
