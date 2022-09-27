@@ -1,14 +1,14 @@
 /**
  * 
  */
-package org.tedros.tools.module.message.decorator;
+package org.tedros.chat.module.client.decorator;
 
+import org.tedros.chat.module.client.model.TChatMV;
 import org.tedros.core.security.model.TUser;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.control.TButton;
 import org.tedros.fx.control.TTextAreaField;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewSimpleBaseDecorator;
-import org.tedros.tools.module.message.model.TChatMV;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.ListView;
@@ -16,6 +16,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -48,19 +49,20 @@ public class TChatDecorator extends TDynaViewSimpleBaseDecorator<TChatMV> {
 		//this.msgsVB.autosize();
 		//StackPane sp = new StackPane(msgsVB);
 		ScrollPane sp = new ScrollPane();
-		super.addItemInTCenterContent(sp);
 		sp.setStyle("-fx-background-color: transparent");
 		sp.setFitToHeight(true);
 		sp.setFitToWidth(true);
 		sp.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		sp.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 		sp.setContent(msgPane);
-		sp.setPadding(new Insets(40));
+		sp.setPadding(new Insets(10));
 		
 		this.msgArea = new TTextAreaField();
 		this.msgArea.setWrapText(true);
-		this.msgArea.setPrefRowCount(8);
-		
+		this.msgArea.setPrefHeight(100);
+		this.msgArea.setMinHeight(100);
+		this.msgArea.setMaxHeight(100);
+		this.msgArea.setStyle("-fx-background-radius: 0; -fx-border-radius: 0;");
 		this.sendBtn = new TButton(super.iEngine.getString(TFxKey.BUTTON_SEND));
 		this.fileBtn = new TButton(super.iEngine.getString(TFxKey.BUTTON_SELECT_FILE));
 		
@@ -69,8 +71,9 @@ public class TChatDecorator extends TDynaViewSimpleBaseDecorator<TChatMV> {
 		tb.getItems().addAll(sendBtn, fileBtn);
 		
 		VBox vb = new VBox(5);
-		vb.getChildren().addAll(msgArea, tb);
-		super.addItemInTBottomContent(vb);
+		VBox.setVgrow(msgArea, Priority.ALWAYS);
+		vb.getChildren().addAll(sp, msgArea, tb);
+		super.addItemInTCenterContent(vb);
 		
 		
 	}

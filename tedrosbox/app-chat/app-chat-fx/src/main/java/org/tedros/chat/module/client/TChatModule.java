@@ -1,11 +1,11 @@
 /**
  * 
  */
-package org.tedros.tools.module.message;
+package org.tedros.chat.module.client;
 
+import org.tedros.chat.module.client.model.TChatMV;
 import org.tedros.core.TModule;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
-import org.tedros.tools.module.message.model.TChatMV;
 
 /**
  * @author Davis Gordon

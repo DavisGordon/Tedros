@@ -1,11 +1,11 @@
 /**
  * 
  */
-package org.tedros.core.cdi.eao;
+package org.tedros.chat.cdi.eao;
 
 import javax.enterprise.context.RequestScoped;
 
-import org.tedros.core.message.model.TMessage;
+import org.tedros.chat.entity.ChatMessage;
 import org.tedros.server.cdi.eao.TGenericEAO;
 
 /**
@@ -13,7 +13,7 @@ import org.tedros.server.cdi.eao.TGenericEAO;
  *
  */
 @RequestScoped
-public class TMessageEao extends TGenericEAO<TMessage> {
+public class TMessageEao extends TGenericEAO<ChatMessage> {
 	
 
 }

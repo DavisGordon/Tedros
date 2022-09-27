@@ -1,14 +1,14 @@
-package org.tedros.core.cdi.bo;
+package org.tedros.chat.cdi.bo;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import org.tedros.core.cdi.eao.TMessageEao;
-import org.tedros.core.message.model.TMessage;
+import org.tedros.chat.cdi.eao.TMessageEao;
+import org.tedros.chat.entity.ChatMessage;
 import org.tedros.server.cdi.bo.TGenericBO;
 
 @RequestScoped
-public class TMessageBO extends TGenericBO<TMessage> {
+public class TMessageBO extends TGenericBO<ChatMessage> {
 	
 	@Inject
 	private TMessageEao eao;

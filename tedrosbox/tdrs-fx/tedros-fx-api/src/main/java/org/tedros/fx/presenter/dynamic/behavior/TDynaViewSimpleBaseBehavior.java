@@ -15,6 +15,7 @@ import org.tedros.core.context.TSecurityDescriptor;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.process.TEjbService;
 import org.tedros.fx.control.action.TPresenterAction;
 import org.tedros.fx.control.validator.TControlValidator;
@@ -333,13 +334,17 @@ extends TBehavior<M, TDynaPresenter<M>> {
 								default:
 									System.out.println(result.getMessage());
 									String msg = result.getMessage();
+									
 									setActionState(new TActionState(action, arg2, TProcessResult.get(result.getState()), msg, model));
 									switch(result.getState()) {
 									case ERROR:
-										addMessage(new TMessage(TMessageType.ERROR, msg));
+										if(msg==null)
+											msg = TFxKey.MESSAGE_ERROR;
+										addMessage(new TMessage(TMessageType.ERROR, iEngine.getFormatedString(msg)));
 										break;
 									default:
-										addMessage(new TMessage(TMessageType.WARNING, msg));
+										if(msg!=null)
+											addMessage(new TMessage(TMessageType.WARNING, iEngine.getFormatedString(msg)));
 										break;
 									}
 								break;

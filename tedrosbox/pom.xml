@@ -94,7 +94,8 @@
 		<module>tdrs-miscellaneous</module>
 		<module>tdrs-server</module>
 		<module>server-application</module>
-	</modules>
+    <module>app-chat</module>
+  </modules>
 	
 	<!-- REPOSITORIES -->
 	<repositories>

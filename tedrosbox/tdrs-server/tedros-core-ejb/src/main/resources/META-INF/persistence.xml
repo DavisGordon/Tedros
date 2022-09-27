@@ -18,7 +18,6 @@
 		<class>org.tedros.core.notify.model.TNotify</class>
 		<class>org.tedros.core.notify.model.TNotifyLog</class>
 		<class>org.tedros.common.model.TMimeType</class>
-		<class>org.tedros.core.message.model.TMessage</class>
 		
 		
 		<properties>
