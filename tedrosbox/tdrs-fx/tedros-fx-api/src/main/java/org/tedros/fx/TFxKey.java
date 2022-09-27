@@ -7,6 +7,7 @@ public interface TFxKey {
 	static final String BUTTON_CANCEL = "#{tedros.fxapi.button.cancel}";
 	static final String BUTTON_CLEAN = "#{tedros.fxapi.button.clean}";
 	static final String BUTTON_CLOSE = "#{tedros.fxapi.button.close}";
+	static final String BUTTON_COPY = "#{tedros.fxapi.button.copy}";
 	static final String BUTTON_DELETE = "#{tedros.fxapi.button.delete}";
 	static final String BUTTON_DOWNLOAD = "#{tedros.fxapi.button.download}";
 	static final String BUTTON_EDIT = "#{tedros.fxapi.button.edit}";

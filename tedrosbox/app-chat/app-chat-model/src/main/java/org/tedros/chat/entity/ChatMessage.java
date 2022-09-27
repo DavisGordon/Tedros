@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.tedros.core.message.model;
+package org.tedros.chat.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,9 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.tedros.chat.domain.DomainSchema;
+import org.tedros.chat.domain.DomainTables;
 import org.tedros.common.model.TFileEntity;
-import org.tedros.core.domain.DomainSchema;
-import org.tedros.core.domain.DomainTables;
 import org.tedros.core.security.model.TUser;
 import org.tedros.server.entity.TEntity;
 
@@ -24,8 +24,8 @@ import org.tedros.server.entity.TEntity;
  */
 
 @Entity
-@Table(name=DomainTables.message, schema=DomainSchema.tedros_core)
-public class TMessage extends TEntity {
+@Table(name=DomainTables.message, schema=DomainSchema.schema)
+public class ChatMessage extends TEntity {
 
 	private static final long serialVersionUID = -8257824754212403138L;
 

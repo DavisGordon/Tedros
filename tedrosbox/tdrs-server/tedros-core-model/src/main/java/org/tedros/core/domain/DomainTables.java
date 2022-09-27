@@ -16,7 +16,6 @@ public interface DomainTables {
 	final static String auditLog = "audit_log";
 	final static String user_profile = "user_profile";
 	final static String profile_authorization = "profile_authorization";
-	final static String message = "message";
 	
 	
 	

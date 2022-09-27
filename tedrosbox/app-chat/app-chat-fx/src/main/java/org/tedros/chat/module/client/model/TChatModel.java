@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.tedros.tools.module.message.model;
+package org.tedros.chat.module.client.model;
 
 import java.util.List;
 

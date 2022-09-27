@@ -1,8 +1,11 @@
 /**
  * 
  */
-package org.tedros.tools.module.message.model;
+package org.tedros.chat.module.client.model;
 
+import org.tedros.chat.CHATKey;
+import org.tedros.chat.module.client.behaviour.TChatBehaviour;
+import org.tedros.chat.module.client.decorator.TChatDecorator;
 import org.tedros.core.security.model.TUser;
 import org.tedros.fx.annotation.control.TModelViewType;
 import org.tedros.fx.annotation.presenter.TBehavior;
@@ -10,16 +13,15 @@ import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.presenter.model.TModelView;
-import org.tedros.tools.ToolsKey;
-import org.tedros.tools.module.message.behaviour.TChatBehaviour;
-import org.tedros.tools.module.message.decorator.TChatDecorator;
 
 /**
  * @author Davis Gordon
  *
  */
-@TPresenter(decorator=@TDecorator(type=TChatDecorator.class, viewTitle=ToolsKey.VIEW_CHAT),
-behavior=@TBehavior(type=TChatBehaviour.class))
+@TPresenter(
+		decorator=@TDecorator(type=TChatDecorator.class, 
+		viewTitle=CHATKey.VIEW_CLIENT_MESSAGES),
+		behavior=@TBehavior(type=TChatBehaviour.class))
 public class TChatMV extends TModelView<TChatModel> {
 
 	@TModelViewType(modelClass = TUser.class)

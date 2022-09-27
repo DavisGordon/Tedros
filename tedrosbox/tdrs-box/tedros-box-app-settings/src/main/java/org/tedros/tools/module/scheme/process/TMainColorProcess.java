@@ -9,6 +9,7 @@ import java.util.Properties;
 import org.tedros.core.style.TStyleResourceName;
 import org.tedros.core.style.TStyleResourceValue;
 import org.tedros.core.style.TThemeUtil;
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.process.TModelProcess;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
@@ -38,10 +39,10 @@ public class TMainColorProcess extends TModelProcess<TMainColor>{
 		result.setValue(obj);
 		try{
 			saveValues(obj);
-			result.setMessage("Dados salvo com sucesso!");
 			result.setState(TState.SUCCESS);
 		}catch(Exception e){
-			result.setMessage(e.getMessage());
+			e.printStackTrace();
+			result.setMessage(TFxKey.MESSAGE_ERROR);
 			result.setState(TState.ERROR);
 		}
 		return Arrays.asList(result);

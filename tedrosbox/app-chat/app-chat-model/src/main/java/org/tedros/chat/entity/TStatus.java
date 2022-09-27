@@ -1,4 +1,4 @@
-package org.tedros.core.message.model;
+package org.tedros.chat.entity;
 
 public enum TStatus {
 
