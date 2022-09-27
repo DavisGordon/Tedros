@@ -1,0 +1,5 @@
+<beans>
+	<interceptors>
+    	<class>org.tedros.server.interceptor.TSecurityInterceptor</class>
+  	</interceptors>
+</beans>
