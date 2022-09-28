@@ -15,12 +15,6 @@
   
   	<dependencies>
   		
-  		<dependency>
-	  		<groupId>org.tedros</groupId>
-	  		<artifactId>app-services-fx</artifactId>
-	  		<version>${app.services}</version>
-	  	</dependency>
-  	
 	  	<dependency>
 	  		<groupId>org.tedros</groupId>
 	  		<artifactId>tedros-fx-api</artifactId>

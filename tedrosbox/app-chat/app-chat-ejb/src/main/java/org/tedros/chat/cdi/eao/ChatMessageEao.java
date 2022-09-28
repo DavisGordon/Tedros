@@ -13,7 +13,7 @@ import org.tedros.server.cdi.eao.TGenericEAO;
  *
  */
 @RequestScoped
-public class TMessageEao extends TGenericEAO<ChatMessage> {
+public class ChatMessageEao extends TGenericEAO<ChatMessage> {
 	
 
 }

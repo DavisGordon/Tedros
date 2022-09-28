@@ -33,12 +33,6 @@
 	  	
 	  	<dependency>
 	  		<groupId>org.tedros</groupId>
-	  		<artifactId>app-services-model</artifactId>
-	  		<version>${app.services}</version>
-	  	</dependency>
-	  	
-	  	<dependency>
-	  		<groupId>org.tedros</groupId>
 	  		<artifactId>tedros-common-model</artifactId>
 	  		<version>${tedros.jee}</version>
 	  	</dependency>

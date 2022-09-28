@@ -11,6 +11,13 @@
   <description>The server application project configuration</description>
   
   <dependencies>
+  
+  <dependency>
+	    <groupId>org.tedros</groupId>
+	    <artifactId>app-chat-ejb-ear</artifactId>
+	    <type>ear</type>
+	    <version>8-4.0.0</version>
+	</dependency>
 	
 	<dependency>
 	    <groupId>org.tedros</groupId>
@@ -272,6 +279,11 @@
 		      <deployable>
 		        <groupId>org.tedros</groupId>
 		        <artifactId>tedros-core-ejb-ear</artifactId>
+		        <type>ear</type>
+		      </deployable>
+		       <deployable>
+		        <groupId>org.tedros</groupId>
+		        <artifactId>app-chat-ejb-ear</artifactId>
 		        <type>ear</type>
 		      </deployable>
 		    </deployables>
