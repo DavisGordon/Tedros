@@ -30,6 +30,12 @@
 	  		<scope>compile</scope>
 	  	</dependency>
 	  	
+	  	<dependency>
+	  		<groupId>org.tedros</groupId>
+	  		<artifactId>app-chat-fx</artifactId>
+	  		<version>8-4.0.0</version>
+	  		<scope>compile</scope>
+	  	</dependency>
 	  	
 	 <dependency>
   		<groupId>org.tedros</groupId>

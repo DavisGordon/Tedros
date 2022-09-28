@@ -8,6 +8,7 @@ import java.net.Socket;
 
 public class ServerConnHandler extends Thread {
 
+	private String userId;
     private ChatServer servidor;
     private Socket socket;
     private DataOutputStream dout;

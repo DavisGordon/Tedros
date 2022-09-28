@@ -49,8 +49,6 @@ public class TAuthorizationProcess extends TEntityProcess<TAuthorization> {
 					.loadPackages()
 					.getClassesAnnotatedWith(TSecurity.class));
 			
-			
-			
 			ServiceLocator loc = ServiceLocator.getInstance();
 			try {
 				TUser user = TedrosContext.getLoggedUser();

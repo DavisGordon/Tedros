@@ -6,8 +6,8 @@ import org.tedros.chat.entity.ChatMessage;
 import org.tedros.server.controller.ITSecureEjbController;
 
 @Remote
-public interface TMessageController extends ITSecureEjbController<ChatMessage>{
+public interface IChatMessageController extends ITSecureEjbController<ChatMessage>{
 	
 
-	static final String JNDI_NAME = "TMessageControllerRemote";
+	static final String JNDI_NAME = "IChatMessageControllerRemote";
 }

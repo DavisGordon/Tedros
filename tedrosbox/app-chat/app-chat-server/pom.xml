@@ -8,4 +8,38 @@
   <artifactId>app-chat-server</artifactId>
   <name>App Chat Server</name>
   <description>The socket chat  server </description>
+  
+  
+  	<!-- PROPERTIES -->
+	<properties>
+		<java.version>1.8</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+  
+  	<!-- BUILD -->
+  	<build>
+    	<plugins>
+      		<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-compiler-plugin</artifactId>
+        		<version>3.3</version>
+        		<configuration>
+          			<source>${java.version}</source>
+          			<target>${java.version}</target>
+        		</configuration>
+      		</plugin>
+  		</plugins>
+  		
+ 		<resources>
+        	<resource>
+            	<directory>src/main/resources</directory>
+        	</resource>
+        	<resource>
+            	<directory>src/main/java</directory>
+            	<excludes>
+            		<exclude>**/*.java</exclude>
+            	</excludes>
+        	</resource>
+    	</resources>
+ 	</build>
 </project>
