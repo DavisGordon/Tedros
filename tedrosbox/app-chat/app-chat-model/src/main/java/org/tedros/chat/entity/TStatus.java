@@ -16,5 +16,11 @@ public enum TStatus {
 		return value;
 	}
 
-	
+	public static TStatus get(String name) {
+		if(name!=null)
+			for(TStatus e : values())
+				if(e.name().equals(name))
+					return e;
+		return null;
+	}
 }
