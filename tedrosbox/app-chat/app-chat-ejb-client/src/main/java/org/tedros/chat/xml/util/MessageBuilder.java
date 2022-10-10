@@ -23,12 +23,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.jvnet.staxex.Base64EncoderStream;
 import org.tedros.chat.entity.ChatMessage;
+import org.tedros.chat.entity.ChatUser;
 import org.tedros.chat.entity.TStatus;
 import org.tedros.common.model.TByteEntity;
 import org.tedros.common.model.TFileEntity;
-import org.tedros.core.security.model.TUser;
 import org.tedros.fx.util.TFileBaseUtil;
 import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.model.TFileModel;
@@ -54,14 +53,14 @@ public class MessageBuilder {
 	}
 	
 	public static void main(String[] arr) {
-		TUser u = new TUser();
+		ChatUser u = new ChatUser();
 		//testAuth(u);
 		
 		try {
 			u.setId(22L);
 			u.setName("Davis Dun");
 			
-			TUser to = new TUser();
+			ChatUser to = new ChatUser();
 			to.setId(44L);
 			to.setName("Fulano de tal");
 			TFileModel fm = new TFileModel(new File("C:\\Users\\Davis Gordon\\Documents\\Covid Sem Fome\\picpay.png"));
@@ -72,10 +71,10 @@ public class MessageBuilder {
 			m.setFrom(u);
 			m.setTo(to);
 			
-			MessageBuilder.writeClientMessage(m,  System.out);
+			MessageBuilder.writeMessage(m, Step.SEND_MSG, System.out);
 			
 			ByteArrayOutputStream ous = new ByteArrayOutputStream();
-			MessageBuilder.writeClientMessage(m,  ous);
+			MessageBuilder.writeMessage(m, Step.SEND_MSG,  ous);
 			InputStream is = new ByteArrayInputStream(ous.toByteArray());
 			Document doc = MessageBuilder.parse(is);
 			ChatMessage msg = MessageBuilder.getMessage(doc);
@@ -84,7 +83,7 @@ public class MessageBuilder {
 			fm.setFilePath("C:\\tmp\\");
 			File f = fm.getFile();
 			
-			MessageBuilder.writeClientMessage(msg,  System.out);
+			MessageBuilder.writeMessage(msg, Step.SEND_MSG, System.out);
 			
 		
 			
@@ -98,9 +97,9 @@ public class MessageBuilder {
 	/**
 	 * @param u
 	 */
-	private static void testAuth(TUser u) {
+	private static void testAuth(ChatUser u) {
 		TAccessToken t = new TAccessToken("fghkiytfgjjj");
-		u.setAccessToken(t);
+		u.setToken(t);
 		try {
 			MessageBuilder.writeAuthentication(u,  System.out);
 			ByteArrayOutputStream ous = new ByteArrayOutputStream();
@@ -133,7 +132,7 @@ public class MessageBuilder {
 		return doc;
 	}
 
-	public static void writeAuthentication(TUser user, OutputStream ous) throws ParserConfigurationException {
+	public static void writeAuthentication(ChatUser user, OutputStream ous) throws ParserConfigurationException {
 		 Document doc = buildDocument();
 		 Element rootElement = doc.createElement("chat");
 		 doc.appendChild(rootElement);
@@ -149,13 +148,12 @@ public class MessageBuilder {
 		}
 	}
 	
-	public static void writeClientMessage(ChatMessage msg, OutputStream ous) throws ParserConfigurationException {
+	public static void writeMessage(ChatMessage msg, Step step, OutputStream ous) throws ParserConfigurationException {
 		 Document doc = buildDocument();
 		 Element rootElement = doc.createElement("chat");
 		 doc.appendChild(rootElement);
 
-		 Step s = Step.SEND_MSG;
-		 createStepTag(doc, rootElement, s);
+		 createStepTag(doc, rootElement, step);
 		 
 		 Element from = doc.createElement("from");
 		 rootElement.appendChild(from);
@@ -205,11 +203,11 @@ public class MessageBuilder {
 		ChatMessage msg = new ChatMessage();
 		
 		NodeList list = doc.getElementsByTagName("from");
-		TUser f = getUser(list);
+		ChatUser f = geChatUser(list);
 		msg.setFrom(f);
 		
 		list = doc.getElementsByTagName("to");
-		TUser u = getUser(list);
+		ChatUser u = geChatUser(list);
 		msg.setTo(u);
 		
 		list = doc.getElementsByTagName("file");
@@ -247,9 +245,9 @@ public class MessageBuilder {
 	 * @param list
 	 * @return
 	 */
-	private static TUser getUser(NodeList list) {
+	private static ChatUser geChatUser(NodeList list) {
 		Node node = list.item(0);
-		TUser u = new TUser();
+		ChatUser u = new ChatUser();
 		if (node.getNodeType() == Node.ELEMENT_NODE) {
 			Element element = (Element) node;
 			String id = getTagContent(element, "id");
@@ -300,9 +298,9 @@ public class MessageBuilder {
 	 * @param doc
 	 * @param rootElement
 	 */
-	private static void createTokenTag(TUser user, Document doc, Element rootElement) {
+	private static void createTokenTag(ChatUser user, Document doc, Element rootElement) {
 		String tag = "token";
-		String val = user.getAccessToken().getToken();
+		String val = user.getToken().getToken();
 		createCDataElement(doc, rootElement, tag, val);
 	}
 

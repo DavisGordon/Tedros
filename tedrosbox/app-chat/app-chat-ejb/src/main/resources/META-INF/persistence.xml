@@ -17,6 +17,8 @@
 		<class>org.tedros.core.security.model.TUser</class>
 		<class>org.tedros.core.security.model.TProfile</class>
 		<class>org.tedros.core.security.model.TAuthorization</class>
+		<class>org.tedros.chat.entity.ChatUser</class>
+		<class>org.tedros.chat.entity.Chat</class>
 		
 		
 		<properties>

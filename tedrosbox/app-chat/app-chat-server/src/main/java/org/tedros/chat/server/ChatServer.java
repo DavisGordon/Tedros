@@ -5,60 +5,58 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import org.tedros.chat.entity.ChatMessage;
+
 public class ChatServer {
 
-    private ServerSocket servidor;
-    //guardar os clientes
-    private final ArrayList<ServerConnHandler> clientes;
+    private ServerSocket server;
+    //hold clients
+    private final ArrayList<ServerConnHandler> clients;
 
     public ChatServer(int port) throws IOException {
-        clientes = new ArrayList<ServerConnHandler>();
+        clients = new ArrayList<ServerConnHandler>();
         listen(port);
     }
 
     private void listen(int port) throws IOException {
 
-        //criar o socket servidor
-        servidor = new ServerSocket(port);
-        System.out.println("À escuta em " + servidor);
+        //socket server
+        server = new ServerSocket(port);
+        System.out.println("Listening at " + server);
 
-        //aceitar ligações para sempre
+        //Establish a connection
         while (true) {
 
-            Socket cliente = servidor.accept();
-            System.out.println("Ligação aceite de " + cliente);
+            Socket client = server.accept();
+            System.out.println("Connection established: " + client);
 
-            //criar um novo handler para este cliente
-            clientes.add(new ServerConnHandler(this, cliente));
+            //client handler
+            clients.add(new ServerConnHandler(this, client));
         }
     }
 
-    public void replicarMensagem(String mensagem) {
-        //vamos sincronizar o nosso acesso à lista para evitar problemas se alguma
-        //outra thread estiver a tentar adicionar ou remover elementos
-        synchronized (clientes) {
-            for (ServerConnHandler cl : clientes) {
-                cl.enviarMensagem(mensagem);
+    public void replyMessage(ChatMessage msg) {
+        synchronized (clients) {
+            for (ServerConnHandler cl : clients) {
+                cl.send(msg);
             }
         }
     }
 
-    public void removerCliente(ServerConnHandler cliente) {
-        synchronized (clientes) {
-            System.out.println("A remover a ligação de " + cliente);
-            clientes.remove(cliente);
-            System.out.println("Ligações restantes: " + clientes.size());
+    public void removeClient(ServerConnHandler client) {
+        synchronized (clients) {
+            System.out.println("Removing " + client);
+            clients.remove(client);
+            System.out.println("Remaining Clients : " + clients.size());
             try {
-                cliente.fechar();
+                client.close();
             } catch (IOException ex) {
-                System.out.println("Erro ao desligar o contacto com " + cliente);
+                System.out.println("Error while removing client " + client);
                 System.out.println(ex.getMessage());
             }
         }
     }
 
-    public void removeConnection(Socket cliente) {
-    }
 
     public static void main(String args[]) {
         try {
