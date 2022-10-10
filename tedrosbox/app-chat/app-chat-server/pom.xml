@@ -16,6 +16,29 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
   
+  	<dependencies>
+	  	<dependency>
+	  		<groupId>org.tedros</groupId>
+	  		<artifactId>app-chat-ejb-client</artifactId>
+	  		<version>8-4.0.0</version>
+	  		<scope>compile</scope>
+	  	</dependency>
+	  	
+	  	<dependency>
+	  		<groupId>org.tedros</groupId>
+	  		<artifactId>tedros-server-api</artifactId>
+	  		<version>${tedros.jee}</version>
+	  		<scope>compile</scope>
+	  	</dependency>
+	  
+	  	<dependency>
+	  		<groupId>org.apache.commons</groupId>
+	  		<artifactId>commons-lang3</artifactId>
+	  		<version>${commons.lang.version}</version>
+	  		<scope>provided</scope>
+	  	</dependency>
+	  </dependencies>
+  
   	<!-- BUILD -->
   	<build>
     	<plugins>

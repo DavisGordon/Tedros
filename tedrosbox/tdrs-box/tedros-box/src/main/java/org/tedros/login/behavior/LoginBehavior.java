@@ -507,7 +507,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 		profileText.setText(iEngine.getString("#{tedros.loading}"));
 		LOGGER.info(iEngine.getString("#{tedros.loading}"));
 		TedrosContext.setLoggedUser(user);
-		LOGGER.info("User "+user.getName()+" setted. ");
+		LOGGER.info("ChatUser "+user.getName()+" setted. ");
 		TedrosContext.loadCustomProperties();
 		TedrosContext.searchApps();
 		TedrosBox.getTedros().buildSettingsPane();

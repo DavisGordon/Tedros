@@ -3,20 +3,16 @@
  */
 package org.tedros.chat.module.client.decorator;
 
+import org.tedros.api.presenter.view.ITDynaView;
+import org.tedros.chat.entity.ChatUser;
 import org.tedros.chat.module.client.model.TChatMV;
-import org.tedros.core.security.model.TUser;
-import org.tedros.fx.TFxKey;
-import org.tedros.fx.control.TButton;
-import org.tedros.fx.control.TTextAreaField;
+import org.tedros.core.control.TProgressIndicator;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewSimpleBaseDecorator;
+import org.tedros.fx.presenter.paginator.TPaginator;
 
-import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.control.ToolBar;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -26,98 +22,69 @@ import javafx.scene.layout.VBox;
  */
 public class TChatDecorator extends TDynaViewSimpleBaseDecorator<TChatMV> {
 
-	private GridPane msgPane;
-	private VBox msgsVB;
-	private ListView<TUser> usrLV;
-	private TTextAreaField msgArea;
-	private TButton sendBtn;
-	private TButton fileBtn;
+	private ListView<ChatUser> usrLV;
+    private TProgressIndicator tListViewProgressIndicator;
+	private TPaginator paginator;
 	
 	@Override
 	public void decorate() {
+		StackPane tListViewPane = new StackPane();
+		tListViewPane.getStyleClass().add("t-panel-background-color");
+		tListViewPane.setAlignment(Pos.CENTER);
 		
+		VBox lvb = new VBox(5);
+		tListViewPane.getChildren().add(lvb);
+		tListViewProgressIndicator = new TProgressIndicator(tListViewPane);
+		tListViewProgressIndicator.setSmallLogo();
+		
+		this.paginator = new TPaginator(true, true);
+		this.paginator.setSearchFieldName("name");
 		this.usrLV = new ListView<>();
-		super.addItemInTLeftContent(usrLV);
+		lvb.getChildren().addAll(usrLV, paginator);
+		
+		super.addItemInTLeftContent(tListViewPane);
 		this.usrLV.getStyleClass().add("t-panel-background-color");
 		
-		this.msgPane = new GridPane();
-		this.msgPane.setHgap(10);
-		this.msgPane.setVgap(8);
-		
-		
-		//this.msgsVB = new VBox(20);
-		//this.msgsVB.autosize();
-		//StackPane sp = new StackPane(msgsVB);
-		ScrollPane sp = new ScrollPane();
-		sp.setStyle("-fx-background-color: transparent");
-		sp.setFitToHeight(true);
-		sp.setFitToWidth(true);
-		sp.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
-		sp.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-		sp.setContent(msgPane);
-		sp.setPadding(new Insets(10));
-		
-		this.msgArea = new TTextAreaField();
-		this.msgArea.setWrapText(true);
-		this.msgArea.setPrefHeight(100);
-		this.msgArea.setMinHeight(100);
-		this.msgArea.setMaxHeight(100);
-		this.msgArea.setStyle("-fx-background-radius: 0; -fx-border-radius: 0;");
-		this.sendBtn = new TButton(super.iEngine.getString(TFxKey.BUTTON_SEND));
-		this.fileBtn = new TButton(super.iEngine.getString(TFxKey.BUTTON_SELECT_FILE));
-		
-		ToolBar tb = new ToolBar();
-		tb.getStyleClass().add("t-panel-background-color");
-		tb.getItems().addAll(sendBtn, fileBtn);
-		
-		VBox vb = new VBox(5);
-		VBox.setVgrow(msgArea, Priority.ALWAYS);
-		vb.getChildren().addAll(sp, msgArea, tb);
-		super.addItemInTCenterContent(vb);
-		
+		this.showScreenSaver();
 		
 	}
-
-	/**
-	 * @return the msgsVB
-	 */
-	public VBox getMsgsVB() {
-		return msgsVB;
+	
+	@SuppressWarnings("rawtypes")
+	private void cleanCenterContent() {
+		final ITDynaView view = getView();
+		view.gettCenterContent().getChildren().clear();
+	}
+	
+	public void showChatPane(ChatPane pane) {
+		this.cleanCenterContent();
+		super.addItemInTCenterContent(pane);
+	}
+	
+	@Override
+	public void showScreenSaver() {
+		this.cleanCenterContent();
+		super.addItemInTCenterContent(super.getScreenSaverPane());
 	}
 
 	/**
 	 * @return the usrLV
 	 */
-	public ListView<TUser> getUsrLV() {
+	public ListView<ChatUser> getUsrLV() {
 		return usrLV;
 	}
 
 	/**
-	 * @return the msgArea
+	 * @return the paginator
 	 */
-	public TTextAreaField getMsgArea() {
-		return msgArea;
+	public TPaginator getPaginator() {
+		return paginator;
 	}
 
 	/**
-	 * @return the sendBtn
+	 * @return the tListViewProgressIndicator
 	 */
-	public TButton getSendBtn() {
-		return sendBtn;
-	}
-
-	/**
-	 * @return the fileBtn
-	 */
-	public TButton getFileBtn() {
-		return fileBtn;
-	}
-
-	/**
-	 * @return the msgPane
-	 */
-	public GridPane getMsgPane() {
-		return msgPane;
+	public TProgressIndicator gettListViewProgressIndicator() {
+		return tListViewProgressIndicator;
 	}
 
 }

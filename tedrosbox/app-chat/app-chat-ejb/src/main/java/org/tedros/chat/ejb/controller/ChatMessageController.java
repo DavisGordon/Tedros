@@ -5,9 +5,9 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
+import org.tedros.chat.domain.DomainApp;
 import org.tedros.chat.ejb.service.ChatMessageService;
 import org.tedros.chat.entity.ChatMessage;
-import org.tedros.core.domain.DomainApp;
 import org.tedros.server.ejb.controller.ITSecurityController;
 import org.tedros.server.ejb.controller.TSecureEjbController;
 import org.tedros.server.security.ITSecurity;
@@ -19,7 +19,7 @@ import org.tedros.server.service.ITEjbService;
 
 @TSecurityInterceptor
 @Stateless(name="IChatMessageController")
-@TBeanSecurity(@TBeanPolicie(id=DomainApp.MESSAGE_FORM_ID, 
+@TBeanSecurity(@TBeanPolicie(id=DomainApp.CHAT_FORM_ID, 
 policie= {TAccessPolicie.APP_ACCESS, TAccessPolicie.VIEW_ACCESS}))
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class ChatMessageController extends TSecureEjbController<ChatMessage> implements	ITSecurity, IChatMessageController {

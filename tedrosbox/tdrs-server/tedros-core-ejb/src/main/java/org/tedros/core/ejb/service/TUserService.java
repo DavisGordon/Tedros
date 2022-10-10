@@ -8,11 +8,10 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.tedros.core.cdi.bo.TUserBO;
-import org.tedros.server.cdi.bo.ITGenericBO;
-import org.tedros.server.ejb.service.TEjbService;
-
 import org.tedros.core.security.model.TProfile;
 import org.tedros.core.security.model.TUser;
+import org.tedros.server.cdi.bo.ITGenericBO;
+import org.tedros.server.ejb.service.TEjbService;
 
 @Local
 @Stateless(name="TUserService")

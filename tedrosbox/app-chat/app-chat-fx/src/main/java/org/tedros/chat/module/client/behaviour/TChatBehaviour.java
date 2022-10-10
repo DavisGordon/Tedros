@@ -4,43 +4,54 @@
 package org.tedros.chat.module.client.behaviour;
 
 import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.chat.ejb.controller.IFindChatUserController;
 import org.tedros.chat.entity.ChatMessage;
+import org.tedros.chat.entity.ChatUser;
+import org.tedros.chat.entity.TStatus;
 import org.tedros.chat.module.client.decorator.TChatDecorator;
 import org.tedros.chat.module.client.model.TChatMV;
 import org.tedros.chat.module.client.model.TChatModel;
 import org.tedros.common.model.TFileEntity;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
+import org.tedros.core.message.TMessage;
+import org.tedros.core.message.TMessageType;
 import org.tedros.core.security.model.TUser;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.control.TText;
 import org.tedros.fx.control.TText.TTextStyle;
 import org.tedros.fx.domain.TImageExtension;
+import org.tedros.fx.exception.TException;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewSimpleBaseBehavior;
+import org.tedros.fx.presenter.paginator.TPagination;
+import org.tedros.fx.process.TPaginationProcess;
 import org.tedros.fx.property.TBytesLoader;
-import org.tedros.fx.util.TFileBaseUtil;
 import org.tedros.server.entity.ITFileEntity;
-import org.tedros.server.model.TFileModel;
+import org.tedros.server.result.TResult;
+import org.tedros.server.result.TResult.TState;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WeakChangeListener;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
@@ -71,10 +82,10 @@ public class TChatBehaviour extends TDynaViewSimpleBaseBehavior<TChatMV, TChatMo
     //Streams de leitura e escrita. A de leitura é usada para receber os dados do
     //servidor, enviados pelos outros clientes. A de escrita para enviar os dados
     //para o servidor.
-    private DataInputStream din;
-    private DataOutputStream dout;
+    private ObjectInputStream din;
+    private ObjectOutputStream dout;
     
-    private SimpleStringProperty messages;
+    private SimpleObjectProperty<ChatMessage> messages;
     
     private boolean receive = true;
     private int row = 0;
@@ -83,27 +94,30 @@ public class TChatBehaviour extends TDynaViewSimpleBaseBehavior<TChatMV, TChatMo
 	public void load() {
 		super.load();
 		this.deco = (TChatDecorator) super.getPresenter().getDecorator();
-		messages = new SimpleStringProperty();
-		ChangeListener<String> chl = (a,o,n) -> {
-			if(StringUtils.isNotBlank(n)) {
-				String[] arr = n.split(Pattern.quote("|$&|"));
-				if(!arr[0].equals(TedrosContext.getLoggedUser().getName())) {
-					ChatMessage m = new ChatMessage();
-	    			m.setContent(arr[1]);
-	    			m.setInsertDate(new Date());
-	    			TUser u = new TUser();
-	    			u.setName(arr[0]);
-	    			
-	    			m.setFrom(u);
-	        		StackPane p1 = buildTextPane(m, true);
+		
+		ChangeListener<TPagination> chl = (a0, a1, a2) -> {
+			try {
+				paginate(a2);
+			} catch (Throwable e) {
+				e.printStackTrace();
+			}
+		};
+		this.deco.getPaginator().paginationProperty().addListener(chl);
+	
+		messages = new SimpleObjectProperty<>();
+		ChangeListener<ChatMessage> chl1 = (a,o,n) -> {
+			if(n!=null) {
+				if(!n.getFrom().getId().equals(TedrosContext.getLoggedUser().getId())) {
+					StackPane p1 = buildTextPane(n, true);
 	        		GridPane.setVgrow(p1, Priority.ALWAYS);
 	        		deco.getMsgPane().add(p1, 0, row);
 	        		row++;
 				}
+	        	messages.setValue(null);
 			}
 		};
-		super.getListenerRepository().add("receiveChl", chl);
-		messages.addListener(new WeakChangeListener<>(chl));
+		super.getListenerRepository().add("receiveChl", chl1);
+		messages.addListener(new WeakChangeListener<>(chl1));
 		
 		EventHandler<ActionEvent> ev = e -> {
 			String msg = deco.getMsgArea().getText();
@@ -112,17 +126,26 @@ public class TChatBehaviour extends TDynaViewSimpleBaseBehavior<TChatMV, TChatMo
 			 try {
 		            //enviar a mensagem para o servidor.
 		            //anexamos o nickname deste utilizador apenas para identificação
-		            dout.writeUTF(u.getName()+"|$&|" + msg);
+		            //dout.writeUTF(u.getName()+"|$&|" + msg);
 		            ChatMessage m = new ChatMessage();
 					m.setContent(msg);
 					m.setInsertDate(new Date());
 					m.setFrom(u);
+					TUser to = new TUser();
+					to.setId(99L);
+					to.setName("Fulano de tal");
+					m.setTo(to);
+					m.setStatus(TStatus.SENT);
+					
+					dout.writeObject(m);
+					//MessageBuilder.writeMessage(m, Step.SEND_MSG, dout);
+					
 					StackPane p1 = buildTextPane(m, false);
 					GridPane.setVgrow(p1, Priority.ALWAYS);
 					deco.getMsgPane().add(p1, 1, row);
 					row++;
 		            deco.getMsgArea().setText("");
-		        } catch (IOException ex) {
+		        } catch (Exception ex) {
 		            ex.printStackTrace();
 		        }
 		};
@@ -190,8 +213,9 @@ public class TChatBehaviour extends TDynaViewSimpleBaseBehavior<TChatMV, TChatMo
             System.out.println("<-client->: Connected...\n");
 
             //Vamos obter as streams de comunicação fornecidas pelo socket
-            din = new DataInputStream(socket.getInputStream());
-            dout = new DataOutputStream(socket.getOutputStream());
+            din = new ObjectInputStream(socket.getInputStream());
+            dout = new ObjectOutputStream(socket.getOutputStream());
+            
 
             //e iniciar a thread que vai estar constantemente à espera de novas
             //mensages. Se não usassemos uma thread, não conseguiamos receber
@@ -203,20 +227,40 @@ public class TChatBehaviour extends TDynaViewSimpleBaseBehavior<TChatMV, TChatMo
                 public void run() {
                     try {
                         while (receive) {
+                        	ChatMessage msg = (ChatMessage) din.readObject();
+							Platform.runLater(()->{
+                        		messages.setValue(msg);
+                        	});
                             //sequencialmente, ler as mensagens uma a uma e acrescentar ao
                             //texto que já recebemos
                             //para o utilizador ver
-                        	String msg = din.readUTF();
-                        	Platform.runLater(()->{
-                        		messages.setValue(msg);
-                        	});
+                        	//String msg = din.readUTF();
+                        	/*Document doc = MessageBuilder.parse(din);
+                        	Step step = MessageBuilder.getStep(doc);
+                        	switch(step) {
+							case AUTHENTICATION_RESULT:
+								break;
+							case RECEIVE_MSG:
+								ChatMessage msg = MessageBuilder.getMessage(doc);
+								Platform.runLater(()->{
+	                        		messages.setValue(msg);
+	                        	});
+								break;
+							default:
+								break;
+                        	
+                        	}*/
+                        	
                         }
-                    } catch (IOException ex) {
+                    } catch (Exception ex) {
                     	System.out.println("<-client->: " + ex.getMessage());
                     }
                 }
             }).start();
-        } catch (IOException ex) {
+          
+         // MessageBuilder.writeAuthentication(TedrosContext.getLoggedUser(), dout);
+			
+        } catch (Exception ex) {
         	System.out.println("<-client->: " + ex.getMessage());
         }
 	}
@@ -356,6 +400,82 @@ public class TChatBehaviour extends TDynaViewSimpleBaseBehavior<TChatMV, TChatMo
 			throw new RuntimeException(e);
 		}
 	}
+	
+	private void processPagination(Long totalRows) {
+		this.deco.getPaginator().reload(totalRows);
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void paginate(TPagination pagination) throws TException {
+		
+		final String chlId = UUID.randomUUID().toString();
+		TPaginationProcess process = new TPaginationProcess(TUser.class, IFindChatUserController.JNDI_NAME) {};
+		ChangeListener<State> prcl = (arg0, arg1, arg2) -> {
+			
+			if(arg2.equals(State.SUCCEEDED)){
+				
+				TResult<Map<String, Object>> resultados = (TResult<Map<String, Object>>) process.getValue();
+				
+				if(resultados != null) {
+					if(resultados.getState().equals(TState.SUCCESS)) {
+						Map<String, Object> result =  resultados.getValue();
+						ObservableList<ChatUser> models = deco.getUsrLV().getItems();
+						models.clear();
+						
+						for(ChatUser e : (List<ChatUser>) result.get("list")){
+							models.add(e);
+						}
+						processPagination((long)result.get("total"));
+					}else {
+						String msg = resultados.getMessage();
+						System.out.println(msg);
+						switch(resultados.getState()) {
+							case ERROR:
+								addMessage(new TMessage(TMessageType.ERROR, msg));
+								break;
+							default:
+								addMessage(new TMessage(TMessageType.WARNING, msg));
+								break;
+						}
+					}
+					getListenerRepository().remove(chlId);
+				}
+			}
+		};
+		
+		super.getListenerRepository().add(chlId, prcl);
+		
+		try {
+			Class target = TUser.class;
+			TUser entity = new TUser();;
+			Method setter = null;
+			do {
+				try {
+					Field f = target.getDeclaredField(pagination.getSearchFieldName());
+					setter = target.getMethod("set"+StringUtils.capitalize(pagination.getSearchFieldName()), f.getType());
+					break;
+				} catch (NoSuchFieldException | SecurityException e) {
+					target = target.getSuperclass();
+				} catch (NoSuchMethodException e) {
+					break;
+				}
+			}while(target != Object.class);
+			
+			if(setter==null)
+				throw new TException("The setter method was not found for the field "+pagination.getSearchFieldName()+" declared in TPaginator annotation.");
+			
+			setter.invoke(entity, pagination.getSearch().toUpperCase());
+			process.findAll(entity, pagination);
+			
+		} catch (Exception e) {
+			throw new TException("An error occurred while trying paginate ", e);
+		}
+			
+		this.deco.gettListViewProgressIndicator().bind(process.runningProperty());
+		process.stateProperty().addListener(new WeakChangeListener(prcl));
+		process.startProcess();
+	}
+	
 	
 	@Override
 	public String canInvalidate() {

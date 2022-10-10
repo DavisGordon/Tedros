@@ -1,57 +1,65 @@
 package org.tedros.chat.server;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
+
+import org.tedros.chat.entity.ChatMessage;
+import org.tedros.chat.entity.TStatus;
 
 public class ServerConnHandler extends Thread {
 
 	private String userId;
-    private ChatServer servidor;
+    private ChatServer server;
     private Socket socket;
-    private DataOutputStream dout;
+    private ObjectOutputStream dout;
 
-    public ServerConnHandler(ChatServer servidor, Socket socket) throws IOException {
-        this.servidor = servidor;
+    public ServerConnHandler(ChatServer server, Socket socket) throws IOException {
+        this.server = server;
         this.socket = socket;
-        dout = new DataOutputStream(socket.getOutputStream());
-        //somos uma thread, vamos começar...
+        dout = new ObjectOutputStream(socket.getOutputStream());
+        
         start();
     }
 
     @Override
     public void run() {
+    	ObjectInputStream ois = null;
         try {
-            //como noutras situações, obter as streams de leitura e escrita.
-            DataInputStream din = new DataInputStream(socket.getInputStream());
-            String mensagem;
+        	ois = new ObjectInputStream(socket.getInputStream());
             while (true) {
-                mensagem = din.readUTF();
-                System.err.println("SR LIDO: " + mensagem);
-                //se não foi enviada a mensagem de saida então enviamos o
-                //texto para todos
-                servidor.replicarMensagem(mensagem);
+            	ChatMessage msg = (ChatMessage) ois.readObject();
+                server.replyMessage(msg);
             }
         } catch (EOFException ex) {
             //DO NOTHING
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
-        } finally {
-            servidor.removeConnection(socket);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+            server.removeClient(this);
+            try {
+            	if(ois!=null)
+            		ois.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
         }
     }
 
-    public void enviarMensagem(String mensagem) {
+    public void send(ChatMessage msg) {
         try {
-            dout.writeUTF(mensagem);
-        } catch (IOException ex) {
+        	msg.setStatus(TStatus.RECEIVED);
+        	dout.writeObject(msg);
+        } catch (Exception ex) {
             System.out.println(ex);
         }
     }
 
-    public void fechar() throws IOException {
+    public void close() throws IOException {
         socket.close();
     }
 }
