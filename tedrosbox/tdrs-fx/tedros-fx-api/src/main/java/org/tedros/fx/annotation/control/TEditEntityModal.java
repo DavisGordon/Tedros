@@ -15,7 +15,7 @@ import org.tedros.api.parser.ITAnnotationParser;
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.annotation.TAnnotationDefaultValue;
 import org.tedros.fx.annotation.layout.TPane;
-import org.tedros.fx.annotation.layout.TVBoxMargin;
+import org.tedros.fx.annotation.layout.TVBox.TMargin;
 import org.tedros.fx.annotation.layout.TVGrow;
 import org.tedros.fx.annotation.parser.TRequiredModalParser;
 import org.tedros.fx.annotation.parser.TVBoxParser;
@@ -139,7 +139,7 @@ public @interface TEditEntityModal  {
 	*  Sets the margin for the child when contained by a vbox. If set, the vbox will layout the child so that it has the margin space around it. Setting the value to null will remove the constraint. Parameters: child - the child mode of a vbox value - the margin of space around the child
 	* </pre>
 	**/
-	public TVBoxMargin margin() default @TVBoxMargin;
+	public TMargin margin() default @TMargin;
 
 	/**
 	* <pre>

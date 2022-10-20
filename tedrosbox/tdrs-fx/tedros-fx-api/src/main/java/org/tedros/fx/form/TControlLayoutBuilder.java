@@ -11,7 +11,9 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.api.descriptor.ITFieldDescriptor;
+import org.tedros.api.form.ITFieldBox;
 import org.tedros.api.presenter.view.TViewMode;
+import org.tedros.app.component.ITActionComponent;
 import org.tedros.core.model.ITModelView;
 import org.tedros.fx.annotation.TDebugConfig;
 import org.tedros.fx.annotation.control.TLabel;
@@ -143,11 +145,11 @@ public final class TControlLayoutBuilder {
 			return;
 		}
 		ITFieldDescriptor fd = descriptor.getFieldDescriptor();
-		TFieldBox fieldBox = (TFieldBox) fd.getComponent();
+		Node control = fd.getComponent();
 		Node layout = ((ITLayoutBuilder) layoutBuilder).build(layoutAnnotation);
 		descriptor.getComponents().put(fd.getFieldName(), layout);
-		if(fieldBox!=null)
-			descriptor.getFieldBoxMap().put(fd.getFieldName(), fieldBox);
+		if(control instanceof ITFieldBox)
+			descriptor.getFieldBoxMap().put(fd.getFieldName(), (ITFieldBox) control);
 		fd.setLayout(layout);
 	}
 	
@@ -183,20 +185,15 @@ public final class TControlLayoutBuilder {
 		if(controlBuilder==null){
 			return;
 		}
-		Node control =  buildFieldBox(buildControl(descriptor, modelView, modelViewGetMethod, controlBuilder, controlAnnotation), descriptor);
-		descriptor.getFieldDescriptor().setComponent(control);
-		/*if(descriptor.getFieldDescriptor().hasLayout()) {
-			
-			Node control = buildControl(descriptor, modelView, modelViewGetMethod, controlBuilder, controlAnnotation);
-			TFieldBox fieldBox = TFieldBoxBuilder.build(control, descriptor);
-			descriptor.getFieldDescriptor().setComponent(fieldBox);
-			descriptor.getComponents().put(descriptor.getFieldDescriptor().getFieldName(), fieldBox);
-			descriptor.getFieldBoxMap().put(descriptor.getFieldDescriptor().getFieldName(), fieldBox);
-			
-		} else {
-			Node control =  buildFieldBox(buildControl(descriptor, modelView, modelViewGetMethod, controlBuilder, controlAnnotation), descriptor);
+		
+		Node control =  buildControl(descriptor, modelView, modelViewGetMethod, controlBuilder, controlAnnotation);
+		if(control instanceof ITActionComponent)
 			descriptor.getFieldDescriptor().setComponent(control);
-		}*/
+		else {
+			Node component = buildFieldBox(control, descriptor);
+			descriptor.getFieldDescriptor().setComponent(component);
+		}
+		
 	}
 	
 	

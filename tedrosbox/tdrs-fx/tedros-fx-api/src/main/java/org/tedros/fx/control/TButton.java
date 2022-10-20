@@ -1,11 +1,15 @@
 package org.tedros.fx.control;
 
+import org.tedros.app.component.ITActionComponent;
+
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 
-public class TButton extends Button {
+public class TButton extends Button implements ITActionComponent {
 
+	private String tComponentId;
+	
 	public TButton() {
 		setId("t-button");
 		addListener();
@@ -70,9 +74,19 @@ public class TButton extends Button {
 		
 		
 	}
-	
-	
-	
-	
+
+	/**
+	 * @return the tComponentId
+	 */
+	public String gettComponentId() {
+		return tComponentId;
+	}
+
+	/**
+	 * @param tComponentId the tComponentId to set
+	 */
+	public void settComponentId(String tComponentId) {
+		this.tComponentId = tComponentId;
+	}
 	
 }

@@ -2,26 +2,26 @@ package org.tedros.fx.annotation.parser;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.descriptor.ITFieldDescriptor;
-import org.tedros.fx.annotation.layout.TFieldInset;
-import org.tedros.fx.annotation.layout.TVBox.TMargin;
+import org.tedros.fx.annotation.layout.TGridPane.TVAlignment;
+import org.tedros.fx.annotation.layout.TVPos;
 
-import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
 
-public class TVBoxMarginParser extends TAnnotationParser<TMargin, VBox> {
+public class TGridPaneVAlignParser extends TAnnotationParser<TVAlignment, GridPane> {
 
 
 	@Override
-	public void parse(TMargin annotation, VBox object, String... byPass) throws Exception {
+	public void parse(TVAlignment annotation, GridPane object, String... byPass) throws Exception {
 		
 		if(annotation.values().length>0){
 			String curField = super.getComponentDescriptor().getFieldDescriptor().getFieldName();
-			TFieldInset[] arr = annotation.values();
-			for (TFieldInset tFieldInset : arr) {
-				String field = tFieldInset.field();
+			TVPos[] arr = annotation.values();
+			for (TVPos v : arr) {
+				String field = v.field();
 				if(StringUtils.isBlank(field))
 					continue;
+				
 				ITFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor(field);
 				if(fd==null)
 					throw new RuntimeException("[WARNING]" + getClass().getSimpleName()+
@@ -35,8 +35,7 @@ public class TVBoxMarginParser extends TAnnotationParser<TMargin, VBox> {
 									? fd.getLayout()
 											: fd.getComponent();
 						 
-				VBox.setMargin(node, (Insets) TTypeAnalyserParserDelegate.parse(tFieldInset.insets(), getComponentDescriptor()));		
-			
+				GridPane.setValignment(node, v.value());
 			}
 			
 		}

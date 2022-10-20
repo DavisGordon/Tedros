@@ -38,13 +38,13 @@ import org.tedros.fx.annotation.control.TVerticalRadioGroup;
 import org.tedros.fx.annotation.form.TDetailForm;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.form.TSetting;
+import org.tedros.fx.annotation.layout.TFieldInset;
 import org.tedros.fx.annotation.layout.THBox;
 import org.tedros.fx.annotation.layout.THGrow;
-import org.tedros.fx.annotation.layout.TMargin;
 import org.tedros.fx.annotation.layout.TPane;
 import org.tedros.fx.annotation.layout.TPriority;
 import org.tedros.fx.annotation.layout.TVBox;
-import org.tedros.fx.annotation.layout.TVBoxMargin;
+import org.tedros.fx.annotation.layout.TVBox.TMargin;
 import org.tedros.fx.annotation.layout.TVGrow;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TDecorator;
@@ -185,7 +185,7 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 	@TFileField(propertyValueType=TFileModelType.ENTITY, preLoadFileBytes=true,
 	extensions= {TFileExtension.ALL_FILES}, showFilePath=true)
 	@TVBox(	pane=@TPane(children={"file"}), spacing=10, fillWidth=true,
-	margin=@TVBoxMargin(margin= {@TMargin(field="file", insets=@TInsets(top=50))}),
+	margin=@TMargin(values= {@TFieldInset(field="file", insets=@TInsets(top=50))}),
 	vgrow=@TVGrow(priority={@TPriority(field="file", priority=Priority.ALWAYS)}))
 	@TModelViewType(modelClass=TFileEntity.class)
 	private TSimpleFileProperty<TFileEntity> file;

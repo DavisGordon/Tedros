@@ -110,7 +110,7 @@ public class TChatBehaviour extends TDynaViewSimpleBaseBehavior<TChatMV, TChatMo
 				if(!n.getFrom().getId().equals(TedrosContext.getLoggedUser().getId())) {
 					StackPane p1 = buildTextPane(n, true);
 	        		GridPane.setVgrow(p1, Priority.ALWAYS);
-	        		deco.getMsgPane().add(p1, 0, row);
+	        		//deco.getMsgPane().add(p1, 0, row);
 	        		row++;
 				}
 	        	messages.setValue(null);
@@ -120,7 +120,7 @@ public class TChatBehaviour extends TDynaViewSimpleBaseBehavior<TChatMV, TChatMo
 		messages.addListener(new WeakChangeListener<>(chl1));
 		
 		EventHandler<ActionEvent> ev = e -> {
-			String msg = deco.getMsgArea().getText();
+			String msg = ""; //deco.getMsgArea().getText();
 			
 			TUser u = TedrosContext.getLoggedUser();
 			 try {
@@ -130,11 +130,11 @@ public class TChatBehaviour extends TDynaViewSimpleBaseBehavior<TChatMV, TChatMo
 		            ChatMessage m = new ChatMessage();
 					m.setContent(msg);
 					m.setInsertDate(new Date());
-					m.setFrom(u);
+					//m.setFrom(u);
 					TUser to = new TUser();
 					to.setId(99L);
 					to.setName("Fulano de tal");
-					m.setTo(to);
+					//m.setTo(to);
 					m.setStatus(TStatus.SENT);
 					
 					dout.writeObject(m);
@@ -142,15 +142,15 @@ public class TChatBehaviour extends TDynaViewSimpleBaseBehavior<TChatMV, TChatMo
 					
 					StackPane p1 = buildTextPane(m, false);
 					GridPane.setVgrow(p1, Priority.ALWAYS);
-					deco.getMsgPane().add(p1, 1, row);
+					//deco.getMsgPane().add(p1, 1, row);
 					row++;
-		            deco.getMsgArea().setText("");
+		           // deco.getMsgArea().setText("");
 		        } catch (Exception ex) {
 		            ex.printStackTrace();
 		        }
 		};
 		super.getListenerRepository().add("sendEv", ev);
-		this.deco.getSendBtn().setOnAction(new WeakEventHandler<>(ev));
+		//this.deco.getSendBtn().setOnAction(new WeakEventHandler<>(ev));
 		
 		connect();
 		

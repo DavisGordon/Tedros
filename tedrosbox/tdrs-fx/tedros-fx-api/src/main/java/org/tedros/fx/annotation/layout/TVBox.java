@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 import org.tedros.api.parser.ITAnnotationParser;
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.parser.TVBoxMarginParser;
 import org.tedros.fx.annotation.parser.TVBoxParser;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.layout.TRegion;
@@ -57,7 +58,16 @@ import javafx.scene.layout.VBox;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.ANNOTATION_TYPE,ElementType.FIELD})
 public @interface TVBox {
-	
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ElementType.ANNOTATION_TYPE})
+	public @interface TMargin {
+		
+		@SuppressWarnings("rawtypes")
+		public Class<? extends ITAnnotationParser>[] parser() default {TVBoxMarginParser.class};
+		
+		public TFieldInset[] values() default {}; 
+	}
 	/**
 	 *<pre>
 	 * The builder of type {@link ITLayoutBuilder} for this component.
@@ -114,7 +124,7 @@ public @interface TVBox {
 	*  Sets the margin for the child when contained by a vbox. If set, the vbox will layout the child so that it has the margin space around it. Setting the value to null will remove the constraint. Parameters: child - the child mode of a vbox value - the margin of space around the child
 	* </pre>
 	**/
-	public TVBoxMargin margin() default @TVBoxMargin;
+	public TMargin margin() default @TMargin;
 
 	/**
 	* <pre>

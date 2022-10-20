@@ -9,7 +9,7 @@ import org.tedros.fx.annotation.scene.control.TInsets;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.ANNOTATION_TYPE})
-public @interface TMargin {
+public @interface TFieldInset {
 	
 	public String field() default "";
 	public TInsets insets() default @TInsets;

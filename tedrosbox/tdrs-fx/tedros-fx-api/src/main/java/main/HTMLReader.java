@@ -27,7 +27,7 @@ public class HTMLReader {
 		Document doc = null;
 		String linkType = null;
 		try {
-			String link = "https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/SelectionModel.html";
+			String link = "https://docs.oracle.com/javase/8/javafx/api/javafx/scene/layout/GridPane.html";
 			linkType = StringUtils.substringAfterLast(link, "/").replaceAll(".html", "");
 			
 			URL url = new URL(link);

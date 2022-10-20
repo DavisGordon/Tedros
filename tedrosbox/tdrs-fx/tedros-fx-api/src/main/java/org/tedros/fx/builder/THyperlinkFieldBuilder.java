@@ -15,7 +15,7 @@ import javafx.scene.control.Hyperlink;
 
 
 /**
- * DESCRIÇÃO DA CLASSE
+ * Hyperlink builder
  *
  * @author Davis Gordon
  *
