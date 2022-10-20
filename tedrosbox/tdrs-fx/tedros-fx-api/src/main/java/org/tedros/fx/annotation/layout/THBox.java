@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 import org.tedros.api.parser.ITAnnotationParser;
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.parser.THBoxMarginParser;
 import org.tedros.fx.annotation.parser.THBoxParser;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.layout.TRegion;
@@ -65,6 +66,17 @@ import javafx.scene.layout.Region;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.ANNOTATION_TYPE,ElementType.FIELD})
 public @interface THBox {
+	
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ElementType.ANNOTATION_TYPE})
+	public @interface TMargin {
+		
+		@SuppressWarnings("rawtypes")
+		public Class<? extends ITAnnotationParser>[] parser() default {THBoxMarginParser.class};
+		
+		public TFieldInset[] values() default {}; 
+	}
 	
 	/**
 	 *<pre>

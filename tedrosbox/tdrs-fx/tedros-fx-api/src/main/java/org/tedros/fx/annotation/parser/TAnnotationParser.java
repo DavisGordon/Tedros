@@ -171,8 +171,10 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 								}
 							}
 							if(!skip) {
-								// �grow needs the pane first  
-								if(key.contains("grow")){
+								// the pane.childs must be parsed
+								if(key.toLowerCase().contains("grow") 
+										|| key.toLowerCase().contains("margin") 
+										|| key.toLowerCase().contains("alignment")){
 									runAfter.put(key, value);
 									skip = true;
 								}

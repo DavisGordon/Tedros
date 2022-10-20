@@ -2,18 +2,18 @@ package org.tedros.fx.annotation.parser;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.descriptor.ITFieldDescriptor;
+import org.tedros.fx.annotation.layout.TBorderPane.TMargin;
 import org.tedros.fx.annotation.layout.TFieldInset;
-import org.tedros.fx.annotation.layout.TVBox.TMargin;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.BorderPane;
 
-public class TVBoxMarginParser extends TAnnotationParser<TMargin, VBox> {
+public class TBorderPaneMarginParser extends TAnnotationParser<TMargin, BorderPane> {
 
 
 	@Override
-	public void parse(TMargin annotation, VBox object, String... byPass) throws Exception {
+	public void parse(TMargin annotation, BorderPane object, String... byPass) throws Exception {
 		
 		if(annotation.values().length>0){
 			String curField = super.getComponentDescriptor().getFieldDescriptor().getFieldName();
@@ -22,6 +22,7 @@ public class TVBoxMarginParser extends TAnnotationParser<TMargin, VBox> {
 				String field = tFieldInset.field();
 				if(StringUtils.isBlank(field))
 					continue;
+				
 				ITFieldDescriptor fd = getComponentDescriptor().getFieldDescriptor(field);
 				if(fd==null)
 					throw new RuntimeException("[WARNING]" + getClass().getSimpleName()+
@@ -35,8 +36,7 @@ public class TVBoxMarginParser extends TAnnotationParser<TMargin, VBox> {
 									? fd.getLayout()
 											: fd.getComponent();
 						 
-				VBox.setMargin(node, (Insets) TTypeAnalyserParserDelegate.parse(tFieldInset.insets(), getComponentDescriptor()));		
-			
+				BorderPane.setMargin(node, (Insets) TTypeAnalyserParserDelegate.parse(tFieldInset.insets(), getComponentDescriptor()));		
 			}
 			
 		}
