@@ -159,6 +159,15 @@ public @interface TBorderPane {
 	* <pre>
 	* {@link BorderPane} Class
 	* 
+	*  Scroll the content of the fields.
+	* </pre>
+	**/
+	public String[] scroll() default {};
+
+	/**
+	* <pre>
+	* {@link BorderPane} Class
+	* 
 	*  Sets the value of the property top. 
 	*  
 	*  Property description: 

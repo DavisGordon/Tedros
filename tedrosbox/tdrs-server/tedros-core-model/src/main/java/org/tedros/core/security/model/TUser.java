@@ -169,6 +169,12 @@ public class TUser extends TEntity {
 		this.accessLogEnable = accessLogEnable;
 	}
 
-	
+	public String getProfilesText() {
+		StringBuffer sb = new StringBuffer();
+		getProfiles().forEach(p->{
+			sb.append((sb.toString().isEmpty() ? "" : ", ")+ p.getName());
+		});
+		return sb.toString();
+	}
 
 }

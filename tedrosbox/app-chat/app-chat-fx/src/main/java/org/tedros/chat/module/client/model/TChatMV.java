@@ -8,12 +8,14 @@ import org.tedros.chat.ejb.controller.IChatController;
 import org.tedros.chat.entity.Chat;
 import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.entity.ChatUser;
+import org.tedros.chat.module.client.setting.ChatSetting;
 import org.tedros.fx.annotation.control.TButtonField;
 import org.tedros.fx.annotation.control.TModelViewType;
 import org.tedros.fx.annotation.control.TMultipleSelectionModal;
 import org.tedros.fx.annotation.control.TTextAreaField;
 import org.tedros.fx.annotation.control.TTextField;
 import org.tedros.fx.annotation.form.TForm;
+import org.tedros.fx.annotation.form.TSetting;
 import org.tedros.fx.annotation.layout.TBorderPane;
 import org.tedros.fx.annotation.layout.TGridPane;
 import org.tedros.fx.annotation.layout.TGridPane.TField;
@@ -34,7 +36,7 @@ import javafx.beans.property.SimpleStringProperty;
  * @author Davis Gordon
  *
  */
-
+@TSetting(ChatSetting.class)
 @TForm(name = "", showBreadcrumBar=false, scroll=true)
 @TEjbService(serviceName = IChatController.JNDI_NAME, model=Chat.class)
 @TListViewPresenter(
@@ -52,7 +54,7 @@ import javafx.beans.property.SimpleStringProperty;
 public class TChatMV extends TEntityModelView<Chat> {
 
 	
-	@TBorderPane(center="messages", bottom="title")
+	@TBorderPane(center="messages", bottom="title", scroll="messages")
 	private SimpleObjectProperty<ChatUser> owner;
 	
 	@TGridPane
