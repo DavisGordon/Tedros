@@ -160,7 +160,13 @@ extends HBox implements ITModelForm<M> {
 
 	@Override
 	public void tDispose() {
-		this.gettObjectRepository().clear();
+		this.formEngine.dispose();
+		this.getChildren().clear();
+	}
+	
+	@Override
+	public ReadOnlyBooleanProperty tDisposeProperty() {
+		return this.formEngine.disposeProperty();
 	}
 	
 	@Override

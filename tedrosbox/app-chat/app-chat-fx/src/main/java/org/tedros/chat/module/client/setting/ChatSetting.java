@@ -51,11 +51,10 @@ public class ChatSetting extends TSetting {
     private ObjectInputStream din;
     private ObjectOutputStream dout;
     
-
     private SimpleObjectProperty<ChatMessage> messages;
     
     private boolean receive = true;
-    //private int row = 0;
+    
 	/**
 	 * @param descriptor
 	 */
@@ -91,7 +90,7 @@ public class ChatSetting extends TSetting {
 				messages.setValue(null);
 			}
 		};
-		messages.addListener(new WeakChangeListener<>(chl1));
+		messages.addListener(chl1);
 		
 
 		EventHandler<ActionEvent> ev = e -> {
@@ -126,32 +125,17 @@ public class ChatSetting extends TSetting {
 		TButton sendBtn = (TButton) super.getDescriptor().getFieldDescriptor("sendBtn").getComponent();
 		sendBtn.setOnAction(ev);
 		
-		ITForm frm = super.getDescriptor().getForm();
-		Node node = (Node) frm;
-		node.parentProperty().addListener((a,o,n)->{
-			if(o!=null && n==null) {
-				receive = false; 
-				if (socket != null) {
-		            try {
-		                socket.close();
-		            } catch (IOException ex) {
-		            	ex.getMessage();
-		            }
-		        }
-			}
-		});
 		connect();
 	}
 
 	/**
 	 * @param m
 	 */
-	@SuppressWarnings("unchecked")
 	private void showMsg(ChatMessage m, boolean left){
-		int row = ((ObservableList<ChatMessage>) super.getProperty("messages")).size()-1;
 		StackPane p1 = util.buildTextPane(m, left);
 		GridPane.setVgrow(p1, Priority.ALWAYS);
 		GridPane gp = super.getLayout("messages");
+		int row = gp.getChildren().size();
 		gp.add(p1, left ? 0 : 1, row);
 	}
 	
@@ -198,6 +182,18 @@ public class ChatSetting extends TSetting {
 			
         } catch (Exception ex) {
         	System.out.println("<-client->: " + ex.getMessage());
+        }
+	}
+
+	@Override
+	public void dispose() {
+		receive = false; 
+		if (socket != null) {
+            try {
+                socket.close();
+            } catch (IOException ex) {
+            	ex.getMessage();
+            }
         }
 	}
 

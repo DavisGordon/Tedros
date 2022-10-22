@@ -152,7 +152,8 @@ extends FlowPane implements ITModelForm<M> {
 
 	@Override
 	public void tDispose() {
-		this.gettObjectRepository().clear();
+		this.formEngine.dispose();
+		this.getChildren().clear();
 	}
 	
 	@Override
@@ -179,7 +180,6 @@ extends FlowPane implements ITModelForm<M> {
 	@Override
 	public void tInitializeReader() {
 		formatForm();
-		
 	}
 	
 	private void formatForm() {
@@ -187,5 +187,10 @@ extends FlowPane implements ITModelForm<M> {
 		super.setHgap(8);
 		super.setVgap(8);
 		setPadding(new Insets(10, 10, 10, 10));
+	}
+
+	@Override
+	public ReadOnlyBooleanProperty tDisposeProperty() {
+		return this.formEngine.disposeProperty();
 	}
 }

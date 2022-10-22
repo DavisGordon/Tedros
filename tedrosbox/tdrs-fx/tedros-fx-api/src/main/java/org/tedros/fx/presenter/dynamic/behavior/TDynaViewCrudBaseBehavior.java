@@ -1048,6 +1048,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * */
 	public void remove() {
 		if(getModels()!=null) {
+			super.clearForm();
 			int index = getModels().indexOf(getModelView());
 			remove(index);
 		}

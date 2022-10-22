@@ -53,9 +53,8 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 		listenerRepository = new TRepository();
 		buildFormStatusProperty = new SimpleObjectProperty();
 		
-		
 		//form added listener
-		ChangeListener<ITModelForm<M>> formCL = (a0, a1, form) -> {
+		ChangeListener<ITModelForm<M>> formCL = (a0, oldForm, form) -> {
 			
 			if(form!=null) {
 				
@@ -97,6 +96,9 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 			    	getView().gettFormSpace().getChildren().add(scroll);
 		    	}
 			}
+			
+			if(oldForm!=null)
+				oldForm.tDispose();
 		};
 		listenerRepository.add("formPropCL", formCL);
 		formProperty.addListener(new WeakChangeListener<>(formCL));
@@ -116,6 +118,7 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 				removeAllListenerFromModelView();
 				removeAllListenerFromModelViewList();
 				listenerRepository.clear();
+				formProperty.setValue(null);
 			}
 		};
 		listenerRepository.add("invalidateModelAndRepo", invCL);

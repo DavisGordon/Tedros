@@ -108,7 +108,13 @@ public class TProgressIndicatorForm<M extends ITModelView<?>> extends StackPane 
 
 	@Override
 	public void tDispose() {
+		getChildren().clear();
 		this.form.tDispose();
+	}
+	
+	@Override
+	public ReadOnlyBooleanProperty tDisposeProperty() {
+		return this.form.tDisposeProperty();
 	}
 
 	@Override

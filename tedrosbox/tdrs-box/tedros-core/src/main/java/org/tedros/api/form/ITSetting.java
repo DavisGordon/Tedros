@@ -37,11 +37,17 @@ public interface ITSetting {
 	/**
 	 * @return the modelView 
 	 */
+	@SuppressWarnings("rawtypes")
 	<T extends ITModelView> T getModelView();
 
 	/**
 	 * @return the form 
 	 */
 	ITForm getForm();
+	
+	/**
+	 * Called to clean all items to the garbage collector
+	 * */
+	void dispose();
 
 }

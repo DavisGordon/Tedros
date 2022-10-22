@@ -55,9 +55,10 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	private ObservableList<Node> fields;
 	private WebView webView;
 	private SimpleBooleanProperty loaded = new SimpleBooleanProperty(false);
+	private SimpleBooleanProperty dispose = new SimpleBooleanProperty(false);
 	private TRepository tObjectRepository = new TRepository();
 	private final TTriggerLoader<M, ITModelForm<M>> triggerLoader;
-	Long startTime;
+	Long startTime; 
 	private ChangeListener<Boolean> chl = (ob, o, n) -> {
 		if(n && mode!=null) { 
 			buildTriggers();
@@ -70,6 +71,22 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 		}
 	};
 	
+	private ChangeListener<Boolean> chl2 = (ob, o, n) -> {
+		if(n) { 
+			this.tObjectRepository.clear();
+			this.tObjectRepository = null;
+			this.modelViewLoader = null;
+			if(this.fields!=null)
+				this.fields.clear();
+			this.webView = null;
+			if(this.setting!=null)
+				this.setting.dispose();
+			this.setting = null;
+			chl = null;
+			chl2 = null;
+		}
+	};
+	
 	public TFormEngine(final F form, final M modelView) {
 		this.form = form;
 		if(StringUtils.isBlank(this.form.getId()))
@@ -78,6 +95,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 		this.associatedObjectsMap = new HashMap<>(0);
 		triggerLoader = new TTriggerLoader<M, ITModelForm<M>>(form);
 		loadedProperty().addListener(new WeakChangeListener<>(chl));
+		disposeProperty().addListener(new WeakChangeListener<>(chl2));
 	}
 	
 	public TFormEngine(final F form, final M modelView, boolean readerMode) {
@@ -86,6 +104,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 		this.associatedObjectsMap = new HashMap<>(0);
 		triggerLoader = new TTriggerLoader<M, ITModelForm<M>>(form);
 		loadedProperty().addListener(new WeakChangeListener<>(chl));
+		disposeProperty().addListener(new WeakChangeListener<>(chl2));
 		if(readerMode)
 			setReaderMode();
 		else
@@ -335,5 +354,14 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	public ITSetting getSetting() {
 		return setting;
 	}
+	
+	public void dispose() {
+		this.dispose.setValue(true);
+	}
+
+	public ReadOnlyBooleanProperty disposeProperty() {
+		return dispose;
+	}
+
 	
 }
