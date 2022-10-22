@@ -185,6 +185,76 @@ public class ChatMessage extends TEntity implements Comparable<ChatMessage>{
 	public void setRepliedTo(ChatMessage repliedTo) {
 		this.repliedTo = repliedTo;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((chat == null) ? 0 : chat.hashCode());
+		result = prime * result + ((content == null) ? 0 : content.hashCode());
+		result = prime * result + ((dateTime == null) ? 0 : dateTime.hashCode());
+		result = prime * result + ((file == null) ? 0 : file.hashCode());
+		result = prime * result + ((from == null) ? 0 : from.hashCode());
+		result = prime * result + ((repliedTo == null) ? 0 : repliedTo.hashCode());
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		result = prime * result + ((to == null) ? 0 : to.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof ChatMessage))
+			return false;
+		ChatMessage other = (ChatMessage) obj;
+		if (chat == null) {
+			if (other.chat != null)
+				return false;
+		} else if (!chat.equals(other.chat))
+			return false;
+		if (content == null) {
+			if (other.content != null)
+				return false;
+		} else if (!content.equals(other.content))
+			return false;
+		if (dateTime == null) {
+			if (other.dateTime != null)
+				return false;
+		} else if (!dateTime.equals(other.dateTime))
+			return false;
+		if (file == null) {
+			if (other.file != null)
+				return false;
+		} else if (!file.equals(other.file))
+			return false;
+		if (from == null) {
+			if (other.from != null)
+				return false;
+		} else if (!from.equals(other.from))
+			return false;
+		if (repliedTo == null) {
+			if (other.repliedTo != null)
+				return false;
+		} else if (!repliedTo.equals(other.repliedTo))
+			return false;
+		if (status != other.status)
+			return false;
+		if (to == null) {
+			if (other.to != null)
+				return false;
+		} else if (!to.equals(other.to))
+			return false;
+		return true;
+	}
 	
 	
 }

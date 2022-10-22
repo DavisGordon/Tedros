@@ -39,6 +39,8 @@ public interface ITForm {
 	
 	public void tDispose();
 	
+	public ReadOnlyBooleanProperty tDisposeProperty();
+	
 	public ReadOnlyBooleanProperty tLoadedProperty();
 	
 	public boolean isLoaded();

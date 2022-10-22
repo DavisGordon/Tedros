@@ -30,4 +30,10 @@ public class TBackgroundSetting extends TSetting {
 		sif.settLocalFolder(TBackgroundDomain.FOLDER);
 	}
 
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
