@@ -14,8 +14,9 @@ import org.tedros.fx.presenter.model.TEntityModelView;
 import javafx.beans.property.SimpleStringProperty;
 
 @TSelectionModalPresenter(allowsMultipleSelections = true, 
-paginator = @TPaginator(entityClass = ChatUser.class, serviceName = IChatUserController.JNDI_NAME), 
-tableView = @TTableView(columns = { @TTableColumn(text = TUsualKey.NAME, cellValue="name" ) }))
+	paginator = @TPaginator(entityClass = ChatUser.class, modelViewClass=ChatUserMV.class, 
+		serviceName = IChatUserController.JNDI_NAME), 
+	tableView = @TTableView(columns = { @TTableColumn(text = TUsualKey.NAME, cellValue="name" ) }))
 public class ChatUserMV extends TEntityModelView<ChatUser> {
 
 	@TLabel(text=TUsualKey.NAME)

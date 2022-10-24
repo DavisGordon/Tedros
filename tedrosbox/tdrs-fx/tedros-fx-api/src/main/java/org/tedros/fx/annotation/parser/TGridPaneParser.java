@@ -29,7 +29,7 @@ public class TGridPaneParser extends TAnnotationParser<Annotation, GridPane> {
 							: null;
 			
 			for(TField f : ann.add()) {
-				Node node = TDescriptorUtil.getComponent(f.field(), super.getComponentDescriptor());
+				Node node = TDescriptorUtil.getComponent(f.name(), super.getComponentDescriptor());
 				
 				if(node!=null) {
 					
@@ -37,7 +37,7 @@ public class TGridPaneParser extends TAnnotationParser<Annotation, GridPane> {
 					
 					if(fws!=null) {
 						fws.filter(p->{
-							return p.field().equals(f.field());
+							return p.field().equals(f.name());
 						})
 						.findFirst()
 						.ifPresent(c->{
@@ -46,7 +46,7 @@ public class TGridPaneParser extends TAnnotationParser<Annotation, GridPane> {
 					}
 					if(fhs!=null) {
 						fhs.filter(p->{
-							return p.field().equals(f.field());
+							return p.field().equals(f.name());
 						})
 						.findFirst()
 						.ifPresent(c->{
@@ -54,7 +54,7 @@ public class TGridPaneParser extends TAnnotationParser<Annotation, GridPane> {
 						});
 					}
 				}else
-					throwException(f.field());
+					throwException(f.name());
 			}
 		}
 		super.parse(annotation, object, "fillWidth", "fillHeight", "add");
