@@ -10,8 +10,12 @@ import java.net.Socket;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
+
+import javax.naming.NamingException;
 
 import org.tedros.api.descriptor.ITComponentDescriptor;
+import org.tedros.chat.ejb.controller.IChatUserController;
 import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.entity.ChatUser;
 import org.tedros.chat.entity.TStatus;
@@ -23,6 +27,7 @@ import org.tedros.core.control.PopOver;
 import org.tedros.core.control.PopOver.ArrowLocation;
 import org.tedros.core.repository.TRepository;
 import org.tedros.core.security.model.TUser;
+import org.tedros.core.service.remote.ServiceLocator;
 import org.tedros.fx.control.TButton;
 import org.tedros.fx.control.TLabel;
 import org.tedros.fx.form.TSetting;
@@ -30,6 +35,7 @@ import org.tedros.fx.util.TFileBaseUtil;
 import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.model.ITFileModel;
 import org.tedros.server.model.TFileModel;
+import org.tedros.server.result.TResult;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
@@ -72,7 +78,7 @@ public class ChatSetting extends TSetting {
     private boolean receive = true;
     private boolean scrollFlag = false;
     
-    private String nickName;
+    private ChatUser owner;
 
 	private int titleLength = 80;
     
@@ -83,8 +89,15 @@ public class ChatSetting extends TSetting {
 		super(descriptor);
 		messages = new SimpleObjectProperty<>();
 		util = new ChatUtil();
-		nickName = TedrosContext.getLoggedUser().getName();
 		repo = new TRepository();
+		TUser u = TedrosContext.getLoggedUser();
+		try {
+			owner = util.findUser(u.getAccessToken(), u.getId(), null);
+			owner.setToken(u.getAccessToken());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	/* (non-Javadoc)
@@ -135,16 +148,11 @@ public class ChatSetting extends TSetting {
 			
 			String msg = mv.getMessage().getValue();
 			ITFileModel fm = mv.getSendFile().getValue();
-			TUser u = TedrosContext.getLoggedUser();
-			ChatUser from = new ChatUser(); 
-			from.setName(u.getName());
-			from.setProfiles(u.getProfilesText());
-			from.setUserId(u.getId());
 			 try {
 		            ChatMessage m = new ChatMessage();
 					m.setContent(msg);
 					m.setInsertDate(new Date());
-					m.setFrom(from);
+					m.setFrom(owner);
 					m.setStatus(TStatus.SENT);
 					
 					if(fm!=null && fm.getFile()!=null) {
@@ -204,19 +212,29 @@ public class ChatSetting extends TSetting {
 			}
 		});
 		
-		
-		
-		
 		connect();
+		
+		if(mv.getModel().isNew()) {
+			mv.getModel().setCode(UUID.randomUUID().toString());
+			mv.getOwner().setValue(owner);
+			util.saveChat(mv);
+		}
+		
+		try {
+			dout.writeObject(mv.getModel());
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
 	}
 
 	/**
 	 * @param ch
 	 */
 	private void buildTitle(List<? extends ChatUserMV> ch) {
-		StringBuilder sb = new StringBuilder(nickName);
+		StringBuilder sb = new StringBuilder(owner.getName());
 		ch.forEach(u->{
-			if(sb.toString().equals(nickName)) {
+			if(sb.toString().equals(owner.getName())) {
 				sb.append(" >> " + u.getName().getValue());
 			} else 
 				sb.append(", " + u.getName().getValue());

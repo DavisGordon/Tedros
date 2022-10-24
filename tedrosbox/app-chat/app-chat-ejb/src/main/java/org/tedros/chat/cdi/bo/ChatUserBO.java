@@ -32,18 +32,43 @@ public class ChatUserBO extends TGenericBO<ChatUser> {
 		List<ChatUser> chat = new ArrayList<>();
 		
 		for(ChatUser c : lst){
-			ChatUser a = new ChatUser();
-			a.setUserId(c.getUserId());
-			a = eao.find(a);
-			
-			if(a==null || 
-					(!a.getName().equals(c.getName()) 
-							|| !a.getProfiles().equals(c.getProfiles()))) {
-				a = super.save(c);
-			}
+			ChatUser a = validate(c);
 			chat.add(a);
 		};
 		return chat;
+	}
+
+
+	/**
+	 * @param c
+	 * @return
+	 * @throws Exception
+	 */
+	public ChatUser validate(ChatUser c) throws Exception {
+		ChatUser a = new ChatUser();
+		a.setUserId(c.getUserId());
+		a = eao.find(a);
+		if(a==null || 
+				(!a.getName().equals(c.getName()) 
+						|| !a.getProfiles().equals(c.getProfiles()))) {
+			a = super.save(c);
+		}
+		return a;
+	}
+	
+	@Override
+	public ChatUser find(ChatUser e) throws Exception {
+		TUser u = new TUser();
+		u.setName(e.getName());
+		u.setId(e.getUserId());
+		
+		TUser c = coreEao.find(u);
+		ChatUser a = new ChatUser();
+		a.setUserId(c.getId());
+		a.setName(c.getName());
+		a.setProfiles(c.getProfilesText());
+			
+		return a;
 	}
 	
 	@Override
