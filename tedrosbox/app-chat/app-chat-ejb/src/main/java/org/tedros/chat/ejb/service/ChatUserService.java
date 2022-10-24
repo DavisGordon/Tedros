@@ -31,6 +31,12 @@ public class ChatUserService extends TEjbService<ChatUser> {
 	public List<ChatUser> validate(List<ChatUser> lst) throws Exception {
 		return bo.validate(lst);
 	}
+	
+
+	@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
+	public ChatUser validate(ChatUser e) throws Exception {
+		return bo.validate(e);
+	}
 		
 
 }

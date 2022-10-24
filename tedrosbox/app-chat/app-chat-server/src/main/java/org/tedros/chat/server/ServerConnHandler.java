@@ -7,11 +7,12 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import org.tedros.chat.entity.ChatMessage;
+import org.tedros.chat.entity.ChatUser;
 import org.tedros.chat.entity.TStatus;
 
 public class ServerConnHandler extends Thread {
 
-	private String userId;
+	private ChatUser owner;
     private ChatServer server;
     private Socket socket;
     private ObjectOutputStream dout;
@@ -30,8 +31,12 @@ public class ServerConnHandler extends Thread {
         try {
         	ois = new ObjectInputStream(socket.getInputStream());
             while (true) {
-            	ChatMessage msg = (ChatMessage) ois.readObject();
-                server.replyMessage(msg);
+            	Object obj = ois.readObject();
+            	if(obj instanceof ChatMessage) {
+	            	ChatMessage msg = (ChatMessage) obj;
+	                server.replyMessage(msg);
+            	}else if(obj instanceof ChatUser)
+            		owner = (ChatUser) obj;
             }
         } catch (EOFException ex) {
             //DO NOTHING
@@ -62,4 +67,11 @@ public class ServerConnHandler extends Thread {
     public void close() throws IOException {
         socket.close();
     }
+
+	/**
+	 * @return the owner
+	 */
+	public ChatUser getOwner() {
+		return owner;
+	}
 }

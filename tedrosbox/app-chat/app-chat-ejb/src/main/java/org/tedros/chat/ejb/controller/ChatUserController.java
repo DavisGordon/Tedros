@@ -48,6 +48,17 @@ public class ChatUserController extends TSecureEjbController<ChatUser> implement
 	}
 	
 	@Override
+	public TResult<ChatUser> find(TAccessToken token, ChatUser e) {
+		try{
+			e = serv.find(e);
+			e = serv.validate(e);
+			return new TResult<>(TState.SUCCESS, e);
+		}catch(Exception ex){
+			return processException(token, e, ex);
+		}
+	}
+	
+	@Override
 	public TResult<Map<String, Object>> findAll(TAccessToken token, ChatUser entidade, int firstResult, int maxResult,
 			boolean orderByAsc, boolean containsAnyKeyWords) {
 		

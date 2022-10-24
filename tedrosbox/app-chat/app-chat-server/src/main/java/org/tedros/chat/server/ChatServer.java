@@ -37,9 +37,13 @@ public class ChatServer {
 
     public void replyMessage(ChatMessage msg) {
         synchronized (clients) {
-            for (ServerConnHandler cl : clients) {
-                cl.send(msg);
-            }
+            clients.parallelStream()
+            .filter(p->{
+            	return p.getOwner().equals(msg.getTo());
+            }).forEach(c->{
+            	c.send(msg);
+            });
+            
         }
     }
 
