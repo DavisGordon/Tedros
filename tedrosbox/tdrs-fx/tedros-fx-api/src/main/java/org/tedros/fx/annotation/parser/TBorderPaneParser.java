@@ -6,12 +6,11 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.fx.annotation.layout.TBorderPane;
 
-import com.openhtmltopdf.util.ArrayUtil;
-
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 
 public class TBorderPaneParser extends TAnnotationParser<Annotation, BorderPane> {
 
@@ -24,8 +23,7 @@ public class TBorderPaneParser extends TAnnotationParser<Annotation, BorderPane>
 			Node node = getNode(ann.top());
 			if(node!=null) {
 				if(ann.scroll().length>0 && ArrayUtils.contains(ann.scroll(), ann.top()) ) {
-					ScrollPane sp = buildScrollPane(node);
-					object.setTop(sp);
+					object.setTop(buildScrollPane(node));
 				}else
 					object.setTop(node);
 			}else
@@ -35,8 +33,7 @@ public class TBorderPaneParser extends TAnnotationParser<Annotation, BorderPane>
 			Node node = getNode(ann.right());
 			if(node!=null) {
 				if(ann.scroll().length>0 && ArrayUtils.contains(ann.scroll(), ann.right()) ) {
-					ScrollPane sp = buildScrollPane(node);
-					object.setRight(sp);
+					object.setRight(buildScrollPane(node));
 				}else
 					object.setRight(node);
 			}else
@@ -46,8 +43,7 @@ public class TBorderPaneParser extends TAnnotationParser<Annotation, BorderPane>
 			Node node = getNode(ann.bottom());
 			if(node!=null) {
 				if(ann.scroll().length>0 && ArrayUtils.contains(ann.scroll(), ann.bottom()) ) {
-					ScrollPane sp = buildScrollPane(node);
-					object.setBottom(sp);
+					object.setBottom(buildScrollPane(node));
 				}else
 					object.setBottom(node);
 			}else
@@ -57,8 +53,7 @@ public class TBorderPaneParser extends TAnnotationParser<Annotation, BorderPane>
 			Node node = getNode(ann.left());
 			if(node!=null) {
 				if(ann.scroll().length>0 && ArrayUtils.contains(ann.scroll(), ann.left()) ) {
-					ScrollPane sp = buildScrollPane(node);
-					object.setLeft(sp);
+					object.setLeft(buildScrollPane(node));
 				}else
 					object.setLeft(node);
 			}else
@@ -68,8 +63,7 @@ public class TBorderPaneParser extends TAnnotationParser<Annotation, BorderPane>
 			Node node = getNode(ann.center());
 			if(node!=null) {
 				if(ann.scroll().length>0 && ArrayUtils.contains(ann.scroll(), ann.center()) ) {
-					ScrollPane sp = buildScrollPane(node);
-					object.setCenter(sp);
+					object.setCenter(buildScrollPane(node));
 				}else
 					object.setCenter(node);
 			}else
@@ -83,16 +77,18 @@ public class TBorderPaneParser extends TAnnotationParser<Annotation, BorderPane>
 	 * @param node
 	 * @return
 	 */
-	private ScrollPane buildScrollPane(Node node) {
-		ScrollPane sp = new ScrollPane();
-		sp.setFitToHeight(true);
-		sp.setFitToWidth(true);
-		sp.autosize();
-		sp.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
-		sp.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-		sp.setStyle("-fx-background-color: transparent;");
-		sp.setContent(node);
-		return sp;
+	private StackPane buildScrollPane(Node node) {
+		ScrollPane scroll = new ScrollPane();
+		scroll.setId("t-form-scroll");
+	    scroll.setFitToWidth(true);
+	    //scroll.setFitToHeight(true);
+	    scroll.maxHeight(Double.MAX_VALUE);
+	    scroll.maxWidth(Double.MAX_VALUE);
+	    scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+	    scroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+	    scroll.setStyle("-fx-background-color: transparent;");
+		scroll.setContent(node);
+		return new StackPane(scroll);
 	}
 
 

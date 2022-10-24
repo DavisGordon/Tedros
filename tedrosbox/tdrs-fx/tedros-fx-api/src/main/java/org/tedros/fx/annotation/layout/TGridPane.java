@@ -20,7 +20,6 @@ import org.tedros.fx.builder.TGridPaneBuilder;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
@@ -28,47 +27,53 @@ import javafx.scene.layout.Region;
 
 /**
  * <pre>
- * Build a {@link BorderPane} layout.
+ * Build a {@link GridPane} layout.
  * 
  * Example:
  * 
- * <i>@</i><strong>TBorderPane</strong>(top="<strong style="color:red;">passField</strong>", center="<strong style="color:blue;">integerField</strong>", bottom="<strong style="color:green;">bigIntegerField</strong>")
+ * <i>@</i><strong>TGridPane</strong>(add={<i>@</i>TField(name = "passField", columnIndex = 0,  rowIndex = 0, columnspan=2),
+ * <i>@</i>TField(name = "integerField", columnIndex = 0,  rowIndex = 1),
+ * <i>@</i>TField(name = "bigIntegerField", columnIndex = 1,  rowIndex = 1)
+ * 	})
  *  <i>@</i>TLabel(text="Password:", control=<i>@</i>TControl(prefWidth=500))
  *  <i>@</i>TPasswordField(required=true, maxLength=6)
- *  private SimpleStringProperty <strong style="color:red;">passField;</strong>
+ *  private SimpleStringProperty passField;
  *		
  *  <i>@</i>TLabel(text="Number field", control=<i>@</i>TControl(prefWidth=500))
  *  <i>@</i>TIntegerField(zeroValidation=TZeroValidation.MORE_THAN_ZERO, control=<i>@</i>TControl(tooltip="Max val: "+Integer.MAX_VALUE))
- *  private SimpleIntegerProperty <strong style="color:blue;">integerField</strong>;
+ *  private SimpleIntegerProperty integerField;
  *		
  *  <i>@</i>TLabel(text="Big number field:", control=<i>@</i>TControl(prefWidth=500))
  *  <i>@</i>TBigIntegerField(zeroValidation=TZeroValidation.MORE_THAN_ZERO, control=<i>@</i>TControl(tooltip="Max val: infinito"))
- *  private SimpleObjectProperty&gt;BigInteger&lt; <strong style="color:green;">bigIntegerField</strong>;
+ *  private SimpleObjectProperty&gt;BigInteger&lt; bigIntegerField;
  * 
  * 
  * Oracle documentation:
  * 
- * BorderPane lays out children in top, left, 
- * right, bottom, and center positions.
+ * GridPane lays out its children within 
+ * a flexible grid of rows and columns. 
+ * If a border and/or padding is set, then 
+ * its content will be layed out within those insets.
  * 
- * The top and bottom children will be resized 
- * to their preferred heights and extend the width 
- * of the border pane. The left and right children
- * will be resized to their preferred widths and 
- * extend the length between the top and bottom nodes. 
- * And the center node will be resized to fill the 
- * available space in the middle. 
- * Any of the positions may be null.
+ * A child may be placed anywhere within 
+ * the grid and may span multiple rows/columns. 
+ * Children may freely overlap within rows/columns 
+ * and their stacking order will be defined by 
+ * the order of the gridpane's children list 
+ * (0th node in back, last node in front).
  * </pre>
  **/
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.ANNOTATION_TYPE,ElementType.FIELD})
 public @interface TGridPane {
 	
+	/**
+	 * Indicate the field and the column/row to be added 
+	 * */
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target({ElementType.ANNOTATION_TYPE})
 	public @interface TField {
-		public String field();
+		public String name();
 		public int columnIndex();
 		public int rowIndex();
 		public int columnspan() default 1;

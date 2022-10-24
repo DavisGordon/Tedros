@@ -10,34 +10,51 @@ import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.entity.ChatUser;
 import org.tedros.chat.module.client.setting.ChatSetting;
 import org.tedros.fx.annotation.control.TButtonField;
+import org.tedros.fx.annotation.control.TContent;
+import org.tedros.fx.annotation.control.TFileField;
+import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TModelViewType;
 import org.tedros.fx.annotation.control.TMultipleSelectionModal;
+import org.tedros.fx.annotation.control.TTab;
+import org.tedros.fx.annotation.control.TTabPane;
 import org.tedros.fx.annotation.control.TTextAreaField;
-import org.tedros.fx.annotation.control.TTextField;
+import org.tedros.fx.annotation.form.TDetailForm;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.form.TSetting;
-import org.tedros.fx.annotation.layout.TBorderPane;
 import org.tedros.fx.annotation.layout.TGridPane;
-import org.tedros.fx.annotation.layout.TGridPane.TField;
+import org.tedros.fx.annotation.layout.THBox;
+import org.tedros.fx.annotation.layout.THGrow;
+import org.tedros.fx.annotation.layout.TPane;
+import org.tedros.fx.annotation.layout.TPriority;
 import org.tedros.fx.annotation.layout.TToolBar;
+import org.tedros.fx.annotation.layout.TVBox;
+import org.tedros.fx.annotation.layout.TVGrow;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.process.TEjbService;
+import org.tedros.fx.annotation.scene.control.TControl;
 import org.tedros.fx.annotation.scene.control.TLabeled;
+import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.collections.ITObservableList;
+import org.tedros.fx.domain.TFileModelType;
 import org.tedros.fx.presenter.model.TEntityModelView;
+import org.tedros.fx.property.TSimpleFileProperty;
+import org.tedros.server.model.ITFileModel;
 
+import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 
 /**
  * @author Davis Gordon
  *
  */
 @TSetting(ChatSetting.class)
-@TForm(name = "", showBreadcrumBar=false, scroll=true)
+@TForm(name = "", showBreadcrumBar=false, scroll=false)
 @TEjbService(serviceName = IChatController.JNDI_NAME, model=Chat.class)
 @TListViewPresenter(
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle=CHATKey.VIEW_CLIENT_MESSAGES,
@@ -53,28 +70,48 @@ import javafx.beans.property.SimpleStringProperty;
 			allowedAccesses= {TAuthorizationType.VIEW_ACCESS, TAuthorizationType.SEARCH})*/
 public class TChatMV extends TEntityModelView<Chat> {
 
+	@THBox(pane=@TPane(children= {"title", "participants"}), 
+			hgrow=@THGrow(priority= {
+					@TPriority(field="title", priority=Priority.ALWAYS), 
+					@TPriority(field="participants", priority=Priority.NEVER)
+					}), fillHeight=true, spacing=10)
+	private SimpleLongProperty id;
 	
-	@TBorderPane(center="messages", bottom="title", scroll="messages")
+	@TVBox(pane=@TPane(children= {"owner", "message", "sendFile"}), 
+			vgrow=@TVGrow(priority= {
+					@TPriority(field="owner", priority=Priority.ALWAYS), 
+					@TPriority(field="message", priority=Priority.NEVER), 
+					@TPriority(field="sendFile", priority=Priority.NEVER)
+					}), fillWidth=true, spacing=10)
+	private SimpleStringProperty title;
+	
+	@TTabPane(tabs = { 
+			@TTab(text = "Chat", scroll=true,
+					content = @TContent(detailForm=@TDetailForm(fields = { "messages" })) )
+			}, 
+			region=@TRegion(minHeight=460, maxHeight=Region.USE_COMPUTED_SIZE, parse = true))
 	private SimpleObjectProperty<ChatUser> owner;
 	
-	@TGridPane
+	@TGridPane(vgap=12, hgap=12)
 	@TModelViewType(modelClass = ChatUser.class, modelViewClass=ChatUserMV.class)
 	private ITObservableList<ChatMessage> messages; 
 	
-	@TTextField
-	@TGridPane(add={@TField(field = "title", columnIndex = 0,  rowIndex = 0, columnspan=2),
-			@TField(field = "participants", columnIndex = 0,  rowIndex = 1),
-			@TField(field = "message", columnIndex = 1,  rowIndex = 1),
-			@TField(field = "sendBtn", columnIndex = 1,  rowIndex = 2)
-	})
-	private SimpleStringProperty title;
-	
-	@TMultipleSelectionModal(modelClass = ChatUser.class, modelViewClass = ChatUserMV.class)
+	@TLabel(text="Participants")
+	@TMultipleSelectionModal(modelClass = ChatUser.class, modelViewClass = ChatUserMV.class, 
+			height=Region.USE_COMPUTED_SIZE, modalHeight=400, modalWidth=740)
 	@TModelViewType(modelClass = ChatUser.class, modelViewClass=ChatUserMV.class)
 	private ITObservableList<ChatUserMV> participants;
 	
-	@TTextAreaField
+	@TTextAreaField(prefRowCount=4, wrapText=true, control= @TControl(maxHeight=70, parse = true))
 	private SimpleStringProperty message;
+	
+	@THBox(pane=@TPane(children= {"sendFile", "sendBtn"}), 
+			hgrow=@THGrow(priority= {
+					@TPriority(field="sendFile", priority=Priority.ALWAYS), 
+					@TPriority(field="sendBtn", priority=Priority.NEVER)
+					}))
+	@TFileField(propertyValueType=TFileModelType.MODEL)
+	private TSimpleFileProperty<ITFileModel> sendFile;
 	
 	@TToolBar(items = { "sendBtn", "clearBtn" })
 	@TButtonField(labeled = @TLabeled(parse = true, text="Send"))
@@ -82,6 +119,7 @@ public class TChatMV extends TEntityModelView<Chat> {
 
 	@TButtonField(labeled = @TLabeled(parse = true, text="Clear"))
 	private SimpleStringProperty clearBtn;
+	
 	
 	public TChatMV(Chat entity) {
 		super(entity);
@@ -184,6 +222,34 @@ public class TChatMV extends TEntityModelView<Chat> {
 	 */
 	public void setClearBtn(SimpleStringProperty clearBtn) {
 		this.clearBtn = clearBtn;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public SimpleLongProperty getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(SimpleLongProperty id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the sendFile
+	 */
+	public TSimpleFileProperty<ITFileModel> getSendFile() {
+		return sendFile;
+	}
+
+	/**
+	 * @param sendFile the sendFile to set
+	 */
+	public void setSendFile(TSimpleFileProperty<ITFileModel> sendFile) {
+		this.sendFile = sendFile;
 	}
 
 }

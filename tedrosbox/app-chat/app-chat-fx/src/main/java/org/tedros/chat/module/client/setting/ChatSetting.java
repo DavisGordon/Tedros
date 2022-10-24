@@ -9,30 +9,45 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import org.tedros.api.descriptor.ITComponentDescriptor;
-import org.tedros.api.form.ITForm;
 import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.entity.ChatUser;
 import org.tedros.chat.entity.TStatus;
+import org.tedros.chat.module.client.model.ChatUserMV;
 import org.tedros.chat.module.client.model.TChatMV;
+import org.tedros.common.model.TFileEntity;
 import org.tedros.core.context.TedrosContext;
+import org.tedros.core.control.PopOver;
+import org.tedros.core.control.PopOver.ArrowLocation;
+import org.tedros.core.repository.TRepository;
 import org.tedros.core.security.model.TUser;
 import org.tedros.fx.control.TButton;
+import org.tedros.fx.control.TLabel;
 import org.tedros.fx.form.TSetting;
+import org.tedros.fx.util.TFileBaseUtil;
+import org.tedros.server.entity.ITFileEntity;
+import org.tedros.server.model.ITFileModel;
+import org.tedros.server.model.TFileModel;
 
-import javafx.collections.ListChangeListener.Change;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Node;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.WeakListChangeListener;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.WeakEventHandler;
+import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 
 
 /**
@@ -52,8 +67,14 @@ public class ChatSetting extends TSetting {
     private ObjectOutputStream dout;
     
     private SimpleObjectProperty<ChatMessage> messages;
+    private TRepository repo;
     
     private boolean receive = true;
+    private boolean scrollFlag = false;
+    
+    private String nickName;
+
+	private int titleLength = 80;
     
 	/**
 	 * @param descriptor
@@ -62,6 +83,8 @@ public class ChatSetting extends TSetting {
 		super(descriptor);
 		messages = new SimpleObjectProperty<>();
 		util = new ChatUtil();
+		nickName = TedrosContext.getLoggedUser().getName();
+		repo = new TRepository();
 	}
 
 	/* (non-Javadoc)
@@ -71,72 +94,152 @@ public class ChatSetting extends TSetting {
 	public void run() {
 		
 		TChatMV mv = (TChatMV) super.getModelView();
-	
+		// Listen new messages to show
 		final ObservableList<ChatMessage> msgs = mv.getMessages();
 		Collections.sort(msgs);
-		
-		msgs.addListener((Change<? extends ChatMessage> c)->{
-			if(c.next() && c.wasAdded()) {
-				c.getAddedSubList().forEach(m->{
+		ListChangeListener<ChatMessage> chl0 = ch0 ->{
+			if(ch0.next() && ch0.wasAdded()) {
+				ch0.getAddedSubList().forEach(m->{
 					boolean left = !m.getFrom().getUserId().equals(TedrosContext.getLoggedUser().getId());
 					showMsg(m, left);
 				});
 			}
-		});
+		};
+		repo.add("chl0", chl0);
+		msgs.addListener(new WeakListChangeListener<ChatMessage>(chl0));
 		
+		// Listen for received message
 		ChangeListener<ChatMessage> chl1 = (a,o,n) -> {
 			if(n!=null && !n.getFrom().getUserId().equals(TedrosContext.getLoggedUser().getId())) {
 				msgs.add(n);
 				messages.setValue(null);
 			}
 		};
-		messages.addListener(chl1);
+		repo.add("chl1", chl1);
+		messages.addListener(new WeakChangeListener<>(chl1));
 		
+		// Send event
+		EventHandler<ActionEvent> ev0 = e -> {
 
-		EventHandler<ActionEvent> ev = e -> {
-			String msg = mv.getMessage().getValue();
+			ObservableList<ChatUserMV> dest = mv.getParticipants();
+			if(dest.size()==0) {
+				Node fbx = (Node) super.getFieldBox("participants");
+				PopOver ppo = new PopOver();
+	        	//ppo.setHeaderAlwaysVisible(true);
+	        	ppo.setAutoFix(true);
+	        	ppo.setArrowLocation(ArrowLocation.RIGHT_CENTER);
+	        	ppo.setContentNode(new TLabel("Select the users"));
+	        	ppo.show(fbx);
+	        	return;
+			}
 			
+			String msg = mv.getMessage().getValue();
+			ITFileModel fm = mv.getSendFile().getValue();
 			TUser u = TedrosContext.getLoggedUser();
 			ChatUser from = new ChatUser(); 
 			from.setName(u.getName());
 			from.setProfiles(u.getProfilesText());
 			from.setUserId(u.getId());
 			 try {
-		            //enviar a mensagem para o servidor.
-		            //anexamos o nickname deste utilizador apenas para identificação
-		            //dout.writeUTF(u.getName()+"|$&|" + msg);
 		            ChatMessage m = new ChatMessage();
 					m.setContent(msg);
 					m.setInsertDate(new Date());
 					m.setFrom(from);
-					ChatUser to = new ChatUser();
-					to.setId(99L);
-					to.setUserId(99L);
-					to.setName("Fulano de tal");
-					m.setTo(to);
 					m.setStatus(TStatus.SENT);
 					
-					dout.writeObject(m);
+					if(fm!=null && fm.getFile()!=null) {
+						ITFileEntity fe = TFileBaseUtil.convert((TFileModel) fm);
+						m.setFile((TFileEntity) fe);
+					}
+					
+					for(ChatUserMV c : dest){
+						m.setTo(c.getEntity());
+						dout.writeObject(m);
+					}
+					
 					showMsg(m, false);
+					
+					mv.getMessage().setValue(null);
+					mv.getSendFile().setValue(null);
+					
 		        } catch (Exception ex) {
 		            ex.printStackTrace();
 		        }
 		};
+		repo.add("ev0", ev0);
 		TButton sendBtn = (TButton) super.getDescriptor().getFieldDescriptor("sendBtn").getComponent();
-		sendBtn.setOnAction(ev);
+		sendBtn.setOnAction(new WeakEventHandler<>(ev0));
+		
+		// Clear event
+		EventHandler<ActionEvent> ev1 = e->{
+			mv.getMessage().setValue(null);
+		};
+		repo.add("ev1", ev1);
+		TButton clearBtn = (TButton) super.getDescriptor().getFieldDescriptor("clearBtn").getComponent();
+		clearBtn.setOnAction(new WeakEventHandler<>(ev1));
+		
+		
+		TabPane tp = super.getLayout("owner");
+		// Tab title
+		Tab t = tp.getTabs().get(0);
+		t.textProperty().bind(mv.getTitle());
+		
+		ListChangeListener<ChatUserMV> chl2 = ch -> {
+			List<? extends ChatUserMV> l = ch.getList();
+			buildTitle(l);
+		};
+		repo.add("chl2", chl2);
+		ObservableList<ChatUserMV> users = mv.getParticipants();
+		users.addListener(new WeakListChangeListener<ChatUserMV>(chl2));
+		buildTitle(users);
+		
+		// auto scroll
+		ScrollPane sp = (ScrollPane) t.getContent();
+		sp.setVvalue(1.0);
+		sp.vvalueProperty().addListener((a,o,n)->{
+			if(scrollFlag) {
+				sp.setVvalue(sp.getVmax());
+				if(n.doubleValue()==sp.getVmax())
+					scrollFlag = false;
+			}
+		});
+		
+		
+		
 		
 		connect();
+	}
+
+	/**
+	 * @param ch
+	 */
+	private void buildTitle(List<? extends ChatUserMV> ch) {
+		StringBuilder sb = new StringBuilder(nickName);
+		ch.forEach(u->{
+			if(sb.toString().equals(nickName)) {
+				sb.append(" >> " + u.getName().getValue());
+			} else 
+				sb.append(", " + u.getName().getValue());
+		});
+		TChatMV mv = (TChatMV) super.getModelView();
+		String tt = sb.toString().length()>titleLength 
+				? sb.toString().substring(0, titleLength-1) +"..." 
+						: sb.toString();
+		mv.getTitle().setValue(tt);
 	}
 
 	/**
 	 * @param m
 	 */
 	private void showMsg(ChatMessage m, boolean left){
+		
+		scrollFlag = true;
 		StackPane p1 = util.buildTextPane(m, left);
 		GridPane.setVgrow(p1, Priority.ALWAYS);
 		GridPane gp = super.getLayout("messages");
 		int row = gp.getChildren().size();
 		gp.add(p1, left ? 0 : 1, row);
+		
 	}
 	
 	private void connect() {

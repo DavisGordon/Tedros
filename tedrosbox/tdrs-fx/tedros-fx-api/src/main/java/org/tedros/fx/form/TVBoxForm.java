@@ -165,8 +165,11 @@ extends VBox implements ITModelForm<M> {
 
 	@Override
 	public void tDispose() {
+		this.parentProperty().addListener((a,o,n)->{
+			if(n==null)
+				this.getChildren().clear();
+		});
 		this.formEngine.dispose();
-		this.getChildren().clear();
 	}
 
 	@Override
