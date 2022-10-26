@@ -52,6 +52,14 @@ public class Chat extends TEntity {
 		cascade=CascadeType.ALL, mappedBy="chat")
 	private Set<ChatMessage> messages;
 	
+	public Chat() {
+		
+	}
+	
+	public Chat(Long id) {
+		super.setId(id);
+	}
+	
 	public void addParticipant(ChatUser usr) {
 		if(this.participants==null)
 			this.participants = new HashSet<>();

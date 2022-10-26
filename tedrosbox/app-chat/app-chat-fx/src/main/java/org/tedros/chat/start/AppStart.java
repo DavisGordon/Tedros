@@ -3,6 +3,7 @@ package org.tedros.chat.start;
 import org.tedros.chat.CHATKey;
 import org.tedros.chat.domain.DomainApp;
 import org.tedros.chat.module.client.TChatModule;
+import org.tedros.chat.module.client.setting.ChatClient;
 import org.tedros.chat.module.server.ChatSettingModule;
 import org.tedros.core.ITApplication;
 import org.tedros.core.annotation.TApplication;
@@ -36,8 +37,11 @@ public class AppStart implements ITApplication {
 
 	@Override
 	public void start() {
-		// Run at startup
+		ChatClient.getInstance().connect();
 	}
-	
-	
+
+	@Override
+	public void stop() {
+		ChatClient.getInstance().close();
+	}
 }

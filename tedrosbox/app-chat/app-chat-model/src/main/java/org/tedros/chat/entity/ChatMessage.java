@@ -37,8 +37,8 @@ public class ChatMessage extends TEntity implements Comparable<ChatMessage>{
 	@JoinColumn(name="from", nullable=false, updatable=false)
 	private ChatUser from;
 	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="to", nullable=false, updatable=false)
+	/*@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="to", nullable=false, updatable=false)*/
 	private ChatUser to;
 	
 	@Column(length=2000)

@@ -32,5 +32,10 @@ public class AppStart implements ITApplication {
 	public void start() {
 		new AppResource().copyToFolder();
 	}
+
+	@Override
+	public void stop() {
+		
+	}
 	
 }

@@ -11,11 +11,11 @@ import java.util.Date;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.tedros.chat.ejb.controller.IChatController;
+import org.tedros.chat.ejb.controller.IChatMessageController;
 import org.tedros.chat.ejb.controller.IChatUserController;
 import org.tedros.chat.entity.Chat;
 import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.entity.ChatUser;
-import org.tedros.chat.module.client.model.TChatMV;
 import org.tedros.common.model.TFileEntity;
 import org.tedros.core.TLanguage;
 import org.tedros.core.service.remote.ServiceLocator;
@@ -23,7 +23,6 @@ import org.tedros.fx.TFxKey;
 import org.tedros.fx.control.TText;
 import org.tedros.fx.control.TText.TTextStyle;
 import org.tedros.fx.domain.TImageExtension;
-import org.tedros.fx.process.TEntityProcess;
 import org.tedros.fx.property.TBytesLoader;
 import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.result.TResult;
@@ -32,7 +31,6 @@ import org.tedros.server.security.TAccessToken;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -61,18 +59,28 @@ public class ChatUtil {
 	public ChatUtil() {
 	}
 	
-	public void saveChat(TChatMV chat) {
-		TEntityProcess<Chat> p = new TEntityProcess<Chat>(Chat.class, IChatController.JNDI_NAME) {};
-		p.save(chat.getModel());
-		p.stateProperty().addListener((a,o,n)->{
-			if(n.equals(State.SUCCEEDED)) {
-				TResult<Chat> res =  p.getValue().get(0);
-				if(res.getValue()!=null) {
-					chat.reload(res.getValue());
-				}
-			}
-		});
-		p.startProcess();
+	@SuppressWarnings("unchecked")
+	public Chat saveChat(TAccessToken token, Chat chat) throws Exception {
+		ServiceLocator loc = ServiceLocator.getInstance();
+		try {
+			IChatController serv = loc.lookup(IChatController.JNDI_NAME);
+			TResult<Chat> res = serv.save(token, chat);
+			return res.getValue();
+		}finally {
+			loc.close();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public ChatMessage saveMessage(TAccessToken token, ChatMessage msg) throws Exception {
+		ServiceLocator loc = ServiceLocator.getInstance();
+		try {
+			IChatMessageController serv = loc.lookup(IChatMessageController.JNDI_NAME);
+			TResult<ChatMessage> res = serv.save(token, msg);
+			return res.getValue();
+		}finally {
+			loc.close();
+		}
 	}
 	
 	@SuppressWarnings("unchecked")

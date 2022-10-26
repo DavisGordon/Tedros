@@ -3,19 +3,12 @@
  */
 package org.tedros.chat.module.client.setting;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
-
-import javax.naming.NamingException;
 
 import org.tedros.api.descriptor.ITComponentDescriptor;
-import org.tedros.chat.ejb.controller.IChatUserController;
+import org.tedros.chat.entity.Chat;
 import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.entity.ChatUser;
 import org.tedros.chat.entity.TStatus;
@@ -26,8 +19,6 @@ import org.tedros.core.context.TedrosContext;
 import org.tedros.core.control.PopOver;
 import org.tedros.core.control.PopOver.ArrowLocation;
 import org.tedros.core.repository.TRepository;
-import org.tedros.core.security.model.TUser;
-import org.tedros.core.service.remote.ServiceLocator;
 import org.tedros.fx.control.TButton;
 import org.tedros.fx.control.TLabel;
 import org.tedros.fx.form.TSetting;
@@ -35,10 +26,7 @@ import org.tedros.fx.util.TFileBaseUtil;
 import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.model.ITFileModel;
 import org.tedros.server.model.TFileModel;
-import org.tedros.server.result.TResult;
 
-import javafx.application.Platform;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
 import javafx.collections.ListChangeListener;
@@ -63,22 +51,9 @@ import javafx.scene.layout.StackPane;
 public class ChatSetting extends TSetting {
 
 	private ChatUtil util;
-	
-	//Socket usado para a ligação
-    private Socket socket;
-    //Streams de leitura e escrita. A de leitura é usada para receber os dados do
-    //servidor, enviados pelos outros clientes. A de escrita para enviar os dados
-    //para o servidor.
-    private ObjectInputStream din;
-    private ObjectOutputStream dout;
-    
-    private SimpleObjectProperty<ChatMessage> messages;
+	private ChatClient client;
     private TRepository repo;
-    
-    private boolean receive = true;
     private boolean scrollFlag = false;
-    
-    private ChatUser owner;
 
 	private int titleLength = 80;
     
@@ -87,17 +62,9 @@ public class ChatSetting extends TSetting {
 	 */
 	public ChatSetting(ITComponentDescriptor descriptor) {
 		super(descriptor);
-		messages = new SimpleObjectProperty<>();
 		util = new ChatUtil();
 		repo = new TRepository();
-		TUser u = TedrosContext.getLoggedUser();
-		try {
-			owner = util.findUser(u.getAccessToken(), u.getId(), null);
-			owner.setToken(u.getAccessToken());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
+		client = ChatClient.getInstance();
 	}
 
 	/* (non-Javadoc)
@@ -122,14 +89,13 @@ public class ChatSetting extends TSetting {
 		msgs.addListener(new WeakListChangeListener<ChatMessage>(chl0));
 		
 		// Listen for received message
-		ChangeListener<ChatMessage> chl1 = (a,o,n) -> {
-			if(n!=null && !n.getFrom().getUserId().equals(TedrosContext.getLoggedUser().getId())) {
-				msgs.add(n);
-				messages.setValue(null);
+		ChangeListener<Object> chl1 = (a,o,n) -> {
+			if(n instanceof ChatMessage) {
+				msgs.add((ChatMessage) n);
 			}
 		};
 		repo.add("chl1", chl1);
-		messages.addListener(new WeakChangeListener<>(chl1));
+		client.messageProperty().addListener(new WeakChangeListener<>(chl1));
 		
 		// Send event
 		EventHandler<ActionEvent> ev0 = e -> {
@@ -152,7 +118,7 @@ public class ChatSetting extends TSetting {
 		            ChatMessage m = new ChatMessage();
 					m.setContent(msg);
 					m.setInsertDate(new Date());
-					m.setFrom(owner);
+					m.setFrom(client.getOwner());
 					m.setStatus(TStatus.SENT);
 					
 					if(fm!=null && fm.getFile()!=null) {
@@ -160,12 +126,15 @@ public class ChatSetting extends TSetting {
 						m.setFile((TFileEntity) fe);
 					}
 					
+					m.setChat(mv.getModel());
+					m = util.saveMessage(TedrosContext.getLoggedUser().getAccessToken(), m);
+					m.setChat(new Chat(mv.getModel().getId()));
 					for(ChatUserMV c : dest){
 						m.setTo(c.getEntity());
-						dout.writeObject(m);
+						client.send(m);
 					}
-					
-					showMsg(m, false);
+					m.setChat(mv.getModel());
+					msgs.add(m);
 					
 					mv.getMessage().setValue(null);
 					mv.getSendFile().setValue(null);
@@ -212,19 +181,6 @@ public class ChatSetting extends TSetting {
 			}
 		});
 		
-		connect();
-		
-		if(mv.getModel().isNew()) {
-			mv.getModel().setCode(UUID.randomUUID().toString());
-			mv.getOwner().setValue(owner);
-			util.saveChat(mv);
-		}
-		
-		try {
-			dout.writeObject(mv.getModel());
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
 		
 	}
 
@@ -232,6 +188,7 @@ public class ChatSetting extends TSetting {
 	 * @param ch
 	 */
 	private void buildTitle(List<? extends ChatUserMV> ch) {
+		ChatUser owner = client.getOwner();
 		StringBuilder sb = new StringBuilder(owner.getName());
 		ch.forEach(u->{
 			if(sb.toString().equals(owner.getName())) {
@@ -260,62 +217,11 @@ public class ChatSetting extends TSetting {
 		
 	}
 	
-	private void connect() {
-		try {
-            System.out.println("<-client->: Connecting...\n");
-            String host = "localhost";
-            int port = 5000;
-
-            //criar o socket
-            socket = new Socket(host, port);
-            //como não ocorreu uma excepção temos um socket aberto
-            System.out.println("<-client->: Connected...\n");
-
-            //Vamos obter as streams de comunicação fornecidas pelo socket
-            din = new ObjectInputStream(socket.getInputStream());
-            dout = new ObjectOutputStream(socket.getOutputStream());
-            
-
-            //e iniciar a thread que vai estar constantemente à espera de novas
-            //mensages. Se não usassemos uma thread, não conseguiamos receber
-            //mensagens enquanto estivessemos a escrever e toda a parte gráfica
-            //ficaria bloqueada.
-          new Thread(new Runnable() {
-                //estamos a usar uma classe anónima...
-
-                public void run() {
-                    try {
-                        while (receive) {
-                        	ChatMessage msg = (ChatMessage) din.readObject();
-							Platform.runLater(()->{
-                        		messages.setValue(msg);
-                        	});
-                            
-                        	
-                        }
-                    } catch (Exception ex) {
-                    	System.out.println("<-client->: " + ex.getMessage());
-                    }
-                }
-            }).start();
-          
-         // MessageBuilder.writeAuthentication(TedrosContext.getLoggedUser(), dout);
-			
-        } catch (Exception ex) {
-        	System.out.println("<-client->: " + ex.getMessage());
-        }
-	}
-
 	@Override
 	public void dispose() {
-		receive = false; 
-		if (socket != null) {
-            try {
-                socket.close();
-            } catch (IOException ex) {
-            	ex.getMessage();
-            }
-        }
+		repo.clear();
+		repo = null;
+		client = null;
 	}
 
 }
