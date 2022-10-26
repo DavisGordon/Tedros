@@ -27,7 +27,8 @@ public final class TAppContext {
 	
 	private TLanguage iEngine;
 	
-	private final TAppDescriptor appDescriptor;
+	private TAppDescriptor appDescriptor;
+	private ITApplication application;
 	
 	private ObservableList<TModuleContext> moduleContextList;
 	
@@ -62,8 +63,8 @@ public final class TAppContext {
 			
 			if(TedrosCoreUtil.isImplemented(appStarterClass, ITApplication.class)){
 				LOGGER.info("Calling start method:");
-				ITApplication appStarterInstance = (ITApplication) appStarterClass.newInstance();
-				appStarterInstance.start();
+				application = (ITApplication) appStarterClass.newInstance();
+				application.start();
 				LOGGER.info("Finish start method.");
 			}
 			
@@ -82,6 +83,21 @@ public final class TAppContext {
 			TedrosContext.updateInitializationErrorMessage(e.getMessage());
 			LOGGER.severe(e.toString());
 		}
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public void stop() {
+		application.stop();
+		for(Class<? extends ITProcess> c : appDescriptor.getProcessList()){
+			TedrosProcessManager.stopProcess(c);
+		}
+		this.moduleContextList.forEach(c->{
+			c.stopModule();
+		});
+		this.moduleContextList.clear();
+		this.moduleContextList = null;
+		this.application = null;
+		this.appDescriptor = null;
 	}
 	
 	/**

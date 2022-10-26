@@ -40,6 +40,15 @@ abstract class TedrosAppLoader {
 		}
 	}
 	
+	void stopAll() {
+		appContexts
+		.forEach(c->{
+			c.stop();
+		});
+		entrys.clear();
+		appContexts.clear();
+	}
+	
 	public ObservableList<TAppContext> getAppContexts() {
 		return appContexts;
 	}

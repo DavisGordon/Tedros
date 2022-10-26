@@ -624,11 +624,11 @@ public final class TedrosContext {
 	public static void exit() {
 		serverLogout();
 		loggedUser = null;
-		TedrosProcess.stopAllServices();
         Platform.exit();
 	}
 	
 	public static void serverLogout() {
+		TedrosAppManager.getInstance().stopAll();
 		if(loggedUser!=null && loggedUser.getAccessToken()!=null) {
 			ServiceLocator loc = ServiceLocator.getInstance();
 			try {

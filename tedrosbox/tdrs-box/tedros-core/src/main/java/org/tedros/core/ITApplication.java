@@ -8,8 +8,13 @@ package org.tedros.core;
 public interface ITApplication {
 
 	/**
-	 * Will be called before run the application.
+	 * Run after login phase.
 	 * */
 	public void start();
+	
+	/**
+	 * Run before exit/close Tedros Box
+	 * */
+	public void stop();
 	
 }

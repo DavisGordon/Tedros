@@ -8,7 +8,7 @@ import org.tedros.chat.ejb.controller.IChatController;
 import org.tedros.chat.entity.Chat;
 import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.entity.ChatUser;
-import org.tedros.chat.module.client.action.BuildChatCodeAction;
+import org.tedros.chat.module.client.behaviour.TChatBehaviour;
 import org.tedros.chat.module.client.setting.ChatSetting;
 import org.tedros.fx.annotation.control.TButtonField;
 import org.tedros.fx.annotation.control.TContent;
@@ -60,7 +60,7 @@ import javafx.scene.layout.Region;
 @TListViewPresenter(
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle=CHATKey.VIEW_CLIENT_MESSAGES,
 		buildModesRadioButton=false),
-	behavior=@TBehavior(runNewActionAfterSave=false, saveAllModels=false)))
+	behavior=@TBehavior(type=TChatBehaviour.class,runNewActionAfterSave=false, saveAllModels=false)))
 
 /*
 @TPresenter(
