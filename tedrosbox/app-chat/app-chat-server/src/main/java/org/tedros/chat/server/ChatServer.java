@@ -38,12 +38,13 @@ public class ChatServer {
     public void replyMessage(ChatMessage msg) {
         synchronized (clients) {
             clients.parallelStream()
-            .filter(p->{
-            	return p.getOwner().equals(msg.getTo());
+            .filter(h->{
+            	return msg.getTo().stream().filter(p->{
+            		return h.getOwner().equals(p);
+            	}).findFirst().isPresent();
             }).forEach(c->{
             	c.send(msg);
             });
-            
         }
     }
 

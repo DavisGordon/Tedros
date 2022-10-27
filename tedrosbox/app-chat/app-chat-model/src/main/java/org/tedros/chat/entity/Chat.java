@@ -6,7 +6,6 @@ package org.tedros.chat.entity;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.tedros.chat.domain.DomainSchema;
@@ -48,9 +46,6 @@ public class Chat extends TEntity {
 		inverseJoinColumns=@JoinColumn(name="user_id"))
 	private Set<ChatUser> participants;
 	
-	@OneToMany(fetch=FetchType.EAGER, 
-		cascade=CascadeType.ALL, mappedBy="chat")
-	private Set<ChatMessage> messages;
 	
 	public Chat() {
 		
@@ -72,17 +67,6 @@ public class Chat extends TEntity {
 		this.participants.remove(usr);
 	}
 	
-	public void addMessage(ChatMessage msg) {
-		if(messages==null)
-			this.messages = new HashSet<>();
-		this.messages.add(msg);
-	}
-	
-	public void removeMessage(ChatMessage msg) {
-		if(this.messages==null)
-			return;
-		this.messages.remove(msg);
-	}
 
 	/**
 	 * @return the code
@@ -138,20 +122,6 @@ public class Chat extends TEntity {
 	 */
 	public void setParticipants(Set<ChatUser> participants) {
 		this.participants = participants;
-	}
-
-	/**
-	 * @return the messages
-	 */
-	public Set<ChatMessage> getMessages() {
-		return messages;
-	}
-
-	/**
-	 * @param messages the messages to set
-	 */
-	public void setMessages(Set<ChatMessage> messages) {
-		this.messages = messages;
 	}
 
 }

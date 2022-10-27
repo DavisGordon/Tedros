@@ -43,6 +43,7 @@ import org.xml.sax.SAXException;
  * @author Davis Gordon
  *
  */
+@Deprecated
 public class MessageBuilder {
 
 	/**
@@ -69,7 +70,7 @@ public class MessageBuilder {
 			m.setFile((TFileEntity) fe);
 			m.setInsertDate(new Date());
 			m.setFrom(u);
-			m.setTo(to);
+			//m.setTo(to);
 			
 			MessageBuilder.writeMessage(m, Step.SEND_MSG, System.out);
 			
@@ -162,8 +163,8 @@ public class MessageBuilder {
 		 
 		 Element to = doc.createElement("to");
 		 rootElement.appendChild(to);
-		 createElement(doc, to, "id", msg.getTo().getId().toString());
-		 createElement(doc, to, "name", msg.getTo().getName());
+		// createElement(doc, to, "id", msg.getTo().getId().toString());
+		 //createElement(doc, to, "name", msg.getTo().getName());
 		 
 		 if(msg.getContent()!=null)
 			 createCDataElement(doc, rootElement, "content", msg.getContent());
@@ -208,7 +209,7 @@ public class MessageBuilder {
 		
 		list = doc.getElementsByTagName("to");
 		ChatUser u = geChatUser(list);
-		msg.setTo(u);
+		//msg.setTo(u);
 		
 		list = doc.getElementsByTagName("file");
 		Node node = list.item(0);

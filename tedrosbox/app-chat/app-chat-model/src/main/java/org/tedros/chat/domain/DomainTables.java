@@ -7,7 +7,7 @@ public interface DomainTables {
 	final static String user = "tchat_user";
 	final static String chat = "tchat_room";
 	final static String chat_user = "tchat_room_user";
-	final static String chat_message = "tchat_room_message";
+	final static String message_dest = "tchat_message_user_dest";
 }
 
 

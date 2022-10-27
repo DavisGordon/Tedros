@@ -3,7 +3,9 @@
  */
 package org.tedros.chat.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,6 +14,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -37,9 +41,12 @@ public class ChatMessage extends TEntity implements Comparable<ChatMessage>{
 	@JoinColumn(name="from", nullable=false, updatable=false)
 	private ChatUser from;
 	
-	/*@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="to", nullable=false, updatable=false)*/
-	private ChatUser to;
+	@ManyToMany(fetch=FetchType.EAGER)
+	@JoinTable(name=DomainTables.message_dest, 
+		schema=DomainSchema.schema,
+		joinColumns=@JoinColumn(name="msg_id"), 
+		inverseJoinColumns=@JoinColumn(name="user_id"))
+	private List<ChatUser> to;
 	
 	@Column(length=2000)
 	private String content;
@@ -67,6 +74,18 @@ public class ChatMessage extends TEntity implements Comparable<ChatMessage>{
 	
 	public ChatMessage() {
 		this.dateTime = new Date();
+	}
+	
+	public void removeDestination(ChatUser to) {
+		if(this.to!=null && to!=null)
+			this.to.remove(to);
+	}
+	
+	public void addDestination(ChatUser to) {
+		if(this.to==null)
+			this.to = new ArrayList<>();
+		if(!this.to.contains(to))
+			this.to.add(to);
 	}
 
 	/**
@@ -116,20 +135,6 @@ public class ChatMessage extends TEntity implements Comparable<ChatMessage>{
 	 */
 	public void setFrom(ChatUser from) {
 		this.from = from;
-	}
-
-	/**
-	 * @return the to
-	 */
-	public ChatUser getTo() {
-		return to;
-	}
-
-	/**
-	 * @param to the to to set
-	 */
-	public void setTo(ChatUser to) {
-		this.to = to;
 	}
 
 	/**
@@ -254,6 +259,20 @@ public class ChatMessage extends TEntity implements Comparable<ChatMessage>{
 		} else if (!to.equals(other.to))
 			return false;
 		return true;
+	}
+
+	/**
+	 * @return the to
+	 */
+	public List<ChatUser> getTo() {
+		return to;
+	}
+
+	/**
+	 * @param to the to to set
+	 */
+	public void setTo(List<ChatUser> to) {
+		this.to = to;
 	}
 	
 	

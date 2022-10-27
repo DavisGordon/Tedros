@@ -74,9 +74,9 @@ public class ChatSetting extends TSetting {
 	public void run() {
 		
 		TChatMV mv = (TChatMV) super.getModelView();
+		
 		// Listen new messages to show
 		final ObservableList<ChatMessage> msgs = mv.getMessages();
-		Collections.sort(msgs);
 		ListChangeListener<ChatMessage> chl0 = ch0 ->{
 			if(ch0.next() && ch0.wasAdded()) {
 				ch0.getAddedSubList().forEach(m->{
@@ -88,9 +88,24 @@ public class ChatSetting extends TSetting {
 		repo.add("chl0", chl0);
 		msgs.addListener(new WeakListChangeListener<ChatMessage>(chl0));
 		
+
+		ListChangeListener<ChatUserMV> chl00 = ch0 ->{
+			if(ch0.next() && (ch0.wasAdded() || ch0.wasRemoved())) {
+				try {
+					Chat c = util.saveChat(TedrosContext.getLoggedUser().getAccessToken(), mv.getEntity());
+					mv.reload(c);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		};
+		repo.add("chl00", chl00);
+		mv.getParticipants().addListener(new WeakListChangeListener<ChatUserMV>(chl00));
+		
 		// Listen for received message
 		ChangeListener<Object> chl1 = (a,o,n) -> {
-			if(n instanceof ChatMessage) {
+			if(n instanceof ChatMessage 
+					&& ((ChatMessage) n).getChat().getId().equals(mv.getEntity().getId())) {
 				msgs.add((ChatMessage) n);
 			}
 		};
@@ -126,14 +141,13 @@ public class ChatSetting extends TSetting {
 						m.setFile((TFileEntity) fe);
 					}
 					
+					for(ChatUserMV c : dest)
+						m.addDestination(c.getEntity());
+					
 					m.setChat(mv.getModel());
 					m = util.saveMessage(TedrosContext.getLoggedUser().getAccessToken(), m);
-					m.setChat(new Chat(mv.getModel().getId()));
-					for(ChatUserMV c : dest){
-						m.setTo(c.getEntity());
-						client.send(m);
-					}
-					m.setChat(mv.getModel());
+					client.send(m);
+					
 					msgs.add(m);
 					
 					mv.getMessage().setValue(null);
@@ -181,6 +195,18 @@ public class ChatSetting extends TSetting {
 			}
 		});
 		
+		if(!mv.getEntity().isNew()) {
+			try {
+				List<ChatMessage> lst = util.findMessages(TedrosContext.getLoggedUser().getAccessToken(),
+						mv.getEntity().getId());
+
+				Collections.sort(lst);
+				msgs.addAll(lst);
+				
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		}
 		
 	}
 

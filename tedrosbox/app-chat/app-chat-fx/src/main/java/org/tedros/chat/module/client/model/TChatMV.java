@@ -4,12 +4,15 @@
 package org.tedros.chat.module.client.model;
 
 import org.tedros.chat.CHATKey;
+import org.tedros.chat.domain.DomainApp;
 import org.tedros.chat.ejb.controller.IChatController;
 import org.tedros.chat.entity.Chat;
 import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.entity.ChatUser;
 import org.tedros.chat.module.client.behaviour.TChatBehaviour;
 import org.tedros.chat.module.client.setting.ChatSetting;
+import org.tedros.core.annotation.security.TAuthorizationType;
+import org.tedros.core.annotation.security.TSecurity;
 import org.tedros.fx.annotation.control.TButtonField;
 import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TFileField;
@@ -58,17 +61,15 @@ import javafx.scene.layout.Region;
 @TForm(name = "", showBreadcrumBar=false, scroll=false)
 @TEjbService(serviceName = IChatController.JNDI_NAME, model=Chat.class)
 @TListViewPresenter(
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle=CHATKey.VIEW_CLIENT_MESSAGES,
-		buildModesRadioButton=false),
-	behavior=@TBehavior(type=TChatBehaviour.class,runNewActionAfterSave=false, saveAllModels=false)))
-
-/*
-@TPresenter(
-		decorator=@TDecorator(type=TChatDecorator.class, 
-		viewTitle=CHATKey.VIEW_CLIENT_MESSAGES),
-		behavior=@TBehavior(type=TChatBehaviour.class))*/
-/*@TSecurity(	id=DomainApp.CHAT_FORM_ID, appName=CHATKey.APP_CHAT, moduleName=CHATKey.MODULE_MESSAGES, 
-			allowedAccesses= {TAuthorizationType.VIEW_ACCESS, TAuthorizationType.SEARCH})*/
+	presenter=@TPresenter(
+		decorator = @TDecorator(viewTitle=CHATKey.VIEW_CLIENT_MESSAGES,
+			buildSaveButton=false, buildModesRadioButton=false),
+		behavior=@TBehavior(type=TChatBehaviour.class, runNewActionAfterSave=false, 
+			saveAllModels=false)))
+@TSecurity(	id=DomainApp.CHAT_FORM_ID, appName=CHATKey.APP_CHAT, 
+	moduleName=CHATKey.MODULE_MESSAGES, viewName=CHATKey.VIEW_CLIENT_MESSAGES,
+	allowedAccesses= {TAuthorizationType.VIEW_ACCESS, TAuthorizationType.SAVE
+					, TAuthorizationType.NEW, TAuthorizationType.SEARCH})
 public class TChatMV extends TEntityModelView<Chat> {
 
 	@THBox(pane=@TPane(children= {"title", "participants"}), 
