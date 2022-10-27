@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.tedros.chat.ejb.controller.IChatController;
@@ -77,6 +78,23 @@ public class ChatUtil {
 		try {
 			IChatMessageController serv = loc.lookup(IChatMessageController.JNDI_NAME);
 			TResult<ChatMessage> res = serv.save(token, msg);
+			return res.getValue();
+		}finally {
+			loc.close();
+		}
+	}
+
+
+	public List<ChatMessage> findMessages(TAccessToken token, Long chatId) throws Exception {
+		ServiceLocator loc = ServiceLocator.getInstance();
+		try {
+			Chat c = new Chat();
+			c.setId(chatId);
+			ChatMessage m = new ChatMessage();
+			m.setChat(c);
+			m.setDateTime(null);
+			IChatMessageController serv = loc.lookup(IChatMessageController.JNDI_NAME);
+			TResult<List<ChatMessage>> res = serv.findAll(token, m);
 			return res.getValue();
 		}finally {
 			loc.close();
