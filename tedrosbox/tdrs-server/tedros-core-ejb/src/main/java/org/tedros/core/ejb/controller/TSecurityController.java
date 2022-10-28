@@ -10,6 +10,7 @@ import javax.ejb.TransactionAttributeType;
 
 import org.tedros.core.ejb.service.TSecurityService;
 import org.tedros.server.ejb.controller.ITSecurityController;
+import org.tedros.server.entity.ITUser;
 import org.tedros.server.security.TAccessToken;
 
 /**
@@ -33,6 +34,10 @@ public class TSecurityController implements ITSecurityController {
 	@Override
 	public boolean isPolicieAllowed(TAccessToken token, String securityId, String... action) {
 		return serv.isActionGranted(token, securityId, action);
+	}
+	@Override
+	public ITUser getUser(TAccessToken token) {
+		return serv.getUser(token);
 	}
 
 }

@@ -38,7 +38,7 @@ public class ChatMessage extends TEntity implements Comparable<ChatMessage>{
 	private static final long serialVersionUID = -8257824754212403138L;
 
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="from", nullable=false, updatable=false)
+	@JoinColumn(name="chat_user_id", nullable=false, updatable=false)
 	private ChatUser from;
 	
 	@ManyToMany(fetch=FetchType.EAGER)
@@ -61,16 +61,13 @@ public class ChatMessage extends TEntity implements Comparable<ChatMessage>{
 	private TStatus status;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="id_chat", nullable=false)
+	@JoinColumn(name="chat_id", nullable=false)
 	private Chat chat;
 	
 	@Column(nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateTime; 
 	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="replied_to", nullable=true, updatable=false)
-	private ChatMessage repliedTo;
 	
 	public ChatMessage() {
 		this.dateTime = new Date();
@@ -177,19 +174,6 @@ public class ChatMessage extends TEntity implements Comparable<ChatMessage>{
 		return this.dateTime.compareTo(o.getDateTime());
 	}
 
-	/**
-	 * @return the repliedTo
-	 */
-	public ChatMessage getRepliedTo() {
-		return repliedTo;
-	}
-
-	/**
-	 * @param repliedTo the repliedTo to set
-	 */
-	public void setRepliedTo(ChatMessage repliedTo) {
-		this.repliedTo = repliedTo;
-	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
@@ -203,7 +187,6 @@ public class ChatMessage extends TEntity implements Comparable<ChatMessage>{
 		result = prime * result + ((dateTime == null) ? 0 : dateTime.hashCode());
 		result = prime * result + ((file == null) ? 0 : file.hashCode());
 		result = prime * result + ((from == null) ? 0 : from.hashCode());
-		result = prime * result + ((repliedTo == null) ? 0 : repliedTo.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((to == null) ? 0 : to.hashCode());
 		return result;
@@ -245,11 +228,6 @@ public class ChatMessage extends TEntity implements Comparable<ChatMessage>{
 			if (other.from != null)
 				return false;
 		} else if (!from.equals(other.from))
-			return false;
-		if (repliedTo == null) {
-			if (other.repliedTo != null)
-				return false;
-		} else if (!repliedTo.equals(other.repliedTo))
 			return false;
 		if (status != other.status)
 			return false;

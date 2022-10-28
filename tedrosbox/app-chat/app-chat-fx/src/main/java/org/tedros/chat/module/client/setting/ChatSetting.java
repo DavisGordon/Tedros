@@ -27,6 +27,7 @@ import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.model.ITFileModel;
 import org.tedros.server.model.TFileModel;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
 import javafx.collections.ListChangeListener;
@@ -88,20 +89,6 @@ public class ChatSetting extends TSetting {
 		repo.add("chl0", chl0);
 		msgs.addListener(new WeakListChangeListener<ChatMessage>(chl0));
 		
-
-		ListChangeListener<ChatUserMV> chl00 = ch0 ->{
-			if(ch0.next() && (ch0.wasAdded() || ch0.wasRemoved())) {
-				try {
-					Chat c = util.saveChat(TedrosContext.getLoggedUser().getAccessToken(), mv.getEntity());
-					mv.reload(c);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			}
-		};
-		repo.add("chl00", chl00);
-		mv.getParticipants().addListener(new WeakListChangeListener<ChatUserMV>(chl00));
-		
 		// Listen for received message
 		ChangeListener<Object> chl1 = (a,o,n) -> {
 			if(n instanceof ChatMessage 
@@ -142,7 +129,8 @@ public class ChatSetting extends TSetting {
 					}
 					
 					for(ChatUserMV c : dest)
-						m.addDestination(c.getEntity());
+						if(!c.getId().getValue().equals(client.getOwner().getId()))
+							m.addDestination(c.getEntity());
 					
 					m.setChat(mv.getModel());
 					m = util.saveMessage(TedrosContext.getLoggedUser().getAccessToken(), m);
@@ -178,11 +166,12 @@ public class ChatSetting extends TSetting {
 		ListChangeListener<ChatUserMV> chl2 = ch -> {
 			List<? extends ChatUserMV> l = ch.getList();
 			buildTitle(l);
+			if(ch.next() && ch.wasRemoved())
+				verifyOwnerAsParticipant();
 		};
 		repo.add("chl2", chl2);
 		ObservableList<ChatUserMV> users = mv.getParticipants();
 		users.addListener(new WeakListChangeListener<ChatUserMV>(chl2));
-		buildTitle(users);
 		
 		// auto scroll
 		ScrollPane sp = (ScrollPane) t.getContent();
@@ -195,19 +184,33 @@ public class ChatSetting extends TSetting {
 			}
 		});
 		
-		if(!mv.getEntity().isNew()) {
-			try {
-				List<ChatMessage> lst = util.findMessages(TedrosContext.getLoggedUser().getAccessToken(),
-						mv.getEntity().getId());
-
-				Collections.sort(lst);
-				msgs.addAll(lst);
-				
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-		}
+		verifyOwnerAsParticipant();
 		
+		try {
+			List<ChatMessage> lst = util.findMessages(TedrosContext.getLoggedUser().getAccessToken(),
+					mv.getEntity().getId());
+
+			Collections.sort(lst);
+			msgs.addAll(lst);
+			
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+			
+		
+	}
+
+	/**
+	 * @param users
+	 */
+	private void verifyOwnerAsParticipant() {
+		TChatMV mv = (TChatMV) super.getModelView();
+		ObservableList<ChatUserMV> users = mv.getParticipants();
+		
+		if(users.isEmpty() || !users.stream().filter(p->{
+				return p.getEntity().equals(client.getOwner());
+			}).findFirst().isPresent())
+			users.add(new ChatUserMV(client.getOwner()));
 	}
 
 	/**
@@ -217,16 +220,25 @@ public class ChatSetting extends TSetting {
 		ChatUser owner = client.getOwner();
 		StringBuilder sb = new StringBuilder(owner.getName());
 		ch.forEach(u->{
-			if(sb.toString().equals(owner.getName())) {
-				sb.append(" >> " + u.getName().getValue());
-			} else 
-				sb.append(", " + u.getName().getValue());
+			if(!u.getId().getValue().equals(owner.getId())) {
+				if(sb.toString().equals(owner.getName())) {
+					sb.append(" >> " + u.getName().getValue());
+				} else 
+					sb.append(", " + u.getName().getValue());
+			}
 		});
 		TChatMV mv = (TChatMV) super.getModelView();
 		String tt = sb.toString().length()>titleLength 
 				? sb.toString().substring(0, titleLength-1) +"..." 
 						: sb.toString();
 		mv.getTitle().setValue(tt);
+		
+		try {
+			Chat c = util.saveChat(TedrosContext.getLoggedUser().getAccessToken(), mv.getEntity());
+			mv.reload(c);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 	}
 
 	/**
