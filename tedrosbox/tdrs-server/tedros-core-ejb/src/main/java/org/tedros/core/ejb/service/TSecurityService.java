@@ -5,6 +5,7 @@ package org.tedros.core.ejb.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
@@ -36,6 +37,17 @@ public class TSecurityService {
 	@PostConstruct
 	public void init() {
 		this.repository = new ArrayList<>();
+	}
+	
+	public TUser getUser(TAccessToken token) {
+		Optional<TUser> op =repository.parallelStream()
+				.filter(p->{
+					return p.getAccessToken().equals(token);
+				})
+				.findFirst();
+		return op.isPresent() 
+				? op.get()
+						: null;
 	}
 	
 	public boolean isAssigned(TAccessToken token) {

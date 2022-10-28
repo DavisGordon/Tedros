@@ -40,7 +40,7 @@ public class ChatServer {
             clients.parallelStream()
             .filter(h->{
             	return msg.getTo().stream().filter(p->{
-            		return h.getOwner().equals(p);
+            		return h.getOwner().equals(p) && !msg.getFrom().equals(p);
             	}).findFirst().isPresent();
             }).forEach(c->{
             	c.send(msg);
