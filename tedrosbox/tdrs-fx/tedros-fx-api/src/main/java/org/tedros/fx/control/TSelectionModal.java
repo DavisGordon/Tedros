@@ -3,6 +3,7 @@
  */
 package org.tedros.fx.control;
 
+import org.tedros.api.presenter.view.TViewState;
 import org.tedros.core.TLanguage;
 import org.tedros.core.TModule;
 import org.tedros.core.context.TedrosAppManager;
@@ -47,7 +48,7 @@ public class TSelectionModal extends TRequiredModal {
 	private TButton tRemoveButton;
 	private TButton tClearButton;
 	
-	private TDynaView view;
+	private TDynaView tModalView;
 
 	private Class<? extends TModelView> tModelViewClass;
 
@@ -86,16 +87,19 @@ public class TSelectionModal extends TRequiredModal {
 		VBox.setVgrow(tListView, Priority.ALWAYS);
 		this.getChildren().addAll(tListView, box);
 		
+
+		
 		//Open modal event
 		EventHandler<ActionEvent> fev = e -> {
 			StackPane pane = new StackPane();
-			view = new TDynaGroupView(tModelViewClass, tSelectedItems);
+			tModalView = new TDynaGroupView(tModelViewClass, tSelectedItems);
 			pane.setMaxSize(modalWidth, modalHeight);
-			pane.getChildren().add(view);
+			pane.getChildren().add(tModalView);
 			pane.setId("t-tedros-color");
 			//pane.getStyleClass().add("t-panel-color");
 			pane.setStyle("-fx-background-radius: 20 20 20 20;");
-			view.tLoad();
+			//if(tModalView.tStateProperty().equals(TViewState.CREATED))
+			tModalView.tLoad();
 			TedrosAppManager.getInstance()
 			.getModuleContext((TModule)TedrosContext.getView()).getCurrentViewContext()
 			.getPresenter().getView().tShowModal(pane, false);
@@ -200,6 +204,13 @@ public class TSelectionModal extends TRequiredModal {
 	 */
 	public ITObservableList<TModelView> gettSelectedItems() {
 		return tSelectedItems;
+	}
+
+	/**
+	 * @return the tModalView
+	 */
+	public TDynaView gettModalView() {
+		return tModalView;
 	}
 	
 	
