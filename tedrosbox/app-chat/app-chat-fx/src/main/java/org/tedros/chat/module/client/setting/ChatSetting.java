@@ -21,7 +21,9 @@ import org.tedros.core.control.PopOver.ArrowLocation;
 import org.tedros.core.repository.TRepository;
 import org.tedros.fx.control.TButton;
 import org.tedros.fx.control.TLabel;
+import org.tedros.fx.control.TSelectionModal;
 import org.tedros.fx.form.TSetting;
+import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.fx.util.TFileBaseUtil;
 import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.model.ITFileModel;
@@ -76,34 +78,78 @@ public class ChatSetting extends TSetting {
 		
 		TChatMV mv = (TChatMV) super.getModelView();
 		
-		// Listen new messages to show
-		final ObservableList<ChatMessage> msgs = mv.getMessages();
-		ListChangeListener<ChatMessage> chl0 = ch0 ->{
-			if(ch0.next() && ch0.wasAdded()) {
-				ch0.getAddedSubList().forEach(m->{
-					boolean left = !m.getFrom().getUserId().equals(TedrosContext.getLoggedUser().getId());
-					showMsg(m, left);
-				});
-			}
-		};
-		repo.add("chl0", chl0);
-		msgs.addListener(new WeakListChangeListener<ChatMessage>(chl0));
+		final ObservableList<ChatMessage> msgs = listenReceivedMsg(mv);
 		
-		// Listen for received message
-		ChangeListener<Object> chl1 = (a,o,n) -> {
-			if(n instanceof ChatMessage 
-					&& ((ChatMessage) n).getChat().getId().equals(mv.getEntity().getId())) {
-				msgs.add((ChatMessage) n);
-			}
-		};
-		repo.add("chl1", chl1);
-		client.messageProperty().addListener(new WeakChangeListener<>(chl1));
+		listenSendButton(mv, msgs);
+		listenClearButton(mv);
 		
+		
+		TabPane tp = super.getLayout("owner");
+		// Tab title
+		Tab t = tp.getTabs().get(0);
+		t.textProperty().bind(mv.getTitle());
+		
+		ListChangeListener<ChatUserMV> chl2 = ch -> {
+			List<? extends ChatUserMV> l = ch.getList();
+			buildTitle(l);
+		};
+		repo.add("chl2", chl2);
+		ObservableList<ChatUserMV> users = mv.getParticipants();
+		users.addListener(new WeakListChangeListener<ChatUserMV>(chl2));
+		
+		// auto scroll
+		ScrollPane sp = (ScrollPane) t.getContent();
+		sp.setVvalue(1.0);
+		sp.vvalueProperty().addListener((a,o,n)->{
+			if(scrollFlag) {
+				sp.setVvalue(sp.getVmax());
+				if(n.doubleValue()==sp.getVmax())
+					scrollFlag = false;
+			}
+		});
+		
+		verifyOwnerAsParticipant();
+		
+		try {
+			List<ChatMessage> lst = util.findMessages(TedrosContext.getLoggedUser().getAccessToken(),
+					mv.getEntity().getId());
+
+			Collections.sort(lst);
+			msgs.addAll(lst);
+			
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	/**
+	 * @param mv
+	 */
+	private void listenClearButton(TChatMV mv) {
+		// Clear event
+		EventHandler<ActionEvent> ev1 = e->{
+			mv.getMessage().setValue(null);
+		};
+		repo.add("ev1", ev1);
+		TButton clearBtn = (TButton) super.getDescriptor().getFieldDescriptor("clearBtn").getComponent();
+		clearBtn.setOnAction(new WeakEventHandler<>(ev1));
+	}
+
+	/**
+	 * @param mv
+	 * @param msgs
+	 */
+	private void listenSendButton(TChatMV mv, final ObservableList<ChatMessage> msgs) {
 		// Send event
 		EventHandler<ActionEvent> ev0 = e -> {
-
+			this.verifyOwnerAsParticipant();
+			if(mv.isChanged())
+				saveChat(mv);
+			
 			ObservableList<ChatUserMV> dest = mv.getParticipants();
-			if(dest.size()==0) {
+			if(dest.size()==0 
+					|| (dest.size()==1 && dest.get(0).getEntity().getId()
+					.equals(client.getOwner().getId()))) {
 				Node fbx = (Node) super.getFieldBox("participants");
 				PopOver ppo = new PopOver();
 	        	//ppo.setHeaderAlwaysVisible(true);
@@ -148,69 +194,52 @@ public class ChatSetting extends TSetting {
 		repo.add("ev0", ev0);
 		TButton sendBtn = (TButton) super.getDescriptor().getFieldDescriptor("sendBtn").getComponent();
 		sendBtn.setOnAction(new WeakEventHandler<>(ev0));
-		
-		// Clear event
-		EventHandler<ActionEvent> ev1 = e->{
-			mv.getMessage().setValue(null);
-		};
-		repo.add("ev1", ev1);
-		TButton clearBtn = (TButton) super.getDescriptor().getFieldDescriptor("clearBtn").getComponent();
-		clearBtn.setOnAction(new WeakEventHandler<>(ev1));
-		
-		
-		TabPane tp = super.getLayout("owner");
-		// Tab title
-		Tab t = tp.getTabs().get(0);
-		t.textProperty().bind(mv.getTitle());
-		
-		ListChangeListener<ChatUserMV> chl2 = ch -> {
-			List<? extends ChatUserMV> l = ch.getList();
-			buildTitle(l);
-			if(ch.next() && ch.wasRemoved())
-				verifyOwnerAsParticipant();
-		};
-		repo.add("chl2", chl2);
-		ObservableList<ChatUserMV> users = mv.getParticipants();
-		users.addListener(new WeakListChangeListener<ChatUserMV>(chl2));
-		
-		// auto scroll
-		ScrollPane sp = (ScrollPane) t.getContent();
-		sp.setVvalue(1.0);
-		sp.vvalueProperty().addListener((a,o,n)->{
-			if(scrollFlag) {
-				sp.setVvalue(sp.getVmax());
-				if(n.doubleValue()==sp.getVmax())
-					scrollFlag = false;
-			}
-		});
-		
-		verifyOwnerAsParticipant();
-		
-		try {
-			List<ChatMessage> lst = util.findMessages(TedrosContext.getLoggedUser().getAccessToken(),
-					mv.getEntity().getId());
+	}
 
-			Collections.sort(lst);
-			msgs.addAll(lst);
-			
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-			
+	/**
+	 * @param mv
+	 * @return
+	 */
+	private ObservableList<ChatMessage> listenReceivedMsg(TChatMV mv) {
+		// Listen new messages to show
+		final ObservableList<ChatMessage> msgs = mv.getMessages();
+		ListChangeListener<ChatMessage> chl0 = ch0 ->{
+			if(ch0.next() && ch0.wasAdded()) {
+				ch0.getAddedSubList().forEach(m->{
+					boolean left = !m.getFrom().getUserId().equals(TedrosContext.getLoggedUser().getId());
+					showMsg(m, left);
+				});
+			}
+		};
+		repo.add("chl0", chl0);
+		msgs.addListener(new WeakListChangeListener<ChatMessage>(chl0));
 		
+		// Listen for received message
+		ChangeListener<Object> chl1 = (a,o,n) -> {
+			if(n instanceof ChatMessage 
+					&& ((ChatMessage) n).getChat().getId().equals(mv.getEntity().getId())) {
+				msgs.add((ChatMessage) n);
+			}
+		};
+		repo.add("chl1", chl1);
+		client.messageProperty().addListener(new WeakChangeListener<>(chl1));
+		return msgs;
 	}
 
 	/**
 	 * @param users
 	 */
-	private void verifyOwnerAsParticipant() {
+	private boolean verifyOwnerAsParticipant() {
 		TChatMV mv = (TChatMV) super.getModelView();
 		ObservableList<ChatUserMV> users = mv.getParticipants();
 		
 		if(users.isEmpty() || !users.stream().filter(p->{
 				return p.getEntity().equals(client.getOwner());
-			}).findFirst().isPresent())
+			}).findFirst().isPresent()) {
 			users.add(new ChatUserMV(client.getOwner()));
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -218,21 +247,30 @@ public class ChatSetting extends TSetting {
 	 */
 	private void buildTitle(List<? extends ChatUserMV> ch) {
 		ChatUser owner = client.getOwner();
-		StringBuilder sb = new StringBuilder(owner.getName());
-		ch.forEach(u->{
+		TChatMV mv = (TChatMV) super.getModelView();
+		String from = mv.getOwner().getValue().getName();
+		StringBuilder sb = new StringBuilder(from);
+		for(ChatUserMV u :  ch){
+			if(mv.getOwner().getValue().getId().equals(owner.getId()) 
+					&& u.getId().getValue().equals(owner.getId()))
+				continue;
 			if(!u.getId().getValue().equals(owner.getId())) {
-				if(sb.toString().equals(owner.getName())) {
+				if(sb.toString().equals(from)) {
 					sb.append(" >> " + u.getName().getValue());
 				} else 
 					sb.append(", " + u.getName().getValue());
 			}
-		});
-		TChatMV mv = (TChatMV) super.getModelView();
+		}
 		String tt = sb.toString().length()>titleLength 
 				? sb.toString().substring(0, titleLength-1) +"..." 
 						: sb.toString();
 		mv.getTitle().setValue(tt);
-		
+	}
+
+	/**
+	 * @param mv
+	 */
+	private void saveChat(TChatMV mv) {
 		try {
 			Chat c = util.saveChat(TedrosContext.getLoggedUser().getAccessToken(), mv.getEntity());
 			mv.reload(c);

@@ -21,10 +21,10 @@ public class ChatRoomEao extends TGenericEAO<Chat> {
 	@SuppressWarnings("unchecked")
 	public List<Chat> listAll(Long chatUserId){
 		
-		String hql = "select e from Chat e "
+		String hql = "select distinct e from Chat e "
 				+ "join e.participants p "
 				+ "join e.owner o "
-				+ "where o.id = :id0 or o.id = :id1 "
+				+ "where o.id = :id0 or p.id = :id1 "
 				+ "order by e.title";
 		Query qry = super.getEntityManager().createQuery(hql);
 		qry.setParameter("id0", chatUserId);
