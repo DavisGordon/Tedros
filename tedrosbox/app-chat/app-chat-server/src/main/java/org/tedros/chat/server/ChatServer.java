@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import org.tedros.chat.entity.ChatMessage;
+import org.tedros.chat.model.ChatInfo;
 
 public class ChatServer {
 
@@ -32,6 +33,19 @@ public class ChatServer {
 
             //client handler
             clients.add(new ServerConnHandler(this, client));
+        }
+    }
+    
+    public void replyMessage(ChatInfo msg) {
+        synchronized (clients) {
+            clients.parallelStream()
+            .filter(h->{
+            	return msg.getRecipients().stream().filter(p->{
+            		return h.getOwner().equals(p) && !msg.getUser().equals(p);
+            	}).findFirst().isPresent();
+            }).forEach(c->{
+            	c.send(msg);
+            });
         }
     }
 

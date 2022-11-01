@@ -68,8 +68,9 @@ import javafx.scene.layout.Region;
 			saveAllModels=false)))
 @TSecurity(	id=DomainApp.CHAT_FORM_ID, appName=CHATKey.APP_CHAT, 
 	moduleName=CHATKey.MODULE_MESSAGES, viewName=CHATKey.VIEW_CLIENT_MESSAGES,
-	allowedAccesses= {TAuthorizationType.VIEW_ACCESS, TAuthorizationType.SAVE
-					, TAuthorizationType.NEW, TAuthorizationType.SEARCH})
+	allowedAccesses= {TAuthorizationType.VIEW_ACCESS, TAuthorizationType.SAVE, 
+		TAuthorizationType.EDIT, TAuthorizationType.READ,  TAuthorizationType.DELETE, 
+		TAuthorizationType.NEW, TAuthorizationType.SEARCH})
 public class TChatMV extends TEntityModelView<Chat> {
 
 	@THBox(pane=@TPane(children= {"title", "participants"}), 

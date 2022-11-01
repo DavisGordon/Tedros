@@ -9,6 +9,7 @@ import java.net.Socket;
 import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.entity.ChatUser;
 import org.tedros.chat.entity.TStatus;
+import org.tedros.chat.model.ChatInfo;
 
 public class ServerConnHandler extends Thread {
 
@@ -35,7 +36,10 @@ public class ServerConnHandler extends Thread {
             	if(obj instanceof ChatMessage) {
 	            	ChatMessage msg = (ChatMessage) obj;
 	                server.replyMessage(msg);
-            	}else if(obj instanceof ChatUser)
+            	}else if(obj instanceof ChatInfo) {
+	            	ChatInfo msg = (ChatInfo) obj;
+	                server.replyMessage(msg);
+            	}if(obj instanceof ChatUser)
             		owner = (ChatUser) obj;
             }
         } catch (EOFException ex) {
@@ -59,6 +63,14 @@ public class ServerConnHandler extends Thread {
         try {
         	msg.setStatus(TStatus.RECEIVED);
         	dout.writeObject(msg);
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+    }
+    
+    public void send(ChatInfo info) {
+        try {
+        	dout.writeObject(info);
         } catch (Exception ex) {
             System.out.println(ex);
         }
