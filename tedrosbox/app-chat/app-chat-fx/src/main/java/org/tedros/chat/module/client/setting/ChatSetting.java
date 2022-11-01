@@ -12,9 +12,12 @@ import org.tedros.chat.entity.Chat;
 import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.entity.ChatUser;
 import org.tedros.chat.entity.TStatus;
+import org.tedros.chat.module.client.TChatModule;
+import org.tedros.chat.module.client.behaviour.TChatBehaviour;
 import org.tedros.chat.module.client.model.ChatUserMV;
 import org.tedros.chat.module.client.model.TChatMV;
 import org.tedros.common.model.TFileEntity;
+import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.control.PopOver;
 import org.tedros.core.control.PopOver.ArrowLocation;
@@ -23,6 +26,7 @@ import org.tedros.fx.control.TButton;
 import org.tedros.fx.control.TLabel;
 import org.tedros.fx.control.TSelectionModal;
 import org.tedros.fx.form.TSetting;
+import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.fx.util.TFileBaseUtil;
 import org.tedros.server.entity.ITFileEntity;
@@ -200,6 +204,7 @@ public class ChatSetting extends TSetting {
 	 * @param mv
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private ObservableList<ChatMessage> listenReceivedMsg(TChatMV mv) {
 		// Listen new messages to show
 		final ObservableList<ChatMessage> msgs = mv.getMessages();
@@ -213,16 +218,24 @@ public class ChatSetting extends TSetting {
 		};
 		repo.add("chl0", chl0);
 		msgs.addListener(new WeakListChangeListener<ChatMessage>(chl0));
-		
+		/*
 		// Listen for received message
 		ChangeListener<Object> chl1 = (a,o,n) -> {
 			if(n instanceof ChatMessage 
 					&& ((ChatMessage) n).getChat().getId().equals(mv.getEntity().getId())) {
 				msgs.add((ChatMessage) n);
+			}else if(n instanceof ChatMessage 
+					&& !((ChatMessage) n).getChat().getId().equals(mv.getEntity().getId())) {
+				TDynaPresenter<TChatMV> p = (TDynaPresenter<TChatMV>) TedrosAppManager.getInstance()
+				.getModuleContext(TChatModule.class)
+				.getCurrentViewContext()
+				.getPresenter();
+				TChatBehaviour b = (TChatBehaviour) p.getBehavior();
+				
 			}
 		};
 		repo.add("chl1", chl1);
-		client.messageProperty().addListener(new WeakChangeListener<>(chl1));
+		client.messageProperty().addListener(new WeakChangeListener<>(chl1));*/
 		return msgs;
 	}
 
@@ -246,15 +259,15 @@ public class ChatSetting extends TSetting {
 	 * @param ch
 	 */
 	private void buildTitle(List<? extends ChatUserMV> ch) {
-		ChatUser owner = client.getOwner();
+		//ChatUser owner = client.getOwner();
 		TChatMV mv = (TChatMV) super.getModelView();
 		String from = mv.getOwner().getValue().getName();
 		StringBuilder sb = new StringBuilder(from);
 		for(ChatUserMV u :  ch){
-			if(mv.getOwner().getValue().getId().equals(owner.getId()) 
+			/*if(mv.getOwner().getValue().getId().equals(owner.getId()) 
 					&& u.getId().getValue().equals(owner.getId()))
-				continue;
-			if(!u.getId().getValue().equals(owner.getId())) {
+				continue;*/
+			if(!u.getId().getValue().equals(mv.getOwner().getValue().getId())) {
 				if(sb.toString().equals(from)) {
 					sb.append(" >> " + u.getName().getValue());
 				} else 

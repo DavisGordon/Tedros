@@ -4,6 +4,11 @@
 package org.tedros.chat.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.tedros.chat.entity.ChatUser;
 
@@ -15,41 +20,82 @@ public class ChatInfo implements Serializable {
 
 	private static final long serialVersionUID = 6041866320727934348L;
 	
-	private String code;
-	private ChatUser owner;
+	private Long id;
+	private ChatUser user;
+	private Action action;
+	
+
+	private List<ChatUser> recipients;
 	
 	public ChatInfo() {
 	}
-
-	/**
-	 * @return the code
-	 */
-	public String getCode() {
-		return code;
+	
+	public void addRecipient(ChatUser... usr) {
+		if(this.recipients==null)
+			this.recipients = new ArrayList<>();
+		this.recipients.addAll(Arrays.asList(usr));
+	}
+	
+	public void removeRecipient(ChatUser usr) {
+		if(this.recipients==null)
+			return;
+		this.recipients.remove(usr);
 	}
 
-
 	/**
-	 * @param code the code to set
+	 * @return the id
 	 */
-	public void setCode(String code) {
-		this.code = code;
+	public Long getId() {
+		return id;
 	}
 
-
 	/**
-	 * @return the owner
+	 * @param id the id to set
 	 */
-	public ChatUser getOwner() {
-		return owner;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
+	/**
+	 * @return the user
+	 */
+	public ChatUser getUser() {
+		return user;
+	}
 
 	/**
-	 * @param owner the owner to set
+	 * @param user the user to set
 	 */
-	public void setOwner(ChatUser owner) {
-		this.owner = owner;
+	public void setUser(ChatUser user) {
+		this.user = user;
+	}
+
+	/**
+	 * @return the action
+	 */
+	public Action getAction() {
+		return action;
+	}
+
+	/**
+	 * @param action the action to set
+	 */
+	public void setAction(Action action) {
+		this.action = action;
+	}
+
+	/**
+	 * @return the recipients
+	 */
+	public List<ChatUser> getRecipients() {
+		return recipients;
+	}
+
+	/**
+	 * @param recipients the recipients to set
+	 */
+	public void setRecipients(List<ChatUser> recipients) {
+		this.recipients = recipients;
 	}
 
 }
