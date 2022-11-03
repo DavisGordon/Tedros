@@ -8,9 +8,11 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
 import org.tedros.chat.domain.DomainApp;
+import org.tedros.chat.ejb.service.ChatMessageService;
 import org.tedros.chat.ejb.service.ChatRoomService;
 import org.tedros.chat.ejb.service.ChatUserService;
 import org.tedros.chat.entity.Chat;
+import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.entity.ChatUser;
 import org.tedros.server.ejb.controller.ITSecurityController;
 import org.tedros.server.ejb.controller.TSecureEjbController;
@@ -43,6 +45,9 @@ public class ChatController extends TSecureEjbController<Chat> implements	ITSecu
 	private ChatUserService uServ;
 	
 	@EJB
+	private ChatMessageService msgServ;
+	
+	@EJB
 	private ITSecurityController security;
 	
 	@Override
@@ -53,6 +58,24 @@ public class ChatController extends TSecureEjbController<Chat> implements	ITSecu
 	@Override
 	public ITSecurityController getSecurityController() {
 		return security;
+	}
+	
+	@Override
+	public TResult<Chat> remove(TAccessToken token, Chat e) {
+		Chat c = new Chat();
+		c.setId(e.getId());
+		
+		ChatMessage cm = new ChatMessage();
+		cm.setChat(c);
+		cm.setDateTime(null);
+		try {
+			List<ChatMessage> l = msgServ.findAll(cm);
+			for(ChatMessage m : l)
+				msgServ.remove(m);
+			return super.remove(token, e);
+		} catch (Exception e1) {
+			return super.processException(token, e, e1);
+		}
 	}
 	
 	@Override

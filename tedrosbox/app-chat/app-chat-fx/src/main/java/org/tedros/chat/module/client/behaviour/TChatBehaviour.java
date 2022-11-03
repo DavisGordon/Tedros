@@ -54,6 +54,23 @@ public class TChatBehaviour extends TMasterCrudViewBehavior<TChatMV, Chat> {
 		deco = (TMasterCrudViewDecorator<TChatMV>) super.getPresenter().getDecorator();
 			// Listen for received message
 		ChangeListener<Object> chl1 = (a,o,n) -> {
+			if(n instanceof ChatInfo) {
+				ChatInfo ci = (ChatInfo) n;
+				if(ci.getAction().equals(Action.DELETE)) {
+					TChatMV mv = super.getModelView();
+					if(mv!=null) {
+						super.addMessage(new TMessage("This conversation was deleted by the owner!", "Ok", 
+							ev-> {
+							super.remove();
+						}));
+					}else {
+						super.addMessage(new TMessage("The conversation "+mv.getTitle()+" was deleted by the owner!", "Ok", 
+								ev-> {
+								super.getModels().remove(mv);
+							}));
+					}
+				}
+			}
 			if(n instanceof ChatMessage) {
 				ChatMessage cm = (ChatMessage) n;
 				Optional<TChatMV> op = deco.gettListView().getItems()
