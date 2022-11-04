@@ -99,7 +99,7 @@ public class TChatMV extends TEntityModelView<Chat> {
 	@TModelViewType(modelClass = ChatUser.class, modelViewClass=ChatUserMV.class)
 	private ITObservableList<ChatMessage> messages; 
 	
-	@TLabel(text="Participants")
+	@TLabel(text=CHATKey.RECIPIENTS)
 	@TMultipleSelectionModal(modelClass = ChatUser.class, modelViewClass = ChatUserMV.class, 
 			height=Region.USE_COMPUTED_SIZE, modalHeight=400, modalWidth=740)
 	@TModelViewType(modelClass = ChatUser.class, modelViewClass=ChatUserMV.class)
@@ -117,10 +117,10 @@ public class TChatMV extends TEntityModelView<Chat> {
 	private TSimpleFileProperty<ITFileModel> sendFile;
 	
 	@TToolBar(items = { "sendBtn", "clearBtn" })
-	@TButtonField(labeled = @TLabeled(parse = true, text="Send"))
+	@TButtonField(labeled = @TLabeled(parse = true, text=CHATKey.SEND))
 	private SimpleStringProperty sendBtn;
 
-	@TButtonField(labeled = @TLabeled(parse = true, text="Clear"))
+	@TButtonField(labeled = @TLabeled(parse = true, text=CHATKey.CLEAR))
 	private SimpleStringProperty clearBtn;
 	
 	
