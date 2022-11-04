@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import org.tedros.chat.CHATKey;
 import org.tedros.chat.ejb.controller.IChatController;
 import org.tedros.chat.entity.Chat;
 import org.tedros.chat.entity.ChatMessage;
@@ -20,6 +21,7 @@ import org.tedros.chat.module.client.model.ChatUserMV;
 import org.tedros.chat.module.client.model.TChatMV;
 import org.tedros.chat.module.client.setting.ChatClient;
 import org.tedros.chat.module.client.setting.ChatUtil;
+import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.message.TMessage;
@@ -58,16 +60,28 @@ public class TChatBehaviour extends TMasterCrudViewBehavior<TChatMV, Chat> {
 				ChatInfo ci = (ChatInfo) n;
 				if(ci.getAction().equals(Action.DELETE)) {
 					TChatMV mv = super.getModelView();
-					if(mv!=null) {
-						super.addMessage(new TMessage("This conversation was deleted by the owner!", "Ok", 
+					if(mv!=null && mv.getId().getValue().equals(ci.getId())) {
+						super.addMessage(new TMessage(TLanguage.getInstance()
+								.getString(CHATKey.MSG_OWNER_REMOVED_CHAT), "Ok", 
 							ev-> {
 							super.remove();
+							super.getView().tHideModal();
 						}));
 					}else {
-						super.addMessage(new TMessage("The conversation "+mv.getTitle()+" was deleted by the owner!", "Ok", 
-								ev-> {
-								super.getModels().remove(mv);
+						Optional<TChatMV> op = super.getModels().stream()
+							.filter(p->{
+								return p.getId().getValue().equals(ci.getId());
+							}).findFirst();
+						if(op.isPresent()) {
+							TChatMV m = op.get();
+							super.addMessage(new TMessage(TLanguage.getInstance()
+									.getFormatedString(CHATKey.MSG_CHAT_REMOVED,
+											m.getTitle().getValue()), "Ok", 
+									ev-> {
+									super.getModels().remove(m);
+									super.getView().tHideModal();
 							}));
+						}
 					}
 				}
 			}
@@ -107,7 +121,10 @@ public class TChatBehaviour extends TMasterCrudViewBehavior<TChatMV, Chat> {
 			public boolean runBefore() {
 				TChatMV mv = getModelView();
 				if(!mv.getOwner().getValue().getId().equals(client.getOwner().getId())) {
-					addMessage(new TMessage(TMessageType.WARNING, "Only the owner can delete a chat room!"));
+					addMessage(new TMessage(TMessageType.WARNING, 
+							TLanguage.getInstance()
+							.getString(CHATKey.MSG_ONLY_OWNER_DELETE)
+							));
 					return false;
 				}
 				chatId = mv.getId().getValue();
