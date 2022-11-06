@@ -3,7 +3,6 @@
  */
 package org.tedros.fx.control;
 
-import org.tedros.api.presenter.view.TViewState;
 import org.tedros.core.TLanguage;
 import org.tedros.core.TModule;
 import org.tedros.core.context.TedrosAppManager;
@@ -87,8 +86,6 @@ public class TSelectionModal extends TRequiredModal {
 		VBox.setVgrow(tListView, Priority.ALWAYS);
 		this.getChildren().addAll(tListView, box);
 		
-
-		
 		//Open modal event
 		EventHandler<ActionEvent> fev = e -> {
 			StackPane pane = new StackPane();
@@ -96,9 +93,7 @@ public class TSelectionModal extends TRequiredModal {
 			pane.setMaxSize(modalWidth, modalHeight);
 			pane.getChildren().add(tModalView);
 			pane.setId("t-tedros-color");
-			//pane.getStyleClass().add("t-panel-color");
 			pane.setStyle("-fx-background-radius: 20 20 20 20;");
-			//if(tModalView.tStateProperty().equals(TViewState.CREATED))
 			tModalView.tLoad();
 			TedrosAppManager.getInstance()
 			.getModuleContext((TModule)TedrosContext.getView()).getCurrentViewContext()

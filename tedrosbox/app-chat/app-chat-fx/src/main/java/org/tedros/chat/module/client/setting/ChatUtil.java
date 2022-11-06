@@ -25,9 +25,13 @@ import org.tedros.fx.control.TText;
 import org.tedros.fx.control.TText.TTextStyle;
 import org.tedros.fx.domain.TImageExtension;
 import org.tedros.fx.property.TBytesLoader;
+import org.tedros.fx.util.TFileBaseUtil;
 import org.tedros.server.entity.ITFileEntity;
+import org.tedros.server.model.TFileModel;
 import org.tedros.server.result.TResult;
 import org.tedros.server.security.TAccessToken;
+import org.tedros.util.TFileUtil;
+import org.tedros.util.TedrosFolder;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -173,7 +177,13 @@ public class ChatUtil {
 			Hyperlink hl = new Hyperlink(iEngine.getString(TFxKey.BUTTON_OPEN));
 			hl.getStyleClass().add(TTextStyle.SMALL.getValue());
 			EventHandler<ActionEvent> ev = e -> {
-				//TFileUtil..open(f)
+				try {
+					TFileModel fm = TFileBaseUtil.convert(file);
+					fm.setFilePath(TedrosFolder.EXPORT_FOLDER.getFullPath());
+					TFileUtil.open(fm.getFile());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			};
 			hl.setOnAction(ev);
 			footer.getChildren().add(hl);

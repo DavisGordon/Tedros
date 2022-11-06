@@ -6,12 +6,11 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.tedros.common.model.TFileEntity;
 import org.tedros.core.cdi.bo.TPropertieBO;
+import org.tedros.core.setting.model.TPropertie;
 import org.tedros.server.cdi.bo.ITGenericBO;
 import org.tedros.server.ejb.service.TEjbService;
-
-import org.tedros.common.model.TFileEntity;
-import org.tedros.core.setting.model.TPropertie;
 
 @LocalBean
 @Stateless(name="TPropertieService")

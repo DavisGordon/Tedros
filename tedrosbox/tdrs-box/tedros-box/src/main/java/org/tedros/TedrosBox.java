@@ -550,7 +550,6 @@ public class TedrosBox extends Application implements ITedrosBox  {
         getStage().show();
         windowButtons.toogleMaximized();
         TedrosContext.showModal(buildLogin());
-        
     }
     
     
