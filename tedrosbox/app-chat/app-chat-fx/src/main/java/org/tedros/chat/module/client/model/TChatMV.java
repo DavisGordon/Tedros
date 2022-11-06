@@ -63,7 +63,7 @@ import javafx.scene.layout.Region;
 @TListViewPresenter(
 	presenter=@TPresenter(
 		decorator = @TDecorator(viewTitle=CHATKey.VIEW_CLIENT_MESSAGES,
-			buildSaveButton=false, buildModesRadioButton=false),
+			buildSaveButton=false, buildModesRadioButton=false, buildCollapseButton=false),
 		behavior=@TBehavior(type=TChatBehaviour.class, runNewActionAfterSave=false, 
 			saveAllModels=false)))
 @TSecurity(	id=DomainApp.CHAT_FORM_ID, appName=CHATKey.APP_CHAT, 

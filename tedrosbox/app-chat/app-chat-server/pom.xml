@@ -26,9 +26,21 @@
 	  	
 	  	<dependency>
 	  		<groupId>org.tedros</groupId>
-	  		<artifactId>tedros-server-api</artifactId>
-	  		<version>${tedros.jee}</version>
+	  		<artifactId>tedros-core-ejb-client</artifactId>
+	  		<version>8-4.0.0</version>
 	  		<scope>compile</scope>
+	  	</dependency>
+	  
+	  	<dependency>
+			<groupId>org.apache.tomee</groupId>
+			<artifactId>openejb-client</artifactId>
+			<version>${openejb.version}</version>
+		</dependency>
+		
+	  	<dependency>
+	  		<groupId>org.tedros</groupId>
+	  		<artifactId>tedros-util</artifactId>
+	  		<version>8-4.0.0</version>
 	  	</dependency>
 	  
 	  	<dependency>

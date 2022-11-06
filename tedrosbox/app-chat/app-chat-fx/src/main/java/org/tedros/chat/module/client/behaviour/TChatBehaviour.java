@@ -6,29 +6,24 @@ package org.tedros.chat.module.client.behaviour;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 import org.tedros.chat.CHATKey;
 import org.tedros.chat.ejb.controller.IChatController;
 import org.tedros.chat.entity.Chat;
 import org.tedros.chat.entity.ChatMessage;
-import org.tedros.chat.entity.ChatUser;
 import org.tedros.chat.model.Action;
 import org.tedros.chat.model.ChatInfo;
-import org.tedros.chat.module.client.TChatModule;
 import org.tedros.chat.module.client.model.ChatUserMV;
 import org.tedros.chat.module.client.model.TChatMV;
 import org.tedros.chat.module.client.setting.ChatClient;
 import org.tedros.chat.module.client.setting.ChatUtil;
 import org.tedros.core.TLanguage;
-import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
 import org.tedros.fx.control.action.TPresenterAction;
 import org.tedros.fx.presenter.behavior.TActionType;
-import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.entity.behavior.TMasterCrudViewBehavior;
 import org.tedros.fx.presenter.entity.decorator.TMasterCrudViewDecorator;
 import org.tedros.fx.process.TEntityProcess;
@@ -150,6 +145,11 @@ public class TChatBehaviour extends TMasterCrudViewBehavior<TChatMV, Chat> {
 			}
 			
 		});
+	}
+	
+	@Override
+	public void hideListView() {
+		
 	}
 	
 	@Override
