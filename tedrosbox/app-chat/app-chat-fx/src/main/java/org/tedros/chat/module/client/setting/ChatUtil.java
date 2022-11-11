@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.tedros.chat.domain.ChatPropertie;
 import org.tedros.chat.ejb.controller.IChatController;
 import org.tedros.chat.ejb.controller.IChatMessageController;
 import org.tedros.chat.ejb.controller.IChatUserController;
@@ -19,6 +21,7 @@ import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.entity.ChatUser;
 import org.tedros.common.model.TFileEntity;
 import org.tedros.core.TLanguage;
+import org.tedros.core.controller.TPropertieController;
 import org.tedros.core.service.remote.ServiceLocator;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.control.TText;
@@ -29,6 +32,7 @@ import org.tedros.fx.util.TFileBaseUtil;
 import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.model.TFileModel;
 import org.tedros.server.result.TResult;
+import org.tedros.server.result.TResult.TState;
 import org.tedros.server.security.TAccessToken;
 import org.tedros.util.TFileUtil;
 import org.tedros.util.TedrosFolder;
@@ -115,6 +119,36 @@ public class ChatUtil {
 			IChatUserController serv = loc.lookup(IChatUserController.JNDI_NAME);
 			TResult<ChatUser> res = serv.find(token, c);
 			return res.getValue();
+		}finally {
+			loc.close();
+		}
+	}
+	
+	public Integer getServerPort(TAccessToken token) throws Exception {
+		ServiceLocator loc = ServiceLocator.getInstance();
+		try {
+			TPropertieController serv = loc.lookup(TPropertieController.JNDI_NAME);
+			TResult<String> res1 = serv.getValue(token, ChatPropertie.SERVER_PORT.getValue());
+			if(res1.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res1.getValue())) {
+				return Integer.parseInt(res1.getValue());
+			}else {
+				return null;
+			}
+		}finally {
+			loc.close();
+		}
+	}
+	
+	public String getServerIp(TAccessToken token) throws Exception {
+		ServiceLocator loc = ServiceLocator.getInstance();
+		try {
+			TPropertieController serv = loc.lookup(TPropertieController.JNDI_NAME);
+			TResult<String> res1 = serv.getValue(token, ChatPropertie.SERVER_IP.getValue());
+			if(res1.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res1.getValue())) {
+				return res1.getValue();
+			}else {
+				return null;
+			}
 		}finally {
 			loc.close();
 		}

@@ -17,6 +17,7 @@
 		<class>org.tedros.chat.entity.Chat</class>
 		<class>org.tedros.chat.entity.ChatMessage</class>
 		<class>org.tedros.chat.entity.ChatSetting</class>
+		<class>org.tedros.core.setting.model.TPropertie</class>
 		
 		<properties>
 		

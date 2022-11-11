@@ -11,6 +11,11 @@ import org.tedros.core.annotation.TModule;
 import org.tedros.core.annotation.TResourceBundle;
 import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.annotation.security.TSecurity;
+import org.tedros.core.context.TedrosContext;
+import org.tedros.core.message.TMessage;
+import org.tedros.core.message.TMessageType;
+
+import javafx.beans.value.ChangeListener;
 
 /**
  * The app start class.
@@ -35,13 +40,20 @@ import org.tedros.core.annotation.security.TSecurity;
 	allowedAccesses=TAuthorizationType.APP_ACCESS)
 public class AppStart implements ITApplication {
 
+	private ChangeListener<String> chl = (a,o,n)->{
+		TedrosContext.showMessage(new TMessage(TMessageType.ERROR, n));
+	};
 	@Override
 	public void start() {
-		ChatClient.getInstance().connect();
+		ChatClient c = ChatClient.getInstance();
+		c.logProperty().addListener(chl);
+		c.connect();
 	}
 
 	@Override
 	public void stop() {
-		ChatClient.getInstance().close();
+		ChatClient c = ChatClient.getInstance();
+		c.logProperty().removeListener(chl);
+		c.close();
 	}
 }
