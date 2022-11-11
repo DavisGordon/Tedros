@@ -119,14 +119,14 @@ public class ChatServer {
 				String ip, url, user, pass;
 				System.out.println("Tedros Chat Server");
 				System.out.println("-----------------+");
-				System.out.println("Application Server IP (Enter for 127.0.0.1): ");
+				System.out.println("Application Server IP (Enter for localhost): ");
 				ip = br.readLine();
 				if(StringUtils.isBlank(ip)) 
-					ip = "127.0.0.1";
+					ip = null;
 				System.out.println("The remote ejb url (Enter for http://{0}:8080/tomee/ejb): ");
 				url = br.readLine();
 				if(StringUtils.isBlank(url)) 
-					url = "http://{0}:8080/tomee/ejb";
+					url = null;
 				
 				System.out.println("Tedros user: ");
 				user = br.readLine();

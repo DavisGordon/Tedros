@@ -16,6 +16,9 @@ package org.tedros.chat;
 public interface CHATKey {
 	
 	static final String APP_CHAT = "#{app.chat}";
+	static final String ERROR_SERVER_OUT = "#{error.server.out}";
+	static final String ERROR_SERVER_PREFERENCE = "#{error.server.preference}";
+	static final String ERROR_USER_NOT_FOUND = "#{error.user.not.found}";
 	static final String CLEAR = "#{label.clear}";
 	static final String RECIPIENTS = "#{label.recipients}";
 	static final String SEND = "#{label.send}";
@@ -26,6 +29,7 @@ public interface CHATKey {
 	static final String MODULE_MESSAGES = "#{module.messages}";
 	static final String MODULE_SERVER_SETTINGS = "#{module.server.settings}";
 	static final String MSG_CHAT_REMOVED = "#{msg.chat.removed}";
+	static final String MSG_ERROR = "#{msg.error}";
 	static final String MSG_ONLY_OWNER_DELETE = "#{msg.only.owner.delete}";
 	static final String MSG_OWNER_REMOVED_CHAT = "#{msg.owner.removed.chat}";
 	static final String MSG_SELECT_RECIPIENT = "#{msg.select.recipient}";

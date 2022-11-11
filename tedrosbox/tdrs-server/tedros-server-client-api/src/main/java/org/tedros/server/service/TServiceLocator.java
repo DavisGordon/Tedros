@@ -9,6 +9,8 @@ import java.util.Properties;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * @author Davis Gordon
  *
@@ -19,8 +21,8 @@ public class TServiceLocator {
 	
 	private InitialContext ctx;
 	
-	private String URL = "http://{0}:8080/tomee/ejb";
-	private String IP = "127.0.0.1";
+	private String URL = "http://{0}:8081/tomee/ejb";
+	private String IP = "localhost";
 	
 	private Properties getProp(){
 		
@@ -39,8 +41,10 @@ public class TServiceLocator {
 	public static TServiceLocator getInstance(String url, String ip){
 		if(locator ==null)
 			locator = new TServiceLocator();
-		locator.URL = url;
-		locator.IP = ip;
+		if(StringUtils.isNotBlank(url))
+			locator.URL = url;
+		if(StringUtils.isNotBlank(ip))
+			locator.IP = ip;
 		return locator;
 	}
 	
