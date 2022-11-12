@@ -4,6 +4,7 @@
 package org.tedros.chat.module.client.behaviour;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,6 +24,8 @@ import org.tedros.core.context.TedrosContext;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
 import org.tedros.fx.control.action.TPresenterAction;
+import org.tedros.fx.modal.TConfirmMessageBox;
+import org.tedros.fx.modal.TMessageBox;
 import org.tedros.fx.presenter.behavior.TActionType;
 import org.tedros.fx.presenter.entity.behavior.TMasterCrudViewBehavior;
 import org.tedros.fx.presenter.entity.decorator.TMasterCrudViewDecorator;
@@ -145,6 +148,23 @@ public class TChatBehaviour extends TMasterCrudViewBehavior<TChatMV, Chat> {
 			}
 			
 		});
+		
+		TMessage msg = new TMessage(client.getLog(), "Connect", c-> {
+				if(!client.isConnected()) {
+					client.connect();
+				}
+		});
+		ChangeListener<Boolean> chl = (a,o,n)->{
+			if(n && super.getView().tModalVisibleProperty().getValue())
+				super.getView().tHideModal();
+			if(!n && !super.getView().tModalVisibleProperty().getValue())
+				super.getView().tShowModal(new TMessageBox(Arrays.asList(msg)), false);
+		};
+		super.getListenerRepository().add("msgModalchl", chl);
+		client.connectedProperty().addListener(new WeakChangeListener<>(chl));
+	
+		if(!client.isConnected())
+			super.getView().tShowModal(new TMessageBox(Arrays.asList(msg)), false);
 	}
 	
 	@Override
