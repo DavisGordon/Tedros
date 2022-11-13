@@ -20,6 +20,7 @@ public interface CHATKey {
 	static final String ERROR_SERVER_PREFERENCE = "#{error.server.preference}";
 	static final String ERROR_USER_NOT_FOUND = "#{error.user.not.found}";
 	static final String CLEAR = "#{label.clear}";
+	static final String CONNECT = "#{label.connect}";
 	static final String RECIPIENTS = "#{label.recipients}";
 	static final String SEND = "#{label.send}";
 	static final String MENU_CLIENT = "#{menu.client}";
