@@ -51,16 +51,20 @@ public class ChatClient {
 		message = new SimpleObjectProperty<>();
 		log = new SimpleStringProperty();
 		util = new ChatUtil();
+		findOwner();
+	}
+
+	/**
+	 * 
+	 */
+	private void findOwner() {
 		TUser u = TedrosContext.getLoggedUser();
 		try {
 			owner = util.findUser(u.getAccessToken(), u.getId(), null);
 			owner.setToken(u.getAccessToken());
 		} catch (Exception e) {
-			String reason = TLanguage.getInstance().getString(CHATKey.ERROR_USER_NOT_FOUND);
-			log.setValue(TLanguage.getInstance().getFormatedString(CHATKey.MSG_ERROR, reason));
 			e.printStackTrace();
 		}
-		
 	}
 	
 	/**
@@ -68,7 +72,13 @@ public class ChatClient {
 	 * */
 	public void connect() {
 		try {
-             TAccessToken token = TedrosContext.getLoggedUser().getAccessToken();
+			log.setValue(null);
+			if(owner==null) 
+				findOwner();
+			if(owner==null) 
+				throw new Exception(TLanguage.getInstance().getString(CHATKey.ERROR_USER_NOT_FOUND));
+			
+            TAccessToken token = TedrosContext.getLoggedUser().getAccessToken();
             String host = util.getServerIp(token);
             Integer port = util.getServerPort(token);
             if(host==null || port==null)
@@ -89,35 +99,39 @@ public class ChatClient {
             //mensages. Se não usassemos uma thread, não conseguiamos receber
             //mensagens enquanto estivessemos a escrever e toda a parte gráfica
             //ficaria bloqueada.
-          new Thread(new Runnable() {
-                public void run() {
-                    try {
-                        while (receive) {
-                        	Object obj = din.readObject();
-							Platform.runLater(()->{
-                        		message.setValue(obj);
-                        		message.setValue(null);
-                        	});
-                        }
-                    } catch (Exception ex) {
-                    	System.out.println("<-client->: " + ex.getMessage());
-                    }
+         new Thread(()-> {
+            try {
+                while (receive) {
+                	Object obj = din.readObject();
+					Platform.runLater(()->{
+                		message.setValue(obj);
+                		message.setValue(null);
+                	});
                 }
-            }).start();
+            } catch (Exception ex) {
+            	System.out.println("<-client->: " + ex.getMessage());
+    			Platform.runLater(()->{
+    				log.setValue(TLanguage.getInstance().getFormatedString(CHATKey.MSG_ERROR, ex.getMessage()));
+    				connected.setValue(false); 
+    			});
+            }
+         }).start();
           
-          send(owner);
-          connected.setValue(true);
+         send(owner);
+         connected.setValue(true);
         } catch (UnknownHostException ex) {
         	String reason = TLanguage.getInstance().getString(CHATKey.ERROR_SERVER_OUT);
 			log.setValue(TLanguage.getInstance().getFormatedString(CHATKey.MSG_ERROR, reason));
-			
+	        connected.setValue(false);
         	System.out.println("<-client->: " + ex.getMessage());
         } catch (IOException e) {
 			log.setValue(TLanguage.getInstance().getFormatedString(CHATKey.MSG_ERROR, e.getMessage()));
-			e.printStackTrace();
+			connected.setValue(false);
+        	e.printStackTrace();
 		} catch (Exception e) {
 			log.setValue(TLanguage.getInstance().getFormatedString(CHATKey.MSG_ERROR, e.getMessage()));
-			e.printStackTrace();
+			connected.setValue(false);
+        	e.printStackTrace();
 		}
 	}
 	
