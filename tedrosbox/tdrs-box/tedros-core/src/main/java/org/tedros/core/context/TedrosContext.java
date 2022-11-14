@@ -86,6 +86,7 @@ public final class TedrosContext {
 	private static StringProperty countryIso2Property;
 	private static StringProperty initializationErrorMessageStringProperty;
 	private static ObservableList<TMessage> messageListProperty;
+	private static ObservableList<TMessage> infoListProperty;
 	
 	//private static Stage stage;
 	private static SimpleObjectProperty<Node> currentViewProperty;
@@ -147,6 +148,7 @@ public final class TedrosContext {
 		totalPageHistoryProperty = new SimpleIntegerProperty(DEFAULT_TOTAL_PAGE_HISTORY);
 		countryIso2Property = new SimpleStringProperty(DEFAULT_COUNTRY_ISO2);
 		messageListProperty = FXCollections.observableArrayList();
+		infoListProperty = FXCollections.observableArrayList();
 		
 		initializationErrorMessageStringProperty.addListener((a,o,n)->{
 			if(showContextInitializationErrorMessages){
@@ -361,9 +363,15 @@ public final class TedrosContext {
 	}
 	
 	/**
-	 * Show a modal with the errors at context initialization.
+	 * Push the message to info pop over
+	 * 
+	 * @param modalMessage
 	 * */
-	
+	public static void pushInfo(TMessage message){
+		if(StringUtils.isNotBlank(message.getValue()))
+			infoListProperty.add(message);
+	}
+
 	/**
 	 * Open a modal with the message.
 	 * 
@@ -466,10 +474,17 @@ public final class TedrosContext {
 	}
 	
 	/**
-	 * message list
+	 * message list property
 	 * */
 	public static ObservableList messageListProperty(){
 		return messageListProperty;
+	}
+	
+	/**
+	 * info list property
+	 * */
+	public static ObservableList infoListProperty(){
+		return infoListProperty;
 	}
 	
 	/**
