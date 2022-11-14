@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +28,8 @@ import org.tedros.core.control.PopOver.ArrowLocation;
 import org.tedros.core.control.TedrosBoxBreadcrumbBar;
 import org.tedros.core.control.TedrosBoxResizeBar;
 import org.tedros.core.logging.TLoggerManager;
+import org.tedros.core.message.TMessage;
+import org.tedros.core.message.TMessageType;
 import org.tedros.core.style.TThemeUtil;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.control.TLabel;
@@ -50,7 +53,9 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener.Change;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -106,6 +111,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     private String currentPagePath;
     private ToolBar pageToolBar;
     private ToolBar toolBar;
+    private PopOver userPopOver;
     private PopOver infoPopOver;
     
     private BorderPane mainPane;
@@ -124,6 +130,11 @@ public class TedrosBox extends Application implements ITedrosBox  {
     private TModalPane modalMessage;
     private TModalPane tModalPane;
     private Accordion settingsAcc;
+    private StackPane infoPane;
+    private Button infoButton;
+    private TMessageBox messageBox;
+    private ObservableList<TMessage> messages;
+    
     private Label appName;
     private StringProperty historySize;
     private StringProperty forwardSize;
@@ -384,18 +395,18 @@ public class TedrosBox extends Application implements ITedrosBox  {
         pageToolBar.setId("t-tedros-toolbar");
         pageToolBar.setMaxSize(Double.MAX_VALUE, Control.USE_PREF_SIZE);
        
-        Button infoButton = new Button();
-        infoButton.getStyleClass().addAll("info");
-        infoButton.setOnAction(e->{
-        	infoPopOver = new PopOver();
-        	infoPopOver.setHeaderAlwaysVisible(true);
-        	infoPopOver.setAutoFix(true);
-        	infoPopOver.setCloseButtonEnabled(true);
-        	infoPopOver.setArrowLocation(ArrowLocation.TOP_LEFT);
-        	infoPopOver.show(infoButton);
-        	infoPopOver.setContentNode(this.settingsAcc);
+        Button userButton = new Button();
+        userButton.getStyleClass().addAll("user");
+        userButton.setOnAction(e->{
+        	userPopOver = new PopOver();
+        	userPopOver.setHeaderAlwaysVisible(true);
+        	userPopOver.setAutoFix(true);
+        	userPopOver.setCloseButtonEnabled(true);
+        	userPopOver.setArrowLocation(ArrowLocation.TOP_LEFT);
+        	userPopOver.show(userButton);
+        	userPopOver.setContentNode(this.settingsAcc);
         });
-        infoPopOver = null;
+        userPopOver = null;
         forwardSize = new SimpleStringProperty(String.valueOf(this.forwardHistory.size()));
         final Button forwardButton = new Button("");
         forwardButton.getStyleClass().addAll("forward");
@@ -449,11 +460,22 @@ public class TedrosBox extends Application implements ITedrosBox  {
         		pvr.hide();
         	backButton.setUserData(null);
         });
+        
+        infoButton = new Button();
+        infoButton.getStyleClass().addAll("info");
+        infoButton.setOnAction(e->{
+        	this.buildInfoPane();
+        	showInfoPopOver();
+        });
+        messages = FXCollections.observableArrayList();
+        infoPopOver = null;
+       
         HBox btnBox = new HBox();
-        btnBox.getChildren().addAll(infoButton, backButton, forwardButton);
-        HBox.setMargin(infoButton, new Insets(0,10,0,0));
+        btnBox.getChildren().addAll(userButton, infoButton, backButton, forwardButton);
+        HBox.setMargin(userButton, new Insets(0,10,0,0));
         HBox.setMargin(backButton, new Insets(0,10,0,0));
         HBox.setMargin(forwardButton, new Insets(0,10,0,0));
+        HBox.setMargin(infoButton, new Insets(0,10,0,0));
         
         pageToolBar.getItems().add(btnBox);
         
@@ -524,6 +546,12 @@ public class TedrosBox extends Application implements ITedrosBox  {
 			}
 		});
         
+        TedrosContext.infoListProperty()
+        .addListener((Change c)->{
+			//this.buildInfoPane();
+			//this.showInfoPopOver();
+		});
+        
         TedrosContext.showModalProperty()
         .addListener((a, o, newValue) -> {
 			if(newValue && TedrosContext.getModal() != null) {
@@ -551,11 +579,45 @@ public class TedrosBox extends Application implements ITedrosBox  {
         windowButtons.toogleMaximized();
         TedrosContext.showModal(buildLogin());
     }
+
+	/**
+	 * 
+	 */
+	@SuppressWarnings("unchecked")
+	private void buildInfoPane() {
+		/*infoPane = new StackPane();
+		messages = FXCollections.observableArrayList(TedrosContext.infoListProperty());
+		if(messages.size()>0)
+			this.infoPane.getChildren().add(new TMessageBox(messages));
+		else
+			this.infoPane.getChildren().add(new TMessageBox(Arrays.asList(new TMessage(TMessageType.GENERIC,"NO MESSAGES"))));
+*/	}
+
+	/**
+	 * @param infoButton
+	 */
+	private void showInfoPopOver() {
+		infoPane = new StackPane();
+		infoPopOver = new PopOver();
+		infoPopOver.setHeaderAlwaysVisible(true);
+		infoPopOver.setAutoFix(true);
+		infoPopOver.setCloseButtonEnabled(true);
+		infoPopOver.setArrowLocation(ArrowLocation.TOP_LEFT);
+		infoPopOver.setContentNode(this.infoPane);
+		Platform.runLater(()->{
+			infoPopOver.show(infoButton);
+		if(TedrosContext.infoListProperty().size()>0)
+			this.infoPane.getChildren().add(new TMessageBox(TedrosContext.infoListProperty()));
+		else
+			this.infoPane.getChildren().add(new TMessageBox(Arrays.asList(new TMessage(TMessageType.GENERIC,"NO MESSAGES"))));
+		
+		});
+	}
     
     
     public void logout() {
-    	if(infoPopOver!=null)
-    		infoPopOver.hide();
+    	if(userPopOver!=null)
+    		userPopOver.hide();
     	currentPage = null;
         currentPagePath = "";
         changingPage = false;

@@ -41,7 +41,7 @@ import javafx.beans.value.ChangeListener;
 public class AppStart implements ITApplication {
 
 	private ChangeListener<String> chl = (a,o,n)->{
-		TedrosContext.showMessage(new TMessage(TMessageType.ERROR, n));
+		TedrosContext.pushInfo(new TMessage(TMessageType.ERROR, n));
 	};
 	@Override
 	public void start() {
