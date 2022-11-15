@@ -40,7 +40,7 @@ public class TMessageBox extends Pane {
 	
 	private ObservableList<TMessage> messages;
 
-	protected double size = 0;
+	protected static double size = 0;
 	private String header;
 	protected VBox messagesPane;
 	protected TLanguage iEngine = TLanguage.getInstance(null);
@@ -262,19 +262,23 @@ public class TMessageBox extends Pane {
 	
 	private void addMessagePane() {
 		messages.forEach(t -> {
-			addMessagePane(t);
+			Pane p = buildMessagePane(t);
+			if(p!=null)
+				messagesPane.getChildren().add(p);
 		});
 		
 	}
 
 	private void addMessagePane(List<? extends TMessage> lst) {
 		lst.forEach(t -> {
-			addMessagePane(t);
+			Pane p = buildMessagePane(t);
+			if(p!=null)
+				messagesPane.getChildren().add(p);
 		});
 		
 	}
 	
-	private void addMessagePane(TMessage msg) {
+	public static Pane buildMessagePane(TMessage msg) {
 		if(!msg.isLoaded()) {
 			msg.setLoaded(true);
 			TText text = buildText(msg.getValue());
@@ -286,9 +290,9 @@ public class TMessageBox extends Pane {
 					action.accept(ev);
 				});
 			}
-			HBox box = buildPane(text, msg.getType(), btn);
-			messagesPane.getChildren().add(box);
+			return buildPane(text, msg.getType(), btn);
 		}
+		return null;
 	}
 	
 	private void tAddMessage(String value, TMessageType type, String buttonText, Consumer<ActionEvent> buttonAction) {
@@ -301,7 +305,7 @@ public class TMessageBox extends Pane {
 	 * @param text
 	 * @return
 	 */
-	private HBox buildPane(TText text, TMessageType type, TButton btn) {
+	private static HBox buildPane(TText text, TMessageType type, TButton btn) {
 		HBox box = new HBox(8);
 		box.setAlignment(Pos.CENTER);
 		box.setId("t-fieldbox-message");
@@ -336,9 +340,9 @@ public class TMessageBox extends Pane {
 	 * @param string
 	 * @return
 	 */
-	private TText buildText(String string) {
+	private static TText buildText(String string) {
 		
-		string = iEngine.getString(string);
+		string = TLanguage.getInstance().getString(string);
 		
 		int p = 30;
 		int t = string.length();
