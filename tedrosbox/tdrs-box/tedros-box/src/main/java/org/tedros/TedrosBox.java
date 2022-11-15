@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,9 +52,7 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener.Change;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -68,6 +65,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
@@ -130,10 +128,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     private TModalPane modalMessage;
     private TModalPane tModalPane;
     private Accordion settingsAcc;
-    private StackPane infoPane;
     private Button infoButton;
-    private TMessageBox messageBox;
-    private ObservableList<TMessage> messages;
     
     private Label appName;
     private StringProperty historySize;
@@ -464,12 +459,10 @@ public class TedrosBox extends Application implements ITedrosBox  {
         infoButton = new Button();
         infoButton.getStyleClass().addAll("info");
         infoButton.setOnAction(e->{
-        	this.buildInfoPane();
         	showInfoPopOver();
         });
-        messages = FXCollections.observableArrayList();
         infoPopOver = null;
-       
+        
         HBox btnBox = new HBox();
         btnBox.getChildren().addAll(userButton, infoButton, backButton, forwardButton);
         HBox.setMargin(userButton, new Insets(0,10,0,0));
@@ -548,8 +541,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
         
         TedrosContext.infoListProperty()
         .addListener((Change c)->{
-			//this.buildInfoPane();
-			//this.showInfoPopOver();
+			this.showInfoPopOver();
 		});
         
         TedrosContext.showModalProperty()
@@ -580,37 +572,42 @@ public class TedrosBox extends Application implements ITedrosBox  {
         TedrosContext.showModal(buildLogin());
     }
 
-	/**
-	 * 
-	 */
-	@SuppressWarnings("unchecked")
-	private void buildInfoPane() {
-		/*infoPane = new StackPane();
-		messages = FXCollections.observableArrayList(TedrosContext.infoListProperty());
-		if(messages.size()>0)
-			this.infoPane.getChildren().add(new TMessageBox(messages));
-		else
-			this.infoPane.getChildren().add(new TMessageBox(Arrays.asList(new TMessage(TMessageType.GENERIC,"NO MESSAGES"))));
-*/	}
 
 	/**
 	 * @param infoButton
 	 */
+	@SuppressWarnings("unchecked")
 	private void showInfoPopOver() {
-		infoPane = new StackPane();
+		double h = scene.getHeight()-200;
+		StackPane infoPane = new StackPane();
+		infoPane.setMaxHeight(h-80);
 		infoPopOver = new PopOver();
 		infoPopOver.setHeaderAlwaysVisible(true);
 		infoPopOver.setAutoFix(true);
 		infoPopOver.setCloseButtonEnabled(true);
 		infoPopOver.setArrowLocation(ArrowLocation.TOP_LEFT);
-		infoPopOver.setContentNode(this.infoPane);
+
+		infoPopOver.setMaxHeight(h);
+		VBox vb = new VBox(8);
+		ScrollPane scroll = new ScrollPane();
+		scroll.setFitToHeight(true);
+		scroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		scroll.setStyle("-fx-background-color: transparent");
+		scroll.setPadding(new Insets(8));
+		scroll.setContent(vb);
+		infoPane.getChildren().add(scroll);
+		StackPane.setMargin(scroll, new Insets(8));
+		infoPopOver.setContentNode(infoPane);
 		Platform.runLater(()->{
 			infoPopOver.show(infoButton);
-		if(TedrosContext.infoListProperty().size()>0)
-			this.infoPane.getChildren().add(new TMessageBox(TedrosContext.infoListProperty()));
-		else
-			this.infoPane.getChildren().add(new TMessageBox(Arrays.asList(new TMessage(TMessageType.GENERIC,"NO MESSAGES"))));
-		
+			if(TedrosContext.infoListProperty().size()>0) {
+				TedrosContext.infoListProperty().forEach(c->{
+					((TMessage) c).setLoaded(false);
+					vb.getChildren().add(TMessageBox.buildMessagePane((TMessage) c));
+				});
+			}else
+				vb.getChildren().add(TMessageBox.buildMessagePane(new TMessage(TMessageType.GENERIC,"...")));
 		});
 	}
     
