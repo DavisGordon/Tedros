@@ -57,5 +57,14 @@ public class ChatUserMV extends TEntityModelView<ChatUser> {
 	public void setProfiles(SimpleStringProperty profiles) {
 		this.profiles = profiles;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+
+		if(obj instanceof ChatUserMV)
+			return getModel().equals(((ChatUserMV)obj).getModel());
+		
+		return false;
+	}
 
 }

@@ -74,6 +74,7 @@ public class TFileField extends StackPane {
 	private SimpleStringProperty fileNameProperty;
 	private SimpleLongProperty fileSizeProperty;
 	private SimpleLongProperty bytesEntityIdProperty;
+	private SimpleBooleanProperty fileChooserOpenedProperty;
 	
 	private String[] extensions;
 	private String initialDirectory = System.getProperty("user.home");
@@ -121,6 +122,7 @@ public class TFileField extends StackPane {
 		fileSizeProperty = new SimpleLongProperty();
 		byteArrayProperty = new SimpleObjectProperty<>();
 		bytesEntityIdProperty = new SimpleLongProperty();
+		fileChooserOpenedProperty = new SimpleBooleanProperty(false);
 		
 		vBox = new VBox();
 		boxImageLabelSpace = new BorderPane();
@@ -197,7 +199,9 @@ public class TFileField extends StackPane {
 		
 		selectButton.setOnAction(e->{
 			configureFileChooser(fileChooser,extensions);
+			fileChooserOpenedProperty.setValue(true);
             final File file = fileChooser.showOpenDialog(appStage);
+			fileChooserOpenedProperty.setValue(false);
             if (file != null) {
             	openFile(file);
             	openButton.setDisable(false);
@@ -359,6 +363,14 @@ public class TFileField extends StackPane {
 	
 	public final String getFileName() {
 		return (fileNameProperty!=null) ? fileNameProperty.getValue() : null;
+	}
+	
+
+	/**
+	 * @return the fileChooserOpenedProperty
+	 */
+	public SimpleBooleanProperty fileChooserOpenedProperty() {
+		return fileChooserOpenedProperty;
 	}
 	
 	public SimpleBooleanProperty requiredProperty() {
@@ -638,4 +650,5 @@ public class TFileField extends StackPane {
 	public void setInitialDirectory(String initialDirectory) {
 		this.initialDirectory = initialDirectory;
 	}
+
 }

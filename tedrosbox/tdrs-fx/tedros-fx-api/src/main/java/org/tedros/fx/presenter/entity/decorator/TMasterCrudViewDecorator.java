@@ -25,9 +25,9 @@ import javafx.scene.layout.VBox;
 public class TMasterCrudViewDecorator<M extends TEntityModelView<? extends ITEntity>> 
 extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M> {
 	
-	private TListViewHelper<M> helper;
+	protected TListViewHelper<M> helper;
 	
-    private TPresenter tPresenter;
+    protected TPresenter tPresenter;
   
     public void decorate() {
     	tPresenter = getPresenter().getPresenterAnnotation();

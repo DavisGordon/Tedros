@@ -6,6 +6,7 @@ import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TTab;
 import org.tedros.fx.annotation.control.TTabPane;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -42,10 +43,12 @@ public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
 				}
 				
 				ScrollPane scroll = new ScrollPane();
+				scroll.autosize();
+				scroll.setPadding(new Insets(10));
 				scroll.setContent(pane);
 				scroll.setFitToWidth(true);
-				scroll.maxHeight(Double.MAX_VALUE);
-				scroll.maxWidth(Double.MAX_VALUE);
+				//scroll.maxHeight(Double.MAX_VALUE);
+				//scroll.maxWidth(Double.MAX_VALUE);
 				if(!tTab.scroll()) {
 			    	scroll.setVbarPolicy(ScrollBarPolicy.NEVER);
 			    	scroll.setHbarPolicy(ScrollBarPolicy.NEVER);
