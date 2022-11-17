@@ -12,8 +12,9 @@ import org.tedros.chat.CHATKey;
 import org.tedros.chat.entity.Chat;
 import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.entity.TStatus;
+import org.tedros.chat.module.client.behaviour.ChatBehaviour;
+import org.tedros.chat.module.client.model.ChatMV;
 import org.tedros.chat.module.client.model.ChatUserMV;
-import org.tedros.chat.module.client.model.TChatMV;
 import org.tedros.common.model.TFileEntity;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
@@ -23,6 +24,7 @@ import org.tedros.core.repository.TRepository;
 import org.tedros.fx.control.TButton;
 import org.tedros.fx.control.TLabel;
 import org.tedros.fx.form.TSetting;
+import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.util.TFileBaseUtil;
 import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.model.ITFileModel;
@@ -34,6 +36,7 @@ import javafx.collections.WeakListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
@@ -47,7 +50,7 @@ import javafx.scene.layout.StackPane;
  * @author Davis Gordon
  *
  */
-public class ChatSetting extends TSetting {
+public class ChatFormSetting extends TSetting {
 
 	private ChatUtil util;
 	private ChatClient client;
@@ -59,7 +62,7 @@ public class ChatSetting extends TSetting {
 	/**
 	 * @param descriptor
 	 */
-	public ChatSetting(ITComponentDescriptor descriptor) {
+	public ChatFormSetting(ITComponentDescriptor descriptor) {
 		super(descriptor);
 		util = new ChatUtil();
 		repo = new TRepository();
@@ -72,7 +75,7 @@ public class ChatSetting extends TSetting {
 	@Override
 	public void run() {
 		
-		TChatMV mv = (TChatMV) super.getModelView();
+		ChatMV mv = (ChatMV) super.getModelView();
 		
 		final ObservableList<ChatMessage> msgs = listenReceivedMsg(mv);
 		
@@ -82,7 +85,7 @@ public class ChatSetting extends TSetting {
 		
 		TabPane tp = super.getLayout("owner");
 		// Tab title
-		Tab t = tp.getTabs().get(0);
+		Tab t = tp.getTabs().get(1);
 		t.textProperty().bind(mv.getTitle());
 		
 		ListChangeListener<ChatUserMV> chl2 = ch -> {
@@ -121,7 +124,7 @@ public class ChatSetting extends TSetting {
 	/**
 	 * @param mv
 	 */
-	private void listenClearButton(TChatMV mv) {
+	private void listenClearButton(ChatMV mv) {
 		// Clear event
 		EventHandler<ActionEvent> ev1 = e->{
 			mv.getMessage().setValue(null);
@@ -135,7 +138,7 @@ public class ChatSetting extends TSetting {
 	 * @param mv
 	 * @param msgs
 	 */
-	private void listenSendButton(TChatMV mv, final ObservableList<ChatMessage> msgs) {
+	private void listenSendButton(ChatMV mv, final ObservableList<ChatMessage> msgs) {
 		// Send event
 		EventHandler<ActionEvent> ev0 = e -> {
 			this.verifyOwnerAsParticipant();
@@ -196,7 +199,7 @@ public class ChatSetting extends TSetting {
 	 * @param mv
 	 * @return
 	 */
-	private ObservableList<ChatMessage> listenReceivedMsg(TChatMV mv) {
+	private ObservableList<ChatMessage> listenReceivedMsg(ChatMV mv) {
 		// Listen new messages to show
 		final ObservableList<ChatMessage> msgs = mv.getMessages();
 		ListChangeListener<ChatMessage> chl0 = ch0 ->{
@@ -216,7 +219,7 @@ public class ChatSetting extends TSetting {
 	 * @param users
 	 */
 	private boolean verifyOwnerAsParticipant() {
-		TChatMV mv = (TChatMV) super.getModelView();
+		ChatMV mv = (ChatMV) super.getModelView();
 		ObservableList<ChatUserMV> users = mv.getParticipants();
 		
 		if(users.isEmpty() || !users.stream().filter(p->{
@@ -233,7 +236,7 @@ public class ChatSetting extends TSetting {
 	 */
 	private void buildTitle(List<? extends ChatUserMV> ch) {
 		//ChatUser owner = client.getOwner();
-		TChatMV mv = (TChatMV) super.getModelView();
+		ChatMV mv = (ChatMV) super.getModelView();
 		String from = mv.getOwner().getValue().getName();
 		StringBuilder sb = new StringBuilder(from);
 		for(ChatUserMV u :  ch){
@@ -253,7 +256,7 @@ public class ChatSetting extends TSetting {
 	/**
 	 * @param mv
 	 */
-	private void saveChat(TChatMV mv) {
+	private void saveChat(ChatMV mv) {
 		try {
 			Chat c = util.saveChat(TedrosContext.getLoggedUser().getAccessToken(), mv.getEntity());
 			mv.reload(c);
@@ -265,14 +268,25 @@ public class ChatSetting extends TSetting {
 	/**
 	 * @param m
 	 */
+	@SuppressWarnings("unchecked")
 	private void showMsg(ChatMessage m, boolean left){
 		
 		scrollFlag = true;
-		StackPane p1 = util.buildTextPane(m, left, null);
+		StackPane p1 = util.buildTextPane(m, left, open->{
+			if(open) {
+				TDynaPresenter<ChatMV> p = (TDynaPresenter<ChatMV>) super.getForm().gettPresenter();
+				ChatBehaviour bhv = (ChatBehaviour) p.getBehavior();
+				bhv.setHidePopOver(true);
+			}
+		});
 		GridPane.setVgrow(p1, Priority.ALWAYS);
 		GridPane gp = super.getLayout("messages");
 		int row = gp.getChildren().size();
-		gp.add(p1, left ? 0 : 1, row);
+		gp.setGridLinesVisible(true);
+		if(left)
+			gp.add(p1, 0, row, 3, 1);
+		else
+			gp.add(p1, 1, row, 2, 1);
 		
 	}
 	

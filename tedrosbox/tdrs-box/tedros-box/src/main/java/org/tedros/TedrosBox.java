@@ -11,6 +11,9 @@ import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.presenter.view.TViewState;
+import org.tedros.chat.module.client.behaviour.ChatBehaviour;
+import org.tedros.chat.module.client.model.ChatMV;
 import org.tedros.core.ITModule;
 import org.tedros.core.ITedrosBox;
 import org.tedros.core.TCoreKeys;
@@ -111,6 +114,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     private ToolBar toolBar;
     private PopOver userPopOver;
     private PopOver infoPopOver;
+    private PopOver chatPopOver;
     
     private BorderPane mainPane;
     private StackPane layerPane;
@@ -129,6 +133,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     private TModalPane tModalPane;
     private Accordion settingsAcc;
     private Button infoButton;
+    private Button chatButton;
     
     private Label appName;
     private StringProperty historySize;
@@ -462,13 +467,30 @@ public class TedrosBox extends Application implements ITedrosBox  {
         	showInfoPopOver();
         });
         infoPopOver = null;
+        HBox chb = new HBox(5);
+        chb.getStyleClass().addAll("box");
+        
+        chatButton = new Button();
+        chatButton.getStyleClass().addAll("chat");
+        chatButton.setOnAction(e->{
+        	showChatPopOver();
+        });
+        chatPopOver = null;
+        
+        Label chatNewMsgsLabel = new Label("0");
+        chatNewMsgsLabel.getStyleClass().addAll("boxTxt");
+        chb.getChildren().addAll(chatButton, chatNewMsgsLabel);
+        HBox.setMargin(chatButton, new Insets(2));
+        HBox.setMargin(chatNewMsgsLabel, new Insets(2));
         
         HBox btnBox = new HBox();
-        btnBox.getChildren().addAll(userButton, infoButton, backButton, forwardButton);
+        btnBox.setAlignment(Pos.CENTER);
+        btnBox.getChildren().addAll(userButton, infoButton, chb, backButton, forwardButton);
         HBox.setMargin(userButton, new Insets(0,10,0,0));
         HBox.setMargin(backButton, new Insets(0,10,0,0));
         HBox.setMargin(forwardButton, new Insets(0,10,0,0));
         HBox.setMargin(infoButton, new Insets(0,10,0,0));
+        HBox.setMargin(chb, new Insets(0,10,0,0));
         
         pageToolBar.getItems().add(btnBox);
         
@@ -611,7 +633,47 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		});
 	}
     
-    
+	@SuppressWarnings("unchecked")
+	private void showChatPopOver() {
+		double h = scene.getHeight()-200;
+		StackPane infoPane = new StackPane();
+		infoPane.setMaxHeight(h-80);
+		if(chatPopOver==null) {
+			chatPopOver = new PopOver();
+			chatPopOver.setHeaderAlwaysVisible(true);
+			chatPopOver.setAutoFix(true);
+			chatPopOver.setCloseButtonEnabled(true);
+			chatPopOver.setAutoHide(false);
+			chatPopOver.setArrowLocation(ArrowLocation.TOP_LEFT);
+	
+			chatPopOver.setMaxHeight(h);
+			
+			TDynaView<ChatMV> view = new TDynaView<>(ChatMV.class);
+			view.tStateProperty().addListener((a,o,n)->{
+				if(n!=null && n.equals(TViewState.READY)) {
+					TDynaPresenter<ChatMV> p = view.gettPresenter();
+					ChatBehaviour bhv = (ChatBehaviour) p.getBehavior();
+					bhv.hidePopOverProperty().addListener((x,y,z)->{
+						if(z)
+							chatPopOver.hide();
+						else if(!chatPopOver.isShowing())
+							chatPopOver.show(chatButton);
+					});
+				}
+			});
+			view.tLoad();
+			chatPopOver.setContentNode(view);
+		}else {
+			TDynaView<ChatMV> view =(TDynaView<ChatMV>) chatPopOver.getContentNode();
+			TDynaPresenter<ChatMV> p = view.gettPresenter();
+			ChatBehaviour bhv = (ChatBehaviour) p.getBehavior();
+			bhv.setHidePopOver(false);
+		}
+		if(!chatPopOver.isShowing())
+			chatPopOver.show(chatButton);
+	}
+	
+	
     public void logout() {
     	if(userPopOver!=null)
     		userPopOver.hide();

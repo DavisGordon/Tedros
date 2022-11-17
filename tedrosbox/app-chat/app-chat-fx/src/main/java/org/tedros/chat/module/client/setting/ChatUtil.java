@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -154,7 +155,7 @@ public class ChatUtil {
 		}
 	}
 	
-	public StackPane buildTextPane(ChatMessage msg, boolean left) {
+	public StackPane buildTextPane(ChatMessage msg, boolean left, Consumer<Boolean> callback) {
 		String user = msg.getFrom().getName();
 		String txt = msg.getContent();
 		final TFileEntity file = msg.getFile();
@@ -215,8 +216,12 @@ public class ChatUtil {
 					TFileModel fm = TFileBaseUtil.convert(file);
 					fm.setFilePath(TedrosFolder.EXPORT_FOLDER.getFullPath());
 					TFileUtil.open(fm.getFile());
+					if(callback!=null)
+						callback.accept(true);
 				} catch (IOException e1) {
 					e1.printStackTrace();
+					if(callback!=null)
+						callback.accept(false);
 				}
 			};
 			hl.setOnAction(ev);
