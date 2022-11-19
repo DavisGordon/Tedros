@@ -14,6 +14,7 @@ import org.tedros.chat.ejb.service.ChatUserService;
 import org.tedros.chat.entity.Chat;
 import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.entity.ChatUser;
+import org.tedros.chat.entity.TStatus;
 import org.tedros.server.ejb.controller.ITSecurityController;
 import org.tedros.server.ejb.controller.TSecureEjbController;
 import org.tedros.server.entity.ITEntity;
@@ -38,6 +39,8 @@ policie= {TAccessPolicie.APP_ACCESS, TAccessPolicie.VIEW_ACCESS}))
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class ChatController extends TSecureEjbController<Chat> implements	ITSecurity, IChatController {
 
+	private ChatUser user;
+	
 	@EJB
 	private ChatRoomService serv;
 	
@@ -83,17 +86,61 @@ public class ChatController extends TSecureEjbController<Chat> implements	ITSecu
 	@TMethodPolicie(policie = {TActionPolicie.EDIT, TActionPolicie.READ, TActionPolicie.SEARCH}, id = "")})
 	public TResult<List<Chat>> listAll(TAccessToken token, Class<? extends ITEntity> entidade) {
 		try {
-			ITUser u = security.getUser(token);
-			ChatUser c = new ChatUser();
-			c.setUserId(u.getId());
-			c = uServ.find(c);
-			c = uServ.validate(c);
+			ChatUser c = findChatUser(token);
 			List<Chat> l = serv.listAll(c);
+			this.processEntityList(token, l);
 			return new TResult<>(TState.SUCCESS, l);
 		}catch(Exception e){
 			return processException(token, null, e);
 		}
 	}
+
+	/**
+	 * @param token
+	 * @return
+	 * @throws Exception
+	 */
+	private ChatUser findChatUser(TAccessToken token) throws Exception {
+		ITUser u = security.getUser(token);
+		ChatUser c = new ChatUser();
+		c.setUserId(u.getId());
+		c = uServ.find(c);
+		c = uServ.validate(c);
+		return c;
+	}
 	
+	@Override
+	protected void processEntityList(TAccessToken token, List<Chat> entities) {
+		user = null;
+		if(entities!=null && entities.size()>0)
+			entities.forEach(e->{
+				this.setTotalMessages(token, e);
+			});
+	}
 	
+	@Override
+	protected void processEntity(TAccessToken token, Chat entity) {
+		user = null;
+		if(entity!=null)
+			this.setTotalMessages(token, entity);
+	}
+
+	/**
+	 * @param e
+	 */
+	private void setTotalMessages(TAccessToken token, Chat e) {
+		try {
+			if(user==null) 
+				user = this.findChatUser(token);
+			
+			Long sent = msgServ.count(e.getId(), user.getId(), TStatus.SENT);
+			Long received = msgServ.count(e.getId(), user.getId(), TStatus.RECEIVED);
+			Long viewed = msgServ.count(e.getId(), user.getId(), TStatus.VIEWED);
+			e.setTotalSentMessages(sent);
+			e.setTotalReceivedMessages(received);
+			e.setTotalViewedMessages(viewed);
+		} catch (Exception e1) {
+			throw new RuntimeException(e1);
+		}
+	}
 }

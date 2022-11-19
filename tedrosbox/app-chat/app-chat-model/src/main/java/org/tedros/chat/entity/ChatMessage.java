@@ -3,15 +3,13 @@
  */
 package org.tedros.chat.entity;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -46,7 +44,21 @@ public class ChatMessage extends TEntity implements Comparable<ChatMessage>{
 		schema=DomainSchema.schema,
 		joinColumns=@JoinColumn(name="msg_id"), 
 		inverseJoinColumns=@JoinColumn(name="user_id"))
-	private List<ChatUser> to;
+	private Set<ChatUser> sent;
+	
+	@ManyToMany(fetch=FetchType.EAGER)
+	@JoinTable(name=DomainTables.message_viewed, 
+		schema=DomainSchema.schema,
+		joinColumns=@JoinColumn(name="msg_id"), 
+		inverseJoinColumns=@JoinColumn(name="user_id"))
+	private Set<ChatUser> viewed;
+	
+	@ManyToMany(fetch=FetchType.EAGER)
+	@JoinTable(name=DomainTables.message_received, 
+		schema=DomainSchema.schema,
+		joinColumns=@JoinColumn(name="msg_id"), 
+		inverseJoinColumns=@JoinColumn(name="user_id"))
+	private Set<ChatUser> received;
 	
 	@Column(length=2000)
 	private String content;
@@ -56,9 +68,10 @@ public class ChatMessage extends TEntity implements Comparable<ChatMessage>{
 	@JoinColumn(name="file", updatable=false)
 	private TFileEntity file;
 	
+	/*
 	@Column(length=15)
 	@Enumerated(EnumType.STRING)
-	private TStatus status;
+	private TStatus status;*/
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="chat_id", nullable=false)
@@ -74,15 +87,34 @@ public class ChatMessage extends TEntity implements Comparable<ChatMessage>{
 	}
 	
 	public void removeDestination(ChatUser to) {
-		if(this.to!=null && to!=null)
-			this.to.remove(to);
+		if(this.sent!=null && to!=null)
+			this.sent.remove(to);
 	}
 	
 	public void addDestination(ChatUser to) {
-		if(this.to==null)
-			this.to = new ArrayList<>();
-		if(!this.to.contains(to))
-			this.to.add(to);
+		if(this.sent==null)
+			this.sent = new HashSet<>();
+		if(!this.sent.contains(to))
+			this.sent.add(to);
+	}
+	
+	public void addViewed(ChatUser user) {
+		if(this.viewed==null)
+			this.viewed = new HashSet<>();
+		if(!this.viewed.contains(user))
+			this.viewed.add(user);
+	}
+	
+	public boolean wasViewed(ChatUser user) {
+		return this.viewed!=null 
+				&& this.viewed.stream().anyMatch(p->p.equals(user));
+	}
+
+	public void addReceived(ChatUser user) {
+		if(this.received==null)
+			this.received = new HashSet<>();
+		if(!this.received.contains(user))
+			this.received.add(user);
 	}
 
 	/**
@@ -104,20 +136,6 @@ public class ChatMessage extends TEntity implements Comparable<ChatMessage>{
 	 */
 	public void setFile(TFileEntity file) {
 		this.file = file;
-	}
-
-	/**
-	 * @return the status
-	 */
-	public TStatus getStatus() {
-		return status;
-	}
-
-	/**
-	 * @param status the status to set
-	 */
-	public void setStatus(TStatus status) {
-		this.status = status;
 	}
 
 	/**
@@ -174,6 +192,33 @@ public class ChatMessage extends TEntity implements Comparable<ChatMessage>{
 		return this.dateTime.compareTo(o.getDateTime());
 	}
 
+	/**
+	 * @return the viewed
+	 */
+	public Set<ChatUser> getViewed() {
+		return viewed;
+	}
+
+	/**
+	 * @param viewed the viewed to set
+	 */
+	public void setViewed(Set<ChatUser> viewed) {
+		this.viewed = viewed;
+	}
+
+	/**
+	 * @return the received
+	 */
+	public Set<ChatUser> getReceived() {
+		return received;
+	}
+
+	/**
+	 * @param received the received to set
+	 */
+	public void setReceived(Set<ChatUser> received) {
+		this.received = received;
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
@@ -187,8 +232,9 @@ public class ChatMessage extends TEntity implements Comparable<ChatMessage>{
 		result = prime * result + ((dateTime == null) ? 0 : dateTime.hashCode());
 		result = prime * result + ((file == null) ? 0 : file.hashCode());
 		result = prime * result + ((from == null) ? 0 : from.hashCode());
-		result = prime * result + ((status == null) ? 0 : status.hashCode());
-		result = prime * result + ((to == null) ? 0 : to.hashCode());
+		result = prime * result + ((received == null) ? 0 : received.hashCode());
+		result = prime * result + ((sent == null) ? 0 : sent.hashCode());
+		result = prime * result + ((viewed == null) ? 0 : viewed.hashCode());
 		return result;
 	}
 
@@ -229,28 +275,36 @@ public class ChatMessage extends TEntity implements Comparable<ChatMessage>{
 				return false;
 		} else if (!from.equals(other.from))
 			return false;
-		if (status != other.status)
-			return false;
-		if (to == null) {
-			if (other.to != null)
+		if (received == null) {
+			if (other.received != null)
 				return false;
-		} else if (!to.equals(other.to))
+		} else if (!received.equals(other.received))
+			return false;
+		if (sent == null) {
+			if (other.sent != null)
+				return false;
+		} else if (!sent.equals(other.sent))
+			return false;
+		if (viewed == null) {
+			if (other.viewed != null)
+				return false;
+		} else if (!viewed.equals(other.viewed))
 			return false;
 		return true;
 	}
 
 	/**
-	 * @return the to
+	 * @return the sent
 	 */
-	public List<ChatUser> getTo() {
-		return to;
+	public Set<ChatUser> getSent() {
+		return sent;
 	}
 
 	/**
-	 * @param to the to to set
+	 * @param sent the sent to set
 	 */
-	public void setTo(List<ChatUser> to) {
-		this.to = to;
+	public void setSent(Set<ChatUser> sent) {
+		this.sent = sent;
 	}
 	
 	

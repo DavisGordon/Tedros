@@ -46,6 +46,10 @@ public class Chat extends TEntity {
 		inverseJoinColumns=@JoinColumn(name="user_id"))
 	private Set<ChatUser> participants;
 	
+	private Long totalReceivedMessages;
+	private Long totalViewedMessages;
+	private Long totalSentMessages;
+	
 	
 	public Chat() {
 		
@@ -122,6 +126,48 @@ public class Chat extends TEntity {
 	 */
 	public void setParticipants(Set<ChatUser> participants) {
 		this.participants = participants;
+	}
+
+	/**
+	 * @return the totalReceivedMessages
+	 */
+	public Long getTotalReceivedMessages() {
+		return totalReceivedMessages;
+	}
+
+	/**
+	 * @param totalReceivedMessages the totalReceivedMessages to set
+	 */
+	public void setTotalReceivedMessages(Long totalReceivedMessages) {
+		this.totalReceivedMessages = totalReceivedMessages;
+	}
+
+	/**
+	 * @return the totalSentMessages
+	 */
+	public Long getTotalSentMessages() {
+		return totalSentMessages;
+	}
+
+	/**
+	 * @param totalSentMessages the totalSentMessages to set
+	 */
+	public void setTotalSentMessages(Long totalSentMessages) {
+		this.totalSentMessages = totalSentMessages;
+	}
+
+	/**
+	 * @return the totalViewedMessages
+	 */
+	public Long getTotalViewedMessages() {
+		return totalViewedMessages;
+	}
+
+	/**
+	 * @param totalViewedMessages the totalViewedMessages to set
+	 */
+	public void setTotalViewedMessages(Long totalViewedMessages) {
+		this.totalViewedMessages = totalViewedMessages;
 	}
 
 }

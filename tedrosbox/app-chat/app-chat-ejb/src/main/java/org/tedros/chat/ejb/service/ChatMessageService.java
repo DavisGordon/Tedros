@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import org.tedros.chat.cdi.bo.ChatMessageBO;
 import org.tedros.chat.entity.ChatMessage;
+import org.tedros.chat.entity.TStatus;
 import org.tedros.server.cdi.bo.ITGenericBO;
 import org.tedros.server.ejb.service.TEjbService;
 
@@ -22,6 +23,10 @@ public class ChatMessageService extends TEjbService<ChatMessage> {
 	@Override
 	public ITGenericBO<ChatMessage> getBussinesObject() {
 		return bo;
+	}
+	
+	public Long count(Long chatId, Long userId, TStatus status){
+		return bo.count(chatId, userId, status);
 	}
 
 }

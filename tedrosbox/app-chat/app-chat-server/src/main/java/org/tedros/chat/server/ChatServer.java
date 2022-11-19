@@ -73,7 +73,7 @@ public class ChatServer {
         synchronized (clients) {
             clients.parallelStream()
             .filter(h->{
-            	return msg.getTo().stream().filter(p->{
+            	return msg.getSent().stream().filter(p->{
             		return h.getOwner().equals(p) && !msg.getFrom().equals(p);
             	}).findFirst().isPresent();
             }).forEach(c->{

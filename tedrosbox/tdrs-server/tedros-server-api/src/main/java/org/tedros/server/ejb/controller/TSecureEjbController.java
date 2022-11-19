@@ -27,24 +27,34 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 	
 	protected abstract ITEjbService<E> getService();
 	
+	protected void processEntity(TAccessToken token, E entity) {
+		
+	}
+	
+	protected void processEntityList(TAccessToken token, List<E> entities) {
+		
+	}
+	
 	@TMethodSecurity({@TMethodPolicie(policie = {TActionPolicie.EDIT, TActionPolicie.READ})})
-	public TResult<E> findById(TAccessToken token, E entidade) {
+	public TResult<E> findById(TAccessToken token, E entity) {
 		try{
-			entidade = getService().findById(entidade);
-			return new TResult<E>(TState.SUCCESS, entidade);
+			entity = getService().findById(entity);
+			processEntity(token, entity);
+			return new TResult<E>(TState.SUCCESS, entity);
 		}catch(Exception e){
-			return processException(token, entidade, e);
+			return processException(token, entity, e);
 		}
 	}
 	
 	@TMethodSecurity({
 	@TMethodPolicie(policie = {TActionPolicie.EDIT, TActionPolicie.READ, TActionPolicie.SEARCH})})
-	public TResult<E> find(TAccessToken token, E entidade) {
+	public TResult<E> find(TAccessToken token, E entity) {
 		try{
-			entidade = getService().find(entidade);
-			return new TResult<E>(TState.SUCCESS, entidade);
+			entity = getService().find(entity);
+			processEntity(token, entity);
+			return new TResult<E>(TState.SUCCESS, entity);
 		}catch(Exception e){
-			return processException(token, entidade, e);
+			return processException(token, entity, e);
 		}
 	}
 	
@@ -53,6 +63,7 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 	public TResult<List<E>> findAll(TAccessToken token, E entity){
 		try{
 			List<E> list = getService().findAll(entity);
+			processEntityList(token, list);
 			return new TResult<List<E>>(TState.SUCCESS, list);
 			
 		}catch(Exception e){
@@ -62,34 +73,36 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 
 	@Override
 	@TMethodSecurity({@TMethodPolicie(policie = {TActionPolicie.SAVE, TActionPolicie.NEW})})
-	public TResult<E> save(TAccessToken token, E entidade) {
+	public TResult<E> save(TAccessToken token, E entity) {
 		try{
-			E e = getService().save(entidade);
+			E e = getService().save(entity);
+			processEntity(token, e);
 			return new TResult<E>(TState.SUCCESS, e);
 		}catch(Exception e){
-			return processException(token, entidade, e);
+			return processException(token, entity, e);
 		}
 	}
 
 	@Override
 	@TMethodSecurity({@TMethodPolicie(policie = {TActionPolicie.DELETE}, id = "")})
-	public TResult<E> remove(TAccessToken token, E entidade) {
+	public TResult<E> remove(TAccessToken token, E entity) {
 		try{
-			getService().remove(entidade);
+			getService().remove(entity);
 			return new TResult<E>(TState.SUCCESS);
 			
 		}catch(Exception e){
-			return processException(token, entidade, e);
+			return processException(token, entity, e);
 		}
 	}
 
 	@Override
 	@TMethodSecurity({
 	@TMethodPolicie(policie = {TActionPolicie.EDIT, TActionPolicie.READ, TActionPolicie.SEARCH}, id = "")})
-	public TResult<List<E>> listAll(TAccessToken token, Class<? extends ITEntity> entidade) {
+	public TResult<List<E>> listAll(TAccessToken token, Class<? extends ITEntity> entity) {
 		
 		try{
-			List<E> list = getService().listAll(entidade);
+			List<E> list = getService().listAll(entity);
+			processEntityList(token, list);
 			return new TResult<List<E>>(TState.SUCCESS, list);
 			
 		}catch(Exception e){
@@ -100,11 +113,12 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 	@Override
 	@TMethodSecurity({
 	@TMethodPolicie(policie = {TActionPolicie.EDIT, TActionPolicie.READ, TActionPolicie.SEARCH}, id = "")})
-	public TResult<Map<String, Object>> pageAll(TAccessToken token, E entidade, int firstResult, int maxResult, boolean orderByAsc) {
+	public TResult<Map<String, Object>> pageAll(TAccessToken token, E entity, int firstResult, int maxResult, boolean orderByAsc) {
 		try{
-			Long count  = getService().countAll(entidade.getClass());
+			Long count  = getService().countAll(entity.getClass());
 			
-			List<E> list = getService().pageAll(entidade, firstResult, maxResult, orderByAsc);
+			List<E> list = getService().pageAll(entity, firstResult, maxResult, orderByAsc);
+			processEntityList(token, list);
 			
 			Map<String, Object> map = new HashMap<>();
 			map.put("total", count);
@@ -113,18 +127,19 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 			return new TResult<>(TState.SUCCESS, map);
 			
 		}catch(Exception e){
-			return processException(token, entidade, e);
+			return processException(token, entity, e);
 		}
 	}
 
 	@Override
 	@TMethodSecurity({
 	@TMethodPolicie(policie = {TActionPolicie.EDIT, TActionPolicie.READ, TActionPolicie.SEARCH}, id = "")})
-	public TResult<Map<String, Object>> findAll(TAccessToken token, E entidade, int firstResult, int maxResult, boolean orderByAsc, boolean containsAnyKeyWords) {
+	public TResult<Map<String, Object>> findAll(TAccessToken token, E entity, int firstResult, int maxResult, boolean orderByAsc, boolean containsAnyKeyWords) {
 		try{
-			Number count  =  getService().countFindAll(entidade, containsAnyKeyWords);
+			Number count  =  getService().countFindAll(entity, containsAnyKeyWords);
 			
-			List<E> list = getService().findAll(entidade, firstResult, maxResult, orderByAsc, containsAnyKeyWords);
+			List<E> list = getService().findAll(entity, firstResult, maxResult, orderByAsc, containsAnyKeyWords);
+			processEntityList(token, list);
 			
 			Map<String, Object> map = new HashMap<>();
 			map.put("total", count.longValue());
@@ -133,15 +148,15 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 			return new TResult<>(TState.SUCCESS, map);
 			
 		}catch(Exception e){
-			return processException(token, entidade, e);
+			return processException(token, entity, e);
 		}
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected <T> T processException(TAccessToken token, E entidade, Exception e) {
+	protected <T> T processException(TAccessToken token, E entity, Exception e) {
 		e.printStackTrace();
 		if(e instanceof OptimisticLockException || e.getCause() instanceof OptimisticLockException){
-			TResult<E> result = find(token, entidade);
+			TResult<E> result = find(token, entity);
 			
 			String message = (result.getValue()==null) ? "REMOVED" : "OUTDATED";
 			

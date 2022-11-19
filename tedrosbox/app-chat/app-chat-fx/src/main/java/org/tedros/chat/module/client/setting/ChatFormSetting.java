@@ -11,7 +11,6 @@ import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.chat.CHATKey;
 import org.tedros.chat.entity.Chat;
 import org.tedros.chat.entity.ChatMessage;
-import org.tedros.chat.entity.TStatus;
 import org.tedros.chat.module.client.behaviour.ChatBehaviour;
 import org.tedros.chat.module.client.model.ChatMV;
 import org.tedros.chat.module.client.model.ChatUserMV;
@@ -36,7 +35,6 @@ import javafx.collections.WeakListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
@@ -110,11 +108,25 @@ public class ChatFormSetting extends TSetting {
 		verifyOwnerAsParticipant();
 		
 		try {
-			List<ChatMessage> lst = util.findMessages(TedrosContext.getLoggedUser().getAccessToken(),
+			List<ChatMessage> lst0 = util.findMessages(TedrosContext.getLoggedUser().getAccessToken(),
 					mv.getEntity().getId());
-
-			Collections.sort(lst);
-			msgs.addAll(lst);
+			
+			
+			lst0.stream().forEach(c->{
+				if(c.getViewed()==null 
+						|| c.getViewed().stream()
+						.noneMatch(p-> p.equals(client.getOwner()))) {
+					try {
+						c.addViewed(client.getOwner());
+						ChatMessage cm = util.saveMessage(TedrosContext.getLoggedUser().getAccessToken(), c);
+						Collections.replaceAll(lst0, c, cm);
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					};
+				}
+			});
+			Collections.sort(lst0);
+			msgs.addAll(lst0);
 			
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -166,7 +178,6 @@ public class ChatFormSetting extends TSetting {
 					m.setContent(msg);
 					m.setInsertDate(new Date());
 					m.setFrom(client.getOwner());
-					m.setStatus(TStatus.SENT);
 					
 					if(fm!=null && fm.getFile()!=null) {
 						ITFileEntity fe = TFileBaseUtil.convert((TFileModel) fm);
@@ -282,11 +293,9 @@ public class ChatFormSetting extends TSetting {
 		GridPane.setVgrow(p1, Priority.ALWAYS);
 		GridPane gp = super.getLayout("messages");
 		int row = gp.getChildren().size();
-		gp.setGridLinesVisible(true);
-		if(left)
-			gp.add(p1, 0, row, 3, 1);
-		else
-			gp.add(p1, 1, row, 2, 1);
+		gp.add(p1, left ? 0 : 1, row);
+		
+		
 		
 	}
 	

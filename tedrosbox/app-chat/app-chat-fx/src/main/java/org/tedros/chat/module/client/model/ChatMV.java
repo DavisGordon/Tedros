@@ -11,7 +11,9 @@ import org.tedros.chat.entity.Chat;
 import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.entity.ChatUser;
 import org.tedros.chat.module.client.behaviour.ChatBehaviour;
+import org.tedros.chat.module.client.behaviour.ChatListViewCallback;
 import org.tedros.chat.module.client.decorator.ChatDecorator;
+import org.tedros.chat.module.client.setting.ChatClient;
 import org.tedros.chat.module.client.setting.ChatFormSetting;
 import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.annotation.security.TSecurity;
@@ -27,13 +29,11 @@ import org.tedros.fx.annotation.control.TTextAreaField;
 import org.tedros.fx.annotation.form.TDetailForm;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.form.TSetting;
-import org.tedros.fx.annotation.layout.TAccordion;
 import org.tedros.fx.annotation.layout.TGridPane;
 import org.tedros.fx.annotation.layout.THBox;
 import org.tedros.fx.annotation.layout.THGrow;
 import org.tedros.fx.annotation.layout.TPane;
 import org.tedros.fx.annotation.layout.TPriority;
-import org.tedros.fx.annotation.layout.TTitledPane;
 import org.tedros.fx.annotation.layout.TToolBar;
 import org.tedros.fx.annotation.layout.TVBox;
 import org.tedros.fx.annotation.layout.TVGrow;
@@ -68,8 +68,8 @@ import javafx.scene.layout.Priority;
 	presenter=@TPresenter(
 		decorator = @TDecorator(type=ChatDecorator.class, viewTitle=CHATKey.VIEW_CLIENT_MESSAGES,
 			buildSaveButton=false, buildModesRadioButton=false, buildCollapseButton=true),
-		behavior=@TBehavior(type=ChatBehaviour.class, runNewActionAfterSave=false, 
-			saveAllModels=false)))
+		behavior=@TBehavior(type=ChatBehaviour.class, listViewCallBack=ChatListViewCallback.class, 
+			runNewActionAfterSave=false, saveAllModels=false)))
 @TSecurity(	id=DomainApp.CHAT_FORM_ID, appName=CHATKey.APP_CHAT, 
 	moduleName=CHATKey.MODULE_MESSAGES, viewName=CHATKey.VIEW_CLIENT_MESSAGES,
 	allowedAccesses= {TAuthorizationType.VIEW_ACCESS, TAuthorizationType.SAVE, 
@@ -77,10 +77,11 @@ import javafx.scene.layout.Priority;
 		TAuthorizationType.NEW, TAuthorizationType.SEARCH})
 public class ChatMV extends TEntityModelView<Chat> {
 
-	/*@TAccordion(panes = { 
-			@TTitledPane(expanded=true, text=CHATKey.RECIPIENTS, fields = { "participants" }),
-			@TTitledPane(text="Chat", fields = { "title" })})
-	*/private SimpleLongProperty id;
+	private SimpleLongProperty id;
+
+	private SimpleLongProperty totalSentMessages;
+	private SimpleLongProperty totalReceivedMessages;
+	private SimpleLongProperty totalViewedMessages;
 	
 	@TVBox(pane=@TPane(children= {"owner", "message", "sendFile"}), 
 			vgrow=@TVGrow(priority= {
@@ -97,7 +98,7 @@ public class ChatMV extends TEntityModelView<Chat> {
 			content = @TContent(detailForm=@TDetailForm(fields = { "messages" })) )
 	
 			}, 
-			region=@TRegion(minHeight=300, maxHeight=350, parse = true))
+			region=@TRegion(minHeight=300, maxHeight=350, minWidth=700, maxWidth=700, parse = true))
 	private SimpleObjectProperty<ChatUser> owner;
 	
 	@TGridPane(vgap=12, hgap=12)
@@ -268,6 +269,64 @@ public class ChatMV extends TEntityModelView<Chat> {
 			return getModel().equals(((ChatMV)obj).getModel());
 		
 		return false;
+	}
+	
+	public long getTotalUnreadMessages() {
+		long sent = 0;
+		long viewed = 0;
+		if(messages==null || messages.isEmpty()) {
+			sent = super.getEntity().getTotalSentMessages();
+			viewed = super.getEntity().getTotalViewedMessages();
+		}else{
+			ChatUser user = ChatClient.getInstance().getOwner();
+			sent = messages.size();
+			viewed = messages.parallelStream()
+					.filter(p->p.wasViewed(user))
+					.count();
+		}
+		return sent - viewed;
+	}
+
+	/**
+	 * @return the totalSentMessages
+	 */
+	public SimpleLongProperty getTotalSentMessages() {
+		return totalSentMessages;
+	}
+
+	/**
+	 * @param totalSentMessages the totalSentMessages to set
+	 */
+	public void setTotalSentMessages(SimpleLongProperty totalSentMessages) {
+		this.totalSentMessages = totalSentMessages;
+	}
+
+	/**
+	 * @return the totalReceivedMessages
+	 */
+	public SimpleLongProperty getTotalReceivedMessages() {
+		return totalReceivedMessages;
+	}
+
+	/**
+	 * @param totalReceivedMessages the totalReceivedMessages to set
+	 */
+	public void setTotalReceivedMessages(SimpleLongProperty totalReceivedMessages) {
+		this.totalReceivedMessages = totalReceivedMessages;
+	}
+
+	/**
+	 * @return the totalViewedMessages
+	 */
+	public SimpleLongProperty getTotalViewedMessages() {
+		return totalViewedMessages;
+	}
+
+	/**
+	 * @param totalViewedMessages the totalViewedMessages to set
+	 */
+	public void setTotalViewedMessages(SimpleLongProperty totalViewedMessages) {
+		this.totalViewedMessages = totalViewedMessages;
 	}
 
 }
