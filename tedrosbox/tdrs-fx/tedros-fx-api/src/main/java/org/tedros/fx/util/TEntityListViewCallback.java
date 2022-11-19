@@ -28,6 +28,7 @@ import javafx.util.Callback;
 public class TEntityListViewCallback<M extends TModelView> implements Callback<ListView<M>, ListCell<M>> {
 
 	public static String ITEM_CSS_ID = "t-listcell-item";
+	public static String BOLD_ITEM_CSS_ID = "t-listcell-bold-item";
 	public static String NEW_ITEM_EMPTY_CSS_ID = "t-listcell-new-empty-item"; 
 	public static String NEW_ITEM_CSS_ID = "t-listcell-new-item"; 
 	public static String CHANGED_ITEM_CSS_ID = "t-listcell-changed-item";
@@ -49,7 +50,7 @@ public class TEntityListViewCallback<M extends TModelView> implements Callback<L
         		}else {
         			//if(empty) {
 	        			if(item.toStringProperty()==null)
-	        				throw new RuntimeException(new TException("The method getDisplayProperty must return a not null value!"));
+	        				throw new RuntimeException(new TException("The method toStringProperty must return a not null value!"));
 	        			
 	                	textProperty().bind(item.toStringProperty());
 	                	

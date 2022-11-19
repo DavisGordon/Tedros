@@ -61,7 +61,7 @@ public class ServerConnHandler extends Thread {
 
     public void send(ChatMessage msg) {
         try {
-        	msg.setStatus(TStatus.RECEIVED);
+        	//msg.setStatus(TStatus.RECEIVED);
         	dout.writeObject(msg);
         } catch (Exception ex) {
             System.out.println(ex);

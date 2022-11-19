@@ -163,7 +163,6 @@ public class ChatSetting extends TSetting {
 					m.setContent(msg);
 					m.setInsertDate(new Date());
 					m.setFrom(client.getOwner());
-					m.setStatus(TStatus.SENT);
 					
 					if(fm!=null && fm.getFile()!=null) {
 						ITFileEntity fe = TFileBaseUtil.convert((TFileModel) fm);

@@ -22,28 +22,39 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 	
 	public abstract ITEjbService<E> getService();
 	
+	protected void processEntity(E entity) {
+		
+	}
 	
-	public TResult<E> findById(E entidade) {
+	protected void processEntityList(List<E> entities) {
+		
+	}
+	
+	
+	public TResult<E> findById(E entity) {
 		try{
-			entidade = getService().findById(entidade);
-			return new TResult<E>(TState.SUCCESS, entidade);
+			entity = getService().findById(entity);
+			processEntity(entity);
+			return new TResult<E>(TState.SUCCESS, entity);
 		}catch(Exception e){
-			return processException(entidade, e);
+			return processException(entity, e);
 		}
 	}
 	
-	public TResult<E> find(E entidade) {
+	public TResult<E> find(E entity) {
 		try{
-			entidade = getService().find(entidade);
-			return new TResult<E>(TState.SUCCESS, entidade);
+			entity = getService().find(entity);
+			processEntity(entity);
+			return new TResult<E>(TState.SUCCESS, entity);
 		}catch(Exception e){
-			return processException(entidade, e);
+			return processException(entity, e);
 		}
 	}
 	
 	public TResult<List<E>> findAll(E entity){
 		try{
 			List<E> list = getService().findAll(entity);
+			processEntityList(list);
 			return new TResult<List<E>>(TState.SUCCESS, list);
 			
 		}catch(Exception e){
@@ -52,31 +63,33 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 	}
 
 	@Override
-	public TResult<E> save(E entidade) {
+	public TResult<E> save(E entity) {
 		try{
-			E e = getService().save(entidade);
+			E e = getService().save(entity);
+			processEntity(e);
 			return new TResult<E>(TState.SUCCESS, e);
 		}catch(Exception e){
-			return processException(entidade, e);
+			return processException(entity, e);
 		}
 	}
 
 	@Override
-	public TResult<E> remove(E entidade) {
+	public TResult<E> remove(E entity) {
 		try{
-			getService().remove(entidade);
+			getService().remove(entity);
 			return new TResult<E>(TState.SUCCESS);
 			
 		}catch(Exception e){
-			return processException(entidade, e);
+			return processException(entity, e);
 		}
 	}
 
 	@Override
-	public TResult<List<E>> listAll(Class<? extends ITEntity> entidade) {
+	public TResult<List<E>> listAll(Class<? extends ITEntity> entity) {
 		
 		try{
-			List<E> list = getService().listAll(entidade);
+			List<E> list = getService().listAll(entity);
+			processEntityList(list);
 			return new TResult<List<E>>(TState.SUCCESS, list);
 			
 		}catch(Exception e){
@@ -85,11 +98,12 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 	}
 
 	@Override
-	public TResult<Map<String, Object>> pageAll(E entidade, int firstResult, int maxResult, boolean orderByAsc) {
+	public TResult<Map<String, Object>> pageAll(E entity, int firstResult, int maxResult, boolean orderByAsc) {
 		try{
-			Long count  = getService().countAll(entidade.getClass());
+			Long count  = getService().countAll(entity.getClass());
 			
-			List<E> list = getService().pageAll(entidade, firstResult, maxResult, orderByAsc);
+			List<E> list = getService().pageAll(entity, firstResult, maxResult, orderByAsc);
+			processEntityList(list);
 			
 			Map<String, Object> map = new HashMap<>();
 			map.put("total", count);
@@ -98,16 +112,17 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 			return new TResult<>(TState.SUCCESS, map);
 			
 		}catch(Exception e){
-			return processException(entidade, e);
+			return processException(entity, e);
 		}
 	}
 
 	@Override
-	public TResult<Map<String, Object>> findAll(E entidade, int firstResult, int maxResult, boolean orderByAsc, boolean containsAnyKeyWords) {
+	public TResult<Map<String, Object>> findAll(E entity, int firstResult, int maxResult, boolean orderByAsc, boolean containsAnyKeyWords) {
 		try{
-			Number count  =  getService().countFindAll(entidade, containsAnyKeyWords);
+			Number count  =  getService().countFindAll(entity, containsAnyKeyWords);
 			
-			List<E> list = getService().findAll(entidade, firstResult, maxResult, orderByAsc, containsAnyKeyWords);
+			List<E> list = getService().findAll(entity, firstResult, maxResult, orderByAsc, containsAnyKeyWords);
+			processEntityList(list);
 			
 			Map<String, Object> map = new HashMap<>();
 			map.put("total", count.longValue());
@@ -116,15 +131,15 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 			return new TResult<>(TState.SUCCESS, map);
 			
 		}catch(Exception e){
-			return processException(entidade, e);
+			return processException(entity, e);
 		}
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected <T> T processException(E entidade, Exception e) {
+	protected <T> T processException(E entity, Exception e) {
 		e.printStackTrace();
 		if(e instanceof OptimisticLockException || e.getCause() instanceof OptimisticLockException){
-			TResult<E> result = find(entidade);
+			TResult<E> result = find(entity);
 			
 			String message = (result.getValue()==null) ? "REMOVED" : "OUTDATED";
 			

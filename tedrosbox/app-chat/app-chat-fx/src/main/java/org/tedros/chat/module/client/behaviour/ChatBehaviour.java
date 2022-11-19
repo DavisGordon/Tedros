@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.tedros.api.form.ITFieldBox;
 import org.tedros.api.form.ITModelForm;
 import org.tedros.chat.CHATKey;
 import org.tedros.chat.ejb.controller.IChatController;
+import org.tedros.chat.ejb.controller.IChatMessageController;
 import org.tedros.chat.entity.Chat;
 import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.model.Action;
@@ -35,9 +35,13 @@ import org.tedros.fx.process.TEntityProcess;
 import org.tedros.server.result.TResult;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyLongProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
+import javafx.collections.ListChangeListener;
+import javafx.collections.WeakListChangeListener;
 import javafx.concurrent.Worker.State;
 
 /**
@@ -51,13 +55,15 @@ public class ChatBehaviour extends TMasterCrudViewBehavior<ChatMV, Chat> {
 	private ChatDecorator deco;
 	private SimpleBooleanProperty hidePopOver = new SimpleBooleanProperty(false);
 	
+	private SimpleLongProperty totalUnreadMessages = new SimpleLongProperty(0);
+	
 	@Override
 	public void load() {
 		super.load();
 		util = new ChatUtil();
 		client = ChatClient.getInstance();
 		deco = (ChatDecorator) super.getPresenter().getDecorator();
-			// Listen for received message
+		// Listen for received message
 		ChangeListener<Object> chl1 = (a,o,n) -> {
 			if(n instanceof ChatInfo) {
 				ChatInfo ci = (ChatInfo) n;
@@ -88,27 +94,44 @@ public class ChatBehaviour extends TMasterCrudViewBehavior<ChatMV, Chat> {
 					}
 				}
 			}
+			//received a chat message
 			if(n instanceof ChatMessage) {
-				ChatMessage cm = (ChatMessage) n;
-				Optional<ChatMV> op = deco.gettListView().getItems()
-					.stream().filter(p->{
-						return p.getId().getValue().equals(cm.getChat().getId());
-					}).findFirst();
-				if(op.isPresent()) {
-					op.get().getMessages().add(cm);
-				}else {
-					TEntityProcess<Chat> p = new TEntityProcess<Chat>(Chat.class, IChatController.JNDI_NAME) {};
-					p.stateProperty().addListener((x,y,s)->{
-						if(s.equals(State.SUCCEEDED)) {
-							TResult<Chat> res = p.getValue().get(0);
-							Chat c = res.getValue();
-							ChatMV cmv = new ChatMV(c);
-							deco.gettListView().getItems().add(cmv);
+				ChatMessage cm0 = (ChatMessage) n;
+				//build a process to save and execute the message
+				TEntityProcess<ChatMessage> cmp = new TEntityProcess<ChatMessage>(ChatMessage.class, IChatMessageController.JNDI_NAME) {};
+				cmp.stateProperty().addListener((x0,y0,s0)->{
+					if(s0.equals(State.SUCCEEDED)) {
+						TResult<ChatMessage> res0 = cmp.getValue().get(0);
+						ChatMessage cm1 = res0.getValue();
+						//...Look for the Chat of the message
+						Optional<ChatMV> op = super.getModels().stream()
+								.filter(p->{
+									return p.getId().getValue().equals(cm1.getChat().getId());
+								}).findFirst();
+						// add the message in the chat
+						if(op.isPresent()) {
+							op.get().getMessages().add(cm1);
+							this.countUnreadMessages();
+						}else {
+							TEntityProcess<Chat> p = new TEntityProcess<Chat>(Chat.class, IChatController.JNDI_NAME) {};
+							p.stateProperty().addListener((x1,y1,s1)->{
+								if(s1.equals(State.SUCCEEDED)) {
+									TResult<Chat> res1 = p.getValue().get(0);
+									Chat c = res1.getValue();
+									ChatMV cmv = new ChatMV(c);
+									super.getModels().add(cmv);
+									//deco.gettListView().getItems().add(cmv);
+								}
+							});
+							p.findById(cm1.getChat());
+							p.startProcess();
 						}
-					});
-					p.findById(cm.getChat());
-					p.startProcess();
-				}
+					}
+				});
+				// set the message as received and save
+				cm0.addReceived(client.getOwner());
+				cmp.save(cm0);
+				cmp.startProcess();
 			}
 			
 		};
@@ -165,18 +188,9 @@ public class ChatBehaviour extends TMasterCrudViewBehavior<ChatMV, Chat> {
 	
 		showLogMessage();
 		
-		ChangeListener<Boolean> bolChl = (a,o,n)->{
-			this.hidePopOver.setValue(n);
-		};
+		
 		
 		ChangeListener<ITModelForm<ChatMV>> chl0 = (a,o,n)->{
-			if(o!=null) {
-				TFileField ff = (TFileField) o.gettFieldDescriptorList().stream()
-					.filter(p->{
-							return p.getFieldName().equals("sendFile");
-					}).findFirst().get().getControl();
-				ff.fileChooserOpenedProperty().removeListener(bolChl);
-			}
 			if(n!=null) {
 				n.tLoadedProperty().addListener((x,y,z)->{
 					if(z) {
@@ -184,7 +198,11 @@ public class ChatBehaviour extends TMasterCrudViewBehavior<ChatMV, Chat> {
 							.filter(p->{
 								return p.getFieldName().equals("sendFile");
 							}).findFirst().get().getControl();
-						ff.fileChooserOpenedProperty().addListener(bolChl);
+						ChangeListener<Boolean> bolChl = (a0,o0,n0)->{
+							this.hidePopOver.setValue(n0);
+						};
+						n.gettObjectRepository().add("sendFile_chl", bolChl);
+						ff.fileChooserOpenedProperty().addListener(new WeakChangeListener<>(bolChl));
 					}
 				});
 			}
@@ -196,6 +214,46 @@ public class ChatBehaviour extends TMasterCrudViewBehavior<ChatMV, Chat> {
 	private void showLogMessage() {
 		if(!client.isConnected())
 			super.getView().tShowModal(new TMessageBox(Arrays.asList(buildLogMessage())), false);
+	}
+	
+	private void countUnreadMessages() {
+		this.totalUnreadMessages.setValue(0);
+		super.getModels().parallelStream()
+		.forEach(cmv->{
+			long total = cmv.getTotalUnreadMessages();
+			this.totalUnreadMessages
+			.setValue(this.totalUnreadMessages.getValue()+total);
+		});
+	}
+	
+	private void subtractFrom(ChatMV cmv) {
+		long total = cmv.getTotalUnreadMessages();
+		this.totalUnreadMessages
+			.setValue(this.totalUnreadMessages.getValue()-total);
+	}
+	
+	@Override
+	protected void loadListView() {
+		
+		ListChangeListener<ChatMV> lcl = c ->{
+			if(c.next()) {
+				if(c.wasAdded())
+					c.getAddedSubList().parallelStream()
+					.forEach(cmv->{
+						long total = cmv.getTotalUnreadMessages();
+						this.totalUnreadMessages
+						.setValue(this.totalUnreadMessages.getValue()+total);
+					});
+				if(c.wasRemoved())
+					c.getRemoved().parallelStream()
+					.forEach(cmv->{
+						this.subtractFrom(cmv);
+					});
+			}
+		};
+		super.getListenerRepository().add("chatmodelsListener", lcl);
+		super.getModels().addListener(new WeakListChangeListener<>(lcl));
+		super.loadListView();
 	}
 	
 	private TMessage  buildLogMessage() {
@@ -236,6 +294,13 @@ public class ChatBehaviour extends TMasterCrudViewBehavior<ChatMV, Chat> {
 	 */
 	public ReadOnlyBooleanProperty hidePopOverProperty() {
 		return hidePopOver;
+	}
+
+	/**
+	 * @return the totalUnreadMessages
+	 */
+	public ReadOnlyLongProperty totalUnreadMessagesProperty() {
+		return totalUnreadMessages;
 	}
 	
 }

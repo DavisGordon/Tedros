@@ -236,7 +236,7 @@ public class MessageBuilder {
 		String status = getTagContent(doc, "status");
 		String dateTime = getTagContent(doc, "dateTime");
 
-		msg.setStatus(TStatus.get(status));
+		//msg.setStatus(TStatus.get(status));
 		msg.setInsertDate(new Date(Long.valueOf(dateTime)));
 		
 		return msg;

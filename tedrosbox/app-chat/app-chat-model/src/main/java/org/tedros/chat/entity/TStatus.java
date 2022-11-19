@@ -4,7 +4,7 @@ public enum TStatus {
 
 	SENT ("#{label.sent}"),
 	RECEIVED ("#{label.received}"),
-	READED ("#{label.readed}");
+	VIEWED ("#{label.viewed}");
 	
 	private String value;
 	
