@@ -5,9 +5,13 @@ package org.tedros.chat.module.client.decorator;
 
 import org.tedros.api.presenter.view.ITDynaView;
 import org.tedros.chat.module.client.model.ChatMV;
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
+import org.tedros.fx.control.TButton;
 import org.tedros.fx.presenter.decorator.TListViewHelper;
 import org.tedros.fx.presenter.entity.decorator.TMasterCrudViewDecorator;
+
+import javafx.scene.Node;
 
 /**
  * @author Davis Gordon
@@ -15,6 +19,15 @@ import org.tedros.fx.presenter.entity.decorator.TMasterCrudViewDecorator;
  */
 public class ChatDecorator extends TMasterCrudViewDecorator<ChatMV> {
 
+	private TButton hidePopOverButton;
+	
+	@Override
+	protected void configAllButtons() {
+		super.configAllButtons();
+		hidePopOverButton = new TButton(iEngine.getString(TFxKey.BUTTON_CLOSE));
+		addItemInTHeaderToolBar(hidePopOverButton);
+	}
+	
 	protected void configListView() {
 		String title = tPresenter!=null ? tPresenter.decorator().listTitle() : null;
 		// get the list view settings
@@ -48,8 +61,17 @@ public class ChatDecorator extends TMasterCrudViewDecorator<ChatMV> {
 	 */
 	@Override
 	public void showListContent() {
-		addItemInTTopContent(helper.gettListViewPane());
+		final ITDynaView<ChatMV> view = getView();
+		if(!view.gettTopContent().getChildren().contains(helper.gettListViewPane()))
+			addItemInTTopContent(helper.gettListViewPane());
 		
+	}
+
+	/**
+	 * @return the hidePopOverButton
+	 */
+	public TButton getHidePopOverButton() {
+		return hidePopOverButton;
 	}
 
 }

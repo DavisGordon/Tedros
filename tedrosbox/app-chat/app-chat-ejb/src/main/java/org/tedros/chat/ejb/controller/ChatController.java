@@ -132,10 +132,11 @@ public class ChatController extends TSecureEjbController<Chat> implements	ITSecu
 		try {
 			if(user==null) 
 				user = this.findChatUser(token);
-			
+			Long total = msgServ.count(e.getId(), null, null);
 			Long sent = msgServ.count(e.getId(), user.getId(), TStatus.SENT);
 			Long received = msgServ.count(e.getId(), user.getId(), TStatus.RECEIVED);
 			Long viewed = msgServ.count(e.getId(), user.getId(), TStatus.VIEWED);
+			e.setTotalMessages(total);
 			e.setTotalSentMessages(sent);
 			e.setTotalReceivedMessages(received);
 			e.setTotalViewedMessages(viewed);

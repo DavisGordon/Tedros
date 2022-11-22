@@ -35,9 +35,11 @@ public class ChatListViewCallback extends TEntityListViewCallback<ChatMV> {
                 	if(!validateNew(item)) 
                 		validateUnreadMessages(item);
                 	
-                	item.lastHashCodeProperty().addListener((a,o,n)->{
-						if(!validateNew(item)) 
-							validateUnreadMessages(item);
+                	item.getTotalUnreadMessages().addListener((a,o,n)->{
+                		if(n.longValue()>0)
+        					setId(BOLD_ITEM_CSS_ID);
+        				else
+        					setId(ITEM_CSS_ID);
 					});
                 	
                 	item.loadedProperty().addListener((a,o,n)->{
@@ -61,7 +63,7 @@ public class ChatListViewCallback extends TEntityListViewCallback<ChatMV> {
 			 * @param item
 			 */
 			private void validateUnreadMessages(final ChatMV item) {
-				if(item.getTotalUnreadMessages()>0)
+				if(item.countTotalUnreadMessages()>0)
 					setId(BOLD_ITEM_CSS_ID);
 				else
 					setId(ITEM_CSS_ID);

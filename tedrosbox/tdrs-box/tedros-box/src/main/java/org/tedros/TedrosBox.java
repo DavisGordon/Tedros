@@ -13,6 +13,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.presenter.view.TViewState;
 import org.tedros.chat.module.client.behaviour.ChatBehaviour;
+import org.tedros.chat.module.client.decorator.ChatDecorator;
 import org.tedros.chat.module.client.model.ChatMV;
 import org.tedros.core.ITModule;
 import org.tedros.core.ITedrosBox;
@@ -309,7 +310,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
         appName = new Label();
         appName.setEffect(ds);
         appName.setCache(true);
-        appName.setText("Tedros Box");
+        appName.setText("Tedros");
         appName.setId("t-app-name");
         
         HBox h = new HBox();
@@ -482,8 +483,8 @@ public class TedrosBox extends Application implements ITedrosBox  {
         chatUnreadMsgsLabel = new Label("0");
         chatUnreadMsgsLabel.getStyleClass().addAll("boxTxt");
         chb.getChildren().addAll(chatButton, chatUnreadMsgsLabel);
-        HBox.setMargin(chatButton, new Insets(2));
-        HBox.setMargin(chatUnreadMsgsLabel, new Insets(2));
+        HBox.setMargin(chatButton, new Insets(2,4,2,8));
+        HBox.setMargin(chatUnreadMsgsLabel, new Insets(2,8,2,4));
         
         HBox btnBox = new HBox();
         btnBox.setAlignment(Pos.CENTER);
@@ -635,18 +636,18 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		});
 	}
     
-	
 	private void showChatPopOver() {
 		double h = scene.getHeight()-200;
 		StackPane infoPane = new StackPane();
 		infoPane.setMaxHeight(h-80);
 		if(chatPopOver==null) {
 			chatPopOver = new PopOver();
-			chatPopOver.setHeaderAlwaysVisible(true);
+			chatPopOver.setHeaderAlwaysVisible(false);
 			chatPopOver.setAutoFix(true);
 			chatPopOver.setCloseButtonEnabled(true);
 			chatPopOver.setAutoHide(false);
 			chatPopOver.setArrowLocation(ArrowLocation.TOP_LEFT);
+			chatPopOver.setCornerRadius(20);
 	
 			chatPopOver.setMaxHeight(h);
 			
@@ -710,9 +711,14 @@ public class TedrosBox extends Application implements ITedrosBox  {
 				if(n!=null && n.equals(TViewState.READY)) {
 					TDynaPresenter<ChatMV> p = chatView.gettPresenter();
 					ChatBehaviour bhv = (ChatBehaviour) p.getBehavior();
+					ChatDecorator dec = (ChatDecorator) p.getDecorator();
+					dec.getHidePopOverButton().setOnAction(ev->{
+						chatPopOver.hide();
+					});
 					bhv.totalUnreadMessagesProperty().addListener((x,y,z)->{
 						this.chatUnreadMsgsLabel.setText(String.valueOf(z));
 					});
+					this.chatUnreadMsgsLabel.setText(String.valueOf(bhv.totalUnreadMessagesProperty().getValue()));
 					bhv.hidePopOverProperty().addListener((x,y,z)->{
 						if(z)
 							chatPopOver.hide();

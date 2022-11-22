@@ -17,6 +17,7 @@ import org.tedros.chat.module.client.setting.ChatClient;
 import org.tedros.chat.module.client.setting.ChatFormSetting;
 import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.annotation.security.TSecurity;
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.control.TButtonField;
 import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TFileField;
@@ -52,9 +53,12 @@ import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.fx.property.TSimpleFileProperty;
 import org.tedros.server.model.ITFileModel;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ListChangeListener;
+import javafx.collections.WeakListChangeListener;
 import javafx.scene.layout.Priority;
 
 /**
@@ -66,8 +70,9 @@ import javafx.scene.layout.Priority;
 @TEjbService(serviceName = IChatController.JNDI_NAME, model=Chat.class)
 @TListViewPresenter(listViewMaxWidth=400, listViewMinWidth=400,
 	presenter=@TPresenter(
-		decorator = @TDecorator(type=ChatDecorator.class, viewTitle=CHATKey.VIEW_CLIENT_MESSAGES,
-			buildSaveButton=false, buildModesRadioButton=false, buildCollapseButton=true),
+		decorator = @TDecorator(type=ChatDecorator.class, 
+			viewTitle=CHATKey.VIEW_CLIENT_MESSAGES, cancelButtonText=TFxKey.BUTTON_BACK,
+			buildSaveButton=false, buildModesRadioButton=false, buildCollapseButton=false),
 		behavior=@TBehavior(type=ChatBehaviour.class, listViewCallBack=ChatListViewCallback.class, 
 			runNewActionAfterSave=false, saveAllModels=false)))
 @TSecurity(	id=DomainApp.CHAT_FORM_ID, appName=CHATKey.APP_CHAT, 
@@ -79,9 +84,12 @@ public class ChatMV extends TEntityModelView<Chat> {
 
 	private SimpleLongProperty id;
 
+	private SimpleLongProperty totalMessages;
 	private SimpleLongProperty totalSentMessages;
 	private SimpleLongProperty totalReceivedMessages;
 	private SimpleLongProperty totalViewedMessages;
+	private SimpleLongProperty totalUnreadMessages;
+	private SimpleBooleanProperty messagesLoaded;
 	
 	@TVBox(pane=@TPane(children= {"owner", "message", "sendFile"}), 
 			vgrow=@TVGrow(priority= {
@@ -134,6 +142,13 @@ public class ChatMV extends TEntityModelView<Chat> {
 	public ChatMV(Chat entity) {
 		super(entity);
 		super.formatToString("%s", title);
+		this.messagesLoaded.setValue(false);
+		ListChangeListener<ChatMessage> lcl = c ->{
+			if(c.next())
+				this.countTotalUnreadMessages();
+		};
+		super.getListenerRepository().add("messagesCountLCL", lcl);
+		this.messages.addListener(new WeakListChangeListener<>(lcl));
 	}
 
 	/**
@@ -271,20 +286,38 @@ public class ChatMV extends TEntityModelView<Chat> {
 		return false;
 	}
 	
-	public long getTotalUnreadMessages() {
-		long sent = 0;
-		long viewed = 0;
-		if(messages==null || messages.isEmpty()) {
-			sent = super.getEntity().getTotalSentMessages();
-			viewed = super.getEntity().getTotalViewedMessages();
-		}else{
+	@Override
+	public boolean isChanged() {
+		return false;
+	}
+	
+	public long countTotalUnreadMessages() {
+		if(messages!=null && !messages.isEmpty()) {
 			ChatUser user = ChatClient.getInstance().getOwner();
-			sent = messages.size();
-			viewed = messages.parallelStream()
-					.filter(p->p.wasViewed(user))
-					.count();
+			this.totalMessages.setValue(messages.size());
+			this.totalSentMessages.setValue( messages.parallelStream()
+					.filter(p->p.getFrom().equals(user))
+					.count());
+			this.totalReceivedMessages.setValue( messages.parallelStream()
+					.filter(p->p.wasReceived(user) && !p.getFrom().equals(user))
+					.count());
+			this.totalViewedMessages.setValue( messages.parallelStream()
+					.filter(p->p.wasViewed(user) && !p.getFrom().equals(user))
+					.count());
 		}
-		return sent - viewed;
+		long total =  this.totalMessages.getValue() 
+				- (this.totalSentMessages.getValue() 
+				+ this.totalViewedMessages.getValue());
+		this.totalUnreadMessages.setValue(total);
+		return total;
+	}
+	
+	public void increaseTotalMessages() {
+		this.totalMessages.setValue(this.totalMessages.getValue()+1);
+	}
+	
+	public void increaseViewedMessages() {
+		this.totalViewedMessages.setValue(this.totalViewedMessages.getValue()+1);
 	}
 
 	/**
@@ -327,6 +360,52 @@ public class ChatMV extends TEntityModelView<Chat> {
 	 */
 	public void setTotalViewedMessages(SimpleLongProperty totalViewedMessages) {
 		this.totalViewedMessages = totalViewedMessages;
+	}
+
+	/**
+	 * @return the totalUnreadMessages
+	 */
+	public SimpleLongProperty getTotalUnreadMessages() {
+		return totalUnreadMessages;
+	}
+
+	/**
+	 * @param totalUnreadMessages the totalUnreadMessages to set
+	 */
+	public void setTotalUnreadMessages(SimpleLongProperty totalUnreadMessages) {
+		this.totalUnreadMessages = totalUnreadMessages;
+	}
+
+	/**
+	 * @return the totalMessages
+	 */
+	public SimpleLongProperty getTotalMessages() {
+		return totalMessages;
+	}
+
+	/**
+	 * @param totalMessages the totalMessages to set
+	 */
+	public void setTotalMessages(SimpleLongProperty totalMessages) {
+		this.totalMessages = totalMessages;
+	}
+
+	/**
+	 * @return the messagesLoaded
+	 */
+	public SimpleBooleanProperty getMessagesLoaded() {
+		return messagesLoaded;
+	}
+
+	/**
+	 * @param messagesLoaded the messagesLoaded to set
+	 */
+	public void setMessagesLoaded(SimpleBooleanProperty messagesLoaded) {
+		this.messagesLoaded = messagesLoaded;
+	}
+	
+	public Boolean isMessagesLoaded() {
+		return messagesLoaded.getValue();
 	}
 
 }

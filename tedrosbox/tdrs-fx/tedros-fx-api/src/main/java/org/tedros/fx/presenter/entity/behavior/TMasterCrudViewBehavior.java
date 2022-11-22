@@ -64,45 +64,45 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		
 	public void initialize() {
 		
-			configCancelAction();
-			configColapseButton();
-			configNewButton();
-			configSaveButton();
-			configDeleteButton();
-			configImportButton();
-			configPrintButton();
-			
-			configModesRadio();
-			configCancelButton();
-			
-			configListViewChangeListener();
-			configListViewCallBack();
-			configListViewContextMenu();
-			
-			if(getModels()==null)
-				super.setModelViewList(FXCollections.observableArrayList());
-			
-			TListViewPresenter tAnnotation = getPresenter().getModelViewClass().getAnnotation(TListViewPresenter.class);
-			if(tAnnotation!=null){
-				tPagAnn = tAnnotation.paginator();
-				if(tPagAnn.show()) {
-					this.paginatorServiceName = tPagAnn.serviceName();
-					this.searchFieldName = tPagAnn.searchFieldName();
-					this.decorator.gettPaginator().setSearchFieldName(searchFieldName);
-					try {
-						if(tPagAnn.showSearchField() && StringUtils.isBlank(this.searchFieldName))
-							throw new TException("The property searchFieldName in TPaginator annotation is required when showSearhField is true.");
-					}catch(TException e){
-						getView().tShowModal(new TMessageBox(e), true);
-						e.printStackTrace();
-					}
+		if(getModels()==null)
+			super.setModelViewList(FXCollections.observableArrayList());
+		
+		configCancelAction();
+		configColapseButton();
+		configNewButton();
+		configSaveButton();
+		configDeleteButton();
+		configImportButton();
+		configPrintButton();
+		
+		configModesRadio();
+		configCancelButton();
+		
+		configListViewChangeListener();
+		configListViewCallBack();
+		configListViewContextMenu();
+		
+		TListViewPresenter tAnnotation = getPresenter().getModelViewClass().getAnnotation(TListViewPresenter.class);
+		if(tAnnotation!=null){
+			tPagAnn = tAnnotation.paginator();
+			if(tPagAnn.show()) {
+				this.paginatorServiceName = tPagAnn.serviceName();
+				this.searchFieldName = tPagAnn.searchFieldName();
+				this.decorator.gettPaginator().setSearchFieldName(searchFieldName);
+				try {
+					if(tPagAnn.showSearchField() && StringUtils.isBlank(this.searchFieldName))
+						throw new TException("The property searchFieldName in TPaginator annotation is required when showSearhField is true.");
+				}catch(TException e){
+					getView().tShowModal(new TMessageBox(e), true);
+					e.printStackTrace();
 				}
 			}
-			if(!isUserNotAuthorized(TAuthorizationType.VIEW_ACCESS))
-				loadModels();
-			else
-				setViewStateAsReady();
 		}
+		if(!isUserNotAuthorized(TAuthorizationType.VIEW_ACCESS))
+			loadModels();
+		else
+			setViewStateAsReady();
+	}
 	
 	@SuppressWarnings("unchecked")
 	public void loadModels() {
@@ -255,20 +255,8 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		final ListView<M> listView = this.decorator.gettListView();
 		listView.setItems((ObservableList<M>) (models==null ? FXCollections.observableArrayList() : models));
 		super.getListenerRepository().remove("processloadlistviewCL");
-		final M mv = super.getModelView(); //getPresenter().getModelView();
+		final M mv = super.getModelView(); 
 		processModelView(mv);
-		
-		if(this.decorator.gettPaginator()!=null) {
-			ChangeListener<TPagination> chl = (a0, a1, a2) -> {
-				try {
-					paginate(a2);
-				} catch (Throwable e) {
-					e.printStackTrace();
-				}
-			};
-			this.decorator.gettPaginator().paginationProperty().addListener(chl);
-		}
-		
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -417,6 +405,19 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		.getSelectionModel()
 		.selectedItemProperty()
 		.addListener(new WeakChangeListener<>(chl));
+		
+		if(this.decorator.gettPaginator()!=null) {
+			ChangeListener<TPagination> chl0 = (a0, a1, a2) -> {
+				try {
+					paginate(a2);
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
+			};
+			super.getListenerRepository().add("listviewpaginatorCL", chl0);
+			this.decorator.gettPaginator()
+			.paginationProperty().addListener(new WeakChangeListener<>(chl0));
+		}
 		
 	}
 

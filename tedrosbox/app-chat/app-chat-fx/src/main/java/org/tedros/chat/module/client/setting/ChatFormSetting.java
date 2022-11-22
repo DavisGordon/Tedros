@@ -70,16 +70,15 @@ public class ChatFormSetting extends TSetting {
 	/* (non-Javadoc)
 	 * @see org.tedros.fx.form.TSetting#run()
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void run() {
 		
 		ChatMV mv = (ChatMV) super.getModelView();
-		
-		final ObservableList<ChatMessage> msgs = listenReceivedMsg(mv);
-		
+		listenReceivedMsg(mv);
+		final ObservableList<ChatMessage> msgs = mv.getMessages();
 		listenSendButton(mv, msgs);
 		listenClearButton(mv);
-		
 		
 		TabPane tp = super.getLayout("owner");
 		// Tab title
@@ -111,22 +110,30 @@ public class ChatFormSetting extends TSetting {
 			List<ChatMessage> lst0 = util.findMessages(TedrosContext.getLoggedUser().getAccessToken(),
 					mv.getEntity().getId());
 			
-			
-			lst0.stream().forEach(c->{
+			boolean reload = false;
+				
+			for(ChatMessage c : lst0){
 				if(c.getViewed()==null 
 						|| c.getViewed().stream()
 						.noneMatch(p-> p.equals(client.getOwner()))) {
 					try {
 						c.addViewed(client.getOwner());
-						ChatMessage cm = util.saveMessage(TedrosContext.getLoggedUser().getAccessToken(), c);
-						Collections.replaceAll(lst0, c, cm);
+						util.saveMessage(TedrosContext.getLoggedUser().getAccessToken(), c);
+						//Collections.replaceAll(lst0, c, cm);
+						reload=true;
 					} catch (Exception e) {
 						throw new RuntimeException(e);
 					};
 				}
-			});
+			}
 			Collections.sort(lst0);
 			msgs.addAll(lst0);
+			mv.getMessagesLoaded().setValue(true);
+			if(reload) {
+				TDynaPresenter<ChatMV> p = (TDynaPresenter<ChatMV>) super.getForm().gettPresenter();
+				ChatBehaviour bhv = (ChatBehaviour) p.getBehavior();
+				bhv.countUnreadMessages();
+			}
 			
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -210,7 +217,7 @@ public class ChatFormSetting extends TSetting {
 	 * @param mv
 	 * @return
 	 */
-	private ObservableList<ChatMessage> listenReceivedMsg(ChatMV mv) {
+	private void listenReceivedMsg(ChatMV mv) {
 		// Listen new messages to show
 		final ObservableList<ChatMessage> msgs = mv.getMessages();
 		ListChangeListener<ChatMessage> chl0 = ch0 ->{
@@ -223,7 +230,6 @@ public class ChatFormSetting extends TSetting {
 		};
 		repo.add("chl0", chl0);
 		msgs.addListener(new WeakListChangeListener<ChatMessage>(chl0));
-		return msgs;
 	}
 
 	/**

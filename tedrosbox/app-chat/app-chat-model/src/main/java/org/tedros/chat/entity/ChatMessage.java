@@ -116,6 +116,12 @@ public class ChatMessage extends TEntity implements Comparable<ChatMessage>{
 		if(!this.received.contains(user))
 			this.received.add(user);
 	}
+	
+
+	public boolean wasReceived(ChatUser user) {
+		return this.received!=null 
+				&& this.received.stream().anyMatch(p->p.equals(user));
+	}
 
 	/**
 	 * @param content the content to set
