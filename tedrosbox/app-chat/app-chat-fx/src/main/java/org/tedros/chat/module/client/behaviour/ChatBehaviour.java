@@ -34,6 +34,7 @@ import org.tedros.fx.presenter.entity.behavior.TMasterCrudViewBehavior;
 import org.tedros.fx.process.TEntityProcess;
 import org.tedros.server.result.TResult;
 
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyLongProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -97,43 +98,72 @@ public class ChatBehaviour extends TMasterCrudViewBehavior<ChatMV, Chat> {
 			//received a chat message
 			if(n instanceof ChatMessage) {
 				ChatMessage cm0 = (ChatMessage) n;
-				//build a process to save and execute the message
-				TEntityProcess<ChatMessage> cmp = new TEntityProcess<ChatMessage>(ChatMessage.class, IChatMessageController.JNDI_NAME) {};
-				cmp.stateProperty().addListener((x0,y0,s0)->{
-					if(s0.equals(State.SUCCEEDED)) {
-						TResult<ChatMessage> res0 = cmp.getValue().get(0);
-						ChatMessage cm1 = res0.getValue();
-						//...Look for the Chat of the message
-						Optional<ChatMV> op = super.getModels().stream()
-								.filter(p->{
-									return p.getId().getValue().equals(cm1.getChat().getId());
-								}).findFirst();
-						// add the message in the chat
-						if(op.isPresent()) {
-							op.get().getMessages().add(cm1);
+				// set the message as received 
+				cm0.addReceived(client.getOwner());
+				//...Look for the Chat of the message
+				Optional<ChatMV> op = super.getModels().stream()
+						.filter(p->{
+							return p.getId().getValue().equals(cm0.getChat().getId());
+						}).findFirst();
+				// add the message in the chat
+				if(op.isPresent()) {
+					ChatMV found = op.get();
+					ChatMV current = super.getModelView();
+					
+					// set the message as viewed
+					if(current!=null && current.equals(found)) 
+						cm0.addViewed(client.getOwner());
+					
+					//build a process to save and execute the message
+					TEntityProcess<ChatMessage> cmp = 
+							new TEntityProcess<ChatMessage>(ChatMessage.class, 
+									IChatMessageController.JNDI_NAME) {};
+					cmp.stateProperty().addListener((x0,y0,s0)->{
+						if(s0.equals(State.SUCCEEDED)) {
+							TResult<ChatMessage> res0 = cmp.getValue().get(0);
+							ChatMessage cm1 = res0.getValue();
+							if(found.isMessagesLoaded())
+								found.getMessages().add(cm1);
+							else {
+								found.increaseTotalMessages();
+								if(current!=null && current.equals(found)) 
+									found.increaseViewedMessages();
+							}
 							this.countUnreadMessages();
-						}else {
-							TEntityProcess<Chat> p = new TEntityProcess<Chat>(Chat.class, IChatController.JNDI_NAME) {};
+						}
+					});
+					cmp.save(cm0);
+					cmp.startProcess();
+				}else {
+					//chat not found
+					//build a process to save the message as received 
+					//and get the chat to add in the list
+					TEntityProcess<ChatMessage> cmp = 
+							new TEntityProcess<ChatMessage>(ChatMessage.class, 
+									IChatMessageController.JNDI_NAME) {};
+					cmp.stateProperty().addListener((x0,y0,s0)->{
+						if(s0.equals(State.SUCCEEDED)) {
+							TResult<ChatMessage> res0 = cmp.getValue().get(0);
+							ChatMessage cm1 = res0.getValue();
+							
+							TEntityProcess<Chat> p = new TEntityProcess<Chat>(Chat.class, 
+									IChatController.JNDI_NAME) {};
 							p.stateProperty().addListener((x1,y1,s1)->{
 								if(s1.equals(State.SUCCEEDED)) {
 									TResult<Chat> res1 = p.getValue().get(0);
 									Chat c = res1.getValue();
 									ChatMV cmv = new ChatMV(c);
 									super.getModels().add(cmv);
-									//deco.gettListView().getItems().add(cmv);
 								}
 							});
 							p.findById(cm1.getChat());
 							p.startProcess();
 						}
-					}
-				});
-				// set the message as received and save
-				cm0.addReceived(client.getOwner());
-				cmp.save(cm0);
-				cmp.startProcess();
+					});
+					cmp.save(cm0);
+					cmp.startProcess();
+				}
 			}
-			
 		};
 		super.getListenerRepository().add("chl1", chl1);
 		client.messageProperty().addListener(new WeakChangeListener<>(chl1));
@@ -188,8 +218,6 @@ public class ChatBehaviour extends TMasterCrudViewBehavior<ChatMV, Chat> {
 	
 		showLogMessage();
 		
-		
-		
 		ChangeListener<ITModelForm<ChatMV>> chl0 = (a,o,n)->{
 			if(n!=null) {
 				n.tLoadedProperty().addListener((x,y,z)->{
@@ -216,44 +244,42 @@ public class ChatBehaviour extends TMasterCrudViewBehavior<ChatMV, Chat> {
 			super.getView().tShowModal(new TMessageBox(Arrays.asList(buildLogMessage())), false);
 	}
 	
-	private void countUnreadMessages() {
-		this.totalUnreadMessages.setValue(0);
-		super.getModels().parallelStream()
-		.forEach(cmv->{
-			long total = cmv.getTotalUnreadMessages();
-			this.totalUnreadMessages
-			.setValue(this.totalUnreadMessages.getValue()+total);
+	public void countUnreadMessages() {
+		Platform.runLater(()->{
+			long total = 0;
+			for(ChatMV cmv : getModels()) 
+				total += cmv.countTotalUnreadMessages();
+			this.totalUnreadMessages.setValue(total);
+
 		});
+				
 	}
 	
 	private void subtractFrom(ChatMV cmv) {
-		long total = cmv.getTotalUnreadMessages();
-		this.totalUnreadMessages
-			.setValue(this.totalUnreadMessages.getValue()-total);
+		Platform.runLater(()->{
+			long total = cmv.countTotalUnreadMessages();
+			this.totalUnreadMessages
+				.setValue(this.totalUnreadMessages.getValue()-total);
+		});
 	}
 	
 	@Override
-	protected void loadListView() {
+	protected void configListViewChangeListener() {
 		
 		ListChangeListener<ChatMV> lcl = c ->{
 			if(c.next()) {
 				if(c.wasAdded())
-					c.getAddedSubList().parallelStream()
-					.forEach(cmv->{
-						long total = cmv.getTotalUnreadMessages();
-						this.totalUnreadMessages
-						.setValue(this.totalUnreadMessages.getValue()+total);
-					});
+					this.countUnreadMessages();
 				if(c.wasRemoved())
-					c.getRemoved().parallelStream()
+					c.getRemoved().stream()
 					.forEach(cmv->{
 						this.subtractFrom(cmv);
 					});
 			}
 		};
-		super.getListenerRepository().add("chatmodelsListener", lcl);
+		super.getListenerRepository().add("chatlistviewcountListener", lcl);
 		super.getModels().addListener(new WeakListChangeListener<>(lcl));
-		super.loadListView();
+		super.configListViewChangeListener();
 	}
 	
 	private TMessage  buildLogMessage() {

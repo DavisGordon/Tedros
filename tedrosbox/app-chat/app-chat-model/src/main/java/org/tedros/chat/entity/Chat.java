@@ -49,6 +49,7 @@ public class Chat extends TEntity {
 	private Long totalReceivedMessages;
 	private Long totalViewedMessages;
 	private Long totalSentMessages;
+	private Long totalMessages;
 	
 	
 	public Chat() {
@@ -168,6 +169,20 @@ public class Chat extends TEntity {
 	 */
 	public void setTotalViewedMessages(Long totalViewedMessages) {
 		this.totalViewedMessages = totalViewedMessages;
+	}
+
+	/**
+	 * @return the totalMessages
+	 */
+	public Long getTotalMessages() {
+		return totalMessages;
+	}
+
+	/**
+	 * @param totalMessages the totalMessages to set
+	 */
+	public void setTotalMessages(Long totalMessages) {
+		this.totalMessages = totalMessages;
 	}
 
 }
