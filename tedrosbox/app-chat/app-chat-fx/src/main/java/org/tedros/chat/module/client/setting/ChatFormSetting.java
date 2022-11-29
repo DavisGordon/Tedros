@@ -3,6 +3,7 @@
  */
 package org.tedros.chat.module.client.setting;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -11,6 +12,8 @@ import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.chat.CHATKey;
 import org.tedros.chat.entity.Chat;
 import org.tedros.chat.entity.ChatMessage;
+import org.tedros.chat.model.Action;
+import org.tedros.chat.model.ChatInfo;
 import org.tedros.chat.module.client.behaviour.ChatBehaviour;
 import org.tedros.chat.module.client.model.ChatMV;
 import org.tedros.chat.module.client.model.ChatUserMV;
@@ -56,6 +59,7 @@ public class ChatFormSetting extends TSetting {
     private boolean scrollFlag = false;
 
 	private int titleLength = 80;
+	private ListChangeListener<ChatUserMV> usersChl;
     
 	/**
 	 * @param descriptor
@@ -79,19 +83,12 @@ public class ChatFormSetting extends TSetting {
 		final ObservableList<ChatMessage> msgs = mv.getMessages();
 		listenSendButton(mv, msgs);
 		listenClearButton(mv);
+		listenRecipients();
 		
 		TabPane tp = super.getLayout("owner");
 		// Tab title
 		Tab t = tp.getTabs().get(1);
 		t.textProperty().bind(mv.getTitle());
-		
-		ListChangeListener<ChatUserMV> chl2 = ch -> {
-			List<? extends ChatUserMV> l = ch.getList();
-			buildTitle(l);
-		};
-		repo.add("chl2", chl2);
-		ObservableList<ChatUserMV> users = mv.getParticipants();
-		users.addListener(new WeakListChangeListener<ChatUserMV>(chl2));
 		
 		// auto scroll
 		ScrollPane sp = (ScrollPane) t.getContent();
@@ -143,6 +140,34 @@ public class ChatFormSetting extends TSetting {
 	/**
 	 * @param mv
 	 */
+	private void listenRecipients() {
+		usersChl = new ListChangeListener<ChatUserMV>(){
+			@Override
+			public void onChanged(Change<? extends ChatUserMV> ch) {
+				ChatMV mv = getModelView();
+				List<? extends ChatUserMV> l = ch.getList();
+				buildTitle(l);
+				removeRecipientsListener();
+				saveChat(mv);
+				ChatInfo info = new ChatInfo();
+				info.setAction(Action.UPDATE_RECIPIENT);
+				info.setId(mv.getId().getValue());
+				info.setUser(mv.getModel().getOwner());
+				l.forEach(u->info.addRecipient(u.getModel()));
+				try {
+					client.send(info);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				addRecipientsListener();
+			}
+		};
+		addRecipientsListener();
+	}
+
+	/**
+	 * @param mv
+	 */
 	private void listenClearButton(ChatMV mv) {
 		// Clear event
 		EventHandler<ActionEvent> ev1 = e->{
@@ -161,8 +186,6 @@ public class ChatFormSetting extends TSetting {
 		// Send event
 		EventHandler<ActionEvent> ev0 = e -> {
 			this.verifyOwnerAsParticipant();
-			if(mv.isChanged())
-				saveChat(mv);
 			
 			ObservableList<ChatUserMV> dest = mv.getParticipants();
 			if(dest.size()==0 
@@ -251,7 +274,7 @@ public class ChatFormSetting extends TSetting {
 	/**
 	 * @param ch
 	 */
-	private void buildTitle(List<? extends ChatUserMV> ch) {
+	public void buildTitle(List<? extends ChatUserMV> ch) {
 		//ChatUser owner = client.getOwner();
 		ChatMV mv = (ChatMV) super.getModelView();
 		String from = mv.getOwner().getValue().getName();
@@ -310,6 +333,24 @@ public class ChatFormSetting extends TSetting {
 		repo.clear();
 		repo = null;
 		client = null;
+	}
+	/**
+	 * @param mv
+	 * @return
+	 */
+	public void addRecipientsListener() {
+		ChatMV mv = super.getModelView();
+		ObservableList<ChatUserMV> users = mv.getParticipants();
+		users.addListener(this.usersChl);
+	}
+	/**
+	 * @param mv
+	 * @return
+	 */
+	public void removeRecipientsListener() {
+		ChatMV mv = super.getModelView();
+		ObservableList<ChatUserMV> users = mv.getParticipants();
+		users.removeListener(this.usersChl);
 	}
 
 }
