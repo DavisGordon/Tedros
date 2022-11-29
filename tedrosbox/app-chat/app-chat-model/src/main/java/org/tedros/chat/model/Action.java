@@ -2,6 +2,7 @@ package org.tedros.chat.model;
 
 public enum Action {
 	
-	DELETE;
+	DELETE,
+	UPDATE_RECIPIENT;
 
 }

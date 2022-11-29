@@ -21,6 +21,7 @@ import org.tedros.chat.module.client.decorator.ChatDecorator;
 import org.tedros.chat.module.client.model.ChatMV;
 import org.tedros.chat.module.client.model.ChatUserMV;
 import org.tedros.chat.module.client.setting.ChatClient;
+import org.tedros.chat.module.client.setting.ChatFormSetting;
 import org.tedros.chat.module.client.setting.ChatUtil;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
@@ -32,6 +33,7 @@ import org.tedros.fx.modal.TMessageBox;
 import org.tedros.fx.presenter.behavior.TActionType;
 import org.tedros.fx.presenter.entity.behavior.TMasterCrudViewBehavior;
 import org.tedros.fx.process.TEntityProcess;
+import org.tedros.server.entity.ITEntity;
 import org.tedros.server.result.TResult;
 
 import javafx.application.Platform;
@@ -68,32 +70,48 @@ public class ChatBehaviour extends TMasterCrudViewBehavior<ChatMV, Chat> {
 		ChangeListener<Object> chl1 = (a,o,n) -> {
 			if(n instanceof ChatInfo) {
 				ChatInfo ci = (ChatInfo) n;
-				if(ci.getAction().equals(Action.DELETE)) {
-					ChatMV mv = super.getModelView();
-					if(mv!=null && mv.getId().getValue().equals(ci.getId())) {
+				
+				ChatMV mv = super.getModelView();
+				if(mv!=null && mv.getId().getValue().equals(ci.getId())) {
+					switch(ci.getAction()) {
+					case DELETE:
 						super.addMessage(new TMessage(TLanguage.getInstance()
 								.getString(CHATKey.MSG_OWNER_REMOVED_CHAT), "Ok", 
 							ev-> {
 							super.remove();
 							super.getView().tHideModal();
 						}));
-					}else {
-						Optional<ChatMV> op = super.getModels().stream()
-							.filter(p->{
-								return p.getId().getValue().equals(ci.getId());
-							}).findFirst();
-						if(op.isPresent()) {
-							ChatMV m = op.get();
-							super.addMessage(new TMessage(TLanguage.getInstance()
-									.getFormatedString(CHATKey.MSG_CHAT_REMOVED,
-											m.getTitle().getValue()), "Ok", 
-									ev-> {
-									super.getModels().remove(m);
-									super.getView().tHideModal();
-							}));
-						}
+						break;
+					case UPDATE_RECIPIENT:
+						ITModelForm<ChatMV> f = super.getForm();
+						ChatFormSetting fs = (ChatFormSetting) f.gettSetting();
+						fs.removeRecipientsListener();
+						mv.getParticipants().clear();
+						ci.getRecipients().forEach(u->{
+							ChatUserMV umv = new ChatUserMV(u);
+							mv.getParticipants().add(umv);
+						});
+						fs.buildTitle(mv.getParticipants());
+						fs.addRecipientsListener();
+						break;
+					}
+				}else {
+					Optional<ChatMV> op = super.getModels().stream()
+						.filter(p->{
+							return p.getId().getValue().equals(ci.getId());
+						}).findFirst();
+					if(op.isPresent()) {
+						ChatMV m = op.get();
+						super.addMessage(new TMessage(TLanguage.getInstance()
+								.getFormatedString(CHATKey.MSG_CHAT_REMOVED,
+										m.getTitle().getValue()), "Ok", 
+								ev-> {
+								super.getModels().remove(m);
+								super.getView().tHideModal();
+						}));
 					}
 				}
+				
 			}
 			//received a chat message
 			if(n instanceof ChatMessage) {
@@ -309,6 +327,18 @@ public class ChatBehaviour extends TMasterCrudViewBehavior<ChatMV, Chat> {
 			e.printStackTrace();
 		}
 		return super.processNewEntityBeforeBuildForm(model);
+	}
+	
+	@Override
+	public void cancelAction() {
+		ChatMV model = super.getModelView();
+		if(model.getModel() instanceof ITEntity && ((ITEntity)model.getModel()).isNew()) {
+			getView().tHideModal();	
+			remove();
+		}else{
+			setModelView(null);
+			getView().tHideModal();	
+		}
 	}
 	
 	public void setHidePopOver(boolean hide) {
