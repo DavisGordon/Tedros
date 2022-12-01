@@ -15,12 +15,12 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.tedros.core.domain.DomainSchema;
 import org.tedros.core.domain.DomainTables;
 import org.tedros.server.entity.ITUser;
-import org.tedros.server.entity.TEntity;
+import org.tedros.server.entity.TVersionEntity;
 import org.tedros.server.security.TAccessToken;
 
 @Entity
 @Table(name = DomainTables.user, schema = DomainSchema.tedros_core)
-public class TUser extends TEntity implements ITUser {
+public class TUser extends TVersionEntity implements ITUser {
 	
 	private static final long serialVersionUID = 2125379739952921937L;
 

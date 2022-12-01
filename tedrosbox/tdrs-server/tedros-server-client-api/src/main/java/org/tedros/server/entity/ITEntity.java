@@ -14,10 +14,6 @@ public interface ITEntity extends ITModel, Serializable{
 	
 	public boolean isNew();
 	
-	public Integer getVersionNum();
-
-	public void setVersionNum(Integer versionNum);
-	
 	public Date getLastUpdate();
 
 	public void setLastUpdate(Date lastUpdate);

@@ -8,7 +8,6 @@ import java.net.Socket;
 
 import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.entity.ChatUser;
-import org.tedros.chat.entity.TStatus;
 import org.tedros.chat.model.ChatInfo;
 
 public class ServerConnHandler extends Thread {

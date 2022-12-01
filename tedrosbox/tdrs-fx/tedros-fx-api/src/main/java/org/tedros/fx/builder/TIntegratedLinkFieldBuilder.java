@@ -11,7 +11,7 @@ import java.lang.annotation.Annotation;
 import org.tedros.fx.control.TIntegratedLink;
 import org.tedros.fx.control.TText.TTextStyle;
 import org.tedros.fx.presenter.model.TEntityModelView;
-import org.tedros.server.entity.TEntity;
+import org.tedros.server.entity.ITEntity;
 import org.tedros.server.entity.TReceptiveEntity;
 
 import javafx.beans.property.Property;
@@ -30,7 +30,7 @@ implements ITControlBuilder<TIntegratedLink, Property<String>> {
 	@SuppressWarnings("rawtypes")
 	public TIntegratedLink build(final Annotation annotation, final Property<String> attrProperty) throws Exception {
 		TEntityModelView mv = (TEntityModelView) super.getComponentDescriptor().getModelView();
-		TEntity e = (TEntity) mv.getEntity();
+		ITEntity e =  mv.getEntity();
 		if(e instanceof TReceptiveEntity) { 
 			TReceptiveEntity re = (TReceptiveEntity) e;
 			final TIntegratedLink control = new TIntegratedLink(re.getIntegratedModulePath());

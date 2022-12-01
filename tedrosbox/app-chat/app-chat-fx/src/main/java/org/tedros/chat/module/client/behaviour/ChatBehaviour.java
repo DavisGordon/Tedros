@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.tedros.api.form.ITModelForm;
 import org.tedros.chat.CHATKey;
@@ -28,6 +29,7 @@ import org.tedros.core.context.TedrosContext;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
 import org.tedros.fx.control.TFileField;
+import org.tedros.fx.control.TPickListField;
 import org.tedros.fx.control.action.TPresenterAction;
 import org.tedros.fx.modal.TMessageBox;
 import org.tedros.fx.presenter.behavior.TActionType;
@@ -60,6 +62,7 @@ public class ChatBehaviour extends TMasterCrudViewBehavior<ChatMV, Chat> {
 	
 	private SimpleLongProperty totalUnreadMessages = new SimpleLongProperty(0);
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void load() {
 		super.load();
@@ -68,13 +71,14 @@ public class ChatBehaviour extends TMasterCrudViewBehavior<ChatMV, Chat> {
 		deco = (ChatDecorator) super.getPresenter().getDecorator();
 		// Listen for received message
 		ChangeListener<Object> chl1 = (a,o,n) -> {
+			//Chat info
 			if(n instanceof ChatInfo) {
 				ChatInfo ci = (ChatInfo) n;
-				
+				// check if the chat is opened
 				ChatMV mv = super.getModelView();
 				if(mv!=null && mv.getId().getValue().equals(ci.getId())) {
 					switch(ci.getAction()) {
-					case DELETE:
+					case DELETE: // message the chat was removed
 						super.addMessage(new TMessage(TLanguage.getInstance()
 								.getString(CHATKey.MSG_OWNER_REMOVED_CHAT), "Ok", 
 							ev-> {
@@ -82,36 +86,59 @@ public class ChatBehaviour extends TMasterCrudViewBehavior<ChatMV, Chat> {
 							super.getView().tHideModal();
 						}));
 						break;
-					case UPDATE_RECIPIENT:
+					case UPDATE_RECIPIENT: // update the chat users
 						ITModelForm<ChatMV> f = super.getForm();
 						ChatFormSetting fs = (ChatFormSetting) f.gettSetting();
 						fs.removeRecipientsListener();
-						mv.getParticipants().clear();
-						ci.getRecipients().forEach(u->{
-							ChatUserMV umv = new ChatUserMV(u);
-							mv.getParticipants().add(umv);
-						});
+						TPickListField<ChatUserMV> plf = (TPickListField<ChatUserMV>) f.gettFieldBox("participants").gettControl();
+						List<ChatUserMV> add = plf.gettSourceList().stream()
+								.filter(p->ci.getRecipients().stream().anyMatch(p1->p1.getId().equals(p.getModel().getId())))
+								.collect(Collectors.toList());
+						if(add!=null && add.size()>0) {
+							plf.gettSourceListView().getItems().removeAll(add);
+							plf.gettSelectedListView().getItems().addAll(add);
+						}
+						
+						List<ChatUserMV> rem = plf.gettSelectedList().stream()
+						.filter(p->ci.getRecipients().stream().noneMatch(p1->p1.equals(p.getModel())))
+						.collect(Collectors.toList());
+						if(rem!=null && rem.size()>0) {
+							plf.gettSelectedListView().getItems().removeAll(rem);
+							plf.gettSourceListView().getItems().addAll(rem);
+						}
 						fs.buildTitle(mv.getParticipants());
 						fs.addRecipientsListener();
 						break;
 					}
 				}else {
+					// look for the chat in the list view
 					Optional<ChatMV> op = super.getModels().stream()
 						.filter(p->{
 							return p.getId().getValue().equals(ci.getId());
 						}).findFirst();
 					if(op.isPresent()) {
+						// chat found
 						ChatMV m = op.get();
-						super.addMessage(new TMessage(TLanguage.getInstance()
-								.getFormatedString(CHATKey.MSG_CHAT_REMOVED,
-										m.getTitle().getValue()), "Ok", 
-								ev-> {
-								super.getModels().remove(m);
-								super.getView().tHideModal();
-						}));
+						switch(ci.getAction()) {
+						case DELETE: // message the chat was removed
+							super.addMessage(new TMessage(TLanguage.getInstance()
+									.getFormatedString(CHATKey.MSG_CHAT_REMOVED,
+											m.getTitle().getValue()), "Ok", 
+									ev-> {
+									super.getModels().remove(m);
+									super.getView().tHideModal();
+							}));
+							break;
+						case UPDATE_RECIPIENT: // update the chat users
+							m.getParticipants().clear();
+							ci.getRecipients().forEach(u->{
+								ChatUserMV umv = new ChatUserMV(u);
+								m.getParticipants().add(umv);
+							});
+							break;
+						}
 					}
 				}
-				
 			}
 			//received a chat message
 			if(n instanceof ChatMessage) {
@@ -331,14 +358,9 @@ public class ChatBehaviour extends TMasterCrudViewBehavior<ChatMV, Chat> {
 	
 	@Override
 	public void cancelAction() {
-		ChatMV model = super.getModelView();
-		if(model.getModel() instanceof ITEntity && ((ITEntity)model.getModel()).isNew()) {
-			getView().tHideModal();	
-			remove();
-		}else{
-			setModelView(null);
-			getView().tHideModal();	
-		}
+		setModelView(null);
+		colapseAction();
+		deco.gettListView().getSelectionModel().clearSelection();
 	}
 	
 	public void setHidePopOver(boolean hide) {

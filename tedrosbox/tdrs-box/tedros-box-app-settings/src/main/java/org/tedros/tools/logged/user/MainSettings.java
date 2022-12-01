@@ -52,18 +52,6 @@ public class MainSettings implements ITEntity {
 	}
 
 	@Override
-	public Integer getVersionNum() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setVersionNum(Integer versionNum) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public Date getLastUpdate() {
 		// TODO Auto-generated method stub
 		return null;

@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 import org.tedros.chat.domain.DomainSchema;
 import org.tedros.chat.domain.DomainTables;
-import org.tedros.server.entity.TEntity;
+import org.tedros.server.entity.TVersionEntity;
 import org.tedros.server.security.TAccessToken;
 
 /**
@@ -18,7 +18,7 @@ import org.tedros.server.security.TAccessToken;
  */
 @Entity
 @Table(name=DomainTables.user, schema=DomainSchema.schema)
-public class ChatUser extends TEntity {
+public class ChatUser extends TVersionEntity {
 
 	private static final long serialVersionUID = -7651172023855481688L;
 	

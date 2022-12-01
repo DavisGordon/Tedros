@@ -13,7 +13,7 @@ import org.tedros.server.annotation.TCaseSensitive;
 import org.tedros.server.annotation.TEntityImportRule;
 import org.tedros.server.annotation.TFieldImportRule;
 import org.tedros.server.annotation.TFileType;
-import org.tedros.server.entity.TEntity;
+import org.tedros.server.entity.TVersionEntity;
 
 /**
  * @author Davis Gordon
@@ -24,7 +24,7 @@ import org.tedros.server.entity.TEntity;
 @Table(name=DomainTables.mimeType, schema=DomainSchema.tedros_common)
 @TEntityImportRule(description = "#{mimetype.import.rule.desc}", 
 fileType = { TFileType.CSV, TFileType.XLS })
-public class TMimeType extends TEntity {
+public class TMimeType extends TVersionEntity {
 
 	private static final long serialVersionUID = 5379094409048057058L;
 

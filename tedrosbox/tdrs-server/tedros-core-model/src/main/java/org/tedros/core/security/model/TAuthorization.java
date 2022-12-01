@@ -11,7 +11,7 @@ import javax.persistence.UniqueConstraint;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.tedros.core.domain.DomainSchema;
 import org.tedros.core.domain.DomainTables;
-import org.tedros.server.entity.TEntity;
+import org.tedros.server.entity.TVersionEntity;
 
 /**
  * @author Davis Gordon
@@ -20,7 +20,7 @@ import org.tedros.server.entity.TEntity;
 @Entity
 @Table(name = DomainTables.authorization, schema = DomainSchema.tedros_core, 
 uniqueConstraints=@UniqueConstraint(name="aSecurityTypeUK", columnNames = { "security_id", "type" }))
-public class TAuthorization extends TEntity {
+public class TAuthorization extends TVersionEntity {
 	
 	private static final long serialVersionUID = 3480135875409356712L;
 	
