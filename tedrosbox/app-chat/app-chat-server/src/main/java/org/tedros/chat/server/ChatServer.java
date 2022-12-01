@@ -1,18 +1,11 @@
 package org.tedros.chat.server;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Properties;
-import java.util.ResourceBundle;
 
 import javax.naming.NamingException;
 
@@ -179,21 +172,5 @@ public class ChatServer {
 		}
     	
     }
-    
-    private static Properties getProp(String filePath) {
-    	
-    	File f = new File(filePath);
-    	if(!f.isFile())
-    		throw new IllegalArgumentException("The path "+filePath+" is not a valid file!");
-    	
-    	Properties p = new Properties();
-    	try(InputStream is = new FileInputStream(f)) {
-    		p.load(is);
-    		return p;
-    	} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-    }
-    
     
 }

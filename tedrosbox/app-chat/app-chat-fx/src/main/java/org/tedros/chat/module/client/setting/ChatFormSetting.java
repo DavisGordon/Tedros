@@ -147,19 +147,19 @@ public class ChatFormSetting extends TSetting {
 				ChatMV mv = getModelView();
 				List<? extends ChatUserMV> l = ch.getList();
 				buildTitle(l);
-				removeRecipientsListener();
+				//removeRecipientsListener();
 				saveChat(mv);
 				ChatInfo info = new ChatInfo();
 				info.setAction(Action.UPDATE_RECIPIENT);
 				info.setId(mv.getId().getValue());
-				info.setUser(mv.getModel().getOwner());
+				info.setUser(client.getOwner());
 				l.forEach(u->info.addRecipient(u.getModel()));
 				try {
 					client.send(info);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				addRecipientsListener();
+				//addRecipientsListener();
 			}
 		};
 		addRecipientsListener();
@@ -298,8 +298,9 @@ public class ChatFormSetting extends TSetting {
 	 */
 	private void saveChat(ChatMV mv) {
 		try {
-			Chat c = util.saveChat(TedrosContext.getLoggedUser().getAccessToken(), mv.getEntity());
-			mv.reload(c);
+			util.saveChat(TedrosContext.getLoggedUser().getAccessToken(), mv.getEntity());
+			//if(c!=null)
+			//	mv.reload(c);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}

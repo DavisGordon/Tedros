@@ -15,12 +15,12 @@ import org.tedros.common.domain.DomainSchema;
 import org.tedros.common.domain.DomainTables;
 import org.tedros.server.entity.ITByteEntity;
 import org.tedros.server.entity.ITFileEntity;
-import org.tedros.server.entity.TEntity;
+import org.tedros.server.entity.TVersionEntity;
 import org.tedros.server.model.ITByteBaseModel;
 
 @Entity
 @Table(name=DomainTables.file, schema=DomainSchema.tedros_common)
-public class TFileEntity extends TEntity implements ITFileEntity {
+public class TFileEntity extends TVersionEntity implements ITFileEntity {
 
 	private static final long serialVersionUID = 6429566289857357149L;
 

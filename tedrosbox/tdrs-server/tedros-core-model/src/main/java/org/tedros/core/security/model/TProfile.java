@@ -18,11 +18,11 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.tedros.core.domain.DomainSchema;
 import org.tedros.core.domain.DomainTables;
-import org.tedros.server.entity.TEntity;
+import org.tedros.server.entity.TVersionEntity;
 
 @Entity
 @Table(name = DomainTables.profile, schema = DomainSchema.tedros_core)
-public class TProfile extends TEntity {
+public class TProfile extends TVersionEntity {
 
 	private static final long serialVersionUID = -5789123411402469912L;
 	

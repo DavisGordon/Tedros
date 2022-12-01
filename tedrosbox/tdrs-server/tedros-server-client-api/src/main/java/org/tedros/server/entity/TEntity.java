@@ -13,7 +13,6 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 
 import org.eclipse.persistence.annotations.Cache;
 import org.eclipse.persistence.annotations.CacheCoordinationType;
@@ -37,10 +36,6 @@ public  class TEntity implements ITEntity {
     @Column(name = "id", nullable = false)
 	private Long id;
 	
-	@Version
-    @Column(name="OPTLOCK")
-	private Integer versionNum;
-	
 	@Column(name = "last_update", nullable = true)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastUpdate;
@@ -56,10 +51,9 @@ public  class TEntity implements ITEntity {
 		addOrderBy("id");
 	}
 	
-	public TEntity(Long id, Integer versionNum, Date lastUpdate, Date insertDate) {
+	public TEntity(Long id,  Date lastUpdate, Date insertDate) {
 		super();
 		this.id = id;
-		this.versionNum = versionNum;
 		this.lastUpdate = lastUpdate;
 		this.insertDate = insertDate;
 		addOrderBy("id");
@@ -76,15 +70,7 @@ public  class TEntity implements ITEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public Integer getVersionNum() {
-		return versionNum;
-	}
-
-	public void setVersionNum(Integer versionNum) {
-		this.versionNum = versionNum;
-	}
-
+	
 	public Date getLastUpdate() {
 		return lastUpdate;
 	}
@@ -129,7 +115,6 @@ public  class TEntity implements ITEntity {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((insertDate == null) ? 0 : insertDate.hashCode());
 		result = prime * result + ((lastUpdate == null) ? 0 : lastUpdate.hashCode());
-		result = prime * result + ((versionNum == null) ? 0 : versionNum.hashCode());
 		return result;
 	}
 

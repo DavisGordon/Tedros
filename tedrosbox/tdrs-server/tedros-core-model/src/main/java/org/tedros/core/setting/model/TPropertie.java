@@ -14,12 +14,12 @@ import javax.persistence.UniqueConstraint;
 import org.tedros.common.model.TFileEntity;
 import org.tedros.core.domain.DomainSchema;
 import org.tedros.core.domain.DomainTables;
-import org.tedros.server.entity.TEntity;
+import org.tedros.server.entity.TVersionEntity;
 
 @Entity
 @Table(name = DomainTables.propertie, schema = DomainSchema.tedros_core,
 uniqueConstraints=@UniqueConstraint(columnNames = { "key", "type" }))
-public class TPropertie extends TEntity {
+public class TPropertie extends TVersionEntity {
 	
 	private static final long serialVersionUID = -3294433359406122382L;
 

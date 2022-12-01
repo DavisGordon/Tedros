@@ -2,7 +2,7 @@ package org.tedros.server.entity;
 
 import org.tedros.server.model.ITFileBaseModel;
 
-public interface ITFileEntity extends ITFileBaseModel, ITEntity {
+public interface ITFileEntity extends ITFileBaseModel, ITVersionableEntity {
 	
 	public ITByteEntity getByteEntity();
 	public void setByteEntity(ITByteEntity byteEntity);

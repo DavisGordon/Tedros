@@ -15,7 +15,7 @@ import javax.persistence.TemporalType;
  *
  */
 @MappedSuperclass
-public class TReceptiveEntity extends TEntity implements ITIntegrable {
+public class TReceptiveEntity extends TVersionEntity implements ITIntegrable {
 
 	private static final long serialVersionUID = -2079872072687921884L;
 	
@@ -45,7 +45,7 @@ public class TReceptiveEntity extends TEntity implements ITIntegrable {
 	 * 
 	 */
 	public TReceptiveEntity() {
-		// TODO Auto-generated constructor stub
+		super();
 	}
 
 	/**

@@ -10,11 +10,11 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.tedros.common.domain.DomainSchema;
 import org.tedros.common.domain.DomainTables;
 import org.tedros.server.entity.ITByteEntity;
-import org.tedros.server.entity.TEntity;
+import org.tedros.server.entity.TVersionEntity;
 
 @Entity
 @Table(name = DomainTables.binary, schema = DomainSchema.tedros_common)
-public class TByteEntity extends TEntity implements ITByteEntity{
+public class TByteEntity extends TVersionEntity implements ITByteEntity{
 
 	private static final long serialVersionUID = -4185266706929273739L;
 		

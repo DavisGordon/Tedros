@@ -36,7 +36,7 @@
 	  		<version>8-4.0.0</version>
 	  		<scope>compile</scope>
 	  	</dependency>
-	  	
+	  	<!-- 
 	 <dependency>
   		<groupId>org.tedros</groupId>
   		<artifactId>app-services-fx</artifactId>
@@ -64,7 +64,7 @@
   		<version>${app.docs}</version>
   		<scope>compile</scope>
   	</dependency>
-	  	
+	  	-->
 	  	
 	  	<!-- END APPS -->
 	  	
