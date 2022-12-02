@@ -135,6 +135,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     private TModalPane modalMessage;
     private TModalPane tModalPane;
     private Accordion settingsAcc;
+    private Button userButton;
     private Button infoButton;
     private Button chatButton;
     
@@ -144,6 +145,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     
     private FadeTransition logoEffect;
     private ChangeListener<Number> effectChl;
+    private ChangeListener<TViewState> chatViewStateChl;
     
     public TedrosBox(){
     	LOGGER.setLevel(Level.ALL);
@@ -392,18 +394,12 @@ public class TedrosBox extends Application implements ITedrosBox  {
         pageToolBar.setId("t-tedros-toolbar");
         pageToolBar.setMaxSize(Double.MAX_VALUE, Control.USE_PREF_SIZE);
        
-        Button userButton = new Button();
+        userButton = new Button();
         userButton.getStyleClass().addAll("user");
         userButton.setOnAction(e->{
-        	userPopOver = new PopOver();
-        	userPopOver.setHeaderAlwaysVisible(true);
-        	userPopOver.setAutoFix(true);
-        	userPopOver.setCloseButtonEnabled(true);
-        	userPopOver.setArrowLocation(ArrowLocation.TOP_LEFT);
-        	userPopOver.show(userButton);
-        	userPopOver.setContentNode(this.settingsAcc);
+        	showUserPopOver();
         });
-        userPopOver = null;
+        
         forwardSize = new SimpleStringProperty(String.valueOf(this.forwardHistory.size()));
         final Button forwardButton = new Button("");
         forwardButton.getStyleClass().addAll("forward");
@@ -585,18 +581,54 @@ public class TedrosBox extends Application implements ITedrosBox  {
  			imgLogo.opacityProperty().addListener(effectChl);
  		});
         
+		chatViewStateChl = (a,o,n)->{
+			if(n!=null && n.equals(TViewState.READY)) {
+				TDynaPresenter<ChatMV> p = chatView.gettPresenter();
+				ChatBehaviour bhv = (ChatBehaviour) p.getBehavior();
+				ChatDecorator dec = (ChatDecorator) p.getDecorator();
+				dec.getHidePopOverButton().setOnAction(ev->{
+					chatPopOver.hide();
+				});
+				bhv.totalUnreadMessagesProperty().addListener((x,y,z)->{
+					this.chatUnreadMsgsLabel.setText(String.valueOf(z));
+				});
+				this.chatUnreadMsgsLabel.setText(String.valueOf(bhv.totalUnreadMessagesProperty().getValue()));
+				bhv.hidePopOverProperty().addListener((x,y,z)->{
+					if(z)
+						chatPopOver.hide();
+					else if(!chatPopOver.isShowing())
+						chatPopOver.show(chatButton);
+				});
+			}
+		};
+        
         getStage().setScene(scene);
         getStage().show();
         windowButtons.toogleMaximized();
         TedrosContext.showModal(buildLogin());
     }
 
-
+	private void showUserPopOver() {
+		if(userPopOver==null) {
+			userPopOver = new PopOver();
+			userPopOver.setHeaderAlwaysVisible(false);
+			userPopOver.setAutoFix(true);
+			userPopOver.setCloseButtonEnabled(true);
+			userPopOver.setArrowLocation(ArrowLocation.TOP_LEFT);
+			userPopOver.setContentNode(this.settingsAcc);
+		}
+		if(userPopOver.isShowing())
+			userPopOver.hide();
+		else
+			userPopOver.show(userButton);
+	}
 	/**
 	 * @param infoButton
 	 */
 	@SuppressWarnings("unchecked")
 	private void showInfoPopOver() {
+		hideInfoPopOver();
+		infoPopOver = null;
 		double h = scene.getHeight()-200;
 		StackPane infoPane = new StackPane();
 		infoPane.setMaxHeight(h-80);
@@ -642,15 +674,14 @@ public class TedrosBox extends Application implements ITedrosBox  {
 			chatPopOver.setAutoHide(false);
 			chatPopOver.setArrowLocation(ArrowLocation.TOP_LEFT);
 			chatPopOver.setCornerRadius(20);
-	
 			chatPopOver.setMaxHeight(h);
-			
-			chatPopOver.setContentNode(chatView);
 		}else {
 			TDynaPresenter<ChatMV> p = chatView.gettPresenter();
 			ChatBehaviour bhv = (ChatBehaviour) p.getBehavior();
 			bhv.setHidePopOver(false);
 		}
+		chatPopOver.setContentNode(chatView);
+		
 		if(chatPopOver.isShowing())
 			chatPopOver.hide();
 		else
@@ -665,18 +696,11 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	}
 
 	public void logout() {
-    	if(userPopOver!=null) {
-    		userPopOver.hide();
-    		userPopOver = null;
-    	}
-    	if(infoPopOver!=null) {
-    		infoPopOver.hide();
-    		infoPopOver = null;
-    	}
-    	if(chatPopOver!=null) {
-			chatPopOver.hide();
-			chatPopOver = null;
-    	}
+    	hideAllPopOver();
+    	userPopOver = null;
+    	infoPopOver = null;
+    	chatPopOver = null;
+    	
     	if(chatView!=null) {
     		chatView.gettPresenter().invalidate();
     		chatView = null;
@@ -694,6 +718,25 @@ public class TedrosBox extends Application implements ITedrosBox  {
     	clearPageHistory();
     	TedrosContext.logout();
     }
+
+	private void hideAllPopOver() {
+		hideUserPopOver();
+    	hideInfoPopOver();
+    	hideChatPopOver();
+	}
+
+	private void hideChatPopOver() {
+		if(chatPopOver!=null) 
+			chatPopOver.hide();
+	}
+	private void hideInfoPopOver() {
+		if(infoPopOver!=null) 
+    		infoPopOver.hide();
+	}
+	private void hideUserPopOver() {
+		if(userPopOver!=null)
+    		userPopOver.hide();
+	}
     
     
 	@SuppressWarnings("unchecked")
@@ -721,31 +764,17 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	@SuppressWarnings("rawtypes")
 	public void buildSettingsPane() {
 		TLanguage iEngine = TLanguage.getInstance(null);
-		
-		if(chatView==null) {
-			chatView = new TDynaView<>(ChatMV.class);
-			chatView.tStateProperty().addListener((a,o,n)->{
-				if(n!=null && n.equals(TViewState.READY)) {
-					TDynaPresenter<ChatMV> p = chatView.gettPresenter();
-					ChatBehaviour bhv = (ChatBehaviour) p.getBehavior();
-					ChatDecorator dec = (ChatDecorator) p.getDecorator();
-					dec.getHidePopOverButton().setOnAction(ev->{
-						chatPopOver.hide();
-					});
-					bhv.totalUnreadMessagesProperty().addListener((x,y,z)->{
-						this.chatUnreadMsgsLabel.setText(String.valueOf(z));
-					});
-					this.chatUnreadMsgsLabel.setText(String.valueOf(bhv.totalUnreadMessagesProperty().getValue()));
-					bhv.hidePopOverProperty().addListener((x,y,z)->{
-						if(z)
-							chatPopOver.hide();
-						else if(!chatPopOver.isShowing())
-							chatPopOver.show(chatButton);
-					});
-				}
-			});
-			chatView.tLoad();
+    	hideInfoPopOver();
+    	hideChatPopOver();
+		if(chatView!=null) {
+			chatView.tStateProperty().removeListener(chatViewStateChl);
+			chatView.gettPresenter().invalidate();
+			chatView = null;
 		}
+
+		chatView = new TDynaView<>(ChatMV.class);
+		chatView.tStateProperty().addListener(chatViewStateChl);
+		chatView.tLoad();
 		
 		if(settingsAcc!=null) {
 			for(TitledPane t : settingsAcc.getPanes())
