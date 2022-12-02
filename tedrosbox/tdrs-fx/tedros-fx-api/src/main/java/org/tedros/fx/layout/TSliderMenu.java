@@ -2,7 +2,6 @@ package org.tedros.fx.layout;
 
 
 
-import org.tedros.core.context.TedrosContext;
 import org.tedros.core.repository.TRepository;
 
 import javafx.animation.Animation;
@@ -17,17 +16,11 @@ import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.DepthTest;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 public class TSliderMenu extends StackPane {
@@ -54,7 +47,7 @@ public class TSliderMenu extends StackPane {
 
 	private void build(double width) {
 		setStyle("-fx-background-color: transparent;");
-	    
+	    /*
 	    DropShadow ds = new DropShadow();
         ds.setOffsetY(3.0f);
         ds.setColor(Color.BLACK);
@@ -63,19 +56,19 @@ public class TSliderMenu extends StackPane {
         ImageView imgV = new ImageView();
         imgV.setImage(img);
         imgV.setEffect(ds);
-        
+*/
         
 	    sliderContent = new StackPane();
 	    sliderContent.setPrefWidth(width);
 	    
-	    Button btn = new Button();
+	   /* Button btn = new Button();
 	    btn.setGraphic(imgV);
 	    btn.setCache(true);
 	    btn.setCacheShape(true);
 	    btn.setDepthTest(DepthTest.ENABLE);
 	    btn.setId("t-slider-menu-button");
-	    
-	    btnPane  = new StackPane(btn);
+	    */
+	    btnPane  = new StackPane();
 	    
 	    btnPane.setPrefWidth(20);
 	    slider = new HBox(sliderContent, btnPane);
