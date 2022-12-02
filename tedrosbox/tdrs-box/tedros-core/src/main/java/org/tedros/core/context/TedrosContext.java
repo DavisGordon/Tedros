@@ -627,7 +627,7 @@ public final class TedrosContext {
 	}
 
 	public static void logOut() {
-		serverLogout();
+		logout();
 		main.logout();
 		loggedUser = null;
 		TedrosContext.showModal(main.buildLogin());
@@ -637,12 +637,11 @@ public final class TedrosContext {
 	 * Stop all services and exit program
 	 * */
 	public static void exit() {
-		serverLogout();
-		loggedUser = null;
+		logout();
         Platform.exit();
 	}
 	
-	public static void serverLogout() {
+	public static void logout() {
 		TedrosAppManager.getInstance().stopAll();
 		if(loggedUser!=null && loggedUser.getAccessToken()!=null) {
 			ServiceLocator loc = ServiceLocator.getInstance();
@@ -653,6 +652,7 @@ public final class TedrosContext {
 				e.printStackTrace();
 			}finally {
 				loc.close();
+				loggedUser = null;
 			}
 		}
 	}

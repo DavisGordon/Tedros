@@ -10,7 +10,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import org.tedros.chat.CHATKey;
-import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.entity.ChatUser;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
@@ -22,7 +21,6 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -86,12 +84,12 @@ public class ChatClient {
             if(host==null || port==null)
             	throw new Exception(TLanguage.getInstance().getString(CHATKey.ERROR_SERVER_PREFERENCE));
 
-            System.out.println("<-client->: Connecting...\n");
+            System.out.println("<-Chat:"+owner+"->: Connecting...\n");
            
             //criar o socket
             socket = new Socket(host, port);
             //como não ocorreu uma excepção temos um socket aberto
-            System.out.println("<-client->: Connected...\n");
+            System.out.println("<-Chat:"+owner+"->: Connected...\n");
 
             //Vamos obter as streams de comunicação fornecidas pelo socket
             din = new ObjectInputStream(socket.getInputStream());
@@ -111,7 +109,7 @@ public class ChatClient {
                 	});
                 }
             } catch (Exception ex) {
-            	System.out.println("<-client->: " + ex.getMessage());
+            	System.out.println("<-Chat:"+owner+"->: " + ex.getMessage());
     			Platform.runLater(()->{
     				log.setValue(TLanguage.getInstance().getFormatedString(CHATKey.MSG_ERROR, ex.getMessage()));
     				connected.setValue(false); 
@@ -157,6 +155,7 @@ public class ChatClient {
             	ex.printStackTrace();;
             }
         }
+		owner = null;
 	}
 	
 	/**

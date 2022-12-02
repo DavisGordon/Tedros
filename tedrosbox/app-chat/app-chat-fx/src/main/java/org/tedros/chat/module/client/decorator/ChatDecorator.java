@@ -11,8 +11,6 @@ import org.tedros.fx.control.TButton;
 import org.tedros.fx.presenter.decorator.TListViewHelper;
 import org.tedros.fx.presenter.entity.decorator.TMasterCrudViewDecorator;
 
-import javafx.scene.Node;
-
 /**
  * @author Davis Gordon
  *
@@ -20,6 +18,16 @@ import javafx.scene.Node;
 public class ChatDecorator extends TMasterCrudViewDecorator<ChatMV> {
 
 	private TButton hidePopOverButton;
+	
+	@Override
+	public void decorate() {
+		super.decorate();
+		super.getView().gettProgressIndicator().setMediumLogo();
+	}
+	
+	@Override
+	public void showScreenSaver() {
+	}
 	
 	@Override
 	protected void configAllButtons() {
@@ -36,6 +44,7 @@ public class ChatDecorator extends TMasterCrudViewDecorator<ChatMV> {
 			helper = new TListViewHelper<>(title, tAnnotation.listViewMaxWidth(), tAnnotation.listViewMinWidth(), tAnnotation.paginator());
 		else
 			helper = new TListViewHelper<>(title, 250, 250, null);
+		helper.gettListViewLayout().getChildren().remove(0);
 		helper.gettListView().setMaxHeight(120);
 		// add the list view box at the top 
 		addItemInTTopContent(helper.gettListViewPane());
