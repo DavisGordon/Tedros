@@ -202,12 +202,6 @@ public class TedrosBox extends Application implements ITedrosBox  {
     	return getStage().getY();
     }
     
-    @Override
-    public void stop() throws Exception {
-    	TedrosContext.serverLogout();
-    	super.stop();
-    }
-        
     public void reloadStyle(){
     	
     	final String customStyleCssUrl = TThemeUtil.getStyleURL().toExternalForm();
@@ -657,14 +651,36 @@ public class TedrosBox extends Application implements ITedrosBox  {
 			ChatBehaviour bhv = (ChatBehaviour) p.getBehavior();
 			bhv.setHidePopOver(false);
 		}
-		if(!chatPopOver.isShowing())
+		if(chatPopOver.isShowing())
+			chatPopOver.hide();
+		else
 			chatPopOver.show(chatButton);
 	}
 	
 	
-    public void logout() {
-    	if(userPopOver!=null)
+    @Override
+	public void stop() throws Exception {
+		super.stop();
+		TedrosContext.exit();
+	}
+
+	public void logout() {
+    	if(userPopOver!=null) {
     		userPopOver.hide();
+    		userPopOver = null;
+    	}
+    	if(infoPopOver!=null) {
+    		infoPopOver.hide();
+    		infoPopOver = null;
+    	}
+    	if(chatPopOver!=null) {
+			chatPopOver.hide();
+			chatPopOver = null;
+    	}
+    	if(chatView!=null) {
+    		chatView.gettPresenter().invalidate();
+    		chatView = null;
+    	}
     	currentPage = null;
         currentPagePath = "";
         changingPage = false;
@@ -676,6 +692,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     	innerPane.settMenuVisible(false);
     	mainPane.setTop(null);
     	clearPageHistory();
+    	TedrosContext.logout();
     }
     
     

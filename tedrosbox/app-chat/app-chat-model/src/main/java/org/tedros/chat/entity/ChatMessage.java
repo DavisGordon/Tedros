@@ -22,7 +22,7 @@ import javax.persistence.TemporalType;
 import org.tedros.chat.domain.DomainSchema;
 import org.tedros.chat.domain.DomainTables;
 import org.tedros.common.model.TFileEntity;
-import org.tedros.server.entity.TVersionEntity;
+import org.tedros.server.entity.TEntity;
 
 /**
  * @author Davis Gordon
@@ -31,7 +31,7 @@ import org.tedros.server.entity.TVersionEntity;
 
 @Entity
 @Table(name=DomainTables.message, schema=DomainSchema.schema)
-public class ChatMessage extends TVersionEntity implements Comparable<ChatMessage>{
+public class ChatMessage extends TEntity implements Comparable<ChatMessage>{
 
 	private static final long serialVersionUID = -8257824754212403138L;
 

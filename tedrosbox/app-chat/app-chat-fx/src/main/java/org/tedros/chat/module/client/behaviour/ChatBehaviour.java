@@ -35,7 +35,6 @@ import org.tedros.fx.modal.TMessageBox;
 import org.tedros.fx.presenter.behavior.TActionType;
 import org.tedros.fx.presenter.entity.behavior.TMasterCrudViewBehavior;
 import org.tedros.fx.process.TEntityProcess;
-import org.tedros.server.entity.ITEntity;
 import org.tedros.server.result.TResult;
 
 import javafx.application.Platform;

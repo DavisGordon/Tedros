@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.chat.CHATKey;
-import org.tedros.chat.entity.Chat;
 import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.model.Action;
 import org.tedros.chat.model.ChatInfo;
@@ -78,12 +77,13 @@ public class ChatFormSetting extends TSetting {
 	@Override
 	public void run() {
 		
-		ChatMV mv = (ChatMV) super.getModelView();
-		listenReceivedMsg(mv);
-		final ObservableList<ChatMessage> msgs = mv.getMessages();
-		listenSendButton(mv, msgs);
-		listenClearButton(mv);
+		listenReceivedMsg();
+		listenSendButton();
+		listenClearButton();
 		listenRecipients();
+		
+		ChatMV mv = (ChatMV) super.getModelView();
+		final ObservableList<ChatMessage> msgs = mv.getMessages();
 		
 		TabPane tp = super.getLayout("owner");
 		// Tab title
@@ -104,7 +104,8 @@ public class ChatFormSetting extends TSetting {
 		verifyOwnerAsParticipant();
 		
 		try {
-			List<ChatMessage> lst0 = util.findMessages(TedrosContext.getLoggedUser().getAccessToken(),
+			List<ChatMessage> lst0 = util.findMessages(TedrosContext.getLoggedUser()
+					.getAccessToken(),
 					mv.getEntity().getId());
 			
 			boolean reload = false;
@@ -115,8 +116,8 @@ public class ChatFormSetting extends TSetting {
 						.noneMatch(p-> p.equals(client.getOwner()))) {
 					try {
 						c.addViewed(client.getOwner());
-						util.saveMessage(TedrosContext.getLoggedUser().getAccessToken(), c);
-						//Collections.replaceAll(lst0, c, cm);
+						util.saveMessage(TedrosContext.getLoggedUser()
+								.getAccessToken(), c);
 						reload=true;
 					} catch (Exception e) {
 						throw new RuntimeException(e);
@@ -127,7 +128,8 @@ public class ChatFormSetting extends TSetting {
 			msgs.addAll(lst0);
 			mv.getMessagesLoaded().setValue(true);
 			if(reload) {
-				TDynaPresenter<ChatMV> p = (TDynaPresenter<ChatMV>) super.getForm().gettPresenter();
+				TDynaPresenter<ChatMV> p = (TDynaPresenter<ChatMV>) 
+						getForm().gettPresenter();
 				ChatBehaviour bhv = (ChatBehaviour) p.getBehavior();
 				bhv.countUnreadMessages();
 			}
@@ -147,7 +149,6 @@ public class ChatFormSetting extends TSetting {
 				ChatMV mv = getModelView();
 				List<? extends ChatUserMV> l = ch.getList();
 				buildTitle(l);
-				//removeRecipientsListener();
 				saveChat(mv);
 				ChatInfo info = new ChatInfo();
 				info.setAction(Action.UPDATE_RECIPIENT);
@@ -159,7 +160,6 @@ public class ChatFormSetting extends TSetting {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				//addRecipientsListener();
 			}
 		};
 		addRecipientsListener();
@@ -168,13 +168,15 @@ public class ChatFormSetting extends TSetting {
 	/**
 	 * @param mv
 	 */
-	private void listenClearButton(ChatMV mv) {
+	private void listenClearButton() {
 		// Clear event
 		EventHandler<ActionEvent> ev1 = e->{
+			ChatMV mv = getModelView();
 			mv.getMessage().setValue(null);
 		};
 		repo.add("ev1", ev1);
-		TButton clearBtn = (TButton) super.getDescriptor().getFieldDescriptor("clearBtn").getComponent();
+		TButton clearBtn = (TButton) getDescriptor()
+				.getFieldDescriptor("clearBtn").getComponent();
 		clearBtn.setOnAction(new WeakEventHandler<>(ev1));
 	}
 
@@ -182,9 +184,11 @@ public class ChatFormSetting extends TSetting {
 	 * @param mv
 	 * @param msgs
 	 */
-	private void listenSendButton(ChatMV mv, final ObservableList<ChatMessage> msgs) {
+	private void listenSendButton() {
 		// Send event
 		EventHandler<ActionEvent> ev0 = e -> {
+			ChatMV mv = getModelView(); 
+			final ObservableList<ChatMessage> msgs = mv.getMessages();
 			this.verifyOwnerAsParticipant();
 			
 			ObservableList<ChatUserMV> dest = mv.getParticipants();
@@ -196,7 +200,8 @@ public class ChatFormSetting extends TSetting {
 	        	//ppo.setHeaderAlwaysVisible(true);
 	        	ppo.setAutoFix(true);
 	        	ppo.setArrowLocation(ArrowLocation.RIGHT_CENTER);
-	        	ppo.setContentNode(new TLabel(TLanguage.getInstance().getString(CHATKey.MSG_SELECT_RECIPIENT)));
+	        	ppo.setContentNode(new TLabel(TLanguage.getInstance()
+	        			.getString(CHATKey.MSG_SELECT_RECIPIENT)));
 	        	ppo.show(fbx);
 	        	return;
 			}
@@ -219,7 +224,8 @@ public class ChatFormSetting extends TSetting {
 							m.addDestination(c.getEntity());
 					
 					m.setChat(mv.getModel());
-					m = util.saveMessage(TedrosContext.getLoggedUser().getAccessToken(), m);
+					m = util.saveMessage(TedrosContext.getLoggedUser()
+							.getAccessToken(), m);
 					client.send(m);
 					
 					msgs.add(m);
@@ -232,7 +238,8 @@ public class ChatFormSetting extends TSetting {
 		        }
 		};
 		repo.add("ev0", ev0);
-		TButton sendBtn = (TButton) super.getDescriptor().getFieldDescriptor("sendBtn").getComponent();
+		TButton sendBtn = (TButton) getDescriptor()
+				.getFieldDescriptor("sendBtn").getComponent();
 		sendBtn.setOnAction(new WeakEventHandler<>(ev0));
 	}
 
@@ -240,13 +247,15 @@ public class ChatFormSetting extends TSetting {
 	 * @param mv
 	 * @return
 	 */
-	private void listenReceivedMsg(ChatMV mv) {
+	private void listenReceivedMsg() {
+		ChatMV mv = getModelView();
 		// Listen new messages to show
 		final ObservableList<ChatMessage> msgs = mv.getMessages();
 		ListChangeListener<ChatMessage> chl0 = ch0 ->{
 			if(ch0.next() && ch0.wasAdded()) {
 				ch0.getAddedSubList().forEach(m->{
-					boolean left = !m.getFrom().getUserId().equals(TedrosContext.getLoggedUser().getId());
+					boolean left = !m.getFrom().getUserId()
+							.equals(TedrosContext.getLoggedUser().getId());
 					showMsg(m, left);
 				});
 			}
@@ -298,9 +307,8 @@ public class ChatFormSetting extends TSetting {
 	 */
 	private void saveChat(ChatMV mv) {
 		try {
-			util.saveChat(TedrosContext.getLoggedUser().getAccessToken(), mv.getEntity());
-			//if(c!=null)
-			//	mv.reload(c);
+			util.saveChat(TedrosContext.getLoggedUser()
+					.getAccessToken(), mv.getEntity());
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -315,7 +323,8 @@ public class ChatFormSetting extends TSetting {
 		scrollFlag = true;
 		StackPane p1 = util.buildTextPane(m, left, open->{
 			if(open) {
-				TDynaPresenter<ChatMV> p = (TDynaPresenter<ChatMV>) super.getForm().gettPresenter();
+				TDynaPresenter<ChatMV> p = (TDynaPresenter<ChatMV>) 
+						getForm().gettPresenter();
 				ChatBehaviour bhv = (ChatBehaviour) p.getBehavior();
 				bhv.setHidePopOver(true);
 			}
@@ -325,15 +334,18 @@ public class ChatFormSetting extends TSetting {
 		int row = gp.getChildren().size();
 		gp.add(p1, left ? 0 : 1, row);
 		
-		
-		
 	}
 	
 	@Override
 	public void dispose() {
+		removeRecipientsListener();
 		repo.clear();
 		repo = null;
 		client = null;
+		usersChl = null;
+		ChatMV mv = getModelView();
+		mv.getMessages().clear();
+		mv.getMessagesLoaded().setValue(false);
 	}
 	/**
 	 * @param mv
