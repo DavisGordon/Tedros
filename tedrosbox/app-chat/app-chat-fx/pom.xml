@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.tedros</groupId>
   		<artifactId>app-chat</artifactId>
-  		<version>8-4.0.0</version>
+  		<version>8-4.1.0</version>
 	</parent>	
 	
   	<artifactId>app-chat-fx</artifactId>
@@ -24,7 +24,7 @@
 	  	<dependency>
 	  		<groupId>org.tedros</groupId>
 	  		<artifactId>app-chat-ejb-client</artifactId>
-	  		<version>8-4.0.0</version>
+	  		<version>8-4.1.0</version>
 	  	</dependency>
 	  	
   	</dependencies> 
