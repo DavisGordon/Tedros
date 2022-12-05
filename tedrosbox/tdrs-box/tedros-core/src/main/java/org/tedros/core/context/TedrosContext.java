@@ -643,6 +643,7 @@ public final class TedrosContext {
 	
 	public static void logout() {
 		TedrosAppManager.getInstance().stopAll();
+		infoListProperty.clear();
 		if(loggedUser!=null && loggedUser.getAccessToken()!=null) {
 			ServiceLocator loc = ServiceLocator.getInstance();
 			try {

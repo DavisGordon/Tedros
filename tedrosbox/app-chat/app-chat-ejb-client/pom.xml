@@ -13,7 +13,7 @@
   	<artifactId>app-chat-ejb-client</artifactId>
   	<packaging>jar</packaging>
 
-  	<name>app-template-client</name>
+  	<name>app-chat-ejb-client</name>
   	<description>The app ejb client</description>
 
 	<!-- DEPENDENCIES -->

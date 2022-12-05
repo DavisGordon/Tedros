@@ -21,20 +21,20 @@
 	  	<dependency>
 	  		<groupId>org.tedros</groupId>
 	  		<artifactId>tedros-server-client-api</artifactId>
-	  		<version>${tedros.jee}</version>
+	  		<version>8-4.1.0</version>
 	  		<scope>compile</scope>
 	  	</dependency>
 	  	
 	  	<dependency>
 	  		<groupId>org.tedros</groupId>
 	  		<artifactId>tedros-core-model</artifactId>
-	  		<version>${tedros.jee}</version>
+	  		<version>8-4.1.0</version>
 	  	</dependency>
 	  	
 	  	<dependency>
 	  		<groupId>org.tedros</groupId>
 	  		<artifactId>tedros-common-model</artifactId>
-	  		<version>${tedros.jee}</version>
+	  		<version>8-4.1.0</version>
 	  	</dependency>
 	  
 	  	<dependency>
