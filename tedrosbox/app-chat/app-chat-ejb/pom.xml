@@ -40,14 +40,14 @@
 	  	<dependency>
 	  		<groupId>org.tedros</groupId>
 	  		<artifactId>tedros-server-api</artifactId>
-	  		<version>${tedros.jee}</version>
+	  		<version>8-4.1.0</version>
 	  		<scope>compile</scope>
 	  	</dependency>
 	  
 	  <dependency>
 	  		<groupId>org.tedros</groupId>
 	  		<artifactId>tedros-core-ejb-client</artifactId>
-	  		<version>${tedros.jee}</version>
+	  		<version>8-4.1.0</version>
 	  		<scope>compile</scope>
 	  	</dependency>
 	  

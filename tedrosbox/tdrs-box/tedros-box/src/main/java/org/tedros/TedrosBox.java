@@ -651,14 +651,17 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		StackPane.setMargin(scroll, new Insets(8));
 		infoPopOver.setContentNode(infoPane);
 		Platform.runLater(()->{
-			infoPopOver.show(infoButton);
-			if(TedrosContext.infoListProperty().size()>0) {
-				TedrosContext.infoListProperty().forEach(c->{
-					((TMessage) c).setLoaded(false);
-					vb.getChildren().add(TMessageBox.buildMessagePane((TMessage) c));
-				});
-			}else
-				vb.getChildren().add(TMessageBox.buildMessagePane(new TMessage(TMessageType.GENERIC,"...")));
+			if(infoPopOver!=null) {
+				infoPopOver.show(infoButton);
+				if(TedrosContext.infoListProperty().size()>0) {
+					TedrosContext.infoListProperty().forEach(c->{
+						((TMessage) c).setLoaded(false);
+						vb.getChildren().add(TMessageBox.buildMessagePane((TMessage) c));
+					});
+				}else
+					vb.getChildren().add(TMessageBox
+							.buildMessagePane(new TMessage(TMessageType.GENERIC,"...")));
+			}
 		});
 	}
     

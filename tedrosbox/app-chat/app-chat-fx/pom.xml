@@ -18,7 +18,7 @@
 	  	<dependency>
 	  		<groupId>org.tedros</groupId>
 	  		<artifactId>tedros-fx-api</artifactId>
-	  		<version>${tedros.fx}</version>
+	  		<version>8-4.1.0</version>
 	  	</dependency>
 	  	
 	  	<dependency>
