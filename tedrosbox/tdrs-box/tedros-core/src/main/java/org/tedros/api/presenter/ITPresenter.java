@@ -6,8 +6,11 @@ import org.tedros.core.ITModule;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 
 /**
- * The presenter responsable to load the view.
- * 
+ * The view presenter contract.
+ * <p>
+ * The presenter acts upon the model (ITModelView) and the view (ITView). 
+ * It delegate the view behavior to the ITBehavior and the layout to the decorator ITDecorator. 
+ * </p>
  * @author Davis Gordon
  * */
 @SuppressWarnings("rawtypes")

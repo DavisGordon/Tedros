@@ -8,6 +8,16 @@ import org.tedros.fx.presenter.model.TModelView;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 
+/**
+ * The basic decorator of the table detail view. 
+ * It can be applied on detail entities.
+ * A TableView is created to list the 
+ * details. 
+ * 
+ * @author Davis Gordon
+ *
+ * @param <M>
+ */
 @SuppressWarnings("rawtypes")
 public abstract class TDetailFieldBaseDecorator<M extends TModelView> 
 extends TDynaViewSimpleBaseDecorator<M> {

@@ -16,7 +16,6 @@ import org.tedros.core.context.TedrosContext;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
 import org.tedros.fx.TFxKey;
-import org.tedros.fx.annotation.process.TEjbService;
 import org.tedros.fx.control.action.TPresenterAction;
 import org.tedros.fx.control.validator.TControlValidator;
 import org.tedros.fx.control.validator.TValidatorResult;
@@ -29,6 +28,7 @@ import org.tedros.fx.presenter.behavior.TBehavior;
 import org.tedros.fx.presenter.behavior.TProcessResult;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewSimpleBaseDecorator;
+import org.tedros.fx.presenter.dynamic.view.TDynaView;
 import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.fx.process.TModelProcess;
 import org.tedros.server.model.ITModel;
@@ -47,6 +47,18 @@ import javafx.collections.WeakListChangeListener;
 import javafx.concurrent.Worker.State;
 import javafx.scene.layout.StackPane;
 
+/***
+ * The basic behavior for the {@link TDynaView} view.
+ * This behavior is applied on views and models 
+ * that don't need to access the business layer on 
+ * the application server. 
+ * For model processing use {@link org.tedros.fx.annotation.process.TModelProcess}
+ * in the TModelView.
+ * @author Davis Gordon
+ *
+ * @param <M>
+ * @param <E>
+ */
 @SuppressWarnings("rawtypes")
 public abstract class TDynaViewSimpleBaseBehavior<M extends TModelView, E extends ITModel> 
 extends TBehavior<M, TDynaPresenter<M>> {
@@ -66,10 +78,9 @@ extends TBehavior<M, TDynaPresenter<M>> {
 	
 	private final ObjectProperty<TActionState<M>> actionStateProperty = new SimpleObjectProperty<>();
 	private final ObservableList<TMessage> messagesProperty = FXCollections.observableArrayList();
-	
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	public void load(){	
 		
 		final TDynaPresenter<M> presenter = getPresenter(); 
@@ -111,6 +122,9 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		getView().tModalVisibleProperty().addListener(new WeakChangeListener<Boolean>(modalCleanMsgLtnr));
 	}
 	
+	/**
+	 * Show the view screen saver
+	 */
 	public void showScreenSaver() {
 		if(!getView().gettState().equals(TViewState.READY))
 			super.setViewStateAsReady();
@@ -118,7 +132,8 @@ extends TBehavior<M, TDynaPresenter<M>> {
 	}
 
 	/**
-	 * 
+	 * Checks if the logged in user are authorize to access the view.
+	 * Show an access denied modal pane if not.
 	 */
 	protected void verifyViewAccessAutorization() {
 		if(isUserNotAuthorized(TAuthorizationType.VIEW_ACCESS)){
@@ -128,6 +143,11 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		}
 	}
 	
+	/**
+	 * Load the presenter action for the presenter.
+	 * @param presenter
+	 * @param action
+	 */
 	@SuppressWarnings("unchecked")
 	protected void loadAction(ITPresenter presenter, Class<? extends TPresenterAction>... action) {
 		try {
@@ -141,10 +161,19 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		}
 	}
 
+	/**
+	 * Add the presenter action.
+	 * @param action
+	 */
 	public void addAction(TPresenterAction action) {
 		this.actionHelper.add(action);
 	}
 	
+	/**
+	 * Retrieves a presenter action list of the given type.
+	 * @param type
+	 * @return List of TPresenterAction
+	 */
 	public List<TPresenterAction>  getActions(TActionType... type){
 		return this.actionHelper.getAction(type);
 	}
@@ -157,7 +186,7 @@ extends TBehavior<M, TDynaPresenter<M>> {
 	}
 	
 	/**
-	 * Set a TActionState
+	 * Set the actionState
 	 * */
 	@SuppressWarnings("unchecked")
 	public void setActionState(TActionState actionState) {
@@ -172,20 +201,34 @@ extends TBehavior<M, TDynaPresenter<M>> {
 	}
 	
 	/**
-	 * Show a message in a modal view
+	 * Show messages in a modal view
 	 * */
 	public void addMessage(TMessage... msg) {
 		messagesProperty.addAll(msg);
 	}
 	
+    /***
+     * Get the authorizations list of the logged in user 
+     * @return List of TAuthorizationType
+     */
     public List<TAuthorizationType> getUserAuthorizations() {
 		return userAuthorizations;
 	}
     
+    /**
+     * Checks if the logged in user is authorized for the type.
+     * @param type
+     * @return true if user has the given type.
+     */
     public boolean isUserAuthorized(TAuthorizationType type){
     	return userAuthorizations==null || userAuthorizations.contains(type);
     }
     
+    /**
+     * Checks if the logged in user is not authorized for the type.
+     * @param type
+     * @return true if the user does not have the provided type.
+     */
     public boolean isUserNotAuthorized(TAuthorizationType type){
     	return userAuthorizations!=null && !userAuthorizations.contains(type);
     }
@@ -204,8 +247,7 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		}
 	}
 	
-	
-	
+	@Override
 	public boolean invalidate() {
 		ITView v = getView();
 		if(v!=null && v.gettProgressIndicator()!=null) 
@@ -214,6 +256,11 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		
 	}
 	
+	/**
+	 * Config a progress indicator to the process.
+	 * Bind the view progress indicator to the process running property.
+	 * @param process
+	 */
 	public void configProgressIndicator(final ITProcess<?> process) {
 		getView().gettProgressIndicator().bind(process.runningProperty());
 	}
@@ -227,8 +274,8 @@ extends TBehavior<M, TDynaPresenter<M>> {
 	
 	/**
 	 * <p>
-	 * Create a {@link TModelProcess} process based on the {@link TEjbService} 
-	 * or {@link org.tedros.fx.annotation.process.TEntityProcess} 
+	 * Create a {@link TModelProcess} process based on the 
+	 * {@link org.tedros.fx.annotation.process.TModelProcess} 
 	 * annotated in the given {@link TModelView}
 	 * </p>  
 	 * */
@@ -240,30 +287,67 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		return null;
 	}
 	
+	/**
+	 * Override to process the result on succeeded state 
+	 * of runModelProcess method.
+	 * @param modelProcess
+	 * @return true to continue the process
+	 */
 	public boolean runWhenModelProcessSucceeded(TModelProcess<E> modelProcess){
 		return true;
 	}
 	
+	/**
+	 * Override to process on failed state of runModelProcess method.
+	 * @param modelProcess
+	 */
 	public void runWhenModelProcessFailed(TModelProcess<E> modelProcess){
 		
 	}
 	
+	/**
+	 * Override to process on cancelled state of runModelProcess method.
+	 * @param modelProcess
+	 */
 	public void runWhenModelProcessCancelled(TModelProcess<E> modelProcess){
 		
 	}
 	
+	/**
+	 * Override to process on ready state of runModelProcess method.
+	 * @param modelProcess
+	 */
 	public void runWhenModelProcessReady(TModelProcess<E> modelProcess){
 		
 	}
 	
+	/**
+	 * Override to process on running state of runModelProcess method.
+	 * @param modelProcess
+	 */
 	public void runWhenModelProcessRunning(TModelProcess<E> modelProcess){
 		
 	}
 	
+	/**
+	 * Override to process on scheduled state of runModelProcess method.
+	 * @param modelProcess
+	 */
 	public void runWhenModelProcessScheduled(TModelProcess<E> modelProcess){
 		
 	}
 	
+	/**
+	 * Construct and run a TModelProcess on the current TModelView. 
+	 * The action to be performed is based on the given TActionType.
+	 * Target service must be defined by {@link org.tedros.fx.annotation.process.TModelProcess}
+	 * in TModelView
+	 * 
+	 * @param action
+	 * @throws Exception
+	 * @throws TValidatorException
+	 * @throws Throwable
+	 */
 	@SuppressWarnings("unchecked")
 	public void runModelProcess(TActionType action)
 			throws Exception, TValidatorException, Throwable {
@@ -402,29 +486,46 @@ extends TBehavior<M, TDynaPresenter<M>> {
 			throw new TValidatorException(lst);
 	}
 	
-	
-
+	/**
+	 * Get the TModelProcess class
+	 * @return Class
+	 */
 	public Class<? extends TModelProcess> getModelProcessClass() {
 		return modelProcessClass;
 	}
 
+	/**
+	 * Get the value of skipChangeValidation
+	 * @return boolean
+	 */
 	public boolean isSkipChangeValidation() {
 		return skipChangeValidation;
 	}
 
+	/**
+	 * Define whether the process should skip model change validation.  
+	 * @param skipChangeValidation
+	 */
 	public void setSkipChangeValidation(boolean skipChangeValidation) {
 		this.skipChangeValidation = skipChangeValidation;
 	}
 
+	/**
+	 * Get the value of skipRequiredValidation
+	 * @return
+	 */
 	public boolean isSkipRequiredValidation() {
 		return skipRequiredValidation;
 	}
 
+	/**
+	 * Define if the process should ignore the 
+	 * validation of mandatory fields.  
+	 * @param skipChangeValidation
+	 */
 	public void setSkipRequiredValidation(boolean skipRequiredValidation) {
 		this.skipRequiredValidation = skipRequiredValidation;
 	}
-
-
 
 	/**
 	 * @return the actionStatePropemrty

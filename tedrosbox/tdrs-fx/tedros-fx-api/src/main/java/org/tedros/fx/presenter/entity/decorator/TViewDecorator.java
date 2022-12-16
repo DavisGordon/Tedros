@@ -6,19 +6,30 @@ import org.tedros.fx.presenter.dynamic.decorator.TDynaViewSimpleBaseDecorator;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
 import org.tedros.fx.presenter.model.TModelView;
 
+/**
+ * The decoraror of the simple view.
+ * No buttons and actions.
+ * @author Davis Gordon
+ *
+ * @param <M>
+ */
 @SuppressWarnings("rawtypes")
 public class TViewDecorator<M extends TModelView> 
 extends TDynaViewSimpleBaseDecorator<M> {
 	
 	private TPresenter tPresenter;
   
+	@Override
     public void decorate() {
     	tPresenter = getPresenter().getPresenterAnnotation();
 		configFormSpace();
 		configViewTitle();
 	}
 
-	
+	/**
+	 * Config the view title based on 
+	 * the {@link TPresenter} defined in the TEntityModelView
+	 */
 	protected void configViewTitle() {
 		if(!tPresenter.decorator().viewTitle().equals(TAnnotationDefaultValue.TVIEW_viewTitle))
 			setViewTitle(null);
@@ -27,6 +38,9 @@ extends TDynaViewSimpleBaseDecorator<M> {
 		}
 	}
 
+	/**
+	 * Config the form space
+	 */
 	protected void configFormSpace() {
 		addItemInTCenterContent(getPresenter().getView().gettFormSpace());
 	}

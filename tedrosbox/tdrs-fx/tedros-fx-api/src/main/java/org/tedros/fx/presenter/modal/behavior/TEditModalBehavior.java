@@ -31,6 +31,14 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.util.Callback;
 
+/**
+ * The behavior of the open modal view to edit entity. 
+ * This behavior can be applied on detail entities.
+ * @author Davis Gordon
+ *
+ * @param <M>
+ * @param <E>
+ */
 public class TEditModalBehavior<M extends TEntityModelView<E>, E extends ITEntity>
 extends TDynaViewCrudBaseBehavior<M, E> {
 	
@@ -43,7 +51,9 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		this.decorator = (TEditModalDecorator<M>) getPresenter().getDecorator();
 		initialize();
 	}
-		
+	/**
+	 * Initialize the behavior.
+	 */
 	public void initialize() {
 		
 		configCancelAction();
@@ -66,6 +76,9 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			super.setViewStateAsReady();
 	}
 	
+	/**
+	 * Enable the single mode.
+	 */
 	public void setSingleMode() {
 		this.singleMode = true;
 		super.runNewActionAfterSave = false;
@@ -105,7 +118,6 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			});
 	}
 	
-
 	/**
 	 * Config the close button 
 	 * */
@@ -122,7 +134,6 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 	/**
 	 * Perform this action when close button onAction is triggered.
 	 * */
-	@SuppressWarnings("unchecked")
 	public void closeAction() {
 		if(actionHelper.runBefore(TActionType.CLOSE)){
 			try{
@@ -151,14 +162,15 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		actionHelper.runAfter(TActionType.CLOSE);
 	}
 	
-
 	private void closeModal() {
 		super.invalidate();
 		TedrosAppManager.getInstance()
 		.getModuleContext((TModule)TedrosContext.getView()).getCurrentViewContext()
 		.getPresenter().getView().tHideModal();
 	}
-	
+	/**
+	 * Config the cancel action
+	 */
 	protected void configCancelAction() {
 		addAction(new TPresenterAction(TActionType.CANCEL) {
 
@@ -208,6 +220,9 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		}
 	}	
 	
+	/**
+	 * Config the ListView listener.
+	 */
 	protected void configListViewChangeListener() {
 		
 		ChangeListener<M> chl = (a0, old_, new_) -> {
@@ -222,7 +237,10 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		.addListener(new WeakChangeListener<>(chl));
 		
 	}
-
+	/**
+	 * Process the selected item on the ListView
+	 * @param new_
+	 */
 	protected void processListViewSelectedItem(M new_) {
 		if(new_==null) {
 			setModelView(null);
@@ -233,6 +251,9 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		}
 	}
 	
+	/**
+	 * Remove the selected item from the ListView
+	 */
 	public void remove() {
 		final ListView<M> listView = this.decorator.gettListView();
 		int index = getModels().indexOf(getModelView());
@@ -240,6 +261,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		super.remove(index);
 	}
 		
+	@Override
 	public void colapseAction() {
 		if(!this.decorator.isListContentVisible())
 			showListView();
@@ -247,26 +269,27 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			hideListView();
 	}
 
+	/**
+	 * Hide the ListView panel
+	 */
 	public void hideListView() {
 		this.decorator.hideListContent();
 	}
 
+	/**
+	 * Show the ListView panel
+	 */
 	public void showListView() {
 		if(!this.singleMode)
 			this.decorator.showListContent();
 	}
 	
+	@Override
 	public boolean processNewEntityBeforeBuildForm(M model) {
 		final ListView<M> list = this.decorator.gettListView();
 		list.getItems().add(model);
 		list.selectionModelProperty().get().select(list.getItems().size()-1);
 		return false;
-	}
-
-	
-	@Override
-	public boolean invalidate() {
-		return super.invalidate();
 	}
 		
 }

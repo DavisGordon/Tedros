@@ -9,6 +9,12 @@ import org.tedros.core.context.TedrosAppManager;
 
 import javafx.scene.layout.StackPane;
 
+/***
+ * The root view decorator.
+ * @author Davis Gordon
+ *
+ * @param <P>
+ */
 @SuppressWarnings("rawtypes")
 public abstract class TDecorator<P extends ITPresenter> 
 implements ITDecorator<P> {
@@ -43,12 +49,13 @@ implements ITDecorator<P> {
 		iEngine.setCurrentUUID(getApplicationUUID());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	public <V extends ITView> V getView() {
 		return (V) this.presenter.getView();
 	}	
 	
+	@Override
 	public String getApplicationUUID() {
 		String uuid = null;
 		ITModule module = getPresenter().getModule();

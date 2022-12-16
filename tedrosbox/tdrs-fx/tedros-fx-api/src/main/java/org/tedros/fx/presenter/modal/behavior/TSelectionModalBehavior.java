@@ -3,6 +3,7 @@ package org.tedros.fx.presenter.modal.behavior;
 import java.lang.reflect.InvocationTargetException;
 
 import org.tedros.api.presenter.view.TViewMode;
+import org.tedros.fx.annotation.presenter.TSelectionModalPresenter;
 import org.tedros.fx.control.action.TPresenterAction;
 import org.tedros.fx.presenter.behavior.TActionType;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewSelectionBaseBehavior;
@@ -10,6 +11,17 @@ import org.tedros.fx.presenter.modal.decorator.TSelectionModalDecorator;
 import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.server.entity.ITEntity;
 
+/**
+ * The behavior of the open modal view 
+ * to select an entity.
+ * It can be set using the 
+ * {@link TSelectionModalPresenter} annotation on 
+ * the TEntityModelView. 
+ * @author Davis Gordon
+ *
+ * @param <M>
+ * @param <E>
+ */
 @SuppressWarnings({ "rawtypes" })
 public class TSelectionModalBehavior<M extends TModelView, E extends ITEntity>
 extends TDynaViewSelectionBaseBehavior<M, E> {
@@ -22,7 +34,10 @@ extends TDynaViewSelectionBaseBehavior<M, E> {
 		this.decorator = (TSelectionModalDecorator<M>) getPresenter().getDecorator();
 		initialize();
 	}
-		
+	
+	/**
+	 * Initialize the behavior
+	 */
 	public void initialize() {
 		configCleanButton();
 		configSearchButton();

@@ -12,6 +12,7 @@ import org.tedros.fx.control.TButton;
 import org.tedros.fx.presenter.decorator.ITListViewDecorator;
 import org.tedros.fx.presenter.decorator.TListViewHelper;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
+import org.tedros.fx.presenter.dynamic.decorator.TDynaViewSimpleBaseDecorator;
 import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.fx.presenter.paginator.TPaginator;
@@ -26,6 +27,13 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+/***
+ * The decorator of the modal CRUD view 
+ * with a list view and a close modal button.
+ * @author Davis Gordon
+ *
+ * @param <M>
+ */
 public class TEditModalDecorator<M extends TEntityModelView<? extends ITEntity>> 
 extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M>{
 	
@@ -35,6 +43,7 @@ extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M>{
 	
     private TPresenter tPresenter;
   
+    @Override
     public void decorate() {
     	tPresenter = getPresenter().getPresenterAnnotation();
 		configFormSpace();
@@ -44,6 +53,9 @@ extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M>{
 		configListView();
 	}
 
+    /**
+     * Build the list view as setting in the {@link TEditModalPresenter}
+     */
 	protected void configListView() {
 		
 		String title = tPresenter!=null ? tPresenter.decorator().listTitle() : null;
@@ -59,6 +71,9 @@ extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M>{
 		addItemInTLeftContent(helper.gettListViewPane());
 	}
 
+	/**
+	 * Build all buttons setting in the {@link TDecorator}
+	 */
 	protected void configAllButtons() {
 		TDecorator tDeco = tPresenter.decorator();
 		Node[] nodes = new Node[0];
@@ -103,6 +118,9 @@ extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M>{
 		addPaddingInTLeftContent(0, 4, 0, 0);
 	}
 	
+	/**
+	 * Enable single edit mode without a list view.
+	 */
 	public void setSingleMode() {
 		Node[] nodes = new Node[0];
 		if(gettColapseButton()!=null)
@@ -144,6 +162,9 @@ extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M>{
 		}
 	}
 
+	/**
+	 * Build the BreadcrumBar as setting in the {@link TForm}
+	 */
 	protected void configBreadcrumBar() {
 		final TForm tForm = this.getPresenter().getFormAnnotation();
 		setShowBreadcrumBar((tForm!=null) ? tForm.showBreadcrumBar() : false);
@@ -152,10 +173,16 @@ extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M>{
 			buildTBreadcrumbForm();
 	}
 
+	/**
+	 * Build the view title see {@link TDynaViewSimpleBaseDecorator} setViewTitle method.
+	 */
 	protected void configViewTitle() {
 		setViewTitle(null);
 	}
 
+	/**
+	 * Setting the view form space at the center of the content layout.
+	 */
 	protected void configFormSpace() {
 		addItemInTCenterContent(getView().gettFormSpace());
 		StackPane.setMargin(getView().gettFormSpace(), new Insets(0,0,0,3));

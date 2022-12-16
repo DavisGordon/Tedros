@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.message.TMessageType;
 import org.tedros.fx.annotation.presenter.TBehavior;
+import org.tedros.fx.annotation.process.TEjbService;
 import org.tedros.fx.exception.TProcessException;
 import org.tedros.fx.exception.TValidatorException;
 import org.tedros.fx.modal.TMessageBox;
@@ -14,6 +15,7 @@ import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewActionBaseBehavior;
 import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.fx.process.TImportProcess;
+import org.tedros.server.controller.ITEjbImportController;
 import org.tedros.server.entity.ITEntity;
 import org.tedros.server.model.ITImportModel;
 import org.tedros.server.model.ITModel;
@@ -26,6 +28,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker.State;
 
+/**
+ * The behavior of the import file view.
+ * For import processing use {@link TEjbService} 
+ * with a service of type {@link ITEjbImportController}
+ * on TEntityModelView 
+ * 
+ * @author Davis Gordon
+ *
+ * @param <M>
+ * @param <E>
+ */
 @SuppressWarnings({ "rawtypes" })
 public class TImportFileModalBehavior<M extends TModelView, E extends ITModel>
 extends TDynaViewActionBaseBehavior<M, E> {
@@ -33,13 +46,15 @@ extends TDynaViewActionBaseBehavior<M, E> {
 	private Class<? extends ITEntity> entityClass;
 	private Class<? extends TModelView> modelViewClass;
 	
-		
 	@Override
 	public void load() {
 		super.load();
 		initialize();
 	}
-		
+	
+	/**
+	 * Initialize the view
+	 */
 	public void initialize() {
 		
 		final TDynaPresenter<M> presenter = getPresenter();
@@ -57,10 +72,13 @@ extends TDynaViewActionBaseBehavior<M, E> {
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
-		
-		
 	}
 	
+	/**
+	 * Create and run a TImportProcess to load 
+	 * the import rules from the service.
+	 * @throws Throwable
+	 */
 	@SuppressWarnings("unchecked")
 	protected void loadEntity() throws Throwable {
 		
@@ -99,12 +117,10 @@ extends TDynaViewActionBaseBehavior<M, E> {
 
 	@Override
 	protected void processSelectedItem(TModelView new_val) {
-		// TODO Auto-generated method stub
-		
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	protected void processAction() throws TValidatorException, Exception {
 		
 		final ObservableList<M> modelsViewsList = FXCollections.observableList(Arrays.asList(getModelView())) ;
@@ -162,7 +178,5 @@ extends TDynaViewActionBaseBehavior<M, E> {
 		} catch (TProcessException e1) {
 			e1.printStackTrace();
 		}
-		
-		
 	}
 }

@@ -5,6 +5,16 @@ import org.tedros.fx.presenter.dynamic.behavior.TDynaViewSimpleBaseBehavior;
 import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.server.model.ITModel;
 
+/**
+ * The behavior of the simple view.
+ * No buttons, no actions, just show the 
+ * first model  on the list defined on the
+ * view initialization.
+ * @author Davis Gordon
+ *
+ * @param <M>
+ * @param <E>
+ */
 @SuppressWarnings({ "rawtypes" })
 public class TViewBehavior<M extends TModelView, E extends ITModel>
 extends TDynaViewSimpleBaseBehavior<M, E> {

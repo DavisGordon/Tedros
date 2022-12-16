@@ -5,10 +5,17 @@ import org.tedros.fx.presenter.model.TModelView;
 
 import javafx.scene.control.ScrollPane;
 
+/**
+ * The decorator of the import file view.
+ * @author Davis Gordon
+ *
+ * @param <M>
+ */
 @SuppressWarnings("rawtypes")
 public class TImportFileModalDecorator<M extends TModelView> 
 extends TDynaViewActionBaseDecorator<M> {
 	
+	@Override
 	public void decorate() {
 		
 		setViewTitle(null);

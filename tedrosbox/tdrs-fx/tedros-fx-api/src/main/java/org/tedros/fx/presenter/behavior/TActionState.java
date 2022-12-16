@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import javafx.concurrent.Worker.State;
 
 /**
+ * The view/presenter action state
  * @author Davis Gordon
  *
  */
@@ -135,6 +136,10 @@ public final class TActionState<T> {
 		this.value = value;
 	}
 
+	/**
+	 * Look for message
+	 * @return true if a message found
+	 */
 	public boolean hasMessage() {
 		return StringUtils.isNotBlank(message);
 	}

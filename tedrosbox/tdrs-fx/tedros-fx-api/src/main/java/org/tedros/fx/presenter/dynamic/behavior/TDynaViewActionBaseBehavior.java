@@ -30,6 +30,16 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 
 
+/**
+ * The basic behavior for custom action view.
+ * 
+ * For entity processing, use {@link TEjbService} 
+ * on TEntityModelView.
+ * @author Davis Gordon
+ *
+ * @param <M>
+ * @param <E>
+ */
 @SuppressWarnings("rawtypes")
 public abstract class TDynaViewActionBaseBehavior<M extends TModelView, E extends ITModel> 
 extends TDynaViewSimpleBaseBehavior<M, E> {
@@ -42,7 +52,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	protected String serviceName;
 		
 	private TDynaViewActionBaseDecorator<M> decorator;
-
+	
+	@Override
 	@SuppressWarnings("unchecked")
 	public void load(){
 		super.load();
@@ -238,6 +249,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		actionHelper.runAfter(TActionType.SELECTED_ITEM);
 	}
 	
+	/**
+	 * Process the selected item 
+	 * @param new_val
+	 */
 	protected abstract void processSelectedItem(TModelView new_val);
 
 
@@ -257,10 +272,20 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		}
 	}
 	
-
+	/**
+	 * Process the custom action
+	 * 
+	 * @throws TValidatorException
+	 * @throws Exception
+	 */
 	protected abstract void processAction() throws TValidatorException, Exception;
 
-
+	/**
+	 * Returns the presenter of the current open ITModule.
+	 * This is commonly used when dealing with a view/behavior 
+	 * under another view/behavior such as a detail view or modal view.
+	 * @return TDynaPresenter
+	 */
 	public TDynaPresenter getModulePresenter() {
 				
 		ITModule module = getPresenter().getModule() ;
@@ -365,9 +390,4 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		this.serviceName = serviceName;
 	}
 
-
-
-	
-	
-	
 }

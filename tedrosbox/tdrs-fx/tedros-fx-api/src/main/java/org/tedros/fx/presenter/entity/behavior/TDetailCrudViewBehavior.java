@@ -3,7 +3,6 @@ package org.tedros.fx.presenter.entity.behavior;
 import org.apache.commons.lang3.ArrayUtils;
 import org.tedros.api.form.ITModelForm;
 import org.tedros.api.presenter.view.TViewMode;
-import org.tedros.core.model.ITModelView;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.control.action.TPresenterAction;
 import org.tedros.fx.form.TFormBuilder;
@@ -28,20 +27,30 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.util.Callback;
-
+/**
+ * The behavior of the detail view. 
+ * This behavior can be applied on detail entities.
+ * @author Davis Gordon
+ *
+ * @param <M>
+ * @param <E>
+ */
 @SuppressWarnings({ "rawtypes" })
 public class TDetailCrudViewBehavior<M extends TEntityModelView<E>, E extends ITEntity>
 extends TDynaViewCrudBaseBehavior<M, E> {
 	
 	private TDetailCrudViewDecorator<M> decorator;
 
+	@Override
 	public void load() {
 		super.setSkipConfigBreadcrumb(true);
 		super.load();
 		this.decorator = (TDetailCrudViewDecorator<M>) getPresenter().getDecorator();
 		initialize();
 	}
-	
+	/**
+	 * Initialize the behavior.
+	 */
 	public void initialize() {
 		try{
 			
@@ -85,6 +94,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		}
 	}
 		
+	@Override
 	public void startRemoveProcess(boolean removeFromDataBase) {
 		super.startRemoveProcess(false);
 	}
@@ -113,6 +123,9 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		}
 	}	
 		
+	/**
+	 * Config the ListView listener.
+	 */
 	protected void configListView() {
 		
 		ChangeListener<M> chl = (a, o, n) -> {
@@ -127,6 +140,9 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		.addListener(new WeakChangeListener<>(chl));
 	}
 
+	/**
+	 * Remove the selected item from the ListView
+	 */
 	public void remove() {
 		final ListView<M> listView = this.decorator.gettListView();
 		int index = getModels().indexOf(getModelView());
@@ -134,6 +150,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		super.remove(index);
 	}
 	
+	@Override
 	public void colapseAction() {
 		if(!this.decorator.isListContentVisible())
 			showListView();
@@ -141,14 +158,21 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			hideListView();
 	}
 	
+	/**
+	 * Hide the ListView panel
+	 */
 	public void hideListView() {
 		this.decorator.hideListContent();
 	}
 
+	/**
+	 * Show the ListView panel
+	 */
 	public void showListView() {
 		this.decorator.showListContent();
 	}
 
+	@Override
 	public boolean processNewEntityBeforeBuildForm(M model) {
 		addInListView(model);
 		return false;
@@ -198,6 +222,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		presenter.getBehavior().setForm(form);
 	}
 
+	@Override
 	public void setDisableModelActionButtons(boolean flag) {
 		if(decorator.gettCancelButton()!=null)
 			decorator.gettCancelButton().setDisable(flag);
@@ -223,6 +248,10 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		behavior.addBreadcrumbFormChangeListener();
 	}
 	
+	/**
+	 * Process the selected item on the ListView
+	 * @param m
+	 */
 	protected void processListViewSelectedItem(M m) {
 		if(m==null) {
 			setModelView(null);

@@ -30,6 +30,11 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.Region;
 
+/**
+ * The root behavior class
+ * 
+ * @author Davis Gordon
+ * */
 @SuppressWarnings("rawtypes")
 public abstract class TBehavior<M extends TModelView, P extends ITPresenter> implements ITBehavior<M, P> {
 	
@@ -155,16 +160,28 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
           });
 	}
 	
+	/**
+	 * Set the view state as Ready
+	 */
 	public void setViewStateAsReady() {
 		buildFormStatusProperty().removeListener(loadChl);
 		getPresenter().getView().settState(TViewState.READY);
 	}
 
+	/**
+	 * Build the form as the mode param
+	 * @param mode
+	 */
 	public void buildForm(TViewMode mode) {
 		setViewMode(mode);
 		buildForm();
 	}
 	
+	/**
+	 * Build the form. 
+	 * Build the form as TViewMode.READER 
+	 * if getViewMode() is null
+	 */
 	public void buildForm() {
 		
 		if(tMode==null)
@@ -173,12 +190,19 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 		this.buildFormStatusProperty.setValue(TBuildFormStatus.STARTING);
 	}
 	
+	/***
+	 * Clear the form
+	 */
 	public void clearForm() {
 		this.buildFormStatusProperty.setValue(null);
 		getView().gettFormSpace().getChildren().clear();
 		this.formProperty.setValue(null);
 	}
 	
+	/**
+	 * Set the form
+	 * @param form
+	 */
 	@SuppressWarnings("unchecked")
 	public void setForm(ITModelForm form) {
 		TProgressIndicatorForm pif = (form instanceof TProgressIndicatorForm) 
@@ -187,15 +211,12 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
     	this.formProperty.setValue(pif);
     }
 	
-
-
 	/**
-	 * @return the invalidateProperty
+	 * @return the invalidate value
 	 */
 	public Boolean getInvalidate() {
 		return invalidateProperty.getValue();
 	}
-
 
 	/**
 	 * @return the invalidateProperty
@@ -214,13 +235,12 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 		return true;
 	}
 
-	
-
 	/**
-	 * @param invalidateProperty the invalidateProperty to set
+	 * Set the invalidate value
+	 * @param val the invalidate to set
 	 */
-	public void setInvalidate(boolean v) {
-		this.invalidateProperty.setValue(v);
+	public void setInvalidate(boolean val) {
+		this.invalidateProperty.setValue(val);
 	}
 
 
@@ -244,14 +264,17 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 		iEngine.setCurrentUUID(getApplicationUUID());
 	}
 	
+	@Override
 	public TViewMode getViewMode() {
 		return tMode;
 	}
 	
+	@Override
 	public void setViewMode(TViewMode mode){
 		this.tMode = mode;
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public <V extends ITView> V getView(){
 		return  this.presenter==null ? null : (V) this.presenter.getView();
@@ -272,6 +295,10 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 		return modelViewProperty.getValue();
 	}
 
+	/**
+	 * Get the modelViewProperty
+	 * @return SimpleObjectProperty<M>
+	 */
 	public SimpleObjectProperty<M> modelViewProperty() {
 		return modelViewProperty;
 	}
@@ -296,12 +323,13 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 		return this.models;
 	}
 
-
+	@Override
 	public String getFormName() {
 		final TForm tForm = getForm().gettModelView().getClass().getAnnotation(TForm.class);
 		return (tForm!=null) ? tForm.name() : "@TForm(name='SET A NAME')";
 	}
 
+	@Override
 	public ITModelForm<M> getForm() {
 		return formProperty.get();
 	}
@@ -319,14 +347,15 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 				m.removeAllListener();
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	public <T> T removeListenerFromModelView(String listenerId) {
 		if(this.modelViewProperty.getValue()!=null)
 			return (T) this.modelViewProperty.getValue().removeListener(listenerId);
 		return null;
 	}
 	
+	@Override
 	public String getApplicationUUID() {
 		String uuid = null;
 		ITModule module = getPresenter().getModule();
@@ -337,14 +366,16 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 	}
 
 	/**
-	 * @return the formProperty
+	 * Get the formProperty
+	 * @return the ReadOnlyObjectProperty
 	 */
 	public ReadOnlyObjectProperty<ITModelForm<M>> formProperty() {
 		return formProperty;
 	}
 
 	/**
-	 * @return the buildFormStatusProperty
+	 * Get the buildFormStatusProperty
+	 * @return the ReadOnlyObjectProperty
 	 */
 	public ReadOnlyObjectProperty<TBuildFormStatus> buildFormStatusProperty() {
 		return buildFormStatusProperty;

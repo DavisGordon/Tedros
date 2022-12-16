@@ -10,6 +10,7 @@ import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.presenter.decorator.ITListViewDecorator;
 import org.tedros.fx.presenter.decorator.TListViewHelper;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
+import org.tedros.fx.presenter.dynamic.decorator.TDynaViewSimpleBaseDecorator;
 import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.fx.presenter.paginator.TPaginator;
 import org.tedros.server.entity.ITEntity;
@@ -22,6 +23,18 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+/***
+ * The decorator of the master detail view. 
+ * This decorator can be applied on master 
+ * entities with detail entities. A ListView
+ * with pagination is created to list the 
+ * database result. It can be set using the 
+ * {@link TListViewPresenter} annotation on 
+ * the TEntityModelView. 
+ * @author Davis Gordon
+ *
+ * @param <M>
+ */
 public class TMasterCrudViewDecorator<M extends TEntityModelView<? extends ITEntity>> 
 extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M> {
 	
@@ -29,6 +42,7 @@ extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M> {
 	
     protected TPresenter tPresenter;
   
+    @Override
     public void decorate() {
     	tPresenter = getPresenter().getPresenterAnnotation();
 		configFormSpace();
@@ -38,6 +52,9 @@ extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M> {
 		configListView();
 	}
 
+    /**
+     * Build the list view as setting in the {@link TListViewPresenter}
+     */
 	protected void configListView() {
 		String title = tPresenter!=null ? tPresenter.decorator().listTitle() : null;
 		// get the list view settings
@@ -51,6 +68,9 @@ extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M> {
 		addItemInTLeftContent(helper.gettListViewPane());
 	}
 
+	/**
+	 * Build all buttons setting in the {@link TDecorator}
+	 */
 	protected void configAllButtons() {
 		TDecorator tDeco = tPresenter.decorator();
 		Node[] nodes = new Node[0];
@@ -103,6 +123,9 @@ extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M> {
 		addPaddingInTLeftContent(0, 4, 0, 0);
 	}
 
+	/**
+	 * Build the BreadcrumBar as setting in the {@link TForm}
+	 */
 	protected void configBreadcrumBar() {
 		final TForm tForm = this.getPresenter().getFormAnnotation();
 		setShowBreadcrumBar((tForm!=null) ? tForm.showBreadcrumBar() : false);
@@ -111,10 +134,16 @@ extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M> {
 			buildTBreadcrumbForm();
 	}
 
+	/**
+	 * Build the view title see {@link TDynaViewSimpleBaseDecorator} setViewTitle method.
+	 */
 	protected void configViewTitle() {
 		setViewTitle(null);
 	}
 
+	/**
+	 * Setting the view form space at the center of the content layout.
+	 */
 	protected void configFormSpace() {
 		addItemInTCenterContent(getView().gettFormSpace());
 		StackPane.setMargin(getPresenter().getView().gettFormSpace(), new Insets(0,0,0,3));

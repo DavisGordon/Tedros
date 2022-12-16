@@ -7,6 +7,16 @@ import org.tedros.fx.presenter.dynamic.behavior.TDynaViewReportBaseBehavior;
 import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.server.model.ITReportModel;
 
+/**
+ * The behavior of the report view.
+ * For report processing use 
+ * {@link org.tedros.fx.annotation.process.TReportProcess} 
+ * in the TEntityModelView.
+ * @author Davis Gordon
+ *
+ * @param <M>
+ * @param <E>
+ */
 @SuppressWarnings({ "rawtypes" })
 public class TDataSetReportBehavior<M extends TModelView, E extends ITReportModel>
 extends TDynaViewReportBaseBehavior<M, E> {
@@ -17,7 +27,9 @@ extends TDynaViewReportBaseBehavior<M, E> {
 		super.load();
 		initialize();
 	}
-		
+	/**
+	 * Initialize the behavior
+	 */
 	public void initialize() {
 		configCleanButton();
 		configSearchButton();

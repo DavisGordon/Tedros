@@ -64,7 +64,7 @@ import javafx.scene.layout.Region;
  * 
  * </pre>
  * 
- * @see {@link TDetailListField}, {@link TTab}, {@link TModelViewType}
+ * @see TDetailListField, TTab, TModelViewType
  *
  */
 @Retention(RetentionPolicy.RUNTIME)

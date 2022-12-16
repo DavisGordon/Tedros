@@ -4,7 +4,7 @@
 package org.tedros.core.annotation.security;
 
 /**
- * Authorizations types which can be defined
+ * Authorization types
  * 
  * @author Davis Gordon
  */

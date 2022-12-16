@@ -52,7 +52,16 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 
-
+/**
+ * The basic behavior of the report view.
+ * For report processing use 
+ * {@link org.tedros.fx.annotation.process.TReportProcess} 
+ * in the TEntityModelView.
+ * @author Davis Gordon
+ *
+ * @param <M>
+ * @param <E>
+ */
 @SuppressWarnings("rawtypes")
 public abstract class TDynaViewReportBaseBehavior<M extends TModelView, E extends ITReportModel> 
 extends TDynaViewSimpleBaseBehavior<M, E> {
@@ -71,6 +80,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	private String organization;
 	private TFileEntity logotype;
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public void load(){
 		super.load();
@@ -203,7 +213,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		}
 	}
 	
-	
 	/**
 	 * Config the pdf button;
 	 * */
@@ -233,7 +242,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	}
 	
 	/**
-	 * Config the cancel button;
+	 * Config the Open Export Folder button;
 	 * */
 	public void configOpenExportFolderButton() {
 		final Button openExportButton = this.decorator.gettOpenExportFolderButton();
@@ -321,8 +330,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		
 		return false;
 	}
-	
-	
+
 	// ACTIONS
 	
 	/**
@@ -568,7 +576,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		
 	}
 	/**
-	 * Perform this action when excel button onAction is triggered.
+	 * Perform this action when pdf button onAction is triggered.
 	 * */
 	public void pdfAction() {
 		if(actionHelper.runBefore(TActionType.EXPORT_PDF)){
@@ -581,6 +589,12 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		
 	}
 	
+	/**
+	 * Create the process
+	 * @return TReportProcess
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
 	public TReportProcess createProcess() throws InstantiationException, IllegalAccessException  {
 		
 		if(this.reportProcessClass != null && this.reportProcessClass != TReportProcess.class)
@@ -635,11 +649,18 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	}
 
 	
-	
+	/**
+	 * Get the mode radio group
+	 * @return radioGroup
+	 */
 	public ToggleGroup getRadioGroup() {
 		return radioGroup;
 	}
 	
+	/**
+	 * Checks if the radioGroup is not null
+	 * @return
+	 */
 	public boolean isRadioGroupBuilt(){
 		return radioGroup!=null;
 	}
@@ -679,6 +700,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		this.modeBtnVisibleProperty = modeBtnVisibleProperty;
 	}
 
+	/**
+	 * Disable buttons
+	 * @param flag
+	 */
 	public void setDisableModelActionButtons(boolean flag) {
 		if(decorator.gettCancelButton()!=null)
 			decorator.gettCancelButton().setDisable(flag);

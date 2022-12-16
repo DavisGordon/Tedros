@@ -54,7 +54,17 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
-
+/**
+ * The basic behavior of the open modal view 
+ * to select an entity.
+ * It can be set using the 
+ * {@link TSelectionModalPresenter} annotation on 
+ * the TEntityModelView. 
+ * @author Davis Gordon
+ *
+ * @param <M>
+ * @param <E>
+ */
 @SuppressWarnings("rawtypes")
 public abstract class TDynaViewSelectionBaseBehavior<M extends TModelView, E extends ITEntity> 
 extends TDynaViewSimpleBaseBehavior<M, E> {
@@ -70,8 +80,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	
 	private TDynaViewSelectionBaseDecorator<M> decorator;
 
-	
-
+	@Override
 	@SuppressWarnings("unchecked")
 	public void load(){
 		super.load();
@@ -165,7 +174,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		}
 		
 	}
-	
+	/**
+	 * Config the selected item listener
+	 */
 	@SuppressWarnings("unchecked")
 	public void configSelectedListView() {
 		ListView listView = this.decorator.gettListView();
@@ -222,6 +233,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		
 	}
 	
+	/**
+	 * Config the add action
+	 */
 	protected void addAction() {
 		TableView tbv = decorator.gettTableView();
 		for(Object obj : tbv.getSelectionModel().getSelectedItems()) {
@@ -272,7 +286,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		
 	}
 	
-	
 	/**
 	 * Config the cancel button;
 	 * */
@@ -322,6 +335,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		}
 	}
 
+	/**
+	 * Perform a find all process and paging the result
+	 * @param pagination
+	 * @throws Throwable
+	 */
 	@SuppressWarnings("unchecked")
 	protected void runFindAllProcess(TPagination pagination)
 			throws Throwable {
@@ -407,7 +425,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		}
 	}
 	
-
+	/**
+	 * Return the prsenter of the current module.
+	 * @return TDynaPresenter
+	 */
 	public TDynaPresenter getModulePresenter() {
 				
 		ITModule module = getPresenter().getModule() ;
@@ -448,7 +469,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		}
 		actionHelper.runAfter(TActionType.CANCEL);
 	}
-
 	
 	private void closeModal() {
 		super.invalidate();

@@ -6,6 +6,17 @@ import org.tedros.fx.presenter.entity.decorator.TSaveViewDecorator;
 import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.server.entity.ITEntity;
 
+/**
+ * The save view behavior. 
+ * This behavior can be applied to save an entity. 
+ * An entity is created if no entity was defined
+ * at view initialization. Only the save button 
+ * is configured.
+ * @author Davis Gordon
+ *
+ * @param <M>
+ * @param <E>
+ */
 @SuppressWarnings({ "rawtypes" })
 public class TSaveViewBehavior<M extends TModelView, E extends ITEntity>
 extends TDynaViewCrudBaseBehavior<M, E> {
@@ -18,7 +29,9 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		this.decorator = (TSaveViewDecorator<M>) getPresenter().getDecorator();
 		initialize();
 	}
-		
+	/**
+	 * Initialize the behavior.
+	 */
 	public void initialize() {
 		try{
 			
@@ -38,12 +51,6 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		}
 		
 	}
-
-	@Override
-	public boolean invalidate() {
-		return super.invalidate();
-	}
-
 
 	@Override
 	public void colapseAction() {
