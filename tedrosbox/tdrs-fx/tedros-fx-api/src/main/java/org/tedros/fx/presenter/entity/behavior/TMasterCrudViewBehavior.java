@@ -17,6 +17,7 @@ import org.tedros.core.model.TModelViewUtil;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
+import org.tedros.fx.annotation.process.TEjbService;
 import org.tedros.fx.annotation.view.TPaginator;
 import org.tedros.fx.control.action.TPresenterAction;
 import org.tedros.fx.exception.TException;
@@ -44,7 +45,22 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.util.Callback;
-
+/**
+ * The behavior of the master detail view. 
+ * This behavior can be applied on master 
+ * entities with detail entities. A ListView
+ * with pagination is created to list the 
+ * database result. It can be set using the 
+ * {@link TListViewPresenter} annotation on 
+ * the TEntityModelView. 
+ * For entity processing, use {@link TEjbService} or
+ * {@link org.tedros.fx.annotation.process.TEntityProcess} 
+ * on TEntityModelView.
+ * @author Davis Gordon
+ *
+ * @param <M>
+ * @param <E>
+ */
 @SuppressWarnings({ "rawtypes" })
 public class TMasterCrudViewBehavior<M extends TEntityModelView<E>, E extends ITEntity>
 extends TDynaViewCrudBaseBehavior<M, E> {
@@ -61,7 +77,10 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		this.decorator = (ITListViewDecorator<M>) getPresenter().getDecorator();
 		initialize();
 	}
-		
+	
+	/**
+	 * Initialize the behavior
+	 */
 	public void initialize() {
 		
 		if(getModels()==null)
@@ -104,6 +123,11 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			setViewStateAsReady();
 	}
 	
+	/**
+	 * Retrieve entities from the server 
+	 * and load the models property in 
+	 * the TBehavior superclass
+	 */
 	@SuppressWarnings("unchecked")
 	public void loadModels() {
 		try{
@@ -221,12 +245,16 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 	}
 
 	/**
+	 * Checks if paging is enabled.
 	 * @return
 	 */
 	private boolean isPaginateEnabled() {
 		return tPagAnn!=null && tPagAnn.show();
 	}
 
+	/**
+	 * Config the cancel action.
+	 */
 	protected void configCancelAction() {
 		addAction(new TPresenterAction(TActionType.CANCEL) {
 
@@ -249,6 +277,10 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		this.decorator.gettPaginator().reload(totalRows);
 	}
 	
+	/**
+	 * Loads the ListView with the models property 
+	 * in the TBehavior superclass.
+	 */
 	@SuppressWarnings("unchecked")
 	protected void loadListView() {
 		final ObservableList<M> models = getModels();
@@ -258,7 +290,11 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		final M mv = super.getModelView(); 
 		processModelView(mv);
 	}
-	
+	/**
+	 * Calls the server's paging service
+	 * @param pagination
+	 * @throws TException
+	 */
 	@SuppressWarnings("unchecked")
 	public void paginate(TPagination pagination) throws TException {
 		final String chlId = UUID.randomUUID().toString();
@@ -376,7 +412,6 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		listView.setContextMenu(ctx);
 	}
 	
-	
 	@SuppressWarnings("unchecked")
 	private void configListViewCallBack() {
 		TBehavior tBehavior = getPresenter().getPresenterAnnotation().behavior();
@@ -393,6 +428,9 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		}
 	}	
 	
+	/**
+	 * Config the ListView and pagination listener
+	 */
 	protected void configListViewChangeListener() {
 		
 		ChangeListener<M> chl = (a0, old_, new_) -> {
@@ -421,6 +459,10 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		
 	}
 
+	/**
+	 * Process the selected item on the ListView
+	 * @param new_
+	 */
 	protected void processListViewSelectedItem(M new_) {
 		if(new_==null) {
 			setModelView(null);
@@ -470,7 +512,13 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		}
 	}
 	
-
+	/**
+	 * Find and paginate all entities on the server 
+	 * using the entity provided as an example.
+	 * @param entity
+	 * @param pagination
+	 * @throws TException
+	 */
 	@SuppressWarnings("unchecked")
 	public void paginateLoadedModel(E entity, TPagination pagination) throws TException {
 		final String chlId = UUID.randomUUID().toString();
@@ -527,14 +575,17 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 	}
 
 	
-	
+	/**
+	 * Remove the selected model from the ListView
+	 */
 	public void remove() {
 		final ListView<M> listView = this.decorator.gettListView();
 		int index = getModels().indexOf(getModelView());
 		listView.getSelectionModel().clearSelection();
 		super.remove(index);
 	}
-		
+	
+	@Override
 	public void colapseAction() {
 		if(!this.decorator.isListContentVisible())
 			showListView();
@@ -542,14 +593,21 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			hideListView();
 	}
 
+	/**
+	 * Hide the ListView panel
+	 */
 	public void hideListView() {
 		this.decorator.hideListContent();
 	}
 
+	/**
+	 * Show the ListView panel
+	 */
 	public void showListView() {
 		this.decorator.showListContent();
 	}
 	
+	@Override
 	public boolean processNewEntityBeforeBuildForm(M model) {
 		addInListView(model);
 		return false;

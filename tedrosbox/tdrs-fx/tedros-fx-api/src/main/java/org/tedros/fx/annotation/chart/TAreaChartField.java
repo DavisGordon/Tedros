@@ -15,7 +15,7 @@ import org.tedros.fx.builder.TAreaChartFieldBuilder;
 public @interface TAreaChartField {
 	
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITChartBuilder> parser() default TAreaChartFieldBuilder.class;
+	public Class<? extends ITChartBuilder> builder() default TAreaChartFieldBuilder.class;
 	
 	public String title() default TAnnotationDefaultValue.TCHART_title;
 	public TAxis xAxis();

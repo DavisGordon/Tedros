@@ -10,12 +10,21 @@ import org.tedros.fx.presenter.model.TModelView;
 
 import javafx.scene.Node;
 
+/**
+ * The save view decorator. 
+ * This decorator can be applied to save an entity. 
+ * Only the save button is configured.
+ * @author Davis Gordon
+ *
+ * @param <M>
+ */
 @SuppressWarnings("rawtypes")
 public class TSaveViewDecorator<M extends TModelView> 
 extends TDynaViewCrudBaseDecorator<M> {
 	
 	private TPresenter tPresenter;
   
+	@Override
     public void decorate() {
     	tPresenter = getPresenter().getPresenterAnnotation();
 		configFormSpace();
@@ -23,8 +32,10 @@ extends TDynaViewCrudBaseDecorator<M> {
 		configViewTitle();
 	}
 
-	
-
+	/**
+	 * Config the save button based on 
+	 * the {@link TDecorator} defined in the TEntityModelView
+	 */
 	protected void configAllButtons() {
 		TDecorator tDeco = tPresenter.decorator();
 		Node[] nodes = new Node[0];
@@ -52,6 +63,10 @@ extends TDynaViewCrudBaseDecorator<M> {
 		addPaddingInTLeftContent(0, 4, 0, 0);
 	}
 
+	/**
+	 * Config the view title based on 
+	 * the {@link TPresenter} defined in the TEntityModelView
+	 */
 	protected void configViewTitle() {
 		final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
 		if(!tPresenter.decorator().viewTitle().equals(TAnnotationDefaultValue.TVIEW_viewTitle))
@@ -61,10 +76,10 @@ extends TDynaViewCrudBaseDecorator<M> {
 		}
 	}
 
+	/**
+	 * Config the form space
+	 */
 	protected void configFormSpace() {
 		addItemInTCenterContent(getPresenter().getView().gettFormSpace());
 	}
-	
-	
-
 }

@@ -16,6 +16,7 @@ import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.control.TButton;
 import org.tedros.fx.layout.TBreadcrumbForm;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
+import org.tedros.fx.presenter.dynamic.view.TDynaView;
 import org.tedros.fx.presenter.model.TModelView;
 
 import javafx.scene.control.Button;
@@ -24,6 +25,14 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToolBar;
 
+/***
+ * The basic decorator with all CRUD 
+ * components for {@link TDynaView} view.
+ * 
+ * @author Davis Gordon
+ *
+ * @param <M>
+ */
 @SuppressWarnings("rawtypes")
 public abstract class TDynaViewCrudBaseDecorator<M extends TModelView> 
 extends TDynaViewSimpleBaseDecorator<M> {
@@ -47,14 +56,28 @@ extends TDynaViewSimpleBaseDecorator<M> {
     
     private List<TAuthorizationType> userAuthorizations;
     
+    /***
+     * Get the authorizations list of the logged in user 
+     * @return List of TAuthorizationType
+     */
     public List<TAuthorizationType> getUserAuthorizations() {
 		return userAuthorizations;
 	}
     
+    /**
+     * Checks if the logged in user is authorized for the type.
+     * @param type
+     * @return true if user has the given type.
+     */
     public boolean isUserAuthorized(TAuthorizationType type){
     	return userAuthorizations==null || userAuthorizations.contains(type);
     }
     
+    /**
+     * Checks if the logged in user is not authorized for the type.
+     * @param type
+     * @return true if the user does not have the provided type.
+     */
     public boolean isUserNotAuthorized(TAuthorizationType type){
     	return userAuthorizations!=null && !userAuthorizations.contains(type);
     }
@@ -78,11 +101,10 @@ extends TDynaViewSimpleBaseDecorator<M> {
 		}
 	}
     
-    
     /**
 	 * <p>
 	 *  Build a {@link TBreadcrumbForm} to use.
-	 *  The {@link TBreadcrumbForm} is a breadcrumbBar used to navigate between opened forms. 
+	 *  The {@link TBreadcrumbForm} is a breadcrumbBar to navigate between forms. 
 	 * </p>
 	 * */
 	public void buildTBreadcrumbForm(){

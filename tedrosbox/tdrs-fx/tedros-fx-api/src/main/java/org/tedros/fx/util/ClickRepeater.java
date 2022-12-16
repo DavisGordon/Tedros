@@ -34,14 +34,14 @@ import javafx.event.EventHandler;
 import javafx.scene.control.ButtonBase;
 import javafx.util.Duration;
 
-/**
+/**<p>
  * Usually a {@link ButtonBase} only fires once per mouse click, namely when the mouse is released.
  * This class allows a {@link ButtonBase} to periodically fire while armed, e.g. while the mouse is pressed.
- * <p/>
+ * </p>
  * While the button is armed, it waits 500ms to fire the first time. After that it fires every 80ms by default.
- * <p/>
+ * <p>
  * Therefore it mimics the behavior of key press events as they fire constantly, too, while the key is pressed.
- * <p/>
+ * </p>
  * <h3>Sample Usage</h3>
  * <pre>
  * <code>

@@ -37,7 +37,18 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 
-
+/**
+ * The basic behavior of the table detail view. 
+ * This behavior can be applied on detail entities.
+ * A TableView is created to list the 
+ * details. It can be set using the 
+ * {@link TDetailTableViewPresenter} annotation on 
+ * the TEntityModelView. 
+ * @author Davis Gordon
+ *
+ * @param <M>
+ * @param <E>
+ */
 @SuppressWarnings("rawtypes")
 public abstract class TDetailFieldBaseBehavior<M extends TModelView, E extends ITEntity> 
 extends TDynaViewSimpleBaseBehavior<M, E> {
@@ -47,7 +58,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	protected TDetailFieldBaseDecorator<M> decorator;
 	protected Class<? extends ITEntity> entityClass;
 	
-
+	@Override
 	@SuppressWarnings("unchecked")
 	public void load(){
 		super.load();
@@ -219,7 +230,12 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		}
 	}
 	
-
+	/**
+	 * Returns the presenter of the current open ITModule.
+	 * This is commonly used when dealing with a view/behavior 
+	 * under another view/behavior such as a detail view or modal view.
+	 * @return TDynaPresenter
+	 */
 	public TDynaPresenter getModulePresenter() {
 				
 		ITModule module = getPresenter().getModule() ;
@@ -262,12 +278,16 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			buildForm(TViewMode.EDIT);
 	}
 	
-
+	/**
+	 * Remove the listener from the form
+	 */
 	public synchronized void removeFormListChangeListener() {
 		if(formListChangeListener!=null)
 			getView().gettFormSpace().getChildren().removeListener(formListChangeListener);
 	}
-	
+	/**
+	 * Add the listener in the form
+	 */
 	@SuppressWarnings("unlikely-arg-type")
 	public synchronized void addFormListChangeListener() {
 		if(formListChangeListener!=null && !getView().gettFormSpace().getChildren().contains(formListChangeListener)){

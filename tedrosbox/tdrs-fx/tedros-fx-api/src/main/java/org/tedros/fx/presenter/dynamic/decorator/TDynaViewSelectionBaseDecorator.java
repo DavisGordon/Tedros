@@ -4,6 +4,7 @@ import org.tedros.core.TLanguage;
 import org.tedros.fx.annotation.TAnnotationDefaultValue;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
+import org.tedros.fx.annotation.presenter.TSelectionModalPresenter;
 import org.tedros.fx.control.TButton;
 import org.tedros.fx.control.TLabel;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
@@ -15,6 +16,16 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 
+/**
+ * The basic decorator of the open modal view 
+ * to select an entity.
+ * It can be set using the 
+ * {@link TSelectionModalPresenter} annotation on 
+ * the TEntityModelView. 
+ * @author Davis Gordon
+ *
+ * @param <M>
+ */
 @SuppressWarnings("rawtypes")
 public abstract class TDynaViewSelectionBaseDecorator<M extends TModelView> 
 extends TDynaViewSimpleBaseDecorator<M> {
@@ -41,12 +52,19 @@ extends TDynaViewSimpleBaseDecorator<M> {
     	super.setPresenter(presenter);
     }
     
+    /**
+     * Sets the tTableView
+     * @param tableView
+     */
     @SuppressWarnings("unchecked")
 	public void setTableView(TableView tableView) {
     	tTableView = tableView;
     	
     }
     
+    /**
+     * Build the ListView
+     */
     public void buildListView() {
     	// build the list view
 		tListView = new ListView<>();
@@ -60,6 +78,10 @@ extends TDynaViewSimpleBaseDecorator<M> {
 		
     }
 
+    /**
+     * Build the list view title
+     * @param text
+     */
 	public void buildListViewTitle(String text) {
 		// build the label for the list view
 		tListViewTitle = new TLabel(iEngine.getString(text==null ? TAnnotationDefaultValue.TVIEW_selected : text));
@@ -67,6 +89,9 @@ extends TDynaViewSimpleBaseDecorator<M> {
 		tListViewTitle.maxWidth(listViewMaxWidth);
 	}
     
+	/**
+	 * Build the paginator
+	 */
     public void buildPaginator() {
     	tPaginator = new TPaginator(false, false);
     }
@@ -244,14 +269,12 @@ extends TDynaViewSimpleBaseDecorator<M> {
 		return tCleanButton;
 	}
 
-
 	/**
 	 * @param tCleanButton the tCleanButton to set
 	 */
 	public void settCleanButton(Button tCleanButton) {
 		this.tCleanButton = tCleanButton;
 	}
-
 
 	/**
 	 * @return the tSearchButton
@@ -260,7 +283,6 @@ extends TDynaViewSimpleBaseDecorator<M> {
 		return tSearchButton;
 	}
 
-
 	/**
 	 * @param tSearchButton the tSearchButton to set
 	 */
@@ -268,14 +290,12 @@ extends TDynaViewSimpleBaseDecorator<M> {
 		this.tSearchButton = tSearchButton;
 	}
 
-
 	/**
 	 * @return the tCancelButton
 	 */
 	public Button gettCancelButton() {
 		return tCancelButton;
 	}
-
 
 	/**
 	 * @param tCancelButton the tCancelButton to set
@@ -353,12 +373,4 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void settAddButton(Button tAddButton) {
 		this.tAddButton = tAddButton;
 	}
-
-	
-
-	// getters and setters
-	
-	
-
-	
 }

@@ -19,11 +19,19 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 
+/***
+ * The detail CRUD view decorator
+ * @author Davis Gordon
+ *
+ * @param <M>
+ */
 public class TDetailCrudViewDecorator<M extends TEntityModelView<? extends ITEntity>> 
 extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M>{
 	
 	private TListViewHelper<M> helper;
  
+	@Override
+	@SuppressWarnings("unchecked")
 	public void decorate() {
 		
 		// get the model view annotation array 

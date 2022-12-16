@@ -6,6 +6,7 @@ import org.tedros.fx.annotation.TAnnotationDefaultValue;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
+import org.tedros.fx.presenter.dynamic.view.TDynaView;
 import org.tedros.fx.presenter.model.TModelView;
 
 import javafx.geometry.Insets;
@@ -16,7 +17,15 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-
+/***
+ * The basic decorator for {@link TDynaView} view.
+ * <p>
+ * Sets up the view layout.
+ * </p>
+ * @author Davis Gordon
+ *
+ * @param <M>
+ */
 @SuppressWarnings("rawtypes")
 public abstract class TDynaViewSimpleBaseDecorator<M extends TModelView> 
 extends org.tedros.fx.presenter.decorator.TDecorator<TDynaPresenter<M>>

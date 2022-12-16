@@ -4,10 +4,18 @@ import org.tedros.api.presenter.view.ITDynaView;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewReportBaseDecorator;
 import org.tedros.fx.presenter.model.TModelView;
 
+/**
+ * The decorator of the report view.
+ * @author Davis Gordon
+ *
+ * @param <M>
+ */
 @SuppressWarnings("rawtypes")
 public class TDataSetReportDecorator<M extends TModelView> 
 extends TDynaViewReportBaseDecorator<M> {
 	
+	@Override
+	@SuppressWarnings("unchecked")
 	 public void decorate() {
 		
 		// get the view
@@ -26,12 +34,7 @@ extends TDynaViewReportBaseDecorator<M> {
 		// add the buttons at the header tool bar
 		addItemInTHeaderToolBar(gettOpenExportFolderButton(), gettSearchButton(), gettCleanButton(), gettPdfButton(), gettExcelButton());
 		
-		
 		// set padding at rigth in left content pane
 		addPaddingInTLeftContent(0, 4, 0, 0);
-		
-		
 	}
-	
-
 }

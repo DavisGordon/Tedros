@@ -23,7 +23,7 @@ public abstract class TPresenterAction implements Comparable<TPresenterAction>{
 	private TActionType[] types;
 	
 	/**
-	 * @param types
+	 * @param tActionType
 	 */
 	public TPresenterAction(TActionType... tActionType) {
 		this.name = getClass().getSimpleName();

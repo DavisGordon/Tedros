@@ -7,12 +7,24 @@ import org.tedros.fx.presenter.model.TEntityModelView;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 
+/**
+ * The decorator of the table detail view. 
+ * It can be applied on detail entities.
+ * A TableView is created to list the 
+ * details. 
+ * 
+ * @author Davis Gordon
+ *
+ * @param <M>
+ */
 @SuppressWarnings("rawtypes")
 public class TDetailFieldDecorator<M extends TEntityModelView> 
 extends TDetailFieldBaseDecorator<M>
  {
 	private VBox box;
     
+	@Override
+	@SuppressWarnings("unchecked")
 	public void decorate() {
 		
 		// get the views
@@ -28,6 +40,7 @@ extends TDetailFieldBaseDecorator<M>
 		buildCleanButton(null);
 		addItemInTHeaderToolBar(gettAddButton(), gettRemoveButton(), gettCleanButton());
 	}
+	
 	@Override
 	public void settTableView(TableView<M> tv) {
 		super.settTableView(tv);

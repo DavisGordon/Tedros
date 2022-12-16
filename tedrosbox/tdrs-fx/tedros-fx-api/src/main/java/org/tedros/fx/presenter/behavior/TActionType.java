@@ -4,6 +4,8 @@
 package org.tedros.fx.presenter.behavior;
 
 /**
+ * The view/presenter action type
+ * 
  * @author Davis Gordon
  *
  */

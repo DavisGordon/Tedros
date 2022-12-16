@@ -17,8 +17,12 @@ import org.tedros.server.model.ITImportModel;
 import org.tedros.server.result.TResult;
 
 /**
+ * The process to import files.
+ * The target entity must be of the ITImportModel type 
+ * and the target service of the ITEjbImportController
  * @author Davis Gordon
  *
+ * @param <M>
  */
 @SuppressWarnings("rawtypes")
 public abstract class TImportProcess<M extends ITImportModel> extends TProcess<TResult<M>> {
@@ -33,16 +37,23 @@ public abstract class TImportProcess<M extends ITImportModel> extends TProcess<T
 		this.serviceJndiName = serviceJndiName;
 	}
 	
+	/**
+	 * Upload the model with the file to import
+	 * @param model
+	 */
 	public void importFile(M model){
 		this.model = model;
 		this.action = TImportProcessEnum.IMPORT;
 	}
 	
+	/**
+	 * Get the import rules
+	 */
 	public void getImportRules(){
 		this.action = TImportProcessEnum.GET_RULES;	
 	}
 	
-	
+	@Override
 	protected TTaskImpl<TResult<M>> createTask() {
 		
 		return new TTaskImpl<TResult<M>>() {

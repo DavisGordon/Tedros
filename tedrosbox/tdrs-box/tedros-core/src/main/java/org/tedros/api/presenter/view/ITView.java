@@ -11,7 +11,13 @@ import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 
 /**
- * The view
+ * The view contract.
+ * <p>
+ * The view is a passive interface that displays data (the ITModelView) 
+ * and routes user commands (events) to the ITBehavior holded by 
+ * the presenter to act upon that data.
+ * </p>
+ * @author Davis Gordon
  * */
 @SuppressWarnings("rawtypes")
 public interface ITView<P extends ITPresenter>{

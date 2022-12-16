@@ -32,6 +32,7 @@ import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import org.tedros.fx.presenter.dynamic.view.TDynaGroupView;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
+import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.fx.presenter.view.group.TGroupPresenter;
 import org.tedros.fx.process.TEntityProcess;
@@ -64,7 +65,19 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebView;
 
-
+/***
+ * The basic behavior of the CRUD view.
+ * This behavior is applied on view and entity
+ * that need to access the business layer on 
+ * the application server. 
+ * For entity processing use {@link TEjbService} or
+ * {@link org.tedros.fx.annotation.process.TEntityProcess} 
+ * in the TEntityModelView.
+ * @author Davis Gordon
+ *
+ * @param <M>
+ * @param <E>
+ */
 @SuppressWarnings("rawtypes")
 public abstract class TDynaViewCrudBaseBehavior<M extends TModelView, E extends ITModel> 
 extends TDynaViewSimpleBaseBehavior<M, E> {
@@ -91,6 +104,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 
 	protected boolean skipConfigBreadcrumb;
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public void load(){
 		super.load();
@@ -158,6 +172,16 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		
 	}
 
+	/**
+	 * Called by a listener on the modelViewProperty
+	 * triggered when it changes. By default it is changed
+	 * by methods setModelView and loadModelView.
+	 * Build and show a ITForm for the given model or 
+	 * clear the current form and show a screen saver if
+	 * model is null.
+	 * 
+	 * @param model
+	 */
 	public void processModelView(TModelView model) {
 		if(model== null) {
 			if(decorator.isShowBreadcrumBar() && decorator.gettBreadcrumbForm()!=null)
@@ -177,11 +201,19 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			super.showScreenSaver();
 	}
 	
+	/**
+	 * Override to process the form after it has been created.
+	 * @param form
+	 */
 	protected void runAfterBuildForm(ITModelForm<M> form) {
-		
-		
+	
 	}
 
+	/**
+	 * Disable the buttons: 
+	 * Cancel, Save, Import, Delete, Print, Edit and ReadMode radio.
+	 * @param flag 
+	 */
 	public void setDisableModelActionButtons(boolean flag) {
 		if(decorator.gettCancelButton()!=null)
 			decorator.gettCancelButton().setDisable(flag);
@@ -374,6 +406,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		selectMode();
 	}
 	
+	@Override
 	public void setViewMode(TViewMode mode){
 		super.setViewMode(mode);
 		final Hyperlink exportLink = this.decorator.gettExportReadHyperLink();
@@ -382,7 +415,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	}
 	
 	/**
-	 * Select the Mode Radio button with the {@link TViewMode} setted.
+	 * Select Edit or Read mode based on the {@link TViewMode} set. 
+	 * Returns false if the mode button was not created or 
+	 * the logged in user is not authorized to read or edit it.
+	 * @return true if succeeded. 
 	 * */
 	public boolean selectMode(){
 		
@@ -492,6 +528,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	
 	/**
 	 * Perform this action when a model is selected.
+	 * @param new_val
 	 * */
 	public void selectedItemAction(M new_val) {
 		setActionState(new TActionState<>(TActionType.SELECTED_ITEM, TProcessResult.RUNNING));
@@ -563,8 +600,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		}
 	}
 	
-	
-
 	@SuppressWarnings("unchecked")
 	private void runSaveEntityProcess()
 			throws Exception, TValidatorException, Throwable {
@@ -743,7 +778,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	/**
 	 * Called by the newAction() method to perform a custom behavior 
 	 * like add the new item in a {@link ListView} or {@link TableView}.  
-	 * @return boolean
+	 * @param model
+	 * @return boolean - true to continue processing and show the form
 	 * */
 	public abstract boolean processNewEntityBeforeBuildForm(M model);
 	
@@ -791,10 +827,20 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		}
 	}
 	
+	/**
+	 * Show the form in Edit mode
+	 * @param model
+	 */
 	public void editEntity(TModelView model) {
 		showForm(TViewMode.EDIT);
 	}
 	
+	/**
+	 * Returns the presenter of the current open ITModule.
+	 * This is commonly used when dealing with a view/behavior 
+	 * under another view/behavior such as a detail view or modal view.
+	 * @return TDynaPresenter
+	 */
 	public TDynaPresenter getModulePresenter() {
 				
 		ITModule module = getPresenter().getModule() ;
@@ -814,6 +860,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		return (TDynaPresenter) presenter;
 	}
 	
+	@Override
 	public String canInvalidate() {
 		final ObservableList<M> models = getModels();
 		
@@ -967,7 +1014,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * public void startRemoveProcess(boolean removeFromDataBase){
 	 * 	super.startRemoveProcess(false);		
 	 * }
-	 * <code>
+	 * </code>
 	 * */
 	@SuppressWarnings("unchecked")
 	public void startRemoveProcess(boolean removeFromDataBase) {
@@ -1029,6 +1076,15 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		}
 	}
 	
+	/**
+	 *  <p>
+	 * Create a {@link TEntityProcess} process based on the  {@link TEjbService} or 
+	 * {@link org.tedros.fx.annotation.process.TEntityProcess} 
+	 * annotated in the given {@link TEntityModelView}
+	 * </p>  
+	 * @return TEntityProcess
+	 * @throws Throwable
+	 */
 	@SuppressWarnings("unchecked")
 	public TEntityProcess createEntityProcess() throws Throwable {
 		
@@ -1054,6 +1110,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		}
 	}
 	
+	/**
+	 * Remove the model at the specified position from the model list. 
+	 * @param index
+	 */
 	public void remove(int index) {
 		if(getModels()!=null) {
 			getModels().remove(index);
@@ -1117,29 +1177,49 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	public boolean isEditModeSelected(){
 		return radioGroup.getSelectedToggle()!=null && radioGroup.getSelectedToggle().equals(this.decorator.gettEditModeRadio());
 	}
-	
+	/**
+	 * Return the Edit and Read radio group
+	 * @return radioGroup
+	 */
 	public ToggleGroup getRadioGroup() {
 		return radioGroup;
 	}
 	
+	/**
+	 * Checks if the edit and read radio group is built.
+	 * @return true if radioGroup is not null
+	 */
 	public boolean isRadioGroupBuilt(){
 		return radioGroup!=null;
 	}
 
-	
+	/**
+	 * Get the edit and read mode disable property.
+	 * @return modeBtnDisableProperty
+	 */
 	public BooleanProperty getModeBtnDisableProperty() {
 		return modeBtnDisableProperty;
 	}
 	
+	/**
+	 * Get the edit and read mode visible property.
+	 * @return modeBtnVisibleProperty
+	 */
 	public BooleanProperty getModeBtnVisibleProperty() {
 		return modeBtnVisibleProperty;
 	}
 
+	/**
+	 * Remove from formProperty the breadcrumbFormChangeListener
+	 */
 	public synchronized void removeBreadcrumbFormChangeListener() {
 		if(breadcrumbFormChangeListener!=null)
 			formProperty().removeListener(breadcrumbFormChangeListener);
 	}
 	
+	/**
+	 * Add in formProperty the breadcrumbFormChangeListener
+	 */
 	public synchronized void addBreadcrumbFormChangeListener() {
 		if(breadcrumbFormChangeListener!=null){
 			formProperty().addListener(breadcrumbFormChangeListener);

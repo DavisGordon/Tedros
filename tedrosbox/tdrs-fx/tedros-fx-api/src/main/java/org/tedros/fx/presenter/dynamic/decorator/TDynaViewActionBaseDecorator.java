@@ -11,6 +11,13 @@ import org.tedros.fx.presenter.model.TModelView;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 
+/**
+ * The basic decorator for custom action view.
+ * 
+ * @author Davis Gordon
+ *
+ * @param <M>
+ */
 @SuppressWarnings("rawtypes")
 public abstract class TDynaViewActionBaseDecorator<M extends TModelView> 
 extends TDynaViewSimpleBaseDecorator<M> {

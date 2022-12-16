@@ -19,6 +19,12 @@ import org.tedros.fx.presenter.model.TModelView;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 
+/**
+ * The basic decorator of the report view.
+ * @author Davis Gordon
+ *
+ * @param <M>
+ */
 @SuppressWarnings("rawtypes")
 public abstract class TDynaViewReportBaseDecorator<M extends TModelView> 
 extends TDynaViewSimpleBaseDecorator<M> {
@@ -37,14 +43,26 @@ extends TDynaViewSimpleBaseDecorator<M> {
     
     private List<TAuthorizationType> userAuthorizations;
     
+    /**
+     * Returns an authorization list of the logged in user.
+     * @return userAuthorizations
+     */
     public List<TAuthorizationType> getUserAuthorizations() {
 		return userAuthorizations;
 	}
-    
+    /**
+     * Checks the logged in user authorization.
+     * @param type
+     * @return true if authorized
+     */
     public boolean isUserAuthorized(TAuthorizationType type){
     	return userAuthorizations==null || userAuthorizations.contains(type);
     }
-    
+    /**
+     * Checks the logged in user no authorization.
+     * @param type
+     * @return true if don't authorized
+     */
     public boolean isUserNotAuthorized(TAuthorizationType type){
     	return userAuthorizations!=null && !userAuthorizations.contains(type);
     }
@@ -69,7 +87,6 @@ extends TDynaViewSimpleBaseDecorator<M> {
 		}
 	}
     
-
 	/**
 	 * <p>
 	 * Build a radio buttons for the select mode action.<br><br>
@@ -116,8 +133,6 @@ extends TDynaViewSimpleBaseDecorator<M> {
 		if(isUserNotAuthorized(TAuthorizationType.READ))
 			tReadModeRadio.setDisable(true);
 	}
-	
-	
 	
 	/**
 	 * <p>

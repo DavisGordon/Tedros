@@ -13,6 +13,16 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+/**
+ * The decorator of the open modal view 
+ * to select an entity.
+ * It can be set using the 
+ * {@link TSelectionModalPresenter} annotation on 
+ * the TEntityModelView. 
+ * @author Davis Gordon
+ *
+ * @param <M>
+ */
 @SuppressWarnings("rawtypes")
 public class TSelectionModalDecorator<M extends TModelView> 
 extends TDynaViewSelectionBaseDecorator<M> {
@@ -22,8 +32,9 @@ extends TDynaViewSelectionBaseDecorator<M> {
 	private TitledPane tFilterTiTlePane;
 	private TitledPane tResultTitlePane;
 	
-	 public void decorate() {
-		
+	@Override
+	@SuppressWarnings("unchecked")
+	public void decorate() {
 		
 		// get the view
 		final ITDynaView<M> view = getPresenter().getView();
@@ -66,17 +77,26 @@ extends TDynaViewSelectionBaseDecorator<M> {
 		expandFilterPane();
 	}
 	
-	 public void expandResultPane() {
-		 tAccordion.setExpandedPane(tResultTitlePane);
-	 }
-	 
-	 public void expandFilterPane() {
-		 tAccordion.setExpandedPane(tFilterTiTlePane);
-	 }
+	/**
+	 * Expand the result title pane.
+	 */
+	public void expandResultPane() {
+		tAccordion.setExpandedPane(tResultTitlePane);
+	}
 	
-	 public void setTableView(TableView tableView) {
-	    	super.setTableView(tableView);
-	    	box.getChildren().addAll(tableView, gettPaginator());
-	    }
+	/**
+	 * Expand the filter title pane.
+	 */
+	public void expandFilterPane() {
+		tAccordion.setExpandedPane(tFilterTiTlePane);
+	}
+	
+	/**
+	 * Set up the TableView
+	 */
+	public void setTableView(TableView tableView) {
+		super.setTableView(tableView);
+		box.getChildren().addAll(tableView, gettPaginator());
+	}
 
 }

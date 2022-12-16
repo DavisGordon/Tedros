@@ -191,8 +191,8 @@ public @interface TNode {
 	*  Opacity is specified as a value between 0 and 1. Values less than 0 are treated as 0, values 
 	*  greater than 1 are treated as 1. On some platforms ImageView might not support opacity variable. 
 	*  
-	*  There is a known limitation of mixing opacity < 1.0 with a 3D Transform. Opacity/Blending is 
-	*  essentially a 2D image operation. The result of an opacity < 1.0 set on a Group node with 3D 
+	*  There is a known limitation of mixing opacity &lt; 1.0 with a 3D Transform. Opacity/Blending is 
+	*  essentially a 2D image operation. The result of an opacity &lt; 1.0 set on a Group node with 3D 
 	*  transformed children will cause its children to be rendered in order without Z-buffering applied 
 	*  between those children. 
 	*  
@@ -1345,8 +1345,8 @@ public @interface TNode {
 	*  Values less than 0 are treated as 0, values greater than 1 are treated as 1. 
 	*  
 	*  On some platforms ImageView might not support opacity variable. 
-	*  There is a known limitation of mixing opacity < 1.0 with a 3D Transform. Opacity/Blending is 
-	*  essentially a 2D image operation. The result of an opacity < 1.0 set on a Group node with 3D 
+	*  There is a known limitation of mixing opacity &lt; 1.0 with a 3D Transform. Opacity/Blending is 
+	*  essentially a 2D image operation. The result of an opacity &lt; 1.0 set on a Group node with 3D 
 	*  transformed children will cause its children to be rendered in order without Z-buffering applied 
 	*  between those children. 
 	* </pre>
