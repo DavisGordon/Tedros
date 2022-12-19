@@ -1,11 +1,12 @@
 package org.tedros.fx.builder;
 
-import java.lang.annotation.Annotation;
+import org.tedros.fx.collections.ITObservableList;
 
 import javafx.scene.Node;
 
-public interface ITChartBuilder<C extends Node> extends ITFieldBuilder {
+
+@SuppressWarnings("rawtypes")
+public interface ITChartBuilder<N extends Node> extends ITControlBuilder<N,ITObservableList> {
 	
-	public C build(final Annotation tAnnotation, C chartField) throws Exception;
 
 }

@@ -78,14 +78,18 @@ public class TProfile extends TVersionEntity {
 		this.description = description;
 	}
 	
-	@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this, false);
+	public List<TAuthorization> getAutorizations(String securityId) {
+		return autorizations!=null ? autorizations.parallelStream().filter(e -> {
+			return e.getSecurityId().equals(securityId);
+		}).collect(Collectors.toList()) : new ArrayList<>();
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return EqualsBuilder.reflectionEquals(this, obj, false);
+
+	public List<TAuthorization> getAutorizations() {
+		return autorizations;
+	}
+
+	public void setAutorizations(List<TAuthorization> autorizations) {
+		this.autorizations = autorizations;
 	}
 	
 	@Override
@@ -101,20 +105,48 @@ public class TProfile extends TVersionEntity {
 		
 		return sb.toString();
 	}
-	
-	public List<TAuthorization> getAutorizations(String securityId) {
-		return autorizations!=null ? autorizations.parallelStream().filter(e -> {
-			return e.getSecurityId().equals(securityId);
-		}).collect(Collectors.toList()) : new ArrayList<>();
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((autorizations == null) ? 0 : autorizations.hashCode());
+		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
 	}
 
-	public List<TAuthorization> getAutorizations() {
-		return autorizations;
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (super.equals(obj))
+			return true;
+		if (!(obj instanceof TProfile))
+			return false;
+		TProfile other = (TProfile) obj;
+		if (autorizations == null) {
+			if (other.autorizations != null)
+				return false;
+		} else if (!autorizations.equals(other.autorizations))
+			return false;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
 	}
-
-	public void setAutorizations(List<TAuthorization> autorizations) {
-		this.autorizations = autorizations;
-	}
-	
 	
 }

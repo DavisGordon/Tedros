@@ -76,7 +76,8 @@ public class TAreaChartField<XType, YType, XAxisType extends Axis<XType>, YAxisT
 		
 		for(XYChart.Series<XType, YType> serie : areaChart.getData()){
 			if(serie.getName().equals(name)){
-				final XYChart.Data<XType, YType> data = (Data<XType, YType>) new XYChart.Data<>(tConvertXValue(xValue), tConvertYValue(yValue));
+				final XYChart.Data<XType, YType> data = (Data<XType, YType>) 
+						new XYChart.Data<>(tConvertXValue(xValue), tConvertYValue(yValue));
 				serie.getData().add(data);
 				return;
 			}	

@@ -4,10 +4,12 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.annotation.security.TSecurity;
+import org.tedros.core.controller.TProfileChartController;
 import org.tedros.core.controller.TProfileController;
 import org.tedros.core.domain.DomainApp;
 import org.tedros.core.security.model.TAuthorization;
 import org.tedros.core.security.model.TProfile;
+import org.tedros.fx.annotation.chart.TPieChartField;
 import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TFieldBox;
 import org.tedros.fx.annotation.control.TLabel;
@@ -85,9 +87,10 @@ public final class TProfileMV extends TEntityModelView<TProfile> {
 					prefRowCount=3)
 	private SimpleStringProperty description;
 	
-	@TDetailReader(label=@TLabel(text="Authorization"))
-	@TMultipleSelectionModal(width=600, height=350,
-	modelClass = TAuthorization.class, modelViewClass = TAuthorizationTV.class)
+	//@TDetailReader(label=@TLabel(text="Authorization"))
+	//@TMultipleSelectionModal(width=600, height=350,
+	//modelClass = TAuthorization.class, modelViewClass = TAuthorizationTV.class)
+	@TPieChartField(service=TProfileChartController.JNDI_NAME, title="Teste chart")
 	@TModelViewType(modelClass=TAuthorization.class, modelViewClass=TAuthorizationTV.class)
 	private ITObservableList<TAuthorizationTV> autorizations;
 

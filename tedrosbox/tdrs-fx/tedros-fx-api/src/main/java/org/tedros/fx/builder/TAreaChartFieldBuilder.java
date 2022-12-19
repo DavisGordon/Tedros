@@ -11,6 +11,7 @@ import java.lang.annotation.Annotation;
 import org.tedros.fx.annotation.chart.TAreaChartField;
 import org.tedros.fx.annotation.chart.TData;
 import org.tedros.fx.annotation.chart.TSeries;
+import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.form.TAxisPropertiesConfig;
 
 import javafx.geometry.Side;
@@ -22,20 +23,23 @@ import javafx.geometry.Side;
  * @author Davis Gordon
  *
  */
-@SuppressWarnings("rawtypes")
 public final class TAreaChartFieldBuilder implements ITChartBuilder<org.tedros.fx.chart.TAreaChartField>{
 
 	
 	
-	public org.tedros.fx.chart.TAreaChartField build(final Annotation annotation, org.tedros.fx.chart.TAreaChartField chartField) throws Exception {
+	@SuppressWarnings("rawtypes")
+	public org.tedros.fx.chart.TAreaChartField build(final Annotation annotation, ITObservableList observable ) throws Exception {
 		TAreaChartField tAnnotation = (TAreaChartField) annotation;
-		chartField = new org.tedros.fx.chart.TAreaChartField<>(tAnnotation.xAxis().axisType().getValue(), tAnnotation.yAxis().axisType().getValue());
-		setProperties(tAnnotation, chartField);
+		org.tedros.fx.chart.TAreaChartField chartField = 
+				new org.tedros.fx.chart.TAreaChartField<>(tAnnotation.xAxis().axisType().getValue(), 
+						tAnnotation.yAxis().axisType().getValue());
+		setProperties(tAnnotation, chartField, observable);
 		return chartField;
 	}
 		
-	@SuppressWarnings({"unchecked"})
-	public static void setProperties(final TAreaChartField tAnnotation, org.tedros.fx.chart.TAreaChartField chartField) {
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	public static void setProperties(final TAreaChartField tAnnotation, 
+			org.tedros.fx.chart.TAreaChartField chartField, ITObservableList observable) {
 		
 		chartField.gettChart().setTitle(tAnnotation.title());
 		TAxisPropertiesConfig.setAxisProperties(tAnnotation.xAxis(), chartField.gettXAxis(), tAnnotation.xAxis().side());
@@ -43,9 +47,13 @@ public final class TAreaChartFieldBuilder implements ITChartBuilder<org.tedros.f
 				(tAnnotation.xAxis().side()==Side.BOTTOM && tAnnotation.yAxis().side()==Side.BOTTOM 
 				? Side.LEFT 
 						: tAnnotation.yAxis().side()));
+		
 		for(TSeries tSerie : tAnnotation.series()){
-			for(TData tData : tSerie.data()){
-				chartField.tAddData(tSerie.name(), tData.x(), tData.y());
+			if(tSerie.data().length>0) 
+				for(TData tData : tSerie.data())
+					chartField.tAddData(tSerie.name(), tData.x(), tData.y());
+			else if(!"".equals(tSerie.xField()) && !"".equals(tSerie.yField())) {
+				
 			}
 		}
 	}
