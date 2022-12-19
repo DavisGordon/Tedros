@@ -11,6 +11,8 @@ import java.lang.annotation.Target;
 public @interface TSeries {
 	//public Class<?> type();
 	public String  name(); 
-	public TData[] data();
+	public String xField() default "";
+	public String yField() default "";
+	public TData[] data() default {};
 	
 }

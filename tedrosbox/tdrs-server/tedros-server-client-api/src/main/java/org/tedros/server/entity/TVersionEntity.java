@@ -44,25 +44,4 @@ public  class TVersionEntity extends TEntity implements ITVersionableEntity {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (!(obj instanceof TVersionEntity))
-			return false;
-		TVersionEntity other = (TVersionEntity) obj;
-		if (versionNum == null) {
-			if (other.versionNum != null)
-				return false;
-		} else if (!versionNum.equals(other.versionNum))
-			return false;
-		return true;
-	}
-
-
 }

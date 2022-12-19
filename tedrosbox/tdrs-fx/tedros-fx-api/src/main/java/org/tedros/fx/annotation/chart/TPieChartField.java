@@ -6,6 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.builder.ITChartBuilder;
+import org.tedros.fx.builder.TGenericBuilder;
+import org.tedros.fx.builder.TPieChartFieldBuilder;
+import org.tedros.fx.process.TChartProcess;
+import org.tedros.server.controller.TParam;
 
 import javafx.geometry.Side;
 
@@ -13,6 +18,10 @@ import javafx.geometry.Side;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface TPieChartField {
+	
+
+	@SuppressWarnings("rawtypes")
+	public Class<? extends ITChartBuilder> builder() default TPieChartFieldBuilder.class;
 	
 	/**
 	 * The chart title
@@ -30,9 +39,31 @@ public @interface TPieChartField {
 	public boolean animated() default true;
 	
 	/**
+	 * Optional, the chart process class to call the ejb service.
+	 * @return class
+	 */
+	public Class<? extends TChartProcess> process() default TChartProcess.class;
+	
+	/**
+	 * The jndi name of the ejb chart controller.
+	 * It must be of the type ITEjbChartController.
+	 * 
+	 * @return the jndi name
+	 */
+	public String service() default "";
+	
+	/**
+	 * Optional, service params builder class.
+	 * This builder must return an array of {@link TParam}
+	 * @return class 
+	 */
+	@SuppressWarnings("rawtypes")
+	public Class<? extends TGenericBuilder> paramsBuilder() default TGenericBuilder.class;
+	
+	/**
 	 * PieCharts data
 	 * */
-	public TPieData[] data();
+	public TPieData[] data() default {};
 	
 	/**
 	 * The angle to start the first pie slice at

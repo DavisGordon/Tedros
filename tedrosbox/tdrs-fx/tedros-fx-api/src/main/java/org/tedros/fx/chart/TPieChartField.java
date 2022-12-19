@@ -9,12 +9,12 @@ public class TPieChartField extends Pane {
 	private PieChart chart;
 	
 	public TPieChartField() {
-		setId("t-form");
+		//setId("t-form");
 		tCreateChart();
 	}
 	
 	public TPieChartField(ObservableList<PieChart.Data> data) {
-		setId("t-form");
+		//setId("t-form");
 		tCreateChart();
 		tAddData(data);
 	}

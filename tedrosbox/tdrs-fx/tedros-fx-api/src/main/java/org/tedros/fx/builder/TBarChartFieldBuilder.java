@@ -11,6 +11,7 @@ import java.lang.annotation.Annotation;
 import org.tedros.fx.annotation.chart.TBarChartField;
 import org.tedros.fx.annotation.chart.TData;
 import org.tedros.fx.annotation.chart.TSeries;
+import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.form.TAxisPropertiesConfig;
 
 import javafx.geometry.Side;
@@ -26,9 +27,9 @@ import javafx.geometry.Side;
 public final class TBarChartFieldBuilder implements ITChartBuilder<org.tedros.fx.chart.TBarChartField>{
 	
 	
-	public org.tedros.fx.chart.TBarChartField build(final Annotation annotation, org.tedros.fx.chart.TBarChartField chartField) throws Exception {
+	public org.tedros.fx.chart.TBarChartField build(final Annotation annotation, ITObservableList observable) throws Exception {
 		TBarChartField tAnnotation = (TBarChartField) annotation;
-		chartField = new org.tedros.fx.chart.TBarChartField<>(tAnnotation.xAxis().axisType().getValue(), tAnnotation.yAxis().axisType().getValue());
+		org.tedros.fx.chart.TBarChartField chartField = new org.tedros.fx.chart.TBarChartField<>(tAnnotation.xAxis().axisType().getValue(), tAnnotation.yAxis().axisType().getValue());
 		setProperties(tAnnotation, chartField);
 		return chartField;
 	}

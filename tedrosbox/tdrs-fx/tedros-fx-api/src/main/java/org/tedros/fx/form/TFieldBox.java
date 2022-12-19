@@ -10,7 +10,6 @@ import org.tedros.fx.domain.TLabelPosition;
 import javafx.beans.Observable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
@@ -95,6 +94,7 @@ public class TFieldBox extends StackPane implements ITField, ITFieldBox {
 	 * @see org.tedros.fx.form.ITFieldBox#tValueProperty()
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public Observable tValueProperty() {
 		return super.getChildren();
 	}
