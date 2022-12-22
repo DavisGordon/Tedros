@@ -9,12 +9,16 @@ import org.tedros.core.controller.TProfileController;
 import org.tedros.core.domain.DomainApp;
 import org.tedros.core.security.model.TAuthorization;
 import org.tedros.core.security.model.TProfile;
+import org.tedros.fx.annotation.chart.TAreaChartField;
+import org.tedros.fx.annotation.chart.TAxis;
 import org.tedros.fx.annotation.chart.TPieChartField;
+import org.tedros.fx.annotation.chart.TPieData;
+import org.tedros.fx.annotation.chart.TSeries;
+import org.tedros.fx.annotation.chart.TXYChart;
 import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TFieldBox;
 import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TModelViewType;
-import org.tedros.fx.annotation.control.TMultipleSelectionModal;
 import org.tedros.fx.annotation.control.TTab;
 import org.tedros.fx.annotation.control.TTabPane;
 import org.tedros.fx.annotation.control.TTextAreaField;
@@ -25,13 +29,13 @@ import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.process.TEjbService;
-import org.tedros.fx.annotation.reader.TDetailReader;
 import org.tedros.fx.annotation.reader.TReader;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TControl;
 import org.tedros.fx.annotation.text.TText;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.control.TText.TTextStyle;
+import org.tedros.fx.domain.TAxisType;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.entity.decorator.TMasterCrudViewDecorator;
 import org.tedros.fx.presenter.model.TEntityModelView;
@@ -90,7 +94,13 @@ public final class TProfileMV extends TEntityModelView<TProfile> {
 	//@TDetailReader(label=@TLabel(text="Authorization"))
 	//@TMultipleSelectionModal(width=600, height=350,
 	//modelClass = TAuthorization.class, modelViewClass = TAuthorizationTV.class)
-	@TPieChartField(service=TProfileChartController.JNDI_NAME, title="Teste chart")
+	/*@TPieChartField(
+			//service=TProfileChartController.JNDI_NAME, 
+			data= {@TPieData(name = "Teste 1", value = 50),@TPieData(name = "Teste 2", value = 25),@TPieData(name = "Teste 3", value = 20) },
+			title="Teste chart", labelLineLength=12)*/
+	@TAreaChartField(xyChart = @TXYChart(service=TProfileChartController.JNDI_NAME, 
+			xAxis = @TAxis(axisType = TAxisType.NUMBER, label = "Horizintal"), 
+			yAxis = @TAxis(axisType = TAxisType.NUMBER, label = "Vertical")))
 	@TModelViewType(modelClass=TAuthorization.class, modelViewClass=TAuthorizationTV.class)
 	private ITObservableList<TAuthorizationTV> autorizations;
 

@@ -5,44 +5,89 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.api.parser.ITAnnotationParser;
+import org.tedros.fx.annotation.parser.TPieChartParser;
+import org.tedros.fx.annotation.scene.TNode;
+import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.builder.ITChartBuilder;
-import org.tedros.fx.builder.TGenericBuilder;
+import org.tedros.fx.builder.TChartModelBuilder;
+import org.tedros.fx.builder.TParamBuilder;
 import org.tedros.fx.builder.TPieChartFieldBuilder;
-import org.tedros.fx.process.TChartProcess;
-import org.tedros.server.controller.TParam;
 
-import javafx.geometry.Side;
+import javafx.scene.Node;
+import javafx.scene.chart.Chart;
+import javafx.scene.chart.PieChart;
+import javafx.scene.layout.Region;
 
-
+/**
+ * <pre>
+ *Construct a pie chart.
+ *A chart can be plotted in three different ways:
+ *1. Using a server service that implements ITEjbChartController.
+ *
+ * <b>@</b>TPieChartField(service=TProfileChartController.JNDI_NAME, title="My chart")
+ * <b>@</b>TModelViewType(modelClass=TAuthorization.class)
+ * private ITObservableList&lt;TAuthorization&gt; autorizations;
+ * 
+ * 2. Using a builder that extends TChartModelBuilder.
+ * 
+ * <b>@</b>TPieChartField(chartModelBuilder=MyChartBuilder.class, title="My chart")
+ * <b>@</b>TModelViewType(modelClass=TAuthorization.class)
+ * private ITObservableList&lt;TAuthorization&gt; autorizations;
+ * 
+ * 3. Configuring static data.
+ * 
+ * <b>@</b>TPieChartField(title="My chart", 
+ * data={<b>@</b>TPieData(name = "App 1", value = 50), <b>@</b>TPieData(name = "App 2", value = 50)})
+ * <b>@</b>TModelViewType(modelClass=TAuthorization.class)
+ * private ITObservableList&lt;TAuthorization&gt; autorizations;
+ * </pre>
+ * @author Davis Gordon
+ *
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface TPieChartField {
 	
-
+	/**
+	 *<pre>
+	 * The builder of type {@link ITChartBuilder} for this component.
+	 * 
+	 * Default value: {@link TPieChartFieldBuilder}
+	 *</pre> 
+	 * */
 	@SuppressWarnings("rawtypes")
 	public Class<? extends ITChartBuilder> builder() default TPieChartFieldBuilder.class;
-	
 	/**
-	 * The chart title
+	 * <pre>
+	 * The parser class for this annotation
+	 * 
+	 * Default value: {TPieChartParser.class}
+	 * </pre>
 	 * */
-	public String title() default TAnnotationDefaultValue.TCHART_title;
+	@SuppressWarnings("rawtypes")
+	public Class<? extends ITAnnotationParser>[] parser() default {TPieChartParser.class};
 	
 	/**
-	 * The side of the chart where the title is displayed
-	 * */		
-	public Side titleSide() default Side.TOP;
-	
-	/**
-	 * When true any data changes will be animated.
+	 * <pre>
+	 * The {@link Node} settings.
+	 * </pre>
 	 * */
-	public boolean animated() default true;
+	public TNode node() default @TNode(parse = false);
 	
 	/**
-	 * Optional, the chart process class to call the ejb service.
-	 * @return class
-	 */
-	public Class<? extends TChartProcess> process() default TChartProcess.class;
+	 * <pre>
+	 * The {@link Region} settings.
+	 * </pre>
+	 * */
+	public TRegion region() default @TRegion(parse = false);
+	
+	/**
+	 * <pre>
+	 * The {@link Chart} settings.
+	 * </pre>
+	 * */
+	public TChart chart() default @TChart(parse = false);
 	
 	/**
 	 * The jndi name of the ejb chart controller.
@@ -54,57 +99,71 @@ public @interface TPieChartField {
 	
 	/**
 	 * Optional, service params builder class.
-	 * This builder must return an array of {@link TParam}
+	 * @return class 
+	 */
+	public Class<? extends TParamBuilder> paramsBuilder() default TParamBuilder.class;
+	
+	/**
+	 * Optional, the TChartModel builder to plot the chart.
 	 * @return class 
 	 */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends TGenericBuilder> paramsBuilder() default TGenericBuilder.class;
+	public Class<? extends TChartModelBuilder> chartModelBuilder() default TChartModelBuilder.class;
 	
 	/**
-	 * PieCharts data
-	 * */
+	* <pre>
+	* {@link PieChart} Class
+	* 
+	*  Optional, sets the value of the property data. 
+	*  Property description: PieCharts data
+	* </pre>
+	**/
 	public TPieData[] data() default {};
 	
 	/**
-	 * The angle to start the first pie slice at
-	 * */
-	public double startAngle() default -1;
-	
-	
+	* <pre>
+	* {@link PieChart} Class
+	* 
+	*  Sets the value of the property startAngle. 
+	*  Property description: 
+	*  The angle to start the first pie slice at
+	* </pre>
+	**/
+	public double startAngle() default 90;
+
 	/**
-	 * When true we start placing slices clockwise from the startAngle
-	 * */
+	* <pre>
+	* {@link PieChart} Class
+	* 
+	*  Sets the value of the property clockwise. 
+	*  Property description: 
+	*  When true we start placing slices clockwise 
+	*  from the startAngle
+	* </pre>
+	**/
 	public boolean clockwise() default true;
 
 	/**
-	 * The length of the line from the outside of the pie to the slice labels.
-	 * */
-	public double labelLineLength() default -1;
-	
+	* <pre>
+	* {@link PieChart} Class
+	* 
+	*  Sets the value of the property labelLineLength. 
+	*  Property description: 
+	*  The length of the line from the outside of the 
+	*  pie to the slice labels.
+	* </pre>
+	**/
+	public double labelLineLength() default 1L;
+
 	/**
-	 * When true pie slice labels are drawn
-	 * */
+	* <pre>
+	* {@link PieChart} Class
+	* 
+	*  Sets the value of the property labelsVisible. 
+	*  Property description: 
+	*  When true pie slice labels are drawn
+	* </pre>
+	**/
 	public boolean labelsVisible() default true;
-	
-	/**
-	 * Charts are sized outside in, user tells chart how much space it has and chart draws inside that. So minimum height is a constant 150.
-	 * */
-	public double computeMinHeight() default -1;
-	
-	/**
-	 * Charts are sized outside in, user tells chart how much space it has and chart draws inside that. So minimum width is a constant 200.
-	 * */
-	public double computeMinWidth() default -1;
-	
-	/**
-	 * Charts are sized outside in, user tells chart how much space it has and chart draws inside that. So preferred width is a constant 500.
-	 * */
-	public double computePrefWidth() default -1;
-	
-	/**
-	 * Charts are sized outside in, user tells chart how much space it has and chart draws inside that. So preferred height is a constant 400.
-	 * */
-	public double computePrefHeight() default -1;
-	 
 	
 }

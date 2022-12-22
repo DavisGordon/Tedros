@@ -34,7 +34,7 @@ import javafx.scene.control.TextInputControl;
 
 /**
  * <pre>
- * Build a {@link org.tedros.fx.control.TFileField} component.
+ * Build a {@link org.tedros.fx.control.TIntegerField} component.
  * </pre>
  *
  * @author Davis Gordon

@@ -3,8 +3,7 @@ package org.tedros.fx.domain;
 public enum TAxisType {
 
 	NUMBER (Number.class),
-	STRING (String.class),
-	DATE   (String.class);
+	CATEGORY (String.class);
 	
 	private Class<?> value;
 	

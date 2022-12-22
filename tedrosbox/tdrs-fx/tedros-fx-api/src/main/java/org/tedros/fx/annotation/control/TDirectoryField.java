@@ -127,6 +127,7 @@ public @interface TDirectoryField {
 	 * Defines the action to the clean button.
 	 * </pre>
 	 * */
+	@SuppressWarnings("rawtypes")
 	public Class<? extends TEventHandler> cleanAction() default TEventHandler.class;
 	
 	/**
@@ -140,6 +141,7 @@ public @interface TDirectoryField {
 	 * Defines the action to the select button
 	 * </pre>
 	 * */
+	@SuppressWarnings("rawtypes")
 	public Class<? extends TEventHandler> selectAction() default TEventHandler.class;
 
 
