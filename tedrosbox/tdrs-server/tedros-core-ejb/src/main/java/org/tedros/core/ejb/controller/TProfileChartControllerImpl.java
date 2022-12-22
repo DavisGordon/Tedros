@@ -1,5 +1,6 @@
 package org.tedros.core.ejb.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -7,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.tedros.core.controller.TProfileChartController;
 import org.tedros.core.domain.DomainApp;
 import org.tedros.core.ejb.service.TCoreService;
@@ -61,17 +63,19 @@ implements TProfileChartController, ITSecurity {
 	@SuppressWarnings("rawtypes")
 	public  TResult<ITChartModel> process(TAccessToken token, TParam... params) {
 		try {
-			List<TProfile> p = serv.listAll(TProfile.class);
-			List<TUser> u = uServ.listAll(TUser.class);
+			//List<TProfile> p = serv.listAll(TProfile.class);
+			//List<TUser> u = uServ.listAll(TUser.class);
+			List<String> p = Arrays.asList("Teste 1","Teste 2","Teste 3");
 			
-			TChartModel<String, Long> cm = new TChartModel<>();
-			TChartSerie<String,Long> s = new TChartSerie<>(null);
-			cm.addSerie(s);
+			TChartModel<Long, Long> cm = new TChartModel<>();
+			//TChartSerie<String,Long> s = new TChartSerie<>(null);
+			//cm.addSerie(s);
 			p.stream().forEach(e->{
-				long t = u.stream().filter(x->{
-					return  x.getProfiles().contains(e);
-				}).count();
-				s.addData(e.getName(), t);
+				TChartSerie<Long,Long> s = new TChartSerie<>(e);
+				cm.addSerie(s);
+				s.addData(RandomUtils.nextLong(0, 100), RandomUtils.nextLong(0, 100));
+				s.addData(RandomUtils.nextLong(0, 100), RandomUtils.nextLong(0, 100));
+				s.addData(RandomUtils.nextLong(0, 100), RandomUtils.nextLong(0, 100));
 			});
 			return new TResult<>(TState.SUCCESS, cm);
 		} catch (Exception e) {

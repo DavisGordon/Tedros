@@ -7,13 +7,15 @@
 package org.tedros.fx.builder;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
 
 import org.tedros.fx.annotation.chart.TPieChartField;
+import org.tedros.fx.annotation.chart.TPieData;
 import org.tedros.fx.collections.ITObservableList;
+import org.tedros.fx.exception.TProcessException;
 import org.tedros.fx.process.TChartProcess;
 import org.tedros.server.controller.TParam;
 import org.tedros.server.model.ITChartModel;
+import org.tedros.server.model.TChartModel;
 import org.tedros.server.result.TResult;
 
 import javafx.concurrent.Worker.State;
@@ -38,31 +40,46 @@ implements ITChartBuilder<PieChart>{
 
 		PieChart chart = new PieChart();
 		if(!"".equals(tAnn.service())) {
-			Class<? extends TChartProcess> prClss = tAnn.process();
-			Constructor cnt = prClss.getConstructor(String.class);
-			TChartProcess pss = (TChartProcess) cnt.newInstance(tAnn.service());
-			if(tAnn.paramsBuilder()!=TGenericBuilder.class) {
-				TGenericBuilder pb = tAnn.paramsBuilder().newInstance();
-				pb.setComponentDescriptor(super.getComponentDescriptor());
-				TParam[] params = (TParam[]) pb.build();
-				pss.process(params);
-			}else
-				pss.process();
-			pss.stateProperty().addListener((a,o,n)->{
-				if(n.equals(State.SUCCEEDED)) {
-					TResult<? extends ITChartModel> res = pss.getValue();
-					ITChartModel<String, Long> model = res.getValue();
-					model.getSeries().forEach(s->{
-						s.getDatas().forEach(d->{
-							chart.getData().add(new PieChart.Data(d.getX(), d.getY()));
-						});
-					});
-				}
-			});
-			pss.startProcess();
+			try {
+				TChartProcess pss = new TChartProcess(tAnn.service());
+				if(tAnn.paramsBuilder()!=TParamBuilder.class) {
+					TParamBuilder pb = tAnn.paramsBuilder().newInstance();
+					pb.setComponentDescriptor(super.getComponentDescriptor());
+					TParam[] params = (TParam[]) pb.build();
+					pss.process(params);
+				}else
+					pss.process();
+				pss.stateProperty().addListener((a,o,n)->{
+					if(n.equals(State.SUCCEEDED)) {
+						TResult<? extends ITChartModel> res = pss.getValue();
+						ITChartModel<String, Long> model = res.getValue();
+						addData(chart, model);
+					}
+				});
+				pss.startProcess();
+			} catch (TProcessException e) {
+				e.printStackTrace();
+			}
+		}else if(tAnn.chartModelBuilder()!=TChartModelBuilder.class) {
+			TChartModelBuilder mb = tAnn.chartModelBuilder().newInstance();
+			mb.setComponentDescriptor(super.getComponentDescriptor());
+			mb.setObservableList(observable);
+			TChartModel model = (TChartModel) mb.build();
+			this.addData(chart, model);
+		}else if(tAnn.data().length>0) {
+			for(TPieData d : tAnn.data())
+				chart.getData().add(new PieChart.Data(d.name(), d.value()));
 		}
-		chart.setTitle(tAnn.title());
+		super.callParser(tAnn, chart);
 		return chart;
+	}
+
+	private void addData(PieChart chart, ITChartModel<String, Long> model) {
+		model.getSeries().forEach(s->{
+			s.getDatas().forEach(d->{
+				chart.getData().add(new PieChart.Data(d.getX(), d.getY()));
+			});
+		});
 	}
 	
 	

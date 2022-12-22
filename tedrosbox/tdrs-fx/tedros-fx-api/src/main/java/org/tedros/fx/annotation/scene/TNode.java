@@ -220,8 +220,6 @@ public @interface TNode {
 	**/
 	public TBlendMode blendMode() default TBlendMode.NULL;
 	
-	
-
 	/**
 	* <pre>
 	* {@link Node} property
@@ -2205,7 +2203,5 @@ public @interface TNode {
 	 * </pre>
 	 * */
 	public boolean parse();
-
-
-		
+	
 }

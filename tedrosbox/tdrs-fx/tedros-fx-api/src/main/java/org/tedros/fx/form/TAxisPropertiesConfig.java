@@ -8,6 +8,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.paint.Color;
 
+@Deprecated
 public class TAxisPropertiesConfig {
 	
 	private TAxisPropertiesConfig(){
@@ -16,7 +17,7 @@ public class TAxisPropertiesConfig {
 	
 	@SuppressWarnings("rawtypes")
 	public static void setAxisProperties(final TAxis tAxis, final Axis axis, final Side side) {
-		
+		/*
 		axis.setLabel(tAxis.label());
 		
 		if(axis instanceof NumberAxis){
@@ -42,7 +43,7 @@ public class TAxisPropertiesConfig {
 		axis.setTickMarkVisible(tAxis.tickMarkVisible());
 		axis.setTickLabelFont(TFontBuilder.build(tAxis.tickLabelFont()));
 		axis.setTickLabelsVisible(tAxis.tickLabelsVisible());
-		if(tAxis.tickLength()!=-1) axis.setTickLength(tAxis.tickLength());
+		if(tAxis.tickLength()!=-1) axis.setTickLength(tAxis.tickLength());*/
 	}
 
 }

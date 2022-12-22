@@ -5,91 +5,62 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.tedros.api.parser.ITAnnotationParser;
-import org.tedros.fx.annotation.parser.TAreaChartParser;
-import org.tedros.fx.annotation.scene.TNode;
-import org.tedros.fx.annotation.scene.layout.TRegion;
-import org.tedros.fx.builder.ITChartBuilder;
-import org.tedros.fx.builder.TAreaChartFieldBuilder;
-import org.tedros.fx.builder.TChartModelBuilder;
+import org.tedros.fx.annotation.parser.TAnnotationParser;
+import org.tedros.fx.annotation.parser.TXYChartParser;
+import org.tedros.fx.builder.TParamBuilder;
 
-import javafx.scene.Node;
-import javafx.scene.chart.AreaChart;
-import javafx.scene.chart.Chart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.layout.Region;
 
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface TAreaChartField {
-	
-	/**
-	 *<pre>
-	 * The builder of type {@link ITChartBuilder} for this component.
-	 * 
-	 * Default value: {@link TAreaChartFieldBuilder}
-	 *</pre> 
-	 * */
-	@SuppressWarnings("rawtypes")
-	public Class<? extends ITChartBuilder> builder() default TAreaChartFieldBuilder.class;
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface TXYChart {
+
 	/**
 	 * <pre>
 	 * The parser class for this annotation
 	 * 
-	 * Default value: {TAreaChartParser.class}
+	 * Default value: {TXYChartParser.class}
 	 * </pre>
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITAnnotationParser>[] parser() default {TAreaChartParser.class};
+	public Class<? extends TAnnotationParser<TXYChart, XYChart>>[] parser() default {TXYChartParser.class};
 	
 	/**
-	 * <pre>
-	 * The {@link Node} settings.
-	 * </pre>
-	 * */
-	public TNode node() default @TNode(parse = false);
+	 * The X axis, by default it is along the bottom of the plot
+	 */
+	public TAxis xAxis();
 	
 	/**
-	 * <pre>
-	 * The {@link Region} settings.
-	 * </pre>
-	 * */
-	public TRegion region() default @TRegion(parse = false);
+	 * The Y axis, by default it is along the left of the plot
+	 */
+	public TAxis yAxis();
+	
+
+	/**
+	 * The jndi name of the ejb chart controller.
+	 * It must be of the type ITEjbChartController.
+	 * 
+	 * @return the jndi name
+	 */
+	public String service() default "";
 	
 	/**
-	 * <pre>
-	 * The {@link Chart} settings.
-	 * </pre>
-	 * */
-	public TChart chart() default @TChart(parse = false);
-	
-	/**
-	 * <pre>
-	 * The {@link TXYChart} settings.
-	 * </pre>
-	 * */
-	public TXYChart xyChart();
-	
-	/**
-	 * Optional, the TChartModel builder to plot the chart.
+	 * Optional, service params builder class.
 	 * @return class 
 	 */
-	@SuppressWarnings("rawtypes")
-	public Class<? extends TChartModelBuilder> chartModelBuilder() default TChartModelBuilder.class;
+	public Class<? extends TParamBuilder> paramsBuilder() default TParamBuilder.class;
 	
 	/**
 	* <pre>
-	* {@link AreaChart} Class
+	* {@link XYChart} Class
 	* 
-	*  Sets the value of the property createSymbols. 
+	*  Optional, sets the value of the property data. 
 	*  Property description: 
-	*  When true, CSS styleable symbols are created for
-	*  any data items that don't have a symbol node specified. 
-	*  Since: JavaFX 8.0
+	*  XYCharts data
 	* </pre>
 	**/
-	public boolean createSymbols() default false;
+	public TSeries[] data() default {};
 	
 	/**
 	* <pre>

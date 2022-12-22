@@ -5,12 +5,34 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.tedros.fx.annotation.text.TFont;
+import org.tedros.fx.annotation.parser.TAnnotationParser;
+import org.tedros.fx.annotation.parser.TAxisParser;
+import org.tedros.fx.annotation.scene.TNode;
+import org.tedros.fx.annotation.scene.layout.TRegion;
+import org.tedros.fx.builder.TFontBuilder;
+import org.tedros.fx.builder.TPaintBuilder;
 import org.tedros.fx.domain.TAxisType;
 
 import javafx.geometry.Side;
+import javafx.scene.Node;
+import javafx.scene.chart.Axis;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.layout.Region;
 
 
+/**
+ * Setting the base class for all axes in JavaFX 
+ * that represents an axis drawn on a chart area. 
+ * It holds properties for axis auto ranging, 
+ * ticks and labels along the axis.
+ * Some examples of concrete subclasses include 
+ * NumberAxis whose axis plots data in numbers 
+ * and CategoryAxis whose values / ticks represent 
+ * string categories along its axis.
+ * @author Davis Gordon
+ *
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)
 public @interface TAxis {
@@ -21,109 +43,162 @@ public @interface TAxis {
 	public TAxisType axisType();
 	
 	/**
-	 * The axis label
+	 * <pre>
+	 * The parser class for this annotation
+	 * 
+	 * Default value: {TAxisParser.class}
+	 * </pre>
 	 * */
-	public String  label();
+	@SuppressWarnings("rawtypes")
+	public Class<? extends TAnnotationParser<TAxis, Axis>>[] parser() default {TAxisParser.class};
+	
+
+	/**
+	 * <pre>
+	 * The {@link NumberAxis} settings.
+	 * </pre>
+	 * */
+	public TNumberAxis numberAxis() default @TNumberAxis(parse = false);
 	
 	/**
-	 * The number of minor tick divisions to be displayed between each major tick mark. 
-	 * The number of actual minor tick marks will be one less than this.
-	 * Only for TAxisType.NUMBER
+	 * <pre>
+	 * The {@link CategoryAxis} settings.
+	 * </pre>
 	 * */
-	public int minorTickCount() default 1;
+	public TCategoryAxis categoryAxis() default @TCategoryAxis(parse = false);
+	
+
+	/**
+	 * <pre>
+	 * The {@link Node} settings.
+	 * </pre>
+	 * */
+	public TNode node() default @TNode(parse = false);
 	
 	/**
-	 * The length of minor tick mark lines. Set to 0 to not display minor tick marks.
-	 * Only for TAxisType.NUMBER
+	 * <pre>
+	 * The {@link Region} settings.
+	 * </pre>
 	 * */
-	public int minorTickLength() default 1;
+	public TRegion region() default @TRegion(parse = false);
 	
 	/**
-	 * true if minor tick marks should be displayed
-	 * Only for TAxisType.NUMBER
-	 * */
-	public boolean minorTickVisible() default true;
-	
+	* <pre>
+	* {@link Axis} Class
+	* 
+	*  Sets the value of the property side. Property description: The side of the plot which this axis is being drawn on
+	* </pre>
+	**/
+	public Side side() default Side.LEFT;
+
 	/**
-	 * The value between each major tick mark in data units.
-	 * Only for TAxisType.NUMBER
-	 * */
-	public int tickUnit() default 10;
-	
+	* <pre>
+	* {@link Axis} Class
+	* 
+	*  Sets the value of the property label. 
+	*  Property description: 
+	*  The axis label
+	* </pre>
+	**/
+	public String label();
+
 	/**
-	 * The fill for all tick labels
-	 * */
-	public String tickLabelFill() default "#ffffff";
-	
-	/**
-	 * The gap between tick labels and the tick mark lines
-	 * */
-	public double tickLabelGap() default 22D;
-	
-	/**
-	 * Rotation in degrees of tick mark labels from their normal horizontal.
-	 * */
-	public double  tickLabelRotation() default 30D;
-	
-	/**
-	 * true if tick marks should be displayed
-	 * */
+	* <pre>
+	* {@link Axis} Class
+	* 
+	*  Sets the value of the property tickMarkVisible. 
+	*  Property description: 
+	*  true if tick marks should be displayed
+	* </pre>
+	**/
 	public boolean tickMarkVisible() default true;
-	
+
 	/**
-	 * The font for all tick labels
-	 * */
-	public TFont tickLabelFont() default @TFont();
-	
-	/**
-	 * true if tick mark labels should be displayed
-	 * */
+	* <pre>
+	* {@link Axis} Class
+	* 
+	*  Sets the value of the property tickLabelsVisible. 
+	*  Property description: 
+	*  true if tick mark labels should be displayed
+	* </pre>
+	**/
 	public boolean tickLabelsVisible() default true;
-	
+
 	/**
-	 * Sets the value of the property forceZeroInRange.
-	 * Property description:
-	 * When true zero is always included in the visible range. This only has effect if auto-ranging is on.
-	 * Only for TAxisType.NUMBER
-	 * */
-	public boolean forceZeroInRange() default false;
+	* <pre>
+	* {@link Axis} Class
+	* 
+	*  Sets the value of the property tickLength. 
+	*  Property description: 
+	*  The length of tick mark lines
+	* </pre>
+	**/
+	public double tickLength() default 10D;
+
 	/**
-	 * This is true when the axis determines its range from the data automatically
-	 * */
-	public boolean autoRanging() default true;
-	
+	* <pre>
+	* {@link Axis} Class
+	* 
+	*  Sets the value of the property autoRanging. 
+	*  Property description: 
+	*  This is true when the axis determines its range from the data automatically
+	* </pre>
+	**/
+	public boolean autoRanging() default false;
+
 	/**
-	 * The length of tick mark lines
-	 * */
-	public double tickLength() default -1; 
-	
+	* <pre>
+	* {@link Axis} Class
+	* 
+	*  Sets the value of the property tickLabelFont. 
+	*  Property description: 
+	*  The font for all tick labels
+	* </pre>
+	**/
+	public Class<? extends TFontBuilder> tickLabelFont() default TFontBuilder.class;
+
 	/**
-	 * The side of the plot which this axis is being drawn on
-	 * */
-	public Side side() default Side.BOTTOM;
-	
+	* <pre>
+	* {@link Axis} Class
+	* 
+	*  Sets the value of the property tickLabelFill. 
+	*  Property description: 
+	*  The fill for all tick labels
+	* </pre>
+	**/
+	public Class<? extends TPaintBuilder> tickLabelFill() default TPaintBuilder.class;
+
 	/**
-	 * When true any changes to the axis and its range will be animated.
-	 * */
-	public boolean animated() default true;
-	
+	* <pre>
+	* {@link Axis} Class
+	* 
+	*  Sets the value of the property tickLabelGap. 
+	*  Property description: 
+	*  The gap between tick labels and the tick mark lines
+	* </pre>
+	**/
+	public double tickLabelGap() default 22;
+
 	/**
-	 * The margin between the axis start and the first tick-mark
-	 * Only for TAxisType.STRING or TAxisType.DATE
-	 * */
-	public double startMargin() default -1;
-	
+	* <pre>
+	* {@link Axis} Class
+	* 
+	*  Sets the value of the property animated. 
+	*  Property description: 
+	*  When true any changes to the axis and its range will be animated.
+	* </pre>
+	**/
+	public boolean animated() default false;
+
 	/**
-	 * The margin between the last tick mark and the axis end
-	 * Only for TAxisType.STRING or TAxisType.DATE
-	 * */
-	public double endMargin() default -1;
-	
-	/**
-	 * If this is true then half the space between ticks is left at the start and end
-	 * Only for TAxisType.STRING or TAxisType.DATE
-	 * */
-	public boolean gapStartAndEnd() default false;
-	
+	* <pre>
+	* {@link Axis} Class
+	* 
+	*  Sets the value of the property tickLabelRotation. 
+	*  Property description: 
+	*  Rotation in degrees of tick mark labels from their normal horizontal.
+	* </pre>
+	**/
+	public double tickLabelRotation() default 30;
 	
 }
