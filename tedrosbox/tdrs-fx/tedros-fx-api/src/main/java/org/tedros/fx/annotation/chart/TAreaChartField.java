@@ -20,6 +20,44 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.layout.Region;
 
 
+/**
+ * <pre>
+ * Construct a area chart.
+ * AreaChart - Plots the area between the line that connects 
+ * the data points and the 0 line on the Y axis.
+ * 
+ * The data can be provided in three different ways:
+ * 
+ * 1. Using a server service that implements ITEjbChartController.
+ *
+ * <b>@</b>TAreaChartField(xyChart = <b>@</b>TXYChart(service=TProfileChartController.JNDI_NAME, 
+ *	xAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Horizontal"), 
+ *	yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Vertical")))
+ * <b>@</b>TModelViewType(modelClass=TAuthorization.class)
+ * private ITObservableList&lt;TAuthorization&gt; autorizations;
+ * 
+ * 2. Using a builder that extends TChartModelBuilder.
+ * 
+ * <b>@</b>TAreaChartField(chartModelBuilder=MyChartBuilder.class,
+ *  xyChart = <b>@</b>TXYChart(
+ *	xAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Horizontal"), 
+ *	yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Vertical")))
+ *  <b>@</b>TModelViewType(modelClass=TAuthorization.class)
+ * private ITObservableList&lt;TAuthorization&gt; autorizations;
+ * 
+ * 3. Configuring static data.
+ * 
+ * <b>@</b>TAreaChartField(xyChart = <b>@</b>TXYChart(
+ *   data= {<b>@</b>TSerie(name = "Teste 1", data= {<b>@</b>TData(x="10", y="20")}),
+ *	 <b>@</b>TSerie(name = "Teste 2", data= {<b>@</b>TData(x="20", y="5")})},
+ *	xAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Horizontal"), 
+ *	yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Vertical")))
+ * <b>@</b>TModelViewType(modelClass=TAuthorization.class)
+ * private ITObservableList&lt;TAuthorization&gt; autorizations;
+ * </pre>
+ * @author Davis Gordon
+ *
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface TAreaChartField {

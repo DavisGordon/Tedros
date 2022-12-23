@@ -4,16 +4,15 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.annotation.security.TSecurity;
-import org.tedros.core.controller.TProfileChartController;
 import org.tedros.core.controller.TProfileController;
 import org.tedros.core.domain.DomainApp;
 import org.tedros.core.security.model.TAuthorization;
 import org.tedros.core.security.model.TProfile;
-import org.tedros.fx.annotation.chart.TAreaChartField;
 import org.tedros.fx.annotation.chart.TAxis;
-import org.tedros.fx.annotation.chart.TPieChartField;
-import org.tedros.fx.annotation.chart.TPieData;
-import org.tedros.fx.annotation.chart.TSeries;
+import org.tedros.fx.annotation.chart.TBarChartField;
+import org.tedros.fx.annotation.chart.TData;
+import org.tedros.fx.annotation.chart.TNumberAxis;
+import org.tedros.fx.annotation.chart.TSerie;
 import org.tedros.fx.annotation.chart.TXYChart;
 import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TFieldBox;
@@ -98,9 +97,13 @@ public final class TProfileMV extends TEntityModelView<TProfile> {
 			//service=TProfileChartController.JNDI_NAME, 
 			data= {@TPieData(name = "Teste 1", value = 50),@TPieData(name = "Teste 2", value = 25),@TPieData(name = "Teste 3", value = 20) },
 			title="Teste chart", labelLineLength=12)*/
-	@TAreaChartField(xyChart = @TXYChart(service=TProfileChartController.JNDI_NAME, 
-			xAxis = @TAxis(axisType = TAxisType.NUMBER, label = "Horizintal"), 
-			yAxis = @TAxis(axisType = TAxisType.NUMBER, label = "Vertical")))
+	@TBarChartField(xyChart = @TXYChart(
+			data= {@TSerie(name = "Teste 1", data= {@TData(x="10", y="20")}),
+				@TSerie(name = "Teste 2", data= {@TData(x="20", y="5")})},
+			//service=TProfileChartController.JNDI_NAME, 
+			xAxis = @TAxis(axisType = TAxisType.CATEGORY, label = "Horizintal",tickLabelFill=PaintBuilder.class,
+			numberAxis=@TNumberAxis(parse = true, forceZeroInRange=false,tickUnit=3)), 
+			yAxis = @TAxis(axisType = TAxisType.NUMBER, label = "Vertical", numberAxis=@TNumberAxis(parse = true))))
 	@TModelViewType(modelClass=TAuthorization.class, modelViewClass=TAuthorizationTV.class)
 	private ITObservableList<TAuthorizationTV> autorizations;
 

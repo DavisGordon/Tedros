@@ -14,13 +14,26 @@ public class TChartData<X, Y> implements ITChartData<X, Y> {
 	
 	private X x;
 	private Y y;
+	private Object extra;
+	
 	/**
-	 * x for horizontal data 
-	 * and y for vertical data
+	 * @param x
+	 * @param y
 	 */
 	public TChartData(X x, Y y) {
 		this.x = x;
 		this.y = y;
+	}
+
+	/**
+	 * @param x
+	 * @param y
+	 * @param extra
+	 */
+	public TChartData(X x, Y y, Object extra) {
+		this.x = x;
+		this.y = y;
+		this.extra = extra;
 	}
 
 	/* (non-Javadoc)
@@ -37,6 +50,11 @@ public class TChartData<X, Y> implements ITChartData<X, Y> {
 	@Override
 	public Y getY() {
 		return y;
+	}
+
+	@Override
+	public Object getExtra() {
+		return extra;
 	}
 
 }

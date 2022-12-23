@@ -5,11 +5,16 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
+/**
+ * The X and Y data.
+ * @author Davis Gordon
+ *
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)
 public @interface TData {
 	public String x();
 	public String y(); 
+	public String extra() default "";
 	
 }

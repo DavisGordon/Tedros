@@ -2,7 +2,7 @@ package org.tedros.fx.annotation.parser;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.tedros.fx.annotation.chart.TData;
-import org.tedros.fx.annotation.chart.TSeries;
+import org.tedros.fx.annotation.chart.TSerie;
 import org.tedros.fx.annotation.chart.TXYChart;
 import org.tedros.fx.builder.TParamBuilder;
 import org.tedros.fx.domain.TAxisType;
@@ -17,10 +17,18 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 
+/**
+ * <pre>
+ * The {@link TXYChart} annotation parser, this parser will read the values 
+ * in the annotation and set them at the {@link XYChart} component.
+ * </pre>
+ * @author Davis Gordon
+ * */
 @SuppressWarnings("rawtypes")
 public class TXYChartParser extends TAnnotationParser<TXYChart, XYChart>{
 	
 	@Override
+	@SuppressWarnings("unchecked")
 	public void parse(TXYChart ann, XYChart chart, String... byPass) throws Exception {
 		
 		if(!"".equals(ann.service())) {
@@ -45,17 +53,16 @@ public class TXYChartParser extends TAnnotationParser<TXYChart, XYChart>{
 				e.printStackTrace();
 			}
 		}else if(ann.data().length>0) {
-			for(TSeries tSerie : ann.data()){
+			for(TSerie tSerie : ann.data()){
 				for(TData tData : tSerie.data())
 						tAddData(ann, chart, tSerie.name(), tData.x(), tData.y());
 				
 			}
 		}
-		super.parse(ann, chart, "service", "paramsBuilder", "data");
-		
+		super.parse(ann, chart, "service", "paramsBuilder", "data", "xAxis", "yAxis");
 	}
 
-	private void addData(TXYChart ann, XYChart chart, ITChartModel<String, Long> model) {
+	public static void addData(TXYChart ann, XYChart chart, ITChartModel<String, Long> model) {
 		model.getSeries().forEach(s->{
 			s.getDatas().forEach(d->{
 				tAddData(ann, chart, s.getName(), d.getX(), d.getY());
@@ -64,7 +71,7 @@ public class TXYChartParser extends TAnnotationParser<TXYChart, XYChart>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void tAddData(TXYChart ann, XYChart chart, String name, Object xValue, Object yValue){
+	private static void tAddData(TXYChart ann, XYChart chart, String name, Object xValue, Object yValue){
 		
 		tAddSeries(chart, name);
 		
@@ -83,7 +90,8 @@ public class TXYChartParser extends TAnnotationParser<TXYChart, XYChart>{
 		}	
 	}
 	
-	private void tAddSeries(XYChart chart, String name){
+	@SuppressWarnings("unchecked")
+	private static void tAddSeries(XYChart chart, String name){
 		for(Object obj : chart.getData()){
 			if(obj instanceof XYChart.Series) {
 				XYChart.Series serie = (Series) obj;
@@ -97,7 +105,7 @@ public class TXYChartParser extends TAnnotationParser<TXYChart, XYChart>{
 		chart.getData().add(series);
 	}
 	
-	private Object tConvertValue(TAxisType type, Object xValue){
+	private static Object tConvertValue(TAxisType type, Object xValue){
 		return (type.equals(TAxisType.NUMBER)) ? NumberUtils.createNumber(String.valueOf(xValue)) : String.valueOf(xValue);
 	}
 	

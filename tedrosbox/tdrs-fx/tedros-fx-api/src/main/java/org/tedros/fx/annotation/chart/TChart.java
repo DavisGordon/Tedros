@@ -11,7 +11,10 @@ import org.tedros.fx.annotation.parser.TChartParser;
 import javafx.geometry.Side;
 import javafx.scene.chart.Chart;
 
-
+/**
+ * Settings for the base class for all charts.
+ * @author Davis Gordon
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)
 public @interface TChart {

@@ -25,19 +25,19 @@ import javafx.scene.layout.Region;
  *A chart can be plotted in three different ways:
  *1. Using a server service that implements ITEjbChartController.
  *
- * <b>@</b>TPieChartField(service=TProfileChartController.JNDI_NAME, title="My chart")
+ * <b>@</b>TPieChartField(service=TProfileChartController.JNDI_NAME, chart=<b>@</b>TChart(title="My chart", parse=true))
  * <b>@</b>TModelViewType(modelClass=TAuthorization.class)
  * private ITObservableList&lt;TAuthorization&gt; autorizations;
  * 
  * 2. Using a builder that extends TChartModelBuilder.
  * 
- * <b>@</b>TPieChartField(chartModelBuilder=MyChartBuilder.class, title="My chart")
+ * <b>@</b>TPieChartField(chartModelBuilder=MyChartBuilder.class, chart=<b>@</b>TChart(title="My chart", parse=true))
  * <b>@</b>TModelViewType(modelClass=TAuthorization.class)
  * private ITObservableList&lt;TAuthorization&gt; autorizations;
  * 
  * 3. Configuring static data.
  * 
- * <b>@</b>TPieChartField(title="My chart", 
+ * <b>@</b>TPieChartField(chart=<b>@</b>TChart(title="My chart", parse=true), 
  * data={<b>@</b>TPieData(name = "App 1", value = 50), <b>@</b>TPieData(name = "App 2", value = 50)})
  * <b>@</b>TModelViewType(modelClass=TAuthorization.class)
  * private ITObservableList&lt;TAuthorization&gt; autorizations;
