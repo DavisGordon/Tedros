@@ -23,7 +23,7 @@ import javafx.scene.chart.PieChart;
 
 
 /**
- * DESCRIÇÃO DA CLASSE
+ * The PieChart builder.
  *
  * @author Davis Gordon
  *

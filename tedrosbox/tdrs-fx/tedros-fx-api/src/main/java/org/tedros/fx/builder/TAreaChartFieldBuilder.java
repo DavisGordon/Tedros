@@ -9,45 +9,51 @@ package org.tedros.fx.builder;
 import java.lang.annotation.Annotation;
 
 import org.tedros.fx.annotation.chart.TAreaChartField;
+import org.tedros.fx.annotation.parser.TXYChartParser;
 import org.tedros.fx.collections.ITObservableList;
-import org.tedros.server.model.ITChartModel;
+import org.tedros.fx.domain.TAxisType;
 import org.tedros.server.model.TChartModel;
+
+import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.Axis;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
 
 
 /**
- * DESCRIÇÃO DA CLASSE
+ * The TAreaChartField builder.
  *
  * @author Davis Gordon
  *
  */
 @SuppressWarnings("rawtypes")
 public final class TAreaChartFieldBuilder extends TBuilder 
-implements ITChartBuilder<org.tedros.fx.chart.TAreaChartField>{
+implements ITChartBuilder<AreaChart>{
 
 	@SuppressWarnings("unchecked")
-	public org.tedros.fx.chart.TAreaChartField build(final Annotation annotation, ITObservableList observable ) throws Exception {
+	public AreaChart build(final Annotation annotation, ITObservableList observable ) throws Exception {
 		TAreaChartField ann = (TAreaChartField) annotation;
-		org.tedros.fx.chart.TAreaChartField chart = 
-				new org.tedros.fx.chart.TAreaChartField<>(ann.xyChart().xAxis().axisType().getValue(), 
-						ann.xyChart().yAxis().axisType().getValue());
+		
+		Axis xAxis = ann.xyChart().xAxis().axisType().equals(TAxisType.NUMBER)
+				? new NumberAxis()
+						: new CategoryAxis();
+		Axis yAxis = ann.xyChart().yAxis().axisType().equals(TAxisType.NUMBER)
+						? new NumberAxis()
+								: new CategoryAxis();
+						
+		super.callParser(ann.xyChart().xAxis(), xAxis);
+		super.callParser(ann.xyChart().yAxis(), yAxis);
+		
+		AreaChart chart = new AreaChart(xAxis, yAxis);
 		
 		if(ann.chartModelBuilder()!=TChartModelBuilder.class) {
 			TChartModelBuilder mb = ann.chartModelBuilder().newInstance();
 			mb.setComponentDescriptor(super.getComponentDescriptor());
 			mb.setObservableList(observable);
 			TChartModel model = (TChartModel) mb.build();
-			this.addData(chart, model);
+			TXYChartParser.addData(ann.xyChart(), chart, model);
 		}
-		super.callParser(ann, chart.gettChart());
+		super.callParser(ann, chart);
 		return chart;
-	}
-
-	@SuppressWarnings("unchecked")
-	private void addData(org.tedros.fx.chart.TAreaChartField chart, ITChartModel<String, Long> model) {
-		model.getSeries().forEach(s->{
-			s.getDatas().forEach(d->{
-				chart.tAddData(s.getName(), d.getX(), d.getY());
-			});
-		});
 	}
 }

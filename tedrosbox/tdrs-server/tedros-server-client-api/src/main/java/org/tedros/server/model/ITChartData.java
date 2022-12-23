@@ -8,14 +8,20 @@ package org.tedros.server.model;
 public interface ITChartData<X, Y> extends ITModel {
 
 	/**
-	 * Return the horizontal X data.
+	 * Returnsi the horizontal X data.
 	 * @return <X>
 	 */
 	X getX();
 	
 	/**
-	 * Return the vertical Y data.
+	 * ReturnS the vertical Y data.
 	 * @return <Y>
 	 */
 	Y getY();
+	
+	/**
+	 * Returns an extra value.
+	 * @return Object
+	 */
+	Object getExtra();
 }

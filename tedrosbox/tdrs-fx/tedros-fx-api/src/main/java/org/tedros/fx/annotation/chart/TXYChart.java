@@ -60,7 +60,7 @@ public @interface TXYChart {
 	*  XYCharts data
 	* </pre>
 	**/
-	public TSeries[] data() default {};
+	public TSerie[] data() default {};
 	
 	/**
 	* <pre>
