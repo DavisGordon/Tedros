@@ -9,10 +9,11 @@ import org.tedros.core.domain.DomainApp;
 import org.tedros.core.security.model.TAuthorization;
 import org.tedros.core.security.model.TProfile;
 import org.tedros.fx.annotation.chart.TAxis;
-import org.tedros.fx.annotation.chart.TBarChartField;
 import org.tedros.fx.annotation.chart.TData;
 import org.tedros.fx.annotation.chart.TNumberAxis;
+import org.tedros.fx.annotation.chart.TScatterChartField;
 import org.tedros.fx.annotation.chart.TSerie;
+import org.tedros.fx.annotation.chart.TValueAxis;
 import org.tedros.fx.annotation.chart.TXYChart;
 import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TFieldBox;
@@ -97,13 +98,22 @@ public final class TProfileMV extends TEntityModelView<TProfile> {
 			//service=TProfileChartController.JNDI_NAME, 
 			data= {@TPieData(name = "Teste 1", value = 50),@TPieData(name = "Teste 2", value = 25),@TPieData(name = "Teste 3", value = 20) },
 			title="Teste chart", labelLineLength=12)*/
-	@TBarChartField(xyChart = @TXYChart(
-			data= {@TSerie(name = "Teste 1", data= {@TData(x="10", y="20")}),
-				@TSerie(name = "Teste 2", data= {@TData(x="20", y="5")})},
+	@TScatterChartField(xyChart = @TXYChart(
+			data= {@TSerie(name = "Investiment 1", data= {
+					@TData(x="200", y="-2"),
+					@TData(x="100", y="5"),
+					@TData(x="120", y="50")}),
+				@TSerie(name = "Stock 2", data= {
+						@TData(x="-40", y="20"),
+						@TData(x="250", y="12"),
+						@TData(x="145", y="60")})},
 			//service=TProfileChartController.JNDI_NAME, 
-			xAxis = @TAxis(axisType = TAxisType.CATEGORY, label = "Horizintal",tickLabelFill=PaintBuilder.class,
-			numberAxis=@TNumberAxis(parse = true, forceZeroInRange=false,tickUnit=3)), 
-			yAxis = @TAxis(axisType = TAxisType.NUMBER, label = "Vertical", numberAxis=@TNumberAxis(parse = true))))
+			xAxis = @TAxis(axisType = TAxisType.NUMBER, label = "Month",
+					numberAxis=@TNumberAxis(parse = true, tickUnit=100,
+					valueAxis=@TValueAxis(lowerBound=-100, upperBound=500, parse = true))), 
+			yAxis = @TAxis(axisType = TAxisType.NUMBER, label = "Quantity", tickLabelFill=PaintBuilder.class,
+			numberAxis=@TNumberAxis(parse = true, tickUnit=1,
+				valueAxis=@TValueAxis(lowerBound=-10, upperBound=100, parse = true)))))
 	@TModelViewType(modelClass=TAuthorization.class, modelViewClass=TAuthorizationTV.class)
 	private ITObservableList<TAuthorizationTV> autorizations;
 

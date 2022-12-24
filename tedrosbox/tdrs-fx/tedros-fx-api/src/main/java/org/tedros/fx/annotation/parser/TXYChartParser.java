@@ -14,7 +14,6 @@ import org.tedros.server.result.TResult;
 
 import javafx.concurrent.Worker.State;
 import javafx.scene.chart.XYChart;
-import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 
 /**
@@ -54,9 +53,15 @@ public class TXYChartParser extends TAnnotationParser<TXYChart, XYChart>{
 			}
 		}else if(ann.data().length>0) {
 			for(TSerie tSerie : ann.data()){
-				for(TData tData : tSerie.data())
-						tAddData(ann, chart, tSerie.name(), tData.x(), tData.y());
-				
+				for(TData tData : tSerie.data()) {
+					Object extra = null;
+					if(!"".equals(tData.extra())) {
+						extra = (NumberUtils.isParsable(tData.extra()))
+							? NumberUtils.createNumber(tData.extra())
+									: tData.extra();
+					}
+					tAddData(ann, chart, tSerie.name(), tData.x(), tData.y(), extra);
+				}
 			}
 		}
 		super.parse(ann, chart, "service", "paramsBuilder", "data", "xAxis", "yAxis");
@@ -65,13 +70,13 @@ public class TXYChartParser extends TAnnotationParser<TXYChart, XYChart>{
 	public static void addData(TXYChart ann, XYChart chart, ITChartModel<String, Long> model) {
 		model.getSeries().forEach(s->{
 			s.getDatas().forEach(d->{
-				tAddData(ann, chart, s.getName(), d.getX(), d.getY());
+				tAddData(ann, chart, s.getName(), d.getX(), d.getY(), d.getExtra());
 			});
 		});
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static void tAddData(TXYChart ann, XYChart chart, String name, Object xValue, Object yValue){
+	private static void tAddData(TXYChart ann, XYChart chart, String name, Object xValue, Object yValue, Object extra){
 		
 		tAddSeries(chart, name);
 		
@@ -80,9 +85,12 @@ public class TXYChartParser extends TAnnotationParser<TXYChart, XYChart>{
 				XYChart.Series serie = (Series) obj;
 				
 				if(serie.getName().equals(name)){
-					final XYChart.Data data = (Data) 
-							new XYChart.Data<>(tConvertValue(ann.xAxis().axisType(), xValue), 
-									tConvertValue(ann.yAxis().axisType(), yValue));
+					final XYChart.Data data =  
+							extra==null 
+							? new XYChart.Data<>(tConvertValue(ann.xAxis().axisType(), xValue), 
+									tConvertValue(ann.yAxis().axisType(), yValue))
+								: new XYChart.Data<>(tConvertValue(ann.xAxis().axisType(), xValue), 
+										tConvertValue(ann.yAxis().axisType(), yValue), extra);
 					serie.getData().add(data);
 					return;
 				}
@@ -106,7 +114,9 @@ public class TXYChartParser extends TAnnotationParser<TXYChart, XYChart>{
 	}
 	
 	private static Object tConvertValue(TAxisType type, Object xValue){
-		return (type.equals(TAxisType.NUMBER)) ? NumberUtils.createNumber(String.valueOf(xValue)) : String.valueOf(xValue);
+		return (type.equals(TAxisType.NUMBER)) 
+				? NumberUtils.createNumber(String.valueOf(xValue)) 
+						: String.valueOf(xValue);
 	}
 	
 	
