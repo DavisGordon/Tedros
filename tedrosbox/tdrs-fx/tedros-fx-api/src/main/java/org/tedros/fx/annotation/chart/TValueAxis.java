@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 import org.tedros.fx.annotation.parser.TAnnotationParser;
 import org.tedros.fx.annotation.parser.TValueAxisParser;
-import org.tedros.fx.builder.TStringConverterBuilder;
+import org.tedros.fx.builder.TNumberAxisFormatterBuilder;
 
 import javafx.scene.chart.ValueAxis;
 
@@ -79,12 +79,18 @@ public @interface TValueAxis {
 	* 
 	*  Sets the value of the property tickLabelFormatter. 
 	*  Property description: 
-	*  StringConverter used to format tick mark labels. 
-	*  If null a default will be used
+	*  StringConverter used to format tick mark labels.
+	* 
+	*  ie:
+	*  public class YAxisFormatterBuild extends TNumberAxisFormatterBuilder {
+	*  	<b>@O</b>verride
+	*  	public DefaultFormatter build() {
+	*  		return new NumberAxis.DefaultFormatter(getAxis(), "$ ", null);
+	*  	}
+	*  }
 	* </pre>
 	**/
-	@SuppressWarnings("rawtypes")
-	public Class<? extends TStringConverterBuilder> tickLabelFormatter() default TStringConverterBuilder.class;
+	public Class<? extends TNumberAxisFormatterBuilder> tickLabelFormatter() default TNumberAxisFormatterBuilder.class;
 
 	/**
 	* <pre>
