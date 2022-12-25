@@ -8,31 +8,31 @@ package org.tedros.fx.builder;
 
 import java.lang.annotation.Annotation;
 
-import org.tedros.fx.annotation.chart.TAreaChartField;
+import org.tedros.fx.annotation.chart.TBubbleChart;
 import org.tedros.fx.annotation.parser.TXYChartParser;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.domain.TAxisType;
 import org.tedros.server.model.TChartModel;
 
-import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.Axis;
+import javafx.scene.chart.BubbleChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 
 
 /**
- * The TAreaChartField builder.
+ * The BubbleChart builder
  *
  * @author Davis Gordon
  *
  */
 @SuppressWarnings("rawtypes")
-public final class TAreaChartFieldBuilder extends TBuilder 
-implements ITChartBuilder<AreaChart>{
-
+public final class TBubbleChartBuilder  extends TBuilder
+implements ITChartBuilder<BubbleChart>{
+	
 	@SuppressWarnings("unchecked")
-	public AreaChart build(final Annotation annotation, ITObservableList observable ) throws Exception {
-		TAreaChartField ann = (TAreaChartField) annotation;
+	public BubbleChart build(final Annotation annotation, ITObservableList observable ) throws Exception {
+		TBubbleChart ann = (TBubbleChart) annotation;
 		
 		Axis xAxis = ann.xyChart().xAxis().axisType().equals(TAxisType.NUMBER)
 				? new NumberAxis()
@@ -44,7 +44,7 @@ implements ITChartBuilder<AreaChart>{
 		super.callParser(ann.xyChart().xAxis(), xAxis);
 		super.callParser(ann.xyChart().yAxis(), yAxis);
 		
-		AreaChart chart = new AreaChart(xAxis, yAxis);
+		BubbleChart chart = new BubbleChart(xAxis, yAxis);
 		
 		if(ann.chartModelBuilder()!=TChartModelBuilder.class) {
 			TChartModelBuilder mb = ann.chartModelBuilder().newInstance();
@@ -56,4 +56,7 @@ implements ITChartBuilder<AreaChart>{
 		super.callParser(ann, chart);
 		return chart;
 	}
+	
+	
+	
 }

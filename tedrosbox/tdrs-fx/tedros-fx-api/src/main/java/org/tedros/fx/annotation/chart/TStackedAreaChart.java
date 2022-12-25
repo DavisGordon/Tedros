@@ -6,31 +6,39 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.tedros.api.parser.ITAnnotationParser;
-import org.tedros.fx.annotation.parser.TAreaChartParser;
+import org.tedros.fx.annotation.parser.TStackedAreaChartParser;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.builder.ITChartBuilder;
-import org.tedros.fx.builder.TAreaChartFieldBuilder;
 import org.tedros.fx.builder.TChartModelBuilder;
+import org.tedros.fx.builder.TStackedAreaChartBuilder;
 
 import javafx.scene.Node;
-import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.Chart;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.StackedAreaChart;
 import javafx.scene.layout.Region;
 
 
 /**
  * <pre>
- * Construct a area chart.
- * AreaChart - Plots the area between the line that connects 
- * the data points and the 0 line on the Y axis.
+ * Construct a stacked area chart.
+ * StackedAreaChart is a variation of AreaChart that 
+ * displays trends of the contribution of each value. 
+ * (over time e.g.) The areas are stacked so that each 
+ * series adjoins but does not overlap the preceding series. 
+ * This contrasts with the Area chart where each series 
+ * overlays the preceding series. The cumulative nature of 
+ * the StackedAreaChart gives an idea of the total Y data value 
+ * at any given point along the X axis. Since data points 
+ * across multiple series may not be common, StackedAreaChart 
+ * interpolates values along the line joining the data points 
+ * whenever necessary.
  * 
  * The data can be provided in three different ways:
  * 
  * 1. Using a server service that implements ITEjbChartController.
  *
- * <b>@</b>TAreaChartField(xyChart = <b>@</b>TXYChart(service=TProfileChartController.JNDI_NAME, 
+ * <b>@</b>TStackedAreaChart(xyChart = <b>@</b>TXYChart(service=TProfileChartController.JNDI_NAME, 
  *	xAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Horizontal"), 
  *	yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Vertical")))
  * <b>@</b>TModelViewType(modelClass=TAuthorization.class)
@@ -38,7 +46,7 @@ import javafx.scene.layout.Region;
  * 
  * 2. Using a builder that extends TChartModelBuilder.
  * 
- * <b>@</b>TAreaChartField(chartModelBuilder=MyChartBuilder.class,
+ * <b>@</b>TStackedAreaChart(chartModelBuilder=MyChartBuilder.class,
  *  xyChart = <b>@</b>TXYChart(
  *	xAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Horizontal"), 
  *	yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Vertical")))
@@ -47,7 +55,7 @@ import javafx.scene.layout.Region;
  * 
  * 3. Configuring static data.
  * 
- * <b>@</b>TAreaChartField(xyChart = <b>@</b>TXYChart(
+ * <b>@</b>TStackedAreaChart(xyChart = <b>@</b>TXYChart(
  *   data= {<b>@</b>TSerie(name = "Teste 1", data= {<b>@</b>TData(x="10", y="20")}),
  *	 <b>@</b>TSerie(name = "Teste 2", data= {<b>@</b>TData(x="20", y="5")})},
  *	xAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Horizontal"), 
@@ -60,26 +68,26 @@ import javafx.scene.layout.Region;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface TAreaChartField {
+public @interface TStackedAreaChart {
 	
 	/**
 	 *<pre>
 	 * The builder of type {@link ITChartBuilder} for this component.
 	 * 
-	 * Default value: {@link TAreaChartFieldBuilder}
+	 * Default value: {@link TStackedAreaChartBuilder}
 	 *</pre> 
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITChartBuilder> builder() default TAreaChartFieldBuilder.class;
+	public Class<? extends ITChartBuilder> builder() default TStackedAreaChartBuilder.class;
 	/**
 	 * <pre>
 	 * The parser class for this annotation
 	 * 
-	 * Default value: {TAreaChartParser.class}
+	 * Default value: {TStackedAreaChartParser.class}
 	 * </pre>
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITAnnotationParser>[] parser() default {TAreaChartParser.class};
+	public Class<? extends ITAnnotationParser>[] parser() default {TStackedAreaChartParser.class};
 	
 	/**
 	 * <pre>
@@ -118,86 +126,15 @@ public @interface TAreaChartField {
 	
 	/**
 	* <pre>
-	* {@link AreaChart} Class
+	* {@link StackedAreaChart} Class
 	* 
 	*  Sets the value of the property createSymbols. 
 	*  Property description: 
-	*  When true, CSS styleable symbols are created for
-	*  any data items that don't have a symbol node specified. 
-	*  Since: JavaFX 8.0
+	*  When true, CSS styleable symbols are created 
+	*  for any data items that don't have a symbol 
+	*  node specified. Since: JavaFX 8.0
 	* </pre>
 	**/
 	public boolean createSymbols() default false;
-	
-	/**
-	* <pre>
-	* {@link XYChart} Class
-	* 
-	*  Sets the value of the property verticalGridLinesVisible. 
-	*  Property description: 
-	*  True if vertical grid lines should be drawn
-	* </pre>
-	**/
-	public boolean verticalGridLinesVisible() default false;
-
-	/**
-	* <pre>
-	* {@link XYChart} Class
-	* 
-	*  Sets the value of the property horizontalGridLinesVisible.
-	*  Property description: 
-	*  True if horizontal grid lines should be drawn
-	* </pre>
-	**/
-	public boolean horizontalGridLinesVisible() default false;
-
-	/**
-	* <pre>
-	* {@link XYChart} Class
-	* 
-	*  Sets the value of the property alternativeColumnFillVisible. 
-	*  Property description: 
-	*  If true then alternative vertical columns will have fills
-	* </pre>
-	**/
-	public boolean alternativeColumnFillVisible() default false;
-
-	/**
-	* <pre>
-	* {@link XYChart} Class
-	* 
-	*  Sets the value of the property alternativeRowFillVisible. 
-	*  Property description: 
-	*  If true then alternative horizontal rows will have fills
-	* </pre>
-	**/
-	public boolean alternativeRowFillVisible() default false;
-
-	/**
-	* <pre>
-	* {@link XYChart} Class
-	* 
-	*  Sets the value of the property verticalZeroLineVisible. 
-	*  Property description: 
-	*  If this is true and the vertical axis has both positive 
-	*  and negative values then a additional axis line will be 
-	*  drawn at the zero point Default value: true
-	* </pre>
-	**/
-	public boolean verticalZeroLineVisible() default true;
-
-	/**
-	* <pre>
-	* {@link XYChart} Class
-	* 
-	*  Sets the value of the property horizontalZeroLineVisible. 
-	*  Property description: 
-	*  If this is true and the horizontal axis has both positive and 
-	*  negative values then a additional axis line will be drawn at 
-	*  the zero point Default value: true
-	* </pre>
-	**/
-	public boolean horizontalZeroLineVisible() default true;
-
 
 }

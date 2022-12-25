@@ -8,7 +8,7 @@ package org.tedros.fx.builder;
 
 import java.lang.annotation.Annotation;
 
-import org.tedros.fx.annotation.chart.TPieChartField;
+import org.tedros.fx.annotation.chart.TPieChart;
 import org.tedros.fx.annotation.chart.TPieData;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.exception.TProcessException;
@@ -29,14 +29,14 @@ import javafx.scene.chart.PieChart;
  *
  */
 @SuppressWarnings("rawtypes")
-public final class TPieChartFieldBuilder 
+public final class TPieChartBuilder 
 extends TBuilder
 implements ITChartBuilder<PieChart>{
 	
 	
 	@SuppressWarnings("unchecked")
 	public PieChart build(final Annotation annotation, ITObservableList observable) throws Exception {
-		TPieChartField tAnn = (TPieChartField) annotation;
+		TPieChart tAnn = (TPieChart) annotation;
 
 		PieChart chart = new PieChart();
 		if(!"".equals(tAnn.service())) {

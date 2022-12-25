@@ -10,7 +10,7 @@ import org.tedros.fx.annotation.parser.TLineChartParser;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.builder.ITChartBuilder;
-import org.tedros.fx.builder.TLineChartFieldBuilder;
+import org.tedros.fx.builder.TLineChartBuilder;
 import org.tedros.fx.builder.TChartModelBuilder;
 
 import javafx.scene.Node;
@@ -29,7 +29,8 @@ import javafx.scene.layout.Region;
  * 
  * 1. Using a server service that implements ITEjbChartController.
  *
- * <b>@</b>TLineChartField(xyChart = <b>@</b>TXYChart(service=StockChartController.JNDI_NAME, 
+ * <b>@</b>TLineChart(xyChart = <b>@</b>TXYChart(
+ *   service=StockChartController.JNDI_NAME, 
  *   xAxis = <b>@</b>TAxis(axisType = TAxisType.CATEGORY, label = "Month"), 
  *   yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Stock")))
  * <b>@</b>TModelViewType(modelClass=Stock.class)
@@ -37,16 +38,16 @@ import javafx.scene.layout.Region;
  * 
  * 2. Using a builder that extends TChartModelBuilder.
  * 
- * <b>@</b>TLineChartField(chartModelBuilder=MyStockChartBuilder.class,
+ * <b>@</b>TLineChart(chartModelBuilder=MyStockChartBuilder.class,
  *  xyChart = <b>@</b>TXYChart(
  *    xAxis = <b>@</b>TAxis(axisType = TAxisType.CATEGORY, label = "Month"), 
  *    yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Stock")))
- *  <b>@</b>TModelViewType(modelClass=Stock.class)
+ * <b>@</b>TModelViewType(modelClass=Stock.class)
  * private ITObservableList&lt;Stock&gt; stocks;
  * 
  * 3. Configuring static data.
  * 
- * <b>@</b>TLineChartField(xyChart = <b>@</b>TXYChart(
+ * <b>@</b>TLineChart(xyChart = <b>@</b>TXYChart(
  *   data= {
  *     <b>@</b>TSerie(name = "Stock 1", data= {
  *       <b>@</b>TData(x="Jan", y="5"),
@@ -66,17 +67,17 @@ import javafx.scene.layout.Region;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface TLineChartField {
+public @interface TLineChart {
 	
 	/**
 	 *<pre>
 	 * The builder of type {@link ITChartBuilder} for this component.
 	 * 
-	 * Default value: {@link TLineChartFieldBuilder}
+	 * Default value: {@link TLineChartBuilder}
 	 *</pre> 
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITChartBuilder> builder() default TLineChartFieldBuilder.class;
+	public Class<? extends ITChartBuilder> builder() default TLineChartBuilder.class;
 	/**
 	 * <pre>
 	 * The parser class for this annotation

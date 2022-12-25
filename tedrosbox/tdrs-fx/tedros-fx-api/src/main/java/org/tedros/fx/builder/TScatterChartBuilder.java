@@ -8,7 +8,7 @@ package org.tedros.fx.builder;
 
 import java.lang.annotation.Annotation;
 
-import org.tedros.fx.annotation.chart.TLineChartField;
+import org.tedros.fx.annotation.chart.TScatterChart;
 import org.tedros.fx.annotation.parser.TXYChartParser;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.domain.TAxisType;
@@ -16,23 +16,23 @@ import org.tedros.server.model.TChartModel;
 
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.ScatterChart;
 
 
 /**
- * The LineChart builder
+ * The ScatterChart builder
  *
  * @author Davis Gordon
  *
  */
 @SuppressWarnings("rawtypes")
-public final class TLineChartFieldBuilder  extends TBuilder
-implements ITChartBuilder<LineChart>{
+public final class TScatterChartBuilder  extends TBuilder
+implements ITChartBuilder<ScatterChart>{
 	
 	@SuppressWarnings("unchecked")
-	public LineChart build(final Annotation annotation, ITObservableList observable ) throws Exception {
-		TLineChartField ann = (TLineChartField) annotation;
+	public ScatterChart build(final Annotation annotation, ITObservableList observable ) throws Exception {
+		TScatterChart ann = (TScatterChart) annotation;
 		
 		Axis xAxis = ann.xyChart().xAxis().axisType().equals(TAxisType.NUMBER)
 				? new NumberAxis()
@@ -44,7 +44,7 @@ implements ITChartBuilder<LineChart>{
 		super.callParser(ann.xyChart().xAxis(), xAxis);
 		super.callParser(ann.xyChart().yAxis(), yAxis);
 		
-		LineChart chart = new LineChart(xAxis, yAxis);
+		ScatterChart chart = new ScatterChart(xAxis, yAxis);
 		
 		if(ann.chartModelBuilder()!=TChartModelBuilder.class) {
 			TChartModelBuilder mb = ann.chartModelBuilder().newInstance();
