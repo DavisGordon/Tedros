@@ -21,7 +21,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.tedros.core.TLanguage;
 import org.tedros.core.model.ITModelView;
 import org.tedros.core.repository.TRepository;
-import org.tedros.fx.chart.TAreaChartField;
 import org.tedros.fx.exception.TErrorType;
 import org.tedros.fx.exception.TException;
 import org.tedros.fx.property.TSimpleFileProperty;
@@ -604,15 +603,12 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 					LOGGER.severe(e.toString());
 				}
 			}else{
+				String types = "";
+				for (Class c : TCompatibleTypesHelper.compatibleTypes.keySet()) 
+					types += c.getSimpleName()+", ";
 				
-				if(h.type != TAreaChartField.class) {
-					String types = "";
-					for (Class c : TCompatibleTypesHelper.compatibleTypes.keySet()) 
-						types += c.getSimpleName()+", ";
-					
-					LOGGER.log(Level.FINEST, h.name+" field of type "+h.type.getSimpleName()+" in "+getClass().getSimpleName()+" is not compatible for a TModelView!");
-					LOGGER.log(Level.FINEST, "TModelView compatible types: "+types.substring(0,types.length()-2));
-				}
+				LOGGER.log(Level.FINEST, h.name+" field of type "+h.type.getSimpleName()+" in "+getClass().getSimpleName()+" is not compatible for a TModelView!");
+				LOGGER.log(Level.FINEST, "TModelView compatible types: "+types.substring(0,types.length()-2));
 			}
 		});
 		

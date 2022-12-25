@@ -11,7 +11,7 @@ import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.builder.ITChartBuilder;
 import org.tedros.fx.builder.TChartModelBuilder;
-import org.tedros.fx.builder.TScatterChartFieldBuilder;
+import org.tedros.fx.builder.TScatterChartBuilder;
 
 import javafx.scene.Node;
 import javafx.scene.chart.Chart;
@@ -28,54 +28,61 @@ import javafx.scene.layout.Region;
  * 
  * 1. Using a server service that implements ITEjbChartController.
  *
- * <b>@</b>TScatterChartField(xyChart = <b>@</b>TXYChart(service=StockChartController.JNDI_NAME, 
- *   xAxis = <b>@</b>TAxis(axisType = TAxisType.CATEGORY, label = "Month"), 
- *   yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Stock")))
- * <b>@</b>TModelViewType(modelClass=Stock.class)
- * private ITObservableList&lt;Stock&gt; stocks;
+ * <b>@</b>TScatterChart(xyChart = <b>@</b>TXYChart(
+ *   service=InvestmentChartController.JNDI_NAME, 
+ *   xAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Age (Years)"), 
+ *   yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Returns", 
+ *     numberAxis=<b>@</b>TNumberAxis(parse = true, tickUnit=1,
+ *       valueAxis=<b>@</b>TValueAxis(lowerBound=-50, upperBound=100, parse = true)))))
+ * <b>@</b>TModelViewType(modelClass=Investment.class)
+ * private ITObservableList&lt;Investment&gt; investments;
  * 
  * 2. Using a builder that extends TChartModelBuilder.
  * 
- * <b>@</b>TScatterChartField(chartModelBuilder=MyStockChartBuilder.class,
+ * <b>@</b>TScatterChart(chartModelBuilder=MyInvestmentChartBuilder.class,
  *  xyChart = <b>@</b>TXYChart(
- *    xAxis = <b>@</b>TAxis(axisType = TAxisType.CATEGORY, label = "Month"), 
- *    yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Stock")))
- *  <b>@</b>TModelViewType(modelClass=Stock.class)
- * private ITObservableList&lt;Stock&gt; stocks;
+ *    xAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Age (Years)"), 
+ *    yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Returns", 
+ *     numberAxis=<b>@</b>TNumberAxis(parse = true, tickUnit=1,
+ *       valueAxis=<b>@</b>TValueAxis(lowerBound=-50, upperBound=100, parse = true)))))
+ * <b>@</b>TModelViewType(modelClass=Investment.class)
+ * private ITObservableList&lt;Investment&gt; investments;
  * 
  * 3. Configuring static data.
  * 
- * <b>@</b>TScatterChartField(xyChart = <b>@</b>TXYChart(
+ * <b>@</b>TScatterChart(xyChart = <b>@</b>TXYChart(
  *   data= {
- *     <b>@</b>TSerie(name = "Stock 1", data= {
- *       <b>@</b>TData(x="Jan", y="5"),
- *       <b>@</b>TData(x="Feb", y="20"),
- *       <b>@</b>TData(x="Mar", y="18")}),
- *     <b>@</b>TSerie(name = "Stock 2", data= {
- *       <b>@</b>TData(x="Jan", y="7"),
- *       <b>@</b>TData(x="Feb", y="12"),
- *       <b>@</b>TData(x="Mar", y="25")})},
- *   xAxis = <b>@</b>TAxis(axisType = TAxisType.CATEGORY, label = "Month"), 
- *   yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Stock")))
- * <b>@</b>TModelViewType(modelClass=Stock.class)
- * private ITObservableList&lt;Stock&gt; stocks;
+ *     <b>@</b>TSerie(name = "Option 1", data= {
+ *       <b>@</b>TData(x="1", y="-20"),
+ *       <b>@</b>TData(x="2", y="40"),
+ *       <b>@</b>TData(x="3", y="80")}),
+ *     <b>@</b>TSerie(name = "Option 2", data= {
+ *       <b>@</b>TData(x="1", y="7"),
+ *       <b>@</b>TData(x="2", y="12"),
+ *       <b>@</b>TData(x="3", y="25")})},
+ *   xAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Age (Years)"), 
+ *   yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Returns", 
+ *     numberAxis=<b>@</b>TNumberAxis(parse = true, tickUnit=1,
+ *       valueAxis=<b>@</b>TValueAxis(lowerBound=-50, upperBound=100, parse = true)))))
+ * <b>@</b>TModelViewType(modelClass=Investment.class)
+ * private ITObservableList&lt;Investment&gt; investments;
  * </pre>
  * @author Davis Gordon
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface TScatterChartField {
+public @interface TScatterChart {
 	
 	/**
 	 *<pre>
 	 * The builder of type {@link ITChartBuilder} for this component.
 	 * 
-	 * Default value: {@link TScatterChartFieldBuilder}
+	 * Default value: {@link TScatterChartBuilder}
 	 *</pre> 
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITChartBuilder> builder() default TScatterChartFieldBuilder.class;
+	public Class<? extends ITChartBuilder> builder() default TScatterChartBuilder.class;
 	/**
 	 * <pre>
 	 * The parser class for this annotation

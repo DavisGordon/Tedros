@@ -12,7 +12,7 @@ import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.builder.ITChartBuilder;
 import org.tedros.fx.builder.TChartModelBuilder;
 import org.tedros.fx.builder.TParamBuilder;
-import org.tedros.fx.builder.TPieChartFieldBuilder;
+import org.tedros.fx.builder.TPieChartBuilder;
 
 import javafx.scene.Node;
 import javafx.scene.chart.Chart;
@@ -25,20 +25,25 @@ import javafx.scene.layout.Region;
  *A chart can be plotted in three different ways:
  *1. Using a server service that implements ITEjbChartController.
  *
- * <b>@</b>TPieChartField(service=TProfileChartController.JNDI_NAME, chart=<b>@</b>TChart(title="My chart", parse=true))
+ * <b>@</b>TPieChart(service=TProfileChartController.JNDI_NAME, 
+ *   chart=<b>@</b>TChart(title="My chart", parse=true))
  * <b>@</b>TModelViewType(modelClass=TAuthorization.class)
  * private ITObservableList&lt;TAuthorization&gt; autorizations;
  * 
  * 2. Using a builder that extends TChartModelBuilder.
  * 
- * <b>@</b>TPieChartField(chartModelBuilder=MyChartBuilder.class, chart=<b>@</b>TChart(title="My chart", parse=true))
+ * <b>@</b>TPieChart(chartModelBuilder=MyChartBuilder.class, 
+ *   chart=<b>@</b>TChart(title="My chart", parse=true))
  * <b>@</b>TModelViewType(modelClass=TAuthorization.class)
  * private ITObservableList&lt;TAuthorization&gt; autorizations;
  * 
  * 3. Configuring static data.
  * 
- * <b>@</b>TPieChartField(chart=<b>@</b>TChart(title="My chart", parse=true), 
- * data={<b>@</b>TPieData(name = "App 1", value = 50), <b>@</b>TPieData(name = "App 2", value = 50)})
+ * <b>@</b>TPieChart(
+ *   chart=<b>@</b>TChart(title="My chart", parse=true), 
+ *   data={
+ *     <b>@</b>TPieData(name = "App 1", value = 50), 
+ *     <b>@</b>TPieData(name = "App 2", value = 50)})
  * <b>@</b>TModelViewType(modelClass=TAuthorization.class)
  * private ITObservableList&lt;TAuthorization&gt; autorizations;
  * </pre>
@@ -47,17 +52,17 @@ import javafx.scene.layout.Region;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface TPieChartField {
+public @interface TPieChart {
 	
 	/**
 	 *<pre>
 	 * The builder of type {@link ITChartBuilder} for this component.
 	 * 
-	 * Default value: {@link TPieChartFieldBuilder}
+	 * Default value: {@link TPieChartBuilder}
 	 *</pre> 
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITChartBuilder> builder() default TPieChartFieldBuilder.class;
+	public Class<? extends ITChartBuilder> builder() default TPieChartBuilder.class;
 	/**
 	 * <pre>
 	 * The parser class for this annotation

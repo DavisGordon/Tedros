@@ -10,7 +10,7 @@ import org.tedros.fx.annotation.parser.TBubbleChartParser;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.builder.ITChartBuilder;
-import org.tedros.fx.builder.TBubbleChartFieldBuilder;
+import org.tedros.fx.builder.TBubbleChartBuilder;
 import org.tedros.fx.builder.TChartModelBuilder;
 
 import javafx.scene.Node;
@@ -28,40 +28,42 @@ import javafx.scene.layout.Region;
  * 
  * 1. Using a server service that implements ITEjbChartController.
  *
- * <b>@</b>TBubbleChartField(xyChart = <b>@</b>TXYChart(service=BudgetChartController.JNDI_NAME, 
+ * <b>@</b>TBubbleChart(xyChart = <b>@</b>TXYChart(
+ *   service=BudgetChartController.JNDI_NAME, 
  *   xAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Week"), 
  *   yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Budget", 
- *     numberAxis=<b>@</b>TNumberAxis(
- *       valueAxis=<b>@</b>TValueAxis(tickLabelFormatter=CurrencyFormatterBuilder.class, parse = true),
- *     parse = true))))
+ *    numberAxis=<b>@</b>TNumberAxis(
+ *      valueAxis=<b>@</b>TValueAxis(tickLabelFormatter=CurrencyFormatterBuilder.class, parse = true),
+ *    parse = true))))
  * <b>@</b>TModelViewType(modelClass=Budget.class)
  * private ITObservableList&lt;Budget&gt; budgets;
  * 
  * 2. Using a builder that extends TChartModelBuilder.
  * 
- * <b>@</b>TBubbleChartField(chartModelBuilder=MyBudgetChartBuilder.class,
+ * <b>@</b>TBubbleChart(chartModelBuilder=MyBudgetChartBuilder.class,
  *  xyChart = <b>@</b>TXYChart(
- *    xAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Week"), 
- *    yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Budget", 
- *     numberAxis=<b>@</b>TNumberAxis(
- *       valueAxis=<b>@</b>TValueAxis(tickLabelFormatter=CurrencyFormatterBuilder.class, parse = true),
- *     parse = true))))
+ *   xAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Week"), 
+ *   yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Budget", 
+ *    numberAxis=<b>@</b>TNumberAxis(
+ *     valueAxis=<b>@</b>TValueAxis(tickLabelFormatter=CurrencyFormatterBuilder.class, parse = true),
+ *    parse = true))))
  *  <b>@</b>TModelViewType(modelClass=Budget.class)
  * private ITObservableList&lt;Budget&gt; budgets;
  * 
  * 3. Configuring static data.
  * 
- * <b>@</b>TBubbleChartField(xyChart = <b>@</b>TXYChart(
+ * <b>@</b>TBubbleChart(xyChart = <b>@</b>TXYChart(
  *   data= {
- *   <b>@</b>TSerie(name = "Product 1", 
- *      data= {<b>@</b>TData(x="2", y="20", extra="1.2"),
- *        <b>@</b>TData(x="3", y="45", extra="5")}),
- *   <b>@</b>TSerie(name = "Product 2", data= {<b>@</b>TData(x="2", y="5", extra="1")})},
+ *    <b>@</b>TSerie(name = "Product 1", data= {
+ *      <b>@</b>TData(x="2", y="20", extra="1.2"),
+ *      <b>@</b>TData(x="3", y="45", extra="5")}),
+ *    <b>@</b>TSerie(name = "Product 2", data= {
+ *      <b>@</b>TData(x="2", y="5", extra="1")})},
  *   xAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Week"), 
  *   yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Budget", 
- *     numberAxis=<b>@</b>TNumberAxis(
- *       valueAxis=<b>@</b>TValueAxis(tickLabelFormatter=CurrencyFormatterBuilder.class, parse = true),
- *     parse = true))))
+ *    numberAxis=<b>@</b>TNumberAxis(
+ *      valueAxis=<b>@</b>TValueAxis(tickLabelFormatter=CurrencyFormatterBuilder.class, parse = true),
+ *    parse = true))))
  * <b>@</b>TModelViewType(modelClass=Budget.class)
  * private ITObservableList&lt;Budget&gt; budgets;
  * </pre>
@@ -70,17 +72,17 @@ import javafx.scene.layout.Region;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface TBubbleChartField {
+public @interface TBubbleChart {
 	
 	/**
 	 *<pre>
 	 * The builder of type {@link ITChartBuilder} for this component.
 	 * 
-	 * Default value: {@link TBubbleChartFieldBuilder}
+	 * Default value: {@link TBubbleChartBuilder}
 	 *</pre> 
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITChartBuilder> builder() default TBubbleChartFieldBuilder.class;
+	public Class<? extends ITChartBuilder> builder() default TBubbleChartBuilder.class;
 	/**
 	 * <pre>
 	 * The parser class for this annotation

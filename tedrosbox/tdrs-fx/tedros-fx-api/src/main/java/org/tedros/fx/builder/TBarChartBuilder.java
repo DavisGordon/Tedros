@@ -8,31 +8,31 @@ package org.tedros.fx.builder;
 
 import java.lang.annotation.Annotation;
 
-import org.tedros.fx.annotation.chart.TScatterChartField;
+import org.tedros.fx.annotation.chart.TBarChart;
 import org.tedros.fx.annotation.parser.TXYChartParser;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.domain.TAxisType;
 import org.tedros.server.model.TChartModel;
 
 import javafx.scene.chart.Axis;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.ScatterChart;
 
 
 /**
- * The ScatterChart builder
+ * The BarChart builder
  *
  * @author Davis Gordon
  *
  */
 @SuppressWarnings("rawtypes")
-public final class TScatterChartFieldBuilder  extends TBuilder
-implements ITChartBuilder<ScatterChart>{
+public final class TBarChartBuilder  extends TBuilder
+implements ITChartBuilder<BarChart>{
 	
 	@SuppressWarnings("unchecked")
-	public ScatterChart build(final Annotation annotation, ITObservableList observable ) throws Exception {
-		TScatterChartField ann = (TScatterChartField) annotation;
+	public BarChart build(final Annotation annotation, ITObservableList observable ) throws Exception {
+		TBarChart ann = (TBarChart) annotation;
 		
 		Axis xAxis = ann.xyChart().xAxis().axisType().equals(TAxisType.NUMBER)
 				? new NumberAxis()
@@ -44,7 +44,7 @@ implements ITChartBuilder<ScatterChart>{
 		super.callParser(ann.xyChart().xAxis(), xAxis);
 		super.callParser(ann.xyChart().yAxis(), yAxis);
 		
-		ScatterChart chart = new ScatterChart(xAxis, yAxis);
+		BarChart chart = new BarChart(xAxis, yAxis);
 		
 		if(ann.chartModelBuilder()!=TChartModelBuilder.class) {
 			TChartModelBuilder mb = ann.chartModelBuilder().newInstance();
