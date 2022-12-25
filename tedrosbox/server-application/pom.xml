@@ -27,6 +27,13 @@
 	</dependency>
 	
 	<dependency>
+	    <groupId>org.tedros</groupId>
+	    <artifactId>tedros-webapp</artifactId>
+	    <type>war</type>
+	    <version>8-4.1.0</version>
+	</dependency>
+	
+	<dependency>
 	    <groupId>org.apache.poi</groupId>
 	    <artifactId>poi</artifactId>
 	    <version>${apache.poi}</version>
@@ -285,6 +292,11 @@
 		        <groupId>org.tedros</groupId>
 		        <artifactId>app-chat-ejb-ear</artifactId>
 		        <type>ear</type>
+		      </deployable>
+		       <deployable>
+		        <groupId>org.tedros</groupId>
+		        <artifactId>tedros-webapp</artifactId>
+		        <type>war</type>
 		      </deployable>
 		    </deployables>
 		    <packager>
