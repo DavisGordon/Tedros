@@ -61,6 +61,7 @@ public interface TFxKey {
 	static final String MESSAGE_ERROR = "#{tedros.fxapi.message.error}";
 	static final String MESSAGE_ERROR_SAVE = "#{tedros.fxapi.message.error.save}";
 	static final String MESSAGE_EXPORT = "#{tedros.fxapi.message.export}";
+	static final String MESSAGE_FILE_ALREADY_EXISTS = "#{tedros.fxapi.message.file.already.exists}";
 	static final String MESSAGE_FILE_MAX_SIZE = "#{tedros.fxapi.message.file.max.size}";
 	static final String MESSAGE_FILE_MIN_SIZE = "#{tedros.fxapi.message.file.min.size}";
 	static final String MESSAGE_HITORY_REMOVED = "#{tedros.fxapi.message.hitory.removed}";
@@ -74,6 +75,8 @@ public interface TFxKey {
 	static final String MESSAGE_OS_NOT_SUPPORT_OPERATION = "#{tedros.fxapi.message.os.not.support.operation}";
 	static final String MESSAGE_OUTDATE = "#{tedros.fxapi.message.outdate}";
 	static final String MESSAGE_PROCESS = "#{tedros.fxapi.message.process}";
+	static final String MESSAGE_REPLACE_FILE = "#{tedros.fxapi.message.replace.file}";
+	static final String MESSAGE_REPLACE_FILE_NO = "#{tedros.fxapi.message.replace.file.no}";
 	static final String MESSAGE_SAVE = "#{tedros.fxapi.message.save}";
 	static final String MESSAGE_SEARCH = "#{tedros.fxapi.message.search}";
 	static final String RADIO_BUTTON_EDIT = "#{tedros.fxapi.radio-button.edit}";

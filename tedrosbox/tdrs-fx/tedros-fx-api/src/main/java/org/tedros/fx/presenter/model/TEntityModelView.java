@@ -79,5 +79,16 @@ extends TModelView<E> {
 	public void setId(SimpleLongProperty id) {
 		this.id = id;
 	}
+	
+	@Override
+	@SuppressWarnings("rawtypes")
+	public boolean equals(Object obj) {
+		
+		if(obj instanceof TEntityModelView) {
+			return getEntity().equals(((TEntityModelView)obj).getEntity());
+		}
+		
+		return false;
+	}
 		
 }

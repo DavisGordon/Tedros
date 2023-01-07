@@ -9,18 +9,24 @@ package org.tedros.fx.control;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.function.Consumer;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TLanguage;
 import org.tedros.core.control.PopOver;
+import org.tedros.fx.TFxKey;
+import org.tedros.fx.TUsualKey;
 import org.tedros.fx.control.action.TEventHandler;
 import org.tedros.fx.domain.TFileExtension;
 import org.tedros.fx.exception.TProcessException;
+import org.tedros.fx.layout.TToolBar;
 import org.tedros.fx.property.TBytesLoader;
 import org.tedros.util.TFileUtil;
 import org.tedros.util.TUrlUtil;
+import org.tedros.util.TedrosFolder;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -29,12 +35,11 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
@@ -182,18 +187,15 @@ public class TFileField extends StackPane {
 					setOpenAction();
 				}else if(byteArrayProperty.getValue()!=null){
 					setOpenAction();
-				}
-				
+				}	
 			}
 		});	
 		
-		byteArrayProperty.addListener(new ChangeListener<byte[]>() {
-			@Override
-			public void changed(ObservableValue<? extends byte[]> arg0, byte[] arg1, byte[] arg2) {
-				
-				if(showImage && arg2!=null ){
-					loadImageView(arg2);
-				}
+		byteArrayProperty.addListener((a,o,n)-> {
+			if(n!=null) {
+				this.setOpenAction();
+				if(showImage)
+					loadImageView(n);
 			}
 		});
 		
@@ -221,37 +223,82 @@ public class TFileField extends StackPane {
 			}
 		};
 		
-		openEventHandler = arg0->{
-			if(filePathLabel!=null && StringUtils.isNotBlank(filePathLabel.getText())){
-				if(!TFileUtil.open(new File(filePathLabel.getText()))) {
-                	showModal(iEngine.getString("#{tedros.fxapi.message.os.not.support.operation}"));
-                }
-			}else{
-				if(byteArrayProperty!=null && byteArrayProperty.getValue()!=null && fileNameField!=null && fileNameField.getText()!=null){
-					try {
-						String folder = FileUtils.getUserDirectoryPath();
-						File file = FileUtils.toFile(TUrlUtil.getURL(folder+"/"+fileNameField.getText()));
-						int x = 1;
-						boolean flag = file.exists();
-						while(flag){
-							String[] arr = new String[]{FilenameUtils.getBaseName(file.getName()), FilenameUtils.getExtension(file.getName())};
-							file = FileUtils.toFile(TUrlUtil.getURL(folder+"/"+arr[0]+" "+(x++)+"."+arr[1]));
-							flag = file.exists();
-						}
+		openEventHandler = event -> {
+			File file = null;
+			String folder = TedrosFolder.EXPORT_FOLDER.getFullPath();	
+			try {if(filePathLabel!=null && StringUtils.isNotBlank(filePathLabel.getText())){
+					if(!TFileUtil.open(new File(filePathLabel.getText()))) 
+						showModal(openButton, 
+								iEngine.getString("#{tedros.fxapi.message.os.not.support.operation}"));
+				}else{
+					if(byteArrayProperty!=null && byteArrayProperty.getValue()!=null && fileNameField!=null && fileNameField.getText()!=null) {
+						file = FileUtils.toFile(TUrlUtil.getURL(folder+"/"+fileNameField.getText()));
 						
-						FileUtils.writeByteArrayToFile(file, byteArrayProperty.getValue());
-						if(!TFileUtil.open(file)) {
-		                	showModal(iEngine.getString("#{tedros.fxapi.message.os.not.support.operation}"));
-		                }
-					} catch (Exception e) {
-						showModal(iEngine.getFormatedString("#{tedros.fxapi.message.cannot.open.file}", e.getMessage()));
+						if(file.exists()) {
+							openButton.setDisable(true);
+							String m1 = iEngine.getFormatedString(TFxKey.MESSAGE_FILE_ALREADY_EXISTS, file.getName());
+							String m2 = iEngine.getString(TFxKey.MESSAGE_REPLACE_FILE);
+							String m3 = iEngine.getString(TFxKey.MESSAGE_REPLACE_FILE_NO);
+							this.showConfirmModal(openButton, m1+"\n"+m2+"\n"+m3, yes->{
+								try {
+									File f = FileUtils.toFile(TUrlUtil.getURL(folder+"/"+fileNameField.getText()));
+									try {
+										if(!yes){
+											int x = 1;
+											while(f.exists()){
+												String[] arr = new String[]{
+														FilenameUtils.getBaseName(f.getName()), 
+														FilenameUtils.getExtension(f.getName())
+													};
+												if(arr[0].contains("(TCopy")) {
+													String v = StringUtils.substringBetween(arr[0], "(TCopy ", ")");
+													arr[0] = StringUtils.remove(arr[0], "(TCopy "+v.trim()+")").trim();
+												}
+												f = FileUtils.toFile(TUrlUtil.getURL(folder+"/"
+												+arr[0]+" (TCopy "+(x++)+")."+arr[1]));
+											}
+										}
+										writeAndOpen(f);
+									} catch (Exception e1) {
+										processOpenFileException(folder, f, e1);
+									}
+								} catch (MalformedURLException e1) {
+									showModal(openButton, 
+										iEngine.getFormatedString("#{tedros.fxapi.message.cannot.open.file}", e1.getMessage()));
+								}
+								openButton.setDisable(false);
+							});
+						}else {
+							writeAndOpen(file);
+						}
 					}
 				}
+			} catch (Exception e) {
+				processOpenFileException(folder, file, e);
 			}
 		};
-		
-		
 		openButton.setOnAction(openEventHandler);
+	}
+
+	private void writeAndOpen(File f) throws IOException {
+		FileUtils.writeByteArrayToFile(f, byteArrayProperty.getValue());
+		if(!TFileUtil.open(f))
+			showModal(openButton, 
+				iEngine.getString("#{tedros.fxapi.message.os.not.support.operation}"));
+	}
+
+	private void processOpenFileException(String folder, File f, Exception e1) {
+		try {
+			if(f!=null && f.exists())
+				TFileUtil.open(new File(folder));
+			else
+				showModal(openButton, 
+						iEngine.getFormatedString("#{tedros.fxapi.message.cannot.open.file}", e1.getMessage()));
+		} catch (IOException e2) {
+			e2.printStackTrace();
+			showModal(openButton, 
+					iEngine.getFormatedString("#{tedros.fxapi.message.cannot.open.file}", e1.getMessage()));
+		}
 	}
 	
 	private void setLoadByteAction() {
@@ -264,18 +311,43 @@ public class TFileField extends StackPane {
 		openButton.setOnAction(openEventHandler);
 	}
 	
-	private void showModal(String msg){
+	private void showConfirmModal(Node node, String msg, Consumer<Boolean> confirmed){
+		
+		TToolBar bar = new TToolBar();
+		TButton yesBtn = new TButton(iEngine.getString(TUsualKey.YES));
+		TButton noBtn = new TButton(iEngine.getString(TUsualKey.NO));
+		bar.getItems().addAll(yesBtn, noBtn);
+		
 		Label label = new Label(msg);
 		label.setId("t-label");
-		label.setStyle(	"-fx-font: Arial; "+
-						"-fx-font-size: 1.0em; "+
-						"-fx-font-weight: bold; "+
-						"-fx-font-smoothing-type:lcd; "+
-						"-fx-text-fill: #000000; "+
-						"-fx-padding: 2 5 5 2; ");
+		label.setMaxWidth(400);
+		label.setWrapText(true);
+		
+		VBox box = new VBox(15);
+		box.getChildren().addAll(label, bar);
+		box.setPadding(new Insets(15));
+		box.setAlignment(Pos.CENTER);
+		PopOver p = new PopOver(box);
+		p.setAutoHide(false);
+		yesBtn.setOnAction(e->{
+			confirmed.accept(true);
+			p.hide();
+		});
+		noBtn.setOnAction(e->{
+			confirmed.accept(false);
+			p.hide();
+		});
+		p.show(node);
+	}
+	
+	private void showModal(Node node, String msg){
+		Label label = new Label(msg);
+		label.setId("t-label");
+		label.setMaxWidth(400);
+		label.setWrapText(true);
 		
 		PopOver p = new PopOver(label);
-		p.show(selectButton);
+		p.show(node);
 	}
 	
 	private void configureFileChooser(final FileChooser fileChooser, String[] extensions){
@@ -291,9 +363,13 @@ public class TFileField extends StackPane {
     	try {
     		long size = FileUtils.sizeOf(file);
     		if(maxFileSize!=null && maxFileSize < size)
-    			showModal(iEngine.getFormatedString("#{tedros.fxapi.message.file.max.size}", maxFileSize.toString()));
+    			showModal(selectButton, 
+    					iEngine.getFormatedString("#{tedros.fxapi.message.file.max.size}", 
+    							maxFileSize.toString()));
     		else if(minFileSize!=null && minFileSize > FileUtils.sizeOf(file))
-    			showModal(iEngine.getFormatedString("#{tedros.fxapi.message.file.min.size}", minFileSize.toString()));
+    			showModal(selectButton, 
+    					iEngine.getFormatedString("#{tedros.fxapi.message.file.min.size}", 
+    							minFileSize.toString()));
     		else{
 	    		if(showFilePath)
 	    			filePathLabel.setText(file.getAbsolutePath());
@@ -577,7 +653,7 @@ public class TFileField extends StackPane {
 						msg += iEngine.getFormatedString("#{tedros.fxapi.message.image.max.height}", minImageHeight.toString()) + "\n";
 					
 					if(StringUtils.isNotBlank(msg)){
-						showModal(msg);
+						showModal(selectButton, msg);
 						cleanField();
 					}else{
 						
