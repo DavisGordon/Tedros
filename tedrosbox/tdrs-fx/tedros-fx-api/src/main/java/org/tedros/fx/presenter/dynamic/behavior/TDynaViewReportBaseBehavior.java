@@ -2,6 +2,7 @@ package org.tedros.fx.presenter.dynamic.behavior;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
@@ -535,28 +536,28 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * */
 	public void openExportFolderAction() {
 		
-		Thread thread = new Thread(new Runnable() {
-		      @Override
-		      public void run() {
-				Platform.runLater(new Runnable() {
-		            @Override
-		            public void run() {
-		                if(!TFileUtil.open(new File(TedrosFolder.EXPORT_FOLDER.getFullPath()))) {
-		                	Label label = new Label(TLanguage.getInstance(null).getString("#{tedros.fxapi.message.os.not.support.operation}"));
-		        			label.setId("t-label");
-		        			label.setStyle(	"-fx-font: Arial; "+
-		        							"-fx-font-size: 1.0em; "+
-		        							"-fx-font-weight: bold; "+
-		        							"-fx-font-smoothing-type:lcd; "+
-		        							"-fx-text-fill: #000000; "+
-		        							"-fx-padding: 2 5 5 2; ");
-		        			
-		        			PopOver p = new PopOver(label);
-		        			p.show(decorator.gettOpenExportFolderButton());
-		                }
-		            }
-		          });
-		      	}
+		Thread thread = new Thread(() ->{
+			Platform.runLater(() ->{
+                try {
+					if(!TFileUtil.open(new File(TedrosFolder.EXPORT_FOLDER.getFullPath()))) {
+						Label label = new Label(TLanguage.getInstance(null).getString("#{tedros.fxapi.message.os.not.support.operation}"));
+						label.setId("t-label");
+						label.setStyle(	"-fx-font: Arial; "+
+										"-fx-font-size: 1.0em; "+
+										"-fx-font-weight: bold; "+
+										"-fx-font-smoothing-type:lcd; "+
+										"-fx-text-fill: #000000; "+
+										"-fx-padding: 2 5 5 2; ");
+						
+						PopOver p = new PopOver(label);
+						p.show(decorator.gettOpenExportFolderButton());
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+					super.addMessage(new TMessage(TMessageType.ERROR, 
+							iEngine.getFormatedString("#{tedros.fxapi.message.cannot.open.file}", e.getMessage())));
+				}
+	          });
 			});
 		thread.setDaemon(true);
 		thread.start();

@@ -5,13 +5,13 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
 
   <display-name>tedros</display-name>
  
- <!--  <servlet>
-    <servlet-name>voluntarioServlet</servlet-name>
-    <servlet-class>org.somos.web.servlet.VoluntarioServlet</servlet-class>
-</servlet>
-<servlet-mapping>
-    <servlet-name>voluntarioServlet</servlet-name>
-    <url-pattern>/cadVol</url-pattern>
-</servlet-mapping>  -->
+  <servlet>
+    <servlet-name>customerServlet</servlet-name>
+    <servlet-class>org.tedros.web.servlet.CustomerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+	<servlet-name>customerServlet</servlet-name>
+	<url-pattern>/suc</url-pattern>
+  </servlet-mapping> 
 
 </web-app>

@@ -1,0 +1,78 @@
+
+@font-face {
+  font-family: ms-eb;
+  src: url(../webfonts/Montserrat-ExtraBold.ttf);
+  font-weight: bold;
+}
+@font-face {
+  font-family: ms-b;
+  src: url(../webfonts/Montserrat-Bold.ttf);
+  font-weight: bold;
+}
+@font-face {
+  font-family: ms-i;
+  src: url(../webfonts/Montserrat-Italic.ttf);
+}
+@font-face {
+  font-family: ms-r;
+  src: url(../webfonts/Montserrat-Regular.ttf);
+}
+@font-face {
+  font-family: ms-t;
+  src: url(../webfonts/Montserrat-Thin.ttf);
+}
+
+.f-title{
+	font-family: ms-b;
+	font-size: 1.8em;
+}
+.f-sub-title{
+	font-family: ms-b;
+	font-size: 1.1em;
+}
+.f-txt{
+	font-family: ms-r;
+	font-size: 1.1em;
+}
+.txt-italic{
+	font-family: ms-i;
+	font-size: 1.1em;
+}
+.txt-bold{
+	font-family: ms-b;
+	font-size: 1.1em;
+}
+.txt-ebold{
+	font-family: ms-eb;
+	font-size: 1.1em;
+}
+.txt-thin{
+	font-family: ms-t;
+	font-size: 1.1em;
+}
+.fnt-small{
+	font-size: 0.6em !important;
+}
+.fnt-large{
+	font-size: 1.2em !important;
+}
+.fnt-big{
+	font-size: 1.8em !important;
+}
+.container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
+}
+
+/* Then style the iframe to fit in the container div with full height and width */
+.responsive-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
