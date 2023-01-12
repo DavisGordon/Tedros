@@ -6,12 +6,20 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
   <display-name>tedros</display-name>
  
   <servlet>
-    <servlet-name>customerServlet</servlet-name>
+    <servlet-name>customerServletEn</servlet-name>
     <servlet-class>org.tedros.web.servlet.CustomerServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-	<servlet-name>customerServlet</servlet-name>
-	<url-pattern>/suc</url-pattern>
+	<servlet-name>customerServletEn</servlet-name>
+	<url-pattern>/en/suc</url-pattern>
+  </servlet-mapping> 
+  <servlet>
+    <servlet-name>customerServletPt</servlet-name>
+    <servlet-class>org.tedros.web.servlet.CustomerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+	<servlet-name>customerServletPt</servlet-name>
+	<url-pattern>/pt/suc</url-pattern>
   </servlet-mapping> 
 
 </web-app>

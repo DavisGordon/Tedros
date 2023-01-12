@@ -10,11 +10,11 @@ import static javax.servlet.http.HttpServletResponse.SC_OK;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ResourceBundle;
 
 import javax.ejb.EJB;
 import javax.enterprise.inject.Any;
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +27,7 @@ import org.tedros.env.entity.WebUser;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.util.TEncriptUtil;
+import org.tedros.util.TResourceUtil;
 import org.tedros.util.TValidatorUtil;
 import org.tedros.web.bean.AppBean;
 /**
@@ -49,6 +50,15 @@ public class CustomerServlet extends HttpServlet {
 
 		String email = request.getParameter("email");
 		String pass = request.getParameter("pass");
+		String lang = request.getParameter("clang");
+		ResourceBundle b = null;
+		try {
+			if(StringUtils.isBlank(lang))
+				lang = "pt";
+			b = TResourceUtil.getResourceBundle("lang_"+lang);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		resp.setContentType("text/html");
 		
@@ -56,11 +66,11 @@ public class CustomerServlet extends HttpServlet {
 
 		if(StringUtils.isAnyBlank(email, pass)){
 			resp.setStatus(SC_BAD_REQUEST);
-			out.println("Por favor informar um email e senha.");
+			out.println(b.getString("msg.email.password.required"));
 		}else{
 			if(!TValidatorUtil.isEmailAddress(email)) {
 				resp.setStatus(SC_BAD_REQUEST);
-				out.println("Email invalido.");
+				out.println(b.getString("msg.invalid.email"));
 			}else{
 				try {
 					WebUser wu = new WebUser();
@@ -70,7 +80,7 @@ public class CustomerServlet extends HttpServlet {
 
 					if(res.getState().equals(TState.SUCCESS) && res.getValue()!=null){
 						resp.setStatus(SC_ACCEPTED);	
-						out.println("O email informado já encontra-se cadastrado!");
+						out.println(b.getString("msg.email.already.exists"));
 					}else  if(res.getState().equals(TState.ERROR)){
 						//System.out.println(res.getErrorMessage());
 						resp.setStatus(SC_INTERNAL_SERVER_ERROR);	
@@ -84,7 +94,7 @@ public class CustomerServlet extends HttpServlet {
 						if(res.getState().equals(TState.SUCCESS)){
 							System.out.println("sucesso");
 							resp.setStatus(SC_OK);
-							out.println("Usúario criado com sucesso!");
+							out.println(b.getString("msg.user.created"));
 						}else if(res.getState().equals(TState.ERROR)){
 							//System.out.println(res.getErrorMessage());
 							resp.setStatus(SC_INTERNAL_SERVER_ERROR);	
@@ -94,7 +104,7 @@ public class CustomerServlet extends HttpServlet {
 				} catch (Exception e) {
 					e.printStackTrace();
 					resp.sendError(SC_INTERNAL_SERVER_ERROR);
-					out.println("Não foi possivel realizar seu cadastro, tente novamente mais tarde!");
+					out.println(b.getString("error.create.user"));
 				}
 			}
 		}
