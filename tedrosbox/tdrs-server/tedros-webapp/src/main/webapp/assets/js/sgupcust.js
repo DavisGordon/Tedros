@@ -28,17 +28,18 @@ function validate(formData, jqForm, options) {
 // post-submit callback 
 function showResponse(responseText, statusText, xhr, $form)  { 
 	var form = $form[0];
-	if(responseText instanceof Object)
-		showMsgModal(responseText.responseText); 
-	else
-		showMsgModal(responseText); 
+	var msg = (responseText instanceof Object)
+	? responseText.responseText
+			: responseText;
+
 	showLoader('', form);
-	if(xhr.status==200){
-		location.href = 'csignin.html';
-	}else if(xhr.status==500){
-		location.href = '500.html';
-	}
-		
+	showActionModal(msg, function(){
+		if(xhr.status==200){
+			location.href = 'csignin.html';
+		}else if(xhr.status==500){
+			location.href = '500.html';
+		}
+	}); 
 }
 
 function showLoader(className, form){
