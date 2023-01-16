@@ -10,6 +10,10 @@
   <name>Tedros Web</name>
   <description>The institucional webpage and system web support</description>
   
+  <properties>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+	
   <profiles>
 	<profile>
 	  <id>prod</id>
@@ -98,6 +102,7 @@
         <artifactId>maven-war-plugin</artifactId>
         <version>2.6</version>
         <configuration>
+        	<resourceEncoding>UTF-8</resourceEncoding>
 			<failOnMissingWebXml>false</failOnMissingWebXml>
 			<warName>${project.artifactId}</warName>
 		</configuration>

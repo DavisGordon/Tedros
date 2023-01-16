@@ -10,6 +10,7 @@ import static javax.servlet.http.HttpServletResponse.SC_OK;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.ejb.EJB;
@@ -76,31 +77,23 @@ public class CustomerServlet extends HttpServlet {
 					WebUser wu = new WebUser();
 					
 					wu.setUsername(email);
-					TResult<WebUser> res = service.find(appBean.getToken(), wu);
-
-					if(res.getState().equals(TState.SUCCESS) && res.getValue()!=null){
-						resp.setStatus(SC_ACCEPTED);	
-						out.println(b.getString("msg.email.already.exists"));
-					}else  if(res.getState().equals(TState.ERROR)){
+					TResult<WebUser> res = service.signUp(appBean.getToken(), 
+							Locale.forLanguageTag(lang), email, pass, WebUserType.CUSTOMER);
+							//(appBean.getToken(), wu);
+			
+					if(res.getState().equals(TState.SUCCESS)){
+						System.out.println("sucesso");
+						resp.setStatus(SC_OK);
+						out.println(res.getMessage());
+					}else if(res.getState().equals(TState.ERROR)){
 						//System.out.println(res.getErrorMessage());
 						resp.setStatus(SC_INTERNAL_SERVER_ERROR);	
-					}else{
-			
-						wu.setPassword(TEncriptUtil.encript(pass));
-						wu.setType(WebUserType.CUSTOMER);
-						
-						res = service.save(appBean.getToken(), wu);
-									
-						if(res.getState().equals(TState.SUCCESS)){
-							System.out.println("sucesso");
-							resp.setStatus(SC_OK);
-							out.println(b.getString("msg.user.created"));
-						}else if(res.getState().equals(TState.ERROR)){
-							//System.out.println(res.getErrorMessage());
-							resp.setStatus(SC_INTERNAL_SERVER_ERROR);	
-							out.println(res.getMessage());
-						}
+						out.println(res.getMessage());
+					}else {
+						resp.setStatus(SC_ACCEPTED);
+						out.println(res.getMessage());
 					}
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 					resp.sendError(SC_INTERNAL_SERVER_ERROR);
