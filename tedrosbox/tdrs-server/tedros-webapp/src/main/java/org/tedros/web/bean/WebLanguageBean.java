@@ -4,40 +4,39 @@
 package org.tedros.web.bean;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
-import org.tedros.env.entity.WebUser;
-
 /**
  * @author Davis Gordon
  *
  */
-@Named("userBean")
+@Named("lang")
 @SessionScoped
-public class UserBean implements Serializable{
+public class WebLanguageBean implements Serializable{
 
 	private static final long serialVersionUID = 700314364541128827L;
-	private WebUser user;
+	private Value<String> value;
 	
 	@PostConstruct
 	public void init(){
-		user = new WebUser();
+		value = new Value<>();
 	}
 
 	/**
-	 * @return the user
+	 * @return the value
 	 */
-	public WebUser getUser() {
-		return user;
+	public Locale get() {
+		return new Locale(value.getObj());
 	}
 
 	/**
-	 * @param user the user to set
+	 * @param lang the value to set
 	 */
-	public void setUser(WebUser user) {
-		this.user = user;
+	public void set(String lang) {
+		this.value.setObj(lang);
 	}
 }

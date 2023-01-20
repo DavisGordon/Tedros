@@ -29,7 +29,7 @@
 			</h1>
 			<nav id="nav">
 				<ul>
-					<li class="current"><a href="../en/csignup.html?lng=en">English</a></li>
+					<li class="current"><a href="../pt/csignin.html?lng=pt">Portugues</a></li>
 					<li class="submenu"><a href="#">Layouts</a>
 						<ul>
 							<li><a href="left-sidebar.html">Left Sidebar</a></li>
@@ -45,7 +45,7 @@
 									<li><a href="#">Ipsum Nisl</a></li>
 								</ul></li>
 						</ul></li>
-					<li><a href="csignin.html" class="button primary">Entrar</a></li>
+					<li><a href="csignup.html" class="button primary">Inscrever-se</a></li>
 				</ul>
 			</nav>
 		</header>
@@ -58,7 +58,7 @@
 
 				<header class="special container">
 					<span class="icon solid fa-industry"></span>
-					<h2>Criar conta empresarial</h2>
+					<h2>Login to business account</h2>
 				</header>
 				<!-- Content -->
 				<div class="content">
@@ -68,22 +68,18 @@
 								<div></div>
 							</div>
 						</div>
-						<form name="frm" id="frm" method="post" action="suc">
-							<input type="hidden" name="clang" value='pt'>
+						<form name="frm" id="frm" method="post" action="csgin">
 							<div class="row gtr-50">
 								<div class="col-12">
 									<input type="text" name="email" placeholder="Email" />
 								</div>
 								<div class="col-6 col-12-mobile">
-									<input type="password" name="pass" placeholder="Senha" />
+									<input type="password" name="pass" placeholder="Password" />
 								</div>
-								<div class="col-6 col-12-mobile">
-									<input type="password" name="passConf"
-										placeholder="Confirmar Senha" />
-								</div>
+								
 								<div class="col-12">
 									<ul class="buttons">
-										<li><input type="submit" class="special" value="Enviar" /></li>
+										<li><input type="button" onclick="validate()" class="special" value="SignIn" /></li>
 									</ul>
 								</div>
 							</div>
@@ -136,8 +132,8 @@
 	<script src="../assets/js/main.js"></script>
 	<script src="../assets/js/jquery.form.js"></script>
 	<script src="../assets/js/tedros.js"></script>
-	<script src="../assets/js/pt.js"></script>
-	<script src="../assets/js/sgupcust.js"></script>
+	<script src="../assets/js/en.js"></script>
+	<script src="../assets/js/sgincust.js"></script>
 
 </body>
 </html>
