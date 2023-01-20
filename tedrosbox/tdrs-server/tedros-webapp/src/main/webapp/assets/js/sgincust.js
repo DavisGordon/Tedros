@@ -1,27 +1,45 @@
-$(document).ready(function() { 
-	$('#frm').ajaxForm( { beforeSubmit: validate, success: showResponse, error: showResponse  } );
-});
 
-
-
-function validate(formData, jqForm, options) { 
+function validate() { 
 	
-	var form = jqForm[0]; 
-	
+	var form = $('#frm').get(0); 
+	var fields = "";
+	if (!form.email.value) { 
+		fields = form.email.placeholder;
+	} 
+	if (!form.pass.value) { 
+		fields += fields && fields.length>0 
+		? ", "+form.pass.placeholder
+				: form.pass.placeholder;
+	} 
+	if(fields.length>0){
+		showWarnModal(clang.required(fields));
+		return;
+	}
 	if(form.email.value && !validateEmail(form.email.value)){
 		showWarnModal(clang.msg_enter_valid_email);
-		return false; 
+		return; 
 	}
 	
-	if (!form.pass.value || !form.passConf.value) { 
-		showWarnModal(clang.msg_enter_password); 
-		return false; 
-	} 
-	if (form.pass.value && form.passConf.value && form.pass.value != form.passConf.value) { 
-		showWarnModal(clang.msg_password_no_match); 
-		return false; 
-	} 
-	showLoader('lds-circle', form);
+	$.ajax
+	({ 
+		url: 'api/auth/signin',
+		data: JSON.stringify({"email": form.email.value, 
+			"pass": form.pass.value,
+			"utype": "c"
+			}),
+		type: 'post',
+		dataType:'json',
+		headers : {'Content-Type' : 'application/json'},
+		success: function(result)
+		{
+			if(result.code == "200"){
+				location.href = '/cstmr/index.html?c='+result.data;
+			}else{
+				showWarnModal(result.message);
+			}
+		
+		}
+	});
 }
 
 

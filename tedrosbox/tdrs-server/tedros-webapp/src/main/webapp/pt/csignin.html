@@ -29,7 +29,7 @@
 			</h1>
 			<nav id="nav">
 				<ul>
-					<li class="current"><a href="index.html">English</a></li>
+					<li class="current"><a href="../en/csignin.html?lng=en">English</a></li>
 					<li class="submenu"><a href="#">Layouts</a>
 						<ul>
 							<li><a href="left-sidebar.html">Left Sidebar</a></li>
@@ -68,7 +68,7 @@
 								<div></div>
 							</div>
 						</div>
-						<form name="frm" id="frm" method="post" action="suc">
+						<form name="frm" id="frm" method="post" action="csgin">
 							<div class="row gtr-50">
 								<div class="col-12">
 									<input type="text" name="email" placeholder="Email" />
@@ -76,13 +76,10 @@
 								<div class="col-6 col-12-mobile">
 									<input type="password" name="pass" placeholder="Senha" />
 								</div>
-								<div class="col-6 col-12-mobile">
-									<input type="password" name="passConf"
-										placeholder="Confirmar Senha" />
-								</div>
+								
 								<div class="col-12">
 									<ul class="buttons">
-										<li><input type="submit" class="special" value="Enviar" /></li>
+										<li><input type="button" onclick="validate()" class="special" value="Entrar" /></li>
 									</ul>
 								</div>
 							</div>

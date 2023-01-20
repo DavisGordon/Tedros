@@ -22,7 +22,7 @@
 	  </properties>
 	</profile>
 	<profile>
-	  <id>des</id>
+	  <id>dev</id>
 	  <activation>
 	  	<activeByDefault>true</activeByDefault>
 	  </activation>
@@ -51,7 +51,17 @@
   		<version>8-4.1.0</version>
   		<scope>compile</scope>
   	</dependency>
-  	
+  	<dependency>
+		<groupId>org.tedros</groupId>
+		 <artifactId>app-location-ejb-client</artifactId>
+		<version>${app.location}</version>
+  		<scope>compile</scope>
+	</dependency> 
+  	<!-- <dependency>
+        <groupId>com.maxmind.geoip2</groupId>
+        <artifactId>geoip2</artifactId>
+        <version>4.0.0</version>
+    </dependency> -->
   	
   	<dependency>
 			<groupId>org.eclipse.persistence</groupId>
