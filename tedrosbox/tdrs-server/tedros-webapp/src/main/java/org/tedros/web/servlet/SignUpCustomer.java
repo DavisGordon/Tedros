@@ -11,12 +11,12 @@ import static javax.servlet.http.HttpServletResponse.SC_OK;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.ejb.EJB;
 import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,41 +25,40 @@ import org.apache.commons.lang3.StringUtils;
 import org.tedros.env.domain.WebUserType;
 import org.tedros.env.ejb.controller.IWebUserController;
 import org.tedros.env.entity.WebUser;
+import org.tedros.env.util.ResourceHandler;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
-import org.tedros.util.TEncriptUtil;
-import org.tedros.util.TResourceUtil;
 import org.tedros.util.TValidatorUtil;
+import org.tedros.web.ResKey;
 import org.tedros.web.bean.AppBean;
+import org.tedros.web.bean.WebLanguageBean;
 /**
  * @author Davis Gordon
  *
  */
-public class CustomerServlet extends HttpServlet {
+@WebServlet(name="SignUpCustomer",
+urlPatterns= {"/en/suc", "/pt/suc"})
+public class SignUpCustomer extends HttpServlet {
 
 	private static final long serialVersionUID = -3035965625139672187L;
 	
 	@Inject @Any
 	private AppBean appBean;
 	
+	@Inject @Any
+	private WebLanguageBean lang;
+	
 	@EJB
 	private IWebUserController service;
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
 
 		String email = request.getParameter("email");
 		String pass = request.getParameter("pass");
-		String lang = request.getParameter("clang");
-		ResourceBundle b = null;
-		try {
-			if(StringUtils.isBlank(lang))
-				lang = "pt";
-			b = TResourceUtil.getResourceBundle("lang_"+lang);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
+		Locale locale = lang.get();
+		ResourceHandler resource = ResourceHandler.fromWar(ResKey.RESOURCE_NAME, locale);
 		
 		resp.setContentType("text/html");
 		
@@ -67,26 +66,21 @@ public class CustomerServlet extends HttpServlet {
 
 		if(StringUtils.isAnyBlank(email, pass)){
 			resp.setStatus(SC_BAD_REQUEST);
-			out.println(b.getString("msg.email.password.required"));
+			out.println(resource.getString(ResKey.MSG_EMAIL_PASSWORD_REQUIRED));
 		}else{
 			if(!TValidatorUtil.isEmailAddress(email)) {
 				resp.setStatus(SC_BAD_REQUEST);
-				out.println(b.getString("msg.invalid.email"));
+				out.println(resource.getString(ResKey.MSG_INVALID_EMAIL));
 			}else{
 				try {
-					WebUser wu = new WebUser();
-					
-					wu.setUsername(email);
 					TResult<WebUser> res = service.signUp(appBean.getToken(), 
-							Locale.forLanguageTag(lang), email, pass, WebUserType.CUSTOMER);
-							//(appBean.getToken(), wu);
+							locale, email, pass, WebUserType.CUSTOMER);
 			
 					if(res.getState().equals(TState.SUCCESS)){
-						System.out.println("sucesso");
 						resp.setStatus(SC_OK);
 						out.println(res.getMessage());
-					}else if(res.getState().equals(TState.ERROR)){
-						//System.out.println(res.getErrorMessage());
+					}else 
+					if(res.getState().equals(TState.ERROR)){
 						resp.setStatus(SC_INTERNAL_SERVER_ERROR);	
 						out.println(res.getMessage());
 					}else {
@@ -97,7 +91,7 @@ public class CustomerServlet extends HttpServlet {
 				} catch (Exception e) {
 					e.printStackTrace();
 					resp.sendError(SC_INTERNAL_SERVER_ERROR);
-					out.println(b.getString("error.create.user"));
+					out.println(resource.getString(ResKey.ERROR_CREATE_USER));
 				}
 			}
 		}

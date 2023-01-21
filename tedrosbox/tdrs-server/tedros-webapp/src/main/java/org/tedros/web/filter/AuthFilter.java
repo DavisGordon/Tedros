@@ -25,6 +25,7 @@ import org.tedros.env.entity.WebSession;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.web.bean.AppBean;
+import org.tedros.web.bean.WebLanguageBean;
 import org.tedros.web.bean.WebSessionBean;
 
 /**
@@ -35,10 +36,13 @@ import org.tedros.web.bean.WebSessionBean;
 urlPatterns = {"/en/cstmr/index.html*", "/pt/cstmr/index.html*"})
 public class AuthFilter implements Filter {
 	
-	private static final String TOKEN = "TDRS-TOKEN";
+	private static final String TOKEN = "tdrstoken";
 
 	@Inject
 	protected AppBean appBean;
+
+	@Inject @Any
+	private WebLanguageBean lang;
 	
 	@Inject @Any
 	private WebSessionBean session;
@@ -68,7 +72,7 @@ public class AuthFilter implements Filter {
 	
 		String key = httpRequest.getParameter(KEY);
 		if(key!=null && !key.trim().equals("")){
-			Locale locale = Locale.ENGLISH;
+			Locale locale = lang.get();
 	    	try {
 				TResult<Boolean> res = serv.isActive(appBean.getToken(), locale, key.trim());
 				

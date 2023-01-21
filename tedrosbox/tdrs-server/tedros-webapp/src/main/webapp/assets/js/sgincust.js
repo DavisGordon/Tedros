@@ -1,3 +1,6 @@
+$(document).ready(function() { 
+	clang.check();
+});
 
 function validate() { 
 	
@@ -22,7 +25,7 @@ function validate() {
 	
 	$.ajax
 	({ 
-		url: 'api/auth/signin',
+		url: '../api/auth/signin',
 		data: JSON.stringify({"email": form.email.value, 
 			"pass": form.pass.value,
 			"utype": "c"
@@ -33,7 +36,7 @@ function validate() {
 		success: function(result)
 		{
 			if(result.code == "200"){
-				location.href = '/cstmr/index.html?c='+result.data;
+				location.href = '/'+clang.lang+'/cstmr/index.html?c='+result.data;
 			}else{
 				showWarnModal(result.message);
 			}
