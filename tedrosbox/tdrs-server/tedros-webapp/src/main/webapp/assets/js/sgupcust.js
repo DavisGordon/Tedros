@@ -1,4 +1,5 @@
 $(document).ready(function() { 
+	clang.check();
 	$('#frm').ajaxForm( { beforeSubmit: validate, success: showResponse, error: showResponse  } );
 });
 

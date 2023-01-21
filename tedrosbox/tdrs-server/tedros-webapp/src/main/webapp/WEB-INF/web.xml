@@ -4,7 +4,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
   <display-name>tedros</display-name>
- 
+ <!-- 
   <servlet>
     <servlet-name>customerServletEn</servlet-name>
     <servlet-class>org.tedros.web.servlet.CustomerServlet</servlet-class>
@@ -20,6 +20,6 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
   <servlet-mapping>
 	<servlet-name>customerServletPt</servlet-name>
 	<url-pattern>/pt/suc</url-pattern>
-  </servlet-mapping> 
+  </servlet-mapping>  -->
 
 </web-app>

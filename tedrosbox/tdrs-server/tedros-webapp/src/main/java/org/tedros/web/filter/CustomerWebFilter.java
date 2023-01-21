@@ -4,7 +4,6 @@
 package org.tedros.web.filter;
 
 import java.io.IOException;
-import java.util.Locale;
 
 import javax.ejb.EJB;
 import javax.enterprise.inject.Any;
@@ -26,6 +25,7 @@ import org.tedros.env.entity.WebSession;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.web.bean.AppBean;
+import org.tedros.web.bean.WebLanguageBean;
 import org.tedros.web.bean.WebSessionBean;
 
 /**
@@ -36,10 +36,13 @@ import org.tedros.web.bean.WebSessionBean;
 urlPatterns = {"/cstmr/*", "/api/cstmr/*"})
 public class CustomerWebFilter implements Filter {
 	
-	private static final String TOKEN = "TDRS-TOKEN";
+	private static final String TOKEN = "tdrstoken";
 
 	@Inject
 	protected AppBean appBean;
+
+	@Inject @Any
+	private WebLanguageBean lang;
 	
 	@Inject @Any
 	private WebSessionBean session;
@@ -60,6 +63,7 @@ public class CustomerWebFilter implements Filter {
 	/* (non-Javadoc)
 	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
 			throws IOException, ServletException {
@@ -88,7 +92,7 @@ public class CustomerWebFilter implements Filter {
 	    if(key!=null && !key.trim().equals("")){
 	    	
 	    	try {
-				TResult<Boolean> res = serv.isActive(appBean.getToken(), Locale.ENGLISH, key.trim());
+				TResult<Boolean> res = serv.isActive(appBean.getToken(), lang.get(), key.trim());
 				
 				if(res.getState().equals(TState.SUCCESS)){
 					if(res.getValue()){

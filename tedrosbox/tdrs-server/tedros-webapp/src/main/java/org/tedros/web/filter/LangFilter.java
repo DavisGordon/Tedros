@@ -32,10 +32,10 @@ import org.tedros.web.bean.WebLanguageBean;
  *
  */
 @WebFilter(filterName = "LangFilter",
-urlPatterns = {"/*"})
+urlPatterns = {"/index.html"})
 public class LangFilter implements Filter {
 	
-	private static final String TOKEN = "TDRS-LANG";
+	private static final String TOKEN = "tdrslang";
 	
 	@Inject
 	protected AppBean appBean;
