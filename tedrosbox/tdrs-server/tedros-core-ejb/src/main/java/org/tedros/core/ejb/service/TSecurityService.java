@@ -4,6 +4,7 @@
 package org.tedros.core.ejb.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -63,15 +64,15 @@ public class TSecurityService {
 				TProfile p = ((TUser)e).getActiveProfile();
 				if(p!=null) {
 					List<TAuthorization> l = p.getAutorizations(securityId);
-					if(l!=null)
-						for(String x : action) {
-							b = l.parallelStream()
-							.filter(t->{ 
-								return t.getType().equals(x);
-							})
-							.count()>0;
-							if(b) break;
-						}
+					if(l!=null) {
+						List<String> actions = Arrays.asList(action);
+						b = l.stream()
+						.anyMatch(y->{
+							return actions.stream().anyMatch(x->{
+								return y.getType().trim().equals(x.trim());
+							});
+						});
+					}
 				}
 			};
 			return b;
