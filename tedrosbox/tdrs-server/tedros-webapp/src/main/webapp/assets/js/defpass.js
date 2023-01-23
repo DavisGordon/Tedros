@@ -1,42 +1,47 @@
 $(document).ready(function() { 
-	$('#frm').ajaxForm( { beforeSubmit: validate, success: showResponse  } ); 
+	clang.check();
 	var key = getUrlParameter('k');
-	document.getElementById("key").value = key;
+	$("#key").val(key);
 });
-
-
-
-function validate(formData, jqForm, options) { 
+function validate() { 
 	
-	var form = jqForm[0]; 
+	var form = $('#frm').get(0); 
 	
 	if (!form.pass.value || !form.passConf.value) { 
 		showWarnModal(clang.msg_enter_password); 
-		return false; 
+		return; 
 	} 
 	if (form.pass.value && form.passConf.value && form.pass.value != form.passConf.value) { 
 		showWarnModal(clang.msg_password_no_match); 
-		return false; 
+		return; 
 	} 
 	showLoader('lds-circle', form);
-}
-
-
-// post-submit callback 
-function showResponse(responseText, statusText, xhr, $form)  { 
-	var form = $form[0];
-	var msg = (responseText instanceof Object)
-	? responseText.responseText
-			: responseText;
-
-	showLoader('', form);
-	showActionModal(msg, function(){
-		if(xhr.status==200){
-			location.href = 'csignin.html';
-		}else if(xhr.status==500){
-			location.href = '500.html';
+	$.ajax
+	({ 
+		url: '../api/auth/defpass',
+		data: JSON.stringify({"key": form.key.value, 
+			"pass": form.pass.value
+			}),
+		type: 'post',
+		dataType:'json',
+		headers : {'Content-Type' : 'application/json'},
+		success: function(result)
+		{
+			showLoader('', form);
+			if(result.code==500){
+				location.href = '500.html';
+			}else{
+				var msg = result.code==200
+				? clang.msg_password_changed
+					: result.message;
+				showActionModal(msg, function(){
+					if(result.code==200){
+						location.href = 'sginindex.html';
+					}
+				});
+			}
 		}
-	}); 
+	});
 }
 
 function showLoader(className, form){

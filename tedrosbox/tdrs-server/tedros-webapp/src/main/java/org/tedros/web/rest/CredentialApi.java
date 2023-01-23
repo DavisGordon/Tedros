@@ -3,7 +3,6 @@ package org.tedros.web.rest;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -35,38 +34,36 @@ public class CredentialApi  extends BaseApi{
 			TResult<Boolean> res = serv.requireChangePass(appBean.getToken(), lang.get(), email, getType(utype));
 			
 			if(res.getState().equals(TState.SUCCESS)){
-				return new RestModel<String>("", "200",res.getMessage());
+				return new RestModel<String>("", OK, res.getMessage());
 			}else{
-				return new RestModel<String>("", "404", res.getState().equals(TState.WARNING) 
+				return new RestModel<String>("", WARN, res.getState().equals(TState.WARNING) 
 						? res.getMessage()  
 								: error.getValue() );
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new RestModel<String>("", "500", error.getValue());
+			return new RestModel<String>("", ERROR, error.getValue());
 		}
 	}
 	
 	@POST
 	@Path("/defpass")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public RestModel<String> defpass(@FormParam("key") String  key, 
-			@FormParam("pass") String  pass,
-			@FormParam("passConf") String  passConf){
+	@Consumes(MediaType.APPLICATION_JSON)
+	public RestModel<String> defpass(CredentialModel model){
 		try {
-			TResult<Boolean> res = serv.changePass(appBean.getToken(), lang.get(), key, pass);
+			TResult<Boolean> res = serv.changePass(appBean.getToken(), lang.get(), model.getKey(), model.getPass());
 			
 			if(res.getState().equals(TState.SUCCESS)){
-				return new RestModel<String>("", "200", res.getMessage());
+				return new RestModel<String>("", OK, res.getMessage());
 			}else{
-				return new RestModel<String>("", "404", 
+				return new RestModel<String>("", WARN, 
 						res.getState().equals(TState.WARNING) 
 						? res.getMessage()  
 								: error.getValue() );
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new RestModel<String>("", "500", error.getValue());
+			return new RestModel<String>("", ERROR, error.getValue());
 		}
 	}
 	
@@ -80,9 +77,9 @@ public class CredentialApi  extends BaseApi{
 					model.getEmail(), model.getPass(), getType(model.getUtype()));
 			
 			if(res.getState().equals(TState.SUCCESS)){
-				return new RestModel<String>(res.getValue().getKey(), "200", res.getMessage());
+				return new RestModel<String>(res.getValue().getKey(), OK, res.getMessage());
 			}else{
-				return new RestModel<String>("", "404", 
+				return new RestModel<String>("", WARN, 
 						res.getState().equals(TState.WARNING) 
 						? res.getMessage()  
 								: error.getValue() );
@@ -90,7 +87,7 @@ public class CredentialApi  extends BaseApi{
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new RestModel<String>("", "500", error.getValue());
+			return new RestModel<String>("", ERROR, error.getValue());
 		}
 		
 	}

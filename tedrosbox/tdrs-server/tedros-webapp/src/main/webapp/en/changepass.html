@@ -27,26 +27,6 @@
 			<h1 class="logo">
 				<img src="../images/logo/icon-tedros.png"><a href="index.html">Tedros</a>
 			</h1>
-			<nav id="nav">
-				<ul>
-					<li class="submenu"><a href="#">Layouts</a>
-						<ul>
-							<li><a href="left-sidebar.html">Left Sidebar</a></li>
-							<li><a href="right-sidebar.html">Right Sidebar</a></li>
-							<li><a href="no-sidebar.html">No Sidebar</a></li>
-							<li><a href="contact.html">Contact</a></li>
-							<li class="submenu"><a href="#">Submenu</a>
-								<ul>
-									<li><a href="#">Dolore Sed</a></li>
-									<li><a href="#">Consequat</a></li>
-									<li><a href="#">Lorem Magna</a></li>
-									<li><a href="#">Sed Magna</a></li>
-									<li><a href="#">Ipsum Nisl</a></li>
-								</ul></li>
-						</ul></li>
-					<li><a href="csignin.html" class="button primary">Entrar</a></li>
-				</ul>
-			</nav>
 		</header>
 
 		<!-- Main -->
@@ -56,12 +36,35 @@
 			<section class="wrapper style4 special container medium">
 
 				<header class="special container">
-					<span class="icon solid fa-exclamation-triangle"></span>
-					<h2>Ops! Um erro que não deveria ter acontecido</h2>
+					<span class="icon solid fa-key"></span>
+					<h2>Change password</h2>
 				</header>
 				<!-- Content -->
 				<div class="content">
-					<p class="txt-bold">Desculpe, estaremos verificando o ocorrido, tente novamente mais tarde!</p>
+					<div class="loader-content">
+						<div id="loader" class="loader">
+							<div id="cssloader">
+								<div></div>
+							</div>
+						</div>
+						<form name="frm" id="frm" method="post" action="suc">
+							<input type="hidden" name="key" value=''>
+							<div class="row gtr-50">
+								<div class="col-6 col-12-mobile">
+									<input type="password" name="pass" placeholder="New Password" />
+								</div>
+								<div class="col-6 col-12-mobile">
+									<input type="password" name="passConf"
+										placeholder="Retype new password" />
+								</div>
+								<div class="col-12">
+									<ul class="buttons">
+										<li><input type="button" onclick="validate()" class="special" value="Change" /></li>
+									</ul>
+								</div>
+							</div>
+						</form>
+					</div>
 				</div>
 			</section>
 
@@ -109,7 +112,8 @@
 	<script src="../assets/js/main.js"></script>
 	<script src="../assets/js/jquery.form.js"></script>
 	<script src="../assets/js/tedros.js"></script>
-	<script src="../assets/js/pt.js"></script>
+	<script src="../assets/js/en.js"></script>
+	<script src="../assets/js/defpass.js"></script>
 
 </body>
 </html>
