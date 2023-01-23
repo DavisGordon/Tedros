@@ -41,9 +41,9 @@ public class WebSessionBaseApi extends BaseApi {
 					lang.get(), session.get().getKey());
 			
 			if(res.getState().equals(TState.SUCCESS)){
-				return new RestModel<String>("SIGNOUT", "200", res.getMessage());
+				return new RestModel<String>("SIGNOUT", OK, res.getMessage());
 			}else{
-				return new RestModel<String>("", "404", 
+				return new RestModel<String>("", WARN, 
 						res.getState().equals(TState.WARNING) 
 						? res.getMessage()  
 								: error.getValue() );
@@ -51,7 +51,7 @@ public class WebSessionBaseApi extends BaseApi {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new RestModel<String>("", "500", error.getValue());
+			return new RestModel<String>("", ERROR, error.getValue());
 		}
 	}
 
@@ -66,9 +66,9 @@ public class WebSessionBaseApi extends BaseApi {
 			info.put("id", Long.toString(p.getId()));
 			info.put("name", StringUtils.capitalize(p.getName()));
 			info.put("sex", p.getSex().name());
-			return new RestModel<>(info, "200", "OK");
+			return new RestModel<>(info, OK, "OK");
 		}catch (Exception e) {
-			return new RestModel<>(null, "500", error.getValue());
+			return new RestModel<>(null, ERROR, error.getValue());
 		}
 	}
 }

@@ -2,6 +2,36 @@ $(document).ready(function() {
 	clang.check();
 });
 
+function defpass(){
+	var form = $('#frm').get(0); 
+	var fields = "";
+	if (!form.email.value) { 
+		fields = form.email.placeholder;
+	} 
+	if(fields.length>0){
+		showWarnModal(clang.required(fields));
+		return;
+	}
+	if(form.email.value && !validateEmail(form.email.value)){
+		showWarnModal(clang.msg_enter_valid_email);
+		return; 
+	}
+	$.ajax
+	({ 
+		url: '../api/auth/newpass/c/'+form.email.value,
+		type: 'get',
+		dataType:'json',
+		headers : {'Content-Type' : 'application/json'},
+		success: function(result)
+		{
+			if(result.code == "200")
+				showMsgModal(result.message);
+			else
+				showWarnModal(result.message);
+		}
+	});
+}
+
 function validate() { 
 	
 	var form = $('#frm').get(0); 
@@ -35,12 +65,11 @@ function validate() {
 		headers : {'Content-Type' : 'application/json'},
 		success: function(result)
 		{
-			if(result.code == "200"){
-				location.href = '/'+clang.lang+'/cstmr/index.html?c='+result.data;
-			}else{
+			if(result.code == "200")
+				location.href = 'cstmr/index.html?c='+result.data;
+				//location.href = '/'+clang.lang+'/cstmr/index.html?c='+result.data;
+			else
 				showWarnModal(result.message);
-			}
-		
 		}
 	});
 }

@@ -18,6 +18,9 @@ public class CredentialModel implements Serializable{
 	
 	@XmlAttribute
 	private String utype;
+	
+	@XmlAttribute
+	private String key;
 
 	/**
 	 * @return the email
@@ -59,6 +62,20 @@ public class CredentialModel implements Serializable{
 	 */
 	public void setUtype(String utype) {
 		this.utype = utype;
+	}
+
+	/**
+	 * @return the key
+	 */
+	public String getKey() {
+		return key;
+	}
+
+	/**
+	 * @param key the key to set
+	 */
+	public void setKey(String key) {
+		this.key = key;
 	}
 	
 	

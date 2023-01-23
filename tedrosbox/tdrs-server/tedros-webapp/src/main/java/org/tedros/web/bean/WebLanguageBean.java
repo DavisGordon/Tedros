@@ -30,7 +30,9 @@ public class WebLanguageBean implements Serializable{
 	 * @return the value
 	 */
 	public Locale get() {
-		return new Locale(value.getObj());
+		return value.getObj()!=null 
+				? new Locale(value.getObj())
+						: null;
 	}
 
 	/**

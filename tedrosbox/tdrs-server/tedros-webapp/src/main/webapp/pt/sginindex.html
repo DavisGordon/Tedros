@@ -3,7 +3,8 @@
 <head>
 <title>Tedros</title>
 <meta charset="utf-8" />
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Cache-Control"
+	content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
 <meta name="viewport"
@@ -18,7 +19,7 @@
 	<link rel="stylesheet" href="../assets/css/noscript.css" />
 </noscript>
 </head>
-<body class="contact is-preload">
+<body class="no-sidebar is-preload">
 	<div id="tModal" class="modal"></div>
 	<div id="page-wrapper">
 
@@ -27,41 +28,55 @@
 			<h1 class="logo">
 				<img src="../images/logo/icon-tedros.png"><a href="index.html">Tedros</a>
 			</h1>
-			<nav id="nav">
-				<ul>
-					<li class="submenu"><a href="#">Layouts</a>
-						<ul>
-							<li><a href="left-sidebar.html">Left Sidebar</a></li>
-							<li><a href="right-sidebar.html">Right Sidebar</a></li>
-							<li><a href="no-sidebar.html">No Sidebar</a></li>
-							<li><a href="contact.html">Contact</a></li>
-							<li class="submenu"><a href="#">Submenu</a>
-								<ul>
-									<li><a href="#">Dolore Sed</a></li>
-									<li><a href="#">Consequat</a></li>
-									<li><a href="#">Lorem Magna</a></li>
-									<li><a href="#">Sed Magna</a></li>
-									<li><a href="#">Ipsum Nisl</a></li>
-								</ul></li>
-						</ul></li>
-					<li><a href="csignin.html" class="button primary">Entrar</a></li>
-				</ul>
-			</nav>
 		</header>
 
 		<!-- Main -->
 		<article id="main">
 
 			<!-- One -->
-			<section class="wrapper style4 special container medium">
+			<section class="wrapper style4 container medium">
 
-				<header class="special container">
-					<span class="icon solid fa-exclamation-triangle"></span>
-					<h2>Ops! Um erro que não deveria ter acontecido</h2>
-				</header>
 				<!-- Content -->
 				<div class="content">
-					<p class="txt-bold">Desculpe, estaremos verificando o ocorrido, tente novamente mais tarde!</p>
+
+					<div class="row">
+						<div class="col-6 col-12-mobile">
+							<section class="wrapper style4 special container">
+
+								<header class="special container">
+									<span class="icon solid fa-code"></span>
+									<h2>Comunidade</h2>
+								</header>
+								<!-- Content -->
+								<div class="content">
+									<ul class="buttons">
+										<li><input type="button" onclick=""
+											class="special" value="Entrar" /></li>
+									</ul>
+								</div>
+							</section>
+
+						</div>
+						<div class="col-6 col-12-mobile">
+
+							<section class="wrapper style4 special container">
+
+								<header class="special container">
+									<span class="icon solid fa-infinity"></span>
+									<h2>Conta empresarial</h2>
+								</header>
+								<!-- Content -->
+								<div class="content">
+									<ul class="buttons">
+										<li><input type="button" onclick="location.href='csignin.html'"
+											class="special" value="Entrar" /></li>
+									</ul>
+								</div>
+							</section>
+
+						</div>
+					</div>
+
 				</div>
 			</section>
 
@@ -108,8 +123,6 @@
 	<script src="../assets/js/util.js"></script>
 	<script src="../assets/js/main.js"></script>
 	<script src="../assets/js/jquery.form.js"></script>
-	<script src="../assets/js/tedros.js"></script>
-	<script src="../assets/js/pt.js"></script>
 
 </body>
 </html>

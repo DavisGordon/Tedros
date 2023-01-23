@@ -12,6 +12,10 @@ import org.tedros.web.producer.Item;
 
 public class BaseApi {
 	
+	protected static final String OK = "200";
+	protected static final String WARN = "202";
+	protected static final String ERROR = "500";
+	
 	@Inject
 	@Named("errorMsg")
 	protected Item<String> error;
