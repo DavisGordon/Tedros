@@ -1,0 +1,197 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Tedros</title>
+<meta charset="utf-8" />
+<meta http-equiv="Cache-Control"
+	content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, user-scalable=no" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.css"
+	integrity="sha512-T3VL1q6jMUIzGLRB9z86oJg9PgF7A55eC2XkB93zyWSqQw3Ju+6IEJZYBfT7E9wOHM7HCMCOZSpcssxnUn6AeQ=="
+	crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="../../assets/css/main.css" />
+<link rel="stylesheet" href="../../assets/css/tedros.css" />
+<noscript>
+	<link rel="stylesheet" href="../../assets/css/noscript.css" />
+</noscript>
+</head>
+<body class="contact is-preload">
+	<div id="tModal" class="modal"></div>
+	<div id="page-wrapper">
+
+		<!-- Header -->
+		<header id="header">
+			<h1 class="logo">
+				<img src="../../images/logo/icon-tedros.png"><a
+					href="index.html">Tedros</a>
+			</h1>
+			<nav id="nav">
+				<ul>
+					<li class="current"><a href="../../en/csignup.html?lng=en">English</a></li>
+					<li class="submenu"><a href="#">Layouts</a>
+						<ul>
+							<li><a href="left-sidebar.html">Left Sidebar</a></li>
+							<li><a href="right-sidebar.html">Right Sidebar</a></li>
+							<li><a href="no-sidebar.html">No Sidebar</a></li>
+							<li><a href="contact.html">Contact</a></li>
+							<li class="submenu"><a href="#">Submenu</a>
+								<ul>
+									<li><a href="#">Dolore Sed</a></li>
+									<li><a href="#">Consequat</a></li>
+									<li><a href="#">Lorem Magna</a></li>
+									<li><a href="#">Sed Magna</a></li>
+									<li><a href="#">Ipsum Nisl</a></li>
+								</ul></li>
+						</ul></li>
+					<li><a href="csignin.html" class="button primary">Entrar</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<!-- Main -->
+		<article id="main">
+			<section class="wrapper style4 special container medium">
+
+				<header>
+					<h3>Meus dados</h3>
+				</header>
+
+				<div class="content">
+					<section>
+						<div class="loader-content">
+							<div id="loader" class="loader">
+								<div id="cssloader">
+									<div></div>
+								</div>
+							</div>
+							<form name="frm1000" id="frm1000" method="post"
+								action="api/cstmr/user/alter">
+								<input type="hidden" name="idx" id="idx" value="1000" />
+								<div class="fields">
+									<div class="field half">
+										<input type="text" name="name" id="name" maxlength="60"
+											value="" /> <label for="name">Nome</label>
+									</div>
+									<div class="field half">
+										<input type="text" name="lastName" id="lastName"
+											maxlength="80" value="" /> <label for="lastName">Sobrenome</label>
+									</div>
+									<div class="field half">
+										<input type="date" name="birthDate" id="birthDate" value="" />
+										<label for="birthDate">Data de nascimento</label>
+									</div>
+									<div class="field half">
+										<select name="sex" id="sex">
+											<option value="">--</option>
+											<option value="MALE">Masculino</option>
+											<option value="FEMALE">Feminino</option>
+										</select> <label for="sex">Sexo</label>
+									</div>
+									<div class="field half">
+										<input type="text" name="identity" id="identity"
+											maxlength="15" value="" /> <label for="identity">Identidade</label>
+									</div>
+									<div class="field half">
+										<input type="text" name="taxId" id="taxId" maxlength="20"
+											value="" /> <label for="taxId">Identidade Fiscal</label>
+									</div>
+									<div class="field">
+										<input type="text" name="phoneNumber" id="phoneNumber"
+											maxlength="20" value="" /> <label for="phoneNumber">Telefone</label>
+									</div>
+
+									<div class="field half">
+										<input type="text" name="streetType" id="streetType"
+											maxlength="30" value="" /> <label for="streetType">Tipo
+											Logradouro (Rua/Avenida...)</label>
+									</div>
+									<div class="field half">
+										<input type="text" name="publicPlace" id="publicPlace"
+											maxlength="120" value="" /> <label for="publicPlace">Logradouro</label>
+									</div>
+									<div class="field half">
+										<input type="text" name="neighborhood" id="neighborhood"
+											maxlength="120" value="" /> <label for="neighborhood">Bairro</label>
+									</div>
+									<div class="field half">
+										<input type="text" name="complement" id="complement"
+											maxlength="120" value="" /> <label for="complement">Complemento
+											(Número/Apartamento...)</label>
+									</div>
+									<div class="field half">
+										<select name="country" id="country"></select> <label
+											for="country">País</label>
+									</div>
+									<div class="field half">
+										<select name="adminArea" id="adminArea"></select> <label
+											for="adminArea">Area administrativa</label>
+									</div>
+									<div class="field half">
+										<select name="city" id="city"></select> <label for="city">Cidade</label>
+									</div>
+									<div class="field half">
+										<input type="text" name="code" id="code" maxlength="20"
+											value="" /> <label for="code">Codigo Postal</label>
+									</div>
+								</div>
+								<ul class="buttons">
+									<li><input type="submit" class="special" value="Salvar" /></li>
+								</ul>
+							</form>
+						</div>
+					</section>
+				</div>
+			</section>
+		</article>
+
+		<!-- Footer -->
+		<footer id="footer">
+
+			<ul class="icons">
+				<li><a href="#" class="icon brands circle fa-twitter"><span
+						class="label">Twitter</span></a></li>
+				<li><a href="#" class="icon brands circle fa-facebook-f"><span
+						class="label">Facebook</span></a></li>
+				<li><a href="#" class="icon brands circle fa-google-plus-g"><span
+						class="label">Google+</span></a></li>
+				<li><a href="#" class="icon brands circle fa-github"><span
+						class="label">Github</span></a></li>
+				<li><a href="#" class="icon brands circle fa-dribbble"><span
+						class="label">Dribbble</span></a></li>
+			</ul>
+
+			<ul class="copyright">
+				<li>&copy; Untitled</li>
+				<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+			</ul>
+
+		</footer>
+
+	</div>
+
+	<!-- Scripts -->
+	<script src="../../assets/js/jquery.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.js"
+		integrity="sha512-ztxZscxb55lKL+xmWGZEbBHekIzy+1qYKHGZTWZYH1GUwxy0hiA18lW6ORIMj4DHRgvmP/qGcvqwEyFFV7OYVQ=="
+		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="../../assets/js/jquery.dropotron.min.js"></script>
+	<script src="../../assets/js/jquery.scrolly.min.js"></script>
+	<!-- 
+			<script src="../../assets/js/jquery.scrollgress.min.js"></script> -->
+	<script src="../../assets/js/jquery.scrollex.min.js"></script>
+	<script src="../../assets/js/browser.min.js"></script>
+	<script src="../../assets/js/breakpoints.min.js"></script>
+	<script src="../../assets/js/util.js"></script>
+	<script src="../../assets/js/main.js"></script>
+	<script src="../../assets/js/jquery.form.js"></script>
+	<script src="../../assets/js/tedros.js"></script>
+	<script src="../../assets/js/pt.js"></script>
+	<script src="assets/js/profile.js"></script>
+
+</body>
+</html>

@@ -67,7 +67,6 @@ function validate() {
 		{
 			if(result.code == "200")
 				location.href = 'cstmr/index.html?c='+result.data;
-				//location.href = '/'+clang.lang+'/cstmr/index.html?c='+result.data;
 			else
 				showWarnModal(result.message);
 		}
