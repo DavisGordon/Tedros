@@ -30,14 +30,14 @@ public class WebSessionBaseApi extends BaseApi {
 	protected WebSessionBean session;
 	
 	@EJB
-	private IWebSessionController serv;
+	protected IWebSessionController wsServ;
 
 	@GET
 	@Path("/signout")
 	public RestModel<String> signOut(){
 		
 		try {
-			TResult<Boolean> res = serv.signOut(super.appBean.getToken(), 
+			TResult<Boolean> res = wsServ.signOut(super.appBean.getToken(), 
 					lang.get(), session.get().getKey());
 			
 			if(res.getState().equals(TState.SUCCESS)){

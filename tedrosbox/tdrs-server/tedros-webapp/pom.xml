@@ -57,6 +57,13 @@
 		<version>${app.location}</version>
   		<scope>compile</scope>
 	</dependency> 
+	
+  	<dependency>
+		<groupId>org.tedros</groupId>
+		 <artifactId>app-person-ejb-client</artifactId>
+		<version>${app.person}</version>
+  		<scope>compile</scope>
+	</dependency> 
   	<!-- <dependency>
         <groupId>com.maxmind.geoip2</groupId>
         <artifactId>geoip2</artifactId>
