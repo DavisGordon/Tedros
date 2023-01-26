@@ -86,7 +86,6 @@ public class CustomerApi extends WebSessionBaseApi{
 			@FormParam("city") Long  city,
 			@FormParam("code") String  code
 			){
-	
 		try{
 			Customer p = (Customer) session.get().getUser().getPerson();
 			p.setName(name);
@@ -98,43 +97,42 @@ public class CustomerApi extends WebSessionBaseApi{
 			if(StringUtils.isNotBlank(sex)) {
 				p.setSex(Sex.valueOf(sex));
 			}
-			Address adrs = p.getAddress()!=null ? p.getAddress() : new Address();
 			
-			adrs.setPublicPlace(publicPlace);
-			adrs.setComplement(complement);
-			adrs.setNeighborhood(neighborhood);
-			adrs.setCode(code);
-			
-			if(StringUtils.isNotBlank(streetType)) {
-				StreetType e = new StreetType();
-				e.setName(streetType);
-				TResult<StreetType> res = sttServ.find(appBean.getToken(), e);
-				e = res.getValue();
-				adrs.setStreetType(e);
-			}
+			if(publicPlace!=null && streetType!=null && country!=null) {
+				Address adrs = p.getAddress()!=null ? p.getAddress() : new Address();
 				
-			if(country!=null) {
-				Country e = new Country();
-				e.setId(country);
-				TResult<Country> res = cntServ.findById(appBean.getToken(), e);
-				e = res.getValue();
-				adrs.setCountry(e);
-			}
+				adrs.setPublicPlace(publicPlace);
+				adrs.setComplement(complement);
+				adrs.setNeighborhood(neighborhood);
+				adrs.setCode(code);
 			
-			if(adminArea!=null) {
-				AdminArea e = new AdminArea();
-				e.setId(adminArea);
-				TResult<AdminArea> res = aaServ.findById(appBean.getToken(), e);
-				e = res.getValue();
-				adrs.setAdminArea(e);
-			}
+				StreetType st = new StreetType();
+				st.setName(streetType);
+				TResult<StreetType> rst = sttServ.find(appBean.getToken(), st);
+				st = rst.getValue();
+				adrs.setStreetType(st);
 			
-			if(city!=null) {
-				City e = new City();
-				e.setId(city);
-				TResult<City> res = ctServ.findById(appBean.getToken(), e);
-				e = res.getValue();
-				adrs.setCity(e);
+				Country cntr = new Country();
+				cntr.setId(country);
+				TResult<Country> cr = cntServ.findById(appBean.getToken(), cntr);
+				cntr = cr.getValue();
+				adrs.setCountry(cntr);
+			
+				if(adminArea!=null) {
+					AdminArea e = new AdminArea();
+					e.setId(adminArea);
+					TResult<AdminArea> res = aaServ.findById(appBean.getToken(), e);
+					e = res.getValue();
+					adrs.setAdminArea(e);
+				}
+				
+				if(city!=null) {
+					City e = new City();
+					e.setId(city);
+					TResult<City> res = ctServ.findById(appBean.getToken(), e);
+					e = res.getValue();
+					adrs.setCity(e);
+				}
 			}
 			
 			if(StringUtils.isNotBlank(phone)) {
@@ -208,8 +206,10 @@ public class CustomerApi extends WebSessionBaseApi{
 				Customer c = res.getValue();
 				WebUser wu = session.get().getUser();
 				wu.setPerson(c);
-				wuServ.save(appBean.getToken(), wu);
-				
+				TResult<WebUser> res1 = wuServ.save(appBean.getToken(), wu);
+				if(res1.getState().equals(TState.SUCCESS)) {
+					session.get().setUser(res1.getValue());
+				}
 				return new RestModel<>(new PersonModel(c), OK, "OK");
 			}else
 				return new RestModel<>(null, ERROR, res.getState().equals(TState.WARNING) 
