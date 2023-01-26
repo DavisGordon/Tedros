@@ -32,11 +32,21 @@ public class AddressModel extends BaseModel<Long> {
 	 * 
 	 */
 	public AddressModel() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	public AddressModel(Address a) {
-		
+		if(a.getStreetType()!=null)
+			this.streetType = new ValueModel<>(a.getStreetType().getId(), a.getStreetType().getName());
+		this.publicPlace = a.getPublicPlace();
+		this.complement = a.getComplement();
+		this.neighborhood = a.getNeighborhood();
+		this.code = a.getCode();
+		if(a.getCountry()!=null)
+			this.country = new ValueModel<>(a.getCountry().getId(), a.getCountry().getName());
+		if(a.getAdminArea()!=null)
+			this.adminArea = new ValueModel<>(a.getAdminArea().getId(), a.getAdminArea().getName());
+		if(a.getCity()!=null)
+			this.city = new ValueModel<>(a.getCity().getId(), a.getCity().getName());
 	}
 
 	public AddressModel(Long id, ValueModel<Long> streetType, String publicPlace, String complement, String neighborhood,

@@ -1,6 +1,10 @@
 $(document).ready(function() { 
 	clang.check();
-	$('#frm').ajaxForm( { beforeSubmit: validate, success: showResponse, error: showResponse  } );
+	autocomplete(document.getElementById("streetTypeName"), 
+			document.getElementById("streetType"), 
+			'../../api/geo/streettype');
+	
+	$('#frm1000').ajaxForm( { beforeSubmit: validate, success: showResponse, error: showResponse  } );
 });
 
 
