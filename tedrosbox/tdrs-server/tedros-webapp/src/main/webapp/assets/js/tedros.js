@@ -58,6 +58,13 @@ var getUrlParameter = function getUrlParameter(sParam) {
 	}
 };
 
+function getLabel(id){
+	return $('label[for='+  id  +']').text();
+};
+function append(id, fields){
+	return  !fields ? getLabel(id)
+			: fields + ', ' + getLabel(id);
+};
 function search(target, val, callback){
 	$.ajax
     ({ 

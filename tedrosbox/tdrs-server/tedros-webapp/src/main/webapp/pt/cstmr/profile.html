@@ -69,7 +69,7 @@
 								</div>
 							</div>
 							<form name="frm1000" id="frm1000" method="post"
-								action="api/cstmr/user/alter">
+								action="../../api/cstmr/user/alter">
 								<input type="hidden" name="idx" id="idx" value="1000" />
 								<div class="fields">
 									<div class="field half">
@@ -100,15 +100,15 @@
 											value="" /> <label for="taxId">Identidade Fiscal</label>
 									</div>
 									<div class="field">
-										<input type="text" name="phoneNumber" id="phoneNumber"
-											maxlength="20" value="" /> <label for="phoneNumber">Telefone</label>
+										<input type="text" name="phone" id="phone"
+											maxlength="20" value="" /> <label for="phone">Telefone</label>
 									</div>
 
 									<div class="field half">
 										<input type="hidden" id="streetType">
 										<input type="text" name="streetTypeName" id="streetTypeName"
-											maxlength="30" value="" /> <label for="streetTypeName">Tipo
-											Logradouro (Rua/Avenida...)</label>
+											maxlength="30" value="" placeholder="Rua, Avenida, Quadra..." /> <label for="streetTypeName">Tipo
+											Logradouro</label>
 									</div>
 									<div class="field half">
 										<input type="text" name="publicPlace" id="publicPlace"
@@ -120,23 +120,25 @@
 									</div>
 									<div class="field half">
 										<input type="text" name="complement" id="complement"
-											maxlength="120" value="" /> <label for="complement">Complemento
-											(Número/Apartamento...)</label>
+											maxlength="120" value="" placeholder="N.22, Sala 7..."/> <label for="complement">Complemento
+											</label>
 									</div>
 									<div class="field half">
-										<select name="country" id="country"></select> <label
+										<select name="country" id="country">
+											<option>--</option>
+										</select> <label
 											for="country">País</label>
 									</div>
 									<div class="field half">
 										<select name="adminArea" id="adminArea"></select> <label
-											for="adminArea">Area administrativa</label>
+											for="adminArea">Estado</label>
 									</div>
 									<div class="field half">
-										<select name="city" id="city"></select> <label for="city">Cidade</label>
+										<select name="city" id="city" ></select> <label for="city">Cidade</label>
 									</div>
 									<div class="field half">
 										<input type="text" name="code" id="code" maxlength="20"
-											value="" /> <label for="code">Codigo Postal</label>
+											value="" placeholder="CEP, Caixa Postal..." /> <label for="code">Codigo Postal</label>
 									</div>
 								</div>
 								<ul class="buttons">
@@ -192,6 +194,7 @@
 	<script src="../../assets/js/jquery.form.js"></script>
 	<script src="../../assets/js/tedros.js"></script>
 	<script src="../../assets/js/pt.js"></script>
+	<script src="../../assets/js/geo.js"></script>
 	<script src="assets/js/profile.js"></script>
 
 </body>
