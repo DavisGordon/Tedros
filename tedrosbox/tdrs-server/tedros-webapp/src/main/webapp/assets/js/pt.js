@@ -1,5 +1,6 @@
 clang = {
 	lang : 'pt',
+	msg_data_saved : "Dados salvo com sucesso!",
 	msg_enter_valid_email : "Por favor informar um email valido.",
 	msg_enter_password : "Por favor informar uma senha",
 	msg_password_no_match : "As senhas não conferem!",

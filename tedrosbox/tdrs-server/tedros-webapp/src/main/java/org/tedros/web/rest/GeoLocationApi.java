@@ -99,7 +99,7 @@ public class GeoLocationApi extends BaseApi {
 	
 	@SuppressWarnings("unchecked")
 	@GET
-	@Path("/adminArea/{countryId}")
+	@Path("/adminAreas/{countryId}")
 	public RestModel<List<ValueModel<Long>>> filterAdminAreas(@PathParam("countryId") Long id ){
 		try {
 			List<ValueModel<Long>> lst = new ArrayList<>();
@@ -126,25 +126,28 @@ public class GeoLocationApi extends BaseApi {
 	
 	@SuppressWarnings("unchecked")
 	@GET
-	@Path("/city/{countryId}/{adAreaName}")
+	@Path("/cities/{countryId}/{adAreaId}")
 	public RestModel<List<ValueModel<Long>>> filterCites(
-			@PathParam("countryId") Long id,
-			@PathParam("adAreaName") String name){
+			@PathParam("countryId") Long cId,
+			@PathParam("adAreaId") Long aaId){
 		try {
 			List<ValueModel<Long>> lst = new ArrayList<>();
 			Country cnt = new Country();
-			cnt.setId(id);
+			cnt.setId(cId);
 			TResult<Country> r = cntServ.findById(appBean.getToken(), cnt);
 			if(r.getState().equals(TState.SUCCESS)) {
 				AdminArea aa = new AdminArea();
-				aa.setName(name);
-				TResult<List<City>> res = ctServ.filter(appBean.getToken(), r.getValue(), aa);
-				if(res.getState().equals(TState.SUCCESS)) {
-					List<City> l = res.getValue();
-					if(l!=null) {
-						l.forEach(c->{
-							lst.add(new ValueModel<>(c.getId(), c.getName()));
-						});
+				aa.setId(aaId);
+				TResult<AdminArea> r1 = aaServ.findById(appBean.getToken(), aa);
+				if(r1.getState().equals(TState.SUCCESS)) {
+					TResult<List<City>> res = ctServ.filter(appBean.getToken(), r.getValue(), r1.getValue());
+					if(res.getState().equals(TState.SUCCESS)) {
+						List<City> l = res.getValue();
+						if(l!=null) {
+							l.forEach(c->{
+								lst.add(new ValueModel<>(c.getId(), c.getName()));
+							});
+						}
 					}
 				}
 			}
