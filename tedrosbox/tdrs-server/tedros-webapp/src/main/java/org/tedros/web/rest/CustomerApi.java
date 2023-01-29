@@ -32,7 +32,7 @@ import org.tedros.location.model.StreetType;
 import org.tedros.person.domain.Sex;
 import org.tedros.person.ejb.controller.ICustomerController;
 import org.tedros.person.model.Customer;
-import org.tedros.person.model.NaturalPerson;
+import org.tedros.person.model.PersonEvent;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.web.model.PersonModel;
@@ -77,7 +77,7 @@ public class CustomerApi extends WebSessionBaseApi{
 			@FormParam("birthDate") String  birthDate,
 			@FormParam("phone") String  phone,
 			@FormParam("sex") String  sex,
-			@FormParam("streetType") String  streetType,
+			@FormParam("streetType") Long  streetType,
 			@FormParam("publicPlace") String  publicPlace,
 			@FormParam("neighborhood") String  neighborhood,
 			@FormParam("complement") String  complement,
@@ -88,6 +88,23 @@ public class CustomerApi extends WebSessionBaseApi{
 			){
 		try{
 			Customer p = (Customer) session.get().getUser().getPerson();
+			PersonEvent event = new PersonEvent();
+			if(p==null) {
+				p = new Customer();
+				event.setName("CRIADO/WEB");
+				event.setDescription("Criado atraves do painel empresarial na plataforma web.");
+			}else if(!p.isNew()) {
+				TResult<Customer> r = this.ctmServ.findById(appBean.getToken(), p);
+				if(r.getState().equals(TState.SUCCESS))
+					p = r.getValue();
+				event.setName("ALTERADO/WEB");
+				event.setDescription("Alterado atraves do painel empresarial na plataforma web.");
+			}
+			
+			if(p.getEvents()==null)
+				p.setEvents(new HashSet<>());
+			p.getEvents().add(event);
+			
 			p.setName(name);
 			p.setLastName(lastName);
 			if(StringUtils.isNotBlank(birthDate)) {
@@ -100,15 +117,16 @@ public class CustomerApi extends WebSessionBaseApi{
 			
 			if(publicPlace!=null && streetType!=null && country!=null) {
 				Address adrs = p.getAddress()!=null ? p.getAddress() : new Address();
-				
+				if(adrs.isNew())
+					p.setAddress(adrs);
 				adrs.setPublicPlace(publicPlace);
 				adrs.setComplement(complement);
 				adrs.setNeighborhood(neighborhood);
 				adrs.setCode(code);
 			
 				StreetType st = new StreetType();
-				st.setName(streetType);
-				TResult<StreetType> rst = sttServ.find(appBean.getToken(), st);
+				st.setId(streetType);
+				TResult<StreetType> rst = sttServ.findById(appBean.getToken(), st);
 				st = rst.getValue();
 				adrs.setStreetType(st);
 			
@@ -222,15 +240,19 @@ public class CustomerApi extends WebSessionBaseApi{
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	@GET
 	@Path("/user")
 	public RestModel<PersonModel> getUser(){
 		
 		try{
-			NaturalPerson p = session.get().getUser().getPerson();
-			if(p!=null)
+			Customer p = (Customer) session.get().getUser().getPerson();
+			if(p!=null) {
+				TResult<Customer> r = this.ctmServ.findById(appBean.getToken(), p);
+				if(r.getState().equals(TState.SUCCESS))
+					p = r.getValue();
 				return new RestModel<>(new PersonModel(p), OK, "OK");
-			else
+			}else
 				return new RestModel<>(null, WARN, "EMPTY");
 			
 		}catch(Exception e){

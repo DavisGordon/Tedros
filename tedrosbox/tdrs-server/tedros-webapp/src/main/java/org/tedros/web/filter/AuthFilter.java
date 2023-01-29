@@ -32,8 +32,8 @@ import org.tedros.web.bean.WebSessionBean;
  * @author Davis Gordon
  *
  */
-@WebFilter(filterName = "AuthFilter",
-urlPatterns = {"/en/cstmr/index.html*", "/pt/cstmr/index.html*"})
+//@WebFilter(filterName = "AuthFilter",
+//urlPatterns = {"/en/cstmr/index.html*", "/pt/cstmr/index.html*"})
 public class AuthFilter implements Filter {
 	
 	private static final String TOKEN = "tdrstoken";
