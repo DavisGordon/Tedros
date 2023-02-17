@@ -15,6 +15,7 @@ import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.model.ChatInfo;
 import org.tedros.core.controller.ITLoginController;
 import org.tedros.core.controller.TPropertieController;
+import org.tedros.core.security.model.TProfile;
 import org.tedros.core.security.model.TUser;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
@@ -147,6 +148,12 @@ public class ChatServer {
 					if(res.getState().equals(TState.SUCCESS)) {
 						System.out.println("Lookup for properties service: ");
 						TUser u = res.getValue();
+						if(u.getActiveProfile()==null && u.getProfiles()!=null && !u.getProfiles().isEmpty()) {
+							Object[] arr = u.getProfiles().toArray();
+							TProfile p = (TProfile) arr[0];
+							res = lServ.saveActiveProfile(u.getAccessToken(), p, u.getId());
+							u = res.getValue();
+						}
 						TPropertieController pServ = serv.lookup(TPropertieController.JNDI_NAME);
 						System.out.println("Search for the propertie: "+ChatPropertie.SERVER_PORT.name());
 						TResult<String> res1 = pServ.getValue(u.getAccessToken(), ChatPropertie.SERVER_PORT.getValue());
