@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Tedros</title>
+<meta charset="utf-8" />
+<meta http-equiv="Cache-Control"
+	content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, user-scalable=no" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.css"
+	integrity="sha512-T3VL1q6jMUIzGLRB9z86oJg9PgF7A55eC2XkB93zyWSqQw3Ju+6IEJZYBfT7E9wOHM7HCMCOZSpcssxnUn6AeQ=="
+	crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="../../assets/css/main.css" />
+<link rel="stylesheet" href="../../assets/css/tedros.css" />
+<noscript>
+	<link rel="stylesheet" href="../../assets/css/noscript.css" />
+</noscript>
+</head>
+<body class="sidebar is-preload">
+	<div id="page-wrapper">
+
+		<!-- Header -->
+		<header id="header">
+			<h1 class="logo">
+				<img src="../../images/logo/icon-tedros.png"><a
+					href="index.html">Tedros</a>
+			</h1>
+			<nav id="nav">
+				<ul>
+					<li class="current"><a href="../../en/cstmr/index.html?lng=en">English</a></li>
+					<li class="submenu"><a href="#">Menu</a>
+						<ul>
+							<li><a href="profile.html">Meus dados</a></li>
+							<li><a href="right-sidebar.html">Right Sidebar</a></li>
+							<li><a href="no-sidebar.html">No Sidebar</a></li>
+							<li><a href="contact.html">Contact</a></li>
+							<li class="submenu"><a href="#">Submenu</a>
+								<ul>
+									<li><a href="#">Dolore Sed</a></li>
+									<li><a href="#">Consequat</a></li>
+									<li><a href="#">Lorem Magna</a></li>
+									<li><a href="#">Sed Magna</a></li>
+									<li><a href="#">Ipsum Nisl</a></li>
+								</ul></li>
+						</ul></li>
+					<li><a href="#" class="button primary">Sair</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<!-- Main -->
+		<article id="main">
+			<header class="container">
+				<h2>Projeto</h2>
+			</header>
+			<!-- One -->
+			<div class="loader-content">
+				<div id="loader" class="loader">
+					<div id="cssloader">
+						<div></div>
+					</div>
+				</div>
+				<form name="frm" id="frm" method="post"
+					action="../../api/cstmr/user/alter">
+
+					<section class="wrapper style3  special">
+						<div class="row">
+							<div class="col-4 col-12-narrower">
+
+								<section>
+									<header>
+										<h3>Dados principais</h3>
+									</header>
+									<input type="hidden" name="idx" id="idx" value="1000" />
+									<div class="fields">
+										<div class="field">
+											<input type="text" name="name" id="name" maxlength="60"
+												t-required="true" value="" /> <label for="name">Titulo</label>
+										</div>
+										<div class="field">
+											<textarea name="description" id="description" maxlength="60"
+												t-required="true"></textarea>
+											<label for="description">Descricão</label>
+										</div>
+									</div>
+									<footer>
+										<ul class="buttons">
+											<li><a href="#" class="button small">Learn More</a></li>
+										</ul>
+									</footer>
+								</section>
+
+							</div>
+							<div class="col-8 col-12-narrower">
+
+								<section>
+									<header>
+										<h3>Visão geral</h3>
+									</header>
+									<p>Descreva abaixo uma visão geral do projeto</p>
+									<div class="fields">
+									<div class="field">
+											<textarea name="description" id="description" maxlength="60" rows="8"
+												t-required="true"></textarea>
+											<label for="description">Descricão</label>
+										</div>
+									</div>
+								</section>
+
+							</div>
+							
+						</div>
+					</section>
+				</form>
+			</div>
+
+		</article>
+
+		<!-- Footer -->
+		<footer id="footer">
+
+			<ul class="icons">
+				<li><a href="#" class="icon brands circle fa-twitter"><span
+						class="label">Twitter</span></a></li>
+				<li><a href="#" class="icon brands circle fa-facebook-f"><span
+						class="label">Facebook</span></a></li>
+				<li><a href="#" class="icon brands circle fa-google-plus-g"><span
+						class="label">Google+</span></a></li>
+				<li><a href="#" class="icon brands circle fa-github"><span
+						class="label">Github</span></a></li>
+				<li><a href="#" class="icon brands circle fa-dribbble"><span
+						class="label">Dribbble</span></a></li>
+			</ul>
+
+			<ul class="copyright">
+				<li>&copy; Untitled</li>
+				<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+			</ul>
+
+		</footer>
+
+	</div>
+
+	<!-- Scripts -->
+	<script src="../../assets/js/jquery.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.js"
+		integrity="sha512-ztxZscxb55lKL+xmWGZEbBHekIzy+1qYKHGZTWZYH1GUwxy0hiA18lW6ORIMj4DHRgvmP/qGcvqwEyFFV7OYVQ=="
+		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="../../assets/js/jquery.dropotron.min.js"></script>
+	<script src="../../assets/js/jquery.scrolly.min.js"></script>
+	<!-- 
+			<script src="../../assets/js/jquery.scrollgress.min.js"></script> -->
+	<script src="../../assets/js/jquery.scrollex.min.js"></script>
+	<script src="../../assets/js/browser.min.js"></script>
+	<script src="../../assets/js/breakpoints.min.js"></script>
+	<script src="../../assets/js/util.js"></script>
+	<script src="../../assets/js/main.js"></script>
+	<script src="../../assets/js/jquery.form.js"></script>
+	<script src="../../assets/js/tedros.js"></script>
+	<script src="../../assets/js/pt.js"></script>
+
+</body>
+</html>
