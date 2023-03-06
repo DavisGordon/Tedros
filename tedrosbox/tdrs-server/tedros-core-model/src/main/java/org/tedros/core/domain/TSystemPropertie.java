@@ -20,7 +20,9 @@ public enum TSystemPropertie {
 	SMTP_HOST ("sys.smtp.host"),
 	SMTP_PORT ("sys.smtp.port"),
 	SMTP_SOCKET_PORT ("sys.smtp.socket.port"),
-	NOTIFY_INTERVAL_TIMER ("sys.notify.interval");
+	NOTIFY_INTERVAL_TIMER ("sys.notify.interval"),
+	OPENAI_KEY("sys.openai.key"),
+	AI_ENABLED("sys.ai.enabled");
 	
 	private String value;
 

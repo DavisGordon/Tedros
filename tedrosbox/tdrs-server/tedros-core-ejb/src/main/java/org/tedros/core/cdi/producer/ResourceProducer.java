@@ -8,6 +8,7 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang.StringUtils;
 import org.tedros.core.cdi.bo.TPropertieBO;
 
 import org.tedros.core.domain.DomainPropertie;
@@ -22,6 +23,21 @@ public class ResourceProducer {
 	
 	@Inject
 	private TPropertieBO propBO;
+
+	@Produces
+	@RequestScoped
+	@Named(DomainPropertie.OPENAI_KEY)
+	public Item<String> getOpenaiKey(){
+		return new Item<>(propBO.getValue(TSystemPropertie.OPENAI_KEY.getValue()));
+	}
+	
+	@Produces
+	@RequestScoped
+	@Named(DomainPropertie.AI_ENABLED)
+	public Item<Boolean> getAiEnabled(){
+		String v = propBO.getValue(TSystemPropertie.AI_ENABLED.getValue());
+		return new Item<>(StringUtils.equalsIgnoreCase("true", v!=null?v.trim():v));
+	}
 	
 	@Produces
 	@RequestScoped
