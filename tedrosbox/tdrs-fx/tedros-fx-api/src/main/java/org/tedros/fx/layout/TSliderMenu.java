@@ -47,27 +47,10 @@ public class TSliderMenu extends StackPane {
 
 	private void build(double width) {
 		setStyle("-fx-background-color: transparent;");
-	    /*
-	    DropShadow ds = new DropShadow();
-        ds.setOffsetY(3.0f);
-        ds.setColor(Color.BLACK);
-        
-        Image img = new Image(TedrosContext.getImageInputStream("open-menu.png"));
-        ImageView imgV = new ImageView();
-        imgV.setImage(img);
-        imgV.setEffect(ds);
-*/
-        
+	    
 	    sliderContent = new StackPane();
 	    sliderContent.setPrefWidth(width);
-	    
-	   /* Button btn = new Button();
-	    btn.setGraphic(imgV);
-	    btn.setCache(true);
-	    btn.setCacheShape(true);
-	    btn.setDepthTest(DepthTest.ENABLE);
-	    btn.setId("t-slider-menu-button");
-	    */
+	 
 	    btnPane  = new StackPane();
 	    
 	    btnPane.setPrefWidth(20);
@@ -145,7 +128,6 @@ public class TSliderMenu extends StackPane {
 	public void tClearMenuContent() {
 		if(this.sliderContent.getChildren().size()==1) {
 			this.sliderContent.getChildren().clear();
-			//this.repo.remove("mev");
 		}
 		
 	}
