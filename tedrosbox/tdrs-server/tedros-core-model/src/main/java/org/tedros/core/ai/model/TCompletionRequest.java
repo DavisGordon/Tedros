@@ -35,7 +35,7 @@ public class TCompletionRequest implements ITModel {
      * Requests can use up to 2048 tokens shared between prompt and completion.
      * (One token is roughly 4 characters for normal English text)
      */
-    private Integer maxTokens;
+    private Integer maxTokens = 512;
 
     /**
      * What sampling temperature to use. Higher values means the model will take more risks.
@@ -43,7 +43,7 @@ public class TCompletionRequest implements ITModel {
      *
      * We generally recommend using this or {@link CompletionRequest#topP} but not both.
      */
-    private Double temperature;
+    private Double temperature = 0.4;
 
     /**
      * An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of
@@ -80,7 +80,7 @@ public class TCompletionRequest implements ITModel {
     /**
      * Echo back the prompt in addition to the completion
      */
-    private Boolean echo;
+    private Boolean echo = false;
 
     /**
      * Up to 4 sequences where the API will stop generating further tokens.
