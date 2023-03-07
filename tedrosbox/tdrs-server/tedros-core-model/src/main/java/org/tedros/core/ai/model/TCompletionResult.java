@@ -38,7 +38,25 @@ public class TCompletionResult implements ITModel {
      * A list of generated completions.
      */
     private List<TChoice> choices;
+    
+    private String log;
+    
+    private boolean success;
 	
+	/**
+	 * @return the success
+	 */
+	public boolean isSuccess() {
+		return success;
+	}
+
+	/**
+	 * @param success the success to set
+	 */
+	public void setSuccess(boolean success) {
+		this.success = success;
+	}
+
 	/**
 	 * 
 	 */
@@ -51,11 +69,21 @@ public class TCompletionResult implements ITModel {
 	 * @param model
 	 */
 	public TCompletionResult(String id, long created, String model) {
+		this.success = true;
 		this.id = id;
 		this.created = created;
 		this.model = model;
 	}
 	
+	/**
+	 * @param log
+	 * @param success
+	 */
+	public TCompletionResult(String log, boolean success) {
+		this.log = log;
+		this.success = success;
+	}
+
 	public void addChoice(String res, Integer index, String reason) {
 		if(choices==null)
 			choices = new ArrayList<>();
@@ -116,6 +144,20 @@ public class TCompletionResult implements ITModel {
 	 */
 	public void setChoices(List<TChoice> choices) {
 		this.choices = choices;
+	}
+
+	/**
+	 * @return the log
+	 */
+	public String getLog() {
+		return log;
+	}
+
+	/**
+	 * @param log the log to set
+	 */
+	public void setLog(String log) {
+		this.log = log;
 	}
 
 }

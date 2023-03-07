@@ -18,6 +18,10 @@
 		<class>org.tedros.core.notify.model.TNotify</class>
 		<class>org.tedros.core.notify.model.TNotifyLog</class>
 		<class>org.tedros.common.model.TMimeType</class>
+		<class>org.tedros.core.ai.model.TAiCompletion</class>
+		<class>org.tedros.core.ai.model.TAiCreateImage</class>
+		<class>org.tedros.core.ai.model.TAiImage</class>
+		<class>org.tedros.core.ai.model.TRequestEvent</class>
 		
 		
 		<properties>

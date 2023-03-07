@@ -14,10 +14,6 @@ import org.tedros.server.model.ITModel;
  */
 public class TImageResult implements ITModel {
 
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6877305621095887716L;
 
 	/**
@@ -29,6 +25,10 @@ public class TImageResult implements ITModel {
      * List of image results.
      */
     private List<TImage> data;
+    
+    private String log;
+    
+    private boolean success;
 	/**
 	 * 
 	 */
@@ -38,9 +38,18 @@ public class TImageResult implements ITModel {
 	 * @param createdAt
 	 */
 	public TImageResult(Long createdAt) {
+		this.success = true;
 		this.createdAt = createdAt;
 	}
 	
+	/**
+	 * @param log
+	 * @param success
+	 */
+	public TImageResult(String log, boolean success) {
+		this.log = log;
+		this.success = success;
+	}
 	public void addImage(String value, TResponseFormat format) {
 		if(data==null)
 			data = new ArrayList<>();
@@ -69,6 +78,30 @@ public class TImageResult implements ITModel {
 	 */
 	public void setData(List<TImage> data) {
 		this.data = data;
+	}
+	/**
+	 * @return the log
+	 */
+	public String getLog() {
+		return log;
+	}
+	/**
+	 * @param log the log to set
+	 */
+	public void setLog(String log) {
+		this.log = log;
+	}
+	/**
+	 * @return the success
+	 */
+	public boolean isSuccess() {
+		return success;
+	}
+	/**
+	 * @param success the success to set
+	 */
+	public void setSuccess(boolean success) {
+		this.success = success;
 	}
 
 }
