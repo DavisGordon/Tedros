@@ -4,28 +4,46 @@
 package org.tedros.tools.module.ai.model;
 
 import org.tedros.core.ai.model.TAiCompletion;
+import org.tedros.core.ai.model.TRequestEvent;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.controller.TAiCompletionController;
-import org.tedros.core.controller.TAuthorizationController;
-import org.tedros.core.security.model.TAuthorization;
-import org.tedros.fx.annotation.control.TDoubleField;
-import org.tedros.fx.annotation.control.TIntegerField;
+import org.tedros.fx.annotation.control.TCallbackFactory;
+import org.tedros.fx.annotation.control.TCellFactory;
+import org.tedros.fx.annotation.control.TContent;
+import org.tedros.fx.annotation.control.TLabel;
+import org.tedros.fx.annotation.control.TModelViewType;
+import org.tedros.fx.annotation.control.TNumberSpinnerField;
+import org.tedros.fx.annotation.control.TSliderField;
+import org.tedros.fx.annotation.control.TTab;
+import org.tedros.fx.annotation.control.TTabPane;
+import org.tedros.fx.annotation.control.TTableColumn;
+import org.tedros.fx.annotation.control.TTableView;
 import org.tedros.fx.annotation.control.TTextAreaField;
+import org.tedros.fx.annotation.control.TTextInputControl;
+import org.tedros.fx.annotation.form.TDetailForm;
 import org.tedros.fx.annotation.form.TForm;
-import org.tedros.fx.annotation.presenter.TBehavior;
+import org.tedros.fx.annotation.layout.THBox;
+import org.tedros.fx.annotation.layout.THGrow;
+import org.tedros.fx.annotation.layout.TPane;
+import org.tedros.fx.annotation.layout.TPriority;
+import org.tedros.fx.annotation.layout.TVBox;
+import org.tedros.fx.annotation.layout.TVGrow;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.process.TEjbService;
+import org.tedros.fx.annotation.scene.control.TControl;
 import org.tedros.fx.annotation.view.TPaginator;
+import org.tedros.fx.collections.ITObservableList;
+import org.tedros.fx.control.tablecell.TMediumDateTimeCallback;
 import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.tools.ToolsKey;
-import org.tedros.tools.module.user.action.TAuthorizationLoadAction;
-import org.tedros.tools.module.user.behaviour.TAuthorizationBehavior;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.geometry.Orientation;
+import javafx.scene.layout.Priority;
 
 /**
  * @author Davis Gordon
@@ -36,23 +54,58 @@ import javafx.beans.property.SimpleStringProperty;
 @TListViewPresenter(listViewMinWidth=500,
 	paginator=@TPaginator(entityClass = TAiCompletion.class, 
 	serviceName = TAiCompletionController.JNDI_NAME, show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle=ToolsKey.VIEW_AUTHORIZATION)
+	presenter=@TPresenter(decorator = @TDecorator(viewTitle=ToolsKey.VIEW_AI_COMPLETION)
 	))
 public class CompletionMV extends TEntityModelView<TAiCompletion> {
 
+
+	@TTabPane(tabs = { 
+		@TTab(closable=false, text = ToolsKey.MAIN_DATA, 
+				content = @TContent(detailForm=@TDetailForm(
+						fields={"response", "prompt"})),
+			scroll=true),
+		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"events"})),
+			text = ToolsKey.EVENT_LOG)
+	})
 	private SimpleStringProperty title;
 	
-	@TTextAreaField
+	@TTextAreaField(wrapText=true, textInputControl=
+			@TTextInputControl(parse = true, editable=false,
+			promptText=ToolsKey.PROMPT_AI_RESPONSE))
 	private SimpleStringProperty response;
 	
-	@TTextAreaField
+	@TTextAreaField(wrapText=true, textInputControl=
+			@TTextInputControl(parse = true, 
+			promptText=ToolsKey.PROMPT_AI_PROMPT), 
+			control=@TControl(parse = true, tooltip=ToolsKey.TEXT_PROMPT))
+	@THBox(pane=@TPane(children={"prompt", "temperature"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="temperature", priority=Priority.NEVER), 
+			@TPriority(field="prompt", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty prompt;
 	
-	@TDoubleField
+	@TLabel(text=ToolsKey.CLEVERNESS)
+	@TSliderField(max = 2, min = 0, blockIncrement=0.1, majorTickUnit=0.5, minorTickCount=5, 
+	showTickLabels=true, showTickMarks=true, snapToTicks=true, orientation=Orientation.VERTICAL,
+	control=@TControl(parse = true, tooltip=ToolsKey.TEXT_DETERMINISTIC))
+	@TVBox(pane=@TPane(children={"temperature", "maxTokens"}), spacing=10, fillWidth=true,
+	vgrow=@TVGrow(priority={@TPriority(field="temperature", priority=Priority.ALWAYS), 
+			@TPriority(field="maxTokens", priority=Priority.NEVER)}))
 	private SimpleDoubleProperty temperature;
 	
-	@TIntegerField
+	@TNumberSpinnerField(maxValue = 4096, minValue=16, 
+			control=@TControl(parse = true, tooltip=ToolsKey.TEXT_MAX_TOKENS))
 	private SimpleIntegerProperty maxTokens;
+	
+	@TTableView(columns = { 
+		@TTableColumn(text = ToolsKey.DATE_INSERT, cellValue="insertDate", 
+				cellFactory=@TCellFactory(parse = true, 
+				callBack=@TCallbackFactory(parse=true, value=TMediumDateTimeCallback.class))), 
+		@TTableColumn(text = ToolsKey.PROMPT, cellValue="prompt"),
+		@TTableColumn(text = ToolsKey.RESPONSE, cellValue="response"),
+		@TTableColumn(text = ToolsKey.EVENT_LOG, cellValue="log")
+	})
+	@TModelViewType(modelClass = TRequestEvent.class, modelViewClass=EventMV.class)
+	private ITObservableList<EventMV> events;
 	
 	
 	/**
@@ -149,6 +202,22 @@ public class CompletionMV extends TEntityModelView<TAiCompletion> {
 	 */
 	public void setTitle(SimpleStringProperty title) {
 		this.title = title;
+	}
+
+
+	/**
+	 * @return the events
+	 */
+	public ITObservableList<EventMV> getEvents() {
+		return events;
+	}
+
+
+	/**
+	 * @param events the events to set
+	 */
+	public void setEvents(ITObservableList<EventMV> events) {
+		this.events = events;
 	}
 
 

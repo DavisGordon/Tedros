@@ -26,6 +26,7 @@ public interface ToolsKey {
 	static final String CANCELED = "#{label.canceled}";
 	static final String CENTER = "#{label.center}";
 	static final String CLEAR_HISTORY = "#{label.clear.history}";
+	static final String CLEVERNESS = "#{label.cleverness}";
 	static final String CLOSE = "#{label.close}";
 	static final String COLLAPSE_MENU = "#{label.collapse.menu}";
 	static final String COLLAPSE_MENU_TOOLTIP = "#{label.collapse.menu.tooltip}";
@@ -36,6 +37,7 @@ public interface ToolsKey {
 	static final String DEGREES = "#{label.degrees}";
 	static final String DESCRIPTION = "#{label.description}";
 	static final String DETAIL = "#{label.detail}";
+	static final String DETERMINISTIC = "#{label.deterministic}";
 	static final String EMAIL = "#{label.email}";
 	static final String ENABLE = "#{label.enable}";
 	static final String ENABLED = "#{label.enabled}";
@@ -55,6 +57,7 @@ public interface ToolsKey {
 	static final String MAIN = "#{label.main}";
 	static final String MAIN_DATA = "#{label.main.data}";
 	static final String MAIN_TITLE = "#{label.main.title}";
+	static final String MAX_TOKENS = "#{label.max.tokens}";
 	static final String MIMETYPE_DESC = "#{label.mimetype.desc}";
 	static final String MIMETYPE_EXT = "#{label.mimetype.ext}";
 	static final String MIMETYPE_TYPE = "#{label.mimetype.type}";
@@ -75,10 +78,12 @@ public interface ToolsKey {
 	static final String PROFILE_HEADER = "#{label.profile.header}";
 	static final String PROFILES = "#{label.profiles}";
 	static final String PROFILESTEXT = "#{label.profilesText}";
+	static final String PROMPT = "#{label.prompt}";
 	static final String QUEUED = "#{label.queued}";
 	static final String REF_CODE = "#{label.ref.code}";
 	static final String REPEAT = "#{label.repeat}";
 	static final String REPEATORREFLECT = "#{label.repeatorreflect}";
+	static final String RESPONSE = "#{label.response}";
 	static final String SCHEDULE_DATE_TIME = "#{label.schedule.date.time}";
 	static final String SCHEDULED = "#{label.scheduled}";
 	static final String SECURITYID = "#{label.securityId}";
@@ -107,11 +112,14 @@ public interface ToolsKey {
 	static final String MENU_TOOLS = "#{menu.tools}";
 	static final String MESSAGE_SELECT_IMAGE = "#{message.select.image}";
 	static final String MIMETYPE_IMPORT_RULE_DESC = "#{mimetype.import.rule.desc}";
+	static final String MODULE_AI = "#{module.ai}";
 	static final String MODULE_CHAT = "#{module.chat}";
 	static final String MODULE_NOTIFY = "#{module.notify}";
 	static final String MODULE_PREFERENCES = "#{module.preferences}";
 	static final String MODULE_SCHEME = "#{module.scheme}";
 	static final String MODULE_USER = "#{module.user}";
+	static final String PROMPT_AI_PROMPT = "#{prompt.ai.prompt}";
+	static final String PROMPT_AI_RESPONSE = "#{prompt.ai.response}";
 	static final String PROMPT_PROFILE_DESCRIPTION = "#{prompt.profile.description}";
 	static final String PROMPT_PROFILE_NAME = "#{prompt.profile.name}";
 	static final String SECURITY_AUTHORIZATION_FORM_NAME = "#{security.authorization.form.name}";
@@ -134,6 +142,11 @@ public interface ToolsKey {
 	static final String SETTINGS_MODULE_NAME = "#{settings.module.name}";
 	static final String SETTINGS_VIEW_TITLE = "#{settings.view.title}";
 	static final String TEMPLATE_MENU = "#{template.menu}";
+	static final String TEXT_DETERMINISTIC = "#{text.deterministic}";
+	static final String TEXT_MAX_TOKENS = "#{text.max.tokens}";
+	static final String TEXT_PROMPT = "#{text.prompt}";
+	static final String VIEW_AI_COMPLETION = "#{view.ai.completion}";
+	static final String VIEW_AI_CREATE_IMAGE = "#{view.ai.create.image}";
 	static final String VIEW_AUTHORIZATION = "#{view.authorization}";
 	static final String VIEW_BACKGROUND = "#{view.background}";
 	static final String VIEW_CHAT = "#{view.chat}";

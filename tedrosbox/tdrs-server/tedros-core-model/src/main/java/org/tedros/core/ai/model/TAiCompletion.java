@@ -43,10 +43,10 @@ public class TAiCompletion extends TEntity {
 	private String prompt;
 	
 	@Column
-	private Double temperature;
+	private Double temperature = 1.0D;
 	
 	@Column
-	private Integer maxTokens;
+	private Integer maxTokens=2048;
 	
 	@Column(length=100, nullable=false)
 	@Enumerated(EnumType.STRING)
