@@ -15,12 +15,10 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.tedros.core.domain.DomainSchema;
 import org.tedros.core.domain.DomainTables;
-import org.tedros.core.security.model.TUser;
 import org.tedros.server.entity.TEntity;
 
 /**
@@ -46,15 +44,17 @@ public class TAiCompletion extends TEntity {
 	private Double temperature = 1.0D;
 	
 	@Column
-	private Integer maxTokens=2048;
+	private Integer maxTokens=1024;
 	
 	@Column(length=100, nullable=false)
 	@Enumerated(EnumType.STRING)
 	private TAiModel model = TAiModel.TEXT_DAVINCI_003;
 	
-	@ManyToOne(optional=false)
-	@JoinColumn(name="user_id", nullable=false, updatable=false)
-	private TUser user;
+	@Column(length=100)
+	private String user;
+	
+	@Column
+	private Long userId;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinTable(	name=DomainTables.ai_completion_event,
@@ -176,20 +176,6 @@ public class TAiCompletion extends TEntity {
 	}
 
 	/**
-	 * @return the user
-	 */
-	public TUser getUser() {
-		return user;
-	}
-
-	/**
-	 * @param user the user to set
-	 */
-	public void setUser(TUser user) {
-		this.user = user;
-	}
-
-	/**
 	 * @return the events
 	 */
 	public List<TRequestEvent> getEvents() {
@@ -279,6 +265,34 @@ public class TAiCompletion extends TEntity {
 	@Override
 	public String toString() {
 		return (title != null ? title : "");
+	}
+
+	/**
+	 * @return the user
+	 */
+	public String getUser() {
+		return user;
+	}
+
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	/**
+	 * @return the userId
+	 */
+	public Long getUserId() {
+		return userId;
+	}
+
+	/**
+	 * @param userId the userId to set
+	 */
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 }
