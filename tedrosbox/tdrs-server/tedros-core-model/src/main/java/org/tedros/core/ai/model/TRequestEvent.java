@@ -42,6 +42,8 @@ public class TRequestEvent extends TEntity {
 	 * 
 	 */
 	public TRequestEvent() {
+		if(super.getInsertDate()==null)
+			super.setInsertDate(new Date());
 	}
 
 	/**
@@ -64,6 +66,8 @@ public class TRequestEvent extends TEntity {
 		this.prompt = prompt;
 		this.log = log;
 		this.type = type;
+		if(super.getInsertDate()==null)
+			super.setInsertDate(new Date());
 	}
 
 	/**

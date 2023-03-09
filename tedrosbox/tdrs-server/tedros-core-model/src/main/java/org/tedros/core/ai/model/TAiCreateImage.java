@@ -52,6 +52,12 @@ public class TAiCreateImage extends TEntity {
 			orphanRemoval=true)
 	@JoinColumn(name="create_img_id")
 	private Set<TAiImage> data;
+	
+	@Column(length=100)
+	private String user;
+	
+	@Column
+	private Long userId;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinTable(	name=DomainTables.ai_createimage_event,
@@ -246,6 +252,34 @@ public class TAiCreateImage extends TEntity {
 	@Override
 	public String toString() {
 		return (title != null ?  title : "");
+	}
+
+	/**
+	 * @return the user
+	 */
+	public String getUser() {
+		return user;
+	}
+
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	/**
+	 * @return the userId
+	 */
+	public Long getUserId() {
+		return userId;
+	}
+
+	/**
+	 * @param userId the userId to set
+	 */
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 }

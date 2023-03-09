@@ -7,6 +7,9 @@ import org.tedros.core.ai.model.TAiCompletion;
 import org.tedros.core.ai.model.TRequestEvent;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.controller.TAiCompletionController;
+import org.tedros.core.security.model.TUser;
+import org.tedros.fx.TFxKey;
+import org.tedros.fx.annotation.control.TButtonField;
 import org.tedros.fx.annotation.control.TCallbackFactory;
 import org.tedros.fx.annotation.control.TCellFactory;
 import org.tedros.fx.annotation.control.TContent;
@@ -22,6 +25,7 @@ import org.tedros.fx.annotation.control.TTextAreaField;
 import org.tedros.fx.annotation.control.TTextInputControl;
 import org.tedros.fx.annotation.form.TDetailForm;
 import org.tedros.fx.annotation.form.TForm;
+import org.tedros.fx.annotation.form.TSetting;
 import org.tedros.fx.annotation.layout.THBox;
 import org.tedros.fx.annotation.layout.THGrow;
 import org.tedros.fx.annotation.layout.TPane;
@@ -32,7 +36,9 @@ import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.process.TEjbService;
+import org.tedros.fx.annotation.scene.control.TButtonBase;
 import org.tedros.fx.annotation.scene.control.TControl;
+import org.tedros.fx.annotation.scene.control.TLabeled;
 import org.tedros.fx.annotation.view.TPaginator;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.control.tablecell.TMediumDateTimeCallback;
@@ -49,6 +55,7 @@ import javafx.scene.layout.Priority;
  * @author Davis Gordon
  *
  */
+@TSetting(CompletionSetting.class)
 @TForm(name = "Ask Teros AI", showBreadcrumBar=true)
 @TEjbService(serviceName = TAiCompletionController.JNDI_NAME, model=TAiCompletion.class)
 @TListViewPresenter(listViewMinWidth=500,
@@ -92,9 +99,14 @@ public class CompletionMV extends TEntityModelView<TAiCompletion> {
 			@TPriority(field="maxTokens", priority=Priority.NEVER)}))
 	private SimpleDoubleProperty temperature;
 	
+	@TLabel(text=ToolsKey.MAX_TOKENS)
 	@TNumberSpinnerField(maxValue = 4096, minValue=16, 
 			control=@TControl(parse = true, tooltip=ToolsKey.TEXT_MAX_TOKENS))
 	private SimpleIntegerProperty maxTokens;
+	
+	@TButtonField(buttonBase=@TButtonBase(onAction=SendActionBuilder.class),
+			labeled = @TLabeled(parse = true, text=TFxKey.BUTTON_SEND))
+	private SimpleStringProperty send;
 	
 	@TTableView(columns = { 
 		@TTableColumn(text = ToolsKey.DATE_INSERT, cellValue="insertDate", 
@@ -107,14 +119,13 @@ public class CompletionMV extends TEntityModelView<TAiCompletion> {
 	@TModelViewType(modelClass = TRequestEvent.class, modelViewClass=EventMV.class)
 	private ITObservableList<EventMV> events;
 	
-	
-	/**
-	 * 
-	 */
 	public CompletionMV(TAiCompletion m) {
 		super(m);
-		if(m.getUser()==null)
-			m.setUser(TedrosContext.getLoggedUser());
+		if(m.getUser()==null) {
+			TUser u = TedrosContext.getLoggedUser();
+			m.setUser(u.getName());
+			m.setUserId(u.getId());
+		}
 		super.formatToString("%s", title);
 		prompt.addListener((a,o,n)->{
 			if(n!=null && n.length()>40) {
@@ -218,6 +229,22 @@ public class CompletionMV extends TEntityModelView<TAiCompletion> {
 	 */
 	public void setEvents(ITObservableList<EventMV> events) {
 		this.events = events;
+	}
+
+
+	/**
+	 * @return the send
+	 */
+	public SimpleStringProperty getSend() {
+		return send;
+	}
+
+
+	/**
+	 * @param send the send to set
+	 */
+	public void setSend(SimpleStringProperty send) {
+		this.send = send;
 	}
 
 

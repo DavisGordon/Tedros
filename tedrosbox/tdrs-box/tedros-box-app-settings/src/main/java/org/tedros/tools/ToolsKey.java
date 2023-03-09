@@ -2,6 +2,7 @@ package org.tedros.tools;
 
 public interface ToolsKey {
 
+	static final String AI_WELCOME = "#{ai.welcome}";
 	static final String APP_TOOLS = "#{app.tools}";
 	static final String BACKGROUND_PAINEL_TITLE = "#{background.painel.title}";
 	static final String COLOR_BASE_PAINEL_TITLE = "#{color.base.painel.title}";
