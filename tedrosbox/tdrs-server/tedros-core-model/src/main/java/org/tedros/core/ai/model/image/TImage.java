@@ -1,8 +1,9 @@
 /**
  * 
  */
-package org.tedros.core.ai.model;
+package org.tedros.core.ai.model.image;
 
+import org.tedros.core.ai.model.TResponseFormat;
 import org.tedros.server.model.ITModel;
 
 /**

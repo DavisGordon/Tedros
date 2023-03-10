@@ -8,8 +8,8 @@ import java.util.List;
 import javax.naming.NamingException;
 
 import org.tedros.core.ai.model.TAiCompletion;
-import org.tedros.core.ai.model.TCompletionRequest;
-import org.tedros.core.ai.model.TCompletionResult;
+import org.tedros.core.ai.model.completion.TCompletionRequest;
+import org.tedros.core.ai.model.completion.TCompletionResult;
 import org.tedros.core.ai.util.TAiModelUtil;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.controller.TAiCompletionController;
