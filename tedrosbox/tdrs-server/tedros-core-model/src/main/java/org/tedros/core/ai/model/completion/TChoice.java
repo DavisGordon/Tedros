@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.tedros.core.ai.model;
+package org.tedros.core.ai.model.completion;
 
 import org.tedros.server.model.ITModel;
 

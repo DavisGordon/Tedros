@@ -4,8 +4,8 @@
 package org.tedros.core.ai.util;
 
 import org.tedros.core.ai.model.TAiCompletion;
-import org.tedros.core.ai.model.TCompletionRequest;
-import org.tedros.core.ai.model.TCompletionResult;
+import org.tedros.core.ai.model.completion.TCompletionRequest;
+import org.tedros.core.ai.model.completion.TCompletionResult;
 
 /**
  * @author Davis Gordon

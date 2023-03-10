@@ -10,8 +10,8 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.tedros.core.ai.model.TAiCompletion;
-import org.tedros.core.ai.model.TCompletionRequest;
-import org.tedros.core.ai.model.TCompletionResult;
+import org.tedros.core.ai.model.completion.TCompletionRequest;
+import org.tedros.core.ai.model.completion.TCompletionResult;
 import org.tedros.core.cdi.bo.TCoreBO;
 import org.tedros.core.cdi.bo.TOpenAiBO;
 import org.tedros.server.cdi.bo.ITGenericBO;
