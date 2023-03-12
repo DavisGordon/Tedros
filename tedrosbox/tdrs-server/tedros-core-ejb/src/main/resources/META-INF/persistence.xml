@@ -22,6 +22,8 @@
 		<class>org.tedros.core.ai.model.TAiCreateImage</class>
 		<class>org.tedros.core.ai.model.TAiImage</class>
 		<class>org.tedros.core.ai.model.TRequestEvent</class>
+		<class>org.tedros.core.ai.model.TAiChatCompletion</class>
+		<class>org.tedros.core.ai.model.TAiChatMessage</class>
 		
 		
 		<properties>

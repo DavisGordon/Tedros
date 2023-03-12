@@ -6,7 +6,6 @@ package org.tedros.core.ai.model.completion.chat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.tedros.core.ai.model.TAiChatModel;
 import org.tedros.core.ai.model.completion.TBaseCompletionRequest;
 /**
  * @author Davis Gordon
@@ -19,7 +18,7 @@ public class TChatRequest extends TBaseCompletionRequest{
 	/**
      * ID of the model to use. Currently, only gpt-3.5-turbo and gpt-3.5-turbo-0301 are supported.
      */
-    private TAiChatModel model;
+    private TAiChatModel model = TAiChatModel.GPT35_TURBO;
 
     /**
      * The messages to generate chat completions for, in the <a

@@ -3,10 +3,13 @@ package org.tedros.core.domain;
 public interface DomainTables {
 
 	final static String ai_completion = "ai_completion";
+	final static String ai_chat_completion = "ai_chat_completion";
+	final static String ai_chat_message = "ai_chat_message";
 	final static String ai_create_image = "ai_create_image";
 	final static String ai_image = "ai_image";
 	final static String ai_request_event = "ai_request_event";
 	final static String ai_completion_event = "ai_completion_event";
+	final static String ai_chat_event = "ai_chat_event";
 	final static String ai_createimage_event = "ai_createimage_event";
 	final static String application = "application";
 	final static String application_config = "application_config";

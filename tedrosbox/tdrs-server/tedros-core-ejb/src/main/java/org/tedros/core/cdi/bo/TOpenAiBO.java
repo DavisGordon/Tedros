@@ -125,7 +125,9 @@ public class TOpenAiBO {
 			r = new TChatResult(cr.getId(), cr.getModel(), 
 					new TUsage(cr.getUsage().getPromptTokens(), cr.getUsage().getCompletionTokens(), 
 							cr.getUsage().getTotalTokens()));
-			cr.getChoices().forEach(ch->{
+			cr.getChoices().stream().sorted((a1, a2)->{
+				return a1.getIndex().compareTo(a2.getIndex());
+			}).forEach(ch->{
 				r.addChoice(new TChatChoice(ch.getIndex(), 
 						new TChatMessage(TChatRole.value(ch.getMessage().getRole()), 
 								ch.getMessage().getContent()), ch.getFinishReason()));

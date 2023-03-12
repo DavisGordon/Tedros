@@ -21,14 +21,14 @@ import org.tedros.server.entity.TEntity;
  */
 @Entity
 @Table(name = DomainTables.ai_request_event, schema = DomainSchema.tedros_core)
-public class TRequestEvent extends TEntity {
+public class TRequestEvent extends TEntity implements Comparable<TRequestEvent>{
 
 	private static final long serialVersionUID = -4376333627387648321L;
 
 	@Column
 	private String response;
 	
-	@Column(nullable=false)
+	@Column
 	private String prompt;
 	
 	@Column(nullable=false)
@@ -37,6 +37,15 @@ public class TRequestEvent extends TEntity {
 	@Column(length=30, nullable=false)
 	@Enumerated(EnumType.STRING)
 	private TRequestType type;
+	
+	@Column
+    private Long promptTokens;
+
+	@Column
+    private Long completionTokens;
+
+	@Column
+    private Long totalTokens;
 	 
 	/**
 	 * 
@@ -66,8 +75,47 @@ public class TRequestEvent extends TEntity {
 		this.prompt = prompt;
 		this.log = log;
 		this.type = type;
-		if(super.getInsertDate()==null)
-			super.setInsertDate(new Date());
+		super.setInsertDate(new Date());
+	}
+
+	/**
+	 * @param response
+	 * @param prompt
+	 * @param log
+	 * @param type
+	 * @param promptTokens
+	 * @param completionTokens
+	 * @param totalTokens
+	 */
+	public TRequestEvent(String response, String prompt, String log, TRequestType type, Long promptTokens,
+			Long completionTokens, Long totalTokens) {
+		this.response = response;
+		this.prompt = prompt;
+		this.log = log;
+		this.type = type;
+		this.promptTokens = promptTokens;
+		this.completionTokens = completionTokens;
+		this.totalTokens = totalTokens;
+		super.setInsertDate(new Date());
+	}
+	
+	public static TRequestEvent build(TRequestType type, String result, TUsage usage, String model, 
+			Double temperature, Integer maxTokens) {
+		StringBuilder log = new StringBuilder(result!=null ? result : "Log info");
+		log.append(", model="+model);
+		if(temperature!=null)
+			log.append(", temperature="+temperature);
+		if(maxTokens!=null)
+			log.append(", maxTokens="+maxTokens);
+		if(usage!=null) {
+			log.append(", promptTokens="+usage.getPromptTokens());
+			log.append(", completionTokens="+usage.getCompletionTokens());
+			log.append(", totalTokens="+usage.getTotalTokens());
+
+			return new TRequestEvent(null, null, log.toString(), type, 
+					usage.getPromptTokens(), usage.getCompletionTokens(), usage.getTotalTokens());
+		}else
+			return new TRequestEvent(null, null, log.toString(), type);
 	}
 
 	/**
@@ -170,6 +218,57 @@ public class TRequestEvent extends TEntity {
 		if (type != other.type)
 			return false;
 		return true;
+	}
+
+	/**
+	 * @return the promptTokens
+	 */
+	public Long getPromptTokens() {
+		return promptTokens;
+	}
+
+	/**
+	 * @param promptTokens the promptTokens to set
+	 */
+	public void setPromptTokens(Long promptTokens) {
+		this.promptTokens = promptTokens;
+	}
+
+	/**
+	 * @return the completionTokens
+	 */
+	public Long getCompletionTokens() {
+		return completionTokens;
+	}
+
+	/**
+	 * @param completionTokens the completionTokens to set
+	 */
+	public void setCompletionTokens(Long completionTokens) {
+		this.completionTokens = completionTokens;
+	}
+
+	/**
+	 * @return the totalTokens
+	 */
+	public Long getTotalTokens() {
+		return totalTokens;
+	}
+
+	/**
+	 * @param totalTokens the totalTokens to set
+	 */
+	public void setTotalTokens(Long totalTokens) {
+		this.totalTokens = totalTokens;
+	}
+
+	@Override
+	public int compareTo(TRequestEvent o) {
+		return o!=null && this.getId()!=null
+				? this.getId().compareTo(o.getId())
+						: this.getInsertDate()!=null && o!=null && o.getInsertDate()!=null
+						? this.getInsertDate().compareTo(o.getInsertDate())
+								: -1;
 	}
 
 }
