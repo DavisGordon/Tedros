@@ -8,5 +8,5 @@ package org.tedros.core.ai.model;
  *
  */
 public enum TRequestType {
-	COMPLETION, CREATE_IMAGE;
+	CHAT, COMPLETION, CREATE_IMAGE;
 }

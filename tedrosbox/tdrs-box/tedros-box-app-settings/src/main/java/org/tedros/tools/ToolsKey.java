@@ -6,6 +6,7 @@ public interface ToolsKey {
 	static final String APP_TOOLS = "#{app.tools}";
 	static final String BACKGROUND_PAINEL_TITLE = "#{background.painel.title}";
 	static final String COLOR_BASE_PAINEL_TITLE = "#{color.base.painel.title}";
+	static final String FORM_AI_CHAT = "#{form.ai.chat}";
 	static final String FORM_MIMETYPE = "#{form.mimetype}";
 	static final String IMPORT_TEXT = "#{import.text}";
 	static final String IMPORT_UP_FILE = "#{import.up.file}";
@@ -146,6 +147,7 @@ public interface ToolsKey {
 	static final String TEXT_DETERMINISTIC = "#{text.deterministic}";
 	static final String TEXT_MAX_TOKENS = "#{text.max.tokens}";
 	static final String TEXT_PROMPT = "#{text.prompt}";
+	static final String VIEW_AI_CHAT = "#{view.ai.chat}";
 	static final String VIEW_AI_COMPLETION = "#{view.ai.completion}";
 	static final String VIEW_AI_CREATE_IMAGE = "#{view.ai.create.image}";
 	static final String VIEW_AUTHORIZATION = "#{view.authorization}";

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.tedros.core.ai.model;
+package org.tedros.core.ai.model.completion.chat;
 
 /**
  * @author Davis Gordon
