@@ -6,6 +6,10 @@ public interface ToolsKey {
 	static final String APP_TOOLS = "#{app.tools}";
 	static final String BACKGROUND_PAINEL_TITLE = "#{background.painel.title}";
 	static final String COLOR_BASE_PAINEL_TITLE = "#{color.base.painel.title}";
+	static final String ERROR_AI_ACCOUNT = "#{error.ai.account}";
+	static final String ERROR_AI_LOG = "#{error.ai.log}";
+	static final String ERROR_AI_QUOTA_OVERLOADED = "#{error.ai.quota.overloaded}";
+	static final String ERROR_AI_SERVER = "#{error.ai.server}";
 	static final String FORM_AI_CHAT = "#{form.ai.chat}";
 	static final String FORM_MIMETYPE = "#{form.mimetype}";
 	static final String IMPORT_TEXT = "#{import.text}";
@@ -112,9 +116,11 @@ public interface ToolsKey {
 	static final String VIEWNAME = "#{label.viewName}";
 	static final String YES = "#{label.yes}";
 	static final String MENU_TOOLS = "#{menu.tools}";
+	static final String MESSAGE_AI_TIMEOUT = "#{message.ai.timeout}";
 	static final String MESSAGE_SELECT_IMAGE = "#{message.select.image}";
 	static final String MIMETYPE_IMPORT_RULE_DESC = "#{mimetype.import.rule.desc}";
 	static final String MODULE_AI = "#{module.ai}";
+	static final String MODULE_AI_DESC = "#{module.ai.desc}";
 	static final String MODULE_CHAT = "#{module.chat}";
 	static final String MODULE_NOTIFY = "#{module.notify}";
 	static final String MODULE_PREFERENCES = "#{module.preferences}";
@@ -164,5 +170,4 @@ public interface ToolsKey {
 	static final String VIEW_THEMES = "#{view.themes}";
 	static final String VIEW_USER = "#{view.user}";
 	static final String VIEW_USER_SETTINGS = "#{view.user.settings}";
-
 }

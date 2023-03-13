@@ -26,6 +26,7 @@ import org.tedros.core.cdi.producer.Item;
 import org.tedros.core.domain.DomainPropertie;
 import org.tedros.server.exception.TBusinessException;
 
+import com.theokanning.openai.OpenAiHttpException;
 import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.completion.CompletionResult;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
@@ -84,8 +85,12 @@ public class TOpenAiBO {
 				tr.addData(val, req.getResponseFormat());
 			});
 			return tr;
-		}catch(Exception e) {
-			return new TImageResult(e.getMessage(), false);
+		}catch(Exception ex) {
+			if(ex instanceof OpenAiHttpException) {
+				OpenAiHttpException oex = (OpenAiHttpException) ex;
+				return new TImageResult(ex.getMessage(), oex.statusCode+":"+oex.code);
+			}else
+				return new TImageResult(ex.getMessage(), false);
 		}
 	}
 	
@@ -134,7 +139,11 @@ public class TOpenAiBO {
 			});
 			return r;
 		}catch(Exception ex) {
-			return new TChatResult(ex.getMessage(), false);
+			if(ex instanceof OpenAiHttpException) {
+				OpenAiHttpException oex = (OpenAiHttpException) ex;
+				return new TChatResult(ex.getMessage(), oex.statusCode+":"+oex.code);
+			}else
+				return new TChatResult(ex.getMessage(), false);
 		}
 		
 	}
@@ -170,8 +179,12 @@ public class TOpenAiBO {
 				tr.addChoice(c.getText(), c.getIndex(), c.getFinish_reason());
 			});
 			return tr;
-		}catch(Exception e) {
-			return new TCompletionResult(e.getMessage(), false);
+		}catch(Exception ex) {
+			if(ex instanceof OpenAiHttpException) {
+				OpenAiHttpException oex = (OpenAiHttpException) ex;
+				return new TCompletionResult(ex.getMessage(), oex.statusCode+":"+oex.code);
+			}else
+				return new TCompletionResult(ex.getMessage(), false);
 		}
 		
 	}

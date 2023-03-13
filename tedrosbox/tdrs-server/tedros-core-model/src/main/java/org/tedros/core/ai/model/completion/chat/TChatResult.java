@@ -36,6 +36,11 @@ public class TChatResult extends TBaseCompletionResult {
 		super(log, success);
 	}
 
+	public TChatResult(String log, String errorCode) {
+		super(log, errorCode);
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * @param id
 	 * @param model

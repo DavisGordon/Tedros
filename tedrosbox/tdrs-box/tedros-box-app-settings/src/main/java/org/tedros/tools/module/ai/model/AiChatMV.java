@@ -30,10 +30,13 @@ import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.process.TEjbService;
 import org.tedros.fx.annotation.scene.control.TControl;
 import org.tedros.fx.annotation.scene.control.TLabeled;
+import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.control.tablecell.TMediumDateTimeCallback;
 import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.tools.ToolsKey;
+import org.tedros.tools.module.ai.action.ChatDeleteAction;
+import org.tedros.tools.module.ai.action.ChatSaveAction;
 import org.tedros.tools.module.ai.settings.AiChatSetting;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -43,14 +46,13 @@ import javafx.beans.property.SimpleStringProperty;
  *
  */
 @TSetting(AiChatSetting.class)
-@TForm(name = ToolsKey.FORM_AI_CHAT, showBreadcrumBar=true, scroll=false)
+@TForm(name = ToolsKey.FORM_AI_CHAT, showBreadcrumBar=false, scroll=true)
 @TEjbService(serviceName = TAiChatCompletionController.JNDI_NAME, model=TAiChatCompletion.class)
-@TListViewPresenter(listViewMaxWidth=400, listViewMinWidth=400,
+@TListViewPresenter(listViewMaxWidth=300, listViewMinWidth=300,
 	presenter=@TPresenter(
 		decorator = @TDecorator(
-			viewTitle=ToolsKey.VIEW_CHAT,
-			buildSaveButton=false, buildModesRadioButton=false),
-		behavior=@TBehavior(//type=ChatBehaviour.class,
+			viewTitle=ToolsKey.VIEW_AI_CHAT, buildModesRadioButton=false),
+		behavior=@TBehavior(action= {ChatSaveAction.class, ChatDeleteAction.class},
 			runNewActionAfterSave=false, saveAllModels=false)))
 public class AiChatMV extends TEntityModelView<TAiChatCompletion> {
 
@@ -59,20 +61,16 @@ public class AiChatMV extends TEntityModelView<TAiChatCompletion> {
 			content = @TContent(detailForm=@TDetailForm(fields = { "messages" })) ), 
 		@TTab(text = ToolsKey.EVENT_LOG, scroll=true,
 			content = @TContent(detailForm=@TDetailForm(fields = { "events" })) )
-	})
+		}, 
+		region=@TRegion(minHeight=400, maxHeight=400, parse = true))
 	private SimpleStringProperty title;
 	
-	@TVBox()
-	@TModelViewType(modelClass = TAiChatMessage.class)
-	private ITObservableList<TAiChatMessage> messages; 
+	@TVBox(fillWidth=true, spacing=20)
+	@TModelViewType(modelClass = TAiChatMessage.class, modelViewClass=AiChatMessageMV.class)
+	private ITObservableList<AiChatMessageMV> messages; 
 
-	@TTextAreaField(prefRowCount=4, wrapText=true, control= @TControl(maxHeight=70, parse = true))
-	/*@TVBox(pane=@TPane(children= {"messages", "prompt", "sendBtn"}), 
-	vgrow=@TVGrow(priority= {
-			@TPriority(field="messages", priority=Priority.ALWAYS), 
-			@TPriority(field="prompt", priority=Priority.NEVER), 
-			@TPriority(field="sendBtn", priority=Priority.NEVER)
-			}), fillWidth=true, spacing=10)*/
+	@TTextAreaField(prefRowCount=4, wrapText=true, 
+			control= @TControl(maxHeight=70, parse = true))
 	private SimpleStringProperty prompt;
 	
 	@TToolBar(items = { "sendBtn", "clearBtn" })
@@ -117,7 +115,7 @@ public class AiChatMV extends TEntityModelView<TAiChatCompletion> {
 	/**
 	 * @return the messages
 	 */
-	public ITObservableList<TAiChatMessage> getMessages() {
+	public ITObservableList<AiChatMessageMV> getMessages() {
 		return messages;
 	}
 
@@ -125,7 +123,7 @@ public class AiChatMV extends TEntityModelView<TAiChatCompletion> {
 	/**
 	 * @param messages the messages to set
 	 */
-	public void setMessages(ITObservableList<TAiChatMessage> messages) {
+	public void setMessages(ITObservableList<AiChatMessageMV> messages) {
 		this.messages = messages;
 	}
 

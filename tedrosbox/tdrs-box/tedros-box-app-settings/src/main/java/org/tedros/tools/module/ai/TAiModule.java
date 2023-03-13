@@ -23,6 +23,6 @@ public class TAiModule extends TModule {
 	public void tStart() {
 		tShowView(new TGroupView<TGroupPresenter>(this, ToolsKey.MODULE_AI,
 				new TViewItem(TDynaGroupView.class, CompletionMV.class, ToolsKey.VIEW_AI_COMPLETION),
-				new TViewItem(TDynaGroupView.class, AiChatMV.class, ToolsKey.VIEW_CHAT)));
+				new TViewItem(TDynaGroupView.class, AiChatMV.class, ToolsKey.VIEW_AI_CHAT)));
 	}
 }

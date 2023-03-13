@@ -36,6 +36,10 @@ public class TCompletionResult extends TBaseCompletionResult {
 		super(log, success);
 	}
 
+	public TCompletionResult(String log, String errorCode) {
+		super(log, errorCode);
+	}
+
 	/**
 	 * @param id
 	 * @param model

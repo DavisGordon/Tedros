@@ -41,6 +41,10 @@ public abstract class TBaseCompletionResult extends TBaseResult {
 		super(log, success);
 	}
 
+	public TBaseCompletionResult(String log, String errorCode) {
+		super(log, errorCode);
+	}
+
 	/**
 	 * @param id
 	 * @param model
