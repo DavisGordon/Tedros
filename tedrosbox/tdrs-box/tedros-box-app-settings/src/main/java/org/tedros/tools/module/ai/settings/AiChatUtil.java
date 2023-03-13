@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Consumer;
 
 import org.tedros.core.TLanguage;
 import org.tedros.core.ai.model.TAiChatCompletion;
@@ -28,7 +27,9 @@ import org.tedros.fx.control.TText.TTextStyle;
 import org.tedros.fx.property.TBytesLoader;
 import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.result.TResult;
+import org.tedros.server.result.TResult.TState;
 import org.tedros.server.security.TAccessToken;
+import org.tedros.tools.module.ai.model.AiChatMessageMV;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -55,16 +56,17 @@ public class AiChatUtil {
 	
 	private TLanguage iEngine = TLanguage.getInstance();
 
-	public TChatResult chat(TAccessToken token, List<TAiChatMessage> msgs) throws Exception {
+	public TChatResult chat(TAccessToken token, List<AiChatMessageMV> msgs) throws Exception {
 		ServiceLocator loc = ServiceLocator.getInstance();
 		try {
 			TChatRequest req = new TChatRequest();
 			req.setMaxTokens(2047);
 			req.setTemperature(0.8);
 			msgs.forEach(c->{
+				TAiChatMessage e = c.getEntity();
 				TChatMessage m = new TChatMessage();
-				m.setContent(c.getContent());
-				m.setRole(c.getRole());
+				m.setContent(e.getContent());
+				m.setRole(e.getRole());
 				req.addMessage(m);
 			});
 			
@@ -96,6 +98,19 @@ public class AiChatUtil {
 			TAiChatMessageController serv = loc.lookup(TAiChatMessageController.JNDI_NAME);
 			TResult<TAiChatMessage> res = serv.save(token, msg);
 			return res.getValue();
+		}finally {
+			loc.close();
+		}
+	}
+	
+
+	@SuppressWarnings("rawtypes")
+	public boolean deleteMessage(TAccessToken token, TAiChatMessage msg) throws Exception {
+		ServiceLocator loc = ServiceLocator.getInstance();
+		try {
+			TAiChatMessageController serv = loc.lookup(TAiChatMessageController.JNDI_NAME);
+			TResult res = serv.remove(token, msg);
+			return res.getState().equals(TState.SUCCESS);
 		}finally {
 			loc.close();
 		}
@@ -151,7 +166,7 @@ public class AiChatUtil {
 		if(txt!=null) {
 			TText t1 = new TText(txt);
 			t1.settTextStyle(TTextStyle.MEDIUM);
-			t1.setWrappingWidth(300);
+			t1.setWrappingWidth(800);
 			VBox.setMargin(t1, new Insets(8));
 			gp.getChildren().add(t1);
 			Hyperlink hl = new Hyperlink(iEngine.getString(TFxKey.BUTTON_COPY));

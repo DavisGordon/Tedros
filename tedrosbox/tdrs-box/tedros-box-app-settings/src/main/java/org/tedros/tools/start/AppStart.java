@@ -24,7 +24,8 @@ module = {@TModule(type=SchemeModule.class, name=ToolsKey.MODULE_SCHEME, menu = 
 				icon=TConstant.ICONS_FOLDER+"user_icon.png", menuIcon=TConstant.ICONS_FOLDER+"user_menu_icon.png"),
 		@TModule(type=TNotifyModule.class, name=ToolsKey.MODULE_NOTIFY, menu = ToolsKey.MENU_TOOLS, 
 				icon=TConstant.ICONS_FOLDER+"notify_icon.png", menuIcon=TConstant.ICONS_FOLDER+"notify_menu_icon.png"),
-		@TModule(type=TAiModule.class, name="Ask Teros", menu = "Artificial Inteligence")
+		@TModule(type=TAiModule.class, name=ToolsKey.MODULE_AI, menu = ToolsKey.MENU_TOOLS, description=ToolsKey.MODULE_AI_DESC,
+				icon=TConstant.ICONS_FOLDER+"icon_art_int.png", menuIcon=TConstant.ICONS_FOLDER+"menu_art_int.png")
 })
 @TResourceBundle(resourceName={"TToolsLabels"})
 @TSecurity(id=DomainApp.MNEMONIC, appName=ToolsKey.APP_TOOLS, allowedAccesses=TAuthorizationType.APP_ACCESS)

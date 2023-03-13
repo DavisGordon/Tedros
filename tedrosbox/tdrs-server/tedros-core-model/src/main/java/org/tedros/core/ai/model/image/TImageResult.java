@@ -39,6 +39,11 @@ public class TImageResult extends TBaseResult {
 	}
 
 
+	public TImageResult(String log, String errorCode) {
+		super(log, errorCode);
+	}
+
+
 	public void addData(String value, TResponseFormat format) {
 		if(data==null)
 			data = new ArrayList<>();
