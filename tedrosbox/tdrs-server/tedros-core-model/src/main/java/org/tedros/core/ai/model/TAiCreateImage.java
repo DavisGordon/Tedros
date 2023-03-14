@@ -20,6 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.tedros.common.model.TFileEntity;
+import org.tedros.core.ai.model.image.TImageSize;
 import org.tedros.core.domain.DomainSchema;
 import org.tedros.core.domain.DomainTables;
 import org.tedros.server.entity.TEntity;
@@ -42,6 +43,10 @@ public class TAiCreateImage extends TEntity {
 	
 	@Column
 	private Integer quantity;
+	
+	@Column(length=8, nullable=false)
+	@Enumerated(EnumType.STRING)
+	private TImageSize size;
 	
 	@Column(length=6, nullable=false)
 	@Enumerated(EnumType.STRING)
@@ -82,15 +87,22 @@ public class TAiCreateImage extends TEntity {
 		// TODO Auto-generated constructor stub
 	}
 
+
 	public void addEvent(String result) {
+		addEvent(result, null);
+	}
+
+	public void addEvent(String result, TUsage usage) {
+		addEvent(TRequestEvent.build(TRequestType.CREATE_IMAGE, result, usage, "DALLE", 
+				null, null, this.quantity));
+	}
+	
+	public void addEvent(TRequestEvent e) {
 		if(events==null)
 			events = new HashSet<>();
-		StringBuilder log = new StringBuilder(result);
-		log.append(", format="+this.format.name());
-		if(this.quantity!=null)
-			log.append(", quantity="+this.quantity);
-		events.add(new TRequestEvent(null, prompt, log.toString(), TRequestType.CREATE_IMAGE));
+		events.add(e);
 	}
+
 	
 	public void addImage(String url) {
 		if(data==null)
@@ -280,6 +292,20 @@ public class TAiCreateImage extends TEntity {
 	 */
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	/**
+	 * @return the size
+	 */
+	public TImageSize getSize() {
+		return size;
+	}
+
+	/**
+	 * @param size the size to set
+	 */
+	public void setSize(TImageSize size) {
+		this.size = size;
 	}
 
 }

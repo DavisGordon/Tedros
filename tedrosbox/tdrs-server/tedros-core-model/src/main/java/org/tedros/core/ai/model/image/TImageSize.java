@@ -29,5 +29,12 @@ public enum TImageSize {
 		return value;
 	}
 	
+	public static TImageSize value(String v) {
+		for(TImageSize e : values())
+			if(e.getValue().equals(v))
+				return e;
+		return null;
+	}
+	
 	
 }
