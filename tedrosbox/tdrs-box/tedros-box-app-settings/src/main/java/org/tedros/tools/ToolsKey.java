@@ -85,6 +85,7 @@ public interface ToolsKey {
 	static final String PROFILES = "#{label.profiles}";
 	static final String PROFILESTEXT = "#{label.profilesText}";
 	static final String PROMPT = "#{label.prompt}";
+	static final String QUANTITY = "#{label.quantity}";
 	static final String QUEUED = "#{label.queued}";
 	static final String REF_CODE = "#{label.ref.code}";
 	static final String REPEAT = "#{label.repeat}";

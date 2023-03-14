@@ -49,8 +49,9 @@ public class TAiCreateImageProcess extends TEntityProcess<TAiCreateImage> {
 			TAiCreateImageController serv = loc.lookup(TAiCreateImageController.JNDI_NAME);
 			TResult<TImageResult> res = serv.createImage(token, req);
 			if(res.getState().equals(TState.SUCCESS)) {
-				TAiModelUtil.parse(res.getValue(), e);
-				resultList.add(new TResult<>(TState.SUCCESS, e));
+				TAiCreateImage i = new TAiCreateImage();
+				TAiModelUtil.parse(res.getValue(), i);
+				resultList.add(new TResult<>(TState.SUCCESS, i));
 			}else {
 				resultList.add(new TResult<>(res.getState(), res.getMessage()));
 			}

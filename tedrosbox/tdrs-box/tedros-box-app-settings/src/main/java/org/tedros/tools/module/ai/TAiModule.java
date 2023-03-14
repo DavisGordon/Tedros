@@ -23,7 +23,7 @@ public class TAiModule extends TModule {
 	@Override
 	public void tStart() {
 		tShowView(new TGroupView<TGroupPresenter>(this, ToolsKey.MODULE_AI,
-				new TViewItem(TDynaGroupView.class, CreateImageMV.class, ToolsKey.VIEW_AI_CREATE_IMAGE),
+				new TViewItem(TDynaGroupView.class, CreateImageMV.class, ToolsKey.VIEW_AI_CREATE_IMAGE, true),
 				new TViewItem(TDynaGroupView.class, CompletionMV.class, ToolsKey.VIEW_AI_COMPLETION),
 				new TViewItem(TDynaGroupView.class, AiChatMV.class, ToolsKey.VIEW_AI_CHAT)));
 	}
