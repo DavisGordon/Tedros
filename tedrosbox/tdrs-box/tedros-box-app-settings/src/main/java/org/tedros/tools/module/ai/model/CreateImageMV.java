@@ -29,6 +29,7 @@ import org.tedros.fx.annotation.control.TTableColumn;
 import org.tedros.fx.annotation.control.TTableView;
 import org.tedros.fx.annotation.control.TTextAreaField;
 import org.tedros.fx.annotation.control.TTextInputControl;
+import org.tedros.fx.annotation.control.TValidator;
 import org.tedros.fx.annotation.form.TDetailForm;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.form.TSetting;
@@ -42,7 +43,6 @@ import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.process.TEjbService;
-import org.tedros.fx.annotation.scene.control.TControl;
 import org.tedros.fx.annotation.scene.control.TLabeled;
 import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.annotation.view.TPaginator;
@@ -51,9 +51,9 @@ import org.tedros.fx.control.tablecell.TMediumDateTimeCallback;
 import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.tools.ToolsKey;
 import org.tedros.tools.module.ai.TImageSizeConverter;
+import org.tedros.tools.module.ai.validator.CreateImageValidator;
 
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Orientation;
@@ -78,15 +78,15 @@ public class CreateImageMV extends TEntityModelView<TAiCreateImage> {
 	@TTabPane(tabs = { 
 		@TTab(closable=false, text = ToolsKey.VIEW_AI_CREATE_IMAGE, 
 				content = @TContent(detailForm=@TDetailForm(
-						fields={"id"})),
+						fields={"images"})),
 			scroll=true),
 		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"events"})),
 			text = ToolsKey.EVENT_LOG)
 	}, region=@TRegion(minHeight=380, maxHeight=380, parse = true))
 	private SimpleStringProperty title;
 	
-	@TVBox(fillWidth=true, spacing=20)
-
+	@TValidator(validatorClass = CreateImageValidator.class)
+	@TVBox(fillWidth=true, spacing=20, alignment=Pos.TOP_CENTER)
 	@TModelViewType(modelClass = TRequestEvent.class, modelViewClass=EventMV.class)
 	private ITObservableList<TFileEntity> images;
 
@@ -102,14 +102,12 @@ public class CreateImageMV extends TEntityModelView<TAiCreateImage> {
 	private SimpleObjectProperty<TImageSize> size;
 	
 	@TLabel(text=ToolsKey.QUANTITY)
-	@TNumberSpinnerField(maxValue = 10, minValue=1, 
-			control=@TControl(parse = true, tooltip=ToolsKey.TEXT_MAX_TOKENS))
+	@TNumberSpinnerField(maxValue = 10, minValue=1)
 	private SimpleIntegerProperty quantity;
 	
 	@TTextAreaField(wrapText=true, prefRowCount=2, textInputControl=
 			@TTextInputControl(parse = true, 
-			promptText=ToolsKey.PROMPT_AI_PROMPT), 
-			control=@TControl(parse = true, tooltip=ToolsKey.TEXT_PROMPT))
+			promptText=ToolsKey.PROMPT_AI_CREATE_IMAGE))
 	private SimpleStringProperty prompt;
 	
 	@TToolBar(items = {"sendBtn", "clearBtn" }, orientation=Orientation.HORIZONTAL)
@@ -133,7 +131,6 @@ public class CreateImageMV extends TEntityModelView<TAiCreateImage> {
 		super(m);
 		m.setFormat(TResponseFormat.BASE64);
 		if(m.isNew()) {
-			m.setQuantity(1);
 			if(m.getUser()==null) {
 				TUser u = TedrosContext.getLoggedUser();
 				m.setUser(u.getName());
@@ -141,12 +138,6 @@ public class CreateImageMV extends TEntityModelView<TAiCreateImage> {
 			}
 		}
 		super.formatToString("%s", title);
-		prompt.addListener((a,o,n)->{
-			if(n!=null && n.length()>40) {
-				title.setValue(n.substring(0, 34)+"...");
-			}else 
-				title.setValue(n);
-		});
 	}
 
 	/**

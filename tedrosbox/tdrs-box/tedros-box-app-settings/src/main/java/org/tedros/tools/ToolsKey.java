@@ -117,6 +117,8 @@ public interface ToolsKey {
 	static final String VIEWNAME = "#{label.viewName}";
 	static final String YES = "#{label.yes}";
 	static final String MENU_TOOLS = "#{menu.tools}";
+	static final String MESSAGE_AI_CREATE_IMAGE_REQUIRED = "#{message.ai.create.image.required}";
+	static final String MESSAGE_AI_PROMPT_REQUIRED = "#{message.ai.prompt.required}";
 	static final String MESSAGE_AI_TIMEOUT = "#{message.ai.timeout}";
 	static final String MESSAGE_SELECT_IMAGE = "#{message.select.image}";
 	static final String MIMETYPE_IMPORT_RULE_DESC = "#{mimetype.import.rule.desc}";
@@ -127,6 +129,7 @@ public interface ToolsKey {
 	static final String MODULE_PREFERENCES = "#{module.preferences}";
 	static final String MODULE_SCHEME = "#{module.scheme}";
 	static final String MODULE_USER = "#{module.user}";
+	static final String PROMPT_AI_CREATE_IMAGE = "#{prompt.ai.create.image}";
 	static final String PROMPT_AI_PROMPT = "#{prompt.ai.prompt}";
 	static final String PROMPT_AI_RESPONSE = "#{prompt.ai.response}";
 	static final String PROMPT_PROFILE_DESCRIPTION = "#{prompt.profile.description}";

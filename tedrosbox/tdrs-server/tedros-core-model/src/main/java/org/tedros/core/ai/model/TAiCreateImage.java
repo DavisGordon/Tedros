@@ -42,11 +42,11 @@ public class TAiCreateImage extends TEntity {
 	private String prompt;
 	
 	@Column
-	private Integer quantity;
+	private Integer quantity = 1;
 	
 	@Column(length=8, nullable=false)
 	@Enumerated(EnumType.STRING)
-	private TImageSize size;
+	private TImageSize size = TImageSize.X256;
 	
 	@Column(length=6, nullable=false)
 	@Enumerated(EnumType.STRING)
