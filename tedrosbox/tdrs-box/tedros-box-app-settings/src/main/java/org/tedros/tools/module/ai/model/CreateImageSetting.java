@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.tedros.api.descriptor.ITComponentDescriptor;
+import org.tedros.common.model.TFileEntity;
 import org.tedros.core.ai.model.TAiCreateImage;
 import org.tedros.core.repository.TRepository;
 import org.tedros.fx.control.TButton;
@@ -16,6 +17,9 @@ import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.tools.module.ai.process.TAiCreateImageProcess;
 
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.WeakListChangeListener;
 import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -52,6 +56,7 @@ public class CreateImageSetting extends TSetting {
 	public void run() {
 		this.listenSendButton();
 		this.listenClearButton();
+		this.listenImages();
 		TabPane tp = super.getLayout("title");
 		// Tab title
 		Tab t = tp.getTabs().get(0);
@@ -67,9 +72,35 @@ public class CreateImageSetting extends TSetting {
 					scrollFlag = false;
 			}
 		});
-		
+
+		CreateImageMV mv = getModelView();
+		TAiCreateImage c = mv.getEntity();
+		if(c.getData()!=null)
+			c.getData().forEach(i->{
+				mv.getImages().add(i.getImage());
+			});
 	}
 	
+
+	@SuppressWarnings("unchecked")
+	private void listenImages() {
+		
+		ListChangeListener<TFileEntity> chl = ch -> {
+			VBox p = super.getLayout("images");
+			ch.next();
+			ch.getAddedSubList().forEach(i->{
+				InputStream bis = new ByteArrayInputStream(i.getByte().getBytes());
+				Image im = new Image(bis);
+				ImageView iv = new ImageView();
+				iv.setImage(im);
+				p.getChildren().add(iv);
+			});
+		};
+		repo.add("imgChl", chl);
+		CreateImageMV mv = getModelView();
+		ObservableList<TFileEntity> images = mv.getImages();
+		images.addListener(new WeakListChangeListener<>(chl));
+	}
 
 	/**
 	 * @param mv
@@ -103,17 +134,14 @@ public class CreateImageSetting extends TSetting {
 			prc.stateProperty().addListener((a,o,n)->{
 				if(n.equals(State.SUCCEEDED)) {
 					List<TResult<TAiCreateImage>> l = prc.getValue();
-					VBox p = super.getLayout("id");
 					TResult<TAiCreateImage> res = l.get(0);
 					if(res.getState().equals(TState.SUCCESS)) {
 						TAiCreateImage c = res.getValue();
-						mv.reload(c);
 						c.getData().forEach(i->{
-							InputStream bis = new ByteArrayInputStream(i.getImage().getByte().getBytes());
-							Image im = new Image(bis);
-							ImageView iv = new ImageView();
-							iv.setImage(im);
-							p.getChildren().add(iv);
+							mv.getImages().add(i.getImage());
+						});
+						c.getEvents().forEach(ev->{
+							mv.getEvents().add(new EventMV(ev));
 						});
 					}
 					btn.setDisable(false);
