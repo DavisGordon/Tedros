@@ -107,7 +107,7 @@ public final class TControlValidator<E extends ITModelView> {
 				
 				TValidator tAnnotation = (TValidator) annotation;
 				org.tedros.fx.control.validator.TValidator validator = tAnnotation.validatorClass()
-						.getConstructor(String.class, Object.class).newInstance(label, value);
+						.getConstructor(String.class, Object.class).newInstance(label.toString(), value);
 				
 				if(tAnnotation.associatedFieldsName().length>0){
 					for(String fName : tAnnotation.associatedFieldsName()){
