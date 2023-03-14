@@ -100,13 +100,15 @@ public class TRequestEvent extends TEntity implements Comparable<TRequestEvent>{
 	}
 	
 	public static TRequestEvent build(TRequestType type, String result, TUsage usage, String model, 
-			Double temperature, Integer maxTokens) {
+			Double temperature, Integer maxTokens, Integer n) {
 		StringBuilder log = new StringBuilder(result!=null ? result : "Log info");
 		log.append(", model="+model);
 		if(temperature!=null)
 			log.append(", temperature="+temperature);
 		if(maxTokens!=null)
-			log.append(", maxTokens="+maxTokens);
+			log.append(", maxTokens="+maxTokens);;
+			if(n!=null)
+				log.append(", n="+n);
 		if(usage!=null) {
 			log.append(", promptTokens="+usage.getPromptTokens());
 			log.append(", completionTokens="+usage.getCompletionTokens());

@@ -39,12 +39,6 @@ public class TAiChatCompletion extends TEntity {
 	@Column(length=60, nullable=false)
 	@Enumerated(EnumType.STRING)
     private TAiChatModel model = TAiChatModel.GPT35_TURBO;
-    /*
-	@OneToMany(fetch=FetchType.EAGER,
-			cascade=CascadeType.ALL, 
-			orphanRemoval=true)
-	@JoinColumn(name="chat_id")*/
-    //private List<TAiChatMessage> messages;
     
     @Column
 	private Double temperature = 1.0D;
@@ -87,7 +81,7 @@ public class TAiChatCompletion extends TEntity {
 
 	public void addEvent(String result, TUsage usage) {
 		addEvent(TRequestEvent.build(TRequestType.CHAT, result, usage, this.model.value(), 
-				this.temperature, this.maxTokens));
+				this.temperature, this.maxTokens, null));
 	}
 	
 	public void addEvent(TRequestEvent e) {

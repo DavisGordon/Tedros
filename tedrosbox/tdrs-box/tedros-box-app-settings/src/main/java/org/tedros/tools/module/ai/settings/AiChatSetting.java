@@ -202,7 +202,7 @@ public class AiChatSetting extends TSetting {
 							TAiChatCompletion cc = mv.getEntity();
 							TRequestEvent ev = TRequestEvent.build(TRequestType.CHAT, res.getLog(), 
 									res.getUsage(), cc.getModel().value(), 
-									cc.getTemperature(), cc.getMaxTokens());
+									cc.getTemperature(), cc.getMaxTokens(), null);
 							mv.getEvents().add(new EventMV(ev));
 						} catch (Exception e1) {
 							e1.printStackTrace();
@@ -216,7 +216,7 @@ public class AiChatSetting extends TSetting {
 							TAiChatCompletion cc = mv.getEntity();
 							TRequestEvent ev = TRequestEvent.build(TRequestType.CHAT, e1.getMessage(), 
 									null, cc.getModel().value(), 
-									cc.getTemperature(), cc.getMaxTokens());
+									cc.getTemperature(), cc.getMaxTokens(), null);
 							mv.getEvents().add(new EventMV(ev));
 						}finally {
 							ft.stop();
@@ -237,7 +237,7 @@ public class AiChatSetting extends TSetting {
 					TAiChatCompletion cc = mv.getEntity();
 					TRequestEvent ev = TRequestEvent.build(TRequestType.CHAT, ex.getMessage(), 
 							null, cc.getModel().value(), 
-							cc.getTemperature(), cc.getMaxTokens());
+							cc.getTemperature(), cc.getMaxTokens(), null);
 					mv.getEvents().add(new EventMV(ev));
 		            ft.stop();
 					control.setOpacity(100);
