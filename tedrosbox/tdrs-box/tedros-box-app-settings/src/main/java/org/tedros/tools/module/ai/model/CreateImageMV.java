@@ -39,6 +39,7 @@ import org.tedros.fx.annotation.layout.TPane;
 import org.tedros.fx.annotation.layout.TPriority;
 import org.tedros.fx.annotation.layout.TToolBar;
 import org.tedros.fx.annotation.layout.TVBox;
+import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
 import org.tedros.fx.annotation.presenter.TPresenter;
@@ -70,7 +71,9 @@ import javafx.scene.layout.Priority;
 @TListViewPresenter(listViewMinWidth=300,
 	paginator=@TPaginator(entityClass = TAiCreateImage.class, 
 	serviceName = TAiCreateImageController.JNDI_NAME, show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle=ToolsKey.VIEW_AI_CREATE_IMAGE)
+	presenter=@TPresenter(
+			decorator = @TDecorator(viewTitle=ToolsKey.VIEW_AI_CREATE_IMAGE),
+			behavior=@TBehavior(saveAllModels=false)
 	))
 public class CreateImageMV extends TEntityModelView<TAiCreateImage> {
 
@@ -87,11 +90,11 @@ public class CreateImageMV extends TEntityModelView<TAiCreateImage> {
 	
 	@TValidator(validatorClass = CreateImageValidator.class)
 	@TVBox(fillWidth=true, spacing=20, alignment=Pos.TOP_CENTER)
-	@TModelViewType(modelClass = TRequestEvent.class, modelViewClass=EventMV.class)
+	@TModelViewType(modelClass = TFileEntity.class)
 	private ITObservableList<TFileEntity> images;
 
 	@TLabel(text=TUsualKey.SIZE)
-	@THorizontalRadioGroup(radioButtons = { 
+	@THorizontalRadioGroup(spacing=10, radioButtons = { 
 			@TRadioButton(text = "256 x 256", userData = "256x256"), 
 			@TRadioButton(text = "512 x 512", userData = "512x512"), 
 			@TRadioButton(text = "1024 x 1024", userData = "1024x1024"), 

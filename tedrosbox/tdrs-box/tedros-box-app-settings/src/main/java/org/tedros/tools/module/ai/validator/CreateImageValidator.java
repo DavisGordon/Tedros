@@ -37,9 +37,9 @@ public class CreateImageValidator extends TValidator {
 			r.setValid(false);
 			r.setMessage(TLanguage.getInstance()
 					.getString(ToolsKey.MESSAGE_AI_CREATE_IMAGE_REQUIRED));
-		}else
-			r.setValid(true);
-		return r;
+			return r;
+		}
+		return null;
 	}
 
 }

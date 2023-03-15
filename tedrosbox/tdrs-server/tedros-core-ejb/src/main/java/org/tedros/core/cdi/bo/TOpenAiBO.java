@@ -57,7 +57,6 @@ public class TOpenAiBO {
 	 */
 	public TOpenAiBO() {
 	}
-	
 
 	public TImageResult createImage(TCreateImageRequest req) throws TBusinessException {
 		
