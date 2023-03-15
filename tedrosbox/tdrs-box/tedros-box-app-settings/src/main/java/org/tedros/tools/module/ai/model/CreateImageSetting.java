@@ -180,6 +180,7 @@ public class CreateImageSetting extends TSetting {
 						TAiCreateImage c = res.getValue();
 						c.getData().forEach(i->{
 							mv.getImages().add(i.getImage());
+							mv.getEntity().addImage(i.getImage());
 						});
 						c.getEvents().forEach(ev->{
 							mv.getEvents().add(new EventMV(ev));
