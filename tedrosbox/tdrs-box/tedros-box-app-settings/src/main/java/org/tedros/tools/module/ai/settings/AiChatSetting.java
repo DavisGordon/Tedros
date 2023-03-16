@@ -18,15 +18,17 @@ import org.tedros.core.ai.model.TRequestType;
 import org.tedros.core.ai.model.completion.chat.TChatResult;
 import org.tedros.core.ai.model.completion.chat.TChatRole;
 import org.tedros.core.context.TedrosContext;
+import org.tedros.core.control.PopOver;
+import org.tedros.core.control.PopOver.ArrowLocation;
 import org.tedros.core.repository.TRepository;
 import org.tedros.fx.control.TButton;
+import org.tedros.fx.control.TLabel;
 import org.tedros.fx.form.TSetting;
 import org.tedros.tools.ToolsKey;
 import org.tedros.tools.module.ai.model.AiChatMV;
 import org.tedros.tools.module.ai.model.AiChatMessageMV;
 import org.tedros.tools.module.ai.model.EventMV;
 
-import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -42,7 +44,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 
 
 /**
@@ -130,14 +131,21 @@ public class AiChatSetting extends TSetting {
 			Node control = super.getControl("prompt");
 			TButton btn = (TButton) e.getSource();
 			btn.setDisable(true);
-			FadeTransition ft = new FadeTransition(Duration.millis(2000), control );
-		    ft.setFromValue(1.0);
-		    ft.setToValue(0.3);
-		    ft.setCycleCount(FadeTransition.INDEFINITE);
-		    ft.setAutoReverse(true);
-		    ft.play();
 		    
 			AiChatMV mv = getModelView(); 
+
+			String prompt = mv.getPrompt().getValue();
+			if(StringUtils.isBlank(prompt)) {
+				PopOver pov = new PopOver();
+				pov.setAutoHide(true);
+				pov.setArrowLocation(ArrowLocation.BOTTOM_CENTER);
+				pov.setContentNode(new TLabel(TLanguage.getInstance()
+						.getString(ToolsKey.MESSAGE_AI_PROMPT_REQUIRED)));
+				pov.show(control);
+				btn.setDisable(false);
+				return;
+			}
+			
 			
 			if(StringUtils.isBlank(mv.getTitle().getValue())) {
 				String n = mv.getPrompt().getValue();
@@ -219,8 +227,6 @@ public class AiChatSetting extends TSetting {
 									cc.getTemperature(), cc.getMaxTokens(), null);
 							mv.getEvents().add(new EventMV(ev));
 						}finally {
-							ft.stop();
-							control.setOpacity(100);
 							btn.setDisable(false);
 						}
 					});
@@ -239,8 +245,6 @@ public class AiChatSetting extends TSetting {
 							null, cc.getModel().value(), 
 							cc.getTemperature(), cc.getMaxTokens(), null);
 					mv.getEvents().add(new EventMV(ev));
-		            ft.stop();
-					control.setOpacity(100);
 					btn.setDisable(false);
 		        }
 

@@ -22,9 +22,24 @@ public interface DomainApp {
 	static final String NOTIFY = "NOTIFY";
 	static final String SETTINGS = "SETTINGS";
 	static final String MESSAGE = "MESSAGE";
+	static final String TEROS = "TEROS";
+	static final String ASK_TEROS = "ASK_TEROS";
+	static final String CHAT_TEROS = "CHAT_TEROS";
+	static final String CR_IMAGE_TEROS = "CR_IMAGE_TEROS";
+	
 	static final String SEP = SEPARATOR;
 	
 	static final String MNEMONIC = "TCORE";
+	
+	static final String TEROS_MODULE_ID = MNEMONIC + SEP + TEROS + SEP + MODULE;
+
+	static final String ASK_TEROS_FORM_ID = MNEMONIC + SEP + ASK_TEROS + SEP + FORM;
+	static final String ASK_TEROS_VIEW_ID = MNEMONIC + SEP + ASK_TEROS + SEP + VIEW;
+	static final String CHAT_TEROS_FORM_ID = MNEMONIC + SEP + CHAT_TEROS + SEP + FORM;
+	static final String CHAT_TEROS_VIEW_ID = MNEMONIC + SEP + CHAT_TEROS + SEP + VIEW;
+	static final String CR_IMAGE_TEROS_FORM_ID = MNEMONIC + SEP + CR_IMAGE_TEROS + SEP + FORM;
+	static final String CR_IMAGE_TEROS_VIEW_ID = MNEMONIC + SEP + CR_IMAGE_TEROS + SEP + VIEW;
+
 
 	static final String SETTINGS_MODULE_ID = MNEMONIC + SEP + SETTINGS + SEP + MODULE;
 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.tedros.tools.module.ai.model;
+package org.tedros.tools.module.ai.settings;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.descriptor.ITComponentDescriptor;
@@ -14,6 +14,7 @@ import org.tedros.fx.form.TSetting;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.tools.ToolsKey;
+import org.tedros.tools.module.ai.model.CompletionMV;
 import org.tedros.tools.module.ai.process.TAiCompletionProcess;
 
 import javafx.animation.FadeTransition;

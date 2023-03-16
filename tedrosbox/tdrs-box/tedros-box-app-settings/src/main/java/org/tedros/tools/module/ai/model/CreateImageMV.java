@@ -8,8 +8,11 @@ import org.tedros.core.ai.model.TAiCreateImage;
 import org.tedros.core.ai.model.TRequestEvent;
 import org.tedros.core.ai.model.TResponseFormat;
 import org.tedros.core.ai.model.image.TImageSize;
+import org.tedros.core.annotation.security.TAuthorizationType;
+import org.tedros.core.annotation.security.TSecurity;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.controller.TAiCreateImageController;
+import org.tedros.core.domain.DomainApp;
 import org.tedros.core.security.model.TUser;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.TUsualKey;
@@ -51,7 +54,8 @@ import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.control.tablecell.TMediumDateTimeCallback;
 import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.tools.ToolsKey;
-import org.tedros.tools.module.ai.TImageSizeConverter;
+import org.tedros.tools.module.ai.converter.TImageSizeConverter;
+import org.tedros.tools.module.ai.settings.CreateImageSetting;
 import org.tedros.tools.module.ai.validator.CreateImageValidator;
 
 import javafx.beans.property.SimpleIntegerProperty;
@@ -75,6 +79,10 @@ import javafx.scene.layout.Priority;
 			decorator = @TDecorator(viewTitle=ToolsKey.VIEW_AI_CREATE_IMAGE),
 			behavior=@TBehavior(saveAllModels=false)
 	))
+@TSecurity(id=DomainApp.CR_IMAGE_TEROS_FORM_ID,
+appName=ToolsKey.APP_TOOLS, moduleName=ToolsKey.MODULE_AI, viewName=ToolsKey.VIEW_AI_CREATE_IMAGE,
+allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,  
+	   				TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public class CreateImageMV extends TEntityModelView<TAiCreateImage> {
 
 

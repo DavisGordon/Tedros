@@ -5,8 +5,11 @@ package org.tedros.tools.module.ai.model;
 
 import org.tedros.core.ai.model.TAiCompletion;
 import org.tedros.core.ai.model.TRequestEvent;
+import org.tedros.core.annotation.security.TAuthorizationType;
+import org.tedros.core.annotation.security.TSecurity;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.controller.TAiCompletionController;
+import org.tedros.core.domain.DomainApp;
 import org.tedros.core.security.model.TUser;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.control.TButtonField;
@@ -44,6 +47,8 @@ import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.control.tablecell.TMediumDateTimeCallback;
 import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.tools.ToolsKey;
+import org.tedros.tools.module.ai.action.SendActionBuilder;
+import org.tedros.tools.module.ai.settings.CompletionSetting;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -56,15 +61,18 @@ import javafx.scene.layout.Priority;
  *
  */
 @TSetting(CompletionSetting.class)
-@TForm(name = "Ask Teros AI", showBreadcrumBar=true)
+@TForm(name = "", showBreadcrumBar=false)
 @TEjbService(serviceName = TAiCompletionController.JNDI_NAME, model=TAiCompletion.class)
-@TListViewPresenter(listViewMinWidth=500,
+@TListViewPresenter(listViewMinWidth=300,
 	paginator=@TPaginator(entityClass = TAiCompletion.class, 
 	serviceName = TAiCompletionController.JNDI_NAME, show=true),
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle=ToolsKey.VIEW_AI_COMPLETION)
 	))
+@TSecurity(id=DomainApp.ASK_TEROS_FORM_ID,
+appName=ToolsKey.APP_TOOLS, moduleName=ToolsKey.MODULE_AI, viewName=ToolsKey.VIEW_AI_COMPLETION,
+allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,  
+	   				TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public class CompletionMV extends TEntityModelView<TAiCompletion> {
-
 
 	@TTabPane(tabs = { 
 		@TTab(closable=false, text = ToolsKey.MAIN_DATA, 
@@ -81,7 +89,7 @@ public class CompletionMV extends TEntityModelView<TAiCompletion> {
 			promptText=ToolsKey.PROMPT_AI_RESPONSE))
 	private SimpleStringProperty response;
 	
-	@TTextAreaField(wrapText=true, textInputControl=
+	@TTextAreaField(wrapText=true, prefRowCount=5, textInputControl=
 			@TTextInputControl(parse = true, 
 			promptText=ToolsKey.PROMPT_AI_PROMPT), 
 			control=@TControl(parse = true, tooltip=ToolsKey.TEXT_PROMPT))

@@ -13,6 +13,7 @@ import org.tedros.core.ai.model.TAiChatCompletion;
 import org.tedros.core.ai.model.completion.chat.TChatRequest;
 import org.tedros.core.ai.model.completion.chat.TChatResult;
 import org.tedros.core.controller.TAiChatCompletionController;
+import org.tedros.core.domain.DomainApp;
 import org.tedros.core.ejb.service.TAiChatCompletionService;
 import org.tedros.core.ejb.service.TSecurityService;
 import org.tedros.core.security.model.TUser;
@@ -21,7 +22,10 @@ import org.tedros.server.ejb.controller.TSecureEjbController;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.server.security.ITSecurity;
+import org.tedros.server.security.TAccessPolicie;
 import org.tedros.server.security.TAccessToken;
+import org.tedros.server.security.TBeanPolicie;
+import org.tedros.server.security.TBeanSecurity;
 import org.tedros.server.security.TSecurityInterceptor;
 import org.tedros.server.service.ITEjbService;
 
@@ -32,6 +36,8 @@ import org.tedros.server.service.ITEjbService;
 
 @TSecurityInterceptor
 @Stateless(name="TAiChatCompletionController")
+@TBeanSecurity(@TBeanPolicie(id=DomainApp.CHAT_TEROS_FORM_ID, 
+policie= {TAccessPolicie.APP_ACCESS, TAccessPolicie.VIEW_ACCESS}))
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class TAiChatCompletionControllerImpl extends TSecureEjbController<TAiChatCompletion>  
 implements TAiChatCompletionController, ITSecurity {
