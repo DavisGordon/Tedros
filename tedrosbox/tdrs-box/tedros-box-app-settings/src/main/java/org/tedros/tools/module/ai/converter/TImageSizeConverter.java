@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.tedros.tools.module.ai;
+package org.tedros.tools.module.ai.converter;
 
 import org.tedros.core.ai.model.image.TImageSize;
 import org.tedros.fx.form.TConverter;

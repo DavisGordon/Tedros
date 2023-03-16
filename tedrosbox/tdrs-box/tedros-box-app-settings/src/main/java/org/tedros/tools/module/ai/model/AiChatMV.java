@@ -6,7 +6,10 @@ package org.tedros.tools.module.ai.model;
 import org.tedros.core.ai.model.TAiChatCompletion;
 import org.tedros.core.ai.model.TAiChatMessage;
 import org.tedros.core.ai.model.TRequestEvent;
+import org.tedros.core.annotation.security.TAuthorizationType;
+import org.tedros.core.annotation.security.TSecurity;
 import org.tedros.core.controller.TAiChatCompletionController;
+import org.tedros.core.domain.DomainApp;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.control.TButtonField;
 import org.tedros.fx.annotation.control.TCallbackFactory;
@@ -54,6 +57,10 @@ import javafx.beans.property.SimpleStringProperty;
 			viewTitle=ToolsKey.VIEW_AI_CHAT, buildModesRadioButton=false),
 		behavior=@TBehavior(action= {ChatSaveAction.class, ChatDeleteAction.class},
 			runNewActionAfterSave=false, saveAllModels=false)))
+@TSecurity(id=DomainApp.CHAT_TEROS_FORM_ID,
+appName=ToolsKey.APP_TOOLS, moduleName=ToolsKey.MODULE_AI, viewName=ToolsKey.VIEW_AI_CHAT,
+allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,  
+	   				TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public class AiChatMV extends TEntityModelView<TAiChatCompletion> {
 
 	@TTabPane(tabs = { 

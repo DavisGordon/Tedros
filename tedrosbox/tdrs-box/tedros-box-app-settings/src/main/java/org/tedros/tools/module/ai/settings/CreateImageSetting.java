@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.tedros.tools.module.ai.model;
+package org.tedros.tools.module.ai.settings;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -26,6 +26,8 @@ import org.tedros.fx.form.TSetting;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.tools.ToolsKey;
+import org.tedros.tools.module.ai.model.CreateImageMV;
+import org.tedros.tools.module.ai.model.EventMV;
 import org.tedros.tools.module.ai.process.TAiCreateImageProcess;
 import org.tedros.util.TFileUtil;
 import org.tedros.util.TedrosFolder;
