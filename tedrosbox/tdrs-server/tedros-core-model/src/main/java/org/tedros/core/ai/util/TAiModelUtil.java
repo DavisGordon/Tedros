@@ -3,25 +3,17 @@
  */
 package org.tedros.core.ai.util;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
+import java.util.Base64;
 
 import org.tedros.common.model.TByteEntity;
 import org.tedros.common.model.TFileEntity;
 import org.tedros.core.ai.model.TAiCompletion;
 import org.tedros.core.ai.model.TAiCreateImage;
-import org.tedros.core.ai.model.TAiImage;
 import org.tedros.core.ai.model.TResponseFormat;
 import org.tedros.core.ai.model.completion.TCompletionRequest;
 import org.tedros.core.ai.model.completion.TCompletionResult;
 import org.tedros.core.ai.model.image.TCreateImageRequest;
 import org.tedros.core.ai.model.image.TImageResult;
-
-import sun.misc.BASE64Decoder;
 
 /**
  * @author Davis Gordon
@@ -87,14 +79,12 @@ public final class TAiModelUtil {
 		}
 	}
 	
-
 	public static TFileEntity convert(String base64) {
 		
 		try {
 			byte[] imageByte;
 
-			BASE64Decoder decoder = new BASE64Decoder();
-			imageByte = decoder.decodeBuffer(base64);
+			imageByte = Base64.getDecoder().decode(base64);
 			
 			TFileEntity e = new TFileEntity();
 			e.setFileName("ai-image-created-"+System.currentTimeMillis()+".png");
@@ -103,7 +93,7 @@ public final class TAiModelUtil {
 			b.setBytes(imageByte);
 			e.setByte(b);
 			return e;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
