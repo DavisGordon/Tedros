@@ -1,0 +1,155 @@
+package org.tedros.fx.control;
+
+import java.lang.reflect.Method;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.tedros.fx.control.TText.TTextStyle;
+import org.tedros.fx.process.TEntityProcess;
+import org.tedros.server.entity.TEntity;
+import org.tedros.server.result.TResult;
+import org.tedros.server.result.TResult.TState;
+
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.WeakChangeListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.WeakListChangeListener;
+import javafx.concurrent.Worker.State;
+import javafx.geometry.Side;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.CustomMenuItem;
+
+/**
+ * This class is a TextField which implements an "autocomplete" functionality,
+ * based on a supplied list of entries.
+ * 
+ * @author Caleb Brinkman
+ */
+public class TAutoCompleteEntity extends TTextField {
+	private int startLength;
+	private int totalItemsList;
+	private Side side;
+	private SimpleObjectProperty<TEntity> tSelectedItemProperty;
+	private String serviceName;
+	private Class<? extends TEntity> eClass;
+	private String fieldName;
+	/** The existing autocomplete entries. */
+	private final ObservableList<TEntity> entries;
+	/** The popup used to select an entry. */
+	private ContextMenu entriesPopup;
+
+	private ListChangeListener<TEntity> lchl;
+	private ChangeListener<String> chl;
+	private ChangeListener<Boolean> fchl;
+	/** Construct a new AutoCompleteTextField. */
+	
+	public TAutoCompleteEntity( Class<? extends TEntity> eClass, 
+			String serviceName, String fieldName, Side side, int startLength, int totalItemsList) {
+		this.serviceName = serviceName;
+		this.eClass = eClass;
+		this.fieldName = fieldName;
+		this.side = side==null ? Side.BOTTOM : side;
+		this.startLength = startLength>0 ? startLength : 3;
+		this.totalItemsList = totalItemsList>0 ? totalItemsList : 6;
+		this.tSelectedItemProperty = new SimpleObjectProperty<>();
+		entriesPopup = new ContextMenu();
+		entries = FXCollections.observableArrayList();
+		buildListeners();
+		entries.addListener(new WeakListChangeListener<>(lchl));
+		textProperty().addListener(new WeakChangeListener<>(chl));
+		focusedProperty().addListener(new WeakChangeListener<>(fchl));
+	}
+
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void buildListeners() {
+		lchl = ch->{
+			if(ch.next()) {
+				if(ch.wasAdded()) {
+					populatePopup(ch.getAddedSubList());
+					if (!entriesPopup.isShowing()) 
+						entriesPopup.show(TAutoCompleteEntity.this, side, 0, 0);
+				}else if(ch.wasRemoved())
+					entriesPopup.hide();
+			}
+		};
+		
+		chl = (a,o,n) -> {
+			if (n.length() < startLength) {
+				entries.clear();
+			} else if(n.length()>=startLength){
+				try {
+					TEntity e = eClass.newInstance();
+					Method m = eClass.getMethod("set"+StringUtils.capitalize(fieldName), String.class);
+					m.invoke(e, n+"%");
+					TEntityProcess p = new TEntityProcess(eClass, serviceName) {};
+					p.stateProperty().addListener((a1, o1, n1)->{
+						if(n1.equals(State.SUCCEEDED)) {
+							List<TResult<List>> l = (List<TResult<List>>) p.getValue();
+							if(l.size()>0) {
+								TResult<List> res = l.get(0);
+								if(res.getState().equals(TState.SUCCESS)) {
+									List l1 = res.getValue();
+									if(l1.size()>0)
+										entries.addAll(l1);
+									else
+										entries.clear();
+								}else 
+									entries.clear();
+							}else
+								entries.clear();
+						}
+					});
+					p.search(e);
+					p.startProcess();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		
+		fchl = (a,o,n) -> entries.clear();
+	}
+
+
+	/**
+	 * Populate the entry set with the given search results. Display is limited to
+	 * 10 entries, for performance.
+	 * 
+	 * @param list The set of matching strings.
+	 */
+	private void populatePopup(List<? extends TEntity> list) {
+		List<CustomMenuItem> menuItems = new LinkedList<>();
+		// If you'd like more entries, modify this line.
+		int count = Math.min(list.size(), this.totalItemsList);
+		for (int i = 0; i < count; i++) {
+			final TEntity result = list.get(i);
+			TText text = new TText(result.toString());
+			text.settTextStyle(TTextStyle.SMALL);
+			//TLabel entryLabel = new TLabel(result.toString());
+			CustomMenuItem item = new CustomMenuItem(text, true);
+			item.setOnAction(ev ->  {
+				setText(result.toString());
+				tSelectedItemProperty.setValue(result);
+				entries.clear();
+			});
+			menuItems.add(item);
+		}
+		entriesPopup.getItems().clear();
+		entriesPopup.getItems().addAll(menuItems);
+
+	}
+
+
+	/**
+	 * @return the tSelectedItemProperty
+	 */
+	public ReadOnlyObjectProperty<TEntity> tSelectedItemProperty() {
+		return tSelectedItemProperty;
+	}
+}

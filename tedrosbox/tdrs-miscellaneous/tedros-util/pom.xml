@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>org.tedros</groupId>
 		<artifactId>tdrs-miscellaneous</artifactId>
-		<version>8-4.1.0</version>
+		<version>8-5.1.0</version>
 	</parent>
 	
 	<!-- MODULE INFO -->	

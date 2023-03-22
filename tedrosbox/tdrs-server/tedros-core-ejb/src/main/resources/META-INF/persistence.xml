@@ -32,10 +32,10 @@
 	      <property name="eclipselink.ddl-generation.output-mode" value="database"/>
 	      <property name="eclipselink.logging.level" value="OFF"/>
           <property name="eclipselink.logging.exceptions" value="true"/>
-          <property name="eclipselink.logging.timestamp" value="true"/>
+          <property name="eclipselink.logging.timestamp" value="false"/>
           <property name="eclipselink.logging.thread" value="false"/>
           <property name="eclipselink.logging.session" value="false"/>
-          <property name="eclipselink.logging.level.sql" value="ALL"/>
+          <property name="eclipselink.logging.level.sql" value="FINEST"/>
           <property name="eclipselink.deploy-on-startup" value="true"/>
 	    </properties>
 		

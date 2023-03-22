@@ -30,11 +30,14 @@ import org.tedros.core.control.PopOver;
 import org.tedros.core.control.PopOver.ArrowLocation;
 import org.tedros.core.control.TedrosBoxBreadcrumbBar;
 import org.tedros.core.control.TedrosBoxResizeBar;
+import org.tedros.core.controller.TAuthorizationController;
 import org.tedros.core.logging.TLoggerManager;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
+import org.tedros.core.security.model.TAuthorization;
 import org.tedros.core.style.TThemeUtil;
 import org.tedros.fx.TFxKey;
+import org.tedros.fx.control.TAutoCompleteEntity;
 import org.tedros.fx.control.TLabel;
 import org.tedros.fx.layout.TSliderMenu;
 import org.tedros.fx.modal.TConfirmMessageBox;
@@ -59,6 +62,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.Cursor;
 import javafx.scene.DepthTest;
 import javafx.scene.Node;
@@ -476,9 +480,12 @@ public class TedrosBox extends Application implements ITedrosBox  {
         HBox.setMargin(chatButton, new Insets(2,4,2,8));
         HBox.setMargin(chatUnreadMsgsLabel, new Insets(2,8,2,4));
         
+        TAutoCompleteEntity ace = new TAutoCompleteEntity(TAuthorization.class, 
+        		TAuthorizationController.JNDI_NAME, "appName", Side.BOTTOM, 3, 10);
+        
         HBox btnBox = new HBox();
         btnBox.setAlignment(Pos.CENTER);
-        btnBox.getChildren().addAll(userButton, infoButton, chb, backButton, forwardButton);
+        btnBox.getChildren().addAll(userButton, ace, infoButton, chb, backButton, forwardButton);
         HBox.setMargin(userButton, new Insets(0,10,0,0));
         HBox.setMargin(backButton, new Insets(0,10,0,0));
         HBox.setMargin(forwardButton, new Insets(0,10,0,0));
