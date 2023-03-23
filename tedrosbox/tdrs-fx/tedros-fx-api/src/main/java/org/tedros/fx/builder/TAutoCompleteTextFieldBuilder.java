@@ -8,8 +8,10 @@ package org.tedros.fx.builder;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
+import java.util.List;
 
 import org.tedros.fx.annotation.control.TAutoCompleteTextField;
+import org.tedros.fx.annotation.control.TAutoCompleteTextField.TEntry;
 
 import javafx.beans.property.Property;
 
@@ -28,7 +30,17 @@ implements ITControlBuilder<org.tedros.fx.control.TAutoCompleteTextField, Proper
 		TAutoCompleteTextField tAnn = (TAutoCompleteTextField) annotation;
 		final org.tedros.fx.control.TAutoCompleteTextField control 
 		= new org.tedros.fx.control.TAutoCompleteTextField();
-		control.getEntries().addAll(Arrays.asList(tAnn.entries()));
+		
+		TEntry eAnn = tAnn.entries();
+		if(eAnn.values().length>0) {
+			control.getEntries().addAll(Arrays.asList(eAnn.values()));
+		}else if(eAnn.factory()!=NullStringListBuilder.class) {
+			ITGenericBuilder<List<String>> builder = eAnn.factory().newInstance();
+			builder.setComponentDescriptor(super.getComponentDescriptor());
+			List<String> l = builder.build();
+			control.getEntries().addAll(l);
+		}
+		
 		callParser(tAnn, control);
 		control.textProperty().bindBidirectional(attrProperty);
 		return control;

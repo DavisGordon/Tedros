@@ -10,7 +10,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.List;
 
 import org.tedros.api.parser.ITAnnotationParser;
 import org.tedros.fx.annotation.TAnnotationDefaultValue;
@@ -21,12 +20,12 @@ import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TControl;
 import org.tedros.fx.builder.ITEventHandlerBuilder;
 import org.tedros.fx.builder.ITFieldBuilder;
-import org.tedros.fx.builder.ITGenericBuilder;
 import org.tedros.fx.builder.NullActionEventBuilder;
-import org.tedros.fx.builder.NullStringListBuilder;
-import org.tedros.fx.builder.TAutoCompleteTextFieldBuilder;
+import org.tedros.fx.builder.TAutoCompleteEntityBuilder;
 import org.tedros.fx.control.TRequiredTextField;
 import org.tedros.fx.domain.TDefaultValues;
+import org.tedros.fx.presenter.model.TEntityModelView;
+import org.tedros.server.entity.TEntity;
 
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -37,7 +36,7 @@ import javafx.scene.control.TextInputControl;
 
 /**
  * <pre>
- * Build a {@link org.tedros.fx.control.TAutoCompleteTextField} component.
+ * Build a {@link org.tedros.fx.control.TAutoCompleteEntity} component.
  * 
  * This component is a TextField which implements an "autocomplete" functionality, 
  * based on a supplied list of entries.
@@ -57,7 +56,7 @@ import javafx.scene.control.TextInputControl;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface TAutoCompleteTextField  {
+public @interface TAutoCompleteEntity  {
 	
 
 	/**
@@ -68,20 +67,33 @@ public @interface TAutoCompleteTextField  {
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.ANNOTATION_TYPE)
 	public @interface TEntry  {
+		/**
+		 * The JNDI name of the target entity Ejb controller.
+		 * The findAll method you be called.
+		 * */
+		String service();
 		
-		String[] values() default {};
+		/**
+		 * The field of the target entity to realize the search. 
+		 * Must be a String type field.
+		 * */
+		String field();
 		
-		Class<? extends ITGenericBuilder<List<String>>> factory() default NullStringListBuilder.class;
+		/**
+		 * The entity type to search. 
+		 * The toString() method will be used to show it in the result list.
+		 * */
+		Class<? extends TEntity> entityType();
 	};
 	
 	/**
 	 *<pre>
 	 * The builder of type {@link ITFieldBuilder} for this component.
 	 * 
-	 *  Default value: {@link TAutoCompleteTextFieldBuilder}
+	 *  Default value: {@link TAutoCompleteEntityBuilder}
 	 *</pre> 
 	 * */
-	public Class<? extends ITFieldBuilder> builder() default TAutoCompleteTextFieldBuilder.class;
+	public Class<? extends ITFieldBuilder> builder() default TAutoCompleteEntityBuilder.class;
 	
 	/**
 	 * <pre>
@@ -118,13 +130,46 @@ public @interface TAutoCompleteTextField  {
 	public TTextInputControl textInputControl() default @TTextInputControl(parse = false);
 	
 	/**
-	 * pre>
-	 * The {@link TAutoCompleteTextField} settings.
+	 * <pre>
+	 * The {@link TAutoCompleteEntity} settings.
 	 * 
-	 * Define the values to be searched.
+	 * Define the server settings to realize the entity search.
 	 * </pre>
 	 * */
 	public TEntry entries();
+	
+	/**
+	 * <pre>
+	 * The {@link TAutoCompleteEntity} settings.
+	 * 
+	 * The TEntityModelView type to encapsulate the selected entity.
+	 * Use it only if the generic type of the target property has
+	 * waiting for it.
+	 * </pre>
+	 * */
+	@SuppressWarnings("rawtypes")
+	public Class<? extends TEntityModelView> modelViewType() default TEntityModelView.class;
+	
+	/**
+	 * <pre>
+	 * The {@link TAutoCompleteEntity} settings.
+	 * 
+	 * The total number of characters entered to start the search.
+	 * Default: 3
+	 * </pre>
+	 * */
+	public int startSearchAt() default 3;
+	
+	/**
+	 * <pre>
+	 * The {@link TAutoCompleteEntity} settings.
+	 * 
+	 * The maximum number of items to display in the results list.
+	 * Default: 10
+	 * </pre>
+	 * */
+	public int showMaxItems() default 10;
+	
 	/**
 	* <pre>
 	* {@link TextField} Class

@@ -148,4 +148,5 @@ public final class TProfileMV extends TEntityModelView<TProfile> {
 		this.autorizations = autorizations;
 	}
 
+
 }
