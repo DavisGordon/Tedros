@@ -49,11 +49,11 @@ public class TAutoCompleteEntity extends TTextField {
 	/** Construct a new AutoCompleteTextField. */
 	
 	public TAutoCompleteEntity( Class<? extends TEntity> eClass, 
-			String serviceName, String fieldName, Side side, int startLength, int totalItemsList) {
+			String serviceName, String fieldName, int startLength, int totalItemsList) {
 		this.serviceName = serviceName;
 		this.eClass = eClass;
 		this.fieldName = fieldName;
-		this.side = side==null ? Side.BOTTOM : side;
+		this.side = Side.BOTTOM;
 		this.startLength = startLength>0 ? startLength : 3;
 		this.totalItemsList = totalItemsList>0 ? totalItemsList : 6;
 		this.tSelectedItemProperty = new SimpleObjectProperty<>();
