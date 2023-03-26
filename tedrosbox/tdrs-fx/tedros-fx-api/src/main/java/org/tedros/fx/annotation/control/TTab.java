@@ -141,10 +141,10 @@ public @interface TTab  {
 	*  Therefore, when this property is false, no 'close' button will 
 	*  be shown on the tab. 
 	*  
-	*  The default is true.
+	*  The default is false.
 	* </pre>
 	**/
-	public boolean closable() default true;
+	public boolean closable() default false;
 
 	/**
 	* <pre>

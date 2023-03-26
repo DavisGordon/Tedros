@@ -80,13 +80,15 @@ public class TAutoCompleteEntity extends TTextField {
 		};
 		
 		chl = (a,o,n) -> {
-			if (n.length() < startLength) {
+			if (n==null || n.length() < startLength) {
 				entries.clear();
+				this.tSelectedItemProperty.setValue(null);
 			} else if(n.length()>=startLength){
 				try {
 					TEntity e = eClass.newInstance();
 					Method m = eClass.getMethod("set"+StringUtils.capitalize(fieldName), String.class);
-					m.invoke(e, n+"%");
+					m.invoke(e, "%"+n+"%");
+					e.addOrderBy(fieldName);
 					TEntityProcess p = new TEntityProcess(eClass, serviceName) {};
 					p.stateProperty().addListener((a1, o1, n1)->{
 						if(n1.equals(State.SUCCEEDED)) {
@@ -130,7 +132,7 @@ public class TAutoCompleteEntity extends TTextField {
 		for (int i = 0; i < count; i++) {
 			final TEntity result = list.get(i);
 			TText text = new TText(result.toString());
-			text.settTextStyle(TTextStyle.SMALL);
+			text.settTextStyle(TTextStyle.MEDIUM);
 			//TLabel entryLabel = new TLabel(result.toString());
 			CustomMenuItem item = new CustomMenuItem(text, true);
 			item.setOnAction(ev ->  {
