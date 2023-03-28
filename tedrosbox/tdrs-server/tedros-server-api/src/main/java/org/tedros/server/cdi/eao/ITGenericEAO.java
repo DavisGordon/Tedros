@@ -5,11 +5,16 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.tedros.server.entity.ITEntity;
+import org.tedros.server.query.TSelect;
 
 public interface ITGenericEAO<E extends ITEntity> {
 	
 	public EntityManager getEntityManager();
 
+	/**
+	 * Search for entities
+	 * */
+	public List<E> search(TSelect<E> sel);
 	/**
 	 * Find an entity by id
 	 * */

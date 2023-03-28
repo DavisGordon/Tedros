@@ -12,6 +12,7 @@ import javax.persistence.OptimisticLockException;
 
 import org.tedros.server.controller.ITEjbController;
 import org.tedros.server.entity.ITEntity;
+import org.tedros.server.query.TSelect;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.server.service.ITEjbService;
@@ -30,6 +31,15 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 		
 	}
 	
+	public TResult<List<E>> search(TSelect<E> sel){
+		try{
+			List<E> list = getService().search(sel);
+			processEntityList(list);
+			return new TResult<List<E>>(TState.SUCCESS, list);
+		}catch(Exception e){
+			return processException(null, e);
+		}
+	}
 	
 	public TResult<E> findById(E entity) {
 		try{

@@ -142,25 +142,21 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<E> select(TSelect<E> sel){
+	public List<E> search(TSelect<E> sel){
 		
 		StringBuilder sb = new StringBuilder("select e from ");
-		sb.append(sel.getType().getSimpleName()+ " e ");
+		sb.append(sel.getType().getSimpleName()+ " e where ");
 		
 		sel.getConditions().forEach(b->{
 			if(b.getOperator()!=null)
-				sb.append(b.getOperator().name()).append(" ");
+				sb.append(b.getOperator().name().toLowerCase()).append(" ");
 			if(b.getCondition().getOperator().equals(TCompareOp.LIKE))
 				sb.append("lower(");
-			sb.append(b.getCondition().getField());
+			sb.append("e.").append(b.getCondition().getField());
 			if(b.getCondition().getOperator().equals(TCompareOp.LIKE))
 				sb.append(")");
 			sb.append(" ").append(b.getCondition().getOperator().getValue()).append(" ");
-			if(b.getCondition().getOperator().getValue().equals(TCompareOp.LIKE.getValue()))
-				sb.append("'");
 			sb.append(":").append(b.getCondition().getField()).append("_");
-			if(b.getCondition().getOperator().getValue().equals(TCompareOp.LIKE.getValue()))
-				sb.append("'");
 			sb.append(" ");
 		});
 		
@@ -179,7 +175,11 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 		Query qry = this.getEntityManager().createQuery(sb.toString());
 		
 		sel.getConditions().forEach(b->{
-			qry.setParameter(b.getCondition().getField()+"_", b.getCondition().getValue());
+			qry.setParameter(b.getCondition().getField()+"_", 
+					b.getCondition().getOperator().equals(TCompareOp.LIKE) 
+						? b.getCondition().getValue().toString().toLowerCase()
+								: b.getCondition().getValue()
+					);
 		});
 		
 		return qry.getResultList();

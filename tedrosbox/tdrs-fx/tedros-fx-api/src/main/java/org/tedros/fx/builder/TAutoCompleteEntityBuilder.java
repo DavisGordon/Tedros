@@ -40,7 +40,7 @@ implements ITControlBuilder<org.tedros.fx.control.TAutoCompleteEntity, Property>
 		
 		final org.tedros.fx.control.TAutoCompleteEntity control 
 		= new org.tedros.fx.control.TAutoCompleteEntity(eAnn.entityType(), 
-				eAnn.service(), eAnn.field(), tAnn.startSearchAt(), tAnn.showMaxItems());
+				tAnn.startSearchAt(), tAnn.showMaxItems(), eAnn.service(), eAnn.fields());
 		
 		if(tAnn.modelViewType()!=TEntityModelView.class) {
 			ChangeListener<TEntity> chl = (a,o,n) -> {
@@ -58,7 +58,8 @@ implements ITControlBuilder<org.tedros.fx.control.TAutoCompleteEntity, Property>
 				}
 			};
 			super.getComponentDescriptor().getForm().gettObjectRepository()
-			.add(eAnn.field()+"_autocompentity_chl", chl);
+			.add(super.getComponentDescriptor().getFieldDescriptor().getFieldName()
+					+"_autocompentity_chl", chl);
 			control.tSelectedItemProperty()
 			.addListener(new WeakChangeListener<>(chl));
 		}else

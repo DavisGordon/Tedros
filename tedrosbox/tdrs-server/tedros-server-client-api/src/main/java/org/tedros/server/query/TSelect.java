@@ -38,7 +38,7 @@ public class TSelect<E extends ITEntity>  implements Serializable{
 		if(this.conditions==null)
 			this.conditions = new ArrayList<>();
 		TCondition<T> c = new TCondition<T>(field, compOp, value);
-		TBlock b = logicOp==null 
+		TBlock b = logicOp==null || this.conditions.size()==0
 				? new TBlock(c)
 						: new TBlock(logicOp, c);
 		this.conditions.add(b);

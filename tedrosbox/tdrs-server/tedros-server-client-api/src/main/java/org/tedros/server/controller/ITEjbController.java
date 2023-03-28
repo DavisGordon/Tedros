@@ -3,10 +3,15 @@ package org.tedros.server.controller;
 import java.util.List;
 
 import org.tedros.server.entity.ITEntity;
+import org.tedros.server.query.TSelect;
 import org.tedros.server.result.TResult;
 
 public interface ITEjbController<E extends ITEntity> extends ITBaseController {
-	
+	/**
+	 * Search for entities
+	 * */
+	public TResult<List<E>> search(TSelect<E> sel);
+			 
 	/**
 	 * Retorna uma entidade pelo seu id
 	 * */

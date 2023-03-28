@@ -4,10 +4,17 @@ import java.util.List;
 
 import org.tedros.server.cdi.eao.ITGenericEAO;
 import org.tedros.server.entity.ITEntity;
+import org.tedros.server.query.TSelect;
 
 public abstract  class TGenericBO<E extends ITEntity> implements ITGenericBO<E> {
 
 	public abstract ITGenericEAO<E> getEao();
+	/**
+	 * Search for entities
+	 * */
+	public List<E> search(TSelect<E> sel){
+		return getEao().search(sel);
+	}
 	
 	/**
 	 * Retorna uma entidade pelo seu id
