@@ -23,6 +23,11 @@ import javafx.concurrent.Worker.State;
 import javafx.geometry.Side;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.CustomMenuItem;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 /**
  * This class is a TextField which implements an "autocomplete" functionality,
@@ -131,9 +136,7 @@ public class TAutoCompleteEntity extends TTextField {
 		int count = Math.min(list.size(), this.totalItemsList);
 		for (int i = 0; i < count; i++) {
 			final TEntity result = list.get(i);
-			TText text = new TText(result.toString());
-			text.settTextStyle(TTextStyle.MEDIUM);
-			//TLabel entryLabel = new TLabel(result.toString());
+			TextFlow text = this.buildTextFlow(result.toString(), getText());
 			CustomMenuItem item = new CustomMenuItem(text, true);
 			item.setOnAction(ev ->  {
 				setText(result.toString());
@@ -146,6 +149,19 @@ public class TAutoCompleteEntity extends TTextField {
 		entriesPopup.getItems().addAll(menuItems);
 
 	}
+	
+	private TextFlow buildTextFlow(String text, String filter) {        
+	    int filterIndex = text.toLowerCase().indexOf(filter.toLowerCase());
+	    TText textBefore = new TText(text.substring(0, filterIndex));
+	    TText textAfter = new TText(text.substring(filterIndex + filter.length()));
+	    Text textFilter = new 
+	    		Text(text.substring(filterIndex,  filterIndex + filter.length())); //instead of "filter" to keep all "case sensitive"
+	    textBefore.settTextStyle(TTextStyle.MEDIUM);
+	    textAfter.settTextStyle(TTextStyle.MEDIUM);
+	    textFilter.setFill(Color.ORANGE);
+	    textFilter.setFont(Font.font("Tahoma", FontWeight.BOLD, 14));  
+	    return new TextFlow(textBefore, textFilter, textAfter);
+	}    
 
 
 	/**
