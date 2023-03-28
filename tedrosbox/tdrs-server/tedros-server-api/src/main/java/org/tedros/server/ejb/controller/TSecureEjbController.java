@@ -13,6 +13,7 @@ import javax.persistence.OptimisticLockException;
 import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.tedros.server.controller.ITSecureEjbController;
 import org.tedros.server.entity.ITEntity;
+import org.tedros.server.query.TSelect;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.server.security.TAccessToken;
@@ -33,6 +34,17 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 	
 	protected void processEntityList(TAccessToken token, List<E> entities) {
 		
+	}
+	
+
+	public TResult<List<E>> search(TAccessToken token,TSelect<E> sel){
+		try{
+			List<E> list = getService().search(sel);
+			processEntityList(token, list);
+			return new TResult<List<E>>(TState.SUCCESS, list);
+		}catch(Exception e){
+			return processException(token, null, e);
+		}
 	}
 	
 	@TMethodSecurity({@TMethodPolicie(policie = {TActionPolicie.EDIT, TActionPolicie.READ})})

@@ -3,8 +3,14 @@ package org.tedros.server.service;
 import java.util.List;
 
 import org.tedros.server.entity.ITEntity;
+import org.tedros.server.query.TSelect;
 
 public interface ITEjbService<E extends ITEntity> {
+
+	/**
+	 * Search for entities
+	 * */
+	public List<E> search(TSelect<E> sel);
 	
 	/**
 	 * Retorna uma entidade pelo seu id

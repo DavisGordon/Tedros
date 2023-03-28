@@ -12,6 +12,7 @@ import org.tedros.server.controller.ITBaseController;
 import org.tedros.server.controller.ITEjbController;
 import org.tedros.server.controller.ITSecureEjbController;
 import org.tedros.server.entity.ITEntity;
+import org.tedros.server.query.TSelect;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 
@@ -47,6 +48,7 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 	
 	private Class<E> entityType;
 	private List<E> values;
+	private TSelect<E> select;
 	private int operation;
 	
 	private String serviceJndiName;
@@ -103,6 +105,14 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 	 * */
 	public void search(E entidade){
 		values.add(entidade);
+		operation = SEARCH;
+	}
+	/**
+	 * <pre>Add a custom select statements to search</pre>
+	 * @param entidade 
+	 * */
+	public void search(TSelect<E> select){
+		this.select = select;
 		operation = SEARCH;
 	}
 	/**
@@ -199,11 +209,18 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 												: secure.listAll(user.getAccessToken(), entityType));
 								break;
 							case SEARCH :
-								for (E entity : values){
+								if(select==null) {
+									for (E entity : values){
+										TResult result = service!=null 
+												? service.findAll(entity)
+														: secure.findAll(user.getAccessToken(), entity);
+										resultList.add(result);		
+									}
+								}else {
 									TResult result = service!=null 
-											? service.findAll(entity)
-													: secure.findAll(user.getAccessToken(), entity);
-									resultList.add(result);		
+											? service.search(select)
+													: secure.search(user.getAccessToken(), select);
+									resultList.add(result);	
 								}
 								break;
 						}

@@ -77,7 +77,7 @@ public @interface TAutoCompleteEntity  {
 		 * The field of the target entity to realize the search. 
 		 * Must be a String type field.
 		 * */
-		String field();
+		String[] fields();
 		
 		/**
 		 * The entity type to search. 

@@ -4,9 +4,15 @@ import java.util.List;
 
 import org.tedros.server.cdi.eao.ITGenericEAO;
 import org.tedros.server.entity.ITEntity;
+import org.tedros.server.query.TSelect;
 
 public interface ITGenericBO<E extends ITEntity> {
 
+	/**
+	 * Search for entities
+	 * */
+	public List<E> search(TSelect<E> sel);
+	
 	/**
 	 * Retorna um Entity Acess Object
 	 * */

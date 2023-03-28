@@ -8,6 +8,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.tedros.fx.control.TText.TTextStyle;
 import org.tedros.fx.process.TEntityProcess;
 import org.tedros.server.entity.TEntity;
+import org.tedros.server.query.TCompareOp;
+import org.tedros.server.query.TSelect;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 
@@ -42,7 +44,7 @@ public class TAutoCompleteEntity extends TTextField {
 	private SimpleObjectProperty<TEntity> tSelectedItemProperty;
 	private String serviceName;
 	private Class<? extends TEntity> eClass;
-	private String fieldName;
+	private String[] fieldsName;
 	/** The existing autocomplete entries. */
 	private final ObservableList<TEntity> entries;
 	/** The popup used to select an entry. */
@@ -54,10 +56,11 @@ public class TAutoCompleteEntity extends TTextField {
 	/** Construct a new AutoCompleteTextField. */
 	
 	public TAutoCompleteEntity( Class<? extends TEntity> eClass, 
-			String serviceName, String fieldName, int startLength, int totalItemsList) {
+			int startLength, int totalItemsList,
+			String serviceName, String... fieldsName) {
 		this.serviceName = serviceName;
 		this.eClass = eClass;
-		this.fieldName = fieldName;
+		this.fieldsName = fieldsName;
 		this.side = Side.BOTTOM;
 		this.startLength = startLength>0 ? startLength : 3;
 		this.totalItemsList = totalItemsList>0 ? totalItemsList : 6;
@@ -90,10 +93,13 @@ public class TAutoCompleteEntity extends TTextField {
 				this.tSelectedItemProperty.setValue(null);
 			} else if(n.length()>=startLength){
 				try {
-					TEntity e = eClass.newInstance();
-					Method m = eClass.getMethod("set"+StringUtils.capitalize(fieldName), String.class);
-					m.invoke(e, "%"+n+"%");
-					e.addOrderBy(fieldName);
+					TSelect sel = new TSelect(eClass);
+					for(String f : fieldsName)
+						sel.addOrCondition(f, TCompareOp.LIKE, "%"+n+"%");
+					//TEntity e = eClass.newInstance();
+					//Method m = eClass.getMethod("set"+StringUtils.capitalize(fieldName), String.class);
+					//m.invoke(e, "%"+n+"%");
+					//e.addOrderBy(fieldName);
 					TEntityProcess p = new TEntityProcess(eClass, serviceName) {};
 					p.stateProperty().addListener((a1, o1, n1)->{
 						if(n1.equals(State.SUCCEEDED)) {
@@ -112,7 +118,7 @@ public class TAutoCompleteEntity extends TTextField {
 								entries.clear();
 						}
 					});
-					p.search(e);
+					p.search(sel);
 					p.startProcess();
 				} catch (Exception e) {
 					e.printStackTrace();

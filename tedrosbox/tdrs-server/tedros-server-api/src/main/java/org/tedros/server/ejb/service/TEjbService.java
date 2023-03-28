@@ -7,6 +7,7 @@ import javax.ejb.TransactionAttributeType;
 
 import org.tedros.server.cdi.bo.ITGenericBO;
 import org.tedros.server.entity.ITEntity;
+import org.tedros.server.query.TSelect;
 import org.tedros.server.service.ITEjbService;
 
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
@@ -14,6 +15,13 @@ public abstract class TEjbService<E extends ITEntity> implements ITEjbService<E>
 
 	
 	public abstract ITGenericBO<E> getBussinesObject();
+	
+	/**
+	 * Search for entities
+	 * */
+	public List<E> search(TSelect<E> sel){
+		return getBussinesObject().search(sel);
+	}
 	
 	public E findById(E entidade)throws Exception{
 		return getBussinesObject().findById(entidade);
