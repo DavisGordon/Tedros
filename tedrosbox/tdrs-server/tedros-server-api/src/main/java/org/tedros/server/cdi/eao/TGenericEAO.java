@@ -7,6 +7,7 @@ import java.util.Vector;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -19,6 +20,8 @@ import org.eclipse.persistence.queries.ReadAllQuery;
 import org.eclipse.persistence.queries.ReportQuery;
 import org.eclipse.persistence.queries.ReportQueryResult;
 import org.tedros.server.entity.ITEntity;
+import org.tedros.server.query.TCompareOp;
+import org.tedros.server.query.TSelect;
 
 public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 	
@@ -123,7 +126,6 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 		return e;
 	}
 	
-	
 	/**
 	 * Remove uma entity
 	 * */
@@ -138,6 +140,52 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 			afterRemove(entity);
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<E> select(TSelect<E> sel){
+		
+		StringBuilder sb = new StringBuilder("select e from ");
+		sb.append(sel.getType().getSimpleName()+ " e ");
+		
+		sel.getConditions().forEach(b->{
+			if(b.getOperator()!=null)
+				sb.append(b.getOperator().name()).append(" ");
+			if(b.getCondition().getOperator().equals(TCompareOp.LIKE))
+				sb.append("lower(");
+			sb.append(b.getCondition().getField());
+			if(b.getCondition().getOperator().equals(TCompareOp.LIKE))
+				sb.append(")");
+			sb.append(" ").append(b.getCondition().getOperator().getValue()).append(" ");
+			if(b.getCondition().getOperator().getValue().equals(TCompareOp.LIKE.getValue()))
+				sb.append("'");
+			sb.append(":").append(b.getCondition().getField()).append("_");
+			if(b.getCondition().getOperator().getValue().equals(TCompareOp.LIKE.getValue()))
+				sb.append("'");
+			sb.append(" ");
+		});
+		
+		if(sel.getOrdenations()!=null) {
+			StringBuilder sb1 = new StringBuilder("");
+			sel.getOrdenations().forEach(f->{
+				if("".equals(sb1.toString()))
+					sb1.append("order by ");
+				else
+					sb1.append(", ");
+				sb1.append(f.getField());
+			});
+			sb.append(sb1);
+		}
+			
+		Query qry = this.getEntityManager().createQuery(sb.toString());
+		
+		sel.getConditions().forEach(b->{
+			qry.setParameter(b.getCondition().getField()+"_", b.getCondition().getValue());
+		});
+		
+		return qry.getResultList();
+		
+	}
+	
 	/**
 	 * Retorna uma lista com todas as entitys persistidas
 	 * */
