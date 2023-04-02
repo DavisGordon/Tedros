@@ -29,9 +29,9 @@ public class TTextField extends TRequiredTextField  {
 	@Override 
 	public void replaceText(int start, int end, String letter) {
 		 
-		if(letter.equals("") || maxLength==null)
-			super.replaceText(start, end, letter);
-		else {
+		if(letter.equals("") || maxLength==null) {
+			super.replaceText(Math.min(start, end), end, letter);
+		}else {
 			final int totalASub = end - start;
 			final int textLenght = (getText()==null) ? 0 : getText().length();
 			if( (textLenght-totalASub) + letter.length() <= maxLength.get() )

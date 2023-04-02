@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -189,7 +190,11 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 			Object o = f.getValue();
 			if(o instanceof String && TStripTagUtil.isTagPresent((String) o))
 				arr = ArrayUtils.add(arr, TLanguage.getInstance().getString((String) o));
-			else
+			else if(o instanceof Date) {
+				Calendar cal = Calendar.getInstance();
+				cal.setTime((Date) o);
+				arr = ArrayUtils.add(arr, cal);
+			}else
 				arr = ArrayUtils.add(arr, o!=null ? o : "");
 		}
 		toStringProperty().setValue(String.format(format, arr));

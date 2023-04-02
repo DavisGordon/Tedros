@@ -42,7 +42,7 @@ public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
 					addNode(pane, field);
 				}
 				
-				ScrollPane scroll = new ScrollPane();
+				ScrollPane scroll = new ScrollPane() ;
 				scroll.autosize();
 				scroll.setPadding(new Insets(10));
 				scroll.setContent(pane);

@@ -43,6 +43,20 @@ implements ITControlBuilder<org.tedros.fx.control.TAutoCompleteEntity, Property>
 				tAnn.startSearchAt(), tAnn.showMaxItems(), eAnn.service(), eAnn.fields());
 		
 		if(tAnn.modelViewType()!=TEntityModelView.class) {
+			if(attrProperty.getValue() instanceof TEntityModelView)
+				control.tSelectedItemProperty().setValue((TEntity) 
+						((TEntityModelView)attrProperty.getValue()).getEntity());
+			ChangeListener<TEntityModelView> chl0 = (a,o,n) -> {
+				if(n!=null) {
+					control.tSelectedItemProperty().setValue((TEntity) n.getEntity());
+				}else
+					control.tSelectedItemProperty().setValue(null);
+			};
+			super.getComponentDescriptor().getForm().gettObjectRepository()
+			.add(super.getComponentDescriptor().getFieldDescriptor().getFieldName()
+					+"_autocompentity_chl0", chl0);
+			attrProperty.addListener(new WeakChangeListener<>(chl0));
+			
 			ChangeListener<TEntity> chl = (a,o,n) -> {
 				if(n!=null) {
 					try {
@@ -62,8 +76,11 @@ implements ITControlBuilder<org.tedros.fx.control.TAutoCompleteEntity, Property>
 					+"_autocompentity_chl", chl);
 			control.tSelectedItemProperty()
 			.addListener(new WeakChangeListener<>(chl));
-		}else
-			attrProperty.bind(control.tSelectedItemProperty());
+		}else {
+			if(attrProperty.getValue() instanceof TEntity)
+				control.tSelectedItemProperty().setValue((TEntity) attrProperty.getValue());
+			attrProperty.bindBidirectional(control.tSelectedItemProperty());
+		}
 		
 		callParser(tAnn, control);
 		

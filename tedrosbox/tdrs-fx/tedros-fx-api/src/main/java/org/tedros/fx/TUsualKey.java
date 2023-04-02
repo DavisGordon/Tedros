@@ -46,6 +46,7 @@ public interface TUsualKey {
 	static final String CURRENCY_NAME = "#{label.currency.name}";
 	static final String DATE = "#{label.date}";
 	static final String DATE_INSERT = "#{label.date.insert}";
+	static final String DATE_TIME = "#{label.date.time}";
 	static final String DATE_UPDATE = "#{label.date.update}";
 	static final String DESCRIPTION = "#{label.description}";
 	static final String DETAIL = "#{label.detail}";
