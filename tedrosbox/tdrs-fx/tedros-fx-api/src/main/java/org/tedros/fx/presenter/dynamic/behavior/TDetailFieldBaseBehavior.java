@@ -113,7 +113,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			super.getListenerRepository().add("setmodelviewCL", mvcl);
 			super.modelViewProperty().addListener(new WeakChangeListener(mvcl));
 			
-			
+			getView().gettProgressIndicator().setSmallLogo();
 		}catch(Exception e){
 			e.printStackTrace();
 		}

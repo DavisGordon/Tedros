@@ -1,10 +1,10 @@
 package org.tedros.fx.control;
 
-import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import org.tedros.core.TLanguage;
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.control.TText.TTextStyle;
 import org.tedros.fx.process.TEntityProcess;
 import org.tedros.server.entity.TEntity;
@@ -13,7 +13,6 @@ import org.tedros.server.query.TSelect;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
@@ -25,6 +24,7 @@ import javafx.concurrent.Worker.State;
 import javafx.geometry.Side;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.CustomMenuItem;
+import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -49,15 +49,20 @@ public class TAutoCompleteEntity extends TTextField {
 	private final ObservableList<TEntity> entries;
 	/** The popup used to select an entry. */
 	private ContextMenu entriesPopup;
-
+	
 	private ListChangeListener<TEntity> lchl;
 	private ChangeListener<String> chl;
 	private ChangeListener<Boolean> fchl;
+	private ChangeListener<TEntity> echl;
+	
+	
 	/** Construct a new AutoCompleteTextField. */
 	
 	public TAutoCompleteEntity( Class<? extends TEntity> eClass, 
 			int startLength, int totalItemsList,
 			String serviceName, String... fieldsName) {
+		this.setTooltip(new Tooltip(TLanguage.getInstance()
+				.getString(TFxKey.TOOLTIP_AUTOCOMPLETE)));
 		this.serviceName = serviceName;
 		this.eClass = eClass;
 		this.fieldsName = fieldsName;
@@ -69,13 +74,23 @@ public class TAutoCompleteEntity extends TTextField {
 		entries = FXCollections.observableArrayList();
 		buildListeners();
 		entries.addListener(new WeakListChangeListener<>(lchl));
-		textProperty().addListener(new WeakChangeListener<>(chl));
+		textProperty().addListener(chl);
 		focusedProperty().addListener(new WeakChangeListener<>(fchl));
+		this.tSelectedItemProperty.addListener(new WeakChangeListener<>(echl));
 	}
 
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void buildListeners() {
+		echl = (a,o,n)->{
+			if(n!=null) {
+				textProperty().removeListener(chl);
+				setText(n.toString());
+				entries.clear();
+				textProperty().addListener(chl);
+			}
+		};
+		
 		lchl = ch->{
 			if(ch.next()) {
 				if(ch.wasAdded()) {
@@ -96,10 +111,6 @@ public class TAutoCompleteEntity extends TTextField {
 					TSelect sel = new TSelect(eClass);
 					for(String f : fieldsName)
 						sel.addOrCondition(f, TCompareOp.LIKE, "%"+n+"%");
-					//TEntity e = eClass.newInstance();
-					//Method m = eClass.getMethod("set"+StringUtils.capitalize(fieldName), String.class);
-					//m.invoke(e, "%"+n+"%");
-					//e.addOrderBy(fieldName);
 					TEntityProcess p = new TEntityProcess(eClass, serviceName) {};
 					p.stateProperty().addListener((a1, o1, n1)->{
 						if(n1.equals(State.SUCCEEDED)) {
@@ -145,9 +156,7 @@ public class TAutoCompleteEntity extends TTextField {
 			TextFlow text = this.buildTextFlow(result.toString(), getText());
 			CustomMenuItem item = new CustomMenuItem(text, true);
 			item.setOnAction(ev ->  {
-				setText(result.toString());
 				tSelectedItemProperty.setValue(result);
-				entries.clear();
 			});
 			menuItems.add(item);
 		}
@@ -173,7 +182,7 @@ public class TAutoCompleteEntity extends TTextField {
 	/**
 	 * @return the tSelectedItemProperty
 	 */
-	public ReadOnlyObjectProperty<TEntity> tSelectedItemProperty() {
+	public SimpleObjectProperty<TEntity> tSelectedItemProperty() {
 		return tSelectedItemProperty;
 	}
 }

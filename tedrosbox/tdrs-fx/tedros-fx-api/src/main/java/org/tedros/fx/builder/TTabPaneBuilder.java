@@ -37,11 +37,12 @@ import javafx.scene.control.TabPane;
 public class TTabPaneBuilder 
 extends TBuilder
 implements ITLayoutBuilder<TabPane> {
-
 	
 	public TabPane build(final Annotation annotation) throws Exception {
 		final TabPane tabPane = new TabPane();
-		tabPane.sceneProperty().addListener(new ChangeListener<Scene>(){
+	
+		tabPane.sceneProperty().addListener(new ChangeListener<Scene> () {
+
 			@Override
 			public void changed(ObservableValue<? extends Scene> arg0, Scene arg1, Scene ne) {
 				if(ne!=null) {
@@ -49,6 +50,7 @@ implements ITLayoutBuilder<TabPane> {
 					tabPane.layout();
 				}
 			}
+			
 		});
 		callParser(annotation, tabPane);
 		return tabPane;

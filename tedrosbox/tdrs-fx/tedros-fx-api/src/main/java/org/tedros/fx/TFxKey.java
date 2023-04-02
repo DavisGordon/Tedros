@@ -87,6 +87,7 @@ public interface TFxKey {
 	static final String STATUS_LOADING = "#{tedros.fxapi.status.loading}";
 	static final String STATUS_STARTING = "#{tedros.fxapi.status.starting}";
 	static final String TABLE_MENU_TOOLTIP = "#{tedros.fxapi.table.menu.tooltip}";
+	static final String TOOLTIP_AUTOCOMPLETE = "#{tedros.fxapi.tooltip.autocomplete}";
 	static final String VALIDATOR_CHECKREQUIRED = "#{tedros.fxapi.validator.checkRequired}";
 	static final String VALIDATOR_FUTURE_DATE = "#{tedros.fxapi.validator.future.date}";
 	static final String VALIDATOR_GREATHERTHANZERO = "#{tedros.fxapi.validator.greatherThanZero}";
