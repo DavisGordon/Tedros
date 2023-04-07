@@ -1,25 +1,13 @@
-<project 	xmlns="http://maven.apache.org/POM/4.0.0" 
-			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  			xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
->
-	<modelVersion>4.0.0</modelVersion>
-	
-	<!-- PARENT INFO -->
-	<parent>
-		<groupId>org.tedros</groupId>
-		<artifactId>tdrs-server</artifactId>
-		<version>8-5.1.0</version>
-	</parent>
-	
-	<!-- MODULE INFO -->
-  	<artifactId>tedros-core-ejb-client</artifactId>
-  	<packaging>jar</packaging>
-  	
-  	<name>tedros-core-ejb-client</name>
-  	<description>The ejb client project for the tedros-core-ejb</description>  
-	
-	<!-- DEPENDENCIES -->
-  	<dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.tedros</groupId>
+    <artifactId>tdrs-server</artifactId>
+    <version>8-5.1.0</version>
+  </parent>
+  <artifactId>tedros-core-service-client</artifactId>
+  <name>The Tedros core services client</name>
+  <dependencies>
 	  	<dependency>
 	  		<groupId>org.tedros</groupId>
 	  		<artifactId>tedros-core-model</artifactId>
@@ -31,6 +19,11 @@
 	  		<artifactId>tedros-common-model</artifactId>
 	  		<version>8-5.1.0</version>
 	  	</dependency>
+	  	<dependency>
+	  		<groupId>org.tedros</groupId>
+	  		<artifactId>tedros-server-client-api</artifactId>
+	  		<version>8-5.1.0</version>
+	  	</dependency>
 	  	
 	  	<dependency>
 			<groupId>org.apache.tomee</groupId>
@@ -38,15 +31,9 @@
 			<version>${openejb.version}</version>
 			<scope>provided</scope>
 		</dependency>
-	  	
-	    <dependency>
-	    	<groupId>junit</groupId>
-	      	<artifactId>junit</artifactId>
-	      	<version>${junit.version}</version>
-	      	<scope>test</scope>
-	    </dependency>
-  	</dependencies>	
-  	
+  </dependencies>
+  
+  
   	<build>
     	<plugins>
       		<plugin>
@@ -84,5 +71,5 @@
 		 <uniqueVersion>false</uniqueVersion>
 	   </repository>
 	</distributionManagement>
- 	
+  
 </project>

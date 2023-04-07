@@ -73,6 +73,7 @@
 		<module>tedros-server-api</module>
 		<module>tedros-common-model</module>
 		<module>tedros-webapp</module>
+		<module>tedros-core-service-client</module>
 	</modules>
  
  	<!-- REPOSITORIES -->

@@ -9,15 +9,14 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.tedros.core.cdi.bo.TNotifyBO;
+import org.tedros.core.notify.model.TNotify;
 import org.tedros.server.cdi.bo.ITGenericBO;
 import org.tedros.server.ejb.service.TEjbService;
 
-import org.tedros.core.notify.model.TNotify;
-
 @LocalBean
-@Stateless(name="TNotifyService")
+@Stateless(name="ITNotifyService")
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
-public class TNotifyService extends TEjbService<TNotify>	{
+public class TNotifyService extends TEjbService<TNotify> implements ITNotifyService	{
 
 	@Inject
 	private TNotifyBO bo;
