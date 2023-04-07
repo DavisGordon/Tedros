@@ -36,6 +36,12 @@
   	
 	  	<dependency>
 	  		<groupId>org.tedros</groupId>
+	  		<artifactId>tedros-core-service-client</artifactId>
+	  		<version>8-5.1.0</version>
+	  		<scope>compile</scope>
+	  	</dependency>
+	  	<dependency>
+	  		<groupId>org.tedros</groupId>
 	  		<artifactId>tedros-common-model</artifactId>
 	  		<version>8-5.1.0</version>
 	  </dependency>

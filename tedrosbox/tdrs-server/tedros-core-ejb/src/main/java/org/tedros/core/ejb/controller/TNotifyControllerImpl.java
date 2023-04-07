@@ -10,6 +10,7 @@ import javax.ejb.TransactionAttributeType;
 
 import org.tedros.core.controller.TNotifyController;
 import org.tedros.core.domain.DomainApp;
+import org.tedros.core.ejb.service.ITNotifyService;
 import org.tedros.core.ejb.service.TNotifyService;
 import org.tedros.core.ejb.timer.TNotifyTimer;
 import org.tedros.core.notify.model.TAction;
@@ -34,7 +35,7 @@ policie= {TAccessPolicie.APP_ACCESS, TAccessPolicie.VIEW_ACCESS}))
 public class TNotifyControllerImpl extends TSecureEjbController<TNotify> implements TNotifyController, ITSecurity {
 
 	@EJB
-	private TNotifyService serv;
+	private ITNotifyService serv;
 	
 	@EJB
 	private TNotifyTimer timer;

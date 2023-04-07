@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.NoSuchObjectLocalException;
@@ -24,9 +25,9 @@ import javax.inject.Named;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.tedros.core.cdi.producer.Item;
-import org.tedros.core.ejb.service.TNotifyService;
-
 import org.tedros.core.domain.DomainPropertie;
+import org.tedros.core.ejb.service.ITNotifyService;
+import org.tedros.core.ejb.service.TNotifyService;
 import org.tedros.core.notify.model.TNotify;
 
 /**
@@ -50,8 +51,8 @@ public class TNotifyTimer {
 	@Resource
     private TimerService timerService;
 	
-	@Inject 
-	private TNotifyService serv;
+	@EJB
+	private ITNotifyService serv;
 	
     @PostConstruct
     private void construct() {
