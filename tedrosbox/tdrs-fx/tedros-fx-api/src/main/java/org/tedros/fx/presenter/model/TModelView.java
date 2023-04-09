@@ -409,7 +409,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		this.registerProperty("toStringProperty", display);
 		// percorre os campos do model view 
 		propertyMap.values()
-		.parallelStream()
+		//.parallelStream()
 		.forEach(h -> {
 			if(h.isElegible()){
 				try{

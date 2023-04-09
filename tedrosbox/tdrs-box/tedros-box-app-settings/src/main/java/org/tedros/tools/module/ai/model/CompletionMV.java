@@ -12,6 +12,7 @@ import org.tedros.core.controller.TAiCompletionController;
 import org.tedros.core.domain.DomainApp;
 import org.tedros.core.security.model.TUser;
 import org.tedros.fx.TFxKey;
+import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.control.TButtonField;
 import org.tedros.fx.annotation.control.TCallbackFactory;
 import org.tedros.fx.annotation.control.TCellFactory;
@@ -117,7 +118,7 @@ public class CompletionMV extends TEntityModelView<TAiCompletion> {
 	private SimpleStringProperty send;
 	
 	@TTableView(columns = { 
-		@TTableColumn(text = ToolsKey.DATE_INSERT, cellValue="insertDate", 
+		@TTableColumn(text = TUsualKey.DATE_INSERT, cellValue="insertDate", 
 				cellFactory=@TCellFactory(parse = true, 
 				callBack=@TCallbackFactory(parse=true, value=TMediumDateTimeCallback.class))), 
 		@TTableColumn(text = ToolsKey.PROMPT, cellValue="prompt"),

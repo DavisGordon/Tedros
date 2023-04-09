@@ -133,6 +133,8 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
         			case SEARCH:
         				ServiceLocator loc = ServiceLocator.getInstance();
         				try {
+        					if(model.getResult()!=null)
+        						model.getResult().clear();
         					TUser user = TedrosContext.getLoggedUser();
 	        				ITEjbReportController<M> service = (ITEjbReportController<M>) loc.lookup(serviceJndiName);
 	        				resultado = service.process(user.getAccessToken(), model);

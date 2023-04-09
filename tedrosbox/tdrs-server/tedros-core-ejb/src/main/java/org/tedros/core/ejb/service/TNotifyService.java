@@ -14,9 +14,9 @@ import org.tedros.server.cdi.bo.ITGenericBO;
 import org.tedros.server.ejb.service.TEjbService;
 
 @LocalBean
-@Stateless(name="ITNotifyService")
+@Stateless(name="TNotifyService")
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
-public class TNotifyService extends TEjbService<TNotify> implements ITNotifyService	{
+public class TNotifyService extends TEjbService<TNotify> {
 
 	@Inject
 	private TNotifyBO bo;

@@ -2,22 +2,24 @@ package org.tedros.tools.module.notify.table;
 
 import org.tedros.core.TLanguage;
 import org.tedros.core.notify.model.TState;
+import org.tedros.fx.control.TTableCell;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
 
-public class TNotifyLogStateCallBack implements Callback <CellDataFeatures<TNotifyLogTV, ObservableValue<TState>>, ObservableValue<String>> {
+@SuppressWarnings("rawtypes")
+public class TNotifyLogStateCallBack implements Callback <TableColumn, TableCell> {
 	
 	@Override
-	public ObservableValue<String> call(CellDataFeatures<TNotifyLogTV, ObservableValue<TState>> param) {
-		TState d = param.getValue().getState().getValue();
-		return (d!=null) 
-				? new SimpleStringProperty(TLanguage.getInstance().getString(d.getValue()))
-						: new SimpleStringProperty();
+	public TableCell call(TableColumn param) {
+		return new TTableCell<TableColumn, TState>() {
+			public String processItem(TState item){
+				return (item!=null) 
+						? TLanguage.getInstance().getString(item.getValue())
+								: "";
+			}
+		};
 	}
-	
-	
 	
 }

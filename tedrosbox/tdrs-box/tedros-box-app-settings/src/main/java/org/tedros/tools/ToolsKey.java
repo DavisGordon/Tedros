@@ -38,7 +38,6 @@ public interface ToolsKey {
 	static final String COLLAPSE_MENU_TOOLTIP = "#{label.collapse.menu.tooltip}";
 	static final String COLOR = "#{label.color}";
 	static final String CONTENT = "#{label.content}";
-	static final String DATE_INSERT = "#{label.date.insert}";
 	static final String DATE_PROCESSED = "#{label.date.processed}";
 	static final String DEGREES = "#{label.degrees}";
 	static final String DESCRIPTION = "#{label.description}";

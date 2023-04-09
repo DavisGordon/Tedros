@@ -179,4 +179,6 @@ public interface TUsualKey {
 	static final String WORK = "#{label.work}";
 	static final String WORKNUMBER = "#{label.worknumber}";
 	static final String YES = "#{label.yes}";
+	static final String TOOLTIP_CODES_COMMA_SEPARATED = "#{tooltip.codes.comma.separated}";
+
 }
