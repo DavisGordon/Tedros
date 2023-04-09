@@ -26,7 +26,6 @@ import javax.inject.Named;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.tedros.core.cdi.producer.Item;
 import org.tedros.core.domain.DomainPropertie;
-import org.tedros.core.ejb.service.ITNotifyService;
 import org.tedros.core.ejb.service.TNotifyService;
 import org.tedros.core.notify.model.TNotify;
 
@@ -52,7 +51,7 @@ public class TNotifyTimer {
     private TimerService timerService;
 	
 	@EJB
-	private ITNotifyService serv;
+	private TNotifyService serv;
 	
     @PostConstruct
     private void construct() {

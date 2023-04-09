@@ -15,9 +15,9 @@ import org.tedros.core.notify.model.TNotify;
 import org.tedros.core.notify.model.TNotifyLog;
 import org.tedros.core.notify.model.TState;
 import org.tedros.fx.TFxKey;
+import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.control.TCallbackFactory;
 import org.tedros.fx.annotation.control.TCellFactory;
-import org.tedros.fx.annotation.control.TCellValueFactory;
 import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TConverter;
 import org.tedros.fx.annotation.control.TDatePickerField;
@@ -191,12 +191,12 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 	private TSimpleFileProperty<TFileEntity> file;
 	
 	@TTableView(columns = { 
-		@TTableColumn(text = ToolsKey.DATE_INSERT, cellValue="insertDate", 
+		@TTableColumn(text = TUsualKey.DATE_INSERT, cellValue="insertDate", 
 				cellFactory=@TCellFactory(parse = true, 
 				callBack=@TCallbackFactory(parse=true, value=TMediumDateTimeCallback.class))), 
 		@TTableColumn(text = ToolsKey.STATE, cellValue="state",
-			cellValueFactory=@TCellValueFactory(parse=true,
-			value=@TCallbackFactory(parse=true, value=TNotifyLogStateCallBack.class))),
+				cellFactory=@TCellFactory(parse = true, 
+				callBack=@TCallbackFactory(parse=true, value=TNotifyLogStateCallBack.class))),
 		@TTableColumn(text = ToolsKey.DESCRIPTION, cellValue="description")
 	})
 	@TModelViewType(modelClass = TNotifyLog.class, modelViewClass=TNotifyLogTV.class)

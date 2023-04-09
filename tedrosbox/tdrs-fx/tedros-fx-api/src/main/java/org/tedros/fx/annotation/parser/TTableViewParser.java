@@ -1,5 +1,7 @@
 package org.tedros.fx.annotation.parser;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.core.TLanguage;
@@ -83,18 +85,24 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 		
 		for (final TTableColumn tTableColumn : columns) {
 			final TableColumn tableColumn = getColumn(tableView, tTableColumn.text());
+			if(!validateColumn(tableView, tableColumn, tTableColumn.text()))
+				continue;
+			
 			TTableSubColumn[] parenteColumns = tTableColumn.columns();
 			
 			boolean clnVf = false;
 			for (final TTableSubColumn tTableSubColumn : parenteColumns) {
 				final TableColumn tableSubColumn = getColumn(tableView, tTableSubColumn.text());
-				//tableColumn.getColumns().add(tableSubColumn);
+				if(!validateColumn(tableView, tableSubColumn, tTableSubColumn.text()))
+					continue;
 				
 				TTableNestedColumn[] nestedColumns = tTableSubColumn.columns();
 				boolean sbClnVf = false;
 				for (final TTableNestedColumn tTableNestedColumn : nestedColumns) {
 					final TableColumn tableNestedColumn = getColumn(tableView, tTableNestedColumn.text());
-					//tableSubColumn.getColumns().add(tableNestedColumn);
+					if(!validateColumn(tableView, tableNestedColumn, tTableNestedColumn.text()))
+						continue;
+					
 					if(StringUtils.isNotBlank(tTableNestedColumn.cellValue())){
 						
 						if(tTableNestedColumn.cellValueFactory().parse() && tTableNestedColumn.cellValueFactory().value().parse()){
@@ -175,6 +183,29 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 		}
 				
 		super.parse(annotation, tableView, "columns","selectionModel","focusModel");
+	}
+
+	private boolean validateColumn(TableView tableView, final TableColumn tableColumn, String text) {
+		if(tableColumn==null) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("WARN: Cant find the column "+TLanguage.getInstance().getString(text));
+			sb.append(" in TableView with columns: ");
+			appendColsName(sb, tableView.getColumns());
+			System.err.println(sb.toString());
+			return false;
+		}
+		return true;
+	}
+
+	@SuppressWarnings("unchecked")
+	private void appendColsName(StringBuilder sb, List l) {
+		l.forEach(c->{
+			TableColumn tc = (TableColumn) c;
+			sb.append(" ["+tc.getText());
+			if(tc.getColumns()!=null && tc.getColumns().size()>0)
+				appendColsName(sb, tc.getColumns());
+			sb.append("]");
+		});
 	}
 
 	/**

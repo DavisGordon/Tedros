@@ -129,7 +129,7 @@ public class CreateImageMV extends TEntityModelView<TAiCreateImage> {
 	private SimpleStringProperty clearBtn;
 	
 	@TTableView(columns = { 
-		@TTableColumn(text = ToolsKey.DATE_INSERT, cellValue="insertDate", 
+		@TTableColumn(text = TUsualKey.DATE_INSERT, cellValue="insertDate", 
 				cellFactory=@TCellFactory(parse = true, 
 				callBack=@TCallbackFactory(parse=true, value=TMediumDateTimeCallback.class))), 
 		@TTableColumn(text = ToolsKey.PROMPT, cellValue="prompt"),

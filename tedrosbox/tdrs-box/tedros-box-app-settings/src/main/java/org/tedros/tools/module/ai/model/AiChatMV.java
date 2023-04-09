@@ -11,6 +11,7 @@ import org.tedros.core.annotation.security.TSecurity;
 import org.tedros.core.controller.TAiChatCompletionController;
 import org.tedros.core.domain.DomainApp;
 import org.tedros.fx.TFxKey;
+import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.control.TButtonField;
 import org.tedros.fx.annotation.control.TCallbackFactory;
 import org.tedros.fx.annotation.control.TCellFactory;
@@ -88,7 +89,7 @@ public class AiChatMV extends TEntityModelView<TAiChatCompletion> {
 	private SimpleStringProperty clearBtn;
 	
 	@TTableView(columns = { 
-		@TTableColumn(text = ToolsKey.DATE_INSERT, cellValue="insertDate", 
+		@TTableColumn(text = TUsualKey.DATE_INSERT, cellValue="insertDate", 
 				cellFactory=@TCellFactory(parse = true, 
 				callBack=@TCallbackFactory(parse=true, value=TMediumDateTimeCallback.class))), 
 		@TTableColumn(text = ToolsKey.EVENT_LOG, cellValue="log")

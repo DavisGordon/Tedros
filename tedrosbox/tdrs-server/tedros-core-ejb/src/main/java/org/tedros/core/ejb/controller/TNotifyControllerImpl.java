@@ -10,7 +10,6 @@ import javax.ejb.TransactionAttributeType;
 
 import org.tedros.core.controller.TNotifyController;
 import org.tedros.core.domain.DomainApp;
-import org.tedros.core.ejb.service.ITNotifyService;
 import org.tedros.core.ejb.service.TNotifyService;
 import org.tedros.core.ejb.timer.TNotifyTimer;
 import org.tedros.core.notify.model.TAction;
@@ -29,13 +28,13 @@ import org.tedros.server.service.ITEjbService;
 
 @TSecurityInterceptor
 @Stateless(name="TNotifyController")
-@TBeanSecurity(@TBeanPolicie(id=DomainApp.PROPERTIE_FORM_ID, 
+@TBeanSecurity(@TBeanPolicie(id=DomainApp.NOTIFY_FORM_ID, 
 policie= {TAccessPolicie.APP_ACCESS, TAccessPolicie.VIEW_ACCESS}))
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class TNotifyControllerImpl extends TSecureEjbController<TNotify> implements TNotifyController, ITSecurity {
 
 	@EJB
-	private ITNotifyService serv;
+	private TNotifyService serv;
 	
 	@EJB
 	private TNotifyTimer timer;
@@ -57,7 +56,7 @@ public class TNotifyControllerImpl extends TSecureEjbController<TNotify> impleme
 	
 	@Override
 	public TResult<TNotify> remove(TAccessToken token, TNotify e) {
-		if(e.getState().equals(TState.SCHEDULED)) {
+		if(e.getState()!=null && e.getState().equals(TState.SCHEDULED)) {
 			timer.cancel(e);
 		}
 		return super.remove(token, e);
