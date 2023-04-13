@@ -18,6 +18,8 @@ import org.eclipse.persistence.annotations.Cache;
 import org.eclipse.persistence.annotations.CacheCoordinationType;
 import org.eclipse.persistence.annotations.CacheType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Cache(
 	type=CacheType.WEAK, // Cache everything until the JVM decides memory is low.
 	size=64000,  // Use 64,000 as the initial cache size.
@@ -45,6 +47,7 @@ public  class TEntity implements ITEntity {
 	private Date insertDate;
 	
 	@Transient
+	@JsonIgnore
 	private List<String> orderBy;
 	
 	public TEntity() {
@@ -59,6 +62,7 @@ public  class TEntity implements ITEntity {
 		addOrderBy("id");
 	}
 	
+	@JsonIgnore
 	public boolean isNew(){
 		return null==getId();
 	}

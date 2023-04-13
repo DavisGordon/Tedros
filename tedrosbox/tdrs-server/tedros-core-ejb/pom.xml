@@ -19,6 +19,40 @@
 
 	<!-- DEPENDENCIES -->
 	<dependencies>
+	
+	
+	  	<dependency>
+			<groupId>org.apache.tomee</groupId>
+			<artifactId>openejb-client</artifactId>
+			<version>${openejb.version}</version>
+			<scope>test</scope>
+		</dependency>
+	  	
+	  	<dependency>
+	  		<groupId>org.tedros</groupId>
+	  		<artifactId>tedros-util</artifactId>
+	  		<version>8-5.1.0</version>
+	  		<scope>test</scope>
+	  	</dependency>
+	  	<dependency>
+	  		<groupId>org.tedros</groupId>
+	  		<artifactId>app-stock-ejb-client</artifactId>
+	  		<version>8-2.0.0</version>
+			<scope>test</scope>
+	  	</dependency>
+	  	
+		<dependency>
+			<groupId>com.mikesamuel</groupId>
+			<artifactId>json-sanitizer</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+		
+	  	<dependency>
+	  		<groupId>org.tedros</groupId>
+	  		<artifactId>app-person-ejb-client</artifactId>
+	  		<version>8-2.0.0</version>
+			<scope>test</scope>
+	  	</dependency>
 		<dependency>
 			<groupId>org.tedros</groupId>
 			<artifactId>tedros-server-api</artifactId>
@@ -32,13 +66,17 @@
 			<version>8-5.1.0</version>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.tedros</groupId>
 			<artifactId>tedros-common-model</artifactId>
 			<version>8-5.1.0</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.theokanning.openai-gpt3-java</groupId>
 			<artifactId>service</artifactId>
@@ -96,12 +134,8 @@
 				<version>2.5</version>
 				<configuration>
 					<ejbVersion>3.0</ejbVersion>
-					<!-- <archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
-						</manifest>
-					</archive> -->
+					<!-- <archive> <manifest> <addClasspath>true</addClasspath> <classpathPrefix>lib/</classpathPrefix> 
+						</manifest> </archive> -->
 				</configuration>
 			</plugin>
 
