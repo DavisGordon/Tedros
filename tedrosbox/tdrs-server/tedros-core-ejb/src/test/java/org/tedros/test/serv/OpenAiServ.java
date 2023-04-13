@@ -1,18 +1,12 @@
 /**
  * 
  */
-package org.tedros.core.cdi.bo;
+package org.tedros.test.serv;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.commons.lang3.StringUtils;
-import org.tedros.core.ai.model.TResponseFormat;
 import org.tedros.core.ai.model.TUsage;
 import org.tedros.core.ai.model.completion.TCompletionRequest;
 import org.tedros.core.ai.model.completion.TCompletionResult;
@@ -21,11 +15,6 @@ import org.tedros.core.ai.model.completion.chat.TChatMessage;
 import org.tedros.core.ai.model.completion.chat.TChatRequest;
 import org.tedros.core.ai.model.completion.chat.TChatResult;
 import org.tedros.core.ai.model.completion.chat.TChatRole;
-import org.tedros.core.ai.model.image.TCreateImageRequest;
-import org.tedros.core.ai.model.image.TImageResult;
-import org.tedros.core.cdi.producer.Item;
-import org.tedros.core.domain.DomainPropertie;
-import org.tedros.server.exception.TBusinessException;
 
 import com.theokanning.openai.OpenAiHttpException;
 import com.theokanning.openai.completion.CompletionRequest;
@@ -33,77 +22,19 @@ import com.theokanning.openai.completion.CompletionResult;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.completion.chat.ChatCompletionResult;
 import com.theokanning.openai.completion.chat.ChatMessage;
-import com.theokanning.openai.image.CreateImageRequest;
-import com.theokanning.openai.image.ImageResult;
 import com.theokanning.openai.service.OpenAiService;
 
 /**
  * @author Davis Gordon
  *
  */
-@RequestScoped
-public class TOpenAiBO {
-
-
-	@Inject
-	@Named(DomainPropertie.OPENAI_KEY)
-	private Item<String> key;
-
-	@Inject
-	@Named(DomainPropertie.AI_ENABLED)
-	private Item<Boolean> enabled;
+public class OpenAiServ {
 	
-	/**
-	 * 
-	 */
-	public TOpenAiBO() {
-	}
+	private static String key = "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";
 
-	public TImageResult createImage(TCreateImageRequest req) throws TBusinessException {
+	public static TChatResult chat(TChatRequest req){
 		
-		if(enabled==null || !enabled.get())
-			throw new TBusinessException("Artificial Intelligence is off!");
-		
-		if(key==null || StringUtils.isBlank(key.get()))
-			throw new TBusinessException("The OpenAi key is required, create it at https://openai.com");
-		
-		OpenAiService service = new OpenAiService(key.get(), Duration.ofSeconds(80));
-		CreateImageRequest request = CreateImageRequest.builder()
-	                .prompt(req.getPrompt())
-	                .n(req.getN())
-	                .responseFormat(req.getResponseFormat().getValue())
-	                .size(req.getSize().getValue())
-	                .user(req.getUser())
-	                .build();
-		try {
-			ImageResult r = service.createImage(request);
-			TImageResult tr = new TImageResult();
-			r.getData().forEach(c->{
-				String val = req.getResponseFormat().equals(TResponseFormat.URL) 
-						? c.getUrl()
-								: c.getB64Json();
-				tr.addData(val, req.getResponseFormat());
-			});
-			return tr;
-		}catch(Exception ex) {
-			if(ex instanceof OpenAiHttpException) {
-				OpenAiHttpException oex = (OpenAiHttpException) ex;
-				return new TImageResult(ex.getMessage(), oex.statusCode+":"+oex.code);
-			}else
-				return new TImageResult(ex.getMessage(), false);
-		}
-	}
-	
-	public TChatResult chat(TChatRequest req){
-		
-
-		if(enabled==null || !enabled.get())
-			throw new TBusinessException("Artificial Intelligence is off!");
-		
-		if(key==null || StringUtils.isBlank(key.get()))
-			throw new TBusinessException("The OpenAi key is required, create it at https://openai.com");
-		
-		OpenAiService service = new OpenAiService(key.get(), Duration.ofSeconds(80));
+		OpenAiService service = new OpenAiService(key, Duration.ofSeconds(80));
 		
 		List<ChatMessage> lst = new ArrayList<>();
 		req.getMessages().forEach(m->{
@@ -149,15 +80,10 @@ public class TOpenAiBO {
 		
 	}
 	
+
 	public TCompletionResult completion(TCompletionRequest req)  {
 		
-		if(enabled==null || !enabled.get())
-			throw new TBusinessException("Artificial Intelligence is off!");
-		
-		if(key==null || StringUtils.isBlank(key.get()))
-			throw new TBusinessException("The OpenAi key is required, create it at https://openai.com");
-		
-		OpenAiService service = new OpenAiService(key.get(), Duration.ofSeconds(80));
+		OpenAiService service = new OpenAiService(key, Duration.ofSeconds(80));
 		CompletionRequest completionRequest = CompletionRequest.builder()
 		        .prompt(req.getPrompt())
 		        .model(req.getModel().getValue())
@@ -189,5 +115,15 @@ public class TOpenAiBO {
 		}
 		
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

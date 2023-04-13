@@ -9,7 +9,8 @@ package org.tedros.core.ai.model.completion.chat;
  */
 public enum TAiChatModel {
 	
-	GPT35_TURBO ("gpt-3.5-turbo");
+	GPT35_TURBO ("gpt-3.5-turbo"),
+	GPT4("gpt-4");
 	
 	private String value;
 

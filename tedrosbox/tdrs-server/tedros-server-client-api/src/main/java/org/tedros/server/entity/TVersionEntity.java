@@ -6,12 +6,15 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @MappedSuperclass
 public  class TVersionEntity extends TEntity implements ITVersionableEntity {
 
 	private static final long serialVersionUID = -5430421399490550671L;
 	
 	@Version
+	@JsonIgnore
     @Column(name="OPTLOCK")
 	private Integer versionNum;
 	
