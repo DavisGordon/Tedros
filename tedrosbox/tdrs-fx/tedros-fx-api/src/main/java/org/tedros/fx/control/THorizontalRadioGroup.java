@@ -12,6 +12,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
@@ -27,7 +28,7 @@ public class THorizontalRadioGroup extends HBox implements ITField{
 	
 	private TRadioButtonGroup radioButtonGroup = new TRadioButtonGroup() {
 		@Override
-		Pane getBox() {
+		public Pane getBox() {
 			return box;
 		}		
 	};
@@ -80,7 +81,11 @@ public class THorizontalRadioGroup extends HBox implements ITField{
 	public Toggle getSelectedToggle(){
 		return radioButtonGroup.getSelectedToggle();
 	}
-	
+
+	public TRadioButtonGroup getTogleeGroup() {
+		return this.radioButtonGroup;
+	}
+
 	public void settFieldStyle(String style){
 		radioButtonGroup.settFieldStyle(style);
 	}

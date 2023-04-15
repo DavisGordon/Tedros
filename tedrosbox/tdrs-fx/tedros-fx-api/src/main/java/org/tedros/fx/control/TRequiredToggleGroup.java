@@ -53,7 +53,7 @@ public abstract class TRequiredToggleGroup extends ToggleGroup implements ITRequ
 		return helper.isRequirementAccomplished() ; 
 	}
     
-    abstract Pane getBox();
+    abstract public Pane getBox();
     
 	
 	@Override

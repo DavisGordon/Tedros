@@ -25,7 +25,6 @@
 		<app.person>8-2.0.0</app.person>
 		<app.services>8-2.0.0</app.services>
 	
-	
 		<javafx.version>1.8.0_261</javafx.version>
 		<java.version>1.8</java.version>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -41,6 +40,7 @@
 		<commons.compress.version>1.21</commons.compress.version>
 		
 		<apache.poi>4.1.2</apache.poi>
+		<jackson.version>2.14.2</jackson.version>
 		
 		<!-- Define the version of OPEN HTML TO PDF in the properties section of your POM. -->  	       
 	  	<openhtml.version>1.0.8</openhtml.version>

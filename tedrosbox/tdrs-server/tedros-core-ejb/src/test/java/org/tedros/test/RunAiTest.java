@@ -1,15 +1,18 @@
 package org.tedros.test;
 
-import org.tedros.test.ai.Insert;
+import org.tedros.test.ai.CountryTest;
+import org.tedros.test.ai.CreateEntryTypeTest;
+import org.tedros.test.ai.CreateProfileTest;
 import org.tedros.test.ai.helper.Helper;
 
 public class RunAiTest {
 
 	public static void main(String[] args) {
-		//Helper.testWriteJson();
+		//Helper.testCountryJson();
 		
-		Insert.test();
-
+		//CreateEntryTypeTest.test();
+		//CreateProfileTest.test();
+		CountryTest.test();
 	}
 
 }

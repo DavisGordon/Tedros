@@ -1,6 +1,11 @@
 package org.tedros.fx;
 
 public interface TFxKey {
+	static final String AI_ASSISTANT_ANALYSE_MESSAGE = "#{tedros.fxapi.ai.assistant.analyse.message}";
+	static final String AI_ASSISTANT_CHANGE_MESSAGE = "#{tedros.fxapi.ai.assistant.change.message}";
+	static final String AI_ASSISTANT_CREATE_MESSAGE = "#{tedros.fxapi.ai.assistant.create.message}";
+	static final String AI_ASSISTANT_INTRO = "#{tedros.fxapi.ai.assistant.intro}";
+	static final String AI_ASSISTANT_RESPONSE_RULE = "#{tedros.fxapi.ai.assistant.response.rule}";
 	static final String BUTTON_ADD = "#{tedros.fxapi.button.add}";
 	static final String BUTTON_APPLY = "#{tedros.fxapi.button.apply}";
 	static final String BUTTON_BACK = "#{tedros.fxapi.button.back}";
@@ -31,7 +36,10 @@ public interface TFxKey {
 	static final String BUTTON_VIEW_SELECTED = "#{tedros.fxapi.button.view.selected}";
 	static final String BUTTON_YES = "#{tedros.fxapi.button.yes}";
 	static final String HYPERLINK_READ_EXPORT = "#{tedros.fxapi.hyperlink.read.export}";
+	static final String ANALYSE = "#{tedros.fxapi.label.analyse}";
+	static final String CHANGE = "#{tedros.fxapi.label.change}";
 	static final String CODE = "#{tedros.fxapi.label.code}";
+	static final String CREATE = "#{tedros.fxapi.label.create}";
 	static final String CURRENT_PAGE = "#{tedros.fxapi.label.current.page}";
 	static final String DESCRIPTION = "#{tedros.fxapi.label.description}";
 	static final String DOUBLE_CLICK_REMOVE = "#{tedros.fxapi.label.double.click.remove}";
@@ -87,6 +95,9 @@ public interface TFxKey {
 	static final String STATUS_LOADING = "#{tedros.fxapi.status.loading}";
 	static final String STATUS_STARTING = "#{tedros.fxapi.status.starting}";
 	static final String TABLE_MENU_TOOLTIP = "#{tedros.fxapi.table.menu.tooltip}";
+	static final String TOOLTIP_AI_ANALYSE = "#{tedros.fxapi.tooltip.ai.analyse}";
+	static final String TOOLTIP_AI_CHANGE = "#{tedros.fxapi.tooltip.ai.change}";
+	static final String TOOLTIP_AI_CREATE = "#{tedros.fxapi.tooltip.ai.create}";
 	static final String TOOLTIP_AUTOCOMPLETE = "#{tedros.fxapi.tooltip.autocomplete}";
 	static final String VALIDATOR_CHECKREQUIRED = "#{tedros.fxapi.validator.checkRequired}";
 	static final String VALIDATOR_FUTURE_DATE = "#{tedros.fxapi.validator.future.date}";

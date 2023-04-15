@@ -81,6 +81,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 	/**
 	 * Initialize the behavior
 	 */
+	@SuppressWarnings("unchecked")
 	public void initialize() {
 		
 		if(getModels()==null)
@@ -117,6 +118,13 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 				}
 			}
 		}
+		
+		if(this.decorator.gettAiAssistant()!=null) {
+			this.decorator.gettAiAssistant().settView(getView());
+			this.decorator.gettAiAssistant().settTargetModel(super.modelViewProperty());
+			this.decorator.gettAiAssistant().settModels(getModels());
+		}
+		
 		if(!isUserNotAuthorized(TAuthorizationType.VIEW_ACCESS))
 			loadModels();
 		else
@@ -626,6 +634,8 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 	public boolean invalidate() {
 		if(this.decorator!=null && this.decorator.gettPaginator()!=null)
 			this.decorator.gettPaginator().invalidate();
+		if(this.decorator!=null && this.decorator.gettAiAssistant()!=null)
+			this.decorator.gettAiAssistant().tInvalidate();;
 		return super.invalidate();
 	}
 		

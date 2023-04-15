@@ -8,6 +8,7 @@ import java.util.Arrays;
 import org.tedros.core.TLanguage;
 import org.tedros.core.control.TProgressIndicator;
 import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.presenter.assistant.TAiAssistant;
 import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.fx.presenter.paginator.TPaginator;
 import org.tedros.server.entity.ITEntity;
@@ -39,10 +40,20 @@ public class TListViewHelper<M extends TEntityModelView<? extends ITEntity>>{
     private Accordion tPaginatorAccordion;
     private TPaginator tPaginator;
     
+    private TAiAssistant<M> tAiAssistat;
+    
     private SimpleDoubleProperty listViewMaxWidth = new SimpleDoubleProperty(250);
     private SimpleDoubleProperty listViewMinWidth = new SimpleDoubleProperty(250);
     
-	public TListViewHelper(String title, double maxWidth, double minWidth, org.tedros.fx.annotation.view.TPaginator paginator ) {
+
+	public TListViewHelper(String title, double maxWidth, double minWidth, 
+			org.tedros.fx.annotation.view.TPaginator paginator ) {
+		this(title,maxWidth,minWidth, paginator, null );
+	}
+    
+	public TListViewHelper(String title, double maxWidth, double minWidth, 
+			org.tedros.fx.annotation.view.TPaginator paginator, 
+			org.tedros.fx.annotation.view.TAiAssistant aiAssistant ) {
 		
 		// build the list view
 		tListView = new ListView<>();
@@ -74,27 +85,39 @@ public class TListViewHelper<M extends TEntityModelView<? extends ITEntity>>{
 		tListViewProgressIndicator = new TProgressIndicator(tListViewPane);
 		tListViewProgressIndicator.setSmallLogo();
 		
-		if(paginator!=null){
-			if(paginator.show()) {
-				tPaginator = new TPaginator(paginator.showSearchField(), paginator.showOrderBy());
-				if(paginator.showOrderBy()) {
-					for(org.tedros.fx.annotation.view.TOption o : paginator.orderBy())
-						tPaginator.addOrderByOption(o.text(), o.value());
-					tPaginator.setOrderBy(paginator.orderBy()[0].value());
-				}
-				tPaginatorAccordion = new Accordion();
-				tPaginatorAccordion.autosize();
-				//tPaginatorAccordion.getStyleClass().add("t-accordion");
-				TitledPane tp = new TitledPane(TLanguage.getInstance().getString("#{tedros.fxapi.label.pagination}"), tPaginator);
-				tPaginatorAccordion.getPanes().add(tp);
-				tPaginator.maxWidthProperty().bind(listViewMaxWidth);
-				tPaginator.minWidthProperty().bind(listViewMinWidth);
-				tListViewLayout.getChildren().addAll(Arrays.asList(tListViewTitle, tListView, tPaginatorAccordion));
+		if(paginator!=null && paginator.show()) {
+			tPaginator = new TPaginator(paginator.showSearchField(), paginator.showOrderBy());
+			if(paginator.showOrderBy()) {
+				for(org.tedros.fx.annotation.view.TOption o : paginator.orderBy())
+					tPaginator.addOrderByOption(o.text(), o.value());
+				tPaginator.setOrderBy(paginator.orderBy()[0].value());
 			}
+			tPaginatorAccordion = new Accordion();
+			tPaginatorAccordion.autosize();
+			//tPaginatorAccordion.getStyleClass().add("t-accordion");
+			TitledPane tp = new TitledPane(TLanguage.getInstance().getString("#{tedros.fxapi.label.pagination}"), tPaginator);
+			tPaginatorAccordion.getPanes().add(tp);
+			tPaginator.maxWidthProperty().bind(listViewMaxWidth);
+			tPaginator.minWidthProperty().bind(listViewMinWidth);
 		}
 		
-		if(tPaginator==null) 
+		if(aiAssistant!=null && aiAssistant.show()) {
+			this.tAiAssistat = new  TAiAssistant<M>(aiAssistant.modelViewClass(), aiAssistant.jsonModel());
+			if(tPaginatorAccordion==null) {
+				tPaginatorAccordion = new Accordion();
+				tPaginatorAccordion.autosize();
+			}
+			TitledPane tp = new TitledPane("Teros", this.tAiAssistat);
+			tPaginatorAccordion.getPanes().add(tp);
+			tAiAssistat.maxWidthProperty().bind(listViewMaxWidth);
+			tAiAssistat.minWidthProperty().bind(listViewMinWidth);
+		}
+		
+		if(tPaginatorAccordion==null) 
 			tListViewLayout.getChildren().addAll(Arrays.asList(tListViewTitle, tListView));
+		else
+			tListViewLayout.getChildren().addAll(Arrays.asList(tListViewTitle, tListView, tPaginatorAccordion));
+			
 		
 		listViewMaxWidth.setValue(maxWidth);
 		listViewMinWidth.setValue(minWidth);
@@ -224,6 +247,20 @@ public class TListViewHelper<M extends TEntityModelView<? extends ITEntity>>{
 	 */
 	public void setListViewMinWidth(SimpleDoubleProperty listViewMinWidth) {
 		this.listViewMinWidth = listViewMinWidth;
+	}
+
+	/**
+	 * @return the tAiAssistat
+	 */
+	public TAiAssistant<M> gettAiAssistat() {
+		return tAiAssistat;
+	}
+
+	/**
+	 * @param tAiAssistat the tAiAssistat to set
+	 */
+	public void settAiAssistat(TAiAssistant<M> tAiAssistat) {
+		this.tAiAssistat = tAiAssistat;
 	}
 
 }
