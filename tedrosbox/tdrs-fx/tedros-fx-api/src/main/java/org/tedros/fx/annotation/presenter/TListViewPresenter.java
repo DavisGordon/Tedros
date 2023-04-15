@@ -5,11 +5,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.tedros.fx.annotation.view.TAiAssistant;
 import org.tedros.fx.annotation.view.TPaginator;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.entity.behavior.TMasterCrudViewBehavior;
 import org.tedros.fx.presenter.entity.decorator.TMasterCrudViewDecorator;
+import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.server.entity.ITEntity;
+import org.tedros.server.model.TJsonModel;
 
 /**
  * <pre>
@@ -26,6 +29,8 @@ public @interface TListViewPresenter {
 	public boolean refreshListViewAfterActions() default false;
 	
 	public TPaginator paginator() default @TPaginator(entityClass = ITEntity.class, serviceName = "");
+	
+	public TAiAssistant aiAssistant() default @TAiAssistant(jsonModel = TJsonModel.class, modelViewClass = TModelView.class);
 	
 	public TPresenter presenter() default @TPresenter(	behavior = @TBehavior(type = TMasterCrudViewBehavior.class), 
 														decorator = @TDecorator(type = TMasterCrudViewDecorator.class), 

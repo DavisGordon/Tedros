@@ -12,6 +12,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
@@ -27,7 +28,7 @@ public class TVerticalRadioGroup extends VBox implements ITField{
 	
 	private TRadioButtonGroup radioButtonGroup = new TRadioButtonGroup() {
 		@Override
-		Pane getBox() {
+		public Pane getBox() {
 			return box;
 		}
 	};
@@ -75,6 +76,10 @@ public class TVerticalRadioGroup extends VBox implements ITField{
 	
 	public ReadOnlyObjectProperty<Toggle> selectedToggleProperty(){
 		return radioButtonGroup.selectedToggleProperty();
+	}
+	
+	public TRadioButtonGroup getTogleeGroup() {
+		return this.radioButtonGroup;
 	}
 	
 	public Toggle getSelectedToggle(){

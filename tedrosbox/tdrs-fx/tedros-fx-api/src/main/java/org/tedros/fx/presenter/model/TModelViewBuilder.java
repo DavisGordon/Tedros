@@ -43,7 +43,19 @@ public final class TModelViewBuilder<M extends ITModelView<?>, E extends ITModel
 	@SuppressWarnings("unchecked")
 	public final M build(ITEntity entity) throws TException{
 		try {
-			return (M) this.modelViewClass.getConstructor(entityClass).newInstance(entity);
+			return (M) this.modelViewClass.getConstructor(entity.getClass()).newInstance(entity);
+		} catch (InstantiationException | IllegalAccessException
+				| IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			throw new TException(e);
+		}
+	}
+	
+
+	@SuppressWarnings("unchecked")
+	public final M build(ITModel model) throws TException{
+		try {
+			return (M) this.modelViewClass.getConstructor(model.getClass()).newInstance(model);
 		} catch (InstantiationException | IllegalAccessException
 				| IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {

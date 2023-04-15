@@ -33,7 +33,10 @@ public class OpenAiServ {
 	private static String key = "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";
 
 	public static TChatResult chat(TChatRequest req){
-		
+
+		System.out.println("--------------------------");
+		System.out.println("Chat Request: ");
+		System.out.println("--------------------------");
 		OpenAiService service = new OpenAiService(key, Duration.ofSeconds(80));
 		
 		List<ChatMessage> lst = new ArrayList<>();
@@ -42,6 +45,10 @@ public class OpenAiServ {
 			m1.setRole(m.getRole().value());
 			m1.setContent(m.getContent());
 			lst.add(m1);
+			System.out.println("Role: "+m.getRole().value());
+			System.out.println("Content: ");
+			System.out.println(m.getContent());
+			System.out.println("--------------------------");
 		});
 		ChatCompletionRequest c = ChatCompletionRequest.builder()
 				.model(req.getModel().value())
@@ -58,7 +65,10 @@ public class OpenAiServ {
 				.build();
 		TChatResult r;
 		try {
+
+			System.out.println("Request OpenAi service...");
 			ChatCompletionResult cr = service.createChatCompletion(c);
+			System.out.println("Response received.");
 			r = new TChatResult(cr.getId(), cr.getModel(), 
 					new TUsage(cr.getUsage().getPromptTokens(), cr.getUsage().getCompletionTokens(), 
 							cr.getUsage().getTotalTokens()));
