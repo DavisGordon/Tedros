@@ -23,7 +23,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.enterprise.context.RequestScoped;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -33,14 +32,14 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.tedros.server.annotation.TCaseSensitive;
-import org.tedros.server.annotation.TEntityImportRule;
-import org.tedros.server.annotation.TFieldImportRule;
-import org.tedros.server.annotation.TFileType;
+import org.tedros.server.annotation.TImportInfo;
+import org.tedros.server.annotation.TField;
 import org.tedros.server.annotation.THeaderType;
 import org.tedros.server.entity.ITEntity;
 import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.exception.TBusinessException;
 import org.tedros.server.model.ITImportModel;
+import org.tedros.server.util.TModelInfoUtil;
 
 /**
  * @author Davis Gordon
@@ -57,176 +56,9 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 	
 	public ITImportModel getImportRules() throws Exception {
 		
-		Class<E> clazz = this.getEntityClass();
-		
-		TEntityImportRule eRule = clazz.getAnnotation(TEntityImportRule.class);
-		
-		if(eRule==null)
-			throw new RuntimeException("The entity "+clazz.getSimpleName()+ 
-					" must be setting with @TEntityImportRule annotation "
-					+ "and the desired fields with @TFieldImportRule");
-		
-		TFileType[] types = eRule.fileType();
-		int totalCols = eRule.totalColumn();
-		String sheetName = eRule.xlsSheetName();
-		THeaderType header = eRule.header();
-		boolean xls = false;
-		boolean csv = false;
-		StringBuilder sb = new StringBuilder();
-		sb.append("<b>");
-		sb.append(eRule.description());
-		sb.append("</b><br>");
-		 
-		if(types!=null) {
-			sb.append("<b>");
-			sb.append("Acceptable file types: ");
-			sb.append("</b>");
-			for(TFileType t : types) {
-				sb.append(t.name()+" ");
-				if(t.equals(TFileType.XLS))
-					xls = true;
-				if(t.equals(TFileType.CSV))
-					csv = true;
-			}
-			sb.append("<br>");
-		}
-		
-		if(totalCols>0) {
-			sb.append("<b>");
-			sb.append("Total columns: ");
-			sb.append("</b>");
-			sb.append(totalCols);
-			sb.append("<br>");
-		}
-		if(StringUtils.isNotBlank(sheetName)) {
-			sb.append("<b>");
-			sb.append("XLS sheet name: ");
-			sb.append("</b>");
-			sb.append(sheetName);
-			sb.append("<br>");
-		}
-		
-		sb.append("<b>");
-		sb.append("Column Header required at first row: ");
-		sb.append("</b>");
-		sb.append(!header.equals(THeaderType.COLUMN_INDEX));
-		sb.append("<br>");
-		
-		sb.append("<hr>");
-		
-		List<Field> lst = new ArrayList<>();
-		for(Field f : clazz.getDeclaredFields())
-			if(f.isAnnotationPresent(TFieldImportRule.class))
-				lst.add(f);
-		
-		if(lst.isEmpty())
-			throw new RuntimeException("The entity "+clazz.getSimpleName()+ 
-					" have none fields with @TFieldImportRule");
-		
-		StringBuilder sb2 = new StringBuilder();
-		if(xls) {
-			sb2.append("<style>");
-			sb2.append("table { border-collapse: collapse;}");
-			sb2.append("table, th, td { border: 1px solid black;}");
-			sb2.append("</style>");
-			sb2.append("<h2>Excel file exampe:</h2>");
-			sb2.append("<table>");
-			if(!header.equals(THeaderType.COLUMN_INDEX)) {
-				sb2.append("<tr>");
-				for(Field f : lst) {
-					TFieldImportRule fRule = f.getAnnotation(TFieldImportRule.class);
-					String column = (header.equals(THeaderType.COLUMN_NAME)) 
-							? fRule.column()
-									: f.getName();
-					sb2.append("<th>"+column+"</th>");
-				}
-				sb2.append("</tr>");
-			}
-			sb2.append("<tr>");
-			for(Field f : lst) {
-				TFieldImportRule fRule = f.getAnnotation(TFieldImportRule.class);
-				
-				String desc = fRule.description();
-				String cDtEx = fRule.example();
-				
-				sb2.append("<td>");
-				if(StringUtils.isNotBlank(cDtEx))
-					sb2.append(cDtEx);
-				else
-					sb2.append(desc);
-				sb2.append("</td>");
-			}
-			sb2.append("</tr>");
-			sb2.append("</table>");
-			sb2.append("<hr>");
-		}
-	
-		if(csv) {
-			sb2.append("<h2>Csv file exampe:</h2>");
-			if(!header.equals(THeaderType.COLUMN_INDEX)) {
-				for(Field f : lst) {
-					TFieldImportRule fRule = f.getAnnotation(TFieldImportRule.class);
-					
-					String column = (header.equals(THeaderType.COLUMN_NAME)) 
-							? fRule.column()
-									: f.getName();
-					sb2.append("<i>"+column+"</i><b>;</b>");
-				}
-				sb2.append("<br>");
-			}
-			for(Field f : lst) {
-				TFieldImportRule fRule = f.getAnnotation(TFieldImportRule.class);
-				
-				String desc = fRule.description();
-				String cDtEx = fRule.example();
-				
-				if(StringUtils.isNotBlank(cDtEx))
-					sb2.append(cDtEx);
-				else
-					sb2.append(desc);
-				
-				sb2.append("<b>;</b>");
-			}
-			sb2.append("<hr>");
-		}
-		
-		int index = 0;
-		sb2.append("<b>The file columns definition:</b><br><br>");
-		for(Field f : lst) {
-			TFieldImportRule fRule = f.getAnnotation(TFieldImportRule.class);
-			String desc = fRule.description();
-			String column = fRule.column();
-			String cDtEx = fRule.example();
-			String[] pVal = fRule.possibleValues();
-			int maxLen = fRule.maxLength();
-			boolean req = fRule.required();
-
-			sb2.append("[<b>"+desc+"</b>]<br>");
-			
-			if(header.equals(THeaderType.COLUMN_INDEX))
-				sb2.append("Column index: "+(StringUtils.isNotBlank(column) 
-						? column 
-								: index)+"<br>");
-			else
-				sb2.append("Column Header Name: "+(header.equals(THeaderType.COLUMN_NAME)
-						? fRule.column() 
-								: f.getName())+"<br>");
-			
-			if(StringUtils.isNotBlank(cDtEx))
-				sb2.append("Example: "+cDtEx+"<br>");
-			if(maxLen>0)
-				sb2.append("Max length: "+maxLen+"<br>");
-			if(pVal.length>0)
-				sb2.append("Possible values: "+ArrayUtils.toString(pVal)+"<br>");
-			sb2.append("Required: "+req+"<br>");
-			sb2.append("<hr>");
-			index++;
-		}
-		
-		sb.append(sb2);
 		
 		ITImportModel m = this.getImportModelClass().newInstance();
-		m.setRules(sb.toString());
+		m.setRules(TModelInfoUtil.getImportRules(getEntityClass()));
 		return m;
 	}
 	
@@ -235,15 +67,15 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 
 		Class<E> clazz = this.getEntityClass();
 		
-		TEntityImportRule eRule = clazz.getAnnotation(TEntityImportRule.class);
+		TImportInfo eRule = clazz.getAnnotation(TImportInfo.class);
 		
 		if(eRule==null)
 			throw new RuntimeException("The entity "+clazz.getSimpleName()+ 
-					" must be setting with @TEntityImportRule annotation "
-					+ "and the desired fields with @TFieldImportRule");
+					" must be setting with @TImportInfo annotation "
+					+ "and the desired fields with @TField");
 		
-		TFileType[] types = eRule.fileType();
-		int totalCols = eRule.totalColumn();
+		//TFileType[] types = eRule.fileType();
+		//int totalCols = eRule.totalColumn();
 		String sheetName = eRule.xlsSheetName();
 		THeaderType header = eRule.header();
 		
@@ -285,7 +117,7 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 								
 								columns.forEach((idx, f) -> {
 									String value = rowCols[idx];
-									TFieldImportRule rule = f.getAnnotation(TFieldImportRule.class);
+									TField rule = f.getAnnotation(TField.class);
 									Class<? extends Number> numClass = rule.numberType();
 									try {
 										Method setter = clazz.getMethod("set"+StringUtils.capitalize(f.getName()), f.getType());
@@ -413,7 +245,7 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 						
 						columns.forEach((idx, f) -> {
 							Cell cell = r.getCell(idx);
-							TFieldImportRule rule = f.getAnnotation(TFieldImportRule.class);
+							TField rule = f.getAnnotation(TField.class);
 							Class<? extends Number> numClass = rule.numberType();
 							try {
 								Method setter = clazz.getMethod("set"+StringUtils.capitalize(f.getName()), f.getType());
@@ -498,7 +330,7 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 		int index = 0;
 		for(Field f : clazz.getDeclaredFields()) {
 			
-			TFieldImportRule fRule = f.getAnnotation(TFieldImportRule.class);
+			TField fRule = f.getAnnotation(TField.class);
 			
 			if(fRule!=null) {
 				
@@ -508,7 +340,7 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 				if(!header.equals(THeaderType.COLUMN_INDEX)) {
 					String column = header.equals(THeaderType.FIELD_NAME) 
 							?  f.getName()
-									: fRule.column();
+									: StringUtils.isNotBlank(fRule.column()) ? fRule.column() : f.getName();
 							
 					for(String cell : row0Cols) {
 						if(column.toLowerCase().trim()
@@ -519,14 +351,14 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 					
 				}else {
 					try {
-						int column = StringUtils.isBlank(fRule.column()) 
+						int column = !NumberUtils.isCreatable(fRule.column()) 
 								?  index
 										: Integer.valueOf(fRule.column());
 						columns.put(column, f);
 					}catch(NumberFormatException e) {
 						throw new RuntimeException("Cannot import the file, the field "+f.getName()+" in the entity "+clazz.getSimpleName()
-						+" have the property column as "+fRule.column()+" in the TFieldImportRule but expected a number as the file index column."
-								+ " If the file have a header column change the property header in the TEntityImportRule",e);
+						+" have the property column as "+fRule.column()+" in the TField but expected a number as the file index column."
+								+ " If the file have a header column change the property header in the TImportInfo",e);
 					}
 				}
 				index++;
@@ -536,7 +368,7 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 		if(!header.equals(THeaderType.COLUMN_INDEX))
 			for(Field f : reqFields) {
 				if(!columns.containsValue(f)) {
-					TFieldImportRule r = f.getAnnotation(TFieldImportRule.class);
+					TField r = f.getAnnotation(TField.class);
 					throw new TBusinessException("Cannot import the file the required column "+r.column()+" not found!");
 				}
 			}

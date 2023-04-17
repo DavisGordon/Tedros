@@ -70,9 +70,11 @@ public interface TUsualKey {
 	static final String END_ACTIVITIES = "#{label.end.activities}";
 	static final String END_DATE = "#{label.end.date}";
 	static final String EVENTS = "#{label.events}";
+	static final String EXAMPLE = "#{label.example}";
 	static final String EXTENSION = "#{label.extension}";
 	static final String FEMALE = "#{label.female}";
 	static final String FEMININE = "#{label.feminine}";
+	static final String FIELD = "#{label.field}";
 	static final String FILE = "#{label.file}";
 	static final String FILE_DESCRIPTION = "#{label.file.description}";
 	static final String FILE_EXTENSION = "#{label.file.extension}";
@@ -89,6 +91,7 @@ public interface TUsualKey {
 	static final String IDENTITY = "#{label.identity}";
 	static final String IMAGE = "#{label.image}";
 	static final String KEY = "#{label.key}";
+	static final String LABEL = "#{label.label}";
 	static final String LANG_CODE = "#{label.lang.code}";
 	static final String LANG_NAME = "#{label.lang.name}";
 	static final String LAST_NAME = "#{label.last.name}";
@@ -98,12 +101,14 @@ public interface TUsualKey {
 	static final String MAIN_DATA = "#{label.main.data}";
 	static final String MAIN_PAGE = "#{label.main.page}";
 	static final String MALE = "#{label.male}";
+	static final String MANDATORY = "#{label.mandatory}";
 	static final String MAP = "#{label.map}";
 	static final String MAP_TYPE = "#{label.map.type}";
 	static final String MAPQUEST_KEY = "#{label.mapquest.key}";
 	static final String MARRIED = "#{label.married}";
 	static final String MASCULINE = "#{label.masculine}";
 	static final String MASTER = "#{label.master}";
+	static final String MAX_LENGTH = "#{label.max.length}";
 	static final String MIME_TYPE = "#{label.mime.type}";
 	static final String NAME = "#{label.name}";
 	static final String NATURAL_PERSON = "#{label.natural.person}";
@@ -135,6 +140,7 @@ public interface TUsualKey {
 	static final String PLANS = "#{label.plans}";
 	static final String POPULATION = "#{label.population}";
 	static final String POPULATION_NAME = "#{label.population.name}";
+	static final String POSSIBLE_VALUES = "#{label.possible.values}";
 	static final String PUBLIC_PLACE = "#{label.public.place}";
 	static final String REF_CODE = "#{label.ref.code}";
 	static final String REGISTRATION_FEE = "#{label.registration.fee}";
@@ -180,5 +186,6 @@ public interface TUsualKey {
 	static final String WORKNUMBER = "#{label.worknumber}";
 	static final String YES = "#{label.yes}";
 	static final String TOOLTIP_CODES_COMMA_SEPARATED = "#{tooltip.codes.comma.separated}";
+
 
 }

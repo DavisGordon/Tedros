@@ -14,12 +14,12 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 @Target(TYPE)
 /**
- * The type rules to import for an entity 
+ * The file rules to import
  * 
  * @author Davis Gordon
  *
  */
-public @interface TEntityImportRule {
+public @interface TImportInfo {
 
 	/**
 	 * A relevant description for the content
@@ -53,10 +53,10 @@ public @interface TEntityImportRule {
 	 *  
 	 * For THeaderType.COLUMN_NAME the file must have the first row with 
 	 * columns named as same value of the property column in the 
-	 * TFieldImportRule annotation of the correspondent entity field.
+	 * TField annotation of the correspondent entity field.
 	 * 
 	 * For THeaderType.COLUMN_INDEX the import process assume the has no header and the first row will
-	 * be used as data to create an entity and  the property column in the TFieldImportRule must have
+	 * be used as data to create an entity and  the property column in the TField must have
 	 * the file column index to be used to identify the correspondent data.
 	 * </pre>
 	 * @default THeaderType.COLUMN_NAME

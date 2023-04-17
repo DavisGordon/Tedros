@@ -35,7 +35,7 @@ public class TChatUtil {
 	private TChatUtil() {
 	}
 	
-	public static StackPane buildTextPane(String user, String txt, Date dt) {
+	public static StackPane buildTextPane(String user, String txt, Double txtWrapWidth, Date dt) {
 
 		TLanguage iEngine = TLanguage.getInstance();
 		
@@ -65,7 +65,8 @@ public class TChatUtil {
 		if(txt!=null) {
 			TText t1 = new TText(txt);
 			t1.settTextStyle(TTextStyle.MEDIUM);
-			t1.setWrappingWidth(800);
+			t1.setWrappingWidth(txtWrapWidth);
+			t1.setId("msgTxt");
 			VBox.setMargin(t1, new Insets(8));
 			gp.getChildren().add(t1);
 			Hyperlink hl = new Hyperlink(iEngine.getString(TFxKey.BUTTON_COPY));

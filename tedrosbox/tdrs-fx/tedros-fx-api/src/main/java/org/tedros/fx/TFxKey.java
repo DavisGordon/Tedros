@@ -1,6 +1,7 @@
 package org.tedros.fx;
 
 public interface TFxKey {
+	
 	static final String AI_ASSISTANT_ANALYSE_MESSAGE = "#{tedros.fxapi.ai.assistant.analyse.message}";
 	static final String AI_ASSISTANT_CHANGE_MESSAGE = "#{tedros.fxapi.ai.assistant.change.message}";
 	static final String AI_ASSISTANT_CREATE_MESSAGE = "#{tedros.fxapi.ai.assistant.create.message}";
@@ -35,6 +36,7 @@ public interface TFxKey {
 	static final String BUTTON_SEND = "#{tedros.fxapi.button.send}";
 	static final String BUTTON_VIEW_SELECTED = "#{tedros.fxapi.button.view.selected}";
 	static final String BUTTON_YES = "#{tedros.fxapi.button.yes}";
+	static final String FIELD_INFO_TITLE = "#{tedros.fxapi.field.info.title}";
 	static final String HYPERLINK_READ_EXPORT = "#{tedros.fxapi.hyperlink.read.export}";
 	static final String ANALYSE = "#{tedros.fxapi.label.analyse}";
 	static final String CHANGE = "#{tedros.fxapi.label.change}";
