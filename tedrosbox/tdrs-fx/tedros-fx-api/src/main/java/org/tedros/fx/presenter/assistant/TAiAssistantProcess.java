@@ -6,6 +6,7 @@ package org.tedros.fx.presenter.assistant;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TLanguage;
 import org.tedros.core.ai.model.completion.chat.TChatMessage;
 import org.tedros.core.ai.model.completion.chat.TChatRequest;
@@ -20,6 +21,7 @@ import org.tedros.fx.process.TTaskImpl;
 import org.tedros.fx.util.JsonHelper;
 import org.tedros.server.model.TJsonModel;
 import org.tedros.server.result.TResult;
+import org.tedros.server.util.TModelInfoUtil;
 
 /**
  * @author Davis Gordon
@@ -34,7 +36,7 @@ public class TAiAssistantProcess extends TProcess<TResult<TChatResult>> {
 	}
 	
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void askForCreate(TJsonModel model, String prompt) {
 
 		TLanguage iEng = TLanguage.getInstance();
@@ -42,10 +44,18 @@ public class TAiAssistantProcess extends TProcess<TResult<TChatResult>> {
 		String intro =  iEng.getString(TFxKey.AI_ASSISTANT_INTRO);
 		String detail = iEng.getString(TFxKey.AI_ASSISTANT_CREATE_MESSAGE);
 		String rule =  iEng.getString(TFxKey.AI_ASSISTANT_RESPONSE_RULE);
+		String info = "";
+		try {
+			info = TModelInfoUtil.getFieldsInfo(model.getModelType());
+			if(StringUtils.isNotBlank(info))
+				info = iEng.getString(info);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		String json = JsonHelper.write(model);
 		
-		this.sysMsg = intro+detail+json;
+		this.sysMsg = intro+detail+info+json;
 		this.userMsg = prompt+rule;
 	}
 
@@ -65,6 +75,7 @@ public class TAiAssistantProcess extends TProcess<TResult<TChatResult>> {
 	    			req.addMessage(s);
 	    			req.addMessage(m);
 	    			req.setTemperature(0.0D);
+	    			req.setMaxTokens(2000);
 	    			
 	    			TAiChatCompletionController serv = loc.lookup(TAiChatCompletionController.JNDI_NAME);
 	    			res = serv.chat(TedrosContext.getLoggedUser().getAccessToken(), req);
