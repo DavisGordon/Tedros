@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.api.form.ITModelForm;
 import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
@@ -123,6 +124,16 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			this.decorator.gettAiAssistant().settView(getView());
 			this.decorator.gettAiAssistant().settTargetModel(super.modelViewProperty());
 			this.decorator.gettAiAssistant().settModels(getModels());
+			
+			ChangeListener<M> outChl = (a,o,n)->{
+				if(n!=null) {
+					this.processNewEntityBeforeBuildForm(n);
+					super.setModelView(n);
+				}
+			};
+			super.getListenerRepository().add("tOutChl", outChl);
+			this.decorator.gettAiAssistant()
+			.tOutModelProperty().addListener(new WeakChangeListener<>(outChl));
 		}
 		
 		if(!isUserNotAuthorized(TAuthorizationType.VIEW_ACCESS))
@@ -614,7 +625,16 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 	public void showListView() {
 		this.decorator.showListContent();
 	}
-	
+	/*
+	@Override
+	protected void runAfterBuildForm(ITModelForm<M> form) {
+		if(form==null)
+			this.showListView();
+		else
+			this.hideListView();
+		super.runAfterBuildForm(form);
+	}
+	*/
 	@Override
 	public boolean processNewEntityBeforeBuildForm(M model) {
 		addInListView(model);
