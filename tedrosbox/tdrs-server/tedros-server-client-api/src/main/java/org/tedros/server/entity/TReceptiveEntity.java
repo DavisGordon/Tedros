@@ -10,8 +10,6 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 /**
  * @author Davis Gordon
  *
@@ -22,33 +20,26 @@ public class TReceptiveEntity extends TVersionEntity implements ITIntegrable {
 	private static final long serialVersionUID = -2079872072687921884L;
 	
 	@Column
-	@JsonIgnore
 	private Long integratedEntityId;
 	
 	@Column(length=1512)
-	@JsonIgnore
 	private String integratedModelView;
 	
 
 	@Column(length=1512)
-	@JsonIgnore
 	private String integratedEntity;
 
 	@Column(length=2512)
-	@JsonIgnore
 	private String integratedModulePath;
 	
 	@Column(length=512)
-	@JsonIgnore
 	private String integratedViewName;
 
 	@Column
-	@JsonIgnore
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date integratedDate;
 
 	@Column(length=200)
-	@JsonIgnore
 	private String integratedAppUUID;
 	/**
 	 * 

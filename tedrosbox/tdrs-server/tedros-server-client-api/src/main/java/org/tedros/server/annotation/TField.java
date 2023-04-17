@@ -14,27 +14,34 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 @Target({ FIELD })
 /**
- * Define field import rules
+ * The field info
  * 
  * @author Davis Gordon
  *
  */
-public @interface TFieldImportRule {
+public @interface TField {
 
 	/**
-	 * Set required for this field
+	 * The field label
 	 * */
-	boolean required();
-	
-	/**
-	 * The file column name or column index that must contain the data for this field
-	 * */
-	String column();
+	String label();
 	
 	/**
 	 * A relevant description for the content
 	 * */
-	String description();
+	String description() default "";
+	
+	/**
+	 * Sets this field to mandatory
+	 * */
+	boolean required() default false;
+	
+	/**
+	 * The name of the column or index containing the data for this field.
+	 * The default value is the field name.
+	 * */
+	String column() default "";
+	
 	
 	/**
 	 * An example of the data
@@ -47,7 +54,7 @@ public @interface TFieldImportRule {
 	String datePattern() default "";
 	
 	/**
-	 * Define a date field to be set with the current date   
+	 * Sets a field of Date type with the current date   
 	 * */
 	boolean setCurrentDate() default false;
 	

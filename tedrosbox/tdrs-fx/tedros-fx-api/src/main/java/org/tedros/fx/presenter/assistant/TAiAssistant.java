@@ -148,8 +148,16 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 											});
 										}
 										if(t.getAssistantMessage()!=null) {
-											StackPane pane = TChatUtil.buildTextPane("Teros", t.getAssistantMessage(), new Date());
-											pane.setPrefSize(400, 300);
+											Pane v = (Pane) tView;
+											double w = v.getBoundsInLocal().getWidth()-200;
+											double h = v.getBoundsInLocal().getHeight()-200;
+											StackPane msg = TChatUtil
+													.buildTextPane("Teros", t.getAssistantMessage(),w-20, new Date());
+											VBox pane = new VBox();
+											pane.getChildren().add(msg);
+											pane.setMinSize(w,h);
+											pane.setMaxSize(w,h);
+											pane.setPrefSize(w,h);
 											showModal(pane);
 										}
 									} catch (Exception e) {

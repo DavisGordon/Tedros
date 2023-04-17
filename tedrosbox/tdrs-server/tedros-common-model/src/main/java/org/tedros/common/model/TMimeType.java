@@ -10,8 +10,8 @@ import javax.persistence.Table;
 import org.tedros.common.domain.DomainSchema;
 import org.tedros.common.domain.DomainTables;
 import org.tedros.server.annotation.TCaseSensitive;
-import org.tedros.server.annotation.TEntityImportRule;
-import org.tedros.server.annotation.TFieldImportRule;
+import org.tedros.server.annotation.TImportInfo;
+import org.tedros.server.annotation.TField;
 import org.tedros.server.annotation.TFileType;
 import org.tedros.server.entity.TVersionEntity;
 
@@ -22,27 +22,27 @@ import org.tedros.server.entity.TVersionEntity;
 
 @Entity
 @Table(name=DomainTables.mimeType, schema=DomainSchema.tedros_common)
-@TEntityImportRule(description = "#{mimetype.import.rule.desc}", 
+@TImportInfo(description = "#{mimetype.import.rule.desc}", 
 fileType = { TFileType.CSV, TFileType.XLS })
 public class TMimeType extends TVersionEntity {
 
 	private static final long serialVersionUID = 5379094409048057058L;
 
 	@Column(length=10, nullable=false)
-	@TFieldImportRule(required = true, 
-	description = "#{label.mimetype.ext}", column = "extension", 
+	@TField(required = true, 
+	label = "#{label.mimetype.ext}", column = "extension", 
 	example=".png", caseSensitive=TCaseSensitive.LOWER, maxLength=10)
 	private String extension;
 
 	@Column(length=500)
-	@TFieldImportRule(required = true, 
-	description = "#{label.mimetype.desc}", column = "description", 
+	@TField(required = true, 
+	label = "#{label.mimetype.desc}", column = "description", 
 	example="The png image file type",  maxLength=500)
 	private String description;
 
 	@Column(length=500)
-	@TFieldImportRule(required = true, 
-	description = "#{label.mimetype.type}", column = "type", 
+	@TField(required = true, 
+	label = "#{label.mimetype.type}", column = "type", 
 	example="image/png",  maxLength=500)
 	private String type;
 

@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * @author Davis Gordon
  *
@@ -20,6 +22,10 @@ public abstract class TJsonModel<T> implements Serializable {
 	private String status;
 	private List<T> data;
 	
+	@JsonIgnore
+	public abstract Class<T> getModelType();
+	
+	@JsonIgnore
 	public void addData(T item) {
 		if(data==null)
 			data = new ArrayList<>();
