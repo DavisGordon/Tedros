@@ -27,6 +27,7 @@ import org.tedros.server.model.TJsonModel;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
@@ -62,6 +63,8 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 	private TToolBar toolbar;
 	private ITView tView;
 	
+
+	private SimpleObjectProperty<M> tOutModel;
 	private SimpleObjectProperty<M> tTargetModel;
 	private ObservableList<M> tModels;
 	private Class<M> tModelViewType;
@@ -76,6 +79,7 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 		this.jsonModelType = jsonModelType;
 		this.tModelViewType = (Class<M>) modelViewType;
 		this.repo = new TRepository();
+		this.tOutModel = new SimpleObjectProperty<>();
 		TLanguage iEng = TLanguage.getInstance();
 		analyseRadio = new RadioButton(iEng.getString(TFxKey.ANALYSE));
 		analyseRadio.setTooltip(new Tooltip(iEng.getString(TFxKey.TOOLTIP_AI_ANALYSE)));
@@ -135,17 +139,25 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 									try {
 										TJsonModel t = JsonHelper.read(c.getMessage().getContent(), this.jsonModelType);
 										if(t.getData()!=null) {
-											t.getData().forEach(e->{
+											if(t.getData().size()==1) {
 												try {
-													M mv = (M) TModelViewBuilder.create()
-														.modelViewClass((Class<? extends ITModelView<?>>) tModelViewType)
-														.build((ITEntity) e);
-													tModels.add(mv);
+													M mv = buildModelView(t.getData().get(0));
+													this.tOutModel.setValue(mv);
+													this.tOutModel.setValue(null);
 												} catch (TException e1) {
 													e1.printStackTrace();
 													showErrorMessage(e1);
 												}
-											});
+											}else
+												t.getData().forEach(e->{
+													try {
+														M mv = buildModelView(e);
+														tModels.add(mv);
+													} catch (TException e1) {
+														e1.printStackTrace();
+														showErrorMessage(e1);
+													}
+												});
 										}
 										if(t.getAssistantMessage()!=null) {
 											Pane v = (Pane) tView;
@@ -187,6 +199,13 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 			}
 		}
 		
+	}
+
+	private M buildModelView(Object e) throws TException {
+		M mv = (M) TModelViewBuilder.create()
+			.modelViewClass((Class<? extends ITModelView<?>>) tModelViewType)
+			.build((ITEntity) e);
+		return mv;
 	}
 	
 	private void showErrorMessage(Throwable ex) {
@@ -269,6 +288,7 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 	public void tInvalidate() {
 		this.repo.clear();
 		this.tTargetModel = null;
+		this.tOutModel = null;
 		this.tModels = null;
 		this.tView = null;
 		this.tModelViewType = null;
@@ -279,6 +299,20 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 	 */
 	public void settView(ITView tView) {
 		this.tView = tView;
+	}
+
+	/**
+	 * @return the tOutModel
+	 */
+	public M gettOutModel() {
+		return tOutModel.getValue();
+	}
+	
+	/**
+	 * @return the tOutModel property
+	 */
+	public ReadOnlyObjectProperty<M> tOutModelProperty() {
+		return tOutModel;
 	}
 
 }

@@ -1,6 +1,7 @@
 package org.tedros.fx.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -20,6 +21,9 @@ public class JsonHelper {
 		// to allow serialization of "empty" POJOs (no properties to serialize)
 		// (without this setting, an exception is thrown in those cases)
 		mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+
+		// to prevent exception when encountering unknown property:
+		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 	}
 	
 	public static <T> String write(T obj) {
