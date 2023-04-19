@@ -18,8 +18,6 @@ import org.tedros.fx.control.validator.TFieldResult;
 import org.tedros.fx.control.validator.TValidatorResult;
 import org.tedros.fx.exception.TValidatorException;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
@@ -32,103 +30,88 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-public class TMessageBox extends Pane {
+public class TMessageBoxOld extends Pane {
 	
-	protected static double size = 0;
-	private SimpleStringProperty header;
 	private ObservableList<TMessage> messages;
-	protected ScrollPane scroll;
+
+	protected static double size = 0;
+	private String header;
 	protected VBox messagesPane;
 	protected TLanguage iEngine = TLanguage.getInstance(null);
 	
-    protected TMessageBox() {
+    protected TMessageBoxOld() {
     	init();
     }
     
-    public TMessageBox(String msg) {
+    public TMessageBoxOld(String msg) {
     	init();
-    	tAddMessage(Arrays.asList(msg), TMessageType.GENERIC);
+    	load(Arrays.asList(msg), TMessageType.GENERIC);
 	}
     
-    public TMessageBox(String header, String msg) {
+    public TMessageBoxOld(String header, String msg) {
+    	this.header = header;
     	init();
-    	settHeader(header);
     	if(msg!=null)
-    		tAddMessage(Arrays.asList(msg), TMessageType.GENERIC);
+    		load(Arrays.asList(msg), TMessageType.GENERIC);
 	}
     
-    public void settHeader(String header) {
-		this.header.setValue(header);
-	}
-
-	public TMessageBox(String msg, TMessageType type) {
+    public TMessageBoxOld(String msg, TMessageType type) {
     	init();
-    	tAddMessage(Arrays.asList(msg), type);
+    	load(Arrays.asList(msg), type);
 	}
     
-    public TMessageBox(String header, String msg, TMessageType type) {
+    public TMessageBoxOld(String header, String msg, TMessageType type) {
+    	this.header = header;
     	init();
-    	settHeader(header);
     	if(msg!=null)
-    		tAddMessage(Arrays.asList(msg), type);
+    		load(Arrays.asList(msg), type);
 	}
     
-    public TMessageBox(List<String> messages, String header) {
+    public TMessageBoxOld(List<String> messages, String header) {
+    	this.header = header;
     	init();
-    	settHeader(header);
-    	tAddMessage(messages, TMessageType.GENERIC);
+    	load(messages, TMessageType.GENERIC);
 	}
 
-    public TMessageBox(List<String> messages, TMessageType type) {
+    public TMessageBoxOld(List<String> messages, TMessageType type) {
     	init();
-    	tAddMessage(messages, type);
+    	load(messages, type);
 	}
 
-    public TMessageBox(String header, List<String> messages, TMessageType type) {
+    public TMessageBoxOld(String header, List<String> messages, TMessageType type) {
+    	this.header = header;
     	init();
-    	settHeader(header);
-    	tAddMessage(messages, type);
+    	load(messages, type);
 	}
     
-    public TMessageBox(List<TMessage> messages) {
+    public TMessageBoxOld(List<TMessage> messages) {
     	init();
-    	tAddMessage(messages);
+    	load(messages);
 	}
     
-    public TMessageBox(String header, List<TMessage> messages) {
+    public TMessageBoxOld(String header, List<TMessage> messages) {
+    	this.header = header;
     	init();
-    	settHeader(header);
-    	tAddMessage(messages);
+    	load(messages);
 	}
     
-    public TMessageBox(Throwable e) {
+    public TMessageBoxOld(Throwable e) {
     	init();
     	process(e);
 	}
     
-    public TMessageBox(Throwable e, String header) {
+    public TMessageBoxOld(Throwable e, String header) {
+    	this.header = header;
     	init();
-    	settHeader(header);
     	process(e);
     }
 
-	public TMessageBox(TValidatorException e) {
-    	init();
-    	processValidator(e);
-	}
-
-	public TMessageBox(TValidatorException e, String header) {
-    	init();
-    	settHeader(header);
-    	processValidator(e);
-	}
 	/**
 	 * @param e
 	 */
@@ -136,14 +119,24 @@ public class TMessageBox extends Pane {
 		String msg = e.getMessage();
     	if(StringUtils.isBlank(msg))
     		msg = TFxKey.MESSAGE_ERROR;
-    	tAddMessage(Arrays.asList(msg), TMessageType.ERROR);
+    	load(Arrays.asList(msg), TMessageType.ERROR);
 	}
     
+	public TMessageBoxOld(TValidatorException e) {
+    	init();
+    	processValidator(e);
+	}
+
+	public TMessageBoxOld(TValidatorException e, String header) {
+    	this.header = header;
+    	init();
+    	processValidator(e);
+	}
 	/**
 	 * @param e
 	 */
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	public void processValidator(TValidatorException e) {
+	private void processValidator(TValidatorException e) {
 		List<TValidatorResult<ITModelView>> results = (List<TValidatorResult<ITModelView>>) e.getValidatorResults();
     	List<String> messages = new ArrayList<>(0);
     	
@@ -166,75 +159,58 @@ public class TMessageBox extends Pane {
     			}
     		}
     	}
-    	tAddMessage(messages, TMessageType.WARNING);
+    	load(messages, TMessageType.WARNING);
 	}
 
     private void init() {
     	
-    	header = new SimpleStringProperty();
+    	
     	messages = FXCollections.observableArrayList();
-		messages.addListener((Change<? extends TMessage> c)->{
-    		if(c.next()) {
-    			if(c.wasAdded())
-    				this.addMessagePane(c.getAddedSubList());
-    			else if(c.wasRemoved() && c.getList().size()==0)
-    				this.buildMessagePane();
-    		}
-    	});
-		
+    	
+    	messagesPane = new VBox(5);
+    	messagesPane.setAlignment(Pos.TOP_CENTER);
+    	messagesPane.setStyle("-fx-background-color: transparent");
+
+    	StackPane main = new StackPane();
+    	
     	super.setStyle("-fx-background-color: transparent");
     	
     	setMaxWidth(530);
-    	/*super.sceneProperty().addListener((a,o,n)->{
+    	super.sceneProperty().addListener((a,o,n)->{
     		if(n==null){
     			this.getChildren().clear();
     			this.messagesPane = null;
     			this.messages = null;
     			this.iEngine = null;
     		}
-    	});*/
+    	});
     	
-    	scroll = new ScrollPane();
+		ScrollPane scroll = new ScrollPane();
     	scroll.setFitToHeight(true);
     	scroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
     	scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
     	scroll.setStyle("-fx-background-color: transparent");
     	scroll.setPadding(new Insets(8));
-    	
-		buildMessagePane();
+		scroll.setContent(this.messagesPane);
 		
-    	BorderPane vb = new BorderPane();
-		vb.setCenter(scroll);
+    	VBox vb = new VBox(8);
 		
-    	ChangeListener<String> headerChl = (a,o,n)->{
-    		vb.setTop(null);
-    		vb.setId(null);
-    		if(n!=null) {
-	    		size = 50;
-	    		Label text = new Label(n);
-	    		text.setId("t-title-label");
-	    		StackPane sp = new StackPane();
-	    		sp.getChildren().add(text);
-	    		sp.getStyleClass().add("t-panel-color");
-	    		sp.setStyle("-fx-background-radius: 20 20 0 0;");
-	    		StackPane.setAlignment(text, Pos.CENTER_LEFT);
-	    		StackPane.setMargin(text, new Insets(5,5,5,10));
-	    		vb.setId("t-view");
-	    		vb.setTop(sp);
-	    	}
-    	};
-    	header.addListener(headerChl);
-		StackPane main = new StackPane();
-    	
+    	if(header!=null) {
+    		size = 50;
+    		Label text = new Label(header);
+    		text.setId("t-title-label");
+    		StackPane sp = new StackPane();
+    		sp.getChildren().add(text);
+    		sp.getStyleClass().add("t-panel-color");
+    		sp.setStyle("-fx-background-radius: 20 20 0 0;");
+    		StackPane.setAlignment(text, Pos.CENTER_LEFT);
+    		StackPane.setMargin(text, new Insets(5,5,5,10));
+    		vb.setId("t-view");
+    		vb.getChildren().add(sp);
+    	}
+		vb.getChildren().add(scroll);
     	main.getChildren().add(vb);
     	super.getChildren().add(main);
-	}
-
-	private void buildMessagePane() {
-		messagesPane = new VBox(5);
-    	messagesPane.setAlignment(Pos.TOP_CENTER);
-    	messagesPane.setStyle("-fx-background-color: transparent");
-		scroll.setContent(this.messagesPane);
 	}
 
     @Override 
@@ -258,24 +234,41 @@ public class TMessageBox extends Pane {
         
     }  
     
-	public void tAddMessage(List<String> messages, TMessageType type) {
+	private void load(List<String> messages, TMessageType type) {
         if(messages!=null)
 	        for (String m : messages)
 				tAddMessage(m, type, null, null);
+        addMessagePane();
+		this.messages.addListener((Change<? extends TMessage> c)->{
+    		if(c.next())
+    			this.addMessagePane(c.getAddedSubList());
+    	});
+			
+    	
 	}
 	
-	public void tAddMessage(List<TMessage> messages) {
+	private void load(List<TMessage> messages) {
 		this.messages.addAll(messages);
+		addMessagePane();
+		this.messages.addListener((Change<? extends TMessage> c)->{
+    		if(c.next())
+    			this.addMessagePane(c.getAddedSubList());
+    	});
 	}
 	
-	public void tAddMessage(String msg) {
+	protected void tAddMessage(String msg) {
 		this.tAddMessage(msg, TMessageType.GENERIC, null, null);
 	}
 	
-	public void tClearMessages() {
-		this.messages.clear();
+	private void addMessagePane() {
+		messages.forEach(t -> {
+			Pane p = buildMessagePane(t);
+			if(p!=null)
+				messagesPane.getChildren().add(p);
+		});
+		
 	}
-	
+
 	private void addMessagePane(List<? extends TMessage> lst) {
 		lst.forEach(t -> {
 			Pane p = buildMessagePane(t);
