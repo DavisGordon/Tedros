@@ -64,6 +64,7 @@ public abstract class TDynaViewSimpleBaseBehavior<M extends TModelView, E extend
 extends TBehavior<M, TDynaPresenter<M>> {
 	
 	private TDynaViewSimpleBaseDecorator decorator;
+	private TMessageBox tMessageBox;
 	
 	protected TActionHelper actionHelper = new TActionHelper();
 	
@@ -103,8 +104,14 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		ListChangeListener<TMessage> msgLtnr = c -> {
 			if(showMessages) {
 				if(c.next() && c.wasAdded()) {
-					final TMessageBox tMessageBox = new TMessageBox((List<TMessage>) c.getAddedSubList());
-					getView().tShowModal(tMessageBox, true);
+					if(tMessageBox==null)
+						tMessageBox = new TMessageBox((List<TMessage>) c.getAddedSubList());
+					else
+						tMessageBox.tAddMessage((List<TMessage>) c.getAddedSubList());
+					getView().tShowModal(tMessageBox, true, n->{
+						TMessageBox mbx = (TMessageBox) n;
+						mbx.tClearMessages();
+					});
 				}
 			}else if(!c.getList().isEmpty())
 				messagesProperty.clear();
