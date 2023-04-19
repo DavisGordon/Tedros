@@ -103,15 +103,17 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		
 		ListChangeListener<TMessage> msgLtnr = c -> {
 			if(showMessages) {
-				if(c.next() && c.wasAdded()) {
-					if(tMessageBox==null)
-						tMessageBox = new TMessageBox((List<TMessage>) c.getAddedSubList());
-					else
-						tMessageBox.tAddMessage((List<TMessage>) c.getAddedSubList());
-					getView().tShowModal(tMessageBox, true, n->{
-						TMessageBox mbx = (TMessageBox) n;
-						mbx.tClearMessages();
-					});
+				if(c.next()) {
+					if(c.wasAdded()) {
+						if(tMessageBox==null) {
+							tMessageBox = new TMessageBox((List<TMessage>) c.getAddedSubList());
+							getView().tShowModal(tMessageBox, true);
+						}else
+							tMessageBox.tAddMessage((List<TMessage>) c.getAddedSubList());
+					}else if(c.wasRemoved()) {
+						tMessageBox.tDispose();
+						tMessageBox = null;
+					}
 				}
 			}else if(!c.getList().isEmpty())
 				messagesProperty.clear();

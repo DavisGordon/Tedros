@@ -10,6 +10,7 @@ import org.tedros.core.TLanguage;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
 import org.tedros.core.model.ITModelView;
+import org.tedros.core.repository.TRepository;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.control.TButton;
 import org.tedros.fx.control.TText;
@@ -20,9 +21,11 @@ import org.tedros.fx.exception.TValidatorException;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.WeakChangeListener;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener.Change;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.WeakListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -42,10 +45,12 @@ import javafx.scene.layout.VBox;
 public class TMessageBox extends Pane {
 	
 	protected static double size = 0;
+	private TRepository repo;
 	private SimpleStringProperty header;
 	private ObservableList<TMessage> messages;
 	protected ScrollPane scroll;
 	protected VBox messagesPane;
+	
 	protected TLanguage iEngine = TLanguage.getInstance(null);
 	
     protected TMessageBox() {
@@ -169,30 +174,25 @@ public class TMessageBox extends Pane {
     	tAddMessage(messages, TMessageType.WARNING);
 	}
 
-    private void init() {
-    	
+	private void init() {
+    	repo = new TRepository();
     	header = new SimpleStringProperty();
     	messages = FXCollections.observableArrayList();
-		messages.addListener((Change<? extends TMessage> c)->{
+    	
+    	ListChangeListener<TMessage> lstChl = c ->{
     		if(c.next()) {
     			if(c.wasAdded())
     				this.addMessagePane(c.getAddedSubList());
     			else if(c.wasRemoved() && c.getList().size()==0)
     				this.buildMessagePane();
     		}
-    	});
+    	};
+    	repo.add("lstChl", lstChl);
+		messages.addListener(new WeakListChangeListener<>(lstChl));
 		
     	super.setStyle("-fx-background-color: transparent");
     	
     	setMaxWidth(530);
-    	/*super.sceneProperty().addListener((a,o,n)->{
-    		if(n==null){
-    			this.getChildren().clear();
-    			this.messagesPane = null;
-    			this.messages = null;
-    			this.iEngine = null;
-    		}
-    	});*/
     	
     	scroll = new ScrollPane();
     	scroll.setFitToHeight(true);
@@ -223,7 +223,8 @@ public class TMessageBox extends Pane {
 	    		vb.setTop(sp);
 	    	}
     	};
-    	header.addListener(headerChl);
+    	repo.add("headerChl", headerChl);
+    	header.addListener(new WeakChangeListener<>(headerChl));
 		StackPane main = new StackPane();
     	
     	main.getChildren().add(vb);
@@ -231,10 +232,13 @@ public class TMessageBox extends Pane {
 	}
 
 	private void buildMessagePane() {
-		messagesPane = new VBox(5);
-    	messagesPane.setAlignment(Pos.TOP_CENTER);
-    	messagesPane.setStyle("-fx-background-color: transparent");
-		scroll.setContent(this.messagesPane);
+		if(messagesPane==null) {
+			messagesPane = new VBox(5);
+	    	messagesPane.setAlignment(Pos.TOP_CENTER);
+	    	messagesPane.setStyle("-fx-background-color: transparent");
+			scroll.setContent(this.messagesPane);
+		}else
+			this.messagesPane.getChildren().clear();
 	}
 
     @Override 
@@ -285,6 +289,20 @@ public class TMessageBox extends Pane {
 		
 	}
 	
+	
+	private void tAddMessage(String value, TMessageType type, String buttonText, Consumer<ActionEvent> buttonAction) {
+		messages.add(new TMessage(type, value, buttonText, buttonAction));
+	}
+	
+	public void tDispose() {
+		this.repo.clear();
+		this.header = null;
+		this.messages = null;
+		this.messagesPane = null;
+		this.scroll = null;
+		this.getChildren().clear();
+	}
+
 	public static Pane buildMessagePane(TMessage msg) {
 		if(!msg.isLoaded()) {
 			msg.setLoaded(true);
@@ -301,11 +319,6 @@ public class TMessageBox extends Pane {
 		}
 		return null;
 	}
-	
-	private void tAddMessage(String value, TMessageType type, String buttonText, Consumer<ActionEvent> buttonAction) {
-		messages.add(new TMessage(type, value, buttonText, buttonAction));
-	}
-
 	/**
 	 * @param type 
 	 * @param text 
