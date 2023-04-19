@@ -18,6 +18,8 @@ import javafx.util.Duration;
 
 public class TModalPane extends StackPane {
 
+	private Consumer<Node> closeCallback;
+	
 	public TModalPane(final Pane pane) {
 		initialize();
 		pane.getChildren().add(this);	
@@ -57,6 +59,21 @@ public class TModalPane extends StackPane {
 	}
 	
 	/**
+	 * Open the modal
+	 * */
+	public void showModal(Node node, boolean closeModalOnMouseClick, Consumer<Node> closeCallback) {
+		if(closeModalOnMouseClick)
+			this.showModal(node, ev->{
+				ev.consume();
+				closeCallback.accept(this.getChildren().get(0));
+				this.hideModal();
+			});
+		else {
+			this.closeCallback = closeCallback;
+			this.showModal(node);
+		}
+	}
+	/**
 	 * Open the modal and consume the closeAction on the mouse clicked event
 	 * this not hide the modal.
 	 * */
@@ -69,7 +86,7 @@ public class TModalPane extends StackPane {
 		else
 			setOnMouseClicked(null);
 		
-		getChildren().add(node);
+		getChildren().set(0, node);
 		StackPane.setMargin(node, new Insets(20));
 		StackPane.setAlignment(node, Pos.CENTER);
         setOpacity(0);
@@ -100,6 +117,8 @@ public class TModalPane extends StackPane {
             new KeyFrame(Duration.millis(400), 
                 new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent t) {
+                    	if(closeCallback!=null)
+                    		closeCallback.accept(getChildren().get(0));
                         getChildren().clear();
                         setCache(false);
                         setVisible(false);

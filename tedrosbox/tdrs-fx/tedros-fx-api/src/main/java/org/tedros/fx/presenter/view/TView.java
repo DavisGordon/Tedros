@@ -2,6 +2,7 @@ package org.tedros.fx.presenter.view;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.function.Consumer;
 
 import org.tedros.api.presenter.ITPresenter;
 import org.tedros.api.presenter.view.ITView;
@@ -74,11 +75,19 @@ extends StackPane implements ITView<P>{
 	}
 	
 	/**
-	 * Abre modal
+	 * Show the modal
 	 * */
 	public void tShowModal(Node message, boolean closeModalOnMouseClick) {
 		initializeModalPane();
 		modalPane.showModal(message, closeModalOnMouseClick);
+	 }
+	
+	/**
+	 * Show the modal
+	 * */
+	public void tShowModal(Node message, boolean closeModalOnMouseClick, Consumer<Node> closeCallback) {
+		initializeModalPane();
+		modalPane.showModal(message, closeModalOnMouseClick, closeCallback);
 	 }
 	
 	public ReadOnlyBooleanProperty tModalVisibleProperty() {
@@ -87,7 +96,7 @@ extends StackPane implements ITView<P>{
 	}
 	
 	/**
-	 * Fecha modal
+	 * Close the modal
 	 * */
 	public void tHideModal() {
 		if(modalPane!=null) {

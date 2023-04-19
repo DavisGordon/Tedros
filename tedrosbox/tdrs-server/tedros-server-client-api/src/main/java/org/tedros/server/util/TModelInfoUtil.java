@@ -14,6 +14,7 @@ import org.tedros.server.annotation.TField;
 import org.tedros.server.annotation.TFileType;
 import org.tedros.server.annotation.THeaderType;
 import org.tedros.server.annotation.TImportInfo;
+import org.tedros.server.annotation.TModelInfo;
 import org.tedros.server.entity.ITEntity;
 import org.tedros.server.model.ITModel;
 
@@ -25,13 +26,21 @@ public class TModelInfoUtil {
 
 	public static String getFieldsInfo(Class<? extends ITModel> modelType) throws Exception {
 		
+		TModelInfo info = modelType.getAnnotation(TModelInfo.class);
+		
 		List<Field> lst = getFields(modelType);
 		
-		if(lst.isEmpty())
+		if(info==null && lst.isEmpty())
 			return "";
 		
 		StringBuilder sb2 = new StringBuilder();
 		
+		if(info!=null && StringUtils.isNotBlank(info.value())) {
+			sb2.append("#{tedros.fxapi.model.responsable}")
+			.append(": ").append(info.value()).append("\r\n");
+		}
+		
+		if(lst.size()>0)
 		sb2.append("#{tedros.fxapi.field.info.title}");
 		for(Field f : lst) {
 			TField fRule = f.getAnnotation(TField.class);
@@ -64,6 +73,7 @@ public class TModelInfoUtil {
 		return sb2.toString();
 	}
 
+	@SuppressWarnings("rawtypes")
 	private static List<Field> getFields(Class superClass){
 		List<Field> lst = new ArrayList<>();
 		while(superClass!=Object.class){
