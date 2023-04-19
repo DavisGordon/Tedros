@@ -1,6 +1,7 @@
 package org.tedros.api.presenter.view;
 
 import java.net.URL;
+import java.util.function.Consumer;
 
 import org.tedros.api.presenter.ITPresenter;
 import org.tedros.core.control.TProgressIndicator;
@@ -36,7 +37,11 @@ public interface ITView<P extends ITPresenter>{
 	 * Shows a modal
 	 * */
 	public void tShowModal(Node message, boolean closeModalOnMouseClick);
-	
+
+	/**
+	 * Shows a modal
+	 * */
+	public void tShowModal(Node message, boolean closeModalOnMouseClick, Consumer<Node> closeCallback);
 	/**
 	 * Hides a modal
 	 * */
