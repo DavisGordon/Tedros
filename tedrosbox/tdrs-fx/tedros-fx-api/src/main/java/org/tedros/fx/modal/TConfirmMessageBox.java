@@ -6,6 +6,7 @@ import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.WeakEventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 
@@ -28,22 +29,18 @@ public class TConfirmMessageBox extends TMessageBox {
 			HBox box = new HBox();
 			box.getChildren().addAll(yesBtn, noBtn);
 			box.setAlignment(Pos.CENTER);
-			
 			super.messagesPane.getChildren().add(box);
 			
-			yesBtn.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent arg0) {
-					confirm.set(1);
-				}
-			});
-			
-			noBtn.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent arg0) {
-					confirm.set(0);
-				}
-			});
+			EventHandler<ActionEvent> yevh = ev ->{
+				confirm.set(1);
+			};
+			repo.add("yesevh", yevh);
+			yesBtn.setOnAction(new WeakEventHandler<>(yevh));
+			EventHandler<ActionEvent> nevh = ev ->{
+				confirm.set(0);
+			};
+			repo.add("noevh", nevh);
+			noBtn.setOnAction(new WeakEventHandler<>(nevh));
 			
 		}catch(Exception e){
 			e.printStackTrace();
@@ -52,6 +49,15 @@ public class TConfirmMessageBox extends TMessageBox {
 	
 	public ReadOnlyIntegerProperty tConfirmProperty() {
 		return confirm;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.modal.TMessageBox#tDispose()
+	 */
+	@Override
+	public void tDispose() {
+		super.tDispose();
+		this.confirm = null;
 	}
 	
 }
