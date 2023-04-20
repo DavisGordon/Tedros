@@ -45,7 +45,7 @@ import javafx.scene.layout.VBox;
 public class TMessageBox extends Pane {
 	
 	protected static double size = 0;
-	private TRepository repo;
+	protected TRepository repo;
 	private SimpleStringProperty header;
 	private ObservableList<TMessage> messages;
 	protected ScrollPane scroll;

@@ -990,18 +990,16 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 						: getModelView().toStringProperty().getValue());
 			
 			final TConfirmMessageBox confirm = new TConfirmMessageBox(message);
-			confirm.tConfirmProperty().addListener(new ChangeListener<Number>() {
-				@Override
-				public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-					if(arg2.equals(1)){
+			confirm.tConfirmProperty().addListener((a,o,n)->{
+					if(n.equals(1)){
 						getView().tHideModal();	
 						startRemoveProcess(true);
 					}else {
 						getView().tHideModal();	
 						setActionState(new TActionState(TActionType.DELETE,  TProcessResult.FINISHED));
 					}
-				}
-			});
+					confirm.tDispose();
+				});
 			
 			getView().tShowModal(confirm, false);
 		}
