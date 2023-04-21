@@ -4,6 +4,7 @@ public interface TFxKey {
 	
 	static final String AI_ASSISTANT_ANALYSE_MESSAGE = "#{tedros.fxapi.ai.assistant.analyse.message}";
 	static final String AI_ASSISTANT_CHANGE_MESSAGE = "#{tedros.fxapi.ai.assistant.change.message}";
+	static final String AI_ASSISTANT_CHANGE_RESPONSE_RULE = "#{tedros.fxapi.ai.assistant.change.response.rule}";
 	static final String AI_ASSISTANT_CREATE_MESSAGE = "#{tedros.fxapi.ai.assistant.create.message}";
 	static final String AI_ASSISTANT_INTRO = "#{tedros.fxapi.ai.assistant.intro}";
 	static final String AI_ASSISTANT_RESPONSE_RULE = "#{tedros.fxapi.ai.assistant.response.rule}";
@@ -89,6 +90,8 @@ public interface TFxKey {
 	static final String MESSAGE_REPLACE_FILE_NO = "#{tedros.fxapi.message.replace.file.no}";
 	static final String MESSAGE_SAVE = "#{tedros.fxapi.message.save}";
 	static final String MESSAGE_SEARCH = "#{tedros.fxapi.message.search}";
+	static final String MODEL_ORIGINAL = "#{tedros.fxapi.model.original}";
+	static final String MODEL_RESPONSABLE = "#{tedros.fxapi.model.responsable}";
 	static final String RADIO_BUTTON_EDIT = "#{tedros.fxapi.radio-button.edit}";
 	static final String RADIO_BUTTON_FILE_SPECIFICATION = "#{tedros.fxapi.radio-button.file.specification}";
 	static final String RADIO_BUTTON_READ = "#{tedros.fxapi.radio-button.read}";

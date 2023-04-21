@@ -5,6 +5,7 @@ package org.tedros.fx.presenter.assistant;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TLanguage;
@@ -19,6 +20,7 @@ import org.tedros.fx.TFxKey;
 import org.tedros.fx.process.TProcess;
 import org.tedros.fx.process.TTaskImpl;
 import org.tedros.fx.util.JsonHelper;
+import org.tedros.server.model.ITModel;
 import org.tedros.server.model.TJsonModel;
 import org.tedros.server.result.TResult;
 import org.tedros.server.util.TModelInfoUtil;
@@ -35,6 +37,57 @@ public class TAiAssistantProcess extends TProcess<TResult<TChatResult>> {
 	public TAiAssistantProcess() {
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void askForChange(TJsonModel model, String prompt, ITModel target) {
+
+		TLanguage iEng = TLanguage.getInstance();
+		
+		String intro =  iEng.getString(TFxKey.AI_ASSISTANT_INTRO);
+		String detail = iEng.getString(TFxKey.AI_ASSISTANT_CHANGE_MESSAGE);
+		String title =  iEng.getString(TFxKey.MODEL_ORIGINAL);
+		String rule =  iEng.getString(TFxKey.AI_ASSISTANT_RESPONSE_RULE);
+		String compl =  iEng.getString(TFxKey.AI_ASSISTANT_CHANGE_RESPONSE_RULE);
+		String info = "";
+		try {
+			info = TModelInfoUtil.getFieldsInfo(model.getModelType());
+			if(StringUtils.isNotBlank(info))
+				info = iEng.getString(info);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		String json = JsonHelper.write(model);
+		String jsonTarget = JsonHelper.write(target);
+		
+		this.sysMsg = intro+detail+info+json;
+		this.userMsg = prompt+title+jsonTarget+rule+compl;
+	}
+
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void askForAnalyse(TJsonModel model, String prompt, List<ITModel> models) {
+
+		TLanguage iEng = TLanguage.getInstance();
+		
+		String intro =  iEng.getString(TFxKey.AI_ASSISTANT_INTRO);
+		String detail = iEng.getString(TFxKey.AI_ASSISTANT_ANALYSE_MESSAGE);
+		String rule =  iEng.getString(TFxKey.AI_ASSISTANT_RESPONSE_RULE);
+		String info = "";
+		try {
+			info = TModelInfoUtil.getFieldsInfo(model.getModelType());
+			if(StringUtils.isNotBlank(info))
+				info = iEng.getString(info);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		String json = JsonHelper.write(model);
+		String jsonTarget = JsonHelper.write(models);
+		
+		this.sysMsg = intro+detail+info+json;
+		this.userMsg = prompt+"\r\n"+jsonTarget+rule;
+	}
+
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void askForCreate(TJsonModel model, String prompt) {
