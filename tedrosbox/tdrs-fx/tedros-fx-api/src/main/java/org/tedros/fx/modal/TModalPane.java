@@ -85,7 +85,6 @@ public class TModalPane extends StackPane {
 	        });
 		else
 			setOnMouseClicked(null);
-		//getChildren().clear();
 		getChildren().add(node);
 		StackPane.setMargin(node, new Insets(20));
 		StackPane.setAlignment(node, Pos.CENTER);

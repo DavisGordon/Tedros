@@ -3,6 +3,7 @@
  */
 package org.tedros.fx.presenter.assistant;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import org.tedros.api.presenter.view.ITView;
@@ -23,6 +24,7 @@ import org.tedros.fx.presenter.model.TModelViewBuilder;
 import org.tedros.fx.util.JsonHelper;
 import org.tedros.fx.util.TChatUtil;
 import org.tedros.server.entity.ITEntity;
+import org.tedros.server.model.ITModel;
 import org.tedros.server.model.TJsonModel;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
@@ -117,88 +119,225 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 		this.tSendButton.setOnAction(new WeakEventHandler<>(sendEv));
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void callAssistant() {
 
 		Toggle selected = this.tActions.getSelectedToggle();
-		if(selected.equals(this.createRadio)) {
-			try {
-				TJsonModel m = this.jsonModelType.newInstance();
-				m.setModel("insert");
-				TAiAssistantProcess prc = new TAiAssistantProcess();
-				tView.gettProgressIndicator().bind(prc.runningProperty());
-				prc.stateProperty().addListener((a,o,n)->{
-					if(n.equals(State.SUCCEEDED)) {
-						TResult<TChatResult> res = prc.getValue();
-						if(res.getState().equals(TState.SUCCESS)) {
-							TChatResult r = res.getValue();
-							if(r.getChoices()!=null) {
-								r.getChoices().forEach(c->{
-									//System.out.println(c.getMessage().getContent());
-									//System.out.println("-----");
-									try {
-										TJsonModel t = JsonHelper.read(c.getMessage().getContent(), this.jsonModelType);
-										if(t.getData()!=null) {
-											if(t.getData().size()==1) {
+		if(selected.equals(this.createRadio)) 
+			processCreate();
+		else 
+		if(selected.equals(this.analyseRadio)) 
+			processAnalyse();
+		else
+		if(selected.equals(this.changeRadio))
+			processChange();
+		
+	}
+
+	@SuppressWarnings("unchecked")
+	private void processChange() {
+		try {
+			TJsonModel m = this.jsonModelType.newInstance();
+			m.setModel("insert");
+			TAiAssistantProcess prc = new TAiAssistantProcess();
+			tView.gettProgressIndicator().bind(prc.runningProperty());
+			prc.stateProperty().addListener((a,o,n)->{
+				if(n.equals(State.SUCCEEDED)) {
+					TResult<TChatResult> res = prc.getValue();
+					if(res.getState().equals(TState.SUCCESS)) {
+						TChatResult r = res.getValue();
+						if(r.getChoices()!=null) {
+							r.getChoices().forEach(c->{
+								//System.out.println(c.getMessage().getContent());
+								//System.out.println("-----");
+								try {
+									TJsonModel t = JsonHelper.read(c.getMessage().getContent(), this.jsonModelType);
+									if(t.getData()!=null) {
+										if(t.getData().size()==1) {
+											try {
+												M mv = this.tTargetModel.getValue();
+												mv.reload((ITModel) t.getData().get(0));
+											} catch (Exception e1) {
+												e1.printStackTrace();
+												showErrorMessage(e1);
+											}
+										}
+									}
+									if(t.getAssistantMessage()!=null) {
+										Pane v = (Pane) tView;
+										double w = v.getBoundsInLocal().getWidth()-200;
+										double h = v.getBoundsInLocal().getHeight()-200;
+										StackPane msg = TChatUtil
+												.buildTextPane("Teros", t.getAssistantMessage(),w-20, new Date());
+										VBox pane = new VBox();
+										pane.getChildren().add(msg);
+										pane.setMinSize(w,h);
+										pane.setMaxSize(w,h);
+										pane.setPrefSize(w,h);
+										showModal(pane);
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									showErrorMessage(e);
+								}
+							});
+						}else {
+							if(r.getLog()!=null) {
+								String msg = r.getLog();
+								if(r.getErrorCode()!=null)
+									msg += "\n"+r.getErrorCode();
+								showErrorMessage(msg);
+							}
+						}
+					}else {
+						showErrorMessage(res.getMessage());
+					}
+				}
+			});
+			prc.askForChange(m, this.tPrompt.getText(), this.tTargetModel.getValue().getModel());
+			prc.startProcess();
+			
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+			showErrorMessage(e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void processCreate() {
+		try {
+			TJsonModel m = this.jsonModelType.newInstance();
+			m.setModel("insert");
+			TAiAssistantProcess prc = new TAiAssistantProcess();
+			tView.gettProgressIndicator().bind(prc.runningProperty());
+			prc.stateProperty().addListener((a,o,n)->{
+				if(n.equals(State.SUCCEEDED)) {
+					TResult<TChatResult> res = prc.getValue();
+					if(res.getState().equals(TState.SUCCESS)) {
+						TChatResult r = res.getValue();
+						if(r.getChoices()!=null) {
+							r.getChoices().forEach(c->{
+								//System.out.println(c.getMessage().getContent());
+								//System.out.println("-----");
+								try {
+									TJsonModel t = JsonHelper.read(c.getMessage().getContent(), this.jsonModelType);
+									if(t.getData()!=null) {
+										if(t.getData().size()==1) {
+											try {
+												M mv = buildModelView(t.getData().get(0));
+												this.tOutModel.setValue(mv);
+												this.tOutModel.setValue(null);
+											} catch (TException e1) {
+												e1.printStackTrace();
+												showErrorMessage(e1);
+											}
+										}else
+											t.getData().forEach(e->{
 												try {
-													M mv = buildModelView(t.getData().get(0));
-													this.tOutModel.setValue(mv);
-													this.tOutModel.setValue(null);
+													M mv = buildModelView(e);
+													tModels.add(mv);
 												} catch (TException e1) {
 													e1.printStackTrace();
 													showErrorMessage(e1);
 												}
-											}else
-												t.getData().forEach(e->{
-													try {
-														M mv = buildModelView(e);
-														tModels.add(mv);
-													} catch (TException e1) {
-														e1.printStackTrace();
-														showErrorMessage(e1);
-													}
-												});
-										}
-										if(t.getAssistantMessage()!=null) {
-											Pane v = (Pane) tView;
-											double w = v.getBoundsInLocal().getWidth()-200;
-											double h = v.getBoundsInLocal().getHeight()-200;
-											StackPane msg = TChatUtil
-													.buildTextPane("Teros", t.getAssistantMessage(),w-20, new Date());
-											VBox pane = new VBox();
-											pane.getChildren().add(msg);
-											pane.setMinSize(w,h);
-											pane.setMaxSize(w,h);
-											pane.setPrefSize(w,h);
-											showModal(pane);
-										}
-									} catch (Exception e) {
-										e.printStackTrace();
-										showErrorMessage(e);
+											});
 									}
-								});
-							}else {
-								if(r.getLog()!=null) {
-									String msg = r.getLog();
-									if(r.getErrorCode()!=null)
-										msg += "\n"+r.getErrorCode();
-									showErrorMessage(msg);
+									if(t.getAssistantMessage()!=null) {
+										Pane v = (Pane) tView;
+										double w = v.getBoundsInLocal().getWidth()-200;
+										double h = v.getBoundsInLocal().getHeight()-200;
+										StackPane msg = TChatUtil
+												.buildTextPane("Teros", t.getAssistantMessage(),w-20, new Date());
+										VBox pane = new VBox();
+										pane.getChildren().add(msg);
+										pane.setMinSize(w,h);
+										pane.setMaxSize(w,h);
+										pane.setPrefSize(w,h);
+										showModal(pane);
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									showErrorMessage(e);
 								}
-							}
+							});
 						}else {
-							showErrorMessage(res.getMessage());
+							if(r.getLog()!=null) {
+								String msg = r.getLog();
+								if(r.getErrorCode()!=null)
+									msg += "\n"+r.getErrorCode();
+								showErrorMessage(msg);
+							}
 						}
+					}else {
+						showErrorMessage(res.getMessage());
 					}
-				});
-				prc.askForCreate(m, this.tPrompt.getText());
-				prc.startProcess();
-				
-			} catch (InstantiationException | IllegalAccessException e) {
-				e.printStackTrace();
-				showErrorMessage(e);
-			}
+				}
+			});
+			prc.askForCreate(m, this.tPrompt.getText());
+			prc.startProcess();
+			
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+			showErrorMessage(e);
 		}
-		
+	}
+
+	private void processAnalyse() {
+		try {
+			TJsonModel m = this.jsonModelType.newInstance();
+			m.setModel("analyse");
+			TAiAssistantProcess prc = new TAiAssistantProcess();
+			tView.gettProgressIndicator().bind(prc.runningProperty());
+			prc.stateProperty().addListener((a,o,n)->{
+				if(n.equals(State.SUCCEEDED)) {
+					TResult<TChatResult> res = prc.getValue();
+					if(res.getState().equals(TState.SUCCESS)) {
+						TChatResult r = res.getValue();
+						if(r.getChoices()!=null) {
+							r.getChoices().forEach(c->{
+								//System.out.println(c.getMessage().getContent());
+								//System.out.println("-----");
+								try {
+									TJsonModel t = JsonHelper.read(c.getMessage().getContent(), this.jsonModelType);
+									
+									if(t.getAssistantMessage()!=null) {
+										Pane v = (Pane) tView;
+										double w = v.getBoundsInLocal().getWidth()-200;
+										double h = v.getBoundsInLocal().getHeight()-200;
+										StackPane msg = TChatUtil
+												.buildTextPane("Teros", t.getAssistantMessage(),w-20, new Date());
+										VBox pane = new VBox();
+										pane.getChildren().add(msg);
+										pane.setMinSize(w,h);
+										pane.setMaxSize(w,h);
+										pane.setPrefSize(w,h);
+										showModal(pane);
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									showErrorMessage(e);
+								}
+							});
+						}else {
+							if(r.getLog()!=null) {
+								String msg = r.getLog();
+								if(r.getErrorCode()!=null)
+									msg += "\n"+r.getErrorCode();
+								showErrorMessage(msg);
+							}
+						}
+					}else {
+						showErrorMessage(res.getMessage());
+					}
+				}
+			});
+			prc.askForAnalyse(m, this.tPrompt.getText(), 
+					Arrays.asList(this.tTargetModel.getValue().getModel()));
+			prc.startProcess();
+			
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+			showErrorMessage(e);
+		}
 	}
 
 	private M buildModelView(Object e) throws TException {
