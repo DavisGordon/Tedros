@@ -6,6 +6,7 @@ package org.tedros.fx.presenter.decorator;
 import java.util.Arrays;
 
 import org.tedros.core.TLanguage;
+import org.tedros.core.context.TedrosContext;
 import org.tedros.core.control.TProgressIndicator;
 import org.tedros.fx.annotation.TAnnotationDefaultValue;
 import org.tedros.fx.presenter.assistant.TAiAssistant;
@@ -101,7 +102,8 @@ public class TListViewHelper<M extends TEntityModelView<? extends ITEntity>>{
 			tPaginator.minWidthProperty().bind(listViewMinWidth);
 		}
 		
-		if(aiAssistant!=null && aiAssistant.show()) {
+		if(TedrosContext.getArtificialIntelligenceEnabled() 
+				&& aiAssistant!=null && aiAssistant.show()) {
 			this.tAiAssistat = new  TAiAssistant<M>(aiAssistant.modelViewClass(), aiAssistant.jsonModel());
 			if(tPaginatorAccordion==null) {
 				tPaginatorAccordion = new Accordion();

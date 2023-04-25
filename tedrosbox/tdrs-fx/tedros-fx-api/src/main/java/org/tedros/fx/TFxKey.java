@@ -18,6 +18,7 @@ public interface TFxKey {
 	static final String BUTTON_DELETE = "#{tedros.fxapi.button.delete}";
 	static final String BUTTON_DOWNLOAD = "#{tedros.fxapi.button.download}";
 	static final String BUTTON_EDIT = "#{tedros.fxapi.button.edit}";
+	static final String BUTTON_GENERATE = "#{tedros.fxapi.button.generate}";
 	static final String BUTTON_IMPORT = "#{tedros.fxapi.button.import}";
 	static final String BUTTON_LOAD = "#{tedros.fxapi.button.load}";
 	static final String BUTTON_NEW = "#{tedros.fxapi.button.new}";
@@ -40,8 +41,10 @@ public interface TFxKey {
 	static final String FIELD_INFO_TITLE = "#{tedros.fxapi.field.info.title}";
 	static final String HYPERLINK_READ_EXPORT = "#{tedros.fxapi.hyperlink.read.export}";
 	static final String ANALYSE = "#{tedros.fxapi.label.analyse}";
+	static final String BARCODE = "#{tedros.fxapi.label.barcode}";
 	static final String CHANGE = "#{tedros.fxapi.label.change}";
 	static final String CODE = "#{tedros.fxapi.label.code}";
+	static final String COLUMNS = "#{tedros.fxapi.label.columns}";
 	static final String CREATE = "#{tedros.fxapi.label.create}";
 	static final String CURRENT_PAGE = "#{tedros.fxapi.label.current.page}";
 	static final String DESCRIPTION = "#{tedros.fxapi.label.description}";
@@ -54,8 +57,10 @@ public interface TFxKey {
 	static final String INTEGRATED_LINK = "#{tedros.fxapi.label.integrated.link}";
 	static final String LOCAL_FILES = "#{tedros.fxapi.label.local.files}";
 	static final String OPTIONS = "#{tedros.fxapi.label.options}";
+	static final String ORIENTATION_DEGREES = "#{tedros.fxapi.label.orientation.degrees}";
 	static final String PAGINATION = "#{tedros.fxapi.label.pagination}";
 	static final String REMOTE_FILES = "#{tedros.fxapi.label.remote.files}";
+	static final String RESOLUTION_DPI = "#{tedros.fxapi.label.resolution.dpi}";
 	static final String RESULT = "#{tedros.fxapi.label.result}";
 	static final String SELECT_FILE = "#{tedros.fxapi.label.select.file}";
 	static final String SELECTED = "#{tedros.fxapi.label.selected}";
