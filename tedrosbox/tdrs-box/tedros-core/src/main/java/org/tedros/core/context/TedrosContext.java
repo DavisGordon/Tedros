@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 
 import javax.naming.NamingException;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.tedros.api.presenter.view.ITView;
@@ -81,6 +82,7 @@ public final class TedrosContext {
 	private static StringProperty pagePathProperty;
 	private static BooleanProperty showModalProperty;
 	private static BooleanProperty reloadStyleProperty;
+	private static BooleanProperty artificialIntelligenceEnabledProperty;
 	private static StringProperty contextStringProperty;
 	private static IntegerProperty totalPageHistoryProperty;
 	private static StringProperty countryIso2Property;
@@ -145,6 +147,7 @@ public final class TedrosContext {
 		showModalProperty = new SimpleBooleanProperty();	
 		initializationErrorMessageStringProperty = new SimpleStringProperty("");
 		reloadStyleProperty = new SimpleBooleanProperty(true);
+		artificialIntelligenceEnabledProperty = new SimpleBooleanProperty(false);
 		totalPageHistoryProperty = new SimpleIntegerProperty(DEFAULT_TOTAL_PAGE_HISTORY);
 		countryIso2Property = new SimpleStringProperty(DEFAULT_COUNTRY_ISO2);
 		messageListProperty = FXCollections.observableArrayList();
@@ -191,19 +194,28 @@ public final class TedrosContext {
 				setCountryIso2(DEFAULT_COUNTRY_ISO2);
 				LOGGER.info("- Propertie "+TSystemPropertie.DEFAULT_COUNTRY_ISO2.getValue()+" set to default value "+DEFAULT_COUNTRY_ISO2);
 			}
-			TResult<String> res1 = serv.getValue(TedrosContext.loggedUser.getAccessToken(), 
+			res = serv.getValue(TedrosContext.loggedUser.getAccessToken(), 
 					TSystemPropertie.TOTAL_PAGE_HISTORY.getValue());
-			if(res1.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res1.getValue())) {
-				if(NumberUtils.isCreatable(res1.getValue())) {
-					setTotalPageHistory(Integer.valueOf(res1.getValue()));
+			if(res.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res.getValue())) {
+				if(NumberUtils.isCreatable(res.getValue())) {
+					setTotalPageHistory(Integer.valueOf(res.getValue()));
 					LOGGER.info("- Propertie "+TSystemPropertie.TOTAL_PAGE_HISTORY.getValue()+" loaded.");
 				}else {
 					LOGGER.info("- The Propertie "+TSystemPropertie.DEFAULT_COUNTRY_ISO2.getValue()
-					+" not loaded because the value "+res1.getValue()+" cant be converted to integer number.");
+					+" not loaded because the value "+res.getValue()+" cant be converted to integer number.");
 				}
 			}else{
 				setTotalPageHistory(DEFAULT_TOTAL_PAGE_HISTORY);
 				LOGGER.info("- Propertie "+TSystemPropertie.TOTAL_PAGE_HISTORY.getValue()+" set to default value "+DEFAULT_TOTAL_PAGE_HISTORY);
+			}
+			res = serv.getValue(TedrosContext.loggedUser.getAccessToken(), 
+					TSystemPropertie.AI_ENABLED.getValue());
+			if(res.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res.getValue())) {
+				setArtificialIntelligenceEnabled(BooleanUtils.toBoolean(res.getValue()));
+				LOGGER.info("- Propertie "+TSystemPropertie.AI_ENABLED.getValue()+" loaded.");
+			}else{
+				setArtificialIntelligenceEnabled(false);
+				LOGGER.info("- Propertie "+TSystemPropertie.AI_ENABLED.getValue()+" set to default value false");
 			}
 		} catch (NamingException e) {
 			LOGGER.severe("Error loading custom system properties: "+ e.toString());
@@ -437,7 +449,26 @@ public final class TedrosContext {
 	public static void setCountryIso2(String iso2){
 		countryIso2Property.setValue(iso2);
 	}
+	/**
+	 * Set the artificial intelligence status
+	 * */
+	public static void setArtificialIntelligenceEnabled(boolean status){
+		artificialIntelligenceEnabledProperty.setValue(status);;
+	}
 	
+	/**
+	 * Get the artificial intelligence status
+	 * */
+	public static Boolean getArtificialIntelligenceEnabled(){
+		return artificialIntelligenceEnabledProperty.get();
+	}
+
+	/**
+	 * Get the artificial intelligence property
+	 * */
+	public static ReadOnlyBooleanProperty artificialIntelligenceEnabledProperty(){
+		return artificialIntelligenceEnabledProperty;
+	}
 	/**
 	 * Get the total page history.
 	 * */

@@ -97,12 +97,12 @@ public class TVerticalRadioGroup extends VBox implements ITField{
 	
 	private void applyRadioGroupStyleClass() {
 		getStyleClass().add("box-input");
+		super.setSpacing(8);
 	}
 
 	@Override
 	public void settFieldStyle(String style) {
 		radioButtonGroup.settFieldStyle(style);
-		
 	}
 	
 }

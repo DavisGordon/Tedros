@@ -101,6 +101,7 @@ public class THorizontalRadioGroup extends HBox implements ITField{
 	
 	private void applyRadioGroupStyleClass() {
 		getStyleClass().add("box-input");
+		super.setSpacing(8);
 	}
 	
 }
