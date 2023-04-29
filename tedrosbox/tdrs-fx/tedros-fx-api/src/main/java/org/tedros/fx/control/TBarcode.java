@@ -4,7 +4,6 @@
 package org.tedros.fx.control;
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -14,7 +13,9 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
+import org.tedros.common.model.TFileEntity;
 import org.tedros.core.TLanguage;
+import org.tedros.core.context.TedrosContext;
 import org.tedros.core.control.PopOver;
 import org.tedros.core.control.PopOver.ArrowLocation;
 import org.tedros.core.repository.TRepository;
@@ -25,19 +26,26 @@ import org.tedros.fx.util.TBarcodeGenerator;
 import org.tedros.fx.util.TBarcodeOrientation;
 import org.tedros.fx.util.TBarcodeResolution;
 import org.tedros.fx.util.TBarcodeType;
+import org.tedros.fx.util.TFileBaseUtil;
+import org.tedros.fx.util.TPrintUtil;
+import org.tedros.server.model.ITBarcode;
+import org.tedros.server.model.ITFileBaseModel;
+import org.tedros.server.model.TFileModel;
 import org.tedros.util.TedrosFolder;
 
-import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.image.Image;
@@ -51,43 +59,52 @@ import javafx.scene.layout.VBox;
  * @author Davis Gordon
  *
  */
-public class TBarcode extends StackPane {
-
-	private ObjectProperty<InputStream> tValueProperty;
+public class TBarcode extends TRequiredStackedComponent {
+	
+	private Class<? extends ITBarcode> tBarcodeModelType;
+	private ObjectProperty<ITBarcode> tValueProperty;
+	private BooleanProperty tAlreadyProperty;
 	private TRepository repo;
 	private BorderPane bp;
 	
+	private TText txtSize;
+	private TIntegerField size;
+	private TIntegerField columns;
+	private THorizontalRadioGroup resolution;
+	private THorizontalRadioGroup orientation;
+	private THorizontalRadioGroup types;
+	private TToolBar sizeBar;
+	private TTextAreaField textarea;
+	private TButton genBtn;
+	private TButton clearBtn;
+	private TButton printBtn;
 	/**
 	 * 
 	 */
-	public TBarcode(StringProperty tValueProperty) {
+	public TBarcode(Class<? extends ITBarcode> tBarcodeModelType) {
 		super();
+		this.tBarcodeModelType = tBarcodeModelType;
+		init();
+		buildListeners();
+	}
+	private void init() {
+		this.tAlreadyProperty = new SimpleBooleanProperty(false);
 		this.tValueProperty = new SimpleObjectProperty<>();
 		this.repo = new TRepository();
 		
 		TLanguage iEn = TLanguage.getInstance();
 
 		TLabel sizeLbl= new TLabel(iEn.getString(TUsualKey.SIZE));
-		TText txtSize = new TText();
-		ChangeListener<Number> sizeChl = (a,o,n)->{
-			txtSize.setText(n+"x"+n);
-		};
-		repo.add("sizeChl", sizeChl);
-		TIntegerField size = new TIntegerField();
-		size.valueProperty().addListener(new WeakChangeListener<>(sizeChl));
+		txtSize = new TText();
+		size = new TIntegerField();
 		size.setValue(200);
-		TToolBar sizeBar = new TToolBar();
+		
+		sizeBar = new TToolBar();
 		sizeBar.getItems().addAll(sizeLbl, size, txtSize);
 		
 		TLabel colLbl= new TLabel(iEn.getString(TFxKey.COLUMNS));
-		TIntegerField columns = new TIntegerField();
+		columns = new TIntegerField();
 		columns.setValue(10);
-
-		TText txtRes = new TText();
-		ChangeListener<Number> resChl = (a,o,n)->{
-			txtRes.setText(n.toString());
-		};
-		repo.add("resChl", resChl);
 		
 		TToolBar complBar = new TToolBar();
 		complBar.getItems().addAll(colLbl, columns);
@@ -96,7 +113,7 @@ public class TBarcode extends StackPane {
 		hb.getChildren().addAll(complBar, sizeBar);
 
 		TLabel resLbl= new TLabel(iEn.getString(TFxKey.RESOLUTION_DPI));
-		THorizontalRadioGroup resolution = new THorizontalRadioGroup();
+		resolution = new THorizontalRadioGroup();
 		for(TBarcodeResolution t : TBarcodeResolution.values()){
 			RadioButton rb = new RadioButton(String.valueOf(t.getValue()));
 			rb.setUserData(t);
@@ -104,14 +121,14 @@ public class TBarcode extends StackPane {
 		}
 		
 		TLabel orLbl= new TLabel(iEn.getString(TFxKey.ORIENTATION_DEGREES));
-		THorizontalRadioGroup orientation = new THorizontalRadioGroup();
+		orientation = new THorizontalRadioGroup();
 		for(TBarcodeOrientation t : TBarcodeOrientation.values()){
 			RadioButton rb = new RadioButton(String.valueOf(t.getValue()));
 			rb.setUserData(t);
 			orientation.addRadioButton(rb);
 		}
 		
-		THorizontalRadioGroup types = new THorizontalRadioGroup();
+		types = new THorizontalRadioGroup();
 		types.setRequired(true);
 		for(TBarcodeType t : TBarcodeType.values()){
 			RadioButton rb = new RadioButton(t.name());
@@ -119,9 +136,84 @@ public class TBarcode extends StackPane {
 			types.addRadioButton(rb);
 		}
 
+		textarea = new TTextAreaField();
+		textarea.setPrefRowCount(2);
+		textarea.setWrapText(true);
+		//textarea.textProperty().bindBidirectional(tInputStreamProperty);
+		
+		genBtn = new TButton(iEn.getString(TFxKey.BUTTON_GENERATE));
+		clearBtn = new TButton(iEn.getString(TFxKey.BUTTON_CLEAN));
+		printBtn = new TButton(iEn.getString(TFxKey.BUTTON_PRINT));
+		
+		TToolBar btnBar = new TToolBar();
+		btnBar.getItems().addAll(genBtn, clearBtn, printBtn);
+		
+		VBox vb = new VBox(5);
+		vb.getChildren().addAll(types, resLbl, resolution, orLbl,  orientation, hb, textarea, btnBar);
+		
+		bp = new BorderPane();
+		super.getChildren().add(bp);
+		StackPane.setMargin(bp, new Insets(10));
+		bp.setLeft(vb);
+		
+		columns.setDisable(true);
+		sizeBar.setDisable(true);
+		orientation.setDisable(true);
+		resolution.setDisable(true);
+		
+	}
+
+	private void buildListeners() {
+
+		ChangeListener<ITBarcode> barChl = (a,o,n)->{
+			this.readModel();
+		};
+		repo.add("barChl", barChl);
+		this.tValueProperty.addListener(new WeakChangeListener<>(barChl));
+		
+		ChangeListener<String> conChl = (a,o,n)->{
+			ITBarcode model = getModel();
+			model.setContent(n);
+		};
+		repo.add("conChl", conChl);
+		textarea.textProperty().addListener(new WeakChangeListener<>(conChl));
+		
+		ChangeListener<Number> colChl = (a,o,n)->{
+			ITBarcode model = getModel();
+			model.setColumns((Integer) n);
+		};
+		repo.add("colChl", colChl);
+		columns.valueProperty().addListener(new WeakChangeListener<>(colChl));
+		
+		ChangeListener<Number> sizeChl = (a,o,n)->{
+			txtSize.setText(n+"x"+n);
+			ITBarcode model = getModel();
+			model.setSize((Integer) n);
+		};
+		repo.add("sizeChl", sizeChl);
+		size.valueProperty().addListener(new WeakChangeListener<>(sizeChl));
+		
+		ChangeListener<Toggle> resChl = (a,o,n)->{
+			TBarcodeResolution e = (TBarcodeResolution) n.getUserData();
+			ITBarcode model = getModel();
+			model.setResolution(e.getValue());
+		};
+		repo.add("resChl", resChl);
+		this.resolution.selectedToggleProperty().addListener(new WeakChangeListener<>(resChl));
+
+		ChangeListener<Toggle> oriChl = (a,o,n)->{
+			TBarcodeOrientation e = (TBarcodeOrientation) n.getUserData();
+			ITBarcode model = getModel();
+			model.setOrientation(e.getValue());
+		};
+		repo.add("oriChl", oriChl);
+		this.orientation.selectedToggleProperty().addListener(new WeakChangeListener<>(oriChl));
+
 		ChangeListener<Toggle> typeChl = (a,o,n)->{
 
 			TBarcodeType tp = (TBarcodeType) n.getUserData();
+			ITBarcode model = getModel();
+			model.setType(tp.name());
 			switch(tp) {
 			case CODE128:
 			case EAN13:
@@ -130,47 +222,67 @@ public class TBarcode extends StackPane {
 				sizeBar.setDisable(true);
 				orientation.setDisable(false);
 				resolution.setDisable(false);
+				model.setColumns(null);
+				model.setSize(null);
+				model.setResolution(resolution.getSelectedToggle()!=null
+						? ((TBarcodeResolution)resolution.getSelectedToggle().getUserData()).getValue()
+								: null);
+				model.setOrientation(orientation.getSelectedToggle()!=null
+						? ((TBarcodeOrientation)orientation.getSelectedToggle().getUserData()).getValue()
+								: null);
 				break;
 			case PDF417:
 				columns.setDisable(false);
 				sizeBar.setDisable(true);
 				orientation.setDisable(false);
 				resolution.setDisable(false);
+				model.setColumns(columns.getValue());
+				model.setSize(null);
+				model.setResolution(resolution.getSelectedToggle()!=null
+						? ((TBarcodeResolution)resolution.getSelectedToggle().getUserData()).getValue()
+								: null);
+				model.setOrientation(orientation.getSelectedToggle()!=null
+						? ((TBarcodeOrientation)orientation.getSelectedToggle().getUserData()).getValue()
+								: null);
 				break;
 			case QRCODE:
 				columns.setDisable(true);
 				sizeBar.setDisable(false);
 				orientation.setDisable(true);
 				resolution.setDisable(true);
+				model.setColumns(null);
+				model.setSize(size.getValue());
+				model.setResolution(null);
+				model.setOrientation(null);
 				break;
 			default:
 				columns.setDisable(true);
 				sizeBar.setDisable(true);
 				orientation.setDisable(true);
 				resolution.setDisable(true);
+				model.setColumns(null);
+				model.setSize(null);
+				model.setResolution(null);
+				model.setOrientation(null);
 				break;
-			
 			}
 		};
 		repo.add("typeChl", typeChl);
 		types.selectedToggleProperty().addListener(new WeakChangeListener<>(typeChl));
-
-		TTextAreaField textarea = new TTextAreaField();
-		textarea.setPrefRowCount(2);
-		textarea.setWrapText(true);
-		textarea.textProperty().bindBidirectional(tValueProperty);
-		
-		TButton genBtn = new TButton(iEn.getString(TFxKey.BUTTON_GENERATE));
-		TButton clearBtn = new TButton(iEn.getString(TFxKey.BUTTON_CLEAN));
-		TButton printBtn = new TButton(iEn.getString(TFxKey.BUTTON_PRINT));
 		
 		EventHandler<ActionEvent> genEvh = ev ->{
-			TBarcodeType t = (TBarcodeType) types.getSelectedToggle().getUserData();
-			String txt = textarea.getText();
-			int cols = columns.getValue();
-			int sz = size.getValue();
-			TBarcodeResolution res = (TBarcodeResolution) resolution.getSelectedToggle().getUserData();
-			TBarcodeOrientation ori = (TBarcodeOrientation) orientation.getSelectedToggle().getUserData();
+			this.tAlreadyProperty.setValue(false);
+			ITBarcode model = getModel();
+			TBarcodeType t = TBarcodeType.valueOf(TBarcodeType.class, model.getType());
+			String txt = model.getContent();
+			Integer cols = model.getColumns();
+			Integer sz = model.getSize();
+			TBarcodeResolution res = model.getResolution()!=null 
+					? TBarcodeResolution.valueOf(model.getResolution())
+							: TBarcodeResolution._100;
+			TBarcodeOrientation ori =  model.getOrientation()!=null 
+					? TBarcodeOrientation.valueOf(model.getOrientation())
+							: TBarcodeOrientation._0;
 			BufferedImage bf = null;
 			try {
 				switch(t) {
@@ -194,10 +306,9 @@ public class TBarcode extends StackPane {
 					bf = TBarcodeGenerator.generateUPCABarcodeImage(txt, res, ori);
 					break;
 				}
-				if(bf!=null) {
-					InputStream is = createInputStream(bf);
-					this.tValueProperty.setValue(is);
-				}
+				if(bf!=null) 
+					readBufferedImage(bf);
+				
 			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
 				TLabel l = new TLabel(e.getMessage());
@@ -205,13 +316,14 @@ public class TBarcode extends StackPane {
 				warn.setArrowLocation(ArrowLocation.TOP_CENTER);
 				warn.setAutoHide(true);
 				warn.show(textarea);
+				this.generateDefaultImage();
 			}
 		};
 		repo.add("genEvh", genEvh);
 		genBtn.setOnAction(new WeakEventHandler<>(genEvh));
 		genBtn.disableProperty().bind(
 		BooleanBinding.booleanExpression(textarea.textProperty().isEmpty())
-		.and(types.requirementAccomplishedProperty().not()));
+		.or(types.requirementAccomplishedProperty().not()));
 		
 		EventHandler<ActionEvent> clearEvh = ev ->{
 			textarea.clear();
@@ -220,71 +332,153 @@ public class TBarcode extends StackPane {
 		repo.add("clearEvh", clearEvh);
 		clearBtn.setOnAction(new WeakEventHandler<>(clearEvh));
 		clearBtn.disableProperty().bind(textarea.textProperty().isEmpty());
-				
-		
-		TToolBar btnBar = new TToolBar();
-		btnBar.getItems().addAll(genBtn, clearBtn, printBtn);
-		
-		VBox vb = new VBox(5);
-		vb.getChildren().addAll(types, resLbl, resolution, orLbl,  orientation, hb, textarea, btnBar);
-		
-		bp = new BorderPane();
-		super.getChildren().add(bp);
-		bp.setLeft(vb);
-		
-		columns.setDisable(true);
-		sizeBar.setDisable(true);
-		orientation.setDisable(true);
-		resolution.setDisable(true);
-		//genBtn.setDisable(true);
-		//clearBtn.setDisable(true);
-		//printBtn.setDisable(true);
 		
 
-		ChangeListener<InputStream> isChl = (a,o,n)->{
-			if(n!=null) {
-				Image img = new Image(n);
-				try {
-					n.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				ImageView iv = new ImageView();
-				iv.setImage(img);
-				bp.setCenter(iv);
-				BorderPane.setAlignment(iv, Pos.CENTER);
-			}
+		EventHandler<ActionEvent> printEvh = ev ->{
+			TPrintUtil.print(bp.getCenter());
 		};
-		repo.add("isChl", isChl);
-		this.tValueProperty.addListener(new WeakChangeListener<>(isChl));
+		repo.add("printEvh", printEvh);
+		printBtn.setOnAction(new WeakEventHandler<>(printEvh));
+		printBtn.disableProperty().bind(this.tAlreadyProperty.not());
 		
-		if(tValueProperty.getValue()==null) {
-			Platform.runLater(()->{
-				generateDefaultImage();
-			});
+		
+	}
+	/*private void setModel(ITBarcode model) {
+		this.tValueProperty.setValue(null);
+		this.tValueProperty.setValue(model);
+	}*/
+	private ITBarcode getModel() {
+		ITBarcode model = this.tValueProperty.getValue();
+		if(model==null) {
+			try {
+				model = this.tBarcodeModelType.newInstance();
+				this.tValueProperty.setValue(model);
+			} catch (InstantiationException | IllegalAccessException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
 		}
+		if(model.getImage()==null) {
+			ITFileBaseModel fm = model.createFileModel();
+			model.setImage(fm);
+		}
+		return model;
 	}
 
-	private InputStream createInputStream(BufferedImage bf)  {
+	private ImageView buildImageView(InputStream n) {
+		if(n!=null) {
+			Image img = new Image(n);
+			try {
+				n.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			ImageView iv = new ImageView();
+			iv.setImage(img);
+			bp.setCenter(iv);
+			BorderPane.setAlignment(iv, Pos.CENTER);
+			return iv;
+		}
+		return null;
+	}
+	private void readBufferedImage(BufferedImage bf)  {
 		try {
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			ImageIO.write(bf, "png", os);
-			InputStream is = new ByteArrayInputStream(os.toByteArray());
+			ITBarcode model = getModel();
+			model.getImage().getByte().setBytes(os.toByteArray());
+			model.getImage().setFileExtension("png");
+			String name = model.getContent().length()>10 ? model.getContent().substring(0, 9) : model.getContent();
+			model.getImage().setFileName(name+".png");
 			os.close();
-			return is;
+			generateBarcodeImage();
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 	}
-
+	
+	private void generateBarcodeImage() {
+		ITBarcode model = getModel();
+		if(model.getImage()!=null && model.getImage().getByte()!=null 
+				&& model.getImage().getByte().getBytes()!=null) {
+			InputStream is = new ByteArrayInputStream(model.getImage().getByte().getBytes());
+			ImageView iv = buildImageView(is);
+			iv.setCursor(Cursor.HAND);
+			iv.setOnMouseClicked(ev->{
+				if(ev.getClickCount()==2) {
+					try {
+						String path = TedrosFolder.EXPORT_FOLDER.getFullPath()+"barcode.png";
+						File file = new File(path);
+						FileUtils.writeByteArrayToFile(file, model.getImage().getByte().getBytes());
+						TedrosContext.openDocument(path);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			this.tAlreadyProperty.setValue(true);
+			
+		}else
+			generateDefaultImage();
+	}
+	
 	private void generateDefaultImage() {
 		File f = new File(TedrosFolder.IMAGES_FOLDER.getFullPath()+"default-image.jpg");
 		try {
 			InputStream is = FileUtils.openInputStream(f);
-			this.tValueProperty.setValue(is);
+			buildImageView(is);
+			this.tAlreadyProperty.setValue(false);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void readModel() {
+		ITBarcode model = getModel();
+		String txt = model.getContent();
+		Integer cols = model.getColumns();
+		Integer sz = model.getSize();
+		TBarcodeType type = model.getType()!=null
+				? TBarcodeType.valueOf(TBarcodeType.class, model.getType())
+						: TBarcodeType.CODE128;
+		TBarcodeResolution res = model.getResolution()!=null 
+				? TBarcodeResolution.valueOf(model.getResolution())
+						: TBarcodeResolution._100;
+		TBarcodeOrientation ori = model.getOrientation()!=null 
+				? TBarcodeOrientation.valueOf(model.getOrientation())
+						: TBarcodeOrientation._0;
+		textarea.setText(txt);
+		columns.setValue(cols==null?10:cols);
+		size.setValue(sz==null?200:sz);
+		orientation.getTogleeGroup().getToggles().forEach(g->{
+			TBarcodeOrientation e = (TBarcodeOrientation) g.getUserData();
+			if(e.equals(ori))
+				g.setSelected(true);
+		});
+		resolution.getTogleeGroup().getToggles().forEach(g->{
+			TBarcodeResolution e = (TBarcodeResolution) g.getUserData();
+			if(e.equals(res))
+				g.setSelected(true);
+		});
+		types.getTogleeGroup().getToggles().forEach(g->{
+			TBarcodeType e = (TBarcodeType) g.getUserData();
+			if(e.equals(type))
+				g.setSelected(true);
+		});
+		this.generateBarcodeImage();
+	}
+	/**
+	 * @return the tValueProperty
+	 */
+	@SuppressWarnings("unchecked")
+	public ObjectProperty<ITBarcode> tValueProperty() {
+		return tValueProperty;
+	}
+	
+	@Override
+	public void settFieldStyle(String style) {
+		this.bp.setStyle(style);
+		
 	}
 }
