@@ -12,7 +12,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.tedros.api.parser.ITAnnotationParser;
-import org.tedros.fx.annotation.parser.TDirectoryFieldParser;
+import org.tedros.fx.annotation.parser.TRequiredStackedComponentParser;
 import org.tedros.fx.annotation.parser.TStackPaneParser;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TControl;
@@ -20,9 +20,9 @@ import org.tedros.fx.annotation.scene.control.TInsets;
 import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.builder.ITFieldBuilder;
 import org.tedros.fx.builder.TBarcodeGeneratorBuilder;
-import org.tedros.fx.builder.TDirectoryFieldBuilder;
-import org.tedros.fx.control.action.TEventHandler;
+import org.tedros.fx.control.TRequiredStackedComponent;
 import org.tedros.fx.domain.TDefaultValues;
+import org.tedros.server.model.ITBarcode;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -33,7 +33,7 @@ import javafx.scene.layout.StackPane;
 
 /**
  * <pre>
- * Build a {@link org.tedros.fx.control.TDirectoryField} component.
+ * Build a {@link org.tedros.fx.control.TBarcode} component.
  * </pre>
  *
  * @author Davis Gordon
@@ -56,11 +56,11 @@ public @interface TBarcodeGenerator {
 	 * <pre>
 	 * The parser class for this annotation
 	 * 
-	 * Default value: {TDirectoryFieldParser.class, TStackPaneParser.class}
+	 * Default value: {TRequiredStackedComponentParser.class, TStackPaneParser.class}
 	 * </pre>
 	 * */
-	//@SuppressWarnings("rawtypes")
-	//public Class<? extends ITAnnotationParser>[] parser() default {TDirectoryFieldParser.class, TStackPaneParser.class};
+	@SuppressWarnings("rawtypes")
+	public Class<? extends ITAnnotationParser>[] parser() default {TRequiredStackedComponentParser.class, TStackPaneParser.class};
 	
 	
 	/**
@@ -119,36 +119,18 @@ public @interface TBarcodeGenerator {
 	
 	/**
 	 * <pre>
-	 * {@link org.tedros.fx.control.TDirectoryField} Class
+	 * {@link org.tedros.fx.control.TBarcode} Class
 	 * 
-	 * Sets the value to the cleanAction property.
+	 * Sets the ITBarcode type.
 	 * 
-	 * Property description:
-	 * 
-	 * Defines the action to the clean button.
 	 * </pre>
 	 * */
-	@SuppressWarnings("rawtypes")
-	public Class<? extends TEventHandler> cleanAction() default TEventHandler.class;
-	
-	/**
-	 * <pre>
-	 * {@link org.tedros.fx.control.TDirectoryField} Class
-	 * 
-	 * Sets the value to the selectAction property.
-	 * 
-	 * Property description:
-	 * 
-	 * Defines the action to the select button
-	 * </pre>
-	 * */
-	@SuppressWarnings("rawtypes")
-	public Class<? extends TEventHandler> selectAction() default TEventHandler.class;
+	public Class<? extends ITBarcode> modelType();
 
 
 	/**
 	 * <pre>
-	 * {@link TBarcodeGenerator} Class
+	 * {@link TRequiredStackedComponent} Class
 	 * 
 	 * Sets the value of the property required.
 	 * 
@@ -160,20 +142,5 @@ public @interface TBarcodeGenerator {
 	 * </pre>
 	 * */
 	public boolean required() default false;
-	
-	/**
-	 * <pre>
-	 * {@link TBarcodeGenerator} Class
-	 * 
-	 * Sets the value of the property showFilePath.
-	 * 
-	 * Property description:
-	 * 
-	 * If true show the directory path.
-	 * 
-	 * Default value: true.
-	 * </pre>
-	 * */
-	public boolean showFilePath() default true;
 	
 }

@@ -27,4 +27,10 @@ public enum TBarcodeOrientation {
 		return value;
 	}
 
+	public static TBarcodeOrientation valueOf(int value) {
+		for(TBarcodeOrientation e : values())
+			if(e.getValue()==value)
+				return e;
+		return null;
+	}
 }

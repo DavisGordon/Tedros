@@ -28,4 +28,11 @@ public enum TBarcodeResolution {
 	public int getValue() {
 		return value;
 	}
+	
+	public static TBarcodeResolution valueOf(int value) {
+		for(TBarcodeResolution e : values())
+			if(e.getValue()==value)
+				return e;
+		return null;
+	}
 }

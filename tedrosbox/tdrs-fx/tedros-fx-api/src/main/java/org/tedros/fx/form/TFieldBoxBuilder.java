@@ -53,7 +53,7 @@ public final class TFieldBoxBuilder {
 		
 		Node label = null;
 		TLabelPosition position = null;
-		if(fieldLabel!=null && StringUtils.isNotBlank(fieldLabel.text())){
+		if(fieldLabel!=null && fieldLabel.show() && StringUtils.isNotBlank(fieldLabel.text())){
 			
 			if(parser == null | parserClass != fieldLabel.parser()){
 				parserClass = fieldLabel.parser();

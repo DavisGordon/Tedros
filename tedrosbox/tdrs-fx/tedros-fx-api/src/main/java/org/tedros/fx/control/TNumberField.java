@@ -211,21 +211,21 @@ public abstract class TNumberField<N extends Number> extends TRequiredNumberFiel
 	}
 	
 	/**
-	 * {@link SimpleObjectProperty} of {@link BigDecimal}
+	 * {@link SimpleObjectProperty} 
 	 * */
 	public SimpleObjectProperty<N> valueProperty(){
 		return valueProperty;
 	}
 	
 	/**
-	 * Get the {@link BigDecimal} value
+	 * Get the value
 	 * */
 	public N getValue(){
 		return valueProperty!=null ? valueProperty.get() : null;
 	}
 	
 	/**
-	 * Set the {@link BigDecimal} value
+	 * Set the  value
 	 * */
 	public void setValue(final N value){
 		if(valueProperty==null) 

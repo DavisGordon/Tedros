@@ -65,6 +65,16 @@ public @interface TLabel {
 	 * */
 	public TControl control() default @TControl(prefWidth=TDefaultValues.LABEL_WIDTH, parse = true);
 	
+
+	/**
+	 * <pre>
+	 * Set the label visibility.
+	 * 
+	 * Default value: true
+	 * </pre>
+	 * */
+	public boolean show() default true; 
+	
 	/**
 	 * <pre>
 	 * Set the positioning of the label relative to the control.
