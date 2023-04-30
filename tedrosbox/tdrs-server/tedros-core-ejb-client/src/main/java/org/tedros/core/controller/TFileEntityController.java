@@ -12,6 +12,8 @@ import org.tedros.server.security.TAccessToken;
 @Remote
 public interface TFileEntityController extends ITSecureEjbController<TFileEntity>{
 
+	static final String JNDI_NAME = "TFileEntityControllerRemote";
+	
 	public TResult<TFileEntity> loadBytes(TAccessToken token, TFileEntity entity);
 
 	public TResult<TFileEntity> findByIdWithBytesLoaded(TAccessToken token, TFileEntity entity);

@@ -30,6 +30,7 @@ import org.tedros.core.controller.TPropertieController;
 import org.tedros.core.domain.TSystemPropertie;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
+import org.tedros.core.resource.TedrosCoreResource;
 import org.tedros.core.security.model.TAuthorization;
 import org.tedros.core.security.model.TUser;
 import org.tedros.core.service.remote.ServiceLocator;
@@ -162,6 +163,8 @@ public final class TedrosContext {
 		contextStringProperty.addListener((a,o,n)->{
 			messageListProperty.add(new TMessage(TMessageType.INFO, n));
 		});
+		
+		TedrosCoreResource.createResource();
 		
 		LOGGER.info("Context started!");
 		

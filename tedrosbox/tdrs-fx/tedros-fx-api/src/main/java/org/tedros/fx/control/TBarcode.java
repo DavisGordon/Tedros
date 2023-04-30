@@ -9,18 +9,27 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
+import org.tedros.common.model.TByteEntity;
 import org.tedros.common.model.TFileEntity;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.control.PopOver;
 import org.tedros.core.control.PopOver.ArrowLocation;
+import org.tedros.core.controller.TFileEntityController;
 import org.tedros.core.repository.TRepository;
+import org.tedros.core.service.remote.ServiceLocator;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.TUsualKey;
+import org.tedros.fx.control.model.TImagesReportModel;
+import org.tedros.fx.control.model.TInputStreamListModel;
+import org.tedros.fx.control.model.TInputStreamModel;
+import org.tedros.fx.control.process.TImageReportProcess;
+import org.tedros.fx.exception.TProcessException;
 import org.tedros.fx.layout.TToolBar;
 import org.tedros.fx.util.TBarcodeGenerator;
 import org.tedros.fx.util.TBarcodeOrientation;
@@ -28,9 +37,13 @@ import org.tedros.fx.util.TBarcodeResolution;
 import org.tedros.fx.util.TBarcodeType;
 import org.tedros.fx.util.TFileBaseUtil;
 import org.tedros.fx.util.TPrintUtil;
+import org.tedros.server.entity.ITEntity;
+import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.model.ITBarcode;
 import org.tedros.server.model.ITFileBaseModel;
 import org.tedros.server.model.TFileModel;
+import org.tedros.server.result.TResult;
+import org.tedros.server.result.TResult.TState;
 import org.tedros.util.TedrosFolder;
 
 import javafx.beans.binding.BooleanBinding;
@@ -40,6 +53,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
+import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
@@ -335,7 +349,33 @@ public class TBarcode extends TRequiredStackedComponent {
 		
 
 		EventHandler<ActionEvent> printEvh = ev ->{
-			TPrintUtil.print(bp.getCenter());
+
+			ITBarcode model = getModel();
+			TInputStreamModel m = new TInputStreamModel();
+			m.setValue(new ByteArrayInputStream(model.getImage().getByte().getBytes()));
+			TInputStreamListModel lm = new TInputStreamListModel();
+			lm.setValues(Arrays.asList(m));
+			TImagesReportModel rm = new TImagesReportModel();
+			rm.setResult(Arrays.asList(lm));
+			try {
+				TImageReportProcess prc = new TImageReportProcess();
+				prc.stateProperty().addListener((a,o,n)->{
+					if(n.equals(State.SUCCEEDED)) {
+						TResult<TImagesReportModel> res = prc.getValue();
+						if(res.getState().equals(TState.SUCCESS)) {
+							try {
+								TedrosContext.openDocument(res.getMessage());
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				});
+				prc.exportPDF(rm, null);
+				prc.startProcess();
+			} catch (TProcessException e) {
+				e.printStackTrace();
+			}
 		};
 		repo.add("printEvh", printEvh);
 		printBtn.setOnAction(new WeakEventHandler<>(printEvh));
@@ -400,6 +440,25 @@ public class TBarcode extends TRequiredStackedComponent {
 	
 	private void generateBarcodeImage() {
 		ITBarcode model = getModel();
+
+		if(model.getImage()!=null && model.getImage().getByte()!=null 
+				&& model.getImage().getByte().getBytes()==null 
+				&& model.getImage() instanceof ITFileEntity 
+				&& !((ITFileEntity)model.getImage()).isNew()) {
+			TFileEntity fe = (TFileEntity) model.getImage();
+			ServiceLocator loc = ServiceLocator.getInstance();
+			try {
+				TFileEntityController serv = loc.lookup(TFileEntityController.JNDI_NAME);
+				TResult<TFileEntity> res = serv.loadBytes(TedrosContext.getLoggedUser().getAccessToken(), fe);
+				if(res.getState().equals(TState.SUCCESS)) {
+					model.getImage().getByte().setBytes(res.getValue().getByte().getBytes());
+				}
+			}catch(Exception ex) {
+				ex.printStackTrace();
+			}finally{
+				loc.close();
+			}
+		}
 		if(model.getImage()!=null && model.getImage().getByte()!=null 
 				&& model.getImage().getByte().getBytes()!=null) {
 			InputStream is = new ByteArrayInputStream(model.getImage().getByte().getBytes());
