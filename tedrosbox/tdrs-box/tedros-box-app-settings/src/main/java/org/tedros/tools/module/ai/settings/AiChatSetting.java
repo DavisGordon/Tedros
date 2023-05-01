@@ -3,12 +3,14 @@
  */
 package org.tedros.tools.module.ai.settings;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.descriptor.ITComponentDescriptor;
+import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.TLanguage;
 import org.tedros.core.ai.model.TAiChatCompletion;
 import org.tedros.core.ai.model.TAiChatMessage;
@@ -24,15 +26,18 @@ import org.tedros.core.repository.TRepository;
 import org.tedros.fx.control.TButton;
 import org.tedros.fx.control.TLabel;
 import org.tedros.fx.form.TSetting;
+import org.tedros.fx.presenter.assistant.TAiAssistantProcess;
+import org.tedros.server.result.TResult;
+import org.tedros.server.result.TResult.TState;
 import org.tedros.tools.ToolsKey;
 import org.tedros.tools.module.ai.model.AiChatMV;
 import org.tedros.tools.module.ai.model.AiChatMessageMV;
 import org.tedros.tools.module.ai.model.EventMV;
 
-import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.WeakListChangeListener;
+import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
@@ -91,18 +96,18 @@ public class AiChatSetting extends TSetting {
 			}
 		});
 		
-		try {
-			List<TAiChatMessage> lst0 = util.findMessages(TedrosContext.getLoggedUser()
-					.getAccessToken(),
-					mv.getEntity().getId());
-			Collections.sort(lst0);
-			lst0.forEach(msg->{
-				msgs.add(new AiChatMessageMV(msg));
-			});
-			
-			
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		if(!mv.getEntity().isNew()) {
+			try {
+				List<TAiChatMessage> lst0 = util.findMessages(TedrosContext.getLoggedUser()
+						.getAccessToken(),
+						mv.getEntity().getId());
+				Collections.sort(lst0);
+				lst0.forEach(msg->{
+					msgs.add(new AiChatMessageMV(msg));
+				});
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 
@@ -125,7 +130,10 @@ public class AiChatSetting extends TSetting {
 	 * @param mv
 	 * @param msgs
 	 */
+	@SuppressWarnings("rawtypes")
 	private void listenSendButton() {
+		final ITView view = super.getDescriptor().getForm().gettPresenter().getView();
+		//final TProgressIndicator pgs = new TProgressIndicator(view.gettFormSpace());
 		// Send event
 		EventHandler<ActionEvent> ev0 = e -> {
 			Node control = super.getControl("prompt");
@@ -153,7 +161,6 @@ public class AiChatSetting extends TSetting {
 			}
 			
 			final ObservableList<AiChatMessageMV> msgs = mv.getMessages();
-			
 			if(msgs.isEmpty()) {
 				TAiChatMessage m = new TAiChatMessage();
 				m.setContent(TLanguage.getInstance()
@@ -175,61 +182,73 @@ public class AiChatSetting extends TSetting {
 					
 					msgs.add(new AiChatMessageMV(m));
 					mv.getPrompt().setValue(null);
-
-					Platform.runLater(()->{
-						try {
-							TChatResult res = util.chat(TedrosContext.getLoggedUser()
-									.getAccessToken(), msgs);
-							if(res.getChoices()!=null)
-								res.getChoices().forEach(c->{
+					
+					TAiAssistantProcess prc = new TAiAssistantProcess();
+					prc.stateProperty().addListener((a,o,n)->{
+						if(n.equals(State.SUCCEEDED)) {
+							
+							TResult<TChatResult> r = prc.getValue();
+							if(r.getState().equals(TState.SUCCESS)) {
+								TChatResult res = r.getValue();
+								if(res.getChoices()!=null) {
+									res.getChoices().forEach(c->{
+										TAiChatMessage m1 = new TAiChatMessage();
+										m1.setContent(c.getMessage().getContent());
+										m1.setInsertDate(new Date());
+										m1.setRole(TChatRole.ASSISTANT);
+										m1.setChat(mv.getModel());
+										msgs.add(new AiChatMessageMV(m1));
+									});
+								}else {
+									TOpenAiError error = res.getErrorType();
+									
 									TAiChatMessage m1 = new TAiChatMessage();
-									m1.setContent(c.getMessage().getContent());
 									m1.setInsertDate(new Date());
 									m1.setRole(TChatRole.ASSISTANT);
 									m1.setChat(mv.getModel());
-									msgs.add(new AiChatMessageMV(m1));
-								});
-							else {
-								TOpenAiError error = res.getErrorType();
+									if(error!=null) {
+										m1.setContent(TLanguage.getInstance().getString(error.getMsgKey()));
+									}else 
+									if(StringUtils.containsIgnoreCase(res.getLog(), "timeout")) { 
+										m1.setContent(TLanguage.getInstance().getString(ToolsKey.MESSAGE_AI_TIMEOUT));
+									}else
+										m1.setContent(TLanguage.getInstance().getString(ToolsKey.ERROR_AI_LOG));
 								
+									msgs.add(new AiChatMessageMV(m1));
+								}
+							
+								TAiChatCompletion cc = mv.getEntity();
+								TRequestEvent ev = TRequestEvent.build(TRequestType.CHAT, res.getLog(), 
+										res.getUsage(), cc.getModel().value(), 
+										cc.getTemperature(), cc.getMaxTokens(), null);
+								mv.getEvents().add(new EventMV(ev));
+							} else {
+								//e1.printStackTrace();
 								TAiChatMessage m1 = new TAiChatMessage();
 								m1.setInsertDate(new Date());
 								m1.setRole(TChatRole.ASSISTANT);
 								m1.setChat(mv.getModel());
-								if(error!=null) {
-									m1.setContent(TLanguage.getInstance().getString(error.getMsgKey()));
-								}else 
-								if(StringUtils.containsIgnoreCase(res.getLog(), "timeout")) { 
-									m1.setContent(TLanguage.getInstance().getString(ToolsKey.MESSAGE_AI_TIMEOUT));
-								}else
-									m1.setContent(TLanguage.getInstance().getString(ToolsKey.ERROR_AI_LOG));
-							
 								msgs.add(new AiChatMessageMV(m1));
-							}
+								m1.setContent(TLanguage.getInstance().getString(ToolsKey.ERROR_AI_LOG));
 							
-							TAiChatCompletion cc = mv.getEntity();
-							TRequestEvent ev = TRequestEvent.build(TRequestType.CHAT, res.getLog(), 
-									res.getUsage(), cc.getModel().value(), 
-									cc.getTemperature(), cc.getMaxTokens(), null);
-							mv.getEvents().add(new EventMV(ev));
-						} catch (Exception e1) {
-							e1.printStackTrace();
-							TAiChatMessage m1 = new TAiChatMessage();
-							m1.setInsertDate(new Date());
-							m1.setRole(TChatRole.ASSISTANT);
-							m1.setChat(mv.getModel());
-							msgs.add(new AiChatMessageMV(m1));
-							m1.setContent(TLanguage.getInstance().getString(ToolsKey.ERROR_AI_LOG));
-						
-							TAiChatCompletion cc = mv.getEntity();
-							TRequestEvent ev = TRequestEvent.build(TRequestType.CHAT, e1.getMessage(), 
-									null, cc.getModel().value(), 
-									cc.getTemperature(), cc.getMaxTokens(), null);
-							mv.getEvents().add(new EventMV(ev));
-						}finally {
+								TAiChatCompletion cc = mv.getEntity();
+								TRequestEvent ev = TRequestEvent.build(TRequestType.CHAT, r.getMessage(), 
+										null, cc.getModel().value(), 
+										cc.getTemperature(), cc.getMaxTokens(), null);
+								mv.getEvents().add(new EventMV(ev));
+							}
 							btn.setDisable(false);
 						}
 					});
+					view.gettProgressIndicator().bind(prc.runningProperty());
+
+					final List<TAiChatMessage> lst = new ArrayList<>();
+					msgs.forEach(i->{
+						lst.add(i.getEntity());
+					});
+					prc.chat(lst);
+					prc.startProcess();
+					
 		        } catch (Exception ex) {
 		            ex.printStackTrace();
 

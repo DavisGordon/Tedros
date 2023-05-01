@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TLanguage;
+import org.tedros.core.ai.model.TAiChatMessage;
 import org.tedros.core.ai.model.completion.chat.TChatMessage;
 import org.tedros.core.ai.model.completion.chat.TChatRequest;
 import org.tedros.core.ai.model.completion.chat.TChatResult;
@@ -33,6 +34,8 @@ public class TAiAssistantProcess extends TProcess<TResult<TChatResult>> {
 	
 	private String sysMsg;
 	private String userMsg;
+	
+	private TChatRequest req;
 	
 	public TAiAssistantProcess() {
 	}
@@ -61,8 +64,12 @@ public class TAiAssistantProcess extends TProcess<TResult<TChatResult>> {
 		
 		this.sysMsg = intro+detail+info+json;
 		this.userMsg = prompt+title+jsonTarget+rule+compl;
-	}
 
+		TChatMessage s = new TChatMessage(TChatRole.SYSTEM, sysMsg);
+		TChatMessage m = new TChatMessage(TChatRole.USER, userMsg);
+		buildChatRequest(0.0D, 2000);
+		addMessage(s, m);
+	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void askForAnalyse(TJsonModel model, String prompt, List<ITModel> models) {
@@ -86,6 +93,11 @@ public class TAiAssistantProcess extends TProcess<TResult<TChatResult>> {
 		
 		this.sysMsg = intro+detail+info+json;
 		this.userMsg = prompt+"\r\n"+jsonTarget+rule;
+		
+		TChatMessage s = new TChatMessage(TChatRole.SYSTEM, sysMsg);
+		TChatMessage m = new TChatMessage(TChatRole.USER, userMsg);
+		buildChatRequest(0.0D, 2000);
+		addMessage(s, m);
 	}
 
 
@@ -111,6 +123,17 @@ public class TAiAssistantProcess extends TProcess<TResult<TChatResult>> {
 		this.sysMsg = intro+detail+info+json;
 		this.userMsg = prompt+rule;
 	}
+	
+
+	public void chat(List<TAiChatMessage> msgs) throws Exception {
+		buildChatRequest(0.8D, 2047);
+		msgs.forEach(e->{
+			TChatMessage m = new TChatMessage();
+			m.setContent(e.getContent());
+			m.setRole(e.getRole());
+			req.addMessage(m);
+		});
+	}
 
 	@Override
 	protected TTaskImpl<TResult<TChatResult>> createTask() {
@@ -122,17 +145,8 @@ public class TAiAssistantProcess extends TProcess<TResult<TChatResult>> {
 	    		TResult<TChatResult> res = null;
 	    		try {
 
-	    			TChatMessage s = new TChatMessage(TChatRole.SYSTEM, sysMsg);
-	    			TChatMessage m = new TChatMessage(TChatRole.USER, userMsg);
-	    			TChatRequest req = new TChatRequest();
-	    			req.addMessage(s);
-	    			req.addMessage(m);
-	    			req.setTemperature(0.0D);
-	    			req.setMaxTokens(2000);
-	    			
 	    			TAiChatCompletionController serv = loc.lookup(TAiChatCompletionController.JNDI_NAME);
 	    			res = serv.chat(TedrosContext.getLoggedUser().getAccessToken(), req);
-	    			
 	    			
 	    		}catch(Exception ex) {
 	    			ex.printStackTrace();
@@ -141,13 +155,22 @@ public class TAiAssistantProcess extends TProcess<TResult<TChatResult>> {
 	    		}
 	    		return res;
 	    	}
-	
+			
 			@Override
 			public String getServiceNameInfo() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 		};
 	}
-	
+
+	private void buildChatRequest(double temperature, int maxTokens) {
+		req = new TChatRequest();
+		req.setTemperature(temperature);
+		req.setMaxTokens(maxTokens);
+	}
+
+	private void addMessage(TChatMessage... arr) {
+		for(TChatMessage m : arr)
+			req.addMessage(m);
+	}
 }
