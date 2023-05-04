@@ -4,11 +4,10 @@
 package org.tedros.tools.module.ai.action;
 
 import org.apache.commons.lang3.StringUtils;
-import org.tedros.api.form.ITForm;
+import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.TLanguage;
 import org.tedros.core.ai.model.TAiCompletion;
 import org.tedros.core.control.PopOver;
-import org.tedros.core.control.TProgressIndicator;
 import org.tedros.core.control.PopOver.ArrowLocation;
 import org.tedros.fx.builder.TBaseEventHandlerBuilder;
 import org.tedros.fx.control.TLabel;
@@ -23,7 +22,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
 
 /**
  * @author Davis Gordon
@@ -31,11 +29,12 @@ import javafx.scene.layout.Pane;
  */
 public class SendActionBuilder extends TBaseEventHandlerBuilder<ActionEvent> {
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public EventHandler<ActionEvent> build() {
 		
 		return ev -> {
-			ITForm f = super.getComponentDescriptor().getForm();
+			final ITView view = super.getComponentDescriptor().getForm().gettPresenter().getView();
 			Button btn = (Button) ev.getSource();
 			btn.setDisable(true);
 			CompletionMV mv = (CompletionMV) super.getComponentDescriptor().getModelView();
@@ -55,8 +54,7 @@ public class SendActionBuilder extends TBaseEventHandlerBuilder<ActionEvent> {
 			TAiCompletion e = mv.getEntity();
 			
 			TAiCompletionProcess p = new TAiCompletionProcess();
-			TProgressIndicator pi = new TProgressIndicator((Pane) f);
-			pi.bind(p.runningProperty());
+			view.gettProgressIndicator().bind(p.runningProperty());
 			p.stateProperty().addListener((a,o,n)->{
 				if(n.equals(State.SUCCEEDED)) {
 					TResult<TAiCompletion> res = p.getValue().get(0);

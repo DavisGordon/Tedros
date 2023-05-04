@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.descriptor.ITComponentDescriptor;
+import org.tedros.api.presenter.view.ITView;
 import org.tedros.common.model.TFileEntity;
 import org.tedros.core.TLanguage;
 import org.tedros.core.ai.model.TAiCreateImage;
@@ -142,7 +143,9 @@ public class CreateImageSetting extends TSetting {
 	 * @param mv
 	 * @param msgs
 	 */
+	@SuppressWarnings("rawtypes")
 	private void listenSendButton() {
+		final ITView view = super.getDescriptor().getForm().gettPresenter().getView();
 		// Send event
 		EventHandler<ActionEvent> ev0 = e -> {
 			TButton btn = (TButton) e.getSource();
@@ -188,6 +191,7 @@ public class CreateImageSetting extends TSetting {
 					btn.setDisable(false);
 				}
 			});
+			view.gettProgressIndicator().bind(prc.runningProperty());
 			prc.createImage(m);
 			prc.startProcess();
 			
