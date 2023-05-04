@@ -36,6 +36,7 @@ import org.tedros.fx.annotation.layout.TPane;
 import org.tedros.fx.annotation.layout.TPriority;
 import org.tedros.fx.annotation.layout.TVBox;
 import org.tedros.fx.annotation.layout.TVGrow;
+import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
 import org.tedros.fx.annotation.presenter.TPresenter;
@@ -67,7 +68,9 @@ import javafx.scene.layout.Priority;
 @TListViewPresenter(listViewMinWidth=300,
 	paginator=@TPaginator(entityClass = TAiCompletion.class, 
 	serviceName = TAiCompletionController.JNDI_NAME, show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle=ToolsKey.VIEW_AI_COMPLETION)
+	presenter=@TPresenter(
+		decorator = @TDecorator(viewTitle=ToolsKey.VIEW_AI_COMPLETION),
+		behavior=@TBehavior(saveAllModels=false, saveOnlyChangedModels=false)
 	))
 @TSecurity(id=DomainApp.ASK_TEROS_FORM_ID,
 appName=ToolsKey.APP_TOOLS, moduleName=ToolsKey.MODULE_AI, viewName=ToolsKey.VIEW_AI_COMPLETION,

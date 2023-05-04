@@ -13,9 +13,6 @@ import java.util.List;
 import org.tedros.core.TLanguage;
 import org.tedros.core.ai.model.TAiChatCompletion;
 import org.tedros.core.ai.model.TAiChatMessage;
-import org.tedros.core.ai.model.completion.chat.TChatMessage;
-import org.tedros.core.ai.model.completion.chat.TChatRequest;
-import org.tedros.core.ai.model.completion.chat.TChatResult;
 import org.tedros.core.ai.model.completion.chat.TChatRole;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.controller.TAiChatCompletionController;
@@ -29,7 +26,6 @@ import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.server.security.TAccessToken;
-import org.tedros.tools.module.ai.model.AiChatMessageMV;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -55,29 +51,6 @@ import javafx.scene.layout.VBox;
 public class AiChatUtil {
 	
 	private TLanguage iEngine = TLanguage.getInstance();
-
-	public TChatResult chat(TAccessToken token, List<AiChatMessageMV> msgs) throws Exception {
-		ServiceLocator loc = ServiceLocator.getInstance();
-		try {
-			TChatRequest req = new TChatRequest();
-			req.setMaxTokens(2047);
-			req.setTemperature(0.8);
-			msgs.forEach(c->{
-				TAiChatMessage e = c.getEntity();
-				TChatMessage m = new TChatMessage();
-				m.setContent(e.getContent());
-				m.setRole(e.getRole());
-				req.addMessage(m);
-			});
-			
-			TAiChatCompletionController serv = loc.lookup(TAiChatCompletionController.JNDI_NAME);
-			TResult<TChatResult> res = serv.chat(token, req);
-			
-			return res.getValue();
-		}finally {
-			loc.close();
-		}
-	}
 	
 	@SuppressWarnings("unchecked")
 	public TAiChatCompletion saveChat(TAccessToken token, TAiChatCompletion chat) throws Exception {

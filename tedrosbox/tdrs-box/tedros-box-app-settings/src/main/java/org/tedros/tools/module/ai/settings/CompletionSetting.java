@@ -5,6 +5,7 @@ package org.tedros.tools.module.ai.settings;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.descriptor.ITComponentDescriptor;
+import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.TLanguage;
 import org.tedros.core.ai.model.TAiCompletion;
 import org.tedros.core.ai.model.TAiModel;
@@ -17,10 +18,7 @@ import org.tedros.tools.ToolsKey;
 import org.tedros.tools.module.ai.model.CompletionMV;
 import org.tedros.tools.module.ai.process.TAiCompletionProcess;
 
-import javafx.animation.FadeTransition;
 import javafx.concurrent.Worker.State;
-import javafx.scene.Node;
-import javafx.util.Duration;
 
 /**
  * @author Davis Gordon
@@ -38,18 +36,12 @@ public class CompletionSetting extends TSetting {
 	/* (non-Javadoc)
 	 * @see org.tedros.fx.form.TSetting#run()
 	 */
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void run() {
+		final ITView view = super.getDescriptor().getForm().gettPresenter().getView();
 		CompletionMV mv = super.getModelView();
 		if(StringUtils.isBlank(mv.getResponse().getValue())) {
-			Node control = getControl("response");
-			FadeTransition ft = new FadeTransition(Duration.millis(2000), control );
-		    ft.setFromValue(1.0);
-		    ft.setToValue(0.3);
-		    ft.setCycleCount(FadeTransition.INDEFINITE);
-		    ft.setAutoReverse(true);
-		    ft.play();
-			
 			TAiCompletion e = new TAiCompletion();
 			
 			TUser u = TedrosContext.getLoggedUser();
@@ -61,12 +53,10 @@ public class CompletionSetting extends TSetting {
 			e.setMaxTokens(256);
 			e.setTemperature(0.4);
 			e.setModel(TAiModel.TEXT_DAVINCI_003);
-			TAiCompletionProcess p = new TAiCompletionProcess();
 			
+			TAiCompletionProcess p = new TAiCompletionProcess();
 			p.stateProperty().addListener((a,o,n)->{
 				if(n.equals(State.SUCCEEDED)) {
-					ft.stop();
-					control.setOpacity(100);
 					TResult<TAiCompletion> res = p.getValue().get(0);
 					if(res.getState().equals(TState.SUCCESS)) {
 						TAiCompletion m = res.getValue();
@@ -74,6 +64,7 @@ public class CompletionSetting extends TSetting {
 					}
 				}
 			});
+			view.gettProgressIndicator().bind(p.runningProperty());
 			p.completion(e);
 			p.startProcess();
 		}

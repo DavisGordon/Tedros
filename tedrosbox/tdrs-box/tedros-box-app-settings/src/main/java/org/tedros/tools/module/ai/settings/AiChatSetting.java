@@ -133,7 +133,6 @@ public class AiChatSetting extends TSetting {
 	@SuppressWarnings("rawtypes")
 	private void listenSendButton() {
 		final ITView view = super.getDescriptor().getForm().gettPresenter().getView();
-		//final TProgressIndicator pgs = new TProgressIndicator(view.gettFormSpace());
 		// Send event
 		EventHandler<ActionEvent> ev0 = e -> {
 			Node control = super.getControl("prompt");
