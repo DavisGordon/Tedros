@@ -340,6 +340,7 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private M buildModelView(Object e) throws TException {
 		M mv = (M) TModelViewBuilder.create()
 			.modelViewClass((Class<? extends ITModelView<?>>) tModelViewType)

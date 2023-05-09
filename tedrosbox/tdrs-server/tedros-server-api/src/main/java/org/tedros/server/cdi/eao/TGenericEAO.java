@@ -226,8 +226,8 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<E> cq = (CriteriaQuery<E>) cb.createQuery(entity.getClass());
 		Root<E> root = (Root<E>) cq.from(entity.getClass());
+		root.alias("e");
 		cq.select(root);
-		
 		if(entity.getOrderBy()!=null && !entity.getOrderBy().isEmpty()) {
 			for(String f : entity.getOrderBy())
 				if(orderByAsc)

@@ -122,6 +122,11 @@ public class TAiAssistantProcess extends TProcess<TResult<TChatResult>> {
 		
 		this.sysMsg = intro+detail+info+json;
 		this.userMsg = prompt+rule;
+
+		TChatMessage s = new TChatMessage(TChatRole.SYSTEM, sysMsg);
+		TChatMessage m = new TChatMessage(TChatRole.USER, userMsg);
+		buildChatRequest(0.0D, 2000);
+		addMessage(s, m);
 	}
 	
 
