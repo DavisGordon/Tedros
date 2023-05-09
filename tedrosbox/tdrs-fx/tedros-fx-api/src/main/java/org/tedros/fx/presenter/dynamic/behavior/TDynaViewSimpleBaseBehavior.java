@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.tedros.api.presenter.ITPresenter;
 import org.tedros.api.presenter.view.ITView;
@@ -38,13 +39,11 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WeakChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.WeakListChangeListener;
-import javafx.concurrent.Worker.State;
 import javafx.scene.layout.StackPane;
 
 /***
@@ -77,7 +76,7 @@ extends TBehavior<M, TDynaPresenter<M>> {
 	
 	private List<TAuthorizationType> userAuthorizations;
 	
-	private final ObjectProperty<TActionState<M>> actionStateProperty = new SimpleObjectProperty<>();
+	protected final ObjectProperty<TActionState<M>> actionStateProperty = new SimpleObjectProperty<>();
 	private final ObservableList<TMessage> messagesProperty = FXCollections.observableArrayList();
 
 	@Override
@@ -357,8 +356,25 @@ extends TBehavior<M, TDynaPresenter<M>> {
 	 * @throws TValidatorException
 	 * @throws Throwable
 	 */
-	@SuppressWarnings("unchecked")
 	public void runModelProcess(TActionType action)
+			throws Exception, TValidatorException, Throwable {
+		runModelProcess(action, null);
+	}
+	
+	/**
+	 * Construct and run a TModelProcess on the current TModelView. 
+	 * The action to be performed is based on the given TActionType.
+	 * Target service must be defined by {@link org.tedros.fx.annotation.process.TModelProcess}
+	 * in TModelView
+	 * 
+	 * @param action
+	 * @param finished
+	 * @throws Exception
+	 * @throws TValidatorException
+	 * @throws Throwable
+	 */
+	@SuppressWarnings("unchecked")
+	public void runModelProcess(TActionType action, Consumer<Boolean> finished)
 			throws Exception, TValidatorException, Throwable {
 		//recupera a lista de models views
 		//final ObservableList<M> modelsViewsList = this.decorator.gettListView().getItems(); 
@@ -376,7 +392,7 @@ extends TBehavior<M, TDynaPresenter<M>> {
 			validateModels(modelsViewsList);
 		
 		for(int x=0; x<modelsViewsList.size(); x++){
-			
+			boolean lastEntity = x==modelsViewsList.size()-1;
 			final M model = modelsViewsList.get(x);
 			
 			if((!isSkipChangeValidation()) && !model.isChanged())
@@ -387,89 +403,87 @@ extends TBehavior<M, TDynaPresenter<M>> {
 			process.setObjectToProcess((E) model.getModel());
 			
 			
-			process.exceptionProperty().addListener(new ChangeListener<Throwable>() {
-
-				@Override
-				public void changed(ObservableValue<? extends Throwable> arg0, Throwable arg1, Throwable arg2) {
-					arg2.printStackTrace();
-				}				
+			process.exceptionProperty().addListener((a,o,n) -> {
+				n.printStackTrace();		
 			});
 			
-			process.stateProperty().addListener(new ChangeListener<State>() {
-				@Override
-				public void changed(ObservableValue<? extends State> arg0, State arg1, State arg2) {
-					
-					switch (arg2) {
-						case SUCCEEDED:
-							if(!runWhenModelProcessSucceeded(process))
-								return;
-							
-							/*TODO: DEVERA SER VERIFICADO OUTRA ABORDAGEM, POIS DEIXAR IMPLICITO QUE TODO RESULTADO
-							 * DEVERA RETORNAR UMA ENTIDADE NA PRIMEIRA POSIÇÃO CAUSA MUITA CONFUSÃO
-							 * DEVERA SER ANALISADO  
-							 * */
-							final List<TResult<E>> resultados = process.getValue();
-							if(resultados.isEmpty())
-								return;
-							TResult result = resultados.get(0);
-							switch(result.getState()) {
-								case SUCCESS:
-									E entity = (E) result.getValue();
-									if(entity!=null){
-										model.reload(entity);
-										String msg = iEngine.getFormatedString("#{tedros.fxapi.message.process}", model.toStringProperty().getValue());
-										setActionState(new TActionState(action, arg2, TProcessResult.SUCCESS, msg, model));
-										addMessage(new TMessage(TMessageType.INFO, msg));
-									}else {
-										setActionState(new TActionState(action, arg2, TProcessResult.NO_RESULT, model));
-									}
-								break;
+			process.stateProperty().addListener((a,o,n) -> {	
+				switch (n) {
+					case SUCCEEDED:
+						if(!runWhenModelProcessSucceeded(process))
+							return;
+						
+						/*TODO: DEVERA SER VERIFICADO OUTRA ABORDAGEM, POIS DEIXAR IMPLICITO QUE TODO RESULTADO
+						 * DEVERA RETORNAR UMA ENTIDADE NA PRIMEIRA POSIÇÃO CAUSA MUITA CONFUSÃO
+						 * DEVERA SER ANALISADO  
+						 * */
+						final List<TResult<E>> resultados = process.getValue();
+						if(resultados.isEmpty())
+							return;
+						TResult result = resultados.get(0);
+						switch(result.getState()) {
+							case SUCCESS:
+								E entity = (E) result.getValue();
+								if(entity!=null){
+									model.reload(entity);
+									String msg = iEngine.getFormatedString(TFxKey.MESSAGE_PROCESS, model.toStringProperty().getValue());
+									setActionState(new TActionState(action, n, TProcessResult.SUCCESS, msg, model));
+									addMessage(new TMessage(TMessageType.INFO, msg));
+								}else {
+									setActionState(new TActionState(action, n, TProcessResult.NO_RESULT, model));
+								}
+							break;
+							default:
+								System.out.println(result.getMessage());
+								String msg = result.getMessage();
+								
+								setActionState(new TActionState(action, n, TProcessResult.get(result.getState()), msg, model));
+								switch(result.getState()) {
+								case ERROR:
+									if(msg==null)
+										msg = TFxKey.MESSAGE_ERROR;
+									addMessage(new TMessage(TMessageType.ERROR, iEngine.getFormatedString(msg)));
+									break;
 								default:
-									System.out.println(result.getMessage());
-									String msg = result.getMessage();
-									
-									setActionState(new TActionState(action, arg2, TProcessResult.get(result.getState()), msg, model));
-									switch(result.getState()) {
-									case ERROR:
-										if(msg==null)
-											msg = TFxKey.MESSAGE_ERROR;
-										addMessage(new TMessage(TMessageType.ERROR, iEngine.getFormatedString(msg)));
-										break;
-									default:
-										if(msg!=null)
-											addMessage(new TMessage(TMessageType.WARNING, iEngine.getFormatedString(msg)));
-										break;
-									}
-								break;
-							}
-						break;
-						case CANCELLED:
-							runWhenModelProcessCancelled(process);
-							setActionState(new TActionState(action, arg2));
-						break;
-						
-						case FAILED:
-							runWhenModelProcessFailed(process);
-							setActionState(new TActionState(action, arg2));
-						break;
-						
-						case READY:
-							runWhenModelProcessReady(process);
-							setActionState(new TActionState(action, arg2));
-						break;
-						
-						case RUNNING:
-							runWhenModelProcessRunning(process);
-							setActionState(new TActionState(action, arg2));
-						break;
-						
-						case SCHEDULED:
-							runWhenModelProcessScheduled(process);
-							setActionState(new TActionState(action, arg2));
-						break;
-					}
+									if(msg!=null)
+										addMessage(new TMessage(TMessageType.WARNING, iEngine.getFormatedString(msg)));
+									break;
+								}
+							break;
+						}
+						if(finished!=null)
+							finished.accept(lastEntity);
+					break;
+					case CANCELLED:
+						runWhenModelProcessCancelled(process);
+						setActionState(new TActionState(action, n));
+						if(finished!=null)
+							finished.accept(lastEntity);
+					break;
 					
+					case FAILED:
+						runWhenModelProcessFailed(process);
+						setActionState(new TActionState(action, n));
+						if(finished!=null)
+							finished.accept(lastEntity);
+					break;
+					
+					case READY:
+						runWhenModelProcessReady(process);
+						setActionState(new TActionState(action, n));
+					break;
+					
+					case RUNNING:
+						runWhenModelProcessRunning(process);
+						setActionState(new TActionState(action, n));
+					break;
+					
+					case SCHEDULED:
+						runWhenModelProcessScheduled(process);
+						setActionState(new TActionState(action, n));
+					break;
 				}
+				
 			});
 			runProcess(process);
 		}

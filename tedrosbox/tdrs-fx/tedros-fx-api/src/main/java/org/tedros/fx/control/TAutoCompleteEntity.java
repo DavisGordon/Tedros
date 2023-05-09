@@ -13,6 +13,7 @@ import org.tedros.server.query.TSelect;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
@@ -79,6 +80,18 @@ public class TAutoCompleteEntity extends TTextField {
 		this.tSelectedItemProperty.addListener(new WeakChangeListener<>(echl));
 	}
 
+	/**
+	 * @return the tSelectedItemProperty
+	 */
+	public SimpleObjectProperty<TEntity> tSelectedItemProperty() {
+		return tSelectedItemProperty;
+	}
+	
+	@Override
+	@SuppressWarnings({ "unchecked"})
+	public <T extends Observable> T tValueProperty() {
+		return (T) tSelectedItemProperty();
+	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void buildListeners() {
@@ -176,13 +189,5 @@ public class TAutoCompleteEntity extends TTextField {
 	    textFilter.setFill(Color.ORANGE);
 	    textFilter.setFont(Font.font("Tahoma", FontWeight.BOLD, 14));  
 	    return new TextFlow(textBefore, textFilter, textAfter);
-	}    
-
-
-	/**
-	 * @return the tSelectedItemProperty
-	 */
-	public SimpleObjectProperty<TEntity> tSelectedItemProperty() {
-		return tSelectedItemProperty;
 	}
 }

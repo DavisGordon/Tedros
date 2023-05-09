@@ -3,6 +3,7 @@ package org.tedros.fx.presenter.dynamic.behavior;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.form.ITModelForm;
@@ -17,6 +18,7 @@ import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.process.TEjbService;
 import org.tedros.fx.collections.TFXCollections;
@@ -577,18 +579,39 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		if(this.actionHelper.runBefore(TActionType.SAVE)){
 			try{
 				boolean flag = true;
+				boolean runNewAction = ((ITEntity)this.getModelView().getModel()).isNew() && this.runNewActionAfterSave;
+				Consumer<Boolean> finishCallback = finished ->{
+					if(finished) {
+						if(runNewAction) {
+							getView().tModalVisibleProperty().addListener(new ChangeListener<Boolean>() {
+								@Override
+								public void changed(ObservableValue<? extends Boolean> arg0, Boolean b, Boolean c) {
+									if(!c) {
+										getView().tModalVisibleProperty().removeListener(this);
+										actionHelper.runAfter(TActionType.SAVE);
+										setActionState(new TActionState<>(TActionType.SAVE, TProcessResult.FINISHED));
+										newAction();
+									}
+								}
+							});
+						}else {
+							actionHelper.runAfter(TActionType.SAVE);
+							setActionState(new TActionState<>(TActionType.SAVE, TProcessResult.FINISHED));
+						}
+					}
+				};
+				
 				if(getEntityProcessClass()!=null || (StringUtils.isNotBlank(this.serviceName) && this.entityClass!=null)){
-					runSaveEntityProcess();
+					runSaveEntityProcess(finishCallback);
 					flag = false;
 				}else if(getModelProcessClass()!=null){
-					runModelProcess(TActionType.SAVE);
+					runModelProcess(TActionType.SAVE, finishCallback);
 					flag = false;
 				}
 				
 				if(flag){
 					throw new TException("Error: No process configuration found in "+getModelViewClass().getSimpleName()+" model view class, use @TEntityProcess, @TEjbService or @TModelProcess to do that.");
 				}
-				setActionState(new TActionState<>(TActionType.SAVE, TProcessResult.FINISHED));
 			}catch(TValidatorException e){
 				getView().tShowModal(new TMessageBox(e), true);
 				setActionState(new TActionState<>(TActionType.SAVE, TProcessResult.FINISHED));
@@ -601,7 +624,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void runSaveEntityProcess()
+	private void runSaveEntityProcess(Consumer<Boolean> callback)
 			throws Exception, TValidatorException, Throwable {
 		//recupera a lista de models views
 		final ObservableList<M> modelsViewsList = (ObservableList<M>) ((saveAllModels && getModels()!=null) 
@@ -616,25 +639,22 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		// valida os models views
 		validateModels(modelsViewsList);
 		
-		boolean runNewAction = ((ITEntity)this.getModelView().getModel()).isNew() && this.runNewActionAfterSave;
 		
 		// salva os models views
 		for(int x=0; x<modelsViewsList.size(); x++){
-			
+			boolean lastEntity = x==modelsViewsList.size()-1;
 			final M model = modelsViewsList.get(x);
 			if(saveOnlyChangedModel && !model.isChanged())
 				continue;
 			
 			final TEntityProcess process  = createEntityProcess();
 			process.save( (ITEntity) model.getModel());
-			process.stateProperty().addListener(new ChangeListener<State>() {
-				@Override
-				public void changed(ObservableValue<? extends State> arg0, State arg1, State arg2) {
-					if(arg2.equals(State.SUCCEEDED)){
+			process.stateProperty().addListener((a,o,n)-> {
+					if(n.equals(State.SUCCEEDED)){
 						List<TResult<E>> resultados = (List<TResult<E>>) process.getValue();
 						if(resultados.isEmpty()) {
 							actionHelper.runAfter(TActionType.SAVE);
-							setActionState(new TActionState(TActionType.SAVE, arg2, TProcessResult.NO_RESULT));
+							setActionState(new TActionState(TActionType.SAVE, (State) n, TProcessResult.NO_RESULT));
 							return;
 						}
 						TResult result = resultados.get(0);
@@ -646,32 +666,18 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 									String msg = result.isPriorityMessage() 
 											? result.getMessage()
 													: iEngine.getFormatedString("#{tedros.fxapi.message.save}", model.toStringProperty().getValue());
-									if(runNewAction) {
-										getView().tModalVisibleProperty().addListener(new ChangeListener<Boolean>() {
-											@Override
-											public void changed(ObservableValue<? extends Boolean> arg0, Boolean b, Boolean c) {
-												if(!c) {
-													getView().tModalVisibleProperty().removeListener(this);
-													actionHelper.runAfter(TActionType.SAVE);
-													newAction();
-												}
-											}
-										});
-									}
+									
 									addMessage(new TMessage(TMessageType.INFO, msg));
-									setActionState(new TActionState(TActionType.SAVE, arg2, TProcessResult.SUCCESS));
+									setActionState(new TActionState(TActionType.SAVE, (State) n, TProcessResult.SUCCESS));
 								} catch (Exception e) {	
 									e.printStackTrace();
 									addMessage(new TMessage(TMessageType.ERROR, e.getMessage()));
-									
 								}
 							}
-							if(!runNewAction)
-								actionHelper.runAfter(TActionType.SAVE);
 						}else{
 							System.out.println(result.getMessage());
 							String msg = result.getState().equals(TState.OUTDATED) 
-									? iEngine.getString("#{tedros.fxapi.message.outdate}")
+									? iEngine.getString(TFxKey.MESSAGE_OUTDATE)
 											: result.getMessage();
 							switch(result.getState()) {
 								case ERROR:
@@ -681,16 +687,13 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 									addMessage(new TMessage(TMessageType.WARNING, msg));
 									break;
 							}
-							setActionState(new TActionState(TActionType.SAVE, arg2, TProcessResult.get(result.getState()), result.getMessage()));	
+							setActionState(new TActionState(TActionType.SAVE, (State) n, TProcessResult.get(result.getState()), result.getMessage()));	
 						}
-						
+						callback.accept(lastEntity);
 					}else {
-						setActionState(new TActionState(TActionType.SAVE, arg2));
+						setActionState(new TActionState(TActionType.SAVE, (State) n));
 					}
-				}
-
-				
-			});
+				});
 			runProcess(process);
 		}
 	}
