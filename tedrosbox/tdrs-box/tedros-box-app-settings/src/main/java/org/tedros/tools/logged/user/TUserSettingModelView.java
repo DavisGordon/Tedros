@@ -6,6 +6,8 @@ package org.tedros.tools.logged.user;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.security.model.TProfile;
 import org.tedros.core.security.model.TUser;
+import org.tedros.fx.TFxKey;
+import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.TObservableValue;
 import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TPasswordField;
@@ -36,21 +38,21 @@ import javafx.beans.property.SimpleStringProperty;
 @TForm(name=ToolsKey.SECURITY_USER_FORM_NAME)
 @TPresenter(type=TDynaPresenter.class, 
 			decorator=@TDecorator(type = TUserSettingDecorator.class, 
-			buildModesRadioButton=false, saveButtonText=ToolsKey.APPLY ),
+			buildModesRadioButton=false, saveButtonText=TFxKey.BUTTON_APPLY ),
 			behavior=@TBehavior(type=TUserSettingBehavior.class, saveOnlyChangedModels=false))
 @TEjbService(model=TUser.class, serviceName = "TUserControllerRemote")
 public class TUserSettingModelView extends TEntityModelView<TUser> {
 
-	@TLabel(text=ToolsKey.NAME, font=@TFont(size=10))
+	@TLabel(text=TUsualKey.NAME, font=@TFont(size=10))
 	@TTextField(maxLength=100, required=true)
 	private SimpleStringProperty name;
 	
 	
-	@TLabel(text=ToolsKey.USERLOGIN, font=@TFont(size=10))
+	@TLabel(text=TUsualKey.LOGIN, font=@TFont(size=10))
 	@TTextField(maxLength=100, required=true)
 	private SimpleStringProperty login;
 	
-	@TLabel(text=ToolsKey.PASSWORD, font=@TFont(size=10))
+	@TLabel(text=TUsualKey.PASSWORD, font=@TFont(size=10))
 	@TPasswordField(required=true,
 		node=@TNode(focusedProperty=@TReadOnlyBooleanProperty(
 				observableValue=@TObservableValue(addListener=TEncriptPasswordChangeListener.class), 

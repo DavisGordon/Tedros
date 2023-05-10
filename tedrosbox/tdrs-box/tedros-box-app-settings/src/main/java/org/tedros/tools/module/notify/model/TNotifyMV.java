@@ -85,9 +85,9 @@ import javafx.scene.layout.Priority;
 paginator=@TPaginator(entityClass = TNotify.class, 
 		serviceName = TNotifyController.JNDI_NAME, 
 		searchFieldName="subject", modelViewClass=TNotifyMV.class, 
-		orderBy= {@TOption(text = ToolsKey.SUBJECT, value = "subject"), 
-				@TOption(text = ToolsKey.SEND_TO, value = "to"), 
-				@TOption(text = ToolsKey.CALLED_BY, value = "calledBy") },
+		orderBy= {@TOption(text = TUsualKey.SUBJECT, value = "subject"), 
+				@TOption(text = TUsualKey.SEND_TO, value = "to"), 
+				@TOption(text = TUsualKey.CALLED_BY, value = "calledBy") },
 		showSearchField=true,
 		show=true),
 		presenter=@TPresenter(decorator = @TDecorator(viewTitle=ToolsKey.VIEW_NOTIFY,
@@ -103,11 +103,11 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 	
 	@TTabPane(tabs = { 
 		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"text"})),
-			scroll=true, text = ToolsKey.MAIN_DATA),
+			scroll=true, text = TUsualKey.MAIN_DATA),
 		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"file"})),
-			scroll=true, text = ToolsKey.ATTACH_FILE),
+			scroll=true, text = TUsualKey.ATTACH_FILE),
 		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"eventLog"})),
-			text = ToolsKey.EVENT_LOG)
+			text = TUsualKey.EVENT_LOG)
 	})
 	private SimpleStringProperty display;
 
@@ -116,7 +116,7 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 					@TPriority(field="content", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty text;
 	
-	@TLabel(text=ToolsKey.REF_CODE)
+	@TLabel(text=TUsualKey.REF_CODE)
 	@TShowField
 	@TVBox(	pane=@TPane(children={"refCode","subject","to","action","scheduleTime","state","processedTime"}), spacing=10, fillWidth=true,
 	vgrow=@TVGrow(priority={@TPriority(field="refCode", priority=Priority.ALWAYS), 
@@ -128,35 +128,35 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 						@TPriority(field="processedTime", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty refCode;
 	
-	@TLabel(text=ToolsKey.SUBJECT)
+	@TLabel(text=TUsualKey.SUBJECT)
 	@TTextField(maxLength=120, 
 	node=@TNode(requestFocus=true, parse = true),
 	required=true)
 	private SimpleStringProperty subject;
 	
-	@TLabel(text=ToolsKey.SEND_TO)
+	@TLabel(text=TUsualKey.SEND_TO)
 	@TTextField(maxLength=400, required=true)
 	private SimpleStringProperty to;
 	
-	@TLabel(text=ToolsKey.ACTION)
+	@TLabel(text=TUsualKey.ACTION)
 	@TVerticalRadioGroup(required=true,
 		converter=@TConverter(parse = true, type = ActionConverter.class),
-		radioButtons = { @TRadioButton(text = ToolsKey.NONE, userData = ToolsKey.NONE ),
-				@TRadioButton(text = ToolsKey.NONE, userData = ToolsKey.SEND ),
-				@TRadioButton(text = ToolsKey.TO_QUEUE, userData = ToolsKey.TO_QUEUE ),
-				@TRadioButton(text = ToolsKey.TO_SCHEDULE, userData = ToolsKey.TO_SCHEDULE ) 
+		radioButtons = { @TRadioButton(text = TUsualKey.NONE, userData = TUsualKey.NONE ),
+				@TRadioButton(text = TUsualKey.NONE, userData = TUsualKey.SEND ),
+				@TRadioButton(text = TUsualKey.TO_QUEUE, userData = TUsualKey.TO_QUEUE ),
+				@TRadioButton(text = TUsualKey.TO_SCHEDULE, userData = TUsualKey.TO_SCHEDULE ) 
 		})
 	private SimpleObjectProperty<TAction> action;
 	
-	@TLabel(text=ToolsKey.SCHEDULE_DATE_TIME)
+	@TLabel(text=TUsualKey.SCHEDULE_DATE_TIME)
 	@TDatePickerField(dateFormat=DateTimeFormatBuilder.class)
 	private SimpleObjectProperty<Date> scheduleTime;
 	
-	@TLabel(text=ToolsKey.STATE)
+	@TLabel(text=TUsualKey.STATE)
 	@TShowField()
 	private SimpleObjectProperty<TState> state;
 
-	@TLabel(text=ToolsKey.DATE_PROCESSED)
+	@TLabel(text=TUsualKey.DATE_PROCESSED)
 	@TShowField(fields= {@TField(pattern=TDateUtil.DDMMYYYY_HHMM)})
 	private SimpleObjectProperty<Date> processedTime;
 	
@@ -194,10 +194,10 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 		@TTableColumn(text = TUsualKey.DATE_INSERT, cellValue="insertDate", 
 				cellFactory=@TCellFactory(parse = true, 
 				callBack=@TCallbackFactory(parse=true, value=TMediumDateTimeCallback.class))), 
-		@TTableColumn(text = ToolsKey.STATE, cellValue="state",
+		@TTableColumn(text = TUsualKey.STATE, cellValue="state",
 				cellFactory=@TCellFactory(parse = true, 
 				callBack=@TCallbackFactory(parse=true, value=TNotifyLogStateCallBack.class))),
-		@TTableColumn(text = ToolsKey.DESCRIPTION, cellValue="description")
+		@TTableColumn(text = TUsualKey.DESCRIPTION, cellValue="description")
 	})
 	@TModelViewType(modelClass = TNotifyLog.class, modelViewClass=TNotifyLogTV.class)
 	private ITObservableList<TNotifyLogTV> eventLog;

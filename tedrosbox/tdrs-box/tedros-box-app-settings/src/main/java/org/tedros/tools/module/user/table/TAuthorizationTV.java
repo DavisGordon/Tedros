@@ -9,12 +9,12 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.tedros.core.TLanguage;
 import org.tedros.core.controller.TAuthorizationController;
 import org.tedros.core.security.model.TAuthorization;
+import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TLabelDefaultSetting;
 import org.tedros.fx.annotation.control.TTableColumn;
 import org.tedros.fx.annotation.control.TTableView;
 import org.tedros.fx.annotation.control.TTextField;
-import org.tedros.fx.annotation.control.TTextInputControl;
 import org.tedros.fx.annotation.layout.THBox;
 import org.tedros.fx.annotation.layout.THGrow;
 import org.tedros.fx.annotation.layout.TPane;
@@ -23,13 +23,12 @@ import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.presenter.TSelectionModalPresenter;
-import org.tedros.fx.annotation.reader.TReader;
-import org.tedros.fx.annotation.scene.control.TControl;
 import org.tedros.fx.annotation.text.TFont;
 import org.tedros.fx.annotation.view.TPaginator;
 import org.tedros.fx.presenter.modal.behavior.TSelectionModalBehavior;
 import org.tedros.fx.presenter.modal.decorator.TSelectionModalDecorator;
 import org.tedros.fx.presenter.model.TEntityModelView;
+import org.tedros.tools.ToolsKey;
 
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
@@ -46,45 +45,38 @@ import javafx.scene.layout.Priority;
 			serviceName = TAuthorizationController.JNDI_NAME),
 		presenter=@TPresenter(behavior = @TBehavior(type = TSelectionModalBehavior.class), 
 			decorator = @TDecorator(type=TSelectionModalDecorator.class, 
-			viewTitle="#{security.authorization.form.name}")),
+			viewTitle=ToolsKey.SECURITY_AUTHORIZATION_FORM_NAME)),
 		tableView=@TTableView(editable=true, 
-			columns = {  @TTableColumn(cellValue="securityId", text = "#{label.securityId}", prefWidth=30, resizable=true), 
-						@TTableColumn(cellValue="appName", text = "#{label.appName}", prefWidth=30, resizable=true), 
-						@TTableColumn(cellValue="moduleName", text = "#{label.moduleName}", prefWidth=40, resizable=true),
-						@TTableColumn(cellValue="viewName", text = "#{label.viewName}", prefWidth=40, resizable=true), 
-						@TTableColumn(cellValue="typeDescription", text = "#{label.permission}",  resizable=true)}), 
+			columns = {  @TTableColumn(cellValue="securityId", text = TUsualKey.SECURITYID, prefWidth=30, resizable=true), 
+						@TTableColumn(cellValue="appName", text = TUsualKey.APP, prefWidth=30, resizable=true), 
+						@TTableColumn(cellValue="moduleName", text = TUsualKey.MODULE, prefWidth=40, resizable=true),
+						@TTableColumn(cellValue="viewName", text = TUsualKey.VIEW, prefWidth=40, resizable=true), 
+						@TTableColumn(cellValue="typeDescription", text = TUsualKey.PERMISSION,  resizable=true)}), 
 		allowsMultipleSelections = true)
 public final class TAuthorizationTV extends TEntityModelView<TAuthorization> {
 	
 	private SimpleStringProperty displayText;
 	
-	@TLabel(text="#{label.securityId}")
-	@THBox(	pane=@TPane(children={"securityId","appName","moduleName","viewName"}), spacing=10, fillHeight=true,
-	hgrow=@THGrow(priority={@TPriority(field="securityId", priority=Priority.NEVER), 
-		   		@TPriority(field="appName", priority=Priority.NEVER),
-		   		@TPriority(field="moduleName", priority=Priority.ALWAYS), 
-			   		@TPriority(field="viewName", priority=Priority.ALWAYS)}))
+	@TLabel(text=TUsualKey.SECURITYID)
+	@TTextField(maxLength=200, required = false)
+	@THBox(	pane=@TPane(children={"securityId","appName"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="securityId", priority=Priority.ALWAYS), 
+		   		@TPriority(field="appName", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty securityId;
 	
-	@TReader
-	@TLabel(text="#{label.appName}")
-	@TTextField(maxLength=60, required = false, 
-	textInputControl=@TTextInputControl(promptText="#{label.appName}", parse = true), 
-	control=@TControl(tooltip="#{label.appName}", parse = true))
+	@TLabel(text=TUsualKey.APP)
+	@TTextField(maxLength=60, required = false)
 	private SimpleStringProperty appName;
 	
-	@TReader
-	@TLabel(text="#{label.moduleName}")
-	@TTextField(maxLength=60, required = false, 
-	textInputControl=@TTextInputControl(promptText="#{label.moduleName}", parse = true), 
-	control=@TControl(tooltip="#{label.moduleName}", parse = true))
+	@TLabel(text=TUsualKey.MODULE)
+	@TTextField(maxLength=60, required = false)
+	@THBox(	pane=@TPane(children={"moduleName","viewName"}), spacing=10, fillHeight=true,
+	hgrow=@THGrow(priority={@TPriority(field="moduleName", priority=Priority.ALWAYS), 
+			   		@TPriority(field="viewName", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty moduleName;
 	
-	@TReader
-	@TLabel(text="#{label.viewName}")
-	@TTextField(maxLength=60, required = false, 
-	textInputControl=@TTextInputControl(promptText="#{label.viewName}", parse = true), 
-	control=@TControl(tooltip="#{label.viewName}", parse = true))
+	@TLabel(text=TUsualKey.VIEW)
+	@TTextField(maxLength=60, required = false)
 	private SimpleStringProperty viewName;
 	
 	private SimpleStringProperty typeDescription;

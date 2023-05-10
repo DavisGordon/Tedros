@@ -9,6 +9,7 @@ import org.tedros.core.annotation.security.TSecurity;
 import org.tedros.core.controller.TPropertieController;
 import org.tedros.core.domain.DomainApp;
 import org.tedros.core.setting.model.TPropertie;
+import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.control.TFileField;
 import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TModelViewType;
@@ -66,7 +67,7 @@ public class TPropertieMV extends TEntityModelView<TPropertie> {
 	private SimpleStringProperty header;
 	
 	@TReaderHtml
-	@TLabel(text=ToolsKey.NAME)
+	@TLabel(text=TUsualKey.NAME)
 	@TTextField(maxLength=40, required=true)
 	@TVBox(	pane=@TPane(children={"name","key"}), spacing=10, fillWidth=true,
 	vgrow=@TVGrow(priority={@TPriority(field="name", priority=Priority.ALWAYS), 
@@ -74,12 +75,12 @@ public class TPropertieMV extends TEntityModelView<TPropertie> {
 	private SimpleStringProperty name;
 	
 	@TReaderHtml
-	@TLabel(text=ToolsKey.KEY)
+	@TLabel(text=TUsualKey.KEY)
 	@TTextField(maxLength=25, required=true)
 	private SimpleStringProperty key;
 	
 	@TReaderHtml
-	@TLabel(text=ToolsKey.DESCRIPTION)
+	@TLabel(text=TUsualKey.DESCRIPTION)
 	@TTextAreaField(maxLength=500, wrapText=true, prefRowCount=2)
 	@TVBox(	pane=@TPane(children={"description", "value"}), spacing=10, fillWidth=true,
 	vgrow=@TVGrow(priority={@TPriority(field="value", priority=Priority.ALWAYS), 
@@ -87,11 +88,11 @@ public class TPropertieMV extends TEntityModelView<TPropertie> {
 	private SimpleStringProperty description;
 	
 	@TReaderHtml
-	@TLabel(text=ToolsKey.VALUE)
+	@TLabel(text=TUsualKey.VALUE)
 	@TTextAreaField(wrapText=true, prefRowCount=2)
 	private SimpleStringProperty value;
 	
-	@TLabel(text=ToolsKey.FILE)
+	@TLabel(text=TUsualKey.FILE)
 	@TFileField(propertyValueType=TFileModelType.ENTITY, preLoadFileBytes=true,
 	extensions= {TFileExtension.ALL_FILES}, showFilePath=true, showImage=true)
 	@TModelViewType(modelClass=TFileEntity.class)

@@ -5,6 +5,7 @@ package org.tedros.tools.module.scheme.model;
 
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.style.TStyleResourceValue;
+import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.control.TColorPickerField;
 import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TSliderField;
@@ -49,21 +50,21 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 	@TAccordion(node=@TNode(parse = true, 
 			styleClass=@TObservableListProperty(addAll="t-accordion", parse=true)),
 			panes={
-					@TTitledPane(text=ToolsKey.MAIN_TITLE, fields={"mainCorTexto", "mainCorFundo","mainOpacidade"}),
-					@TTitledPane(text=ToolsKey.NAV_TITLE, fields={"navCorTexto", "navCorFundo","navOpacidade"}),
-					@TTitledPane(text=ToolsKey.APP_TITLE, fields={ "appCorTexto", "appTamTexto" })
+					@TTitledPane(text=TUsualKey.MAIN_TITLE, fields={"mainCorTexto", "mainCorFundo","mainOpacidade"}),
+					@TTitledPane(text=TUsualKey.NAV_TITLE, fields={"navCorTexto", "navCorFundo","navOpacidade"}),
+					@TTitledPane(text=TUsualKey.APP_TITLE, fields={ "appCorTexto", "appTamTexto"})
 			})
-	@TLabel(text=ToolsKey.TEXT, position=TLabelPosition.LEFT, control=@TControl(parse = true, prefWidth=80))
+	@TLabel(text=TUsualKey.TEXT, position=TLabelPosition.LEFT, control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
 	@TTrigger(triggerClass=TMainColorTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> mainCorTexto;
 	
-	@TLabel(text=ToolsKey.BACKGROUND, position=TLabelPosition.LEFT, control=@TControl(parse = true, prefWidth=80))
+	@TLabel(text=TUsualKey.BACKGROUND, position=TLabelPosition.LEFT, control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
 	@TTrigger(triggerClass=TMainColorTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> mainCorFundo;
 	
-	@TLabel(text=ToolsKey.OPACITY)
+	@TLabel(text=TUsualKey.OPACITY)
 	@TSliderField(max = 1, min = 0,
 		majorTickUnit=0.5, blockIncrement=0.01,
 		minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
@@ -73,17 +74,17 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 	
 	// nav bar
 	
-	@TLabel(text=ToolsKey.TEXT, position=TLabelPosition.LEFT, control=@TControl(parse = true, prefWidth=80))
+	@TLabel(text=TUsualKey.TEXT, position=TLabelPosition.LEFT, control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
 	@TTrigger(triggerClass=TMainColorTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> navCorTexto;
 	
-	@TLabel(text=ToolsKey.BACKGROUND, position=TLabelPosition.LEFT, control=@TControl(parse = true, prefWidth=80))
+	@TLabel(text=TUsualKey.BACKGROUND, position=TLabelPosition.LEFT, control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
 	@TTrigger(triggerClass=TMainColorTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> navCorFundo;
 	
-	@TLabel(text=ToolsKey.OPACITY)
+	@TLabel(text=TUsualKey.OPACITY)
 	@TSliderField(max = 1, min = 0,
 		majorTickUnit=0.5, blockIncrement=0.01,
 		minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
@@ -91,12 +92,12 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 	@TTrigger(triggerClass=TMainColorTrigger.class, mode=TViewMode.EDIT)
 	private SimpleDoubleProperty navOpacidade;
 	
-	@TLabel(text=ToolsKey.TEXT, position=TLabelPosition.LEFT, control=@TControl(parse = true, prefWidth=80))
+	@TLabel(text=TUsualKey.TEXT, position=TLabelPosition.LEFT, control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
 	@TTrigger(triggerClass=TMainColorTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> appCorTexto;
 	
-	@TLabel(text=ToolsKey.FONT)
+	@TLabel(text=TUsualKey.FONT)
 	@TSliderField(max = 2, min = 0.8,
 		majorTickUnit=0.5, blockIncrement=0.01,
 		minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 

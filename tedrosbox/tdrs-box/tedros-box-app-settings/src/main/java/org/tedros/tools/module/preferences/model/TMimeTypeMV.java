@@ -8,6 +8,7 @@ import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.annotation.security.TSecurity;
 import org.tedros.core.controller.TMimeTypeController;
 import org.tedros.core.domain.DomainApp;
+import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TTextAreaField;
 import org.tedros.fx.annotation.control.TTextField;
@@ -46,19 +47,19 @@ import javafx.beans.property.SimpleStringProperty;
 public class TMimeTypeMV extends TEntityModelView<TMimeType> {
 	
 	@TReaderHtml
-	@TLabel(text=ToolsKey.MIMETYPE_EXT)
+	@TLabel(text=TUsualKey.MIMETYPE_EXT)
 	@TTextField(maxLength=10, 
 	node=@TNode(requestFocus=true, parse = true),
 	required=true)
 	private SimpleStringProperty extension;
 	
 	@TReaderHtml
-	@TLabel(text=ToolsKey.MIMETYPE_TYPE)
+	@TLabel(text=TUsualKey.MIMETYPE_TYPE)
 	@TTextField(maxLength=500, required=true)
 	private SimpleStringProperty type;
 	
 	@TReaderHtml
-	@TLabel(text=ToolsKey.DESCRIPTION)
+	@TLabel(text=TUsualKey.DESCRIPTION)
 	@TTextAreaField(maxLength=500, wrapText=true, prefRowCount=4)
 	private SimpleStringProperty description;
 

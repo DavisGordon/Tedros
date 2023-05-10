@@ -11,6 +11,7 @@ import org.tedros.core.annotation.security.TSecurity;
 import org.tedros.core.controller.TAuthorizationController;
 import org.tedros.core.domain.DomainApp;
 import org.tedros.core.security.model.TAuthorization;
+import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.control.THorizontalRadioGroup;
 import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TRadioButton;
@@ -49,7 +50,7 @@ import javafx.scene.layout.Priority;
 	paginator=@TPaginator(entityClass = TAuthorization.class, 
 	serviceName = TAuthorizationController.JNDI_NAME, show=true),
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle=ToolsKey.VIEW_AUTHORIZATION, 
-		 buildDeleteButton=false, buildCollapseButton=false, newButtonText=ToolsKey.LOAD),
+		 buildDeleteButton=false, buildCollapseButton=false, newButtonText=TUsualKey.LOAD),
 	behavior=@TBehavior(type=TAuthorizationBehavior.class, action=TAuthorizationLoadAction.class)
 	))
 @TSecurity(	id=DomainApp.AUTHORIZATION_FORM_ID, 
@@ -63,7 +64,7 @@ public final class TAuthorizationMV extends TEntityModelView<TAuthorization> {
 	private SimpleStringProperty displayText;
 	
 	@TReaderHtml
-	@TLabel(text=ToolsKey.SECURITYID)
+	@TLabel(text=TUsualKey.SECURITYID)
 	@THBox(	pane=@TPane(children={"securityId","appName","moduleName","viewName"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="securityId", priority=Priority.NEVER), 
 		   		@TPriority(field="appName", priority=Priority.NEVER),
@@ -73,22 +74,22 @@ public final class TAuthorizationMV extends TEntityModelView<TAuthorization> {
 	private SimpleStringProperty securityId;
 	
 	@TReaderHtml
-	@TLabel(text=ToolsKey.APPNAME)
+	@TLabel(text=TUsualKey.APP)
 	@TShowField
 	private SimpleStringProperty appName;
 	
 	@TReaderHtml
-	@TLabel(text=ToolsKey.MODULENAME)
+	@TLabel(text=TUsualKey.MODULE)
 	@TShowField
 	private SimpleStringProperty moduleName;
 	
 	@TReaderHtml
-	@TLabel(text=ToolsKey.VIEWNAME)
+	@TLabel(text=TUsualKey.VIEW)
 	@TShowField
 	private SimpleStringProperty viewName;
 	
 	@TReaderHtml
-	@TLabel(text=ToolsKey.TYPE)
+	@TLabel(text=TUsualKey.TYPE)
 	@TShowField
 	@THBox(	pane=@TPane(children={"type","typeDescription"}), spacing=10, fillHeight=true,
 			hgrow=@THGrow(priority={@TPriority(field="type", priority=Priority.NEVER), 
@@ -97,15 +98,15 @@ public final class TAuthorizationMV extends TEntityModelView<TAuthorization> {
 	private SimpleStringProperty type;
 	
 	@TReaderHtml
-	@TLabel(text=ToolsKey.PERMISSION)
+	@TLabel(text=TUsualKey.PERMISSION)
 	@TShowField
 	private SimpleStringProperty typeDescription;
 	
 	@TReaderHtml
-	@TLabel(text=ToolsKey.ENABLED, position=TLabelPosition.LEFT)
+	@TLabel(text=TUsualKey.ENABLED, position=TLabelPosition.LEFT)
 	@THorizontalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
-	radioButtons = {@TRadioButton(text=ToolsKey.YES, userData="S"), 
-					@TRadioButton(text=ToolsKey.NO, userData="N")
+	radioButtons = {@TRadioButton(text=TUsualKey.YES, userData="S"), 
+					@TRadioButton(text=TUsualKey.NO, userData="N")
 	})
 	private SimpleStringProperty enabled;
 

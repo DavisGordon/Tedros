@@ -100,7 +100,6 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleMV, Exampl
 			String g = String.valueOf(rgb.getGreen());
 			String b = String.valueOf(rgb.getBlue());
 			
-			
 			TFieldSet fieldSet = (TFieldSet) node;
 			StringBuilder strBuilder = new StringBuilder("-fx-background-color: rgba("+r+","+g+","+b+",1); ");
 			strBuilder.append("-fx-padding: 0 0 5 0;");
@@ -249,7 +248,16 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleMV, Exampl
 		applyFormStyle(opacity, r, g, b);
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void applyFormStyle(String value, String r, String g, String b) {
+		final ITModelForm<ExampleMV> form = getForm();
+		Node node = ((TDefaultForm<ExampleMV>) ((TProgressIndicatorForm) form).gettForm()).lookup("#t-fieldbox-info");
+		if(node!=null) {
+			String s = "-fx-background-color: rgba("+r+","+g+","+b+","+value.replaceAll(",", ".")+"); "+
+								"-fx-padding: 8 8 8 8; " + 
+								"-fx-background-radius: 10 10 10 10;";
+			node.setStyle(s);
+		}
 		((Node)getForm()).setStyle("-fx-background-color: rgba("+r+","+g+","+b+","+value.replaceAll(",", ".")+");");
 	}
 	
