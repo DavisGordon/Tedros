@@ -188,16 +188,17 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		Object[] arr = new Object[] {};
 		for(ObservableValue<?> f : fields) {
 			Object o = f.getValue();
-			if(o instanceof String && TStripTagUtil.isTagPresent((String) o))
+			/*if(o instanceof String && TStripTagUtil.isTagPresent((String) o))
 				arr = ArrayUtils.add(arr, TLanguage.getInstance().getString((String) o));
-			else if(o instanceof Date) {
+			else*/ 
+			if(o instanceof Date) {
 				Calendar cal = Calendar.getInstance();
 				cal.setTime((Date) o);
 				arr = ArrayUtils.add(arr, cal);
 			}else
 				arr = ArrayUtils.add(arr, o!=null ? o : "");
 		}
-		toStringProperty().setValue(String.format(format, arr));
+		toStringProperty().setValue(TLanguage.getInstance().getString(String.format(format, arr)));
 	}
 	
 	/**

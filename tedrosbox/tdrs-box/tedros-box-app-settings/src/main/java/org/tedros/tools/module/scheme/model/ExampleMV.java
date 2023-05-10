@@ -3,6 +3,7 @@ package org.tedros.tools.module.scheme.model;
 
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.TBooleanValues;
 import org.tedros.fx.annotation.control.TCheckBoxField;
 import org.tedros.fx.annotation.control.TFieldBox;
@@ -32,6 +33,7 @@ import org.tedros.fx.domain.TLabelPosition;
 import org.tedros.fx.domain.TZeroValidation;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.model.TEntityModelView;
+import org.tedros.tools.ToolsKey;
 import org.tedros.tools.module.scheme.behaviour.ExampleBehavior;
 import org.tedros.tools.module.scheme.decorator.ExampleDecorator;
 
@@ -43,45 +45,56 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
 
-@TLabelDefaultSetting(wrapText=false, position = TLabelPosition.TOP, node=@TNode(id="t-form-control-label", parse = true))
-@TPresenter(behavior=@TBehavior(type = ExampleBehavior.class), decorator=@TDecorator(type=ExampleDecorator.class, viewTitle="#{label.paineltitle}"), type = TDynaPresenter.class, modelClass = Example.class)
+@TLabelDefaultSetting(wrapText=false, position = TLabelPosition.TOP, 
+	node=@TNode(id="t-form-control-label", parse = true))
+@TPresenter(
+		behavior=@TBehavior(type = ExampleBehavior.class), 
+		decorator=@TDecorator(type=ExampleDecorator.class, 
+			viewTitle=ToolsKey.VIEW_EXAMPLE_PANEL), type = TDynaPresenter.class, modelClass = Example.class)
 public class ExampleMV extends TEntityModelView<Example> {
 	
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text="Example form", textAlignment=TextAlignment.LEFT, 
+	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id=TFieldBox.INFO, parse = true))
+	@TText(text=ToolsKey.TEXT_EXAMPLE_TITLE, textAlignment=TextAlignment.LEFT, 
 	textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty text;
 	
 	@TReader
-	@TLabel(text="Code:")
-	@TLongField(zeroValidation=TZeroValidation.GREATHER_THAN_ZERO, maxLength=3,	control=@TControl(maxSize=@TSize(width=100, height=30), parse = true), textInputControl=@TTextInputControl(editable=false, parse = true))
+	@TLabel(text=TUsualKey.CODE)
+	@TLongField(zeroValidation=TZeroValidation.GREATHER_THAN_ZERO, maxLength=3,	
+	control=@TControl(maxSize=@TSize(width=100, height=30), parse = true), 
+	textInputControl=@TTextInputControl(editable=false, parse = true))
 	@THBox(	pane=@TPane(children={"id","longField"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="id", priority=Priority.ALWAYS), 
    				   		@TPriority(field="longField", priority=Priority.ALWAYS) }))
 	private SimpleLongProperty id;
 	
 	@TReader
-	@TLabel(text="Age:", font=@TFont(size=56), control=@TControl(prefWidth=500, parse = true))
-	@TLongField(zeroValidation=TZeroValidation.GREATHER_THAN_ZERO, maxLength=3,	control=@TControl(maxSize=@TSize(width=100, height=30), parse = true))
+	@TLabel(text=TUsualKey.AMOUNT, font=@TFont(size=56), control=@TControl(prefWidth=500, parse = true))
+	@TLongField(zeroValidation=TZeroValidation.GREATHER_THAN_ZERO, maxLength=3,	
+	control=@TControl(maxSize=@TSize(width=100, height=30), parse = true))
 	private SimpleLongProperty longField;
 	
 	@TReader
-	@TLabel(text="Name:", control=@TControl(prefWidth=500, parse = true))
-	@TTextField(textInputControl=@TTextInputControl(promptText="Name", parse = true), control=@TControl(tooltip="Name", parse = true), required=true, maxLength=20)
-	@TFieldSet(fields = { "stringField", "textField", "booleanField" }, legend = "FieldSet")
+	@TLabel(text=TUsualKey.NAME, control=@TControl(prefWidth=500, parse = true))
+	@TTextField(textInputControl=@TTextInputControl(promptText=TUsualKey.NAME, parse = true), 
+	control=@TControl(tooltip=TUsualKey.NAME, parse = true), required=true, maxLength=20)
+	@TFieldSet(fields = { "stringField", "textField", "booleanField" }, legend = TUsualKey.MAIN_TITLE)
 	@TFieldBox(node=@TNode(id="stringField-fieldSet", parse=true))
 	private SimpleStringProperty stringField;
 	
 	@TReader(wrappingWidth=600)
-	@TLabel(text="About:", control=@TControl(prefWidth=500, parse = true))
-	@TTextAreaField(textInputControl=@TTextInputControl(promptText="About", parse = true), 
-	control=@TControl(tooltip="Digite um texto", parse = true), prefColumnCount=25, prefRowCount=2, 
+	@TLabel(text=TUsualKey.DESCRIPTION, control=@TControl(prefWidth=500, parse = true))
+	@TTextAreaField(textInputControl=@TTextInputControl(promptText=TUsualKey.DESCRIPTION, parse = true), 
+	control=@TControl(tooltip=TUsualKey.DESCRIPTION, parse = true), prefColumnCount=25, prefRowCount=2, 
 	required=true, wrapText=true)
 	private SimpleStringProperty textField;
 
-	@TReader(label=@TLabel(text="Check"), booleanValues=@TBooleanValues(falseValue="No", trueValue="Yes"))
-	@TLabel(text="Check")
-	@TCheckBoxField(labeled=@TLabeled(text="Yes", parse = true), control=@TControl(tooltip="Check", parse = true), required=true)
+	@TReader(label=@TLabel(text=TUsualKey.ENABLE), 
+			booleanValues=@TBooleanValues(
+					falseValue=TUsualKey.NO, 
+					trueValue=TUsualKey.YES))
+	@TLabel(text=TUsualKey.ENABLE)
+	@TCheckBoxField(labeled=@TLabeled(text=TUsualKey.YES, parse = true), required=true)
 	private SimpleBooleanProperty booleanField;
 	
 	public ExampleMV(){

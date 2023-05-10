@@ -7,6 +7,7 @@ import org.tedros.common.model.TFileEntity;
 import org.tedros.common.model.TMimeType;
 import org.tedros.common.model.TMimeTypeImport;
 import org.tedros.core.controller.TMimeTypeImportController;
+import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.control.TFieldBox;
 import org.tedros.fx.annotation.control.TFileField;
 import org.tedros.fx.annotation.control.TLabel;
@@ -58,7 +59,7 @@ public class TMimeTypeImportMV extends TImportModelView<TMimeTypeImport> {
 	@TReaderHtml
 	private SimpleStringProperty rules;
 	
-	@TLabel(text=ToolsKey.FILE)
+	@TLabel(text=TUsualKey.FILE)
 	@TFileField(propertyValueType=TFileModelType.ENTITY, 
 	initialDirectory=TFileField.TEDROS_MODULE+TConstant.UUI,
 	extensions= {TFileExtension.CSV}, moreExtensions= {"*.xls", "*.xlsx"},

@@ -1,5 +1,6 @@
 package org.tedros.tools.module.scheme.decorator;
 
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
@@ -25,7 +26,7 @@ public class TPanelDecorator extends TDynaViewCrudBaseDecorator<TPanelMV>
 		exampleView.tLoad();
 		
 		setViewTitle(ToolsKey.VIEW_COLORS);
-		buildSaveButton(ToolsKey.BUTTON_APPLY);
+		buildSaveButton(TFxKey.BUTTON_APPLY);
 		
 		// add the buttons at the header tool bar
 		addItemInTHeaderToolBar(gettSaveButton());

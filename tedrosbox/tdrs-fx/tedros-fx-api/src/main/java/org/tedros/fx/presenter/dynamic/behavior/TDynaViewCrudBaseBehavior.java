@@ -579,7 +579,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		if(this.actionHelper.runBefore(TActionType.SAVE)){
 			try{
 				boolean flag = true;
-				boolean runNewAction = ((ITEntity)this.getModelView().getModel()).isNew() && this.runNewActionAfterSave;
+				ITModel model = this.getModelView().getModel();
+				boolean runNewAction = model instanceof ITEntity 
+						? ((ITEntity)model).isNew() && this.runNewActionAfterSave 
+								: this.runNewActionAfterSave;
 				Consumer<Boolean> finishCallback = finished ->{
 					if(finished) {
 						if(runNewAction) {

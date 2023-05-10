@@ -48,6 +48,7 @@ public class TProgressIndicatorForm<M extends ITModelView<?>> extends StackPane 
 	
 	public TProgressIndicatorForm(ITModelForm<M> form) {
 		this.form = form;
+		this.pIndicator.setSmallLogo();
 		if(form.isLoaded())
 			getChildren().add((Node) form);
 		else {

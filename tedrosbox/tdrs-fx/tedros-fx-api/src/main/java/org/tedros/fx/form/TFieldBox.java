@@ -28,6 +28,14 @@ import javafx.scene.layout.VBox;
  * */
 public class TFieldBox extends StackPane implements ITField, ITFieldBox {
 
+	final static String DEFAULT = "t-fieldbox";
+	final static String MESSAGE = "t-fieldbox-message";
+	final static String INFO = "t-fieldbox-info";
+	final static String TITLE = "t-fieldbox-title";
+	final static String FIRST = "t-fieldbox-hsplit-first";
+	final static String MIDDLE = "t-fieldbox-hsplit-middle";
+	final static String LAST = "t-fieldbox-hsplit-last";
+	
 	private Node label;
 	private Node control;
 	private String controlFieldName;
@@ -40,7 +48,7 @@ public class TFieldBox extends StackPane implements ITField, ITFieldBox {
 		this.controlFieldName = controlFieldName;
 		this.label = label;
 		this.control = control;
-		setId("t-fieldbox");
+		setId(DEFAULT);
 		if(this.label==null && control==null)
 			return;
 		

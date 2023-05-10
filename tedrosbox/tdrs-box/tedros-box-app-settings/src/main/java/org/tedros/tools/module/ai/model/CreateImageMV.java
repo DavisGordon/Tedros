@@ -92,7 +92,7 @@ public class CreateImageMV extends TEntityModelView<TAiCreateImage> {
 						fields={"images"})),
 			scroll=true),
 		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"events"})),
-			text = ToolsKey.EVENT_LOG)
+			text = TUsualKey.EVENT_LOG)
 	}, region=@TRegion(minHeight=380, maxHeight=380, parse = true))
 	private SimpleStringProperty title;
 	
@@ -112,7 +112,7 @@ public class CreateImageMV extends TEntityModelView<TAiCreateImage> {
 			@TPriority(field="size", priority=Priority.ALWAYS)}))
 	private SimpleObjectProperty<TImageSize> size;
 	
-	@TLabel(text=ToolsKey.QUANTITY)
+	@TLabel(text=TUsualKey.QUANTITY)
 	@TNumberSpinnerField(maxValue = 10, minValue=1)
 	private SimpleIntegerProperty quantity;
 	
@@ -132,8 +132,8 @@ public class CreateImageMV extends TEntityModelView<TAiCreateImage> {
 		@TTableColumn(text = TUsualKey.DATE_INSERT, cellValue="insertDate", 
 				cellFactory=@TCellFactory(parse = true, 
 				callBack=@TCallbackFactory(parse=true, value=TMediumDateTimeCallback.class))), 
-		@TTableColumn(text = ToolsKey.PROMPT, cellValue="prompt"),
-		@TTableColumn(text = ToolsKey.EVENT_LOG, cellValue="log")
+		@TTableColumn(text = TUsualKey.PROMPT, cellValue="prompt"),
+		@TTableColumn(text = TUsualKey.EVENT_LOG, cellValue="log")
 	})
 	@TModelViewType(modelClass = TRequestEvent.class, modelViewClass=EventMV.class)
 	private ITObservableList<EventMV> events;

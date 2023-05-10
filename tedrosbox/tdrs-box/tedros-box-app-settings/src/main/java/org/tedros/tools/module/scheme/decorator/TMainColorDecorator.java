@@ -1,10 +1,11 @@
 package org.tedros.tools.module.scheme.decorator;
 
 import org.tedros.core.TLanguage;
+import org.tedros.fx.TFxKey;
+import org.tedros.fx.TUsualKey;
 import org.tedros.fx.control.TComboBoxField;
 import org.tedros.fx.control.TLabel;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
-import org.tedros.tools.ToolsKey;
 import org.tedros.tools.module.scheme.model.TMainColorMV;
 import org.tedros.tools.module.scheme.template.TemplatePane;
 
@@ -26,14 +27,14 @@ public class TMainColorDecorator extends TDynaViewCrudBaseDecorator<TMainColorMV
 		
 		try {
 			setViewTitle(null);
-			buildSaveButton(ToolsKey.BUTTON_APPLY);
+			buildSaveButton(TFxKey.BUTTON_APPLY);
 			
 			themes = new TComboBoxField<>();
 			// add the buttons at the header tool bar
 			addItemInTHeaderToolBar(gettSaveButton());
 			Region space = new Region();
 			HBox.setHgrow(space, Priority.ALWAYS);
-			TLabel l = new TLabel(TLanguage.getInstance(null).getString(ToolsKey.THEME+": "));
+			TLabel l = new TLabel(TLanguage.getInstance(null).getString(TUsualKey.THEME+": "));
 			super.addItemInTHeaderHorizontalLayout(space,l, themes);
 			
 			

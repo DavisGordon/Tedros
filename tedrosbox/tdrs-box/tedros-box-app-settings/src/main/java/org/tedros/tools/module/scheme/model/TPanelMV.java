@@ -2,6 +2,7 @@ package org.tedros.tools.module.scheme.model;
 
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.style.TStyleResourceValue;
+import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.control.TCheckBoxField;
 import org.tedros.fx.annotation.control.TColorPickerField;
 import org.tedros.fx.annotation.control.TLabel;
@@ -58,14 +59,14 @@ public class TPanelMV extends TModelView<TPanel> {
 					@TTitledPane(text=ToolsKey.SETTINGS_LAYOUT_FORM, fields={"formCorFundo", "formOpacidade"}),
 					@TTitledPane(text=ToolsKey.SETTINGS_LAYOUT_READER, fields={"readerCorTituloCampo", "readerCorTexto", "readerCorFundo"})
 			})
-	@TLabel(text=ToolsKey.TEXT, 
+	@TLabel(text=TUsualKey.TEXT, 
 		position=TLabelPosition.LEFT, 
 		control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> painelCorTexto;
 	
-	@TLabel(text=ToolsKey.FONT)
+	@TLabel(text=TUsualKey.FONT)
 	@TSliderField(max = 2, min = 0.8,
 		majorTickUnit=0.5, blockIncrement=0.01,
 		minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
@@ -73,14 +74,14 @@ public class TPanelMV extends TModelView<TPanel> {
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleDoubleProperty painelTamTexto;
 	
-	@TLabel(text=ToolsKey.BACKGROUND, 
+	@TLabel(text=TUsualKey.BACKGROUND, 
 			position=TLabelPosition.LEFT,
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> painelCorFundo;
 	
-	@TLabel(text=ToolsKey.OPACITY)
+	@TLabel(text=TUsualKey.OPACITY)
 	@TSliderField(max = 1, min = 0,
 		majorTickUnit=0.5, blockIncrement=0.01,
 		minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
@@ -91,14 +92,14 @@ public class TPanelMV extends TModelView<TPanel> {
 	/**
 	 * Grupo customizar bot�es
 	 * */
-	@TLabel(text=ToolsKey.TEXT, 
+	@TLabel(text=TUsualKey.TEXT, 
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> botaoCorTexto;
 	
-	@TLabel(text=ToolsKey.FONT)
+	@TLabel(text=TUsualKey.FONT)
 	@TSliderField(max = 2, min = 0.8,
 		majorTickUnit=0.5, blockIncrement=0.01,
 		minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
@@ -106,21 +107,21 @@ public class TPanelMV extends TModelView<TPanel> {
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleDoubleProperty botaoTamTexto;
 	
-	@TLabel(text=ToolsKey.COLOR,
+	@TLabel(text=TUsualKey.COLOR,
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> botaoCorFundo;
 	
-	@TLabel(text=ToolsKey.BORDER, 
+	@TLabel(text=TUsualKey.BORDER, 
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> botaoCorBorda;
 	
-	@TLabel(text=ToolsKey.OPACITY)
+	@TLabel(text=TUsualKey.OPACITY)
 	@TSliderField(max = 1, min = 0,
 			majorTickUnit=0.5, blockIncrement=0.01,
 					minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
@@ -131,14 +132,14 @@ public class TPanelMV extends TModelView<TPanel> {
 	/**
 	 * Grupo customizar titulo dos campos
 	 * */
-	@TLabel(text=ToolsKey.TEXT, 
+	@TLabel(text=TUsualKey.TEXT, 
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> campoCorTitulo;
 	
-	@TLabel(text=ToolsKey.FONT)
+	@TLabel(text=TUsualKey.FONT)
 	@TSliderField(max = 2, min = 0.8,
 			majorTickUnit=0.5, blockIncrement=0.01,
 			minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
@@ -149,28 +150,28 @@ public class TPanelMV extends TModelView<TPanel> {
 	/**
 	 * Grupo customizar campo 
 	 * */
-	@TLabel(text=ToolsKey.TEXT, 
+	@TLabel(text=TUsualKey.TEXT, 
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> campoCorTexto;
 	
-	@TLabel(text=ToolsKey.BACKGROUND, 
+	@TLabel(text=TUsualKey.BACKGROUND, 
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80)) 
 	@TColorPickerField
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> campoCorFundo;
 	
-	@TLabel(text=ToolsKey.BORDER, 
+	@TLabel(text=TUsualKey.BORDER, 
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> campoCorBorda;
 	
-	@TLabel(text=ToolsKey.FONT)
+	@TLabel(text=TUsualKey.FONT)
 	@TSliderField(max = 2, min = 0.8,
 	majorTickUnit=0.5, blockIncrement=0.01,
 	minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
@@ -178,21 +179,21 @@ public class TPanelMV extends TModelView<TPanel> {
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleDoubleProperty campoTamTexto;
 	
-	@TCheckBoxField(labeled=@TLabeled(text=ToolsKey.BOLD, parse = true))
+	@TCheckBoxField(labeled=@TLabeled(text=TUsualKey.BOLD, parse = true))
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleBooleanProperty campoTextoNegrito;
 	
 	/**
 	 * Grupo customizar formulario
 	 * */
-	@TLabel(text=ToolsKey.COLOR, 
+	@TLabel(text=TUsualKey.COLOR, 
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> formCorFundo;
 	
-	@TLabel(text=ToolsKey.OPACITY)
+	@TLabel(text=TUsualKey.OPACITY)
 	@TSliderField(max = 1, min = 0,
 			majorTickUnit=0.5, blockIncrement=0.01,
 			minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
@@ -204,7 +205,7 @@ public class TPanelMV extends TModelView<TPanel> {
 	 * Grupo customizar titulo do visualizar
 	 * */
 	// Visualizar - Titulos
-	@TLabel(text=ToolsKey.COLOR, 
+	@TLabel(text=TUsualKey.COLOR, 
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
@@ -213,7 +214,7 @@ public class TPanelMV extends TModelView<TPanel> {
 	legend = "#{label.title}", layoutType=TLayoutType.VBOX)
 	private SimpleObjectProperty<Color> readerCorTituloCampo;
 	
-	@TLabel(text=ToolsKey.FONT)
+	@TLabel(text=TUsualKey.FONT)
 	@TSliderField(max = 2, min = 0.8,
 			majorTickUnit=0.5, blockIncrement=0.01,
 			minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
@@ -222,16 +223,16 @@ public class TPanelMV extends TModelView<TPanel> {
 	private SimpleDoubleProperty readerTamTituloCampo;
 	
 	// Visualizar - Texto
-	@TLabel(text=ToolsKey.COLOR, 
+	@TLabel(text=TUsualKey.COLOR, 
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	@TFieldSet(fields = { "readerCorTexto", "readerTamTexto" }, 
-	legend = ToolsKey.TEXT, layoutType=TLayoutType.VBOX)
+	legend = TUsualKey.TEXT, layoutType=TLayoutType.VBOX)
 	private SimpleObjectProperty<Color> readerCorTexto;
 	
-	@TLabel(text=ToolsKey.FONT)
+	@TLabel(text=TUsualKey.FONT)
 	@TSliderField(max = 2, min = 0.8,
 			majorTickUnit=0.5, blockIncrement=0.01,
 			minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
@@ -240,16 +241,16 @@ public class TPanelMV extends TModelView<TPanel> {
 	private SimpleDoubleProperty readerTamTexto;
 	
 	// visualizar - Fundo
-	@TLabel(text=ToolsKey.COLOR, 
+	@TLabel(text=TUsualKey.COLOR, 
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
 	@TFieldSet(fields = { "readerCorFundo", "readerOpacidade" }, 
-	legend = ToolsKey.BACKGROUND, layoutType=TLayoutType.VBOX)
+	legend = TUsualKey.BACKGROUND, layoutType=TLayoutType.VBOX)
 	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> readerCorFundo;
 	
-	@TLabel(text=ToolsKey.OPACITY)
+	@TLabel(text=TUsualKey.OPACITY)
 	@TSliderField(max = 1, min = 0,
 			majorTickUnit=0.5, blockIncrement=0.01,
 			minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 

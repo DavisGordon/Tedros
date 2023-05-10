@@ -67,7 +67,7 @@ public class AiChatMV extends TEntityModelView<TAiChatCompletion> {
 	@TTabPane(tabs = { 
 		@TTab(text = "Chat", scroll=true,
 			content = @TContent(detailForm=@TDetailForm(fields = { "messages" })) ), 
-		@TTab(text = ToolsKey.EVENT_LOG, scroll=true,
+		@TTab(text = TUsualKey.EVENT_LOG, scroll=true,
 			content = @TContent(detailForm=@TDetailForm(fields = { "events" })) )
 		}, 
 		region=@TRegion(minHeight=400, maxHeight=400, parse = true))
@@ -92,7 +92,7 @@ public class AiChatMV extends TEntityModelView<TAiChatCompletion> {
 		@TTableColumn(text = TUsualKey.DATE_INSERT, cellValue="insertDate", 
 				cellFactory=@TCellFactory(parse = true, 
 				callBack=@TCallbackFactory(parse=true, value=TMediumDateTimeCallback.class))), 
-		@TTableColumn(text = ToolsKey.EVENT_LOG, cellValue="log")
+		@TTableColumn(text = TUsualKey.EVENT_LOG, cellValue="log")
 	})
 	@TModelViewType(modelClass = TRequestEvent.class, modelViewClass=EventMV.class)
 	private ITObservableList<EventMV> events;

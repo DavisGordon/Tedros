@@ -79,12 +79,12 @@ allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,
 public class CompletionMV extends TEntityModelView<TAiCompletion> {
 
 	@TTabPane(tabs = { 
-		@TTab(closable=false, text = ToolsKey.MAIN_DATA, 
+		@TTab(closable=false, text = TUsualKey.MAIN_DATA, 
 				content = @TContent(detailForm=@TDetailForm(
 						fields={"response", "prompt"})),
 			scroll=true),
 		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"events"})),
-			text = ToolsKey.EVENT_LOG)
+			text = TUsualKey.EVENT_LOG)
 	})
 	private SimpleStringProperty title;
 	
@@ -102,7 +102,7 @@ public class CompletionMV extends TEntityModelView<TAiCompletion> {
 			@TPriority(field="prompt", priority=Priority.ALWAYS)}))
 	private SimpleStringProperty prompt;
 	
-	@TLabel(text=ToolsKey.CLEVERNESS)
+	@TLabel(text=TUsualKey.CLEVERNESS)
 	@TSliderField(max = 2, min = 0, blockIncrement=0.1, majorTickUnit=0.5, minorTickCount=5, 
 	showTickLabels=true, showTickMarks=true, snapToTicks=true, orientation=Orientation.VERTICAL,
 	control=@TControl(parse = true, tooltip=ToolsKey.TEXT_DETERMINISTIC))
@@ -111,7 +111,7 @@ public class CompletionMV extends TEntityModelView<TAiCompletion> {
 			@TPriority(field="maxTokens", priority=Priority.NEVER)}))
 	private SimpleDoubleProperty temperature;
 	
-	@TLabel(text=ToolsKey.MAX_TOKENS)
+	@TLabel(text=TUsualKey.MAX_TOKENS)
 	@TNumberSpinnerField(maxValue = 4096, minValue=16, 
 			control=@TControl(parse = true, tooltip=ToolsKey.TEXT_MAX_TOKENS))
 	private SimpleIntegerProperty maxTokens;
@@ -124,9 +124,9 @@ public class CompletionMV extends TEntityModelView<TAiCompletion> {
 		@TTableColumn(text = TUsualKey.DATE_INSERT, cellValue="insertDate", 
 				cellFactory=@TCellFactory(parse = true, 
 				callBack=@TCallbackFactory(parse=true, value=TMediumDateTimeCallback.class))), 
-		@TTableColumn(text = ToolsKey.PROMPT, cellValue="prompt"),
-		@TTableColumn(text = ToolsKey.RESPONSE, cellValue="response"),
-		@TTableColumn(text = ToolsKey.EVENT_LOG, cellValue="log")
+		@TTableColumn(text = TUsualKey.PROMPT, cellValue="prompt"),
+		@TTableColumn(text = TUsualKey.RESPONSE, cellValue="response"),
+		@TTableColumn(text = TUsualKey.EVENT_LOG, cellValue="log")
 	})
 	@TModelViewType(modelClass = TRequestEvent.class, modelViewClass=EventMV.class)
 	private ITObservableList<EventMV> events;

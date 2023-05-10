@@ -8,6 +8,7 @@ import org.tedros.core.controller.TProfileController;
 import org.tedros.core.domain.DomainApp;
 import org.tedros.core.security.model.TAuthorization;
 import org.tedros.core.security.model.TProfile;
+import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TFieldBox;
 import org.tedros.fx.annotation.control.TLabel;
@@ -61,25 +62,25 @@ public final class TProfileMV extends TEntityModelView<TProfile> {
 	@TTabPane(tabs = { 
 			@TTab(closable=false, scroll=false, content = @TContent(detailForm=
 				@TDetailForm(fields={"textoCadastro", "name", "description"})), 
-				text = ToolsKey.MAIN), 
+				text = TUsualKey.MAIN), 
 			@TTab(closable=false, content = @TContent(detailForm=
 				@TDetailForm(fields={"autorizations"})), 
-				text = ToolsKey.DETAIL)
+				text = TUsualKey.DETAIL)
 	})
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-form", parse = true))
-	@TText(text=ToolsKey.PROFILE_HEADER, textAlignment=TextAlignment.LEFT, 
+	@TText(text=ToolsKey.TEXT_PROFILE_HEADER, textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)
 	private SimpleStringProperty textoCadastro;
 	
 	@TReader
-	@TLabel(text=ToolsKey.NAME)
+	@TLabel(text=TUsualKey.NAME)
 	@TTextField(maxLength=100, required=true,
 				textInputControl=@TTextInputControl(promptText=ToolsKey.PROMPT_PROFILE_NAME, parse=true), 
 				control=@TControl(minWidth=100, parse=true))
 	private SimpleStringProperty name;
 	
 	@TReader
-	@TLabel(text=ToolsKey.DESCRIPTION)
+	@TLabel(text=TUsualKey.DESCRIPTION)
 	@TTextAreaField(maxLength=600, 
 					textInputControl=@TTextInputControl(promptText=ToolsKey.PROMPT_PROFILE_DESCRIPTION, parse=true),
 					prefRowCount=3)
