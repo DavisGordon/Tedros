@@ -7,6 +7,10 @@ import org.tedros.api.form.ITModelForm;
 import org.tedros.fx.form.TFieldBox;
 
 public abstract class TTrigger<T> {
+	
+	public enum TEvent {
+		BUILD, ADDED, REMOVED;
+	};
 
 	private TFieldBox source;
 	private TFieldBox target;
@@ -36,7 +40,7 @@ public abstract class TTrigger<T> {
 		return associatedFields.get(fieldName);
 	}
 	
-	public abstract void run(T value);
+	public abstract void run(TEvent event, T newValue, T oldValue);
 
 	public TFieldBox getSource() {
 		return source;

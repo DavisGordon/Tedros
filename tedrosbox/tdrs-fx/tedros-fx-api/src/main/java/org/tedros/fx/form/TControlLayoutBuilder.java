@@ -14,7 +14,6 @@ import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.api.form.ITFieldBox;
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.app.component.ITActionComponent;
-import org.tedros.core.model.ITModelView;
 import org.tedros.fx.annotation.TDebugConfig;
 import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.parser.ITEffectParse;
@@ -141,9 +140,9 @@ public final class TControlLayoutBuilder {
 			}
 		}
 		
-		if(layoutBuilder==null){
+		if(layoutBuilder==null)
 			return;
-		}
+		
 		ITFieldDescriptor fd = descriptor.getFieldDescriptor();
 		Node control = fd.getComponent();
 		Node layout = ((ITLayoutBuilder) layoutBuilder).build(layoutAnnotation);
@@ -153,17 +152,11 @@ public final class TControlLayoutBuilder {
 		fd.setLayout(layout);
 	}
 	
-	
-	@SuppressWarnings({"rawtypes"})
 	private void getControl(TComponentDescriptor descriptor) throws Exception{
 		
 		if(descriptor.getFieldDescriptor().isLoaded())
 			return;
-		
-		final String fieldName = descriptor.getFieldDescriptor().getFieldName();
-		final ITModelView modelView = descriptor.getModelView();
-		final Method modelViewGetMethod = getMethod(fieldName, modelView);
-		
+			
 		Object[] arrControl = descriptor.getFieldDescriptor().getArrControl();
 		
 		ITFieldBuilder controlBuilder = null;
@@ -182,11 +175,10 @@ public final class TControlLayoutBuilder {
 			}
 		}
 		
-		if(controlBuilder==null){
+		if(controlBuilder==null)
 			return;
-		}
 		
-		Node control =  buildControl(descriptor, modelView, modelViewGetMethod, controlBuilder, controlAnnotation);
+		Node control =  buildControl(descriptor, controlBuilder, controlAnnotation);
 		if(control instanceof ITActionComponent)
 			descriptor.getFieldDescriptor().setComponent(control);
 		else {
@@ -196,20 +188,11 @@ public final class TControlLayoutBuilder {
 		
 	}
 	
-	
-	@SuppressWarnings({"rawtypes"})
 	private void getReader(TComponentDescriptor descriptor) throws Exception{
 		
 		if(descriptor.getFieldDescriptor().isLoaded())
 			return;
 		
-		/*int x=0;
-		if(descriptor.getFieldDescriptor().getFieldName().equals("textoCadastro"))
-			x=1;*/
-		
-		final String fieldName = descriptor.getFieldDescriptor().getFieldName();
-		final ITModelView modelView = descriptor.getModelView();
-		final Method modelViewGetMethod = getMethod(fieldName, modelView);
 		final List<Annotation> fieldAnnotations = descriptor.getFieldAnnotationList();
 		
 		ITFieldBuilder readerBuilder = null;
@@ -249,16 +232,14 @@ public final class TControlLayoutBuilder {
 			}
 		}
 		
-		
-		if(readerBuilder==null){
+		if(readerBuilder==null)
 			return;
-		}
 		
 		Node node = null;
 		if(htmlReaderFlag)
-			node = buildHtmlBox((THtmlReader) buildReader(modelView, modelViewGetMethod, readerAnnotation, readerBuilder), descriptor);
+			node = buildHtmlBox((THtmlReader) buildReader(descriptor, readerAnnotation, readerBuilder), descriptor);
 		else
-			node = buildFieldBox((Node) buildReader(modelView, modelViewGetMethod, readerAnnotation, readerBuilder), descriptor);
+			node = buildFieldBox((Node) buildReader(descriptor, readerAnnotation, readerBuilder), descriptor);
 		
 		descriptor.getFieldDescriptor().setComponent(node);
 	}
@@ -315,7 +296,6 @@ public final class TControlLayoutBuilder {
 		fd.setLayout(layout);
 		
 	}
-
 	
 	private boolean isModeActive(Annotation annotation, TViewMode mode) {
 		TViewMode[] modes = TReflectionUtil.getValue(annotation, "mode");
@@ -340,11 +320,11 @@ public final class TControlLayoutBuilder {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private <T> T buildReader(final ITModelView modelView, final Method modelViewGetMethod, Annotation annotation, ITFieldBuilder builder) throws IllegalAccessException, InvocationTargetException {
+	private <T> T buildReader(final TComponentDescriptor descriptor, Annotation annotation, ITFieldBuilder builder) throws IllegalAccessException, InvocationTargetException {
 		
 		if(builder instanceof ITReaderHtmlBuilder){
 			
-			final Object obj = (Object) modelViewGetMethod.invoke(modelView);
+			final Object obj = descriptor.getFieldValue();
 			final THtmlReader node = runConverter(annotation, obj);
 			
 			if(node!=null){
@@ -359,7 +339,7 @@ public final class TControlLayoutBuilder {
 		
 		if(builder instanceof ITReaderBuilder){
 			
-			final Object obj = (Object) modelViewGetMethod.invoke(modelView);
+			final Object obj = descriptor.getFieldValue(); 
 			final Node node = runConverter(annotation, obj);
 			
 			if(node!=null){
@@ -376,22 +356,21 @@ public final class TControlLayoutBuilder {
 	}
 	
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	private Node buildControl(ITComponentDescriptor descriptor, final ITModelView modelView, final Method modelViewGetMethod, ITFieldBuilder controlBuilder, Annotation controlAnnotation)
+	private Node buildControl(ITComponentDescriptor descriptor, ITFieldBuilder controlBuilder, Annotation controlAnnotation)
 			throws IllegalAccessException, InvocationTargetException, Exception, NoSuchMethodException {
-		
 		
 		Node node = null;
 		if(controlBuilder instanceof ITControlBuilder){
-			final Object attrProperty = modelViewGetMethod.invoke(modelView);
+			final Object attrProperty = descriptor.getFieldValue();// modelViewGetMethod.invoke(modelView);
 			node = ((ITControlBuilder) controlBuilder).build(controlAnnotation, attrProperty);
 		}else
 		if(controlBuilder instanceof ITChartBuilder){
-			final Node chart = (Node) modelViewGetMethod.invoke(modelView);
+			final Node chart = (Node) descriptor.getFieldValue();//modelViewGetMethod.invoke(modelView);
 			node =  ((ITChartBuilder) controlBuilder).build(controlAnnotation, chart);
 		}else
 		if(controlBuilder instanceof ITFileBuilder){
 						
-			final Object obj = (Object) modelViewGetMethod.invoke(modelView);
+			final Object obj = (Object) descriptor.getFieldValue();//modelViewGetMethod.invoke(modelView);
 			
 			if(obj instanceof TSimpleFileProperty){
 				TSimpleFileProperty<?> attrProperty = (TSimpleFileProperty<?>) obj;
@@ -412,8 +391,8 @@ public final class TControlLayoutBuilder {
 				final String fileName = (String) fileNameFieldMethod.invoke(controlAnnotation);
 				
 				Property<?> attrProperty = (Property<?>) obj;
-				final Method fileNameFieldGetMethod = modelView.getClass().getMethod("get"+StringUtils.capitalize(fileName));
-				final SimpleStringProperty fileNameProperty = (SimpleStringProperty) fileNameFieldGetMethod.invoke(modelView);
+				final Method fileNameFieldGetMethod = descriptor.getModelView().getClass().getMethod("get"+StringUtils.capitalize(fileName));
+				final SimpleStringProperty fileNameProperty = (SimpleStringProperty) fileNameFieldGetMethod.invoke(descriptor.getModelView());
 				node =  ((ITFileBuilder) controlBuilder).build(controlAnnotation, fileNameProperty, (Property<byte[]>) attrProperty);
 				
 			}
@@ -477,10 +456,5 @@ public final class TControlLayoutBuilder {
 		return tHtmlReader;
 		
 	}
-	
-	private static Method getMethod(final String fieldName, final Object modelView) throws NoSuchMethodException {
-		return modelView.getClass().getMethod("get"+StringUtils.capitalize(fieldName));
-	}
-	
 }
 

@@ -4,16 +4,13 @@ import java.util.Map;
 
 import org.tedros.api.form.ITFieldBox;
 import org.tedros.api.form.ITModelForm;
-import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.control.TCheckBoxField;
 import org.tedros.fx.control.THorizontalRadioGroup;
 import org.tedros.fx.control.TVerticalRadioGroup;
-import org.tedros.fx.control.action.TPresenterAction;
 import org.tedros.fx.form.TDefaultForm;
 import org.tedros.fx.form.TFieldBox;
 import org.tedros.fx.form.TProgressIndicatorForm;
 import org.tedros.fx.layout.TFieldSet;
-import org.tedros.fx.presenter.behavior.TActionType;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
 import org.tedros.fx.reader.TTextReader;
@@ -31,23 +28,6 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleMV, Exampl
 	public void load() {
 		super.load();
 		configModesRadio();
-		
-		addAction(new TPresenterAction(TActionType.NEW) {
-
-			@Override
-			public boolean runBefore() {
-				ExampleMV model = new ExampleMV();
-				setModelView(model);
-				showForm(TViewMode.EDIT);
-				return false;
-			}
-
-			@Override
-			public void runAfter() {
-				
-			}
-		});
-		
 		newAction();
 	}
 	
@@ -124,15 +104,15 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleMV, Exampl
 		String tViewTitleBox = 	"-fx-border-color: transparent;" +
 								"-fx-background-color: rgba("+r+","+g+","+b+","+opacity.replaceAll(",", ".")+");";
 		
-		String tPane = 	"-fx-background-color: rgba("+r+","+g+","+b+","+opacity.replaceAll(",", ".")+");"+
+		/*String tPane = 	"-fx-background-color: rgba("+r+","+g+","+b+","+opacity.replaceAll(",", ".")+");"+
 						"-fx-padding: 20 20 20 20;"+
-						"-fx-spacing: 8;";
+						"-fx-spacing: 8;";*/
 		
 		TDynaView<ExampleMV> view = getView();
 		
 		view.gettHeaderHorizontalLayout().setStyle(tHeaderBox);
 		view.gettViewTitleLayout().setStyle(tViewTitleBox);
-		view.gettFormSpace().setStyle(tPane);
+		//view.gettFormSpace().setStyle(tPane);
 		//view.getModelListBox().setStyle(tPane);
 		
 	}

@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 
 public class ExampleDecorator extends TDynaViewCrudBaseDecorator<ExampleMV> {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void decorate() {
 		

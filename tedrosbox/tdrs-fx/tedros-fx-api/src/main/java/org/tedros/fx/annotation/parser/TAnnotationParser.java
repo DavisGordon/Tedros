@@ -340,9 +340,10 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 		/*int x = 0;
 		if(key.equals("items"))
 			x = 0;*/
+		Class paramClass = getGenericParamClass();
+		Class targetClass = paramClass == Object.class ? targetObject.getClass() : paramClass;
+			
 		try {
-			Class paramClass = getGenericParamClass();
-			Class targetClass = paramClass == Object.class ? targetObject.getClass() : paramClass;
 			Object targetValue = TTypeAnalyserParserDelegate.parse(value, componentDescriptor);
 			final Method method = getTargetMethod(key, targetClass);
 			try{
@@ -364,16 +365,29 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 					
 				}
 			}catch(Exception e){
-				System.out.println("Warning: Error trying parse an annotation.");
-				System.out.println("annotation: "+TReflectionUtil.getAnnotationFullName(annotation)+", object: " + targetObject.getClass().getSimpleName()
-									+", method: "+method.getName() + ", value: "+value.toString()+", form: "+componentDescriptor.getForm().getClass().getSimpleName());
-				System.out.println("Message: "+e.getMessage());
+				System.out.println("Warning: Error trying parse the annotation "+ TReflectionUtil.getAnnotationFullName(annotation));
+				System.out.println("parser: "+this.getClass().getSimpleName()
+					+", attribute: "+key
+					+", object: " + targetObject.getClass().getSimpleName()
+					+", target method: "+targetClass.getSimpleName()+"."+method.getName() 
+					+", value: "+targetValue.toString()
+					+", form: "+componentDescriptor.getForm().getClass().getSimpleName()
+					+", modelView: "+componentDescriptor.getModelView().getClass().getSimpleName()
+					+", field: "+componentDescriptor.getFieldDescriptor().getFieldName());
+				System.out.println("Exception: "+e+", Message: "+e.getMessage());
 			}
 		}catch(Exception e) {
-			System.out.println("Warning: Error trying parse an annotation.");
-			System.out.println("annotation: "+TReflectionUtil.getAnnotationFullName(annotation)+", object: " + targetObject.getClass().getSimpleName()
-								+ ", value: "+value.toString()+", form: "+componentDescriptor.getForm().getClass().getSimpleName());
-			System.out.println("Message: "+e.getMessage());
+			System.out.println("Warning: Error trying analyse a parse annotation to get the value.");
+			System.out.println("annotation: "+TReflectionUtil.getAnnotationFullName(annotation)
+				+", parser: "+this.getClass().getSimpleName()
+				+", attribute: "+key
+				+", object: " + targetObject.getClass().getSimpleName()
+				+", target class: "+targetClass.getSimpleName()
+				+", value: "+value.toString()
+				+", form: "+componentDescriptor.getForm().getClass().getSimpleName()
+				+", modelView: "+componentDescriptor.getModelView().getClass().getSimpleName()
+				+", field: "+componentDescriptor.getFieldDescriptor().getFieldName());
+			System.out.println("Exception: "+e+", Message: "+e.getMessage());
 		}
 	}
 	

@@ -28,10 +28,9 @@ import javafx.collections.ObservableSet;
  * @author Davis Gordon
  *
  */
-class TPropertyHelper<T extends TModelView> {
+class TPropertyHelperOld<T extends TModelView> {
 	
-	final Field field;;
-	final String name;
+	final String name;;
 	final Class type;
 	final static String SET = "set";
 	final static String GET = "get";
@@ -46,11 +45,9 @@ class TPropertyHelper<T extends TModelView> {
 	 * @throws NoSuchMethodException 
 	 * 
 	 */
-	public TPropertyHelper(Field field, T modelView) throws Throwable {
-		this.field = field;
+	public TPropertyHelperOld(Field field, T modelView) throws Throwable {
 		this.name = field.getName();
 		this.type = field.getType();
-		this.field.setAccessible(true);
 		this.modelView = modelView;
 		TModelViewType[] arr = field.getAnnotationsByType(TModelViewType.class);
 		if(arr.length>0) 
@@ -58,16 +55,16 @@ class TPropertyHelper<T extends TModelView> {
 		
 		if(isElegible()) {
 			// recupera o metodo get do property
-			//final Method getMethod = modelView.getClass().getMethod(GET+StringUtils.capitalize(name));
-			value = field.get(modelView);//getMethod.invoke(modelView);
+			final Method getMethod = modelView.getClass().getMethod(GET+StringUtils.capitalize(name));
+			value = getMethod.invoke(modelView);
 			initialize();
 		}
 	}
 	
 	void setValue(Object value)  throws Throwable {
 		// recupera o metodo set do property
-			//final Method propertySetMethod = modelView.getClass().getMethod(SET+StringUtils.capitalize(name), type);
-			this.field.set(modelView, value);
+			final Method propertySetMethod = modelView.getClass().getMethod(SET+StringUtils.capitalize(name), type);
+			
 	}
 	
 	boolean isElegible() {
@@ -77,22 +74,21 @@ class TPropertyHelper<T extends TModelView> {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	void initialize() throws Throwable{
 		// recupera o metodo set do property
-		//final Method setMethod = modelView.getClass().getMethod(SET+StringUtils.capitalize(name), type);
+		final Method setMethod = modelView.getClass().getMethod(SET+StringUtils.capitalize(name), type);
 		if(value==null){
-			//Class type = this.field.getType();
 			buildListener = true;
 			if(TReflectionUtil.isImplemented(type, ITObservableList.class)){
 				value = (ITObservableList) TFXCollections.iTObservableList();
-				setValue(value);
+				setMethod.invoke(modelView, value);
 			}else if(TReflectionUtil.isImplemented(type, ObservableList.class)){
 				value = (ObservableList) FXCollections.observableArrayList();
-				setValue(value);
+				setMethod.invoke(modelView, value);
 			}else if(type == ObservableSet.class){
 				value = (ObservableSet)FXCollections.observableSet((Set)new HashSet());
-				setValue(value);
+				setMethod.invoke(modelView, value);
 			}else if(type == ObservableMap.class ){
 				value = (ObservableMap)FXCollections.observableMap((Map)new HashMap());
-				setValue(value);
+				setMethod.invoke(modelView, value);
 			}else if(type == TSimpleFileProperty.class) {
 				Class entityClass = null;
 				if(this.genericType!=null)
@@ -100,14 +96,14 @@ class TPropertyHelper<T extends TModelView> {
 					
 				if(entityClass!=null) {
 					value = type.getConstructor(ITFileBaseModel.class).newInstance(entityClass.newInstance());
-					setValue(value);
+					setMethod.invoke(modelView, value);
 				}else {
 					value = type.newInstance();
-					setValue(value);
+					setMethod.invoke(modelView, value);
 				}
 			}else{
 				value = type.newInstance();
-				setValue(value);
+				setMethod.invoke(modelView, value);
 			}
 		}
 	}

@@ -41,7 +41,7 @@ public class TPanelTrigger extends TTrigger<Object> {
 	}
 	
 	@Override
-	public void run(Object value) {
+	public void run(TEvent event, Object value, Object old) {
 		
 		final TFieldBox source = getSource();
 		final ExampleBehavior behavior = (ExampleBehavior) getForm().gettAssociatedObject(ExampleBehavior.class.getSimpleName());
