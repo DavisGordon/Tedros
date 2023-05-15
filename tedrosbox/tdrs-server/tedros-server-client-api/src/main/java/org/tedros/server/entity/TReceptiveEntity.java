@@ -24,7 +24,6 @@ public class TReceptiveEntity extends TVersionEntity implements ITIntegrable {
 	
 	@Column(length=1512)
 	private String integratedModelView;
-	
 
 	@Column(length=1512)
 	private String integratedEntity;

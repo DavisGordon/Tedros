@@ -38,7 +38,7 @@ public class TMainColorTrigger extends TTrigger<Object> {
 	}
 	
 	@Override
-	public void run(Object value) {
+	public void run(TEvent event, Object value, Object old) {
 		
 		final TFieldBox source = getSource();
 		final TemplatePane t = (TemplatePane) getForm().gettAssociatedObject(TemplatePane.class.getSimpleName());

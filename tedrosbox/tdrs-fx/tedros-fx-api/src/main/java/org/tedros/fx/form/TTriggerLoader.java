@@ -1,14 +1,20 @@
 package org.tedros.fx.form;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.form.ITModelForm;
 import org.tedros.core.model.ITModelView;
 import org.tedros.fx.annotation.control.TTrigger;
 import org.tedros.fx.control.ITTriggeredable;
+import org.tedros.fx.control.trigger.TTrigger.TEvent;
 import org.tedros.fx.exception.TErrorType;
 
 import javafx.beans.Observable;
+import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WeakChangeListener;
@@ -79,32 +85,54 @@ public class TTriggerLoader<M extends ITModelView<?>, F extends ITModelForm<M>> 
 							
 					if(ob instanceof ObservableValue) {
 						final ChangeListener l = (obs, old, value) -> {
-							trigger.run(value);
+							trigger.run(TEvent.ADDED, value, old);
 						};
 						this.form.gettObjectRepository().add(key, l);
 						ObservableValue obt = (ObservableValue) ob;
 						obt.addListener(new WeakChangeListener<>(l));
-						
+
+						if(tAnnotation.runAfterFormBuild()) {
+							trigger.run(TEvent.BUILD, ((Property)ob).getValue(), null);
+						}
 					} else 
 					if(ob instanceof ObservableList) {
 						final ListChangeListener l = (value) -> {
-							trigger.run(value);
+							if(value.next()) {
+								if(value.wasAdded())
+									trigger.run(TEvent.ADDED, value.getAddedSubList(), value.getList());
+								if(value.wasRemoved())
+									trigger.run(TEvent.REMOVED, value.getRemoved(), value.getList());
+							}
 						};
 						this.form.gettObjectRepository().add(key, l);
 						ObservableList obt = (ObservableList) ob;
 						obt.addListener(new WeakListChangeListener<>(l));
+						
+						if(tAnnotation.runAfterFormBuild()) 
+							trigger.run(TEvent.BUILD, (List) ob, null);
+						
 					} else 
 					if(ob instanceof ObservableSet) {
 						final SetChangeListener l = (value) -> {
-							trigger.run(value);
+							Set s = new HashSet();
+							if(value.wasAdded()) {
+								s.add(value.getElementAdded());
+								trigger.run(TEvent.ADDED, s, value.getSet());
+							}
+							if(value.wasRemoved()) {
+								s.add(value.getElementRemoved());
+								trigger.run(TEvent.REMOVED, s, value.getSet());
+							}
 						};
 						this.form.gettObjectRepository().add(key, l);
 						ObservableSet obt = (ObservableSet) ob;
 						obt.addListener(new WeakSetChangeListener<>(l));
+
+						if(tAnnotation.runAfterFormBuild()) 
+							trigger.run(TEvent.BUILD, (Set) ob, null);
+						
 					}
 					
-					if(tAnnotation.runAfterFormBuild())
-						trigger.run(null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

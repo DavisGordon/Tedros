@@ -187,4 +187,9 @@ public class TUser extends TVersionEntity implements ITUser {
 		return sb.toString();
 	}
 
+	@Override
+	public String toString() {
+		return name + " [" + login + "]";
+	}
+
 }

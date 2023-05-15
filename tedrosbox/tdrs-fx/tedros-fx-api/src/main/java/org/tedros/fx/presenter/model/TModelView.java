@@ -30,7 +30,6 @@ import org.tedros.fx.util.TReflectionUtil;
 import org.tedros.server.entity.ITEntity;
 import org.tedros.server.model.ITFileModel;
 import org.tedros.server.model.ITModel;
-import org.tedros.util.TStripTagUtil;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;

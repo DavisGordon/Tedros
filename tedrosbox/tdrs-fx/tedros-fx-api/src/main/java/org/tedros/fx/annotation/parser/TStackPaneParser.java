@@ -4,6 +4,10 @@ import java.lang.annotation.Annotation;
 
 import javafx.scene.layout.StackPane;
 
-public class TStackPaneParser extends TAnnotationParser<Annotation, StackPane> {
+public final class TStackPaneParser extends TAnnotationParser<Annotation, StackPane> {
 
+	@Override
+	public void parse(Annotation annotation, StackPane object, String... byPass) throws Exception {
+		super.parse(annotation, object, "required");
+	}
 }
