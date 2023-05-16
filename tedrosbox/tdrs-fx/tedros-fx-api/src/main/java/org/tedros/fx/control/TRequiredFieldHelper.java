@@ -76,6 +76,8 @@ public class TRequiredFieldHelper {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void buildRequiredProperty() {
+		if(this.requiredProperty!=null)
+			return;
 		this.requiredProperty = new SimpleBooleanProperty();
 		ChangeListener<Boolean> rpchl = (a,b,n)->{
 			if(n){
