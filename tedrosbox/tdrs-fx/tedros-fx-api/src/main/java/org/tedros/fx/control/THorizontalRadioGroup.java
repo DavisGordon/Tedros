@@ -12,7 +12,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
@@ -43,6 +42,7 @@ public class THorizontalRadioGroup extends HBox implements ITField{
 		radioButtonGroup.addRadioButton(radioButtons);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Observable tValueProperty() {
 		return selectedToggleProperty();

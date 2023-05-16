@@ -144,17 +144,34 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 	@SuppressWarnings("unchecked")
 	public List<E> search(TSelect<E> sel){
 		
-		StringBuilder sb = new StringBuilder("select e from ");
-		sb.append(sel.getType().getSimpleName()+ " e where ");
+		StringBuilder sb = new StringBuilder("select ");
+		sb.append(sel.getAlias()).append(" ");
+		sb.append("from ");
+		sb.append(sel.getType().getSimpleName()).append(" ");
+		sb.append(sel.getAlias()).append(" ");
+		
+		if(sel.getJoins()!=null)
+			sel.getJoins().forEach(j->{
+				sb.append(j.getType().getValue()).append(" ");
+				sb.append(j.getField()).append(" ");
+				sb.append(j.getAlias()).append(" ");
+			});
+		
+		sb.append("where ");
 		
 		sel.getConditions().forEach(b->{
 			if(b.getOperator()!=null)
 				sb.append(b.getOperator().name().toLowerCase()).append(" ");
+			
 			if(b.getCondition().getOperator().equals(TCompareOp.LIKE))
 				sb.append("lower(");
-			sb.append("e.").append(b.getCondition().getField());
+			
+			sb.append(b.getCondition().getAlias())
+			.append(".").append(b.getCondition().getField());
+			
 			if(b.getCondition().getOperator().equals(TCompareOp.LIKE))
 				sb.append(")");
+			
 			sb.append(" ").append(b.getCondition().getOperator().getValue()).append(" ");
 			sb.append(":").append(b.getCondition().getField()).append("_");
 			sb.append(" ");
@@ -167,6 +184,7 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 					sb1.append("order by ");
 				else
 					sb1.append(", ");
+				sb1.append(f.getAlias()).append(".");
 				sb1.append(f.getField());
 			});
 			sb.append(sb1);

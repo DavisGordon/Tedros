@@ -12,7 +12,16 @@ public class TCondition<T> extends TField{
 	 * @param value
 	 */
 	public TCondition(String field, T value) {
-		super(field);
+		super(TSelect.ALIAS, field);
+		this.value = value;
+	}
+	/**
+	 * @param alias
+	 * @param field
+	 * @param value
+	 */
+	public TCondition(String alias, String field, T value) {
+		super(alias, field);
 		this.value = value;
 	}
 	/**
@@ -21,7 +30,18 @@ public class TCondition<T> extends TField{
 	 * @param value
 	 */
 	public TCondition(String field, TCompareOp operator, T value) {
-		super(field);
+		super(TSelect.ALIAS, field);
+		this.operator = operator;
+		this.value = value;
+	}
+	/**
+	 * @param alias
+	 * @param field
+	 * @param operator
+	 * @param value
+	 */
+	public TCondition(String alias, String field, TCompareOp operator, T value) {
+		super(alias, field);
 		this.operator = operator;
 		this.value = value;
 	}

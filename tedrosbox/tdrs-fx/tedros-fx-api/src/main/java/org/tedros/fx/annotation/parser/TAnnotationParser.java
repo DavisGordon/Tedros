@@ -191,7 +191,6 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 						}
 						
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}

@@ -14,7 +14,6 @@ import java.util.Arrays;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
-import org.tedros.common.model.TByteEntity;
 import org.tedros.common.model.TFileEntity;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
@@ -35,13 +34,9 @@ import org.tedros.fx.util.TBarcodeGenerator;
 import org.tedros.fx.util.TBarcodeOrientation;
 import org.tedros.fx.util.TBarcodeResolution;
 import org.tedros.fx.util.TBarcodeType;
-import org.tedros.fx.util.TFileBaseUtil;
-import org.tedros.fx.util.TPrintUtil;
-import org.tedros.server.entity.ITEntity;
 import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.model.ITBarcode;
 import org.tedros.server.model.ITFileBaseModel;
-import org.tedros.server.model.TFileModel;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.util.TedrosFolder;
@@ -100,6 +95,7 @@ public class TBarcode extends TRequiredStackedComponent {
 		this.tBarcodeModelType = tBarcodeModelType;
 		init();
 		buildListeners();
+		super.tRequiredNodeProperty().setValue(this);
 	}
 	private void init() {
 		this.tAlreadyProperty = new SimpleBooleanProperty(false);

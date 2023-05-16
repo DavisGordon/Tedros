@@ -283,7 +283,7 @@ public final class TReflectionUtil {
 		return getBuilder(list, ITLayoutBuilder.class);
 	}
 	
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	@SuppressWarnings({"rawtypes"})
 	private static Object[] getBuilder(List<Annotation> list, Class... builderInterface) {
 		for (Annotation annotation : list) {
 			final Method method = getAnnotationBuilderMethod(annotation);

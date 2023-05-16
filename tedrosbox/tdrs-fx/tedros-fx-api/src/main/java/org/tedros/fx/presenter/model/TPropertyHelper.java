@@ -3,15 +3,12 @@
  */
 package org.tedros.fx.presenter.model;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.tedros.fx.annotation.control.TModelViewType;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.collections.TFXCollections;
@@ -28,6 +25,7 @@ import javafx.collections.ObservableSet;
  * @author Davis Gordon
  *
  */
+@SuppressWarnings("rawtypes")
 class TPropertyHelper<T extends TModelView> {
 	
 	final Field field;;
@@ -57,29 +55,22 @@ class TPropertyHelper<T extends TModelView> {
 			this.genericType = arr[0];
 		
 		if(isElegible()) {
-			// recupera o metodo get do property
-			//final Method getMethod = modelView.getClass().getMethod(GET+StringUtils.capitalize(name));
 			value = field.get(modelView);//getMethod.invoke(modelView);
 			initialize();
 		}
 	}
 	
 	void setValue(Object value)  throws Throwable {
-		// recupera o metodo set do property
-			//final Method propertySetMethod = modelView.getClass().getMethod(SET+StringUtils.capitalize(name), type);
-			this.field.set(modelView, value);
+		this.field.set(modelView, value);
 	}
 	
 	boolean isElegible() {
 		return TCompatibleTypesHelper.isCompatible(type);
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "unchecked" })
 	void initialize() throws Throwable{
-		// recupera o metodo set do property
-		//final Method setMethod = modelView.getClass().getMethod(SET+StringUtils.capitalize(name), type);
 		if(value==null){
-			//Class type = this.field.getType();
 			buildListener = true;
 			if(TReflectionUtil.isImplemented(type, ITObservableList.class)){
 				value = (ITObservableList) TFXCollections.iTObservableList();
