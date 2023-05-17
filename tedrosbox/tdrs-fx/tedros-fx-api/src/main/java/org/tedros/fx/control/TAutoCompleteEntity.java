@@ -123,7 +123,7 @@ public class TAutoCompleteEntity extends TTextField {
 				try {
 					TSelect sel = new TSelect(eClass);
 					for(String f : fieldsName)
-						sel.addOrCondition(f, TCompareOp.LIKE, "%"+n+"%");
+						sel.addOrCondition(f, TCompareOp.LIKE, n);
 					TEntityProcess p = new TEntityProcess(eClass, serviceName) {};
 					p.stateProperty().addListener((a1, o1, n1)->{
 						if(n1.equals(State.SUCCEEDED)) {

@@ -14,6 +14,16 @@ public interface ITGenericBO<E extends ITEntity> {
 	public List<E> search(TSelect<E> sel);
 	
 	/**
+	 * Search for entities
+	 * */
+	public List<E> search(TSelect<E> sel, int firstResult, int maxResult);
+	
+	/**
+	 * Count a searched entities
+	 * */
+	public Long countSearch(TSelect<E> sel);
+	
+	/**
 	 * Retorna um Entity Acess Object
 	 * */
 	public abstract ITGenericEAO<E> getEao();

@@ -10,51 +10,65 @@ public interface ITEjbService<E extends ITEntity> {
 	/**
 	 * Search for entities
 	 * */
-	public List<E> search(TSelect<E> sel);
-	
-	/**
-	 * Retorna uma entidade pelo seu id
-	 * */
-	public E findById(E entidade)throws Exception;
-	
-	/**
-	 * Retorna a primeira entidade pesquisada com os atributos preenchidos
-	 * */
-	public E find(E entidade)throws Exception ;
-	
-	/**
-	 * Pesquisa pelos atributos preenchidos
-	 * */
-	public List<E> findAll(E entity)throws Exception;
-	
-	/**
-	 * Salva uma entidade
-	 * */
-	public E save(E entidade)throws Exception;
-	/**
-	 * Remove uma entidade
-	 * */
-	public void remove(E entidade)throws Exception;
-	/**
-	 * Retorna uma lista com todas as entidades persistidas
-	 * */
-	public List<E> listAll(Class<? extends ITEntity> entidadeClass)throws Exception;
-	/**
-	 * Retorna uma lista paginada
-	 * */
-	public List<E> pageAll(E entidade, int firstResult, int maxResult, boolean orderByAsc)throws Exception;
-	/**
-	 * Retorna uma pesquisa paginada
-	 * */
-	public List<E> findAll(E entity, int firstResult, int maxResult, boolean orderByAsc, boolean containsAnyKeyWords)throws Exception;
+	List<E> search(TSelect<E> sel);
 
 	/**
-	 * Retorna a quantidade de registros encontrados
+	 * Search for entities
 	 * */
-	public Integer countFindAll(E entity, boolean containsAnyKeyWords)throws Exception;
+	List<E> search(TSelect<E> sel, int firstResult, int maxResult);
+	
 	/**
-	 * Retorna a quantidade de registros cadastrados
+	 * Count a searched entities
 	 * */
-	public Long countAll(Class<? extends ITEntity> entidade)throws Exception;
+	Long countSearch(TSelect<E> sel);
+	
+	/**
+	 * Find an entity by id
+	 * */
+	E findById(E entidade)throws Exception;
+	
+	/**
+	 * Returns the first entity searched with attributes filled in
+	 * */
+	E find(E entidade)throws Exception ;
+	
+	/**
+	 * Search for entities with attributes filled in
+	 * */
+	List<E> findAll(E entity)throws Exception;
+	
+	/**
+	 * Save an entity
+	 * */
+	E save(E entidade)throws Exception;
+	/**
+	 * Remove/delete an entity
+	 * */
+	void remove(E entidade)throws Exception;
+	
+	/**
+	 * List all typed entities
+	 * */
+	List<E> listAll(Class<? extends ITEntity> entidadeClass)throws Exception;
+	
+	/**
+	 * Paginate all typed entity
+	 * */
+	List<E> pageAll(E entidade, int firstResult, int maxResult, boolean orderByAsc)throws Exception;
+	
+	/**
+	 * Find and page the result
+	 * */
+	List<E> findAll(E entity, int firstResult, int maxResult, boolean orderByAsc, boolean containsAnyKeyWords)throws Exception;
+
+	/**
+	 * Return the total entities found in find all
+	 * */
+	Integer countFindAll(E entity, boolean containsAnyKeyWords)throws Exception;
+	
+	/**
+	 * Return the total entities
+	 * */
+	Long countAll(Class<? extends ITEntity> entidade)throws Exception;
 	
 }

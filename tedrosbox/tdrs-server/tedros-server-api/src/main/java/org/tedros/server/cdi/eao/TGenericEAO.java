@@ -143,9 +143,34 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 	
 	@SuppressWarnings("unchecked")
 	public List<E> search(TSelect<E> sel){
+		Query qry = createSearchQuery(sel, false);
+		return qry.getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<E> search(TSelect<E> sel, int firstResult, int maxResult){
 		
+		Query qry = createSearchQuery(sel, false);
+		qry.setFirstResult(firstResult);
+		qry.setMaxResults(maxResult);
+		return qry.getResultList();
+		
+	}
+	
+	public Long countSearch(TSelect<E> sel){
+		Query qry = createSearchQuery(sel, true);
+		return (Long) qry.getSingleResult();
+		
+	}
+
+	private Query createSearchQuery(TSelect<E> sel, boolean count) {
 		StringBuilder sb = new StringBuilder("select ");
-		sb.append(sel.getAlias()).append(" ");
+		if(count)
+			sb.append("count(");
+		sb.append(sel.getAlias());
+		if(count)
+			sb.append(") as total");
+		sb.append(" ");
 		sb.append("from ");
 		sb.append(sel.getType().getSimpleName()).append(" ");
 		sb.append(sel.getAlias()).append(" ");
@@ -153,55 +178,62 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 		if(sel.getJoins()!=null)
 			sel.getJoins().forEach(j->{
 				sb.append(j.getType().getValue()).append(" ");
+				sb.append(j.getAlias()).append(".");
 				sb.append(j.getField()).append(" ");
-				sb.append(j.getAlias()).append(" ");
+				sb.append(j.getJoinAlias()).append(" ");
 			});
 		
-		sb.append("where ");
-		
-		sel.getConditions().forEach(b->{
-			if(b.getOperator()!=null)
-				sb.append(b.getOperator().name().toLowerCase()).append(" ");
+		if(sel.getConditions()!=null && !sel.getConditions().isEmpty()) {
+			sb.append("where ");
 			
-			if(b.getCondition().getOperator().equals(TCompareOp.LIKE))
-				sb.append("lower(");
-			
-			sb.append(b.getCondition().getAlias())
-			.append(".").append(b.getCondition().getField());
-			
-			if(b.getCondition().getOperator().equals(TCompareOp.LIKE))
-				sb.append(")");
-			
-			sb.append(" ").append(b.getCondition().getOperator().getValue()).append(" ");
-			sb.append(":").append(b.getCondition().getField()).append("_");
-			sb.append(" ");
-		});
-		
-		if(sel.getOrdenations()!=null) {
+			sel.getConditions().forEach(b->{
+				if(b.getOperator()!=null)
+					sb.append(b.getOperator().name().toLowerCase()).append(" ");
+				
+				if(b.getCondition().getOperator().equals(TCompareOp.LIKE))
+					sb.append("lower(");
+				
+				sb.append(b.getCondition().getAlias())
+				.append(".").append(b.getCondition().getField());
+				
+				if(b.getCondition().getOperator().equals(TCompareOp.LIKE))
+					sb.append(")");
+				
+				sb.append(" ").append(b.getCondition().getOperator().getValue()).append(" ");
+				sb.append(":").append(b.getCondition().getField()).append("_");
+				sb.append(" ");
+			});
+		}
+		if(!count && sel.getOrdenations()!=null) {
 			StringBuilder sb1 = new StringBuilder("");
 			sel.getOrdenations().forEach(f->{
 				if("".equals(sb1.toString()))
 					sb1.append("order by ");
 				else
 					sb1.append(", ");
-				sb1.append(f.getAlias()).append(".");
+				if(f.getAlias()!=null)
+					sb1.append(f.getAlias()).append(".");
 				sb1.append(f.getField());
 			});
+			if(sel.isAsc())
+				sb1.append(" ").append("asc");
+			else
+				sb1.append(" ").append("desc");
 			sb.append(sb1);
+				
 		}
-			
+		
 		Query qry = this.getEntityManager().createQuery(sb.toString());
-		
-		sel.getConditions().forEach(b->{
-			qry.setParameter(b.getCondition().getField()+"_", 
-					b.getCondition().getOperator().equals(TCompareOp.LIKE) 
-						? b.getCondition().getValue().toString().toLowerCase()
-								: b.getCondition().getValue()
-					);
-		});
-		
-		return qry.getResultList();
-		
+		if(sel.getConditions()!=null && !sel.getConditions().isEmpty()) {
+			sel.getConditions().forEach(b->{
+				qry.setParameter(b.getCondition().getField()+"_", 
+						b.getCondition().getOperator().equals(TCompareOp.LIKE) 
+							? "%"+b.getCondition().getValue().toString().toLowerCase()+"%"
+									: b.getCondition().getValue()
+						);
+			});
+		}
+		return qry;
 	}
 	
 	/**
@@ -303,7 +335,8 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 		
 		//List<E> lst = (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
 		//ReportQueryResult res = (ReportQueryResult) ((Vector)((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query)).get(0);
-		ReportQueryResult res = (ReportQueryResult) ((Vector)((JpaEntityManager) em.getDelegate()).createQuery(query).getResultList()).get(0);
+		ReportQueryResult res = (ReportQueryResult) 
+				((Vector)((JpaEntityManager) em.getDelegate()).createQuery(query).getResultList()).get(0);
 		Integer total = (Integer) res.get("COUNT");
 		return  total;
 	}

@@ -9,11 +9,10 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.tedros.common.model.TMimeType;
 import org.tedros.core.cdi.bo.TMimeTypeImportBO;
 import org.tedros.server.cdi.bo.TImportFileEntityBO;
 import org.tedros.server.ejb.service.TEjbImportService;
-
-import org.tedros.common.model.TMimeType;
 
 /**
  * @author Davis Gordon

@@ -16,6 +16,22 @@ public abstract  class TGenericBO<E extends ITEntity> implements ITGenericBO<E> 
 		return getEao().search(sel);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.tedros.server.cdi.bo.ITGenericBO#search(org.tedros.server.query.TSelect, int, int)
+	 */
+	@Override
+	public List<E> search(TSelect<E> sel, int firstResult, int maxResult) {
+		return getEao().search(sel, firstResult, maxResult);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.tedros.server.cdi.bo.ITGenericBO#countSearch(org.tedros.server.query.TSelect)
+	 */
+	@Override
+	public Long countSearch(TSelect<E> sel) {
+		return getEao().countSearch(sel);
+	}
+	
 	/**
 	 * Retorna uma entidade pelo seu id
 	 * */

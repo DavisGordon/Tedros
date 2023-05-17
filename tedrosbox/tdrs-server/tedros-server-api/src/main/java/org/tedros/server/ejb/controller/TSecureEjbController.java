@@ -36,12 +36,34 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 		
 	}
 	
-
+	@TMethodSecurity({
+	@TMethodPolicie(policie = {TActionPolicie.EDIT, TActionPolicie.READ, TActionPolicie.SEARCH})})
 	public TResult<List<E>> search(TAccessToken token,TSelect<E> sel){
 		try{
 			List<E> list = getService().search(sel);
 			processEntityList(token, list);
 			return new TResult<List<E>>(TState.SUCCESS, list);
+		}catch(Exception e){
+			return processException(token, null, e);
+		}
+	}
+	
+
+	@TMethodSecurity({
+	@TMethodPolicie(policie = {TActionPolicie.EDIT, TActionPolicie.READ, TActionPolicie.SEARCH})})
+	public TResult<Map<String, Object>> search(TAccessToken token,TSelect<E> sel, int firstResult, int maxResult){
+		try{
+			Long count  = getService().countSearch(sel);
+			
+			List<E> list = getService().search(sel, firstResult, maxResult);
+			processEntityList(token, list);
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("total", count);
+			map.put("list", list);
+			
+			return new TResult<>(TState.SUCCESS, map);
+			
 		}catch(Exception e){
 			return processException(token, null, e);
 		}

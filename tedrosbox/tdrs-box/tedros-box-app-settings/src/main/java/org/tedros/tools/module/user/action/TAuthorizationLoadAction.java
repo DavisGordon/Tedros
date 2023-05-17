@@ -23,6 +23,7 @@ import org.tedros.fx.presenter.behavior.TActionType;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewSimpleBaseBehavior;
 import org.tedros.fx.presenter.paginator.TPagination;
+import org.tedros.server.query.TSelect;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.tools.module.user.behaviour.TAuthorizationBehavior;
@@ -77,7 +78,7 @@ public class TAuthorizationLoadAction extends TPresenterAction {
 								behavior.getView().tShowModal(tMessageBox, true);
 							}
 							if(behavior instanceof TAuthorizationBehavior) {
-								TPagination pag = new TPagination(null, "appName", true, 0, 50);
+								TPagination pag = new TPagination(null, "appName", TSelect.ALIAS, true, 0, 50);
 								try {
 									((TAuthorizationBehavior)behavior).paginate(pag);
 								} catch (TException e) {

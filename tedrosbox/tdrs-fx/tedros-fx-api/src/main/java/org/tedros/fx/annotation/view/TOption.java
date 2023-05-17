@@ -3,11 +3,13 @@
  */
 package org.tedros.fx.annotation.view;
 
-import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import org.tedros.server.query.TSelect;
 
 
 /**
@@ -19,5 +21,6 @@ import java.lang.annotation.Target;
 public @interface TOption {
 
 	public String text();
-	public String value();
+	public String field();
+	public String alias() default TSelect.ALIAS;
 }

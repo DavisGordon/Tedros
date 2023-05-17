@@ -3,20 +3,12 @@
  */
 package org.tedros.test.ai.helper;
 
-import java.util.List;
-
-import org.tedros.ejb.controller.ICountryController;
-import org.tedros.location.model.Country;
-import org.tedros.stock.entity.EntryType;
-import org.tedros.test.ai.model.CountryJson;
-import org.tedros.test.ai.model.EntryTypeJson;
-
 /**
  * @author Davis Gordon
  *
  */
 public class Helper {
-
+/*
 	public static void testCountryJson() {
 		List<Country> l = ServiceHelper.listAll(ICountryController.JNDI_NAME, Country.class);
 		CountryJson obj = new CountryJson();
@@ -30,8 +22,8 @@ public class Helper {
 		obj.setModel("insert");
 		obj.addData(new EntryType());
 		String json = JsonHelper.write(obj);
-	}
-
+	}*/
+/*
 	public static void testReadJson() {
 		String m = "{\r\n" + 
 				"  \"model\": \"insert\",\r\n" + 
@@ -50,5 +42,5 @@ public class Helper {
 				"}";
 		
 		EntryTypeJson obj = JsonHelper.read(m, EntryTypeJson.class);
-	}
+	}*/
 }

@@ -1,6 +1,7 @@
 package org.tedros.server.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.tedros.server.entity.ITEntity;
 import org.tedros.server.query.TSelect;
@@ -11,50 +12,51 @@ public interface ITSecureEjbController<E extends ITEntity> extends ITBaseControl
 	/**
 	 * Search for entities
 	 * */
-	public TResult<List<E>> search(TAccessToken token, TSelect<E> sel);
+	TResult<List<E>> search(TAccessToken token, TSelect<E> sel);
+
+	/**
+	 * Search for entities
+	 * */
+	TResult<Map<String, Object>> search(TAccessToken token, TSelect<E> sel, int firstResult, int maxResult);
 	
 	/**
-	 * Retorna uma entidade pelo seu id
+	 * Find an entity by id
 	 * */
-	@SuppressWarnings("rawtypes")
-	public TResult findById(TAccessToken token, E entidade)throws Exception;
+	TResult<E> findById(TAccessToken token, E entidade)throws Exception;
 	
 	/**
-	 * Retorna a primeira entidade pesquisada com os atributos preenchidos
+	 * Returns the first entity searched with attributes filled in
 	 * */
-	@SuppressWarnings("rawtypes")
-	public TResult find(TAccessToken token, E entidade);
+	TResult<E> find(TAccessToken token, E entidade);
 	
 	/**
-	 * Pesquisa pelos atributos preenchidos
+	 * Search for entities with attributes filled in
 	 * */
-	public TResult<List<E>> findAll(TAccessToken token, E entity);
+	TResult<List<E>> findAll(TAccessToken token, E entity);
 	
 	/**
-	 * Salva uma entidade
+	 *  Save an entity
 	 * */
-	@SuppressWarnings("rawtypes")
-	public TResult save(TAccessToken token, E entidade);
-	/**
-	 * Remove uma entidade
-	 * */
-	@SuppressWarnings("rawtypes")
-	public TResult remove(TAccessToken token, E entidade);
-	/**
-	 * Retorna uma lista com todas as entidades persistidas
-	 * */
-	@SuppressWarnings("rawtypes")
-	public TResult listAll(TAccessToken token, Class<? extends ITEntity> entidadeClass);
-	/**
-	 * Retorna uma lista paginada
-	 * */
-	@SuppressWarnings("rawtypes")
-	public TResult pageAll(TAccessToken token, E entidade, int firstResult, int maxResult, boolean orderByAsc);
+	TResult<E> save(TAccessToken token, E entidade);
 	
 	/**
-	 * Retorna uma pesquisa paginada
+	 *  Remove/delete an entity
 	 * */
-	@SuppressWarnings("rawtypes")
-	public TResult findAll(TAccessToken token, E entity, int firstResult, int maxResult, boolean orderByAsc, boolean containsAnyKeyWords)throws Exception;
+	TResult<E> remove(TAccessToken token, E entidade);
+	
+	/**
+	 * List all typed entities
+	 * */
+	TResult<List<E>> listAll(TAccessToken token, Class<? extends ITEntity> entidadeClass);
+	
+	/**
+	 * * Paginate all typed entity
+	 * */
+	TResult<Map<String, Object>> pageAll(TAccessToken token, E entidade, int firstResult, int maxResult, boolean orderByAsc);
+	
+	/**
+	 * Find and page the result
+	 * */
+	TResult<Map<String, Object>> findAll(TAccessToken token, E entity, int firstResult, int maxResult, boolean orderByAsc, boolean containsAnyKeyWords)throws Exception;
 
 }

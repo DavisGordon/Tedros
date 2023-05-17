@@ -41,6 +41,26 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 		}
 	}
 	
+	
+	public TResult<Map<String, Object>> search(TSelect<E> sel, int firstResult, int maxResult){
+		try{
+			Long count  = getService().countSearch(sel);
+			
+			List<E> list = getService().search(sel, firstResult, maxResult);
+			processEntityList(list);
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("total", count);
+			map.put("list", list);
+			
+			return new TResult<>(TState.SUCCESS, map);
+			
+		}catch(Exception e){
+			return processException(null, e);
+		}
+	}
+	
+	
 	public TResult<E> findById(E entity) {
 		try{
 			entity = getService().findById(entity);
@@ -87,7 +107,7 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 	public TResult<E> remove(E entity) {
 		try{
 			getService().remove(entity);
-			return new TResult<E>(TState.SUCCESS);
+			return new TResult<>(TState.SUCCESS);
 			
 		}catch(Exception e){
 			return processException(entity, e);

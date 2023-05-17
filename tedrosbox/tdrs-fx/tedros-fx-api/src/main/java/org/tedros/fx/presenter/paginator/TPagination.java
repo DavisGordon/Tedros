@@ -14,6 +14,7 @@ public class TPagination {
 	private String searchFieldName;
 	private String search;
 	private String orderBy;
+	private String orderByAlias;
 	private boolean orderByAsc;
 	private int start;
 	private int totalRows;
@@ -27,10 +28,11 @@ public class TPagination {
 	 * @param start
 	 * @param totalRows
 	 */
-	public TPagination(String search, String orderBy, boolean orderByAsc, int start, int totalRows) {
+	public TPagination(String search, String orderBy, String orderByAlias, boolean orderByAsc, int start, int totalRows) {
 		this.search = search;
 		this.orderBy = orderBy;
 		this.orderByAsc = orderByAsc;
+		this.orderByAlias = orderByAlias;
 		this.start = start;
 		this.totalRows = totalRows;
 	}
@@ -42,12 +44,13 @@ public class TPagination {
 	 * @param start
 	 * @param totalRows
 	 */
-	public TPagination(String searchFieldName, String search, String orderBy, boolean orderByAsc, int start,
+	public TPagination(String searchFieldName, String search, String orderBy, String orderByAlias, boolean orderByAsc, int start,
 			int totalRows) {
 		this.searchFieldName = searchFieldName;
 		this.search = search;
 		this.orderBy = orderBy;
 		this.orderByAsc = orderByAsc;
+		this.orderByAlias = orderByAlias;
 		this.start = start;
 		this.totalRows = totalRows;
 	}
@@ -86,6 +89,12 @@ public class TPagination {
 	 */
 	public String getSearchFieldName() {
 		return searchFieldName;
+	}
+	/**
+	 * @return the orderByAlias
+	 */
+	public String getOrderByAlias() {
+		return orderByAlias;
 	}
 	
 	

@@ -204,10 +204,10 @@ public class TPaginator extends BorderPane {
 		
 	}
 	
-	public void addOrderByOption(String text, String field) {
+	public void addOrderByOption(String text, String field, String alias) {
 		orderBy.getItems().add(new TOption<>(TLanguage
 				.getInstance(null)
-				.getString(text), field));
+				.getString(text), field, alias));
 	}
 	
 	public void reload(long totalRows) {
@@ -275,10 +275,11 @@ public class TPaginator extends BorderPane {
 	
 	private TPagination buildPagination(int start){
 		String orderBy = getOrderBy();
+		String orderAlias = getOrderByAlias();
 		boolean orderAsc = getOrderAsc();
 		return new TPagination(searchFieldName!=null ? searchFieldName : null, 
 				search!=null ? search.getText() : null, 
-				orderBy, orderAsc, start, getTotalRows());
+				orderBy, orderAlias, orderAsc, start, getTotalRows());
 	}
 
 	/**
@@ -292,14 +293,26 @@ public class TPaginator extends BorderPane {
 	 * @return
 	 */
 	public boolean getOrderAsc() {
-		return this.orderByType!=null ? (boolean) this.orderByType.getSelectedToggle().getUserData() : true;
+		return this.orderByType!=null 
+				? (boolean) this.orderByType.getSelectedToggle().getUserData() 
+						: true;
 	}
 
 	/**
 	 * @return
 	 */
+	public String getOrderByAlias() {
+		return this.orderBy!=null && this.orderBy.getValue()!=null 
+				? (String) this.orderBy.getValue().getUserData() 
+						: null;
+	}
+	/**
+	 * @return
+	 */
 	public String getOrderBy() {
-		return this.orderBy!=null && this.orderBy.getValue()!=null ? this.orderBy.getValue().getValue() : null;
+		return this.orderBy!=null && this.orderBy.getValue()!=null 
+				? this.orderBy.getValue().getValue() 
+						: null;
 	}
 	
 	public void setOrderBy(int index) {

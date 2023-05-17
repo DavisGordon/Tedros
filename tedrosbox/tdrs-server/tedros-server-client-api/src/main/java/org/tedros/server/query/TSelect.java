@@ -24,6 +24,7 @@ public class TSelect<E extends ITEntity>  implements Serializable{
 	private List<TJoin> joins;
 	private List<TBlock> conditions;
 	private List<TField> ordenations;
+	private boolean asc = true;
 	/**
 	 * @param type
 	 */
@@ -40,16 +41,16 @@ public class TSelect<E extends ITEntity>  implements Serializable{
 	}
 	/**
 	 * add a join.
-	 * Important, the field parameter must precede its source alias.
 	 *
 	 * @param type
-	 * @param field - the field to join, ie: "e.product"
-	 * @param alias - the join alias
+	 * @param fieldAlias - the field alias
+	 * @param field - the field to join
+	 * @param joinAlias - the join alias
 	 */
-	public void addJoin(TJoinType type, String field, String alias) {
+	public void addJoin(TJoinType type, String fieldAlias, String field, String joinAlias) {
 		if(joins==null)
 			joins = new ArrayList<>();
-		joins.add(new TJoin(type, field, alias));
+		joins.add(new TJoin(type, fieldAlias, field, joinAlias));
 	}
 
 	public <T> void addOrCondition(String field, TCompareOp compOp, T value) {
@@ -121,6 +122,20 @@ public class TSelect<E extends ITEntity>  implements Serializable{
 	 */
 	public List<TJoin> getJoins() {
 		return joins;
+	}
+
+	/**
+	 * @return the asc
+	 */
+	public boolean isAsc() {
+		return asc;
+	}
+
+	/**
+	 * @param asc the asc to set
+	 */
+	public void setAsc(boolean asc) {
+		this.asc = asc;
 	}
 	
 }

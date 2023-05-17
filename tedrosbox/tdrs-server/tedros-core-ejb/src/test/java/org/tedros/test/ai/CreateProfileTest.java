@@ -11,7 +11,6 @@ import org.tedros.core.controller.TProfileController;
 import org.tedros.core.security.model.TProfile;
 import org.tedros.test.ai.helper.JsonHelper;
 import org.tedros.test.ai.helper.ServiceHelper;
-import org.tedros.test.ai.model.EntryTypeJson;
 import org.tedros.test.ai.model.ProfileJson;
 import org.tedros.test.serv.OpenAiServ;
 
