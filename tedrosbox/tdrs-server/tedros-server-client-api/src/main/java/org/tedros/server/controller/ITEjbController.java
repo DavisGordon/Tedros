@@ -1,6 +1,7 @@
 package org.tedros.server.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.tedros.server.entity.ITEntity;
 import org.tedros.server.query.TSelect;
@@ -10,50 +11,51 @@ public interface ITEjbController<E extends ITEntity> extends ITBaseController {
 	/**
 	 * Search for entities
 	 * */
-	public TResult<List<E>> search(TSelect<E> sel);
-			 
-	/**
-	 * Retorna uma entidade pelo seu id
-	 * */
-	@SuppressWarnings("rawtypes")
-	public TResult findById(E entidade)throws Exception;
+	TResult<List<E>> search(TSelect<E> sel);
 	
 	/**
-	 * Retorna a primeira entidade pesquisada com os atributos preenchidos
+	 * Search for entities
 	 * */
-	@SuppressWarnings("rawtypes")
-	public TResult find(E entidade);
+	TResult<Map<String, Object>> search(TSelect<E> sel, int firstResult, int maxResult);
+		
+	/**
+	 * Find an entity by id
+	 * */
+	TResult<E> findById(E entidade)throws Exception;
 	
 	/**
-	 * Pesquisa pelos atributos preenchidos
+	 * Returns the first entity searched with attributes filled in
 	 * */
-	public TResult<List<E>> findAll(E entity);
+	TResult<E> find(E entidade);
 	
 	/**
-	 * Salva uma entidade
+	 * Search by filled attributes
 	 * */
-	@SuppressWarnings("rawtypes")
-	public TResult save(E entidade);
-	/**
-	 * Remove uma entidade
-	 * */
-	@SuppressWarnings("rawtypes")
-	public TResult remove(E entidade);
-	/**
-	 * Retorna uma lista com todas as entidades persistidas
-	 * */
-	@SuppressWarnings("rawtypes")
-	public TResult listAll(Class<? extends ITEntity> entidadeClass);
-	/**
-	 * Retorna uma lista paginada
-	 * */
-	@SuppressWarnings("rawtypes")
-	public TResult pageAll(E entidade, int firstResult, int maxResult, boolean orderByAsc);
+	TResult<List<E>> findAll(E entity);
 	
 	/**
-	 * Retorna uma pesquisa paginada
+	 * Save an entity
 	 * */
-	@SuppressWarnings("rawtypes")
-	public TResult findAll(E entity, int firstResult, int maxResult, boolean orderByAsc, boolean containsAnyKeyWords)throws Exception;
+	TResult<E> save(E entidade);
+	
+	/**
+	 * Remove an entity
+	 * */
+	TResult<E> remove(E entidade);
+	
+	/**
+	 * Returns a list of all persisted entities
+	 * */
+	TResult<List<E>> listAll(Class<? extends ITEntity> entidadeClass);
+	
+	/**
+	 * Returns a paginated list
+	 * */
+	TResult<Map<String, Object>> pageAll(E entidade, int firstResult, int maxResult, boolean orderByAsc);
+	
+	/**
+	 * Returns a paginated search
+	 * */
+	TResult<Map<String, Object>> findAll(E entity, int firstResult, int maxResult, boolean orderByAsc, boolean containsAnyKeyWords)throws Exception;
 
 }

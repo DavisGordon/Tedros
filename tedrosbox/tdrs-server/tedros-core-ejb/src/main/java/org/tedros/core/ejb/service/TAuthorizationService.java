@@ -9,10 +9,9 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.tedros.core.cdi.bo.TAuthorizationBO;
+import org.tedros.core.security.model.TAuthorization;
 import org.tedros.server.cdi.bo.ITGenericBO;
 import org.tedros.server.ejb.service.TEjbService;
-
-import org.tedros.core.security.model.TAuthorization;
 
 @Local
 @Stateless(name="TAuthorizationService")

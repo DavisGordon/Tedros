@@ -4,11 +4,10 @@ package org.tedros.core.cdi.bo;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import org.tedros.server.cdi.bo.ITGenericBO;
-import org.tedros.server.cdi.bo.TImportFileEntityBO;
-
 import org.tedros.common.model.TMimeType;
 import org.tedros.common.model.TMimeTypeImport;
+import org.tedros.server.cdi.bo.ITGenericBO;
+import org.tedros.server.cdi.bo.TImportFileEntityBO;
 
 /**
  * @author Davis Gordon

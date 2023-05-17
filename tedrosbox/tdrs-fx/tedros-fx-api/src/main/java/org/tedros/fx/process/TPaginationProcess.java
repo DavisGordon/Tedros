@@ -15,6 +15,7 @@ import org.tedros.server.controller.ITBaseController;
 import org.tedros.server.controller.ITEjbController;
 import org.tedros.server.controller.ITSecureEjbController;
 import org.tedros.server.entity.ITEntity;
+import org.tedros.server.query.TSelect;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 
@@ -43,11 +44,13 @@ public abstract class TPaginationProcess<E extends ITEntity> extends TProcess<TR
 	
 	private static final int PAGEALL = 1; 
 	private static final int FINDALL = 2;
+	private static final int SEARCHALL = 3;
 	
 	private Class<E> entityType;
 	private E value;
 	private TPagination pagination;
 	private int operation;
+	private TSelect<E> select;
 	
 	private String serviceJndiName;
 	
@@ -86,6 +89,16 @@ public abstract class TPaginationProcess<E extends ITEntity> extends TProcess<TR
 		this.pagination = pagination;
 	}
 	
+	/**
+	 * <pre>Add an entity to find </pre>
+	 * @param entidade - The entity to find
+	 * @param pagination - the pagination info
+	 * */
+	public void searchAll(TSelect<E> select, TPagination pagination){
+		operation = SEARCHALL;
+		this.select = select;
+		this.pagination = pagination;
+	}
 	
 	/**
 	 * <pre>Create the task to be executed</pre>
@@ -120,7 +133,7 @@ public abstract class TPaginationProcess<E extends ITEntity> extends TProcess<TR
 	        		}
         			
         			if(service!=null || secure!=null){
-	        			if(StringUtils.isNotBlank(pagination.getOrderBy())) {
+	        			if(StringUtils.isNotBlank(pagination.getOrderBy()) && value!=null) {
 	        				value.setOrderBy(new ArrayList<>());
 	        				value.addOrderBy(pagination.getOrderBy());
 	        			}
@@ -134,6 +147,11 @@ public abstract class TPaginationProcess<E extends ITEntity> extends TProcess<TR
 								result = service!=null
 										? service.pageAll(value, pagination.getStart(), pagination.getTotalRows(), pagination.isOrderByAsc())
 												: secure.pageAll(user.getAccessToken(), value, pagination.getStart(), pagination.getTotalRows(), pagination.isOrderByAsc());
+								break;
+							case SEARCHALL :
+								result = service!=null
+										? service.search(select, pagination.getStart(), pagination.getTotalRows())
+												: secure.search(user.getAccessToken(), select, pagination.getStart(), pagination.getTotalRows());
 								break;
 						}
 	        		}

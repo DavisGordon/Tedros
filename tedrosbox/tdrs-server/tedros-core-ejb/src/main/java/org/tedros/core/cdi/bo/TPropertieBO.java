@@ -3,12 +3,11 @@ package org.tedros.core.cdi.bo;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import org.tedros.core.cdi.eao.TPropertieEao;
-import org.tedros.server.cdi.bo.TGenericBO;
-
 import org.tedros.common.model.TFileEntity;
+import org.tedros.core.cdi.eao.TPropertieEao;
 import org.tedros.core.domain.TSystemPropertie;
 import org.tedros.core.setting.model.TPropertie;
+import org.tedros.server.cdi.bo.TGenericBO;
 
 @RequestScoped
 public class TPropertieBO extends TGenericBO<TPropertie> {

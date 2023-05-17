@@ -23,6 +23,20 @@ public abstract class TEjbService<E extends ITEntity> implements ITEjbService<E>
 		return getBussinesObject().search(sel);
 	}
 	
+	/**
+	 * Search for entities
+	 * */
+	public List<E> search(TSelect<E> sel, int firstResult, int maxResult) {
+		return getBussinesObject().search(sel, firstResult, maxResult);
+	}
+	
+	/**
+	 * Count Searched entities
+	 * */
+	public Long countSearch(TSelect<E> sel) {
+		return getBussinesObject().countSearch(sel);
+	}
+	
 	public E findById(E entidade)throws Exception{
 		return getBussinesObject().findById(entidade);
 	}

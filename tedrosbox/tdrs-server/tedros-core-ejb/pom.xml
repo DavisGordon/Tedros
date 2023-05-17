@@ -34,12 +34,6 @@
 	  		<version>8-5.1.0</version>
 	  		<scope>test</scope>
 	  	</dependency>
-	  	<dependency>
-	  		<groupId>org.tedros</groupId>
-	  		<artifactId>app-stock-ejb-client</artifactId>
-	  		<version>8-2.0.0</version>
-			<scope>test</scope>
-	  	</dependency>
 	  	
 		<dependency>
 			<groupId>com.mikesamuel</groupId>
@@ -54,18 +48,7 @@
 			<version>${jackson.version}</version>
 			<scope>test</scope>
 		</dependency>
-	  	<dependency>
-	  		<groupId>org.tedros</groupId>
-	  		<artifactId>app-location-ejb-client</artifactId>
-	  		<version>8-2.0.0</version>
-			<scope>test</scope>
-	  	</dependency>
-	  	<dependency>
-	  		<groupId>org.tedros</groupId>
-	  		<artifactId>app-person-ejb-client</artifactId>
-	  		<version>8-2.0.0</version>
-			<scope>test</scope>
-	  	</dependency>
+	  	
 		<dependency>
 			<groupId>org.tedros</groupId>
 			<artifactId>tedros-server-api</artifactId>

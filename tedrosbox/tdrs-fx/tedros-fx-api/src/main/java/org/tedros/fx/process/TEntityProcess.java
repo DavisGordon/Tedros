@@ -204,9 +204,10 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 													: secure.find(user.getAccessToken(), entity));
 								break;
 							case LIST :
-								resultList.add(service!=null 
+								TResult res = service!=null 
 										? service.listAll(entityType)
-												: secure.listAll(user.getAccessToken(), entityType));
+												: secure.listAll(user.getAccessToken(), entityType);
+								resultList.add(res);
 								break;
 							case SEARCH :
 								if(select==null) {

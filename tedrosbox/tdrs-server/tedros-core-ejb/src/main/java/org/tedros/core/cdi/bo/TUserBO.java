@@ -4,10 +4,9 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import org.tedros.core.cdi.eao.TUserEao;
-import org.tedros.server.cdi.bo.TGenericBO;
-
 import org.tedros.core.security.model.TProfile;
 import org.tedros.core.security.model.TUser;
+import org.tedros.server.cdi.bo.TGenericBO;
 
 @RequestScoped
 public class TUserBO extends TGenericBO<TUser> {

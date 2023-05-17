@@ -8,8 +8,10 @@ package org.tedros.fx.control;
  *
  */
 public class TOption<T> {
-
+	
 	private String text;
+	
+	private Object userData; 
 	
 	private T value;
 
@@ -19,6 +21,12 @@ public class TOption<T> {
 	 */
 	public TOption(String text, T value) {
 		this.text = text;
+		this.value = value;
+	}
+
+	public TOption(String text, T value, Object userData) {
+		this.text = text;
+		this.userData = userData;
 		this.value = value;
 	}
 
@@ -93,6 +101,20 @@ public class TOption<T> {
 	@Override
 	public String toString() {
 		return  (text != null ?  text : "");
+	}
+
+	/**
+	 * @return the userData
+	 */
+	public Object getUserData() {
+		return userData;
+	}
+
+	/**
+	 * @param userData the userData to set
+	 */
+	public void setUserData(Object userData) {
+		this.userData = userData;
 	}
 	
 }

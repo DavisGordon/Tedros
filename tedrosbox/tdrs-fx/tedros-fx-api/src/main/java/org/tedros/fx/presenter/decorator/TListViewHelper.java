@@ -87,11 +87,11 @@ public class TListViewHelper<M extends TEntityModelView<? extends ITEntity>>{
 		tListViewProgressIndicator.setSmallLogo();
 		
 		if(paginator!=null && paginator.show()) {
-			tPaginator = new TPaginator(paginator.showSearchField(), paginator.showOrderBy());
+			tPaginator = new TPaginator(paginator.showSearch(), paginator.showOrderBy());
 			if(paginator.showOrderBy()) {
 				for(org.tedros.fx.annotation.view.TOption o : paginator.orderBy())
-					tPaginator.addOrderByOption(o.text(), o.value());
-				tPaginator.setOrderBy(paginator.orderBy()[0].value());
+					tPaginator.addOrderByOption(o.text(), o.field(), o.alias());
+				tPaginator.setOrderBy(paginator.orderBy()[0].field());
 			}
 			tPaginatorAccordion = new Accordion();
 			tPaginatorAccordion.autosize();

@@ -19,6 +19,7 @@ import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
 import org.tedros.fx.annotation.process.TEjbService;
 import org.tedros.fx.annotation.view.TPaginator;
+import org.tedros.fx.annotation.view.TPaginator.TJoin;
 import org.tedros.fx.control.action.TPresenterAction;
 import org.tedros.fx.exception.TException;
 import org.tedros.fx.modal.TMessageBox;
@@ -32,6 +33,9 @@ import org.tedros.fx.process.TPaginationProcess;
 import org.tedros.fx.process.TProcess;
 import org.tedros.fx.util.TEntityListViewCallback;
 import org.tedros.server.entity.ITEntity;
+import org.tedros.server.query.TCompareOp;
+import org.tedros.server.query.TJoinType;
+import org.tedros.server.query.TSelect;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 
@@ -107,10 +111,10 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			tPagAnn = tAnnotation.paginator();
 			if(tPagAnn.show()) {
 				this.paginatorServiceName = tPagAnn.serviceName();
-				this.searchFieldName = tPagAnn.searchFieldName();
+				this.searchFieldName = tPagAnn.searchField();
 				this.decorator.gettPaginator().setSearchFieldName(searchFieldName);
 				try {
-					if(tPagAnn.showSearchField() && StringUtils.isBlank(this.searchFieldName))
+					if(tPagAnn.showSearch() && StringUtils.isBlank(this.searchFieldName))
 						throw new TException("The property searchFieldName in TPaginator annotation is required when showSearhField is true.");
 				}catch(TException e){
 					getView().tShowModal(new TMessageBox(e), true);
@@ -357,43 +361,51 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		
 		super.getListenerRepository().add(chlId, prcl);
 		
-		if(StringUtils.isNotBlank(pagination.getSearch())) {
-			
-			try {
-				Class target = super.getEntityClass();
-				E entity = super.getEntityClass().newInstance();
-				Method setter = null;
-				do {
-					try {
-						Field f = target.getDeclaredField(pagination.getSearchFieldName());
-						setter = target.getMethod("set"+StringUtils.capitalize(pagination.getSearchFieldName()), f.getType());
-						break;
-					} catch (NoSuchFieldException | SecurityException e) {
-						target = target.getSuperclass();
-					} catch (NoSuchMethodException e) {
-						break;
-					}
-				}while(target != Object.class);
-				
-				if(setter==null)
-					throw new TException("The setter method was not found for the field "+this.searchFieldName+" declared in TPaginator annotation.");
-				
-				setter.invoke(entity, pagination.getSearch().toUpperCase());
-				process.findAll(entity, pagination);
-				
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				throw new TException("An error occurred while trying paginate ", e);
-			}
-			
-			
+		if(this.tPagAnn.join().length>0) {
+			TSelect<E> sel = new TSelect(this.tPagAnn.entityClass());
+			for(TJoin j : tPagAnn.join())
+				sel.addJoin(TJoinType.INNER, j.fieldAlias(), j.field(), j.joinAlias());
+			if(pagination.getSearch()!=null)
+				sel.addAndCondition(tPagAnn.fieldAlias(), pagination.getSearchFieldName(), TCompareOp.LIKE, pagination.getSearch());
+			sel.addOrderBy(pagination.getOrderByAlias(), pagination.getOrderBy());
+			sel.setAsc(pagination.isOrderByAsc());
+			process.searchAll(sel, pagination);
 		}else {
-			try {
-				E entity = super.getEntityClass().newInstance();
-				process.pageAll(entity, pagination);
-			} catch (InstantiationException | IllegalAccessException e) {
-				e.printStackTrace();
-			}
 			
+			if(StringUtils.isNotBlank(pagination.getSearch())) {
+				try {
+					Class target = super.getEntityClass();
+					E entity = super.getEntityClass().newInstance();
+					Method setter = null;
+					do {
+						try {
+							Field f = target.getDeclaredField(pagination.getSearchFieldName());
+							setter = target.getMethod("set"+StringUtils.capitalize(pagination.getSearchFieldName()), f.getType());
+							break;
+						} catch (NoSuchFieldException | SecurityException e) {
+							target = target.getSuperclass();
+						} catch (NoSuchMethodException e) {
+							break;
+						}
+					}while(target != Object.class);
+					
+					if(setter==null)
+						throw new TException("The setter method was not found for the field "+this.searchFieldName+" declared in TPaginator annotation.");
+					
+					setter.invoke(entity, pagination.getSearch().toUpperCase());
+					process.findAll(entity, pagination);
+					
+				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					throw new TException("An error occurred while trying paginate ", e);
+				}
+			}else {	
+				try {
+					E entity = super.getEntityClass().newInstance();
+					process.pageAll(entity, pagination);
+				} catch (InstantiationException | IllegalAccessException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		bindProgressIndicator(process);
 		process.stateProperty().addListener(new WeakChangeListener(prcl));
@@ -509,8 +521,9 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 				String orderBy = this.decorator.gettPaginator().getOrderBy();
 				boolean orderAsc = this.decorator.gettPaginator().getOrderAsc();
 				int totalRows = this.decorator.gettPaginator().getTotalRows();
+				String alias = this.decorator.gettPaginator().getOrderByAlias();
 				try {
-					this.paginateLoadedModel(e, new TPagination(null, orderBy, orderAsc, 0, totalRows));
+					this.paginateLoadedModel(e, new TPagination(null, orderBy, alias, orderAsc, 0, totalRows));
 				} catch (TException e1) {
 					e1.printStackTrace();
 				}

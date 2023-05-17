@@ -7,10 +7,9 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.tedros.core.cdi.bo.TCoreBO;
+import org.tedros.core.security.model.TAuditLog;
 import org.tedros.server.cdi.bo.ITGenericBO;
 import org.tedros.server.ejb.service.TEjbService;
-
-import org.tedros.core.security.model.TAuditLog;
 
 @Local
 @Stateless(name="TAuditLogService")
