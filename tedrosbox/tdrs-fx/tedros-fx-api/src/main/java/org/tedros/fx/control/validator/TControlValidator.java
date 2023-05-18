@@ -1,8 +1,8 @@
 package org.tedros.fx.control.validator;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,14 +11,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.core.TLanguage;
 import org.tedros.core.model.ITModelView;
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TModelViewType;
 import org.tedros.fx.annotation.control.TValidator;
 import org.tedros.fx.domain.TZeroValidation;
+import org.tedros.fx.exception.TException;
 import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.presenter.model.TModelViewBuilder;
 import org.tedros.fx.util.TReflectionUtil;
 import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.model.ITFileModel;
+import org.tedros.server.model.ITModel;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
@@ -29,7 +33,6 @@ import javafx.collections.ObservableSet;
 @SuppressWarnings("rawtypes")
 public final class TControlValidator<E extends ITModelView> {
 
-	private static final String GET = "get";
 	private static final String REQUIRED = "required";
 	private static final String ZEROVALIDATION = "zeroValidation";
 	
@@ -81,14 +84,11 @@ public final class TControlValidator<E extends ITModelView> {
 	
 	@SuppressWarnings({"unchecked"})
 	private void validateField(final TValidatorResult<E> result, final ITFieldDescriptor tFieldDescriptor, final E modelView) throws Exception {
+		Field field = tFieldDescriptor.getField();
+		field.setAccessible(true);
+		Object value = field.get(modelView);
+		field.setAccessible(false);
 		
-		final String fieldName = tFieldDescriptor.getFieldName();
-		Method propertyGetMethod = null;
-		try {
-			propertyGetMethod = modelView.getClass().getMethod(GET+StringUtils.capitalize(fieldName));
-		}catch(Exception e) {
-			return;
-		}
 		StringBuilder label = new StringBuilder("");
 		List<Annotation> lAnn = (List<Annotation>) tFieldDescriptor.getAnnotations();
 		lAnn.stream()
@@ -102,7 +102,6 @@ public final class TControlValidator<E extends ITModelView> {
 			
 			if(annotation instanceof TValidator){
 				
-				Object value = propertyGetMethod.invoke(modelView);
 				validateRequiredField(label.toString(), value, result, annotation);
 				
 				TValidator tAnnotation = (TValidator) annotation;
@@ -113,8 +112,11 @@ public final class TControlValidator<E extends ITModelView> {
 					for(String fName : tAnnotation.associatedFieldsName()){
 						if(StringUtils.isBlank(fName))
 							continue;
-						final Method associatedFieldGetMethod = modelView.getClass().getMethod(GET+StringUtils.capitalize(fName));
-						Object associatedValue = associatedFieldGetMethod.invoke(modelView);
+						
+						final Field associatedField = modelView.getClass().getField(fName);
+						associatedField.setAccessible(true);
+						Object associatedValue = associatedField.get(modelView);
+						associatedField.setAccessible(false);
 						validator.addAssociatedFieldValue(fName, associatedValue);
 					}
 				}
@@ -129,12 +131,25 @@ public final class TControlValidator<E extends ITModelView> {
 				List<ITModelView> lst = null;
 				List<TValidatorResult> results = null;
 				
-				Object object = propertyGetMethod.invoke(modelView);
-				if(object instanceof ObservableList)
-					lst = ((ObservableList) propertyGetMethod.invoke(modelView));
-				else if (object instanceof ObjectProperty) {
-					ITModelView detailModelView = (ITModelView) ((ObjectProperty)object).getValue();  
-					lst = Arrays.asList(detailModelView);
+				if(value instanceof ObservableList)
+					lst = (ObservableList) value;
+				else if (value instanceof ObjectProperty) {
+					Object object = ((ObjectProperty)value).getValue();
+					if(object==null)
+						continue;
+					ITModelView detailModelView = null;
+					try {
+						detailModelView = (object instanceof ITModelView)
+								? (ITModelView) object
+										: TModelViewBuilder
+										.create()
+										.modelViewClass((Class<? extends ITModelView<?>>) ((TModelViewType)annotation).modelViewClass())
+										.build((ITModel)object);
+						lst = Arrays.asList(detailModelView);
+					} catch (TException e) {
+						e.printStackTrace();
+						throw new RuntimeException(e);
+					}
 				}
 				if(lst==null)
 					continue;
@@ -146,7 +161,6 @@ public final class TControlValidator<E extends ITModelView> {
 				continue;
 			}
 		
-			Object value = propertyGetMethod.invoke(modelView);
 			validateRequiredField(label.toString(), value, result, annotation);
 		}
 		
@@ -211,23 +225,23 @@ public final class TControlValidator<E extends ITModelView> {
 	}
 
 	private void fieldRequiredMessage(final String fieldName, final TValidatorResult<E> result) {
-		result.addResult(fieldName, iEngine.getString("#{tedros.fxapi.validator.required}"), true);
+		result.addResult(fieldName, iEngine.getString(TFxKey.VALIDATOR_REQUIRED), true);
 	}
 	
 	private void minorThanZeroMessage(final String fieldName, final TValidatorResult<E> result) {
-		result.addResult(fieldName, iEngine.getString("#{tedros.fxapi.validator.minorThanZero}"), true);
+		result.addResult(fieldName, iEngine.getString(TFxKey.VALIDATOR_MINORTHANZERO), true);
 	}
 	
 	private void greatherThanZeroMessage(final String fieldName, final TValidatorResult<E> result) {
-		result.addResult(fieldName, iEngine.getString("#{tedros.fxapi.validator.greatherThanZero}"), true);
+		result.addResult(fieldName, iEngine.getString(TFxKey.VALIDATOR_GREATHERTHANZERO), true);
 	}
 	
 	private void selectAnOptionMessage(final String fieldName, final TValidatorResult<E> result) {
-		result.addResult(fieldName, iEngine.getString("#{tedros.fxapi.validator.selectAnOption}"), true);
+		result.addResult(fieldName, iEngine.getString(TFxKey.VALIDATOR_SELECTANOPTION), true);
 	}
 	
 	private void checkRequiredMessage(final String fieldName, final TValidatorResult<E> result) {
-		result.addResult(fieldName, iEngine.getString("#{tedros.fxapi.validator.checkRequired}"), true);
+		result.addResult(fieldName, iEngine.getString(TFxKey.VALIDATOR_CHECKREQUIRED), true);
 	}
 	
 }

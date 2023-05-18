@@ -365,8 +365,8 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			TSelect<E> sel = new TSelect(this.tPagAnn.entityClass());
 			for(TJoin j : tPagAnn.join())
 				sel.addJoin(TJoinType.INNER, j.fieldAlias(), j.field(), j.joinAlias());
-			if(pagination.getSearch()!=null)
-				sel.addAndCondition(tPagAnn.fieldAlias(), pagination.getSearchFieldName(), TCompareOp.LIKE, pagination.getSearch());
+			if(StringUtils.isNotBlank(pagination.getSearch()))
+				sel.addAndCondition(tPagAnn.fieldAlias(), tPagAnn.searchField(), TCompareOp.LIKE, pagination.getSearch());
 			sel.addOrderBy(pagination.getOrderByAlias(), pagination.getOrderBy());
 			sel.setAsc(pagination.isOrderByAsc());
 			process.searchAll(sel, pagination);

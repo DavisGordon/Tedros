@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.control.TTableView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.entity.behavior.TDetailFieldBehavior;
@@ -37,6 +38,6 @@ public @interface TDetailTableViewPresenter {
 	 * */
 	public TPresenter presenter() default @TPresenter(	behavior = @TBehavior(type = TDetailFieldBehavior.class), 
 														decorator = @TDecorator(type = TDetailFieldDecorator.class, 
-														viewTitle="#{tedros.fxapi.view.detail.title}"), 
+														viewTitle=TFxKey.VIEW_DETAIL_TITLE), 
 														type = TDynaPresenter.class);
 }
