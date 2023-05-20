@@ -3,6 +3,7 @@ package org.tedros.fx.presenter.dynamic.behavior;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
+import org.tedros.api.presenter.ITPresenter;
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.ITModule;
 import org.tedros.core.TLanguage;
@@ -236,11 +237,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * under another view/behavior such as a detail view or modal view.
 	 * @return TDynaPresenter
 	 */
-	public TDynaPresenter getModulePresenter() {
+	public ITPresenter getModulePresenter() {
 				
 		ITModule module = getPresenter().getModule() ;
 		
-		final TDynaPresenter presenter = (TDynaPresenter) TedrosAppManager.getInstance()
+		final ITPresenter presenter = TedrosAppManager.getInstance()
 				.getModuleContext(module).getCurrentViewContext().getPresenter();
 		
 		if(presenter==null)
