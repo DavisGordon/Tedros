@@ -5,5 +5,8 @@ import java.lang.annotation.Annotation;
 import javafx.scene.layout.HBox;
 
 public class THBoxParser extends TAnnotationParser<Annotation, HBox> {
-
+	@Override
+	public void parse(Annotation annotation, HBox object, String... byPass) throws Exception {
+		super.parse(annotation, object, "mode");
+	}
 }

@@ -25,6 +25,6 @@ public final class TTextParser extends TAnnotationParser<Annotation, TText> {
 			control.settTextStyle(tAnnotation.textStyle());
 			control.setText(TLanguage.getInstance(null).getString(tAnnotation.text()));
 			
-			super.parse(annotation, control, "textStyle", "text");
+			super.parse(annotation, control, "textStyle", "text", "mode");
 		}
 }

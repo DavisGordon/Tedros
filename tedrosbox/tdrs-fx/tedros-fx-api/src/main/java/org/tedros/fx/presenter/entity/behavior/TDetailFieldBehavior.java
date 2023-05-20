@@ -3,6 +3,7 @@ package org.tedros.fx.presenter.entity.behavior;
 import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.tedros.api.presenter.ITPresenter;
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.annotation.presenter.TDetailTableViewPresenter;
 import org.tedros.fx.control.action.TPresenterAction;
@@ -11,6 +12,7 @@ import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.dynamic.behavior.TDetailFieldBaseBehavior;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewSimpleBaseBehavior;
 import org.tedros.fx.presenter.model.TEntityModelView;
+import org.tedros.fx.presenter.view.group.TGroupPresenter;
 import org.tedros.server.entity.ITEntity;
 
 /**
@@ -67,7 +69,11 @@ extends TDetailFieldBaseBehavior<M, E> {
 		if(flag) {
 			super.addAction(action);
 		}else {
-			final TDynaPresenter presenter = getModulePresenter();
+			final ITPresenter pre = getModulePresenter();
+			final TDynaPresenter presenter = pre instanceof TDynaPresenter 
+					? (TDynaPresenter) pre
+							: (TDynaPresenter) ((TGroupPresenter)pre).getSelectedView().gettPresenter();
+			
 			final TDynaViewSimpleBaseBehavior behavior = (TDynaViewSimpleBaseBehavior) presenter.getBehavior(); 
 			behavior.addAction(action);
 		}

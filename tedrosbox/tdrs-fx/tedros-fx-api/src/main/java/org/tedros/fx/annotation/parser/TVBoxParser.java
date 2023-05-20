@@ -8,6 +8,7 @@ public class TVBoxParser extends TAnnotationParser<Annotation, VBox> {
 
 	@Override
 	public void parse(Annotation annotation, VBox object, String... byPass) throws Exception {
-		super.parse(annotation, object, "height", "width","modalHeight","modalWidth");
+		super.parse(annotation, object, "height", "width","modalHeight","modalWidth",
+				"mode", "required", "modelViewClass");
 	}
 }

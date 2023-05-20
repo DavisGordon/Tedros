@@ -19,7 +19,7 @@ public class TComboBoxParser extends TAnnotationParser<Annotation, ComboBox> {
 	public void parse(Annotation ann, ComboBox object, String... byPass)
 			throws Exception {
 		
-		super.parse(ann, object, "firstItemText", "optionsList");
+		super.parse(ann, object, "firstItemText", "optionsList", "required");
 		parseFirstItemText(ann, object);
 	}
 
