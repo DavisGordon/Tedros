@@ -166,7 +166,7 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected <T> T processException(E entity, Exception e) {
+	protected <T> T processException(E entity, Throwable e) {
 		e.printStackTrace();
 		if(e instanceof OptimisticLockException || e.getCause() instanceof OptimisticLockException){
 			TResult<E> result = find(entity);
@@ -177,7 +177,10 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 		}else if(e instanceof EJBTransactionRolledbackException) {
 			return (T) new TResult<>(TState.ERROR,true, e.getCause().getMessage());
 		}else if(e instanceof EJBException) {
-			return (T) new TResult<>(TState.ERROR,true, e.getCause().getMessage());
+			if(e.getCause() instanceof EJBException)
+				return this.processException(entity, e.getCause());
+			else
+				return (T) new TResult<>(TState.ERROR,true, e.getCause().getMessage());
 		}else{
 			return (T) new TResult<>(TState.ERROR, e.getMessage());
 		}

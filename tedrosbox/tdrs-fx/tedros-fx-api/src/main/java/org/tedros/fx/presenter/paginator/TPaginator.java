@@ -204,13 +204,13 @@ public class TPaginator extends BorderPane {
 		
 	}
 	
-	public void addOrderByOption(String text, String field, String alias) {
+	public void tAddOrderByOption(String text, String field, String alias) {
 		orderBy.getItems().add(new TOption<>(TLanguage
 				.getInstance(null)
 				.getString(text), field, alias));
 	}
 	
-	public void reload(long totalRows) {
+	public void tReload(long totalRows) {
 		removeBtnEvent();
 		toolbar.getItems().clear();
 		
@@ -274,25 +274,25 @@ public class TPaginator extends BorderPane {
 	}
 	
 	private TPagination buildPagination(int start){
-		String orderBy = getOrderBy();
-		String orderAlias = getOrderByAlias();
-		boolean orderAsc = getOrderAsc();
+		String orderBy = gettOrderBy();
+		String orderAlias = gettOrderByAlias();
+		boolean orderAsc = gettOrderAsc();
 		return new TPagination(searchFieldName!=null ? searchFieldName : null, 
 				search!=null ? search.getText() : null, 
-				orderBy, orderAlias, orderAsc, start, getTotalRows());
+				orderBy, orderAlias, orderAsc, start, gettTotalRows());
 	}
 
 	/**
 	 * @return
 	 */
-	public int getTotalRows() {
+	public int gettTotalRows() {
 		return (int) slider.getValue();
 	}
 
 	/**
 	 * @return
 	 */
-	public boolean getOrderAsc() {
+	public boolean gettOrderAsc() {
 		return this.orderByType!=null 
 				? (boolean) this.orderByType.getSelectedToggle().getUserData() 
 						: true;
@@ -301,7 +301,7 @@ public class TPaginator extends BorderPane {
 	/**
 	 * @return
 	 */
-	public String getOrderByAlias() {
+	public String gettOrderByAlias() {
 		return this.orderBy!=null && this.orderBy.getValue()!=null 
 				? (String) this.orderBy.getValue().getUserData() 
 						: null;
@@ -309,18 +309,18 @@ public class TPaginator extends BorderPane {
 	/**
 	 * @return
 	 */
-	public String getOrderBy() {
+	public String gettOrderBy() {
 		return this.orderBy!=null && this.orderBy.getValue()!=null 
 				? this.orderBy.getValue().getValue() 
 						: null;
 	}
 	
-	public void setOrderBy(int index) {
+	public void settOrderBy(int index) {
 		if(index>=0 && this.orderBy!=null)
 			this.orderBy.getSelectionModel().select(index);
 	}
 	
-	public void setOrderBy(String fieldName) {
+	public void settOrderBy(String fieldName) {
 		if(StringUtils.isNotBlank(fieldName) && this.orderBy!=null) {
 			Optional<TOption<String>> op = this.orderBy.getItems().stream()
 			.filter(e->{
@@ -331,7 +331,7 @@ public class TPaginator extends BorderPane {
 		}
 	}
 	
-	public TPagination getPagination(){
+	public TPagination gettPagination(){
 		return buildPagination(0);
 	}
 
@@ -339,26 +339,32 @@ public class TPaginator extends BorderPane {
 	/**
 	 * @return the paginationProperty
 	 */
-	public ReadOnlyObjectProperty<TPagination> paginationProperty() {
+	public ReadOnlyObjectProperty<TPagination> tPaginationProperty() {
 		return paginationProperty;
 	}
 	
-	public void invalidate() {
+	public void tDispose() {
 		repo.clear();
 	}
 
 	/**
 	 * @return the searchFieldName
 	 */
-	public String getSearchFieldName() {
+	public String gettSearchFieldName() {
 		return searchFieldName;
 	}
 
 	/**
 	 * @param searchFieldName the searchFieldName to set
 	 */
-	public void setSearchFieldName(String searchFieldName) {
+	public void settSearchFieldName(String searchFieldName) {
 		this.searchFieldName = searchFieldName;
+	}
+	
+	public void settSearchPromptText(String text) {
+		if(this.search!=null) {
+			this.search.setPromptText(TLanguage.getInstance().getString(text));
+		}
 	}
 
 }

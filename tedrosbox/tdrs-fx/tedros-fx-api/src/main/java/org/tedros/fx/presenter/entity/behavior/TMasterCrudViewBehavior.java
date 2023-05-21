@@ -112,7 +112,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			if(tPagAnn.show()) {
 				this.paginatorServiceName = tPagAnn.serviceName();
 				this.searchFieldName = tPagAnn.searchField();
-				this.decorator.gettPaginator().setSearchFieldName(searchFieldName);
+				this.decorator.gettPaginator().settSearchFieldName(searchFieldName);
 				try {
 					if(tPagAnn.showSearch() && StringUtils.isBlank(this.searchFieldName))
 						throw new TException("The property searchFieldName in TPaginator annotation is required when showSearhField is true.");
@@ -196,7 +196,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 				
 				TModelViewUtil<M,E> mvu = new TModelViewUtil<>(getModelViewClass(), getEntityClass());
 				E entity = mvu.getNewModelInstance();
-				process.pageAll(entity, this.decorator.gettPaginator().getPagination());
+				process.pageAll(entity, this.decorator.gettPaginator().gettPagination());
 				bindProgressIndicator(process);
 				process.stateProperty().addListener(new WeakChangeListener(prcl));
 				process.startProcess();
@@ -296,7 +296,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 	}
 	
 	private void processPagination(Long totalRows) {
-		this.decorator.gettPaginator().reload(totalRows);
+		this.decorator.gettPaginator().tReload(totalRows);
 	}
 	
 	/**
@@ -426,7 +426,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		reload.setOnAction(e->{
 			try {
 				if(this.isPaginateEnabled()) {
-					TPagination p = this.decorator.gettPaginator().paginationProperty().getValue();
+					TPagination p = this.decorator.gettPaginator().tPaginationProperty().getValue();
 					if(p!=null)
 						this.paginate(p);
 				}else {
@@ -484,7 +484,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			};
 			super.getListenerRepository().add("listviewpaginatorCL", chl0);
 			this.decorator.gettPaginator()
-			.paginationProperty().addListener(new WeakChangeListener<>(chl0));
+			.tPaginationProperty().addListener(new WeakChangeListener<>(chl0));
 		}
 		
 	}
@@ -518,10 +518,10 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			this.processListViewSelectedItem(m);
 		}else{
 			if(this.isPaginateEnabled()) {
-				String orderBy = this.decorator.gettPaginator().getOrderBy();
-				boolean orderAsc = this.decorator.gettPaginator().getOrderAsc();
-				int totalRows = this.decorator.gettPaginator().getTotalRows();
-				String alias = this.decorator.gettPaginator().getOrderByAlias();
+				String orderBy = this.decorator.gettPaginator().gettOrderBy();
+				boolean orderAsc = this.decorator.gettPaginator().gettOrderAsc();
+				int totalRows = this.decorator.gettPaginator().gettTotalRows();
+				String alias = this.decorator.gettPaginator().gettOrderByAlias();
 				try {
 					this.paginateLoadedModel(e, new TPagination(null, orderBy, alias, orderAsc, 0, totalRows));
 				} catch (TException e1) {
@@ -665,7 +665,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 	@Override
 	public boolean invalidate() {
 		if(this.decorator!=null && this.decorator.gettPaginator()!=null)
-			this.decorator.gettPaginator().invalidate();
+			this.decorator.gettPaginator().tDispose();
 		if(this.decorator!=null && this.decorator.gettAiAssistant()!=null)
 			this.decorator.gettAiAssistant().tInvalidate();;
 		return super.invalidate();

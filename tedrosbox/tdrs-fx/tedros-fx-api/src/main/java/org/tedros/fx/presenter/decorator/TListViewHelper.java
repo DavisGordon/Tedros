@@ -5,6 +5,7 @@ package org.tedros.fx.presenter.decorator;
 
 import java.util.Arrays;
 
+import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.control.TProgressIndicator;
@@ -88,10 +89,12 @@ public class TListViewHelper<M extends TEntityModelView<? extends ITEntity>>{
 		
 		if(paginator!=null && paginator.show()) {
 			tPaginator = new TPaginator(paginator.showSearch(), paginator.showOrderBy());
+			if(StringUtils.isNotBlank(paginator.promptText()))
+				tPaginator.settSearchPromptText(paginator.promptText());
 			if(paginator.showOrderBy()) {
 				for(org.tedros.fx.annotation.view.TOption o : paginator.orderBy())
-					tPaginator.addOrderByOption(o.text(), o.field(), o.alias());
-				tPaginator.setOrderBy(paginator.orderBy()[0].field());
+					tPaginator.tAddOrderByOption(o.text(), o.field(), o.alias());
+				tPaginator.settOrderBy(paginator.orderBy()[0].field());
 			}
 			tPaginatorAccordion = new Accordion();
 			tPaginatorAccordion.autosize();

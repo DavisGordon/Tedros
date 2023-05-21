@@ -50,6 +50,11 @@ public @interface TPaginator {
 	 * The entity field name to search.
 	 * */
 	public String searchField() default "";
+
+	/**
+	 * The search prompt text.
+	 * */
+	public String promptText() default "";
 	
 	/**
 	 * The field alias.
