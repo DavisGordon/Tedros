@@ -187,7 +187,7 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected <T> T processException(TAccessToken token, E entity, Exception e) {
+	protected <T> T processException(TAccessToken token, E entity, Throwable e) {
 		e.printStackTrace();
 		if(e instanceof OptimisticLockException || e.getCause() instanceof OptimisticLockException){
 			TResult<E> result = find(token, entity);
@@ -201,7 +201,10 @@ public abstract class TSecureEjbController<E extends ITEntity> implements ITSecu
 			else
 				return (T) new TResult<>(TState.ERROR,true, e.getCause().getMessage());
 		}else if(e instanceof EJBException) {
-			return (T) new TResult<>(TState.ERROR,true, e.getCause().getMessage());
+			if(e.getCause() instanceof EJBException)
+				return this.processException(token, entity, e.getCause());
+			else
+				return (T) new TResult<>(TState.ERROR,true, e.getCause().getMessage());
 		}else{
 			return (T) new TResult<>(TState.ERROR, e.getMessage());
 		}

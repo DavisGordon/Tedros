@@ -166,7 +166,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 						e.printStackTrace();
 					}
 				};
-				this.decorator.gettPaginator().paginationProperty().addListener(chl);
+				this.decorator.gettPaginator().tPaginationProperty().addListener(chl);
 			}
 			
 		}catch(Exception e){
@@ -345,7 +345,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			throws Throwable {
 		
 		if(pagination==null)
-			pagination = decorator.gettPaginator().getPagination();
+			pagination = decorator.gettPaginator().gettPagination();
 		
 		final String id = UUID.randomUUID().toString();
 		TPaginationProcess process = new TPaginationProcess(modelClass, this.serviceName) {};
@@ -398,7 +398,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	}
 	
 	private void processPagination(Long totalRows) {
-		this.decorator.gettPaginator().reload(totalRows);
+		this.decorator.gettPaginator().tReload(totalRows);
 	}
 		
 	/**
@@ -418,7 +418,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			setModelView(model);
 			showForm(TViewMode.EDIT);
 			this.searchResultList.clear();
-			decorator.gettPaginator().reload(0);
+			decorator.gettPaginator().tReload(0);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
