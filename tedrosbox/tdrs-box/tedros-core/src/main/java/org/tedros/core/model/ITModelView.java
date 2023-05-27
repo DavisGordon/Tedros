@@ -8,7 +8,6 @@ import org.tedros.server.model.ITModel;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -102,6 +101,6 @@ public interface ITModelView<M extends ITModel> {
 	@SuppressWarnings("rawtypes")
 	void addListener(final String fieldName, final ListChangeListener listChangeListener);
 
-	Observable getProperty(String fieldName);
+	<T extends Observable> T getProperty(String fieldName);
 	
 }

@@ -290,11 +290,13 @@ extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M> {
 		return helper.gettListViewProgressIndicator();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public TAiAssistant gettAiAssistant() {
 		return helper.gettAiAssistat();
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void settAiAssistant(TAiAssistant tAiAssistant) {
 		helper.settAiAssistat(tAiAssistant);

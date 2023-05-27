@@ -629,7 +629,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	@SuppressWarnings("unchecked")
 	private void runSaveEntityProcess(Consumer<Boolean> callback)
 			throws Exception, TValidatorException, Throwable {
-		//recupera a lista de models views
+		//get the list
 		final ObservableList<M> modelsViewsList = (ObservableList<M>) ((saveAllModels && getModels()!=null) 
 				? getModels() 
 						: getModelView()!=null 
@@ -639,11 +639,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		if(modelsViewsList == null)
 			throw new Exception("None entity found to save!");
 						
-		// valida os models views
+		// validate
 		validateModels(modelsViewsList);
 		
-		
-		// salva os models views
+		// save
 		for(int x=0; x<modelsViewsList.size(); x++){
 			boolean lastEntity = x==modelsViewsList.size()-1;
 			final M model = modelsViewsList.get(x);
@@ -668,7 +667,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 									model.reload(entity);
 									String msg = result.isPriorityMessage() 
 											? result.getMessage()
-													: iEngine.getFormatedString("#{tedros.fxapi.message.save}", model.toStringProperty().getValue());
+													: iEngine.getFormatedString(TFxKey.MESSAGE_SAVE, model.toString());
 									
 									addMessage(new TMessage(TMessageType.INFO, msg));
 									setActionState(new TActionState(TActionType.SAVE, (State) n, TProcessResult.SUCCESS));
@@ -746,14 +745,12 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 					
 					if(processNewEntityBeforeBuildForm(model)) {
 						super.formProperty().addListener(new ChangeListener<ITModelForm>() {
-
 							@Override
 							public void changed(ObservableValue<? extends ITModelForm> arg0, ITModelForm arg1,
 									ITModelForm form) {
 								if(form!=null) {
 									formProperty().removeListener(this);
 									form.tLoadedProperty().addListener(new ChangeListener<Boolean>() {
-
 										@Override
 										public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1,
 												Boolean loaded) {
@@ -761,14 +758,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 												form.tLoadedProperty().removeListener(this);
 												setActionState(new TActionState<>(TActionType.NEW, TProcessResult.SUCCESS));
 											}
-											
 										}
-										
 									});
-								}
-								
-							}
-							
+								}	
+							}	
 						});
 						setModelView(model);
 					}
@@ -880,7 +873,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			};
 		
 		if(unsaved) {
-			return iEngine.getFormatedString("#{tedros.fxapi.message.invalidate}");
+			return iEngine.getFormatedString(TFxKey.MESSAGE_INVALIDATE);
 		}else
 			return null;
 	}
@@ -896,7 +889,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				final M model = getModelView();
 				if(model.isChanged()) {
 				
-					String message = iEngine.getFormatedString("#{tedros.fxapi.message.cancel}");
+					String message = iEngine.getFormatedString(TFxKey.MESSAGE_CANCEL);
 					
 					final TConfirmMessageBox confirm = new TConfirmMessageBox(message);
 					confirm.tConfirmProperty().addListener(new ChangeListener<Number>() {
@@ -934,7 +927,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 																actionHelper.runAfter(TActionType.CANCEL);
 																setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.SUCCESS));
 															}else {
-																addMessage(new TMessage(TMessageType.WARNING, iEngine.getString("#{tedros.fxapi.message.error}")));
+																addMessage(new TMessage(TMessageType.WARNING, iEngine.getString(TFxKey.MESSAGE_ERROR)));
 																setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.NO_RESULT));
 															}
 														}
@@ -991,9 +984,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			if(getModelView()==null)
 				return;
 			
-			String message = iEngine.getFormatedString("#{tedros.fxapi.message.delete}", getModelView().toStringProperty().getValue()==null 
-					? "" 
-						: getModelView().toStringProperty().getValue());
+			String message = iEngine.getFormatedString(TFxKey.MESSAGE_DELETE, getModelView().toString());
 			
 			final TConfirmMessageBox confirm = new TConfirmMessageBox(message);
 			confirm.tConfirmProperty().addListener((a,o,n)->{

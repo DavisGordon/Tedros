@@ -19,7 +19,6 @@ import org.tedros.util.TDateUtil;
 import javafx.beans.Observable;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener.Change;
 import javafx.geometry.Insets;
