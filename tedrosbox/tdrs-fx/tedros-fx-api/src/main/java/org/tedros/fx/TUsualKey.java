@@ -1,6 +1,7 @@
 package org.tedros.fx;
 
 public interface TUsualKey {
+
 	static final String ABLE = "#{label.able}";
 	static final String ACTION = "#{label.action}";
 	static final String ACTIVE = "#{label.active}";
@@ -120,6 +121,10 @@ public interface TUsualKey {
 	static final String FOCUS_ANGLE = "#{label.focus.angle}";
 	static final String FOCUS_DISTANCE = "#{label.focus.distance}";
 	static final String FONT = "#{label.font}";
+	static final String FOR = "#{label.for}";
+	static final String FROM_1 = "#{label.from.1}";
+	static final String FROM_2 = "#{label.from.2}";
+	static final String FROM_THE = "#{label.from.the}";
 	static final String GENDER = "#{label.gender}";
 	static final String GIVER = "#{label.giver}";
 	static final String HEADER = "#{label.header}";
@@ -184,6 +189,7 @@ public interface TUsualKey {
 	static final String OR = "#{label.or}";
 	static final String ORDER_ASC = "#{label.order.asc}";
 	static final String ORDER_BY = "#{label.order.by}";
+	static final String ORDER_CODE = "#{label.order.code}";
 	static final String ORDER_DESC = "#{label.order.desc}";
 	static final String ORDER_TYPE = "#{label.order.type}";
 	static final String ORDERING = "#{label.ordering}";
@@ -191,6 +197,7 @@ public interface TUsualKey {
 	static final String OTHER = "#{label.other}";
 	static final String OWNER = "#{label.owner}";
 	static final String PAGES = "#{label.pages}";
+	static final String PAINEL_EXAMPLE = "#{label.painel.example}";
 	static final String PASSWORD = "#{label.password}";
 	static final String PAYMENT_PLANS = "#{label.payment.plans}";
 	static final String PERCENTAGE = "#{label.percentage}";
@@ -224,6 +231,7 @@ public interface TUsualKey {
 	static final String RESPONSE = "#{label.response}";
 	static final String RESULT = "#{label.result}";
 	static final String RESULT_ORDER = "#{label.result.order}";
+	static final String SALE_CODE = "#{label.sale.code}";
 	static final String SCHEDULE_DATE_TIME = "#{label.schedule.date.time}";
 	static final String SCHEDULED = "#{label.scheduled}";
 	static final String SEARCH = "#{label.search}";
@@ -261,6 +269,7 @@ public interface TUsualKey {
 	static final String THEME = "#{label.theme}";
 	static final String THIS = "#{label.this}";
 	static final String TITLE = "#{label.title}";
+	static final String TO = "#{label.to}";
 	static final String TO_QUEUE = "#{label.to.queue}";
 	static final String TO_SCHEDULE = "#{label.to.schedule}";
 	static final String TOKEN = "#{label.token}";
@@ -284,7 +293,9 @@ public interface TUsualKey {
 	static final String WIDTH = "#{label.width}";
 	static final String WILL = "#{label.will}";
 	static final String WILL_BE = "#{label.will.be}";
+	static final String WITH = "#{label.with}";
 	static final String WORK = "#{label.work}";
 	static final String YES = "#{label.yes}";
 	static final String TOOLTIP_CODES_COMMA_SEPARATED = "#{tooltip.codes.comma.separated}";
+
 }

@@ -8,9 +8,9 @@ import org.tedros.core.context.TReflections;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.model.ITModelView;
 import org.tedros.core.model.TModelViewUtil;
-import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.fx.util.TReflectionUtil;
 
+import javafx.beans.property.Property;
 import javafx.scene.Node;
 import javafx.scene.control.Hyperlink;
 
@@ -52,7 +52,7 @@ public class TIntegratedLink extends Hyperlink {
 			
 			if(mvCls!=null && mCls!=null) {
 				ITModelView mv = TModelViewUtil.buildModelView(mvCls, mCls);
-				((TEntityModelView)mv).getId().setValue(tEntityId);
+				((Property)mv.getProperty("id")).setValue(tEntityId);
 				TedrosAppManager.getInstance().loadInModule(tModulePath, mv);
 			}
 		});

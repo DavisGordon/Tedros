@@ -24,6 +24,7 @@ import org.tedros.core.model.ITModelView;
 import org.tedros.core.repository.TRepository;
 import org.tedros.fx.exception.TErrorType;
 import org.tedros.fx.exception.TException;
+import org.tedros.fx.presenter.model.TFormatter.Item;
 import org.tedros.fx.property.TSimpleFileProperty;
 import org.tedros.fx.util.TPropertyUtil;
 import org.tedros.fx.util.TReflectionUtil;
@@ -178,6 +179,27 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		}
 		
 	}
+	
+
+	@SuppressWarnings("unchecked")
+	public void formatToString(TFormatter formatter) {
+		int x = 0;
+		for(Item i : formatter.items) {
+			String lid = "tDisplayFieldIdx_"+(x++);
+			ChangeListener<Object> chl = (ChangeListener<Object>) getListenerRepository().get(lid);
+			if(chl==null) {
+				chl = (a,o,n) -> {
+					toStringProperty().setValue(TLanguage.getInstance().getString(formatter.toString()));
+				};
+				addListener(lid, chl);
+			}else
+				i.ob.removeListener(chl);
+			
+			i.ob.addListener(chl);
+		}
+		toStringProperty().setValue(TLanguage.getInstance().getString(formatter.toString()));
+	}
+	
 
 	/**
 	 * @param format
@@ -187,9 +209,6 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		Object[] arr = new Object[] {};
 		for(ObservableValue<?> f : fields) {
 			Object o = f.getValue();
-			/*if(o instanceof String && TStripTagUtil.isTagPresent((String) o))
-				arr = ArrayUtils.add(arr, TLanguage.getInstance().getString((String) o));
-			else*/ 
 			if(o instanceof Date) {
 				Calendar cal = Calendar.getInstance();
 				cal.setTime((Date) o);
@@ -352,8 +371,9 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	/**
 	 * Return the {@link ObservableValue} created to the field name. 
 	 * */
-	public Observable getProperty(String fieldName) {
-		return properties.get(fieldName);
+	@SuppressWarnings("unchecked")
+	public <T extends Observable> T getProperty(String fieldName) {
+		return (T) properties.get(fieldName);
 	}
 	
 	/**
