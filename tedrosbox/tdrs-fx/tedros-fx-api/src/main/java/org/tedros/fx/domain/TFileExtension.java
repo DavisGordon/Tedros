@@ -16,16 +16,19 @@ public enum TFileExtension {
 
 	ALL_FILES ("*.*"),
 	ALL_IMAGES ("*.*", "*.jpg", "*.jpeg", "*.bmp", "*.gif", "*.tif", "*.png"), 
+	ALL_MICROSOFT_WORD ("*.doc", "*.docx", "*.docm", "*.dot", "*.dotx", "*.dotm"),
+	ALL_MICROSOFT_EXCEL ("*.xls", "*.xlsx", "*.xlsm", "*.xlt", "*.xltx", "*.xltm"),
+	DOC ("*.doc"),
+	DOCX ("*.docx"),
 	JPG ("*.jpg", "*.jpeg"),  
 	PNG ("*.png"), 
 	BMP ("*.bmp"), 
 	GIF ("*.gif"),
-	TIF ("*.tif"),
-	ALL_MICROSOFT_WORD ("*.doc", "*.docx", "*.docm", "*.dot", "*.dotx", "*.dotm"),
-	ALL_MICROSOFT_EXCEL ("*.xls", "*.xlsx", "*.xlsm", "*.xlt", "*.xltx", "*.xltm"),
-	TXT ("*.txt"), 
+	TIF ("*.tif"),TXT ("*.txt"), 
 	PDF ("*.pdf"), 
-	CSV ("*.csv");
+	CSV ("*.csv"),
+	XLS ("*.xls"),
+	XLSX ("*.xlsx");
 	
 	private String[] extension;
 	

@@ -193,14 +193,24 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 				};
 				
 				super.getListenerRepository().add("processloadlistviewCL", prcl);
-				
-				TModelViewUtil<M,E> mvu = new TModelViewUtil<>(getModelViewClass(), getEntityClass());
-				E entity = mvu.getNewModelInstance();
-				process.pageAll(entity, this.decorator.gettPaginator().gettPagination());
-				bindProgressIndicator(process);
-				process.stateProperty().addListener(new WeakChangeListener(prcl));
-				process.startProcess();
-				
+				if(this.tPagAnn.join().length>0) {
+					TPagination pagination = this.decorator.gettPaginator().gettPagination();
+					TSelect<E> sel = new TSelect(this.tPagAnn.entityClass());
+					for(TJoin j : tPagAnn.join())
+						sel.addJoin(TJoinType.INNER, j.fieldAlias(), j.field(), j.joinAlias());
+					if(StringUtils.isNotBlank(pagination.getSearch()))
+						sel.addAndCondition(tPagAnn.fieldAlias(), tPagAnn.searchField(), TCompareOp.LIKE, pagination.getSearch());
+					sel.addOrderBy(pagination.getOrderByAlias(), pagination.getOrderBy());
+					sel.setAsc(pagination.isOrderByAsc());
+					process.searchAll(sel, pagination);
+				}else {
+					TModelViewUtil<M,E> mvu = new TModelViewUtil<>(getModelViewClass(), getEntityClass());
+					E entity = mvu.getNewModelInstance();
+					process.pageAll(entity, this.decorator.gettPaginator().gettPagination());
+					bindProgressIndicator(process);
+					process.stateProperty().addListener(new WeakChangeListener(prcl));
+					process.startProcess();
+				}
 			} else {
 				// list model process
 				final TEntityProcess<E> process  = (TEntityProcess<E>) createEntityProcess();
