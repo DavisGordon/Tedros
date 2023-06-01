@@ -14,7 +14,7 @@ public class TFileFieldParser extends TAnnotationParser<TFileField, org.tedros.f
 	public void parse(TFileField tAnnotation, org.tedros.fx.control.TFileField control, String...byPass) throws Exception {
 		
 		super.parse(tAnnotation, control, "initialDirectory", "openAction","imageAction", "cleanAction", "selectAction", 
-				"control", "textInputControl", "extensions", "moreExtensions", "preLoadFileBytes");
+				"control", "textInputControl", "extensions", "moreExtensions", "preLoadFileBytes", "propertyValueType");
 		
 		TControlParser cp = new TControlParser();
 		TTextInputControlParse ticp = new TTextInputControlParse();

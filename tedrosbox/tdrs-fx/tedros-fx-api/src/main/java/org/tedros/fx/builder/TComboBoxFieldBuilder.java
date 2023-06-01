@@ -51,6 +51,7 @@ implements ITControlBuilder<org.tedros.fx.control.TComboBoxField, Property<Objec
 	
 		final TComboBoxField tAnnotation = (TComboBoxField) annotation;
 		final org.tedros.fx.control.TComboBoxField control = new org.tedros.fx.control.TComboBoxField();
+		
 		control.getSelectionModel().selectedItemProperty().addListener((a,o,n)-> {
 			if(n instanceof TItem)
 				attrProperty.setValue(((TItem)n).getValue());

@@ -3,9 +3,11 @@
  */
 package org.tedros.tools.module.notify.model;
 
+import java.text.DateFormat;
 import java.util.Date;
 
 import org.tedros.common.model.TFileEntity;
+import org.tedros.core.TLanguage;
 import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.annotation.security.TSecurity;
 import org.tedros.core.controller.TNotifyController;
@@ -62,6 +64,7 @@ import org.tedros.fx.control.tablecell.TMediumDateTimeCallback;
 import org.tedros.fx.domain.TFileExtension;
 import org.tedros.fx.domain.TFileModelType;
 import org.tedros.fx.presenter.model.TEntityModelView;
+import org.tedros.fx.presenter.model.TFormatter;
 import org.tedros.fx.property.TSimpleFileProperty;
 import org.tedros.tools.ToolsKey;
 import org.tedros.tools.module.notify.behaviour.TNotifyBehaviour;
@@ -82,21 +85,20 @@ import javafx.scene.layout.Priority;
 @TSetting(TNotifyMVSetting.class)
 @TEjbService(serviceName = TNotifyController.JNDI_NAME, model=TNotify.class)
 @TListViewPresenter(listViewMinWidth=400, 
-paginator=@TPaginator(entityClass = TNotify.class, 
+	paginator=@TPaginator(entityClass = TNotify.class, 
 		serviceName = TNotifyController.JNDI_NAME, 
 		searchField="subject", modelViewClass=TNotifyMV.class, 
-		orderBy= {@TOption(text = TUsualKey.SUBJECT, field = "subject"), 
+		orderBy= {@TOption(text = TUsualKey.REF_CODE, field = "refCode"), 
+				@TOption(text = TUsualKey.DATE_PROCESSED, field = "processedTime"),
+				@TOption(text = TUsualKey.SUBJECT, field = "subject"),
 				@TOption(text = TUsualKey.SEND_TO, field = "to"), 
 				@TOption(text = TUsualKey.CALLED_BY, field = "calledBy") },
-		showSearch=true,
-		show=true),
-		presenter=@TPresenter(decorator = @TDecorator(viewTitle=ToolsKey.VIEW_NOTIFY,
-			buildModesRadioButton=false),
-	behavior=@TBehavior(type=TNotifyBehaviour.class, saveOnlyChangedModels=false, saveAllModels=false)))
-@TSecurity(id=DomainApp.NOTIFY_FORM_ID,
-appName=ToolsKey.APP_TOOLS, 
-moduleName=ToolsKey.MODULE_NOTIFY, 
-viewName=ToolsKey.VIEW_NOTIFY,
+		showSearch=true, show=true),
+	presenter=@TPresenter(
+		decorator = @TDecorator(viewTitle=ToolsKey.VIEW_NOTIFY, buildModesRadioButton=false),
+		behavior=@TBehavior(type=TNotifyBehaviour.class, saveOnlyChangedModels=false, saveAllModels=false)))
+@TSecurity(id=DomainApp.NOTIFY_FORM_ID, appName=ToolsKey.APP_TOOLS, 
+moduleName=ToolsKey.MODULE_NOTIFY, viewName=ToolsKey.VIEW_NOTIFY,
 allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,  
 	   				TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public class TNotifyMV extends TEntityModelView<TNotify> {
@@ -205,80 +207,19 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 
 	public TNotifyMV(TNotify entity) {
 		super(entity);
-		super.formatToString("%s / %s", subject, to);
+		super.formatToString(TFormatter.create()
+				.add("[%s]", refCode)
+				.add(" %s", subject)
+				.add(" "+TUsualKey.TO+" %s", to)
+				.add(processedTime, obj -> {
+					Date dt = (Date) obj;
+					return " "+TUsualKey.ON+" "+DateFormat
+						.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM, TLanguage.getLocale())
+						.format(dt);
+				})
+			);
 	}
 	
-
-	/**
-	 * @return the refCode
-	 */
-	public SimpleStringProperty getRefCode() {
-		return refCode;
-	}
-
-	/**
-	 * @param refCode the refCode to set
-	 */
-	public void setRefCode(SimpleStringProperty refCode) {
-		this.refCode = refCode;
-	}
-
-	/**
-	 * @return the subject
-	 */
-	public SimpleStringProperty getSubject() {
-		return subject;
-	}
-
-	/**
-	 * @param subject the subject to set
-	 */
-	public void setSubject(SimpleStringProperty subject) {
-		this.subject = subject;
-	}
-
-	/**
-	 * @return the to
-	 */
-	public SimpleStringProperty getTo() {
-		return to;
-	}
-
-	/**
-	 * @param to the to to set
-	 */
-	public void setTo(SimpleStringProperty to) {
-		this.to = to;
-	}
-
-	/**
-	 * @return the content
-	 */
-	public SimpleStringProperty getContent() {
-		return content;
-	}
-
-	/**
-	 * @param content the content to set
-	 */
-	public void setContent(SimpleStringProperty content) {
-		this.content = content;
-	}
-
-	/**
-	 * @return the action
-	 */
-	public SimpleObjectProperty<TAction> getAction() {
-		return action;
-	}
-
-	/**
-	 * @param action the action to set
-	 */
-	public void setAction(SimpleObjectProperty<TAction> action) {
-		this.action = action;
-	}
-
 	/**
 	 * @return the state
 	 */
@@ -286,138 +227,4 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 		return state;
 	}
 
-	/**
-	 * @param state the state to set
-	 */
-	public void setState(SimpleObjectProperty<TState> state) {
-		this.state = state;
-	}
-
-	/**
-	 * @return the eventLog
-	 */
-	public ITObservableList<TNotifyLogTV> getEventLog() {
-		return eventLog;
-	}
-
-	/**
-	 * @param eventLog the eventLog to set
-	 */
-	public void setEventLog(ITObservableList<TNotifyLogTV> eventLog) {
-		this.eventLog = eventLog;
-	}
-	
-	/**
-	 * @return the text
-	 */
-	public SimpleStringProperty getText() {
-		return text;
-	}
-
-	/**
-	 * @param text the text to set
-	 */
-	public void setText(SimpleStringProperty text) {
-		this.text = text;
-	}
-
-	/**
-	 * @return the file
-	 */
-	public TSimpleFileProperty<TFileEntity> getFile() {
-		return file;
-	}
-
-	/**
-	 * @param file the file to set
-	 */
-	public void setFile(TSimpleFileProperty<TFileEntity> file) {
-		this.file = file;
-	}
-
-	/**
-	 * @return the scheduleTime
-	 */
-	public SimpleObjectProperty<Date> getScheduleTime() {
-		return scheduleTime;
-	}
-
-	/**
-	 * @param scheduleTime the scheduleTime to set
-	 */
-	public void setScheduleTime(SimpleObjectProperty<Date> scheduleTime) {
-		this.scheduleTime = scheduleTime;
-	}
-
-	/**
-	 * @return the processedTime
-	 */
-	public SimpleObjectProperty<Date> getProcessedTime() {
-		return processedTime;
-	}
-
-	/**
-	 * @param processedTime the processedTime to set
-	 */
-	public void setProcessedTime(SimpleObjectProperty<Date> processedTime) {
-		this.processedTime = processedTime;
-	}
-
-	/**
-	 * @return the integratedViewName
-	 */
-	public SimpleStringProperty getIntegratedViewName() {
-		return integratedViewName;
-	}
-
-	/**
-	 * @param integratedViewName the integratedViewName to set
-	 */
-	public void setIntegratedViewName(SimpleStringProperty integratedViewName) {
-		this.integratedViewName = integratedViewName;
-	}
-
-	/**
-	 * @return the integratedDate
-	 */
-	public SimpleObjectProperty<Date> getIntegratedDate() {
-		return integratedDate;
-	}
-
-	/**
-	 * @param integratedDate the integratedDate to set
-	 */
-	public void setIntegratedDate(SimpleObjectProperty<Date> integratedDate) {
-		this.integratedDate = integratedDate;
-	}
-
-	/**
-	 * @return the integratedModulePath
-	 */
-	public SimpleStringProperty getIntegratedModulePath() {
-		return integratedModulePath;
-	}
-
-	/**
-	 * @param integratedModulePath the integratedModulePath to set
-	 */
-	public void setIntegratedModulePath(SimpleStringProperty integratedModulePath) {
-		this.integratedModulePath = integratedModulePath;
-	}
-
-	/**
-	 * @return the display
-	 */
-	public SimpleStringProperty getDisplay() {
-		return display;
-	}
-
-	/**
-	 * @param display the display to set
-	 */
-	public void setDisplay(SimpleStringProperty display) {
-		this.display = display;
-	}
-
-	
 }
