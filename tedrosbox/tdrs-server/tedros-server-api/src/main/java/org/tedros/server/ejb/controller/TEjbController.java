@@ -12,6 +12,7 @@ import javax.persistence.OptimisticLockException;
 
 import org.tedros.server.controller.ITEjbController;
 import org.tedros.server.entity.ITEntity;
+import org.tedros.server.exception.TBusinessException;
 import org.tedros.server.query.TSelect;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
@@ -179,7 +180,10 @@ public abstract class TEjbController<E extends ITEntity> implements ITEjbControl
 		}else if(e instanceof EJBException) {
 			if(e.getCause() instanceof EJBException)
 				return this.processException(entity, e.getCause());
-			else
+			else if(e.getCause() instanceof TBusinessException) {
+				TBusinessException bex = (TBusinessException) e.getCause();
+				return (T) new TResult<>(bex.isWarning() ? TState.WARNING : TState.ERROR, true, bex.getMessage());
+			}else
 				return (T) new TResult<>(TState.ERROR,true, e.getCause().getMessage());
 		}else{
 			return (T) new TResult<>(TState.ERROR, e.getMessage());

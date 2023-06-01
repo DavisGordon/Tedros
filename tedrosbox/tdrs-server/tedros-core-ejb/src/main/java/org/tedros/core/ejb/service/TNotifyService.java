@@ -25,10 +25,10 @@ public class TNotifyService extends TEjbService<TNotify> {
 	public ITGenericBO<TNotify> getBussinesObject() {
 		return bo;
 	}
-	
+	/*
 	public void process(TNotify e) {
 		bo.process(e);
-	}
+	}*/
 	
 	public TNotify process(String refCode) throws Exception {
 		return bo.process(refCode);

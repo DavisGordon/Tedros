@@ -9,6 +9,8 @@ package org.tedros.server.exception;
  */
 public class TBusinessException extends RuntimeException {
 
+	private boolean warning;
+	
 	/**
 	 * 
 	 */
@@ -27,6 +29,14 @@ public class TBusinessException extends RuntimeException {
 		super(message);
 	}
 
+
+	/**
+	 * @param message
+	 */
+	public TBusinessException(boolean warning, String message) {
+		super(message);
+		this.warning = warning;
+	}
 	/**
 	 * @param cause
 	 */
@@ -50,6 +60,13 @@ public class TBusinessException extends RuntimeException {
 	 */
 	public TBusinessException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
+	/**
+	 * @return the warning
+	 */
+	public boolean isWarning() {
+		return warning;
 	}
 
 }
