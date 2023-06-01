@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 	type=CacheType.WEAK, // Cache everything until the JVM decides memory is low.
 	size=64000,  // Use 64,000 as the initial cache size.
 	expiry=360000,  // 6 minutes
-	coordinationType=CacheCoordinationType.INVALIDATE_CHANGED_OBJECTS  
+	coordinationType=CacheCoordinationType.INVALIDATE_CHANGED_OBJECTS
 	// if cache coordination is used, only send invalidation messages.
 )
 @MappedSuperclass

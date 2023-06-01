@@ -1,8 +1,5 @@
 package org.tedros.core.ejb.controller;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -11,16 +8,11 @@ import javax.ejb.TransactionAttributeType;
 import org.tedros.core.controller.TNotifyController;
 import org.tedros.core.domain.DomainApp;
 import org.tedros.core.ejb.service.TNotifyService;
-import org.tedros.core.ejb.timer.TNotifyTimer;
-import org.tedros.core.notify.model.TAction;
 import org.tedros.core.notify.model.TNotify;
-import org.tedros.core.notify.model.TState;
 import org.tedros.server.ejb.controller.ITSecurityController;
 import org.tedros.server.ejb.controller.TSecureEjbController;
-import org.tedros.server.result.TResult;
 import org.tedros.server.security.ITSecurity;
 import org.tedros.server.security.TAccessPolicie;
-import org.tedros.server.security.TAccessToken;
 import org.tedros.server.security.TBeanPolicie;
 import org.tedros.server.security.TBeanSecurity;
 import org.tedros.server.security.TSecurityInterceptor;
@@ -35,9 +27,9 @@ public class TNotifyControllerImpl extends TSecureEjbController<TNotify> impleme
 
 	@EJB
 	private TNotifyService serv;
-	
+	/*
 	@EJB
-	private TNotifyTimer timer;
+	private TNotifyTimer timer;*/
 	
 	@EJB
 	private ITSecurityController securityController;
@@ -53,7 +45,7 @@ public class TNotifyControllerImpl extends TSecureEjbController<TNotify> impleme
 	public ITSecurityController getSecurityController() {
 		return securityController;
 	}
-	
+	/*
 	@Override
 	public TResult<TNotify> remove(TAccessToken token, TNotify e) {
 		if(e.getState()!=null && e.getState().equals(TState.SCHEDULED)) {
@@ -61,8 +53,8 @@ public class TNotifyControllerImpl extends TSecureEjbController<TNotify> impleme
 		}
 		return super.remove(token, e);
 	}
-	
-	@Override
+	*/
+	/*@Override
 	public TResult<TNotify> save(TAccessToken token, TNotify e) {
 		
 		switch(e.getAction()) {
@@ -104,6 +96,6 @@ public class TNotifyControllerImpl extends TSecureEjbController<TNotify> impleme
 		}
 		
 		return super.save(token, e);
-	}
+	}*/
 
 }
