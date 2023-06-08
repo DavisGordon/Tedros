@@ -2,13 +2,14 @@ package org.tedros.fx.control;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 import org.tedros.core.TLanguage;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.control.TText.TTextStyle;
 import org.tedros.fx.process.TEntityProcess;
 import org.tedros.server.entity.TEntity;
-import org.tedros.server.query.TCompareOp;
+import org.tedros.server.query.TBlock;
 import org.tedros.server.query.TSelect;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
@@ -44,8 +45,8 @@ public class TAutoCompleteEntity extends TTextField {
 	private Side side;
 	private SimpleObjectProperty<TEntity> tSelectedItemProperty;
 	private String serviceName;
-	private Class<? extends TEntity> eClass;
-	private String[] fieldsName;
+	@SuppressWarnings("rawtypes")
+	private TSelect tSelect;
 	/** The existing autocomplete entries. */
 	private final ObservableList<TEntity> entries;
 	/** The popup used to select an entry. */
@@ -55,26 +56,28 @@ public class TAutoCompleteEntity extends TTextField {
 	private ChangeListener<String> chl;
 	private ChangeListener<Boolean> fchl;
 	private ChangeListener<TEntity> echl;
+	private Function<TEntity, String> tConverter;
 	
 	
 	/** Construct a new AutoCompleteTextField. */
 	
-	public TAutoCompleteEntity( Class<? extends TEntity> eClass, 
+	@SuppressWarnings("rawtypes")
+	public TAutoCompleteEntity(TSelect tSelect, 
 			int startLength, int totalItemsList,
-			String serviceName, String... fieldsName) {
+			String serviceName) {
 		this.setTooltip(new Tooltip(TLanguage.getInstance()
 				.getString(TFxKey.TOOLTIP_AUTOCOMPLETE)));
 		this.serviceName = serviceName;
-		this.eClass = eClass;
-		this.fieldsName = fieldsName;
+		this.tSelect = tSelect;
 		this.side = Side.BOTTOM;
 		this.startLength = startLength>0 ? startLength : 3;
 		this.totalItemsList = totalItemsList>0 ? totalItemsList : 6;
 		this.tSelectedItemProperty = new SimpleObjectProperty<>();
-		entriesPopup = new ContextMenu();
-		entries = FXCollections.observableArrayList();
+		this.entriesPopup = new ContextMenu();
+		this.entries = FXCollections.observableArrayList();
+		this.tConverter = e -> e.toString();
 		buildListeners();
-		entries.addListener(new WeakListChangeListener<>(lchl));
+		this.entries.addListener(new WeakListChangeListener<>(lchl));
 		textProperty().addListener(chl);
 		focusedProperty().addListener(new WeakChangeListener<>(fchl));
 		this.tSelectedItemProperty.addListener(new WeakChangeListener<>(echl));
@@ -98,7 +101,7 @@ public class TAutoCompleteEntity extends TTextField {
 		echl = (a,o,n)->{
 			if(n!=null) {
 				textProperty().removeListener(chl);
-				setText(n.toString());
+				setText(tConverter.apply(n));
 				entries.clear();
 				textProperty().addListener(chl);
 			}
@@ -121,10 +124,12 @@ public class TAutoCompleteEntity extends TTextField {
 				this.tSelectedItemProperty.setValue(null);
 			} else if(n.length()>=startLength){
 				try {
-					TSelect sel = new TSelect(eClass);
-					for(String f : fieldsName)
-						sel.addOrCondition(f, TCompareOp.LIKE, n);
-					TEntityProcess p = new TEntityProcess(eClass, serviceName) {};
+					tSelect.getConditions().forEach(c->{
+						TBlock b = (TBlock) c;
+						if(b.getCondition().isDynamicValue())
+							b.getCondition().setValue(n);
+					});
+					TEntityProcess p = new TEntityProcess(tSelect.getType(), serviceName) {};
 					p.stateProperty().addListener((a1, o1, n1)->{
 						if(n1.equals(State.SUCCEEDED)) {
 							List<TResult<List>> l = (List<TResult<List>>) p.getValue();
@@ -142,7 +147,7 @@ public class TAutoCompleteEntity extends TTextField {
 								entries.clear();
 						}
 					});
-					p.search(sel);
+					p.search(tSelect);
 					p.startProcess();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -166,7 +171,7 @@ public class TAutoCompleteEntity extends TTextField {
 		int count = Math.min(list.size(), this.totalItemsList);
 		for (int i = 0; i < count; i++) {
 			final TEntity result = list.get(i);
-			TextFlow text = this.buildTextFlow(result.toString(), getText());
+			TextFlow text = this.buildTextFlow(tConverter.apply(result), getText());
 			CustomMenuItem item = new CustomMenuItem(text, true);
 			item.setOnAction(ev ->  {
 				tSelectedItemProperty.setValue(result);
@@ -189,5 +194,28 @@ public class TAutoCompleteEntity extends TTextField {
 	    textFilter.setFill(Color.ORANGE);
 	    textFilter.setFont(Font.font("Tahoma", FontWeight.BOLD, 14));  
 	    return new TextFlow(textBefore, textFilter, textAfter);
+	}
+
+	/**
+	 * @return the tSelect
+	 */
+	@SuppressWarnings("rawtypes")
+	public TSelect gettSelect() {
+		return tSelect;
+	}
+
+	/**
+	 * @param tSelect the tSelect to set
+	 */
+	@SuppressWarnings("rawtypes")
+	public void settSelect(TSelect tSelect) {
+		this.tSelect = tSelect;
+	}
+
+	/**
+	 * @param tConverter the tConverter to set
+	 */
+	public void settConverter(Function<TEntity, String> tConverter) {
+		this.tConverter = tConverter;
 	}
 }

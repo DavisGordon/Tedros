@@ -14,13 +14,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
-import javafx.scene.web.WebView;
-
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.api.form.ITModelForm;
@@ -37,6 +30,13 @@ import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.fx.reader.THtmlReader;
 import org.tedros.fx.util.TMaskUtil;
 import org.tedros.util.TStripTagUtil;
+
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
+import javafx.scene.web.WebView;
 
 
 /**

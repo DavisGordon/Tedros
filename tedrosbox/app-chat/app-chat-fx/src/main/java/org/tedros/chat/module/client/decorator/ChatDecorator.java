@@ -41,7 +41,7 @@ public class ChatDecorator extends TMasterCrudViewDecorator<ChatMV> {
 		// get the list view settings
 		TListViewPresenter tAnnotation = getPresenter().getModelViewClass().getAnnotation(TListViewPresenter.class);
 		if(tAnnotation!=null)
-			helper = new TListViewHelper<>(title, tAnnotation.listViewMaxWidth(), tAnnotation.listViewMinWidth(), tAnnotation.paginator());
+			helper = new TListViewHelper<>(title, tAnnotation.listViewMaxWidth(), tAnnotation.listViewMinWidth(), tAnnotation.page());
 		else
 			helper = new TListViewHelper<>(title, 250, 250, null);
 		helper.gettListViewLayout().getChildren().remove(0);

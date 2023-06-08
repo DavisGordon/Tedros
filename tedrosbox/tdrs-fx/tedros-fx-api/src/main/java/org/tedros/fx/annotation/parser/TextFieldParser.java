@@ -9,6 +9,6 @@ public class TextFieldParser extends TAnnotationParser<TTextField, TextField> {
 	@Override
 	public void parse(TTextField annotation, TextField object, String... byPass)
 			throws Exception {
-		super.parse(annotation, object, "maxLength","required");
+		super.parse(annotation, object, "maxLength","required","query","service","modelViewType","startSearchAt");
 	}
 }

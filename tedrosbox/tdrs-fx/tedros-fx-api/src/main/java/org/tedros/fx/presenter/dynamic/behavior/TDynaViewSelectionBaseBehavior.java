@@ -15,9 +15,9 @@ import org.tedros.core.context.TedrosContext;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
 import org.tedros.fx.annotation.control.TTableView;
+import org.tedros.fx.annotation.page.TPage;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TSelectionModalPresenter;
-import org.tedros.fx.annotation.view.TPaginator;
 import org.tedros.fx.builder.ITBuilder;
 import org.tedros.fx.builder.ITControlBuilder;
 import org.tedros.fx.builder.ITFieldBuilder;
@@ -90,13 +90,13 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			if(modalPresenter==null)
 				throw new RuntimeException("The TSelectionModalPresenter annotation not found in the " + getModelViewClass().getSimpleName());
 
-			final TPaginator tPaginator = modalPresenter.paginator();
+			final TPage tPaginator = modalPresenter.paginator();
 			
 			// set the  process
-			if(tPaginator.entityClass()!=null && tPaginator.serviceName()!=null && tPaginator.modelViewClass()!=null){
-				this.modelClass = (Class<E>) tPaginator.entityClass();
+			if(tPaginator.query().entity()!=null && tPaginator.serviceName()!=null && tPaginator.modelView()!=null){
+				this.modelClass = (Class<E>) tPaginator.query().entity();
 				this.serviceName = tPaginator.serviceName();
-				this.paginatorModelViewClass = (Class<? extends TModelView<E>>) tPaginator.modelViewClass();
+				this.paginatorModelViewClass = (Class<? extends TModelView<E>>) tPaginator.modelView();
 			}else
 				throw new RuntimeException("The propertys entityClass, serviceName and modelViewClass in TPaginator is required in the " + getModelViewClass().getSimpleName());
 			

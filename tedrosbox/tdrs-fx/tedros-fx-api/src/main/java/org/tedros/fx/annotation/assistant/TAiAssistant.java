@@ -1,4 +1,4 @@
-package org.tedros.fx.annotation.view;
+package org.tedros.fx.annotation.assistant;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -22,11 +22,13 @@ public @interface TAiAssistant {
 	/**
 	 * The TJsonModel class
 	 * */
+	@SuppressWarnings("rawtypes")
 	public Class<? extends TJsonModel> jsonModel();
 	
 
 	/**
 	 * The model view class
 	 * */
+	@SuppressWarnings("rawtypes")
 	public Class<? extends TModelView> modelViewClass();
 }

@@ -5,8 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.tedros.fx.annotation.view.TAiAssistant;
-import org.tedros.fx.annotation.view.TPaginator;
+import org.tedros.fx.annotation.assistant.TAiAssistant;
+import org.tedros.fx.annotation.page.TPage;
+import org.tedros.fx.annotation.query.TQuery;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.entity.behavior.TMasterCrudViewBehavior;
 import org.tedros.fx.presenter.entity.decorator.TMasterCrudViewDecorator;
@@ -24,15 +25,21 @@ import org.tedros.server.model.TJsonModel;
 @Target(ElementType.TYPE)
 public @interface TListViewPresenter {
 	
-	public double listViewMaxWidth() default 250;
-	public double listViewMinWidth() default 250;
-	public boolean refreshListViewAfterActions() default false;
+	static final double WIDTH = 350;
 	
-	public TPaginator paginator() default @TPaginator(entityClass = ITEntity.class, serviceName = "");
+	double listViewMaxWidth() default WIDTH;
+	double listViewMinWidth() default WIDTH;
+	boolean refreshListViewAfterActions() default false;
 	
-	public TAiAssistant aiAssistant() default @TAiAssistant(jsonModel = TJsonModel.class, modelViewClass = TModelView.class);
+	TPage page() default @TPage(show = false, serviceName = "", 
+			query = @TQuery(entity = ITEntity.class));
 	
-	public TPresenter presenter() default @TPresenter(	behavior = @TBehavior(type = TMasterCrudViewBehavior.class), 
-														decorator = @TDecorator(type = TMasterCrudViewDecorator.class), 
-														type = TDynaPresenter.class);
+	TAiAssistant aiAssistant() default @TAiAssistant(
+			jsonModel = TJsonModel.class, 
+			modelViewClass = TModelView.class);
+	
+	TPresenter presenter() default @TPresenter(	
+			behavior = @TBehavior(type = TMasterCrudViewBehavior.class), 
+			decorator = @TDecorator(type = TMasterCrudViewDecorator.class), 
+			type = TDynaPresenter.class);
 }

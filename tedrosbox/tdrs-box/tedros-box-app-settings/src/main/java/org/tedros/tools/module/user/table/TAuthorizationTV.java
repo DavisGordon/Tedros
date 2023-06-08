@@ -19,12 +19,13 @@ import org.tedros.fx.annotation.layout.THBox;
 import org.tedros.fx.annotation.layout.THGrow;
 import org.tedros.fx.annotation.layout.TPane;
 import org.tedros.fx.annotation.layout.TPriority;
+import org.tedros.fx.annotation.page.TPage;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.presenter.TSelectionModalPresenter;
+import org.tedros.fx.annotation.query.TQuery;
 import org.tedros.fx.annotation.text.TFont;
-import org.tedros.fx.annotation.view.TPaginator;
 import org.tedros.fx.presenter.modal.behavior.TSelectionModalBehavior;
 import org.tedros.fx.presenter.modal.decorator.TSelectionModalDecorator;
 import org.tedros.fx.presenter.model.TEntityModelView;
@@ -41,7 +42,7 @@ import javafx.scene.layout.Priority;
 
 @TLabelDefaultSetting(font=@TFont(size=12))
 @TSelectionModalPresenter(
-		paginator=@TPaginator(entityClass = TAuthorization.class, modelViewClass=TAuthorizationTV.class, 
+		paginator=@TPage(query=@TQuery(entity = TAuthorization.class), modelView=TAuthorizationTV.class, 
 			serviceName = TAuthorizationController.JNDI_NAME),
 		presenter=@TPresenter(behavior = @TBehavior(type = TSelectionModalBehavior.class), 
 			decorator = @TDecorator(type=TSelectionModalDecorator.class, 
@@ -119,6 +120,7 @@ public final class TAuthorizationTV extends TEntityModelView<TAuthorization> {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Observable getProperty(String f) {
 		SimpleStringProperty p = (SimpleStringProperty) super.getProperty(f);

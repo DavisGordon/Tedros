@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.tedros.ejb.controller.ICountryController;
-import org.tedros.location.model.Country;
+import org.tedros.extension.ejb.controller.ICountryController;
+import org.tedros.extension.model.Country;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.web.bean.AppBean;

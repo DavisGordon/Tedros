@@ -53,8 +53,8 @@
   	</dependency>
   	<dependency>
 		<groupId>org.tedros</groupId>
-		 <artifactId>app-location-ejb-client</artifactId>
-		<version>${app.location}</version>
+		 <artifactId>app-extensions-ejb-client</artifactId>
+		<version>${app.ext}</version>
   		<scope>compile</scope>
 	</dependency> 
 	

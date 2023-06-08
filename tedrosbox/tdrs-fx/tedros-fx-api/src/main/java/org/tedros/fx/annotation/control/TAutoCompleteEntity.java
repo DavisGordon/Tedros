@@ -16,16 +16,16 @@ import org.tedros.fx.annotation.TAnnotationDefaultValue;
 import org.tedros.fx.annotation.parser.TRequiredTextFieldParser;
 import org.tedros.fx.annotation.parser.TTextFieldParser;
 import org.tedros.fx.annotation.parser.TextFieldParser;
+import org.tedros.fx.annotation.query.TQuery;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TControl;
 import org.tedros.fx.builder.ITEventHandlerBuilder;
 import org.tedros.fx.builder.ITFieldBuilder;
 import org.tedros.fx.builder.NullActionEventBuilder;
 import org.tedros.fx.builder.TAutoCompleteEntityBuilder;
+import org.tedros.fx.builder.TFunctionEntityToStringBuilder;
 import org.tedros.fx.control.TRequiredTextField;
-import org.tedros.fx.domain.TDefaultValues;
 import org.tedros.fx.presenter.model.TEntityModelView;
-import org.tedros.server.entity.TEntity;
 
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -58,34 +58,6 @@ import javafx.scene.control.TextInputControl;
 @Target(ElementType.FIELD)
 public @interface TAutoCompleteEntity  {
 	
-
-	/**
-	 * Define the entry values to be searched.
-	 * @author Davis Gordon
-	 *
-	 */
-	@Retention(RetentionPolicy.RUNTIME)
-	@Target(ElementType.ANNOTATION_TYPE)
-	public @interface TEntry  {
-		/**
-		 * The JNDI name of the target entity Ejb controller.
-		 * The findAll method you be called.
-		 * */
-		String service();
-		
-		/**
-		 * The field of the target entity to realize the search. 
-		 * Must be a String type field.
-		 * */
-		String[] fields();
-		
-		/**
-		 * The entity type to search. 
-		 * The toString() method will be used to show it in the result list.
-		 * */
-		Class<? extends TEntity> entityType();
-	};
-	
 	/**
 	 *<pre>
 	 * The builder of type {@link ITFieldBuilder} for this component.
@@ -116,11 +88,9 @@ public @interface TAutoCompleteEntity  {
 	/**
 	 * <pre>
 	 * The {@link Control} settings.
-	 * 
-	 * Default value: @TControl(prefWidth=250) 
 	 * </pre>
 	 * */
-	public TControl control() default @TControl(prefWidth=TDefaultValues.LABEL_WIDTH, parse = true);
+	public TControl control() default @TControl(parse = false);
 	
 	/**
 	 * <pre>
@@ -133,10 +103,20 @@ public @interface TAutoCompleteEntity  {
 	 * <pre>
 	 * The {@link TAutoCompleteEntity} settings.
 	 * 
-	 * Define the server settings to realize the entity search.
+	 * The JNDI name of the target entity Ejb controller.
+	 * The findAll method you be called.
 	 * </pre>
 	 * */
-	public TEntry entries();
+	public String service();
+	
+	/**
+	 * <pre>
+	 * The {@link TAutoCompleteEntity} settings.
+	 * 
+	 * The query to entities search
+	 * </pre>
+	 * */
+	public TQuery query();
 	
 	/**
 	 * <pre>
@@ -149,6 +129,17 @@ public @interface TAutoCompleteEntity  {
 	 * */
 	@SuppressWarnings("rawtypes")
 	public Class<? extends TEntityModelView> modelViewType() default TEntityModelView.class;
+	
+
+	/**
+	 * <pre>
+	 * The {@link TAutoCompleteEntity} settings.
+	 * 
+	 * The Function&ltTEntity,String&gt builder to create a string to show of a TEntity
+	 * Default: 3
+	 * </pre>
+	 * */
+	public Class<? extends TFunctionEntityToStringBuilder> converter() default TFunctionEntityToStringBuilder.class;
 	
 	/**
 	 * <pre>

@@ -10,12 +10,12 @@ import org.tedros.fx.annotation.parser.TStackedBarChartParser;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.builder.ITChartBuilder;
-import org.tedros.fx.builder.TStackedBarChartBuilder;
 import org.tedros.fx.builder.TChartModelBuilder;
+import org.tedros.fx.builder.TStackedBarChartBuilder;
 
 import javafx.scene.Node;
-import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.Chart;
+import javafx.scene.chart.StackedBarChart;
 import javafx.scene.layout.Region;
 
 /**

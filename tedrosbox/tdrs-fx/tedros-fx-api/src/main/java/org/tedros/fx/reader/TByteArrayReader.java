@@ -9,6 +9,13 @@ package org.tedros.fx.reader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.tedros.fx.domain.TFileExtension;
+import org.tedros.fx.modal.TModalPane;
+import org.tedros.util.TUrlUtil;
+
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
@@ -27,13 +34,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.tedros.fx.domain.TFileExtension;
-import org.tedros.fx.modal.TModalPane;
-import org.tedros.util.TUrlUtil;
 
 /**
  * DESCRIÇÃO DA CLASSE

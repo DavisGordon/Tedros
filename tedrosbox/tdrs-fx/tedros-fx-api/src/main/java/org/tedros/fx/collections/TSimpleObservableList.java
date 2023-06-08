@@ -1,11 +1,11 @@
 package org.tedros.fx.collections;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
-
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * <pre>

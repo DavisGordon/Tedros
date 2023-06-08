@@ -1,25 +1,22 @@
 package org.tedros.fx.presenter.entity.behavior;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
 import org.tedros.core.model.TModelViewUtil;
 import org.tedros.fx.TFxKey;
+import org.tedros.fx.annotation.page.TPage;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
 import org.tedros.fx.annotation.process.TEjbService;
-import org.tedros.fx.annotation.view.TPaginator;
-import org.tedros.fx.annotation.view.TPaginator.TJoin;
+import org.tedros.fx.annotation.query.TQuery;
+import org.tedros.fx.builder.TSelectQueryBuilder;
 import org.tedros.fx.control.action.TPresenterAction;
 import org.tedros.fx.exception.TException;
 import org.tedros.fx.modal.TMessageBox;
@@ -28,13 +25,12 @@ import org.tedros.fx.presenter.decorator.ITListViewDecorator;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.fx.presenter.paginator.TPagination;
+import org.tedros.fx.presenter.paginator.TSearch;
 import org.tedros.fx.process.TEntityProcess;
 import org.tedros.fx.process.TPaginationProcess;
 import org.tedros.fx.process.TProcess;
 import org.tedros.fx.util.TEntityListViewCallback;
 import org.tedros.server.entity.ITEntity;
-import org.tedros.server.query.TCompareOp;
-import org.tedros.server.query.TJoinType;
 import org.tedros.server.query.TSelect;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
@@ -68,10 +64,8 @@ import javafx.util.Callback;
 @SuppressWarnings({ "rawtypes" })
 public class TMasterCrudViewBehavior<M extends TEntityModelView<E>, E extends ITEntity>
 extends TDynaViewCrudBaseBehavior<M, E> {
-	
-	private String paginatorServiceName;
-	private String searchFieldName;
-	private TPaginator tPagAnn = null;
+
+	private TPage tPagAnn = null;
 	protected ITListViewDecorator<M> decorator;
 		
 	@SuppressWarnings("unchecked")
@@ -107,21 +101,8 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		configListViewContextMenu();
 		
 		TListViewPresenter tAnnotation = getPresenter().getModelViewClass().getAnnotation(TListViewPresenter.class);
-		if(tAnnotation!=null){
-			tPagAnn = tAnnotation.paginator();
-			if(tPagAnn.show()) {
-				this.paginatorServiceName = tPagAnn.serviceName();
-				this.searchFieldName = tPagAnn.searchField();
-				this.decorator.gettPaginator().settSearchFieldName(searchFieldName);
-				try {
-					if(tPagAnn.showSearch() && StringUtils.isBlank(this.searchFieldName))
-						throw new TException("The property searchFieldName in TPaginator annotation is required when showSearhField is true.");
-				}catch(TException e){
-					getView().tShowModal(new TMessageBox(e), true);
-					e.printStackTrace();
-				}
-			}
-		}
+		if(tAnnotation!=null && tAnnotation.page().show())
+			tPagAnn = tAnnotation.page();
 		
 		if(this.decorator.gettAiAssistant()!=null) {
 			this.decorator.gettAiAssistant().settView(getView());
@@ -154,7 +135,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 	public void loadModels() {
 		try{
 			if(isPaginateEnabled()) {
-				TPaginationProcess process = new TPaginationProcess(super.getEntityClass(), this.paginatorServiceName) {};
+				TPaginationProcess process = new TPaginationProcess(super.getEntityClass(), this.tPagAnn.serviceName()) {};
 				ChangeListener<State> prcl = (arg0, arg1, arg2) -> {
 					
 					if(arg2.equals(State.SUCCEEDED)){
@@ -191,26 +172,14 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 						}
 					}
 				};
-				
+				//
 				super.getListenerRepository().add("processloadlistviewCL", prcl);
-				if(this.tPagAnn.join().length>0) {
-					TPagination pagination = this.decorator.gettPaginator().gettPagination();
-					TSelect<E> sel = new TSelect(this.tPagAnn.entityClass());
-					for(TJoin j : tPagAnn.join())
-						sel.addJoin(TJoinType.INNER, j.fieldAlias(), j.field(), j.joinAlias());
-					if(StringUtils.isNotBlank(pagination.getSearch()))
-						sel.addAndCondition(tPagAnn.fieldAlias(), tPagAnn.searchField(), TCompareOp.LIKE, pagination.getSearch());
-					sel.addOrderBy(pagination.getOrderByAlias(), pagination.getOrderBy());
-					sel.setAsc(pagination.isOrderByAsc());
-					process.searchAll(sel, pagination);
-				}else {
-					TModelViewUtil<M,E> mvu = new TModelViewUtil<>(getModelViewClass(), getEntityClass());
-					E entity = mvu.getNewModelInstance();
-					process.pageAll(entity, this.decorator.gettPaginator().gettPagination());
-					bindProgressIndicator(process);
-					process.stateProperty().addListener(new WeakChangeListener(prcl));
-					process.startProcess();
-				}
+				
+				configPageProcess(process);
+				
+				bindProgressIndicator(process);
+				process.stateProperty().addListener(new WeakChangeListener(prcl));
+				process.startProcess();
 			} else {
 				// list model process
 				final TEntityProcess<E> process  = (TEntityProcess<E>) createEntityProcess();
@@ -275,6 +244,39 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		}
 		
 	}
+	
+
+	private void configPageProcess(TPaginationProcess process) {
+		TPagination pag = this.decorator.gettPaginator().gettPagination();
+		this.configPageProcess(process, pag);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void configPageProcess(TPaginationProcess process, TPagination pag) {
+		TQuery qry = this.tPagAnn.query();
+		TSelect<E> sel = TSelectQueryBuilder.create(qry);
+		TSelectQueryBuilder.addJoins(qry, sel);
+		TSelectQueryBuilder.addCondition(qry, sel, 
+		c->{
+			if(!c.prompted()) return true;
+			Object v = pag.getValue();
+			TSearch s = pag.getSearch();
+			return s!=null && c.alias().equals(s.getAlias()) && c.field().equals(s.getField())
+					&& ( (v instanceof String && !"".equals(v.toString().trim())) || (!(v instanceof String) && v!=null));
+		}, c->{
+			TSearch s = pag.getSearch();
+			if(c.prompted() && s!=null 
+					&& (c.prompted() && c.alias().equals(s.getAlias()) 
+					&& c.field().equals(s.getField())))
+				TSelectQueryBuilder.addCondition(sel, c, pag.getValue());
+		});
+		TSelectQueryBuilder.addOrders(qry, sel, o->{
+			return pag.getOrderBy()!=null && pag.getOrderByAlias()!=null 
+					&& pag.getOrderBy().equals(o.field()) && pag.getOrderByAlias().equals(o.alias());
+		});
+		sel.setAsc(pag.isOrderByAsc());
+		process.searchAll(sel, pag);
+	}
 
 	/**
 	 * Checks if paging is enabled.
@@ -330,7 +332,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 	@SuppressWarnings("unchecked")
 	public void paginate(TPagination pagination) throws TException {
 		final String chlId = UUID.randomUUID().toString();
-		TPaginationProcess<E> process = new TPaginationProcess<E>(super.getEntityClass(), this.paginatorServiceName) {};
+		TPaginationProcess<E> process = new TPaginationProcess<E>(super.getEntityClass(), this.tPagAnn.serviceName()) {};
 		ChangeListener<State> prcl = (arg0, arg1, arg2) -> {
 			
 			if(arg2.equals(State.SUCCEEDED)){
@@ -371,52 +373,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		
 		super.getListenerRepository().add(chlId, prcl);
 		
-		if(this.tPagAnn.join().length>0) {
-			TSelect<E> sel = new TSelect(this.tPagAnn.entityClass());
-			for(TJoin j : tPagAnn.join())
-				sel.addJoin(TJoinType.INNER, j.fieldAlias(), j.field(), j.joinAlias());
-			if(StringUtils.isNotBlank(pagination.getSearch()))
-				sel.addAndCondition(tPagAnn.fieldAlias(), tPagAnn.searchField(), TCompareOp.LIKE, pagination.getSearch());
-			sel.addOrderBy(pagination.getOrderByAlias(), pagination.getOrderBy());
-			sel.setAsc(pagination.isOrderByAsc());
-			process.searchAll(sel, pagination);
-		}else {
-			
-			if(StringUtils.isNotBlank(pagination.getSearch())) {
-				try {
-					Class target = super.getEntityClass();
-					E entity = super.getEntityClass().newInstance();
-					Method setter = null;
-					do {
-						try {
-							Field f = target.getDeclaredField(pagination.getSearchFieldName());
-							setter = target.getMethod("set"+StringUtils.capitalize(pagination.getSearchFieldName()), f.getType());
-							break;
-						} catch (NoSuchFieldException | SecurityException e) {
-							target = target.getSuperclass();
-						} catch (NoSuchMethodException e) {
-							break;
-						}
-					}while(target != Object.class);
-					
-					if(setter==null)
-						throw new TException("The setter method was not found for the field "+this.searchFieldName+" declared in TPaginator annotation.");
-					
-					setter.invoke(entity, pagination.getSearch().toUpperCase());
-					process.findAll(entity, pagination);
-					
-				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					throw new TException("An error occurred while trying paginate ", e);
-				}
-			}else {	
-				try {
-					E entity = super.getEntityClass().newInstance();
-					process.pageAll(entity, pagination);
-				} catch (InstantiationException | IllegalAccessException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+		configPageProcess(process, pagination);
 		bindProgressIndicator(process);
 		process.stateProperty().addListener(new WeakChangeListener(prcl));
 		process.startProcess();
@@ -521,8 +478,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 	
 	@Override
 	public void loadModelView(M m) {
-		M mv = m;
-		E e = mv.getModel();
+		E e = m.getModel();
 		if(e.isNew()) {
 			this.addInListView(m);
 			this.processListViewSelectedItem(m);
@@ -533,7 +489,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 				int totalRows = this.decorator.gettPaginator().gettTotalRows();
 				String alias = this.decorator.gettPaginator().gettOrderByAlias();
 				try {
-					this.paginateLoadedModel(e, new TPagination(null, orderBy, alias, orderAsc, 0, totalRows));
+					this.paginateLoadedModel(e, new TPagination(null, null, orderBy, alias, orderAsc, 0, totalRows));
 				} catch (TException e1) {
 					e1.printStackTrace();
 				}
@@ -543,7 +499,8 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 					return !p.getEntity().isNew() && p.getEntity().getId().equals(e.getId());
 				}).findFirst();
 				if(op.isPresent()) {
-					list.selectionModelProperty().get().select(mv);
+					m = op.get();
+					list.selectionModelProperty().get().select(m);
 					this.processListViewSelectedItem(m);
 				}else {
 					this.addInListView(m);
@@ -563,7 +520,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 	@SuppressWarnings("unchecked")
 	public void paginateLoadedModel(E entity, TPagination pagination) throws TException {
 		final String chlId = UUID.randomUUID().toString();
-		TPaginationProcess<E> process = new TPaginationProcess<E>(super.getEntityClass(), this.paginatorServiceName) {};
+		TPaginationProcess<E> process = new TPaginationProcess<E>(super.getEntityClass(), this.tPagAnn.serviceName()) {};
 		ChangeListener<State> prcl = (arg0, arg1, arg2) -> {
 			
 			if(arg2.equals(State.SUCCEEDED)){

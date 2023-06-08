@@ -14,10 +14,10 @@ import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.domain.TAxisType;
 import org.tedros.server.model.TChartModel;
 
-import javafx.scene.chart.StackedAreaChart;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.StackedAreaChart;
 
 
 /**

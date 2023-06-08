@@ -21,7 +21,6 @@ import org.tedros.fx.builder.NullRectangle2DWebEventBuilder;
 import org.tedros.fx.builder.NullStringBooleanCallBackBuilder;
 import org.tedros.fx.builder.NullStringWebEventBuilder;
 import org.tedros.fx.builder.NullWebErrorEventBuilder;
-import org.tedros.util.TedrosFolder;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.web.PopupFeatures;

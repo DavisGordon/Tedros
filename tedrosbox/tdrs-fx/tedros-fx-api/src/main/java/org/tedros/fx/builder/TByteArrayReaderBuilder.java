@@ -9,14 +9,14 @@ package org.tedros.fx.builder;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.Node;
-
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.fx.form.TConverter;
 import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.fx.reader.TByteArrayReader;
+
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.Node;
 
 /**
  * DESCRIÇÃO DA CLASSE

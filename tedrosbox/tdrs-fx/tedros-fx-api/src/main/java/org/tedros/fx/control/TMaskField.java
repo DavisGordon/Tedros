@@ -39,21 +39,30 @@ public class TMaskField extends TRequiredTextField {
 	private SimpleIntegerProperty maxLenght;
 	private SimpleStringProperty maskProperty ;
 	private ChangeListener<String> listener;
-	
+
+	public TMaskField() {
+		init();
+	}
 	public TMaskField(String mask) {
+		init();
+		setMask(mask);
+	}
+
+	private void init() {
 		maskProperty = new SimpleStringProperty();
 		listener =	new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> arg0,
 					String arg1, String arg2) {
-				textProperty().removeListener(this);
-				setText(TMaskUtil.applyMask(getText(), maskProperty.get()));
-				textProperty().addListener(this);
+				if(maskProperty.getValue()!=null) {
+					textProperty().removeListener(this);
+					setText(TMaskUtil.applyMask(getText(), maskProperty.get()));
+					textProperty().addListener(this);
+				}
 			}
 		};
 		
 		textProperty().addListener(listener);
-		setMask(mask);
 		super.tRequiredNodeProperty().setValue(this);
 	}
 	
@@ -79,15 +88,25 @@ public class TMaskField extends TRequiredTextField {
 	* </pre>
 	* */
 	public void setMask(String mask){
-		char[] arr = maskProperty.get() == null ? mask.toCharArray() : maskProperty.get().toCharArray();
-		setMaxLenght(mask.length());
-		this.maskProperty.set(mask);
-		if(getText()!=null){
-			textProperty().removeListener(listener);
-			setText(TMaskUtil.applyMask(TMaskUtil.removeMask(getText(), arr), maskProperty.get()));
-			textProperty().addListener(listener);
+		if(mask!=null) {
+			char[] arr = maskProperty.get() == null ? mask.toCharArray() : maskProperty.get().toCharArray();
+			setMaxLenght(mask.length());
+			this.maskProperty.set(mask);
+			if(getText()!=null){
+				textProperty().removeListener(listener);
+				setText(TMaskUtil.applyMask(TMaskUtil.removeMask(getText(), arr), maskProperty.get()));
+				textProperty().addListener(listener);
+			}
+		}else {
+			if(this.maskProperty.getValue()!=null) {
+				String m = this.maskProperty.getValue();
+				char[] arr = m.toCharArray();
+				setText(TMaskUtil.removeMask(getText(), arr));
+			}
+			if(maxLenght!=null)
+				maxLenght.setValue(null);
+			this.maskProperty.setValue(null);
 		}
-		
 	}
 	
 	public SimpleStringProperty maskProperty() {
@@ -99,7 +118,7 @@ public class TMaskField extends TRequiredTextField {
 		
 		textProperty().removeListener(listener);
 		
-		if(letter.equals("") || maxLenght==null)
+		if(maxLenght==null || maxLenght.getValue()==null || maxLenght.getValue()==0 || letter.equals(""))
 			super.replaceText(start, end, letter);
 		else {
 			final int totalASub = end - start;
@@ -138,15 +157,18 @@ public class TMaskField extends TRequiredTextField {
 		if(maxLenght==null)
 			super.replaceSelection(selection);
 		else{
-			final String selectedText  = getSelectedText();
-			final int selectedTextLenght = (selectedText!=null) ? selectedText.length() : 0;
-			final int textLenght = getText()==null ? 0 : getText().length();
-			final int maxLenghtValue = maxLenght.get();
-			while( (textLenght - selectedTextLenght) + selection.length() > maxLenghtValue){
-				selection = selection.substring(0, selection.length()-1);
-			}
-			String text = TMaskUtil.applyMask(selection, maskProperty.get());
-			super.replaceSelection(text);
+			if(maskProperty.getValue()!=null) {
+				final String selectedText  = getSelectedText();
+				final int selectedTextLenght = (selectedText!=null) ? selectedText.length() : 0;
+				final int textLenght = getText()==null ? 0 : getText().length();
+				final int maxLenghtValue = maxLenght.get();
+				while( (textLenght - selectedTextLenght) + selection.length() > maxLenghtValue){
+					selection = selection.substring(0, selection.length()-1);
+				}
+				String text =TMaskUtil.applyMask(selection, maskProperty.get());
+				super.replaceSelection(text);
+			}else
+				super.replaceSelection(selection);
 		}
 		 
 	}

@@ -26,11 +26,13 @@ public class TDateUtil {
 	
 	public static synchronized String getFormatedDate(Date data, String pattern){
 		DateFormat df = new SimpleDateFormat(pattern);
+		df.setLenient(false);
 		return df.format(data);
 	}
 
 	public static synchronized Date getDate(String data, String pattern) throws ParseException{
 		DateFormat df = new SimpleDateFormat(pattern);
+		df.setLenient(false);
 		return df.parse(data);
 	}
 }

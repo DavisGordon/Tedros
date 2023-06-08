@@ -42,14 +42,15 @@ import org.tedros.fx.annotation.layout.TPane;
 import org.tedros.fx.annotation.layout.TPriority;
 import org.tedros.fx.annotation.layout.TToolBar;
 import org.tedros.fx.annotation.layout.TVBox;
+import org.tedros.fx.annotation.page.TPage;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.process.TEjbService;
+import org.tedros.fx.annotation.query.TQuery;
 import org.tedros.fx.annotation.scene.control.TLabeled;
 import org.tedros.fx.annotation.scene.layout.TRegion;
-import org.tedros.fx.annotation.view.TPaginator;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.control.tablecell.TMediumDateTimeCallback;
 import org.tedros.fx.presenter.model.TEntityModelView;
@@ -73,7 +74,7 @@ import javafx.scene.layout.Priority;
 @TForm(name = "", showBreadcrumBar=false)
 @TEjbService(serviceName = TAiCreateImageController.JNDI_NAME, model=TAiCreateImage.class)
 @TListViewPresenter(listViewMinWidth=300,
-	paginator=@TPaginator(entityClass = TAiCreateImage.class, 
+	page=@TPage(query=@TQuery(entity  = TAiCreateImage.class), 
 	serviceName = TAiCreateImageController.JNDI_NAME, show=true),
 	presenter=@TPresenter(
 			decorator = @TDecorator(viewTitle=ToolsKey.VIEW_AI_CREATE_IMAGE),

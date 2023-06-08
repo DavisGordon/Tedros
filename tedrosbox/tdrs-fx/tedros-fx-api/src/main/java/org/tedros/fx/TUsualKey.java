@@ -132,6 +132,7 @@ public interface TUsualKey {
 	static final String HIRING_DATE = "#{label.hiring.date}";
 	static final String HOUSE = "#{label.house}";
 	static final String HOUSE_NUMBER = "#{label.house.number}";
+	static final String ID_NUMBER = "#{label.id.number}";
 	static final String IDD_CODE = "#{label.idd.code}";
 	static final String IDENTITY = "#{label.identity}";
 	static final String IMAGE = "#{label.image}";
@@ -262,6 +263,7 @@ public interface TUsualKey {
 	static final String SUBJECT = "#{label.subject}";
 	static final String SUMMARY = "#{label.summary}";
 	static final String SUSPENDED = "#{label.suspended}";
+	static final String TAX_NUMBER = "#{label.tax.number}";
 	static final String TEL = "#{label.tel}";
 	static final String TELEPHONE = "#{label.telephone}";
 	static final String TEXT = "#{label.text}";

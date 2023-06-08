@@ -1,15 +1,15 @@
 package org.tedros.fx.util;
 
-import javafx.beans.property.Property;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.collections.ObservableSet;
-
 import org.apache.commons.lang3.StringUtils;
 
 import com.sun.javafx.collections.ObservableListWrapper;
 import com.sun.javafx.collections.ObservableMapWrapper;
 import com.sun.javafx.collections.ObservableSetWrapper;
+
+import javafx.beans.property.Property;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
 
 public final class TPropertyUtil {
 

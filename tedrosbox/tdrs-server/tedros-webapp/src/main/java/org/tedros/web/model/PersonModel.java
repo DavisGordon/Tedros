@@ -5,9 +5,9 @@ package org.tedros.web.model;
 
 import java.util.Optional;
 
-import org.tedros.docs.model.Document;
 import org.tedros.extension.model.Contact;
 import org.tedros.extension.model.ContactType;
+import org.tedros.extension.model.Document;
 import org.tedros.person.model.NaturalPerson;
 import org.tedros.web.util.ApiUtils;
 

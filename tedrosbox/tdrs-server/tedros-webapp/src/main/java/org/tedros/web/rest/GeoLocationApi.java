@@ -15,14 +15,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.tedros.ejb.controller.IAdminAreaController;
-import org.tedros.ejb.controller.ICityController;
-import org.tedros.ejb.controller.ICountryController;
-import org.tedros.ejb.controller.IStreetTypeController;
-import org.tedros.location.model.AdminArea;
-import org.tedros.location.model.City;
-import org.tedros.location.model.Country;
-import org.tedros.location.model.StreetType;
+import org.tedros.extension.ejb.controller.IAdminAreaController;
+import org.tedros.extension.ejb.controller.ICityController;
+import org.tedros.extension.ejb.controller.ICountryController;
+import org.tedros.extension.ejb.controller.IExtensionDomainController;
+import org.tedros.extension.model.AdminArea;
+import org.tedros.extension.model.City;
+import org.tedros.extension.model.Country;
+import org.tedros.extension.model.StreetType;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.web.model.RestModel;
@@ -38,7 +38,7 @@ import org.tedros.web.model.ValueModel;
 public class GeoLocationApi extends BaseApi {
 
 	@EJB 
-	private IStreetTypeController stServ;
+	private IExtensionDomainController stServ;
 	
 	@EJB 
 	private ICountryController cntServ;

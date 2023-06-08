@@ -6,6 +6,11 @@
  */
 package org.tedros.fx.control;
 
+import org.apache.commons.lang3.math.NumberUtils;
+import org.tedros.app.component.ITComponent;
+import org.tedros.fx.domain.TZeroValidation;
+import org.tedros.fx.effect.TEffectUtil;
+
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -13,11 +18,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.Effect;
-
-import org.apache.commons.lang3.math.NumberUtils;
-import org.tedros.app.component.ITComponent;
-import org.tedros.fx.domain.TZeroValidation;
-import org.tedros.fx.effect.TEffectUtil;
 
 /**
  * DESCRIÇÃO DA CLASSE

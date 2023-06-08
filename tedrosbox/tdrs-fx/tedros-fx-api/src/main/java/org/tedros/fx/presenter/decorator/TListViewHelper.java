@@ -5,11 +5,15 @@ package org.tedros.fx.presenter.decorator;
 
 import java.util.Arrays;
 
-import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.control.TProgressIndicator;
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.page.TPage;
+import org.tedros.fx.annotation.presenter.TListViewPresenter;
+import org.tedros.fx.annotation.query.TCondition;
+import org.tedros.fx.annotation.query.TOrder;
 import org.tedros.fx.presenter.assistant.TAiAssistant;
 import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.fx.presenter.paginator.TPaginator;
@@ -44,18 +48,18 @@ public class TListViewHelper<M extends TEntityModelView<? extends ITEntity>>{
     
     private TAiAssistant<M> tAiAssistat;
     
-    private SimpleDoubleProperty listViewMaxWidth = new SimpleDoubleProperty(250);
-    private SimpleDoubleProperty listViewMinWidth = new SimpleDoubleProperty(250);
+    private SimpleDoubleProperty listViewMaxWidth = new SimpleDoubleProperty(TListViewPresenter.WIDTH);
+    private SimpleDoubleProperty listViewMinWidth = new SimpleDoubleProperty(TListViewPresenter.WIDTH);
     
 
 	public TListViewHelper(String title, double maxWidth, double minWidth, 
-			org.tedros.fx.annotation.view.TPaginator paginator ) {
+			TPage paginator ) {
 		this(title,maxWidth,minWidth, paginator, null );
 	}
     
 	public TListViewHelper(String title, double maxWidth, double minWidth, 
-			org.tedros.fx.annotation.view.TPaginator paginator, 
-			org.tedros.fx.annotation.view.TAiAssistant aiAssistant ) {
+			TPage paginator, 
+			org.tedros.fx.annotation.assistant.TAiAssistant aiAssistant ) {
 		
 		// build the list view
 		tListView = new ListView<>();
@@ -89,17 +93,22 @@ public class TListViewHelper<M extends TEntityModelView<? extends ITEntity>>{
 		
 		if(paginator!=null && paginator.show()) {
 			tPaginator = new TPaginator(paginator.showSearch(), paginator.showOrderBy());
-			if(StringUtils.isNotBlank(paginator.promptText()))
-				tPaginator.settSearchPromptText(paginator.promptText());
-			if(paginator.showOrderBy()) {
-				for(org.tedros.fx.annotation.view.TOption o : paginator.orderBy())
-					tPaginator.tAddOrderByOption(o.text(), o.field(), o.alias());
-				tPaginator.settOrderBy(paginator.orderBy()[0].field());
+			if(paginator.showSearch() && paginator.query().condition().length>0)
+				for(TCondition c : paginator.query().condition()) {
+					if(!c.prompted()) continue;
+					tPaginator.tAddSearchOption(c.label(), c.field(), c.alias(),
+							"".equals(c.promptMask())?null:c.promptMask(), 
+							"".equals(c.promptText())?null:c.promptText(), 
+							c.operator(), c.temporal(), c.converter());
+				}
+			if(paginator.showOrderBy() && paginator.query().orderBy().length>0) {
+				for(TOrder o : paginator.query().orderBy())
+					tPaginator.tAddOrderByOption(o.label(), o.field(), o.alias());
 			}
 			tPaginatorAccordion = new Accordion();
 			tPaginatorAccordion.autosize();
 			//tPaginatorAccordion.getStyleClass().add("t-accordion");
-			TitledPane tp = new TitledPane(TLanguage.getInstance().getString("#{tedros.fxapi.label.pagination}"), tPaginator);
+			TitledPane tp = new TitledPane(TLanguage.getInstance().getString(TFxKey.PAGINATION), tPaginator);
 			tPaginatorAccordion.getPanes().add(tp);
 			tPaginator.maxWidthProperty().bind(listViewMaxWidth);
 			tPaginator.minWidthProperty().bind(listViewMinWidth);
