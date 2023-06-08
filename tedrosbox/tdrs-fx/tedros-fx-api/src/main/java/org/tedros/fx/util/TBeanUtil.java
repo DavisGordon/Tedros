@@ -4,7 +4,6 @@
 package org.tedros.fx.util;
 
 import java.lang.reflect.Field;
-import java.util.Collection;
 import java.util.Set;
 
 import org.reflections.ReflectionUtils;

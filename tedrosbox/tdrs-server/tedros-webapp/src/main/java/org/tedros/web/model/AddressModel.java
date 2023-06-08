@@ -3,7 +3,7 @@
  */
 package org.tedros.web.model;
 
-import org.tedros.location.model.Address;
+import org.tedros.extension.model.Address;
 
 /**
  * @author Davis Gordon

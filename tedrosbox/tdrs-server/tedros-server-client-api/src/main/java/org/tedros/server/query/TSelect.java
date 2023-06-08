@@ -68,10 +68,15 @@ public class TSelect<E extends ITEntity>  implements Serializable{
 	public <T> void addAndCondition(String alias, String field, TCompareOp compOp, T value) {
 		this.addCondition(TLogicOp.AND, alias, field, compOp, value);
 	}
+	
 	public <T> void addCondition(TLogicOp logicOp, String alias, String field, TCompareOp compOp, T value) {
+		this.addCondition(logicOp, alias, field, compOp, value, false);
+	}
+	
+	public <T> void addCondition(TLogicOp logicOp, String alias, String field, TCompareOp compOp, T value, boolean dynamicValue) {
 		if(this.conditions==null)
 			this.conditions = new ArrayList<>();
-		TCondition<T> c = new TCondition<T>(alias, field, compOp, value);
+		TCondition<T> c = new TCondition<T>(alias, field, compOp, value, dynamicValue);
 		TBlock b = logicOp==null || this.conditions.size()==0
 				? new TBlock(c)
 						: new TBlock(logicOp, c);

@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.tedros.fx.annotation.control.TTableView;
-import org.tedros.fx.annotation.view.TPaginator;
+import org.tedros.fx.annotation.page.TPage;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.modal.behavior.TSelectionModalBehavior;
 import org.tedros.fx.presenter.modal.decorator.TSelectionModalDecorator;
@@ -54,7 +54,7 @@ public @interface TSelectionModalPresenter {
 	 *  serviceName - the jndi name for the ejb service
 	 *  </pre>
 	 * */
-	public TPaginator paginator();
+	public TPage paginator();
 	
 	/**
 	 * The modal view build settings 

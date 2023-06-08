@@ -583,8 +583,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				boolean runNewAction = model instanceof ITEntity 
 						? ((ITEntity)model).isNew() && this.runNewActionAfterSave 
 								: this.runNewActionAfterSave;
-				Consumer<Boolean> finishCallback = finished ->{
-					if(finished) {
+				Consumer<Boolean> finishCallback = succefull ->{
+					if(succefull) {
 						if(runNewAction) {
 							getView().tModalVisibleProperty().addListener(new ChangeListener<Boolean>() {
 								@Override
@@ -601,6 +601,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 							actionHelper.runAfter(TActionType.SAVE);
 							setActionState(new TActionState<>(TActionType.SAVE, TProcessResult.FINISHED));
 						}
+					}else {
+						actionHelper.runAfter(TActionType.SAVE);
+						setActionState(new TActionState<>(TActionType.SAVE, TProcessResult.FINISHED));
 					}
 				};
 				
@@ -671,9 +674,13 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 									
 									addMessage(new TMessage(TMessageType.INFO, msg));
 									setActionState(new TActionState(TActionType.SAVE, (State) n, TProcessResult.SUCCESS));
+									if(lastEntity) 
+										callback.accept(true);
 								} catch (Exception e) {	
 									e.printStackTrace();
 									addMessage(new TMessage(TMessageType.ERROR, e.getMessage()));
+									if(lastEntity) 
+										callback.accept(false);
 								}
 							}
 						}else{
@@ -681,17 +688,18 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 							String msg = result.getState().equals(TState.OUTDATED) 
 									? iEngine.getString(TFxKey.MESSAGE_OUTDATE)
 											: result.getMessage();
-							switch(result.getState()) {
-								case ERROR:
-									addMessage(new TMessage(TMessageType.ERROR, msg));
-									break;
-								default:
-									addMessage(new TMessage(TMessageType.WARNING, msg));
-									break;
+							if(result.getState().equals(TState.ERROR)) {
+								addMessage(new TMessage(TMessageType.ERROR, msg));
+								setActionState(new TActionState(TActionType.SAVE, (State) n, TProcessResult.get(result.getState()), result.getMessage()));	
+								if(lastEntity) 
+									callback.accept(false);
+							}else{
+								addMessage(new TMessage(TMessageType.WARNING, msg));
+								setActionState(new TActionState(TActionType.SAVE, (State) n, TProcessResult.get(result.getState()), result.getMessage()));	
+								if(lastEntity) 
+									callback.accept(true);
 							}
-							setActionState(new TActionState(TActionType.SAVE, (State) n, TProcessResult.get(result.getState()), result.getMessage()));	
 						}
-						callback.accept(lastEntity);
 					}else {
 						setActionState(new TActionState(TActionType.SAVE, (State) n));
 					}

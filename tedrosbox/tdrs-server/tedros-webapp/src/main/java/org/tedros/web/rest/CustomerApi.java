@@ -15,20 +15,20 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringUtils;
-import org.tedros.docs.model.Document;
-import org.tedros.ejb.controller.IAdminAreaController;
-import org.tedros.ejb.controller.ICityController;
-import org.tedros.ejb.controller.ICountryController;
-import org.tedros.ejb.controller.IStreetTypeController;
 import org.tedros.env.ejb.controller.IWebUserController;
 import org.tedros.env.entity.WebUser;
+import org.tedros.extension.ejb.controller.IAdminAreaController;
+import org.tedros.extension.ejb.controller.ICityController;
+import org.tedros.extension.ejb.controller.ICountryController;
+import org.tedros.extension.ejb.controller.IExtensionDomainController;
+import org.tedros.extension.model.Address;
+import org.tedros.extension.model.AdminArea;
+import org.tedros.extension.model.City;
 import org.tedros.extension.model.Contact;
 import org.tedros.extension.model.ContactType;
-import org.tedros.location.model.Address;
-import org.tedros.location.model.AdminArea;
-import org.tedros.location.model.City;
-import org.tedros.location.model.Country;
-import org.tedros.location.model.StreetType;
+import org.tedros.extension.model.Country;
+import org.tedros.extension.model.Document;
+import org.tedros.extension.model.StreetType;
 import org.tedros.person.domain.Sex;
 import org.tedros.person.ejb.controller.ICustomerController;
 import org.tedros.person.model.Customer;
@@ -58,7 +58,7 @@ public class CustomerApi extends WebSessionBaseApi{
 	private ICityController ctServ;
 
 	@EJB 
-	private IStreetTypeController sttServ;
+	private IExtensionDomainController sttServ;
 	
 	@EJB
 	private ICustomerController ctmServ;

@@ -3,40 +3,37 @@
  */
 package org.tedros.tools.module.user.model;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.tedros.core.TLanguage;
 import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.annotation.security.TSecurity;
 import org.tedros.core.controller.TAuthorizationController;
 import org.tedros.core.domain.DomainApp;
 import org.tedros.core.security.model.TAuthorization;
 import org.tedros.fx.TUsualKey;
-import org.tedros.fx.annotation.control.THorizontalRadioGroup;
 import org.tedros.fx.annotation.control.TLabel;
-import org.tedros.fx.annotation.control.TRadioButton;
 import org.tedros.fx.annotation.control.TShowField;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.layout.THBox;
 import org.tedros.fx.annotation.layout.THGrow;
 import org.tedros.fx.annotation.layout.TPane;
 import org.tedros.fx.annotation.layout.TPriority;
+import org.tedros.fx.annotation.page.TPage;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.process.TEjbService;
+import org.tedros.fx.annotation.query.TCondition;
+import org.tedros.fx.annotation.query.TOrder;
+import org.tedros.fx.annotation.query.TQuery;
 import org.tedros.fx.annotation.reader.TFormReaderHtml;
-import org.tedros.fx.annotation.reader.TReaderHtml;
-import org.tedros.fx.annotation.view.TPaginator;
-import org.tedros.fx.domain.TLabelPosition;
 import org.tedros.fx.presenter.model.TEntityModelView;
+import org.tedros.fx.presenter.model.TFormatter;
+import org.tedros.server.query.TCompareOp;
 import org.tedros.tools.ToolsKey;
 import org.tedros.tools.module.user.action.TAuthorizationLoadAction;
 import org.tedros.tools.module.user.behaviour.TAuthorizationBehavior;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
 
 /**
@@ -47,23 +44,25 @@ import javafx.scene.layout.Priority;
 @TForm(name = ToolsKey.SECURITY_AUTHORIZATION_FORM_NAME, showBreadcrumBar=true)
 @TEjbService(serviceName = TAuthorizationController.JNDI_NAME, model=TAuthorization.class)
 @TListViewPresenter(listViewMinWidth=500,
-	paginator=@TPaginator(entityClass = TAuthorization.class, 
-	serviceName = TAuthorizationController.JNDI_NAME, show=true),
-	presenter=@TPresenter(decorator = @TDecorator(viewTitle=ToolsKey.VIEW_AUTHORIZATION, 
-		 buildDeleteButton=false, buildCollapseButton=false, newButtonText=TUsualKey.LOAD),
-	behavior=@TBehavior(type=TAuthorizationBehavior.class, action=TAuthorizationLoadAction.class)
+	page=@TPage(serviceName = TAuthorizationController.JNDI_NAME, 
+		modelView=TAuthorizationMV.class, showSearch=true, showOrderBy=true,
+		query=@TQuery(entity = TAuthorization.class,
+			condition=@TCondition(label=TUsualKey.SECURITYID, field = "securityId", 
+				operator=TCompareOp.LIKE),
+			orderBy=@TOrder(label=TUsualKey.SECURITYID, field = "securityId")
+		)), 
+	presenter=@TPresenter(
+		decorator = @TDecorator(viewTitle=ToolsKey.VIEW_AUTHORIZATION, newButtonText=TUsualKey.LOAD,
+			buildDeleteButton=false, buildSaveButton=false, buildCollapseButton=false),
+		behavior=@TBehavior(type=TAuthorizationBehavior.class, action=TAuthorizationLoadAction.class)
 	))
 @TSecurity(	id=DomainApp.AUTHORIZATION_FORM_ID, 
 	appName=ToolsKey.APP_TOOLS, 
 	moduleName=ToolsKey.MODULE_USER, 
 	viewName=ToolsKey.VIEW_AUTHORIZATION,
-	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, 
-			TAuthorizationType.READ, TAuthorizationType.SAVE, TAuthorizationType.NEW})
+	allowedAccesses={TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.NEW})
 public final class TAuthorizationMV extends TEntityModelView<TAuthorization> {
 	
-	private SimpleStringProperty displayText;
-	
-	@TReaderHtml
 	@TLabel(text=TUsualKey.SECURITYID)
 	@THBox(	pane=@TPane(children={"securityId","appName","moduleName","viewName"}), spacing=10, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="securityId", priority=Priority.NEVER), 
@@ -73,22 +72,18 @@ public final class TAuthorizationMV extends TEntityModelView<TAuthorization> {
 	@TShowField
 	private SimpleStringProperty securityId;
 	
-	@TReaderHtml
 	@TLabel(text=TUsualKey.APP)
 	@TShowField
 	private SimpleStringProperty appName;
 	
-	@TReaderHtml
 	@TLabel(text=TUsualKey.MODULE)
 	@TShowField
 	private SimpleStringProperty moduleName;
 	
-	@TReaderHtml
 	@TLabel(text=TUsualKey.VIEW)
 	@TShowField
 	private SimpleStringProperty viewName;
 	
-	@TReaderHtml
 	@TLabel(text=TUsualKey.TYPE)
 	@TShowField
 	@THBox(	pane=@TPane(children={"type","typeDescription"}), spacing=10, fillHeight=true,
@@ -97,141 +92,26 @@ public final class TAuthorizationMV extends TEntityModelView<TAuthorization> {
 			
 	private SimpleStringProperty type;
 	
-	@TReaderHtml
 	@TLabel(text=TUsualKey.PERMISSION)
 	@TShowField
 	private SimpleStringProperty typeDescription;
-	
-	@TReaderHtml
+	/*
 	@TLabel(text=TUsualKey.ENABLED, position=TLabelPosition.LEFT)
 	@THorizontalRadioGroup(alignment=Pos.TOP_LEFT, spacing=4,
 	radioButtons = {@TRadioButton(text=TUsualKey.YES, userData="S"), 
 					@TRadioButton(text=TUsualKey.NO, userData="N")
 	})
 	private SimpleStringProperty enabled;
-
+*/
 	public TAuthorizationMV(TAuthorization entity) {
 		super(entity);
-		loadDisplayText(entity);
-	}
-		
-	@Override
-	public void reload(TAuthorization model) {
-		super.reload(model);
-		loadDisplayText(model);
-	}
-
-	/**
-	 * @param model
-	 */
-	private void loadDisplayText(TAuthorization model) {
-		if(!model.isNew()){
-			TLanguage iEngine = TLanguage.getInstance(null);
-			String str = (appName.getValue()==null ? "" : iEngine.getString(appName.getValue())+" / " )
-					+ (moduleName.getValue()!=null ? iEngine.getString(moduleName.getValue()) +" / " : "")
-					+ (viewName.getValue()!=null ? iEngine.getString(viewName.getValue()) +" / ": "")
-					+ (type.getValue()!=null ? type.getValue(): "");
-			displayText.setValue(str);
-		}
-	}
-	@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this, false);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return EqualsBuilder.reflectionEquals(this, obj, false);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.tedros.fx.presenter.model.TModelView#toStringProperty()
-	 */
-	@Override
-	public SimpleStringProperty toStringProperty() {
-		return this.displayText;
-	}
-
-
-	public SimpleStringProperty getAppName() {
-		return appName;
-	}
-
-
-	public void setAppName(SimpleStringProperty appName) {
-		this.appName = appName;
-	}
-
-
-	public SimpleStringProperty getModuleName() {
-		return moduleName;
-	}
-
-
-	public void setModuleName(SimpleStringProperty moduleName) {
-		this.moduleName = moduleName;
-	}
-
-	
-
-	public SimpleStringProperty getSecurityId() {
-		return securityId;
-	}
-
-	public void setSecurityId(SimpleStringProperty securityId) {
-		this.securityId = securityId;
-	}
-
-	public SimpleStringProperty getType() {
-		return type;
-	}
-
-	public void setType(SimpleStringProperty type) {
-		this.type = type;
-	}
-
-	public SimpleStringProperty getTypeDescription() {
-		return typeDescription;
-	}
-
-	public void setTypeDescription(SimpleStringProperty typeDescription) {
-		this.typeDescription = typeDescription;
-	}
-
-	public SimpleStringProperty getViewName() {
-		return viewName;
-	}
-
-	public void setViewName(SimpleStringProperty viewName) {
-		this.viewName = viewName;
-	}
-
-	/**
-	 * @return the enabled
-	 */
-	public SimpleStringProperty getEnabled() {
-		return enabled;
-	}
-
-	/**
-	 * @param enabled the enabled to set
-	 */
-	public void setEnabled(SimpleStringProperty enabled) {
-		this.enabled = enabled;
-	}
-
-	/**
-	 * @return the displayText
-	 */
-	public SimpleStringProperty getDisplayText() {
-		return displayText;
-	}
-
-	/**
-	 * @param displayText the displayText to set
-	 */
-	public void setDisplayText(SimpleStringProperty displayText) {
-		this.displayText = displayText;
+		super.formatToString(TFormatter.create()
+				.add(securityId, s-> s.toString())
+				.add(appName, s->" / "+s.toString())
+				.add(moduleName, s->" / "+ s.toString())
+				.add(viewName, s->" / "+ s.toString())
+				.add(type, s->" / "+ s.toString())
+				);
 	}
 
 }

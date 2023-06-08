@@ -10,11 +10,12 @@ import org.tedros.fx.annotation.parser.TLineChartParser;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.builder.ITChartBuilder;
-import org.tedros.fx.builder.TLineChartBuilder;
 import org.tedros.fx.builder.TChartModelBuilder;
+import org.tedros.fx.builder.TLineChartBuilder;
 
 import javafx.scene.Node;
 import javafx.scene.chart.Chart;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.LineChart.SortingPolicy;
 import javafx.scene.layout.Region;
 

@@ -48,16 +48,19 @@ import org.tedros.fx.annotation.layout.TPriority;
 import org.tedros.fx.annotation.layout.TVBox;
 import org.tedros.fx.annotation.layout.TVBox.TMargin;
 import org.tedros.fx.annotation.layout.TVGrow;
+import org.tedros.fx.annotation.page.TPage;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.process.TEjbService;
+import org.tedros.fx.annotation.query.TCondition;
+import org.tedros.fx.annotation.query.TOrder;
+import org.tedros.fx.annotation.query.TQuery;
+import org.tedros.fx.annotation.query.TTemporal;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TControl;
 import org.tedros.fx.annotation.scene.control.TInsets;
-import org.tedros.fx.annotation.view.TOption;
-import org.tedros.fx.annotation.view.TPaginator;
 import org.tedros.fx.builder.DateTimeFormatBuilder;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.control.tablecell.TMediumDateTimeCallback;
@@ -66,6 +69,7 @@ import org.tedros.fx.domain.TFileModelType;
 import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.fx.presenter.model.TFormatter;
 import org.tedros.fx.property.TSimpleFileProperty;
+import org.tedros.server.query.TCompareOp;
 import org.tedros.tools.ToolsKey;
 import org.tedros.tools.module.notify.behaviour.TNotifyBehaviour;
 import org.tedros.tools.module.notify.converter.ActionConverter;
@@ -85,15 +89,17 @@ import javafx.scene.layout.Priority;
 @TSetting(TNotifyMVSetting.class)
 @TEjbService(serviceName = TNotifyController.JNDI_NAME, model=TNotify.class)
 @TListViewPresenter(listViewMinWidth=400, 
-	paginator=@TPaginator(entityClass = TNotify.class, 
-		serviceName = TNotifyController.JNDI_NAME, 
-		searchField="subject", modelViewClass=TNotifyMV.class, 
-		orderBy= {@TOption(text = TUsualKey.REF_CODE, field = "refCode"), 
-				@TOption(text = TUsualKey.DATE_PROCESSED, field = "processedTime"),
-				@TOption(text = TUsualKey.SUBJECT, field = "subject"),
-				@TOption(text = TUsualKey.SEND_TO, field = "to"), 
-				@TOption(text = TUsualKey.CALLED_BY, field = "calledBy") },
-		showSearch=true, show=true),
+	page=@TPage(serviceName = TNotifyController.JNDI_NAME,  modelView=TNotifyMV.class,
+	query=@TQuery(entity = TNotify.class, 		
+			condition= {@TCondition(label = TUsualKey.REF_CODE, field = "refCode", operator=TCompareOp.EQUAL), 
+					@TCondition(label = TUsualKey.DATE_PROCESSED, field = "processedTime", operator=TCompareOp.GREATER_EQ_THAN, temporal=TTemporal.DATE),
+					@TCondition(label = TUsualKey.SUBJECT, field = "subject", operator=TCompareOp.LIKE),
+					@TCondition(label = TUsualKey.SEND_TO, field = "to", operator=TCompareOp.LIKE) },
+			orderBy= {@TOrder(label = TUsualKey.REF_CODE, field = "refCode"), 
+				@TOrder(label = TUsualKey.DATE_PROCESSED, field = "processedTime"),
+				@TOrder(label = TUsualKey.SUBJECT, field = "subject"),
+				@TOrder(label = TUsualKey.SEND_TO, field = "to") }
+		), showSearch=true, showOrderBy=true),
 	presenter=@TPresenter(
 		decorator = @TDecorator(viewTitle=ToolsKey.VIEW_NOTIFY, buildModesRadioButton=false),
 		behavior=@TBehavior(type=TNotifyBehaviour.class, saveOnlyChangedModels=false, saveAllModels=false)))

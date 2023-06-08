@@ -36,10 +36,8 @@ import javafx.scene.layout.VBox;
 /**
  * <pre>
  * Build a {@link org.tedros.fx.control.TEditEntitynModal} component.
- * 
- * This component opens a modal that allows a user to edit items. 
- * 
- *  Must be used with ITObservableList 
+ * This component opens a modal that allows the user to edit one or a list of items.
+ * Can be used with ITObservableList or SimpleObjectProperty
  * </pre>
  * @author Davis Gordon
  *

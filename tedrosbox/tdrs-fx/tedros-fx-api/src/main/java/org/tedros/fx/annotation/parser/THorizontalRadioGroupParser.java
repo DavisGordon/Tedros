@@ -6,7 +6,6 @@ public class THorizontalRadioGroupParser extends TAnnotationParser<THorizontalRa
 
 	@Override
 		public void parse(THorizontalRadioGroup annotation, org.tedros.fx.control.THorizontalRadioGroup object, String... byPass) throws Exception {
-			super.parse(annotation, object, "+required", "+radioButtons", "+fieldStyle" );
+			super.parse(annotation, object, "radioButtons" );
 		}
-	
 }

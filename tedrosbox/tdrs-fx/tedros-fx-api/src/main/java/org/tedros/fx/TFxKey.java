@@ -112,7 +112,10 @@ public interface TFxKey {
 	static final String VALIDATOR_CHECKREQUIRED = "#{tedros.fxapi.validator.checkRequired}";
 	static final String VALIDATOR_FUTURE_DATE = "#{tedros.fxapi.validator.future.date}";
 	static final String VALIDATOR_GREATHERTHANZERO = "#{tedros.fxapi.validator.greatherThanZero}";
+	static final String VALIDATOR_INCORRECT_DATA = "#{tedros.fxapi.validator.incorrect.data}";
 	static final String VALIDATOR_MINORTHANZERO = "#{tedros.fxapi.validator.minorThanZero}";
+	static final String VALIDATOR_ONLY_DECIMAL_NUMBER = "#{tedros.fxapi.validator.only.decimal.number}";
+	static final String VALIDATOR_ONLY_REAL_NUMBER = "#{tedros.fxapi.validator.only.real.number}";
 	static final String VALIDATOR_REQUIRED = "#{tedros.fxapi.validator.required}";
 	static final String VALIDATOR_SELECTANOPTION = "#{tedros.fxapi.validator.selectAnOption}";
 	static final String VIEW_DETAIL_TITLE = "#{tedros.fxapi.view.detail.title}";

@@ -39,6 +39,7 @@ import org.tedros.fx.domain.TBlendMode;
 import org.tedros.fx.domain.TPoint3D;
 
 import javafx.event.EventDispatcher;
+import javafx.event.EventType;
 import javafx.scene.CacheHint;
 import javafx.scene.Node;
 import javafx.scene.input.ContextMenuEvent;
@@ -53,7 +54,6 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.SwipeEvent;
 import javafx.scene.input.TouchEvent;
 import javafx.scene.input.ZoomEvent;
-import javafx.event.EventType;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.ANNOTATION_TYPE, ElementType.FIELD, ElementType.TYPE})

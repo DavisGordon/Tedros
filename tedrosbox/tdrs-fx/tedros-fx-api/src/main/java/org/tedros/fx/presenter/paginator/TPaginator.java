@@ -4,19 +4,28 @@
 package org.tedros.fx.presenter.paginator;
 
 
+import java.text.ParseException;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TLanguage;
+import org.tedros.core.control.PopOver;
+import org.tedros.core.control.PopOver.ArrowLocation;
 import org.tedros.core.repository.TRepository;
+import org.tedros.fx.TFxKey;
+import org.tedros.fx.annotation.query.TTemporal;
 import org.tedros.fx.control.TButton;
 import org.tedros.fx.control.TComboBoxField;
 import org.tedros.fx.control.THorizontalRadioGroup;
 import org.tedros.fx.control.TLabel;
+import org.tedros.fx.control.TMaskField;
 import org.tedros.fx.control.TOption;
 import org.tedros.fx.control.TSlider;
-import org.tedros.fx.control.TTextField;
+import org.tedros.fx.form.TConverter;
+import org.tedros.server.query.TCompareOp;
+import org.tedros.util.TDateUtil;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -43,17 +52,19 @@ import javafx.scene.text.Font;
  *
  */
 public class TPaginator extends BorderPane {
+
 	
 	private double totalItens = 25.0;
 	private double maxItens = 100.0;
 	private int lastEnd;
 	private String lastButton;
-	private String searchFieldName = null;
 	
 	private TSlider slider;
 	private TButton searchButton;
 	private TButton clearButton;
-	private TTextField search = null;
+	private PopOver searchPopover;
+	private TMaskField search = null;
+	private TComboBoxField<TOption<String>> searches;
 	private TComboBoxField<TOption<String>> orderBy;
 	private THorizontalRadioGroup orderByType;
 	private ToolBar toolbar;
@@ -94,8 +105,7 @@ public class TPaginator extends BorderPane {
 		};
 		repo.add("slider", ehs);
 		slider.valueProperty().addListener(new WeakChangeListener<>(ehs));
-		//slider.valueChangingProperty(new WeakChangeListener<>(ehs));
-		TLabel title = new TLabel(iEngine.getString("#{tedros.fxapi.label.current.page}") + ":") ;
+		TLabel title = new TLabel(iEngine.getString(TFxKey.CURRENT_PAGE) + ":") ;
 		title.setId("t-title-label");
 		title.setFont(Font.font(16));
 		HBox pane = new HBox();
@@ -110,17 +120,19 @@ public class TPaginator extends BorderPane {
 		
 		if(showSearch) {
 			searchButton = new TButton();
-			searchButton.setText(iEngine.getString("#{tedros.fxapi.button.search}"));
+			searchButton.setText(iEngine.getString(TFxKey.BUTTON_SEARCH));
 			searchButton.setId("t-button");
 			EventHandler<ActionEvent> eh = e ->{
-				lastButton = null;
-				paginationProperty.setValue(buildPagination(0));
+				if(validateSearch(search.getText())) {
+					lastButton = null;
+					paginationProperty.setValue(buildPagination(0));
+				}
 			};
 			repo.add("searchbtn", eh);
 			searchButton.setOnAction(new WeakEventHandler<>(eh));
 			
 			clearButton = new TButton();
-			clearButton.setText(iEngine.getString("#{tedros.fxapi.button.clean}"));
+			clearButton.setText(iEngine.getString(TFxKey.BUTTON_CLEAN));
 			clearButton.setId("t-last-button");
 			EventHandler<ActionEvent> eh1 = e ->{
 				lastButton = null;
@@ -129,21 +141,52 @@ public class TPaginator extends BorderPane {
 			};
 			repo.add("clearhbtn", eh1);
 			clearButton.setOnAction(new WeakEventHandler<>(eh1));
+
+			searches = new TComboBoxField<>();
+			ChangeListener<TOption<String>> chl0 = (a0, o, n) ->{
+				TSearch s = (TSearch) n.getUserData();
+				if(s.mask!=null) {
+					search.setMask(s.mask);
+					search.setPromptText(s.mask);
+				}else if(s.temporal!=null && !s.temporal.equals(TTemporal.NONE)) {
+					String m = TLanguage.getLocale().equals(new Locale("pt")) 
+							? "99/99/9999"
+								: "99-99-9999";
+					if(s.temporal.equals(TTemporal.DATETIME))
+						m+=" 99:99";
+					search.setMask(m);
+					search.setPromptText(m);
+				}else {
+					search.setMask(null);
+					search.setPromptText(null);
+				}
+			};
+			repo.add("searches", chl0);
+			searches.valueProperty().addListener(new WeakChangeListener<>(chl0));
 			
-			search = new TTextField();
+			search = new TMaskField();
 			search.setMaxHeight(searchButton.getHeight());
-			//search.setMaxWidth(100);
+			ChangeListener<String> schl = (a,o,n) -> {
+				validateSearch(n);
+			};
+			repo.add("schl", schl);
+			search.textProperty().addListener(new WeakChangeListener<>(schl));
+			search.setStyle("-fx-background-radius: 10 0 0 10; -fx-border-radius: 10 0 0 10;");
+			HBox h0 = new HBox(0);
+			HBox.setHgrow(search, Priority.ALWAYS);
+			HBox.setHgrow(searches, Priority.ALWAYS);
+			h0.getChildren().addAll(search, searches);
+			
 			ToolBar h1 = new ToolBar();
 			h1.setId("t-view-toolbar");
-			//HBox.setHgrow(search, Priority.ALWAYS);
 			h1.getItems().addAll(searchButton, clearButton);
-			box.getChildren().addAll(search, h1);
+			box.getChildren().addAll(h0, h1);
 		}
 		
 		if(showOrderBy) {
 
 			orderBy = new TComboBoxField<>();
-			orderBy.setPromptText(iEngine.getString("#{tedros.fxapi.label.sort.by}"));
+			orderBy.setPromptText(iEngine.getString(TFxKey.SORT_BY));
 			ChangeListener<TOption<String>> eh = (a0, a1, a2) ->{
 				lastButton = null;
 				paginationProperty.setValue(buildPagination(0));
@@ -167,8 +210,8 @@ public class TPaginator extends BorderPane {
 			repo.add("orderByType", eh1);
 			orderByType.selectedToggleProperty().addListener(new WeakChangeListener<>(eh1));
 			
-			RadioButton ascRadioBtn = new RadioButton(iEngine.getString("#{tedros.fxapi.label.sort.by.asc}")); 
-			RadioButton descRadioBtn = new RadioButton(iEngine.getString("#{tedros.fxapi.label.sort.by.desc}")); 
+			RadioButton ascRadioBtn = new RadioButton(iEngine.getString(TFxKey.SORT_BY_ASC)); 
+			RadioButton descRadioBtn = new RadioButton(iEngine.getString(TFxKey.SORT_BY_DESC)); 
 			ascRadioBtn.setSelected(true);
 			ascRadioBtn.setUserData(true);
 			descRadioBtn.setUserData(false);
@@ -203,11 +246,71 @@ public class TPaginator extends BorderPane {
 		
 		
 	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private boolean validateSearch(String n) {
+		if(searchPopover!=null && searchPopover.isShowing())
+			searchPopover.hide();
+		if(StringUtils.isNotBlank(n)) {
+			TSearch s = this.searches.getValue()!=null
+					? (TSearch) this.searches.getValue().getUserData()
+							: null;
+			if(s!=null) {
+				if(s.converter!=TConverter.class) {
+					try {
+						TConverter converter = s.converter.newInstance();
+						converter.setIn(n);
+						converter.getOut();
+					} catch (Exception e) {
+						showSearchMsg(e.getMessage());
+						return false;
+					}
+				}else
+				if(s.temporal!=null && !s.temporal.equals(TTemporal.NONE)) {
+					String m = TLanguage.getLocale().equals(new Locale("pt")) 
+							? "dd/MM/yyyy"
+								: "MM-dd-yyyy";
+					if(s.temporal.equals(TTemporal.DATETIME))
+						m+=" HH:mm";
+					if(m.length()==n.length()) {
+						try {
+							TDateUtil.getDate(n, m);
+						} catch (ParseException e1) {
+							showSearchMsg(TLanguage.getInstance().getString(TFxKey.VALIDATOR_INCORRECT_DATA));
+							return false;
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
+
+	private void showSearchMsg(String msg) {
+		TLabel l = new TLabel(msg);
+		searchPopover = new PopOver(l);
+		searchPopover.setAutoHide(true);
+		searchPopover.setArrowLocation(ArrowLocation.TOP_CENTER);
+		searchPopover.show(search);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public void tAddSearchOption(String text, String field, String alias, String mask, String prompt, 
+			TCompareOp operator, TTemporal temporal, Class<? extends TConverter> converter) {
+		searches.getItems().add(new TOption<>(TLanguage
+				.getInstance(null)
+				.getString(text), field, new TSearch(field, alias, text, mask, prompt, 
+						operator, temporal, converter)));
+		if(searches.getSelectionModel().isEmpty())
+			searches.getSelectionModel().selectFirst();
+	}
 	
 	public void tAddOrderByOption(String text, String field, String alias) {
 		orderBy.getItems().add(new TOption<>(TLanguage
 				.getInstance(null)
 				.getString(text), field, alias));
+		if(orderBy.getSelectionModel().isEmpty())
+			orderBy.getSelectionModel().selectFirst();
 	}
 	
 	public void tReload(long totalRows) {
@@ -273,13 +376,43 @@ public class TPaginator extends BorderPane {
 		}
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private TPagination buildPagination(int start){
 		String orderBy = gettOrderBy();
 		String orderAlias = gettOrderByAlias();
 		boolean orderAsc = gettOrderAsc();
-		return new TPagination(searchFieldName!=null ? searchFieldName : null, 
-				search!=null ? search.getText() : null, 
-				orderBy, orderAlias, orderAsc, start, gettTotalRows());
+		String prompt = search!=null ? search.getText() : null;
+		Object value = prompt;
+		TSearch s = this.searches!=null && this.searches.getValue()!=null
+				? (TSearch) this.searches.getValue().getUserData()
+						: null;
+		if(s!=null) {
+			if(s.converter!=TConverter.class) {
+				try {
+					TConverter converter = s.converter.newInstance();
+					converter.setIn(prompt);
+					value = converter.getOut();
+				} catch (Exception e) {
+					showSearchMsg(e.getMessage());
+				}
+			}else if(s.temporal!=null && !s.temporal.equals(TTemporal.NONE)) {
+				String m = TLanguage.getLocale().equals(new Locale("pt")) 
+						? "dd/MM/yyyy"
+							: "MM-dd-yyyy";
+				if(s.temporal.equals(TTemporal.DATETIME))
+					m+=" HH:mm";
+				if(m.length()==prompt.length()) {
+					try {
+						value = TDateUtil.getDate(prompt, m);
+					} catch (ParseException e1) {
+						showSearchMsg(TLanguage.getInstance().getString(TFxKey.VALIDATOR_INCORRECT_DATA));
+					}
+				}
+			}
+		}
+		return new TPagination(value, s,
+				orderBy, orderAlias, orderAsc, 
+				start, gettTotalRows());
 	}
 
 	/**
@@ -335,7 +468,6 @@ public class TPaginator extends BorderPane {
 		return buildPagination(0);
 	}
 
-
 	/**
 	 * @return the paginationProperty
 	 */
@@ -345,26 +477,6 @@ public class TPaginator extends BorderPane {
 	
 	public void tDispose() {
 		repo.clear();
-	}
-
-	/**
-	 * @return the searchFieldName
-	 */
-	public String gettSearchFieldName() {
-		return searchFieldName;
-	}
-
-	/**
-	 * @param searchFieldName the searchFieldName to set
-	 */
-	public void settSearchFieldName(String searchFieldName) {
-		this.searchFieldName = searchFieldName;
-	}
-	
-	public void settSearchPromptText(String text) {
-		if(this.search!=null) {
-			this.search.setPromptText(TLanguage.getInstance().getString(text));
-		}
 	}
 
 }

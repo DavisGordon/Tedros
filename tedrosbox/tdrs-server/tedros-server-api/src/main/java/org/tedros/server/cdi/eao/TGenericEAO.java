@@ -187,21 +187,23 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 			sb.append("where ");
 			
 			sel.getConditions().forEach(b->{
-				if(b.getOperator()!=null)
-					sb.append(b.getOperator().name().toLowerCase()).append(" ");
-				
-				if(b.getCondition().getOperator().equals(TCompareOp.LIKE))
-					sb.append("lower(");
-				
-				sb.append(b.getCondition().getAlias())
-				.append(".").append(b.getCondition().getField());
-				
-				if(b.getCondition().getOperator().equals(TCompareOp.LIKE))
-					sb.append(")");
-				
-				sb.append(" ").append(b.getCondition().getOperator().getValue()).append(" ");
-				sb.append(":").append(b.getCondition().getField()).append("_");
-				sb.append(" ");
+				if(b.getCondition().getValue()!=null) {
+					if(b.getOperator()!=null)
+						sb.append(b.getOperator().name().toLowerCase()).append(" ");
+					
+					if(b.getCondition().getOperator().equals(TCompareOp.LIKE))
+						sb.append("lower(");
+					
+					sb.append(b.getCondition().getAlias())
+					.append(".").append(b.getCondition().getField());
+					
+					if(b.getCondition().getOperator().equals(TCompareOp.LIKE))
+						sb.append(")");
+					
+					sb.append(" ").append(b.getCondition().getOperator().getValue()).append(" ");
+					sb.append(":").append(b.getCondition().getField()).append("_");
+					sb.append(" ");
+				}
 			});
 		}
 		if(!count && sel.getOrdenations()!=null) {
@@ -226,11 +228,12 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 		Query qry = this.getEntityManager().createQuery(sb.toString());
 		if(sel.getConditions()!=null && !sel.getConditions().isEmpty()) {
 			sel.getConditions().forEach(b->{
-				qry.setParameter(b.getCondition().getField()+"_", 
-						b.getCondition().getOperator().equals(TCompareOp.LIKE) 
-							? "%"+b.getCondition().getValue().toString().toLowerCase()+"%"
-									: b.getCondition().getValue()
-						);
+				if(b.getCondition().getValue()!=null)
+					qry.setParameter(b.getCondition().getField()+"_", 
+							b.getCondition().getOperator().equals(TCompareOp.LIKE) 
+								? "%"+b.getCondition().getValue().toString().toLowerCase()+"%"
+										: b.getCondition().getValue()
+							);
 			});
 		}
 		return qry;

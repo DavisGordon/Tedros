@@ -19,6 +19,7 @@ import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.builder.ITReaderBuilder;
 import org.tedros.fx.builder.TFileReaderBuilder;
+import org.tedros.fx.property.TSimpleFileProperty;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;

@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TLanguage;
 import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.annotation.security.TSecurity;
-import org.tedros.core.context.TReflections;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
 import org.tedros.core.security.model.TAuthorization;
@@ -78,7 +77,8 @@ public class TAuthorizationLoadAction extends TPresenterAction {
 								behavior.getView().tShowModal(tMessageBox, true);
 							}
 							if(behavior instanceof TAuthorizationBehavior) {
-								TPagination pag = new TPagination(null, "appName", TSelect.ALIAS, true, 0, 50);
+								TPagination pag = new TPagination(null, null, "appName", 
+										TSelect.ALIAS, true, 0, 50);
 								try {
 									((TAuthorizationBehavior)behavior).paginate(pag);
 								} catch (TException e) {

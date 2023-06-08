@@ -9,8 +9,10 @@ import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.control.PopOver;
 import org.tedros.core.repository.TRepository;
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.collections.TFXCollections;
+import org.tedros.fx.layout.TToolBar;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.dynamic.view.TDynaGroupView;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
@@ -33,7 +35,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -66,26 +67,38 @@ public class TEditEntityModal extends TRequiredModal {
 	private double height;
 	
 	private boolean singleEntity;
-	
+	private ListChangeListener lChl0;
+	private ChangeListener chl0;
+	private ITObservableList items;
+	private Property item;
 	private TRepository repo = new TRepository();
 	
 	@SuppressWarnings("unchecked")
 	public TEditEntityModal(Property item, double width, double height, double modalWidth, double modalHeight) {
 		this.singleEntity = true;
-		ITObservableList items = TFXCollections.iTObservableList();
+		this.item = item;
+		this.items = TFXCollections.iTObservableList();
 		if(item.getValue()!=null)
 			items.add(item.getValue());
-		items.addListener(new ListChangeListener() {
-			@Override
-			public void onChanged(Change c) {
-				if(c.getList().isEmpty())
-					item.setValue(null);
-				else
-					item.setValue(c.getList().get(0));
-			}
-			
-		});
-		init(items, width, height, modalWidth, modalHeight);
+		
+		chl0 = (a,o,n) ->{
+			items.removeListener(lChl0);
+			items.clear();
+			items.add(n);
+			items.addListener(lChl0);
+		};
+		item.addListener(chl0);
+		
+		lChl0 = c -> {
+			item.removeListener(chl0);
+			if(c.getList().isEmpty())
+				item.setValue(null);
+			else
+				item.setValue(c.getList().get(0));
+			item.addListener(chl0);
+		};
+		items.addListener(lChl0);
+		init(width, height, modalWidth, modalHeight);
 	}
 	
 	/**
@@ -94,11 +107,12 @@ public class TEditEntityModal extends TRequiredModal {
 	public TEditEntityModal(ITObservableList items, double width, double height,
 			double modalWidth, double modalHeight) {
 		this.singleEntity = false;
-		init(items, width, height, modalWidth, modalHeight);
+		this.items = items;
+		init(width, height, modalWidth, modalHeight);
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void init(ITObservableList items, double width, double height,
+	private void init(double width, double height,
 			double modalWidth, double modalHeight) {
 		this.tSelectedItems = items;
 		this.width = width;
@@ -107,16 +121,16 @@ public class TEditEntityModal extends TRequiredModal {
 		boolean disable = !(this.tSelectedItems!=null && !this.tSelectedItems.isEmpty());
 		TLanguage iEngine = TLanguage.getInstance(null);
 		
-		tEditButton = new TButton(iEngine.getString("#{tedros.fxapi.button.edit}"));
-		tRemoveButton = new TButton(iEngine.getString("#{tedros.fxapi.button.delete}"));
-		tClearButton = new TButton(iEngine.getString("#{tedros.fxapi.button.clean}"));
+		tEditButton = new TButton(iEngine.getString(TFxKey.BUTTON_EDIT));
+		tRemoveButton = new TButton(iEngine.getString(TFxKey.BUTTON_DELETE));
+		tClearButton = new TButton(iEngine.getString(TFxKey.BUTTON_CLEAN));
 		tClearButton.setId("t-last-button");
 		
 		this.buildListView();
 		this.configSelectedListView();
 		
-		HBox box = new HBox();
-		box.getChildren().addAll(tEditButton, tRemoveButton, tClearButton);
+		TToolBar box = new TToolBar();
+		box.getItems().addAll(tEditButton, tRemoveButton, tClearButton);
 		
 		tRemoveButton.setDisable(true);
 		tClearButton.setDisable(disable);
@@ -222,8 +236,14 @@ public class TEditEntityModal extends TRequiredModal {
 		tListView.getSelectionModel().selectedItemProperty().addListener(new WeakChangeListener(selchl));
 	}
 
+	@SuppressWarnings("unchecked")
 	public void invalidate() {
 		repo.clear();
+		if(item!=null)
+			item.removeListener(chl0);
+		items.removeListener(lChl0);
+		item = null;
+		items = null;
 	}
 	
 	/**

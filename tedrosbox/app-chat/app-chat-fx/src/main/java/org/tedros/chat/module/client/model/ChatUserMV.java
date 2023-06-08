@@ -7,14 +7,15 @@ import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TTableColumn;
 import org.tedros.fx.annotation.control.TTableView;
 import org.tedros.fx.annotation.control.TTextField;
+import org.tedros.fx.annotation.page.TPage;
 import org.tedros.fx.annotation.presenter.TSelectionModalPresenter;
-import org.tedros.fx.annotation.view.TPaginator;
+import org.tedros.fx.annotation.query.TQuery;
 import org.tedros.fx.presenter.model.TEntityModelView;
 
 import javafx.beans.property.SimpleStringProperty;
 
 @TSelectionModalPresenter(allowsMultipleSelections = true, 
-	paginator = @TPaginator(entityClass = ChatUser.class, modelViewClass=ChatUserMV.class, 
+	paginator = @TPage(query = @TQuery(entity=ChatUser.class), modelView=ChatUserMV.class, 
 		serviceName = IChatUserController.JNDI_NAME), 
 	tableView = @TTableView(columns = { @TTableColumn(text = TUsualKey.NAME, cellValue="name" ) }))
 public class ChatUserMV extends TEntityModelView<ChatUser> {

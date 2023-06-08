@@ -62,7 +62,7 @@ extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M> {
 		TListViewPresenter tAnnotation = getPresenter().getModelViewClass().getAnnotation(TListViewPresenter.class);
 		if(tAnnotation!=null)
 			helper = new TListViewHelper<>(title, tAnnotation.listViewMaxWidth(), tAnnotation.listViewMinWidth(), 
-					tAnnotation.paginator(), tAnnotation.aiAssistant());
+					tAnnotation.page(), tAnnotation.aiAssistant());
 		else
 			helper = new TListViewHelper<>(title, 250, 250, null);
 		

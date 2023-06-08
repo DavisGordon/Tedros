@@ -10,11 +10,11 @@ import java.lang.annotation.Annotation;
 
 import org.tedros.core.model.ITModelView;
 import org.tedros.fx.annotation.control.TAutoCompleteEntity;
-import org.tedros.fx.annotation.control.TAutoCompleteEntity.TEntry;
 import org.tedros.fx.exception.TException;
 import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.fx.presenter.model.TModelViewBuilder;
 import org.tedros.server.entity.TEntity;
+import org.tedros.server.query.TSelect;
 
 import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
@@ -35,12 +35,17 @@ implements ITControlBuilder<org.tedros.fx.control.TAutoCompleteEntity, Property>
 	@SuppressWarnings("unchecked")
 	public org.tedros.fx.control.TAutoCompleteEntity build(final Annotation annotation, final Property attrProperty) throws Exception {
 		TAutoCompleteEntity tAnn = (TAutoCompleteEntity) annotation;
-		TEntry eAnn = tAnn.entries();
 		
+		TSelect sel = TSelectQueryBuilder.build(tAnn.query(), super.getComponentDescriptor());
 		
 		final org.tedros.fx.control.TAutoCompleteEntity control 
-		= new org.tedros.fx.control.TAutoCompleteEntity(eAnn.entityType(), 
-				tAnn.startSearchAt(), tAnn.showMaxItems(), eAnn.service(), eAnn.fields());
+		= new org.tedros.fx.control.TAutoCompleteEntity(sel, 
+				tAnn.startSearchAt(), tAnn.showMaxItems(), tAnn.service());
+		
+		if(tAnn.converter()!=TFunctionEntityToStringBuilder.class) {
+			TFunctionEntityToStringBuilder b = tAnn.converter().newInstance();
+			control.settConverter(b.build());
+		}
 		
 		if(tAnn.modelViewType()!=TEntityModelView.class) {
 			if(attrProperty.getValue() instanceof TEntityModelView)
@@ -62,7 +67,7 @@ implements ITControlBuilder<org.tedros.fx.control.TAutoCompleteEntity, Property>
 					try {
 						TEntityModelView mv = (TEntityModelView) TModelViewBuilder.create()
 								.modelViewClass((Class<? extends ITModelView<?>>) tAnn.modelViewType())
-								.entityClass(eAnn.entityType())
+								.entityClass(sel.getType())
 								.build(n);
 						attrProperty.setValue(mv);
 					} catch (TException e) {

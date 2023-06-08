@@ -15,9 +15,9 @@ import org.tedros.fx.domain.TAxisType;
 import org.tedros.server.model.TChartModel;
 
 import javafx.scene.chart.Axis;
-import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.StackedBarChart;
 
 
 /**

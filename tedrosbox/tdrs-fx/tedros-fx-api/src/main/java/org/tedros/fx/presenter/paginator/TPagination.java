@@ -11,8 +11,8 @@ package org.tedros.fx.presenter.paginator;
  */
 public class TPagination {
 
-	private String searchFieldName;
-	private String search;
+	private Object value;
+	private TSearch search;
 	private String orderBy;
 	private String orderByAlias;
 	private boolean orderByAsc;
@@ -20,44 +20,30 @@ public class TPagination {
 	private int totalRows;
 	
 	
-	
 	/**
+	 * @param value
 	 * @param search
 	 * @param orderBy
+	 * @param orderByAlias
 	 * @param orderByAsc
 	 * @param start
 	 * @param totalRows
 	 */
-	public TPagination(String search, String orderBy, String orderByAlias, boolean orderByAsc, int start, int totalRows) {
-		this.search = search;
-		this.orderBy = orderBy;
-		this.orderByAsc = orderByAsc;
-		this.orderByAlias = orderByAlias;
-		this.start = start;
-		this.totalRows = totalRows;
-	}
-	/**
-	 * @param searchFieldName
-	 * @param search
-	 * @param orderBy
-	 * @param orderByAsc
-	 * @param start
-	 * @param totalRows
-	 */
-	public TPagination(String searchFieldName, String search, String orderBy, String orderByAlias, boolean orderByAsc, int start,
+	public TPagination(Object value, TSearch search, String orderBy, String orderByAlias, boolean orderByAsc, int start,
 			int totalRows) {
-		this.searchFieldName = searchFieldName;
+		super();
+		this.value = value;
 		this.search = search;
 		this.orderBy = orderBy;
-		this.orderByAsc = orderByAsc;
 		this.orderByAlias = orderByAlias;
+		this.orderByAsc = orderByAsc;
 		this.start = start;
 		this.totalRows = totalRows;
 	}
 	/**
 	 * @return the search
 	 */
-	public String getSearch() {
+	public TSearch getSearch() {
 		return search;
 	}
 	/**
@@ -85,16 +71,16 @@ public class TPagination {
 		return orderByAsc;
 	}
 	/**
-	 * @return the searchFieldName
-	 */
-	public String getSearchFieldName() {
-		return searchFieldName;
-	}
-	/**
 	 * @return the orderByAlias
 	 */
 	public String getOrderByAlias() {
 		return orderByAlias;
+	}
+	/**
+	 * @return the value
+	 */
+	public Object getValue() {
+		return value;
 	}
 	
 	

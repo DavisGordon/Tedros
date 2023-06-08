@@ -9,6 +9,7 @@ import java.io.Serializable;
  * @author Davis Gordon
  *
  */
+@SuppressWarnings("rawtypes")
 public class TBlock implements Serializable{
 
 	/**
@@ -16,18 +17,18 @@ public class TBlock implements Serializable{
 	 */
 	private static final long serialVersionUID = 5156295347187302751L;
 	private TLogicOp operator;
-	private TCondition<?> condition;
+	private TCondition condition;
 	/**
 	 * @param condition
 	 */
-	public TBlock(TCondition<?> condition) {
+	public TBlock(TCondition condition) {
 		this.condition = condition;
 	}
 	/**
 	 * @param operator
 	 * @param condition
 	 */
-	public TBlock(TLogicOp operator, TCondition<?> condition) {
+	public TBlock(TLogicOp operator, TCondition condition) {
 		this.operator = operator;
 		this.condition = condition;
 	}
@@ -40,7 +41,7 @@ public class TBlock implements Serializable{
 	/**
 	 * @return the condition
 	 */
-	public TCondition<?> getCondition() {
+	public TCondition getCondition() {
 		return condition;
 	}
 	

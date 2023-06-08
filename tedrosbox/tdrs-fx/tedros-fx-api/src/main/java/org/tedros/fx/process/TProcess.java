@@ -2,6 +2,10 @@ package org.tedros.fx.process;
 
 import java.util.Calendar;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.tedros.app.process.ITProcess;
+import org.tedros.server.info.ITAppInfo;
+
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -9,10 +13,6 @@ import javafx.concurrent.Service;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.util.Duration;
-
-import org.apache.commons.lang3.RandomStringUtils;
-import org.tedros.app.process.ITProcess;
-import org.tedros.server.info.ITAppInfo;
 
 /**
  * The Tedros process ia a JavaFX Service 
