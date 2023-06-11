@@ -20,7 +20,7 @@ import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.modal.TMessageBox;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TModelView;
 import org.tedros.server.model.ITModel;
 import org.tedros.server.model.ITReportItemModel;
 

@@ -9,12 +9,12 @@ import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.annotation.security.TSecurity;
 import org.tedros.core.context.TSecurityDescriptor;
 import org.tedros.core.context.TedrosContext;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.control.TButton;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
-import org.tedros.fx.presenter.model.TModelView;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
@@ -109,7 +109,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 		if(editRadiotext==null)		{
 			tEditModeRadio = new RadioButton();
 			tEditModeRadio.setText(iEngine.getString(tPresenter==null 
-				? TAnnotationDefaultValue.TVIEW_editModeTitle 
+				? TDefaultValue.TVIEW_editModeTitle 
 						: tPresenter.decorator().editModeTitle()));
 			tEditModeRadio.setId("t-title-label");
 		}else {
@@ -120,7 +120,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 		if(readRadioText==null)	{
 			tReadModeRadio = new RadioButton();
 			tReadModeRadio.setText(iEngine.getString(tPresenter==null 
-					? TAnnotationDefaultValue.TVIEW_readerModeTitle 
+					? TDefaultValue.TVIEW_readerModeTitle 
 							: tPresenter.decorator().readerModeTitle()));
 			tReadModeRadio.setId("t-title-label");
 		}else {
@@ -152,7 +152,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
 			tCancelButton = new TButton();
 			tCancelButton.setText(iEngine.getString(tPresenter==null 
-					? TAnnotationDefaultValue.TVIEW_cancelButtonText 
+					? TDefaultValue.TVIEW_cancelButtonText 
 							: tPresenter.decorator().cancelButtonText()));
 			tCancelButton.setId("t-button");
 		}else {
@@ -180,7 +180,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
 			tSearchButton = new TButton();
 			tSearchButton.setText(iEngine.getString(tPresenter==null 
-					? TAnnotationDefaultValue.TVIEW_searchButtonText 
+					? TDefaultValue.TVIEW_searchButtonText 
 							: tPresenter.decorator().searchButtonText()));
 			tSearchButton.setId("t-button");
 		}else {
@@ -210,7 +210,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
 			tCleanButton = new TButton();
 			tCleanButton.setText(iEngine.getString(tPresenter==null 
-					? TAnnotationDefaultValue.TVIEW_cleanButtonText 
+					? TDefaultValue.TVIEW_cleanButtonText 
 							: tPresenter.decorator().cleanButtonText()));
 			tCleanButton.setId("t-button");
 		}else {
@@ -239,7 +239,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
 			tExcelButton = new TButton();
 			tExcelButton.setText(iEngine.getString(tPresenter==null 
-					? TAnnotationDefaultValue.TVIEW_excelButtonText 
+					? TDefaultValue.TVIEW_excelButtonText 
 							: tPresenter.decorator().excelButtonText()));
 			tExcelButton.setId("t-button");
 		}else {
@@ -269,7 +269,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
 			tWordButton = new TButton();
 			tWordButton.setText(iEngine.getString(tPresenter==null 
-					? TAnnotationDefaultValue.TVIEW_wordButtonText 
+					? TDefaultValue.TVIEW_wordButtonText 
 							: tPresenter.decorator().wordButtonText()));
 			tWordButton.setId("t-button");
 		}else {
@@ -299,7 +299,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
 			tPdfButton = new TButton();
 			tPdfButton.setText(iEngine.getString(tPresenter==null 
-					? TAnnotationDefaultValue.TVIEW_pdfButtonText 
+					? TDefaultValue.TVIEW_pdfButtonText 
 							: tPresenter.decorator().pdfButtonText()));
 			tPdfButton.setId("t-button");
 		}else {
@@ -328,7 +328,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
 			tOpenExportFolderButton = new TButton();
 			tOpenExportFolderButton.setText(iEngine.getString(tPresenter==null 
-					? TAnnotationDefaultValue.TVIEW_openExportFolderButtonText 
+					? TDefaultValue.TVIEW_openExportFolderButtonText 
 							: tPresenter.decorator().openExportFolderButtonText()));
 			tOpenExportFolderButton.setId("t-button");
 		}else {
@@ -351,7 +351,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildColapseButton(String text) {
 		tColapseButton = new TButton();
 		tColapseButton.setText(iEngine.getString(StringUtils.isBlank(text) 
-				? TAnnotationDefaultValue.TVIEW_colapse : text));
+				? TDefaultValue.TVIEW_colapse : text));
 		tColapseButton.setId("t-button");
 	}
 

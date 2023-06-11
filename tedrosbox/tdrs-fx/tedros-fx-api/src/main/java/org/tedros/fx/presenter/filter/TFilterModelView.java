@@ -7,7 +7,7 @@
 package org.tedros.fx.presenter.filter;
 
 import org.tedros.core.model.ITFilterModelView;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TModelView;
 import org.tedros.server.model.ITModel;
 
 

@@ -12,7 +12,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.tedros.api.parser.ITAnnotationParser;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.parser.TNumberFieldParser;
 import org.tedros.fx.annotation.parser.TRequiredNumeberFieldParser;
 import org.tedros.fx.annotation.parser.TTextFieldParser;
@@ -23,7 +23,7 @@ import org.tedros.fx.builder.ITFieldBuilder;
 import org.tedros.fx.builder.NullActionEventBuilder;
 import org.tedros.fx.builder.TDoubleFieldBuilder;
 import org.tedros.fx.domain.TDefaultValues;
-import org.tedros.fx.domain.TZeroValidation;
+import org.tedros.fx.domain.TValidateNumber;
 
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -97,7 +97,7 @@ public @interface TDoubleField  {
 	*  The preferred number of text columns. This is used for calculating the TextField's preferred width.
 	* </pre>
 	**/
-	public int prefColumnCount() default TAnnotationDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
+	public int prefColumnCount() default TDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -128,14 +128,14 @@ public @interface TDoubleField  {
 	
 	/**
 	 * <pre>
-	 * Sets the zeroValidation property.
+	 * Sets the validate property.
 	 * 
 	 * Property description:
 	 * 
 	 * Validate if the value of this control are more or less than zero.
 	 * </pre>
 	 * */
-	public TZeroValidation zeroValidation() default TZeroValidation.NONE;
+	public TValidateNumber validate() default TValidateNumber.NONE;
 	
 	/**
 	 * <pre>
@@ -146,7 +146,7 @@ public @interface TDoubleField  {
 	 * The max length for this input control.
 	 * </pre>
 	 * */
-	public int maxLength() default TAnnotationDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
+	public int maxLength() default TDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
 	
 	/**
 	 * <pre>
@@ -157,5 +157,5 @@ public @interface TDoubleField  {
 	 * The precision for this input control.
 	 * </pre>
 	 * */
-	public int precision() default TAnnotationDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
+	public int precision() default TDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
 }

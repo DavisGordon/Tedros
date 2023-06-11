@@ -10,7 +10,7 @@ import org.tedros.fx.annotation.control.TTableNestedColumn;
 import org.tedros.fx.annotation.control.TTableSubColumn;
 import org.tedros.fx.annotation.control.TTableView;
 import org.tedros.fx.descriptor.TComponentDescriptor;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TModelView;
 
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableCell;

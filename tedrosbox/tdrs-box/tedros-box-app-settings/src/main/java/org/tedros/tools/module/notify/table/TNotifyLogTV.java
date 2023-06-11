@@ -8,7 +8,7 @@ import java.util.Date;
 import org.tedros.core.TLanguage;
 import org.tedros.core.notify.model.TNotifyLog;
 import org.tedros.core.notify.model.TState;
-import org.tedros.fx.presenter.model.TEntityModelView;
+import org.tedros.fx.model.TEntityModelView;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;

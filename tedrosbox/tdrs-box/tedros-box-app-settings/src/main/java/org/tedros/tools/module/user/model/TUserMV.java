@@ -42,10 +42,10 @@ import org.tedros.fx.annotation.text.TText;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.control.TText.TTextStyle;
 import org.tedros.fx.domain.TLabelPosition;
+import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.entity.behavior.TMasterCrudViewBehavior;
 import org.tedros.fx.presenter.entity.decorator.TMasterCrudViewDecorator;
-import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.tools.ToolsKey;
 import org.tedros.tools.module.user.action.TEncriptPasswordChangeListener;
 

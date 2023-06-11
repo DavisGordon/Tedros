@@ -5,7 +5,7 @@ package org.tedros.fx.control;
 
 import org.tedros.app.component.ITComponent;
 import org.tedros.fx.collections.ITObservableList;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TModelView;
 
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;

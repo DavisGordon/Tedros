@@ -7,11 +7,11 @@ import org.tedros.api.presenter.ITPresenter;
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.annotation.presenter.TDetailTableViewPresenter;
 import org.tedros.fx.control.action.TPresenterAction;
+import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.presenter.behavior.TActionType;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.dynamic.behavior.TDetailFieldBaseBehavior;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewSimpleBaseBehavior;
-import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.fx.presenter.view.group.TGroupPresenter;
 import org.tedros.server.entity.ITEntity;
 

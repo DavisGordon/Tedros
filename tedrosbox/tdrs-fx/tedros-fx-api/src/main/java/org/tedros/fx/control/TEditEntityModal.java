@@ -13,12 +13,12 @@ import org.tedros.fx.TFxKey;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.collections.TFXCollections;
 import org.tedros.fx.layout.TToolBar;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.dynamic.view.TDynaGroupView;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
 import org.tedros.fx.presenter.modal.behavior.TEditModalBehavior;
 import org.tedros.fx.presenter.modal.decorator.TEditModalDecorator;
-import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.fx.util.TEntityListViewCallback;
 import org.tedros.server.model.ITModel;
 

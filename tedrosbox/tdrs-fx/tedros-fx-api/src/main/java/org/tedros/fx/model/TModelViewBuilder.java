@@ -4,7 +4,7 @@
  * TODOS OS DIREITOS RESERVADOS
  * 26/02/2014
  */
-package org.tedros.fx.presenter.model;
+package org.tedros.fx.model;
 
 import java.lang.reflect.InvocationTargetException;
 

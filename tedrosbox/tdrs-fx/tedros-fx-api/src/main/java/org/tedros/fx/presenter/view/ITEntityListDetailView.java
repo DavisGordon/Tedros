@@ -1,6 +1,6 @@
 package org.tedros.fx.presenter.view;
 
-import org.tedros.fx.presenter.model.TEntityModelView;
+import org.tedros.fx.model.TEntityModelView;
 
 import javafx.scene.control.ListView;
 

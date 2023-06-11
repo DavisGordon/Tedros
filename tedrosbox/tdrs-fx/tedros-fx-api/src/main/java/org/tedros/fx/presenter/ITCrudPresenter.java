@@ -1,7 +1,7 @@
 package org.tedros.fx.presenter;
 
 import org.tedros.api.form.ITModelForm;
-import org.tedros.fx.presenter.model.TEntityModelView;
+import org.tedros.fx.model.TEntityModelView;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;

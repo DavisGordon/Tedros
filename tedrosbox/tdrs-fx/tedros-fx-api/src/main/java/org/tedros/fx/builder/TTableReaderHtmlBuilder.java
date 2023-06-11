@@ -26,7 +26,7 @@ import org.tedros.fx.domain.THtmlConstant;
 import org.tedros.fx.form.TConverter;
 import org.tedros.fx.html.THtmlTableGenerator;
 import org.tedros.fx.html.THtmlTableGenerator.TColumn;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.reader.THtmlReader;
 import org.tedros.fx.util.TMaskUtil;
 import org.tedros.util.TStripTagUtil;

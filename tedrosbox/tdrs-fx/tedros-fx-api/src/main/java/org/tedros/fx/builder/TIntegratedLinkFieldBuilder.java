@@ -10,7 +10,7 @@ import java.lang.annotation.Annotation;
 
 import org.tedros.fx.control.TIntegratedLink;
 import org.tedros.fx.control.TText.TTextStyle;
-import org.tedros.fx.presenter.model.TEntityModelView;
+import org.tedros.fx.model.TEntityModelView;
 import org.tedros.server.entity.ITEntity;
 import org.tedros.server.entity.TReceptiveEntity;
 

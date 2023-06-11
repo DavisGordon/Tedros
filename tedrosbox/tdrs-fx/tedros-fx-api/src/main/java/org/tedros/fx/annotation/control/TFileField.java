@@ -26,8 +26,8 @@ import org.tedros.fx.control.action.TEventHandler;
 import org.tedros.fx.domain.TDefaultValues;
 import org.tedros.fx.domain.TFileExtension;
 import org.tedros.fx.domain.TFileModelType;
-import org.tedros.fx.presenter.model.TEntityModelView;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TEntityModelView;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.property.TSimpleFileProperty;
 
 import javafx.beans.property.Property;

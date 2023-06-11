@@ -8,10 +8,10 @@ import java.lang.annotation.Target;
 import org.tedros.fx.annotation.assistant.TAiAssistant;
 import org.tedros.fx.annotation.page.TPage;
 import org.tedros.fx.annotation.query.TQuery;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.entity.behavior.TMasterCrudViewBehavior;
 import org.tedros.fx.presenter.entity.decorator.TMasterCrudViewDecorator;
-import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.server.entity.ITEntity;
 import org.tedros.server.model.TJsonModel;
 

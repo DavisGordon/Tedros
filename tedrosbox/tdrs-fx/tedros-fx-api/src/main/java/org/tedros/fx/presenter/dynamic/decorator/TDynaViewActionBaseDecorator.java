@@ -1,12 +1,12 @@
 package org.tedros.fx.presenter.dynamic.decorator;
 
 import org.tedros.api.presenter.view.TViewMode;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.control.TButton;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
-import org.tedros.fx.presenter.model.TModelView;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
@@ -55,7 +55,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 		if(editRadiotext==null) {		
 			tEditModeRadio = new RadioButton();
 			tEditModeRadio.setText(iEngine.getString(tPresenter==null
-					? TAnnotationDefaultValue.TVIEW_editModeTitle 
+					? TDefaultValue.TVIEW_editModeTitle 
 							: tPresenter.decorator().editModeTitle()));
 			tEditModeRadio.setId("t-title-label");
 		}else {
@@ -66,7 +66,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 		if(readRadioText==null)	{
 			tReadModeRadio = new RadioButton();
 			tReadModeRadio.setText(iEngine.getString(tPresenter==null 
-					? TAnnotationDefaultValue.TVIEW_readerModeTitle 
+					? TDefaultValue.TVIEW_readerModeTitle 
 							: tPresenter.decorator().readerModeTitle()));
 			tReadModeRadio.setId("t-title-label");
 		}else {
@@ -95,7 +95,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
 			tCloseButton = new TButton();
 			tCloseButton.setText(iEngine.getString(tPresenter==null 
-							? TAnnotationDefaultValue.TVIEW_closeButtonText 
+							? TDefaultValue.TVIEW_closeButtonText 
 									: tPresenter.decorator().closeButtonText()));
 			tCloseButton.setId("t-button");
 		}else {
@@ -137,7 +137,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
 			tCleanButton = new TButton();
 			tCleanButton.setText(iEngine.getString(tPresenter==null 
-					? TAnnotationDefaultValue.TVIEW_cleanButtonText 
+					? TDefaultValue.TVIEW_cleanButtonText 
 							: tPresenter.decorator().cleanButtonText()));
 			tCleanButton.setId("t-button");
 		}else {

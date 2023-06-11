@@ -1,9 +1,9 @@
 package org.tedros.fx.presenter.entity.behavior;
 
 import org.tedros.fx.modal.TMessageBox;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 import org.tedros.fx.presenter.entity.decorator.TSaveViewDecorator;
-import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.server.entity.ITEntity;
 
 /**

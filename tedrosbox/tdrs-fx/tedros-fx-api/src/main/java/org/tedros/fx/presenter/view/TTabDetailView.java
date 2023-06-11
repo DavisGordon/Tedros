@@ -8,8 +8,8 @@ package org.tedros.fx.presenter.view;
 
 import org.tedros.api.form.ITModelForm;
 import org.tedros.api.presenter.view.ITView;
+import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.presenter.TTabDetailPresenter;
-import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.server.entity.ITEntity;
 
 import javafx.collections.ObservableList;

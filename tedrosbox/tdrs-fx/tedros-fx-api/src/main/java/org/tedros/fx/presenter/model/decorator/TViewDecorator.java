@@ -1,10 +1,10 @@
-package org.tedros.fx.presenter.entity.decorator;
+package org.tedros.fx.presenter.model.decorator;
 
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.presenter.TPresenter;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewSimpleBaseDecorator;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
-import org.tedros.fx.presenter.model.TModelView;
 
 /**
  * The decoraror of the simple view.
@@ -31,7 +31,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	 * the {@link TPresenter} defined in the TEntityModelView
 	 */
 	protected void configViewTitle() {
-		if(!tPresenter.decorator().viewTitle().equals(TAnnotationDefaultValue.TVIEW_viewTitle))
+		if(!tPresenter.decorator().viewTitle().equals(TDefaultValue.TVIEW_viewTitle))
 			setViewTitle(null);
 		else {
 			((TDynaView)super.getView()).gettLayout().getChildren().remove(0);

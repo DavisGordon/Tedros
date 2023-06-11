@@ -31,9 +31,9 @@ import org.tedros.fx.annotation.scene.control.TControl;
 import org.tedros.fx.annotation.text.TText;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.control.TText.TTextStyle;
+import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.entity.decorator.TMasterCrudViewDecorator;
-import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.tools.ToolsKey;
 import org.tedros.tools.module.user.table.TAuthorizationTV;
 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.tedros.fx.presenter.paginator.converter;
+package org.tedros.fx.presenter.page.converter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -13,19 +13,19 @@ import org.tedros.fx.form.TConverter;
  * @author Davis Gordon
  *
  */
-public class TStringToDouble extends TConverter<String, Double> {
+public class TStringToInteger extends TConverter<String, Integer> {
 
 	/* (non-Javadoc)
 	 * @see org.tedros.fx.form.TConverter#getOut()
 	 */
 	@Override
-	public Double getOut() {
+	public Integer getOut() {
 		
 		if(StringUtils.isNotBlank(getIn())) {
 			if(NumberUtils.isParsable(getIn()))
-				return Double.valueOf(getIn());
+				return Integer.valueOf(getIn());
 			throw new IllegalArgumentException(TLanguage.getInstance()
-					.getString(TFxKey.VALIDATOR_ONLY_DECIMAL_NUMBER));
+					.getString(TFxKey.VALIDATOR_ONLY_REAL_NUMBER));
 		}
 		return null;
 	}

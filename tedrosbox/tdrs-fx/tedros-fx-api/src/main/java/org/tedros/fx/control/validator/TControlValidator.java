@@ -15,10 +15,10 @@ import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TModelViewType;
 import org.tedros.fx.annotation.control.TValidator;
-import org.tedros.fx.domain.TZeroValidation;
+import org.tedros.fx.domain.TValidateNumber;
 import org.tedros.fx.exception.TException;
-import org.tedros.fx.presenter.model.TModelView;
-import org.tedros.fx.presenter.model.TModelViewBuilder;
+import org.tedros.fx.model.TModelView;
+import org.tedros.fx.model.TModelViewBuilder;
 import org.tedros.fx.util.TReflectionUtil;
 import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.model.ITFileModel;
@@ -34,7 +34,7 @@ import javafx.collections.ObservableSet;
 public final class TControlValidator<E extends ITModelView> {
 
 	private static final String REQUIRED = "required";
-	private static final String ZEROVALIDATION = "zeroValidation";
+	private static final String VALIDATE = "validate";
 	
 	private List<TValidatorResult<E>> list;
 	private TLanguage iEngine;
@@ -169,9 +169,9 @@ public final class TControlValidator<E extends ITModelView> {
 	private void validateRequiredField(final String fieldLabel, final Object valueObject, final TValidatorResult<E> result, final Annotation annotation) throws IllegalAccessException,
 			InvocationTargetException {
 		
-		TZeroValidation zeroValidation = TReflectionUtil.getValue(annotation, ZEROVALIDATION);
+		TValidateNumber validate = TReflectionUtil.getValue(annotation, VALIDATE);
 		Boolean isRequired = TReflectionUtil.getValue(annotation, REQUIRED);
-		if((isRequired!=null && isRequired) || (zeroValidation!=null && !zeroValidation.equals(TZeroValidation.NONE))){
+		if((isRequired!=null && isRequired) || (validate!=null && !validate.equals(TValidateNumber.NONE))){
 			
 			if(valueObject==null){
 				fieldRequiredMessage(fieldLabel, result);
@@ -211,9 +211,9 @@ public final class TControlValidator<E extends ITModelView> {
 					return;
 				}else if(propertyValue instanceof Number){
 					Double number = ((Number)propertyValue).doubleValue();
-					if(zeroValidation!=null && zeroValidation.equals(TZeroValidation.MINOR_THAN_ZERO) && number>=0)
+					if(validate!=null && validate.equals(TValidateNumber.MINOR_THAN_ZERO) && number>=0)
 						minorThanZeroMessage(fieldLabel, result);
-					else if( zeroValidation==null || (zeroValidation!=null && zeroValidation.equals(TZeroValidation.GREATHER_THAN_ZERO) && number<=0))
+					else if( validate==null || (validate!=null && validate.equals(TValidateNumber.GREATHER_THAN_ZERO) && number<=0))
 						greatherThanZeroMessage(fieldLabel, result);
 				} else if(propertyValue instanceof String && StringUtils.isBlank((String)propertyValue) ){
 					fieldRequiredMessage(fieldLabel, result);	

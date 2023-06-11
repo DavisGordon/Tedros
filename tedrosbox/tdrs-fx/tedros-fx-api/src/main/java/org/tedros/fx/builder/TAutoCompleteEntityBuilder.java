@@ -11,8 +11,8 @@ import java.lang.annotation.Annotation;
 import org.tedros.core.model.ITModelView;
 import org.tedros.fx.annotation.control.TAutoCompleteEntity;
 import org.tedros.fx.exception.TException;
-import org.tedros.fx.presenter.model.TEntityModelView;
-import org.tedros.fx.presenter.model.TModelViewBuilder;
+import org.tedros.fx.model.TEntityModelView;
+import org.tedros.fx.model.TModelViewBuilder;
 import org.tedros.server.entity.TEntity;
 import org.tedros.server.query.TSelect;
 

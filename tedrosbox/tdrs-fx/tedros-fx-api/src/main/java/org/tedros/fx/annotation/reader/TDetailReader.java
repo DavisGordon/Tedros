@@ -21,8 +21,8 @@ import org.tedros.fx.annotation.scene.shape.TShape;
 import org.tedros.fx.builder.ITReaderBuilder;
 import org.tedros.fx.builder.TDetailReaderBuilder;
 import org.tedros.fx.form.TDefaultDetailForm;
-import org.tedros.fx.presenter.model.TEntityModelView;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TEntityModelView;
+import org.tedros.fx.model.TModelView;
 import org.tedros.server.entity.ITEntity;
 import org.tedros.server.entity.TEntity;
 

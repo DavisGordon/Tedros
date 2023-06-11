@@ -12,7 +12,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.tedros.api.parser.ITAnnotationParser;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.parser.TRequiredPasswordFieldParser;
 import org.tedros.fx.annotation.parser.TTextFieldParser;
 import org.tedros.fx.annotation.scene.TNode;
@@ -97,7 +97,7 @@ public @interface TPasswordField  {
 	*  The preferred number of text columns. This is used for calculating the TextField's preferred width.
 	* </pre>
 	**/
-	public int prefColumnCount() default TAnnotationDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
+	public int prefColumnCount() default TDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -135,7 +135,7 @@ public @interface TPasswordField  {
 	 * The max length for this input control.
 	 * </pre>
 	 * */
-	public int maxLength() default TAnnotationDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION; 
+	public int maxLength() default TDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION; 
 	
 	/**
 	 * <pre>

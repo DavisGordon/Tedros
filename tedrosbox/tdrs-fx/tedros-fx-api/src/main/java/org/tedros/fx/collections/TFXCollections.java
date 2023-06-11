@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TModelView;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;

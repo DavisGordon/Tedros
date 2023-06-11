@@ -20,7 +20,7 @@ import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.builder.ITFieldBuilder;
 import org.tedros.fx.builder.TDetailFieldBuilder;
 import org.tedros.fx.control.TRequiredDetailField;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TModelView;
 import org.tedros.server.model.ITModel;
 
 import javafx.geometry.Pos;

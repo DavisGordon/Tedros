@@ -9,7 +9,7 @@ import org.tedros.core.model.TModelViewUtil;
 import org.tedros.core.repository.TRepository;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.form.TFormBuilder;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TModelView;
 import org.tedros.server.model.ITModel;
 
 import javafx.beans.property.Property;

@@ -10,6 +10,7 @@ import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.List;
 
+import org.tedros.core.TLanguage;
 import org.tedros.fx.annotation.control.TAutoCompleteTextField;
 import org.tedros.fx.annotation.control.TAutoCompleteTextField.TEntry;
 
@@ -33,7 +34,10 @@ implements ITControlBuilder<org.tedros.fx.control.TAutoCompleteTextField, Proper
 		
 		TEntry eAnn = tAnn.entries();
 		if(eAnn.values().length>0) {
-			control.getEntries().addAll(Arrays.asList(eAnn.values()));
+			Arrays.asList(eAnn.values()).forEach(e->{
+				control.getEntries().add(TLanguage.getInstance().getString(e));
+			});
+			
 		}else if(eAnn.factory()!=NullStringListBuilder.class) {
 			ITGenericBuilder<List<String>> builder = eAnn.factory().newInstance();
 			builder.setComponentDescriptor(super.getComponentDescriptor());

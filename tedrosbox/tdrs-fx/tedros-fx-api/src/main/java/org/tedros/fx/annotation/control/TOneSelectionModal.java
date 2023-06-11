@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 
 import org.tedros.api.parser.ITAnnotationParser;
 import org.tedros.api.presenter.view.TViewMode;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.layout.TPane;
 import org.tedros.fx.annotation.layout.TVBox.TMargin;
 import org.tedros.fx.annotation.layout.TVGrow;
@@ -25,7 +25,7 @@ import org.tedros.fx.builder.ITFieldBuilder;
 import org.tedros.fx.builder.TOneSelectionModalBuilder;
 import org.tedros.fx.builder.TTextFieldBuilder;
 import org.tedros.fx.control.TRequiredTextField;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TModelView;
 import org.tedros.server.model.ITModel;
 
 import javafx.geometry.Pos;
@@ -150,7 +150,7 @@ public @interface TOneSelectionModal  {
 	*  Sets the value of the property spacing. Property description: The amount of vertical space between each child in the vbox.
 	* </pre>
 	**/
-	public double spacing() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double spacing() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>

@@ -12,7 +12,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.tedros.api.parser.ITAnnotationParser;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.parser.TNumberSpinnerFieldParser;
 import org.tedros.fx.annotation.parser.TRequiredNumeberFieldParser;
 import org.tedros.fx.annotation.parser.TTNumberSpinnerFieldParser;
@@ -25,7 +25,7 @@ import org.tedros.fx.builder.NullActionEventBuilder;
 import org.tedros.fx.builder.NullNumberStringConverterBuilder;
 import org.tedros.fx.builder.TNumberSpinnerFieldBuilder;
 import org.tedros.fx.domain.TDefaultValues;
-import org.tedros.fx.domain.TZeroValidation;
+import org.tedros.fx.domain.TValidateNumber;
 
 import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
@@ -101,7 +101,7 @@ public @interface TNumberSpinnerField {
 	*  The preferred number of text columns. This is used for calculating the TextField's preferred width.
 	* </pre>
 	**/
-	public int prefColumnCount() default TAnnotationDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
+	public int prefColumnCount() default TDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -139,7 +139,7 @@ public @interface TNumberSpinnerField {
 	 * The max length for this input control.
 	 * </pre>
 	 * */
-	public int maxLength() default TAnnotationDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION; 
+	public int maxLength() default TDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION; 
 	
     
     /**
@@ -198,12 +198,12 @@ public @interface TNumberSpinnerField {
 	
 	/**
 	 * <pre>
-	 * Sets the zeroValidation property.
+	 * Sets the validate property.
 	 * 
 	 * Property description:
 	 * 
 	 * Validate if the value of this control are more or less than zero.
 	 * </pre>
 	 * */
-	public TZeroValidation zeroValidation() default TZeroValidation.NONE;
+	public TValidateNumber validate() default TValidateNumber.NONE;
 }

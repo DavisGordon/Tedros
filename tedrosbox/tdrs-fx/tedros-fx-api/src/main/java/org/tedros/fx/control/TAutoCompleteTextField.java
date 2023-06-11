@@ -9,8 +9,6 @@ import org.tedros.core.TLanguage;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.control.TText.TTextStyle;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Side;
@@ -41,14 +39,12 @@ public class TAutoCompleteTextField extends TTextField {
 		this.setTooltip(new Tooltip(TLanguage.getInstance().getString(TFxKey.TOOLTIP_AUTOCOMPLETE)));
 		entries = new TreeSet<>();
 		entriesPopup = new ContextMenu();
-		textProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observableValue, String s, String s2) {
-				if (getText().length() == 0) {
+		textProperty().addListener((a,o,n)->{
+				if (n==null || n.length() == 0) {
 					entriesPopup.hide();
 				} else {
 					LinkedList<String> searchResult = new LinkedList<>();
-					searchResult.addAll(entries.subSet(getText(), getText() + Character.MAX_VALUE));
+					searchResult.addAll(entries.subSet(n, n + Character.MAX_VALUE));
 					if (entries.size() > 0) {
 						populatePopup(searchResult);
 						if (!entriesPopup.isShowing()) {
@@ -58,16 +54,9 @@ public class TAutoCompleteTextField extends TTextField {
 						entriesPopup.hide();
 					}
 				}
-			}
-		});
+			});
 
-		focusedProperty().addListener(new ChangeListener<Boolean>() {
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean,
-					Boolean aBoolean2) {
-				entriesPopup.hide();
-			}
-		});
+		focusedProperty().addListener((a,o,n)->entriesPopup.hide());
 
 	}
 

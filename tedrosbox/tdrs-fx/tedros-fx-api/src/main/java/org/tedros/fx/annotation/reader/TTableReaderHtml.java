@@ -17,8 +17,8 @@ import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.builder.ITReaderHtmlBuilder;
 import org.tedros.fx.builder.TTableReaderHtmlBuilder;
 import org.tedros.fx.domain.TStyleParameter;
-import org.tedros.fx.presenter.model.TEntityModelView;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TEntityModelView;
+import org.tedros.fx.model.TModelView;
 import org.tedros.server.entity.ITEntity;
 import org.tedros.server.entity.TEntity;
 

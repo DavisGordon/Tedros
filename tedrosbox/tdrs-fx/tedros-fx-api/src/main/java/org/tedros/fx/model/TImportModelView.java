@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.tedros.fx.presenter.model;
+package org.tedros.fx.model;
 
 import org.tedros.common.model.TFileEntity;
 import org.tedros.fx.property.TSimpleFileProperty;

@@ -9,9 +9,9 @@ import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.repository.TRepository;
 import org.tedros.fx.collections.ITObservableList;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.view.TDynaGroupView;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
-import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.fx.util.TEntityListViewCallback;
 
 import javafx.beans.value.ChangeListener;

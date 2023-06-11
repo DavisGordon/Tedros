@@ -12,7 +12,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.tedros.api.parser.ITAnnotationParser;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.parser.TRequiredTextFieldParser;
 import org.tedros.fx.annotation.parser.TTextFieldParser;
 import org.tedros.fx.annotation.parser.TextFieldParser;
@@ -25,7 +25,7 @@ import org.tedros.fx.builder.NullActionEventBuilder;
 import org.tedros.fx.builder.TAutoCompleteEntityBuilder;
 import org.tedros.fx.builder.TFunctionEntityToStringBuilder;
 import org.tedros.fx.control.TRequiredTextField;
-import org.tedros.fx.presenter.model.TEntityModelView;
+import org.tedros.fx.model.TEntityModelView;
 
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -172,7 +172,7 @@ public @interface TAutoCompleteEntity  {
 	*  The preferred number of text columns. This is used for calculating the TextField's preferred width.
 	* </pre>
 	**/
-	public int prefColumnCount() default TAnnotationDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
+	public int prefColumnCount() default TDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -210,7 +210,7 @@ public @interface TAutoCompleteEntity  {
 	 * The max length for this input control.
 	 * </pre>
 	 * */
-	public int maxLength() default TAnnotationDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION; 
+	public int maxLength() default TDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION; 
 	
 	/**
 	 * <pre>

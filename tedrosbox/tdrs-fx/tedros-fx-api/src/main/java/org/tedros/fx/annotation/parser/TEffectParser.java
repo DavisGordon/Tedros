@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.effect.TBlend;
 import org.tedros.fx.annotation.effect.TDisplacementMap;
 import org.tedros.fx.annotation.effect.TDropShadow;
@@ -46,9 +46,9 @@ public final class TEffectParser implements ITEffectParse {
 	private static final String LIGHTDISTANT_METHOD_NAME = "lightDistant";
 	private static final String LIGHTPOINT_METHOD_NAME = "lightPoint";
 	private static final String LIGHTSPOT_METHOD_NAME = "lightSpot";
-	private static final double DOUBLE_DEFAULT_VALUE = TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION; 
-	private static final float FLOAT_DEFAULT_VALUE = TAnnotationDefaultValue.DEFAULT_FLOAT_VALUE_IDENTIFICATION;
-	private static final int INT_DEFAULT_VALUE = TAnnotationDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
+	private static final double DOUBLE_DEFAULT_VALUE = TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION; 
+	private static final float FLOAT_DEFAULT_VALUE = TDefaultValue.DEFAULT_FLOAT_VALUE_IDENTIFICATION;
+	private static final int INT_DEFAULT_VALUE = TDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
 	private static final String SET = "set";
 	private static final String HEIGHT = "height";
 	private static final String WIDTH = "width";

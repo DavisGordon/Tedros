@@ -4,7 +4,7 @@
 package org.tedros.tools.module.ai.model;
 
 import org.tedros.core.ai.model.TRequestEvent;
-import org.tedros.fx.presenter.model.TEntityModelView;
+import org.tedros.fx.model.TEntityModelView;
 
 import javafx.beans.property.SimpleStringProperty;
 

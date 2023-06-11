@@ -1,7 +1,7 @@
 package org.tedros.fx.presenter.view;
 
+import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.presenter.ITCrudPresenter;
-import org.tedros.fx.presenter.model.TEntityModelView;
 
 
 @SuppressWarnings("rawtypes")

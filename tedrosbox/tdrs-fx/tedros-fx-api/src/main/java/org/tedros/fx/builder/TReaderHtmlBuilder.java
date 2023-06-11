@@ -17,7 +17,7 @@ import org.tedros.core.style.TStyleResourceValue;
 import org.tedros.fx.annotation.TCodeValue;
 import org.tedros.fx.annotation.reader.TReaderHtml;
 import org.tedros.fx.domain.THtmlConstant;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.reader.THtmlReader;
 import org.tedros.fx.util.TMaskUtil;
 import org.tedros.util.TStripTagUtil;

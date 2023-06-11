@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.tedros.fx.presenter.paginator;
+package org.tedros.fx.presenter.page;
 
 /**
  * Pagination data 

@@ -1,8 +1,9 @@
-package org.tedros.fx.presenter.entity.behavior;
+package org.tedros.fx.presenter.model.behavior;
 
+import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.modal.TMessageBox;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewSimpleBaseBehavior;
-import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.server.model.ITModel;
 
 /**
@@ -27,8 +28,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		
 	public void initialize() {
 		try{
-			M model = (M) super.getModels().get(0);
-			setModelView(model);
+			if(getModels()!=null && !getModels().isEmpty()) {
+				M model = super.getModels().get(0);
+				setModelView(model);
+				super.buildForm(TViewMode.EDIT);
+			}
 		}catch(Throwable e){
 			getView().tShowModal(new TMessageBox(e), true);
 			e.printStackTrace();

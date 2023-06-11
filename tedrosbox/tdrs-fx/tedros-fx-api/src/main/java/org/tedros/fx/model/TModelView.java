@@ -1,7 +1,7 @@
 /**
  * Tedros Box
  */
-package org.tedros.fx.presenter.model;
+package org.tedros.fx.model;
 
 import java.beans.Transient;
 import java.lang.reflect.Field;
@@ -24,7 +24,7 @@ import org.tedros.core.model.ITModelView;
 import org.tedros.core.repository.TRepository;
 import org.tedros.fx.exception.TErrorType;
 import org.tedros.fx.exception.TException;
-import org.tedros.fx.presenter.model.TFormatter.Item;
+import org.tedros.fx.model.TFormatter.Item;
 import org.tedros.fx.property.TSimpleFileProperty;
 import org.tedros.fx.util.TPropertyUtil;
 import org.tedros.fx.util.TReflectionUtil;

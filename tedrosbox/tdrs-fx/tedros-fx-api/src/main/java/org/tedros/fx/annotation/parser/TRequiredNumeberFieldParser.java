@@ -11,7 +11,6 @@ public class TRequiredNumeberFieldParser<A extends Annotation> extends TControlF
 	@Override
 	public void parse(A annotation, TRequiredNumberField object,
 			String... byPass) throws Exception {
-		// TODO Auto-generated method stub
-		super.parse(annotation, object, "+zeroValidation");
+		super.parse(annotation, object, "+validate");
 	}
 }

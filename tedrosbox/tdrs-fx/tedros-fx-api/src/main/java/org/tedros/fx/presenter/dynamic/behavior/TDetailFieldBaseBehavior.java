@@ -17,10 +17,10 @@ import org.tedros.fx.builder.ITFieldBuilder;
 import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.exception.TValidatorException;
 import org.tedros.fx.modal.TMessageBox;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.behavior.TActionType;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.dynamic.decorator.TDetailFieldBaseDecorator;
-import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.fx.util.TReflectionUtil;
 import org.tedros.server.entity.ITEntity;
 

@@ -8,7 +8,7 @@ package org.tedros.fx.control;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.tedros.app.component.ITComponent;
-import org.tedros.fx.domain.TZeroValidation;
+import org.tedros.fx.domain.TValidateNumber;
 import org.tedros.fx.effect.TEffectUtil;
 
 import javafx.beans.Observable;
@@ -30,29 +30,30 @@ public abstract class TRequiredNumberField extends TextField implements ITField,
 	private SimpleBooleanProperty requirementAccomplishedProperty;
     private Effect requiredEffect;
     private ChangeListener<String> requiredListener;
-    private SimpleObjectProperty<TZeroValidation> zeroValidationProperty;
+    private SimpleObjectProperty<TValidateNumber> tValidateProperty;
 	private String t_componentId; 
     
+	@SuppressWarnings("unchecked")
 	@Override
 	public Observable tValueProperty() {
 		return textProperty();
 	}
 	
-	public void setZeroValidation(TZeroValidation zeroValidation){
+	public void setValidate(TValidateNumber validate){
     	
-		if(this.zeroValidationProperty == null)
-			this.zeroValidationProperty = new SimpleObjectProperty<>();
+		if(this.tValidateProperty == null)
+			this.tValidateProperty = new SimpleObjectProperty<>();
 		
-		this.zeroValidationProperty.addListener(new ChangeListener<TZeroValidation>() {
+		this.tValidateProperty.addListener(new ChangeListener<TValidateNumber>() {
 			@Override
-			public void changed(ObservableValue<? extends TZeroValidation> arg0, TZeroValidation arg1, TZeroValidation new_value) {
-				if(!new_value.equals(TZeroValidation.NONE)){
+			public void changed(ObservableValue<? extends TValidateNumber> arg0, TValidateNumber arg1, TValidateNumber new_value) {
+				if(!new_value.equals(TValidateNumber.NONE)){
 					getStyleClass().add("required");
 		    		buildRequiredEffect();
-		    		buildZeroValidationListener();
+		    		buildValidateListener();
 		    		buildRequirementAccomplishedProperty();
 		    		textProperty().addListener(requiredListener);
-					checkNumber(getText());
+					validate(getText());
 					
 		    	}else{
 		    		requirementAccomplishedProperty = null;
@@ -64,7 +65,7 @@ public abstract class TRequiredNumberField extends TextField implements ITField,
 			}
 		});
 		
-		this.zeroValidationProperty.set(zeroValidation);
+		this.tValidateProperty.set(validate);
     }
     
     private void buildRequiredEffect(){
@@ -72,14 +73,9 @@ public abstract class TRequiredNumberField extends TextField implements ITField,
 			requiredEffect = TEffectUtil.buildNotNullFieldFormEffect();
 	}
 	
-	private void buildZeroValidationListener(){
+	private void buildValidateListener(){
 		if(requiredListener == null)
-			requiredListener = new ChangeListener<String>() {
-				@Override
-				public void changed(ObservableValue<? extends String> arg0, String arg1, String new_value) {
-					checkNumber(new_value);
-				}
-			};
+			requiredListener = (a,o,n) -> validate(n);
 	}
 	
 	
@@ -104,8 +100,8 @@ public abstract class TRequiredNumberField extends TextField implements ITField,
 		getStyleClass().add("required-not-ok");
 	}
 	
-	public SimpleObjectProperty<TZeroValidation> zeroValidationProperty() {
-		return zeroValidationProperty;
+	public SimpleObjectProperty<TValidateNumber> tValidateProperty() {
+		return tValidateProperty;
 	}
 	
 	public SimpleBooleanProperty requirementAccomplishedProperty() {
@@ -116,21 +112,21 @@ public abstract class TRequiredNumberField extends TextField implements ITField,
 		return (requirementAccomplishedProperty==null) ? true : requirementAccomplishedProperty.get() ; 
 	}
 	
-	private void checkNumber(String new_value) {
-		if(!NumberUtils.isNumber(new_value)){
+	private void validate(String value) {
+		if(!NumberUtils.isParsable(value) || NumberUtils.isCreatable(value)){
 			applyEffect();
 			return;
 		}
 		
-		Number number = NumberUtils.createNumber(new_value);
-		if(zeroValidationProperty.getValue().equals(TZeroValidation.GREATHER_THAN_ZERO)){
+		Number number = NumberUtils.createNumber(value);
+		if(tValidateProperty.getValue().equals(TValidateNumber.GREATHER_THAN_ZERO)){
 			if(number.doubleValue()<=0.0)
 				applyEffect();
 			else
 				removeEffect();
 		}
 		
-		if(zeroValidationProperty.getValue().equals(TZeroValidation.MINOR_THAN_ZERO)){
+		if(tValidateProperty.getValue().equals(TValidateNumber.MINOR_THAN_ZERO)){
 			if(number.doubleValue()>=0.0)
 				applyEffect();
 			else

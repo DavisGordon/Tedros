@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.tedros.api.parser.ITAnnotationParser;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.parser.TVBoxParser;
 import org.tedros.fx.annotation.parser.TVerticalRadioGroupParser;
 import org.tedros.fx.annotation.scene.TNode;
@@ -108,7 +108,7 @@ public @interface TVerticalRadioGroup {
 	*  The amount of vertical space between each child in the vbox.
 	* </pre>
 	**/
-	public double spacing() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double spacing() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>

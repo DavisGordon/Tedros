@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.TCursor;
 import org.tedros.fx.annotation.TDepthTest;
 import org.tedros.fx.annotation.TEventHandler;
@@ -537,7 +537,7 @@ public @interface TNodeDefaultSetting {
 	*  If the node is unmanaged or parented by a Group, then the application may set layoutX directly to position it.
 	* </pre>
 	**/
-	public double layoutX() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double layoutX() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -566,7 +566,7 @@ public @interface TNodeDefaultSetting {
 	*  If the node is unmanaged or parented by a Group, then the application may set layoutY directly to position it.
 	* </pre>
 	**/
-	public double layoutY() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double layoutY() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>

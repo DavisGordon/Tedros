@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.parser.TAnnotationParser;
 import org.tedros.fx.annotation.parser.TControlParser;
 import org.tedros.fx.builder.ITBuilder;
@@ -87,7 +87,7 @@ public @interface TControl {
 	* enabling applications to easily restrict the resizability of the control.
 	* </pre>
 	**/
-	public double minWidth() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double minWidth() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -106,7 +106,7 @@ public @interface TControl {
 	* of the control.
 	* </pre>
 	**/
-	public double minHeight() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double minHeight() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -120,7 +120,7 @@ public @interface TControl {
 	* See Also: minWidth(double), minHeight(double)
 	* </pre>
 	**/
-	public TSize minSize() default @TSize(width=TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION, height=TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION);
+	public TSize minSize() default @TSize(width=TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION, height=TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION);
 
 	/**
 	* <pre>
@@ -136,7 +136,7 @@ public @interface TControl {
 	*  the control's internally computed preferred width.
 	* </pre>
 	**/
-	public double prefWidth() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double prefWidth() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -152,7 +152,7 @@ public @interface TControl {
 	* control's internally computed preferred width.
 	* </pre>
 	**/
-	public double prefHeight() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double prefHeight() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -168,7 +168,7 @@ public @interface TControl {
 	*  See Also: setPrefWidth(double), setPrefHeight(double)
 	* </pre>
 	**/
-	public TSize prefSize() default @TSize(width=TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION, height=TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION);
+	public TSize prefSize() default @TSize(width=TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION, height=TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION);
 
 	/**
 	* <pre>
@@ -185,7 +185,7 @@ public @interface TControl {
 	* to return the control's preferred width, enabling applications to easily restrict the resizability of the control.
 	* </pre>
 	**/
-	public double maxWidth() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double maxWidth() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -202,7 +202,7 @@ public @interface TControl {
 	* enabling applications to easily restrict the resizability of the control.
 	* </pre>
 	**/
-	public double maxHeight() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double maxHeight() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -216,7 +216,7 @@ public @interface TControl {
 	* See Also: setMaxWidth(double), setMaxHeight(double)
 	* </pre>
 	**/
-	public TSize maxSize() default @TSize(width=TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION, height=TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION);
+	public TSize maxSize() default @TSize(width=TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION, height=TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION);
 
 	/**
 	 * <pre>

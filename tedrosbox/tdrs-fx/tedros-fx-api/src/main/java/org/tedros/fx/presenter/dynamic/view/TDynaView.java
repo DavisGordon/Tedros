@@ -4,8 +4,8 @@ import java.net.URL;
 
 import org.tedros.api.presenter.view.ITDynaView;
 import org.tedros.core.ITModule;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
-import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.fx.presenter.view.TView;
 import org.tedros.server.model.ITModel;
 

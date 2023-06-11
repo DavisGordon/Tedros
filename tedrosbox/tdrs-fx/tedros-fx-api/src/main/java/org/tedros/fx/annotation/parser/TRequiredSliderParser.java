@@ -8,8 +8,7 @@ public class TRequiredSliderParser extends TControlFieldParser<TSliderField, TRe
 	@Override
 	public void parse(TSliderField annotation, TRequiredSlider object,
 			String... byPass) throws Exception {
-	
-		super.parse(annotation, object, "+zeroValidation");
+		super.parse(annotation, object, "+validate");
 	}
 	
 }

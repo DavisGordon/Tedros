@@ -30,9 +30,9 @@ import org.tedros.fx.annotation.text.TFont;
 import org.tedros.fx.annotation.text.TText;
 import org.tedros.fx.control.TText.TTextStyle;
 import org.tedros.fx.domain.TLabelPosition;
-import org.tedros.fx.domain.TZeroValidation;
+import org.tedros.fx.domain.TValidateNumber;
+import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
-import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.tools.ToolsKey;
 import org.tedros.tools.module.scheme.behaviour.ExampleBehavior;
 import org.tedros.tools.module.scheme.decorator.ExampleDecorator;
@@ -60,7 +60,7 @@ public class ExampleMV extends TEntityModelView<Example> {
 	
 	@TReader
 	@TLabel(text=TUsualKey.CODE)
-	@TLongField(zeroValidation=TZeroValidation.GREATHER_THAN_ZERO, maxLength=3,	
+	@TLongField(validate=TValidateNumber.GREATHER_THAN_ZERO, maxLength=3,	
 	control=@TControl(maxSize=@TSize(width=100, height=30), parse = true), 
 	textInputControl=@TTextInputControl(editable=false, parse = true))
 	@THBox(	pane=@TPane(children={"id","longField"}), spacing=10, fillHeight=true,
@@ -70,7 +70,7 @@ public class ExampleMV extends TEntityModelView<Example> {
 	
 	@TReader
 	@TLabel(text=TUsualKey.AMOUNT, font=@TFont(size=56), control=@TControl(prefWidth=500, parse = true))
-	@TLongField(zeroValidation=TZeroValidation.GREATHER_THAN_ZERO, maxLength=3,	
+	@TLongField(validate=TValidateNumber.GREATHER_THAN_ZERO, maxLength=3,	
 	control=@TControl(maxSize=@TSize(width=100, height=30), parse = true))
 	private SimpleLongProperty longField;
 	

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.tedros.fx.presenter.paginator;
+package org.tedros.fx.presenter.page;
 
 
 import java.text.ParseException;
@@ -51,7 +51,7 @@ import javafx.scene.text.Font;
  * @author Davis Gordon
  *
  */
-public class TPaginator extends BorderPane {
+public class TPager extends BorderPane {
 
 	
 	private double totalItens = 25.0;
@@ -74,7 +74,7 @@ public class TPaginator extends BorderPane {
 	
 	private TRepository repo;
 	
-	public TPaginator(boolean showSearch, boolean showOrderBy) {
+	public TPager(boolean showSearch, boolean showOrderBy) {
 		
 		setId("t-form");
 		paginationProperty = new SimpleObjectProperty<>();

@@ -1,15 +1,16 @@
 package org.tedros.fx.presenter.dynamic.decorator;
 
 import org.tedros.core.TLanguage;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.TFxKey;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.presenter.TSelectionModalPresenter;
 import org.tedros.fx.control.TButton;
 import org.tedros.fx.control.TLabel;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
-import org.tedros.fx.presenter.model.TModelView;
-import org.tedros.fx.presenter.paginator.TPaginator;
+import org.tedros.fx.presenter.page.TPager;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -42,9 +43,9 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	
 	private TableView<M> tTableView;
 	
-	private TPaginator tPaginator;
-	protected double listViewMaxWidth = 250;
-	protected double listViewMinWidth = 250;
+	private TPager tPaginator;
+	protected double listViewMaxWidth = TSelectionModalPresenter.WIDTH;
+	protected double listViewMinWidth = TSelectionModalPresenter.WIDTH;
     
     
     @Override
@@ -74,7 +75,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 		tListView.setMinWidth(listViewMinWidth);
 		tListView.setTooltip(new Tooltip(TLanguage
 				.getInstance(null)
-				.getString("#{tedros.fxapi.label.double.click.remove}")));
+				.getString(TFxKey.DOUBLE_CLICK_REMOVE)));
 		
     }
 
@@ -84,7 +85,8 @@ extends TDynaViewSimpleBaseDecorator<M> {
      */
 	public void buildListViewTitle(String text) {
 		// build the label for the list view
-		tListViewTitle = new TLabel(iEngine.getString(text==null ? TAnnotationDefaultValue.TVIEW_selected : text));
+		tListViewTitle = new TLabel(iEngine.getString(text==null 
+				? TDefaultValue.TVIEW_selected : text));
 		tListViewTitle.setId("t-title-label");
 		tListViewTitle.maxWidth(listViewMaxWidth);
 	}
@@ -93,7 +95,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	 * Build the paginator
 	 */
     public void buildPaginator() {
-    	tPaginator = new TPaginator(false, false);
+    	tPaginator = new TPager(false, false);
     }
     
     /**
@@ -112,12 +114,10 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildAddButton(String text) {
 		if(text==null){
 			tAddButton = new TButton();
-			tAddButton.setText(iEngine.getString(TAnnotationDefaultValue.TVIEW_addButtonText));
-			tAddButton.setId("t-button");
+			tAddButton.setText(iEngine.getString(TDefaultValue.TVIEW_addButtonText));
 		}else {
 			tAddButton = new TButton();
 			tAddButton.setText(iEngine.getString(text));
-			tAddButton.setId("t-button");
 		}
 	}
 	
@@ -139,13 +139,11 @@ extends TDynaViewSimpleBaseDecorator<M> {
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
 			tSelectAllButton = new TButton();
 			tSelectAllButton.setText(iEngine.getString(tPresenter==null 
-							? TAnnotationDefaultValue.TVIEW_selectAllButtonText 
+							? TDefaultValue.TVIEW_selectAllButtonText 
 									: tPresenter.decorator().selectAllButtonText()));
-			tSelectAllButton.setId("t-button");
 		}else {
 			tSelectAllButton = new TButton();
 			tSelectAllButton.setText(iEngine.getString(text));
-			tSelectAllButton.setId("t-button");
 		}
 	}
 	
@@ -167,13 +165,11 @@ extends TDynaViewSimpleBaseDecorator<M> {
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
 			tCancelButton = new TButton();
 			tCancelButton.setText(iEngine.getString(tPresenter==null 
-							? TAnnotationDefaultValue.TVIEW_cancelButtonText 
+							? TDefaultValue.TVIEW_cancelButtonText 
 									: tPresenter.decorator().cancelButtonText()));
-			tCancelButton.setId("t-button");
 		}else {
 			tCancelButton = new TButton();
 			tCancelButton.setText(iEngine.getString(text));
-			tCancelButton.setId("t-button");
 		}
 	}
 	
@@ -195,13 +191,11 @@ extends TDynaViewSimpleBaseDecorator<M> {
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
 			tCloseButton = new TButton();
 			tCloseButton.setText(iEngine.getString(tPresenter==null 
-							? TAnnotationDefaultValue.TVIEW_closeButtonText 
+							? TDefaultValue.TVIEW_closeButtonText 
 									: tPresenter.decorator().closeButtonText()));
-			tCloseButton.setId("t-button");
 		}else {
 			tCloseButton = new TButton();
 			tCloseButton.setText(iEngine.getString(text));
-			tCloseButton.setId("t-button");
 		}
 	}
 	
@@ -223,19 +217,17 @@ extends TDynaViewSimpleBaseDecorator<M> {
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
 			tSearchButton = new TButton();
 			tSearchButton.setText(iEngine.getString(tPresenter==null 
-							? TAnnotationDefaultValue.TVIEW_searchButtonText 
+							? TDefaultValue.TVIEW_searchButtonText 
 									: tPresenter.decorator().searchButtonText()));
-			tSearchButton.setId("t-button");
 		}else {
 			tSearchButton = new TButton();
 			tSearchButton.setText(iEngine.getString(text));
-			tSearchButton.setId("t-button");
 		}
 	}
 
 	/**
 	 * <p>
-	 * Build a button for the clean action.<br><br>
+	 * Build a button for the clear action.<br><br>
 	 * 
 	 * If the parameter was null this will use the text set up
 	 * in @{@link TPresenter}{decorator= @{@link TDecorator}{cleanButtonText=''}} 
@@ -251,13 +243,11 @@ extends TDynaViewSimpleBaseDecorator<M> {
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
 			tCleanButton = new TButton();
 			tCleanButton.setText(iEngine.getString(tPresenter==null 
-					? TAnnotationDefaultValue.TVIEW_cleanButtonText 
+					? TDefaultValue.TVIEW_cleanButtonText 
 							: tPresenter.decorator().cleanButtonText()));
-			tCleanButton.setId("t-button");
 		}else {
 			tCleanButton = new TButton();
 			tCleanButton.setText(iEngine.getString(text));
-			tCleanButton.setId("t-button");
 		}
 		
 	}
@@ -314,7 +304,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	/**
 	 * @return the tPaginator
 	 */
-	public TPaginator gettPaginator() {
+	public TPager gettPaginator() {
 		return tPaginator;
 	}
 
