@@ -1,4 +1,4 @@
-package org.tedros.fx.presenter.model;
+package org.tedros.fx.model;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

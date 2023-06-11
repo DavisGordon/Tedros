@@ -13,7 +13,7 @@ import org.tedros.fx.annotation.control.TOneSelectionModal;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.collections.TFXCollections;
 import org.tedros.fx.control.TSelectionModal;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TModelView;
 
 import javafx.beans.property.Property;
 import javafx.collections.ListChangeListener;

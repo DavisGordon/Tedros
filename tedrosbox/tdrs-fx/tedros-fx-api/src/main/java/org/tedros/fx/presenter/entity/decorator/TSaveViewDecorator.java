@@ -1,12 +1,12 @@
 package org.tedros.fx.presenter.entity.decorator;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
-import org.tedros.fx.presenter.model.TModelView;
 
 import javafx.scene.Node;
 
@@ -69,7 +69,7 @@ extends TDynaViewCrudBaseDecorator<M> {
 	 */
 	protected void configViewTitle() {
 		final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-		if(!tPresenter.decorator().viewTitle().equals(TAnnotationDefaultValue.TVIEW_viewTitle))
+		if(!tPresenter.decorator().viewTitle().equals(TDefaultValue.TVIEW_viewTitle))
 			setViewTitle(null);
 		else {
 			((TDynaView)super.getView()).gettLayout().getChildren().remove(0);

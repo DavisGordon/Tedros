@@ -1,7 +1,7 @@
 /**
  * Tedros Box
  */
-package org.tedros.fx.presenter.model;
+package org.tedros.fx.model;
 
 import java.beans.Transient;
 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.tedros.fx.presenter.model;
+package org.tedros.fx.model;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

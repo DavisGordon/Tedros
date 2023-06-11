@@ -7,10 +7,10 @@ import java.lang.annotation.Target;
 
 import org.tedros.api.presenter.behaviour.ITBehavior;
 import org.tedros.fx.control.action.TPresenterAction;
+import org.tedros.fx.model.TEntityModelView;
+import org.tedros.fx.model.TImportModelView;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.entity.behavior.TMasterCrudViewBehavior;
-import org.tedros.fx.presenter.model.TEntityModelView;
-import org.tedros.fx.presenter.model.TImportModelView;
-import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.fx.util.TEntityListViewCallback;
 import org.tedros.server.entity.ITEntity;
 

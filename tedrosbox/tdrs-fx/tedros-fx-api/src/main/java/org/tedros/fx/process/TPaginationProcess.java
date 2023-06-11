@@ -10,7 +10,7 @@ import org.tedros.core.context.TedrosContext;
 import org.tedros.core.security.model.TUser;
 import org.tedros.core.service.remote.ServiceLocator;
 import org.tedros.fx.exception.TProcessException;
-import org.tedros.fx.presenter.paginator.TPagination;
+import org.tedros.fx.presenter.page.TPagination;
 import org.tedros.server.controller.ITBaseController;
 import org.tedros.server.controller.ITEjbController;
 import org.tedros.server.controller.ITSecureEjbController;

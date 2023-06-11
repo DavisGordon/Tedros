@@ -17,7 +17,7 @@ import org.tedros.fx.annotation.control.TOptionsList;
 import org.tedros.fx.annotation.parser.TComboBoxParser;
 import org.tedros.fx.control.TItem;
 import org.tedros.fx.domain.TOptionProcessType;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.process.TOptionsProcess;
 import org.tedros.server.entity.ITEntity;
 import org.tedros.server.result.TResult;

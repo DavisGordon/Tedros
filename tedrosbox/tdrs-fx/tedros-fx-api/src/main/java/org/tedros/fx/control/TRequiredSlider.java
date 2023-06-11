@@ -7,7 +7,7 @@
 package org.tedros.fx.control;
 
 import org.tedros.app.component.ITComponent;
-import org.tedros.fx.domain.TZeroValidation;
+import org.tedros.fx.domain.TValidateNumber;
 import org.tedros.fx.effect.TEffectUtil;
 
 import javafx.beans.Observable;
@@ -29,26 +29,27 @@ public abstract class TRequiredSlider extends Slider implements ITField, ITCompo
 	private SimpleBooleanProperty requirementAccomplishedProperty;
     private Effect requiredEffect;
     private ChangeListener<Number> requiredListener;
-    private SimpleObjectProperty<TZeroValidation> zeroValidationProperty;
+    private SimpleObjectProperty<TValidateNumber> tValidateProperty;
 	private String t_componentId; 
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Observable tValueProperty() {
 		return valueProperty();
 	}
     
-	public void setZeroValidation(TZeroValidation zeroValidation){
+	public void setValidate(TValidateNumber validate){
     	
-		if(this.zeroValidationProperty == null)
-			this.zeroValidationProperty = new SimpleObjectProperty<>();
+		if(this.tValidateProperty == null)
+			this.tValidateProperty = new SimpleObjectProperty<>();
 		
-		this.zeroValidationProperty.addListener(new ChangeListener<TZeroValidation>() {
+		this.tValidateProperty.addListener(new ChangeListener<TValidateNumber>() {
 			@Override
-			public void changed(ObservableValue<? extends TZeroValidation> arg0, TZeroValidation arg1, TZeroValidation new_value) {
-				if(!new_value.equals(TZeroValidation.NONE)){
+			public void changed(ObservableValue<? extends TValidateNumber> arg0, TValidateNumber arg1, TValidateNumber new_value) {
+				if(!new_value.equals(TValidateNumber.NONE)){
 					getStyleClass().add("required");
 		    		buildRequiredEffect();
-		    		buildZeroValidationListener();
+		    		buildValidateListener();
 		    		buildRequirementAccomplishedProperty();
 		    		valueProperty().addListener(requiredListener);
 					checkNumber(getValue());
@@ -62,7 +63,7 @@ public abstract class TRequiredSlider extends Slider implements ITField, ITCompo
 			}
 		});
 		
-		this.zeroValidationProperty.set(zeroValidation);
+		this.tValidateProperty.set(validate);
     }
     
     private void buildRequiredEffect(){
@@ -70,14 +71,9 @@ public abstract class TRequiredSlider extends Slider implements ITField, ITCompo
 			requiredEffect = TEffectUtil.buildNotNullFieldFormEffect();
 	}
 	
-	private void buildZeroValidationListener(){
+	private void buildValidateListener(){
 		if(requiredListener == null)
-			requiredListener = new ChangeListener<Number>() {
-				@Override
-				public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number new_value) {
-					checkNumber(new_value);
-				}
-			};
+			requiredListener = (a,o,n)->checkNumber(n);
 	}
 	
 	
@@ -102,8 +98,8 @@ public abstract class TRequiredSlider extends Slider implements ITField, ITCompo
 		getStyleClass().add("required-not-ok");
 	}
 	
-	public SimpleObjectProperty<TZeroValidation> zeroValidationProperty() {
-		return zeroValidationProperty;
+	public SimpleObjectProperty<TValidateNumber> tValidateProperty() {
+		return tValidateProperty;
 	}
 	
 	public SimpleBooleanProperty requirementAccomplishedProperty() {
@@ -115,14 +111,14 @@ public abstract class TRequiredSlider extends Slider implements ITField, ITCompo
 	}
 
 	private void checkNumber(Number new_value) {
-		if(zeroValidationProperty.getValue().equals(TZeroValidation.GREATHER_THAN_ZERO)){
+		if(tValidateProperty.getValue().equals(TValidateNumber.GREATHER_THAN_ZERO)){
 			if(new_value.doubleValue()<=0.0)
 				applyEffect();
 			else
 				removeEffect();
 		}
 		
-		if(zeroValidationProperty.getValue().equals(TZeroValidation.MINOR_THAN_ZERO)){
+		if(tValidateProperty.getValue().equals(TValidateNumber.MINOR_THAN_ZERO)){
 			if(new_value.doubleValue()>=0.0)
 				applyEffect();
 			else

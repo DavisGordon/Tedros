@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.tedros.fx.presenter.paginator.converter;
+package org.tedros.fx.presenter.page.converter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;

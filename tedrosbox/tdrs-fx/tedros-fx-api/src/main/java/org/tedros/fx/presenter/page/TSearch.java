@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.tedros.fx.presenter.paginator;
+package org.tedros.fx.presenter.page;
 
 import org.tedros.fx.annotation.query.TTemporal;
 import org.tedros.fx.form.TConverter;

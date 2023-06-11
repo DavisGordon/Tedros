@@ -14,8 +14,8 @@ import org.tedros.api.presenter.view.ITGroupViewItem;
 import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.ITModule;
 import org.tedros.core.model.ITModelView;
-import org.tedros.fx.presenter.model.TEntityModelView;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TEntityModelView;
+import org.tedros.fx.model.TModelView;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;

@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 import org.tedros.api.parser.ITAnnotationParser;
 import org.tedros.api.presenter.view.TViewMode;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.parser.THBoxMarginParser;
 import org.tedros.fx.annotation.parser.THBoxParser;
 import org.tedros.fx.annotation.scene.TNode;
@@ -37,11 +37,11 @@ import javafx.scene.layout.Region;
  *  private SimpleStringProperty <strong style="color:red;">passField;</strong>
  *		
  *  <i>@</i>TLabel(text="Number field", control=<i>@</i>TControl(prefWidth=500))
- *  <i>@</i>TIntegerField(zeroValidation=TZeroValidation.MORE_THAN_ZERO, control=<i>@</i>TControl(tooltip="Max val: "+Integer.MAX_VALUE))
+ *  <i>@</i>TIntegerField(validate=TValidateNumber.GREATHER_THAN_ZERO, control=<i>@</i>TControl(tooltip="Max val: "+Integer.MAX_VALUE))
  *  private SimpleIntegerProperty <strong style="color:blue;">integerField</strong>;
  *		
  *  <i>@</i>TLabel(text="Big number field:", control=<i>@</i>TControl(prefWidth=500))
- *  <i>@</i>TBigIntegerField(zeroValidation=TZeroValidation.MORE_THAN_ZERO, control=<i>@</i>TControl(tooltip="Max val: infinito"))
+ *  <i>@</i>TBigIntegerField(validate=TValidateNumber.GREATHER_THAN_ZERO, control=<i>@</i>TControl(tooltip="Max val: infinito"))
  *  private SimpleObjectProperty&lt;BigInteger&gt; <strong style="color:green;">bigIntegerField</strong>;
  * 
  * Oracle documentation:
@@ -134,7 +134,7 @@ public @interface THBox {
 	*  Sets the value of the property spacing. Property description: The amount of horizontal space between each child in the hbox.
 	* </pre>
 	**/
-	public double spacing() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double spacing() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>

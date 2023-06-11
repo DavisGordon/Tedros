@@ -11,7 +11,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.parser.TAnnotationParser;
 import org.tedros.fx.annotation.parser.TRequiredSliderParser;
 import org.tedros.fx.annotation.parser.TSliderParser;
@@ -21,7 +21,7 @@ import org.tedros.fx.builder.ITControlBuilder;
 import org.tedros.fx.builder.NullDoubleStringConverter;
 import org.tedros.fx.builder.TSliderFieldBuilder;
 import org.tedros.fx.domain.TDefaultValues;
-import org.tedros.fx.domain.TZeroValidation;
+import org.tedros.fx.domain.TValidateNumber;
 
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
@@ -192,7 +192,7 @@ public @interface TSliderField  {
 	*  Out of range values are essentially the same as disabling tick marks.
 	* </pre>
 	**/
-	public double majorTickUnit() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double majorTickUnit() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -207,7 +207,7 @@ public @interface TSliderField  {
 	*  Out of range values will disable disable minor ticks, as will a value of zero.
 	* </pre>
 	**/
-	public int minorTickCount() default TAnnotationDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
+	public int minorTickCount() default TDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -252,18 +252,18 @@ public @interface TSliderField  {
 	*  tick mark to the adjusted value will be used.
 	* </pre>
 	**/
-	public double blockIncrement() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double blockIncrement() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 	
 	/**
 	 * <pre>
-	 * Sets the zeroValidation property.
+	 * Sets the validate property.
 	 * 
 	 * Property description:
 	 * 
 	 * Validate if the value of this control are more or less than zero.
 	 * </pre>
 	 * */
-	public TZeroValidation zeroValidation() default TZeroValidation.NONE;
+	public TValidateNumber validate() default TValidateNumber.NONE;
 	
 	/**
 	 * <pre>

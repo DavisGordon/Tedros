@@ -13,7 +13,7 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.fx.annotation.reader.TReader;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.reader.TBigDecimalReader;
 import org.tedros.fx.reader.TBigIntegerReader;
 import org.tedros.fx.reader.TBooleanReader;

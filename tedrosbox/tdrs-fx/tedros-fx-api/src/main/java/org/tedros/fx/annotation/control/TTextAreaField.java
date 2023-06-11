@@ -12,7 +12,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.tedros.api.parser.ITAnnotationParser;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.parser.TRequiredTextAreaParser;
 import org.tedros.fx.annotation.parser.TTextAreaFieldParser;
 import org.tedros.fx.annotation.parser.TTextAreaParser;
@@ -118,7 +118,7 @@ public @interface TTextAreaField  {
 	*  TextArea's preferred width.
 	* </pre>
 	**/
-	public int prefColumnCount() default TAnnotationDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
+	public int prefColumnCount() default TDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -132,7 +132,7 @@ public @interface TTextAreaField  {
 	*  This is used for calculating the TextArea's preferred height.
 	* </pre>
 	**/
-	public int prefRowCount() default TAnnotationDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
+	public int prefRowCount() default TDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -145,7 +145,7 @@ public @interface TTextAreaField  {
 	*  The number of pixels by which the content is vertically scrolled.
 	* </pre>
 	**/
-	public double scrollTop() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double scrollTop() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -158,7 +158,7 @@ public @interface TTextAreaField  {
 	*  The number of pixels by which the content is horizontally scrolled.
 	* </pre>
 	**/
-	public double scrollLeft() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double scrollLeft() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 	
 	/**
 	 * <pre>
@@ -169,7 +169,7 @@ public @interface TTextAreaField  {
 	 * The max length for this input control.
 	 * </pre>
 	 * */
-	public int maxLength() default TAnnotationDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION; 
+	public int maxLength() default TDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION; 
 	
 	/**
 	 * <pre>

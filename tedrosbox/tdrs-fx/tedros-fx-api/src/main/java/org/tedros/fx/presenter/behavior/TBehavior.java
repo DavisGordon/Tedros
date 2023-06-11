@@ -15,7 +15,7 @@ import org.tedros.fx.form.TBuildFormStatus;
 import org.tedros.fx.form.TFormBuilder;
 import org.tedros.fx.form.TProgressIndicatorForm;
 import org.tedros.fx.form.TReaderFormBuilder;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TModelView;
 
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectProperty;

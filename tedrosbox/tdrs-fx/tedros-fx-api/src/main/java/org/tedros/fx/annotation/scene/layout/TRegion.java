@@ -1,7 +1,7 @@
 package org.tedros.fx.annotation.scene.layout;
 
 import org.tedros.api.parser.ITAnnotationParser;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.parser.TRegionParser;
 import org.tedros.fx.annotation.scene.control.TInsets;
 import org.tedros.fx.annotation.scene.control.TSize;
@@ -89,7 +89,7 @@ public @interface TRegion {
 	*  resizability of the region.
 	* </pre>
 	**/
-	public double minWidth() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double minWidth() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -107,7 +107,7 @@ public @interface TRegion {
 	*  enabling applications to easily restrict the resizability of the region.
 	* </pre>
 	**/
-	public double minHeight() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double minHeight() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -120,7 +120,7 @@ public @interface TRegion {
 	*  See Also: setMinWidth(double), setMinHeight(double)
 	* </pre>
 	**/
-	public TSize minSize() default @TSize(width=TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION, height=TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION);;
+	public TSize minSize() default @TSize(width=TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION, height=TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION);;
 
 	/**
 	* <pre>
@@ -136,7 +136,7 @@ public @interface TRegion {
 	*  means that getPrefWidth(forHeight) will return the region's internally computed preferred width.
 	* </pre>
 	**/
-	public double prefWidth() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double prefWidth() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -152,7 +152,7 @@ public @interface TRegion {
 	*  getPrefHeight(forWidth) will return the region's internally computed preferred width.
 	* </pre>
 	**/
-	public double prefHeight() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double prefHeight() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -166,7 +166,7 @@ public @interface TRegion {
 	*  See Also: setPrefWidth(double), setPrefHeight(double)
 	* </pre>
 	**/
-	public TSize prefSize() default @TSize(width=TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION, height=TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION);;
+	public TSize prefSize() default @TSize(width=TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION, height=TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION);;
 
 	/**
 	* <pre>
@@ -184,7 +184,7 @@ public @interface TRegion {
 	*  to easily restrict the resizability of the region.
 	* </pre>
 	**/
-	public double maxWidth() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double maxWidth() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -202,7 +202,7 @@ public @interface TRegion {
 	*  to easily restrict the resizability of the region.
 	* </pre>
 	**/
-	public double maxHeight() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double maxHeight() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -216,7 +216,7 @@ public @interface TRegion {
 	*  See Also: setMaxWidth(double), setMaxHeight(double)
 	* </pre>
 	**/
-	public TSize maxSize() default @TSize(width=TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION, height=TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION);
+	public TSize maxSize() default @TSize(width=TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION, height=TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION);
 	
 	/**
 	 * <pre>

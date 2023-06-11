@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 
 import org.tedros.api.parser.ITAnnotationParser;
 import org.tedros.fx.TFxKey;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.parser.TComboBoxParser;
 import org.tedros.fx.annotation.parser.TRequiredComboBoxParser;
 import org.tedros.fx.annotation.property.TIntegerProperty;
@@ -31,7 +31,7 @@ import org.tedros.fx.builder.NullObservableListBuilder;
 import org.tedros.fx.builder.TComboBoxFieldBuilder;
 import org.tedros.fx.control.TRequiredCheckBox;
 import org.tedros.fx.domain.TDefaultValues;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.process.TOptionsProcess;
 import org.tedros.server.entity.ITEntity;
 
@@ -206,7 +206,7 @@ public @interface TComboBoxField  {
 	*  to increase or decrease the height of the popup.
 	* </pre>
 	**/
-	public int visibleRowCount() default TAnnotationDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
+	public int visibleRowCount() default TDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
 	
 	/**
 	 * <pre>

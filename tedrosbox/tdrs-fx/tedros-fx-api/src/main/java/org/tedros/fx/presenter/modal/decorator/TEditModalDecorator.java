@@ -3,20 +3,20 @@ package org.tedros.fx.presenter.modal.decorator;
 import org.apache.commons.lang3.ArrayUtils;
 import org.tedros.api.presenter.view.ITDynaView;
 import org.tedros.core.control.TProgressIndicator;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TEditModalPresenter;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.control.TButton;
+import org.tedros.fx.model.TEntityModelView;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.assistant.TAiAssistant;
 import org.tedros.fx.presenter.decorator.ITListViewDecorator;
 import org.tedros.fx.presenter.decorator.TListViewHelper;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewSimpleBaseDecorator;
-import org.tedros.fx.presenter.model.TEntityModelView;
-import org.tedros.fx.presenter.model.TModelView;
-import org.tedros.fx.presenter.paginator.TPaginator;
+import org.tedros.fx.presenter.page.TPager;
 import org.tedros.server.entity.ITEntity;
 
 import javafx.geometry.Insets;
@@ -153,7 +153,7 @@ extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M>{
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
 			tCloseButton = new TButton();
 			tCloseButton.setText(iEngine.getString(tPresenter==null 
-							? TAnnotationDefaultValue.TVIEW_closeButtonText 
+							? TDefaultValue.TVIEW_closeButtonText 
 									: tPresenter.decorator().closeButtonText()));
 			tCloseButton.setId("t-button");
 		}else {
@@ -315,7 +315,7 @@ extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M>{
 	 * @see org.tedros.fx.presenter.entity.decorator.ITListViewDecorator#gettPaginator()
 	 */
 	@Override
-	public TPaginator gettPaginator() {
+	public TPager gettPaginator() {
 		return helper.gettPaginator();
 	}
 
@@ -323,7 +323,7 @@ extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M>{
 	 * @see org.tedros.fx.presenter.entity.decorator.ITListViewDecorator#settPaginator(org.tedros.fx.presenter.paginator.TPaginator)
 	 */
 	@Override
-	public void settPaginator(TPaginator tPaginator) {
+	public void settPaginator(TPager tPaginator) {
 		helper.settPaginator(tPaginator);
 	}
 

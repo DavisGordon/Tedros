@@ -15,7 +15,7 @@ import org.tedros.core.model.ITModelView;
 import org.tedros.fx.exception.TException;
 import org.tedros.fx.form.TDefaultForm;
 import org.tedros.fx.modal.TConfirmMessageBox;
-import org.tedros.fx.presenter.model.TEntityModelView;
+import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.presenter.view.TTabDetailView;
 import org.tedros.server.entity.ITEntity;
 

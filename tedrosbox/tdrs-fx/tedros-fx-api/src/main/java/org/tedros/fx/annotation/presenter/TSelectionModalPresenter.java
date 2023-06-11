@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.control.TTableView;
 import org.tedros.fx.annotation.page.TPage;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
@@ -22,14 +23,15 @@ import org.tedros.fx.presenter.modal.decorator.TSelectionModalDecorator;
 @Target(ElementType.TYPE)
 public @interface TSelectionModalPresenter {
 	
+	static final double WIDTH = 350;
 	/**
 	 * The list view max width
 	 * */
-	public double listViewMaxWidth() default 250;
+	public double listViewMaxWidth() default WIDTH;
 	/**
 	 * The list view min width
 	 * */
-	public double listViewMinWidth() default 250;
+	public double listViewMinWidth() default WIDTH;
 	/**
 	 * If true allows the user to select more than one item, 
 	 * but this must be set according the field type which 
@@ -54,13 +56,13 @@ public @interface TSelectionModalPresenter {
 	 *  serviceName - the jndi name for the ejb service
 	 *  </pre>
 	 * */
-	public TPage paginator();
+	public TPage page();
 	
 	/**
 	 * The modal view build settings 
 	 * */
 	public TPresenter presenter() default @TPresenter(	behavior = @TBehavior(type = TSelectionModalBehavior.class), 
 														decorator = @TDecorator(type = TSelectionModalDecorator.class, 
-														viewTitle="#{tedros.fxapi.view.modal.selection.title}"), 
+														viewTitle=TFxKey.VIEW_MODAL_SELECTION_TITLE), 
 														type = TDynaPresenter.class);
 }

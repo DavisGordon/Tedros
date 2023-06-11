@@ -2,12 +2,12 @@ package org.tedros.fx.presenter.dynamic.decorator;
 
 import org.tedros.api.presenter.decorator.ITDecorator;
 import org.tedros.api.presenter.view.ITDynaView;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
-import org.tedros.fx.presenter.model.TModelView;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -196,7 +196,7 @@ implements ITDecorator<TDynaPresenter<M>>{
 		final ITDynaView<M> view = getView();
 		if(text==null){
 			final TPresenter tPresenter = getPresenter().getPresenterAnnotation();
-			view.gettViewTitle().setText(iEngine.getString(tPresenter==null ? TAnnotationDefaultValue.TVIEW_viewTitle : tPresenter.decorator().viewTitle()));
+			view.gettViewTitle().setText(iEngine.getString(tPresenter==null ? TDefaultValue.TVIEW_viewTitle : tPresenter.decorator().viewTitle()));
 		}else
 			view.gettViewTitle().setText(iEngine.getString(text));
 	}

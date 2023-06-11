@@ -53,7 +53,7 @@ import org.tedros.fx.annotation.scene.control.TLabeled;
 import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.control.tablecell.TMediumDateTimeCallback;
-import org.tedros.fx.presenter.model.TEntityModelView;
+import org.tedros.fx.model.TEntityModelView;
 import org.tedros.tools.ToolsKey;
 import org.tedros.tools.module.ai.converter.TImageSizeConverter;
 import org.tedros.tools.module.ai.settings.CreateImageSetting;

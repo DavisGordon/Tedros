@@ -24,8 +24,8 @@ import org.tedros.fx.annotation.process.TEjbService;
 import org.tedros.fx.annotation.property.TReadOnlyBooleanProperty;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.text.TFont;
+import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
-import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.tools.ToolsKey;
 
 import javafx.beans.property.SimpleObjectProperty;

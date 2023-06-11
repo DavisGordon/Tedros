@@ -5,10 +5,10 @@ import java.lang.reflect.InvocationTargetException;
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.annotation.presenter.TSelectionModalPresenter;
 import org.tedros.fx.control.action.TPresenterAction;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.behavior.TActionType;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewSelectionBaseBehavior;
 import org.tedros.fx.presenter.modal.decorator.TSelectionModalDecorator;
-import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.server.entity.ITEntity;
 
 /**

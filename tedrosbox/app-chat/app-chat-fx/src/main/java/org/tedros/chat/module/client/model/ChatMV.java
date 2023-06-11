@@ -49,7 +49,7 @@ import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.domain.TFileModelType;
 import org.tedros.fx.domain.TOptionProcessType;
-import org.tedros.fx.presenter.model.TEntityModelView;
+import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.property.TSimpleFileProperty;
 import org.tedros.server.model.ITFileModel;
 

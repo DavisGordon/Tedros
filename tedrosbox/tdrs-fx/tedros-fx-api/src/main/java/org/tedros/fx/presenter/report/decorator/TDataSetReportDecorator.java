@@ -1,8 +1,8 @@
 package org.tedros.fx.presenter.report.decorator;
 
 import org.tedros.api.presenter.view.ITDynaView;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewReportBaseDecorator;
-import org.tedros.fx.presenter.model.TModelView;
 
 /**
  * The decorator of the report view.

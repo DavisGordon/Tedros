@@ -8,14 +8,14 @@ import org.tedros.fx.control.action.TPresenterAction;
 import org.tedros.fx.form.TFormBuilder;
 import org.tedros.fx.form.TReaderFormBuilder;
 import org.tedros.fx.modal.TMessageBox;
+import org.tedros.fx.model.TEntityModelView;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.behavior.TActionType;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewSimpleBaseBehavior;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import org.tedros.fx.presenter.entity.decorator.TDetailCrudViewDecorator;
-import org.tedros.fx.presenter.model.TEntityModelView;
-import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.fx.util.TEntityListViewCallback;
 import org.tedros.server.entity.ITEntity;
 

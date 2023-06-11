@@ -12,7 +12,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.tedros.api.parser.ITAnnotationParser;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.parser.TTabPaneParser;
 import org.tedros.fx.annotation.property.TBooleanProperty;
 import org.tedros.fx.annotation.property.TDoubleProperty;
@@ -198,7 +198,7 @@ public @interface TTabPane  {
 	*  This value can also be set via CSS using -fx-tab-min-width
 	* </pre>
 	**/
-	public double tabMinWidth() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double tabMinWidth() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -211,7 +211,7 @@ public @interface TTabPane  {
 	*  The maximum width of the tabs in the TabPane.
 	* </pre>
 	**/
-	public double tabMaxWidth() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double tabMaxWidth() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -225,7 +225,7 @@ public @interface TTabPane  {
 	*  This value can also be set via CSS using -fx-tab-min-height
 	* </pre>
 	**/
-	public double tabMinHeight() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double tabMinHeight() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -238,7 +238,7 @@ public @interface TTabPane  {
 	*  The maximum height of the tabs in the TabPane.
 	* </pre>
 	**/
-	public double tabMaxHeight() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double tabMaxHeight() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 	
 	/**
 	* <pre>

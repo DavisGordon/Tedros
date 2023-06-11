@@ -167,6 +167,8 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 		StringBuilder sb = new StringBuilder("select ");
 		if(count)
 			sb.append("count(");
+		else
+			sb.append("distinct ");
 		sb.append(sel.getAlias());
 		if(count)
 			sb.append(") as total");

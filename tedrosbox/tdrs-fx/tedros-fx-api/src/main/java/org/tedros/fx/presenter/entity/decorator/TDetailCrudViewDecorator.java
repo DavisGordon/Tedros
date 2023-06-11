@@ -6,12 +6,12 @@ import org.tedros.core.control.TProgressIndicator;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
 import org.tedros.fx.annotation.presenter.TPresenter;
+import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.presenter.assistant.TAiAssistant;
 import org.tedros.fx.presenter.decorator.ITListViewDecorator;
 import org.tedros.fx.presenter.decorator.TListViewHelper;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
-import org.tedros.fx.presenter.model.TEntityModelView;
-import org.tedros.fx.presenter.paginator.TPaginator;
+import org.tedros.fx.presenter.page.TPager;
 import org.tedros.server.entity.ITEntity;
 
 import javafx.scene.Node;
@@ -197,7 +197,7 @@ extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M>{
 	 * @see org.tedros.fx.presenter.entity.decorator.ITListViewDecorator#gettPaginator()
 	 */
 	@Override
-	public TPaginator gettPaginator() {
+	public TPager gettPaginator() {
 		return helper.gettPaginator();
 	}
 
@@ -205,7 +205,7 @@ extends TDynaViewCrudBaseDecorator<M> implements ITListViewDecorator<M>{
 	 * @see org.tedros.fx.presenter.entity.decorator.ITListViewDecorator#settPaginator(org.tedros.fx.presenter.paginator.TPaginator)
 	 */
 	@Override
-	public void settPaginator(TPaginator tPaginator) {
+	public void settPaginator(TPager tPaginator) {
 		helper.settPaginator(tPaginator);
 	}
 

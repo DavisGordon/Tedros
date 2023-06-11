@@ -1,7 +1,7 @@
 package org.tedros.fx.presenter.modal.decorator;
 
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewActionBaseDecorator;
-import org.tedros.fx.presenter.model.TModelView;
 
 import javafx.scene.control.ScrollPane;
 

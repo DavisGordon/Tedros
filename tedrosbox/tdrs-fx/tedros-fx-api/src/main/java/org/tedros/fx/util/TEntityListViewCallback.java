@@ -2,8 +2,8 @@ package org.tedros.fx.util;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.fx.exception.TException;
-import org.tedros.fx.presenter.model.TEntityModelView;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TEntityModelView;
+import org.tedros.fx.model.TModelView;
 import org.tedros.server.entity.ITEntity;
 
 import javafx.beans.property.StringProperty;

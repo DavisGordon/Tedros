@@ -1,9 +1,9 @@
 package org.tedros.fx.presenter.dynamic.decorator;
 
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.control.TButton;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
-import org.tedros.fx.presenter.model.TModelView;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
@@ -47,7 +47,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildRemoveButton(String text) {
 		if(text==null){
 			tRemoveButton = new TButton();
-			tRemoveButton.setText(iEngine.getString(TAnnotationDefaultValue.TVIEW_removeButtonText));
+			tRemoveButton.setText(iEngine.getString(TDefaultValue.TVIEW_removeButtonText));
 			tRemoveButton.setId("t-button");
 		}else {
 			tRemoveButton = new TButton();
@@ -69,7 +69,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildAddButton(String text) {
 		if(text==null){
 			tAddButton = new TButton();
-			tAddButton.setText(iEngine.getString(TAnnotationDefaultValue.TVIEW_addButtonText));
+			tAddButton.setText(iEngine.getString(TDefaultValue.TVIEW_addButtonText));
 			tAddButton.setId("t-button");
 		}else {
 			tAddButton = new TButton();
@@ -91,7 +91,7 @@ extends TDynaViewSimpleBaseDecorator<M> {
 	public void buildCleanButton(String text) {
 		if(text==null){
 			tCleanButton = new TButton();
-			tCleanButton.setText(iEngine.getString(TAnnotationDefaultValue.TVIEW_cleanButtonText));
+			tCleanButton.setText(iEngine.getString(TDefaultValue.TVIEW_cleanButtonText));
 			tCleanButton.setId("t-button");
 		}else {
 			tCleanButton = new TButton();

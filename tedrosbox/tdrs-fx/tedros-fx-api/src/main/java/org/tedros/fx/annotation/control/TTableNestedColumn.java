@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.tedros.api.parser.ITAnnotationParser;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.parser.TTableNestedColumnParser;
 import org.tedros.fx.annotation.property.TBooleanProperty;
 import org.tedros.fx.annotation.property.TDoubleProperty;
@@ -21,7 +21,7 @@ import org.tedros.fx.builder.ITBuilder;
 import org.tedros.fx.builder.ITComparatorBuilder;
 import org.tedros.fx.builder.ITEventHandlerBuilder;
 import org.tedros.fx.builder.ITNodeBuilder;
-import org.tedros.fx.presenter.model.TModelView;
+import org.tedros.fx.model.TModelView;
 
 import javafx.scene.control.TableColumn;
 
@@ -155,7 +155,7 @@ public @interface TTableNestedColumn {
 	*  Sets the value of the property minWidth. Property description: The minimum width the TableColumn is permitted to be resized to.
 	* </pre>
 	**/
-	public double minWidth() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double minWidth() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -164,7 +164,7 @@ public @interface TTableNestedColumn {
 	*  Sets the value of the property prefWidth. Property description: The preferred width of the TableColumn.
 	* </pre>
 	**/
-	public double prefWidth() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double prefWidth() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>
@@ -173,7 +173,7 @@ public @interface TTableNestedColumn {
 	*  Sets the value of the property maxWidth. Property description: The maximum width the TableColumn is permitted to be resized to.
 	* </pre>
 	**/
-	public double maxWidth() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double maxWidth() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>

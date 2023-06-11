@@ -3,8 +3,8 @@ package org.tedros.fx.presenter.dynamic.view;
 import java.net.URL;
 
 import org.tedros.core.ITModule;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
-import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.server.model.ITModel;
 
 import javafx.collections.ObservableList;

@@ -26,9 +26,9 @@ import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.presenter.TSelectionModalPresenter;
 import org.tedros.fx.annotation.query.TQuery;
 import org.tedros.fx.annotation.text.TFont;
+import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.presenter.modal.behavior.TSelectionModalBehavior;
 import org.tedros.fx.presenter.modal.decorator.TSelectionModalDecorator;
-import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.tools.ToolsKey;
 
 import javafx.beans.Observable;
@@ -42,7 +42,7 @@ import javafx.scene.layout.Priority;
 
 @TLabelDefaultSetting(font=@TFont(size=12))
 @TSelectionModalPresenter(
-		paginator=@TPage(query=@TQuery(entity = TAuthorization.class), modelView=TAuthorizationTV.class, 
+		page=@TPage(query=@TQuery(entity = TAuthorization.class), modelView=TAuthorizationTV.class, 
 			serviceName = TAuthorizationController.JNDI_NAME),
 		presenter=@TPresenter(behavior = @TBehavior(type = TSelectionModalBehavior.class), 
 			decorator = @TDecorator(type=TSelectionModalDecorator.class, 

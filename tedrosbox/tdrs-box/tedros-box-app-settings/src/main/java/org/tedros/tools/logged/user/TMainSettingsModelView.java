@@ -11,9 +11,9 @@ import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.scene.control.TButtonBase;
 import org.tedros.fx.annotation.scene.control.TLabeled;
 import org.tedros.fx.annotation.text.TFont;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.entity.decorator.TSaveViewDecorator;
-import org.tedros.fx.presenter.model.TModelView;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.text.FontWeight;

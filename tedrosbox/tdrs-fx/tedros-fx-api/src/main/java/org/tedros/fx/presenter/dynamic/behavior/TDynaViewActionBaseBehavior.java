@@ -12,10 +12,10 @@ import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.process.TEjbService;
 import org.tedros.fx.exception.TValidatorException;
 import org.tedros.fx.modal.TMessageBox;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.behavior.TActionType;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewActionBaseDecorator;
-import org.tedros.fx.presenter.model.TModelView;
 import org.tedros.server.model.ITModel;
 
 import javafx.beans.property.BooleanProperty;

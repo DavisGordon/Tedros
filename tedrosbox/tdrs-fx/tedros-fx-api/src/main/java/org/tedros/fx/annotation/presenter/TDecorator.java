@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.tedros.api.presenter.decorator.ITDecorator;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.layout.TPane;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.layout.TRegion;
@@ -47,107 +47,107 @@ public @interface TDecorator {
 	/**
 	 * Set the new button text
 	 * */
-	public String newButtonText() default TAnnotationDefaultValue.TVIEW_newButtonText;
+	public String newButtonText() default TDefaultValue.TVIEW_newButtonText;
 	
 	/**
 	 * Set the save button text
 	 * */
-	public String saveButtonText() default TAnnotationDefaultValue.TVIEW_saveButtonText;
+	public String saveButtonText() default TDefaultValue.TVIEW_saveButtonText;
 	
 	/**
 	 * Set the search button text
 	 * */
-	public String searchButtonText() default TAnnotationDefaultValue.TVIEW_searchButtonText;
+	public String searchButtonText() default TDefaultValue.TVIEW_searchButtonText;
 	
 	/**
 	 * Set the delete button text
 	 * */
-	public String deleteButtonText() default TAnnotationDefaultValue.TVIEW_deleteButtonText;
+	public String deleteButtonText() default TDefaultValue.TVIEW_deleteButtonText;
 	
 	/**
 	 * Set the edit button text
 	 * */
-	public String editButtonText() default TAnnotationDefaultValue.TVIEW_editButtonText;
+	public String editButtonText() default TDefaultValue.TVIEW_editButtonText;
 
 	/**
 	 * Set the print button text
 	 * */
-	public String printButtonText() default TAnnotationDefaultValue.TVIEW_printButtonText;
+	public String printButtonText() default TDefaultValue.TVIEW_printButtonText;
 	
 	/**
 	 * Set the cancel button text
 	 * */
-	public String cancelButtonText() default TAnnotationDefaultValue.TVIEW_cancelButtonText;
+	public String cancelButtonText() default TDefaultValue.TVIEW_cancelButtonText;
 	
 	/**
 	 * Set the modal close button text
 	 * */
-	public String closeButtonText() default TAnnotationDefaultValue.TVIEW_closeButtonText;
+	public String closeButtonText() default TDefaultValue.TVIEW_closeButtonText;
 	
 	/**
 	 * <pre>
 	 * Set the clean button text
 	 * </pre>
 	 * */
-	public String cleanButtonText() default TAnnotationDefaultValue.TVIEW_cleanButtonText;
+	public String cleanButtonText() default TDefaultValue.TVIEW_cleanButtonText;
 
 	/**
 	 * <pre>
 	 * Set the excel button text
 	 * </pre>
 	 * */
-	public String excelButtonText() default TAnnotationDefaultValue.TVIEW_excelButtonText;
+	public String excelButtonText() default TDefaultValue.TVIEW_excelButtonText;
 
 	/**
 	 * <pre>
 	 * Set the word button text
 	 * </pre>
 	 * */
-	public String wordButtonText() default TAnnotationDefaultValue.TVIEW_wordButtonText;
+	public String wordButtonText() default TDefaultValue.TVIEW_wordButtonText;
 
 	/**
 	 * <pre>
 	 * Set the PDF button text
 	 * </pre>
 	 * */
-	public String pdfButtonText() default TAnnotationDefaultValue.TVIEW_pdfButtonText;
+	public String pdfButtonText() default TDefaultValue.TVIEW_pdfButtonText;
 
 	/**
 	 * <pre>
 	 * Set the Open Export Folder button text
 	 * </pre>
 	 * */
-	public String openExportFolderButtonText() default TAnnotationDefaultValue.TVIEW_openExportFolderButtonText;
+	public String openExportFolderButtonText() default TDefaultValue.TVIEW_openExportFolderButtonText;
 	/**
 	 * <pre>
 	 * Set the Select button text
 	 * </pre>
 	 * */
-	public String selectButtonText() default TAnnotationDefaultValue.TVIEW_selectButtonText;
+	public String selectButtonText() default TDefaultValue.TVIEW_selectButtonText;
 	
 	/**
 	 * <pre>
 	 * Set the Select All button text
 	 * </pre>
 	 * */
-	public String selectAllButtonText() default TAnnotationDefaultValue.TVIEW_selectAllButtonText;
+	public String selectAllButtonText() default TDefaultValue.TVIEW_selectAllButtonText;
 	
 	/**
 	 * <pre>
 	 * Set the Import button text
 	 * </pre>
 	 * */
-	public String importButtonText() default TAnnotationDefaultValue.TVIEW_importButtonText;
+	public String importButtonText() default TDefaultValue.TVIEW_importButtonText;
 	
 	/**
 	 * Set the view title text
 	 * */
-	public String viewTitle() default TAnnotationDefaultValue.TVIEW_viewTitle;
+	public String viewTitle() default TDefaultValue.TVIEW_viewTitle;
 	
 	/**
 	 * Set the list view title text
 	 * */
-	public String listTitle() default TAnnotationDefaultValue.TVIEW_listTitle;
+	public String listTitle() default TDefaultValue.TVIEW_listTitle;
 	
 	/**
 	 * <pre>
@@ -156,7 +156,7 @@ public @interface TDecorator {
 	 * Default value: Edit
 	 * </pre>
 	 * */
-	public String editModeTitle() default TAnnotationDefaultValue.TVIEW_editModeTitle;
+	public String editModeTitle() default TDefaultValue.TVIEW_editModeTitle;
 	
 	/**
 	 * <pre>
@@ -165,7 +165,7 @@ public @interface TDecorator {
 	 * Default value: Read
 	 * </pre>
 	 * */
-	public String readerModeTitle() default TAnnotationDefaultValue.TVIEW_readerModeTitle;
+	public String readerModeTitle() default TDefaultValue.TVIEW_readerModeTitle;
 
 	/**
 	 * <pre>

@@ -14,6 +14,7 @@ import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.control.TTableView;
 import org.tedros.fx.annotation.page.TPage;
 import org.tedros.fx.annotation.presenter.TBehavior;
@@ -25,11 +26,11 @@ import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.collections.TFXCollections;
 import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.modal.TMessageBox;
+import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.behavior.TActionType;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewSelectionBaseDecorator;
-import org.tedros.fx.presenter.model.TModelView;
-import org.tedros.fx.presenter.paginator.TPagination;
+import org.tedros.fx.presenter.page.TPagination;
 import org.tedros.fx.process.TPaginationProcess;
 import org.tedros.fx.util.TEntityListViewCallback;
 import org.tedros.fx.util.TReflectionUtil;
@@ -90,7 +91,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			if(modalPresenter==null)
 				throw new RuntimeException("The TSelectionModalPresenter annotation not found in the " + getModelViewClass().getSimpleName());
 
-			final TPage tPaginator = modalPresenter.paginator();
+			final TPage tPaginator = modalPresenter.page();
 			
 			// set the  process
 			if(tPaginator.query().entity()!=null && tPaginator.serviceName()!=null && tPaginator.modelView()!=null){
@@ -124,7 +125,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	    	TableView tableView = (TableView) ((ITControlBuilder) controlBuilder).build(tableViewAnn, this.searchResultList);
 	    	tableView.setTooltip(new Tooltip(TLanguage
 					.getInstance(null)
-					.getString("#{tedros.fxapi.label.double.click.select}")));
+					.getString(TFxKey.DOUBLE_CLICK_SELECT)));
 	    	
 	    	decorator.setTableView(tableView);
 			decorator.gettSelectAllButton().setDisable(true);

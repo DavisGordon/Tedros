@@ -12,7 +12,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.tedros.api.parser.ITAnnotationParser;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.parser.TLabelParser;
 import org.tedros.fx.annotation.parser.TTitledPaneParser;
 import org.tedros.fx.annotation.scene.TNode;
@@ -51,7 +51,7 @@ import javafx.scene.text.TextAlignment;
  *  private SimpleStringProperty <strong style="color:blue">passField</strong>;
  *		
  *  <i>@</i>TLabel(text="Number field", control=<i>@</i>TControl(prefWidth=500))
- *  <i>@</i>TIntegerField(zeroValidation=TZeroValidation.MORE_THAN_ZERO, control=<i>@</i>TControl(tooltip="Max value: "+Integer.MAX_VALUE))
+ *  <i>@</i>TIntegerField(validate=TValidateNumber.GREATHER_THAN_ZERO, control=<i>@</i>TControl(tooltip="Max value: "+Integer.MAX_VALUE))
  *  private SimpleIntegerProperty <strong style="color:green">integerField</strong>;
  * 
  * Oracle documentation:
@@ -282,7 +282,7 @@ public @interface TTitledPane  {
 	*  The amount of space between the graphic and text
 	* </pre>
 	**/
-	public double graphicTextGap() default TAnnotationDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
+	public double graphicTextGap() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
 
 	/**
 	* <pre>

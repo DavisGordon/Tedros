@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.tedros.api.parser.ITAnnotationParser;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.parser.TMultipleSelectionModelParser;
 import org.tedros.fx.annotation.parser.TTableSelectionModelParser;
 import org.tedros.fx.annotation.parser.TTableViewFocusModelParser;
@@ -148,7 +148,7 @@ public @interface TTableView {
 		*  0 <= index < model size
 		* </pre>
 		**/
-		public int focus() default TAnnotationDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
+		public int focus() default TDefaultValue.DEFAULT_INT_VALUE_IDENTIFICATION;
 		
 		/**
 		* <pre>

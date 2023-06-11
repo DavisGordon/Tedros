@@ -46,7 +46,7 @@ import javafx.scene.layout.Region;
  *  private SimpleStringProperty <strong style="color:blue">passField</strong>;
  *		
  *  <i>@</i>TLabel(text="Number field", control=<i>@</i>TControl(prefWidth=500))
- *  <i>@</i>TIntegerField(zeroValidation=TZeroValidation.MORE_THAN_ZERO, control=<i>@</i>TControl(tooltip="Max value: "+Integer.MAX_VALUE))
+ *  <i>@</i>TIntegerField(validate=TValidateNumber.GREATHER_THAN_ZERO, control=<i>@</i>TControl(tooltip="Max value: "+Integer.MAX_VALUE))
  *  private SimpleIntegerProperty <strong style="color:green">integerField</strong>;
  * 
  * Oracle documentation:

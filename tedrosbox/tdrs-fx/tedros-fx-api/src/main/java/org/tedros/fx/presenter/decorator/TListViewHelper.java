@@ -9,14 +9,14 @@ import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.control.TProgressIndicator;
 import org.tedros.fx.TFxKey;
-import org.tedros.fx.annotation.TAnnotationDefaultValue;
+import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.page.TPage;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
 import org.tedros.fx.annotation.query.TCondition;
 import org.tedros.fx.annotation.query.TOrder;
+import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.presenter.assistant.TAiAssistant;
-import org.tedros.fx.presenter.model.TEntityModelView;
-import org.tedros.fx.presenter.paginator.TPaginator;
+import org.tedros.fx.presenter.page.TPager;
 import org.tedros.server.entity.ITEntity;
 
 import javafx.beans.property.SimpleDoubleProperty;
@@ -44,7 +44,7 @@ public class TListViewHelper<M extends TEntityModelView<? extends ITEntity>>{
     private TProgressIndicator tListViewProgressIndicator;
     
     private Accordion tPaginatorAccordion;
-    private TPaginator tPaginator;
+    private TPager tPaginator;
     
     private TAiAssistant<M> tAiAssistat;
     
@@ -71,7 +71,7 @@ public class TListViewHelper<M extends TEntityModelView<? extends ITEntity>>{
 		tListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		
 		// build the label for the list view
-		tListViewTitle = new Label(TLanguage.getInstance().getString(title==null ? TAnnotationDefaultValue.TVIEW_listTitle : title));
+		tListViewTitle = new Label(TLanguage.getInstance().getString(title==null ? TDefaultValue.TVIEW_listTitle : title));
 		tListViewTitle.setId("t-title-label");
 		tListViewTitle.maxWidthProperty().bind(listViewMaxWidth);
 		tListViewTitle.minWidthProperty().bind(listViewMinWidth);
@@ -92,7 +92,7 @@ public class TListViewHelper<M extends TEntityModelView<? extends ITEntity>>{
 		tListViewProgressIndicator.setSmallLogo();
 		
 		if(paginator!=null && paginator.show()) {
-			tPaginator = new TPaginator(paginator.showSearch(), paginator.showOrderBy());
+			tPaginator = new TPager(paginator.showSearch(), paginator.showOrderBy());
 			if(paginator.showSearch() && paginator.query().condition().length>0)
 				for(TCondition c : paginator.query().condition()) {
 					if(!c.prompted()) continue;
@@ -224,14 +224,14 @@ public class TListViewHelper<M extends TEntityModelView<? extends ITEntity>>{
 	/**
 	 * @return the tPaginator
 	 */
-	public TPaginator gettPaginator() {
+	public TPager gettPaginator() {
 		return tPaginator;
 	}
 
 	/**
 	 * @param tPaginator the tPaginator to set
 	 */
-	public void settPaginator(TPaginator tPaginator) {
+	public void settPaginator(TPager tPaginator) {
 		this.tPaginator = tPaginator;
 	}
 

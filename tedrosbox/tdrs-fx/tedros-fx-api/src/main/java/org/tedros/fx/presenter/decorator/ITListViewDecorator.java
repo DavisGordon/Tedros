@@ -1,9 +1,9 @@
 package org.tedros.fx.presenter.decorator;
 
 import org.tedros.core.control.TProgressIndicator;
+import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.presenter.assistant.TAiAssistant;
-import org.tedros.fx.presenter.model.TEntityModelView;
-import org.tedros.fx.presenter.paginator.TPaginator;
+import org.tedros.fx.presenter.page.TPager;
 import org.tedros.server.entity.ITEntity;
 
 import javafx.scene.control.Accordion;
@@ -99,7 +99,7 @@ public interface ITListViewDecorator<M extends TEntityModelView<? extends ITEnti
 	 * Get the paginator
 	 * @return the tPaginator
 	 */
-	TPaginator gettPaginator();
+	TPager gettPaginator();
 	
 	/**
 	 * Get the assistant
@@ -118,7 +118,7 @@ public interface ITListViewDecorator<M extends TEntityModelView<? extends ITEnti
 	 * Set the paginator
 	 * @param tPaginator the tPaginator to set
 	 */
-	void settPaginator(TPaginator tPaginator);
+	void settPaginator(TPager tPaginator);
 
 	/**
 	 * Get the paginator accordion

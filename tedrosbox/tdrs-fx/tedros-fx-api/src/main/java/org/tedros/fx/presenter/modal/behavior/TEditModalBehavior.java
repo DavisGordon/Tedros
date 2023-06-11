@@ -10,12 +10,12 @@ import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.control.action.TPresenterAction;
 import org.tedros.fx.exception.TValidatorException;
 import org.tedros.fx.modal.TMessageBox;
+import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.presenter.behavior.TActionState;
 import org.tedros.fx.presenter.behavior.TActionType;
 import org.tedros.fx.presenter.behavior.TProcessResult;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 import org.tedros.fx.presenter.modal.decorator.TEditModalDecorator;
-import org.tedros.fx.presenter.model.TEntityModelView;
 import org.tedros.fx.util.TEntityListViewCallback;
 import org.tedros.server.entity.ITEntity;
 
