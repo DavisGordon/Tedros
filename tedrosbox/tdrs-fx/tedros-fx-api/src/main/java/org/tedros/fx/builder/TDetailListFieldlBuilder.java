@@ -33,7 +33,7 @@ implements ITControlBuilder<org.tedros.fx.control.TDetailListField, ITObservable
 		ITModule module = getComponentDescriptor().getForm().gettPresenter().getModule();
 		
 		org.tedros.fx.control.TDetailListField control = 
-				new org.tedros.fx.control.TDetailListField(module, tAnnotation.entityModelViewClass(), tAnnotation.entityClass(), attrProperty);
+				new org.tedros.fx.control.TDetailListField(module, tAnnotation.modelView(), tAnnotation.entity(), attrProperty);
 		callParser(tAnnotation, control);
 		return control;
 	}

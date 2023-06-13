@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.tedros.fx.annotation.control.TModelViewType;
+import org.tedros.fx.annotation.control.TGenericType;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.collections.TFXCollections;
 import org.tedros.fx.property.TSimpleFileProperty;
@@ -36,7 +36,7 @@ class TPropertyHelper<T extends TModelView> {
 	
 	Object value;
 	T modelView;
-	TModelViewType genericType;
+	TGenericType genericType;
 	boolean buildListener = false;
 
 	/**
@@ -50,7 +50,7 @@ class TPropertyHelper<T extends TModelView> {
 		this.type = field.getType();
 		this.field.setAccessible(true);
 		this.modelView = modelView;
-		TModelViewType[] arr = field.getAnnotationsByType(TModelViewType.class);
+		TGenericType[] arr = field.getAnnotationsByType(TGenericType.class);
 		if(arr.length>0) 
 			this.genericType = arr[0];
 		
@@ -87,7 +87,7 @@ class TPropertyHelper<T extends TModelView> {
 			}else if(type == TSimpleFileProperty.class) {
 				Class entityClass = null;
 				if(this.genericType!=null)
-					entityClass = this.genericType.modelClass();
+					entityClass = this.genericType.model();
 					
 				if(entityClass!=null) {
 					value = type.getConstructor(ITFileBaseModel.class).newInstance(entityClass.newInstance());

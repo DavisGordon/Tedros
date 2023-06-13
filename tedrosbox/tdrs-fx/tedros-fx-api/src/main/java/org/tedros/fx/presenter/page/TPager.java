@@ -18,7 +18,7 @@ import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.query.TTemporal;
 import org.tedros.fx.control.TButton;
 import org.tedros.fx.control.TComboBoxField;
-import org.tedros.fx.control.THorizontalRadioGroup;
+import org.tedros.fx.control.THRadioGroup;
 import org.tedros.fx.control.TLabel;
 import org.tedros.fx.control.TMaskField;
 import org.tedros.fx.control.TOption;
@@ -66,7 +66,7 @@ public class TPager extends BorderPane {
 	private TMaskField search = null;
 	private TComboBoxField<TOption<String>> searches;
 	private TComboBoxField<TOption<String>> orderBy;
-	private THorizontalRadioGroup orderByType;
+	private THRadioGroup orderByType;
 	private ToolBar toolbar;
 	private TLabel label;
 	
@@ -202,7 +202,7 @@ public class TPager extends BorderPane {
 			orderBy.setMinWidth(200);
 			h1.getChildren().addAll(orderBy);
 			
-			orderByType = new THorizontalRadioGroup();
+			orderByType = new THRadioGroup();
 			ChangeListener<Toggle> eh1 = (a0, a1, a2) ->{
 				lastButton = null;
 				paginationProperty.setValue(buildPagination(0));
@@ -217,7 +217,7 @@ public class TPager extends BorderPane {
 			descRadioBtn.setUserData(false);
 			orderByType.addRadioButton(ascRadioBtn);
 			orderByType.addRadioButton(descRadioBtn);
-			THorizontalRadioGroup.setMargin(ascRadioBtn, new Insets(0, 5, 0, 0));
+			THRadioGroup.setMargin(ascRadioBtn, new Insets(0, 5, 0, 0));
 			
 			HBox h2 = new HBox();
 			h2.setId("t-view-toolbar");

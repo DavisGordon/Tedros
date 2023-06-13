@@ -22,7 +22,7 @@ import org.tedros.fx.annotation.parser.TVBoxParser;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.builder.ITFieldBuilder;
-import org.tedros.fx.builder.TOneSelectionModalBuilder;
+import org.tedros.fx.builder.TSingleSelectionModalBuilder;
 import org.tedros.fx.builder.TTextFieldBuilder;
 import org.tedros.fx.control.TRequiredTextField;
 import org.tedros.fx.model.TModelView;
@@ -47,7 +47,7 @@ import javafx.scene.layout.VBox;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface TOneSelectionModal  {
+public @interface TSingleSelectionModal  {
 	
 	/**
 	 *<pre>
@@ -56,7 +56,7 @@ public @interface TOneSelectionModal  {
 	 *  Default value: {@link TTextFieldBuilder}
 	 *</pre> 
 	 * */
-	public Class<? extends ITFieldBuilder> builder() default TOneSelectionModalBuilder.class;
+	public Class<? extends ITFieldBuilder> builder() default TSingleSelectionModalBuilder.class;
 	
 	/**
 	 * <pre>
@@ -74,12 +74,12 @@ public @interface TOneSelectionModal  {
 	 * This class  must be annotated with @TSelectionModalPresenter
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends TModelView> modelViewClass();
+	public Class<? extends TModelView> modelView();
 	
 	/**
 	 * The model or entity type
 	 * */
-	public Class<? extends ITModel> modelClass();
+	public Class<? extends ITModel> model();
 	
 	/**
 	 * The list view width 

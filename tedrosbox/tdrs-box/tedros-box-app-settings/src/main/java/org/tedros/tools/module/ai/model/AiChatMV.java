@@ -16,7 +16,7 @@ import org.tedros.fx.annotation.control.TButtonField;
 import org.tedros.fx.annotation.control.TCallbackFactory;
 import org.tedros.fx.annotation.control.TCellFactory;
 import org.tedros.fx.annotation.control.TContent;
-import org.tedros.fx.annotation.control.TModelViewType;
+import org.tedros.fx.annotation.control.TGenericType;
 import org.tedros.fx.annotation.control.TTab;
 import org.tedros.fx.annotation.control.TTabPane;
 import org.tedros.fx.annotation.control.TTableColumn;
@@ -74,7 +74,7 @@ public class AiChatMV extends TEntityModelView<TAiChatCompletion> {
 	private SimpleStringProperty title;
 	
 	@TVBox(fillWidth=true, spacing=20)
-	@TModelViewType(modelClass = TAiChatMessage.class, modelViewClass=AiChatMessageMV.class)
+	@TGenericType(model = TAiChatMessage.class, modelView=AiChatMessageMV.class)
 	private ITObservableList<AiChatMessageMV> messages; 
 
 	@TTextAreaField(prefRowCount=4, wrapText=true, 
@@ -94,7 +94,7 @@ public class AiChatMV extends TEntityModelView<TAiChatCompletion> {
 				callBack=@TCallbackFactory(parse=true, value=TMediumDateTimeCallback.class))), 
 		@TTableColumn(text = TUsualKey.EVENT_LOG, cellValue="log")
 	})
-	@TModelViewType(modelClass = TRequestEvent.class, modelViewClass=EventMV.class)
+	@TGenericType(model = TRequestEvent.class, modelView=EventMV.class)
 	private ITObservableList<EventMV> events;
 	
 	

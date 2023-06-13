@@ -8,6 +8,7 @@ public final class TStackPaneParser extends TAnnotationParser<Annotation, StackP
 
 	@Override
 	public void parse(Annotation annotation, StackPane object, String... byPass) throws Exception {
-		super.parse(annotation, object, "required");
+		super.parse(annotation, object, "required", "items", "height", "width",
+				"selectionMode", "sourceLabel","targetLabel","process");
 	}
 }

@@ -13,7 +13,7 @@ import org.tedros.core.TLanguage;
 import org.tedros.core.model.ITModelView;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.control.TLabel;
-import org.tedros.fx.annotation.control.TModelViewType;
+import org.tedros.fx.annotation.control.TGenericType;
 import org.tedros.fx.annotation.control.TValidator;
 import org.tedros.fx.domain.TValidateNumber;
 import org.tedros.fx.exception.TException;
@@ -126,7 +126,7 @@ public final class TControlValidator<E extends ITModelView> {
 				continue;
 			}
 			
-			if (annotation instanceof TModelViewType && ((TModelViewType)annotation).modelViewClass()!=TModelView.class){
+			if (annotation instanceof TGenericType && ((TGenericType)annotation).modelView()!=TModelView.class){
 				final TControlValidator validator = new TControlValidator();
 				List<ITModelView> lst = null;
 				List<TValidatorResult> results = null;
@@ -143,7 +143,7 @@ public final class TControlValidator<E extends ITModelView> {
 								? (ITModelView) object
 										: TModelViewBuilder
 										.create()
-										.modelViewClass((Class<? extends ITModelView<?>>) ((TModelViewType)annotation).modelViewClass())
+										.modelViewClass((Class<? extends ITModelView<?>>) ((TGenericType)annotation).modelView())
 										.build((ITModel)object);
 						lst = Arrays.asList(detailModelView);
 					} catch (TException e) {

@@ -12,7 +12,7 @@ import org.tedros.core.setting.model.TPropertie;
 import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.control.TFileField;
 import org.tedros.fx.annotation.control.TLabel;
-import org.tedros.fx.annotation.control.TModelViewType;
+import org.tedros.fx.annotation.control.TGenericType;
 import org.tedros.fx.annotation.control.TTextAreaField;
 import org.tedros.fx.annotation.control.TTextField;
 import org.tedros.fx.annotation.form.TForm;
@@ -95,7 +95,7 @@ public class TPropertieMV extends TEntityModelView<TPropertie> {
 	@TLabel(text=TUsualKey.FILE)
 	@TFileField(propertyValueType=TFileModelType.ENTITY, preLoadFileBytes=true,
 	extensions= {TFileExtension.ALL_FILES}, showFilePath=true, showImage=true)
-	@TModelViewType(modelClass=TFileEntity.class)
+	@TGenericType(model=TFileEntity.class)
 	private TSimpleFileProperty<TFileEntity> file;
 	
 	

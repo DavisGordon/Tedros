@@ -7,12 +7,17 @@ import java.lang.annotation.Target;
 
 import org.tedros.fx.annotation.parser.TAnnotationParser;
 import org.tedros.fx.annotation.parser.TStackPaneParser;
+import org.tedros.fx.annotation.query.TQuery;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TInsets;
 import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.builder.ITControlBuilder;
+import org.tedros.fx.builder.ITGenericBuilder;
+import org.tedros.fx.builder.NullObservableListBuilder;
 import org.tedros.fx.builder.TPickListFieldBuilder;
+import org.tedros.server.entity.ITEntity;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.SelectionMode;
@@ -134,22 +139,37 @@ public @interface TPickListField {
 	 * <pre>
 	 * {@link TPickListField} Class
 	 * 
-	 * Sets the value of the property selectedLabel.
+	 * Sets the value of the property targetLabel.
 	 * 
 	 * Property description:
 	 * 
-	 * Set a label to the selected list
+	 * Set a label to the target list
 	 * 
 	 * Default value: Empty string.
 	 * </pre>
 	 * */
-	public String selectedLabel() default "";
+	public String targetLabel() default "";
+	
+
+	/**
+	* <pre>
+	* {@link TPickListField} Class
+	* 
+	*  Sets the value of the property items in the source list
+	*  
+	*  Property description: 
+	*  
+	*  The list of items to show within the source list view 
+	* </pre>
+	**/
+	@SuppressWarnings("rawtypes")
+	public Class<? extends ITGenericBuilder<ObservableList>> items() default NullObservableListBuilder.class;
 	
 	/**
 	 * <pre>
 	 * {@link TPickListField} Class
 	 * 
-	 * Sets the value of the property optionsList.
+	 * Sets the value of the property process.
 	 * 
 	 * Property description:
 	 * 
@@ -158,7 +178,9 @@ public @interface TPickListField {
 	 * Default value: Empty string.
 	 * </pre>
 	 * */
-	public TOptionsList optionsList() default @TOptionsList(serviceName = "");
+	public TProcess process() default @TProcess(
+			query=@TQuery(entity = ITEntity.class),
+			service = "");
 	
 	/**
 	* <pre>

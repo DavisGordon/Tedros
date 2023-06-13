@@ -8,12 +8,12 @@ import java.lang.annotation.Target;
 import org.tedros.api.parser.ITAnnotationParser;
 import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.parser.THBoxParser;
-import org.tedros.fx.annotation.parser.THorizontalRadioGroupParser;
+import org.tedros.fx.annotation.parser.THRadioGroupParser;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TInsets;
 import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.builder.ITControlBuilder;
-import org.tedros.fx.builder.THorizontalRadioGroupBuilder;
+import org.tedros.fx.builder.THRadioGroupBuilder;
 
 import javafx.beans.property.Property;
 import javafx.geometry.Pos;
@@ -24,7 +24,7 @@ import javafx.scene.layout.Region;
 
 /**
  * <pre>
- * Build a {@link org.tedros.fx.control.THorizontalRadioGroup} component;
+ * Build a {@link org.tedros.fx.control.THRadioGroup} component;
  * </pre>
  *
  * @author Davis Gordon
@@ -32,29 +32,29 @@ import javafx.scene.layout.Region;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface THorizontalRadioGroup {
+public @interface THRadioGroup {
 	
 	/**
 	 *<pre>
 	 * The builder of type {@link ITControlBuilder} for this component.
 	 * 
-	 *  Default value: {@link THorizontalRadioGroupBuilder}
+	 *  Default value: {@link THRadioGroupBuilder}
 	 *</pre> 
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITControlBuilder<org.tedros.fx.control.THorizontalRadioGroup, Property>> builder() 
-			default THorizontalRadioGroupBuilder.class;
+	public Class<? extends ITControlBuilder<org.tedros.fx.control.THRadioGroup, Property>> builder() 
+			default THRadioGroupBuilder.class;
 	
 	/**
 	 * <pre>
 	 * The parser class for this annotation
 	 * 
-	 * Default value: {THorizontalRadioGroupParser.class, THBoxParser.class}
+	 * Default value: {THRadioGroupParser.class, THBoxParser.class}
 	 * </pre>
 	 * */
 	@SuppressWarnings("rawtypes")
 	public Class<? extends ITAnnotationParser>[] parser() 
-	default {THorizontalRadioGroupParser.class, THBoxParser.class};
+	default {THRadioGroupParser.class, THBoxParser.class};
 	
 	
 	/**
@@ -146,7 +146,7 @@ public @interface THorizontalRadioGroup {
 
 	/**
 	 * <pre>
-	 * {@link org.tedros.fx.control.TVerticalRadioGroup} Class
+	 * {@link org.tedros.fx.control.TVRadioGroup} Class
 	 * 
 	 * A custom converter 
 	 * 
@@ -162,7 +162,7 @@ public @interface THorizontalRadioGroup {
 	
 	/**
 	 * <pre>
-	 * {@link org.tedros.fx.control.THorizontalRadioGroup} Class
+	 * {@link org.tedros.fx.control.THRadioGroup} Class
 	 * 
 	 * Sets the value of the property required.
 	 * 
@@ -177,17 +177,13 @@ public @interface THorizontalRadioGroup {
 	
 	/**
 	 * <pre>
-	 * {@link org.tedros.fx.control.THorizontalRadioGroup} Class
+	 * {@link org.tedros.fx.control.THRadioGroup} Class
 	 * 
-	 * Sets the value of the property radioButtons.
-	 * 
-	 * Property description:
-	 * 
-	 * Add radio button for this control.
+	 * Adds radio button for this control.
 	 * 
 	 * </pre>
 	 * */
-	public TRadioButton[] radioButtons();
+	public TRadio[] radio();
 	
 	/**
 	 * <pre>

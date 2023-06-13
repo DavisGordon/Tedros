@@ -27,7 +27,8 @@ implements ITControlBuilder<org.tedros.fx.control.TDirectoryField, Property<File
 
 	public org.tedros.fx.control.TDirectoryField build(final Annotation annotation, final Property<File> directoryProperty) throws Exception {
 		TDirectoryField tAnnotation = (TDirectoryField) annotation;
-		final org.tedros.fx.control.TDirectoryField control = new org.tedros.fx.control.TDirectoryField(TedrosContext.getStage());
+		final org.tedros.fx.control.TDirectoryField control = 
+				new org.tedros.fx.control.TDirectoryField(TedrosContext.getStage());
 		callParser(tAnnotation, control);
 		control.tFileProperty().bindBidirectional(directoryProperty);
 		return control;

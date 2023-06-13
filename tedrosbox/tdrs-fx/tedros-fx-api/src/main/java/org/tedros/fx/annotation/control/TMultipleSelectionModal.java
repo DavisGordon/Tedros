@@ -74,12 +74,12 @@ public @interface TMultipleSelectionModal  {
 	 * This class  must be annotated with @TSelectionModalPresenter
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends TModelView> modelViewClass();
+	public Class<? extends TModelView> modelView();
 	
 	/**
 	 * The model or entity type
 	 * */
-	public Class<? extends ITModel> modelClass();
+	public Class<? extends ITModel> model();
 	
 	/**
 	 * The list view width 

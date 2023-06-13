@@ -27,8 +27,8 @@ import org.tedros.fx.annotation.control.TFileField;
 import org.tedros.fx.annotation.control.THTMLEditor;
 import org.tedros.fx.annotation.control.TIntegratedLinkField;
 import org.tedros.fx.annotation.control.TLabel;
-import org.tedros.fx.annotation.control.TModelViewType;
-import org.tedros.fx.annotation.control.TRadioButton;
+import org.tedros.fx.annotation.control.TGenericType;
+import org.tedros.fx.annotation.control.TRadio;
 import org.tedros.fx.annotation.control.TShowField;
 import org.tedros.fx.annotation.control.TShowField.TField;
 import org.tedros.fx.annotation.control.TTab;
@@ -36,7 +36,7 @@ import org.tedros.fx.annotation.control.TTabPane;
 import org.tedros.fx.annotation.control.TTableColumn;
 import org.tedros.fx.annotation.control.TTableView;
 import org.tedros.fx.annotation.control.TTextField;
-import org.tedros.fx.annotation.control.TVerticalRadioGroup;
+import org.tedros.fx.annotation.control.TVRadioGroup;
 import org.tedros.fx.annotation.form.TDetailForm;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.form.TSetting;
@@ -147,12 +147,12 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 	private SimpleStringProperty to;
 	
 	@TLabel(text=TUsualKey.ACTION)
-	@TVerticalRadioGroup(required=true,
+	@TVRadioGroup(required=true,
 		converter=@TConverter(parse = true, type = ActionConverter.class),
-		radioButtons = { @TRadioButton(text = TUsualKey.NONE, userData = TUsualKey.NONE ),
-				@TRadioButton(text = TUsualKey.NONE, userData = TUsualKey.SEND ),
-				@TRadioButton(text = TUsualKey.TO_QUEUE, userData = TUsualKey.TO_QUEUE ),
-				@TRadioButton(text = TUsualKey.TO_SCHEDULE, userData = TUsualKey.TO_SCHEDULE ) 
+		radio = { @TRadio(text = TUsualKey.NONE, userData = TUsualKey.NONE ),
+				@TRadio(text = TUsualKey.NONE, userData = TUsualKey.SEND ),
+				@TRadio(text = TUsualKey.TO_QUEUE, userData = TUsualKey.TO_QUEUE ),
+				@TRadio(text = TUsualKey.TO_SCHEDULE, userData = TUsualKey.TO_SCHEDULE ) 
 		})
 	private SimpleObjectProperty<TAction> action;
 	
@@ -195,7 +195,7 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 	@TVBox(	pane=@TPane(children={"file"}), spacing=10, fillWidth=true,
 	margin=@TMargin(values= {@TFieldInset(field="file", insets=@TInsets(top=50))}),
 	vgrow=@TVGrow(priority={@TPriority(field="file", priority=Priority.ALWAYS)}))
-	@TModelViewType(modelClass=TFileEntity.class)
+	@TGenericType(model=TFileEntity.class)
 	private TSimpleFileProperty<TFileEntity> file;
 	
 	@TTableView(columns = { 
@@ -207,7 +207,7 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 				callBack=@TCallbackFactory(parse=true, value=TNotifyLogStateCallBack.class))),
 		@TTableColumn(text = TUsualKey.DESCRIPTION, cellValue="description")
 	})
-	@TModelViewType(modelClass = TNotifyLog.class, modelViewClass=TNotifyLogTV.class)
+	@TGenericType(model = TNotifyLog.class, modelView=TNotifyLogTV.class)
 	private ITObservableList<TNotifyLogTV> eventLog;
 	
 

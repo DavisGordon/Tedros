@@ -5,8 +5,8 @@ import java.util.Map;
 import org.tedros.api.form.ITFieldBox;
 import org.tedros.api.form.ITModelForm;
 import org.tedros.fx.control.TCheckBoxField;
-import org.tedros.fx.control.THorizontalRadioGroup;
-import org.tedros.fx.control.TVerticalRadioGroup;
+import org.tedros.fx.control.THRadioGroup;
+import org.tedros.fx.control.TVRadioGroup;
 import org.tedros.fx.form.TDefaultForm;
 import org.tedros.fx.form.TFieldBox;
 import org.tedros.fx.form.TProgressIndicatorForm;
@@ -242,7 +242,7 @@ public class ExampleBehavior extends TDynaViewCrudBaseBehavior<ExampleMV, Exampl
 	}
 	
 	private boolean isChoiceField(TFieldBox fieldBox) {
-		return (fieldBox.gettControl() instanceof TVerticalRadioGroup || fieldBox.gettControl() instanceof THorizontalRadioGroup 
+		return (fieldBox.gettControl() instanceof TVRadioGroup || fieldBox.gettControl() instanceof THRadioGroup 
 				|| fieldBox.gettControl() instanceof TCheckBoxField);
 	}
 	

@@ -15,7 +15,7 @@ import org.tedros.core.repository.TRepository;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.control.TButton;
 import org.tedros.fx.control.TTextAreaField;
-import org.tedros.fx.control.TVerticalRadioGroup;
+import org.tedros.fx.control.TVRadioGroup;
 import org.tedros.fx.exception.TException;
 import org.tedros.fx.layout.TToolBar;
 import org.tedros.fx.modal.TMessageBox;
@@ -58,7 +58,7 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 	private RadioButton analyseRadio;
 	private RadioButton changeRadio;
 	private RadioButton createRadio;
-	private TVerticalRadioGroup tActions;
+	private TVRadioGroup tActions;
 	private TButton tSendButton;
 	private TButton tClearButton;
 	private TTextAreaField tPrompt;
@@ -89,7 +89,7 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 		changeRadio.setTooltip(new Tooltip(iEng.getString(TFxKey.TOOLTIP_AI_CHANGE)));
 		createRadio = new RadioButton(iEng.getString(TFxKey.CREATE));
 		createRadio.setTooltip(new Tooltip(iEng.getString(TFxKey.TOOLTIP_AI_CREATE)));
-		this.tActions = new TVerticalRadioGroup();
+		this.tActions = new TVRadioGroup();
 		this.tSendButton = new TButton(iEng.getString(TFxKey.BUTTON_SEND));
 		this.tClearButton = new TButton(iEng.getString(TFxKey.BUTTON_CLEAN));
 		this.tPrompt = new TTextAreaField();

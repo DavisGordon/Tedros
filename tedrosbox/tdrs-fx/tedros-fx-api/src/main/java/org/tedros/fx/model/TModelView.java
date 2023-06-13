@@ -459,8 +459,8 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 							Class modelViewClass = null; 
 							Class entityClass = null;
 							if(h.genericType!=null){
-								modelViewClass = h.genericType.modelViewClass();
-								entityClass = h.genericType.modelClass();
+								modelViewClass = h.genericType.modelView();
+								entityClass = h.genericType.model();
 							}
 							
 							// ObservableList.class
@@ -589,8 +589,8 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 									Class entityClass = null;
 									
 									if(h.genericType!=null){
-										modelViewClass = h.genericType.modelViewClass();
-										entityClass = h.genericType.modelClass();
+										modelViewClass = h.genericType.modelView();
+										entityClass = h.genericType.model();
 									}
 									try{
 										if(modelViewClass!=TModelView.class && entityClass!=null)

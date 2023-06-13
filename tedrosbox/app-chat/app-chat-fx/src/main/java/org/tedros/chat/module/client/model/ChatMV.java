@@ -21,9 +21,9 @@ import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.control.TButtonField;
 import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TFileField;
-import org.tedros.fx.annotation.control.TModelViewType;
-import org.tedros.fx.annotation.control.TOptionsList;
+import org.tedros.fx.annotation.control.TGenericType;
 import org.tedros.fx.annotation.control.TPickListField;
+import org.tedros.fx.annotation.control.TProcess;
 import org.tedros.fx.annotation.control.TTab;
 import org.tedros.fx.annotation.control.TTabPane;
 import org.tedros.fx.annotation.control.TTextAreaField;
@@ -43,12 +43,12 @@ import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.process.TEjbService;
+import org.tedros.fx.annotation.query.TQuery;
 import org.tedros.fx.annotation.scene.control.TControl;
 import org.tedros.fx.annotation.scene.control.TLabeled;
 import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.domain.TFileModelType;
-import org.tedros.fx.domain.TOptionProcessType;
 import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.property.TSimpleFileProperty;
 import org.tedros.server.model.ITFileModel;
@@ -110,14 +110,13 @@ public class ChatMV extends TEntityModelView<Chat> {
 	private SimpleObjectProperty<ChatUser> owner;
 	
 	@TGridPane(vgap=12, hgap=12)
-	@TModelViewType(modelClass = ChatUser.class, modelViewClass=ChatUserMV.class)
+	@TGenericType(model = ChatUser.class, modelView=ChatUserMV.class)
 	private ITObservableList<ChatMessage> messages; 
 	
-	@TPickListField(optionsList=@TOptionsList(serviceName = IChatUserController.JNDI_NAME,
-	entityClass=ChatUser.class,
-	optionModelViewClass=ChatUserMV.class, 
-	optionProcessType=TOptionProcessType.LIST_ALL))
-	@TModelViewType(modelClass = ChatUser.class, modelViewClass=ChatUserMV.class)
+	@TPickListField(
+		process=@TProcess(service = IChatUserController.JNDI_NAME,
+		query=@TQuery(entity=ChatUser.class), modelView=ChatUserMV.class))
+	@TGenericType(model = ChatUser.class, modelView=ChatUserMV.class)
 	private ITObservableList<ChatUserMV> participants;
 	
 	@TTextAreaField(prefRowCount=4, wrapText=true, control= @TControl(maxHeight=70, parse = true))

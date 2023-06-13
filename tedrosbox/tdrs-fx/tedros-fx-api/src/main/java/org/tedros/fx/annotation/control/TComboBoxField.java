@@ -19,6 +19,7 @@ import org.tedros.fx.annotation.parser.TRequiredComboBoxParser;
 import org.tedros.fx.annotation.property.TIntegerProperty;
 import org.tedros.fx.annotation.property.TObjectProperty;
 import org.tedros.fx.annotation.property.TReadOnlyObjectProperty;
+import org.tedros.fx.annotation.query.TQuery;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TComboBoxBase;
 import org.tedros.fx.annotation.scene.control.TControl;
@@ -31,8 +32,6 @@ import org.tedros.fx.builder.NullObservableListBuilder;
 import org.tedros.fx.builder.TComboBoxFieldBuilder;
 import org.tedros.fx.control.TRequiredCheckBox;
 import org.tedros.fx.domain.TDefaultValues;
-import org.tedros.fx.model.TModelView;
-import org.tedros.fx.process.TOptionsProcess;
 import org.tedros.server.entity.ITEntity;
 
 import javafx.collections.ObservableList;
@@ -241,9 +240,9 @@ public @interface TComboBoxField  {
 	 * The option list process
 	 * </pre>
 	 * */
-	public TOptionsList optionsList() default @TOptionsList(entityClass = ITEntity.class, 
-			optionModelViewClass = TModelView.class, 
-			optionsProcessClass = TOptionsProcess.class, serviceName = "");
+	public TProcess process() default @TProcess(
+			query=@TQuery(entity = ITEntity.class),
+			service = "");
 	
 	
 	// 	PROPERTYS

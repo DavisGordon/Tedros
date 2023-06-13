@@ -8,12 +8,12 @@ import java.lang.annotation.Target;
 import org.tedros.api.parser.ITAnnotationParser;
 import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.parser.TVBoxParser;
-import org.tedros.fx.annotation.parser.TVerticalRadioGroupParser;
+import org.tedros.fx.annotation.parser.TVRadioGroupParser;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TInsets;
 import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.builder.ITControlBuilder;
-import org.tedros.fx.builder.TVerticalRadioGroupBuilder;
+import org.tedros.fx.builder.TVRadioGroupBuilder;
 
 import javafx.beans.property.Property;
 import javafx.geometry.Pos;
@@ -24,7 +24,7 @@ import javafx.scene.layout.VBox;
 
 /**
  * <pre>
- * Build a {@link org.tedros.fx.control.TVerticalRadioGroup} component;
+ * Build a {@link org.tedros.fx.control.TVRadioGroup} component;
  * </pre>
  *
  * @author Davis Gordon
@@ -32,29 +32,29 @@ import javafx.scene.layout.VBox;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface TVerticalRadioGroup {
+public @interface TVRadioGroup {
 	
 	/**
 	 *<pre>
 	 * The builder of type {@link ITControlBuilder} for this component.
 	 * 
-	 *  Default value: {@link TVerticalRadioGroupBuilder}
+	 *  Default value: {@link TVRadioGroupBuilder}
 	 *</pre> 
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITControlBuilder<org.tedros.fx.control.TVerticalRadioGroup, Property>> builder() 
-			default TVerticalRadioGroupBuilder.class;
+	public Class<? extends ITControlBuilder<org.tedros.fx.control.TVRadioGroup, Property>> builder() 
+			default TVRadioGroupBuilder.class;
 	
 	/**
 	 * <pre>
 	 * The parser class for this annotation
 	 * 
-	 * Default value: {TVerticalRadioGroupParser.class, TVBoxParser.class}
+	 * Default value: {TVRadioGroupParser.class, TVBoxParser.class}
 	 * </pre>
 	 * */
 	@SuppressWarnings("rawtypes")
 	public Class<? extends ITAnnotationParser>[] parser() 
-	default {TVerticalRadioGroupParser.class, TVBoxParser.class};
+	default {TVRadioGroupParser.class, TVBoxParser.class};
 	
 	
 	/**
@@ -140,7 +140,7 @@ public @interface TVerticalRadioGroup {
 	
 	/**
 	 * <pre>
-	 * {@link org.tedros.fx.control.TVerticalRadioGroup} Class
+	 * {@link org.tedros.fx.control.TVRadioGroup} Class
 	 * 
 	 * A custom converter 
 	 * 
@@ -156,7 +156,7 @@ public @interface TVerticalRadioGroup {
 	
 	/**
 	 * <pre>
-	 * {@link org.tedros.fx.control.TVerticalRadioGroup} Class
+	 * {@link org.tedros.fx.control.TVRadioGroup} Class
 	 * 
 	 * Sets the value of the property required.
 	 * 
@@ -171,17 +171,13 @@ public @interface TVerticalRadioGroup {
 	
 	/**
 	 * <pre>
-	 * {@link org.tedros.fx.control.TVerticalRadioGroup} Class
+	 * {@link org.tedros.fx.control.TVRadioGroup} Class
 	 * 
-	 * Sets the value of the property radioButtons.
-	 * 
-	 * Property description:
-	 * 
-	 * Add radio button for this control.
+	 * Adds radio button for this control.
 	 * 
 	 * </pre>
 	 * */
-	public TRadioButton[] radioButtons();
+	public TRadio[] radio();
 	
 	/**
 	 * <pre>

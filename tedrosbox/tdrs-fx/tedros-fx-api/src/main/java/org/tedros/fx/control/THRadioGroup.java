@@ -21,9 +21,9 @@ import javafx.scene.layout.Pane;
  * @author Davis Gordon
  *
  */
-public class THorizontalRadioGroup extends HBox implements ITField{
+public class THRadioGroup extends HBox implements ITField{
 
-	final private THorizontalRadioGroup box = this;
+	final private THRadioGroup box = this;
 	
 	private TRadioButtonGroup radioButtonGroup = new TRadioButtonGroup() {
 		@Override
@@ -32,11 +32,11 @@ public class THorizontalRadioGroup extends HBox implements ITField{
 		}		
 	};
 	
-	public THorizontalRadioGroup() {
+	public THRadioGroup() {
 		applyRadioGroupStyleClass();
 	}
 	
-	public THorizontalRadioGroup(ObservableList<RadioButton> radioButtons) {
+	public THRadioGroup(ObservableList<RadioButton> radioButtons) {
 		applyRadioGroupStyleClass();
 		applyRadioButtonStyleClass(radioButtons);
 		radioButtonGroup.addRadioButton(radioButtons);

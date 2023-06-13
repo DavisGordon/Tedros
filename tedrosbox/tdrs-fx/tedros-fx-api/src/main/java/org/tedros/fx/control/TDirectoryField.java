@@ -9,6 +9,7 @@ package org.tedros.fx.control;
 import java.io.File;
 
 import org.tedros.core.TLanguage;
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.control.action.TEventHandler;
 
 import javafx.beans.property.ObjectProperty;
@@ -42,8 +43,8 @@ public class TDirectoryField extends StackPane {
 	
     private Label filePathLabel;
     private TTextField directoryNameField;
-	private Button selectButton;
-	private Button cleanButton;
+	private TButton selectButton;
+	private TButton cleanButton;
     
     private DirectoryChooser directoryChooser;
     
@@ -76,13 +77,10 @@ public class TDirectoryField extends StackPane {
 		toolbar.autosize();
 		
 		filePathLabel.setId("t-label");
-		selectButton.setText(iEngine.getString("#{tedros.fxapi.button.select.folder}"));
-		cleanButton.setText("Limpar");
+		selectButton.setText(iEngine.getString(TFxKey.BUTTON_SELECT_FOLDER));
+		cleanButton.setText(iEngine.getString(TFxKey.BUTTON_CLEAN));
 		
 		setAlignment(toolbar, Pos.CENTER_LEFT);
-		
-		selectButton.setId("t-button");
-		cleanButton.setId("t-last-button");
 		
 		directoryNameField.setStyle("-fx-text-fill: #000000; -fx-font-weight: bold; ");
 		directoryNameField.setPrefWidth(250);
@@ -99,8 +97,8 @@ public class TDirectoryField extends StackPane {
 		
 		fileProperty = new SimpleObjectProperty<>();
 		directoryChooser = new DirectoryChooser();
-		directoryChooser.setTitle(iEngine.getString("#{tedros.fxapi.button.select}"));
-		selectButton = new Button();
+		directoryChooser.setTitle(iEngine.getString(TFxKey.BUTTON_SELECT));
+		selectButton = new TButton();
 		directoryNameField = new TTextField();
 		initialDirectoryProperty = new SimpleObjectProperty<>();
 		
@@ -109,8 +107,8 @@ public class TDirectoryField extends StackPane {
 		filePathLabel = new Label();
 
 		toolbar = new ToolBar();
-		cleanButton = new Button();
-		selectButton = new Button();
+		cleanButton = new TButton();
+		selectButton = new TButton();
 		
 		vBox.setAlignment(Pos.CENTER_LEFT);
 		

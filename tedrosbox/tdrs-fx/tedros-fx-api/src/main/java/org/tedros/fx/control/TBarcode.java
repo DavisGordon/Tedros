@@ -79,9 +79,9 @@ public class TBarcode extends TRequiredStackedComponent {
 	private TText txtSize;
 	private TIntegerField size;
 	private TIntegerField columns;
-	private THorizontalRadioGroup resolution;
-	private THorizontalRadioGroup orientation;
-	private THorizontalRadioGroup types;
+	private THRadioGroup resolution;
+	private THRadioGroup orientation;
+	private THRadioGroup types;
 	private TToolBar sizeBar;
 	private TTextAreaField textarea;
 	private TButton genBtn;
@@ -123,7 +123,7 @@ public class TBarcode extends TRequiredStackedComponent {
 		hb.getChildren().addAll(complBar, sizeBar);
 
 		TLabel resLbl= new TLabel(iEn.getString(TFxKey.RESOLUTION_DPI));
-		resolution = new THorizontalRadioGroup();
+		resolution = new THRadioGroup();
 		for(TBarcodeResolution t : TBarcodeResolution.values()){
 			RadioButton rb = new RadioButton(String.valueOf(t.getValue()));
 			rb.setUserData(t);
@@ -131,14 +131,14 @@ public class TBarcode extends TRequiredStackedComponent {
 		}
 		
 		TLabel orLbl= new TLabel(iEn.getString(TFxKey.ORIENTATION_DEGREES));
-		orientation = new THorizontalRadioGroup();
+		orientation = new THRadioGroup();
 		for(TBarcodeOrientation t : TBarcodeOrientation.values()){
 			RadioButton rb = new RadioButton(String.valueOf(t.getValue()));
 			rb.setUserData(t);
 			orientation.addRadioButton(rb);
 		}
 		
-		types = new THorizontalRadioGroup();
+		types = new THRadioGroup();
 		types.setRequired(true);
 		for(TBarcodeType t : TBarcodeType.values()){
 			RadioButton rb = new RadioButton(t.name());

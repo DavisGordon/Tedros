@@ -6,7 +6,6 @@ import java.util.Comparator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TLanguage;
-import org.tedros.core.model.ITModelView;
 import org.tedros.core.repository.TRepository;
 import org.tedros.fx.effect.TEffectUtil;
 
@@ -30,11 +29,11 @@ import javafx.scene.effect.Effect;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 
-public class TPickListField<E extends ITModelView<?>> extends StackPane implements ITTriggeredable {
+public class TPickListField<E> extends StackPane implements ITTriggeredable {
 		
 		@FXML private Label tSourceLabel;
-		@FXML private Label tSelectedLabel;
-	    @FXML private ListView<E> tSelectedListView;
+		@FXML private Label tTargetLabel;
+	    @FXML private ListView<E> tTargetListView;
 	    @FXML private ListView<E> tSourceListView;
 	    @FXML private Button tAddAllButton;
 	    @FXML private Button tAddButton;
@@ -42,33 +41,31 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 	    @FXML private Button tRemoveButton;
 	    
 	    private ObservableList<E> tSourceList;
-	    private ObservableList<E> tSelectedList;
+	    private ObservableList<E> tTargetList;
 	    private SimpleBooleanProperty mandatoryResultProperty;
 	    private Effect notNullEffect;
 	    private ListChangeListener<E> notNullListener;
 	    private SimpleBooleanProperty requiredProperty;
 	    private TRepository repository = new TRepository();
-	    private Comparator<E> comparator = (x, y) -> {
-			return x.toStringProperty().getValue().compareTo(y.toStringProperty().getValue());
-		};
+	    private Comparator<E> comparator = (x, y) -> x.toString().compareTo(y.toString());
 	   
-		public TPickListField(String sourceLabel, String selectedLabel, 
-				ObservableList<E> sourceList, ObservableList<E> selectedList, 
+		public TPickListField(String sourceLabel, String targetLabel, 
+				ObservableList<E> sourceList, ObservableList<E> targetList, 
 				double width, double height,
 				boolean required, SelectionMode mode) {
 	    	try{
 		    	loadFXML();     
-		        initializeListViews(sourceList, selectedList, mode);
+		        initializeListViews(sourceList, targetList, mode);
 		        configMouseDblClickEvent();
 		        configButtons();
 		        setRequired(required);
-		        configLabels(sourceLabel, selectedLabel);
+		        configLabels(sourceLabel, targetLabel);
 		        if(width>0) {
-		        	this.tSelectedListView.setPrefWidth(width);
+		        	this.tTargetListView.setPrefWidth(width);
 		        	this.tSourceListView.setPrefWidth(width);
 		        }
 		        if(height>0) {
-		        	this.tSelectedListView.setPrefHeight(height);
+		        	this.tTargetListView.setPrefHeight(height);
 		        	this.tSourceListView.setPrefHeight(height);
 		        }
 		        
@@ -77,24 +74,24 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 	    	}
 		}
 
-		private void configLabels(String sourceLabelText, String selectedLabelText) {
+		private void configLabels(String sourceLabelText, String targetLabelText) {
 			
 			ChangeListener<String> srcLblChl = (a, b, n) -> { tSourceLabel.setVisible(StringUtils.isNotBlank(n)); };
 			this.repository.add("srcLblChl", srcLblChl);
 			this.tSourceLabel.textProperty().addListener(new WeakChangeListener<>(srcLblChl));
 			
-			ChangeListener<String> slcLblChl = (a, b, n) -> { tSelectedLabel.setVisible(StringUtils.isNotBlank(n)); };
+			ChangeListener<String> slcLblChl = (a, b, n) -> { tTargetLabel.setVisible(StringUtils.isNotBlank(n)); };
 			this.repository.add("slcLblChl", slcLblChl);
-			this.tSelectedLabel.textProperty().addListener(new WeakChangeListener<>(slcLblChl));
+			this.tTargetLabel.textProperty().addListener(new WeakChangeListener<>(slcLblChl));
 			
 			TLanguage iEngine = TLanguage.getInstance(null);
 			
 			this.tSourceLabel.setText(iEngine.getString(sourceLabelText));
-			this.tSelectedLabel.setText(iEngine.getString(selectedLabelText));
+			this.tTargetLabel.setText(iEngine.getString(targetLabelText));
 			this.tSourceLabel.setId("t-form-control-label");
-			this.tSelectedLabel.setId("t-form-control-label");
+			this.tTargetLabel.setId("t-form-control-label");
 			this.tSourceLabel.getStyleClass().add("t-form-control-label");
-			this.tSelectedLabel.getStyleClass().add("t-form-control-label");
+			this.tTargetLabel.getStyleClass().add("t-form-control-label");
 		}
 		
 		private void buildNotNullEffect(){
@@ -105,7 +102,7 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 		private void buildNotNullListener(){
 			if(notNullListener == null)
 				notNullListener = change -> {
-						if(tSelectedList.size()==0)
+						if(tTargetList.size()==0)
 							applyEffect();
 						else
 							removeEffect();			
@@ -120,13 +117,13 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 		private void removeEffect() {
 			if(mandatoryResultProperty!=null)
 				mandatoryResultProperty.set(true);
-			tSelectedListView.setEffect(null);
+			tTargetListView.setEffect(null);
 		}
 
 		private void applyEffect() {
 			if(mandatoryResultProperty!=null)
 				mandatoryResultProperty.set(false);
-			tSelectedListView.setEffect(notNullEffect);
+			tTargetListView.setEffect(notNullEffect);
 		}
 		
 		private void configButtons() {
@@ -153,7 +150,7 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 					tRemoveAction(); 
 				};
 			this.repository.add("slcMsEv", slcMsEv);
-			tSelectedListView.setOnMouseClicked(new WeakEventHandler<>(slcMsEv));
+			tTargetListView.setOnMouseClicked(new WeakEventHandler<>(slcMsEv));
 			
 			EventHandler<MouseEvent> srcMsEv = e -> {
 				if(e.getClickCount()==2)
@@ -163,28 +160,28 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 			tSourceListView.setOnMouseClicked(new WeakEventHandler<>(srcMsEv));
 		}
 		
-		private void initializeListViews(ObservableList<E> sourceList, ObservableList<E> selectedList, SelectionMode mode) {
-			if(selectedList==null)
-				this.tSelectedList = FXCollections.observableArrayList();
+		private void initializeListViews(ObservableList<E> sourceList, ObservableList<E> targetList, SelectionMode mode) {
+			if(targetList==null)
+				this.tTargetList = FXCollections.observableArrayList();
 			else
-				this.tSelectedList = selectedList;
+				this.tTargetList = targetList;
 			if(sourceList!=null){
 				final ObservableList<E> resultList = FXCollections.observableArrayList();
-				resultList.addAll(CollectionUtils.subtract(sourceList, this.tSelectedList));
+				resultList.addAll(CollectionUtils.subtract(sourceList, this.tTargetList));
 				this.tSourceList = resultList;
 			}else 
 				this.tSourceList = FXCollections.observableArrayList();
 			
 			tSourceListView.setEditable(true);
 			tSourceListView.getSelectionModel().setSelectionMode(mode);
-			tSelectedListView.setEditable(true);
-			tSelectedListView.getSelectionModel().setSelectionMode(mode);
+			tTargetListView.setEditable(true);
+			tTargetListView.getSelectionModel().setSelectionMode(mode);
 			
 			tSourceListView.setItems(this.tSourceList);
-			tSelectedListView.setItems(this.tSelectedList);
+			tTargetListView.setItems(this.tTargetList);
 			
 			tSourceListView.getItems().sort(comparator);
-			tSelectedListView.getItems().sort(comparator);
+			tTargetListView.getItems().sort(comparator);
 		}
 
 		private void loadFXML() throws IOException {
@@ -203,8 +200,8 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 				    		buildNotNullEffect();
 				    		buildNotNullListener();
 				    		buildMandatoryResultProperty();
-				    		tSelectedList.addListener(notNullListener);
-							if(tSelectedList.size()==0)
+				    		tTargetList.addListener(notNullListener);
+							if(tTargetList.size()==0)
 								applyEffect();
 							else
 								removeEffect();
@@ -212,7 +209,7 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 				    		mandatoryResultProperty = null;
 				    		removeEffect();
 				    		if(notNullListener!=null)
-				    			tSelectedList.removeListener(notNullListener);
+				    			tTargetList.removeListener(notNullListener);
 				    	}
 					};
 				this.repository.add("rqdChl", rqdChl);
@@ -233,8 +230,8 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 				throw new IllegalArgumentException("The argument sourceList canot be null");
 			
 			final ObservableList<E> resultList = FXCollections.observableArrayList();
-			if(this.tSelectedList!=null){
-				resultList.addAll(CollectionUtils.removeAll(sourceList, this.tSelectedList));
+			if(this.tTargetList!=null){
+				resultList.addAll(CollectionUtils.removeAll(sourceList, this.tTargetList));
 			}
 			
 			if(this.tSourceList==null){
@@ -248,46 +245,46 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 			tSourceListView.getItems().sort(comparator);
 		}
 
-		public ObservableList<E> gettSelectedList() {
-			return tSelectedList;
+		public ObservableList<E> gettTargetList() {
+			return tTargetList;
 		}
 		
-		public void tClearSelectedList() {
-			if(this.tSelectedList!=null && !this.tSelectedList.isEmpty()){
-				this.tSourceList.addAll(this.tSelectedList);
-				this.tSelectedList.clear();
+		public void tClearTargetList() {
+			if(this.tTargetList!=null && !this.tTargetList.isEmpty()){
+				this.tSourceList.addAll(this.tTargetList);
+				this.tTargetList.clear();
 				tSourceListView.getItems().sort(comparator);
 			}
 		}
 
-		public void settSelectedList(ObservableList<E> selectedList) {
+		public void settTargetList(ObservableList<E> targetList) {
 			
-			if(selectedList==null)
-				throw new IllegalArgumentException("The argument selectedList canot be null");
+			if(targetList==null)
+				throw new IllegalArgumentException("The argument targetList canot be null");
 			
-			this.tClearSelectedList();
+			this.tClearTargetList();
 			
 			if(this.tSourceList!=null){
-				this.tSourceList.retainAll(CollectionUtils.removeAll(this.tSourceList, selectedList));
+				this.tSourceList.retainAll(CollectionUtils.removeAll(this.tSourceList, targetList));
 			}
 			
-			if(this.tSelectedList==null){
-				this.tSelectedList = selectedList;
-				this.tSelectedListView.setItems(this.tSelectedList);
+			if(this.tTargetList==null){
+				this.tTargetList = targetList;
+				this.tTargetListView.setItems(this.tTargetList);
 			}else{
-				this.tSelectedList.clear();
-				this.tSelectedList.addAll(selectedList);
+				this.tTargetList.clear();
+				this.tTargetList.addAll(targetList);
 			}
 			
-			tSelectedListView.getItems().sort(comparator);
+			tTargetListView.getItems().sort(comparator);
 		}
 
 		public void tRemoveAction() {
-			ObservableList<E> model = tSelectedListView.getSelectionModel().getSelectedItems();
+			ObservableList<E> model = tTargetListView.getSelectionModel().getSelectedItems();
 			if(!model.isEmpty()){
 				tSourceListView.getItems().addAll(model);
-				tSelectedListView.getItems().removeAll(model);
-				tSelectedListView.getSelectionModel().clearSelection();
+				tTargetListView.getItems().removeAll(model);
+				tTargetListView.getSelectionModel().clearSelection();
 				tSourceListView.getItems().sort(comparator);
 			}
 		}
@@ -295,10 +292,10 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 		public void tAddAction() {
 			ObservableList<E> model = tSourceListView.getSelectionModel().getSelectedItems();
 			if(!model.isEmpty()){
-				tSelectedListView.getItems().addAll(model);
+				tTargetListView.getItems().addAll(model);
 				tSourceListView.getItems().removeAll(model);
 				tSourceListView.getSelectionModel().clearSelection();
-				tSelectedListView.getItems().sort(comparator);
+				tTargetListView.getItems().sort(comparator);
 			}
 		}
 		
@@ -306,11 +303,11 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 		 * 
 		 */
 		public void tAddAllAction() {
-			tSelectedListView.getItems().addAll(
-					CollectionUtils.subtract(tSourceListView.getItems(), tSelectedListView.getItems())
+			tTargetListView.getItems().addAll(
+					CollectionUtils.subtract(tSourceListView.getItems(), tTargetListView.getItems())
 				);
 			tSourceListView.getItems().clear();
-			tSelectedListView.getItems().sort(comparator);
+			tTargetListView.getItems().sort(comparator);
 		}
 
 		/**
@@ -318,9 +315,9 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 		 */
 		public void tRemoveAllAction() {
 			tSourceListView.getItems().addAll(
-					CollectionUtils.subtract(tSelectedListView.getItems(), tSourceListView.getItems())
+					CollectionUtils.subtract(tTargetListView.getItems(), tSourceListView.getItems())
 				);
-			tSelectedListView.getItems().clear();
+			tTargetListView.getItems().clear();
 			tSourceListView.getItems().sort(comparator);
 		}
 		
@@ -339,7 +336,7 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 		@SuppressWarnings("unchecked")
 		@Override
 		public Observable tValueProperty() {
-			return this.tSelectedList;
+			return this.tTargetList;
 		}
 
 		/**
@@ -357,31 +354,31 @@ public class TPickListField<E extends ITModelView<?>> extends StackPane implemen
 		}
 
 		/**
-		 * @return the tSelectedLabel
+		 * @return the tTargetLabel
 		 */
-		public Label gettSelectedLabel() {
-			return tSelectedLabel;
+		public Label gettTargetLabel() {
+			return tTargetLabel;
 		}
 
 		/**
-		 * @param tSelectedLabel the tSelectedLabel to set
+		 * @param tTargetLabel the tTargetLabel to set
 		 */
-		public void settSelectedLabel(Label tSelectedLabel) {
-			this.tSelectedLabel = tSelectedLabel;
+		public void settTargetLabel(Label tTargetLabel) {
+			this.tTargetLabel = tTargetLabel;
 		}
 
 		/**
-		 * @return the tSelectedListView
+		 * @return the tTargetListView
 		 */
-		public ListView<E> gettSelectedListView() {
-			return tSelectedListView;
+		public ListView<E> gettTargetListView() {
+			return tTargetListView;
 		}
 
 		/**
-		 * @param tSelectedListView the tSelectedListView to set
+		 * @param tTargetListView the tTargetListView to set
 		 */
-		public void settSelectedListView(ListView<E> tSelectedListView) {
-			this.tSelectedListView = tSelectedListView;
+		public void settTargetListView(ListView<E> tTargetListView) {
+			this.tTargetListView = tTargetListView;
 		}
 
 		/**

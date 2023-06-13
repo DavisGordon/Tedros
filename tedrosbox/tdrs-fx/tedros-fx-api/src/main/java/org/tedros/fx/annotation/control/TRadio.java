@@ -12,7 +12,7 @@ import javafx.geometry.Pos;
  * */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)
-public @interface TRadioButton {
+public @interface TRadio {
 	
 	
 	public String text();

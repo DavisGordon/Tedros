@@ -8,12 +8,12 @@ import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TFieldBox;
 import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TPasswordField;
-import org.tedros.fx.annotation.control.TRadioButton;
+import org.tedros.fx.annotation.control.TRadio;
 import org.tedros.fx.annotation.control.TTab;
 import org.tedros.fx.annotation.control.TTabPane;
 import org.tedros.fx.annotation.control.TTextField;
 import org.tedros.fx.annotation.control.TTextInputControl;
-import org.tedros.fx.annotation.control.TVerticalRadioGroup;
+import org.tedros.fx.annotation.control.TVRadioGroup;
 import org.tedros.fx.annotation.effect.TDropShadow;
 import org.tedros.fx.annotation.effect.TEffect;
 import org.tedros.fx.annotation.form.TDetailForm;
@@ -81,8 +81,8 @@ public class LoginModelView extends TModelView<Login> {
 	private SimpleStringProperty password;
 	
 	@TLabel(text = "#{tedros.language}")
-	@TVerticalRadioGroup(radioButtons= {@TRadioButton(text = "English", userData = "en"),
-			@TRadioButton(text = "Português", userData = "pt")})
+	@TVRadioGroup(radio= {@TRadio(text = "English", userData = "en"),
+			@TRadio(text = "Português", userData = "pt")})
 	private SimpleStringProperty language;
 	
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-info", 
