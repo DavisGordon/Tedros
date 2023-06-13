@@ -21,9 +21,9 @@ import javafx.scene.layout.VBox;
  * @author Davis Gordon
  *
  */
-public class TVerticalRadioGroup extends VBox implements ITField{
+public class TVRadioGroup extends VBox implements ITField{
 
-	final private TVerticalRadioGroup box = this;
+	final private TVRadioGroup box = this;
 	
 	private TRadioButtonGroup radioButtonGroup = new TRadioButtonGroup() {
 		@Override
@@ -32,16 +32,17 @@ public class TVerticalRadioGroup extends VBox implements ITField{
 		}
 	};
 	
-	public TVerticalRadioGroup() {
+	public TVRadioGroup() {
 		applyRadioGroupStyleClass();
 	}
 	
-	public TVerticalRadioGroup(ObservableList<RadioButton> radioButtons) {
+	public TVRadioGroup(ObservableList<RadioButton> radioButtons) {
 		applyRadioGroupStyleClass();
 		applyRadioButtonStyleClass(radioButtons);
 		radioButtonGroup.addRadioButton(radioButtons);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Observable tValueProperty() {
 		return selectedToggleProperty();

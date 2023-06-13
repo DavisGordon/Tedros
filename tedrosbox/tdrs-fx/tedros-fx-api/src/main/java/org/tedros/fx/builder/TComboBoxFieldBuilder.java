@@ -7,23 +7,22 @@
 package org.tedros.fx.builder;
 
 import java.lang.annotation.Annotation;
-import java.util.List;
 
 import org.tedros.core.TLanguage;
 import org.tedros.core.model.TModelViewUtil;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.control.TComboBoxField;
-import org.tedros.fx.annotation.control.TOptionsList;
+import org.tedros.fx.annotation.control.TProcess;
 import org.tedros.fx.annotation.parser.TComboBoxParser;
+import org.tedros.fx.annotation.query.TQuery;
 import org.tedros.fx.control.TItem;
-import org.tedros.fx.domain.TOptionProcessType;
+import org.tedros.fx.helper.TLoadListHelper;
 import org.tedros.fx.model.TModelView;
-import org.tedros.fx.process.TOptionsProcess;
+import org.tedros.fx.process.TEntityProcess;
 import org.tedros.server.entity.ITEntity;
-import org.tedros.server.result.TResult;
+import org.tedros.server.query.TSelect;
 
 import javafx.beans.property.Property;
-import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
@@ -86,7 +85,7 @@ implements ITControlBuilder<org.tedros.fx.control.TComboBoxField, Property<Objec
 		
 		callParser(tAnnotation, (ComboBox) control);
 		
-		if(tAnnotation.optionsList().entityClass()!=ITEntity.class) {
+		if(tAnnotation.process().query().entity()!=ITEntity.class) {
 			
 			loadControl(attrProperty, tAnnotation, control);
 			
@@ -133,65 +132,28 @@ implements ITControlBuilder<org.tedros.fx.control.TComboBoxField, Property<Objec
 	@SuppressWarnings("unchecked")
 	private void loadControl(final Property<Object> attrProperty, final TComboBoxField tAnnotation,
 			final org.tedros.fx.control.TComboBoxField control) throws InstantiationException, IllegalAccessException {
-		TOptionsList optAnn = tAnnotation.optionsList();
-		final Class<? extends TOptionsProcess> pClass = optAnn.optionsProcessClass();
-		final Class<? extends TModelView> mClass = optAnn.optionModelViewClass();
-		final Class<? extends ITEntity> eClass = optAnn.entityClass();
-		final String serviceName = optAnn.serviceName();
+		TProcess ann = tAnnotation.process();
+		final Class<? extends TEntityProcess> pClass = ann.type();
+		final Class<? extends TModelView> mClass = ann.modelView();
+		final Class<? extends ITEntity> eClass = ann.query().entity();
+		final String service = ann.service();
+	
+		TQuery qry = ann.query();
+		TSelect sel = TSelectQueryBuilder.build(qry, super.getComponentDescriptor());
 		
-		final TOptionsProcess process = pClass!=TOptionsProcess.class 
-			? pClass.newInstance()
-				: new TOptionsProcess(eClass, serviceName) {};
-
-		process.stateProperty().addListener((a,o,n)-> {
-			if(n.equals(State.SUCCEEDED)){
-				List<TResult<Object>> resultados = (List<TResult<Object>>) process.getValue();
-				if(resultados!=null && resultados.size()>0){
-					TResult result = resultados.get(0);
-					if(result.getValue()!=null && result.getValue() instanceof List<?>){
-						for(Object e : (List<Object>) result.getValue()){
-							if(e instanceof ITEntity){
-								if(mClass != TModelView.class){
-									TModelView<?> model = (TModelView<?>) 
-											new TModelViewUtil(mClass, eClass, (ITEntity) e)
-											.convertToModelView();
-									control.getItems().add(model);
-								}else
-									control.getItems().add(e);
-							}
-						}
-						Object value = attrProperty.getValue();
-						if(value instanceof ITEntity){
-							if(mClass != TModelView.class){
-								TModelView<?> model = (TModelView<?>) 
-										new TModelViewUtil(mClass, eClass, (ITEntity) value)
-										.convertToModelView();
-								control.setValue(model);
-							}else
-								control.setValue(value);
-						}else
-							control.setValue(value);
-					}
-				}
-			}
+		TLoadListHelper.load(control.getItems(), service, eClass, mClass, pClass, sel, ok -> {
+			Object value = attrProperty.getValue();
+			if(value instanceof ITEntity){
+				if(mClass != TModelView.class){
+					TModelView<?> model = (TModelView<?>) 
+							new TModelViewUtil(mClass, eClass, (ITEntity) value)
+							.convertToModelView();
+					control.setValue(model);
+				}else
+					control.setValue(value);
+			}else
+				control.setValue(value);
 		});
-		
-		if(optAnn.optionProcessType() == TOptionProcessType.LIST_ALL){
-			process.list();
-		}else {
-			Class<? extends ITGenericBuilder> bClass = optAnn.exampleEntityBuilder();
-			if(bClass == NullEntityBuilder.class)
-				throw new RuntimeException("The property exampleEntityBuilder is required for @TOptionsList"
-						+ " when the property optionProcessType = TOptionProcessType.SEARCH. See field "
-						+ super.getComponentDescriptor().getFieldDescriptor().getFieldName()
-						+ " in "+super.getComponentDescriptor().getModelView().getClass().getSimpleName());
-			
-			ITGenericBuilder builder = bClass.newInstance();
-			ITEntity example = (ITEntity) builder.build();
-			process.search(example);
-		}
-		
-		process.startProcess();
 	}
 
 }

@@ -18,7 +18,7 @@ import org.tedros.fx.annotation.control.TCallbackFactory;
 import org.tedros.fx.annotation.control.TCellFactory;
 import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TLabel;
-import org.tedros.fx.annotation.control.TModelViewType;
+import org.tedros.fx.annotation.control.TGenericType;
 import org.tedros.fx.annotation.control.TNumberSpinnerField;
 import org.tedros.fx.annotation.control.TSliderField;
 import org.tedros.fx.annotation.control.TTab;
@@ -129,7 +129,7 @@ public class CompletionMV extends TEntityModelView<TAiCompletion> {
 		@TTableColumn(text = TUsualKey.RESPONSE, cellValue="response"),
 		@TTableColumn(text = TUsualKey.EVENT_LOG, cellValue="log")
 	})
-	@TModelViewType(modelClass = TRequestEvent.class, modelViewClass=EventMV.class)
+	@TGenericType(model = TRequestEvent.class, modelView=EventMV.class)
 	private ITObservableList<EventMV> events;
 	
 	public CompletionMV(TAiCompletion m) {

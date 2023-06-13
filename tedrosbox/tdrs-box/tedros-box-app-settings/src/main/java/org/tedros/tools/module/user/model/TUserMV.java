@@ -17,8 +17,8 @@ import org.tedros.fx.annotation.control.TCheckBoxField;
 import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TFieldBox;
 import org.tedros.fx.annotation.control.TLabel;
-import org.tedros.fx.annotation.control.TModelViewType;
-import org.tedros.fx.annotation.control.TOptionsList;
+import org.tedros.fx.annotation.control.TGenericType;
+import org.tedros.fx.annotation.control.TProcess;
 import org.tedros.fx.annotation.control.TPasswordField;
 import org.tedros.fx.annotation.control.TPickListField;
 import org.tedros.fx.annotation.control.TTab;
@@ -35,6 +35,7 @@ import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.process.TEjbService;
 import org.tedros.fx.annotation.property.TReadOnlyBooleanProperty;
+import org.tedros.fx.annotation.query.TQuery;
 import org.tedros.fx.annotation.reader.TFormReaderHtml;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TLabeled;
@@ -116,11 +117,11 @@ public class TUserMV extends TEntityModelView<TUser> {
 			textStyle = TTextStyle.LARGE, mode=TViewMode.EDIT)
 	private SimpleStringProperty profilesText;
 	
-	@TPickListField(selectedLabel=TUsualKey.SELECTED, 
+	@TPickListField(targetLabel=TUsualKey.SELECTED, 
 			sourceLabel=TUsualKey.PROFILES, required=true,
-			optionsList=@TOptionsList(entityClass=TProfile.class,
-						optionModelViewClass=TProfileMV.class, serviceName = TProfileController.JNDI_NAME))
-	@TModelViewType(modelClass=TProfile.class, modelViewClass=TProfileMV.class)
+			process=@TProcess(service = TProfileController.JNDI_NAME,
+					modelView=TProfileMV.class, query=@TQuery(entity=TProfile.class)))
+	@TGenericType(model=TProfile.class, modelView=TProfileMV.class)
 	private ITObservableList<TProfileMV> profiles;
 	
 	private SimpleStringProperty lastPassword;

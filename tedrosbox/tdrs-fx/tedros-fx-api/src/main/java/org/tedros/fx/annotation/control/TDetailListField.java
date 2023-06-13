@@ -71,12 +71,12 @@ public @interface TDetailListField  {
 	 * or  {@link TDetailListViewPresenter} annotation.
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends TEntityModelView> entityModelViewClass();
+	public Class<? extends TEntityModelView> modelView();
 	
 	/**
 	 * The entity type of the TEntityModelView
 	 * */
-	public Class<? extends ITEntity> entityClass();
+	public Class<? extends ITEntity> entity();
 	
 	/**
 	 * <pre>

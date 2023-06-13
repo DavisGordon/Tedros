@@ -12,7 +12,7 @@ import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TFieldBox;
 import org.tedros.fx.annotation.control.TLabel;
-import org.tedros.fx.annotation.control.TModelViewType;
+import org.tedros.fx.annotation.control.TGenericType;
 import org.tedros.fx.annotation.control.TMultipleSelectionModal;
 import org.tedros.fx.annotation.control.TTab;
 import org.tedros.fx.annotation.control.TTabPane;
@@ -88,8 +88,8 @@ public final class TProfileMV extends TEntityModelView<TProfile> {
 	
 	@TDetailReader(label=@TLabel(text="Authorization"))
 	@TMultipleSelectionModal(width=600, height=350,
-	modelClass = TAuthorization.class, modelViewClass = TAuthorizationTV.class)
-	@TModelViewType(modelClass=TAuthorization.class, modelViewClass=TAuthorizationTV.class)
+	model = TAuthorization.class, modelView = TAuthorizationTV.class)
+	@TGenericType(model=TAuthorization.class, modelView=TAuthorizationTV.class)
 	private ITObservableList<TAuthorizationTV> autorizations;
 
 	public TProfileMV(TProfile entity) {

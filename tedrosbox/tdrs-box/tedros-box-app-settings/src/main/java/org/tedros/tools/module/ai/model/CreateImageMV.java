@@ -21,11 +21,11 @@ import org.tedros.fx.annotation.control.TCallbackFactory;
 import org.tedros.fx.annotation.control.TCellFactory;
 import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TConverter;
-import org.tedros.fx.annotation.control.THorizontalRadioGroup;
+import org.tedros.fx.annotation.control.THRadioGroup;
 import org.tedros.fx.annotation.control.TLabel;
-import org.tedros.fx.annotation.control.TModelViewType;
+import org.tedros.fx.annotation.control.TGenericType;
 import org.tedros.fx.annotation.control.TNumberSpinnerField;
-import org.tedros.fx.annotation.control.TRadioButton;
+import org.tedros.fx.annotation.control.TRadio;
 import org.tedros.fx.annotation.control.TTab;
 import org.tedros.fx.annotation.control.TTabPane;
 import org.tedros.fx.annotation.control.TTableColumn;
@@ -99,14 +99,14 @@ public class CreateImageMV extends TEntityModelView<TAiCreateImage> {
 	
 	@TValidator(validatorClass = CreateImageValidator.class)
 	@TVBox(fillWidth=true, spacing=20, alignment=Pos.TOP_CENTER)
-	@TModelViewType(modelClass = TFileEntity.class)
+	@TGenericType(model = TFileEntity.class)
 	private ITObservableList<TFileEntity> images;
 
 	@TLabel(text=TUsualKey.SIZE)
-	@THorizontalRadioGroup(spacing=10, radioButtons = { 
-			@TRadioButton(text = "256 x 256", userData = "256x256"), 
-			@TRadioButton(text = "512 x 512", userData = "512x512"), 
-			@TRadioButton(text = "1024 x 1024", userData = "1024x1024"), 
+	@THRadioGroup(spacing=10, radio = { 
+			@TRadio(text = "256 x 256", userData = "256x256"), 
+			@TRadio(text = "512 x 512", userData = "512x512"), 
+			@TRadio(text = "1024 x 1024", userData = "1024x1024"), 
 		}, converter=@TConverter(parse = true, type = TImageSizeConverter.class))
 	@THBox(pane=@TPane(children={"size", "quantity"}), spacing=10, fillHeight=false,
 	hgrow=@THGrow(priority={@TPriority(field="quantity", priority=Priority.NEVER), 
@@ -136,7 +136,7 @@ public class CreateImageMV extends TEntityModelView<TAiCreateImage> {
 		@TTableColumn(text = TUsualKey.PROMPT, cellValue="prompt"),
 		@TTableColumn(text = TUsualKey.EVENT_LOG, cellValue="log")
 	})
-	@TModelViewType(modelClass = TRequestEvent.class, modelViewClass=EventMV.class)
+	@TGenericType(model = TRequestEvent.class, modelView=EventMV.class)
 	private ITObservableList<EventMV> events;
 	
 	public CreateImageMV(TAiCreateImage m) {

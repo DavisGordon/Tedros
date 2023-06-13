@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 import org.tedros.fx.annotation.parser.TAnnotationParser;
 import org.tedros.fx.annotation.parser.TListViewParser;
 import org.tedros.fx.annotation.parser.TRequiredListViewParser;
+import org.tedros.fx.annotation.query.TQuery;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TControl;
 import org.tedros.fx.annotation.scene.layout.TRegion;
@@ -19,6 +20,7 @@ import org.tedros.fx.builder.NullObservableListBuilder;
 import org.tedros.fx.builder.TBaseEventHandlerBuilder;
 import org.tedros.fx.builder.TListViewFieldBuilder;
 import org.tedros.fx.control.TListView;
+import org.tedros.server.entity.ITEntity;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
@@ -113,7 +115,7 @@ public @interface TListViewField {
 	 * <pre>
 	 * {@link TPickListField} Class
 	 * 
-	 * Sets the value of the property optionsList.
+	 * Sets the value of the property process.
 	 * 
 	 * Property description:
 	 * 
@@ -122,7 +124,9 @@ public @interface TListViewField {
 	 * Default value: Empty string.
 	 * </pre>
 	 * */
-	public TOptionsList optionsList() default @TOptionsList(serviceName = "");
+	public TProcess process() default @TProcess(
+			query=@TQuery(entity = ITEntity.class),
+			service = "");
 
 	/**
 	* <pre>

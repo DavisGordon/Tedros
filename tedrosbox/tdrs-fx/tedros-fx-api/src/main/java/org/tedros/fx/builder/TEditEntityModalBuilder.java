@@ -34,8 +34,8 @@ implements ITControlBuilder<org.tedros.fx.control.TEditEntityModal, Observable> 
 					? new org.tedros.fx.control.TEditEntityModal( (ITObservableList) attrProperty, tAnnotation.width(), tAnnotation.height(), tAnnotation.modalWidth(), tAnnotation.modalHeight())
 		: new org.tedros.fx.control.TEditEntityModal( (SimpleObjectProperty) attrProperty, tAnnotation.width(), tAnnotation.height(), tAnnotation.modalWidth(), tAnnotation.modalHeight());
 		
-		control.settModelViewClass(tAnnotation.modelViewClass());
-		control.settModelClass(tAnnotation.modelClass());
+		control.settModelViewClass(tAnnotation.modelView());
+		control.settModelClass(tAnnotation.model());
 		callParser(tAnnotation, control);
 		return control;
 	}

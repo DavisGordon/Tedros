@@ -7,7 +7,7 @@ import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.core.TLanguage;
 import org.tedros.core.notify.model.TAction;
 import org.tedros.core.notify.model.TState;
-import org.tedros.fx.control.TVerticalRadioGroup;
+import org.tedros.fx.control.TVRadioGroup;
 import org.tedros.fx.form.TSetting;
 import org.tedros.tools.start.TConstant;
 
@@ -48,7 +48,7 @@ public class TNotifyMVSetting extends TSetting {
 	 */
 	private void buildActions(TState st) {
 		
-		TVerticalRadioGroup rg = super.getControl("action");
+		TVRadioGroup rg = super.getControl("action");
 		rg.getChildren().clear();
 		rg.addRadioButton(buildItem(TAction.NONE));
 		if(st!=null)

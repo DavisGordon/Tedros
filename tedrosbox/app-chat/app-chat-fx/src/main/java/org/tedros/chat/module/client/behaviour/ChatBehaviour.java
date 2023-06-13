@@ -95,14 +95,14 @@ public class ChatBehaviour extends TMasterCrudViewBehavior<ChatMV, Chat> {
 								.collect(Collectors.toList());
 						if(add!=null && add.size()>0) {
 							plf.gettSourceListView().getItems().removeAll(add);
-							plf.gettSelectedListView().getItems().addAll(add);
+							plf.gettTargetListView().getItems().addAll(add);
 						}
 						
-						List<ChatUserMV> rem = plf.gettSelectedList().stream()
+						List<ChatUserMV> rem = plf.gettTargetList().stream()
 						.filter(p->ci.getRecipients().stream().noneMatch(p1->p1.equals(p.getModel())))
 						.collect(Collectors.toList());
 						if(rem!=null && rem.size()>0) {
-							plf.gettSelectedListView().getItems().removeAll(rem);
+							plf.gettTargetListView().getItems().removeAll(rem);
 							plf.gettSourceListView().getItems().addAll(rem);
 						}
 						fs.buildTitle(mv.getParticipants());

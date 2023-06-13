@@ -26,7 +26,7 @@ import org.tedros.core.style.TThemeUtil;
 import org.tedros.fx.control.TComboBoxField;
 import org.tedros.fx.control.TPasswordField;
 import org.tedros.fx.control.TTextField;
-import org.tedros.fx.control.TVerticalRadioGroup;
+import org.tedros.fx.control.TVRadioGroup;
 import org.tedros.fx.control.action.TPresenterAction;
 import org.tedros.fx.exception.TValidatorException;
 import org.tedros.fx.form.TBuildFormStatus;
@@ -73,7 +73,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 	private TTextField userTextField;
 	private TPasswordField passwordField;
 	private TTextField nameField;
-	private TVerticalRadioGroup languageField;
+	private TVRadioGroup languageField;
 	private TComboBoxField<TProfileMV> profileComboBox;
 	private Text profileText;
 	private TLanguage iEngine;
@@ -390,7 +390,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 		passwordField.setOnAction(new WeakEventHandler<>(ev1));
 		
 		ITFieldBox tFieldBox = form.gettFieldBox("language");// password language
-		languageField = (TVerticalRadioGroup) tFieldBox.gettControl();
+		languageField = (TVRadioGroup) tFieldBox.gettControl();
 		
 		ITFieldBox profileFieldBox = form.gettFieldBox("profile");//  language
 		profileComboBox = (TComboBoxField<TProfileMV>) profileFieldBox.gettControl();

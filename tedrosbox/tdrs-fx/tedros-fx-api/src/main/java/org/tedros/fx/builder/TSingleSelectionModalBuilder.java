@@ -9,7 +9,7 @@ package org.tedros.fx.builder;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 
-import org.tedros.fx.annotation.control.TOneSelectionModal;
+import org.tedros.fx.annotation.control.TSingleSelectionModal;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.collections.TFXCollections;
 import org.tedros.fx.control.TSelectionModal;
@@ -26,7 +26,7 @@ import javafx.collections.ListChangeListener;
  *
  */
 @SuppressWarnings("rawtypes")
-public class TOneSelectionModalBuilder 
+public class TSingleSelectionModalBuilder 
 extends TBuilder
 implements ITControlBuilder<org.tedros.fx.control.TSelectionModal, Property> {
 
@@ -34,7 +34,7 @@ implements ITControlBuilder<org.tedros.fx.control.TSelectionModal, Property> {
 	@SuppressWarnings({ "unchecked" })
 	public TSelectionModal build(final Annotation annotation, final Property attrProperty) throws Exception {
 		
-		TOneSelectionModal tAnnotation = (TOneSelectionModal) annotation;
+		TSingleSelectionModal tAnnotation = (TSingleSelectionModal) annotation;
 		TSelectionModal control = null;
 			
 		Object value = attrProperty.getValue();
@@ -63,15 +63,15 @@ implements ITControlBuilder<org.tedros.fx.control.TSelectionModal, Property> {
 		list.addListener(lcl);
 		
 		control = new TSelectionModal(list, false, tAnnotation.width(), tAnnotation.height(), tAnnotation.modalWidth(), tAnnotation.modalHeight());
-		control.settModelViewClass(tAnnotation.modelViewClass());
+		control.settModelViewClass(tAnnotation.modelView());
 		
 		callParser(tAnnotation, control);
 		return control;
 	}
 
-	private TModelView buildModel(TOneSelectionModal tAnnotation, Object value) {
+	private TModelView buildModel(TSingleSelectionModal tAnnotation, Object value) {
 		try {
-			return tAnnotation.modelViewClass().getConstructor(value.getClass()).newInstance(value);
+			return tAnnotation.modelView().getConstructor(value.getClass()).newInstance(value);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();

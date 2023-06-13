@@ -7,23 +7,21 @@
 package org.tedros.fx.builder;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.tedros.core.TLanguage;
 import org.tedros.core.model.TModelViewUtil;
 import org.tedros.fx.TFxKey;
-import org.tedros.fx.annotation.control.TOptionsList;
 import org.tedros.fx.annotation.control.TPickListField;
-import org.tedros.fx.domain.TOptionProcessType;
+import org.tedros.fx.annotation.control.TProcess;
+import org.tedros.fx.annotation.query.TQuery;
+import org.tedros.fx.helper.TLoadListHelper;
 import org.tedros.fx.model.TModelView;
-import org.tedros.fx.process.TOptionsProcess;
+import org.tedros.fx.process.TEntityProcess;
 import org.tedros.server.entity.ITEntity;
-import org.tedros.server.result.TResult;
+import org.tedros.server.query.TSelect;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
@@ -47,39 +45,36 @@ implements ITControlBuilder<org.tedros.fx.control.TPickListField, ObservableList
 		TPickListField tAnnotation = (TPickListField) annotation;
 		final org.tedros.fx.control.TPickListField control = 
 				new org.tedros.fx.control.TPickListField<>(	tAnnotation.sourceLabel(), 
-															tAnnotation.selectedLabel(), 
+															tAnnotation.targetLabel(), 
 															null, 
 															attrProperty, 
 															tAnnotation.width(),
 															tAnnotation.height(),
 															tAnnotation.required(),
 															tAnnotation.selectionMode());
+			
+		ContextMenu ctx = new ContextMenu();
+		MenuItem reload = new MenuItem(TLanguage.getInstance().getString(TFxKey.BUTTON_RELOAD));
+		EventHandler<ActionEvent> reloadEvent = ev->{
+			try {
+				loadControl(tAnnotation, control);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		};
+		String k = super.getComponentDescriptor().getFieldDescriptor()
+				.getFieldName()+"_picklist_reload_event";
 		
-		if(tAnnotation.optionsList().entityClass()!=ITEntity.class) {
-			loadControl(tAnnotation, control);
+		super.getComponentDescriptor().getForm()
+		.gettObjectRepository()
+		.add(k, reloadEvent);
+		
+		reload.setOnAction(new WeakEventHandler<>(reloadEvent));
+		ctx.getItems().add(reload);
+		
+		control.gettSourceListView().setContextMenu(ctx);
 			
-			ContextMenu ctx = new ContextMenu();
-			MenuItem reload = new MenuItem(TLanguage.getInstance().getString(TFxKey.BUTTON_RELOAD));
-			EventHandler<ActionEvent> reloadEvent = ev->{
-				try {
-					loadControl(tAnnotation, control);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			};
-			String k = super.getComponentDescriptor().getFieldDescriptor()
-					.getFieldName()+"_picklist_reload_event";
-			
-			super.getComponentDescriptor().getForm()
-			.gettObjectRepository()
-			.add(k, reloadEvent);
-			
-			reload.setOnAction(new WeakEventHandler<>(reloadEvent));
-			ctx.getItems().add(reload);
-			
-			control.gettSourceListView().setContextMenu(ctx);
-			
-		}
+		loadControl(tAnnotation, control);
 		
 		callParser(tAnnotation, control);
 				
@@ -95,55 +90,32 @@ implements ITControlBuilder<org.tedros.fx.control.TPickListField, ObservableList
 	@SuppressWarnings("unchecked")
 	private void loadControl(TPickListField tAnnotation, final org.tedros.fx.control.TPickListField control)
 			throws InstantiationException, IllegalAccessException {
-		TOptionsList optAnn = tAnnotation.optionsList();
-		final Class<? extends TOptionsProcess> pClass = optAnn.optionsProcessClass();
-		final Class<? extends TModelView> mClass = optAnn.optionModelViewClass();
-		final Class<? extends ITEntity> eClass = optAnn.entityClass();
-		final String serviceName = optAnn.serviceName();
 		
-		final TOptionsProcess process = pClass!=TOptionsProcess.class 
-			? pClass.newInstance()
-				: new TOptionsProcess(eClass, serviceName) {};
-				
-		process.stateProperty().addListener((a,o,n)-> {
-			if(n.equals(State.SUCCEEDED)){
-				List<TResult<Object>> resultados = (List<TResult<Object>>) process.getValue();
-				for(TResult result : resultados) {
-					if(result.getValue()!=null && result.getValue() instanceof List<?>){
-						List list = new ArrayList<>(0);
-						for(Object e : (List<Object>) result.getValue()){
-							if(e instanceof ITEntity){
-								if(mClass!=TModelView.class) {
-									TModelView<?> model =(TModelView<?>) 
-											new TModelViewUtil(mClass, eClass, (ITEntity) e)
-											.convertToModelView();
-									list.add(model);
-								}else 
-									list.add(e);
-							}
-						}
-						control.settSourceList(FXCollections.observableArrayList(list));
-					}
-				}
-			}	
-		});
-		
-		if(optAnn.optionProcessType() == TOptionProcessType.LIST_ALL){
-			process.list();
-		}else {
-			Class<? extends ITGenericBuilder> bClass = optAnn.exampleEntityBuilder();
-			if(bClass == NullEntityBuilder.class)
-				throw new RuntimeException("The property exampleEntityBuilder is required for @TOptionsList"
-						+ " when the property optionProcessType = TOptionProcessType.SEARCH. See field "
-						+ super.getComponentDescriptor().getFieldDescriptor().getFieldName()
-						+ " in "+super.getComponentDescriptor().getModelView().getClass().getSimpleName());
+		if(tAnnotation.items()!=NullObservableListBuilder.class) {
+			ITGenericBuilder<ObservableList> b = tAnnotation.items().newInstance();
+			b.setComponentDescriptor(getComponentDescriptor());
+			ObservableList source = b.build();
+			control.settSourceList(source);
+		}else
+		if(tAnnotation.process().query().entity()!=ITEntity.class) {
+			TProcess ann = tAnnotation.process();
+			final Class<? extends TEntityProcess> pClass = ann.type();
+			final Class<? extends TModelView> mClass = ann.modelView();
+			final Class<? extends ITEntity> eClass = ann.query().entity();
+			final String service = ann.service();
 			
-			ITGenericBuilder builder = bClass.newInstance();
-			ITEntity example = (ITEntity) builder.build();
-			process.search(example);
+			ObservableList source = FXCollections.observableArrayList();
+	
+			TQuery qry = ann.query();
+			TSelect sel = TSelectQueryBuilder.build(qry, super.getComponentDescriptor());
+			TModelViewUtil util = (mClass!=TModelView.class) ? new TModelViewUtil(mClass, eClass) : null;
+			TLoadListHelper.load(service, eClass, mClass, pClass, sel, e -> {
+				source.add(util!=null ? util.convertToModelView(e) : e);
+			}, ok->{
+				if(ok)
+					control.settSourceList(source);
+			});	
 		}
-		
-		process.startProcess();
 	}
 	
 }

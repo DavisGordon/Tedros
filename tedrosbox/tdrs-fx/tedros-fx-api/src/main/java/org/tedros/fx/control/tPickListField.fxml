@@ -43,8 +43,8 @@
       <right>
         <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0">
           <children>
-            <Label id="t-form-control-label" fx:id="tSelectedLabel" text="Label" VBox.margin="$x1" VBox.vgrow="ALWAYS" />
-            <ListView fx:id="tSelectedListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="-1.0" VBox.vgrow="ALWAYS" />
+            <Label id="t-form-control-label" fx:id="tTargetLabel" text="Label" VBox.margin="$x1" VBox.vgrow="ALWAYS" />
+            <ListView fx:id="tTargetListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="-1.0" VBox.vgrow="ALWAYS" />
           </children>
         </VBox>
       </right>

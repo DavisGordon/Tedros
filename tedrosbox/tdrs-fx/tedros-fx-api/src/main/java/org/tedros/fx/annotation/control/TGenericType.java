@@ -9,24 +9,24 @@ import org.tedros.fx.model.TModelView;
 import org.tedros.server.model.ITModel;
 
 /**
- * Specify the types to build a TModelView.
- * Must be used when the generic type of a property is a TModelView. 
+ * Specify the types of an object property or observable list.
+ * Must be used when the generic type is a TModelView. 
  * 
  * @author Davis Gordon
  * */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface TModelViewType {
+public @interface TGenericType {
 	
 	/**
 	 * The model view type
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends TModelView> modelViewClass() default TModelView.class;
+	public Class<? extends TModelView> modelView() default TModelView.class;
 	
 	/**
 	 * The model or entity type
 	 * */
-	public Class<? extends ITModel> modelClass();
+	public Class<? extends ITModel> model();
 	
 }

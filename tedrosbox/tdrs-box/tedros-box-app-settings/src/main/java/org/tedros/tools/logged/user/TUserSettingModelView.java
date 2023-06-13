@@ -11,11 +11,11 @@ import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.TObservableValue;
 import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TPasswordField;
-import org.tedros.fx.annotation.control.TRadioButton;
+import org.tedros.fx.annotation.control.TRadio;
 import org.tedros.fx.annotation.control.TShowField;
 import org.tedros.fx.annotation.control.TShowField.TField;
 import org.tedros.fx.annotation.control.TTextField;
-import org.tedros.fx.annotation.control.TVerticalRadioGroup;
+import org.tedros.fx.annotation.control.TVRadioGroup;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TDecorator;
@@ -65,8 +65,8 @@ public class TUserSettingModelView extends TEntityModelView<TUser> {
 	private SimpleObjectProperty<TProfile> activeProfile;
 
 	@TLabel(text = "#{tedros.language}", font=@TFont(size=10))
-	@TVerticalRadioGroup(radioButtons= {@TRadioButton(text = "English", userData = "en"),
-			@TRadioButton(text = "Português", userData = "pt")})
+	@TVRadioGroup(radio= {@TRadio(text = "English", userData = "en"),
+			@TRadio(text = "Português", userData = "pt")})
 	private SimpleStringProperty language;
 	
 	

@@ -64,13 +64,13 @@ public class TFileField extends StackPane {
 	private final Stage appStage;
 	private BorderPane boxImageLabelSpace;
 	private VBox vBox;
-	private Button cleanButton;
+	private TButton cleanButton;
     private TTextField fileNameField;
     private Label filePathLabel;
     private StackPane imageSpace;
     private ImageView imageView;
-    private Button openButton;
-    private Button selectButton;
+    private TButton openButton;
+    private TButton selectButton;
     private ToolBar toolbar;
     private FileChooser fileChooser;
     
@@ -121,7 +121,6 @@ public class TFileField extends StackPane {
 		
 		fileProperty = new SimpleObjectProperty<>();
 		fileChooser = new FileChooser();
-		selectButton = new Button();
 		fileNameField = new TTextField();
 		fileNameProperty = new SimpleStringProperty();
 		fileSizeProperty = new SimpleLongProperty();
@@ -132,9 +131,9 @@ public class TFileField extends StackPane {
 		vBox = new VBox();
 		boxImageLabelSpace = new BorderPane();
 		toolbar = new ToolBar();
-		cleanButton = new Button();
-		selectButton = new Button();
-		openButton = new Button();
+		cleanButton = new TButton();
+		selectButton = new TButton();
+		openButton = new TButton();
 		
 		fileNameProperty.bindBidirectional(fileNameField.textProperty());
 		
@@ -144,15 +143,11 @@ public class TFileField extends StackPane {
 		toolbar.setMaxWidth(Double.MAX_VALUE);
 		toolbar.autosize();
 		
-		selectButton.setText(iEngine.getString("#{tedros.fxapi.button.select}"));
-		openButton.setText(iEngine.getString("#{tedros.fxapi.button.open}"));
-		cleanButton.setText(iEngine.getString("#{tedros.fxapi.button.clean}"));
+		selectButton.setText(iEngine.getString(TFxKey.BUTTON_SELECT));
+		openButton.setText(iEngine.getString(TFxKey.BUTTON_OPEN));
+		cleanButton.setText(iEngine.getString(TFxKey.BUTTON_CLEAN));
 		
 		setAlignment(toolbar, Pos.CENTER_LEFT);
-		
-		selectButton.setId("t-button");
-		openButton.setId("t-button");
-		cleanButton.setId("t-last-button");
 		
 		fileNameField.setStyle("-fx-text-fill: #000000; -fx-font-weight: bold; ");
 		fileNameField.setPrefWidth(250);
@@ -167,9 +162,6 @@ public class TFileField extends StackPane {
 		HBox hBox = new HBox();
 		HBox.setHgrow(toolbar, Priority.ALWAYS);
 		hBox.getChildren().add(toolbar);
-		
-		
-		
 		vBox.getChildren().addAll(boxImageLabelSpace, hBox);
 		getChildren().add(vBox);
 	}
@@ -229,7 +221,7 @@ public class TFileField extends StackPane {
 			try {if(filePathLabel!=null && StringUtils.isNotBlank(filePathLabel.getText())){
 					if(!TFileUtil.open(new File(filePathLabel.getText()))) 
 						showModal(openButton, 
-								iEngine.getString("#{tedros.fxapi.message.os.not.support.operation}"));
+								iEngine.getString(TFxKey.MESSAGE_OS_NOT_SUPPORT_OPERATION));
 				}else{
 					if(byteArrayProperty!=null && byteArrayProperty.getValue()!=null && fileNameField!=null && fileNameField.getText()!=null) {
 						file = FileUtils.toFile(TUrlUtil.getURL(folder+"/"+fileNameField.getText()));
@@ -264,7 +256,7 @@ public class TFileField extends StackPane {
 									}
 								} catch (MalformedURLException e1) {
 									showModal(openButton, 
-										iEngine.getFormatedString("#{tedros.fxapi.message.cannot.open.file}", e1.getMessage()));
+										iEngine.getFormatedString(TFxKey.MESSAGE_CANNOT_OPEN_FILE, e1.getMessage()));
 								}
 								openButton.setDisable(false);
 							});
@@ -284,7 +276,7 @@ public class TFileField extends StackPane {
 		FileUtils.writeByteArrayToFile(f, byteArrayProperty.getValue());
 		if(!TFileUtil.open(f))
 			showModal(openButton, 
-				iEngine.getString("#{tedros.fxapi.message.os.not.support.operation}"));
+				iEngine.getString(TFxKey.MESSAGE_OS_NOT_SUPPORT_OPERATION));
 	}
 
 	private void processOpenFileException(String folder, File f, Exception e1) {
@@ -293,21 +285,21 @@ public class TFileField extends StackPane {
 				TFileUtil.open(new File(folder));
 			else
 				showModal(openButton, 
-						iEngine.getFormatedString("#{tedros.fxapi.message.cannot.open.file}", e1.getMessage()));
+						iEngine.getFormatedString(TFxKey.MESSAGE_CANNOT_OPEN_FILE, e1.getMessage()));
 		} catch (IOException e2) {
 			e2.printStackTrace();
 			showModal(openButton, 
-					iEngine.getFormatedString("#{tedros.fxapi.message.cannot.open.file}", e1.getMessage()));
+					iEngine.getFormatedString(TFxKey.MESSAGE_CANNOT_OPEN_FILE, e1.getMessage()));
 		}
 	}
 	
 	private void setLoadByteAction() {
-		openButton.setText(iEngine.getString("#{tedros.fxapi.button.load}"));
+		openButton.setText(iEngine.getString(TFxKey.BUTTON_LOAD));
 		openButton.setOnAction(downloadEventHandler);
 	}
 	
 	private void setOpenAction() {
-		openButton.setText(iEngine.getString("#{tedros.fxapi.button.open}"));
+		openButton.setText(iEngine.getString(TFxKey.BUTTON_OPEN));
 		openButton.setOnAction(openEventHandler);
 	}
 	
@@ -351,7 +343,7 @@ public class TFileField extends StackPane {
 	}
 	
 	private void configureFileChooser(final FileChooser fileChooser, String[] extensions){
-		fileChooser.setTitle(TLanguage.getInstance(null).getString("#{tedros.fxapi.label.select.file}"));
+		fileChooser.setTitle(TLanguage.getInstance(null).getString(TFxKey.SELECT_FILE));
         fileChooser.setInitialDirectory(new File(this.initialDirectory)); 
         for(String ext : extensions){
         	if(ext!=null)
@@ -364,11 +356,11 @@ public class TFileField extends StackPane {
     		long size = FileUtils.sizeOf(file);
     		if(maxFileSize!=null && maxFileSize < size)
     			showModal(selectButton, 
-    					iEngine.getFormatedString("#{tedros.fxapi.message.file.max.size}", 
+    					iEngine.getFormatedString(TFxKey.MESSAGE_FILE_MAX_SIZE, 
     							maxFileSize.toString()));
     		else if(minFileSize!=null && minFileSize > FileUtils.sizeOf(file))
     			showModal(selectButton, 
-    					iEngine.getFormatedString("#{tedros.fxapi.message.file.min.size}", 
+    					iEngine.getFormatedString(TFxKey.MESSAGE_FILE_MIN_SIZE, 
     							minFileSize.toString()));
     		else{
 	    		if(showFilePath)
@@ -416,11 +408,11 @@ public class TFileField extends StackPane {
 		this.maxFileSize = maxFileSize;
 	}
 
-	public final Button getSelectFileButton() {
+	public final TButton getSelectFileButton() {
 		return selectButton;
 	}
 
-	public final void setSelectFileButton(Button selectFileButton) {
+	public final void setSelectFileButton(TButton selectFileButton) {
 		this.selectButton = selectFileButton;
 	}
 
@@ -644,13 +636,17 @@ public class TFileField extends StackPane {
 					double iH = image.getHeight();
 					String msg = "";
 					if(maxImageWidth!=null && iW>maxImageWidth)
-						msg += iEngine.getFormatedString("#{tedros.fxapi.message.image.min.width}", maxImageWidth.toString()) + "\n";
+						msg += iEngine.getFormatedString(TFxKey.MESSAGE_IMAGE_MIN_WIDTH, maxImageWidth.toString()) 
+						+ "\n";
 					if(minImageWidth!=null && iW<minImageWidth)
-						msg += iEngine.getFormatedString("#{tedros.fxapi.message.image.max.width}", minImageWidth.toString()) + "\n";
+						msg += iEngine.getFormatedString(TFxKey.MESSAGE_IMAGE_MAX_WIDTH, minImageWidth.toString()) 
+						+ "\n";
 					if(maxImageHeight!=null && iH>maxImageHeight)
-						msg += iEngine.getFormatedString("#{tedros.fxapi.message.image.min.height}", maxImageHeight.toString()) + "\n";
+						msg += iEngine.getFormatedString(TFxKey.MESSAGE_IMAGE_MIN_HEIGHT, maxImageHeight.toString()) 
+						+ "\n";
 					if(minImageHeight!=null && iH>minImageHeight)
-						msg += iEngine.getFormatedString("#{tedros.fxapi.message.image.max.height}", minImageHeight.toString()) + "\n";
+						msg += iEngine.getFormatedString(TFxKey.MESSAGE_IMAGE_MAX_HEIGHT, minImageHeight.toString()) 
+						+ "\n";
 					
 					if(StringUtils.isNotBlank(msg)){
 						showModal(selectButton, msg);
