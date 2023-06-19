@@ -4,7 +4,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.tedros.core.security.model.TUser;
 import org.tedros.fx.annotation.control.TComboBoxField;
-import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TFieldBox;
 import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TPasswordField;
@@ -16,7 +15,6 @@ import org.tedros.fx.annotation.control.TTextInputControl;
 import org.tedros.fx.annotation.control.TVRadioGroup;
 import org.tedros.fx.annotation.effect.TDropShadow;
 import org.tedros.fx.annotation.effect.TEffect;
-import org.tedros.fx.annotation.form.TDetailForm;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.layout.THBox;
 import org.tedros.fx.annotation.layout.THGrow;
@@ -39,26 +37,24 @@ import org.tedros.tools.module.user.model.TProfileMV;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
-@TForm(name = "#{tedros.login.view.title}", scroll=false)
+@TForm(header = "#{tedros.login.view.title}", scroll=false)
 @TPresenter(modelClass=Login.class, behavior=@TBehavior(type=LoginBehavior.class), 
 	decorator=@TDecorator(type=LoginDecorator.class, saveButtonText="#{tedros.validateUser}",
 	viewTitle="#{tedros.login.view.title}"), 
 	type = TDynaPresenter.class)
 @TEntityProcess(entity=TUser.class, process=TLoginProcess.class)
-public class LoginModelView extends TModelView<Login> {
+public class LoginMV extends TModelView<Login> {
 	
-	@TTabPane(tabs = { 
-			@TTab(closable=false, scroll=false, content = @TContent(detailForm=
-				@TDetailForm(fields={"title", "name", "user", "profileText","profile"})), 
-				text = "#{tedros.log.in}"), 
-			@TTab(closable=false, content = @TContent(detailForm=
-				@TDetailForm(fields={"header", "url", "serverIp","theme",
-						"language"})), 
-				text = "#{tedros.config}")
-	})
+	@TTabPane(side=Side.RIGHT,
+	tabs = { 
+		@TTab(scroll=false, text = "#{tedros.log.in}",
+			fields={"title", "name", "user", "profileText","profile"}), 
+		@TTab(text = "#{tedros.config}",
+			fields={"header", "url", "serverIp","theme","language"})})
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id="t-fieldbox-title", 
 			effect=@TEffect(dropShadow=@TDropShadow, parse = false), parse = true))
 	@TText(text="#{tedros.login.form.title}", textAlignment=TextAlignment.LEFT, 
@@ -120,11 +116,11 @@ public class LoginModelView extends TModelView<Login> {
 	@TComboBoxField(firstItemText="#{tedros.select}")
 	private SimpleStringProperty theme;
 	
-	public LoginModelView() {
+	public LoginMV() {
 		super(new Login());
 	}
 	
-	public LoginModelView(Login model) {
+	public LoginMV(Login model) {
 		super(model);
 	} 
 	

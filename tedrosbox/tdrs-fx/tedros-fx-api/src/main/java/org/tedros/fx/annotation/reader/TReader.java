@@ -359,7 +359,7 @@ public @interface TReader {
 	/**
 	 * Specifies a converter class. 
 	 * */
-	public TConverter converter() default @TConverter(type=org.tedros.fx.form.TConverter.class, parse = false);
+	public TConverter converter() default @TConverter(type=org.tedros.fx.converter.TConverter.class, parse = false);
 	
 	
 }

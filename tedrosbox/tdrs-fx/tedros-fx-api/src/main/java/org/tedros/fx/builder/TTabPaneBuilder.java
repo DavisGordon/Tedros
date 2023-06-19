@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TTab;
 import org.tedros.fx.annotation.control.TTabPane;
 import org.tedros.fx.descriptor.TComponentDescriptor;
@@ -64,14 +63,10 @@ implements ITLayoutBuilder<TabPane> {
 		TTabPane tAnnotation = (TTabPane) annotation;
 		List<String> fields  = new ArrayList<>();
 		
-		for (TTab tTab : tAnnotation.tabs()) {
-			TContent tContent = tTab.content();
+		for (TTab tTab : tAnnotation.tabs()) 
+			if(tTab.fields().length>0)
+				fields.addAll(Arrays.asList(tTab.fields()));
 			
-			if(!(tContent.detailForm().fields()[0].equals("") && tContent.detailForm().fields().length==1)){
-				fields.addAll(Arrays.asList(tContent.detailForm().fields()));
-			}
-		}
-				
 		THtmlLayoutGenerator tHtmlLayoutGenerator = new THtmlLayoutGenerator(TLayoutType.VBOX);
 		
 		for(String field : fields){

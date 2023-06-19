@@ -1,7 +1,7 @@
 package org.tedros.fx.annotation;
 
 import org.tedros.fx.annotation.scene.control.TInsets;
-import org.tedros.fx.form.TConverter;
+import org.tedros.fx.converter.TConverter;
 
 import javafx.geometry.Insets;
 

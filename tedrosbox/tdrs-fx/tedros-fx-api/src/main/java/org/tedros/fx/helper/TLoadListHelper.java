@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import org.tedros.core.model.TModelViewUtil;
-import org.tedros.fx.annotation.query.TQuery;
-import org.tedros.fx.builder.TSelectQueryBuilder;
 import org.tedros.fx.model.TModelView;
 import org.tedros.fx.process.TEntityProcess;
 import org.tedros.server.entity.ITEntity;
@@ -31,9 +29,11 @@ public final class TLoadListHelper {
 			Class<? extends ITEntity> eClass, Class<? extends TModelView> mClass,
 			Class<? extends TEntityProcess> pClass, TSelect sel, Consumer<Boolean> succeeded) throws InstantiationException, IllegalAccessException {
 		
-		TModelViewUtil util = new TModelViewUtil(mClass, eClass);
+		TModelViewUtil util = mClass!=null && mClass!=TModelView.class
+				? new TModelViewUtil(mClass, eClass)
+						: null;
 		load(service, eClass, mClass, pClass, sel, e->{
-			if(mClass!=TModelView.class) 
+			if(util!=null) 
 				list.add(util.convertToModelView(e));
 			else
 				list.add(e);

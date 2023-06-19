@@ -16,8 +16,8 @@ import org.tedros.core.model.TModelViewUtil;
 import org.tedros.fx.annotation.reader.TDetailReader;
 import org.tedros.fx.annotation.reader.TDetailReaderHtml;
 import org.tedros.fx.collections.ITObservableList;
+import org.tedros.fx.converter.TConverter;
 import org.tedros.fx.domain.THtmlConstant;
-import org.tedros.fx.form.TConverter;
 import org.tedros.fx.form.TDefaultForm;
 import org.tedros.fx.form.TReaderFormBuilder;
 import org.tedros.fx.html.THtmlLayoutGenerator;
@@ -95,7 +95,7 @@ implements ITReaderHtmlBuilder<TDetailReaderHtml, Object> {
 	@SuppressWarnings("unchecked")
 	public THtmlReader buildTHtmlReader(final TDetailReaderHtml tAnnotation,
 			final Object attrProperty) {
-		if(tAnnotation.converter().type()!=org.tedros.fx.form.TConverter.class){
+		if(tAnnotation.converter().type()!=org.tedros.fx.converter.TConverter.class){
 			Class clazz = tAnnotation.converter().type();
 			TConverter converter;
 			try {

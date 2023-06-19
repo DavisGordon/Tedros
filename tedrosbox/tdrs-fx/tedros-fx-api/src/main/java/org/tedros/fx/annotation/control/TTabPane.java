@@ -49,22 +49,20 @@ import javafx.scene.layout.Region;
  * Example:
  * 
  * <i>@</i><strong>TTabPane</strong>(tabs = {
- * <i>@</i>TTab(text="#{label.documents}", closable=false,
- * 		 content = <i>@</i>TContent(detailForm = <i>@</i>TDetailForm(fields= {"<strong style="color:red;">documents</strong>"}))),
+ * <i>@</i>TTab(text="#{label.documents}", fields= {"<strong style="color:red;">documents</strong>"}),
  *                          
- * <i>@</i>TTab(text="#{label.contacts}", closable=false, 
- *       content = <i>@</i>TContent(detailForm = <i>@</i>TDetailForm(fields= {"<strong style="color:green;">contacts</strong>"}))))
- *  <i>@</i><b>TDetailListField</b>(entityModelViewClass = DocumentModelView.class, entityClass = Document.class)
- *  <i>@</i><b>TModelViewType</b>(entityClass=Document.class, modelViewClass=DocumentModelView.class)
+ * <i>@</i>TTab(text="#{label.contacts}", fields= {"<strong style="color:green;">contacts</strong>"}))
+ *  <i>@</i><b>TDetailListField</b>(modelView = DocumentModelView.class, entity = Document.class)
+ *  <i>@</i><b>TGenericType</b>(model=Document.class, modelView=DocumentModelView.class)
  *  private <b>ITObservableList</b>&lt;DocumentModelView&gt; <strong style="color:red;">documents</strong>;
  *  
- *  <i>@</i><b>TDetailListField</b>(entityModelViewClass = ContactModelView.class, entityClass = Contact.class)
- *  <i>@</i><b>TModelViewType</b>(entityClass=Contact.class, modelViewClass=ContactModelView.class)
+ *  <i>@</i><b>TDetailListField</b>(modelView = ContactModelView.class, entity = Contact.class)
+ *  <i>@</i><b>TGenericType</b>(model=Contact.class, modelView=ContactModelView.class)
  *  private <b>ITObservableList</b>&lt;ContactModelView&gt; <strong style="color:green;">contacts</strong>;
  * 
  * </pre>
  * 
- * @see TDetailListField, TTab, TModelViewType
+ * @see TDetailListField, TTab, TGenericType
  *
  */
 @Retention(RetentionPolicy.RUNTIME)

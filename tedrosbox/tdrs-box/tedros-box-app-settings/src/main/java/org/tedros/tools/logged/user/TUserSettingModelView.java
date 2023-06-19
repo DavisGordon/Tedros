@@ -35,7 +35,7 @@ import javafx.beans.property.SimpleStringProperty;
  * @author Davis Gordon
  *
  */
-@TForm(name=ToolsKey.SECURITY_USER_FORM_NAME)
+@TForm(header=ToolsKey.SECURITY_USER_FORM_NAME)
 @TPresenter(type=TDynaPresenter.class, 
 			decorator=@TDecorator(type = TUserSettingDecorator.class, 
 			buildModesRadioButton=false, saveButtonText=TFxKey.BUTTON_APPLY ),

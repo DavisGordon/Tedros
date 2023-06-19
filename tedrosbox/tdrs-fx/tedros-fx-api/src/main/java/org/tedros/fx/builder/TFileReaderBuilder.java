@@ -10,8 +10,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 
 import org.tedros.fx.annotation.reader.TFileReader;
+import org.tedros.fx.converter.TConverter;
 import org.tedros.fx.exception.TProcessException;
-import org.tedros.fx.form.TConverter;
 import org.tedros.fx.property.TBytesLoader;
 import org.tedros.fx.property.TSimpleFileProperty;
 import org.tedros.fx.reader.TByteArrayReader;

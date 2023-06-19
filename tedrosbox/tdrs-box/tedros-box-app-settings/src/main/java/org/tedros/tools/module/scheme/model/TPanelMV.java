@@ -37,7 +37,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.paint.Color;
 
-@TForm(name=ToolsKey.SETTINGS_FORM_NAME, editCssId="y")
+@TForm(header=ToolsKey.SETTINGS_FORM_NAME, editCssId="y")
 @TLabelDefaultSetting(position=TLabelPosition.TOP, textFill="#ffffff")
 @TModelProcess(type=TPanelProcess.class)
 @TPresenter(type = TDynaPresenter.class, modelClass = TPanel.class,

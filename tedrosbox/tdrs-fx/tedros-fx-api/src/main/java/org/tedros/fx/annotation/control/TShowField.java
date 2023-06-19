@@ -12,8 +12,10 @@ import org.tedros.fx.annotation.scene.control.TInsets;
 import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.builder.ITFieldBuilder;
 import org.tedros.fx.builder.TShowFieldBuilder;
+import org.tedros.fx.domain.TDateStyle;
 import org.tedros.fx.domain.TLabelPosition;
 import org.tedros.fx.domain.TLayoutType;
+import org.tedros.fx.domain.TTimeStyle;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -39,7 +41,7 @@ public @interface TShowField {
 		/**
 		 * The field name, empty string will refer the field object.
 		 * */
-		public String name() default "";
+		String name() default "";
 		/**
 		 * <pre>
 		 * Set a date pattern for Date type or a mask for String type.
@@ -61,15 +63,37 @@ public @interface TShowField {
 		 * 
 		 * @author Davis Gordon
 		 * */ 
-		public String pattern() default "";
+		String mask() default "";
+		
+		/**
+		 * Sets a string format 
+		 * */
+		String format() default "";
+		
+		/**
+		 * The date style
+		 * */
+		TDateStyle dateStyle() default TDateStyle.DEFAULT;
+		
+		/**
+		 * The time style
+		 * */
+		TTimeStyle timeStyle() default TTimeStyle.NONE;
+		
 		/**
 		 * The field label
 		 * */
-		public String label() default "";
+		String label() default "";
 		/**
 		 * The label position
 		 * */
-		public TLabelPosition labelPosition() default TLabelPosition.DEFAULT;
+		TLabelPosition labelPosition() default TLabelPosition.DEFAULT;
+		
+		/**
+		 * The TConverter&ltObject,String&gt to be applied
+		 * */
+		@SuppressWarnings("rawtypes")
+		Class<? extends org.tedros.fx.converter.TConverter> converter() default org.tedros.fx.converter.TConverter.class;
 	};
 
 	/**
@@ -93,7 +117,7 @@ public @interface TShowField {
 	/**
 	 * The fields to read and show
 	 * */
-	public TField[] fields() default {};
+	public TField[] fields() default {@TField()};
 	
 	/**
 	 * <pre>

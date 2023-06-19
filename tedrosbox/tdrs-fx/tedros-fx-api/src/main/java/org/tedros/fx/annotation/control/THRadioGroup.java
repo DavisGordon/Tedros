@@ -157,7 +157,7 @@ public @interface THRadioGroup {
 	 * </pre>
 	 * */
 	public TConverter converter() 
-	default @TConverter(parse = false, type = org.tedros.fx.form.TConverter.class);
+	default @TConverter(parse = false, type = org.tedros.fx.converter.TConverter.class);
 	
 	
 	/**

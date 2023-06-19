@@ -19,7 +19,6 @@ import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.annotation.security.TSecurity;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.control.TButtonField;
-import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TFileField;
 import org.tedros.fx.annotation.control.TGenericType;
 import org.tedros.fx.annotation.control.TPickListField;
@@ -27,7 +26,6 @@ import org.tedros.fx.annotation.control.TProcess;
 import org.tedros.fx.annotation.control.TTab;
 import org.tedros.fx.annotation.control.TTabPane;
 import org.tedros.fx.annotation.control.TTextAreaField;
-import org.tedros.fx.annotation.form.TDetailForm;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.form.TSetting;
 import org.tedros.fx.annotation.layout.TGridPane;
@@ -66,7 +64,7 @@ import javafx.scene.layout.Priority;
  *
  */
 @TSetting(ChatFormSetting.class)
-@TForm(name = "", showBreadcrumBar=false, scroll=false)
+@TForm(header = "", showBreadcrumBar=false, scroll=false)
 @TEjbService(serviceName = IChatController.JNDI_NAME, model=Chat.class)
 @TListViewPresenter(listViewMaxWidth=400, listViewMinWidth=400,
 	presenter=@TPresenter(
@@ -100,13 +98,9 @@ public class ChatMV extends TEntityModelView<Chat> {
 	private SimpleStringProperty title;
 	
 	@TTabPane(tabs = { 
-			@TTab(text = CHATKey.RECIPIENTS, scroll=false,
-					content = @TContent(detailForm=@TDetailForm(fields = { "participants" })) ), 
-			@TTab(text = "Chat", scroll=true,
-			content = @TContent(detailForm=@TDetailForm(fields = { "messages" })) )
-	
-			}, 
-			region=@TRegion(minHeight=300, maxHeight=350, minWidth=700, maxWidth=700, parse = true))
+		@TTab(text = CHATKey.RECIPIENTS, scroll=false, fields = { "participants" }), 
+		@TTab(text = "Chat", scroll=true, fields = { "messages" })}, 
+		region=@TRegion(minHeight=300, maxHeight=350, minWidth=700, maxWidth=700, parse = true))
 	private SimpleObjectProperty<ChatUser> owner;
 	
 	@TGridPane(vgap=12, hgap=12)

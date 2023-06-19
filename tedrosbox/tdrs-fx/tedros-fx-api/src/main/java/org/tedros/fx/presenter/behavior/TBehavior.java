@@ -326,7 +326,7 @@ public abstract class TBehavior<M extends TModelView, P extends ITPresenter> imp
 	@Override
 	public String getFormName() {
 		final TForm tForm = getForm().gettModelView().getClass().getAnnotation(TForm.class);
-		return (tForm!=null) ? tForm.name() : "@TForm(name='SET A NAME')";
+		return (tForm!=null) ? tForm.header() : "@TForm(name='SET A NAME')";
 	}
 
 	@Override

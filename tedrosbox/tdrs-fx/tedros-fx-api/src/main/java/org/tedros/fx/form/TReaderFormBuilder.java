@@ -53,7 +53,7 @@ public class TReaderFormBuilder<M extends ITModelView<?>> {
 		
 		TForm tForm = this.modelView.getClass().getAnnotation(TForm.class);
 		if(tForm!=null)
-			this.formClass = tForm.form();
+			this.formClass = tForm.type();
 		
 		if(this.formClass==null)
 			this.formClass = TDefaultForm.class;

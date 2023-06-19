@@ -15,14 +15,12 @@ import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.control.TButtonField;
 import org.tedros.fx.annotation.control.TCallbackFactory;
 import org.tedros.fx.annotation.control.TCellFactory;
-import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TGenericType;
 import org.tedros.fx.annotation.control.TTab;
 import org.tedros.fx.annotation.control.TTabPane;
 import org.tedros.fx.annotation.control.TTableColumn;
 import org.tedros.fx.annotation.control.TTableView;
 import org.tedros.fx.annotation.control.TTextAreaField;
-import org.tedros.fx.annotation.form.TDetailForm;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.form.TSetting;
 import org.tedros.fx.annotation.layout.TToolBar;
@@ -50,7 +48,7 @@ import javafx.beans.property.SimpleStringProperty;
  *
  */
 @TSetting(AiChatSetting.class)
-@TForm(name = ToolsKey.FORM_AI_CHAT, showBreadcrumBar=false, scroll=true)
+@TForm(header = ToolsKey.FORM_AI_CHAT, showBreadcrumBar=false, scroll=true)
 @TEjbService(serviceName = TAiChatCompletionController.JNDI_NAME, model=TAiChatCompletion.class)
 @TListViewPresenter(listViewMaxWidth=300, listViewMinWidth=300,
 	presenter=@TPresenter(
@@ -65,11 +63,8 @@ allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,
 public class AiChatMV extends TEntityModelView<TAiChatCompletion> {
 
 	@TTabPane(tabs = { 
-		@TTab(text = "Chat", scroll=true,
-			content = @TContent(detailForm=@TDetailForm(fields = { "messages" })) ), 
-		@TTab(text = TUsualKey.EVENT_LOG, scroll=true,
-			content = @TContent(detailForm=@TDetailForm(fields = { "events" })) )
-		}, 
+		@TTab(text = "Chat", scroll=true, fields = { "messages" }), 
+		@TTab(text = TUsualKey.EVENT_LOG, scroll=true, fields = { "events" })}, 
 		region=@TRegion(minHeight=400, maxHeight=400, parse = true))
 	private SimpleStringProperty title;
 	

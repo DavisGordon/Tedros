@@ -34,7 +34,7 @@ import javafx.scene.layout.Region;
  *   yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Returns", 
  *     numberAxis=<b>@</b>TNumberAxis(parse = true, tickUnit=1,
  *       valueAxis=<b>@</b>TValueAxis(lowerBound=-50, upperBound=100, parse = true)))))
- * <b>@</b>TModelViewType(modelClass=Investment.class)
+ * <b>@</b>TGenericType(modelClass=Investment.class)
  * private ITObservableList&lt;Investment&gt; investments;
  * 
  * 2. Using a builder that extends TChartModelBuilder.
@@ -45,7 +45,7 @@ import javafx.scene.layout.Region;
  *    yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Returns", 
  *     numberAxis=<b>@</b>TNumberAxis(parse = true, tickUnit=1,
  *       valueAxis=<b>@</b>TValueAxis(lowerBound=-50, upperBound=100, parse = true)))))
- * <b>@</b>TModelViewType(modelClass=Investment.class)
+ * <b>@</b>TGenericType(modelClass=Investment.class)
  * private ITObservableList&lt;Investment&gt; investments;
  * 
  * 3. Configuring static data.
@@ -64,7 +64,7 @@ import javafx.scene.layout.Region;
  *   yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Returns", 
  *     numberAxis=<b>@</b>TNumberAxis(parse = true, tickUnit=1,
  *       valueAxis=<b>@</b>TValueAxis(lowerBound=-50, upperBound=100, parse = true)))))
- * <b>@</b>TModelViewType(modelClass=Investment.class)
+ * <b>@</b>TGenericType(modelClass=Investment.class)
  * private ITObservableList&lt;Investment&gt; investments;
  * </pre>
  * @author Davis Gordon

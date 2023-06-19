@@ -94,7 +94,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	
 	private boolean remoteMode;
 	private String serviceName;
-	private Class<E> entityClass;
 
 	private Class<? extends TEntityProcess> entityProcessClass;
 	
@@ -117,17 +116,15 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			final TEjbService tEjbService = getPresenter().getEjbServiceAnnotation();
 			final org.tedros.fx.annotation.process.TEntityProcess tEntityProcess = getPresenter().getEntityProcessAnnotation();
 			
-			this.entityClass = (Class<E>) presenter.getModelClass();
-			
 			if(tEjbService!=null){
 				this.remoteMode = tEjbService.remoteMode();
 				this.serviceName = tEjbService.serviceName();
-				this.entityClass = (Class<E>) tEjbService.model();
+				this.modelClass = (Class<E>) tEjbService.model();
 			}
 			// set the crud process
 			if(tEntityProcess!=null){
 				this.entityProcessClass = (Class<? extends TEntityProcess>) tEntityProcess.process();
-				this.entityClass = (Class<E>) tEntityProcess.entity();
+				this.modelClass = (Class<E>) tEntityProcess.entity();
 			}
 			
 			this.decorator = (TDynaViewCrudBaseDecorator<M>) presenter.getDecorator();
@@ -607,7 +604,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 					}
 				};
 				
-				if(getEntityProcessClass()!=null || (StringUtils.isNotBlank(this.serviceName) && this.entityClass!=null)){
+				if(getEntityProcessClass()!=null || (StringUtils.isNotBlank(this.serviceName) && this.modelClass!=null)){
 					runSaveEntityProcess(finishCallback);
 					flag = false;
 				}else if(getModelProcessClass()!=null){
@@ -1091,8 +1088,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	@SuppressWarnings("unchecked")
 	public TEntityProcess createEntityProcess() throws Throwable {
 		
-		if((StringUtils.isNotBlank(serviceName)) && this.entityClass!=null && (this.entityProcessClass==null || this.entityProcessClass == TEntityProcess.class)){
-			return new TEntityProcess(entityClass, this.serviceName) {};
+		if((StringUtils.isNotBlank(serviceName)) && this.modelClass!=null && (this.entityProcessClass==null || this.entityProcessClass == TEntityProcess.class)){
+			return new TEntityProcess(modelClass, this.serviceName) {};
 		}
 		
 		if(this.entityProcessClass != null && this.entityProcessClass != TEntityProcess.class)
@@ -1254,7 +1251,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * Return the {@link ITEntity} class
 	 * */
 	public Class<E> getEntityClass() {
-		return entityClass;
+		return modelClass;
 	}
 
 	/**

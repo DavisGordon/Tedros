@@ -66,12 +66,12 @@ public @interface TDetailField  {
 	 * The detail model view class .
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends TModelView> modelViewClass();
+	public Class<? extends TModelView> modelView();
 	
 	/**
 	 * The entity type of the TModelView
 	 * */
-	public Class<? extends ITModel> modelClass();
+	public Class<? extends ITModel> model();
 	
 	/**
 	 * Show the new and clear action buttons

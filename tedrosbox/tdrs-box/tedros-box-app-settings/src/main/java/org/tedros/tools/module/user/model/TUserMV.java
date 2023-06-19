@@ -14,17 +14,15 @@ import org.tedros.core.security.model.TUser;
 import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.TObservableValue;
 import org.tedros.fx.annotation.control.TCheckBoxField;
-import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TFieldBox;
-import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TGenericType;
-import org.tedros.fx.annotation.control.TProcess;
+import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TPasswordField;
 import org.tedros.fx.annotation.control.TPickListField;
+import org.tedros.fx.annotation.control.TProcess;
 import org.tedros.fx.annotation.control.TTab;
 import org.tedros.fx.annotation.control.TTabPane;
 import org.tedros.fx.annotation.control.TTextField;
-import org.tedros.fx.annotation.form.TDetailForm;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.layout.THBox;
 import org.tedros.fx.annotation.layout.THGrow;
@@ -61,7 +59,7 @@ import javafx.scene.text.TextAlignment;
  *
  */
 @TFormReaderHtml
-@TForm(name=ToolsKey.SECURITY_USER_FORM_NAME, showBreadcrumBar=true, editCssId="")
+@TForm(header=ToolsKey.SECURITY_USER_FORM_NAME, showBreadcrumBar=true, editCssId="")
 @TEjbService(serviceName = TUserController.JNDI_NAME, model=TUser.class)
 @TPresenter(type=TDynaPresenter.class, 
 			decorator=@TDecorator(type = TMasterCrudViewDecorator.class, 
@@ -71,19 +69,16 @@ import javafx.scene.text.TextAlignment;
 			appName=ToolsKey.APP_TOOLS, 
 			moduleName=ToolsKey.MODULE_USER, 
 			viewName=ToolsKey.VIEW_USER,
-			allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
-			   					TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
+			allowedAccesses={	
+				TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,
+			   	TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public class TUserMV extends TEntityModelView<TUser> {
 	
 	@TTabPane(tabs = { 
-			@TTab(closable=false, scroll=false, content = @TContent(detailForm=
-				@TDetailForm(fields={"header", "name", "login", "active"})), 
-				text = TUsualKey.MAIN), 
-			@TTab(closable=false, content = @TContent(detailForm=
-				@TDetailForm(fields={"profilesText","profiles"})), 
-				text = TUsualKey.DETAIL)
-	})
-	
+		@TTab(closable=false, scroll=false, text = TUsualKey.MAIN,
+			fields={"header", "name", "login", "active"}), 
+		@TTab(closable=false, fields={"profilesText","profiles"}, 
+			text = TUsualKey.DETAIL)})
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id=TFieldBox.INFO, parse = true))
 	@TText(text=ToolsKey.TEXT_USER_HEADER, textAlignment=TextAlignment.LEFT, 
 			textStyle = TTextStyle.LARGE)
@@ -129,6 +124,7 @@ public class TUserMV extends TEntityModelView<TUser> {
 	public TUserMV(TUser entity) {
 		super(entity);
 		copyPassword();
+		super.formatToString("%s", name);
 	}
 
 	private void copyPassword() {
@@ -142,81 +138,17 @@ public class TUserMV extends TEntityModelView<TUser> {
 		copyPassword();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.tedros.fx.presenter.model.TModelView#setId(javafx.beans.property.SimpleLongProperty)
+	/**
+	 * @return the password
 	 */
-
-	/* (non-Javadoc)
-	 * @see org.tedros.fx.presenter.model.TModelView#toStringProperty()
-	 */
-	@Override
-	public SimpleStringProperty toStringProperty() {
-		return name;
-	}
-
-	public SimpleStringProperty getName() {
-		return name;
-	}
-
-	public void setName(SimpleStringProperty name) {
-		this.name = name;
-	}
-
-	public SimpleStringProperty getLogin() {
-		return login;
-	}
-
-	public void setLogin(SimpleStringProperty login) {
-		this.login = login;
-	}
-
 	public SimpleStringProperty getPassword() {
 		return password;
 	}
 
-	public void setPassword(SimpleStringProperty password) {
-		this.password = password;
-	}
-	
-	public ITObservableList<TProfileMV> getProfiles() {
-		return profiles;
-	}
-
-	public void setProfiles(ITObservableList<TProfileMV> profiles) {
-		this.profiles = profiles;
-	}
-
-	public SimpleBooleanProperty getActive() {
-		return active;
-	}
-
-	public void setActive(SimpleBooleanProperty active) {
-		this.active = active;
-	}
-
-	public SimpleStringProperty getHeader() {
-		return header;
-	}
-
-	public void setHeader(SimpleStringProperty header) {
-		this.header = header;
-	}
-
-	public SimpleStringProperty getProfilesText() {
-		return profilesText;
-	}
-
-	public void setProfilesText(SimpleStringProperty profilesText) {
-		this.profilesText = profilesText;
-	}
-	
-	
-
+	/**
+	 * @return the lastPassword
+	 */
 	public SimpleStringProperty getLastPassword() {
 		return lastPassword;
-	}
-
-	public void setLastPassword(SimpleStringProperty lastPassword) {
-		this.lastPassword = lastPassword;
 	}
 }

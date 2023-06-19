@@ -4,7 +4,7 @@
 package org.tedros.tools.module.notify.converter;
 
 import org.tedros.core.notify.model.TAction;
-import org.tedros.fx.form.TConverter;
+import org.tedros.fx.converter.TConverter;
 
 /**
  * @author Davis Gordon

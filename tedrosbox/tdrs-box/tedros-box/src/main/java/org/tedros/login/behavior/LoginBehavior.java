@@ -35,7 +35,7 @@ import org.tedros.fx.presenter.behavior.TActionType;
 import org.tedros.fx.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 import org.tedros.login.decorator.LoginDecorator;
 import org.tedros.login.model.Login;
-import org.tedros.login.model.LoginModelView;
+import org.tedros.login.model.LoginMV;
 import org.tedros.login.model.TLoginProcess;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
@@ -61,7 +61,7 @@ import javafx.scene.control.Toggle;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 
-public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Login> {
+public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 
 	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
@@ -169,7 +169,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 			public boolean runBefore() {
 				Login login = new Login();
 				login.setLanguage(TedrosContext.getLocale().getLanguage().toLowerCase());
-				LoginModelView model = new LoginModelView(login);
+				LoginMV model = new LoginMV(login);
 				setViewMode(TViewMode.EDIT);
 				setModelView(model);
 				//editEntity(model);
@@ -190,8 +190,8 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 				
 				if(profileComboBox.isDisable()){
 					saveButton.setDisable(false);
-					LoginModelView modelView = getModelView();
-					final ObservableList<LoginModelView> modelsViewsList = modelView !=null 
+					LoginMV modelView = getModelView();
+					final ObservableList<LoginMV> modelsViewsList = modelView !=null 
 									? FXCollections.observableList(Arrays.asList(modelView)) 
 											: null;
 					
@@ -417,8 +417,9 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 				saveLanguage(language);
 				LOGGER.info("Language setted.");
 				TedrosContext.setLocale(new Locale(language));
-				TedrosContext.logOut();
-			} catch (IOException e1) {
+				TedrosContext.showModal(TedrosContext.getApplication().buildLogin());
+				
+			} catch (Exception e1) {
 				e1.printStackTrace();
 				super.addMessage(new TMessage(TMessageType.ERROR, e1.getMessage()));
 			}
@@ -494,7 +495,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginModelView, Log
 	}
 
 	@Override
-	public boolean processNewEntityBeforeBuildForm(LoginModelView model) {
+	public boolean processNewEntityBeforeBuildForm(LoginMV model) {
 		return true;
 	}
 

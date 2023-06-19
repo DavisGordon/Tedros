@@ -42,7 +42,7 @@ import org.tedros.fx.modal.TMessageBox;
 import org.tedros.fx.modal.TModalPane;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
-import org.tedros.login.model.LoginModelView;
+import org.tedros.login.model.LoginMV;
 import org.tedros.tools.logged.user.TMainSettingsPane;
 import org.tedros.tools.logged.user.TUserSettingsPane;
 import org.tedros.util.TFileUtil;
@@ -719,7 +719,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     	innerPane.settMenuVisible(false);
     	mainPane.setTop(null);
     	clearPageHistory();
-    	TedrosContext.logout();
+    	TedrosContext.removeUserSession();
     }
 
 	private void hideAllPopOver() {
@@ -812,7 +812,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     	TModule module = new TModule() {
     		@Override
 			public void tStart() {
-    			TDynaView<LoginModelView> view = new TDynaView<LoginModelView>(LoginModelView.class);
+    			TDynaView<LoginMV> view = new TDynaView<LoginMV>(LoginMV.class);
     			tShowView(view);
 			}
     		

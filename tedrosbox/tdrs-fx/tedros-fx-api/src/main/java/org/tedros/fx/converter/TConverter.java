@@ -4,7 +4,7 @@
  * TODOS OS DIREITOS RESERVADOS
  * 09/03/2014
  */
-package org.tedros.fx.form;
+package org.tedros.fx.converter;
 
 import org.tedros.api.descriptor.ITComponentDescriptor;
 

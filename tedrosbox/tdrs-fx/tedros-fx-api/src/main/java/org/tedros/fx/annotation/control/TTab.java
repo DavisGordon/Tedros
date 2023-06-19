@@ -26,6 +26,7 @@ import org.tedros.fx.builder.NullEventBuilder;
 import org.tedros.fx.builder.NullNodeBuilder;
 
 import javafx.event.Event;
+import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Tab;
@@ -114,12 +115,18 @@ public @interface TTab  {
 	* <pre>
 	* {@link Tab} Class
 	* 
-	*  The content to show within the main TabPane area. 
+	*  The fields to show within the main TabPane area. 
 	*  The content can be any Node such as UI controls or 
 	*  groups of nodes added to a layout container.
 	* </pre>
 	**/
-	public TContent content();
+	public String[] fields();
+	
+	/**
+	 * The content orientation
+	 * */
+	public Orientation orientation() default Orientation.VERTICAL;
+	
 
 	/**
 	* <pre>

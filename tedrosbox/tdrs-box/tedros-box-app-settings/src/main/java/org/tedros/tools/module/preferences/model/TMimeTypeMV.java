@@ -32,7 +32,7 @@ import javafx.beans.property.SimpleStringProperty;
  */
 
 @TFormReaderHtml
-@TForm(name = "", showBreadcrumBar=false, scroll=false)
+@TForm(header = "", showBreadcrumBar=false, scroll=false)
 @TEjbService(serviceName = TMimeTypeController.JNDI_NAME, model=TMimeType.class)
 @TListViewPresenter(
 	presenter=@TPresenter(decorator = @TDecorator(viewTitle=ToolsKey.VIEW_MIMETYPE, buildImportButton=true),

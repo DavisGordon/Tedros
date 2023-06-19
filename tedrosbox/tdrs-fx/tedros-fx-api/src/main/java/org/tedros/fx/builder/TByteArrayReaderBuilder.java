@@ -10,7 +10,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import org.apache.commons.lang3.StringUtils;
-import org.tedros.fx.form.TConverter;
+import org.tedros.fx.converter.TConverter;
 import org.tedros.fx.model.TModelView;
 import org.tedros.fx.reader.TByteArrayReader;
 

@@ -46,7 +46,7 @@ import javafx.scene.layout.Priority;
  *
  */
 @TFormReaderHtml
-@TForm(name="",  editCssId="")
+@TForm(header="",  editCssId="")
 @TEjbService(serviceName = TPropertieController.JNDI_NAME, model=TPropertie.class)
 @TPresenter(type=TDynaPresenter.class, 
 			decorator=@TDecorator(type = TMasterCrudViewDecorator.class, 

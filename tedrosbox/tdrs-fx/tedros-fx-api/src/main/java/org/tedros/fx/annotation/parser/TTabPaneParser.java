@@ -2,7 +2,6 @@ package org.tedros.fx.annotation.parser;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.descriptor.ITFieldDescriptor;
-import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TTab;
 import org.tedros.fx.annotation.control.TTabPane;
 
@@ -25,22 +24,16 @@ public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
 		
 		TTab[] tabs = annotation.tabs();		
 		for (TTab tTab : tabs) {
-			
-			TContent tContent = tTab.content();
 			Tab tab = new Tab();
-			
-			if(!(tContent.detailForm().fields()[0].equals("") && tContent.detailForm().fields().length==1)){
-				String[] fields =  tContent.detailForm().fields();
-				Orientation orientation = tContent.detailForm().orientation();
+			if(tTab.fields().length>0){
+				Orientation orientation = tTab.orientation();
 				Pane pane = (orientation.equals(Orientation.HORIZONTAL)) 
 						? buildHBox()
 								: buildVBox();
 						
-				for (String field : fields) {
-					if(StringUtils.isBlank(field))
-						continue;
-					addNode(pane, field);
-				}
+				for (String field : tTab.fields())
+					if(StringUtils.isNotBlank(field))
+						addNode(pane, field);
 				
 				ScrollPane scroll = new ScrollPane() ;
 				scroll.autosize();

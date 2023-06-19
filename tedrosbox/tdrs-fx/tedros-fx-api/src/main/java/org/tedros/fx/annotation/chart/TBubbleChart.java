@@ -35,7 +35,7 @@ import javafx.scene.layout.Region;
  *    numberAxis=<b>@</b>TNumberAxis(
  *      valueAxis=<b>@</b>TValueAxis(tickLabelFormatter=CurrencyFormatterBuilder.class, parse = true),
  *    parse = true))))
- * <b>@</b>TModelViewType(modelClass=Budget.class)
+ * <b>@</b>TGenericType(modelClass=Budget.class)
  * private ITObservableList&lt;Budget&gt; budgets;
  * 
  * 2. Using a builder that extends TChartModelBuilder.
@@ -47,7 +47,7 @@ import javafx.scene.layout.Region;
  *    numberAxis=<b>@</b>TNumberAxis(
  *     valueAxis=<b>@</b>TValueAxis(tickLabelFormatter=CurrencyFormatterBuilder.class, parse = true),
  *    parse = true))))
- *  <b>@</b>TModelViewType(modelClass=Budget.class)
+ *  <b>@</b>TGenericType(modelClass=Budget.class)
  * private ITObservableList&lt;Budget&gt; budgets;
  * 
  * 3. Configuring static data.
@@ -64,7 +64,7 @@ import javafx.scene.layout.Region;
  *    numberAxis=<b>@</b>TNumberAxis(
  *      valueAxis=<b>@</b>TValueAxis(tickLabelFormatter=CurrencyFormatterBuilder.class, parse = true),
  *    parse = true))))
- * <b>@</b>TModelViewType(modelClass=Budget.class)
+ * <b>@</b>TGenericType(modelClass=Budget.class)
  * private ITObservableList&lt;Budget&gt; budgets;
  * </pre>
  * @author Davis Gordon
