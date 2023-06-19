@@ -40,16 +40,16 @@ public interface ITBehavior<M extends ITModelView, P extends ITPresenter> {
 	 * @return V the view
 	 */
 	<V extends ITView> V getView();
-	
+
 	/**
-	 * Define the model to be loaded 
+	 * Sets the model view to be loaded 
 	 * into a form and shown in the view
 	 * @param modelView
 	 */
 	void setModelView(M modelView);
 	
 	/**
-	 *Get the current model in edit 
+	 *Get the current model view in edit 
 	 *and loaded by a form in the view
 	 * @return M the current ITModelView
 	 */

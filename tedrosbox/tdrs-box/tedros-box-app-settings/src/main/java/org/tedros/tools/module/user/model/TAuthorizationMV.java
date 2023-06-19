@@ -41,7 +41,7 @@ import javafx.scene.layout.Priority;
  *
  */
 @TFormReaderHtml
-@TForm(name = ToolsKey.SECURITY_AUTHORIZATION_FORM_NAME, showBreadcrumBar=true)
+@TForm(header = ToolsKey.SECURITY_AUTHORIZATION_FORM_NAME, showBreadcrumBar=true)
 @TEjbService(serviceName = TAuthorizationController.JNDI_NAME, model=TAuthorization.class)
 @TListViewPresenter(listViewMinWidth=500,
 	page=@TPage(serviceName = TAuthorizationController.JNDI_NAME, 

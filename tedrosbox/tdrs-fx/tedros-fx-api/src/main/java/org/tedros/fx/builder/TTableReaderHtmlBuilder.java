@@ -22,8 +22,8 @@ import org.tedros.core.style.TStyleResourceValue;
 import org.tedros.fx.annotation.reader.TColumnReader;
 import org.tedros.fx.annotation.reader.TTableReaderHtml;
 import org.tedros.fx.collections.ITObservableList;
+import org.tedros.fx.converter.TConverter;
 import org.tedros.fx.domain.THtmlConstant;
-import org.tedros.fx.form.TConverter;
 import org.tedros.fx.html.THtmlTableGenerator;
 import org.tedros.fx.html.THtmlTableGenerator.TColumn;
 import org.tedros.fx.model.TModelView;
@@ -100,7 +100,7 @@ implements ITReaderHtmlBuilder<TTableReaderHtml, Object> {
 
 	@SuppressWarnings("unchecked")
 	public THtmlReader buildTHtmlReader(final TTableReaderHtml tAnnotation, final Object fieldObject)  {
-		if(tAnnotation.converter().type()!=org.tedros.fx.form.TConverter.class){
+		if(tAnnotation.converter().type()!=org.tedros.fx.converter.TConverter.class){
 			Class clazz = tAnnotation.converter().type();
 			TConverter converter;
 			try {

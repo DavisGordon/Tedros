@@ -57,7 +57,7 @@ public class TFormBuilder<M extends ITModelView<?>> {
 		Class formClass = TDefaultForm.class;
 		TForm tForm = this.modelView.getClass().getAnnotation(TForm.class);
 		if(tForm!=null)
-			formClass = tForm.form();
+			formClass = tForm.type();
 		
 		try {
 			

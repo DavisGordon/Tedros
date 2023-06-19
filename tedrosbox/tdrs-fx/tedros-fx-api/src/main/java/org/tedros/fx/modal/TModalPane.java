@@ -2,11 +2,6 @@ package org.tedros.fx.modal;
 
 import java.util.function.Consumer;
 
-import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -14,7 +9,6 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.util.Duration;
 
 public class TModalPane extends StackPane {
 
@@ -85,10 +79,11 @@ public class TModalPane extends StackPane {
 	        });
 		else
 			setOnMouseClicked(null);
+		getChildren().clear();
 		getChildren().add(node);
 		StackPane.setMargin(node, new Insets(20));
 		StackPane.setAlignment(node, Pos.CENTER);
-        setOpacity(0);
+        /*setOpacity(0);
         setVisible(true);
         setCache(true);
         Timeline tl = new Timeline();
@@ -101,7 +96,7 @@ public class TModalPane extends StackPane {
                 },
                 new KeyValue(opacityProperty(),1, Interpolator.LINEAR)
         ));
-        tl.play();
+        tl.play();*/
         setVisible(true);
 	 }
 	
@@ -109,8 +104,12 @@ public class TModalPane extends StackPane {
 	 * Close the modal and clean it 
 	 * */
 	public void hideModal() {
-		
-        setCache(true);
+		setVisible(false);
+
+    	if(closeCallback!=null)
+    		closeCallback.accept(getChildren().get(0));
+    	getChildren().clear();
+       /* setCache(true);
         Timeline tl = new Timeline();
         tl.getKeyFrames().add(
             new KeyFrame(Duration.millis(400), 
@@ -125,7 +124,7 @@ public class TModalPane extends StackPane {
                 },
                 new KeyValue(opacityProperty(),0, Interpolator.LINEAR)
         ));
-        tl.play();
+        tl.play();*/
 	}
 	
 	

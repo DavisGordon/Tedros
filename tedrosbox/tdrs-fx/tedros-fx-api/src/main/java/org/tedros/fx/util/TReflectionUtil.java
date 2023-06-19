@@ -22,8 +22,8 @@ import org.tedros.fx.builder.ITLayoutBuilder;
 import org.tedros.fx.builder.ITReaderBuilder;
 import org.tedros.fx.builder.ITReaderHtmlBuilder;
 import org.tedros.fx.builder.ITViewBuilder;
+import org.tedros.fx.converter.TConverter;
 import org.tedros.fx.descriptor.TFieldDescriptor;
-import org.tedros.fx.form.TConverter;
 import org.tedros.fx.model.TModelView;
 
 public final class TReflectionUtil {

@@ -11,7 +11,7 @@ import java.lang.annotation.Annotation;
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.fx.annotation.control.TRadio;
 import org.tedros.fx.annotation.control.TVRadioGroup;
-import org.tedros.fx.form.TConverter;
+import org.tedros.fx.converter.TConverter;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;

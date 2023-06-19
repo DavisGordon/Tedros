@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * Specifies a converter type to convert the field 
  * object for a custom node.
  * </pre>
- * @see org.tedros.fx.form.TConverter
+ * @see org.tedros.fx.converter.TConverter
  * @author Davis Gordon 
  * */
 @Retention(RetentionPolicy.RUNTIME)
@@ -18,10 +18,10 @@ import java.lang.annotation.Target;
 public @interface TConverter {
 	
 	/**
-	 * Sets a custom {@link org.tedros.fx.form.TConverter} implementention type.
+	 * Sets a custom {@link org.tedros.fx.converter.TConverter} implementention type.
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends org.tedros.fx.form.TConverter> type();
+	public Class<? extends org.tedros.fx.converter.TConverter> type();
 	
 	/**
 	 * <pre>

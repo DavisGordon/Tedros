@@ -19,7 +19,7 @@ import org.tedros.tools.module.scheme.decorator.TBackgroundDecorator;
 import javafx.beans.property.SimpleObjectProperty;
 
 @TSetting(TBackgroundSetting.class)
-@TForm(name = ToolsKey.VIEW_BACKGROUND, scroll=false)
+@TForm(header = ToolsKey.VIEW_BACKGROUND, scroll=false)
 @TPresenter(type=TDynaPresenter.class, 
 decorator=@TDecorator(type=TBackgroundDecorator.class, viewTitle=ToolsKey.VIEW_BACKGROUND), 
 behavior=@TBehavior(type=TBackgroundBehavior.class))

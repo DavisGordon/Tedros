@@ -20,14 +20,13 @@ import org.tedros.fx.TFxKey;
 import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.control.TCallbackFactory;
 import org.tedros.fx.annotation.control.TCellFactory;
-import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TConverter;
 import org.tedros.fx.annotation.control.TDatePickerField;
 import org.tedros.fx.annotation.control.TFileField;
+import org.tedros.fx.annotation.control.TGenericType;
 import org.tedros.fx.annotation.control.THTMLEditor;
 import org.tedros.fx.annotation.control.TIntegratedLinkField;
 import org.tedros.fx.annotation.control.TLabel;
-import org.tedros.fx.annotation.control.TGenericType;
 import org.tedros.fx.annotation.control.TRadio;
 import org.tedros.fx.annotation.control.TShowField;
 import org.tedros.fx.annotation.control.TShowField.TField;
@@ -37,7 +36,6 @@ import org.tedros.fx.annotation.control.TTableColumn;
 import org.tedros.fx.annotation.control.TTableView;
 import org.tedros.fx.annotation.control.TTextField;
 import org.tedros.fx.annotation.control.TVRadioGroup;
-import org.tedros.fx.annotation.form.TDetailForm;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.form.TSetting;
 import org.tedros.fx.annotation.layout.TFieldInset;
@@ -66,6 +64,7 @@ import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.control.tablecell.TMediumDateTimeCallback;
 import org.tedros.fx.domain.TFileExtension;
 import org.tedros.fx.domain.TFileModelType;
+import org.tedros.fx.domain.TTimeStyle;
 import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.model.TFormatter;
 import org.tedros.fx.property.TSimpleFileProperty;
@@ -75,7 +74,6 @@ import org.tedros.tools.module.notify.behaviour.TNotifyBehaviour;
 import org.tedros.tools.module.notify.converter.ActionConverter;
 import org.tedros.tools.module.notify.table.TNotifyLogStateCallBack;
 import org.tedros.tools.module.notify.table.TNotifyLogTV;
-import org.tedros.util.TDateUtil;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -85,7 +83,7 @@ import javafx.scene.layout.Priority;
  * @author Davis Gordon
  *
  */
-@TForm(name = "", scroll=true)
+@TForm(header = "", scroll=true)
 @TSetting(TNotifyMVSetting.class)
 @TEjbService(serviceName = TNotifyController.JNDI_NAME, model=TNotify.class)
 @TListViewPresenter(listViewMinWidth=400, 
@@ -110,13 +108,9 @@ allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,
 public class TNotifyMV extends TEntityModelView<TNotify> {
 	
 	@TTabPane(tabs = { 
-		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"text"})),
-			scroll=true, text = TUsualKey.MAIN_DATA),
-		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"file"})),
-			scroll=true, text = TUsualKey.ATTACH_FILE),
-		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"eventLog"})),
-			text = TUsualKey.EVENT_LOG)
-	})
+		@TTab(closable=false,fields={"text"}, scroll=true, text = TUsualKey.MAIN_DATA),
+		@TTab(closable=false, fields={"file"}, scroll=true, text = TUsualKey.ATTACH_FILE),
+		@TTab(closable=false, fields={"eventLog"}, text = TUsualKey.EVENT_LOG)})
 	private SimpleStringProperty display;
 
 	@THBox(pane=@TPane(children={"refCode", "content"}), spacing=10, fillHeight=true,
@@ -165,7 +159,7 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 	private SimpleObjectProperty<TState> state;
 
 	@TLabel(text=TUsualKey.DATE_PROCESSED)
-	@TShowField(fields= {@TField(pattern=TDateUtil.DDMMYYYY_HHMM)})
+	@TShowField(fields= {@TField(timeStyle=TTimeStyle.SHORT)})
 	private SimpleObjectProperty<Date> processedTime;
 	
 	@THTMLEditor(control=@TControl( maxHeight=450, parse = true))
@@ -183,7 +177,7 @@ public class TNotifyMV extends TEntityModelView<TNotify> {
 	private SimpleStringProperty integratedViewName;
 	
 	@TLabel(text=TFxKey.INTEGRATED_DATE)
-	@TShowField(fields= {@TField(pattern=TDateUtil.DDMMYYYY_HHMM)})
+	@TShowField(fields= {@TField(timeStyle=TTimeStyle.SHORT)})
 	private SimpleObjectProperty<Date> integratedDate;
 	
 	@TLabel(text=TFxKey.INTEGRATED_LINK)

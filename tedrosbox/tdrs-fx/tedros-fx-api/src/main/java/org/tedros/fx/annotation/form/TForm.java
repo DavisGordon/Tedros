@@ -14,11 +14,11 @@ import org.tedros.fx.form.TDefaultForm;
 @SuppressWarnings("rawtypes")
 public @interface TForm {
 	
-	public Class<? extends ITModelForm> form() default TDefaultForm.class;
+	public Class<? extends ITModelForm> type() default TDefaultForm.class;
 	
 	public boolean showBreadcrumBar() default false;
 	
-	public String name();
+	public String header() default "";
 	
 	public String editCssId() default "t-form";
 	

@@ -34,7 +34,7 @@ import javafx.scene.layout.Region;
  *   service=StockChartController.JNDI_NAME, 
  *   xAxis = <b>@</b>TAxis(axisType = TAxisType.CATEGORY, label = "Month"), 
  *   yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Stock")))
- * <b>@</b>TModelViewType(modelClass=Stock.class)
+ * <b>@</b>TGenericType(modelClass=Stock.class)
  * private ITObservableList&lt;Stock&gt; stocks;
  * 
  * 2. Using a builder that extends TChartModelBuilder.
@@ -43,7 +43,7 @@ import javafx.scene.layout.Region;
  *  xyChart = <b>@</b>TXYChart(
  *    xAxis = <b>@</b>TAxis(axisType = TAxisType.CATEGORY, label = "Month"), 
  *    yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Stock")))
- * <b>@</b>TModelViewType(modelClass=Stock.class)
+ * <b>@</b>TGenericType(modelClass=Stock.class)
  * private ITObservableList&lt;Stock&gt; stocks;
  * 
  * 3. Configuring static data.
@@ -60,7 +60,7 @@ import javafx.scene.layout.Region;
  *       <b>@</b>TData(x="Mar", y="25")})},
  *   xAxis = <b>@</b>TAxis(axisType = TAxisType.CATEGORY, label = "Month"), 
  *   yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Stock")))
- * <b>@</b>TModelViewType(modelClass=Stock.class)
+ * <b>@</b>TGenericType(modelClass=Stock.class)
  * private ITObservableList&lt;Stock&gt; stocks;
  * </pre>
  * @author Davis Gordon

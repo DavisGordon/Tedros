@@ -31,7 +31,8 @@ implements ITControlBuilder<org.tedros.fx.control.TDetailField, Property> {
 		TDetailField tAnnotation = (TDetailField) annotation;
 		
 		org.tedros.fx.control.TDetailField control = 
-				new org.tedros.fx.control.TDetailField(tAnnotation.modelViewClass(), tAnnotation.modelClass(), attrProperty, tAnnotation.showButtons());
+				new org.tedros.fx.control.TDetailField(tAnnotation.modelView(), tAnnotation.model(), 
+						attrProperty, tAnnotation.showButtons());
 		callParser(tAnnotation, control);
 		return control;
 	}

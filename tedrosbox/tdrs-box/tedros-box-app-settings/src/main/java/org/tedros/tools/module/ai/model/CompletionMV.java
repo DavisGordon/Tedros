@@ -16,9 +16,8 @@ import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.control.TButtonField;
 import org.tedros.fx.annotation.control.TCallbackFactory;
 import org.tedros.fx.annotation.control.TCellFactory;
-import org.tedros.fx.annotation.control.TContent;
-import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TGenericType;
+import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TNumberSpinnerField;
 import org.tedros.fx.annotation.control.TSliderField;
 import org.tedros.fx.annotation.control.TTab;
@@ -27,7 +26,6 @@ import org.tedros.fx.annotation.control.TTableColumn;
 import org.tedros.fx.annotation.control.TTableView;
 import org.tedros.fx.annotation.control.TTextAreaField;
 import org.tedros.fx.annotation.control.TTextInputControl;
-import org.tedros.fx.annotation.form.TDetailForm;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.form.TSetting;
 import org.tedros.fx.annotation.layout.THBox;
@@ -64,7 +62,7 @@ import javafx.scene.layout.Priority;
  *
  */
 @TSetting(CompletionSetting.class)
-@TForm(name = "", showBreadcrumBar=false)
+@TForm(header = "", showBreadcrumBar=false)
 @TEjbService(serviceName = TAiCompletionController.JNDI_NAME, model=TAiCompletion.class)
 @TListViewPresenter(listViewMinWidth=300,
 	page=@TPage(query=@TQuery(entity = TAiCompletion.class), 
@@ -81,12 +79,8 @@ public class CompletionMV extends TEntityModelView<TAiCompletion> {
 
 	@TTabPane(tabs = { 
 		@TTab(closable=false, text = TUsualKey.MAIN_DATA, 
-				content = @TContent(detailForm=@TDetailForm(
-						fields={"response", "prompt"})),
-			scroll=true),
-		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"events"})),
-			text = TUsualKey.EVENT_LOG)
-	})
+			fields={"response", "prompt"}, scroll=true),
+		@TTab(closable=false, fields={"events"}, text = TUsualKey.EVENT_LOG)})
 	private SimpleStringProperty title;
 	
 	@TTextAreaField(wrapText=true, textInputControl=

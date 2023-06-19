@@ -13,7 +13,7 @@ import org.tedros.api.form.ITForm;
 import org.tedros.core.model.ITModelView;
 import org.tedros.core.model.TModelViewUtil;
 import org.tedros.fx.annotation.reader.TDetailReader;
-import org.tedros.fx.form.TConverter;
+import org.tedros.fx.converter.TConverter;
 import org.tedros.fx.form.TReaderFormBuilder;
 import org.tedros.fx.layout.TFlowPane;
 import org.tedros.server.entity.ITEntity;
@@ -44,7 +44,7 @@ implements ITReaderBuilder<Node, Object> {
 	@SuppressWarnings("unchecked")
 	public Node build(final Annotation annotation, final Object attrProperty) throws Exception {
 		TDetailReader tAnnotation = (TDetailReader) annotation;
-		if(tAnnotation.converter().type()!=org.tedros.fx.form.TConverter.class){
+		if(tAnnotation.converter().type()!=org.tedros.fx.converter.TConverter.class){
 			Class clazz = tAnnotation.converter().type();
 			TConverter converter = (TConverter) clazz.getConstructor().newInstance();
 			converter.setIn(attrProperty);

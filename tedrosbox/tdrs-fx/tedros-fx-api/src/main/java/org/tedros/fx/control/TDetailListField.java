@@ -54,7 +54,6 @@ public class TDetailListField extends TRequiredDetailField {
 	/**
 	 * @return the view
 	 */
-	@SuppressWarnings("rawtypes")
 	public Node gettComponent() {
 		return view;
 	}

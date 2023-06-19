@@ -11,7 +11,6 @@ import java.lang.annotation.Annotation;
 import org.apache.commons.lang3.ArrayUtils;
 import org.tedros.fx.annotation.control.TShowField.TField;
 import org.tedros.fx.control.TShowField;
-import org.tedros.fx.control.TShowFieldValue;
 import org.tedros.fx.domain.TLayoutType;
 
 import javafx.beans.property.Property;
@@ -35,11 +34,11 @@ implements ITControlBuilder<TShowField, Property> {
 		
 		TLayoutType layout = tAnnotation.layout();
 		TField[] tfs = tAnnotation.fields();
-		TShowFieldValue[] fields = tfs.length>0 
-				? new TShowFieldValue[0] 
-						: null;
+		org.tedros.fx.control.TField[] fields = new org.tedros.fx.control.TField[0];
 		for(TField f : tfs) {
-			TShowFieldValue v = new TShowFieldValue(f.name(), f.pattern(), f.label(), f.labelPosition());
+			org.tedros.fx.control.TField v = 
+					new org.tedros.fx.control.TField(f.name(), f.mask(), f.format(), 
+							f.dateStyle(), f.timeStyle(), f.label(), f.labelPosition(), f.converter());
 			fields = ArrayUtils.add(fields, v);
 		}
 		

@@ -132,10 +132,10 @@ public @interface TDetailReader {
 	 * 
 	 * Property description:
 	 * 
-	 * The {@link org.tedros.fx.form.TConverter} which process and return a custom reader node.       
+	 * The {@link org.tedros.fx.converter.TConverter} which process and return a custom reader node.       
 	 * </pre>
 	 * */
-	public TConverter converter() default @TConverter(type=org.tedros.fx.form.TConverter.class, parse = false);
+	public TConverter converter() default @TConverter(type=org.tedros.fx.converter.TConverter.class, parse = false);
 	
 	/**
 	 * <pre>

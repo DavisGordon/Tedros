@@ -68,7 +68,8 @@ extends TBehavior<M, TDynaPresenter<M>> {
 	protected TActionHelper actionHelper = new TActionHelper();
 	
 	private Class<? extends TModelProcess> modelProcessClass;
-	private Class<M> modelViewClass;
+	protected Class<M> modelViewClass;
+	protected Class<E> modelClass;
 	
 	private boolean skipChangeValidation;
 	private boolean skipRequiredValidation;
@@ -86,7 +87,8 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		final TDynaPresenter<M> presenter = getPresenter(); 
 		
 		this.decorator = (TDynaViewSimpleBaseDecorator) this.getPresenter().getDecorator();
-		
+
+		this.modelClass = (Class<E>) presenter.getModelClass();
 		this.modelViewClass = presenter.getModelViewClass();
 		setModelView(presenter.getModelView());
 		setModelViewList(presenter.getModelViews());
@@ -555,6 +557,13 @@ extends TBehavior<M, TDynaPresenter<M>> {
 	 */
 	public ReadOnlyObjectProperty<TActionState<M>> actionStateProperty() {
 		return actionStateProperty;
+	}
+
+	/**
+	 * @return the modelClass
+	 */
+	public Class<E> getModelClass() {
+		return modelClass;
 	}
 
 	

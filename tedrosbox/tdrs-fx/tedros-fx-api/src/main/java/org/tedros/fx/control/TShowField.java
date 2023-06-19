@@ -3,17 +3,18 @@
  */
 package org.tedros.fx.control;
 
+import java.lang.reflect.Field;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.app.component.ITComponent;
 import org.tedros.core.TLanguage;
+import org.tedros.fx.converter.TConverter;
 import org.tedros.fx.domain.TLayoutType;
 import org.tedros.fx.form.TFieldBox;
 import org.tedros.fx.form.TFieldBoxBuilder;
 import org.tedros.fx.util.TMaskUtil;
-import org.tedros.fx.util.TReflectionUtil;
 import org.tedros.util.TDateUtil;
 
 import javafx.beans.Observable;
@@ -42,7 +43,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 	private TLayoutType layout = TLayoutType.HBOX;
 	@SuppressWarnings("rawtypes")
 	private Property value;
-	private TShowFieldValue[] fields;
+	private TField[] fields;
 	private ITComponentDescriptor descriptor;
 	
 	private Pane pane;
@@ -52,7 +53,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 	 * @param fields
 	 */
 	@SuppressWarnings("rawtypes")
-	public TShowField(TLayoutType layout, Property value, TShowFieldValue... fields) {
+	public TShowField(TLayoutType layout, Property value, TField... fields) {
 		this.layout = layout;
 		this.value = value;
 		this.fields = fields;
@@ -63,7 +64,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 		}
 	}
 	@SuppressWarnings("rawtypes")
-	public TShowField(TLayoutType layout, Property value, ITComponentDescriptor descriptor ,TShowFieldValue... fields) {
+	public TShowField(TLayoutType layout, Property value, ITComponentDescriptor descriptor ,TField... fields) {
 		this.descriptor = descriptor;
 		this.layout = layout;
 		this.value = value;
@@ -79,7 +80,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 	 * @param fields
 	 */
 	@SuppressWarnings("rawtypes")
-	public TShowField(Property value, TShowFieldValue... fields) {
+	public TShowField(Property value, TField... fields) {
 		this.value = value;
 		this.fields = fields;
 		try {
@@ -133,7 +134,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 	@SuppressWarnings("static-access")
 	private void addField(Object obj) throws Exception {
 		if(fields!=null) {
-			for(TShowFieldValue f : fields) {
+			for(TField f : fields) {
 				String v = getValue(obj, f);
 				TFieldBox fb = this.buildFieldBox(v, f);
 				pane.getChildren().add(fb);
@@ -157,7 +158,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 		}
 	}
 	
-	private TFieldBox buildFieldBox(String value, TShowFieldValue f) {
+	private TFieldBox buildFieldBox(String value, TField f) {
 		TLabel l = StringUtils.isNotBlank(f.getLabel()) 
 				? new TLabel(TLanguage.getInstance(null).getString(f.getLabel())) 
 						: null;
@@ -166,6 +167,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 		
 		Node c = buildNode(TLanguage.getInstance(null).getString(value));
 		TFieldBox box =  new TFieldBox(f.getName(), l, c, f.getLabelPosition());
+		box.setId(null);
 		if(descriptor!=null)
 			TFieldBoxBuilder.parse(descriptor, box);
 		return box;
@@ -187,23 +189,69 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 	}
 	
 	@SuppressWarnings("rawtypes")
-	private String getValue(Object obj, TShowFieldValue f) throws Exception {
+	private Object getObject(String path, Object obj) {
+		Object o = null;
+		String field = (path.contains(".")) 
+				? StringUtils.substringBefore(path, ".")
+						: path;
+		String after = (path.contains(".")) 
+				? StringUtils.substringAfter(path, ".")
+						: "";
+		Class target = obj.getClass();
+		do {
+			Field f;
+			try {
+				f = target.getDeclaredField(field);
+				f.setAccessible(true);
+				o = f.get(obj);
+				f.setAccessible(false);
+			} catch (NoSuchFieldException | SecurityException e) {
+				target = target.getSuperclass();
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			} 
+		}while(o==null || target == Object.class);
+		
+		if(o!=null && StringUtils.isNotBlank(after))
+			o = getObject(after, o);
+	
+		return o;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private String getValue(Object obj, TField f) throws Exception {
 		String v = "";
+		
 		Object t = (obj!=null && StringUtils.isNotBlank(f.getName())) 
-				? TReflectionUtil.getGetterMethod(obj.getClass(), f.getName()).invoke(obj)
+				? getObject(f.getName(), obj)
 					: obj;
 		if(t!=null) {
 			if(t instanceof Property) 
 				t = ((Property)t).getValue();
+			
+			if(f.getConverter()!=TConverter.class) {
+				TConverter c = f.getConverter().newInstance();
+				c.setComponentDescriptor(descriptor);
+				c.setIn(t);
+				return (String) c.getOut();
+			}
 		
 			if(t instanceof Date) {
-				v = (StringUtils.isNotBlank(f.getPattern()))
-						? TDateUtil.getFormatedDate((Date) t, f.getPattern())
-						: TDateUtil.getFormatedDate((Date) t, TDateUtil.DDMMYYYY);
+				if(StringUtils.isNotBlank(f.getFormat()))
+					v = TDateUtil.format((Date) t, f.getFormat());
+				else {
+					v = TDateUtil.create(TLanguage.getLocale())
+						.setDateStyle(f.getDateStyle().getValue())
+						.setTimeStyle(f.getTimeStyle().getValue())
+						.format((Date) t);
+					}
 			}else {
-				v = t.toString();
-				if(StringUtils.isNotBlank(f.getPattern()))
-					v = TMaskUtil.applyMask(v, f.getPattern());
+				v = TLanguage.getInstance().getString(t.toString());
+				if(StringUtils.isNotBlank(f.getMask()))
+					v = TMaskUtil.applyMask(v, f.getMask());
+				else if(StringUtils.isNotBlank(f.getFormat()))
+					v = String.format(f.getFormat(), t);
 			}
 		}
 		return v;
@@ -227,15 +275,25 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 	 * 
 	 */
 	private void buildPane() {
-		try {
-			if(pane!=null && super.getChildren().contains(pane))
-				super.getChildren().remove(pane);
-				
-			pane = layout.getValue().newInstance();
-			super.getChildren().add(pane);
-		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
+	
+		if(pane!=null && super.getChildren().contains(pane))
+			super.getChildren().remove(pane);
+		switch(layout) {
+		case FLOWPANE:
+			pane = new FlowPane();
+			((FlowPane)pane).setPrefWrapLength(USE_COMPUTED_SIZE);
+			((FlowPane)pane).setVgap(10);
+			((FlowPane)pane).setHgap(10);
+			break;
+		case HBOX:
+			pane = new HBox(10);
+			break;
+		case VBOX:
+			pane = new VBox(10);
+			break;
+		
 		}
+		super.getChildren().add(pane);
 	}
 	
 }

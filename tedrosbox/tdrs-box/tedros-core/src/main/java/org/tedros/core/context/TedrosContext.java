@@ -405,7 +405,7 @@ public final class TedrosContext {
 		if(MODAL!=null)
 			hideModal();
 		MODAL = node;
-		showModalProperty.set(true);
+		Platform.runLater(()->showModalProperty.set(true));
 	}
 	
 	/**
@@ -661,7 +661,7 @@ public final class TedrosContext {
 	}
 
 	public static void logOut() {
-		logout();
+		removeUserSession();
 		main.logout();
 		loggedUser = null;
 		TedrosContext.showModal(main.buildLogin());
@@ -671,11 +671,11 @@ public final class TedrosContext {
 	 * Stop all services and exit program
 	 * */
 	public static void exit() {
-		logout();
+		removeUserSession();
         Platform.exit();
 	}
 	
-	public static void logout() {
+	public static void removeUserSession() {
 		TedrosAppManager.getInstance().stopAll();
 		infoListProperty.clear();
 		if(loggedUser!=null && loggedUser.getAccessToken()!=null) {

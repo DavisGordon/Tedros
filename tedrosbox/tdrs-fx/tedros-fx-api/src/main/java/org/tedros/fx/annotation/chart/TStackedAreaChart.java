@@ -41,7 +41,7 @@ import javafx.scene.layout.Region;
  * <b>@</b>TStackedAreaChart(xyChart = <b>@</b>TXYChart(service=TProfileChartController.JNDI_NAME, 
  *	xAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Horizontal"), 
  *	yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Vertical")))
- * <b>@</b>TModelViewType(modelClass=TAuthorization.class)
+ * <b>@</b>TGenericType(modelClass=TAuthorization.class)
  * private ITObservableList&lt;TAuthorization&gt; autorizations;
  * 
  * 2. Using a builder that extends TChartModelBuilder.
@@ -50,7 +50,7 @@ import javafx.scene.layout.Region;
  *  xyChart = <b>@</b>TXYChart(
  *	xAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Horizontal"), 
  *	yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Vertical")))
- *  <b>@</b>TModelViewType(modelClass=TAuthorization.class)
+ *  <b>@</b>TGenericType(modelClass=TAuthorization.class)
  * private ITObservableList&lt;TAuthorization&gt; autorizations;
  * 
  * 3. Configuring static data.
@@ -60,7 +60,7 @@ import javafx.scene.layout.Region;
  *	 <b>@</b>TSerie(name = "Teste 2", data= {<b>@</b>TData(x="20", y="5")})},
  *	xAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Horizontal"), 
  *	yAxis = <b>@</b>TAxis(axisType = TAxisType.NUMBER, label = "Vertical")))
- * <b>@</b>TModelViewType(modelClass=TAuthorization.class)
+ * <b>@</b>TGenericType(modelClass=TAuthorization.class)
  * private ITObservableList&lt;TAuthorization&gt; autorizations;
  * </pre>
  * @author Davis Gordon

@@ -19,11 +19,10 @@ import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.control.TButtonField;
 import org.tedros.fx.annotation.control.TCallbackFactory;
 import org.tedros.fx.annotation.control.TCellFactory;
-import org.tedros.fx.annotation.control.TContent;
 import org.tedros.fx.annotation.control.TConverter;
+import org.tedros.fx.annotation.control.TGenericType;
 import org.tedros.fx.annotation.control.THRadioGroup;
 import org.tedros.fx.annotation.control.TLabel;
-import org.tedros.fx.annotation.control.TGenericType;
 import org.tedros.fx.annotation.control.TNumberSpinnerField;
 import org.tedros.fx.annotation.control.TRadio;
 import org.tedros.fx.annotation.control.TTab;
@@ -33,7 +32,6 @@ import org.tedros.fx.annotation.control.TTableView;
 import org.tedros.fx.annotation.control.TTextAreaField;
 import org.tedros.fx.annotation.control.TTextInputControl;
 import org.tedros.fx.annotation.control.TValidator;
-import org.tedros.fx.annotation.form.TDetailForm;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.form.TSetting;
 import org.tedros.fx.annotation.layout.THBox;
@@ -71,7 +69,7 @@ import javafx.scene.layout.Priority;
  *
  */
 @TSetting(CreateImageSetting.class)
-@TForm(name = "", showBreadcrumBar=false)
+@TForm(header = "", showBreadcrumBar=false)
 @TEjbService(serviceName = TAiCreateImageController.JNDI_NAME, model=TAiCreateImage.class)
 @TListViewPresenter(listViewMinWidth=300,
 	page=@TPage(query=@TQuery(entity  = TAiCreateImage.class), 
@@ -89,12 +87,9 @@ public class CreateImageMV extends TEntityModelView<TAiCreateImage> {
 
 	@TTabPane(tabs = { 
 		@TTab(closable=false, text = ToolsKey.VIEW_AI_CREATE_IMAGE, 
-				content = @TContent(detailForm=@TDetailForm(
-						fields={"images"})),
-			scroll=true),
-		@TTab(closable=false, content = @TContent(detailForm=@TDetailForm(fields={"events"})),
-			text = TUsualKey.EVENT_LOG)
-	}, region=@TRegion(minHeight=380, maxHeight=380, parse = true))
+				fields={"images"}, scroll=true),
+		@TTab(closable=false, fields={"events"}, text = TUsualKey.EVENT_LOG)}, 
+		region=@TRegion(minHeight=380, maxHeight=380, parse = true))
 	private SimpleStringProperty title;
 	
 	@TValidator(validatorClass = CreateImageValidator.class)

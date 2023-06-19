@@ -8,7 +8,8 @@ import javafx.scene.control.Tab;
 public class TTabParser extends TAnnotationParser<TTab, Tab>{
 
 	@Override
-	public void parse(TTab annotation, Tab object, String... byPass) throws Exception {
-		super.parse(annotation, object, "content", "scroll");
+	public void parse(TTab ann, Tab tab, String... byPass) throws Exception {
+		tab.setClosable(ann.closable());
+		super.parse(ann, tab, "fields", "scroll", "closable", "orientation");
 	}
 }

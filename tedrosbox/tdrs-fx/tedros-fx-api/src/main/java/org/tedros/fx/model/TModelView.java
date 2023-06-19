@@ -482,7 +482,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 												throw new Exception("\n\nT_ERROR "
 														+ "\nType: "+TErrorType.COLLECTION_CONFIGURATION
 														+ "\nFIELD: "+getClass().getSimpleName() + "."+h.name
-														+ "\n\n-Use the @TModelViewType annotation at field "+getClass().getSimpleName() + "."+h.name+"\n\n");
+														+ "\n\n-Use the @TGenericType annotation at field "+getClass().getSimpleName() + "."+h.name+"\n\n");
 											try{
 												if(modelViewClass!=TModelView.class && entityClass!=null)
 													property.add(modelViewClass.getConstructor(entityClass).newInstance(o));

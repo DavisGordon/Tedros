@@ -5,8 +5,10 @@ package org.tedros.fx.control;
 
 import org.tedros.api.form.ITModelForm;
 import org.tedros.core.TLanguage;
+import org.tedros.core.context.TedrosContext;
 import org.tedros.core.model.TModelViewUtil;
 import org.tedros.core.repository.TRepository;
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.form.TFormBuilder;
 import org.tedros.fx.model.TModelView;
@@ -18,10 +20,14 @@ import javafx.beans.value.WeakChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
 /**<pre>
@@ -33,8 +39,8 @@ import javafx.scene.layout.StackPane;
 @SuppressWarnings("rawtypes")
 public class TDetailField extends TRequiredDetailField {
 
-	private Button tNewButton;
-	private Button tClearButton;
+	private TButton tNewButton;
+	private TButton tClearButton;
 	private BorderPane pane;
 	private StackPane screenSaverPane;
 	
@@ -56,12 +62,10 @@ public class TDetailField extends TRequiredDetailField {
 			TLanguage iEngine = TLanguage.getInstance(null);
 			ToolBar bar = new ToolBar();
 			bar.setId("t-view-toolbar");
-			this.tClearButton = new Button();
-			this.tNewButton = new Button();
-			tNewButton.setId("t-button");
-			tClearButton.setId("t-last-button");
-			tNewButton.setText(iEngine.getString("#{tedros.fxapi.button.new}"));
-			tClearButton.setText(iEngine.getString("#{tedros.fxapi.button.clean}"));
+			this.tClearButton = new TButton();
+			this.tNewButton = new TButton();
+			tNewButton.setText(iEngine.getString(TFxKey.BUTTON_NEW));
+			tClearButton.setText(iEngine.getString(TFxKey.BUTTON_CLEAN));
 			bar.getItems().addAll(tNewButton, tClearButton);
 			pane.setTop(bar);
 			EventHandler<ActionEvent> nEv = e -> {
@@ -87,6 +91,8 @@ public class TDetailField extends TRequiredDetailField {
 		getChildren().add(pane);
 		if(this.tDetailProperty.getValue()!=null)
 			this.showForm(this.tDetailProperty.getValue());
+		else
+			this.tShowScreenSaver();
 		
 		super.tRequiredNodeProperty().setValue(this);
 	}
@@ -99,7 +105,6 @@ public class TDetailField extends TRequiredDetailField {
 		this.pane.setCenter((Node) form);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void tNewAction(){
 		TModelView m = TModelViewUtil.buildModelView(this.tModelViewClass, this.tModelClass);
 		this.tDetailProperty.setValue(m);
@@ -120,8 +125,24 @@ public class TDetailField extends TRequiredDetailField {
 	
 	private StackPane getScreenSaverPane() {
 		if(screenSaverPane==null){
+			Image img = new Image(TedrosContext.getImageInputStream("logo-tedros-small.png"));
+			ImageView iv = new ImageView();
+			iv.setImage(img);
+			
+			Region veil = new Region();
+			veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4); " +
+					"-fx-background-radius: 0 0 10 10;" +
+					"-fx-border-color:lightslategrey; " + 
+					"-fx-border-width: 1 0 0 0; " + 
+					"-fx-border-radius: 0 0 10 10; " + 
+					"-fx-border-insets: 0;");
+			
 			screenSaverPane = new StackPane();
-			screenSaverPane.setId("t-form-pane");
+			this.screenSaverPane.getChildren().addAll(veil, iv);
+			
+
+			StackPane.setMargin(iv, new Insets(20));
+			StackPane.setAlignment(iv, Pos.CENTER);
 		}
 		return screenSaverPane;
 	}

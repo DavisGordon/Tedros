@@ -27,14 +27,14 @@ import javafx.scene.layout.Region;
  *
  * <b>@</b>TPieChart(service=TProfileChartController.JNDI_NAME, 
  *   chart=<b>@</b>TChart(title="My chart", parse=true))
- * <b>@</b>TModelViewType(modelClass=TAuthorization.class)
+ * <b>@</b>TGenericType(modelClass=TAuthorization.class)
  * private ITObservableList&lt;TAuthorization&gt; autorizations;
  * 
  * 2. Using a builder that extends TChartModelBuilder.
  * 
  * <b>@</b>TPieChart(chartModelBuilder=MyChartBuilder.class, 
  *   chart=<b>@</b>TChart(title="My chart", parse=true))
- * <b>@</b>TModelViewType(modelClass=TAuthorization.class)
+ * <b>@</b>TGenericType(modelClass=TAuthorization.class)
  * private ITObservableList&lt;TAuthorization&gt; autorizations;
  * 
  * 3. Configuring static data.
@@ -44,7 +44,7 @@ import javafx.scene.layout.Region;
  *   data={
  *     <b>@</b>TPieData(name = "App 1", value = 50), 
  *     <b>@</b>TPieData(name = "App 2", value = 50)})
- * <b>@</b>TModelViewType(modelClass=TAuthorization.class)
+ * <b>@</b>TGenericType(modelClass=TAuthorization.class)
  * private ITObservableList&lt;TAuthorization&gt; autorizations;
  * </pre>
  * @author Davis Gordon
