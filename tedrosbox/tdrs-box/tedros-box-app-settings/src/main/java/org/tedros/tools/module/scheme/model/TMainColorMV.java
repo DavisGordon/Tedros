@@ -56,12 +56,12 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 			})
 	@TLabel(text=TUsualKey.TEXT, position=TLabelPosition.LEFT, control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
-	@TTrigger(triggerClass=TMainColorTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TMainColorTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> mainCorTexto;
 	
 	@TLabel(text=TUsualKey.BACKGROUND, position=TLabelPosition.LEFT, control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
-	@TTrigger(triggerClass=TMainColorTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TMainColorTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> mainCorFundo;
 	
 	@TLabel(text=TUsualKey.OPACITY)
@@ -69,19 +69,19 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 		majorTickUnit=0.5, blockIncrement=0.01,
 		minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
 		showTickMarks=true, showTickLabels=true)
-	@TTrigger(triggerClass=TMainColorTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TMainColorTrigger.class, mode=TViewMode.EDIT)
 	private SimpleDoubleProperty mainOpacidade;
 	
 	// nav bar
 	
 	@TLabel(text=TUsualKey.TEXT, position=TLabelPosition.LEFT, control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
-	@TTrigger(triggerClass=TMainColorTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TMainColorTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> navCorTexto;
 	
 	@TLabel(text=TUsualKey.BACKGROUND, position=TLabelPosition.LEFT, control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
-	@TTrigger(triggerClass=TMainColorTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TMainColorTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> navCorFundo;
 	
 	@TLabel(text=TUsualKey.OPACITY)
@@ -89,12 +89,12 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 		majorTickUnit=0.5, blockIncrement=0.01,
 		minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
 		showTickMarks=true, showTickLabels=true)
-	@TTrigger(triggerClass=TMainColorTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TMainColorTrigger.class, mode=TViewMode.EDIT)
 	private SimpleDoubleProperty navOpacidade;
 	
 	@TLabel(text=TUsualKey.TEXT, position=TLabelPosition.LEFT, control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
-	@TTrigger(triggerClass=TMainColorTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TMainColorTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> appCorTexto;
 	
 	@TLabel(text=TUsualKey.FONT)
@@ -102,7 +102,7 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 		majorTickUnit=0.5, blockIncrement=0.01,
 		minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
 		showTickMarks=true, showTickLabels=true)
-	@TTrigger(triggerClass=TMainColorTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TMainColorTrigger.class, mode=TViewMode.EDIT)
 	private SimpleDoubleProperty appTamTexto;
 	
 	public TMainColorMV(TMainColor entity) {

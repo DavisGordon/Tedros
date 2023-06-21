@@ -66,7 +66,7 @@ public class TTriggerLoader<M extends ITModelView<?>, F extends ITModelForm<M>> 
 				}
 				
 				try {
-					final org.tedros.fx.control.trigger.TTrigger trigger = tAnnotation.triggerClass()
+					final org.tedros.fx.control.trigger.TTrigger trigger = tAnnotation.type()
 							.getConstructor(TFieldBox.class, TFieldBox.class).newInstance(source, target);
 				
 					trigger.setForm(this.form);
