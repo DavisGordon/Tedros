@@ -15,7 +15,7 @@ import org.tedros.api.presenter.view.TViewMode;
 
 /**
  * <pre>
- * Build a listener to be called when the control action is executed.
+ * Build a trigger listener to be called.
  * </pre>
  *
  * @author Davis Gordon
@@ -24,11 +24,33 @@ import org.tedros.api.presenter.view.TViewMode;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface TTrigger  {
-	public boolean runAfterFormBuild() default false;
-	public String targetFieldName() default "";
-	public String[] associatedFieldBox() default "";
-	public TViewMode[] mode() default {TViewMode.EDIT};
-	public Class<? extends org.tedros.fx.control.trigger.TTrigger> triggerClass();
-	public boolean triggerFieldBox() default false;
+	/**
+	 * Runs it after the form be built
+	 * */
+	boolean runAfterFormBuild() default false;
+	/***
+	 * Sets a target field to be available on it
+	 */
+	String targetFieldName() default "";
+	
+	/**
+	 * Sets fields to be be available on it
+	 */
+	String[] associatedFieldBox() default "";
+	/***
+	 * Define the view mode to trigger
+	 */
+	TViewMode[] mode() default {TViewMode.EDIT};
+	
+	/**
+	 * The trigger class
+	 */
+	@SuppressWarnings("rawtypes")
+	 Class<? extends org.tedros.fx.control.trigger.TTrigger> type();
+	/**
+	 * If true the trigger will be applied in the TFieldBox children list.
+	 * Default false
+	 */
+	boolean triggerFieldBox() default false;
 	
 }

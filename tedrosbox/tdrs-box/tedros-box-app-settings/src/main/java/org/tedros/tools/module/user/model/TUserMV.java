@@ -3,7 +3,6 @@
  */
 package org.tedros.tools.module.user.model;
 
-import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.annotation.security.TSecurity;
 import org.tedros.core.controller.TProfileController;
@@ -20,14 +19,13 @@ import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TPasswordField;
 import org.tedros.fx.annotation.control.TPickListField;
 import org.tedros.fx.annotation.control.TProcess;
-import org.tedros.fx.annotation.control.TTab;
-import org.tedros.fx.annotation.control.TTabPane;
 import org.tedros.fx.annotation.control.TTextField;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.layout.THBox;
 import org.tedros.fx.annotation.layout.THGrow;
 import org.tedros.fx.annotation.layout.TPane;
 import org.tedros.fx.annotation.layout.TPriority;
+import org.tedros.fx.annotation.layout.TVBox;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
@@ -74,23 +72,31 @@ import javafx.scene.text.TextAlignment;
 			   	TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public class TUserMV extends TEntityModelView<TUser> {
 	
-	@TTabPane(tabs = { 
-		@TTab(closable=false, scroll=false, text = TUsualKey.MAIN,
-			fields={"header", "name", "login", "active"}), 
-		@TTab(closable=false, fields={"profilesText","profiles"}, 
-			text = TUsualKey.DETAIL)})
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id=TFieldBox.INFO, parse = true))
-	@TText(text=ToolsKey.TEXT_USER_HEADER, textAlignment=TextAlignment.LEFT, 
-			textStyle = TTextStyle.LARGE)
+	@TText(text=ToolsKey.TEXT_USER_HEADER, 
+		textAlignment=TextAlignment.LEFT, 
+		textStyle = TTextStyle.LARGE)
+	@TFieldBox(alignment=Pos.CENTER_LEFT, 
+	node=@TNode(id=TFieldBox.INFO, parse = true))
 	private SimpleStringProperty header;
+	
+
+	@TPickListField(targetLabel=TUsualKey.SELECTED, 
+		sourceLabel=TUsualKey.PROFILES, required=true,
+		process=@TProcess(service = TProfileController.JNDI_NAME,
+			modelView=TProfileMV.class, query=@TQuery(entity=TProfile.class)))
+	@THBox(pane=@TPane(children={"name","profiles"}), spacing=20, fillHeight=true)
+	@TGenericType(model=TProfile.class, modelView=TProfileMV.class)
+	private ITObservableList<TProfileMV> profiles;
 	
 	@TLabel(text=TUsualKey.NAME)
 	@TTextField(maxLength=100, required=true)
+	@TVBox(pane=@TPane(children= {"name","login", "active"}), 
+	fillWidth=true, spacing=20)
 	private SimpleStringProperty name;
 	
 	@TLabel(text=TUsualKey.LOGIN)
 	@TTextField(maxLength=100, required=true)
-	@THBox(	pane=@TPane(children={"login","password"}), spacing=10, fillHeight=true,
+	@THBox(	pane=@TPane(children={"login","password"}), spacing=20, fillHeight=true,
 	hgrow=@THGrow(priority={@TPriority(field="login", priority=Priority.NEVER), 
 		   		@TPriority(field="password", priority=Priority.NEVER)}))
 	private SimpleStringProperty login;
@@ -106,18 +112,6 @@ public class TUserMV extends TEntityModelView<TUser> {
 	@TLabel(text=TUsualKey.ACTIVE, position=TLabelPosition.LEFT)
 	@TCheckBoxField(labeled=@TLabeled(text=TUsualKey.YES, parse = true))
 	private SimpleBooleanProperty active;
-	
-	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id=TFieldBox.INFO, parse = true))
-	@TText(text=ToolsKey.TEXT_PROFILE_HEADER, textAlignment=TextAlignment.LEFT, 
-			textStyle = TTextStyle.LARGE, mode=TViewMode.EDIT)
-	private SimpleStringProperty profilesText;
-	
-	@TPickListField(targetLabel=TUsualKey.SELECTED, 
-			sourceLabel=TUsualKey.PROFILES, required=true,
-			process=@TProcess(service = TProfileController.JNDI_NAME,
-					modelView=TProfileMV.class, query=@TQuery(entity=TProfile.class)))
-	@TGenericType(model=TProfile.class, modelView=TProfileMV.class)
-	private ITObservableList<TProfileMV> profiles;
 	
 	private SimpleStringProperty lastPassword;
 	

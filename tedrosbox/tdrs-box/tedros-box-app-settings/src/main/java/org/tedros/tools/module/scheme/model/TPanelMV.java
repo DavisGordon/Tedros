@@ -63,7 +63,7 @@ public class TPanelMV extends TModelView<TPanel> {
 		position=TLabelPosition.LEFT, 
 		control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> painelCorTexto;
 	
 	@TLabel(text=TUsualKey.FONT)
@@ -71,14 +71,14 @@ public class TPanelMV extends TModelView<TPanel> {
 		majorTickUnit=0.5, blockIncrement=0.01,
 		minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
 		showTickMarks=true, showTickLabels=true)
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleDoubleProperty painelTamTexto;
 	
 	@TLabel(text=TUsualKey.BACKGROUND, 
 			position=TLabelPosition.LEFT,
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> painelCorFundo;
 	
 	@TLabel(text=TUsualKey.OPACITY)
@@ -86,7 +86,7 @@ public class TPanelMV extends TModelView<TPanel> {
 		majorTickUnit=0.5, blockIncrement=0.01,
 		minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
 		showTickMarks=true, showTickLabels=true)
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleDoubleProperty painelOpacidade;
 	
 	/**
@@ -96,7 +96,7 @@ public class TPanelMV extends TModelView<TPanel> {
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> botaoCorTexto;
 	
 	@TLabel(text=TUsualKey.FONT)
@@ -104,21 +104,21 @@ public class TPanelMV extends TModelView<TPanel> {
 		majorTickUnit=0.5, blockIncrement=0.01,
 		minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
 		showTickMarks=true, showTickLabels=true)
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleDoubleProperty botaoTamTexto;
 	
 	@TLabel(text=TUsualKey.COLOR,
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> botaoCorFundo;
 	
 	@TLabel(text=TUsualKey.BORDER, 
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> botaoCorBorda;
 	
 	@TLabel(text=TUsualKey.OPACITY)
@@ -126,7 +126,7 @@ public class TPanelMV extends TModelView<TPanel> {
 			majorTickUnit=0.5, blockIncrement=0.01,
 					minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
 			showTickMarks=true, showTickLabels=true)
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleDoubleProperty botaoOpacidade;
 	
 	/**
@@ -136,7 +136,7 @@ public class TPanelMV extends TModelView<TPanel> {
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> campoCorTitulo;
 	
 	@TLabel(text=TUsualKey.FONT)
@@ -144,7 +144,7 @@ public class TPanelMV extends TModelView<TPanel> {
 			majorTickUnit=0.5, blockIncrement=0.01,
 			minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
 			showTickMarks=true, showTickLabels=true, snapToTicks=false)
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleDoubleProperty campoTamTitulo;
 	
 	/**
@@ -154,21 +154,21 @@ public class TPanelMV extends TModelView<TPanel> {
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> campoCorTexto;
 	
 	@TLabel(text=TUsualKey.BACKGROUND, 
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80)) 
 	@TColorPickerField
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> campoCorFundo;
 	
 	@TLabel(text=TUsualKey.BORDER, 
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> campoCorBorda;
 	
 	@TLabel(text=TUsualKey.FONT)
@@ -176,11 +176,11 @@ public class TPanelMV extends TModelView<TPanel> {
 	majorTickUnit=0.5, blockIncrement=0.01,
 	minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
 	showTickMarks=true, showTickLabels=true)
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleDoubleProperty campoTamTexto;
 	
 	@TCheckBoxField(labeled=@TLabeled(text=TUsualKey.BOLD, parse = true))
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleBooleanProperty campoTextoNegrito;
 	
 	/**
@@ -190,7 +190,7 @@ public class TPanelMV extends TModelView<TPanel> {
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> formCorFundo;
 	
 	@TLabel(text=TUsualKey.OPACITY)
@@ -198,7 +198,7 @@ public class TPanelMV extends TModelView<TPanel> {
 			majorTickUnit=0.5, blockIncrement=0.01,
 			minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
 			showTickMarks=true, showTickLabels=true)
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleDoubleProperty formOpacidade;
 	
 	/**
@@ -209,7 +209,7 @@ public class TPanelMV extends TModelView<TPanel> {
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	@TFieldSet(fields = { "readerCorTituloCampo", "readerTamTituloCampo" }, 
 	legend = "#{label.title}", layoutType=TLayoutType.VBOX)
 	private SimpleObjectProperty<Color> readerCorTituloCampo;
@@ -219,7 +219,7 @@ public class TPanelMV extends TModelView<TPanel> {
 			majorTickUnit=0.5, blockIncrement=0.01,
 			minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
 			showTickMarks=true, showTickLabels=true)
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleDoubleProperty readerTamTituloCampo;
 	
 	// Visualizar - Texto
@@ -227,7 +227,7 @@ public class TPanelMV extends TModelView<TPanel> {
 			position=TLabelPosition.LEFT, 
 			control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	@TFieldSet(fields = { "readerCorTexto", "readerTamTexto" }, 
 	legend = TUsualKey.TEXT, layoutType=TLayoutType.VBOX)
 	private SimpleObjectProperty<Color> readerCorTexto;
@@ -237,7 +237,7 @@ public class TPanelMV extends TModelView<TPanel> {
 			majorTickUnit=0.5, blockIncrement=0.01,
 			minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
 			showTickMarks=true, showTickLabels=true)
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleDoubleProperty readerTamTexto;
 	
 	// visualizar - Fundo
@@ -247,7 +247,7 @@ public class TPanelMV extends TModelView<TPanel> {
 	@TColorPickerField
 	@TFieldSet(fields = { "readerCorFundo", "readerOpacidade" }, 
 	legend = TUsualKey.BACKGROUND, layoutType=TLayoutType.VBOX)
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleObjectProperty<Color> readerCorFundo;
 	
 	@TLabel(text=TUsualKey.OPACITY)
@@ -255,7 +255,7 @@ public class TPanelMV extends TModelView<TPanel> {
 			majorTickUnit=0.5, blockIncrement=0.01,
 			minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
 			showTickMarks=true, showTickLabels=true)
-	@TTrigger(triggerClass=TPanelTrigger.class, mode=TViewMode.EDIT)
+	@TTrigger(type=TPanelTrigger.class, mode=TViewMode.EDIT)
 	private SimpleDoubleProperty readerOpacidade;
 	
 	
