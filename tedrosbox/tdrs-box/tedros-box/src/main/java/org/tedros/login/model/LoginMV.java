@@ -42,7 +42,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
 @TForm(header = "#{tedros.login.view.title}", scroll=false)
-@TPresenter(modelClass=Login.class, behavior=@TBehavior(type=LoginBehavior.class), 
+@TPresenter(model=Login.class, behavior=@TBehavior(type=LoginBehavior.class), 
 	decorator=@TDecorator(type=LoginDecorator.class, saveButtonText="#{tedros.validateUser}",
 	viewTitle="#{tedros.login.view.title}"), 
 	type = TDynaPresenter.class)

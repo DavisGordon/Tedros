@@ -6,7 +6,7 @@ package org.tedros.core.context;
 import java.util.List;
 
 import org.tedros.core.ITModule;
-import org.tedros.core.annotation.TLoadable;
+import org.tedros.core.annotation.TView;
 import org.tedros.core.model.ITModelView;
 import org.tedros.core.model.TModelViewUtil;
 import org.tedros.server.model.ITModel;
@@ -62,7 +62,7 @@ public final class TLoader {
 			+( (modelType!=null) ? " modelType "+this.modelType.getClass().getSimpleName()+", " : "")
 			+( (modelViewType!=null) ? " modelViewType "+this.modelViewType.getClass().getSimpleName()+", " : "")
 			+( (moduleType!=null) ? " moduleType "+this.moduleType.getClass().getSimpleName()+", " : "")
-			+"see "+TLoadable.class.getSimpleName();
+			+"see "+TView.class.getSimpleName();
 		}
 	}
 	

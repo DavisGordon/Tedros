@@ -40,7 +40,7 @@ import javafx.scene.paint.Color;
  */
 @TForm(header = ToolsKey.VIEW_THEMES, scroll=false, editCssId="x")
 @TModelProcess(type=TMainColorProcess.class)
-@TPresenter(type=TDynaPresenter.class, modelClass=TMainColor.class, 
+@TPresenter(type=TDynaPresenter.class, model=TMainColor.class, 
 decorator=@TDecorator(type=TMainColorDecorator.class, viewTitle=ToolsKey.VIEW_THEMES), 
 behavior=@TBehavior(type=TMainColorBehavior.class))
 public class TMainColorMV extends TEntityModelView<TMainColor> {

@@ -39,7 +39,8 @@ implements ITDecorator<TDynaPresenter<M>>{
 	 * */
     public void addItemInTTopContent(Node item) {		 
 		final ITDynaView<M> view = getView();
-		view.gettTopContent().getChildren().add(item);
+		if(!view.gettTopContent().getChildren().contains(item))
+			view.gettTopContent().getChildren().add(item);
 	}
 	
     /**
@@ -60,7 +61,8 @@ implements ITDecorator<TDynaPresenter<M>>{
 	 * */
 	public void addItemInTRightContent(Node item) {		 
 		final ITDynaView<M> view = getView();
-		view.gettRightContent().getChildren().add(item);
+		if(!view.gettRightContent().getChildren().contains(item))
+			view.gettRightContent().getChildren().add(item);
 	}
 	
 	/**
@@ -81,7 +83,8 @@ implements ITDecorator<TDynaPresenter<M>>{
 	 * */
 	public void addItemInTBottomContent(Node item) {		 
 		final ITDynaView<M> view = getView();
-		view.gettBottomContent().getChildren().add(item);
+		if(!view.gettBottomContent().getChildren().contains(item))
+			view.gettBottomContent().getChildren().add(item);
 	}
 
 	/**

@@ -50,7 +50,7 @@ import javafx.scene.text.TextAlignment;
 @TPresenter(
 		behavior=@TBehavior(type = ExampleBehavior.class), 
 		decorator=@TDecorator(type=ExampleDecorator.class, 
-			viewTitle=ToolsKey.VIEW_EXAMPLE_PANEL), type = TDynaPresenter.class, modelClass = Example.class)
+			viewTitle=ToolsKey.VIEW_EXAMPLE_PANEL), type = TDynaPresenter.class, model = Example.class)
 public class ExampleMV extends TEntityModelView<Example> {
 	
 	@TFieldBox(alignment=Pos.CENTER_LEFT, node=@TNode(id=TFieldBox.INFO, parse = true))

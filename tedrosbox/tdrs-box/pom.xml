@@ -17,11 +17,10 @@
   	<name>tdrs-box</name>
   	<description>The tedros box projects</description>
   	
-  	
 	<organization>
 		<name>Tedros</name>
 	</organization>
-  	
+	
   	<!-- DEVELOPERS -->
 	<developers>
 		<developer>

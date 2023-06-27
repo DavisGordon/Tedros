@@ -40,7 +40,7 @@ import javafx.scene.paint.Color;
 @TForm(header=ToolsKey.SETTINGS_FORM_NAME, editCssId="y")
 @TLabelDefaultSetting(position=TLabelPosition.TOP, textFill="#ffffff")
 @TModelProcess(type=TPanelProcess.class)
-@TPresenter(type = TDynaPresenter.class, modelClass = TPanel.class,
+@TPresenter(type = TDynaPresenter.class, model = TPanel.class,
 	behavior=@TBehavior(type = TPanelBehavior.class), 
 	decorator=@TDecorator(type=TPanelDecorator.class))
 public class TPanelMV extends TModelView<TPanel> {

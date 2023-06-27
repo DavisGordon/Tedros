@@ -6,6 +6,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TCoreKeys;
 import org.tedros.core.TLanguage;
 import org.tedros.core.TModule;
+import org.tedros.core.annotation.TItem;
+import org.tedros.core.annotation.TView;
+import org.tedros.core.annotation.security.TSecurity;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * The module descriptor
@@ -20,6 +26,8 @@ public final class TModuleDescriptor implements Comparable<TModuleDescriptor> {
 	private String moduleName;
 	private String description;
 	
+	private ObservableList<TViewDescriptor> viewDescriptors;
+	
 	@Transient
 	private Class<? extends TModule> type;
 	private String icon;
@@ -27,18 +35,20 @@ public final class TModuleDescriptor implements Comparable<TModuleDescriptor> {
 	private final TSecurityDescriptor securityDescriptor;
 	private TLanguage iEngine;
 	
+	@SuppressWarnings("rawtypes")
 	public TModuleDescriptor(String applicationName, String universalUniqueIdentifier, String menu,  String moduleName, String description, 
 			Class<? extends TModule> type, String icon, String menuIcon, 
 			TSecurityDescriptor securityDescriptor) {
-		
-		iEngine = TLanguage.getInstance(applicationUUID);
 		
 		if(StringUtils.isBlank(applicationName) 
 				|| StringUtils.isBlank(menu)
 				|| StringUtils.isBlank(moduleName)
 				|| type == null)
-			throw new IllegalArgumentException("TModuleDescriptor constructor cannot receive null or empty argument.");
+			throw new IllegalArgumentException("TModuleDescriptor constructor cannot receive null "
+					+ "or empty argument.");
 		
+		iEngine = TLanguage.getInstance(applicationUUID);
+		this.viewDescriptors = FXCollections.observableArrayList();
 		this.applicationName = applicationName;
 		this.menu = menu;
 		this.moduleName = moduleName;
@@ -47,9 +57,33 @@ public final class TModuleDescriptor implements Comparable<TModuleDescriptor> {
 		this.icon = icon;
 		this.menuIcon = menuIcon;
 		this.securityDescriptor = securityDescriptor;
+		
+		TView ann = type.getAnnotation(TView.class);
+		if(ann!=null) {
+			TItem[] arr = ann.items();
+			for(TItem i : arr) {
+				TSecurity tSecurity = (TSecurity) i.modelView().getAnnotation(TSecurity.class);
+				TSecurityDescriptor sdt = (tSecurity!=null) ? new TSecurityDescriptor(tSecurity) : null;
+				this.viewDescriptors.add(new TViewDescriptor(this, i.title(), i.description(), i.model(), i.modelView(), sdt));
+			
+				TEntry e = TEntryBuilder.create()
+						.addEntry(TedrosModuleLoader.MODEL, i.model())
+						.addEntry(TedrosModuleLoader.MODELVIEW, i.modelView())
+						.addEntry(TedrosModuleLoader.MODULE, type)
+						.build();
+				TedrosModuleLoader.getInstance().entries.add(e);
+			
+			}
+		}
 	}
 	
-	
+	/**
+	 * @return the viewDescriptors
+	 */
+	public ObservableList<TViewDescriptor> getViewDescriptors() {
+		return viewDescriptors;
+	}
+
 	public final String getApplicationName() {
 		return iEngine.getString(applicationName);
 	}

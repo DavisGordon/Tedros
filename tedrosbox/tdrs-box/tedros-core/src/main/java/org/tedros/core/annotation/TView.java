@@ -21,7 +21,12 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RUNTIME)
 @Target(TYPE)
-public @interface TLoadable {
+public @interface TView {
 
-	TModel[] value();
+	/**
+	 * The group view title
+	 */
+	String title() default "";
+	
+	TItem[] items();
 }
