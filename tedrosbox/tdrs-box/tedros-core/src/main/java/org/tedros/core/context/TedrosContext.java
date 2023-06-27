@@ -20,6 +20,7 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.tedros.api.presenter.view.ITView;
+import org.tedros.core.ITViewBuilder;
 import org.tedros.core.ITedrosBox;
 import org.tedros.core.TLanguage;
 import org.tedros.core.TModule;
@@ -93,6 +94,8 @@ public final class TedrosContext {
 	
 	//private static Stage stage;
 	private static SimpleObjectProperty<Node> currentViewProperty;
+	
+	private static ITViewBuilder viewBuilder;
 	
 	private static TUser loggedUser;
 	
@@ -701,6 +704,20 @@ public final class TedrosContext {
 	
 	public static ITedrosBox getApplication() {
 		return main;
+	}
+
+	/**
+	 * @return the viewBuilder
+	 */
+	public static ITViewBuilder getViewBuilder() {
+		return viewBuilder;
+	}
+
+	/**
+	 * @param viewBuilder the viewBuilder to set
+	 */
+	public static void setViewBuilder(ITViewBuilder viewBuilder) {
+		TedrosContext.viewBuilder = viewBuilder;
 	}
 
 	

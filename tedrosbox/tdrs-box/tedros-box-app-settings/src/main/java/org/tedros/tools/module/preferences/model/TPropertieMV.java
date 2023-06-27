@@ -11,8 +11,8 @@ import org.tedros.core.domain.DomainApp;
 import org.tedros.core.setting.model.TPropertie;
 import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.control.TFileField;
-import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TGenericType;
+import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TTextAreaField;
 import org.tedros.fx.annotation.control.TTextField;
 import org.tedros.fx.annotation.form.TForm;
@@ -50,13 +50,13 @@ import javafx.scene.layout.Priority;
 @TEjbService(serviceName = TPropertieController.JNDI_NAME, model=TPropertie.class)
 @TPresenter(type=TDynaPresenter.class, 
 			decorator=@TDecorator(type = TMasterCrudViewDecorator.class, 
-			viewTitle=ToolsKey.VIEW_PROPERTIE),
+			viewTitle=ToolsKey.VIEW_SYSTEM_PROPERTIES),
 			behavior=@TBehavior(type=TMasterCrudViewBehavior.class, 
 			action=ReloadPropertiesAction.class))
 @TSecurity(	id=DomainApp.PROPERTIE_FORM_ID, 
 			appName=ToolsKey.APP_TOOLS, 
 			moduleName=ToolsKey.MODULE_PREFERENCES, 
-			viewName=ToolsKey.VIEW_PROPERTIE,
+			viewName=ToolsKey.VIEW_SYSTEM_PROPERTIES,
 			allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT, TAuthorizationType.READ, 
 			   					TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public class TPropertieMV extends TEntityModelView<TPropertie> {

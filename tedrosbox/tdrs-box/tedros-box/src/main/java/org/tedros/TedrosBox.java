@@ -43,6 +43,7 @@ import org.tedros.fx.modal.TModalPane;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
 import org.tedros.login.model.LoginMV;
+import org.tedros.tools.ai.pane.TerosPane;
 import org.tedros.tools.logged.user.TMainSettingsPane;
 import org.tedros.tools.logged.user.TUserSettingsPane;
 import org.tedros.util.TFileUtil;
@@ -116,6 +117,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     private PopOver userPopOver;
     private PopOver infoPopOver;
     private PopOver chatPopOver;
+    private PopOver terosPopOver;
     private TDynaView<ChatMV> chatView;
     private Label chatUnreadMsgsLabel;
     
@@ -138,6 +140,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     private Button userButton;
     private Button infoButton;
     private Button chatButton;
+    private Button terosButton;
     
     private Label appName;
     private StringProperty historySize;
@@ -239,6 +242,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		
     	stage = primaryStage;
     	TedrosContext.setApplication(this);
+    	TedrosContext.setViewBuilder(new TViewBuilder());
     	tedros = this;
     	getStage().setTitle("Tedros");
     	getStage().initStyle(StageStyle.UNDECORATED);
@@ -460,6 +464,14 @@ public class TedrosBox extends Application implements ITedrosBox  {
         	showInfoPopOver();
         });
         infoPopOver = null;
+        
+        terosButton = new Button();
+        terosButton.getStyleClass().addAll("teros");
+        terosButton.setOnAction(e->{
+        	showTerosPopOver();
+        });
+        terosPopOver = null;
+        
         HBox chb = new HBox(5);
         chb.getStyleClass().addAll("box");
         
@@ -478,7 +490,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
         
         HBox btnBox = new HBox();
         btnBox.setAlignment(Pos.CENTER);
-        btnBox.getChildren().addAll(userButton, infoButton, chb, backButton, forwardButton);
+        btnBox.getChildren().addAll(userButton, terosButton, infoButton, chb, backButton, forwardButton);
         HBox.setMargin(userButton, new Insets(0,10,0,0));
         HBox.setMargin(backButton, new Insets(0,10,0,0));
         HBox.setMargin(forwardButton, new Insets(0,10,0,0));
@@ -608,6 +620,22 @@ public class TedrosBox extends Application implements ITedrosBox  {
         TedrosContext.showModal(buildLogin());
     }
 
+
+	private void showTerosPopOver() {
+		if(terosPopOver==null) {
+			terosPopOver = new PopOver();
+			terosPopOver.setHeaderAlwaysVisible(false);
+			terosPopOver.setAutoFix(true);
+			terosPopOver.setCloseButtonEnabled(true);
+			terosPopOver.setArrowLocation(ArrowLocation.TOP_LEFT);
+			terosPopOver.setContentNode(new TerosPane());
+		}
+		if(terosPopOver.isShowing())
+			terosPopOver.hide();
+		else
+			terosPopOver.show(terosButton);
+	}
+    
 	private void showUserPopOver() {
 		if(userPopOver==null) {
 			userPopOver = new PopOver();
@@ -703,6 +731,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     	userPopOver = null;
     	infoPopOver = null;
     	chatPopOver = null;
+    	terosPopOver = null;
     	
     	if(chatView!=null) {
     		chatView.gettPresenter().invalidate();
@@ -726,6 +755,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		hideUserPopOver();
     	hideInfoPopOver();
     	hideChatPopOver();
+    	hideTerosPopOver();
 	}
 
 	private void hideChatPopOver() {
@@ -739,6 +769,10 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	private void hideUserPopOver() {
 		if(userPopOver!=null)
     		userPopOver.hide();
+	}
+	private void hideTerosPopOver() {
+		if(terosPopOver!=null)
+    		terosPopOver.hide();
 	}
     
     

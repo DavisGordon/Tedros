@@ -153,8 +153,8 @@ implements ITDynaPresenter<M> {
 		try {
 			decorator = tPresenter.decorator().type().newInstance();
 			behavior = tPresenter.behavior().type().newInstance();
-			if(modelClass==null && tPresenter.modelClass()!=ITModel.class)
-				modelClass = tPresenter.modelClass();
+			if(modelClass==null && tPresenter.model()!=ITModel.class)
+				modelClass = tPresenter.model();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

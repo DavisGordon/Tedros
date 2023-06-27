@@ -10,7 +10,7 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.tedros.core.ITModule;
-import org.tedros.core.annotation.TLoadable;
+import org.tedros.core.annotation.TView;
 import org.tedros.core.model.ITModelView;
 import org.tedros.server.model.ITModel;
 
@@ -23,34 +23,34 @@ import javafx.collections.ObservableList;
 @SuppressWarnings("rawtypes")
 public final class TedrosModuleLoader {
 	
-	private static final String MODEL = "m";
-	private static final String MODELVIEW = "mv";
-	private static final String MODULE = "mdl";
+	static final String MODEL = "m";
+	static final String MODELVIEW = "mv";
+	static final String MODULE = "mdl";
 
 	private static TedrosModuleLoader instance;
 	
-	private final List<TEntry> entries = new ArrayList<>();
+	final List<TEntry> entries = new ArrayList<>();
 	
-	@SuppressWarnings("unchecked")
+	//@SuppressWarnings("unchecked")
 	private TedrosModuleLoader() {
-		Collection<TEntry> lst = CollectionUtils.synchronizedCollection(entries);
-		TReflections.getInstance().getClassesAnnotatedWith(TLoadable.class)
+		/*Collection<TEntry> lst = CollectionUtils.synchronizedCollection(entries);
+		TReflections.getInstance().getClassesAnnotatedWith(TView.class)
 		.parallelStream()
 		.forEach(c -> {
-			TLoadable l = c.getAnnotation(TLoadable.class);
-			Arrays.asList(l.value())
+			TView l = c.getAnnotation(TView.class);
+			Arrays.asList(l.items())
 			.stream()
 			.forEach(v->{
 				TEntry e = TEntryBuilder.create()
-				.addEntry(MODEL, v.modelType())
-				.addEntry(MODELVIEW, v.modelViewType())
-				.addEntry(MODULE, v.moduleType())
+				.addEntry(MODEL, v.model())
+				.addEntry(MODELVIEW, v.modelView())
+				.addEntry(MODULE, c)
 				.build();
 				synchronized(lst){
 					lst.add(e);
 				}
 			});
-		});
+		});*/
 		
 	}
 	

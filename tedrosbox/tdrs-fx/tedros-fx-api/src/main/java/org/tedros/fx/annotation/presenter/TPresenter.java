@@ -38,5 +38,5 @@ public @interface TPresenter {
 	/**
 	 * The model class associated with the view
 	 * */
-	public Class<? extends ITModel> modelClass() default ITModel.class;
+	public Class<? extends ITModel> model() default ITModel.class;
 }

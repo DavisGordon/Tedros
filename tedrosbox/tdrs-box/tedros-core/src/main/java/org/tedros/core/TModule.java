@@ -5,6 +5,7 @@ import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.context.InternalView;
 import org.tedros.core.context.TModuleContext;
 import org.tedros.core.context.TedrosAppManager;
+import org.tedros.core.context.TedrosContext;
 import org.tedros.core.model.ITModelView;
 
 import javafx.animation.FadeTransition;
@@ -62,7 +63,7 @@ public abstract class TModule extends InternalView implements ITModule {
 
 	@Override
 	public void tStart() {
-		
+		tShowView(TedrosContext.getViewBuilder().build(this));
 	}
 
 

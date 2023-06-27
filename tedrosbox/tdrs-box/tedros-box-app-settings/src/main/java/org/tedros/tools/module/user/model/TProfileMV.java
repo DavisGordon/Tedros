@@ -47,7 +47,7 @@ import javafx.scene.text.TextAlignment;
 @TForm(header=ToolsKey.SECURITY_PROFILE_FORM_NAME, showBreadcrumBar=true, editCssId="")
 @TEjbService(serviceName = TProfileController.JNDI_NAME, model=TProfile.class)
 @TPresenter(type=TDynaPresenter.class,
-	modelClass=TProfile.class,
+	model=TProfile.class,
 	decorator=@TDecorator(	type=TMasterCrudViewDecorator.class, 
 		viewTitle=ToolsKey.VIEW_PROFILE, 
 		listTitle=ToolsKey.SECURITY_PROFILE_LIST_TITLE),

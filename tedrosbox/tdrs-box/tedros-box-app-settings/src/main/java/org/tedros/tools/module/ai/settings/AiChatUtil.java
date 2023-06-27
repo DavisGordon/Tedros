@@ -113,6 +113,10 @@ public class AiChatUtil {
 						: TedrosContext.getLoggedUser().getName();
 		String txt = msg.getContent();
 		Date dt =  msg.getInsertDate();
+		return buildMsgPane(user, txt, dt);
+	}
+
+	public StackPane buildMsgPane(String user, String txt, Date dt) {
 		String dtf = dt!=null 
 				? DateFormat
 				.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.DEFAULT, TLanguage.getLocale())

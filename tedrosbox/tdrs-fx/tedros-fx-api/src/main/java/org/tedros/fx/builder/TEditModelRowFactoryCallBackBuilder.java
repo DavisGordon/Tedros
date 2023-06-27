@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.tedros.core.TLanguage;
-import org.tedros.core.annotation.TLoadable;
+import org.tedros.core.annotation.TView;
 import org.tedros.core.context.TLoader;
 import org.tedros.core.context.TModuleContext;
 import org.tedros.core.context.TedrosAppManager;
@@ -84,7 +84,7 @@ public class TEditModelRowFactoryCallBackBuilder<M extends TModelView<?>> extend
 	 */
 	private void callLoader(List<TLoader> l) {
 		if(l.isEmpty()) {
-			LOGGER.severe("The model must be setting as loadable, see "+TLoadable.class.getSimpleName());
+			LOGGER.severe("The model must be setting as loadable, see "+TView.class.getSimpleName());
 			TedrosContext.showMessage(new TMessage(TMessageType.ERROR, iE.getString(TFxKey.MESSAGE_ERROR)));
 		}else {
 			if(l.size()==1) {

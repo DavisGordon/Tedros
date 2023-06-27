@@ -5,8 +5,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
 
-import javafx.scene.paint.Color;
-
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.style.TStyleResourceName;
 import org.tedros.core.style.TStyleResourceValue;
@@ -14,6 +12,8 @@ import org.tedros.core.style.TThemeUtil;
 import org.tedros.util.TColorUtil;
 import org.tedros.util.TFileUtil;
 import org.tedros.util.TedrosFolder;
+
+import javafx.scene.paint.Color;
 
 public abstract class TedrosStyleUtil {
 

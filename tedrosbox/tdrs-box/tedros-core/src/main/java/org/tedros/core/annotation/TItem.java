@@ -10,7 +10,8 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import org.tedros.core.ITModule;
+import org.tedros.api.presenter.view.ITDynaView;
+import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.model.ITModelView;
 import org.tedros.server.model.ITModel;
 
@@ -21,7 +22,25 @@ import org.tedros.server.model.ITModel;
  * @author Davis Gordon
  *
  */
-public @interface TModel {
+public @interface TItem {
+	
+	/**
+	 * The view title
+	 */
+	String title();
+	
+	/**
+	 * The view description
+	 */
+	String description() default "";
+	
+	/**
+	 * The view type.
+	 * @see {@link ITDynaView}
+	 */
+	@SuppressWarnings("rawtypes")
+	Class<? extends ITView> view() default ITView.class;
+	
 	/**
 	 * <ore>
 	 * The ITModelView type which the view on the ITModule accept to load and edit.
@@ -29,20 +48,19 @@ public @interface TModel {
 	 * 
 	 * */
 	@SuppressWarnings("rawtypes")
-	Class<? extends ITModelView> modelViewType();
+	Class<? extends ITModelView> modelView() default ITModelView.class;
 	
 	/**
 	 * <ore>
 	 * The ITModel type which the ITModelView wraps.
 	 * </pre>
 	 * */
-	Class<? extends ITModel> modelType();
+	Class<? extends ITModel> model() default ITModel.class;
 	
 	/**
-	 * <ore>
-	 * The ITModule type which accept the ITModelView to load and edit.
-	 * </pre>
-	 * */
-	Class<? extends ITModule> moduleType();
+	 * Group the view header for grouped views.
+	 */
+	boolean groupHeaders() default false;
+	
 	
 }
