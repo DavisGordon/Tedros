@@ -24,6 +24,13 @@ extends ITModelViewPresenter, ITPresenter<V> {
 	String getViewTitle();
 	
 	/**
+	 * Returns the selected view
+	 * 
+	 * @return ITView
+	 */
+	ITView getSelectedView();
+	
+	/**
 	 * Returns the observable list with all group views
 	 * 
 	 * @return ObservableList of ITGroupViewItem

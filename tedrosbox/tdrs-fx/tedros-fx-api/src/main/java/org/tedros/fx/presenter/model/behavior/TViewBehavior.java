@@ -17,8 +17,8 @@ import org.tedros.server.model.ITModel;
  * @param <M>
  * @param <E>
  */
-@SuppressWarnings({ "rawtypes" })
-public class TViewBehavior<M extends TModelView, E extends ITModel>
+@SuppressWarnings({ })
+public class TViewBehavior<M extends TModelView<E>, E extends ITModel>
 extends TDynaViewSimpleBaseBehavior<M, E> {
 		
 	@Override

@@ -22,8 +22,7 @@ import org.tedros.server.entity.ITEntity;
  * @param <M>
  * @param <E>
  */
-@SuppressWarnings({ "rawtypes" })
-public class TSelectionModalBehavior<M extends TModelView, E extends ITEntity>
+public class TSelectionModalBehavior<M extends TModelView<E>, E extends ITEntity>
 extends TDynaViewSelectionBaseBehavior<M, E> {
 	
 	private TSelectionModalDecorator<M> decorator;

@@ -40,7 +40,7 @@ import javafx.concurrent.Worker.State;
  * @param <E>
  */
 @SuppressWarnings({ "rawtypes" })
-public class TImportFileModalBehavior<M extends TModelView, E extends ITModel>
+public class TImportFileModalBehavior<M extends TModelView<E>, E extends ITModel>
 extends TDynaViewActionBaseBehavior<M, E> {
 	
 	private Class<? extends ITEntity> entityClass;

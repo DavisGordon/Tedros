@@ -17,8 +17,7 @@ import org.tedros.server.entity.ITEntity;
  * @param <M>
  * @param <E>
  */
-@SuppressWarnings({ "rawtypes" })
-public class TSaveViewBehavior<M extends TModelView, E extends ITEntity>
+public class TSaveViewBehavior<M extends TModelView<E>, E extends ITEntity>
 extends TDynaViewCrudBaseBehavior<M, E> {
 	
 	protected TSaveViewDecorator<M> decorator;

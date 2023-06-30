@@ -28,7 +28,7 @@ import org.tedros.server.entity.ITEntity;
  * @param <E>
  */
 @SuppressWarnings({ "rawtypes" })
-public class TDetailFieldBehavior<M extends TEntityModelView, E extends ITEntity>
+public class TDetailFieldBehavior<M extends TEntityModelView<E>, E extends ITEntity>
 extends TDetailFieldBaseBehavior<M, E> {
 	
 	@Override

@@ -1,6 +1,6 @@
 package org.tedros.api.presenter;
 
-import org.tedros.api.presenter.behaviour.ITBehavior;
+import org.tedros.api.presenter.behavior.ITBehavior;
 import org.tedros.api.presenter.decorator.ITDecorator;
 import org.tedros.core.model.ITModelView;
 import org.tedros.server.model.ITModel;

@@ -81,7 +81,7 @@ import javafx.scene.web.WebView;
  * @param <E>
  */
 @SuppressWarnings("rawtypes")
-public abstract class TDynaViewCrudBaseBehavior<M extends TModelView, E extends ITModel> 
+public abstract class TDynaViewCrudBaseBehavior<M extends TModelView<E>, E extends ITModel> 
 extends TDynaViewSimpleBaseBehavior<M, E> {
 	
 	private ChangeListener<ITModelForm<M>> breadcrumbFormChangeListener;

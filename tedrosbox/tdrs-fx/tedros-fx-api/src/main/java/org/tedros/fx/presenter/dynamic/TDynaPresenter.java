@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.api.presenter.ITDynaPresenter;
-import org.tedros.api.presenter.behaviour.ITBehavior;
+import org.tedros.api.presenter.behavior.ITBehavior;
 import org.tedros.api.presenter.decorator.ITDecorator;
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.api.presenter.view.TViewState;

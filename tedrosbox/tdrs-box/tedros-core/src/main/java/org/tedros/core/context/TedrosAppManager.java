@@ -2,14 +2,21 @@ package org.tedros.core.context;
 
 import java.util.function.Consumer;
 
+import org.tedros.api.presenter.ITDynaPresenter;
+import org.tedros.api.presenter.ITGroupPresenter;
+import org.tedros.api.presenter.ITPresenter;
+import org.tedros.api.presenter.behavior.ITDynaViewSimpleBaseBehavior;
+import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.ITModule;
 import org.tedros.core.TLanguage;
 import org.tedros.core.model.ITModelView;
+import org.tedros.server.model.ITModel;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
 /**
  * App manager
  * */
@@ -27,6 +34,75 @@ public final class TedrosAppManager extends TedrosAppLoader {
 		if(instance==null)
 			instance = new TedrosAppManager();
 		return instance;
+	}
+	
+	public ITModule getCurrentModule() {
+		Node view = TedrosContext.getView();
+		ITModule m = null;
+    	if(view != null && view instanceof ITModule)
+    		m = (ITModule) view;
+    	else if(view != null && view instanceof ScrollPane && ((ScrollPane)view).getContent() instanceof ITModule)
+    		m = (ITModule) ((ScrollPane)view).getContent();
+    	return m;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public ITPresenter getCurrentPresenter() {
+		ITModule m = getCurrentModule();
+		if(m!=null) 
+			return getModuleContext(m).getCurrentViewContext().getPresenter();
+			
+		return null;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public ITView getCurrentView() {
+		ITPresenter p = getCurrentPresenter();
+		if(p instanceof ITGroupPresenter) {
+			return ((ITGroupPresenter) p).getSelectedView();
+		}
+		if(p instanceof ITDynaPresenter) {
+			ITDynaPresenter dp = (ITDynaPresenter) p;
+			return dp.getDecorator().getView();
+		}
+		return null;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public TViewDescriptor getCurrentViewDescriptor() {
+		ITPresenter p = getCurrentPresenter();
+		ITDynaViewSimpleBaseBehavior b = null;
+		Class<ITModel> model;
+		Class<ITModelView> modelView;
+		if(p instanceof ITGroupPresenter) {
+			ITView ov = ((ITGroupPresenter) p).getSelectedView();
+			if(ov!=null) {
+				ITDynaPresenter dp = (ITDynaPresenter) ov.gettPresenter();
+				b = (ITDynaViewSimpleBaseBehavior) dp.getBehavior();
+			}
+		}
+		if(p instanceof ITDynaPresenter) {
+			ITDynaPresenter dp = (ITDynaPresenter) p;
+			b = (ITDynaViewSimpleBaseBehavior) dp.getBehavior();
+		}
+		if(b!=null) {
+			model = b.getModelClass();
+			modelView = b.getModelViewClass();
+			ITModule m = getCurrentModule();
+			for(TViewDescriptor vds : getModuleContext(m).getModuleDescriptor().getViewDescriptors())
+				if(vds.getModel()==model && vds.getModelView()==modelView)
+					return vds;
+		}
+		return null;
+	}
+	
+	public TViewDescriptor getViewDescriptor(String viewPath) {
+		for(TAppContext actx : getAppContexts())
+			for(TModuleContext mctx : actx.getModulesContext())
+				for(TViewDescriptor vds : mctx.getModuleDescriptor().getViewDescriptors())
+					if(vds.getPath().equals(viewPath) && vds.getModel()!=null) 
+						return vds;
+		return null;
 	}
 	
 	/**

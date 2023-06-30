@@ -96,4 +96,11 @@ public class TViewDescriptor implements Comparable<TViewDescriptor> {
 		return TLanguage.getInstance().getString(getPathKeys());
 	}
 
+	/**
+	 * @return the moduleDescriptor
+	 */
+	public TModuleDescriptor getModuleDescriptor() {
+		return moduleDescriptor;
+	}
+
 }

@@ -17,13 +17,13 @@ public class ViewInfo {
 	@JsonPropertyDescription("The module name. A module can have one or more views")
 	private String moduleName;
 
-	@JsonPropertyDescription("The view name.")
+	@JsonPropertyDescription("The view name")
 	private String viewName;
 	
 	@JsonPropertyDescription("The view description")
 	private String viewDescription;
 	
-	@JsonPropertyDescription("The system view path, used to open a view in the Tedros system")
+	@JsonPropertyDescription("The path to open a view on the Tedros desktop system, do not change it")
 	private String viewPath;
 	
 	@JsonPropertyDescription("Shows whether the user has access to the application")

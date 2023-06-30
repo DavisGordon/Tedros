@@ -490,8 +490,9 @@ public class TedrosBox extends Application implements ITedrosBox  {
         
         HBox btnBox = new HBox();
         btnBox.setAlignment(Pos.CENTER);
-        btnBox.getChildren().addAll(userButton, terosButton, infoButton, chb, backButton, forwardButton);
+        btnBox.getChildren().addAll(userButton, infoButton, chb, terosButton, backButton, forwardButton);
         HBox.setMargin(userButton, new Insets(0,10,0,0));
+        HBox.setMargin(terosButton, new Insets(0,10,0,0));
         HBox.setMargin(backButton, new Insets(0,10,0,0));
         HBox.setMargin(forwardButton, new Insets(0,10,0,0));
         HBox.setMargin(infoButton, new Insets(0,10,0,0));

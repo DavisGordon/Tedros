@@ -42,10 +42,10 @@ public class TerosMV extends TModelView<Teros> {
 
 	@TTabPane(tabs = { 
 		@TTab(text = "Teros", scroll=true, fields = { "messages" })}, 
-		region=@TRegion(minHeight=300, maxHeight=300, parse = true))
+		region=@TRegion(minHeight=400, maxHeight=400, parse = true))
 	private SimpleStringProperty title;
 	
-	@TVBox(fillWidth=true, spacing=20)
+	@TVBox(fillWidth=true, spacing=10)
 	@TGenericType(model = Message.class, modelView=MsgMV.class)
 	private ITObservableList<MsgMV> messages; 
 

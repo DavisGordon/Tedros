@@ -1,74 +1,56 @@
 package org.tedros.ai;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import com.theokanning.openai.completion.chat.*;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.tedros.ai.function.TFunction;
+import org.tedros.core.context.TedrosContext;
+
+import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest.ChatCompletionRequestFunctionCall;
+import com.theokanning.openai.completion.chat.ChatFunction;
+import com.theokanning.openai.completion.chat.ChatFunctionCall;
+import com.theokanning.openai.completion.chat.ChatMessage;
+import com.theokanning.openai.completion.chat.ChatMessageRole;
 import com.theokanning.openai.service.FunctionExecutor;
 import com.theokanning.openai.service.OpenAiService;
 
-import java.util.*;
-
-import org.tedros.ai.function.TFunction;
-import org.tedros.ai.function.model.CallView;
-import org.tedros.ai.function.model.Empty;
-import org.tedros.ai.function.model.Response;
-import org.tedros.ai.function.model.ViewCatalog;
-
 public class TerosService{
 
-	public  static String token = "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";
+	private static TerosService instance;
 	
-	/*public static void main(String[] args) {
-		TerosService s = new TerosService(token);
-		ViewCatalog log = new ViewCatalog();
-		log.add("Produtos", "Gerencia todos os produtos", "App/Estoque/Produtos");
-		log.add("Entrada no estoque", "Registra entrada de produto no estoque", "App/Estoque/Entrada");
-		log.add("Saida do estoque", "Registra saida de produto do estoque", "App/Estoque/Saida");
-		log.add("Relatorio de inventario", "Gera relatorio do inventario", "App/Estoque/Relatorio");
-		log.add("Clientes", "Gerencia todos os clientes", "App/Suporte/Pessoas!Clientes");
-		log.add("Funcionarios", "Gerencia todos os funcionarios", "App/Suporte/Pessoas!Funcionario");
-		log.add("Empresas", "Gerencia todas as Empresas", "App/Suporte/Pessoas/Empresas ");
-		
-		TFunction<Empty> f1 = new TFunction<Empty>("list_system_views", "List all system views/screens", Empty.class, obj->log);
-		TFunction<CallView> f2 = new TFunction<CallView>("call_view", "Call and open a view/screen", CallView.class, 
-				obj->new Response(obj.getSystemViewPath() + " opened successfully"));
-		
-		s.createFunctionExecutor(f1, f2);
-		
-		String resp = "";
-        System.out.print("First Query: ");
-        Scanner scanner = new Scanner(System.in);
-        resp = s.call(scanner.nextLine());
-        while(true) {
-            System.out.println("Response: " + resp);
-            System.out.print("Next Query: ");
-            String nextLine = scanner.nextLine();
-            if (nextLine.equalsIgnoreCase("exit")) {
-            	scanner.close();
-                System.exit(0);
-            }
-            resp = s.call(nextLine);
-        }
-		
-	}*/
-
 	private List<ChatMessage> messages = new ArrayList<>();
 	private FunctionExecutor functionExecutor;
     private OpenAiService service;
+    
     /**
 	 * @param token
 	 */
-	public TerosService(String token) {
+	private TerosService(String token) {
 		super();
-		service = new OpenAiService(token);
-
-        ChatMessage systemMessage = new ChatMessage(ChatMessageRole.SYSTEM.value(), 
-        		"Você é um útil assistente do sistema Tedros e seu nome é Teros");
+		service = new OpenAiService(token, Duration.ZERO);
+		String msg = "You are a helpful assistant for the Tedros desktop system and your name is Teros."
+				+ "\nIntroduce yourself by greeting the user "+TedrosContext.getLoggedUser().getName()
+				+"\nImportant: call the list_system_views function to get system information, do this before helping the user";
+        ChatMessage systemMessage = new ChatMessage(ChatMessageRole.SYSTEM.value(), msg);
         messages.add(systemMessage);
 	}
 	
-	@SuppressWarnings("unchecked")
+	public static TerosService create(String token) {
+		if(instance==null)
+			instance = new TerosService(token);
+		return instance;
+	}
+	
+	public static TerosService getInstance() {
+		if(instance==null)
+			throw new IllegalStateException("The instance was not created!");
+		return instance;
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void createFunctionExecutor(TFunction... functions) {
 		functionExecutor = null;
 		if(functions!=null && functions.length>0) {
@@ -84,10 +66,12 @@ public class TerosService{
 		}
 	}
 
-	public String call(String prompt) {
+	public String call(String userPrompt, String sysPrompt) {
 
         String resp = "";
-        ChatMessage msg = new ChatMessage(ChatMessageRole.USER.value(), prompt);
+        if(sysPrompt!=null)
+        	messages.add(new ChatMessage(ChatMessageRole.SYSTEM.value(), sysPrompt));
+        ChatMessage msg = new ChatMessage(ChatMessageRole.USER.value(), userPrompt);
         messages.add(msg);
         while (true) {
 	        ChatCompletionRequest chatCompletionRequest = buildRequest();
@@ -125,8 +109,10 @@ public class TerosService{
                     break;
                 }
             	}catch(Exception e) {
+            		e.printStackTrace();
             		 ChatMessage message = functionExecutor.convertExceptionToMessage(e);
             		 messages.add(message);
+            		 resp = "Error: "+e.getMessage();
             	}
             }
 
@@ -140,20 +126,22 @@ public class TerosService{
 		return (this.functionExecutor!=null)
 				? ChatCompletionRequest
 		        .builder()
-		        .model("gpt-3.5-turbo-0613")
+		        .model("gpt-3.5-turbo-16k")
 		        .messages(messages)
 		        .functions(functionExecutor.getFunctions())
 		        .functionCall(ChatCompletionRequestFunctionCall.of("auto"))
 		        .n(1)
-		        .maxTokens(2500)
+		        .temperature(0.1)
+		        .maxTokens(2000)
 		        .logitBias(new HashMap<>())
 		        .build()
 		        : ChatCompletionRequest
 		        .builder()
-		        .model("gpt-3.5-turbo-0613")
+		        .model("gpt-3.5-turbo-16k")
 		        .messages(messages)
 		        .n(1)
-		        .maxTokens(2500)
+		        .temperature(0.1)
+		        .maxTokens(2000)
 		        .logitBias(new HashMap<>())
 		        .build();
 	}

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import org.tedros.api.presenter.ITPresenter;
+import org.tedros.api.presenter.behavior.ITDynaViewSimpleBaseBehavior;
 import org.tedros.api.presenter.view.ITView;
 import org.tedros.api.presenter.view.TViewState;
 import org.tedros.app.process.ITProcess;
@@ -16,13 +17,13 @@ import org.tedros.core.context.TSecurityDescriptor;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
+import org.tedros.core.model.ITModelView;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.control.action.TPresenterAction;
 import org.tedros.fx.control.validator.TControlValidator;
 import org.tedros.fx.control.validator.TValidatorResult;
 import org.tedros.fx.exception.TValidatorException;
 import org.tedros.fx.modal.TMessageBox;
-import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.behavior.TActionHelper;
 import org.tedros.fx.presenter.behavior.TActionState;
 import org.tedros.fx.presenter.behavior.TActionType;
@@ -52,15 +53,15 @@ import javafx.scene.layout.StackPane;
  * that don't need to access the business layer on 
  * the application server. 
  * For model processing use {@link org.tedros.fx.annotation.process.TModelProcess}
- * in the TModelView.
+ * in the ITModelView.
  * @author Davis Gordon
  *
  * @param <M>
  * @param <E>
  */
 @SuppressWarnings("rawtypes")
-public abstract class TDynaViewSimpleBaseBehavior<M extends TModelView, E extends ITModel> 
-extends TBehavior<M, TDynaPresenter<M>> {
+public abstract class TDynaViewSimpleBaseBehavior<M extends ITModelView<E>, E extends ITModel> 
+extends TBehavior<M, TDynaPresenter<M>> implements ITDynaViewSimpleBaseBehavior<M, E> {
 	
 	private TDynaViewSimpleBaseDecorator decorator;
 	private TMessageBox tMessageBox;
@@ -132,9 +133,10 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		getView().tModalVisibleProperty().addListener(new WeakChangeListener<Boolean>(modalCleanMsgLtnr));
 	}
 	
-	/**
-	 * Show the view screen saver
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.presenter.dynamic.behavior.ITDynaViewSimpleBaseBehavior#showScreenSaver()
 	 */
+	@Override
 	public void showScreenSaver() {
 		if(!getView().gettState().equals(TViewState.READY))
 			super.setViewStateAsReady();
@@ -188,9 +190,10 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		return this.actionHelper.getAction(type);
 	}
 
-	/**
-	 * If false none message from method addMessage will be displayed.
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.presenter.dynamic.behavior.ITDynaViewSimpleBaseBehavior#setShoWMessages(boolean)
+	 */
+	@Override
 	public void setShoWMessages(boolean show) {
 		this.showMessages = show;
 	}
@@ -203,16 +206,18 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		this.actionStateProperty.setValue(actionState);
 	}
 	
-	/**
-	 * Show a list of message in a modal view
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.presenter.dynamic.behavior.ITDynaViewSimpleBaseBehavior#addMessage(java.util.List)
+	 */
+	@Override
 	public void addMessage(List<TMessage> msgList) {
 		messagesProperty.addAll(msgList);
 	}
 	
-	/**
-	 * Show messages in a modal view
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.presenter.dynamic.behavior.ITDynaViewSimpleBaseBehavior#addMessage(org.tedros.core.message.TMessage)
+	 */
+	@Override
 	public void addMessage(TMessage... msg) {
 		messagesProperty.addAll(msg);
 	}
@@ -275,9 +280,10 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		getView().gettProgressIndicator().bind(process.runningProperty());
 	}
 	
-	/**
-	 * Return the {@link TModelView} class
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.presenter.dynamic.behavior.ITDynaViewSimpleBaseBehavior#getModelViewClass()
+	 */
+	@Override
 	public Class<M> getModelViewClass() {
 		return this.modelViewClass;
 	}
@@ -286,7 +292,7 @@ extends TBehavior<M, TDynaPresenter<M>> {
 	 * <p>
 	 * Create a {@link TModelProcess} process based on the 
 	 * {@link org.tedros.fx.annotation.process.TModelProcess} 
-	 * annotated in the given {@link TModelView}
+	 * annotated in the given {@link ITModelView}
 	 * </p>  
 	 * */
 	@SuppressWarnings("unchecked")
@@ -348,10 +354,10 @@ extends TBehavior<M, TDynaPresenter<M>> {
 	}
 	
 	/**
-	 * Construct and run a TModelProcess on the current TModelView. 
+	 * Construct and run a TModelProcess on the current ITModelView. 
 	 * The action to be performed is based on the given TActionType.
 	 * Target service must be defined by {@link org.tedros.fx.annotation.process.TModelProcess}
-	 * in TModelView
+	 * in ITModelView
 	 * 
 	 * @param action
 	 * @throws Exception
@@ -364,10 +370,10 @@ extends TBehavior<M, TDynaPresenter<M>> {
 	}
 	
 	/**
-	 * Construct and run a TModelProcess on the current TModelView. 
+	 * Construct and run a TModelProcess on the current ITModelView. 
 	 * The action to be performed is based on the given TActionType.
 	 * Target service must be defined by {@link org.tedros.fx.annotation.process.TModelProcess}
-	 * in TModelView
+	 * in ITModelView
 	 * 
 	 * @param action
 	 * @param finished
@@ -527,10 +533,10 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		return skipChangeValidation;
 	}
 
-	/**
-	 * Define whether the process should skip model change validation.  
-	 * @param skipChangeValidation
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.presenter.dynamic.behavior.ITDynaViewSimpleBaseBehavior#setSkipChangeValidation(boolean)
 	 */
+	@Override
 	public void setSkipChangeValidation(boolean skipChangeValidation) {
 		this.skipChangeValidation = skipChangeValidation;
 	}
@@ -543,11 +549,10 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		return skipRequiredValidation;
 	}
 
-	/**
-	 * Define if the process should ignore the 
-	 * validation of mandatory fields.  
-	 * @param skipChangeValidation
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.presenter.dynamic.behavior.ITDynaViewSimpleBaseBehavior#setSkipRequiredValidation(boolean)
 	 */
+	@Override
 	public void setSkipRequiredValidation(boolean skipRequiredValidation) {
 		this.skipRequiredValidation = skipRequiredValidation;
 	}
@@ -559,9 +564,10 @@ extends TBehavior<M, TDynaPresenter<M>> {
 		return actionStateProperty;
 	}
 
-	/**
-	 * @return the modelClass
+	/* (non-Javadoc)
+	 * @see org.tedros.fx.presenter.dynamic.behavior.ITDynaViewSimpleBaseBehavior#getModelClass()
 	 */
+	@Override
 	public Class<E> getModelClass() {
 		return modelClass;
 	}

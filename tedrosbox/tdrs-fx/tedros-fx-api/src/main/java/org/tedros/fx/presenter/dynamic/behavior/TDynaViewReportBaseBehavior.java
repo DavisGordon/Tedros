@@ -64,7 +64,7 @@ import javafx.scene.control.ToggleGroup;
  * @param <E>
  */
 @SuppressWarnings("rawtypes")
-public abstract class TDynaViewReportBaseBehavior<M extends TModelView, E extends ITReportModel> 
+public abstract class TDynaViewReportBaseBehavior<M extends TModelView<E>, E extends ITReportModel> 
 extends TDynaViewSimpleBaseBehavior<M, E> {
 	
 	private ToggleGroup radioGroup;
