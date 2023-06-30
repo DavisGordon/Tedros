@@ -9,7 +9,9 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
+import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TLanguage;
 import org.tedros.core.ai.model.TAiChatCompletion;
 import org.tedros.core.ai.model.TAiChatMessage;
@@ -17,6 +19,8 @@ import org.tedros.core.ai.model.completion.chat.TChatRole;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.controller.TAiChatCompletionController;
 import org.tedros.core.controller.TAiChatMessageController;
+import org.tedros.core.controller.TPropertieController;
+import org.tedros.core.domain.TSystemPropertie;
 import org.tedros.core.service.remote.ServiceLocator;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.control.TText;
@@ -49,10 +53,30 @@ import javafx.scene.layout.VBox;
  *
  */
 public class AiChatUtil {
+
+	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
 	private TLanguage iEngine = TLanguage.getInstance();
 	
-	@SuppressWarnings("unchecked")
+	public String getOpenAiKey() {
+		String key = "";
+		ServiceLocator loc = ServiceLocator.getInstance();
+		try {
+			TPropertieController serv = loc.lookup(TPropertieController.JNDI_NAME);
+			TResult<String> res = serv.getValue(TedrosContext.getLoggedUser().getAccessToken(), 
+					TSystemPropertie.OPENAI_KEY.getValue());
+			if(res.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res.getValue()))
+				key = res.getValue();
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			LOGGER.severe(ex.toString());
+		}finally{
+			loc.close();
+		}
+		
+		return key;
+	}
+	
 	public TAiChatCompletion saveChat(TAccessToken token, TAiChatCompletion chat) throws Exception {
 		ServiceLocator loc = ServiceLocator.getInstance();
 		try {
@@ -64,7 +88,6 @@ public class AiChatUtil {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public TAiChatMessage saveMessage(TAccessToken token, TAiChatMessage msg) throws Exception {
 		ServiceLocator loc = ServiceLocator.getInstance();
 		try {
@@ -113,10 +136,10 @@ public class AiChatUtil {
 						: TedrosContext.getLoggedUser().getName();
 		String txt = msg.getContent();
 		Date dt =  msg.getInsertDate();
-		return buildMsgPane(user, txt, dt);
+		return buildMsgPane(user, txt, dt, 800, true);
 	}
 
-	public StackPane buildMsgPane(String user, String txt, Date dt) {
+	public StackPane buildMsgPane(String user, String txt, Date dt, int wrapAt, boolean showHeader) {
 		String dtf = dt!=null 
 				? DateFormat
 				.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.DEFAULT, TLanguage.getLocale())
@@ -124,13 +147,15 @@ public class AiChatUtil {
 				: "";
 		
 		VBox gp = new VBox(8);
-		HBox header = new HBox(4);
-		header.setId("t-chat-msg-header");
-		gp.getChildren().add(header);
-		if(user!=null) {
-			TText t2 = new TText(user);
-			t2.settTextStyle(TTextStyle.MEDIUM);
-			header.getChildren().add(t2);
+		if(showHeader) {
+			HBox header = new HBox(4);
+			header.setId("t-chat-msg-header");
+			gp.getChildren().add(header);
+			if(user!=null) {
+				TText t2 = new TText(user);
+				t2.settTextStyle(TTextStyle.MEDIUM);
+				header.getChildren().add(t2);
+			}
 		}
 		HBox footer = new HBox(10);
 		footer.setAlignment(Pos.CENTER_LEFT);
@@ -143,7 +168,7 @@ public class AiChatUtil {
 		if(txt!=null) {
 			TText t1 = new TText(txt);
 			t1.settTextStyle(TTextStyle.MEDIUM);
-			t1.setWrappingWidth(800);
+			t1.setWrappingWidth(wrapAt);
 			VBox.setMargin(t1, new Insets(8));
 			gp.getChildren().add(t1);
 			Hyperlink hl = new Hyperlink(iEngine.getString(TFxKey.BUTTON_COPY));
@@ -184,6 +209,7 @@ public class AiChatUtil {
 					setImage(imgView, n);
 				} catch (Exception e1) {
 					e1.printStackTrace();
+					LOGGER.severe(e1.toString());
 				}
 				bp.removeListener(this);
 			}
@@ -196,6 +222,7 @@ public class AiChatUtil {
 			TBytesLoader.loadBytesFromTFileEntity(m.getByteEntity().getId(), bp);
 		} catch (Throwable e) {
 			e.printStackTrace();
+			LOGGER.severe(e.toString());
 		}
 	}
 	
@@ -209,6 +236,7 @@ public class AiChatUtil {
 			Image img = new Image(is);
 			imgView.setImage(img);
 		} catch (IOException e) {
+			LOGGER.severe(e.toString());
 			throw new RuntimeException(e);
 		}
 	}

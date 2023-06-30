@@ -20,7 +20,7 @@ public class TerosPane extends StackPane {
 	public TerosPane() {
 		TDynaView<TerosMV> v = new TDynaView<>(TerosMV.class);
     	v.tLoad();
-    	v.setMinHeight(60);
+    	v.setMinHeight(400);
 		super.getChildren().add(v);
 				
 		

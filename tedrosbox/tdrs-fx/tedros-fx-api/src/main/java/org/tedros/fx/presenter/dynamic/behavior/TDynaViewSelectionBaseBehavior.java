@@ -67,7 +67,7 @@ import javafx.util.Callback;
  * @param <E>
  */
 @SuppressWarnings("rawtypes")
-public abstract class TDynaViewSelectionBaseBehavior<M extends TModelView, E extends ITEntity> 
+public abstract class TDynaViewSelectionBaseBehavior<M extends TModelView<E>, E extends ITEntity> 
 extends TDynaViewSimpleBaseBehavior<M, E> {
 	
 	

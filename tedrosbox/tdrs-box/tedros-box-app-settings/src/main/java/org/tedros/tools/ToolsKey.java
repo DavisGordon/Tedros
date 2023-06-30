@@ -16,6 +16,8 @@ public interface ToolsKey {
 	static final String IMPORT_UP_FILE = "#{import.up.file}";
 	static final String MENU_TOOLS = "#{menu.tools}";
 	static final String MESSAGE_AI_CREATE_IMAGE_REQUIRED = "#{message.ai.create.image.required}";
+	static final String MESSAGE_AI_DISABLED = "#{message.ai.disabled}";
+	static final String MESSAGE_AI_KEY_REQUIRED = "#{message.ai.key.required}";
 	static final String MESSAGE_AI_PROMPT_REQUIRED = "#{message.ai.prompt.required}";
 	static final String MESSAGE_AI_TIMEOUT = "#{message.ai.timeout}";
 	static final String MESSAGE_SELECT_IMAGE = "#{message.select.image}";

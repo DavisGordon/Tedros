@@ -51,7 +51,7 @@ import javafx.scene.input.MouseEvent;
  * @param <E>
  */
 @SuppressWarnings("rawtypes")
-public abstract class TDetailFieldBaseBehavior<M extends TModelView, E extends ITEntity> 
+public abstract class TDetailFieldBaseBehavior<M extends TModelView<E>, E extends ITEntity> 
 extends TDynaViewSimpleBaseBehavior<M, E> {
 	
 	private ListChangeListener<Node> formListChangeListener;

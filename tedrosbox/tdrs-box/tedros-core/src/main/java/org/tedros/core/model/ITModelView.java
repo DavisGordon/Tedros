@@ -8,6 +8,8 @@ import org.tedros.server.model.ITModel;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,17 +20,20 @@ import javafx.collections.SetChangeListener;
 /**
  * The model view contract
  * */
+@SuppressWarnings("rawtypes")
 public interface ITModelView<M extends ITModel> {
-	
-	
+
+	String getModelViewId();
+
+	void setModelViewId(String modelViewId);
+
 	/**
 	 * <pre>
-	 * The toString property 
-	 * @return SimpleStringProperty
+	 * Get the value to display in components.
 	 * </pre>
 	 * */
 	SimpleStringProperty toStringProperty();
-	
+
 	/**
 	 * <pre>
 	 * Format the toString value
@@ -36,71 +41,130 @@ public interface ITModelView<M extends ITModel> {
 	 * @see java.util.Formatter
 	 * */
 	void formatToString(String format, ObservableValue<?>... fields);
-	
+
+	void formatToString(TFormatter formatter);
+
 	/**
-	 * Removes all listener
+	 * <pre>
+	 * Get the model.
+	 * </pre>
 	 * */
-	void removeAllListener();
-	
+	M getModel();
+
 	/**
-	 * Removes the listener
+	 * <pre>
+	 * Set a new model and reload the values in the model view properties. 
+	 * </pre>
 	 * */
-	<T> T removeListener(String listenerId);
-	
+	void reload(M model);
+
+	int hashCode();
+
 	/**
-	 * Returns all listeners key
-	 * */
-	Map<String, Set<String>> getListenerKeys();
-	
-	/**
-	 * Returns the listener repository
-	 * */
-	TRepository getListenerRepository();
-	
-	/**
-	 * Adds a {@link InvalidationListener} on the repository 
+	 * <pre>
+	 * To be called by hashCode methods. 
+	 * The hashCode are built over the ITModel object instead this TModelView object
+	 * the reason is because we need to know when the model is changed and we do this
+	 * observing the hashcode value. 
 	 * 
+	 * 
+	 *	Example:
+	 *	public class ExampleModelView extends TModelView&lt;ExampleModel&gt;{
+	 *		...
+	 *		<i>@</i>Override
+	 *		public int hashCode() {
+	 *			return reflectionHashCode("someFieldToBeExcluded");
+	 *		}
+	 *	}
+	 * 
+	 * </pre>
+	 * @param excludeFields
+	 * */
+	int reflectionHashCode(String... excludeFields);
+
+	/**
+	 * <pre>
+	 * Return the last hashCode to check changes 
+	 * </pre>
+	 * */
+	int getLastHashCode();
+
+	/**
+	 * <pre>
+	 * Return true if the model are changed.
+	 * </pre>
+	 * */
+	boolean isChanged();
+
+	/**
+	 * <pre>
+	 * The property for the lastHashCode value.
+	 * </pre>
+	 * */
+	SimpleIntegerProperty lastHashCodeProperty();
+
+	/**
+	 * <pre>
+	 * A property to check when the model view are reloaded.
+	 * </pre>
+	 * */
+	SimpleLongProperty loadedProperty();
+
+	/**
+	 * <pre>
+	 * Return the value of the getDisplayProperty method.
+	 * </pre>
+	 * */
+	String toString();
+
+	/**
+	 * <pre>
+	 * Perform a equals in getId and getDisplayProperty;
+	 * </pre>
+	 * */
+	boolean equals(Object obj);
+
+	/**
+	 * Return the {@link ObservableValue} created to the field name. 
+	 * */
+	<T extends Observable> T getProperty(String fieldName);
+
+	void removeAllListener();
+
+	<T> T removeListener(String listenerId);
+
+	Map<String, Set<String>> getListenerKeys();
+
+	TRepository getListenerRepository();
+
+	/**
 	 * @param fieldName
 	 * @param invalidationListener
 	 */
-	void addListener(final String fieldName, InvalidationListener invalidationListener);
-	
-	/**
-	 * Adds a {@link ChangeListener} on the repository
-	 * 
-	 * @param fieldName
-	 * @param changeListener
-	 */
-	@SuppressWarnings("rawtypes")
-	void addListener(final String fieldName, ChangeListener changeListener);
-	
-	/**
-	 * Adds a {@link MapChangeListener} on the repository
-	 * 
-	 * @param fieldName
-	 * @param changeListener
-	 */
-	@SuppressWarnings("rawtypes")
-	void addListener(final String fieldName, final MapChangeListener mapChangeListener);
-	
-	/**
-	 * Adds a {@link SetChangeListener} on the repository
-	 * 
-	 * @param fieldName
-	 * @param changeListener
-	 */
-	@SuppressWarnings("rawtypes")
-	void addListener(final String fieldName, final SetChangeListener setChangeListener);
+	void addListener(String fieldName, InvalidationListener invalidationListener);
 
 	/**
-	 * Adds a {@link ListChangeListener} on the repository
-	 * 
 	 * @param fieldName
 	 * @param changeListener
 	 */
-	@SuppressWarnings("rawtypes")
-	void addListener(final String fieldName, final ListChangeListener listChangeListener);
+	void addListener(String fieldName, ChangeListener changeListener);
 
-	<T extends Observable> T getProperty(String fieldName);
-	
+	/**
+	 * @param fieldName
+	 * @param changeListener
+	 */
+	void addListener(String fieldName, MapChangeListener changeListener);
+
+	/**
+	 * @param fieldName
+	 * @param changeListener
+	 */
+	void addListener(String fieldName, SetChangeListener changeListener);
+
+	/**
+	 * @param fieldName
+	 * @param changeListener
+	 */
+	void addListener(String fieldName, ListChangeListener changeListener);
+
 }

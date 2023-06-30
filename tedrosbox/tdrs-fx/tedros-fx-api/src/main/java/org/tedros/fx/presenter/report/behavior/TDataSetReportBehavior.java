@@ -18,7 +18,7 @@ import org.tedros.server.model.ITReportModel;
  * @param <E>
  */
 @SuppressWarnings({ "rawtypes" })
-public class TDataSetReportBehavior<M extends TModelView, E extends ITReportModel>
+public class TDataSetReportBehavior<M extends TModelView<E>, E extends ITReportModel>
 extends TDynaViewReportBaseBehavior<M, E> {
 	
 		

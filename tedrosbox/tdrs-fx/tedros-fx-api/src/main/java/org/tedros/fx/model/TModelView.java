@@ -21,10 +21,11 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.tedros.core.TLanguage;
 import org.tedros.core.model.ITModelView;
+import org.tedros.core.model.TFormatter;
+import org.tedros.core.model.TFormatter.Item;
 import org.tedros.core.repository.TRepository;
 import org.tedros.fx.exception.TErrorType;
 import org.tedros.fx.exception.TException;
-import org.tedros.fx.model.TFormatter.Item;
 import org.tedros.fx.property.TSimpleFileProperty;
 import org.tedros.fx.util.TPropertyUtil;
 import org.tedros.fx.util.TReflectionUtil;
@@ -134,30 +135,35 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		buildLastHashCodeListener();
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#getModelViewId()
+	 */
+	@Override
 	public String getModelViewId() {
 		return modelViewId;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#setModelViewId(java.lang.String)
+	 */
+	@Override
 	public void setModelViewId(String modelViewId) {
 		this.modelViewId = modelViewId;
 	}
 
-	/**
-	 * <pre>
-	 * Get the value to display in components.
-	 * </pre>
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#toStringProperty()
+	 */
+	@Override
 	@Transient
 	public SimpleStringProperty toStringProperty() {
 		return display;
 	}
 
-	/**
-	 * <pre>
-	 * Format the toString value
-	 * </pre>
-	 * @see java.util.Formatter
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#formatToString(java.lang.String, javafx.beans.value.ObservableValue)
+	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public void formatToString(String format, ObservableValue<?>... fields) {
 		
@@ -181,6 +187,10 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	}
 	
 
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#formatToString(org.tedros.fx.model.TFormatter)
+	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public void formatToString(TFormatter formatter) {
 		int x = 0;
@@ -219,21 +229,19 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		toStringProperty().setValue(TLanguage.getInstance().getString(String.format(format, arr)));
 	}
 	
-	/**
-	 * <pre>
-	 * Get the model.
-	 * </pre>
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#getModel()
+	 */
+	@Override
 	@Transient
 	public M getModel(){
 		return this.model;
 	}
 	
-	/**
-	 * <pre>
-	 * Set a new model and reload the values in the model view properties. 
-	 * </pre>
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#reload(M)
+	 */
+	@Override
 	public void reload(M model) {
 		
 		LOGGER.log(Level.FINEST, "Reloading model " + model.getClass().getSimpleName() + " by the "+this.getClass().getSimpleName());
@@ -262,30 +270,17 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		lastHashCodeProperty.addListener(listener);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		return reflectionHashCode(new String[]{});
 	}
-	/**
-	 * <pre>
-	 * To be called by hashCode methods. 
-	 * The hashCode are built over the ITModel object instead this TModelView object
-	 * the reason is because we need to know when the model is changed and we do this
-	 * observing the hashcode value. 
-	 * 
-	 * 
-	 *	Example:
-	 *	public class ExampleModelView extends TModelView&lt;ExampleModel&gt;{
-	 *		...
-	 *		<i>@</i>Override
-	 *		public int hashCode() {
-	 *			return reflectionHashCode("someFieldToBeExcluded");
-	 *		}
-	 *	}
-	 * 
-	 * </pre>
-	 * @param excludeFields
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#reflectionHashCode(java.lang.String)
+	 */
+	@Override
 	@Transient
 	public int reflectionHashCode(String... excludeFields){
 		if(excludeFields!=null && excludeFields.length>0){
@@ -294,30 +289,27 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 			return HashCodeBuilder.reflectionHashCode(model);
 	}
 	  
-	/**
-	 * <pre>
-	 * Return the last hashCode to check changes 
-	 * </pre>
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#getLastHashCode()
+	 */
+	@Override
 	@Transient
 	public int getLastHashCode() {
 		return lastHashCode;
 	}
-	/**
-	 * <pre>
-	 * Return true if the model are changed.
-	 * </pre>
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#isChanged()
+	 */
+	@Override
 	@Transient
 	public boolean isChanged(){
 		return changed;
 	}
 	
-	/**
-	 * <pre>
-	 * The property for the lastHashCode value.
-	 * </pre>
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#lastHashCodeProperty()
+	 */
+	@Override
 	@Transient
 	public SimpleIntegerProperty lastHashCodeProperty() {
 		if(lastHashCodeProperty==null)
@@ -325,11 +317,10 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		return lastHashCodeProperty;
 	}
 	
-	/**
-	 * <pre>
-	 * A property to check when the model view are reloaded.
-	 * </pre>
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#loadedProperty()
+	 */
+	@Override
 	@Transient
 	public SimpleLongProperty loadedProperty() {
 		if(loadedProperty==null)
@@ -337,21 +328,17 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		return loadedProperty;
 	}	
 	
-	/**
-	 * <pre>
-	 * Return the value of the getDisplayProperty method.
-	 * </pre>
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#toString()
+	 */
 	@Override
 	public String toString() {
 		return toStringProperty().getValue()!=null ? toStringProperty().getValue() : "";	
 	}
 	
-	/**
-	 * <pre>
-	 * Perform a equals in getId and getDisplayProperty;
-	 * </pre>
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#equals(java.lang.Object)
+	 */
 	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean equals(Object obj) {
@@ -368,9 +355,10 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		return false;
 	}
 	
-	/**
-	 * Return the {@link ObservableValue} created to the field name. 
-	 * */
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#getProperty(java.lang.String)
+	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends Observable> T getProperty(String fieldName) {
 		return (T) properties.get(fieldName);
@@ -652,65 +640,77 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		this.lastHashCode = lastHashCode;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#removeAllListener()
+	 */
 	@Override
 	public void removeAllListener() {
 		tListenerHelper.removeAllListener();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#removeListener(java.lang.String)
+	 */
 	@Override
 	public <T> T removeListener(String listenerId) {
 		return tListenerHelper.removeListener(listenerId);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#getListenerKeys()
+	 */
 	@Override
 	public Map<String, Set<String>> getListenerKeys() {
 		return tListenerHelper.getListenerKeys();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#getListenerRepository()
+	 */
 	@Override
 	public TRepository getListenerRepository() {
 		return tListenerHelper.getListenerRepository();
 	}
 	
-	/**
-	 * @param fieldName
-	 * @param invalidationListener
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#addListener(java.lang.String, javafx.beans.InvalidationListener)
 	 */
+	@Override
 	public void addListener(final String fieldName, InvalidationListener invalidationListener) {
 		tListenerHelper.addListener(fieldName, invalidationListener);
 	}
 	
-	/**
-	 * @param fieldName
-	 * @param changeListener
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#addListener(java.lang.String, javafx.beans.value.ChangeListener)
 	 */
+	@Override
 	@SuppressWarnings("rawtypes")
 	public void addListener(final String fieldName, ChangeListener changeListener) {
 		tListenerHelper.addListener(fieldName, changeListener);
 	}
 	
-	/**
-	 * @param fieldName
-	 * @param changeListener
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#addListener(java.lang.String, javafx.collections.MapChangeListener)
 	 */
+	@Override
 	@SuppressWarnings("rawtypes")
 	public void addListener(final String fieldName, final MapChangeListener changeListener) {
 		tListenerHelper.addListener(fieldName, changeListener);
 	}
 	
-	/**
-	 * @param fieldName
-	 * @param changeListener
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#addListener(java.lang.String, javafx.collections.SetChangeListener)
 	 */
+	@Override
 	@SuppressWarnings("rawtypes")
 	public void addListener(final String fieldName, final SetChangeListener changeListener) {
 		tListenerHelper.addListener(fieldName, changeListener);
 	}
 
-	/**
-	 * @param fieldName
-	 * @param changeListener
+	/* (non-Javadoc)
+	 * @see org.tedros.core.model.ITModelView#addListener(java.lang.String, javafx.collections.ListChangeListener)
 	 */
+	@Override
 	@SuppressWarnings("rawtypes")
 	public void addListener(final String fieldName, final ListChangeListener changeListener) {
 		tListenerHelper.addListener(fieldName, changeListener);

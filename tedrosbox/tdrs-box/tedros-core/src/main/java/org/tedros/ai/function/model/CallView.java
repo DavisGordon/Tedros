@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
  */
 public class CallView {
 
-	@JsonPropertyDescription("The view path to open")
+	@JsonPropertyDescription("The path to open a view on the Tedros desktop system, do not change it")
 	private String viewPath;
 
 	/**

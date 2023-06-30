@@ -41,14 +41,13 @@ import javafx.scene.control.ToggleGroup;
  * @param <E>
  */
 @SuppressWarnings("rawtypes")
-public abstract class TDynaViewActionBaseBehavior<M extends TModelView, E extends ITModel> 
+public abstract class TDynaViewActionBaseBehavior<M extends TModelView<E>, E extends ITModel> 
 extends TDynaViewSimpleBaseBehavior<M, E> {
 	
 	private ToggleGroup radioGroup;
 	private BooleanProperty modeBtnDisableProperty;
 	private BooleanProperty modeBtnVisibleProperty;
 	
-	protected Class<E> modelClass;
 	protected String serviceName;
 		
 	private TDynaViewActionBaseDecorator<M> decorator;

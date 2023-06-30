@@ -8,31 +8,22 @@ import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.ai.TFunctionHelper;
 import org.tedros.ai.TerosService;
-import org.tedros.ai.model.Message;
 import org.tedros.api.descriptor.ITComponentDescriptor;
-import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
-import org.tedros.core.control.PopOver;
-import org.tedros.core.control.PopOver.ArrowLocation;
+import org.tedros.core.message.TMessageType;
 import org.tedros.core.repository.TRepository;
 import org.tedros.fx.control.TButton;
-import org.tedros.fx.control.TLabel;
 import org.tedros.fx.form.TSetting;
+import org.tedros.fx.modal.TMessageBox;
 import org.tedros.tools.ToolsKey;
-import org.tedros.tools.ai.model.MsgMV;
 import org.tedros.tools.ai.model.TerosMV;
-import org.tedros.tools.module.ai.model.AiChatMV;
 import org.tedros.tools.module.ai.settings.AiChatUtil;
 
-import javafx.application.Platform;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-import javafx.collections.WeakListChangeListener;
+import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
-import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -60,16 +51,33 @@ public class TerosSetting extends TSetting {
 		super(descriptor);
 		util = new AiChatUtil();
 		repo = new TRepository();
-		teros = new TerosService(TerosService.token);
-		teros.createFunctionExecutor(
-			TFunctionHelper.createListViewFunction(),
-			TFunctionHelper.createCallViewFunction());
 	}
 
 	@Override
 	public void run() {
+		if(TedrosContext.getArtificialIntelligenceEnabled()) {
+			String key = util.getOpenAiKey();
+			if(!"".equals(key)) {
+				teros = TerosService.create(key);
+				teros.createFunctionExecutor(
+					TFunctionHelper.listAllViewsFunction(),
+					TFunctionHelper.callViewFunction(),
+					TFunctionHelper.getModelBeingEditedFunction(),
+					TFunctionHelper.getViewModelFunction()
+					);
+			}else {
+				super.getForm().gettPresenter().getView()
+				.tShowModal(new TMessageBox(TLanguage.getInstance()
+						.getString(ToolsKey.MESSAGE_AI_KEY_REQUIRED), TMessageType.WARNING), false);
+				return;	
+			}
+		}else {
+			super.getForm().gettPresenter().getView()
+			.tShowModal(new TMessageBox(TLanguage.getInstance()
+					.getString(ToolsKey.MESSAGE_AI_DISABLED), TMessageType.WARNING), false);
+			return;	
+		}
 		
-		listenReceivedMsg();
 		listenSendButton();
 		listenClearButton();
 		
@@ -112,35 +120,29 @@ public class TerosSetting extends TSetting {
 	private void listenSendButton() {
 		// Send event
 		EventHandler<ActionEvent> ev0 = e -> {
-			Node control = super.getControl("prompt");
-			TButton btn = (TButton) e.getSource();
-			//btn.setDisable(true);
-		    
 			TerosMV mv = getModelView(); 
 
 			String prompt = mv.getPrompt().getValue();
-			if(StringUtils.isBlank(prompt)) {
-				PopOver pov = new PopOver();
-				pov.setAutoHide(true);
-				pov.setArrowLocation(ArrowLocation.BOTTOM_CENTER);
-				pov.setContentNode(new TLabel(TLanguage.getInstance()
-						.getString(ToolsKey.MESSAGE_AI_PROMPT_REQUIRED)));
-				pov.show(control);
-				//btn.setDisable(false);
+			if(StringUtils.isBlank(prompt))
 				return;
-			}
 			
-			final ObservableList<MsgMV> msgs = mv.getMessages();
-			String msg = mv.getPrompt().getValue();
 			try {
-				msgs.add(new MsgMV(new Message(msg, TedrosContext.getLoggedUser().getName())));
-				Platform.runLater(()->{	
-					String resp = teros.call(msg);
-					msgs.add(new MsgMV(new Message(resp, "Teros")));
+				showMsg(TedrosContext.getLoggedUser().getName(), prompt);
+				
+				TerosProcess p = new TerosProcess();
+				p.stateProperty().addListener((a,o,n)->{
+					if(n.equals(State.SUCCEEDED)) {
+						showMsg("Teros", p.getValue());
+						mv.getPrompt().setValue(null);
+					}
 				});
+				super.getForm().gettPresenter().getView()
+				.gettProgressIndicator().bind(p.runningProperty());
+				p.setPrompt(prompt);
+				p.startProcess();
+				
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				//btn.setDisable(false);
 			}
 		};
 		repo.add("ev0", ev0);
@@ -150,31 +152,11 @@ public class TerosSetting extends TSetting {
 	}
 
 	/**
-	 * @param mv
-	 * @return
-	 */
-	private void listenReceivedMsg() {
-		TerosMV mv = getModelView();
-		// Listen new messages to show
-		final ObservableList<MsgMV> msgs = mv.getMessages();
-		ListChangeListener<MsgMV> chl0 = ch0 ->{
-			if(ch0.next() && ch0.wasAdded()) {
-				ch0.getAddedSubList().forEach(m->{
-					Message e = m.getModel();
-					showMsg(e.getUser(), e.getContent());
-				});
-			}
-		};
-		repo.add("chl0", chl0);
-		msgs.addListener(new WeakListChangeListener<MsgMV>(chl0));
-	}
-
-	/**
 	 * @param m
 	 */
 	private void showMsg(String user, String txt){
 		scrollFlag = true;
-		StackPane p1 = util.buildMsgPane(user, txt, new Date());
+		StackPane p1 = util.buildMsgPane(user, txt, new Date(), 460, false);
 		GridPane.setVgrow(p1, Priority.ALWAYS);
 		VBox gp = super.getLayout("messages");
 		gp.getChildren().add(p1);
@@ -187,7 +169,6 @@ public class TerosSetting extends TSetting {
 		teros = null;
 		TerosMV mv = getModelView();
 		mv.getMessages().clear();
-		//mv.getMessagesLoaded().setValue(false);
 	}
 
 }

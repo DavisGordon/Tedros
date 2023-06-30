@@ -2,20 +2,20 @@ package org.tedros.fx.presenter.behavior;
 
 import org.tedros.api.form.ITModelForm;
 import org.tedros.api.presenter.ITPresenter;
-import org.tedros.api.presenter.behaviour.ITBehavior;
+import org.tedros.api.presenter.behavior.ITBehavior;
 import org.tedros.api.presenter.view.ITView;
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.api.presenter.view.TViewState;
 import org.tedros.core.ITModule;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosAppManager;
+import org.tedros.core.model.ITModelView;
 import org.tedros.core.repository.TRepository;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.form.TBuildFormStatus;
 import org.tedros.fx.form.TFormBuilder;
 import org.tedros.fx.form.TProgressIndicatorForm;
 import org.tedros.fx.form.TReaderFormBuilder;
-import org.tedros.fx.model.TModelView;
 
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -36,7 +36,7 @@ import javafx.scene.layout.Region;
  * @author Davis Gordon
  * */
 @SuppressWarnings("rawtypes")
-public abstract class TBehavior<M extends TModelView, P extends ITPresenter> implements ITBehavior<M, P> {
+public abstract class TBehavior<M extends ITModelView, P extends ITPresenter> implements ITBehavior<M, P> {
 	
 	private P presenter;
 	private SimpleObjectProperty<M> modelViewProperty;
