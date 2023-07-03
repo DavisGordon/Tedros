@@ -30,7 +30,7 @@ import com.theokanning.openai.service.OpenAiService;
  */
 public class OpenAiServ {
 	
-	private static String key = "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";
+	private static String key = "OPEN_AI_KEY";
 
 	public static TChatResult chat(TChatRequest req){
 
