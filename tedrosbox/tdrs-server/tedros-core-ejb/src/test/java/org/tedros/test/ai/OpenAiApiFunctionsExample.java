@@ -39,7 +39,7 @@ class OpenAiApiFunctionsExample {
     }
 
     public static void main(String... args) {
-        String token = "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";
+        String token = "OPEN_AI_KEY";
         OpenAiService service = new OpenAiService(token);
 
         FunctionExecutor functionExecutor = new FunctionExecutor(Collections.singletonList(ChatFunction.builder()
