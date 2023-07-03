@@ -26,6 +26,8 @@ import org.tedros.core.domain.DomainSchema;
 import org.tedros.core.domain.DomainTables;
 import org.tedros.server.entity.TReceptiveEntity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * @author Davis Gordon
  *
@@ -48,6 +50,7 @@ public class TNotify extends TReceptiveEntity {
 	@Column(nullable=false)
 	private String content;
 	
+	@JsonIgnore
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="file_id")
 	private TFileEntity file;
@@ -60,14 +63,17 @@ public class TNotify extends TReceptiveEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date processedTime;
 	
+	@JsonIgnore
 	@Column
 	@Enumerated(EnumType.STRING)
 	private TAction action;
 	
+	@JsonIgnore
 	@Column
 	@Enumerated(EnumType.STRING)
 	private TState state;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="notify", 
 	cascade=CascadeType.ALL, 
 	fetch=FetchType.EAGER)

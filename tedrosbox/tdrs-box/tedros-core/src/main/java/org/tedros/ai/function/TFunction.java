@@ -31,13 +31,6 @@ public class TFunction<T> {
 	}
 
 	/**
-	 * 
-	 */
-	public TFunction() {
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
 	 * @return the name
 	 */
 	public String getName() {
@@ -91,6 +84,14 @@ public class TFunction<T> {
 	 */
 	public void setModel(Class<T> model) {
 		this.model = model;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "TFunction [" + (name != null ? "name=" + name : "") + "]";
 	}
 
 }
