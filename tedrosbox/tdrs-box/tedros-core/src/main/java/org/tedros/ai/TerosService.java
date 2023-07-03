@@ -4,12 +4,20 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.tedros.ai.function.TFunction;
+import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
+import org.tedros.core.security.model.TUser;
 
+import com.theokanning.openai.OpenAiHttpException;
+import com.theokanning.openai.Usage;
+import com.theokanning.openai.completion.chat.ChatCompletionChoice;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest.ChatCompletionRequestFunctionCall;
+import com.theokanning.openai.completion.chat.ChatCompletionResult;
 import com.theokanning.openai.completion.chat.ChatFunction;
 import com.theokanning.openai.completion.chat.ChatFunctionCall;
 import com.theokanning.openai.completion.chat.ChatMessage;
@@ -17,133 +25,139 @@ import com.theokanning.openai.completion.chat.ChatMessageRole;
 import com.theokanning.openai.service.FunctionExecutor;
 import com.theokanning.openai.service.OpenAiService;
 
-public class TerosService{
+public class TerosService {
 
+	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	private static TerosService instance;
-	
+
 	private List<ChatMessage> messages = new ArrayList<>();
 	private FunctionExecutor functionExecutor;
-    private OpenAiService service;
-    
-    /**
+	private OpenAiService service;
+
+	/**
 	 * @param token
 	 */
 	private TerosService(String token) {
 		super();
 		service = new OpenAiService(token, Duration.ZERO);
 		String msg = "You are a helpful assistant for the Tedros desktop system and your name is Teros."
-				+ "\nIntroduce yourself by greeting the user "+TedrosContext.getLoggedUser().getName()
-				+"\nImportant: call the list_system_views function to get system information, do this before helping the user";
-        ChatMessage systemMessage = new ChatMessage(ChatMessageRole.SYSTEM.value(), msg);
-        messages.add(systemMessage);
+				+ "\nIntroduce yourself by greeting the user " + TedrosContext.getLoggedUser().getName()
+				+ "\nImportant: call the list_system_views function to get system information, do this before helping the user";
+		ChatMessage systemMessage = new ChatMessage(ChatMessageRole.SYSTEM.value(), msg);
+		messages.add(systemMessage);
+		LOGGER.info("Teros Ai Service created!");
 	}
-	
+
 	public static TerosService create(String token) {
-		if(instance==null)
+		if (instance == null)
 			instance = new TerosService(token);
 		return instance;
 	}
-	
+
 	public static TerosService getInstance() {
-		if(instance==null)
+		if (instance == null)
 			throw new IllegalStateException("The instance was not created!");
 		return instance;
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void createFunctionExecutor(TFunction... functions) {
+
 		functionExecutor = null;
-		if(functions!=null && functions.length>0) {
+		if (functions != null && functions.length > 0) {
 			List<ChatFunction> lst = new ArrayList<>();
-			for(TFunction f : functions) {
+			for (TFunction f : functions) {
 				lst.add(ChatFunction.builder()
-                .name(f.getName())
-                .description(f.getDescription())
-                .executor(f.getModel(), f.getCallback())
-                .build());
+						.name(TLanguage.getInstance().getString(f.getName()))
+						.description(TLanguage.getInstance().getString(f.getDescription()))
+						.executor(f.getModel(), f.getCallback()).build());
 			}
 			functionExecutor = new FunctionExecutor(lst);
+			LOGGER.info("FunctionExecutor created with functions: "+lst);
 		}
 	}
 
 	public String call(String userPrompt, String sysPrompt) {
 
-        String resp = "";
-        if(sysPrompt!=null)
-        	messages.add(new ChatMessage(ChatMessageRole.SYSTEM.value(), sysPrompt));
-        ChatMessage msg = new ChatMessage(ChatMessageRole.USER.value(), userPrompt);
-        messages.add(msg);
-        while (true) {
-	        ChatCompletionRequest chatCompletionRequest = buildRequest();
-	        
-	        ChatMessage responseMessage = service
-	        		.createChatCompletion(chatCompletionRequest)
-	        		.getChoices().get(0).getMessage();
-	        
-	        messages.add(responseMessage); // don't forget to update the conversation with the latest response
+		String resp = "";
+		if (sysPrompt != null)
+			messages.add(new ChatMessage(ChatMessageRole.SYSTEM.value(), sysPrompt));
+		ChatMessage msg = new ChatMessage(ChatMessageRole.USER.value(), userPrompt);
+		messages.add(msg);
+		while (true) {
+			ChatCompletionRequest chatCompletionRequest = buildRequest();
+			try {
+				ChatCompletionResult result = service.createChatCompletion(chatCompletionRequest);
+				
+				ChatCompletionChoice choice = result.getChoices().get(0);
+				ChatMessage responseMessage = choice.getMessage();
+				messages.add(responseMessage); 
+				
+				Usage usage = result.getUsage();
+				LOGGER.info(String.format("Total messages: %s, Usage Tokens: prompt=%s, completion=%s, total=%s", messages.size(), usage.getPromptTokens(), usage.getCompletionTokens(), usage.getTotalTokens()));
+				
+				resp = responseMessage.getContent();
 
-            resp = responseMessage.getContent();
-           
-            ChatFunctionCall functionCall = responseMessage.getFunctionCall();
-            if (functionExecutor!=null && functionCall != null) {
-            	System.out.println("Trying to execute " + functionCall.getName() + "...");
-            	try {
-            	   ChatMessage message = functionExecutor
-                		.executeAndConvertToMessage(functionCall);
-                /* You can also try 'executeAndConvertToMessage' inside a try-catch block, and add the following line inside the catch:
-                "message = executor.handleException(exception);"
-                The content of the message will be the exception itself, so the flow of the conversation will not be interrupted, and you will still be able to log the issue. */
+				ChatFunctionCall functionCall = responseMessage.getFunctionCall();
+				if (functionExecutor != null && functionCall != null) {
+					LOGGER.info("Trying to execute " + functionCall.getName() + "...");
+					try {
+						ChatMessage message = functionExecutor.executeAndConvertToMessage(functionCall);
+						
+						if (message != null) {
+							LOGGER.info("Executed " + functionCall.getName() + ".");
+							messages.add(message);
+							continue;
+						} else {
+							LOGGER.info(
+								"Something went wrong with the execution of " + functionCall.getName() + "...");
+							break;
+						}
+					} catch (Exception e) {
+						//e.printStackTrace();
+						LOGGER.log(Level.ALL, e.getMessage(), e);
+						ChatMessage message = functionExecutor.convertExceptionToMessage(e);
+						messages.add(message);
+						resp = "Error: " + e.getMessage();
+					}
+				}
+			} catch (Exception e) {
+				
+				if(e instanceof OpenAiHttpException 
+						&& ((OpenAiHttpException)e).code.equals("context_length_exceeded")) {
 
-                if (message!=null) {
-                    /* At this point:
-                    1. The function requested was found
-                    2. The request was converted to its specified object for execution (Weather.class in this case)
-                    3. It was executed
-                    4. The response was finally converted to a ChatMessage object. */
+					LOGGER.log(Level.ALL, "Total Messages="+messages.size(), e);
+					
+					do {
+						messages.remove(1);
+					}while(messages.size()>10);
+					
+					continue;
+				}
 
-                    System.out.println("Executed " + functionCall.getName() + ".");
-                    messages.add(message);
-                    continue;
-                } else {
-                    System.out.println("Something went wrong with the execution of " + functionCall.getName() + "...");
-                    break;
-                }
-            	}catch(Exception e) {
-            		e.printStackTrace();
-            		 ChatMessage message = functionExecutor.convertExceptionToMessage(e);
-            		 messages.add(message);
-            		 resp = "Error: "+e.getMessage();
-            	}
-            }
+				LOGGER.log(Level.ALL, e.getMessage(), e);
+				resp = "Error: " + e.getMessage();
+			}
 
-            break;
-        }
-        
-        return resp;
-    }
+			break;
+		}
+
+		return resp;
+	}
 
 	public ChatCompletionRequest buildRequest() {
-		return (this.functionExecutor!=null)
-				? ChatCompletionRequest
-		        .builder()
-		        .model("gpt-3.5-turbo-16k")
-		        .messages(messages)
-		        .functions(functionExecutor.getFunctions())
-		        .functionCall(ChatCompletionRequestFunctionCall.of("auto"))
-		        .n(1)
-		        .temperature(0.1)
-		        .maxTokens(2000)
-		        .logitBias(new HashMap<>())
-		        .build()
-		        : ChatCompletionRequest
-		        .builder()
-		        .model("gpt-3.5-turbo-16k")
-		        .messages(messages)
-		        .n(1)
-		        .temperature(0.1)
-		        .maxTokens(2000)
-		        .logitBias(new HashMap<>())
-		        .build();
+		TUser u = TedrosContext.getLoggedUser();
+		return (this.functionExecutor != null)
+				? ChatCompletionRequest.builder().model("gpt-3.5-turbo-16k").messages(messages)
+						.user(String.valueOf(u.getLogin().hashCode()))
+						.functions(functionExecutor.getFunctions())
+						.functionCall(ChatCompletionRequestFunctionCall.of("auto"))
+						.n(1).temperature(0.1)
+						.maxTokens(2000).logitBias(new HashMap<>()).build()
+				: ChatCompletionRequest.builder().model("gpt-3.5-turbo-16k").messages(messages)
+						.user(String.valueOf(u.getLogin().hashCode()))
+						.n(1).temperature(0.1)
+						.maxTokens(2000).logitBias(new HashMap<>()).build();
 	}
 
 }

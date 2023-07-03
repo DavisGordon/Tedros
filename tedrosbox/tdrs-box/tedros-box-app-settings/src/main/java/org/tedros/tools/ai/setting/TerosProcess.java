@@ -24,7 +24,6 @@ public class TerosProcess extends TProcess<String> {
 
 			@Override
 			public String getServiceNameInfo() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
@@ -33,7 +32,7 @@ public class TerosProcess extends TProcess<String> {
 				String msg = TedrosContext.getLoggedUser().getName() + " does not currently have any system views open";
 				TViewDescriptor vds = TedrosAppManager.getInstance().getCurrentViewDescriptor();
 				if(vds!=null)
-					msg = TedrosContext.getLoggedUser().getName()+" currently has the "+vds.getTitle()+ " view open";
+					msg = TedrosContext.getLoggedUser().getName()+" currently has the '"+vds.getTitle()+ "' view open";
 				String resp = TerosService.getInstance().call(prompt, msg);
 				return resp;
 			}

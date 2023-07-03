@@ -3,6 +3,9 @@
  */
 package org.tedros.ai;
 
+import java.util.Set;
+
+import org.apache.commons.lang3.ArrayUtils;
 import org.tedros.ai.function.TFunction;
 import org.tedros.ai.function.model.CallView;
 import org.tedros.ai.function.model.Empty;
@@ -12,6 +15,7 @@ import org.tedros.api.presenter.ITDynaPresenter;
 import org.tedros.api.presenter.behavior.ITBehavior;
 import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.annotation.security.TAuthorizationType;
+import org.tedros.core.context.TReflections;
 import org.tedros.core.context.TViewDescriptor;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
@@ -31,7 +35,23 @@ public class TFunctionHelper {
 	}
 	
 	@SuppressWarnings("rawtypes")
-public static TFunction<Empty> getModelBeingEditedFunction() {
+	public static TFunction[] getAppsFunction(){
+		TFunction[] arr = new TFunction[] {};
+		Set<Class<? extends TFunction>> clss = TReflections.getInstance().getSubTypesOf(TFunction.class);
+		if(clss!=null && !clss.isEmpty()) {
+			for(Class<? extends TFunction> c : clss){
+				try {
+					arr = ArrayUtils.add(arr, c.newInstance());
+				} catch (InstantiationException | IllegalAccessException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return arr;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public static TFunction<Empty> getModelBeingEditedFunction() {
 		return new TFunction<Empty>("get_edited_model", "Returns the entity model being edited by the user, "
 				+ "call this to help the user with entered data", 
 				Empty.class, 

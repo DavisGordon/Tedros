@@ -7,6 +7,9 @@ import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.model.ITModelView;
 import org.tedros.core.repository.TRepository;
 
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 /**
  * The view behavior contract.
@@ -19,24 +22,24 @@ import javafx.collections.ObservableList;
 public interface ITBehavior<M extends ITModelView, P extends ITPresenter> {
 	
 	/**
-	 * Load the behavior
+	 * Loads the behavior
 	 */
 	void load();
 
 	/**
-	 * Get the ITPresenter
+	 * Gets the ITPresenter
 	 * @return P the presenter
 	 */
 	P getPresenter();
 	
 	/***
-	 * Set the ITPresenter
+	 * Sets the ITPresenter
 	 * @param presenter
 	 */
 	void setPresenter(P presenter);
 	
 	/**
-	 * Get the ITView
+	 * Gets the ITView
 	 * @return V the view
 	 */
 	<V extends ITView> V getView();
@@ -49,91 +52,91 @@ public interface ITBehavior<M extends ITModelView, P extends ITPresenter> {
 	void setModelView(M modelView);
 	
 	/**
-	 *Get the current model view in edit 
-	 *and loaded by a form in the view
+	 * Gets the currently model view in edit 
+	 * and loaded by a form in the view
 	 * @return M the current ITModelView
 	 */
 	M getModelView();
 	
 	/**
-	 * Remove all listeners from the current model
+	 * Removes all listeners from the current model
 	 */
 	void removeAllListenerFromModelView();
 	/**
-	 * Remove all listeners from models in the list
+	 * Removes all listeners from models in the list
 	 */
 	void removeAllListenerFromModelViewList();
 	
 	/**
-	 * Remove and return the expected listener
+	 * Removes and returns the expected listener
 	 * @param listenerId
 	 * @return T the expected listeher
 	 */
 	<T> T removeListenerFromModelView(String listenerId);
 	
 	/**
-	 * Get the behavior listener repository
+	 * Gets the behavior listener repository
 	 * @return TRepository
 	 */
 	TRepository getListenerRepository();
 	
 	/**
-	 * Set and load the model on the view
+	 * Sets and load the model on the view
 	 * @param modelView
 	 */
 	void loadModelView(M modelView);
 	
 	/**
-	 * Set the form mode. 
+	 * Sets the form mode. 
 	 * @param mode
 	 * */
 	void setViewMode(TViewMode mode);
 	
 	/**
-	 * Get the form mode
+	 * Gets the form mode
 	 * @return TViewMode
 	 * */
 	TViewMode getViewMode();
 	
 	/**
-	 * Get the models list
+	 * Gets the models list
 	 * @return ObservableList
 	 */
 	ObservableList<M> getModels();
 
 	/**
-	 * Set a list of models
+	 * Sets a list of models
 	 * @param models
 	 */
 	void setModelViewList(ObservableList<M> models); 
 	
 
 	/**
-	 * Set and load the model list
+	 * Sets and load the model list
 	 * @param models
 	 */
 	void loadModelViewList(ObservableList<M> models); 
 	
 	/**
-	 * Return the loaded form name
+	 * Returns the loaded form name
 	 * @return String
 	 */
 	String getFormName();
 	
 	/**
-	 * Set the form to show
+	 * Sets the form to show
 	 * @param form
 	 */
 	void setForm(ITModelForm form);
 	
 	/**
-	 * Get the form loaded for the current model
+	 * Gets the form loaded for the current model
 	 * @return ITModelForm
 	 */
 	ITModelForm<M> getForm();
 	
 	/**
-	 * Get the App Unique Id
+	 * Gets the App Unique Id
 	 * @return String
 	 */
 	String getApplicationUUID();
@@ -145,10 +148,61 @@ public interface ITBehavior<M extends ITModelView, P extends ITPresenter> {
 	boolean invalidate();
 	
 	/**
-	 * Ask the behavior if it can be invalidated to close
+	 * Asks the behavior if it can be invalidated to close
 	 * @return String with the message of what cannot be 
 	 * invalidated, null if it is ok to invalidate
 	 */
 	String canInvalidate();
+	
+	/**
+	 * Set the view state as Ready
+	 */
+	void setViewStateAsReady();
+
+	/**
+	 * Builds the form as the mode param
+	 * @param mode
+	 */
+	void buildForm(TViewMode mode);
+
+	/**
+	 * Builds the form. 
+	 * Build the form as TViewMode.READER 
+	 * if getViewMode() is null
+	 */
+	void buildForm();
+
+	/***
+	 * Clear the form
+	 */
+	void clearForm();
+
+	/**
+	 * @return the invalidate value
+	 */
+	Boolean getInvalidate();
+
+	/**
+	 * @return the invalidateProperty
+	 */
+	SimpleBooleanProperty invalidateProperty();
+
+	/**
+	 * Sets the invalidate value
+	 * @param val the invalidate to set
+	 */
+	void setInvalidate(boolean val);
+
+	/**
+	 * Gets the modelViewProperty
+	 * @return SimpleObjectProperty<M>
+	 */
+	SimpleObjectProperty<M> modelViewProperty();
+
+	/**
+	 * Gets the formProperty
+	 * @return the ReadOnlyObjectProperty
+	 */
+	ReadOnlyObjectProperty<ITModelForm<M>> formProperty();
 
 }

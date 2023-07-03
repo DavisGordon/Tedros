@@ -88,6 +88,17 @@ public final class TReflections {
 		return repo.getTypesAnnotatedWith(annotationClass);
 	}
 	
+	
+	/**
+	 * Returns a Set of T sub types
+	 * @param type
+	 * @return Set<Class<? extends T>>
+	 */
+	public <T> Set<Class<? extends T>>  getSubTypesOf(Class<T> type){
+		Set<Class<? extends T>> clss = repo.getSubTypesOf(type);
+		return clss;
+	}
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void createAppPackagesIndex() {
 		try {

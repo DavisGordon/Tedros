@@ -36,7 +36,8 @@ import javafx.scene.layout.Region;
  * @author Davis Gordon
  * */
 @SuppressWarnings("rawtypes")
-public abstract class TBehavior<M extends ITModelView, P extends ITPresenter> implements ITBehavior<M, P> {
+public abstract class TBehavior<M extends ITModelView, P extends ITPresenter> 
+implements ITBehavior<M, P>{
 	
 	private P presenter;
 	private SimpleObjectProperty<M> modelViewProperty;
@@ -160,28 +161,28 @@ public abstract class TBehavior<M extends ITModelView, P extends ITPresenter> im
           });
 	}
 	
-	/**
-	 * Set the view state as Ready
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#setViewStateAsReady()
 	 */
+	@Override
 	public void setViewStateAsReady() {
 		buildFormStatusProperty().removeListener(loadChl);
 		getPresenter().getView().settState(TViewState.READY);
 	}
 
-	/**
-	 * Build the form as the mode param
-	 * @param mode
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#buildForm(org.tedros.api.presenter.view.TViewMode)
 	 */
+	@Override
 	public void buildForm(TViewMode mode) {
 		setViewMode(mode);
 		buildForm();
 	}
 	
-	/**
-	 * Build the form. 
-	 * Build the form as TViewMode.READER 
-	 * if getViewMode() is null
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#buildForm()
 	 */
+	@Override
 	public void buildForm() {
 		
 		if(tMode==null)
@@ -190,19 +191,20 @@ public abstract class TBehavior<M extends ITModelView, P extends ITPresenter> im
 		this.buildFormStatusProperty.setValue(TBuildFormStatus.STARTING);
 	}
 	
-	/***
-	 * Clear the form
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#clearForm()
 	 */
+	@Override
 	public void clearForm() {
 		this.buildFormStatusProperty.setValue(null);
 		getView().gettFormSpace().getChildren().clear();
 		this.formProperty.setValue(null);
 	}
 	
-	/**
-	 * Set the form
-	 * @param form
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#setForm(org.tedros.api.form.ITModelForm)
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public void setForm(ITModelForm form) {
 		TProgressIndicatorForm pif = (form instanceof TProgressIndicatorForm) 
@@ -211,16 +213,18 @@ public abstract class TBehavior<M extends ITModelView, P extends ITPresenter> im
     	this.formProperty.setValue(pif);
     }
 	
-	/**
-	 * @return the invalidate value
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#getInvalidate()
 	 */
+	@Override
 	public Boolean getInvalidate() {
 		return invalidateProperty.getValue();
 	}
 
-	/**
-	 * @return the invalidateProperty
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#invalidateProperty()
 	 */
+	@Override
 	public SimpleBooleanProperty invalidateProperty() {
 		return invalidateProperty;
 	}
@@ -229,85 +233,119 @@ public abstract class TBehavior<M extends ITModelView, P extends ITPresenter> im
 	/* (non-Javadoc)
 	 * @see org.tedros.fx.presenter.behavior.ITBehavior#invalidate()
 	 */
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#invalidate()
+	 */
 	@Override
 	public boolean invalidate() {
 		this.invalidateProperty.setValue(true);
 		return true;
 	}
 
-	/**
-	 * Set the invalidate value
-	 * @param val the invalidate to set
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#setInvalidate(boolean)
 	 */
+	@Override
 	public void setInvalidate(boolean val) {
 		this.invalidateProperty.setValue(val);
 	}
 
 
-	/**
-	 * @return the listenerRepository
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#getListenerRepository()
 	 */
+	@Override
 	public TRepository getListenerRepository() {
 		return listenerRepository;
 	}
 
 
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#getPresenter()
+	 */
 	@Override
 	public P getPresenter() {
 		return presenter;
 	}
 
 
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#setPresenter(P)
+	 */
 	@Override
 	public void setPresenter(P presenter) {
 		this.presenter = presenter;
 		iEngine.setCurrentUUID(getApplicationUUID());
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#getViewMode()
+	 */
 	@Override
 	public TViewMode getViewMode() {
 		return tMode;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#setViewMode(org.tedros.api.presenter.view.TViewMode)
+	 */
 	@Override
 	public void setViewMode(TViewMode mode){
 		this.tMode = mode;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#getView()
+	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public <V extends ITView> V getView(){
 		return  this.presenter==null ? null : (V) this.presenter.getView();
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#loadModelView(M)
+	 */
 	@Override
 	public void loadModelView(M modelView) {
 		setModelView(modelView);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#setModelView(M)
+	 */
 	@Override
 	public  void setModelView(M modelView) {
 		this.modelViewProperty.setValue((M)modelView);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#getModelView()
+	 */
 	@Override
 	public M getModelView() {
 		return modelViewProperty.getValue();
 	}
 
-	/**
-	 * Get the modelViewProperty
-	 * @return SimpleObjectProperty<M>
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#modelViewProperty()
 	 */
+	@Override
 	public SimpleObjectProperty<M> modelViewProperty() {
 		return modelViewProperty;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#setModelViewList(javafx.collections.ObservableList)
+	 */
 	@Override
 	public void setModelViewList(ObservableList<M> models) {
 		this.models = models;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#loadModelViewList(javafx.collections.ObservableList)
+	 */
 	@Override
 	public void loadModelViewList(ObservableList<M> models) {
 		if(this.models == null)
@@ -318,28 +356,43 @@ public abstract class TBehavior<M extends ITModelView, P extends ITPresenter> im
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#getModels()
+	 */
 	@Override
 	public ObservableList<M> getModels() {
 		return this.models;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#getFormName()
+	 */
 	@Override
 	public String getFormName() {
 		final TForm tForm = getForm().gettModelView().getClass().getAnnotation(TForm.class);
 		return (tForm!=null) ? tForm.header() : "@TForm(name='SET A NAME')";
 	}
 
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#getForm()
+	 */
 	@Override
 	public ITModelForm<M> getForm() {
 		return formProperty.get();
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#removeAllListenerFromModelView()
+	 */
 	@Override
 	public void removeAllListenerFromModelView() {
 		if(this.modelViewProperty.getValue()!=null)
 			this.modelViewProperty.getValue().removeAllListener();
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#removeAllListenerFromModelViewList()
+	 */
 	@Override
 	public void removeAllListenerFromModelViewList() {
 		if(models!=null && models.size()>0)
@@ -347,6 +400,9 @@ public abstract class TBehavior<M extends ITModelView, P extends ITPresenter> im
 				m.removeAllListener();
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#removeListenerFromModelView(java.lang.String)
+	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T removeListenerFromModelView(String listenerId) {
@@ -355,6 +411,9 @@ public abstract class TBehavior<M extends ITModelView, P extends ITPresenter> im
 		return null;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#getApplicationUUID()
+	 */
 	@Override
 	public String getApplicationUUID() {
 		String uuid = null;
@@ -365,18 +424,14 @@ public abstract class TBehavior<M extends ITModelView, P extends ITPresenter> im
 		return uuid;
 	}
 
-	/**
-	 * Get the formProperty
-	 * @return the ReadOnlyObjectProperty
+	/* (non-Javadoc)
+	 * @see org.tedros.api.presenter.behavior.ITBehavior#formProperty()
 	 */
+	@Override
 	public ReadOnlyObjectProperty<ITModelForm<M>> formProperty() {
 		return formProperty;
 	}
 
-	/**
-	 * Get the buildFormStatusProperty
-	 * @return the ReadOnlyObjectProperty
-	 */
 	public ReadOnlyObjectProperty<TBuildFormStatus> buildFormStatusProperty() {
 		return buildFormStatusProperty;
 	}

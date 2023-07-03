@@ -1,12 +1,12 @@
 package org.tedros.util;
 
-public class TDocumentoUtil {
+public class TBrazilDocsValidator {
 
-	private TDocumentoUtil(){
+	private TBrazilDocsValidator(){
 		
 	}
 	
-	public static boolean validarCPF(String cpf){
+	public static boolean validateCPF(String cpf){
 	    int iDigito1Aux = 0, iDigito2Aux = 0, iDigitoCPF;
 	    int iDigito1 = 0, iDigito2 = 0, iRestoDivisao = 0;
 	    String strDigitoVerificador, strDigitoResultado;
@@ -45,7 +45,7 @@ public class TDocumentoUtil {
 	    }
 	}
 	
-	public static boolean validarCNPJ(String cnpj) {
+	public static boolean validateCNPJ(String cnpj) {
 	    int iSoma = 0, iDigito;
 	    char[] chCaracteresCNPJ;
 	    String strCNPJ_Calculado;
@@ -92,7 +92,7 @@ public class TDocumentoUtil {
 	    } else return false;
 	}
 	
-	public static boolean validarPIS(String pis) {
+	public static boolean validatePIS(String pis) {
 	    char i, j, somatorio = 0;
 	    char chDigitoVerificador;
 	    char chPISAux;
