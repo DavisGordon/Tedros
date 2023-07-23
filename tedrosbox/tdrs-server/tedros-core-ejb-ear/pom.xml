@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>org.tedros</groupId>
 		<artifactId>tdrs-server</artifactId>
-		<version>8-5.1.0</version>
+		<version>8-5.2.0</version>
 	</parent>
 	
 	<!-- MODULE INFO -->
@@ -23,7 +23,7 @@
 	  	<dependency>
 	  		<groupId>org.tedros</groupId>
 	  		<artifactId>tedros-core-ejb</artifactId>
-	  		<version>8-5.1.0</version>
+	  		<version>8-5.2.0</version>
 	  		<scope>runtime</scope>
 	  		<type>ejb</type>
 	  	</dependency>

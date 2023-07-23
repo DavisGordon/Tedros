@@ -17,15 +17,17 @@ import javafx.scene.layout.StackPane;
  */
 public class TUserSettingsPane extends StackPane {
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public TUserSettingsPane() {
+		// 1) The model, note: TUser is an ITEntity
 		TUser usr = TedrosContext.getLoggedUser();
-    	
+		// 2) The model view, please note: here are the form and view settings
 		TUserSettingModelView umv = new TUserSettingModelView(usr);
-    	ObservableList l = FXCollections.observableArrayList(umv);
-    	TDynaView<TUserSettingModelView> v = new TDynaView<>(TUserSettingModelView.class, l, false);
-    	v.tLoad();
-    	v.setMinHeight(420);
+		ObservableList l = FXCollections.observableArrayList(umv);
+		// 3) The View, note: we instantiate it but who decorates and behaves it is the
+		// presenter in it.
+		TDynaView<TUserSettingModelView> v = new TDynaView<>(TUserSettingModelView.class, l, false);
+		v.tLoad();
+		v.setMinHeight(420);
 		super.getChildren().add(v);
 	}
 }

@@ -4,6 +4,7 @@
 package org.tedros.tools.logged.user;
 
 import org.tedros.core.context.TedrosContext;
+import org.tedros.core.controller.TUserController;
 import org.tedros.core.security.model.TProfile;
 import org.tedros.core.security.model.TUser;
 import org.tedros.fx.TFxKey;
@@ -40,7 +41,7 @@ import javafx.beans.property.SimpleStringProperty;
 			decorator=@TDecorator(type = TUserSettingDecorator.class, 
 			buildModesRadioButton=false, saveButtonText=TFxKey.BUTTON_APPLY ),
 			behavior=@TBehavior(type=TUserSettingBehavior.class, saveOnlyChangedModels=false))
-@TEjbService(model=TUser.class, serviceName = "TUserControllerRemote")
+@TEjbService(model=TUser.class, serviceName = TUserController.JNDI_NAME)
 public class TUserSettingModelView extends TEntityModelView<TUser> {
 
 	@TLabel(text=TUsualKey.NAME, font=@TFont(size=10))
@@ -54,8 +55,10 @@ public class TUserSettingModelView extends TEntityModelView<TUser> {
 	
 	@TLabel(text=TUsualKey.PASSWORD, font=@TFont(size=10))
 	@TPasswordField(required=true,
-		node=@TNode(focusedProperty=@TReadOnlyBooleanProperty(
-				observableValue=@TObservableValue(addListener=TEncriptPasswordChangeListener.class), 
+		node=@TNode(
+			focusedProperty=@TReadOnlyBooleanProperty(
+				observableValue=@TObservableValue(
+						addListener=TEncriptPasswordChangeListener.class), 
 				parse = true), 
 		parse = true))
 	private SimpleStringProperty password;
@@ -68,7 +71,6 @@ public class TUserSettingModelView extends TEntityModelView<TUser> {
 	@TVRadioGroup(radio= {@TRadio(text = "English", userData = "en"),
 			@TRadio(text = "Português", userData = "pt")})
 	private SimpleStringProperty language;
-	
 	
 	private SimpleStringProperty lastPassword;
 	

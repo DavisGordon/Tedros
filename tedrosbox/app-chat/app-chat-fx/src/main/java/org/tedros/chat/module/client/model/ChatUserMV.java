@@ -15,9 +15,11 @@ import org.tedros.fx.model.TEntityModelView;
 import javafx.beans.property.SimpleStringProperty;
 
 @TSelectionModalPresenter(allowsMultipleSelections = true, 
-	page = @TPage(query = @TQuery(entity=ChatUser.class), modelView=ChatUserMV.class, 
-		serviceName = IChatUserController.JNDI_NAME), 
-	tableView = @TTableView(columns = { @TTableColumn(text = TUsualKey.NAME, cellValue="name" ) }))
+	page = @TPage(modelView=ChatUserMV.class, 
+		serviceName = IChatUserController.JNDI_NAME, query = 
+		@TQuery(entity=ChatUser.class)),
+	tableView = @TTableView(columns = { 
+		@TTableColumn(text = TUsualKey.NAME, cellValue="name")}))
 public class ChatUserMV extends TEntityModelView<ChatUser> {
 
 	@TLabel(text=TUsualKey.NAME)

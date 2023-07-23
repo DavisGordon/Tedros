@@ -630,6 +630,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 			terosPopOver.setCloseButtonEnabled(true);
 			terosPopOver.setArrowLocation(ArrowLocation.TOP_LEFT);
 			terosPopOver.setContentNode(new TerosPane());
+			//terosPopOver.setAutoHide(false);
 		}
 		if(terosPopOver.isShowing())
 			terosPopOver.hide();
