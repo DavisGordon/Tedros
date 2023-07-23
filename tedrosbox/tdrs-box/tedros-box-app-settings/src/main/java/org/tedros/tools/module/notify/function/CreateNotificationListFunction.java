@@ -26,47 +26,46 @@ public class CreateNotificationListFunction extends TFunction<Contents> {
 
 	@SuppressWarnings("unchecked")
 	public CreateNotificationListFunction() {
-		super("set_notify_list", "Sets a list of notify model in the view '"+ToolsKey.VIEW_NOTIFY+"'", Contents.class, 
-				v->{
-					TedrosAppManager mng = TedrosAppManager.getInstance();
-					TViewDescriptor vds = mng.getCurrentViewDescriptor();
+		super("set_notify_list", "Sets a list of notify model in the view '"+ToolsKey.VIEW_NOTIFY+"'", 
+			Contents.class, 
+			v->{
+				//Gets the view descriptor of the currently open view, if any.
+				TedrosAppManager mng = TedrosAppManager.getInstance();
+				TViewDescriptor vds = mng.getCurrentViewDescriptor();
+				
+				if(vds!=null && vds.getModel()==TNotify.class) { // Is Notify the current view? 
+					// Gets the presenter
+					ITView<TDynaPresenter<TNotifyMV>> vw = mng.getCurrentView();
+					TDynaPresenter<TNotifyMV> p = vw.gettPresenter();
 					
-					if(vds!=null && vds.getModel()==TNotify.class) {
-						ITView<TDynaPresenter<TNotifyMV>> vw = mng.getCurrentView();
-						TDynaPresenter<TNotifyMV> p = vw.gettPresenter();
-						
-						Platform.runLater(()->{
-							ObservableList<TNotifyMV> lst = FXCollections.observableArrayList();
-							v.getList().forEach(c->{
-								TNotify n = new TNotify();
-								n.setSubject(c.getSubject());
-								n.setContent(c.getContent());
-								n.setTo(c.getTo());
-								TNotifyMV mv0 = new TNotifyMV(n);
-								lst.add(mv0);
-							});
-							
-							p.getBehavior().loadModelViewList(lst);
-						});
-						
-					}else{
-						Platform.runLater(()->{
-							ObservableList<TNotifyMV> lst = FXCollections.observableArrayList();
-							v.getList().forEach(c->{
-								TNotify n = new TNotify();
-								n.setSubject(c.getSubject());
-								n.setContent(c.getContent());
-								n.setTo(c.getTo());
-								TNotifyMV mv0 = new TNotifyMV(n);
-								lst.add(mv0);
-							});
-							mng.loadInModule(TNotifyModule.class, lst);
-						});
-						
-					}
+					Platform.runLater(()->{
+						ObservableList<TNotifyMV> lst = createNotifyList(v);
+						p.getBehavior().loadModelViewList(lst); // loads list in current view
+					});
+					
+				}else{
+					Platform.runLater(()->{
+						ObservableList<TNotifyMV> lst = createNotifyList(v);
+						mng.loadInModule(TNotifyModule.class, lst); //calls the module, opens the view and loads the list
+					});
+					
+				}
 
-					return new Response("The operation was successful, the user can now send or schedule the sending!");
-				});
+				return new Response("The operation was successful, the user can now send or schedule the sending!");
+			});
+	}
+
+	private static ObservableList<TNotifyMV> createNotifyList(Contents v) {
+		ObservableList<TNotifyMV> lst = FXCollections.observableArrayList();
+		v.getList().forEach(c->{
+			TNotify n = new TNotify();
+			n.setSubject(c.getSubject());
+			n.setContent(c.getContent());
+			n.setTo(c.getTo());
+			TNotifyMV mv0 = new TNotifyMV(n);
+			lst.add(mv0);
+		});
+		return lst;
 	}
 
 }

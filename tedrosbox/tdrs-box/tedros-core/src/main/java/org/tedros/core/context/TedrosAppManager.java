@@ -118,6 +118,33 @@ public final class TedrosAppManager extends TedrosAppLoader {
 		return null;
 	}
 	
+	@SuppressWarnings("rawtypes")
+	public TViewDescriptor getViewDescriptor(Class<? extends ITModelView> modelViewClass, Class<? extends ITModel> modelClass) {
+		for(TAppContext a : this.getAppContexts()){
+			for(TModuleContext mctx : a.getModulesContext()) {
+				for(TViewDescriptor vds : mctx.getModuleDescriptor().getViewDescriptors()) {
+					if(vds.getModel()!=null && vds.getModel()==modelClass 
+							&& vds.getModelView()!=null && vds.getModelView()==modelViewClass)
+						return vds;
+				}
+			}
+		}
+		return null;
+	}
+	
+	public TModuleContext getModuleContext(@SuppressWarnings("rawtypes") Class<? extends ITModelView> modelViewClass, Class<? extends ITModel> modelClass) {
+		for(TAppContext a : this.getAppContexts()){
+			for(TModuleContext mctx : a.getModulesContext()) {
+				for(TViewDescriptor vds : mctx.getModuleDescriptor().getViewDescriptors()) {
+					if(vds.getModel()!=null && vds.getModel()==modelClass 
+							&& vds.getModelView()!=null && vds.getModelView()==modelViewClass)
+						return mctx;
+				}
+			}
+		}
+		return null;
+	}
+	
 	public void goToModule(Class<? extends ITModule> moduleClass) {
 		String path = getModuleContext(moduleClass).getModuleDescriptor().getPath();
 		TedrosContext.setPagePathProperty(path, true, true, true);

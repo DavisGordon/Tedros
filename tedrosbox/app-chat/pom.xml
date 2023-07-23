@@ -4,7 +4,7 @@
   	<parent>
     <artifactId>tedrosbox</artifactId>
     <groupId>org.tedros</groupId>
-    <version>8-5.1.0</version>
+    <version>8-5.2.0</version>
   </parent>
   
   	<artifactId>app-chat</artifactId>
