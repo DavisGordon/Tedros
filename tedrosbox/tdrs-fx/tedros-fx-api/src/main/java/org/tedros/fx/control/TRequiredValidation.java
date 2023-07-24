@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class TRequiredValidation {
 
+	@SuppressWarnings("rawtypes")
 	public static boolean isRequired(Object o) {
 		if(o == null)
 			return true;
