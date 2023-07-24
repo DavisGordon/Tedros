@@ -15,7 +15,6 @@ import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.Effect;
 
@@ -44,10 +43,8 @@ public abstract class TRequiredNumberField extends TextField implements ITField,
 		if(this.tValidateProperty == null)
 			this.tValidateProperty = new SimpleObjectProperty<>();
 		
-		this.tValidateProperty.addListener(new ChangeListener<TValidateNumber>() {
-			@Override
-			public void changed(ObservableValue<? extends TValidateNumber> arg0, TValidateNumber arg1, TValidateNumber new_value) {
-				if(!new_value.equals(TValidateNumber.NONE)){
+		this.tValidateProperty.addListener((a,o,n)-> {
+				if(!n.equals(TValidateNumber.NONE)){
 					getStyleClass().add("required");
 		    		buildRequiredEffect();
 		    		buildValidateListener();
@@ -62,7 +59,6 @@ public abstract class TRequiredNumberField extends TextField implements ITField,
 		    		if(requiredListener!=null)
 		    			textProperty().removeListener(requiredListener);
 		    	}
-			}
 		});
 		
 		this.tValidateProperty.set(validate);
@@ -113,7 +109,7 @@ public abstract class TRequiredNumberField extends TextField implements ITField,
 	}
 	
 	private void validate(String value) {
-		if(!NumberUtils.isParsable(value) || NumberUtils.isCreatable(value)){
+		if(!NumberUtils.isParsable(value) || !NumberUtils.isCreatable(value)){
 			applyEffect();
 			return;
 		}

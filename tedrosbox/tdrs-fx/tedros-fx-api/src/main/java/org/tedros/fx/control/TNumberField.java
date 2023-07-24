@@ -56,7 +56,8 @@ public abstract class TNumberField<N extends Number> extends TRequiredNumberFiel
 						
 					}catch(NumberFormatException e){
 						
-						final Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3), new EventHandler<ActionEvent>(){
+						final Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3), 
+						new EventHandler<ActionEvent>(){
 							@Override
 							public void handle(ActionEvent arg0) {
 								field.setEffect(null);
@@ -103,13 +104,9 @@ public abstract class TNumberField<N extends Number> extends TRequiredNumberFiel
 			}
 		});
         
-        valueProperty.addListener(new ChangeListener<N>() {
-			@Override
-			public void changed(ObservableValue<? extends N> arg0,
-					N arg1, N new_value) {
-				if(new_value!=null)
-					setText(new_value.toString());
-			}
+        valueProperty.addListener((a,o,n)->{
+			if(n!=null)
+				setText(n.toString());
 		});
 	}
 	
