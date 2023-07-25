@@ -155,13 +155,13 @@ public class ChatServer {
 							u = res.getValue();
 						}
 						TPropertieController pServ = serv.lookup(TPropertieController.JNDI_NAME);
-						System.out.println("Search for the propertie: "+ChatPropertie.SERVER_PORT.name());
-						TResult<String> res1 = pServ.getValue(u.getAccessToken(), ChatPropertie.SERVER_PORT.getValue());
+						System.out.println("Search for the propertie: "+ChatPropertie.CHAT_SERVER_PORT.name());
+						TResult<String> res1 = pServ.getValue(u.getAccessToken(), ChatPropertie.CHAT_SERVER_PORT.getValue());
 						if(res1.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res1.getValue())) {
 							port = Integer.parseInt(res1.getValue());
-							System.out.println("Propertie "+ChatPropertie.SERVER_PORT.name() +" = "+ res1.getValue());
+							System.out.println("Propertie "+ChatPropertie.CHAT_SERVER_PORT.name() +" = "+ res1.getValue());
 						}else {
-							System.out.println("The propertie "+ChatPropertie.SERVER_PORT.name()+" not configured!");
+							System.out.println("The propertie "+ChatPropertie.CHAT_SERVER_PORT.name()+" not configured!");
 						}
 					}else {
 						System.out.println("Logon failed!");

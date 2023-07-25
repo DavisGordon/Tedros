@@ -65,7 +65,8 @@ public class TerosSetting extends TSetting {
 				TFunction[] arr = new TFunction[] {TFunctionHelper.listAllViewsFunction(),
 						TFunctionHelper.callViewFunction(),
 						TFunctionHelper.getModelBeingEditedFunction(),
-						TFunctionHelper.getViewModelFunction()};
+						TFunctionHelper.getViewModelFunction(),
+						TFunctionHelper.getPreferencesFunction()};
 				arr = ArrayUtils.addAll(arr, TFunctionHelper.getAppsFunction());
 				
 				teros.createFunctionExecutor(arr);

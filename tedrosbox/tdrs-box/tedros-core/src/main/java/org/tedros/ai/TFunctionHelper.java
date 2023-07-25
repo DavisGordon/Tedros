@@ -3,6 +3,10 @@
  */
 package org.tedros.ai;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -19,6 +23,12 @@ import org.tedros.core.context.TReflections;
 import org.tedros.core.context.TViewDescriptor;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
+import org.tedros.core.controller.TPropertieController;
+import org.tedros.core.domain.TSystemPropertie;
+import org.tedros.core.service.remote.ServiceLocator;
+import org.tedros.core.setting.model.TPropertie;
+import org.tedros.server.result.TResult;
+import org.tedros.server.result.TResult.TState;
 
 import javafx.application.Platform;
 
@@ -48,6 +58,47 @@ public class TFunctionHelper {
 			}
 		}
 		return arr;
+	}
+	
+	public static TFunction<Empty> getPreferencesFunction() {
+		return new TFunction<Empty>("get_system_preferences", "Returns the system preferences for chat server, smtp server, "
+				+ "view history page, openai, teros status, reports, notify, currency/date format and others", 
+				Empty.class, 
+				v->{
+					ServiceLocator loc = ServiceLocator.getInstance();
+					try {
+						TPropertieController serv = loc.lookup(TPropertieController.JNDI_NAME);
+						TResult<List<TPropertie>> res = serv
+								.listAll(TedrosContext.getLoggedUser().getAccessToken(), TPropertie.class);
+						if(res.getState().equals(TState.SUCCESS)) {
+							List<TPropertie> l = res.getValue();
+							List<Map<String, String>> lst = new ArrayList<>();
+							l.forEach(c->{
+								if( (c.getKey().equals(TSystemPropertie.SMTP_PASS.getValue()) && c.getValue()!=null)
+										|| (c.getKey().equals(TSystemPropertie.OPENAI_KEY.getValue()) && c.getValue()!=null)
+										|| (c.getKey().equals(TSystemPropertie.TOKEN.getValue()) && c.getValue()!=null)
+										)
+									c.setValue("*******");
+								
+								Map<String,String> m = new HashMap<>();
+								m.put("name", c.getName());
+								m.put("key", c.getKey());
+								m.put("description", c.getDescription());
+								m.put("value", c.getValue());
+								
+								if(c.getFile()!=null)
+									m.put("file", "Property with file defined");
+								lst.add(m);
+							});
+							return new Response("use the name field to help the user", lst);
+						}
+					}catch(Exception e) {
+						
+					}finally{
+						loc.close();
+					}
+					return new Response("Cant retrieve the preference list!");
+				});
 	}
 	
 	@SuppressWarnings("rawtypes")

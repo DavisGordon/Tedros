@@ -34,8 +34,10 @@ public class TPropertieBO extends TGenericBO<TPropertie> {
 				TPropertie e = new TPropertie();
 				e.setName(p.name());
 				e.setKey(p.getValue());
+				e.setDescription(p.getDescription());
 				eao.persist(e);
 			}
+				
 		}
 	}
 
