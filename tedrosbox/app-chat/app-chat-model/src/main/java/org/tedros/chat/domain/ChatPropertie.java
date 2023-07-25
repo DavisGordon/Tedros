@@ -9,13 +9,15 @@ package org.tedros.chat.domain;
  */
 public enum ChatPropertie {
 	
-	SERVER_IP("chat.server.ip"),
-	SERVER_PORT("chat.server.port");
+	CHAT_SERVER_IP("chat.server.ip", "Define the chat server ip"),
+	CHAT_SERVER_PORT("chat.server.port","Define the chat server port");
 	
 	private String value;
+	private String description;
 	
-	private ChatPropertie(String v) {
+	private ChatPropertie(String v, String description) {
 		this.value = v;
+		this.description = description;
 	}
 
 	/**
@@ -23,5 +25,12 @@ public enum ChatPropertie {
 	 */
 	public String getValue() {
 		return value;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
 	}
 }

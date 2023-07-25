@@ -129,7 +129,7 @@ public class ChatUtil {
 		ServiceLocator loc = ServiceLocator.getInstance();
 		try {
 			TPropertieController serv = loc.lookup(TPropertieController.JNDI_NAME);
-			TResult<String> res1 = serv.getValue(token, ChatPropertie.SERVER_PORT.getValue());
+			TResult<String> res1 = serv.getValue(token, ChatPropertie.CHAT_SERVER_PORT.getValue());
 			if(res1.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res1.getValue())) {
 				return Integer.parseInt(res1.getValue());
 			}else {
@@ -144,7 +144,7 @@ public class ChatUtil {
 		ServiceLocator loc = ServiceLocator.getInstance();
 		try {
 			TPropertieController serv = loc.lookup(TPropertieController.JNDI_NAME);
-			TResult<String> res1 = serv.getValue(token, ChatPropertie.SERVER_IP.getValue());
+			TResult<String> res1 = serv.getValue(token, ChatPropertie.CHAT_SERVER_IP.getValue());
 			if(res1.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res1.getValue())) {
 				return res1.getValue();
 			}else {
