@@ -3,18 +3,26 @@
  */
 package org.tedros.ai;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.tedros.ai.function.TFunction;
 import org.tedros.ai.function.model.CallView;
 import org.tedros.ai.function.model.Empty;
 import org.tedros.ai.function.model.Response;
 import org.tedros.ai.function.model.ViewCatalog;
+import org.tedros.ai.model.CreateFile;
 import org.tedros.api.presenter.ITDynaPresenter;
 import org.tedros.api.presenter.behavior.ITBehavior;
 import org.tedros.api.presenter.view.ITView;
@@ -29,6 +37,7 @@ import org.tedros.core.service.remote.ServiceLocator;
 import org.tedros.core.setting.model.TPropertie;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
+import org.tedros.util.TedrosFolder;
 
 import javafx.application.Platform;
 
@@ -58,6 +67,26 @@ public class TFunctionHelper {
 			}
 		}
 		return arr;
+	}
+	
+	public static TFunction<CreateFile> getCreateFileFunction() {
+		return new TFunction<CreateFile>("create_file", "Creates a file", 
+				CreateFile.class, 
+				v->{
+					
+					String dir = TedrosFolder.EXPORT_FOLDER.getFullPath();
+					String path = dir+v.getName()+"."+v.getExtension();
+					File f = new File(path);
+					try(OutputStream out = new FileOutputStream(f)) {
+					IOUtils.write(v.getContent(), out, Charset.forName("UTF-8"));
+					return new Response("File created, return the link like this: !{"+path+"}");
+					} catch (Exception e) {
+						e.printStackTrace();
+						return new Response("Error: "+e.getMessage());
+					}
+					
+					//return new Response("Cant create the file!");
+				});
 	}
 	
 	public static TFunction<Empty> getPreferencesFunction() {

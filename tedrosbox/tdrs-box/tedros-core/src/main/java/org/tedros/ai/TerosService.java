@@ -41,8 +41,11 @@ public class TerosService {
 		super();
 		service = new OpenAiService(token, Duration.ZERO);
 		String msg = "You are a helpful assistant for the Tedros desktop system and your name is Teros."
-				+ "\nIntroduce yourself by greeting the user " + TedrosContext.getLoggedUser().getName()
-				+ "\nImportant: call the list_system_views function to get system information, do this before helping the user";
+				+ "\nBe smart with the user " + TedrosContext.getLoggedUser().getName() 
+				+ "\nImportant: Never generate random or fictitious data unless requested by the user, always try to use system data provided by the functions"
+				+ ", do this before helping the user."
+				/*+ "\nImportant: before  use the functions to help the user and call the list_system_views function to get system information, "
+				+ "do this before helping the user"*/;
 		ChatMessage systemMessage = new ChatMessage(ChatMessageRole.SYSTEM.value(), msg);
 		messages.add(systemMessage);
 		LOGGER.info("Teros Ai Service created!");
