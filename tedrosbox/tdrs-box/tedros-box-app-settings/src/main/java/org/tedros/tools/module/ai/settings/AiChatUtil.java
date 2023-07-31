@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TLanguage;
@@ -30,6 +31,7 @@ import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.server.security.TAccessToken;
+import org.tedros.util.TStripTagUtil;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -47,6 +49,11 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 /**
  * @author Davis Gordon
@@ -166,11 +173,19 @@ public class AiChatUtil {
 			footer.getChildren().add(t2);
 		}
 		if(txt!=null) {
-			TText t1 = new TText(txt);
-			t1.settTextStyle(TTextStyle.MEDIUM);
-			t1.setWrappingWidth(wrapAt);
-			VBox.setMargin(t1, new Insets(8));
-			gp.getChildren().add(t1);
+			Node n = null;
+			
+			if(txt.contains("!{")) {
+				String s = StringUtils.substringBetween(txt, "!{", "}");
+				n =  this.buildLinkTextFlow(txt, s);
+			}else {
+				TText t1 = new TText(txt);
+				t1.settTextStyle(TTextStyle.MEDIUM);
+				t1.setWrappingWidth(wrapAt);
+				n = t1;
+			}
+			VBox.setMargin(n, new Insets(8));
+			gp.getChildren().add(n);
 			Hyperlink hl = new Hyperlink(iEngine.getString(TFxKey.BUTTON_COPY));
 			hl.getStyleClass().add(TTextStyle.SMALL.getValue());
 			hl.setUserData(txt);
@@ -191,6 +206,26 @@ public class AiChatUtil {
 		p1.getChildren().add(gp);
 		//p1.setAlignment(left ? Pos.CENTER_LEFT : Pos.CENTER_RIGHT);
 		return p1;
+	}
+	
+	private TextFlow buildLinkTextFlow(String text, String path) {  
+		String filter = "!{"+path+"}";
+	    int filterIndex = text.toLowerCase().indexOf(filter.toLowerCase());
+	    TText textBefore = new TText(text.substring(0, filterIndex));
+	    TText textAfter = new TText(text.substring(filterIndex + filter.length()));
+	    String tag = text.substring(filterIndex,  filterIndex + filter.length());
+	    Hyperlink textFilter = new Hyperlink(path); 
+	    textFilter.setOnAction(ev->{
+	    	try {
+				TedrosContext.openDocument(path);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	    });
+	    textBefore.settTextStyle(TTextStyle.MEDIUM);
+	    textAfter.settTextStyle(TTextStyle.MEDIUM);
+	    textFilter.setFont(Font.font("Tahoma", FontWeight.BOLD, 14));  
+	    return new TextFlow(textBefore, textFilter, textAfter);
 	}
 	
 
