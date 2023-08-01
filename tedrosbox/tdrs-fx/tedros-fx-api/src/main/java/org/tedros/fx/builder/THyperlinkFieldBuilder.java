@@ -8,10 +8,9 @@ package org.tedros.fx.builder;
 
 import java.lang.annotation.Annotation;
 
-import org.tedros.fx.control.TText.TTextStyle;
+import org.tedros.fx.control.THyperlink;
 
 import javafx.beans.property.Property;
-import javafx.scene.control.Hyperlink;
 
 
 /**
@@ -22,11 +21,10 @@ import javafx.scene.control.Hyperlink;
  */
 public class THyperlinkFieldBuilder 
 extends TBuilder 
-implements ITControlBuilder<Hyperlink, Property<String>> {
+implements ITControlBuilder<THyperlink, Property<String>> {
 	
-	public Hyperlink build(final Annotation annotation, final Property<String> attrProperty) throws Exception {
-		final Hyperlink control = new Hyperlink();
-		control.getStyleClass().add(TTextStyle.CUSTOM.getValue());
+	public THyperlink build(final Annotation annotation, final Property<String> attrProperty) throws Exception {
+		final THyperlink control = new THyperlink();
 		control.textProperty().bindBidirectional(attrProperty);
 		callParser(annotation, control);
 		return control;

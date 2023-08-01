@@ -155,11 +155,11 @@ public class TerosService {
 						.user(String.valueOf(u.getLogin().hashCode()))
 						.functions(functionExecutor.getFunctions())
 						.functionCall(ChatCompletionRequestFunctionCall.of("auto"))
-						.n(1).temperature(0.1)
+						.n(1).temperature(1.0)
 						.maxTokens(2000).logitBias(new HashMap<>()).build()
 				: ChatCompletionRequest.builder().model("gpt-3.5-turbo-16k").messages(messages)
 						.user(String.valueOf(u.getLogin().hashCode()))
-						.n(1).temperature(0.1)
+						.n(1).temperature(1.0)
 						.maxTokens(2000).logitBias(new HashMap<>()).build();
 	}
 

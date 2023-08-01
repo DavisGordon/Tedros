@@ -10,7 +10,6 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TLanguage;
@@ -24,6 +23,8 @@ import org.tedros.core.controller.TPropertieController;
 import org.tedros.core.domain.TSystemPropertie;
 import org.tedros.core.service.remote.ServiceLocator;
 import org.tedros.fx.TFxKey;
+import org.tedros.fx.TUsualKey;
+import org.tedros.fx.control.THyperlink;
 import org.tedros.fx.control.TText;
 import org.tedros.fx.control.TText.TTextStyle;
 import org.tedros.fx.property.TBytesLoader;
@@ -31,7 +32,6 @@ import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.server.security.TAccessToken;
-import org.tedros.util.TStripTagUtil;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -49,10 +49,6 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 /**
@@ -62,6 +58,9 @@ import javafx.scene.text.TextFlow;
 public class AiChatUtil {
 
 	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	private static String EN_OPEN_TAG = "[here](";
+	private static String PT_OPEN_TAG = "[aqui](";
+	private static String CLOSE_TAG = ")";
 	
 	private TLanguage iEngine = TLanguage.getInstance();
 	
@@ -175,9 +174,8 @@ public class AiChatUtil {
 		if(txt!=null) {
 			Node n = null;
 			
-			if(txt.contains("!{")) {
-				String s = StringUtils.substringBetween(txt, "!{", "}");
-				n =  this.buildLinkTextFlow(txt, s);
+			if(txt.contains(EN_OPEN_TAG) || txt.contains(PT_OPEN_TAG)) {
+				n =  this.buildLinkTextFlow(txt, wrapAt);
 			}else {
 				TText t1 = new TText(txt);
 				t1.settTextStyle(TTextStyle.MEDIUM);
@@ -208,24 +206,33 @@ public class AiChatUtil {
 		return p1;
 	}
 	
-	private TextFlow buildLinkTextFlow(String text, String path) {  
-		String filter = "!{"+path+"}";
-	    int filterIndex = text.toLowerCase().indexOf(filter.toLowerCase());
+	private TextFlow buildLinkTextFlow(String text, int wrapAt) {  
+		String opentag = text.contains(EN_OPEN_TAG) ? EN_OPEN_TAG : PT_OPEN_TAG;
+		String path = StringUtils.substringBetween(text, opentag, CLOSE_TAG);
+		String filter = opentag+path+CLOSE_TAG;
+		LOGGER.info("text: "+ text);
+		LOGGER.info("path: "+ path);
+		LOGGER.info("filter: "+ filter);
+	    
+		int filterIndex = text.toLowerCase().indexOf(filter.toLowerCase());
 	    TText textBefore = new TText(text.substring(0, filterIndex));
 	    TText textAfter = new TText(text.substring(filterIndex + filter.length()));
-	    String tag = text.substring(filterIndex,  filterIndex + filter.length());
-	    Hyperlink textFilter = new Hyperlink(path); 
+	    //String tag = text.substring(filterIndex,  filterIndex + filter.length());
+	    THyperlink textFilter = new THyperlink(TLanguage.getInstance().getString(TUsualKey.HERE)); 
 	    textFilter.setOnAction(ev->{
 	    	try {
-				TedrosContext.openDocument(path);
+	    		String p = path.replaceAll("sandbox:/", "").replaceAll("file:/", "");
+				TedrosContext.openDocument(p);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 	    });
 	    textBefore.settTextStyle(TTextStyle.MEDIUM);
 	    textAfter.settTextStyle(TTextStyle.MEDIUM);
-	    textFilter.setFont(Font.font("Tahoma", FontWeight.BOLD, 14));  
-	    return new TextFlow(textBefore, textFilter, textAfter);
+	    textFilter.settTextStyle(TTextStyle.MEDIUM);
+	    TextFlow flow = new TextFlow(textBefore, textFilter, textAfter);
+	    flow.setMaxWidth(wrapAt);
+	    return flow;
 	}
 	
 

@@ -129,6 +129,7 @@ public interface TUsualKey {
 	static final String GIVER = "#{label.giver}";
 	static final String HEADER = "#{label.header}";
 	static final String HEIGHT = "#{label.height}";
+	static final String HERE = "#{label.here}";
 	static final String HIRING_DATE = "#{label.hiring.date}";
 	static final String HOUSE = "#{label.house}";
 	static final String HOUSE_NUMBER = "#{label.house.number}";

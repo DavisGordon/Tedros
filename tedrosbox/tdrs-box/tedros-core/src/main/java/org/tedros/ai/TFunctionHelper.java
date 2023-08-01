@@ -70,7 +70,7 @@ public class TFunctionHelper {
 	}
 	
 	public static TFunction<CreateFile> getCreateFileFunction() {
-		return new TFunction<CreateFile>("create_file", "Creates a file", 
+		return new TFunction<CreateFile>("create_file", "Creates a file.", 
 				CreateFile.class, 
 				v->{
 					
@@ -79,7 +79,7 @@ public class TFunctionHelper {
 					File f = new File(path);
 					try(OutputStream out = new FileOutputStream(f)) {
 					IOUtils.write(v.getContent(), out, Charset.forName("UTF-8"));
-					return new Response("File created, return the link like this: !{"+path+"}");
+					return new Response("File created! return file path like this: '!{"+path+"}'");
 					} catch (Exception e) {
 						e.printStackTrace();
 						return new Response("Error: "+e.getMessage());

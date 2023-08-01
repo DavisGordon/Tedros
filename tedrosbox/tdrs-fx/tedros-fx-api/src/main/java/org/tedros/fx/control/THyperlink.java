@@ -4,6 +4,7 @@
 package org.tedros.fx.control;
 
 import org.tedros.app.component.ITActionComponent;
+import org.tedros.fx.control.TText.TTextStyle;
 
 import javafx.scene.Node;
 import javafx.scene.control.Hyperlink;
@@ -19,6 +20,7 @@ public class THyperlink extends Hyperlink implements ITActionComponent {
 	 * 
 	 */
 	public THyperlink() {
+		getStyleClass().add(TTextStyle.CUSTOM.getValue());
 	}
 
 	/**
@@ -26,6 +28,7 @@ public class THyperlink extends Hyperlink implements ITActionComponent {
 	 */
 	public THyperlink(String arg0) {
 		super(arg0);
+		getStyleClass().add(TTextStyle.CUSTOM.getValue());
 	}
 
 	/**
@@ -34,8 +37,14 @@ public class THyperlink extends Hyperlink implements ITActionComponent {
 	 */
 	public THyperlink(String arg0, Node arg1) {
 		super(arg0, arg1);
+		getStyleClass().add(TTextStyle.CUSTOM.getValue());
 	}
 
+	public void settTextStyle(TTextStyle style) {
+		super.getStyleClass().clear();
+		super.getStyleClass().add(style.getValue());
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.tedros.app.component.ITComponent#gettComponentId()
 	 */
