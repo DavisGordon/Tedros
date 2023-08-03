@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.tedros</groupId>
     <artifactId>tedrosbox</artifactId>
-    <version>8-5.2.0</version>
+    <version>8-5.2.1</version>
   </parent>
   
   <artifactId>server-application</artifactId>
@@ -16,21 +16,21 @@
 	    <groupId>org.tedros</groupId>
 	    <artifactId>app-chat-ejb-ear</artifactId>
 	    <type>ear</type>
-	    <version>8-5.2.0</version>
+	    <version>8-5.2.1</version>
 	</dependency>
 	
 	<dependency>
 	    <groupId>org.tedros</groupId>
 	    <artifactId>tedros-core-ejb-ear</artifactId>
 	    <type>ear</type>
-	    <version>8-5.2.0</version>
+	    <version>8-5.2.1</version>
 	</dependency>
 	
 	<dependency>
 	    <groupId>org.tedros</groupId>
 	    <artifactId>tedros-webapp</artifactId>
 	    <type>war</type>
-	    <version>8-5.2.0</version>
+	    <version>8-5.2.1</version>
 	</dependency>
 	
 	<dependency>

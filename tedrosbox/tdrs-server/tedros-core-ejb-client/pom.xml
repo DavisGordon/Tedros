@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>org.tedros</groupId>
 		<artifactId>tdrs-server</artifactId>
-		<version>8-5.2.0</version>
+		<version>8-5.2.1</version>
 	</parent>
 	
 	<!-- MODULE INFO -->
@@ -23,13 +23,13 @@
 	  	<dependency>
 	  		<groupId>org.tedros</groupId>
 	  		<artifactId>tedros-core-model</artifactId>
-	  		<version>8-5.2.0</version>
+	  		<version>8-5.2.1</version>
 	  	</dependency>
   	
 	  	<dependency>
 	  		<groupId>org.tedros</groupId>
 	  		<artifactId>tedros-common-model</artifactId>
-	  		<version>8-5.2.0</version>
+	  		<version>8-5.2.1</version>
 	  	</dependency>
 	  	
 	  	<dependency>

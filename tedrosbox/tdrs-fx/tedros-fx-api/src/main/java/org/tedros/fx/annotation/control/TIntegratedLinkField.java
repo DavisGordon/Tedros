@@ -17,8 +17,8 @@ import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TButtonBase;
 import org.tedros.fx.annotation.scene.control.TControl;
 import org.tedros.fx.builder.ITControlBuilder;
-import org.tedros.fx.builder.TBaseEventHandlerBuilder;
 import org.tedros.fx.builder.TIntegratedLinkFieldBuilder;
+import org.tedros.fx.control.TIntegratedLink;
 import org.tedros.fx.domain.TDefaultValues;
 
 import javafx.scene.Node;
@@ -28,29 +28,29 @@ import javafx.scene.control.Hyperlink;
 
 /**
  * <pre>
- * Build a {@link Hyperlink} component.
+ * Build a {@link TIntegratedLink} component.
+ * 
+ * This component must be used in entities which extends TReceptiveEntity.
+ * A TReceptiveEntity has information about his creator (View and Entity)
+ * and the component TIntegratedLink show a link to open it.
  * 
  * Example:
  * 
- * <i>@</i>THyperlinkField(labeled = <i>@</i>TLabeled(text="Logout", 
- * font=<i>@</i>TFont(size=4, weight=FontWeight.BOLD), parse = true),
- * buttonBase=<i>@</i>TButtonBase(onAction=LogoutEventBuilder.class))
- * private SimpleStringProperty logout;
+ * <i>@</i>TLabel(text=TFxKey.INTEGRATED_LINK)
+ * <i>@</i>TIntegratedLinkField
+ * private SimpleStringProperty integratedModulePath;
  * 
- * The event example:
+ * The entity example:
  * 
- * public class LogoutEventBuilder extends TBaseEventHandlerBuilder&ltActionEvent&gt{
- * 		<i>@</i>Override
- * 		public EventHandler&ltActionEvent&gt build() {
- * 			return  e -> {
- * 				//code here
- * 				...
- * 			};
- * 		}
+ * @Entity
+ * @Table(name=DomainTables.document, schema=DomainSchema.schema)
+ * public class Document extends <strong>TReceptiveEntity</strong> {
+ * 
+ * 	// fields
+ * 
+ * 	// getters and setters
  * }
  * </pre>
- * @see TBaseEventHandlerBuilder
- * @author Davis Gordon
  * 
  */
 @Retention(RetentionPolicy.RUNTIME)
