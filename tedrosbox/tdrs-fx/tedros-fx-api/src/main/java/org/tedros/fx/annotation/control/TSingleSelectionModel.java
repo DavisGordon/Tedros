@@ -9,8 +9,10 @@ import javafx.scene.control.SingleSelectionModel;
 
 /**
  * <pre>
- * A SelectionModel which enforces the requirement that only a single index be selected at any given time. 
- * This class exists for controls that allow for pluggable selection models, but which do not allow for multiple selection.
+ * A SelectionModel which enforces the requirement that only 
+ * a single index be selected at any given time. 
+ * This class exists for controls that allow for pluggable 
+ * selection models, but which do not allow for multiple selection.
  * </pre>
  *
  * @author Davis Gordon

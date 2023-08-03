@@ -16,7 +16,7 @@ import org.tedros.fx.model.TModelView;
 import org.tedros.fx.process.TEntityProcess;
 
 /**
- * A set of information to build a option list
+ * A set of information to run an TEntityProcess
  *
  * @author Davis Gordon
  *
