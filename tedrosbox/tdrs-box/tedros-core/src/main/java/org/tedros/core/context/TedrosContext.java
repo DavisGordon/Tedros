@@ -88,6 +88,7 @@ public final class TedrosContext {
 	private static StringProperty contextStringProperty;
 	private static IntegerProperty totalPageHistoryProperty;
 	private static StringProperty countryIso2Property;
+	private static StringProperty organizationNameProperty;
 	private static StringProperty initializationErrorMessageStringProperty;
 	private static ObservableList<TMessage> messageListProperty;
 	private static ObservableList<TMessage> infoListProperty;
@@ -154,6 +155,7 @@ public final class TedrosContext {
 		artificialIntelligenceEnabledProperty = new SimpleBooleanProperty(false);
 		totalPageHistoryProperty = new SimpleIntegerProperty(DEFAULT_TOTAL_PAGE_HISTORY);
 		countryIso2Property = new SimpleStringProperty(DEFAULT_COUNTRY_ISO2);
+		organizationNameProperty = new SimpleStringProperty("");
 		messageListProperty = FXCollections.observableArrayList();
 		infoListProperty = FXCollections.observableArrayList();
 		
@@ -222,6 +224,15 @@ public final class TedrosContext {
 			}else{
 				setArtificialIntelligenceEnabled(false);
 				LOGGER.info("- Propertie "+TSystemPropertie.AI_ENABLED.getValue()+" set to default value false");
+			}
+			
+			res = serv.getValue(TedrosContext.loggedUser.getAccessToken(), 
+					TSystemPropertie.ORGANIZATION.getValue());
+			if(res.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res.getValue())) {
+				setOrganizationName(res.getValue());
+				LOGGER.info("- Propertie "+TSystemPropertie.ORGANIZATION.getValue()+" loaded.");
+			}else{
+				LOGGER.info("- Propertie "+TSystemPropertie.ORGANIZATION.getValue()+" not defined!");
 			}
 		} catch (NamingException e) {
 			LOGGER.severe("Error loading custom system properties: "+ e.toString());
@@ -489,6 +500,20 @@ public final class TedrosContext {
 		return countryIso2Property.get();
 	}
 	
+	/**
+	 * @return the organizationName
+	 */
+	public static String getOrganizationName() {
+		return organizationNameProperty.get();
+	}
+
+	/**
+	 * @param organizationName the organizationName to set
+	 */
+	public static void setOrganizationName(String organizationName) {
+		TedrosContext.organizationNameProperty.setValue(organizationName);
+	}
+
 	/**
 	 * total page history property to listen.
 	 * */
