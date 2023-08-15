@@ -13,7 +13,6 @@ import org.tedros.core.context.TedrosModuleLoader;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.model.TModelView;
 import org.tedros.server.model.ITModel;
-import org.tedros.server.model.ITReportItemModel;
 
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.MenuItem;
@@ -24,20 +23,18 @@ import javafx.scene.control.TableView;
  * @author Davis Gordon
  *
  */
-@SuppressWarnings("rawtypes")
-public class TReportRowFactoryCallBackBuilder<M extends TModelView<? extends ITReportItemModel>> 
-extends TContextMenuRowFactoryCallBackBuilder<M> {
+public class TOpenModelRowFactoryCallBackBuilder<M extends TModelView<?>> extends TContextMenuRowFactoryCallBackBuilder<M> {
 
 	private TLanguage iE = TLanguage.getInstance();
 	
 	@Override
 	List<MenuItem> getMenuItems(TableView<M> table, TableRow<M> row) {
-		
+
 		final MenuItem open = new MenuItem(iE.getString(TFxKey.BUTTON_OPEN));
 		open.setOnAction(e->{
 			M mv = row.getItem();
 			List<TLoader> l = TedrosModuleLoader.getInstance()
-			.getLoader(mv.getModel().getModel());
+			.getLoader(mv.getModel());
 			TRowFactoryCalbackHelper.callLoader(l);
 		});
 		
@@ -48,7 +45,7 @@ extends TContextMenuRowFactoryCallBackBuilder<M> {
 		edit.setOnAction(e->{
 			List<ITModel> models = new ArrayList<>();
 			table.getSelectionModel().getSelectedItems().forEach(mv->{
-				models.add(mv.getModel().getModel());
+				models.add(mv.getModel());
 			});
 			List<TLoader> l = TedrosModuleLoader.getInstance()
 			.getLoader(models);
@@ -58,18 +55,9 @@ extends TContextMenuRowFactoryCallBackBuilder<M> {
 		edit.disableProperty().bind(
 				  Bindings.size(table.getSelectionModel().getSelectedItems()).lessThan(2));
 		
-		final MenuItem remove  = new MenuItem(iE.getString(TFxKey.BUTTON_REMOVE));
-		remove.setOnAction(ev-> {
-		table.getItems().removeAll(
-				table.getSelectionModel().getSelectedItems());
-		});
-		// disable this menu item if nothing is selected:
-		remove.disableProperty().bind(
-		  Bindings.isEmpty(table.getSelectionModel().getSelectedItems()));
-		
-		return Arrays.asList(open, edit, remove);
+		return Arrays.asList(open, edit);
 	}
-
-
+	
+	
 
 }

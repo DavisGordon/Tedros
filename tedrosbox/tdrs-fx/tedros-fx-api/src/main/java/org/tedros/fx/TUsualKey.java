@@ -38,6 +38,7 @@ public interface TUsualKey {
 	static final String CANCEL = "#{label.cancel}";
 	static final String CANCELED = "#{label.canceled}";
 	static final String CAPITAL = "#{label.capital}";
+	static final String CATEGORY = "#{label.category}";
 	static final String CCTLD = "#{label.cctld}";
 	static final String CCTLD_DESC = "#{label.cctld.desc}";
 	static final String CELLPHONE = "#{label.cellphone}";
