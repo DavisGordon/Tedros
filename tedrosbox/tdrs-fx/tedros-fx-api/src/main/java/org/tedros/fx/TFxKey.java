@@ -18,7 +18,9 @@ public interface TFxKey {
 	static final String BUTTON_DELETE = "#{tedros.fxapi.button.delete}";
 	static final String BUTTON_DOWNLOAD = "#{tedros.fxapi.button.download}";
 	static final String BUTTON_EDIT = "#{tedros.fxapi.button.edit}";
+	static final String BUTTON_EXECUTE = "#{tedros.fxapi.button.execute}";
 	static final String BUTTON_GENERATE = "#{tedros.fxapi.button.generate}";
+	static final String BUTTON_GO = "#{tedros.fxapi.button.go}";
 	static final String BUTTON_IMPORT = "#{tedros.fxapi.button.import}";
 	static final String BUTTON_LOAD = "#{tedros.fxapi.button.load}";
 	static final String BUTTON_NEW = "#{tedros.fxapi.button.new}";
@@ -72,7 +74,7 @@ public interface TFxKey {
 	static final String TRUE = "#{tedros.fxapi.label.true}";
 	static final String MESSAGE_CANCEL = "#{tedros.fxapi.message.cancel}";
 	static final String MESSAGE_CANNOT_OPEN_FILE = "#{tedros.fxapi.message.cannot.open.file}";
-	static final String MESSAGE_CHOOSE_ONE = "#{tedros.fxapi.message.choose.one}";
+	static final String MESSAGE_CHOOSE_ACTION = "#{tedros.fxapi.message.choose.action}";
 	static final String MESSAGE_DELETE = "#{tedros.fxapi.message.delete}";
 	static final String MESSAGE_ERROR = "#{tedros.fxapi.message.error}";
 	static final String MESSAGE_ERROR_SAVE = "#{tedros.fxapi.message.error.save}";
@@ -87,7 +89,9 @@ public interface TFxKey {
 	static final String MESSAGE_IMAGE_MIN_WIDTH = "#{tedros.fxapi.message.image.min.width}";
 	static final String MESSAGE_IMPORT = "#{tedros.fxapi.message.import}";
 	static final String MESSAGE_INVALIDATE = "#{tedros.fxapi.message.invalidate}";
+	static final String MESSAGE_LIST_ACTION = "#{tedros.fxapi.message.list.action}";
 	static final String MESSAGE_NO_DATA_FOUND = "#{tedros.fxapi.message.no.data.found}";
+	static final String MESSAGE_OPEN_ACTION = "#{tedros.fxapi.message.open.action}";
 	static final String MESSAGE_OS_NOT_SUPPORT_OPERATION = "#{tedros.fxapi.message.os.not.support.operation}";
 	static final String MESSAGE_OUTDATE = "#{tedros.fxapi.message.outdate}";
 	static final String MESSAGE_PROCESS = "#{tedros.fxapi.message.process}";

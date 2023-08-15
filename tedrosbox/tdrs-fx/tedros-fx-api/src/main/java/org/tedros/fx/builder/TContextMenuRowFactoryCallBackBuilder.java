@@ -5,9 +5,13 @@ package org.tedros.fx.builder;
 
 import java.util.List;
 
+import org.tedros.core.TLanguage;
+import org.tedros.fx.TFxKey;
+
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -37,11 +41,24 @@ public abstract class TContextMenuRowFactoryCallBackBuilder<S> extends TRowFacto
 			final TableRow<S> row = new TableRow<>();
 	        final ContextMenu rowMenu = new ContextMenu();
 	        ContextMenu tableMenu = tblVw.getContextMenu();
-	        if (tableMenu != null) {
+	        if (tableMenu != null) 
 	          rowMenu.getItems().addAll(tableMenu.getItems());
+	        
+	        if(rowMenu.getItems().size()>0)
 	          rowMenu.getItems().add(new SeparatorMenuItem());
-	        }
+	        	
 	        rowMenu.getItems().addAll(getMenuItems(tblVw, row));
+	        
+	        if(tblVw.getSelectionModel().getSelectionMode().equals(SelectionMode.MULTIPLE)) {
+		        if(rowMenu.getItems().size()>0)
+			          rowMenu.getItems().add(new SeparatorMenuItem());
+		        final MenuItem selAll = new MenuItem(TLanguage.getInstance().getString(TFxKey.BUTTON_SELECTALL));
+				selAll.setOnAction(e->{
+					tblVw.getSelectionModel().selectAll();
+				});
+				rowMenu.getItems().add(selAll);
+	        }
+	        
 	        row.contextMenuProperty().bind(
 	            Bindings.when(Bindings.isNotNull(row.itemProperty()))
 	            .then(rowMenu)

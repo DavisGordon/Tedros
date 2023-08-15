@@ -36,10 +36,10 @@ import org.tedros.fx.presenter.dynamic.behavior.TDynaViewCrudBaseBehavior;
 import org.tedros.login.decorator.LoginDecorator;
 import org.tedros.login.model.Login;
 import org.tedros.login.model.LoginMV;
+import org.tedros.login.model.ProfileMV;
 import org.tedros.login.model.TLoginProcess;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
-import org.tedros.tools.module.user.model.TProfileMV;
 import org.tedros.util.TEncriptUtil;
 import org.tedros.util.TFileUtil;
 import org.tedros.util.TedrosFolder;
@@ -74,7 +74,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 	private TPasswordField passwordField;
 	private TTextField nameField;
 	private TVRadioGroup languageField;
-	private TComboBoxField<TProfileMV> profileComboBox;
+	private TComboBoxField<ProfileMV> profileComboBox;
 	private Text profileText;
 	private TLanguage iEngine;
 	private TTextField ipTextField;
@@ -140,8 +140,9 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 					profileComboBox.setDisable(false);
 					
 					
-					List<TProfileMV> profiles  = new TModelViewUtil<TProfileMV, TProfile>
-					(TProfileMV.class, TProfile.class, new ArrayList<>(newVal.getProfiles())).convertToModelViewList();
+					List<ProfileMV> profiles  = new TModelViewUtil<ProfileMV, TProfile>
+					(ProfileMV.class, TProfile.class, new ArrayList<>(newVal.getProfiles()))
+					.convertToModelViewList();
 					
 					profileComboBox.getItems().addAll(profiles);
 					profileText.setText(iEngine.getFormatedString("#{tedros.selectProfile}", newVal.getName()));
@@ -249,7 +250,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 					}
 				}else{
 					
-					TProfileMV selectedProfile = profileComboBox.getSelectionModel().getSelectedItem();
+					ProfileMV selectedProfile = profileComboBox.getSelectionModel().getSelectedItem();
 					if(selectedProfile!=null){
 						try{
 							final TUser user = loggedUserProperty.getValue();
@@ -393,7 +394,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 		languageField = (TVRadioGroup) tFieldBox.gettControl();
 		
 		ITFieldBox profileFieldBox = form.gettFieldBox("profile");//  language
-		profileComboBox = (TComboBoxField<TProfileMV>) profileFieldBox.gettControl();
+		profileComboBox = (TComboBoxField<ProfileMV>) profileFieldBox.gettControl();
 		
 		ITFieldBox profileTextFieldBox = form.gettFieldBox("profileText");//  language
 		profileText = (Text) profileTextFieldBox.gettControl();

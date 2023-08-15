@@ -76,10 +76,11 @@ public class TTriggerLoader<M extends ITModelView<?>, F extends ITModelForm<M>> 
 							trigger.addAssociatedField((TFieldBox)this.form.gettFieldBox(associatedFieldName));
 					
 					final Node sourceControl = source.gettControl();
-					
 					final Observable ob = tAnnotation.triggerFieldBox() 
 							? source.tValueProperty()
-									: ((ITTriggeredable) sourceControl).tValueProperty();
+									: sourceControl instanceof ITTriggeredable
+									? ((ITTriggeredable) sourceControl).tValueProperty()
+											:  form.gettModelView().getProperty(fieldName);
 							
 					String key =  "trigger_"+fieldName;
 							

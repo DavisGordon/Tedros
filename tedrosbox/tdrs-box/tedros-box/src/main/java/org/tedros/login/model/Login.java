@@ -8,6 +8,10 @@ import org.tedros.util.TResourceUtil;
 
 public class Login implements ITModel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private String user;
 	private String password;

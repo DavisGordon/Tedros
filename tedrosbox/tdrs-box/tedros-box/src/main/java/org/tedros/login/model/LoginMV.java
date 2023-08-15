@@ -90,7 +90,7 @@ public class LoginMV extends TModelView<Login> {
 	@TLabel(text = "#{tedros.profile}")
 	@TComboBoxField(firstItemText="#{tedros.select}",
 		node=@TNode(disable=true, parse=true))
-	private SimpleObjectProperty<TProfileMV> profile;
+	private SimpleObjectProperty<ProfileMV> profile;
 	
 	//
 	
@@ -171,11 +171,11 @@ public class LoginMV extends TModelView<Login> {
 		this.title = title;
 	}
 
-	public SimpleObjectProperty<TProfileMV> getProfile() {
+	public SimpleObjectProperty<ProfileMV> getProfile() {
 		return profile;
 	}
 
-	public void setProfile(SimpleObjectProperty<TProfileMV> profile) {
+	public void setProfile(SimpleObjectProperty<ProfileMV> profile) {
 		this.profile = profile;
 	}
 

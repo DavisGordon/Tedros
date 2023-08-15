@@ -31,6 +31,7 @@ import org.tedros.fx.process.TPaginationProcess;
 import org.tedros.fx.process.TProcess;
 import org.tedros.fx.util.TEntityListViewCallback;
 import org.tedros.server.entity.ITEntity;
+import org.tedros.server.query.TCompareOp;
 import org.tedros.server.query.TSelect;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
@@ -566,7 +567,9 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		};
 		
 		super.getListenerRepository().add(chlId, prcl);
-		process.findAll(entity, pagination);
+		TSelect<E> sel = new TSelect(entity.getClass());
+		sel.addAndCondition("id", TCompareOp.EQUAL, entity.getId());
+		process.searchAll(sel, pagination);
 		bindProgressIndicator(process);
 		process.stateProperty().addListener(new WeakChangeListener(prcl));
 		process.startProcess();
