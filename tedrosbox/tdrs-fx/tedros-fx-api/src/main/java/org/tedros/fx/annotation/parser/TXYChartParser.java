@@ -1,6 +1,7 @@
 package org.tedros.fx.annotation.parser;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.tedros.core.TLanguage;
 import org.tedros.fx.annotation.chart.TData;
 import org.tedros.fx.annotation.chart.TSerie;
 import org.tedros.fx.annotation.chart.TXYChart;
@@ -40,6 +41,7 @@ public class TXYChartParser extends TAnnotationParser<TXYChart, XYChart>{
 					pss.process(params);
 				}else
 					pss.process();
+				
 				pss.stateProperty().addListener((a,o,n)->{
 					if(n.equals(State.SUCCEEDED)) {
 						TResult<? extends ITChartModel> res = pss.getValue();
@@ -60,7 +62,7 @@ public class TXYChartParser extends TAnnotationParser<TXYChart, XYChart>{
 							? NumberUtils.createNumber(tData.extra())
 									: tData.extra();
 					}
-					tAddData(ann, chart, tSerie.name(), tData.x(), tData.y(), extra);
+					tAddData(ann, chart, TLanguage.getInstance().getString(tSerie.name()), tData.x(), tData.y(), extra);
 				}
 			}
 		}
@@ -68,11 +70,12 @@ public class TXYChartParser extends TAnnotationParser<TXYChart, XYChart>{
 	}
 
 	public static void addData(TXYChart ann, XYChart chart, ITChartModel<String, Long> model) {
-		model.getSeries().forEach(s->{
-			s.getDatas().forEach(d->{
-				tAddData(ann, chart, s.getName(), d.getX(), d.getY(), d.getExtra());
+		if(model!=null && model.getSeries()!=null)
+			model.getSeries().forEach(s->{
+				if(s!=null && s.getDatas()!=null)
+					s.getDatas()
+					.forEach(d->tAddData(ann, chart, TLanguage.getInstance().getString(s.getName()), d.getX(), d.getY(), d.getExtra()));
 			});
-		});
 	}
 	
 	@SuppressWarnings("unchecked")
