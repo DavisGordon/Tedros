@@ -14,10 +14,19 @@ import org.tedros.core.context.TLoader;
 import org.tedros.core.context.TViewDescriptor;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
+import org.tedros.core.context.TedrosModuleLoader;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
+import org.tedros.core.model.ITModelView;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.modal.TMessageBox;
+import org.tedros.server.model.ITModel;
+import org.tedros.server.model.ITReportItemModel;
+
+import javafx.beans.binding.Bindings;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
 
 /**
  * @author Davis Gordon
@@ -31,6 +40,44 @@ public class TRowFactoryCalbackHelper {
 	 * 
 	 */
 	private TRowFactoryCalbackHelper() {
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public static <M extends ITModelView> MenuItem buildOpenMenuItems(TableView<M> table, TableRow<M> row) {
+		TLanguage iE = TLanguage.getInstance();
+		final MenuItem open = new MenuItem(iE.getString(TFxKey.BUTTON_OPEN));
+		open.setOnAction(e->{
+			List<ITModel> models = new ArrayList<>();
+			table.getSelectionModel().getSelectedItems().forEach(mv->{
+				models.add(mv.getModel() instanceof ITReportItemModel 
+						? ((ITReportItemModel)mv.getModel()).getModel()
+						: mv.getModel());
+			});
+			List<TLoader> l = TedrosModuleLoader.getInstance()
+			.getLoader(models);
+			TRowFactoryCalbackHelper.callLoader(l);
+		});
+		
+		open.disableProperty().bind(
+				Bindings.isEmpty(table.getSelectionModel().getSelectedItems()));
+	
+		return open;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public static <M extends ITModelView> MenuItem buildRemoveMenuItems(TableView<M> table, TableRow<M> row) {
+		TLanguage iE = TLanguage.getInstance();
+		
+		final MenuItem remove  = new MenuItem(iE.getString(TFxKey.BUTTON_REMOVE));
+		remove.setOnAction(ev-> {
+		table.getItems().removeAll(
+				table.getSelectionModel().getSelectedItems());
+		});
+		// disable this menu item if nothing is selected:
+		remove.disableProperty().bind(
+				Bindings.isEmpty(table.getSelectionModel().getSelectedItems()));
+		
+		return remove;
 	}
 	
 	/**
