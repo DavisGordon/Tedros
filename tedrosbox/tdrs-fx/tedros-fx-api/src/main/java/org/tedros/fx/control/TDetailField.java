@@ -117,10 +117,10 @@ public class TDetailField extends TRequiredDetailField {
 	private void clearForm() {
 		this.tShowScreenSaver();
 		if(form!=null) {
-			form.gettModelView().removeAllListener();
 			form.tDispose();
+			form.gettModelView().removeAllListener();
+			form = null;
 		}
-		form=null;
 	}
 	
 	private StackPane getScreenSaverPane() {

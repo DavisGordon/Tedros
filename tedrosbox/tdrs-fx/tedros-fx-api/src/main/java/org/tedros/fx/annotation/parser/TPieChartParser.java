@@ -16,7 +16,7 @@ public class TPieChartParser extends TAnnotationParser<TPieChart, PieChart> {
 
 	@Override
 	public void parse(TPieChart annotation, PieChart object, String... byPass) throws Exception {
-		super.parse(annotation, object, "service", "paramsBuilder", "chartModelBuilder");
+		super.parse(annotation, object, "service", "data", "paramsBuilder", "chartModelBuilder");
 	}
 	
 }
