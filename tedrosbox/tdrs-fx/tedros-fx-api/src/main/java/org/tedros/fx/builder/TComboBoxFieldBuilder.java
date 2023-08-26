@@ -28,10 +28,7 @@ import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
-import javafx.util.Callback;
 
 
 /**
@@ -51,7 +48,8 @@ implements ITControlBuilder<org.tedros.fx.control.TComboBoxField, Property<Objec
 		final TComboBoxField tAnnotation = (TComboBoxField) annotation;
 		final org.tedros.fx.control.TComboBoxField control = new org.tedros.fx.control.TComboBoxField();
 		
-		control.getSelectionModel().selectedItemProperty().addListener((a,o,n)-> {
+		control.getSelectionModel().selectedItemProperty()
+		.addListener((a,o,n)-> {
 			if(n instanceof TItem)
 				attrProperty.setValue(((TItem)n).getValue());
 			else{
@@ -61,27 +59,6 @@ implements ITControlBuilder<org.tedros.fx.control.TComboBoxField, Property<Objec
 					attrProperty.setValue(n);
 			}
 		});	
-								
-		control.setCellFactory(new Callback<ListView<Object>,ListCell<Object>>(){
-            @Override
-            public ListCell<Object> call(ListView<Object> p) {
-                final ListCell<Object> cell = new ListCell<Object>(){
-                    @Override
-                    protected void updateItem(Object obj, boolean bln) {
-                        super.updateItem(obj, bln);
-                        if(obj != null){
-        					if(obj instanceof TModelView)
-        						setText(((TModelView)obj).toStringProperty().getValue());
-        					else
-        						setText(obj.toString());
-        				}else{
-                            setText(null);
-                        }
-                    }
-                };
-                return cell;
-            }
-        });
 		
 		callParser(tAnnotation, (ComboBox) control);
 		

@@ -2,6 +2,7 @@ package org.tedros.fx.annotation.parser;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.tedros.core.TLanguage;
+import org.tedros.core.context.TedrosContext;
 import org.tedros.fx.annotation.chart.TData;
 import org.tedros.fx.annotation.chart.TSerie;
 import org.tedros.fx.annotation.chart.TXYChart;
@@ -13,6 +14,7 @@ import org.tedros.server.controller.TParam;
 import org.tedros.server.model.ITChartModel;
 import org.tedros.server.result.TResult;
 
+import javafx.application.Platform;
 import javafx.concurrent.Worker.State;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
@@ -30,6 +32,8 @@ public class TXYChartParser extends TAnnotationParser<TXYChart, XYChart>{
 	@Override
 	@SuppressWarnings("unchecked")
 	public void parse(TXYChart ann, XYChart chart, String... byPass) throws Exception {
+
+		super.parse(ann, chart, "service", "paramsBuilder", "data", "xAxis", "yAxis");
 		
 		if(!"".equals(ann.service())) {
 			try {
@@ -47,9 +51,14 @@ public class TXYChartParser extends TAnnotationParser<TXYChart, XYChart>{
 						TResult<? extends ITChartModel> res = pss.getValue();
 						ITChartModel<String, Long> model = res.getValue();
 						addData(ann, chart, model);
+						Platform.runLater(()->{
+							chart.applyCss();
+							chart.layout();
+						});
 					}
 				});
 				pss.startProcess();
+				
 			} catch (TProcessException e) {
 				e.printStackTrace();
 			}
@@ -66,7 +75,6 @@ public class TXYChartParser extends TAnnotationParser<TXYChart, XYChart>{
 				}
 			}
 		}
-		super.parse(ann, chart, "service", "paramsBuilder", "data", "xAxis", "yAxis");
 	}
 
 	public static void addData(TXYChart ann, XYChart chart, ITChartModel<String, Long> model) {
@@ -103,6 +111,7 @@ public class TXYChartParser extends TAnnotationParser<TXYChart, XYChart>{
 	
 	@SuppressWarnings("unchecked")
 	private static void tAddSeries(XYChart chart, String name){
+		
 		for(Object obj : chart.getData()){
 			if(obj instanceof XYChart.Series) {
 				XYChart.Series serie = (Series) obj;
