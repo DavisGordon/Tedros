@@ -18,7 +18,6 @@ import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.model.ITModelView;
 import org.tedros.core.repository.TRepository;
 
-import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
