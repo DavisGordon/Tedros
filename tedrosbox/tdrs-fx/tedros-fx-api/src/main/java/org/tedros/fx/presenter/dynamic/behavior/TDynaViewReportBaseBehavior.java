@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.List;
 
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.common.model.TFileEntity;
@@ -19,18 +18,21 @@ import org.tedros.core.controller.TPropertieController;
 import org.tedros.core.domain.TSystemPropertie;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
+import org.tedros.core.security.model.TUser;
+import org.tedros.core.service.remote.ServiceLocator;
 import org.tedros.core.setting.model.TPropertie;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.exception.TException;
+import org.tedros.fx.exception.TProcessException;
 import org.tedros.fx.exception.TValidatorException;
 import org.tedros.fx.modal.TMessageBox;
 import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.behavior.TActionType;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewReportBaseDecorator;
-import org.tedros.fx.process.TEntityProcess;
 import org.tedros.fx.process.TReportProcess;
 import org.tedros.fx.process.TReportProcessEnum;
+import org.tedros.fx.property.TBytesLoader;
 import org.tedros.server.model.ITReportModel;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
@@ -78,9 +80,6 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	
 	private TDynaViewReportBaseDecorator<M> decorator;
 	
-	private String organization;
-	private TFileEntity logotype;
-
 	@Override
 	@SuppressWarnings("unchecked")
 	public void load(){
@@ -105,54 +104,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			// set the custom behavior actions
 			loadAction(presenter, tBehavior.action());
 			
-			TEntityProcess<TPropertie> pp = new TEntityProcess(TPropertie.class, TPropertieController.JNDI_NAME) {};
-			pp.stateProperty().addListener((a,o,n)->{
-				if(n.equals(State.SUCCEEDED)) {
-					proccessResult(pp);
-				}
-			});
-			TPropertie ex = new TPropertie();
-			ex.setKey(TSystemPropertie.ORGANIZATION.getValue());
-			pp.find(ex);
-			pp.startProcess();
-			
-			TEntityProcess<TPropertie> pp1 = new TEntityProcess(TPropertie.class, TPropertieController.JNDI_NAME) {};
-			pp1.stateProperty().addListener((a,o,n)->{
-				if(n.equals(State.SUCCEEDED)) {
-					proccessResult(pp1);
-				}
-			});
-			TPropertie ex1 = new TPropertie();
-			ex1.setKey(TSystemPropertie.REPORT_LOGOTYPE.getValue());
-			pp1.find(ex1);
-			pp1.startProcess();
-			
 			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		
-	}
-
-	/**
-	 * @param pp
-	 */
-	private void proccessResult(TEntityProcess<TPropertie> pp) {
-		List<TResult<TPropertie>> l = pp.getValue();
-		if(l!=null && !l.isEmpty()) {
-			TResult<TPropertie> r = l.get(0);
-			if(r.getState().equals(TState.SUCCESS)) {
-				TPropertie p = r.getValue();
-				if(p.getKey().equals(TSystemPropertie.ORGANIZATION.getValue()) 
-						&& p.getValue()!=null) {
-					this.organization = p.getValue();
-				}
-				if(p.getKey().equals(TSystemPropertie.REPORT_LOGOTYPE.getValue()) 
-						&& p.getFile()!=null) {
-					this.logotype = p.getFile();
-				}
-			}
-		}
 	}
 	
 	/**
@@ -383,11 +339,49 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		
 		try {
 			runningProcess  = createProcess();
-		
-			if(this.organization!=null)
+			
+			String organization = null;
+			TFileEntity logotype = null;
+			
+			ServiceLocator loc = ServiceLocator.getInstance();
+    		try {
+        		TUser user = TedrosContext.getLoggedUser();
+        		TPropertieController serv = loc.lookup(TPropertieController.JNDI_NAME);
+        		
+        		TPropertie ex = new TPropertie();
+    			ex.setKey(TSystemPropertie.ORGANIZATION.getValue());
+        		
+        		TResult<TPropertie> r = serv.find(user.getAccessToken(), ex);
+    			if(r.getState().equals(TState.SUCCESS)) {
+    				TPropertie p = r.getValue();
+    				if(p.getValue()!=null)
+    					organization = p.getValue();
+    			}
+    			
+    			ex = new TPropertie();
+    			ex.setKey(TSystemPropertie.REPORT_LOGOTYPE.getValue());
+    			r = serv.find(user.getAccessToken(), ex);
+    			if(r.getState().equals(TState.SUCCESS)) {
+    				TPropertie p = r.getValue();
+    				if(p.getFile()!=null)
+    					logotype = p.getFile();
+    				try {
+						TBytesLoader.loadBytes(logotype);
+					} catch (TProcessException e) {
+						e.printStackTrace();
+					}
+    			}
+    			
+    		}catch (Exception e) {
+				e.printStackTrace();
+			}finally {
+				loc.close();
+			}
+			
+			if(organization!=null)
 				runningProcess.setOrganization(organization);
-			if(this.logotype!=null) 
-				runningProcess.setLogoInputStream(new ByteArrayInputStream(this.logotype.getByte().getBytes()));
+			if(logotype!=null && logotype.getByte()!=null && logotype.getByte().getBytes()!=null) 
+				runningProcess.setLogoInputStream(new ByteArrayInputStream(logotype.getByte().getBytes()));
 			
 			if(type.equals(TReportProcessEnum.EXPORT_XLS))
 				runningProcess.exportXLS((ITReportModel) getModelView().getModel(), folderPath);

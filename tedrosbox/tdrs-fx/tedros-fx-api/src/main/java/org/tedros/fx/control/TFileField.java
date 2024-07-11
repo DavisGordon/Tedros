@@ -6,6 +6,7 @@
  */
 package org.tedros.fx.control;
 
+import java.awt.Dimension;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.util.function.Consumer;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TLanguage;
 import org.tedros.core.control.PopOver;
@@ -59,7 +61,7 @@ import javafx.stage.Stage;
  * @author Davis Gordon
  *
  */
-public class TFileField extends StackPane {
+public class TFileField extends StackPane implements ITTriggeredable {
 	
 	private final Stage appStage;
 	private BorderPane boxImageLabelSpace;
@@ -354,27 +356,59 @@ public class TFileField extends StackPane {
 	private void openFile(File file)  {
     	try {
     		long size = FileUtils.sizeOf(file);
-    		if(maxFileSize!=null && maxFileSize < size)
+    		
+    		boolean isImage = ArrayUtils.contains(TFileExtension.ALL_IMAGES.getExtension(), 
+    				"*." + FilenameUtils.getExtension(file.getName())); 
+    		
+    		if(maxFileSize!=null && size > maxFileSize)
     			showModal(selectButton, 
     					iEngine.getFormatedString(TFxKey.MESSAGE_FILE_MAX_SIZE, 
-    							maxFileSize.toString()));
-    		else if(minFileSize!=null && minFileSize > FileUtils.sizeOf(file))
+    							TFileUtil.convertAndFormat(maxFileSize)));
+    		else if(minFileSize!=null && size < minFileSize)
     			showModal(selectButton, 
     					iEngine.getFormatedString(TFxKey.MESSAGE_FILE_MIN_SIZE, 
-    							minFileSize.toString()));
-    		else{
-	    		if(showFilePath)
-	    			filePathLabel.setText(file.getAbsolutePath());
-	    		
-	            this.fileProperty.setValue(file);
-	    		this.fileNameProperty.setValue(file.getName());
-	    		this.byteArrayProperty.setValue(FileUtils.readFileToByteArray(file));
-	    		this.fileSizeProperty.setValue(size);
-    		}
+    							TFileUtil.convertAndFormat(minFileSize)));
+    		
+    		else if(isImage && (this.maxImageWidth!=null || this.minImageWidth!=null 
+        			|| this.maxImageHeight!=null|| this.minImageHeight!=null)) {
+        			Dimension dim = TFileUtil.getImageDimension(file);
+        			if(this.maxImageWidth!=null && dim.getWidth()>this.maxImageWidth)
+        				showModal(selectButton, 
+            					iEngine.getFormatedString(TFxKey.MESSAGE_IMAGE_MAX_WIDTH, 
+            							String.valueOf(this.maxImageWidth)));
+        			else if(this.minImageWidth!=null && dim.getWidth()<this.minImageWidth)
+        				showModal(selectButton, 
+            					iEngine.getFormatedString(TFxKey.MESSAGE_IMAGE_MIN_WIDTH, 
+            						 String.valueOf(this.minImageWidth)));
+        			else if(this.maxImageHeight!=null && dim.getHeight()>this.maxImageHeight)
+        				showModal(selectButton, 
+            					iEngine.getFormatedString(TFxKey.MESSAGE_IMAGE_MAX_HEIGHT, 
+            							String.valueOf(this.maxImageHeight)));
+        			else if(this.minImageHeight!=null && dim.getHeight()<this.minImageHeight)
+        				showModal(selectButton, 
+            					iEngine.getFormatedString(TFxKey.MESSAGE_IMAGE_MIN_HEIGHT, 
+            							String.valueOf(this.minImageHeight)));
+        			else
+        				setFile(file, size);
+        		}
+    		
+    		else
+	    		setFile(file, size);
+    		
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
     }
+
+	public void setFile(File file, long size) throws IOException {
+		if(showFilePath)
+			filePathLabel.setText(file.getAbsolutePath());
+		
+		this.fileProperty.setValue(file);
+		this.fileNameProperty.setValue(file.getName());
+		this.byteArrayProperty.setValue(FileUtils.readFileToByteArray(file));
+		this.fileSizeProperty.setValue(size);
+	}
 
 	public final File getFile() {
 		return (fileProperty!=null) ? fileProperty.getValue() : null;
@@ -721,6 +755,12 @@ public class TFileField extends StackPane {
 	 */
 	public void setInitialDirectory(String initialDirectory) {
 		this.initialDirectory = initialDirectory;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends Observable> T tValueProperty() {
+		return (T) fileProperty;
 	}
 
 }

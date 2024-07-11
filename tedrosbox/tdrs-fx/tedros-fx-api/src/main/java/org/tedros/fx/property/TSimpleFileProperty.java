@@ -68,6 +68,12 @@ public class TSimpleFileProperty<T extends ITFileBaseModel> extends SimpleObject
 
 	private void buildListeners() {
 		
+		ChangeListener<T> valCL = (a,b,n) -> {
+			setFilePropertyValue();
+		};
+		repo.add("valCL", valCL);
+		super.addListener(new WeakChangeListener<T>(valCL));
+		
 		ChangeListener<String> flnCL = (a, b, n) -> {
 			ITFileBaseModel v = getValue();
 			if(v!=null) {
@@ -119,6 +125,7 @@ public class TSimpleFileProperty<T extends ITFileBaseModel> extends SimpleObject
 				try {
 					ITFileModel m = new TFileModel(); //(ITFileModel) v;
 					m.setFile(n);
+					
 					tFileNameProperty.setValue(/*n==null ? null :*/ m.getFileName());
 					tFilePathProperty.setValue(/*n==null ? null :*/ m.getFilePath());
 					tBytesProperty.setValue(/*n==null ? null :*/ m.getByteModel().getBytes());
@@ -140,7 +147,7 @@ public class TSimpleFileProperty<T extends ITFileBaseModel> extends SimpleObject
 
 	@SuppressWarnings("unchecked")
 	private void setFilePropertyValue() {
-		ITFileBaseModel v = getValue();
+		T v = getValue();
 		if(v!=null) {
 			try{
 				if(v instanceof ITFileModel) {
@@ -166,6 +173,7 @@ public class TSimpleFileProperty<T extends ITFileBaseModel> extends SimpleObject
 		}
 	}
 	
+	/*
 	@Override
 	public void set(T arg0) {
 		super.set(arg0);
@@ -177,7 +185,7 @@ public class TSimpleFileProperty<T extends ITFileBaseModel> extends SimpleObject
 		super.setValue(arg0);
 		setFilePropertyValue();
 	}
-	
+	*/
 	public final SimpleStringProperty tFileNameProperty() {
 		return tFileNameProperty;
 	}

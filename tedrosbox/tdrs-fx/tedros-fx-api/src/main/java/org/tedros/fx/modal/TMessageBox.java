@@ -345,7 +345,7 @@ public class TMessageBox extends Pane {
 		if(type!=null && !type.equals(TMessageType.GENERIC)) {
 			StackPane icon = new StackPane();
 			icon.setId("t-"+type.name().toLowerCase()+"-icon");
-			icon.setMinSize(48, 48);
+			icon.setMinSize(28, 28);
 			box.getChildren().add(icon);
 		}
 		
@@ -371,7 +371,7 @@ public class TMessageBox extends Pane {
 		size = size + (r*120);
 		
 		TText text = new TText(string);
-		text.settTextStyle(TTextStyle.LARGE);
+		text.settTextStyle(TTextStyle.CUSTOM);
 		text.setWrappingWidth(300);
 		return text;
 	}

@@ -9,6 +9,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.tedros.core.cdi.bo.TNotifyBO;
+import org.tedros.core.cdi.queue.TNotifyProducer;
 import org.tedros.core.notify.model.TNotify;
 import org.tedros.server.cdi.bo.ITGenericBO;
 import org.tedros.server.ejb.service.TEjbService;
@@ -21,21 +22,20 @@ public class TNotifyService extends TEjbService<TNotify> {
 	@Inject
 	private TNotifyBO bo;
 	
+	@Inject
+	private TNotifyProducer sender;
+	
 	@Override
 	public ITGenericBO<TNotify> getBussinesObject() {
 		return bo;
 	}
-	/*
-	public void process(TNotify e) {
-		bo.process(e);
-	}*/
-	
-	public TNotify process(String refCode) throws Exception {
-		return bo.process(refCode);
+		
+	public List<TNotify> listToProcess(){
+		return bo.listToProcess();
 	}
 	
-	public List<TNotify> process() {
-		return bo.process();
+	public void queue(TNotify notify) {
+		sender.queue(notify);
 	}
 	
 

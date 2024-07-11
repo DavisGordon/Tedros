@@ -62,7 +62,7 @@ public class TFileModel implements ITFileModel, Serializable {
 	}
 	
 	private void writeFile() throws IOException {
-		if(file==null && StringUtils.isNotBlank(fileName) && getByteModel().getBytes()!=null && filePath!=null){
+		if(StringUtils.isNotBlank(fileName) && getByteModel().getBytes()!=null && filePath!=null){
 			file = new File(filePath+fileName);
 			FileUtils.writeByteArrayToFile(file, getByteModel().getBytes());
 		}

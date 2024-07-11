@@ -28,6 +28,7 @@ import org.tedros.core.cdi.producer.Item;
 import org.tedros.core.domain.DomainPropertie;
 import org.tedros.core.ejb.service.TNotifyService;
 import org.tedros.core.notify.model.TNotify;
+import org.tedros.server.exception.TBusinessException;
 
 /**
  * @author Davis Gordon
@@ -52,7 +53,7 @@ public class TNotifyTimer {
 	
 	@EJB
 	private TNotifyService serv;
-	
+		
     @PostConstruct
     private void construct() {
     	String interval = initialInterval.get();
@@ -104,7 +105,7 @@ public class TNotifyTimer {
     @Timeout
     public void timeout(Timer timer) {
     	if(DEFAULT.equals(timer.getInfo())) {
-    		List<TNotify> l = serv.process();
+    		List<TNotify> l = process();
     		for(TNotify e : l)
 				try {
 					serv.save(e);
@@ -113,12 +114,35 @@ public class TNotifyTimer {
 				}
     	}else {
     		try {
-				TNotify e = serv.process((String)timer.getInfo());
+				TNotify e = process((String)timer.getInfo());
 				serv.save(e);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-    	}
-        
+    	}        
     }
+    
+    private List<TNotify> process()  {
+		List<TNotify> l = serv.listToProcess();
+		if(l!=null && !l.isEmpty())
+			for(TNotify e : l) 
+				serv.queue(e);
+		return l;
+	}
+	
+	private TNotify process(String refCode) throws Exception {
+		if(refCode!=null) {
+			TNotify ex = new TNotify();
+			ex.setRefCode(refCode);
+			ex = serv.find(ex);
+			if(ex!=null) {
+				serv.queue(ex);
+				return ex;
+			}else
+				throw new TBusinessException("#{tedros.fxapi.message.no.data.found}");
+		}else
+			throw new IllegalArgumentException("The argument cannot be null");
+	}
+    
+    
 }

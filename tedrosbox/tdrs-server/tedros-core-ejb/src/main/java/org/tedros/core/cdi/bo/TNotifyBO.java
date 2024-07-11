@@ -18,12 +18,9 @@ import org.tedros.server.exception.TBusinessException;
 
 @RequestScoped
 public class TNotifyBO extends TGenericBO<TNotify> {
-
+	
 	@EJB
 	private TNotifyTimer timer;
-	
-	@Inject
-	private TEmailBO emailBO;
 	
 	@Inject
 	private TNotifyEao eao;
@@ -33,6 +30,9 @@ public class TNotifyBO extends TGenericBO<TNotify> {
 		return eao;
 	}
 	
+	public List<TNotify> listToProcess(){
+		return eao.listToProcess();
+	}
 
 	@Override
 	public void remove(TNotify e) throws Exception {
@@ -55,10 +55,11 @@ public class TNotifyBO extends TGenericBO<TNotify> {
 			e.setAction(TAction.NONE);
 			e.addEventLog(TState.CANCELED, null);
 			break;
-		case SEND:
-			e.setState(null);
-			process(e);
+		
+		case SEND: 
+			e.setState(null); 
 			break;
+		 
 		case TO_QUEUE:
 			e.setState(TState.QUEUED);
 			e.setProcessedTime(new Date());
@@ -86,65 +87,23 @@ public class TNotifyBO extends TGenericBO<TNotify> {
 		return super.save(e);
 	}
 	
-	public void process(TNotify e) {
-		try {
-			validate(e);
-			if(e.getFile()!=null) 
-				emailBO.send(false, e.getTo(), e.getSubject(), e.getContent(), true, e.getFile());
-			else
-				emailBO.send(false, e.getTo(), e.getSubject(), e.getContent(), true);
+	/*
+	 * public void process(TNotify e) { try { validate(e); if(e.getFile()!=null)
+	 * emailBO.send(false, e.getTo(), e.getSubject(), e.getContent(), true,
+	 * e.getFile()); else emailBO.send(false, e.getTo(), e.getSubject(),
+	 * e.getContent(), true);
+	 * 
+	 * e.setAction(TAction.NONE); e.setState(TState.SENT); e.setProcessedTime(new
+	 * Date()); e.addEventLog(TState.SENT, null);
+	 * 
+	 * } catch (Throwable e1) { e1.printStackTrace(); e.setAction(TAction.NONE);
+	 * e.setState(TState.ERROR); e.setProcessedTime(new Date());
+	 * e.addEventLog(TState.ERROR, e1.getMessage()); } }
+	 */
 	
-			e.setAction(TAction.NONE);
-			e.setState(TState.SENT);
-			e.setProcessedTime(new Date());
-			e.addEventLog(TState.SENT, null);
-			
-		} catch (Throwable e1) {
-			e1.printStackTrace();
-			e.setAction(TAction.NONE);
-			e.setState(TState.ERROR);
-			e.setProcessedTime(new Date());
-			e.addEventLog(TState.ERROR, e1.getMessage());
-		}
-	}
 	
-	public List<TNotify> process()  {
-		List<TNotify> l = eao.listToProcess();
-		if(l!=null && !l.isEmpty())
-			for(TNotify e : l) 
-				process(e);
-		return l;
-	}
 	
-	public TNotify process(String refCode) throws Exception {
-		if(refCode!=null) {
-			TNotify ex = new TNotify();
-			ex.setRefCode(refCode);
-			ex = find(ex);
-			if(ex!=null) {
-				process(ex);
-				return ex;
-			}else
-				throw new TBusinessException("#{tedros.fxapi.message.no.data.found}");
-		}else
-			throw new IllegalArgumentException("The argument cannot be null");
-	}
-
-
-	@SuppressWarnings("incomplete-switch")
-	private void validate(TNotify e) {
-		String v=null;
-		if(e.getState()!=null)
-			switch(e.getState()) {
-			case CANCELED:
-				v = "canceled";
-				break;
-			case SENT:
-				v = "already sent";
-				break;
-			}
-		if(v!=null)
-			throw new TBusinessException("This notification cant be done until it was "+v);
-	}
+	
+	
 	
 }

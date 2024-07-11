@@ -5,6 +5,7 @@ package org.tedros.chat.module.client.decorator;
 
 import org.tedros.api.presenter.view.ITDynaView;
 import org.tedros.chat.module.client.model.ChatMV;
+import org.tedros.core.style.TStyle;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.presenter.TListViewPresenter;
 import org.tedros.fx.control.TButton;
@@ -34,6 +35,10 @@ public class ChatDecorator extends TMasterCrudViewDecorator<ChatMV> {
 		super.configAllButtons();
 		hidePopOverButton = new TButton(iEngine.getString(TFxKey.BUTTON_CLOSE));
 		addItemInTHeaderToolBar(hidePopOverButton);
+		super.gettCancelButton().setStyle(TStyle.FONT_SIZE_095em);
+		super.gettNewButton().setStyle(TStyle.FONT_SIZE_095em);
+		super.gettDeleteButton().setStyle(TStyle.FONT_SIZE_095em);
+		hidePopOverButton.setStyle(TStyle.FONT_SIZE_095em);
 	}
 	
 	protected void configListView() {
@@ -46,6 +51,7 @@ public class ChatDecorator extends TMasterCrudViewDecorator<ChatMV> {
 			helper = new TListViewHelper<>(title, 250, 250, null);
 		helper.gettListViewLayout().getChildren().remove(0);
 		helper.gettListView().setMaxHeight(120);
+		helper.gettListView().setStyle(TStyle.FONT_SIZE_095em);
 		// add the list view box at the top 
 		addItemInTTopContent(helper.gettListViewPane());
 	}

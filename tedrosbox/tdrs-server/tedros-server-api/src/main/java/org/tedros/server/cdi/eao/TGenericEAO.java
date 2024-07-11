@@ -2,6 +2,7 @@ package org.tedros.server.cdi.eao;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.Vector;
 
 import javax.persistence.EntityManager;
@@ -162,6 +163,7 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 		return (Long) qry.getSingleResult();
 		
 	}
+	
 
 	private Query createSearchQuery(TSelect<E> sel, boolean count) {
 		StringBuilder sb = new StringBuilder("select ");
@@ -202,8 +204,11 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 					if(b.getCondition().getOperator().equals(TCompareOp.LIKE))
 						sb.append(")");
 					
+					String qryParam = b.getCondition().getField() +"_"+ UUID.randomUUID().toString().substring(2, 8);
+					b.getCondition().setQryParam(qryParam);
+					
 					sb.append(" ").append(b.getCondition().getOperator().getValue()).append(" ");
-					sb.append(":").append(b.getCondition().getField()).append("_");
+					sb.append(":").append(qryParam);
 					sb.append(" ");
 				}
 			});
@@ -231,11 +236,12 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 		if(sel.getConditions()!=null && !sel.getConditions().isEmpty()) {
 			sel.getConditions().forEach(b->{
 				if(b.getCondition().getValue()!=null)
-					qry.setParameter(b.getCondition().getField()+"_", 
-							b.getCondition().getOperator().equals(TCompareOp.LIKE) 
-								? "%"+b.getCondition().getValue().toString().toLowerCase()+"%"
-										: b.getCondition().getValue()
-							);
+					qry.setParameter(
+						b.getCondition().getQryParam(), 
+						b.getCondition().getOperator().equals(TCompareOp.LIKE) 
+							? "%"+b.getCondition().getValue().toString().toLowerCase()+"%"
+									: b.getCondition().getValue()
+					);
 			});
 		}
 		return qry;

@@ -26,7 +26,7 @@ public class CreateNotificationListFunction extends TFunction<Contents> {
 
 	@SuppressWarnings("unchecked")
 	public CreateNotificationListFunction() {
-		super("set_notify_list", "Sets a list of notify model in the view '"+ToolsKey.VIEW_NOTIFY+"'", 
+		super("create_list_of_email", "Creates a list of notifications to send in the view '"+ToolsKey.VIEW_NOTIFY+"'", 
 			Contents.class, 
 			v->{
 				//Gets the view descriptor of the currently open view, if any.
@@ -51,7 +51,7 @@ public class CreateNotificationListFunction extends TFunction<Contents> {
 					
 				}
 
-				return new Response("The operation was successful, the user can now send or schedule the sending!");
+				return new Response("Successful");
 			});
 	}
 

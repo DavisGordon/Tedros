@@ -31,6 +31,7 @@ public class TMainColorBehavior extends TDynaViewCrudBaseBehavior<TMainColorMV, 
 
 	@Override
 	public boolean runWhenModelProcessSucceeded(TModelProcess<TMainColor> modelProcess) {
+		TedrosContext.loadSystemLogo();
 		TedrosStyleUtil.applyChanges();
 		return true;
 	}
@@ -46,7 +47,7 @@ public class TMainColorBehavior extends TDynaViewCrudBaseBehavior<TMainColorMV, 
 	}
 	
 
-	@SuppressWarnings({ "rawtypes"})
+	@SuppressWarnings({ "rawtypes", "unchecked"})
 	@Override
 	protected void runAfterBuildForm(ITModelForm form) {
 		

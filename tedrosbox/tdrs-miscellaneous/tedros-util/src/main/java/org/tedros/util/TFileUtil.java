@@ -1,16 +1,44 @@
 package org.tedros.util;
 
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Iterator;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 
 public final class TFileUtil {
 
 	private TFileUtil() {
+	}
+	
+	public static String convertAndFormat(double bytes) {
+		if(bytes>=(1024*1024))
+			return String.valueOf(convertToMegaByte(bytes))+"Mb";
+		else if(bytes>=110)
+			return String.valueOf(convertToKiloByte(bytes))+"Kb";
+		else 
+			return String.valueOf(bytes)+" bytes";
+	}
+	
+	public static double convertToMegaByte(double bytes) {
+		BigDecimal size = new BigDecimal(bytes / (1024*1024));
+		size = size.setScale(2, BigDecimal.ROUND_HALF_UP);
+		return  size.doubleValue();
+	}
+	
+	public static double convertToKiloByte(double bytes) {
+		BigDecimal size = new BigDecimal(bytes / 1024);
+		size = size.setScale(2, BigDecimal.ROUND_HALF_UP);
+		return  size.doubleValue();
 	}
 	
 	public static void saveFile(String content, File file){
@@ -109,6 +137,24 @@ public final class TFileUtil {
                 return false;
             }
         }
+	}
+	
+	public static Dimension getImageDimension(File file) throws IOException {
+		try(ImageInputStream in = ImageIO.createImageInputStream(file)){
+		    final Iterator<ImageReader> readers = ImageIO.getImageReaders(in);
+		    if (readers.hasNext()) {
+		        ImageReader reader = readers.next();
+		        try {
+		            reader.setInput(in);
+		            return new Dimension(reader.getWidth(0), reader.getHeight(0));
+		        } finally {
+		            reader.dispose();
+		        }
+		    }
+		} 
+		
+		return null;
+		
 	}
 	
 }

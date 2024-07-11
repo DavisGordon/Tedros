@@ -6,13 +6,16 @@
  */
 package org.tedros.tools.module.scheme.trigger;
 
+import java.io.File;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
 
 import org.tedros.api.form.ITModelForm;
 import org.tedros.fx.control.TColorPickerField;
+import org.tedros.fx.control.TFileField;
 import org.tedros.fx.control.TSlider;
+import org.tedros.fx.control.TTextField;
 import org.tedros.fx.control.trigger.TTrigger;
 import org.tedros.fx.form.TFieldBox;
 import org.tedros.tools.module.scheme.model.TMainColorMV;
@@ -57,6 +60,21 @@ public class TMainColorTrigger extends TTrigger<Object> {
 			t.settAppNameStyle(c);
 		}
 		
+		list = Arrays.asList("brand", "fileLogo");
+		if(list.contains(fieldName)){
+			String brand = getTextValue(list.get(0));
+			File file = getFileValue(list.get(1));
+			Double indent = getSliderDoubleValue("indentation");
+			t.showLogo(file, brand);
+			t.indent(indent);
+		}
+		
+		list = Arrays.asList("indentation");
+		if(list.contains(fieldName)){
+			Double indent = getSliderDoubleValue("indentation");
+			t.indent(indent);
+		}
+		
 		list = Arrays.asList("navCorFundo", "navOpacidade", "navCorTexto");
 		if(list.contains(fieldName)){
 			Color c = getColorValue(list.get(0));
@@ -80,7 +98,6 @@ public class TMainColorTrigger extends TTrigger<Object> {
 		
 	}
 
-
 	@SuppressWarnings("unchecked")
 	private Color getColorValue(String field) {
 		ITModelForm<TMainColorMV> form = (ITModelForm<TMainColorMV>) getForm();
@@ -92,6 +109,24 @@ public class TMainColorTrigger extends TTrigger<Object> {
 		ITModelForm<TMainColorMV> form = (ITModelForm<TMainColorMV>) getForm();
 		String value = numberFormat.format(((TSlider) form.gettFieldBox(field).gettControl()).getValue()); 
 		return value.replaceAll(",", ".");
+	}
+	
+	@SuppressWarnings("unchecked")
+	private Double getSliderDoubleValue(String field) {
+		ITModelForm<TMainColorMV> form = (ITModelForm<TMainColorMV>) getForm();
+		return ((TSlider) form.gettFieldBox(field).gettControl()).getValue();
+	}
+	
+	@SuppressWarnings("unchecked")
+	private String getTextValue(String field) {
+		ITModelForm<TMainColorMV> form = (ITModelForm<TMainColorMV>) getForm();
+		return ((TTextField) form.gettFieldBox(field).gettControl()).getText();
+	}
+	
+	@SuppressWarnings("unchecked")
+	private File getFileValue(String field) {
+		ITModelForm<TMainColorMV> form = (ITModelForm<TMainColorMV>) getForm();
+		return ((TFileField) form.gettFieldBox(field).gettControl()).getFile();
 	}
 	
 }

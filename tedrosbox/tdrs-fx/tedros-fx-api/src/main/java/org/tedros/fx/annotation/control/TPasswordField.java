@@ -13,8 +13,8 @@ import java.lang.annotation.Target;
 
 import org.tedros.api.parser.ITAnnotationParser;
 import org.tedros.fx.annotation.TDefaultValue;
+import org.tedros.fx.annotation.parser.TPasswordFieldParser;
 import org.tedros.fx.annotation.parser.TRequiredPasswordFieldParser;
-import org.tedros.fx.annotation.parser.TTextFieldParser;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TControl;
 import org.tedros.fx.builder.ITEventHandlerBuilder;
@@ -56,11 +56,11 @@ public @interface TPasswordField  {
 	 * <pre>
 	 * The parser class for this annotation
 	 * 
-	 * Default value: {TRequiredPasswordFieldParser.class, TTextFieldParser.class}
+	 * Default value: {TRequiredPasswordFieldParser.class, TPasswordFieldParser.class}
 	 * </pre>
 	 * */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ITAnnotationParser>[] parser() default {TRequiredPasswordFieldParser.class, TTextFieldParser.class};
+	public Class<? extends ITAnnotationParser>[] parser() default {TRequiredPasswordFieldParser.class, TPasswordFieldParser.class};
 	
 	
 	/**

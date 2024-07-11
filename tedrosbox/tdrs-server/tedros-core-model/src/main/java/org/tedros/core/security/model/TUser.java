@@ -2,6 +2,7 @@ package org.tedros.core.security.model;
 
 import java.util.Set;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,6 +20,7 @@ import org.tedros.server.entity.TVersionEntity;
 import org.tedros.server.security.TAccessToken;
 
 @Entity
+@Cacheable(false)
 @Table(name = DomainTables.user, schema = DomainSchema.tedros_core)
 public class TUser extends TVersionEntity implements ITUser {
 	

@@ -1,5 +1,6 @@
 package org.tedros.common.model;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +20,7 @@ import org.tedros.server.entity.TVersionEntity;
 import org.tedros.server.model.ITByteBaseModel;
 
 @Entity
+@Cacheable(false)
 @Table(name=DomainTables.file, schema=DomainSchema.tedros_common)
 public class TFileEntity extends TVersionEntity implements ITFileEntity {
 

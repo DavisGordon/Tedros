@@ -3,12 +3,14 @@
  */
 package org.tedros.tools.module.scheme.template;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosAppManager;
-import org.tedros.core.context.TedrosContext;
+import org.tedros.core.style.TStyleResourceValue;
 import org.tedros.tools.module.scheme.SchemeModule;
 import org.tedros.util.TColorUtil;
 
@@ -40,6 +42,8 @@ import javafx.scene.paint.Color;
 public class TemplatePane extends StackPane {
 
 	private BorderPane root = new BorderPane();
+	private ImageView imgLogo; 
+    private StackPane logoPane;
 	private ToolBar toolBar;
 	private ToolBar pageToolBar;
 	private Label appName;
@@ -56,42 +60,14 @@ public class TemplatePane extends StackPane {
         
         root.getStyleClass().add("application");
 		root.setId("t-tedros-color");
-        
+		// create logo pane
+		logoPane = new StackPane();
         // create main toolbar
         toolBar = new ToolBar();
         toolBar.setId("t-main-toolbar");
-        
-      //add appName
-        DropShadow ds = new DropShadow();
-        ds.setOffsetY(3.0f);
-        ds.setColor(Color.BLACK);
-        
-        StackPane logoPane = new StackPane();
-        InputStream is = TedrosContext.getImageInputStream("logo-tedros-small.png");
-        Image logo = new Image(is);
-        try {
-			is.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-        ImageView imgLogo = new ImageView();
-        imgLogo.setImage(logo);
-        imgLogo.setEffect(ds);
-        
-        appName = new Label();
-        appName.setEffect(ds);
-        appName.setCache(true);
-        appName.setText("Tedros Box");
-        appName.setId("t-app-name");
-        
-        HBox h = new HBox();
-        h.setAlignment(Pos.CENTER_LEFT);
-        HBox.setMargin(imgLogo, new Insets(8,0,0,8));
-        h.getChildren().addAll(imgLogo);
-        
-        logoPane.getChildren().addAll(h, appName);
-        StackPane.setMargin(appName, new Insets(0,0,0,55));
         toolBar.getItems().add(logoPane);
+               
+       // showDefaultLogo();
         
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -147,6 +123,72 @@ public class TemplatePane extends StackPane {
         
         pageArea.getChildren().add(tile);
         
+        String brand = TStyleResourceValue.BRAND.headerStyle(true);
+		String indentantion = TStyleResourceValue.INDENTANTION.headerStyle();
+		String pathLogo = TStyleResourceValue.LOGO.headerStyle();
+		Double indent = indentantion!=null ? Double.parseDouble(indentantion) : null;
+		showLogo(pathLogo!=null ?  new File(pathLogo) : null, brand);
+		this.indent(indent);
+	}
+	
+	public void indent(Double value) {
+		if(value!=null)
+			StackPane.setMargin(appName, new Insets(0,0,0,value));
+	}
+	
+	public void showLogo(File file, String brand) {
+		
+		int size = logoPane.getChildren().size();
+		for(int x=0; x<size; x++)
+			logoPane.getChildren().remove(0);
+		
+		createLogoImageView(file);
+		
+		//add Logo and app name
+        DropShadow nameLogoEffect = buildLogoEffect();
+        
+        if(imgLogo!=null) {
+	        imgLogo.setEffect(nameLogoEffect);
+	        
+	        HBox h = new HBox();
+	        h.setAlignment(Pos.CENTER_LEFT);
+	        HBox.setMargin(imgLogo, new Insets(8,0,0,8));
+	        h.getChildren().addAll(imgLogo);
+	        
+	        logoPane.getChildren().add(h);
+        }
+        
+		if(appName==null) {
+			appName = new Label();
+			appName.setEffect(nameLogoEffect);
+	        appName.setCache(true);
+	        appName.setId("t-app-name");
+		}
+		
+		appName.setText(brand==null ? "" : brand);
+        logoPane.getChildren().add(appName);
+	}
+
+	private void createLogoImageView(File file) {
+		if(file==null) {
+			imgLogo=null;
+			return;
+		}
+			
+		imgLogo = new ImageView();
+        try(InputStream is = new FileInputStream(file)) {
+        	Image logo = new Image(is);
+        	imgLogo.setImage(logo);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	private DropShadow buildLogoEffect() {
+		DropShadow nameLogoEffect = new DropShadow();
+        nameLogoEffect.setOffsetY(3.0f);
+        nameLogoEffect.setColor(Color.BLACK);
+		return nameLogoEffect;
 	}
 	
 	public void settIconStyle(Color c, String t) {

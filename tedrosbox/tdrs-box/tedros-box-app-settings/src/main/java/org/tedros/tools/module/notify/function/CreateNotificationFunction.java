@@ -23,8 +23,9 @@ import javafx.beans.property.SimpleStringProperty;
  * @author Davis Gordon
  *
  */
-public class CreateNotificationFunction extends TFunction<Content> {
-
+@Deprecated
+public class CreateNotificationFunction {
+/*
 	@SuppressWarnings("unchecked")
 	public CreateNotificationFunction() {
 		super("set_notify", "Sets a  notify model in the view '"+ToolsKey.VIEW_NOTIFY+"'", Content.class, 
@@ -73,6 +74,6 @@ public class CreateNotificationFunction extends TFunction<Content> {
 
 					return new Response("The operation was successful, the user can now send or schedule the sending!");
 				});
-	}
+	}*/
 
 }

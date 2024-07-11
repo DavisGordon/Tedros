@@ -108,6 +108,13 @@
 			<version>${openejb.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+	        <groupId>org.apache.activemq</groupId>
+	        <artifactId>activemq-all</artifactId>
+	        <version>${apache.activemq}</version>
+			<scope>provided</scope>
+	    </dependency>
 
 		<dependency>
 			<groupId>junit</groupId>

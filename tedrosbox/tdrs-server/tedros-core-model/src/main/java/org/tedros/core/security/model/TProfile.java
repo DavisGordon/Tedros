@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,13 +15,12 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.tedros.core.domain.DomainSchema;
 import org.tedros.core.domain.DomainTables;
 import org.tedros.server.entity.TVersionEntity;
 
 @Entity
+@Cacheable(false)
 @Table(name = DomainTables.profile, schema = DomainSchema.tedros_core)
 public class TProfile extends TVersionEntity {
 

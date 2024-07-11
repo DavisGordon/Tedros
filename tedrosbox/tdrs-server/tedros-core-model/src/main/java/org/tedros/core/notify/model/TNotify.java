@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -230,6 +231,37 @@ public class TNotify extends TReceptiveEntity {
 	 */
 	public void setProcessedTime(Date processedTime) {
 		this.processedTime = processedTime;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(action, content, eventLog, file, processedTime, refCode, scheduleTime,
+				state, subject, to);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof TNotify))
+			return false;
+		TNotify other = (TNotify) obj;
+		return action == other.action && Objects.equals(content, other.content)
+				&& Objects.equals(eventLog, other.eventLog) && Objects.equals(file, other.file)
+				&& Objects.equals(processedTime, other.processedTime) && Objects.equals(refCode, other.refCode)
+				&& Objects.equals(scheduleTime, other.scheduleTime) && state == other.state
+				&& Objects.equals(subject, other.subject) && Objects.equals(to, other.to);
+	}
+
+	@Override
+	public String toString() {
+		return "TNotify [refCode=" + refCode + ", subject=" + subject + ", to=" + to + ", scheduleTime=" + scheduleTime
+				+ ", processedTime=" + processedTime + ", action=" + action + ", state=" + state + "]";
 	}
 	
 }
