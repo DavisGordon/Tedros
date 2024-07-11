@@ -4,9 +4,7 @@
 package org.tedros.ai;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -18,10 +16,13 @@ import java.util.Set;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.tedros.ai.function.TFunction;
+import org.tedros.ai.function.model.AppCatalog;
 import org.tedros.ai.function.model.CallView;
 import org.tedros.ai.function.model.Empty;
+import org.tedros.ai.function.model.ModuleInfo;
 import org.tedros.ai.function.model.Response;
-import org.tedros.ai.function.model.ViewCatalog;
+import org.tedros.ai.function.model.ViewInfo;
+import org.tedros.ai.function.model.ViewPath;
 import org.tedros.ai.model.CreateFile;
 import org.tedros.api.presenter.ITDynaPresenter;
 import org.tedros.api.presenter.behavior.ITBehavior;
@@ -162,9 +163,9 @@ public class TFunctionHelper {
 				});
 	}
 	
-	public static TFunction<CallView> callViewFunction() {
-		return new TFunction<CallView>("call_view", 
-			"Opens a view. Important: Before calling this, make sure the viewPath exists, for that call the function list_system_views", 
+	/*public static TFunction<CallView> callViewFunction() {
+		return new TFunction<CallView>("call_view_path", 
+			"Opens a view. IMPORTANT: Before calling this make sure that the 'viewPath' exists, to do this call the list_system_views function.", 
 			CallView.class, 
 				v->{	
 					StringBuilder sb = new StringBuilder(v.getViewPath());
@@ -179,13 +180,13 @@ public class TFunctionHelper {
 					}
 					
 					if(sb.toString().equals(v.getViewPath()))
-						sb.append(" cannot open or does not exist pass the correct view path!");
+						sb.append(" does not exist! Run the list_system_views function to find the correct path.");
 				return new Response(sb.toString());
 		});
-	}
+	}*/
 	
-	public static TFunction<Empty> listAllViewsFunction() {
-		ViewCatalog log = new ViewCatalog();
+	/*public static TFunction<Empty> listAllViewsFunction() {
+		AppCatalog log = new AppCatalog();
 		TedrosAppManager.getInstance().getAppContexts()
 		.forEach(actx->{
 			Boolean appAccess = actx.getAppDescriptor().getSecurityDescriptor()!=null
@@ -213,6 +214,97 @@ public class TFunctionHelper {
 			"Lists all system views, use this to see what the system can do and get a path to open a view", 
 			Empty.class, obj->log);
 		
+	}*/
+	
+	public static TFunction<Empty> listAllViewPathFunction() {
+		List<ViewPath> lst = new ArrayList<ViewPath>();
+		TedrosAppManager.getInstance().getAppContexts()
+		.forEach(actx->{
+			actx.getModulesContext().forEach(mctx->{
+				mctx.getModuleDescriptor().getViewDescriptors()
+				.forEach(vds->{
+					lst.add(new ViewPath(vds.getPath()));
+				});
+			});
+		});
+		return new TFunction<Empty>("list_all_view_path", 
+			"It lists all the view paths ('viewPath'), can be used to call up a view and to get more details about a specific view.", 
+			Empty.class, obj->lst);	
+	}
+	
+	public static TFunction<Empty> listAllAppsFunction() {
+		AppCatalog log = new AppCatalog();
+		TedrosAppManager.getInstance().getAppContexts()
+		.forEach(actx->{
+			List<ModuleInfo> mods = new ArrayList<>();
+			Boolean appAccess = actx.getAppDescriptor().getSecurityDescriptor()!=null
+					? TedrosContext.isUserAuthorized(actx.getAppDescriptor().getSecurityDescriptor(), 
+							TAuthorizationType.APP_ACCESS)
+							: true;
+			actx.getModulesContext().forEach(mctx->{
+				List<ViewInfo> views = new ArrayList<>();
+				Boolean modAccess = mctx.getModuleDescriptor().getSecurityDescriptor() != null
+						? TedrosContext.isUserAuthorized(mctx.getModuleDescriptor().getSecurityDescriptor(), 
+								TAuthorizationType.MODULE_ACCESS)
+								: true;				
+				mctx.getModuleDescriptor().getViewDescriptors()
+				.forEach(vds->{
+					Boolean viewAccess = vds.getSecurityDescriptor()!=null
+							?TedrosContext.isUserAuthorized(vds.getSecurityDescriptor(), 
+									TAuthorizationType.VIEW_ACCESS)
+									: true;
+					
+					views.add(new ViewInfo(vds.getPath(), vds.getTitle(), vds.getDescription(), viewAccess.toString()));
+				});
+				mods.add(new ModuleInfo(mctx.getModuleDescriptor().getModuleName(), modAccess.toString(), views));
+			});
+			log.add(actx.getAppDescriptor().getName(), appAccess.toString(), mods);
+		});
+		return new TFunction<Empty>("lists_all_applications", 
+			"It lists all the applications and can be used to discover all the system's functionalities.", 
+			Empty.class, obj->log);
+	}
+	
+	public static TFunction<ViewPath> callUpViewFunction() {
+		return new TFunction<ViewPath>("call_view", 
+			"Calls and opens a view using a 'viewPath'", 
+			ViewPath.class, 
+				v->{	
+					StringBuilder sb = new StringBuilder(v.getViewPath());
+					TViewDescriptor vds = TedrosAppManager.getInstance()
+							.getViewDescriptor(v.getViewPath());
+					if(vds!=null) {
+						Platform.runLater(()->{
+							TedrosAppManager.getInstance()
+							.goToModule(vds.getModuleDescriptor().getType(), vds.getModelView());
+						});
+						sb.append(" opened successfully!");
+					}
+					
+					if(sb.toString().equals(v.getViewPath()))
+						sb.append(" does not exist! Run the list_all_view_path function to find the correct 'viewPath'.");
+				return new Response(sb.toString());
+		});
+	}
+	
+	public static TFunction<ViewPath> getViewInfoFunction() {
+		return new TFunction<ViewPath>("get_view_info", 
+			"Gets information from a specific view, must be used with a correct 'viewPath' returned from the list_all_view_path function", 
+			ViewPath.class, 
+				v->{	
+					TViewDescriptor vds = TedrosAppManager.getInstance()
+							.getViewDescriptor(v.getViewPath());
+					if(vds!=null) {
+						Boolean viewAccess = vds.getSecurityDescriptor()!=null
+								?TedrosContext.isUserAuthorized(vds.getSecurityDescriptor(), 
+										TAuthorizationType.VIEW_ACCESS)
+										: true;
+						return new ViewInfo(vds.getPath(), vds.getTitle(), vds.getDescription(), viewAccess.toString());
+					}
+					StringBuilder sb = new StringBuilder(v.getViewPath());
+					sb.append(" does not exist! Run the list_all_view_path function to find the correct 'viewPath'");
+				return new Response(sb.toString());
+		});
 	}
 
 }

@@ -2,6 +2,7 @@ package org.tedros.ai;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -11,6 +12,7 @@ import org.tedros.ai.function.TFunction;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.security.model.TUser;
+import org.tedros.util.TDateUtil;
 
 import com.theokanning.openai.OpenAiHttpException;
 import com.theokanning.openai.Usage;
@@ -27,6 +29,8 @@ import com.theokanning.openai.service.OpenAiService;
 
 public class TerosService {
 
+	private static final String GPT_4_TURBO = "gpt-4-turbo";
+	private static final String GPT_3_TURBO = "gpt-3.5-turbo-16k";
 	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	private static TerosService instance;
 
@@ -40,7 +44,8 @@ public class TerosService {
 	private TerosService(String token) {
 		super();
 		service = new OpenAiService(token, Duration.ZERO);
-		String msg = "You are a helpful assistant for the Tedros desktop system and your name is Teros."
+		String date = TDateUtil.formatFullgDate(new Date(), TLanguage.getLocale());
+		String msg = "Today is "+date+" and you are a helpful assistant for the Tedros desktop system and your name is Teros."
 				+ "\nBe smart with the user " + TedrosContext.getLoggedUser().getName() 
 				+ "\nImportant: Never generate random or fictitious data unless requested by the user, always try to use system data provided by the functions"
 				+ ", do this before helping the user."
@@ -151,16 +156,20 @@ public class TerosService {
 	public ChatCompletionRequest buildRequest() {
 		TUser u = TedrosContext.getLoggedUser();
 		return (this.functionExecutor != null)
-				? ChatCompletionRequest.builder().model("gpt-3.5-turbo-16k").messages(messages)
+				? ChatCompletionRequest.builder().model(GPT_3_TURBO).messages(messages)
 						.user(String.valueOf(u.getLogin().hashCode()))
 						.functions(functionExecutor.getFunctions())
 						.functionCall(ChatCompletionRequestFunctionCall.of("auto"))
 						.n(1).temperature(1.0)
-						.maxTokens(2000).logitBias(new HashMap<>()).build()
-				: ChatCompletionRequest.builder().model("gpt-3.5-turbo-16k").messages(messages)
+						.maxTokens(2000)
+						.logitBias(new HashMap<>())
+						.build()
+				: ChatCompletionRequest.builder().model(GPT_3_TURBO).messages(messages)
 						.user(String.valueOf(u.getLogin().hashCode()))
 						.n(1).temperature(1.0)
-						.maxTokens(2000).logitBias(new HashMap<>()).build();
+						.maxTokens(2000)
+						.logitBias(new HashMap<>())
+						.build();
 	}
 
 }

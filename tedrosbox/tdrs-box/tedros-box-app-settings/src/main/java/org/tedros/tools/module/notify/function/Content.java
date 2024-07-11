@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
  * @author Davis Gordon
  *
  */
-@JsonClassDescription("The notify model")
+@JsonClassDescription("Notify model ")
 public class Content {
 	
 	@JsonPropertyDescription("The email subject")
@@ -19,7 +19,7 @@ public class Content {
 	@JsonPropertyDescription("The destination email address")
 	private String to;
 	
-	@JsonPropertyDescription("The html content")
+	@JsonPropertyDescription("The email body")
 	private String content;
 	/**
 	 * 

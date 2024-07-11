@@ -2,6 +2,7 @@ package org.tedros;
 
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -121,6 +122,8 @@ public class TedrosBox extends Application implements ITedrosBox  {
     private TDynaView<ChatMV> chatView;
     private Label chatUnreadMsgsLabel;
     
+    private ImageView imgLogo; 
+    private StackPane logoPane;
     private BorderPane mainPane;
     private StackPane layerPane;
     private VBox leftMenuPane;
@@ -287,63 +290,14 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		root.getStyleClass().add("application");
 		root.setId("t-tedros-color");
         
+		// create logo pane
+		logoPane = new StackPane();
         // create main toolbar
         toolBar = new ToolBar();
-        toolBar.setId("t-main-toolbar");
-        
-        //add appName
-        DropShadow ds = new DropShadow();
-        ds.setOffsetY(3.0f);
-        ds.setColor(Color.BLACK);
-        InputStream is = TedrosContext.getImageInputStream("logo-tedros-small.png");
-        StackPane logoPane = new StackPane();
-        Image logo = new Image(is);
-        try {
-			is.close();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-        ImageView imgLogo = new ImageView();
-        imgLogo.setImage(logo);
-        imgLogo.setEffect(ds);
-        
-        appName = new Label();
-        appName.setEffect(ds);
-        appName.setCache(true);
-        appName.setText("Tedros");
-        appName.setId("t-app-name");
-        
-        HBox h = new HBox();
-        h.setAlignment(Pos.CENTER_LEFT);
-        HBox.setMargin(imgLogo, new Insets(8,0,0,8));
-        h.getChildren().addAll(imgLogo);
-        
-        logoPane.getChildren().addAll(h, appName);
-        StackPane.setMargin(appName, new Insets(0,0,0,55));
+        toolBar.setId("t-main-toolbar");        
         toolBar.getItems().add(logoPane);
-        logoEffect = new FadeTransition(Duration.millis(2000), imgLogo);
-        logoEffect.setFromValue(1.0);
-        logoEffect.setToValue(0.3);
-        logoEffect.setCycleCount(FadeTransition.INDEFINITE);
-        logoEffect.setAutoReverse(true);
-        effectChl = (a,o,n)->{
-			if(n.intValue()==1)
-				logoEffect.stop();
-		};
         
-        appName.setCursor(Cursor.HAND);
-        
-        appName.setOnMouseClicked(e -> {
-        	String tt = TLanguage.getInstance(null).getFormatedString("#{tedros.tooltip}", TedrosRelease.version);
-        	TLabel l = new TLabel(tt);
-        	l.setFont(Font.font(11));
-        	PopOver p = new PopOver();
-        	p.setCloseButtonEnabled(true);
-        	p.setContentNode(l);
-        	p.getRoot().setPadding(new Insets(20,20,20,20));
-        	p.show(appName);
-    	
-        });
+        showDefaultLogo();
         
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -554,15 +508,18 @@ public class TedrosBox extends Application implements ITedrosBox  {
         TedrosContext.messageListProperty()
         .addListener((Change c)->{
 			if(!c.getList().isEmpty()) {
-				imgLogo.opacityProperty().removeListener(effectChl);
-				logoEffect.play();
+				if(imgLogo!=null && logoEffect!=null && effectChl!=null) {
+					imgLogo.opacityProperty().removeListener(effectChl);
+					logoEffect.play();
+				}
 				modalMessage.showModal(new TMessageBox(c.getList()), ev->{
 					TedrosContext.messageListProperty().clear();
 				});
 			}else {
 				if(modalMessage!=null) {
 					modalMessage.hideModal();
-					imgLogo.opacityProperty().addListener(effectChl);
+					if(imgLogo!=null && effectChl!=null)
+						imgLogo.opacityProperty().addListener(effectChl);
 				}
 			}
 		});
@@ -575,23 +532,30 @@ public class TedrosBox extends Application implements ITedrosBox  {
         TedrosContext.showModalProperty()
         .addListener((a, o, newValue) -> {
 			if(newValue && TedrosContext.getModal() != null) {
-				imgLogo.opacityProperty().removeListener(effectChl);
-				logoEffect.play();
+				if(imgLogo!=null && logoEffect!=null && effectChl!=null) {
+					imgLogo.opacityProperty().removeListener(effectChl);
+					logoEffect.play();
+				}
 				tModalPane.showModal(TedrosContext.getModal());
 			}else {
 				if(tModalPane!=null) {
 					tModalPane.hideModal();
-					imgLogo.opacityProperty().addListener(effectChl);
+					if(imgLogo!=null && effectChl!=null)
+						imgLogo.opacityProperty().addListener(effectChl);
 				}
 			}
 		});
         
         TedrosContext.reloadStyleProperty()
         .addListener((a,o,n)-> {
-        	imgLogo.opacityProperty().removeListener(effectChl);
- 			logoEffect.play();
- 			reloadStyle();
- 			imgLogo.opacityProperty().addListener(effectChl);
+        	if(imgLogo!=null && logoEffect!=null && effectChl!=null) {
+	        	imgLogo.opacityProperty().removeListener(effectChl);
+	 			logoEffect.play();
+        	}
+	 		reloadStyle();
+	 		if(imgLogo!=null && effectChl!=null) {	
+	 			imgLogo.opacityProperty().addListener(effectChl);
+        	}
  		});
         
 		chatViewStateChl = (a,o,n)->{
@@ -620,6 +584,93 @@ public class TedrosBox extends Application implements ITedrosBox  {
         windowButtons.toogleMaximized();
         TedrosContext.showModal(buildLogin());
     }
+
+	public void showDefaultLogo() {
+		String logoFileName =  TedrosFolder.IMAGES_FOLDER.getFullPath()+File.separator+"logo-tedros-small.png";
+        String brand = "Tedros";
+        double brandLeftMargin = 55;
+        showLogo(logoFileName, brand, brandLeftMargin);
+	}
+
+	public void showLogo(String imagePath, String brand, Double brandLeftMargin) {
+		
+		int size = logoPane.getChildren().size();
+		for(int x=0; x<size; x++)
+			logoPane.getChildren().remove(0);
+		
+		imgLogo = null;
+		logoEffect = null;
+		effectChl = null;
+		
+		createLogoImageView(imagePath);
+		
+		//add Logo and app name
+        DropShadow nameLogoEffect = buildLogoEffect();
+        
+        if(imgLogo!=null) {
+	        imgLogo.setEffect(nameLogoEffect);
+	        
+	        HBox h = new HBox();
+	        h.setAlignment(Pos.CENTER_LEFT);
+	        HBox.setMargin(imgLogo, new Insets(8,0,0,8));
+	        h.getChildren().addAll(imgLogo);
+	        
+	        logoPane.getChildren().add(h);
+	        
+	        logoEffect = new FadeTransition(Duration.millis(2000), imgLogo);
+	        logoEffect.setFromValue(1.0);
+	        logoEffect.setToValue(0.3);
+	        logoEffect.setCycleCount(FadeTransition.INDEFINITE);
+	        logoEffect.setAutoReverse(true);
+	        effectChl = (a,o,n)->{
+				if(n.intValue()==1)
+					logoEffect.stop();
+			};
+        }
+        
+		if(appName==null) {
+			appName = new Label();
+			appName.setEffect(nameLogoEffect);
+	        appName.setCache(true);
+	        appName.setId("t-app-name");        
+	        appName.setCursor(Cursor.HAND);        
+	        appName.setOnMouseClicked(e -> {
+	        	String tt = TLanguage.getInstance(null).getFormatedString("#{tedros.tooltip}", TedrosRelease.version);
+	        	TLabel l = new TLabel(tt);
+	        	l.setFont(Font.font(11));
+	        	PopOver p = new PopOver();
+	        	p.setCloseButtonEnabled(true);
+	        	p.setContentNode(l);
+	        	p.getRoot().setPadding(new Insets(20,20,20,20));
+	        	p.show(appName);
+	        });
+		}
+		
+		appName.setText(brand==null ? "" : brand);
+		if(brandLeftMargin!=null)
+			StackPane.setMargin(appName, new Insets(0,0,0,brandLeftMargin));
+		
+        logoPane.getChildren().add(appName);
+	}
+
+	private void createLogoImageView(String path) {
+		if(path!=null) {
+			imgLogo = new ImageView();
+	        try(InputStream is = new FileInputStream(new File(path))) {
+	        	Image logo = new Image(is);
+	        	imgLogo.setImage(logo);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
+
+	private DropShadow buildLogoEffect() {
+		DropShadow nameLogoEffect = new DropShadow();
+        nameLogoEffect.setOffsetY(3.0f);
+        nameLogoEffect.setColor(Color.BLACK);
+		return nameLogoEffect;
+	}
 
 
 	private void showTerosPopOver() {
@@ -708,12 +759,17 @@ public class TedrosBox extends Application implements ITedrosBox  {
 			chatPopOver.setArrowLocation(ArrowLocation.TOP_LEFT);
 			chatPopOver.setCornerRadius(20);
 			chatPopOver.setMaxHeight(h);
+			
+			
 		}else {
 			TDynaPresenter<ChatMV> p = chatView.gettPresenter();
 			ChatBehaviour bhv = (ChatBehaviour) p.getBehavior();
 			bhv.setHidePopOver(false);
 		}
-		chatPopOver.setContentNode(chatView);
+		StackPane sp = new StackPane();
+		sp.getStyleClass().add("t-settings-header");
+		sp.getChildren().add(chatView);
+		chatPopOver.setContentNode(sp);
 		
 		if(chatPopOver.isShowing())
 			chatPopOver.hide();
@@ -751,6 +807,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     	mainPane.setTop(null);
     	clearPageHistory();
     	TedrosContext.removeUserSession();
+    	showDefaultLogo();
     }
 
 	private void hideAllPopOver() {
@@ -813,7 +870,10 @@ public class TedrosBox extends Application implements ITedrosBox  {
 
 		chatView = new TDynaView<>(ChatMV.class);
 		chatView.tStateProperty().addListener(chatViewStateChl);
-		chatView.tLoad();
+		chatView.sceneProperty().addListener((ob,o,n)->{
+			if(n!=null)
+				chatView.tLoad();
+		});
 		
 		if(settingsAcc!=null) {
 			for(TitledPane t : settingsAcc.getPanes())
@@ -836,7 +896,6 @@ public class TedrosBox extends Application implements ITedrosBox  {
         TitledPane t2 = new TitledPane();
         t2.setText(iEngine.getString("#{tedros.setting.main}"));
         t2.setContent(new TMainSettingsPane());
-       // settingsAcc.getStyleClass().add("t-settings-page");
         t.getStyleClass().add("t-settings-header");
         t2.getStyleClass().add("t-settings-header");
         settingsAcc.setExpandedPane(t);

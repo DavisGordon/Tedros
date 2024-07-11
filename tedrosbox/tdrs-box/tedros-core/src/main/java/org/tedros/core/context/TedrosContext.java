@@ -261,6 +261,15 @@ public final class TedrosContext {
 			LOGGER.severe(e1.toString());
 		}
 	}
+	
+	public static void loadSystemLogo() {
+		
+		String brand = TStyleResourceValue.BRAND.headerStyle(true);
+		String indentantion = TStyleResourceValue.INDENTANTION.headerStyle();
+		String pathLogo = TStyleResourceValue.LOGO.headerStyle();
+		Double indent = indentantion!=null ? Double.parseDouble(indentantion) : null;
+		main.showLogo(pathLogo, brand, indent);
+	}
 
 	/**
 	 * Check if the logged user are allowed with the TAuthorizationType for the app point TSecurityDescriptor

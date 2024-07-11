@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.tedros.server.entity.ITEntity;
+import org.tedros.server.model.TFileModel;
 
 import javafx.scene.paint.Color;
 
@@ -15,6 +16,11 @@ public class TMainColor implements ITEntity {
 	private Color mainCorTexto;
 	private Color mainCorFundo;
 	private Double mainOpacidade;
+	
+	private String brand;
+	private Double indentation;
+	private TFileModel fileLogo;
+	
 	
 	private Color navCorTexto;
 	private Color navCorFundo;
@@ -202,6 +208,30 @@ public class TMainColor implements ITEntity {
 	 */
 	public void setAppTamTexto(Double appTamTexto) {
 		this.appTamTexto = appTamTexto;
+	}
+
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+
+	public Double getIndentation() {
+		return indentation;
+	}
+
+	public void setIndentation(Double indentation) {
+		this.indentation = indentation;
+	}
+
+	public TFileModel getFileLogo() {
+		return fileLogo;
+	}
+
+	public void setFileLogo(TFileModel fileLogo) {
+		this.fileLogo = fileLogo;
 	}
 
 	

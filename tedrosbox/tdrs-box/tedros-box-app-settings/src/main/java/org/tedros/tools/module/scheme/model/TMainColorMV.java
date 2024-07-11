@@ -3,12 +3,18 @@
  */
 package org.tedros.tools.module.scheme.model;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.style.TStyleResourceValue;
 import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.control.TColorPickerField;
+import org.tedros.fx.annotation.control.TFileField;
+import org.tedros.fx.annotation.control.TGenericType;
 import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TSliderField;
+import org.tedros.fx.annotation.control.TTextField;
 import org.tedros.fx.annotation.control.TTrigger;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.layout.TAccordion;
@@ -20,14 +26,20 @@ import org.tedros.fx.annotation.process.TModelProcess;
 import org.tedros.fx.annotation.property.TObservableListProperty;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TControl;
+import org.tedros.fx.domain.TFileExtension;
+import org.tedros.fx.domain.TFileModelType;
 import org.tedros.fx.domain.TLabelPosition;
 import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
+import org.tedros.fx.property.TSimpleFileProperty;
+import org.tedros.server.model.TFileModel;
 import org.tedros.tools.ToolsKey;
 import org.tedros.tools.module.scheme.behaviour.TMainColorBehavior;
 import org.tedros.tools.module.scheme.decorator.TMainColorDecorator;
 import org.tedros.tools.module.scheme.process.TMainColorProcess;
 import org.tedros.tools.module.scheme.trigger.TMainColorTrigger;
+import org.tedros.tools.start.TConstant;
+import org.tedros.util.TedrosFolder;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -48,12 +60,13 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 	private SimpleStringProperty display;
 	
 	@TAccordion(node=@TNode(parse = true, 
-			styleClass=@TObservableListProperty(addAll="t-accordion", parse=true)),
-			panes={
-					@TTitledPane(text=TUsualKey.MAIN_TITLE, fields={"mainCorTexto", "mainCorFundo","mainOpacidade"}),
-					@TTitledPane(text=TUsualKey.NAV_TITLE, fields={"navCorTexto", "navCorFundo","navOpacidade"}),
-					@TTitledPane(text=TUsualKey.APP_TITLE, fields={ "appCorTexto", "appTamTexto"})
-			})
+		styleClass=@TObservableListProperty(addAll="t-accordion", parse=true)),
+		panes={
+			@TTitledPane(text=TUsualKey.MAIN_TITLE, fields={"mainCorTexto", "mainCorFundo","mainOpacidade", 
+					"brand", "indentation", "fileLogo"}),
+			@TTitledPane(text=TUsualKey.NAV_TITLE, fields={"navCorTexto", "navCorFundo","navOpacidade"}),
+			@TTitledPane(text=TUsualKey.APP_TITLE, fields={ "appCorTexto", "appTamTexto"})
+	})
 	@TLabel(text=TUsualKey.TEXT, position=TLabelPosition.LEFT, control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
 	@TTrigger(type=TMainColorTrigger.class, mode=TViewMode.EDIT)
@@ -71,6 +84,28 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 		showTickMarks=true, showTickLabels=true)
 	@TTrigger(type=TMainColorTrigger.class, mode=TViewMode.EDIT)
 	private SimpleDoubleProperty mainOpacidade;
+	
+	@TLabel(text=TUsualKey.COMPANY)
+	@TTextField(maxLength=100)
+	@TTrigger(type=TMainColorTrigger.class, mode=TViewMode.EDIT)
+	private SimpleStringProperty brand;
+	
+	@TLabel(text="Indentation")
+	@TSliderField(max = 100, min = 0,
+		majorTickUnit=50, blockIncrement=5,
+		minorTickCount=5, control=@TControl(parse = true, prefWidth=100), 
+		showTickMarks=true, showTickLabels=true)
+	@TTrigger(type=TMainColorTrigger.class, mode=TViewMode.EDIT)
+	private SimpleDoubleProperty indentation;
+	
+	@TLabel(text=TUsualKey.LOGO)
+	@TFileField(propertyValueType=TFileModelType.MODEL, 
+	extensions= {TFileExtension.ALL_IMAGES}, 
+	showFilePath=false, showImage=false, 
+	maxImageHeight = 60, minImageHeight = 30, maxFileSize = 256000)
+	@TGenericType(model=TFileModel.class)
+	@TTrigger(type=TMainColorTrigger.class, mode=TViewMode.EDIT)
+	private TSimpleFileProperty<TFileModel> fileLogo;
 	
 	// nav bar
 	
@@ -116,6 +151,10 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 		String mainCorFundo = TStyleResourceValue.MAIN_COLOR.defaultStyle();
 		String mainOpacidade = TStyleResourceValue.MAIN_COLOR_OPACITY.defaultStyle();
 		
+		String brand = TStyleResourceValue.BRAND.headerStyle(true);
+		String indentantion = TStyleResourceValue.INDENTANTION.headerStyle();
+		String path = TStyleResourceValue.LOGO.headerStyle();
+		
 		String navCorTexto = TStyleResourceValue.TOPBAR_TEXT_COLOR.defaultStyle();
 		String navCorFundo = TStyleResourceValue.TOPBAR_COLOR.defaultStyle();
 		String navOpacidade = TStyleResourceValue.TOPBAR_COLOR_OPACITY.defaultStyle();
@@ -123,10 +162,22 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 		String appCorTexto = TStyleResourceValue.APP_TEXT_COLOR.defaultStyle();
 		String appTamTexto = TStyleResourceValue.APP_TEXT_SIZE.defaultStyle();
 		
+		this.brand.setValue(brand!=null? brand : "Tedros");
+		this.indentation.setValue(indentantion!=null ? Double.parseDouble(indentantion) : 55);
 		
+		if(path!=null) {
+			try {
+				TFileModel fileModel = new TFileModel(new File(path));
+				this.fileLogo.setValue(fileModel);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		this.mainCorTexto.setValue(mainCorTexto!=null ? Color.web(mainCorTexto) : Color.WHITE);
 		this.mainCorFundo.setValue(mainCorFundo!=null ? Color.web(mainCorFundo) : Color.BLACK);
 		this.mainOpacidade.setValue(mainOpacidade!=null ? Double.parseDouble(mainOpacidade) : 0.35);
+		
+		
 		
 		this.navCorTexto.setValue(navCorTexto!=null ? Color.web(navCorTexto) : Color.WHITE);
 		this.navCorFundo.setValue(navCorFundo!=null ? Color.web(navCorFundo) : Color.BLACK);
@@ -263,6 +314,30 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 	 */
 	public void setDisplay(SimpleStringProperty display) {
 		this.display = display;
+	}
+
+	public SimpleDoubleProperty getIndentation() {
+		return indentation;
+	}
+
+	public void setIndentation(SimpleDoubleProperty indentation) {
+		this.indentation = indentation;
+	}
+
+	public SimpleStringProperty getBrand() {
+		return brand;
+	}
+
+	public void setBrand(SimpleStringProperty brand) {
+		this.brand = brand;
+	}
+
+	public TSimpleFileProperty<TFileModel> getFileLogo() {
+		return fileLogo;
+	}
+
+	public void setFileLogo(TSimpleFileProperty<TFileModel> fileLogo) {
+		this.fileLogo = fileLogo;
 	}
 
 }

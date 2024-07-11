@@ -52,7 +52,13 @@ implements ITControlBuilder<org.tedros.fx.control.TPickListField, ObservableList
 															tAnnotation.height(),
 															tAnnotation.required(),
 															tAnnotation.selectionMode());
-			
+		
+		control.settSourceListViewStyle(tAnnotation.sourceStyle());
+		control.settTargetListViewStyle(tAnnotation.targetStyle());
+		control.settButtonsStyle(tAnnotation.buttonsStyle());
+		control.settSourceListViewId(tAnnotation.sourceId());
+		control.settTargetListViewId(tAnnotation.targetId());
+					
 		ContextMenu ctx = new ContextMenu();
 		MenuItem reload = new MenuItem(TLanguage.getInstance().getString(TFxKey.BUTTON_RELOAD));
 		EventHandler<ActionEvent> reloadEvent = ev->{

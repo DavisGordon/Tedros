@@ -450,6 +450,29 @@ public class TPickListField<E> extends StackPane implements ITTriggeredable {
 		public void settRemoveButton(Button tRemoveButton) {
 			this.tRemoveButton = tRemoveButton;
 		}
+		
+		public void settSourceListViewStyle(String style) {
+			this.tSourceListView.setStyle(style);
+		}
+		
+		public void settTargetListViewStyle(String style) {
+			this.tTargetListView.setStyle(style);
+		}
+		
+		public void settSourceListViewId(String id) {
+			this.tSourceListView.setId(id);
+		}
+		
+		public void settTargetListViewId(String id) {
+			this.tTargetListView.setId(id);
+		}
+		
+		public void settButtonsStyle(String style) {
+			this.tAddAllButton.setStyle(style);
+			this.tAddButton.setStyle(style);
+			this.tRemoveAllButton.setStyle(style);
+			this.tRemoveButton.setStyle(style);
+		}
 
 
 }

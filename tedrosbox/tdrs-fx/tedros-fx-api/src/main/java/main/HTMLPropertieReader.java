@@ -18,7 +18,7 @@ public class HTMLPropertieReader {
 		Document doc = null;
 		String linkType = null;
 		try {
-			String link = "https://docs.oracle.com/javafx/2/api/javafx/scene/control/TextInputControl.html";
+			String link = "https://docs.oracle.com/javafx/2/api/javafx/scene/control/ScrollPane.html";
 			linkType = StringUtils.substringAfterLast(link, "/").replaceAll(".html", "");
 			
 			URL url = new URL(link);

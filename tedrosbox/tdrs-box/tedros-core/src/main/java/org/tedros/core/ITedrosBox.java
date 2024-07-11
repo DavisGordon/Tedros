@@ -18,6 +18,10 @@ public interface ITedrosBox {
 	
 	void buildSettingsPane();
 	
+	void showLogo(String logoFileName, String brand, Double brandLeftMargin);
+	
+	void showDefaultLogo();
+	
 	Stage getStage();
 	
 	void clearPageHistory();

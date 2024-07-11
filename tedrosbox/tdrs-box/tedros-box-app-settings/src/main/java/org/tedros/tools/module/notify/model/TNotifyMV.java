@@ -89,14 +89,16 @@ import javafx.scene.layout.Priority;
 @TListViewPresenter(listViewMinWidth=400, 
 	page=@TPage(serviceName = TNotifyController.JNDI_NAME,  modelView=TNotifyMV.class,
 	query=@TQuery(entity = TNotify.class, 		
-			condition= {@TCondition(label = TUsualKey.REF_CODE, field = "refCode", operator=TCompareOp.EQUAL), 
-					@TCondition(label = TUsualKey.DATE_PROCESSED, field = "processedTime", operator=TCompareOp.GREATER_EQ_THAN, temporal=TTemporal.DATE),
-					@TCondition(label = TUsualKey.SUBJECT, field = "subject", operator=TCompareOp.LIKE),
-					@TCondition(label = TUsualKey.SEND_TO, field = "to", operator=TCompareOp.LIKE) },
-			orderBy= {@TOrder(label = TUsualKey.REF_CODE, field = "refCode"), 
-				@TOrder(label = TUsualKey.DATE_PROCESSED, field = "processedTime"),
-				@TOrder(label = TUsualKey.SUBJECT, field = "subject"),
-				@TOrder(label = TUsualKey.SEND_TO, field = "to") }
+		condition= {
+			@TCondition(label = TUsualKey.REF_CODE, field = "refCode", operator=TCompareOp.EQUAL), 
+			@TCondition(label = TUsualKey.DATE_PROCESSED, field = "processedTime", 
+				operator=TCompareOp.GREATER_EQ_THAN, temporal=TTemporal.DATE),
+			@TCondition(label = TUsualKey.SUBJECT, field = "subject", operator=TCompareOp.LIKE),
+			@TCondition(label = TUsualKey.SEND_TO, field = "to", operator=TCompareOp.LIKE) },
+		orderBy= {@TOrder(label = TUsualKey.REF_CODE, field = "refCode"), 
+			@TOrder(label = TUsualKey.DATE_PROCESSED, field = "processedTime"),
+			@TOrder(label = TUsualKey.SUBJECT, field = "subject"),
+			@TOrder(label = TUsualKey.SEND_TO, field = "to") }
 		), showSearch=true, showOrderBy=true),
 	presenter=@TPresenter(
 		decorator = @TDecorator(viewTitle=ToolsKey.VIEW_NOTIFY, buildModesRadioButton=false),

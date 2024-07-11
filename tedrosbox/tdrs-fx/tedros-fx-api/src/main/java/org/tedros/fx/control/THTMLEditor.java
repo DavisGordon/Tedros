@@ -58,25 +58,31 @@ public class THTMLEditor extends TRequiredHTMLEditor {
 		tHtmlProperty.addListener(listener);
 		this.getChildren().addAll(editor);
 		
-		WebView webView = (WebView) editor.lookup("WebView");
-		webPage = Accessor.getPageFor(webView.getEngine());
-        webView.focusedProperty().addListener((a, b, c) -> { 
-        	tHtmlProperty.removeListener(listener);
-        	String text = webPage.getInnerText(webPage.getMainFrame());
-        	if(StringUtils.isNotBlank(text))
-        		tHtmlProperty.setValue(editor.getHtmlText());
-        	else
-        		tHtmlProperty.setValue(null);
-        	tHtmlProperty.addListener(listener);
-        });
-        
-        webView.addEventFilter(KeyEvent.KEY_TYPED, e -> { 
-        	if(StringUtils.isBlank(tHtmlProperty.getValue())) {
-        		tHtmlProperty.removeListener(listener);
-        		tHtmlProperty.setValue(editor.getHtmlText());
-        		tHtmlProperty.addListener(listener);
-        	}
-        });
+		this.sceneProperty().addListener((ob, o, n)->{
+			if(n!=null) {
+				WebView webView = (WebView) editor.lookup("WebView");
+				webPage = Accessor.getPageFor(webView.getEngine());
+		        webView.focusedProperty().addListener((a, b, c) -> { 
+		        	tHtmlProperty.removeListener(listener);
+		        	String text = webPage.getInnerText(webPage.getMainFrame());
+		        	if(StringUtils.isNotBlank(text))
+		        		tHtmlProperty.setValue(editor.getHtmlText());
+		        	else
+		        		tHtmlProperty.setValue(null);
+		        	tHtmlProperty.addListener(listener);
+		        });
+		        
+		        webView.addEventFilter(KeyEvent.KEY_TYPED, e -> { 
+		        	if(StringUtils.isBlank(tHtmlProperty.getValue())) {
+		        		tHtmlProperty.removeListener(listener);
+		        		tHtmlProperty.setValue(editor.getHtmlText());
+		        		tHtmlProperty.addListener(listener);
+		        	}
+		        });
+			}
+		});
+		
+		
         super.tRequiredNodeProperty().setValue(gettHTMLEditor());
 	}
 

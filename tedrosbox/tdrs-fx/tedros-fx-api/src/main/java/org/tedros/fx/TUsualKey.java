@@ -111,6 +111,7 @@ public interface TUsualKey {
 	static final String EXAMPLE = "#{label.example}";
 	static final String EXIT = "#{label.exit}";
 	static final String EXTENSION = "#{label.extension}";
+	static final String FACILITIES = "#{label.facilities}";
 	static final String FEMALE = "#{label.female}";
 	static final String FEMININE = "#{label.feminine}";
 	static final String FIELD = "#{label.field}";
@@ -147,6 +148,7 @@ public interface TUsualKey {
 	static final String LAYOUT = "#{label.layout}";
 	static final String LEGAL_PERSON = "#{label.legal.person}";
 	static final String LOAD = "#{label.load}";
+	static final String LOCAL_FACILITIES = "#{label.local.facilities}";
 	static final String LOGIN = "#{label.login}";
 	static final String LOGO = "#{label.logo}";
 	static final String LOGOUT = "#{label.logout}";
@@ -281,6 +283,7 @@ public interface TUsualKey {
 	static final String TRADE_NAME = "#{label.trade.name}";
 	static final String TRADEMARK = "#{label.trademark}";
 	static final String TYPE = "#{label.type}";
+	static final String TYPES_ROAD = "#{label.types.road}";
 	static final String UNIT_MEASURE = "#{label.unit.measure}";
 	static final String UNIT_PRICE = "#{label.unit.price}";
 	static final String UNTIL_DATE = "#{label.until.date}";

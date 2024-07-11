@@ -506,6 +506,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 
 	private void loadTedros(final TUser user) throws IOException {
 		
+		TedrosContext.loadSystemLogo();
 		profileText.setText(iEngine.getString("#{tedros.loading}"));
 		LOGGER.info(iEngine.getString("#{tedros.loading}"));
 		TedrosContext.setLoggedUser(user);

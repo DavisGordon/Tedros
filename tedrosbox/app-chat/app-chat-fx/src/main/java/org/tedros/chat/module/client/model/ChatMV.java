@@ -17,6 +17,7 @@ import org.tedros.chat.module.client.setting.ChatClient;
 import org.tedros.chat.module.client.setting.ChatFormSetting;
 import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.annotation.security.TSecurity;
+import org.tedros.core.style.TStyle;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.control.TButtonField;
 import org.tedros.fx.annotation.control.TFileField;
@@ -42,6 +43,7 @@ import org.tedros.fx.annotation.presenter.TListViewPresenter;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.process.TEjbService;
 import org.tedros.fx.annotation.query.TQuery;
+import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TControl;
 import org.tedros.fx.annotation.scene.control.TLabeled;
 import org.tedros.fx.annotation.scene.layout.TRegion;
@@ -98,8 +100,10 @@ public class ChatMV extends TEntityModelView<Chat> {
 	private SimpleStringProperty title;
 	
 	@TTabPane(tabs = { 
-		@TTab(text = CHATKey.RECIPIENTS, scroll=false, fields = { "participants" }), 
-		@TTab(text = "Chat", scroll=true, fields = { "messages" })}, 
+		@TTab(text = CHATKey.RECIPIENTS, scroll=false, fields = { "participants" }, 
+				style = TStyle.FONT_SIZE_095em), 
+		@TTab(text = "Chat", scroll=true, fields = { "messages" }, 
+				style = TStyle.FONT_SIZE_095em)}, 
 		region=@TRegion(minHeight=300, maxHeight=350, minWidth=700, maxWidth=700, parse = true))
 	private SimpleObjectProperty<ChatUser> owner;
 	
@@ -108,6 +112,9 @@ public class ChatMV extends TEntityModelView<Chat> {
 	private ITObservableList<ChatMessage> messages; 
 	
 	@TPickListField(
+			sourceStyle = TStyle.FONT_SIZE_1_2em,
+			targetStyle = TStyle.FONT_SIZE_1_2em,
+			buttonsStyle = TStyle.FONT_SIZE_1_2em,
 		process=@TProcess(service = IChatUserController.JNDI_NAME,
 		query=@TQuery(entity=ChatUser.class), modelView=ChatUserMV.class))
 	@TGenericType(model = ChatUser.class, modelView=ChatUserMV.class)
@@ -125,10 +132,12 @@ public class ChatMV extends TEntityModelView<Chat> {
 	private TSimpleFileProperty<ITFileModel> sendFile;
 	
 	@TToolBar(items = { "sendBtn", "clearBtn" })
-	@TButtonField(labeled = @TLabeled(parse = true, text=CHATKey.SEND))
+	@TButtonField(labeled = @TLabeled(parse = true, text=CHATKey.SEND),
+		node = @TNode(style = TStyle.FONT_SIZE_095em, parse = true))
 	private SimpleStringProperty sendBtn;
 
-	@TButtonField(labeled = @TLabeled(parse = true, text=CHATKey.CLEAR))
+	@TButtonField(labeled = @TLabeled(parse = true, text=CHATKey.CLEAR),
+		node = @TNode(style = TStyle.FONT_SIZE_095em, parse = true))
 	private SimpleStringProperty clearBtn;
 	
 	

@@ -5,8 +5,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
-import org.tedros.util.TFileUtil;
-import org.tedros.util.TedrosFolder;
+import org.tedros.util.TResourceUtil;
 
 /**
  * The enum with possible values for style resources
@@ -19,6 +18,11 @@ public enum TStyleResourceValue {
 	MAIN_COLOR_BLUE,
 	MAIN_COLOR_OPACITY,
 	MAIN_TEXT_COLOR,
+	
+	BRAND,
+	INDENTANTION,
+	LOGO,
+	
 	TOPBAR_COLOR,
 	TOPBAR_COLOR_RED,
 	TOPBAR_COLOR_GREEN,
@@ -88,18 +92,22 @@ public enum TStyleResourceValue {
 		
 	}
 	
+	static private Properties headerProp;
 	static private Properties panelCustomProp;
 	static private Properties defaultProp;
 	static private Properties backgroundProp;
 	
-	public static void loadCustomValues(boolean reload){	
+	public static void loadHeaderValues(boolean reload){
+		if(null==headerProp || reload)
+			headerProp = TResourceUtil.getPropertiesFromConfFolder(TStyleResourceName.HEADER_STYLE.toString());
+	}
+	
+	public static void loadCustomValues(boolean reload){
 		if(null==panelCustomProp || reload){
 			panelCustomProp = new Properties();
 			String propFilePath = TThemeUtil.getThemeFolder()+TStyleResourceName.PANEL_CUSTOM_STYLE;
-			try {
-				InputStream is = new FileInputStream(propFilePath);
+			try(InputStream is = new FileInputStream(propFilePath)) {
 				panelCustomProp.load(is);
-				is.close();
 			} catch (Exception  e1) {
 				e1.printStackTrace();
 			}
@@ -107,10 +115,8 @@ public enum TStyleResourceValue {
 		if(null==backgroundProp || reload){
 			backgroundProp = new Properties();
 			String propFilePath = TThemeUtil.getThemeFolder()+TStyleResourceName.BACKGROUND_STYLE;
-			try {
-				InputStream is = new FileInputStream(propFilePath);
+			try(InputStream is = new FileInputStream(propFilePath)) {
 				backgroundProp.load(is);
-				is.close();
 			} catch (Exception  e1) {
 				e1.printStackTrace();
 			}
@@ -122,10 +128,8 @@ public enum TStyleResourceValue {
 		if(null==defaultProp || reload){
 			defaultProp = new Properties();
 			String propFilePath = TThemeUtil.getThemeFolder()+TStyleResourceName.DEFAULT_STYLE;
-			try {
-				InputStream is = new FileInputStream(propFilePath);				
+			try(InputStream is = new FileInputStream(propFilePath)) {
 				defaultProp.load(is);
-				is.close();
 			}catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -143,16 +147,19 @@ public enum TStyleResourceValue {
 		return null;
 	}
 	
-	public String customStyle() {
-		loadCustomValues(false);
-		return getCustomValue();
-	}	
-	
-	public String customStyle(boolean reloadValues) {
-		loadCustomValues(reloadValues);
-		return getCustomValue();
+	// HEADER STYLE
+	public String headerStyle() {
+		return headerStyle(false);
 	}
 	
+	public String headerStyle(boolean reloadValues) {
+		loadHeaderValues(reloadValues);
+		if(headerProp.containsKey(name()))
+			return  headerProp.getProperty(name());
+		return null;
+	}
+	
+	// DEFAULT STYLE
 	public String defaultStyle() {
 		return defaultStyle(false);
 	}
@@ -162,6 +169,17 @@ public enum TStyleResourceValue {
 		if(defaultProp.containsKey(name()))
 			return  defaultProp.getProperty(name());
 		return null;
+	}
+	
+	// CUSTOM STYLE
+	public String customStyle() {
+		loadCustomValues(false);
+		return getCustomValue();
+	}
+	
+	public String customStyle(boolean reloadValues) {
+		loadCustomValues(reloadValues);
+		return getCustomValue();
 	}
 	
 	private String getCustomValue() {

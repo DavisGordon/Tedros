@@ -55,10 +55,6 @@ public final class TControlLayoutReaderBuilder {
 		if(descriptor.getFieldDescriptor().isLoaded())
 			return null;
 		
-		/*int x=0;
-		if(descriptor.getFieldDescriptor().getFieldName().equals("textoCadastro"))
-			x=1;*/
-		
 		final String fieldName = descriptor.getFieldDescriptor().getFieldName();
 		final ITModelView modelView = descriptor.getModelView();
 		final Method modelViewGetMethod = getMethod(fieldName, modelView);

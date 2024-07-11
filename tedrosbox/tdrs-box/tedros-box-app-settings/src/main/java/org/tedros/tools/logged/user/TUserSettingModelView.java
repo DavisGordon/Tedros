@@ -44,16 +44,19 @@ import javafx.beans.property.SimpleStringProperty;
 @TEjbService(model=TUser.class, serviceName = TUserController.JNDI_NAME)
 public class TUserSettingModelView extends TEntityModelView<TUser> {
 
-	@TLabel(text=TUsualKey.NAME, font=@TFont(size=10))
+	@TLabel(text=TUsualKey.NAME,
+		node = @TNode(style = "-fx-font-size: 1em;", parse = true))
 	@TTextField(maxLength=100, required=true)
 	private SimpleStringProperty name;
 	
 	
-	@TLabel(text=TUsualKey.LOGIN, font=@TFont(size=10))
+	@TLabel(text=TUsualKey.LOGIN, 
+		node = @TNode(style = "-fx-font-size: 1em;", parse = true))
 	@TTextField(maxLength=100, required=true)
 	private SimpleStringProperty login;
 	
-	@TLabel(text=TUsualKey.PASSWORD, font=@TFont(size=10))
+	@TLabel(text=TUsualKey.PASSWORD, 
+		node = @TNode(style = "-fx-font-size: 1em;", parse = true))
 	@TPasswordField(required=true,
 		node=@TNode(
 			focusedProperty=@TReadOnlyBooleanProperty(
@@ -63,11 +66,13 @@ public class TUserSettingModelView extends TEntityModelView<TUser> {
 		parse = true))
 	private SimpleStringProperty password;
 	
-	@TLabel(text = "#{tedros.profile}", font=@TFont(size=10))
+	@TLabel(text = "#{tedros.profile}", 
+		node = @TNode(style = "-fx-font-size: 1em;", parse = true))
 	@TShowField(fields=@TField(name="name"))
 	private SimpleObjectProperty<TProfile> activeProfile;
 
-	@TLabel(text = "#{tedros.language}", font=@TFont(size=10))
+	@TLabel(text = "#{tedros.language}",
+		node = @TNode(style = "-fx-font-size: 1em;", parse = true))
 	@TVRadioGroup(radio= {@TRadio(text = "English", userData = "en"),
 			@TRadio(text = "Português", userData = "pt")})
 	private SimpleStringProperty language;

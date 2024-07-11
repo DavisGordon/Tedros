@@ -3,6 +3,7 @@
  */
 package org.tedros.common.model;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +24,7 @@ import org.tedros.server.model.ITFileBaseModel;
  */
 
 @Entity
+@Cacheable(false)
 @Table(name=DomainTables.barcode, schema=DomainSchema.tedros_common)
 public class TBarcode extends TEntity implements ITBarcode {
 

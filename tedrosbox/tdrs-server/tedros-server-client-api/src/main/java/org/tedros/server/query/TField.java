@@ -9,6 +9,7 @@ public class TField  implements Serializable{
 	private static final long serialVersionUID = 4277238013497442351L;
 	private String alias;
 	private String field;
+	private String qryParam;
 	
 	public TField(String alias, String field) {
 		super();
@@ -26,5 +27,13 @@ public class TField  implements Serializable{
 	 */
 	public String getAlias() {
 		return alias;
+	}
+	
+	public String getQryParam() {
+		return qryParam;
+	}
+	
+	public void setQryParam(String qryParam) {
+		this.qryParam = qryParam;
 	}
 }

@@ -13,12 +13,10 @@ public final class TResourceUtil {
 	
 	public static Properties getPropertiesFromConfFolder(String propertieFileName){
 		Properties prop = null;
-		try {
-			String propFilePath = TFileUtil.getTedrosFolderPath()+TedrosFolder.CONF_FOLDER.getFolder()+propertieFileName;
-			InputStream is = new FileInputStream(propFilePath);
+		String propFilePath = TFileUtil.getTedrosFolderPath()+TedrosFolder.CONF_FOLDER.getFolder()+propertieFileName;
+		try(InputStream is = new FileInputStream(propFilePath)) {
 			prop = new Properties();
 			prop.load(is);
-			is.close();
 		} catch (Exception  e1) {
 			e1.printStackTrace();
 		}

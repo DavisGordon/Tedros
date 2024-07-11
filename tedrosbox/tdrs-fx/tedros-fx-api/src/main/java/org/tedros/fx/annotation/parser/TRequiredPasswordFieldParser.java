@@ -9,6 +9,6 @@ public class TRequiredPasswordFieldParser extends TControlFieldParser<TPasswordF
 	public void parse(TPasswordField annotation, TRequiredPasswordField object,
 			String... byPass) throws Exception {
 		
-		super.parse(annotation, object, "+required");
+		object.setRequired(annotation.required());
 	}
 }

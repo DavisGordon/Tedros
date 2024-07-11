@@ -150,6 +150,80 @@ public @interface TPickListField {
 	 * */
 	public String targetLabel() default "";
 	
+	/**
+	 * <pre>
+	 * {@link TPickListField} Class
+	 * 
+	 * Sets the value of the property style on the source ListView
+	 * 
+	 * Property description:
+	 * 
+	 * Set a css style to the source list
+	 * 
+	 * Default value: Empty string.
+	 * </pre>
+	 * */
+	public String sourceStyle() default "";
+	
+	/**
+	 * <pre>
+	 * {@link TPickListField} Class
+	 * 
+	 * Sets the value of the property style on the target ListView
+	 * 
+	 * Property description:
+	 * 
+	 * Set a css style to the target list
+	 * 
+	 * Default value: Empty string.
+	 * </pre>
+	 * */
+	public String targetStyle() default "";
+	
+	/**
+	 * <pre>
+	 * {@link TPickListField} Class
+	 * 
+	 * Sets the value of the property style on all buttons
+	 * 
+	 * Property description:
+	 * 
+	 * Set a css style to the buttons
+	 * 
+	 * Default value: Empty string.
+	 * </pre>
+	 * */
+	public String buttonsStyle() default "";
+	
+	/**
+	 * <pre>
+	 * {@link TPickListField} Class
+	 * 
+	 * Sets the value of the property id on the source ListView
+	 * 
+	 * Property description:
+	 * 
+	 * Set an id to the source list
+	 * 
+	 * Default value: Empty string.
+	 * </pre>
+	 * */
+	public String sourceId() default "";
+	
+	/**
+	 * <pre>
+	 * {@link TPickListField} Class
+	 * 
+	 * Sets the value of the property id on the target ListView
+	 * 
+	 * Property description:
+	 * 
+	 * Set an id to the target list
+	 * 
+	 * Default value: Empty string.
+	 * </pre>
+	 * */
+	public String targetId() default "";
 
 	/**
 	* <pre>
