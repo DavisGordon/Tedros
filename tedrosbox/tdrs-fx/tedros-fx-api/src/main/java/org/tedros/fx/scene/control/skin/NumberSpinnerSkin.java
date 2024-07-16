@@ -44,7 +44,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -323,8 +322,9 @@ public final class NumberSpinnerSkin extends StackPane implements Skin<NumberSpi
 
         arrowIncrement.setRotate(-90);
         arrowDecrement.setRotate(90);
-
-        getChildren().add(HBoxBuilder.create().children(btnDecrement, textField, btnIncrement).build());
+        HBox p = new HBox();
+        p.getChildren().addAll(btnDecrement, textField, btnIncrement);
+        getChildren().add(p);
     }
 
     /**

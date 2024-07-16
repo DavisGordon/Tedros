@@ -1,6 +1,7 @@
 package org.tedros.fx.modal;
 
 import org.tedros.fx.control.TButton;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -43,7 +44,7 @@ public class TConfirmMessageBox extends TMessageBox {
 			noBtn.setOnAction(new WeakEventHandler<>(nevh));
 			
 		}catch(Exception e){
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 	}
 	

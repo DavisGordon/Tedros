@@ -23,6 +23,7 @@ import org.tedros.fx.presenter.TPresenter;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
 import org.tedros.fx.util.TReflectionUtil;
 import org.tedros.server.model.ITModel;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -151,12 +152,12 @@ implements ITDynaPresenter<M> {
 			throwExceptionForNullTPresenter();
 		
 		try {
-			decorator = tPresenter.decorator().type().newInstance();
-			behavior = tPresenter.behavior().type().newInstance();
+			decorator = tPresenter.decorator().type().getDeclaredConstructor().newInstance();
+			behavior = tPresenter.behavior().type().getDeclaredConstructor().newInstance();
 			if(modelClass==null && tPresenter.model()!=ITModel.class)
 				modelClass = tPresenter.model();
 		} catch (Exception e) {
-			e.printStackTrace();
+			TLoggerUtil.error(TDynaPresenter.class, e.getMessage(), e);
 		}
 		
 		tEjbService = (TEjbService) this.modelViewClass.getAnnotation(TEjbService.class);
@@ -164,8 +165,6 @@ implements ITDynaPresenter<M> {
 		tEntityProcess = (TEntityProcess) this.modelViewClass.getAnnotation(TEntityProcess.class);
 		tReportProcess = (TReportProcess) this.modelViewClass.getAnnotation(TReportProcess.class);
 		tForm = (TForm) this.modelViewClass.getAnnotation(TForm.class);
-		
-		//loadView();
 	}
 	
 	@Override
@@ -185,7 +184,7 @@ implements ITDynaPresenter<M> {
 		try {
 			parser.parse(tPresenter.decorator(), (StackPane) getView(), "+node", "+region", "+pane");
 		} catch (Exception e) {
-			e.printStackTrace();
+			TLoggerUtil.error(TDynaPresenter.class, e.getMessage(), e);
 		}
 		
 		behavior.setPresenter(this);

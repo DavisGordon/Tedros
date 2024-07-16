@@ -22,6 +22,7 @@ import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.model.ITFileBaseModel;
 import org.tedros.server.model.ITFileModel;
 import org.tedros.server.model.ITModel;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -161,7 +162,7 @@ class TListenerHelper<M extends ITModel> {
 						}
 					
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					e.printStackTrace();
+					TLoggerUtil.error(getClass(), e.getMessage(), e);
 				}
 			}
 		}
@@ -198,7 +199,7 @@ class TListenerHelper<M extends ITModel> {
 							}
 							tModelView.buildLastHashCode();
 						} catch (IllegalAccessException	| IllegalArgumentException	| InvocationTargetException e) {
-							e.printStackTrace();
+							TLoggerUtil.error(getClass(), e.getMessage(), e);
 						}
 						
 					}
@@ -223,8 +224,7 @@ class TListenerHelper<M extends ITModel> {
 							entidadeSetMethod.invoke(tModelView.model, (arg2 instanceof TModelView) ? ((TModelView)arg2).getModel() : arg2);
 							tModelView.buildLastHashCode();
 						} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							TLoggerUtil.error(getClass(), e.getMessage(), e);
 						}
 					}
 				};
@@ -242,8 +242,7 @@ class TListenerHelper<M extends ITModel> {
 							entidadeSetMethod.invoke(tModelView.model, arg2);
 							tModelView.buildLastHashCode();
 						} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							TLoggerUtil.error(getClass(), e.getMessage(), e);
 						}
 					}
 				};
@@ -262,8 +261,7 @@ class TListenerHelper<M extends ITModel> {
 							entidadeSetMethod.invoke(tModelView.model, arg2);
 							tModelView.buildLastHashCode();
 						} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							TLoggerUtil.error(getClass(), e.getMessage(), e);
 						}
 					}
 				};
@@ -282,8 +280,7 @@ class TListenerHelper<M extends ITModel> {
 							entidadeSetMethod.invoke(tModelView.model, arg2);
 							tModelView.buildLastHashCode();
 						} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							TLoggerUtil.error(getClass(), e.getMessage(), e);
 						}
 					}
 				};
@@ -301,8 +298,7 @@ class TListenerHelper<M extends ITModel> {
 							entidadeSetMethod.invoke(tModelView.model, arg2);
 							tModelView.buildLastHashCode();
 						} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							TLoggerUtil.error(getClass(), e.getMessage(), e);
 						}
 					}
 				};
@@ -317,8 +313,7 @@ class TListenerHelper<M extends ITModel> {
 							entidadeSetMethod.invoke(tModelView.model, arg2);
 							tModelView.buildLastHashCode();
 						} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							TLoggerUtil.error(getClass(), e.getMessage(), e);
 						}
 					}
 				};
@@ -357,11 +352,9 @@ class TListenerHelper<M extends ITModel> {
 						tModelView.buildLastHashCode();
 						
 					}catch(NumberFormatException e){
-						// TODO: TRATAR ERRO QUANDO UMA STRING N�O PUDER SER CONVERTIDA PARA NUMBER
-						e.printStackTrace();
+						TLoggerUtil.error(getClass(), e.getMessage(), e);
 					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-						// TODO: TRATAR ERRO QUANDO A REFLEX�O NO CAMPO FALHAR
-						e.printStackTrace();
+						TLoggerUtil.error(getClass(), e.getMessage(), e);
 					}
 				}
 			};
@@ -386,11 +379,9 @@ class TListenerHelper<M extends ITModel> {
 							entidadeSetMethod.invoke(tModelView.model, BigDecimal.valueOf(arg2));
 						tModelView.buildLastHashCode();
 					}catch(NumberFormatException e){
-						// TODO: TRATAR ERRO QUANDO UMA STRING N�O PUDER SER CONVERTIDA PARA NUMBER
-						e.printStackTrace();
+						TLoggerUtil.error(getClass(), e.getMessage(), e);
 					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-						// TODO: TRATAR ERRO QUANDO A REFLEX�O NO CAMPO FALHAR
-						e.printStackTrace();
+						TLoggerUtil.error(getClass(), e.getMessage(), e);
 					}
 				}
 			};
@@ -417,8 +408,7 @@ class TListenerHelper<M extends ITModel> {
 						
 						tModelView.buildLastHashCode();
 					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-						// TODO: TRATAR ERRO QUANDO A REFLEX�O NO CAMPO FALHAR
-						e.printStackTrace();
+						TLoggerUtil.error(getClass(), e.getMessage(), e);
 					}
 				}
 			};
@@ -438,8 +428,7 @@ class TListenerHelper<M extends ITModel> {
 						entidadeSetMethod.invoke(tModelView.model, arg2);
 						tModelView.buildLastHashCode();
 					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-						// TODO: TRATAR ERRO QUANDO A REFLEX�O NO CAMPO FALHAR
-						e.printStackTrace();
+						TLoggerUtil.error(getClass(), e.getMessage(), e);
 					}
 				}
 			};
@@ -459,8 +448,7 @@ class TListenerHelper<M extends ITModel> {
 						entidadeSetMethod.invoke(tModelView.model, arg2);
 						tModelView.buildLastHashCode();
 					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-						// TODO: TRATAR ERRO QUANDO A REFLEX�O NO CAMPO FALHAR
-						e.printStackTrace();
+						TLoggerUtil.error(getClass(), e.getMessage(), e);
 					}
 				}
 			};
@@ -480,8 +468,7 @@ class TListenerHelper<M extends ITModel> {
 						entidadeSetMethod.invoke(tModelView.model, arg2);
 						tModelView.buildLastHashCode();
 					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-						// TODO: TRATAR ERRO QUANDO A REFLEX�O NO CAMPO FALHAR
-						e.printStackTrace();
+						TLoggerUtil.error(getClass(), e.getMessage(), e);
 					}
 				}
 			};
@@ -513,8 +500,7 @@ class TListenerHelper<M extends ITModel> {
 					} catch (IllegalAccessException
 							| IllegalArgumentException
 							| InvocationTargetException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						TLoggerUtil.error(getClass(), e.getMessage(), e);
 					}	
 				}
 			};
@@ -548,8 +534,7 @@ class TListenerHelper<M extends ITModel> {
 					} catch (IllegalAccessException
 							| IllegalArgumentException
 							| InvocationTargetException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						TLoggerUtil.error(getClass(), e.getMessage(), e);
 					}	
 				}
 			};
@@ -613,8 +598,7 @@ class TListenerHelper<M extends ITModel> {
 					} catch (IllegalAccessException
 							| IllegalArgumentException
 							| InvocationTargetException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						TLoggerUtil.error(getClass(), e.getMessage(), e);
 					}	
 				}
 			};
@@ -642,7 +626,7 @@ class TListenerHelper<M extends ITModel> {
 		addListener(fieldName, changeListener);
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes"})
 	private void setInvalidationListener(final Property property, final String fieldName, InvalidationListener changeListener, Object entityFieldValue) {
 		property.addListener(new WeakInvalidationListener(changeListener));
 		addListener(fieldName, changeListener);

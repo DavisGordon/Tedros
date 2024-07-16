@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.commons.lang3.ArrayUtils;
 import org.tedros.api.presenter.ITPresenter;
 import org.tedros.fx.control.action.TPresenterAction;
+import org.tedros.util.TLoggerUtil;
 
 /**
  * @author Davis Gordon
@@ -52,7 +53,7 @@ public final class TActionHelper {
 			actions.addAll(l);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 	}
 
@@ -68,7 +69,7 @@ public final class TActionHelper {
 	
 	@SuppressWarnings("rawtypes")
 	private static TPresenterAction build(Class<? extends TPresenterAction> action, ITPresenter presenter) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		TPresenterAction p =  action.newInstance();
+		TPresenterAction p =  action.getDeclaredConstructor().newInstance();
 		p.setPresenter(presenter);
 		return p;
 	}

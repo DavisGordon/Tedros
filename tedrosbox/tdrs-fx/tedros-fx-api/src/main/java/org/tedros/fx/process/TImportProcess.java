@@ -15,6 +15,7 @@ import org.tedros.fx.exception.TProcessException;
 import org.tedros.server.controller.ITEjbImportController;
 import org.tedros.server.model.ITImportModel;
 import org.tedros.server.result.TResult;
+import org.tedros.util.TLoggerUtil;
 
 /**
  * The process to import files.
@@ -80,10 +81,10 @@ public abstract class TImportProcess<M extends ITImportModel> extends TProcess<T
         			}
 	    		} catch(NamingException e){
 	    			setException( new TProcessException(e, e.getMessage(), "The service is not available!"));
-	    			e.printStackTrace();
+	    			TLoggerUtil.error(getClass(), e.getMessage(), e);
 	    		}catch (Exception e) {
 					setException(e);
-					e.printStackTrace();
+					TLoggerUtil.error(getClass(), e.getMessage(), e);
 				} finally {
 					loc.close();
 				}

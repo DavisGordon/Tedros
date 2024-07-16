@@ -13,6 +13,7 @@ import org.tedros.fx.process.TChartProcess;
 import org.tedros.server.controller.TParam;
 import org.tedros.server.model.ITChartModel;
 import org.tedros.server.result.TResult;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.application.Platform;
 import javafx.concurrent.Worker.State;
@@ -39,7 +40,7 @@ public class TXYChartParser extends TAnnotationParser<TXYChart, XYChart>{
 			try {
 				TChartProcess pss = new TChartProcess(ann.service());
 				if(ann.paramsBuilder()!=TParamBuilder.class) {
-					TParamBuilder pb = ann.paramsBuilder().newInstance();
+					TParamBuilder pb = ann.paramsBuilder().getDeclaredConstructor().newInstance();
 					pb.setComponentDescriptor(super.getComponentDescriptor());
 					TParam[] params = (TParam[]) pb.build();
 					pss.process(params);
@@ -60,7 +61,7 @@ public class TXYChartParser extends TAnnotationParser<TXYChart, XYChart>{
 				pss.startProcess();
 				
 			} catch (TProcessException e) {
-				e.printStackTrace();
+				TLoggerUtil.error(getClass(), e.getMessage(), e);
 			}
 		}else if(ann.data().length>0) {
 			for(TSerie tSerie : ann.data()){

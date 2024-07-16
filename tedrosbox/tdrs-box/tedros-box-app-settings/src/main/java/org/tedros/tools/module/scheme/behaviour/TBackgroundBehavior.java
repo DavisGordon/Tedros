@@ -67,8 +67,7 @@ public class TBackgroundBehavior extends TDynaViewCrudBaseBehavior<TBackgroundIm
 					TedrosContext.reloadStyle();
 					
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					LOGGER.error(e.getMessage(), e);
 				}
 
 

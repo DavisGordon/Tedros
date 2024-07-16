@@ -53,14 +53,14 @@ public class TTypeAnalyserParserDelegate {
 		if(obj instanceof Class && TReflectionUtil.isImplemented((Class)obj, ITNodeBuilder.class)){
 			if( ((Class)obj)==ITNodeBuilder.class)
 				return null;
-			ITNodeBuilder builder = (ITNodeBuilder) ((Class)obj).newInstance();
+			ITNodeBuilder builder = (ITNodeBuilder) ((Class)obj).getDeclaredConstructor().newInstance();
 			return builder.build();
 		}
 		
 		if(obj instanceof Class && TReflectionUtil.isImplemented((Class)obj, ITEventHandlerBuilder.class)){
 			if(((Class)obj)==ITEventHandlerBuilder.class)
 				return null;
-			ITEventHandlerBuilder builder = (ITEventHandlerBuilder) ((Class)obj).newInstance();
+			ITEventHandlerBuilder builder = (ITEventHandlerBuilder) ((Class)obj).getDeclaredConstructor().newInstance();
 			builder.setComponentDescriptor(descriptor);
 			return builder.build();
 		}
@@ -68,7 +68,7 @@ public class TTypeAnalyserParserDelegate {
 		if(obj instanceof Class && TReflectionUtil.isImplemented((Class)obj, ITGenericBuilder.class)){
 			if(((Class)obj)==ITGenericBuilder.class)
 				return null;
-			ITGenericBuilder builder = (ITGenericBuilder) ((Class)obj).newInstance();
+			ITGenericBuilder builder = (ITGenericBuilder) ((Class)obj).getDeclaredConstructor().newInstance();
 			builder.setComponentDescriptor(descriptor);
 			return builder.build();
 		}
@@ -76,7 +76,7 @@ public class TTypeAnalyserParserDelegate {
 		if(obj instanceof Class && TReflectionUtil.isTypeOf((Class)obj, TChangeListener.class)){
 			if(((Class)obj)==TChangeListener.class)
 				return null;
-			TChangeListener listener = (TChangeListener) ((Class)obj).newInstance();
+			TChangeListener listener = (TChangeListener) ((Class)obj).getDeclaredConstructor().newInstance();
 			listener.setComponentDescriptor(descriptor);
 			return listener;
 		}
@@ -84,7 +84,7 @@ public class TTypeAnalyserParserDelegate {
 		if(obj instanceof Class && TReflectionUtil.isTypeOf((Class)obj, TInvalidationListener.class)){
 			if(((Class)obj)==TInvalidationListener.class)
 				return null;
-			TInvalidationListener listener = (TInvalidationListener) ((Class)obj).newInstance();
+			TInvalidationListener listener = (TInvalidationListener) ((Class)obj).getDeclaredConstructor().newInstance();
 			listener.setComponentDescriptor(descriptor);
 			return listener;
 		}
@@ -92,7 +92,7 @@ public class TTypeAnalyserParserDelegate {
 		if(obj instanceof Class && TReflectionUtil.isImplemented((Class)obj, Callback.class)){
 			if(((Class)obj)==Callback.class)
 				return null;
-			Callback callback = (Callback) ((Class)obj).newInstance();
+			Callback callback = (Callback) ((Class)obj).getDeclaredConstructor().newInstance();
 			return callback;
 		}
 		
@@ -117,7 +117,7 @@ public class TTypeAnalyserParserDelegate {
 				
 			Class clazz = (Class) obj;
 			if(TReflectionUtil.isImplemented(clazz, ITBaseParser.class)){
-				Object parserInstance = clazz.newInstance();
+				Object parserInstance = clazz.getDeclaredConstructor().newInstance();
 				return ((ITBaseParser)parserInstance).parse(annotation);
 			}
 		}
@@ -128,7 +128,7 @@ public class TTypeAnalyserParserDelegate {
 			final Object obj = converterMethod.invoke(annotation);
 			Class clazz = (Class) obj;
 			if(TReflectionUtil.isTypeOf(clazz, TConverter.class)){
-				TConverter converter = (TConverter) clazz.newInstance();
+				TConverter converter = (TConverter) clazz.getDeclaredConstructor().newInstance();
 				converter.setIn(annotation);
 				return converter.getOut();
 			}

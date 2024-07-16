@@ -7,6 +7,7 @@ import org.tedros.core.context.TModuleContext;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.model.ITModelView;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.animation.FadeTransition;
 import javafx.collections.ObservableList;
@@ -47,7 +48,12 @@ public abstract class TModule extends InternalView implements ITModule {
 	
 	public String tCanStop() {
 		TModuleContext context = TedrosAppManager.getInstance().getModuleContext(this);
-		return context!=null ? context.canStop() : null;
+		String msg = context!=null ? context.canStop() : null;
+		
+		if(TLoggerUtil.isDebugEnabled())
+			TLoggerUtil.debug(getClass(), this.getClass().getSimpleName() + (msg==null ? " able to stop! " : msg));
+		
+		return msg;
 	}
 	
 	@Override
@@ -58,11 +64,19 @@ public abstract class TModule extends InternalView implements ITModule {
 			flag = context.stopModule();
 			context = null;
 		}
+		
+		if(TLoggerUtil.isDebugEnabled())
+			TLoggerUtil.debug(getClass(), this.getClass().getSimpleName() + (flag ? " stoped! " : " unable to stop!"));
+		
 		return flag;
 	}
 
 	@Override
 	public void tStart() {
+		if(TLoggerUtil.isDebugEnabled()) {
+			TLoggerUtil.splitDebugLine(getClass(), '#');
+			TLoggerUtil.debug(getClass(), "Starting TModule["+this.getClass().getSimpleName()+"]");
+		}
 		tShowView(TedrosContext.getViewBuilder().build(this));
 	}
 

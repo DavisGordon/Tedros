@@ -3,11 +3,11 @@
  */
 package org.tedros.chat.ejb.service;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.inject.Inject;
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Stateless;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
+import jakarta.inject.Inject;
 
 import org.tedros.chat.cdi.bo.ChatTPropertieBO;
 import org.tedros.core.setting.model.TPropertie;

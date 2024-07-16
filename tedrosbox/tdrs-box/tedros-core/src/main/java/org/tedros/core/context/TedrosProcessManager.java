@@ -106,15 +106,14 @@ public final class TedrosProcessManager {
 	 * Will be started from scheduler if the process is scheduled 
 	 * or will be started if the process is to be auto start.
 	 * </pre>
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
+	 * @throws Exception 
 	 * */
-	public static final void addProcess(Class<? extends ITProcess> classe) throws InstantiationException, IllegalAccessException{
+	public static final void addProcess(Class<? extends ITProcess> classe) throws Exception{
 		
 		if(TedrosProcess.moduleProcessMap.containsKey(classe))
 			return;
 		
-		ITProcess process = classe.newInstance();
+		ITProcess process = classe.getDeclaredConstructor().newInstance();
 		process.messageProperty().addListener(new ChangeListener<String>() {
 			@Override
 	    	public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {

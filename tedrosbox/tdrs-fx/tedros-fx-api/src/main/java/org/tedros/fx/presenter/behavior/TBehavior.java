@@ -1,5 +1,6 @@
 package org.tedros.fx.presenter.behavior;
 
+import org.slf4j.Logger;
 import org.tedros.api.form.ITModelForm;
 import org.tedros.api.presenter.ITPresenter;
 import org.tedros.api.presenter.behavior.ITBehavior;
@@ -16,6 +17,7 @@ import org.tedros.fx.form.TBuildFormStatus;
 import org.tedros.fx.form.TFormBuilder;
 import org.tedros.fx.form.TProgressIndicatorForm;
 import org.tedros.fx.form.TReaderFormBuilder;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -39,6 +41,8 @@ import javafx.scene.layout.Region;
 public abstract class TBehavior<M extends ITModelView, P extends ITPresenter> 
 implements ITBehavior<M, P>{
 	
+	protected static Logger LOGGER;
+	
 	private P presenter;
 	private SimpleObjectProperty<M> modelViewProperty;
 	private ObservableList<M> models;
@@ -53,6 +57,7 @@ implements ITBehavior<M, P>{
 	
 	@SuppressWarnings("unchecked")
 	public TBehavior() {
+		LOGGER = TLoggerUtil.getLogger(getClass());
 		modelViewProperty = new SimpleObjectProperty<>();
 		formProperty = new SimpleObjectProperty<>();
 		invalidateProperty = new SimpleBooleanProperty(false);
@@ -154,10 +159,9 @@ implements ITBehavior<M, P>{
     						? TReaderFormBuilder.create(getModelView()).build() 
     								: TFormBuilder.create(getModelView()).presenter(getPresenter()).build());
     				setForm(form);
-				} catch (Exception e) {
-					e.printStackTrace();
+				}catch (Exception e) {
+					LOGGER.error(e.getMessage(), e);
 				}
-            
           });
 	}
 	

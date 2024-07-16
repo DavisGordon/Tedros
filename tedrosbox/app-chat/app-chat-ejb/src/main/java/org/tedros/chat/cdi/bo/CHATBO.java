@@ -3,8 +3,8 @@
  */
 package org.tedros.chat.cdi.bo;
 
-import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
+import jakarta.enterprise.context.Dependent;
+import jakarta.inject.Inject;
 
 import org.tedros.chat.cdi.eao.CHATEAO;
 import org.tedros.server.cdi.bo.TGenericBO;

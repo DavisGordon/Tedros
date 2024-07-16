@@ -15,6 +15,7 @@ import org.tedros.fx.exception.TProcessException;
 import org.tedros.fx.property.TBytesLoader;
 import org.tedros.fx.property.TSimpleFileProperty;
 import org.tedros.server.entity.ITFileEntity;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.Property;
 
@@ -73,7 +74,7 @@ implements ITFileBuilder<org.tedros.fx.control.TFileField> {
 			if(fileEntityProperty.getValue()!=null && v.getByte()!=null && v.getByteEntity().getId()!=null)
 				TBytesLoader.loadBytesFromTFileEntity(v.getByteEntity().getId(), fileEntityProperty.tBytesProperty());
 		} catch (TProcessException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 	}	
 }

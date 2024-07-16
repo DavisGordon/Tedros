@@ -3,6 +3,7 @@
  */
 package org.tedros.fx.presenter.assistant;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -28,6 +29,7 @@ import org.tedros.server.model.ITModel;
 import org.tedros.server.model.TJsonModel;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -136,7 +138,7 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 	@SuppressWarnings("unchecked")
 	private void processChange() {
 		try {
-			TJsonModel m = this.jsonModelType.newInstance();
+			TJsonModel m = this.jsonModelType.getDeclaredConstructor().newInstance();
 			m.setModel("insert");
 			TAiAssistantProcess prc = new TAiAssistantProcess();
 			tView.gettProgressIndicator().bind(prc.runningProperty());
@@ -157,7 +159,7 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 												M mv = this.tTargetModel.getValue();
 												mv.reload((ITModel) t.getData().get(0));
 											} catch (Exception e1) {
-												e1.printStackTrace();
+												TLoggerUtil.error(getClass(), e1.getMessage(), e1);
 												showErrorMessage(e1);
 											}
 										}
@@ -176,7 +178,7 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 										showModal(pane);
 									}
 								} catch (Exception e) {
-									e.printStackTrace();
+									TLoggerUtil.error(getClass(), e.getMessage(), e);
 									showErrorMessage(e);
 								}
 							});
@@ -196,8 +198,9 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 			prc.askForChange(m, this.tPrompt.getText(), this.tTargetModel.getValue().getModel());
 			prc.startProcess();
 			
-		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | 
+				InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 			showErrorMessage(e);
 		}
 	}
@@ -205,7 +208,7 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 	@SuppressWarnings("unchecked")
 	private void processCreate() {
 		try {
-			TJsonModel m = this.jsonModelType.newInstance();
+			TJsonModel m = this.jsonModelType.getDeclaredConstructor().newInstance();
 			m.setModel("insert");
 			TAiAssistantProcess prc = new TAiAssistantProcess();
 			tView.gettProgressIndicator().bind(prc.runningProperty());
@@ -227,7 +230,7 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 												this.tOutModel.setValue(mv);
 												this.tOutModel.setValue(null);
 											} catch (TException e1) {
-												e1.printStackTrace();
+												TLoggerUtil.error(getClass(), e1.getMessage(), e1);
 												showErrorMessage(e1);
 											}
 										}else
@@ -236,7 +239,7 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 													M mv = buildModelView(e);
 													tModels.add(mv);
 												} catch (TException e1) {
-													e1.printStackTrace();
+													TLoggerUtil.error(getClass(), e1.getMessage(), e1);
 													showErrorMessage(e1);
 												}
 											});
@@ -255,7 +258,7 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 										showModal(pane);
 									}
 								} catch (Exception e) {
-									e.printStackTrace();
+									TLoggerUtil.error(getClass(), e.getMessage(), e);
 									showErrorMessage(e);
 								}
 							});
@@ -275,15 +278,16 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 			prc.askForCreate(m, this.tPrompt.getText());
 			prc.startProcess();
 			
-		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException 
+				| NoSuchMethodException | SecurityException e) {
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 			showErrorMessage(e);
 		}
 	}
 
 	private void processAnalyse() {
 		try {
-			TJsonModel m = this.jsonModelType.newInstance();
+			TJsonModel m = this.jsonModelType.getDeclaredConstructor().newInstance();
 			m.setModel("analyse");
 			TAiAssistantProcess prc = new TAiAssistantProcess();
 			tView.gettProgressIndicator().bind(prc.runningProperty());
@@ -313,7 +317,7 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 										showModal(pane);
 									}
 								} catch (Exception e) {
-									e.printStackTrace();
+									TLoggerUtil.error(getClass(), e.getMessage(), e);
 									showErrorMessage(e);
 								}
 							});
@@ -334,8 +338,9 @@ public class TAiAssistant<M extends TModelView> extends BorderPane {
 					Arrays.asList(this.tTargetModel.getValue().getModel()));
 			prc.startProcess();
 			
-		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException 
+				| NoSuchMethodException | SecurityException e) {
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 			showErrorMessage(e);
 		}
 	}

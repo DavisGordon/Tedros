@@ -7,6 +7,7 @@
 package org.tedros.fx.reader;
 
 import org.tedros.fx.util.TMaskUtil;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.value.ChangeListener;
@@ -44,7 +45,7 @@ public class TLongReader extends TTextReader<Long> {
 			buildValueProperty();
 			return valueProperty;
 		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 		return null;
 	}

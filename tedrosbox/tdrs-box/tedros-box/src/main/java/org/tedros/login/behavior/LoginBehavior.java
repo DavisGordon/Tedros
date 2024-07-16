@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.logging.Logger;
 
+import org.slf4j.Logger;
 import org.tedros.TedrosBox;
 import org.tedros.api.form.ITFieldBox;
 import org.tedros.api.form.ITForm;
@@ -42,6 +42,7 @@ import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.util.TEncriptUtil;
 import org.tedros.util.TFileUtil;
+import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TedrosFolder;
 
 import javafx.application.Platform;
@@ -63,7 +64,7 @@ import javafx.scene.text.Text;
 
 public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 
-	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	private final static Logger LOGGER = TLoggerUtil.getLogger(LoginBehavior.class);
 	
 	private SimpleObjectProperty<TUser> loggedUserProperty;
 	private SimpleBooleanProperty serverOkProperty;
@@ -224,7 +225,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 										return;
 									TResult<TUser> result = resultados.get(0);
 									if(result.getState().getValue() == TState.ERROR.getValue()){
-										System.out.println(result.getMessage());
+										TLoggerUtil.debug(getClass(), result.getMessage());
 										addMessage(new TMessage(TMessageType.ERROR, result.getMessage()));
 									}else{
 										TUser entity = result.getValue();
@@ -243,10 +244,10 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 						getView().tShowModal(new TMessageBox(e1), true);
 					}catch(Exception e){
 						getView().tShowModal(new TMessageBox(e), true);
-						e.printStackTrace();
+						LOGGER.error(e.getMessage(), e);
 					} catch (Throwable e1) {
 						getView().tShowModal(new TMessageBox(e1), true);
-						e1.printStackTrace();
+						LOGGER.error(e1.getMessage(), e1);
 					}
 				}else{
 					
@@ -269,14 +270,14 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 										TResult<TUser> result = resultados.get(0);
 			
 										if(result.getState().getValue() == TState.ERROR.getValue()){
-											System.out.println(result.getMessage());
+											TLoggerUtil.debug(getClass(), result.getMessage());
 											addMessage(new TMessage(TMessageType.ERROR, result.getMessage()));
 										}else{
 											try{
 												loadTedros(result.getValue());												
 											}catch(Exception e){
 												saveButton.setDisable(false);
-												e.printStackTrace();
+												LOGGER.error(e.getMessage(), e);
 											}
 										}
 									}	
@@ -285,7 +286,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 							runProcess(process);
 						}catch(Throwable e){
 							saveButton.setDisable(false);
-							e.printStackTrace();
+							LOGGER.error(e.getMessage(), e);
 						}
 					}else{
 						saveButton.setDisable(false);
@@ -367,7 +368,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 			process.stateProperty().addListener(new WeakChangeListener<>(swouProcChl));
 			super.runProcess(process);
 		} catch (Throwable e2) {
-			e2.printStackTrace();
+			LOGGER.error(e2.getMessage(), e2);
 		}
 	}
 
@@ -416,13 +417,12 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 			try {
 				final String language = (String) n.getUserData();
 				saveLanguage(language);
-				LOGGER.info("Language setted.");
 				TedrosContext.setLocale(new Locale(language));
 				TedrosContext.showModal(TedrosContext.getApplication().buildLogin());
 				
 			} catch (Exception e1) {
-				e1.printStackTrace();
 				super.addMessage(new TMessage(TMessageType.ERROR, e1.getMessage()));
+				LOGGER.error(e1.getMessage(), e1);
 			}
 			
 		};
@@ -463,7 +463,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 					TedrosContext.reloadStyle();
 				});
 			} catch (Exception e) {
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}
 		});
 		
@@ -486,8 +486,8 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 			
 			this.verifySysUsers();
 			
-		} catch (IOException e1) {
-			e1.printStackTrace();
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 	
@@ -506,11 +506,10 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 
 	private void loadTedros(final TUser user) throws IOException {
 		
+		LOGGER.info(iEngine.getString("#{tedros.loading}"));
 		TedrosContext.loadSystemLogo();
 		profileText.setText(iEngine.getString("#{tedros.loading}"));
-		LOGGER.info(iEngine.getString("#{tedros.loading}"));
 		TedrosContext.setLoggedUser(user);
-		LOGGER.info("ChatUser "+user.getName()+" setted. ");
 		TedrosContext.loadCustomProperties();
 		TedrosContext.searchApps();
 		TedrosBox.getTedros().buildSettingsPane();

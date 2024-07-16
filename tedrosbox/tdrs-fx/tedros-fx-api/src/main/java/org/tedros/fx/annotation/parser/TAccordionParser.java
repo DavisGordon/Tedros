@@ -18,7 +18,7 @@ public class TAccordionParser extends TAnnotationParser<TAccordion, Accordion> {
 	public void parse(TAccordion annotation, Accordion object, String... byPass) throws Exception {
 		for(TTitledPane tTitledPane : annotation.panes()){
 			if(tTitledPane.fields().length>0){
-				final Pane layout = tTitledPane.layoutType().getValue().newInstance();
+				final Pane layout = tTitledPane.layoutType().getValue().getDeclaredConstructor().newInstance();
 				layout.setId("t-form");
 				layout.setPadding(new Insets(8,0,8,0));			
 				

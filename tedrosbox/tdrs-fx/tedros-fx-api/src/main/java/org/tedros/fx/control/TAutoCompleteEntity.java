@@ -13,6 +13,7 @@ import org.tedros.server.query.TBlock;
 import org.tedros.server.query.TSelect;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleObjectProperty;
@@ -150,7 +151,7 @@ public class TAutoCompleteEntity extends TTextField {
 					p.search(tSelect);
 					p.startProcess();
 				} catch (Exception e) {
-					e.printStackTrace();
+					TLoggerUtil.error(getClass(), e.getMessage(), e);
 				}
 			}
 		};

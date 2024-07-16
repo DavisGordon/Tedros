@@ -27,6 +27,7 @@ import org.tedros.fx.exception.TProcessException;
 import org.tedros.fx.layout.TToolBar;
 import org.tedros.fx.property.TBytesLoader;
 import org.tedros.util.TFileUtil;
+import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TUrlUtil;
 import org.tedros.util.TedrosFolder;
 
@@ -213,7 +214,7 @@ public class TFileField extends StackPane implements ITTriggeredable {
 			try {
 				TBytesLoader.loadBytesFromTFileEntity(bytesEntityIdProperty.getValue(), byteArrayProperty);
 			} catch (TProcessException e) {
-				e.printStackTrace();
+				TLoggerUtil.error(getClass(), e.getMessage(), e);
 			}
 		};
 		
@@ -289,7 +290,7 @@ public class TFileField extends StackPane implements ITTriggeredable {
 				showModal(openButton, 
 						iEngine.getFormatedString(TFxKey.MESSAGE_CANNOT_OPEN_FILE, e1.getMessage()));
 		} catch (IOException e2) {
-			e2.printStackTrace();
+			TLoggerUtil.error(getClass(), e2.getMessage(), e2);
 			showModal(openButton, 
 					iEngine.getFormatedString(TFxKey.MESSAGE_CANNOT_OPEN_FILE, e1.getMessage()));
 		}
@@ -396,7 +397,7 @@ public class TFileField extends StackPane implements ITTriggeredable {
 	    		setFile(file, size);
     		
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+        	TLoggerUtil.error(getClass(), ex.getMessage(), ex);
         }
     }
 

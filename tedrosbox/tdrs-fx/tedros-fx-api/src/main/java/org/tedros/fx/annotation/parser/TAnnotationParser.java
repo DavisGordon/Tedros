@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.api.parser.ITAnnotationParser;
 import org.tedros.core.ITModule;
@@ -21,6 +22,7 @@ import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.util.TReflectionUtil;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Color;
@@ -55,9 +57,10 @@ import javafx.scene.paint.Color;
 @SuppressWarnings("rawtypes")
 public abstract class TAnnotationParser<A extends Annotation, T> implements ITAnnotationParser<A, T> {
 	
+	private final static Logger LOGGER = TLoggerUtil.getLogger(TAnnotationParser.class);
+	
 	private final static String SET = "set";
 	private final static String GET = "get";
-	private final String[] SKIPMETHODS = {"builder","parser","parse","equals", "getClass", "wait", "hashCode", "toString", "notify", "notifyAll", "annotationType"};
 	
 	private ITComponentDescriptor componentDescriptor;
 	protected TLanguage iEngine = TLanguage.getInstance(null);
@@ -88,7 +91,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 				}
 			}
 		}catch(Exception e){
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 	
@@ -123,9 +126,23 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 	 * </pre>
 	 * */
 	public void parse(final A annotation, final T object, String...byPass) throws Exception{
-		
-		//long startTime = System.nanoTime();
-		
+		if(TLoggerUtil.isParserDebugEnabled()) {
+			TLoggerUtil.splitDebugLine(TAnnotationParser.class, '.');
+			TLoggerUtil.timeComplexity(TAnnotationParser.class, "[Parse] "+annotation.annotationType().getName()+", Object: "+object.getClass().getName()+", byPass: "+Arrays.toString(byPass), 
+			()->{
+				try {
+					exec(annotation, object, byPass);
+				} catch (Exception e) {
+					LOGGER.error(e.getMessage(), e);
+				}
+			});
+		}else
+			exec(annotation, object, byPass);
+	}
+	
+	
+	private void exec(final A annotation, final T object, String...byPass) throws Exception{
+			
 		TInner<Annotation> defaultSetting = new TInner<>();
 		TInner<Map<String, Object>> defaultParams = new TInner<>();
 		
@@ -144,13 +161,15 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 			//metodos.parallel().forEach(method-> {
 			metodos.forEach(method-> {
 				String key = method.getName();
-								
-				if(!ArrayUtils.contains(SKIPMETHODS, key)) {
+						
+				if(!ArrayUtils.contains(TReflectionUtil.SKIPMETHODS, key)) {
 					
 					try {
 						Object value = method.invoke(annotation);
-						
 						boolean skip = false;
+						
+						if(TLoggerUtil.isParserDebugEnabled())
+							TLoggerUtil.debug(TAnnotationParser.class, key+" = "+value.toString());
 						
 						if(value instanceof Annotation){
 							Method parseMethod = TReflectionUtil.getParseMethod((Annotation) value);
@@ -187,13 +206,32 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 									if(defaultParams.value==null)
 										defaultParams.value = (defaultSetting.value!=null) ? TReflectionUtil.readAnnotation(defaultSetting.value) : null;
 									
-									run(key, annotation, defaultSetting.value, value, defaultParams.value, object);
+									if(TLoggerUtil.isParserDebugEnabled())
+										TLoggerUtil.timeComplexity(TAnnotationParser.class, 
+											"run("+key+","+ annotation.annotationType().getName()+","+ 
+													(defaultSetting.value!=null ? defaultSetting.value : "null")+","+value+","+
+													(defaultParams.value!=null?defaultParams.value:"null")+","+object+")",
+											()->{
+												try {
+													run(key, annotation, defaultSetting.value, value, defaultParams.value, object);
+												} catch (Exception e) {
+													LOGGER.error(e.getMessage(), e);
+												}
+											});
+									else
+										try {
+											run(key, annotation, defaultSetting.value, value, defaultParams.value, object);
+										} catch (Exception e) {
+											LOGGER.error(e.getMessage(), e);
+										}
 								}
 							}
-						}
+						}else
+							if(TLoggerUtil.isParserDebugEnabled())
+								TLoggerUtil.debug(TAnnotationParser.class, key+" skipped");
 						
 					} catch (Exception e) {
-						e.printStackTrace();
+						LOGGER.error(e.getMessage(), e);
 					}
 				}
 			});
@@ -211,17 +249,35 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 				  Entry thisEntry = (Entry) entries.next();
 				  String key = (String) thisEntry.getKey();
 				  Object value = thisEntry.getValue();
-				 run(key, annotation, defaultSetting.value, value, defaultParams.value, object);
+				  if(TLoggerUtil.isParserDebugEnabled())
+					  TLoggerUtil.timeComplexity(TAnnotationParser.class, 
+						"run("+key+","+ annotation.annotationType().getName()+","+ 
+								(defaultSetting.value!=null ? defaultSetting.value : "null")+","+value+","+
+								(defaultParams.value!=null?defaultParams.value:"null")+","+object+")",
+						()->{
+							try {
+								run(key, annotation, defaultSetting.value, value, defaultParams.value, object);
+							} catch (Exception e) {
+								LOGGER.error(e.getMessage(), e);
+							}
+						});
+				  else
+					  try {
+							run(key, annotation, defaultSetting.value, value, defaultParams.value, object);
+						} catch (Exception e) {
+							LOGGER.error(e.getMessage(), e);
+						}
 				}
 			}
 			
 		}catch(Exception e){
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
+		
 	}
 	
 	
-	private static String INFO_HEADER = "\n[TAnnotationParser][callParser] Field: %s, Annotation(name: %s, proxy: %s), Control: %s";
+	private static String INFO_HEADER = "\n\t[TAnnotationParser][callParser] Field: %s, Annotation(name: %s, proxy: %s), Control: %s";
 	
 	/**
 	 * <pre>
@@ -242,7 +298,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 				
 				for (Class<? extends ITAnnotationParser> clazz : parsers) {
 					
-					ITAnnotationParser parser = (ITAnnotationParser) clazz.newInstance();
+					ITAnnotationParser parser = (ITAnnotationParser) clazz.getDeclaredConstructor().newInstance();
 					parser.setComponentDescriptor(descriptor);
 					
 					try{
@@ -258,23 +314,23 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 									tAnnotation.getClass().getSimpleName(),
 									control.getClass().getSimpleName()));
 						
-						error.append("\nIssue found on the parser: "+ clazz.getSimpleName());
-						error.append("\nException: "+ e.getMessage());
+						error.append("\n\t\tIssue found on the parser: "+ clazz.getSimpleName());
+						error.append("\n\t\tException: "+ e.getMessage());
 						try {
 							
 							Class genParamClass = getGenericParamClass(clazz,1);
 							final Method method = getSourceMethod(descriptor.getAnnotationPropertyInExecution(), control.getClass());
 							
-							error.append("\nMethod method = getSourceMethod("+descriptor.getAnnotationPropertyInExecution()+","+genParamClass.getSimpleName()+")");
-							error.append("\nWhere method is "+method.getName());
-							error.append("\nExecuting method.invoke("+control.getClass().getName()+") to get the parser param!");
+							error.append("\n\t\tMethod method = getSourceMethod("+descriptor.getAnnotationPropertyInExecution()+","+genParamClass.getSimpleName()+")");
+							error.append("\n\t\tWhere method is "+method.getName());
+							error.append("\n\t\tExecuting method.invoke("+control.getClass().getName()+") to get the parser param!");
 							Object obj = method.invoke(control);
-							error.append("\nObject returned: "+obj.getClass().getSimpleName());
+							error.append("\n\t\tObject returned: "+obj.getClass().getSimpleName());
 							if(obj !=null) {
-								error.append("\nTrying to parser again: parser.parse("+tAnnotation.annotationType().getSimpleName()+","+obj.getClass().getSimpleName()+")");
-								error.append("\nWhere parser is "+parser.getClass().getSimpleName());
+								error.append("\n\t\t\tTrying to parser again: parser.parse("+tAnnotation.annotationType().getSimpleName()+","+obj.getClass().getSimpleName()+")");
+								error.append("\n\t\t\tWhere parser is "+parser.getClass().getSimpleName());
 								parser.parse(tAnnotation, obj);
-								error.append("\nParser executed successfully!");
+								error.append("\n\t\t\tParser executed successfully!");
 							}
 						}catch (Exception ex) { 
 							error.append("\nFail message: "+ex.getMessage());
@@ -282,10 +338,12 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 					}
 				}
 			}catch(Exception e){
+				if(error==null)
+					error = new StringBuilder();
 				error.append("\nError: "+e.getMessage());
 			}	
 			if(error!=null)
-				System.out.println(error.toString());
+				LOGGER.error(error.toString());
 		}
 	}
 	
@@ -388,8 +446,8 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 					
 				}
 			}catch(Exception e){
-				System.out.println("Warning: Error trying parse the annotation "+ TReflectionUtil.getAnnotationFullName(annotation));
-				System.out.println("parser: "+this.getClass().getSimpleName()
+				LOGGER.warn("Warning: Error trying parse the annotation "+ TReflectionUtil.getAnnotationFullName(annotation));
+				LOGGER.warn("parser: "+this.getClass().getSimpleName()
 					+", attribute: "+key
 					+", object: " + targetObject.getClass().getSimpleName()
 					+", target method: "+targetClass.getSimpleName()+"."+method.getName() 
@@ -397,11 +455,12 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 					+", form: "+componentDescriptor.getForm().getClass().getSimpleName()
 					+", modelView: "+componentDescriptor.getModelView().getClass().getSimpleName()
 					+", field: "+componentDescriptor.getFieldDescriptor().getFieldName());
-				System.out.println("Exception: "+e+", Message: "+e.getMessage());
+				LOGGER.error(e.getMessage());
+				
 			}
 		}catch(Exception e) {
-			System.out.println("Warning: Error trying analyse a parse annotation to get the value.");
-			System.out.println("annotation: "+TReflectionUtil.getAnnotationFullName(annotation)
+			LOGGER.warn("Warning: Error trying analyse a parse annotation to get the value.");
+			LOGGER.warn("annotation: "+TReflectionUtil.getAnnotationFullName(annotation)
 				+", parser: "+this.getClass().getSimpleName()
 				+", attribute: "+key
 				+", object: " + targetObject.getClass().getSimpleName()
@@ -410,7 +469,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 				+", form: "+componentDescriptor.getForm().getClass().getSimpleName()
 				+", modelView: "+componentDescriptor.getModelView().getClass().getSimpleName()
 				+", field: "+componentDescriptor.getFieldDescriptor().getFieldName());
-			System.out.println("Exception: "+e+", Message: "+e.getMessage());
+			LOGGER.error(e.getMessage());
 		}
 	}
 	

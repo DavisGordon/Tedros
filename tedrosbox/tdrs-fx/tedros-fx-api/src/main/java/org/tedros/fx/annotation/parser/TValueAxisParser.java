@@ -22,7 +22,7 @@ public class TValueAxisParser extends TAnnotationParser<TValueAxis, ValueAxis>{
 	@Override
 	public void parse(TValueAxis ann, ValueAxis object, String... byPass) throws Exception {
 		if(!Modifier.isAbstract(ann.tickLabelFormatter().getModifiers())) {
-			TNumberAxisFormatterBuilder b = ann.tickLabelFormatter().newInstance();
+			TNumberAxisFormatterBuilder b = ann.tickLabelFormatter().getDeclaredConstructor().newInstance();
 			b.setComponentDescriptor(getComponentDescriptor());
 			b.setAxis((NumberAxis) object);
 			DefaultFormatter f = b.build();

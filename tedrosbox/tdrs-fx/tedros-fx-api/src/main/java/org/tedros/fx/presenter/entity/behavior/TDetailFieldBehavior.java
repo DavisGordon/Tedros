@@ -46,12 +46,12 @@ extends TDetailFieldBaseBehavior<M, E> {
 		super.configRemoveButton();
 		
 		try {
-			M model = (M) super.getModelViewClass().getConstructor(entityClass).newInstance(entityClass.newInstance());
+			M model = (M) super.getModelViewClass().getConstructor(entityClass).newInstance(entityClass.getDeclaredConstructor().newInstance());
 			setModelView(model);
 			super.showForm(TViewMode.EDIT);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 	

@@ -258,7 +258,7 @@ public class TPager extends BorderPane {
 			if(s!=null) {
 				if(s.converter!=TConverter.class) {
 					try {
-						TConverter converter = s.converter.newInstance();
+						TConverter converter = s.converter.getDeclaredConstructor().newInstance();
 						converter.setIn(n);
 						converter.getOut();
 					} catch (Exception e) {
@@ -389,7 +389,7 @@ public class TPager extends BorderPane {
 		if(s!=null) {
 			if(s.converter!=TConverter.class) {
 				try {
-					TConverter converter = s.converter.newInstance();
+					TConverter converter = s.converter.getDeclaredConstructor().newInstance();
 					converter.setIn(prompt);
 					value = converter.getOut();
 				} catch (Exception e) {

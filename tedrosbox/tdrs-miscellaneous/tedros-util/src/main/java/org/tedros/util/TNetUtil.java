@@ -54,7 +54,7 @@ public final class TNetUtil {
         }
         catch (SocketException ex)
         {
-            ex.printStackTrace();
+            TLoggerUtil.error(TNetUtil.class, ex.getMessage(), ex);
         	//Logger.getLogger(Net.class.getName()).log(Level.WARNING, "No IP address available", ex);
             return listAdr;
         }
@@ -122,14 +122,12 @@ public final class TNetUtil {
                 }
             }
             if (ipOnly.length()==0)
-            	System.out.println("No IP address available");
-            	//Logger.getLogger(Net.class.getName()).log(Level.WARNING, "No IP address available");
+            	TLoggerUtil.warn(TNetUtil.class, "No IP address available");
             return ipOnly;
         }
         catch (SocketException ex)
         {
-        	ex.printStackTrace();
-            //Logger.getLogger(Net.class.getName()).log(Level.WARNING, "No IP address available", ex);
+        	TLoggerUtil.error(TNetUtil.class, ex.getMessage(), ex);
             return "";
         }
     }

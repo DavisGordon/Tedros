@@ -3,9 +3,9 @@
  */
 package org.tedros.chat.cdi.eao;
 
-import javax.enterprise.context.RequestScoped;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.Query;
 
 import org.tedros.common.model.TFileEntity;
 import org.tedros.core.setting.model.TPropertie;

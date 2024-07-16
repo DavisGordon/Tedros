@@ -9,7 +9,9 @@ package org.tedros.fx.reader;
 import java.util.Arrays;
 import java.util.Date;
 
+import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.util.TMaskUtil;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -19,9 +21,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.ImageCursor;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.ContextMenuBuilder;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.MenuItemBuilder;
 import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
@@ -84,7 +84,8 @@ public abstract class TTextReader<V> extends Text {
 	
 	private void buildContextMenu() {
 		final MenuItem copyItem = buildCopyMenuITem();
-		contextMenu = ContextMenuBuilder.create().items(Arrays.asList(copyItem)).build();
+		contextMenu = new ContextMenu();
+		contextMenu.getItems().addAll(Arrays.asList(copyItem));
 		contextMenu.setAutoFix(true);
 		contextMenu.setAutoHide(true);
 		mouseClickEventHandler = new EventHandler<MouseEvent>() {
@@ -102,20 +103,19 @@ public abstract class TTextReader<V> extends Text {
 	}
 
 	private MenuItem buildCopyMenuITem() {
-		final MenuItem copyItem = MenuItemBuilder.create()
-				.text("Copiar")
-				.onAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent arg0) {
-						if(getText()!=null){
-							final Clipboard clipboard = Clipboard.getSystemClipboard();
-						    final ClipboardContent content = new ClipboardContent();
-						    content.putString(getText());
-						    clipboard.setContent(content);
-						}
-					}
-				})
-				.build();
+		final MenuItem copyItem = new MenuItem();
+		copyItem.setText(TLanguage.getInstance().getString(TFxKey.BUTTON_COPY));
+		copyItem.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				if(getText()!=null){
+					final Clipboard clipboard = Clipboard.getSystemClipboard();
+				    final ClipboardContent content = new ClipboardContent();
+				    content.putString(getText());
+				    clipboard.setContent(content);
+				}
+			}
+		});
 		return copyItem;
 	}
 	

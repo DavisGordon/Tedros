@@ -11,6 +11,7 @@ import org.tedros.fx.annotation.control.TTableSubColumn;
 import org.tedros.fx.annotation.control.TTableView;
 import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.model.TModelView;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableCell;
@@ -107,7 +108,7 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 						
 						if(tTableNestedColumn.cellValueFactory().parse() && tTableNestedColumn.cellValueFactory().value().parse()){
 							Class callbackClass = tTableNestedColumn.cellValueFactory().value().value();
-							Callback callback = (Callback) callbackClass.newInstance();
+							Callback callback = (Callback) callbackClass.getDeclaredConstructor().newInstance();
 							setCellValueFactory(tableNestedColumn, callback);
 						}
 						
@@ -129,7 +130,7 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 					
 					if(tTableSubColumn.cellValueFactory().parse() && tTableSubColumn.cellValueFactory().value().parse()){
 						Class callbackClass = tTableSubColumn.cellValueFactory().value().value();
-						Callback callback = (Callback) callbackClass.newInstance();
+						Callback callback = (Callback) callbackClass.getDeclaredConstructor().newInstance();
 						setCellValueFactory(tableSubColumn, callback);
 					}
 					
@@ -151,7 +152,7 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 				
 				if(tTableColumn.cellValueFactory().parse() && tTableColumn.cellValueFactory().value().parse()){
 					Class callbackClass = tTableColumn.cellValueFactory().value().value();
-					Callback callback = (Callback) callbackClass.newInstance();
+					Callback callback = (Callback) callbackClass.getDeclaredConstructor().newInstance();
 					setCellValueFactory(tableColumn, callback);
 				}
 				
@@ -191,7 +192,7 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 			sb.append("WARN: Cant find the column "+TLanguage.getInstance().getString(text));
 			sb.append(" in TableView with columns: ");
 			appendColsName(sb, tableView.getColumns());
-			System.err.println(sb.toString());
+			TLoggerUtil.warn(getClass(), sb.toString());
 			return false;
 		}
 		return true;
@@ -229,10 +230,10 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 	@SuppressWarnings("unchecked")
 	private void setCellFactory(final TableColumn tableColumn, Class callbackClass, Class tableCellClass, 
 			Class<? extends StringConverter> converter)
-			throws InstantiationException, IllegalAccessException {
+			throws Exception {
 	
 		if(callbackClass != null && callbackClass != Callback.class){
-			Callback callback = (Callback) callbackClass.newInstance();
+			Callback callback = (Callback) callbackClass.getDeclaredConstructor().newInstance();
 			tableColumn.setCellFactory(callback);
 		
 		}else if(tableCellClass!=TableCell.class){
@@ -250,7 +251,7 @@ public class TTableViewParser extends TAnnotationParser<TTableView, TableView> {
 				tableColumn.setCellFactory(ProgressBarTableCell.forTableColumn());
 			else						
 			if(tableCellClass==TextFieldTableCell.class)
-				tableColumn.setCellFactory(TextFieldTableCell.forTableColumn(converter.newInstance()));
+				tableColumn.setCellFactory(TextFieldTableCell.forTableColumn(converter.getDeclaredConstructor().newInstance()));
 		}
 	}
 	

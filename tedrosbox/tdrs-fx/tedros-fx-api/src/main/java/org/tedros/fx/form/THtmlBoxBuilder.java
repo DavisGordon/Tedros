@@ -13,7 +13,6 @@ import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.core.TLanguage;
 import org.tedros.core.style.TStyleResourceValue;
 import org.tedros.fx.annotation.control.TLabel;
-import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.domain.THtmlConstant;
 import org.tedros.fx.domain.TLabelPosition;
 import org.tedros.fx.reader.THtmlReader;
@@ -55,7 +54,7 @@ final class THtmlBoxBuilder {
 																+"<span style='"+THtmlConstant.CONTENT_STYLE+"'>"+THtmlConstant.CONTENT+"</span>"
 															  +"</div>");
 	
-	public static THtmlReader build(final THtmlReader control, final TComponentDescriptor descriptor){
+	public static THtmlReader build(final THtmlReader control, final ITComponentDescriptor descriptor){
 		
 		Annotation annotation = getReaderHtmlAnnotation(descriptor);
 		

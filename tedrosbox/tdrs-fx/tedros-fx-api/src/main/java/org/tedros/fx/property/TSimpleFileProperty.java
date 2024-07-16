@@ -11,6 +11,7 @@ import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.model.ITFileBaseModel;
 import org.tedros.server.model.ITFileModel;
 import org.tedros.server.model.TFileModel;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
@@ -131,7 +132,7 @@ public class TSimpleFileProperty<T extends ITFileBaseModel> extends SimpleObject
 					tBytesProperty.setValue(/*n==null ? null :*/ m.getByteModel().getBytes());
 					tFileSizeProperty.setValue(/*n==null ? null : */m.getFileSize());
 				} catch (IOException e) {
-					e.printStackTrace();
+					TLoggerUtil.error(getClass(), e.getMessage(), e);
 				}
 			}else {
 				tFileNameProperty.setValue(null);
@@ -165,7 +166,7 @@ public class TSimpleFileProperty<T extends ITFileBaseModel> extends SimpleObject
 				this.tFileSizeProperty.setValue(getValue().getFileSize());
 				
 			}catch(IOException e){
-				e.printStackTrace();
+				TLoggerUtil.error(getClass(), e.getMessage(), e);
 			}
 	
 		}else{

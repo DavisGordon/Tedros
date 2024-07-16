@@ -9,19 +9,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
-import javax.ejb.ConcurrencyManagement;
-import javax.ejb.ConcurrencyManagementType;
-import javax.ejb.Lock;
-import javax.ejb.LockType;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.tedros.core.security.model.TAuthorization;
 import org.tedros.core.security.model.TProfile;
 import org.tedros.core.security.model.TUser;
 import org.tedros.server.security.TAccessToken;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.ejb.ConcurrencyManagement;
+import jakarta.ejb.ConcurrencyManagementType;
+import jakarta.ejb.Lock;
+import jakarta.ejb.LockType;
+import jakarta.ejb.Singleton;
+import jakarta.ejb.Startup;
 
 /**
  * @author Davis Gordon

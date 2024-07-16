@@ -6,6 +6,7 @@ package org.tedros.ai;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,8 +62,9 @@ public class TFunctionHelper {
 		if(clss!=null && !clss.isEmpty()) {
 			for(Class<? extends TFunction> c : clss){
 				try {
-					arr = ArrayUtils.add(arr, c.newInstance());
-				} catch (InstantiationException | IllegalAccessException e) {
+					arr = ArrayUtils.add(arr, c.getDeclaredConstructor().newInstance());
+				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException |
+						InvocationTargetException | NoSuchMethodException | SecurityException e) {
 					e.printStackTrace();
 				}
 			}

@@ -98,7 +98,7 @@ public class TMainColorBehavior extends TDynaViewCrudBaseBehavior<TMainColorMV, 
 				
 				
 			} catch (Exception e) {
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}
 		});
 		

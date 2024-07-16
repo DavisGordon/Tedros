@@ -1,6 +1,7 @@
 package org.tedros.fx.modal;
 
 import org.tedros.fx.control.TButton;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -37,7 +38,7 @@ public class TConfirmObjectMessageBox<T> extends TMessageBox {
 			});
 			
 		}catch(Exception e){
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 	}
 	

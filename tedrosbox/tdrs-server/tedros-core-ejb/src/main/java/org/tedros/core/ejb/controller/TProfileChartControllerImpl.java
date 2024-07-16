@@ -3,10 +3,10 @@ package org.tedros.core.ejb.controller;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
 
 import org.apache.commons.lang3.RandomUtils;
 import org.tedros.core.controller.TProfileChartController;

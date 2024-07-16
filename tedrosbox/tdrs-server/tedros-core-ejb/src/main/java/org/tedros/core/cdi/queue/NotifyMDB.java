@@ -2,17 +2,6 @@ package org.tedros.core.cdi.queue;
 
 import java.util.Date;
 
-import javax.ejb.ActivationConfigProperty;
-import javax.ejb.EJB;
-import javax.ejb.MessageDriven;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.inject.Inject;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.TextMessage;
-
 import org.tedros.core.cdi.bo.TEmailBO;
 import org.tedros.core.ejb.service.TNotifyService;
 import org.tedros.core.notify.model.TAction;
@@ -20,14 +9,25 @@ import org.tedros.core.notify.model.TNotify;
 import org.tedros.core.notify.model.TState;
 import org.tedros.server.exception.TBusinessException;
 
+import jakarta.ejb.ActivationConfigProperty;
+import jakarta.ejb.EJB;
+import jakarta.ejb.MessageDriven;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
+import jakarta.inject.Inject;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
+import jakarta.jms.MessageListener;
+import jakarta.jms.TextMessage;
+
 @MessageDriven(
     activationConfig = {
-        @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
+        @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "jakarta.jms.Queue"),
         @ActivationConfigProperty(propertyName = "destination", propertyValue = "NotifyQueue")
     }
 )
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
-public class NotifyMDB implements MessageListener {
+public class NotifyMDB  implements MessageListener {
 	
 	@Inject
 	private TEmailBO emailBO;

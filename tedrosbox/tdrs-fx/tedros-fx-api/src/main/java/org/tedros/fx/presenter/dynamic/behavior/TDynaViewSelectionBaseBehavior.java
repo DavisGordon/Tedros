@@ -115,7 +115,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			allowsMultipleSel = modalPresenter.allowsMultipleSelections();
 			searchResultList = TFXCollections.iTObservableList();
 			
-			TModelView model = (M) paginatorModelViewClass.getConstructor(modelClass).newInstance(modelClass.newInstance());
+			TModelView model = (M) paginatorModelViewClass.getConstructor(modelClass).newInstance(modelClass.getDeclaredConstructor().newInstance());
 	    	
 			TTableView tableViewAnn = modalPresenter.tableView();
 
@@ -164,14 +164,14 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 					try {
 						this.runFindAllProcess(a2);
 					} catch (Throwable e) {
-						e.printStackTrace();
+						LOGGER.error(e.getMessage(), e);
 					}
 				};
 				this.decorator.gettPaginator().tPaginationProperty().addListener(chl);
 			}
 			
 		}catch(Exception e){
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 		
 	}
@@ -331,7 +331,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				runFindAllProcess(null);
 			} catch (Throwable e) {
 				getView().tShowModal(new TMessageBox(e), true);
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}
 		}
 	}
@@ -369,19 +369,20 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 								M model = (M) this.paginatorModelViewClass.getConstructor(modelClass).newInstance(e);
 								this.searchResultList.add(model);
 							} catch (Exception e1) {
-								e1.printStackTrace();
+								LOGGER.error(e1.getMessage(), e1);
 							}
 						}
 						
 						processPagination((long)result.get("total"));
 					}else {
 						String msg = resultados.getMessage();
-						System.out.println(msg);
 						switch(resultados.getState()) {
 							case ERROR:
+								LOGGER.error(msg);
 								addMessage(new TMessage(TMessageType.ERROR, msg));
 								break;
 							default:
+								LOGGER.warn(msg);
 								addMessage(new TMessage(TMessageType.WARNING, msg));
 								break;
 						}
@@ -415,14 +416,14 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	private void processClean() {
 		try {
 			super.removeAllListenerFromModelView();
-			M model = (M) getModelViewClass().getConstructor(modelClass).newInstance(modelClass.newInstance());
+			M model = (M) getModelViewClass().getConstructor(modelClass).newInstance(modelClass.getDeclaredConstructor().newInstance());
 			setModelView(model);
 			showForm(TViewMode.EDIT);
 			this.searchResultList.clear();
 			decorator.gettPaginator().tReload(0);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 	
@@ -450,7 +451,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			try{
 				closeModal();
 			}catch(Exception e){
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}
 		}
 		actionHelper.runAfter(TActionType.CLOSE);
@@ -465,7 +466,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				processClean();
 				getModels().clear();
 			}catch(Exception e){
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}
 		}
 		actionHelper.runAfter(TActionType.CANCEL);

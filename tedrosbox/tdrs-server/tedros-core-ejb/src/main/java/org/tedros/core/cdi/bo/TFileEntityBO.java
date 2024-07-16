@@ -5,8 +5,8 @@ package org.tedros.core.cdi.bo;
 
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 
 import org.tedros.common.model.TFileEntity;
 import org.tedros.core.cdi.eao.TFileEntityEao;

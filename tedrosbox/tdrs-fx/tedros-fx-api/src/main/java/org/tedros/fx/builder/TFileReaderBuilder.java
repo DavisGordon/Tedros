@@ -16,6 +16,7 @@ import org.tedros.fx.property.TBytesLoader;
 import org.tedros.fx.property.TSimpleFileProperty;
 import org.tedros.fx.reader.TByteArrayReader;
 import org.tedros.server.entity.ITFileEntity;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
@@ -57,7 +58,7 @@ implements ITReaderBuilder<Node, TSimpleFileProperty>{
 					| IllegalArgumentException | InvocationTargetException
 					| NoSuchMethodException | SecurityException e) {
 				
-				e.printStackTrace();
+				TLoggerUtil.error(getClass(), e.getMessage(), e);
 				
 			}
 		}else{
@@ -82,7 +83,7 @@ implements ITReaderBuilder<Node, TSimpleFileProperty>{
 				}
 				return reader;
 			} catch (TProcessException e) {
-				e.printStackTrace();
+				TLoggerUtil.error(getClass(), e.getMessage(), e);
 			}
 			
 		}

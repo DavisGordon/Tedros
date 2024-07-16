@@ -44,7 +44,7 @@ implements ITControlBuilder<org.tedros.fx.control.THRadioGroup, Property>{
 		
 		final TConverter conv = 
 				(tAnnotation.converter().parse() && tAnnotation.converter().type()!=TConverter.class) 
-					? tAnnotation.converter().type().newInstance() 
+					? tAnnotation.converter().type().getDeclaredConstructor().newInstance() 
 					: null;
 					
 		if(conv!=null)

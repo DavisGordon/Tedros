@@ -10,6 +10,7 @@ import org.tedros.core.resource.TedrosCoreResource;
 import org.tedros.fx.control.model.TImagesReportModel;
 import org.tedros.fx.exception.TProcessException;
 import org.tedros.fx.process.TReportProcess;
+import org.tedros.util.TLoggerUtil;
 
 public class TImageReportProcess extends TReportProcess<TImagesReportModel> {
 
@@ -28,7 +29,7 @@ public class TImageReportProcess extends TReportProcess<TImagesReportModel> {
 		try {
 			return TedrosCoreResource.getImagesJasperInputStream();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -43,7 +44,7 @@ public class TImageReportProcess extends TReportProcess<TImagesReportModel> {
 						try {
 							i.getValue().close();;
 						} catch (IOException e1) {
-							e1.printStackTrace();
+							TLoggerUtil.error(getClass(), e1.getMessage(), e1);
 						}
 					});
 			});

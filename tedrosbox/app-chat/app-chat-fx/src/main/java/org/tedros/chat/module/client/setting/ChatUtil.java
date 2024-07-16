@@ -36,6 +36,7 @@ import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.server.security.TAccessToken;
 import org.tedros.util.TFileUtil;
+import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TedrosFolder;
 
 import javafx.beans.property.SimpleObjectProperty;
@@ -69,7 +70,6 @@ public class ChatUtil {
 	public ChatUtil() {
 	}
 	
-	@SuppressWarnings("unchecked")
 	public Chat saveChat(TAccessToken token, Chat chat) throws Exception {
 		ServiceLocator loc = ServiceLocator.getInstance();
 		try {
@@ -81,7 +81,6 @@ public class ChatUtil {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public ChatMessage saveMessage(TAccessToken token, ChatMessage msg) throws Exception {
 		ServiceLocator loc = ServiceLocator.getInstance();
 		try {
@@ -110,7 +109,6 @@ public class ChatUtil {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public ChatUser findUser(TAccessToken token, Long id, String name) throws Exception {
 		ServiceLocator loc = ServiceLocator.getInstance();
 		try {
@@ -219,7 +217,7 @@ public class ChatUtil {
 					if(callback!=null)
 						callback.accept(true);
 				} catch (IOException e1) {
-					e1.printStackTrace();
+					TLoggerUtil.error(getClass(), e1.getMessage(), e1);
 					if(callback!=null)
 						callback.accept(false);
 				}
@@ -266,7 +264,7 @@ public class ChatUtil {
 					fe.getByteEntity().setBytes(n);
 					setImage(imgView, n);
 				} catch (Exception e1) {
-					e1.printStackTrace();
+					TLoggerUtil.error(getClass(), e1.getMessage(), e1);
 				}
 				bp.removeListener(this);
 			}
@@ -278,7 +276,7 @@ public class ChatUtil {
 		try {
 			TBytesLoader.loadBytesFromTFileEntity(m.getByteEntity().getId(), bp);
 		} catch (Throwable e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 	}
 	

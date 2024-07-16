@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.ejb.EJBException;
-import javax.ejb.EJBTransactionRolledbackException;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.persistence.OptimisticLockException;
+import jakarta.ejb.EJBException;
+import jakarta.ejb.EJBTransactionRolledbackException;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
+import jakarta.persistence.OptimisticLockException;
 
 import org.tedros.server.controller.ITEjbController;
 import org.tedros.server.entity.ITEntity;

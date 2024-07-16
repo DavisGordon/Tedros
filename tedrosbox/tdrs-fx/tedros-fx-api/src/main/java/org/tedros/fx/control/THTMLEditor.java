@@ -10,6 +10,7 @@ import org.tedros.core.TLanguage;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.util.HtmlPDFExportHelper;
 import org.tedros.fx.util.TPrintUtil;
+import org.tedros.util.TLoggerUtil;
 
 import com.sun.javafx.webkit.Accessor;
 import com.sun.webkit.WebPage;
@@ -113,7 +114,7 @@ public class THTMLEditor extends TRequiredHTMLEditor {
 					try {
 						HtmlPDFExportHelper.generate(output, html);
 					} catch (Exception e1) {
-						e1.printStackTrace();
+						TLoggerUtil.error(getClass(), e1.getMessage(), e1);
 					}
 				}
 			});

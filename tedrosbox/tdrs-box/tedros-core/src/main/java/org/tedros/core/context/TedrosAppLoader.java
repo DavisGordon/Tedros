@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,7 +21,7 @@ import javafx.collections.ObservableList;
  */
 abstract class TedrosAppLoader {
 
-	private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	private static final Logger LOGGER = TLoggerUtil.getLogger(TedrosAppLoader.class);
 	
 	protected final Map<String, TEntry<TAppContext>> entrys;
 	

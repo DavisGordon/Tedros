@@ -3,15 +3,15 @@
  */
 package org.tedros.core.cdi.producer;
 
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.apache.commons.lang3.BooleanUtils;
 import org.tedros.core.cdi.bo.TPropertieBO;
 import org.tedros.core.domain.DomainPropertie;
 import org.tedros.core.domain.TSystemPropertie;
+
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 /**
  * @author Davis Gordon

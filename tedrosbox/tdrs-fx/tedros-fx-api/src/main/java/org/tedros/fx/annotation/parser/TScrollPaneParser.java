@@ -2,8 +2,8 @@ package org.tedros.fx.annotation.parser;
 
 import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.fx.annotation.control.TScrollPane;
+import org.tedros.util.TLoggerUtil;
 
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 
@@ -23,8 +23,7 @@ public class TScrollPaneParser extends TAnnotationParser<TScrollPane, ScrollPane
 				try {
 					super.parse(annotation, scroll, "content");
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					TLoggerUtil.error(getClass(), e.getMessage(), e);
 				}
 			}
 		});

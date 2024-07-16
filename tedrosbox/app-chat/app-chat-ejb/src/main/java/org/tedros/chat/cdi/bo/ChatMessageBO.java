@@ -1,7 +1,7 @@
 package org.tedros.chat.cdi.bo;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 
 import org.tedros.chat.cdi.eao.ChatMessageEao;
 import org.tedros.chat.entity.ChatMessage;

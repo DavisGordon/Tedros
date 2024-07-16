@@ -40,7 +40,7 @@ public class TUserSettingBehavior extends TSaveViewBehavior<TUserSettingModelVie
 				try {
 					loadTedros();
 				} catch (IOException e) {
-					e.printStackTrace();
+					LOGGER.error(e.getMessage(), e);
 				}
 				
 			}

@@ -30,6 +30,7 @@ import org.tedros.fx.util.TFileBaseUtil;
 import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.model.ITFileModel;
 import org.tedros.server.model.TFileModel;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -134,8 +135,8 @@ public class ChatFormSetting extends TSetting {
 				bhv.countUnreadMessages();
 			}
 			
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		} catch (Exception e) {
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 	}
 
@@ -158,7 +159,7 @@ public class ChatFormSetting extends TSetting {
 				try {
 					client.send(info);
 				} catch (IOException e) {
-					e.printStackTrace();
+					TLoggerUtil.error(getClass(), e.getMessage(), e);
 				}
 			}
 		};
@@ -234,7 +235,7 @@ public class ChatFormSetting extends TSetting {
 					mv.getSendFile().setValue(null);
 					
 		        } catch (Exception ex) {
-		            ex.printStackTrace();
+		        	TLoggerUtil.error(getClass(), ex.getMessage(), ex);
 		        }
 		};
 		repo.add("ev0", ev0);
@@ -309,8 +310,8 @@ public class ChatFormSetting extends TSetting {
 		try {
 			util.saveChat(TedrosContext.getLoggedUser()
 					.getAccessToken(), mv.getEntity());
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		} catch (Exception e) {
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 	}
 

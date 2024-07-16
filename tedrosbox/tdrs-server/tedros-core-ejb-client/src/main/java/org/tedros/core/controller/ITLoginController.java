@@ -2,7 +2,7 @@ package org.tedros.core.controller;
 
 import java.util.List;
 
-import javax.ejb.Remote;
+import jakarta.ejb.Remote;
 
 import org.tedros.core.security.model.TAuthorization;
 import org.tedros.core.security.model.TProfile;

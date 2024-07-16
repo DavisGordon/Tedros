@@ -6,15 +6,14 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.api.form.ITFieldBox;
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.app.component.ITActionComponent;
-import org.tedros.fx.annotation.TDebugConfig;
 import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.parser.ITEffectParse;
 import org.tedros.fx.annotation.parser.TAnnotationParser;
@@ -27,21 +26,23 @@ import org.tedros.fx.builder.ITLayoutBuilder;
 import org.tedros.fx.builder.ITReaderBuilder;
 import org.tedros.fx.builder.ITReaderHtmlBuilder;
 import org.tedros.fx.converter.TConverter;
-import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.property.TSimpleFileProperty;
 import org.tedros.fx.reader.THtmlReader;
 import org.tedros.fx.util.TReflectionUtil;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Node;
 import javafx.scene.effect.Effect;
 
-public final class TControlLayoutBuilder {
+public final class TComponentBuilder {
+	
+	private final static Logger LOGGER = TLoggerUtil.getLogger(TComponentBuilder.class);
 	
 	private final Map<String, Object> parserMap = new HashMap<>();
 	
-	public TControlLayoutBuilder() {
+	public TComponentBuilder() {
 		
 	}
 	
@@ -62,7 +63,7 @@ public final class TControlLayoutBuilder {
 				if(parserMap.containsKey(parseClass.getName())){
 					parser = (ITEffectParse) parserMap.get(parseClass.getName());
 				}else{
-					parser = (ITEffectParse) parseClass.newInstance();	
+					parser = (ITEffectParse) parseClass.getDeclaredConstructor().newInstance();	
 					parserMap.put(parseClass.getName(), parser);
 				} 
 				return parser.parse(annotation);
@@ -73,48 +74,52 @@ public final class TControlLayoutBuilder {
 		
 	}
 	
-	public void getControlField(TComponentDescriptor descriptor) throws Exception{
-		
-		Long startTime = TDebugConfig.detailParseExecution ? System.nanoTime() : null;
-		
+	public void processControlField(ITComponentDescriptor descriptor) throws Exception{
+		if(TLoggerUtil.isFormEngineEnabled()) {
+			Exception[] exArr = new Exception[]{};
+			TLoggerUtil.timeComplexity(getClass(), "Build control of field: "+descriptor.getFieldDescriptor().getFieldName(), 
+					()->{
+						try {
+							execControlField(descriptor);
+						} catch (Exception e) {
+							exArr[0] = e;
+						}
+					});
+			if(exArr.length>0)
+				throw exArr[0];
+		}else
+			execControlField(descriptor);
+	}
+	
+	private void execControlField(ITComponentDescriptor descriptor) throws Exception{
 		if(descriptor.getMode() == TViewMode.EDIT )
 			getControl(descriptor);
 		else 
 			getReader(descriptor);
-		
-		Long endTime = TDebugConfig.detailParseExecution ? System.nanoTime() : null;
-		
-		if(TDebugConfig.detailParseExecution) {
-			try{
-				long duration = (endTime - startTime);
-				System.out.println("[TControlLayoutReaderBuilder][Field: "+descriptor.getFieldDescriptor().getFieldName()+
-						"][Build duration: "+(duration/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration/1000000))+"s] ");
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 	}
 	
-	public void getLayoutField(ITComponentDescriptor descriptor) throws Exception{
-		
-		Long startTime = TDebugConfig.detailParseExecution ? System.nanoTime() : null;
-		
+	public void processLayoutField(ITComponentDescriptor descriptor) throws Exception{
+		if(TLoggerUtil.isFormEngineEnabled()) {
+			Exception[] exArr = new Exception[]{};
+			TLoggerUtil.timeComplexity(getClass(), "Build Layout of field: "+descriptor.getFieldDescriptor().getFieldName(), 
+					()->{
+						try {
+							execLayoutField(descriptor);
+						} catch (Exception e) {
+							exArr[0] = e;
+						}
+					});
+			if(exArr.length>0)
+				throw exArr[0];
+		}else
+			execLayoutField(descriptor);
+	}
+	
+	private void execLayoutField(ITComponentDescriptor descriptor) throws Exception{
 		if(descriptor.getMode() == TViewMode.EDIT)
 			getLayout(descriptor);
 		else
 			getLayoutReader(descriptor);
-		
-		Long endTime = TDebugConfig.detailParseExecution ? System.nanoTime() : null;
-		
-		if(TDebugConfig.detailParseExecution) {
-			try{
-				long duration = (endTime - startTime);
-				System.out.println("[TControlLayoutReaderBuilder][Field: "+descriptor.getFieldDescriptor().getFieldName()+
-						"][Build duration: "+(duration/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration/1000000))+"s] ");
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	@SuppressWarnings({"rawtypes"})
@@ -153,7 +158,7 @@ public final class TControlLayoutBuilder {
 		fd.setLayout(layout);
 	}
 	
-	private void getControl(TComponentDescriptor descriptor) throws Exception{
+	private void getControl(ITComponentDescriptor descriptor) throws Exception{
 		
 		if(descriptor.getFieldDescriptor().isLoaded())
 			return;
@@ -189,7 +194,7 @@ public final class TControlLayoutBuilder {
 		
 	}
 	
-	private void getReader(TComponentDescriptor descriptor) throws Exception{
+	private void getReader(ITComponentDescriptor descriptor) throws Exception{
 		
 		if(descriptor.getFieldDescriptor().isLoaded())
 			return;
@@ -321,7 +326,7 @@ public final class TControlLayoutBuilder {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private <T> T buildReader(final TComponentDescriptor descriptor, Annotation annotation, ITFieldBuilder builder) throws IllegalAccessException, InvocationTargetException {
+	private <T> T buildReader(final ITComponentDescriptor descriptor, Annotation annotation, ITFieldBuilder builder) throws IllegalAccessException, InvocationTargetException {
 		
 		if(builder instanceof ITReaderHtmlBuilder){
 			
@@ -334,7 +339,7 @@ public final class TControlLayoutBuilder {
 				try{
 					return (T) ((ITReaderHtmlBuilder) builder).build(annotation, obj);
 				}catch (Exception e) {
-					e.printStackTrace();
+					LOGGER.error(e.getMessage(), e);
 				}
 		}
 		
@@ -349,7 +354,7 @@ public final class TControlLayoutBuilder {
 				try{
 					return (T) ((ITReaderBuilder) builder).build(annotation, obj);
 				}catch (Exception e) {
-					e.printStackTrace();
+					LOGGER.error(e.getMessage(), e);
 				}
 		}
 		
@@ -407,7 +412,7 @@ public final class TControlLayoutBuilder {
 	
 	private void applyEffects(ITComponentDescriptor descriptor, Node control) throws Exception {
 		if(control==null){
-			System.err.println("WARNING: Control null to "+descriptor.getFieldDescriptor().getFieldName());
+			LOGGER.warn("WARNING: Control null to "+descriptor.getFieldDescriptor().getFieldName());
 			return;
 		}
 		
@@ -441,7 +446,7 @@ public final class TControlLayoutBuilder {
 		
 	}
 	
-	private Node buildFieldBox(Node node, final TComponentDescriptor descriptor) {
+	private Node buildFieldBox(Node node, final ITComponentDescriptor descriptor) {
 		final TFieldBox fieldBox = TFieldBoxBuilder.build(node, descriptor);
 		descriptor.getFieldBoxMap().put(descriptor.getFieldDescriptor().getFieldName(), fieldBox);
 		descriptor.getComponents().put(descriptor.getFieldDescriptor().getFieldName(), fieldBox);
@@ -449,7 +454,7 @@ public final class TControlLayoutBuilder {
 		
 	}
 	
-	private THtmlReader buildHtmlBox(THtmlReader node, final TComponentDescriptor descriptor) {
+	private THtmlReader buildHtmlBox(THtmlReader node, final ITComponentDescriptor descriptor) {
 		final THtmlReader tHtmlReader = THtmlBoxBuilder.build(node, descriptor);
 		TFieldBox fieldBox = new TFieldBox(descriptor.getFieldDescriptor().getFieldName(), null, tHtmlReader, null);
 		descriptor.getFieldBoxMap().put(descriptor.getFieldDescriptor().getFieldName(), fieldBox);

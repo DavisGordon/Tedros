@@ -4,53 +4,53 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.model.ITModelView;
-import org.tedros.fx.annotation.TDebugConfig;
 import org.tedros.fx.builder.ITBuilder;
 import org.tedros.fx.builder.ITFieldBuilder;
 import org.tedros.fx.builder.ITLayoutBuilder;
 import org.tedros.fx.builder.ITReaderBuilder;
 import org.tedros.fx.builder.ITReaderHtmlBuilder;
 import org.tedros.fx.converter.TConverter;
-import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.reader.THtmlReader;
 import org.tedros.fx.util.TReflectionUtil;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.scene.Node;
 
-public final class TControlLayoutReaderBuilder {
+public final class TComponentReaderBuilder {
 	
+	private final static Logger LOGGER = TLoggerUtil.getLogger(TComponentReaderBuilder.class);
 	
-	private TControlLayoutReaderBuilder() {
+	private TComponentReaderBuilder() {
 		
 	}
 	
-	public static final Node getField(TComponentDescriptor descriptor) throws Exception{
-		
-		Long startTime = TDebugConfig.detailParseExecution ? System.nanoTime() : null;
-		
-		Node node = getReaderField(descriptor);
-		
-		Long endTime = TDebugConfig.detailParseExecution ? System.nanoTime() : null;
-		
-		if(TDebugConfig.detailParseExecution) {
-			try{
-				long duration = (endTime - startTime);
-				System.out.println("[TControlLayoutReaderBuilder][Field: "+descriptor.getFieldDescriptor().getFieldName()+"][Node: "+( (node==null) ? "null" : (node instanceof TFieldBox) ? ((TFieldBox) node).gettControl().getClass().getSimpleName(): node.getClass().getSimpleName())+"][Build duration: "+(duration/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration/1000000))+"s] ");
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return node;
+	public static final Node getField(ITComponentDescriptor descriptor) throws Exception{
+		if(TLoggerUtil.isFormEngineEnabled()) {
+			Node[] node = new Node[]{};
+			Exception[] exArr = new Exception[]{};
+			TLoggerUtil.timeComplexity(TComponentReaderBuilder.class, "Build reader of field: "+descriptor.getFieldDescriptor().getFieldName(), 
+					()->{
+						try { 
+							node[0] = getReaderField(descriptor);
+						} catch (Exception e) {
+							exArr[0] = e;
+						}
+					});
+			if(exArr.length>0)
+				throw exArr[0];
+			return node[0];
+		}else
+			return getReaderField(descriptor);
 	}
 	
 	@SuppressWarnings({"rawtypes"})
-	private static final Node getReaderField(TComponentDescriptor descriptor) throws Exception{
+	private static final Node getReaderField(ITComponentDescriptor descriptor) throws Exception{
 		
 		if(descriptor.getFieldDescriptor().isLoaded())
 			return null;
@@ -197,7 +197,7 @@ public final class TControlLayoutReaderBuilder {
 				try{
 					return (T) ((ITReaderHtmlBuilder) builder).build(annotation, obj);
 				}catch (Exception e) {
-					e.printStackTrace();
+					LOGGER.error(e.getMessage(), e);
 				}
 		}
 		
@@ -212,21 +212,21 @@ public final class TControlLayoutReaderBuilder {
 				try{
 					return (T) ((ITReaderBuilder) builder).build(annotation, obj);
 				}catch (Exception e) {
-					e.printStackTrace();
+					LOGGER.error(e.getMessage(), e);
 				}
 		}
 		
 		return null;
 	}
 	
-	private static Node buildFieldBox(Node node, final TComponentDescriptor descriptor) {
+	private static Node buildFieldBox(Node node, final ITComponentDescriptor descriptor) {
 		final TFieldBox fieldBox = TFieldBoxBuilder.build(node, descriptor);
 		registerComponent(descriptor, fieldBox);
 		return fieldBox;
 		
 	}
 	
-	private static THtmlReader buildHtmlBox(THtmlReader node, final TComponentDescriptor descriptor) {
+	private static THtmlReader buildHtmlBox(THtmlReader node, final ITComponentDescriptor descriptor) {
 		final THtmlReader tHtmlReader = THtmlBoxBuilder.build(node, descriptor);
 		TFieldBox fieldBox = new TFieldBox(descriptor.getFieldDescriptor().getFieldName(), null, tHtmlReader, null);
 		registerComponent(descriptor, fieldBox);

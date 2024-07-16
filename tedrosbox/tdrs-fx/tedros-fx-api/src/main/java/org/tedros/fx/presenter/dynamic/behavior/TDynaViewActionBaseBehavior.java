@@ -75,7 +75,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			loadAction(presenter, tBehavior.action());
 			
 		}catch(Exception e){
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 		
 	}
@@ -229,12 +229,12 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	private void processClean() {
 		try {
 			super.removeAllListenerFromModelView();
-			M model = (M) getModelViewClass().getConstructor(modelClass).newInstance(modelClass.newInstance());
+			M model = (M) getModelViewClass().getConstructor(modelClass).newInstance(modelClass.getDeclaredConstructor().newInstance());
 			setModelView(model);
 			showForm(TViewMode.EDIT);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 	
@@ -266,7 +266,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				getView().tShowModal(new TMessageBox(e), true);
 			} catch (Throwable e) {
 				getView().tShowModal(new TMessageBox(e), true);
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}
 		}
 	}
@@ -305,7 +305,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			try{
 				closeModal();
 			}catch(Exception e){
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}
 		}
 		actionHelper.runAfter(TActionType.CLOSE);

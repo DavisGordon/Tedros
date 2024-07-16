@@ -44,6 +44,7 @@ import org.tedros.server.entity.ITEntity;
 import org.tedros.server.model.ITModel;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -158,15 +159,10 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 					runAfterBuildForm(form);
 			};
 			super.getListenerRepository().add("afterBuildFormChl", abfchl);
-			super.formProperty().addListener(new WeakChangeListener(abfchl));
+			super.formProperty().addListener(new WeakChangeListener(abfchl));			
 			
-			/*super.actionStateProperty().addListener((a,b,c)->{
-				if(c!=null)
-					System.out.println(c.toString());
-			});
-			*/
 		}catch(Exception e){
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 		
 	}
@@ -619,7 +615,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				getView().tShowModal(new TMessageBox(e), true);
 				setActionState(new TActionState<>(TActionType.SAVE, TProcessResult.FINISHED));
 			} catch (Throwable e) {
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 				getView().tShowModal(new TMessageBox(e), true);
 				setActionState(new TActionState<>(TActionType.SAVE, TProcessResult.ERROR));
 			}
@@ -674,17 +670,17 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 									if(lastEntity) 
 										callback.accept(true);
 								} catch (Exception e) {	
-									e.printStackTrace();
+									LOGGER.error(e.getMessage(), e);
 									addMessage(new TMessage(TMessageType.ERROR, e.getMessage()));
 									if(lastEntity) 
 										callback.accept(false);
 								}
 							}
-						}else{
-							System.out.println(result.getMessage());
+						}else{							
 							String msg = result.getState().equals(TState.OUTDATED) 
 									? iEngine.getString(TFxKey.MESSAGE_OUTDATE)
 											: result.getMessage();
+							TLoggerUtil.debug(getClass(), msg);
 							if(result.getState().equals(TState.ERROR)) {
 								addMessage(new TMessage(TMessageType.ERROR, msg));
 								setActionState(new TActionState(TActionType.SAVE, (State) n, TProcessResult.get(result.getState()), result.getMessage()));	
@@ -730,7 +726,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			this.actionHelper.runAfter(TActionType.IMPORT);
 			setActionState(new TActionState<>(TActionType.IMPORT, TProcessResult.FINISHED));
 		}catch(Exception e){
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			setActionState(new TActionState<>(TActionType.IMPORT, TProcessResult.ERROR, e.getMessage()));
 		}
 	}
@@ -745,8 +741,8 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			if(this.actionHelper.runBefore(TActionType.NEW)){
 					final Class<E> entityClass = getEntityClass();
 					model = entityClass!=null 
-							? (M) getModelViewClass().getConstructor(entityClass).newInstance(entityClass.newInstance())
-									: getModelViewClass().newInstance();
+							? (M) getModelViewClass().getConstructor(entityClass).newInstance(entityClass.getDeclaredConstructor().newInstance())
+									: getModelViewClass().getDeclaredConstructor().newInstance();
 					
 					if(processNewEntityBeforeBuildForm(model)) {
 						super.formProperty().addListener(new ChangeListener<ITModelForm>() {
@@ -774,7 +770,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			this.actionHelper.runAfter(TActionType.NEW);
 			setActionState(new TActionState<>(TActionType.NEW, TProcessResult.FINISHED));
 		}catch(Exception e){
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			setActionState(new TActionState<>(TActionType.NEW, TProcessResult.ERROR, e.getMessage()));
 		}
 	}
@@ -798,7 +794,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			this.actionHelper.runAfter(TActionType.PRINT);
 			setActionState(new TActionState<>(TActionType.PRINT, TProcessResult.FINISHED));
 		}catch(Exception e){
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			setActionState(new TActionState<>(TActionType.PRINT, TProcessResult.ERROR, e.getMessage()));
 		}
 	}
@@ -826,7 +822,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			this.actionHelper.runAfter(TActionType.EDIT);
 			setActionState(new TActionState<>(TActionType.EDIT, TProcessResult.FINISHED));
 		}catch(Exception e){
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			setActionState(new TActionState<>(TActionType.EDIT, TProcessResult.ERROR, e.getMessage()));
 		}
 	}
@@ -921,14 +917,14 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 															return;
 														TResult result = resultados.get(0);
 														if(result.getState().equals(TState.ERROR)) {
-															System.out.println(result.getMessage());
+															TLoggerUtil.debug(getClass(), result.getMessage());
 															addMessage(new TMessage(TMessageType.ERROR, result.getMessage()));
 															setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.ERROR, result.getMessage()));
 														}else{
 															E entity = (E) result.getValue();
 															if(entity!=null) {
 																model.reload(entity);
-																setModelView(null);
+														        setModelView(null);
 																actionHelper.runAfter(TActionType.CANCEL);
 																setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.SUCCESS));
 															}else {
@@ -944,7 +940,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 										getView().tHideModal();	
 										runProcess(process);
 									}catch(Throwable e){
-										e.printStackTrace();
+										LOGGER.error(e.getMessage(), e);
 										getView().tHideModal();	
 										getView().tShowModal(new TMessageBox(e), true);
 										setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.ERROR, e.getMessage()));
@@ -972,7 +968,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				}
 				
 			}catch(Exception e){
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 				getView().tHideModal();	
 				getView().tShowModal(new TMessageBox(e), true);
 				setActionState(new TActionState<>(TActionType.CANCEL, TProcessResult.ERROR, e.getMessage()));
@@ -1036,7 +1032,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 										return;
 									TResult result = resultados.get(0);
 									if(result.getState().equals(TState.ERROR)) {
-										System.out.println(result.getMessage());
+										TLoggerUtil.debug(getClass(), result.getMessage());
 										addMessage(new TMessage(TMessageType.ERROR, result.getMessage()));
 										setActionState(new TActionState(TActionType.DELETE, arg2, TProcessResult.ERROR, result.getMessage()));
 									}else if(result.getState().equals(TState.WARNING)){
@@ -1063,7 +1059,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 					});
 					runProcess(process);
 				}catch(Throwable e){
-					e.printStackTrace();
+					LOGGER.error(e.getMessage(), e);
 					getView().tShowModal(new TMessageBox(e), true);
 					setActionState(new TActionState(TActionType.DELETE, TProcessResult.ERROR, e.getMessage()));
 				}
@@ -1093,7 +1089,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		}
 		
 		if(this.entityProcessClass != null && this.entityProcessClass != TEntityProcess.class)
-			return entityProcessClass.newInstance();
+			return entityProcessClass.getDeclaredConstructor().newInstance();
 		
 		return null;
 	}

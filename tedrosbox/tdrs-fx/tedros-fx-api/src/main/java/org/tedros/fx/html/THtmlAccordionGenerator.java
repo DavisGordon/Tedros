@@ -13,6 +13,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.tedros.fx.domain.THtmlConstant;
 import org.tedros.fx.domain.TStyleParameter;
+import org.tedros.util.TLoggerUtil;
 
 /**
  * @author Davis Gordon
@@ -66,8 +67,7 @@ public class THtmlAccordionGenerator implements ITHtmlGenerator{
 					.replace(TStyleParameter.READER_TEXT_SIZE, contentTextSize);
 			
 		} catch (URISyntaxException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 		
 		return "";

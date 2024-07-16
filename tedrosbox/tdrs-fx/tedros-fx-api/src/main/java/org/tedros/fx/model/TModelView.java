@@ -14,11 +14,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.slf4j.Logger;
 import org.tedros.core.TLanguage;
 import org.tedros.core.model.ITModelView;
 import org.tedros.core.model.TFormatter;
@@ -32,6 +31,7 @@ import org.tedros.fx.util.TReflectionUtil;
 import org.tedros.server.entity.ITEntity;
 import org.tedros.server.model.ITFileModel;
 import org.tedros.server.model.ITModel;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -91,7 +91,7 @@ import javafx.collections.SetChangeListener;
  */
 public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	
-	private static final Logger 			LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	private final static Logger 			LOGGER = TLoggerUtil.getLogger(TModelView.class);
 	
 	protected	final static String 		SET = "set";
 	protected	final static String 		GET = "get";
@@ -118,9 +118,6 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	 * */
 	public TModelView(final M model) {
 		
-		LOGGER.setLevel(Level.FINEST);
-		LOGGER.log(Level.FINEST, "Begin wrap the model " + model.getClass().getSimpleName() + " by the "+this.getClass().getSimpleName());
-		
 		this.display = new SimpleStringProperty();
 		this.modelViewId = UUID.randomUUID().toString(); 
 		this.model = model;
@@ -129,10 +126,13 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 		
 		tListenerHelper = new TListenerHelper<>(this);
 		
-		loadFields();
-		
-		buildLastHashCode();
-		buildLastHashCodeListener();
+		TLoggerUtil.timeComplexity(this.getClass(), "Wraping "+model.getClass().getName()+" -> "+model.toString(),
+		()->{
+			loadFields();
+			
+			buildLastHashCode();
+			buildLastHashCodeListener();
+		});
 	}
 	
 	/* (non-Javadoc)
@@ -244,13 +244,16 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	@Override
 	public void reload(M model) {
 		
-		LOGGER.log(Level.FINEST, "Reloading model " + model.getClass().getSimpleName() + " by the "+this.getClass().getSimpleName());
-		this.model = model;
-		loadFields();
-		buildLastHashCode();
-		loadedProperty().setValue(Calendar.getInstance().getTimeInMillis());
-		buildLastHashCodeListener();
-		changed = false;
+		TLoggerUtil.timeComplexity(this.getClass(), "Reloading " + this.toString(), 
+		()->{
+			this.model = model;
+			loadFields();
+			buildLastHashCode();
+			loadedProperty().setValue(Calendar.getInstance().getTimeInMillis());
+			buildLastHashCodeListener();
+			changed = false;
+		});
+		
 	}
 
 	private void buildLastHashCodeListener() {
@@ -375,8 +378,6 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private void loadFields() {
 		
-		LOGGER.log(Level.FINEST, "Starting load fields.");
-		
 		final Map<String, Field> modelFields = new HashMap<>();
 		Class superClass = this.model.getClass();
 		
@@ -406,7 +407,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 						try {
 							propertyMap.put(f.getName(), new TPropertyHelper(f, this));
 						} catch (Throwable e) {
-							e.printStackTrace();
+							LOGGER.error(e.getMessage(), e);
 						}
 				});
 			}
@@ -483,9 +484,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 														+ "\nModel to bind: "+o.getClass().getName()+".class"
 														+ "\n\n-Check the configuration of the field "+h.name+" at "+getClass().getName()+".java\n\n";
 												
-												LOGGER.severe(error);
-												LOGGER.severe(e.toString());
-												
+												LOGGER.error(error, e);
 											}
 										}else if(o instanceof ITFileModel){
 											property.add(new TSimpleFileProperty<ITFileModel>((ITFileModel)o));
@@ -571,7 +570,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 									String v = (String) obj;
 									String literal = v.equals("1") || v.toUpperCase().trim().equals("T") ||  v.toUpperCase().trim().equals("TRUE")  
 													? "true" : "false";
-									property.setValue(new Boolean(literal));
+									property.setValue(Boolean.valueOf(literal));
 								}else if(obj instanceof ITModel) {
 									Class modelViewClass = null; 
 									Class entityClass = null;
@@ -592,9 +591,7 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 												+ "\nModel to bind: "+obj.getClass().getName()+".class"
 												+ "\n\n-Check the configuration of the field "+h.name+" at "+getClass().getName()+".java\n\n";
 										
-										LOGGER.severe(error);
-										LOGGER.severe(e.toString());
-										
+										LOGGER.error(error, e);
 									}
 	
 								}else {
@@ -613,15 +610,15 @@ public abstract class TModelView<M extends ITModel> implements ITModelView<M> {
 					}
 					
 				}catch(Throwable e){				
-					LOGGER.severe(e.toString());
+					LOGGER.error(e.toString(), e);
 				}
 			}else{
 				String types = "";
 				for (Class c : TCompatibleTypesHelper.compatibleTypes.keySet()) 
 					types += c.getSimpleName()+", ";
 				
-				LOGGER.log(Level.FINEST, h.name+" field of type "+h.type.getSimpleName()+" in "+getClass().getSimpleName()+" is not compatible for a TModelView!");
-				LOGGER.log(Level.FINEST, "TModelView compatible types: "+types.substring(0,types.length()-2));
+				LOGGER.info(h.name+" field of type "+h.type.getSimpleName()+" in "+getClass().getSimpleName()+" is not compatible for a TModelView!");
+				LOGGER.info("TModelView compatible types: "+types.substring(0,types.length()-2));
 			}
 		});
 		

@@ -12,26 +12,26 @@ import javafx.scene.web.WebView;
 
 @SuppressWarnings("rawtypes")
 public interface ITModelForm<M extends ITModelView> extends ITForm {
-		
-	public void tAddFormItem(Node fieldBox);
 	
-	public TViewMode gettMode();
+	void tAddFormItem(Node fieldBox);
 	
-	public M gettModelView();
+	TViewMode gettMode();
 	
-	public abstract void tInitializeReader();
+	M gettModelView();
 	
-	public void settReaderMode();
+	abstract void tInitializeReader();
 	
-	public void settEditMode();
+	void settReaderMode();
 	
-	public List<ITFieldDescriptor> gettFieldDescriptorList();
+	void settEditMode();
 	
-	public void tAddAssociatedObject(final String name, final Object obj);
+	List<ITFieldDescriptor> gettFieldDescriptorList();
 	
-	public Object gettAssociatedObject(final String name);
+	void tAddAssociatedObject(final String name, final Object obj);
 	
-	public ObservableList<Node> gettFormItens();
+	Object gettAssociatedObject(final String name);
 	
-	public WebView gettWebView();
+	ObservableList<Node> gettFormItens();
+	
+	WebView gettWebView();
 }

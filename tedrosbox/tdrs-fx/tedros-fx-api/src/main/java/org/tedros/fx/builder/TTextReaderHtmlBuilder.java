@@ -20,6 +20,7 @@ import org.tedros.fx.annotation.reader.TTextReaderHtml;
 import org.tedros.fx.domain.THtmlConstant;
 import org.tedros.fx.reader.THtmlReader;
 import org.tedros.fx.util.TMaskUtil;
+import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TStripTagUtil;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -81,13 +82,13 @@ implements ITReaderHtmlBuilder<TTextReaderHtml, SimpleStringProperty> {
 				if(wv!=null){
 					WebEngine engine = wv.getEngine();
 					String newValue = iEngine.getString(getValue(tAnnotation, arg2));
-					System.out.println("document.getElementById('"+uuid+"').innerHTML = \""+newValue+"\"");
+					TLoggerUtil.debug(getClass(), "document.getElementById('"+uuid+"').innerHTML = \""+newValue+"\"");
 					try{
 					engine.executeScript("document.getElementById('"+uuid+"').innerHTML = \""+newValue+"\"");
 					}catch(Exception e){
-						System.err.println("TWarning: Reader html form cant find the element with "+uuid+" id generated to "+fieldName+" field.");
-						System.out.println("To work check if the id attribute is setted like this \"id='%ID%'\" in the template "+template);
-						e.printStackTrace();	
+						TLoggerUtil.warn(getClass(),"Reader html form cant find the element with "+uuid+" id generated to "+fieldName+" field. " +
+						"To fix check if the id attribute is setted in the template. ie: \"id='%ID%'\""+template);
+						TLoggerUtil.error(getClass(), e.getMessage(), e);	
 					}
 				}
 			}
@@ -139,7 +140,7 @@ implements ITReaderHtmlBuilder<TTextReaderHtml, SimpleStringProperty> {
 	}
 	
 	private String replaceTags(String styleContent) {
-		if(tStripTagUtil.isTagPresent(styleContent)){
+		if(TStripTagUtil.isTagPresent(styleContent)){
 			String[] keys = tStripTagUtil.getTags(styleContent);
 			for (String key : keys) {
 				TStyleResourceValue tResourceValue = TStyleResourceValue.getByName(key);

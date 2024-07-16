@@ -24,6 +24,7 @@ import org.tedros.fx.html.THtmlLayoutGenerator;
 import org.tedros.fx.reader.THtmlReader;
 import org.tedros.server.entity.ITEntity;
 import org.tedros.server.entity.TEntity;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
@@ -55,10 +56,6 @@ implements ITReaderHtmlBuilder<TDetailReaderHtml, Object> {
 		final String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 		final String fieldName = descriptor.getFieldDescriptor().getFieldName();
 		
-		/*System.out.println("########################");
-		System.out.println(uuid);
-		System.out.println(fieldName);*/
-
 		if (fieldObject instanceof ITObservableList){
 			//build listener
 			ChangeListener<Number> listener = new ChangeListener<Number>() {
@@ -106,7 +103,7 @@ implements ITReaderHtmlBuilder<TDetailReaderHtml, Object> {
 			} catch (InstantiationException | IllegalAccessException
 					| IllegalArgumentException | InvocationTargetException
 					| NoSuchMethodException | SecurityException e) {
-				e.printStackTrace();
+				TLoggerUtil.error(getClass(),e.getMessage(), e);
 				return null;
 			}
 			
@@ -168,7 +165,7 @@ implements ITReaderHtmlBuilder<TDetailReaderHtml, Object> {
 			try{
 				wv.getEngine().executeScript("document.getElementById('"+uuid+"').innerHTML = \""+tHtmlReader.getText()+"\"");
 			}catch(Exception e){
-				
+				TLoggerUtil.error(getClass(),e.getMessage(), e);
 			}
 		}
 	}

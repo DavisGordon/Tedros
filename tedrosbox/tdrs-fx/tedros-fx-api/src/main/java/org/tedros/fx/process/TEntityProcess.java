@@ -5,6 +5,8 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.security.model.TUser;
 import org.tedros.core.service.remote.ServiceLocator;
@@ -29,6 +31,8 @@ import org.tedros.server.result.TResult.TState;
  * */
 public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<TResult<E>>>{
 
+	protected final static Logger LOGGER = LoggerFactory.getLogger(TEntityProcess.class);
+	
 	/**
 	 * Constant for TomEE
 	 * */
@@ -246,7 +250,7 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 	 * @param e
 	 */
 	protected void buildExceptionResult(List<TResult<E>> resultList, Exception e) {
-		e.printStackTrace();
+		LOGGER.error(e.getMessage(), e);
 		TResult<E> result = new TResult<>(TState.ERROR, true, e.getCause().getMessage());
 		resultList.add(result);
 	}

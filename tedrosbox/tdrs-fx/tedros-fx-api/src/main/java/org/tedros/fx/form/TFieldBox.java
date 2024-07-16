@@ -1,11 +1,12 @@
 package org.tedros.fx.form;
 
+import java.util.Objects;
 import java.util.UUID;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.tedros.api.form.ITFieldBox;
 import org.tedros.fx.control.ITField;
 import org.tedros.fx.domain.TLabelPosition;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.Observable;
 import javafx.geometry.Pos;
@@ -68,7 +69,7 @@ public class TFieldBox extends StackPane implements ITField, ITFieldBox {
 				box.getChildren().addAll(this.label, this.control);
 				getChildren().add(box);
 			}catch(NullPointerException e){
-				e.printStackTrace();
+				TLoggerUtil.error(getClass(), e.getMessage(), e);
 			}
 		}
 		
@@ -144,18 +145,17 @@ public class TFieldBox extends StackPane implements ITField, ITFieldBox {
 	}
 	
 	
-	@Override
-	public boolean equals(Object obj) {
-		if(obj==null || !(obj instanceof TFieldBox))
-			return false;
-		return this.uuid.equals(((TFieldBox)obj).uuid);
-		//return EqualsBuilder.reflectionEquals(this, obj, true);
-	}
+	/*
+	 * @Override public boolean equals(Object obj) { if(obj==null || !(obj
+	 * instanceof TFieldBox)) return false; return
+	 * this.uuid.equals(((TFieldBox)obj).uuid); //return
+	 * EqualsBuilder.reflectionEquals(this, obj, true); }
+	 */
 	
-	@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this, true);
-	}
+	/*
+	 * @Override public int hashCode() { return
+	 * HashCodeBuilder.reflectionHashCode(this, true); }
+	 */
 	
 	@Override
 	public String toString() {
@@ -169,6 +169,21 @@ public class TFieldBox extends StackPane implements ITField, ITFieldBox {
 			str.append("CONTROL: "+control.toString()+", ");
 		str.append("];");
 		return str.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(controlFieldName, uuid);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof TFieldBox))
+			return false;
+		TFieldBox other = (TFieldBox) obj;
+		return Objects.equals(controlFieldName, other.controlFieldName) && Objects.equals(uuid, other.uuid);
 	}
 	
 }

@@ -99,7 +99,7 @@ public final class TLoader {
 		validate();
 		try {
 			if(model==null)
-				model = modelType.newInstance();
+				model = modelType.getDeclaredConstructor().newInstance();
 			TModelViewUtil mvu = new TModelViewUtil(modelViewType, modelType, model);
 			T target = (T) mvu.convertToModelView();
 			return target;

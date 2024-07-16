@@ -21,7 +21,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.RequestScoped;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -57,7 +57,7 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 	public ITImportModel getImportRules() throws Exception {
 		
 		
-		ITImportModel m = this.getImportModelClass().newInstance();
+		ITImportModel m = this.getImportModelClass().getDeclaredConstructor().newInstance();
 		m.setRules(TModelInfoUtil.getImportRules(getEntityClass()));
 		return m;
 	}
@@ -113,7 +113,7 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 							E modelProcess = processCsvRow(rowCols);
 							
 							if(modelProcess==null) {
-								final E model = clazz.newInstance();
+								final E model = clazz.getDeclaredConstructor().newInstance();
 								
 								columns.forEach((idx, f) -> {
 									String value = rowCols[idx];
@@ -241,7 +241,7 @@ public abstract class TImportFileEntityBO<E extends ITEntity>  {
 					E modelProcess = processXlsRow(r);
 					
 					if(modelProcess==null) {
-						final E model = clazz.newInstance();
+						final E model = clazz.getDeclaredConstructor().newInstance();
 						
 						columns.forEach((idx, f) -> {
 							Cell cell = r.getCell(idx);

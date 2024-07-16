@@ -81,7 +81,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			
 			TTableView tableViewAnn = modalPresenter.tableView();
 
-			TModelView model = (M) super.getModelViewClass().getConstructor(entityClass).newInstance(entityClass.newInstance());
+			TModelView model = (M) super.getModelViewClass().getConstructor(entityClass).newInstance(entityClass.getDeclaredConstructor().newInstance());
 
 			
 	    	Object[] arrControl = TReflectionUtil.getControlBuilder(Arrays.asList(tableViewAnn));
@@ -116,7 +116,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			
 			getView().gettProgressIndicator().setSmallLogo();
 		}catch(Exception e){
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 		
 	}
@@ -202,7 +202,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				getView().tShowModal(new TMessageBox(e), true);
 			} catch (Exception e) {
 				getView().tShowModal(new TMessageBox(e), true);
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}
 			actionHelper.runAfter(TActionType.ADD);
 		}
@@ -222,12 +222,12 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 
 	private void processClean() {
 		try {
-			M model = (M) getModelViewClass().getConstructor(entityClass).newInstance(entityClass.newInstance());
+			M model = (M) getModelViewClass().getConstructor(entityClass).newInstance(entityClass.getDeclaredConstructor().newInstance());
 			setModelView(model);
 			showForm(TViewMode.EDIT);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 	
@@ -260,7 +260,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				this.processClean();
 				
 			}catch(Exception e){
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}
 		}
 		actionHelper.runAfter(TActionType.REMOVE);

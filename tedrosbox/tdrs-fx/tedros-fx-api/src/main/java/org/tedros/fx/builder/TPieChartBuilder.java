@@ -17,6 +17,7 @@ import org.tedros.server.controller.TParam;
 import org.tedros.server.model.ITChartModel;
 import org.tedros.server.model.TChartModel;
 import org.tedros.server.result.TResult;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.concurrent.Worker.State;
 import javafx.scene.chart.PieChart;
@@ -43,7 +44,7 @@ implements ITChartBuilder<PieChart>{
 			try {
 				TChartProcess pss = new TChartProcess(tAnn.service());
 				if(tAnn.paramsBuilder()!=TParamBuilder.class) {
-					TParamBuilder pb = tAnn.paramsBuilder().newInstance();
+					TParamBuilder pb = tAnn.paramsBuilder().getDeclaredConstructor().newInstance();
 					pb.setComponentDescriptor(super.getComponentDescriptor());
 					TParam[] params = (TParam[]) pb.build();
 					pss.process(params);
@@ -58,10 +59,10 @@ implements ITChartBuilder<PieChart>{
 				});
 				pss.startProcess();
 			} catch (TProcessException e) {
-				e.printStackTrace();
+				TLoggerUtil.error(getClass(), e.getMessage(), e);
 			}
 		}else if(tAnn.chartModelBuilder()!=TChartModelBuilder.class) {
-			TChartModelBuilder mb = tAnn.chartModelBuilder().newInstance();
+			TChartModelBuilder mb = tAnn.chartModelBuilder().getDeclaredConstructor().newInstance();
 			mb.setComponentDescriptor(super.getComponentDescriptor());
 			mb.setObservableList(observable);
 			TChartModel model = (TChartModel) mb.build();

@@ -12,9 +12,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.api.form.ITFieldBox;
@@ -23,10 +23,10 @@ import org.tedros.api.form.ITSetting;
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.model.ITModelView;
 import org.tedros.core.repository.TRepository;
-import org.tedros.fx.annotation.TDebugConfig;
 import org.tedros.fx.builder.ITReaderHtmlBuilder;
 import org.tedros.fx.reader.THtmlReader;
 import org.tedros.fx.util.TReflectionUtil;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -46,6 +46,8 @@ import javafx.scene.web.WebView;
  */
 public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M>>  {
 	
+	private final static Logger LOGGER = TLoggerUtil.getLogger(TFormEngine.class); 
+	
 	private TViewMode mode;
 	private ITSetting setting;
 	private TModelViewLoader<M> modelViewLoader;
@@ -58,16 +60,18 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	private SimpleBooleanProperty dispose = new SimpleBooleanProperty(false);
 	private TRepository tObjectRepository = new TRepository();
 	private final TTriggerLoader<M, ITModelForm<M>> triggerLoader;
-	Long startTime; 
+	
+	
 	private ChangeListener<Boolean> chl = (ob, o, n) -> {
 		if(n && mode!=null) { 
-			buildTriggers();
-			runSetting();
-			if(TDebugConfig.detailParseExecution){
-    			long endTime = System.nanoTime();
-    			long duration = (endTime - startTime);
-    			System.out.println("[TFormEngine][ModelView: "+getModelView().getClass().getSimpleName()+"][Build duration: "+(duration/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration/1000000))+"s] ");
-    		}
+			if(TLoggerUtil.isFormEngineEnabled())
+				TLoggerUtil.timeComplexity(TFormEngine.class, getLogTitle()+": Reading @TTrigger and @TSetting", ()->{
+					buildTriggers();
+					runSetting();
+				});
+			else
+				buildTriggers();
+				runSetting();
 		}
 	};
 	
@@ -96,7 +100,8 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 		triggerLoader = new TTriggerLoader<M, ITModelForm<M>>(form);
 		loadedProperty().addListener(new WeakChangeListener<>(chl));
 		disposeProperty().addListener(new WeakChangeListener<>(chl2));
-	}
+		logInit();
+	}	
 	
 	public TFormEngine(final F form, final M modelView, boolean readerMode) {
 		this.form = form;
@@ -105,22 +110,34 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 		triggerLoader = new TTriggerLoader<M, ITModelForm<M>>(form);
 		loadedProperty().addListener(new WeakChangeListener<>(chl));
 		disposeProperty().addListener(new WeakChangeListener<>(chl2));
+		logInit();
 		if(readerMode)
 			setReaderMode();
 		else
-			setEditMode();
+			setEditMode();		
+	}
+	
+	private void logInit() {
+		if(TLoggerUtil.isFormEngineEnabled())
+			TLoggerUtil.splitDebugLine(TFormEngine.class, '-');
+			TLoggerUtil.debug(TFormEngine.class, getLogTitle()+": Created.");
+	}
+	
+	
+	public void setReaderMode(){
+		resetForm();
+		mode = TViewMode.READER;
+		
+		if(TLoggerUtil.isFormEngineEnabled()) {
+			TLoggerUtil.splitDebugLine(TFormEngine.class, '^');
+			TLoggerUtil.timeComplexity(TFormEngine.class, getLogTitle()+": Loading fields.", ()->execReadMode());
+		}else
+			execReadMode();
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void setReaderMode(){
+	private void execReadMode() {
 		
-		if(TDebugConfig.detailParseExecution) {
-			startTime = System.nanoTime();
-			System.out.println("[TFormEngine][ReadeMode][initialized]");
-		}
-		
-		resetForm();
-		mode = TViewMode.READER;
 		buildModelViewLoader();
 		
 		try {
@@ -144,7 +161,9 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 					StringBuffer op = new StringBuffer("<html><body>");
 					StringBuffer cl = new StringBuffer("</body></html>");
 					sbf = new StringBuffer(op.toString()+sbf.toString()+cl.toString());
-					//System.out.println(sbf.toString());
+					
+					TLoggerUtil.debug(getClass(), sbf.toString());
+					
 					webView = new WebView();
 					form.tAddFormItem(webView);
 					webView.setDisable(false);
@@ -186,12 +205,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 			loaded.setValue(true);
 			initializeReader();
 		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		if(TDebugConfig.detailParseExecution){
-			long endTime = System.nanoTime();
-			long duration = (endTime - startTime);
-			System.out.println("[TFormEngine][ModelView: "+getModelView().getClass().getSimpleName()+"][Build duration: "+(duration/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration/1000000))+"s] ");
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 
@@ -199,31 +213,41 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 		this.modelViewLoader = new TModelViewLoader<M>(modelView, this.form);
 	}
 
-	public void setEditMode(){
-		if(TDebugConfig.detailParseExecution) {
-			startTime = System.nanoTime();
-			System.out.println("[TFormEngine][EditMode][initialized]");
-		}
-		
+	public void setEditMode(){		
 		resetForm();
 		mode = TViewMode.EDIT;
-		buildModelViewLoader();
-		this.loaded.bind(this.modelViewLoader.allLoadedProperty());
+		/*
+		 * TODO: COMMENTED TO PUT INSIDE THE THREAD 
+		 * buildModelViewLoader();
+		 * this.loaded.bind(this.modelViewLoader.allLoadedProperty());
+		 */
 		Thread taskThread = new Thread(()-> {
 			Platform.runLater(()-> {
-				try {
-					if(StringUtils.isBlank(this.form.getId()))
-						this.form.setId("t-form");
-					this.modelViewLoader.loadEditFields(form.getChildren());
-					
-					initializeForm();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				if(TLoggerUtil.isFormEngineEnabled()) {
+					TLoggerUtil.splitDebugLine(TFormEngine.class, '^');
+					TLoggerUtil.timeComplexity(TFormEngine.class, getLogTitle()+": Loading fields.", ()->loadEditFields());
+				}else
+					loadEditFields();
 			});
 		});
 		taskThread.setDaemon(true);
 		taskThread.start();
+	}
+
+	private void loadEditFields() {
+		try {
+			if(StringUtils.isBlank(this.form.getId()))
+				this.form.setId("t-form");
+			
+			buildModelViewLoader();
+			this.loaded.bind(this.modelViewLoader.allLoadedProperty());
+			
+			this.modelViewLoader.loadEditFields(form.getChildren());
+			
+			initializeForm();
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+		}
 	}
 	
 	public ReadOnlyBooleanProperty loadedProperty() {
@@ -333,10 +357,8 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 				setting.run();
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 					| InvocationTargetException | NoSuchMethodException | SecurityException e) {
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}
-			
-		
 		}
 	}
 	
@@ -344,8 +366,12 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 		try {
 			triggerLoader.buildTriggers();
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
+	}
+	
+	private String getLogTitle() {
+		return (this.mode!=null ? "["+this.mode+"] " : "")+this.form.getClass().getSimpleName() + "|" + this.modelView.getClass().getSimpleName();
 	}
 
 	/**
@@ -362,6 +388,8 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	public ReadOnlyBooleanProperty disposeProperty() {
 		return dispose;
 	}
+	
+	
 
 	
 }

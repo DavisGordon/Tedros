@@ -25,7 +25,6 @@ import org.tedros.fx.util.TReflectionUtil;
 
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.FloatMap;
-import javafx.scene.effect.FloatMapBuilder;
 import javafx.scene.effect.Light;
 import javafx.scene.paint.Color;
 
@@ -70,12 +69,12 @@ public final class TEffectParser implements ITEffectParse {
 			
 			name = name.substring(1, name.length());
 			Class<?> clazz = Class.forName(FX_EFFECT_PACKAGE+"."+name);
-			Object componentInstance = clazz.newInstance();
+			Object componentInstance = clazz.getDeclaredConstructor().newInstance();
 			
 			Map<String, Object> params = TReflectionUtil.readAnnotation(annotation);
 			
 			Class builderClass = (Class) params.get(BUILDER_METHOD_NAME);
-			ITEffectBuilder<?> builder = (ITEffectBuilder<?>) builderClass.newInstance();
+			ITEffectBuilder<?> builder = (ITEffectBuilder<?>) builderClass.getDeclaredConstructor().newInstance();
 			Effect effect = builder.build();
 			if(effect!=null){
 				return effect;
@@ -92,7 +91,7 @@ public final class TEffectParser implements ITEffectParse {
 				
 				if(isInputMethod(key)){
 					
-					ITEffectBuilder<?> inputBuilder = (ITEffectBuilder<?>) ((Class)value).newInstance();
+					ITEffectBuilder<?> inputBuilder = (ITEffectBuilder<?>) ((Class)value).getDeclaredConstructor().newInstance();
 					Effect e = inputBuilder.build();
 					if(e!=null)
 						invokeSetterMethod(method, componentInstance, e);
@@ -112,10 +111,9 @@ public final class TEffectParser implements ITEffectParse {
 				}else if(key.equals(MAP_DATA_NAME) && annotation instanceof TDisplacementMap){
 					
 					Map<String, Object> map =  (Map<String, Object>) value;
-					FloatMap floatMap = FloatMapBuilder.create()
-							.height((int)map.get(HEIGHT))
-							.width((int) map.get(WIDTH))
-							.build();
+					FloatMap floatMap = new FloatMap();
+					floatMap.setHeight((int)map.get(HEIGHT));
+					floatMap.setWidth((int) map.get(WIDTH));
 					
 					TFloatMap tFloatMap = (TFloatMap) ((TDisplacementMap)annotation).mapData();
 					

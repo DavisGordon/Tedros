@@ -18,7 +18,6 @@ import org.tedros.fx.presenter.view.TCrudView;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.control.ScrollPaneBuilder;
 import javafx.scene.layout.Region;
 
 /**
@@ -60,19 +59,16 @@ extends TPresenter<V> implements ITCrudPresenter<M> {
     		this.form.settPresenter(this);
     	
     	((Region)form).layout();
-    	ScrollPane scroll = ScrollPaneBuilder.create()
-    			.id("t-form-scroll")
-				.content((Region)form)
-				.fitToWidth(true)
-				.maxHeight(Double.MAX_VALUE)
-				.maxWidth(Double.MAX_VALUE)
-				.vbarPolicy(ScrollBarPolicy.AS_NEEDED)
-				.hbarPolicy(ScrollBarPolicy.AS_NEEDED)
-				.style("-fx-background-color: transparent;")
-				.build();
-    	
+    	ScrollPane scroll = new ScrollPane();
+    	scroll.setId("t-form-scroll");
+    	scroll.setContent((Region)form);
+    	scroll.setFitToWidth(true);
+    	scroll.maxHeight(Double.MAX_VALUE);
+    	scroll.maxWidth(Double.MAX_VALUE);
+    	scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+    	scroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+    	scroll.setStyle("-fx-background-color: transparent;");
     	getView().gettFormSpace().getChildren().add(scroll);
-    	
     }
     
     @Override

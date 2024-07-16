@@ -27,7 +27,7 @@ public final class TLoadListHelper {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void load(ObservableList list, String service,
 			Class<? extends ITEntity> eClass, Class<? extends TModelView> mClass,
-			Class<? extends TEntityProcess> pClass, TSelect sel, Consumer<Boolean> succeeded) throws InstantiationException, IllegalAccessException {
+			Class<? extends TEntityProcess> pClass, TSelect sel, Consumer<Boolean> succeeded) throws Exception {
 		
 		TModelViewUtil util = mClass!=null && mClass!=TModelView.class
 				? new TModelViewUtil(mClass, eClass)
@@ -43,10 +43,10 @@ public final class TLoadListHelper {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void load(String service, Class<? extends ITEntity> eClass,
 			Class<? extends TModelView> mClass, Class<? extends TEntityProcess> pClass, TSelect sel,
-			Consumer<ITEntity> consume, Consumer<Boolean> callback) throws InstantiationException, IllegalAccessException {
+			Consumer<ITEntity> consume, Consumer<Boolean> callback) throws Exception {
 		
 		final TEntityProcess process = pClass!=TEntityProcess.class 
-			? pClass.newInstance()
+			? pClass.getDeclaredConstructor().newInstance()
 				: new TEntityProcess(eClass, service) {};
 
 		process.stateProperty().addListener((a,o,n)-> {

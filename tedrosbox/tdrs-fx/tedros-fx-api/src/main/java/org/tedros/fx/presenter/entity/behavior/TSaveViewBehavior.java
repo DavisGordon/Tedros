@@ -46,7 +46,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			
 		}catch(Throwable e){
 			getView().tShowModal(new TMessageBox(e), true);
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 		
 	}

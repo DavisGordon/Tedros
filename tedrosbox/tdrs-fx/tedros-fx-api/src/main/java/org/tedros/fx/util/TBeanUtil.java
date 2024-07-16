@@ -48,7 +48,7 @@ public class TBeanUtil {
 				}else
 					if(srcVal!=null && tgtVal==null) {
 						if(srcVal instanceof ITModel) {
-							copyChanges((ITModel) srcVal, (ITModel) srcVal.getClass().newInstance());
+							copyChanges((ITModel) srcVal, (ITModel) srcVal.getClass().getDeclaredConstructor().newInstance());
 						}else {
 							f.set(target, srcVal);
 						}

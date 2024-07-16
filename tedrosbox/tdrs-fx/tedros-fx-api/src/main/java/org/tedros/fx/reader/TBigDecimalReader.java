@@ -9,6 +9,7 @@ package org.tedros.fx.reader;
 import java.math.BigDecimal;
 
 import org.tedros.fx.util.TMaskUtil;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -46,7 +47,7 @@ public class TBigDecimalReader extends TTextReader<BigDecimal> {
 			buildValueProperty();
 			return valueProperty;
 		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 		return null;
 	}

@@ -9,6 +9,8 @@ package org.tedros.fx.properties;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.tedros.util.TLoggerUtil;
+
 /**
  * DESCRIÇÃO DA CLASSE
  *
@@ -24,7 +26,7 @@ public final class TFXComponentsPropertiesUtil {
 		try {
 			patternKeyValueProp.load(TFXComponentsPropertiesUtil.class.getResourceAsStream("patterns.properties"));
 		} catch (IOException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(TFXComponentsPropertiesUtil.class, e.getMessage(), e);
 		}
 	}
 	

@@ -3,11 +3,11 @@
  */
 package org.tedros.core.ejb.controller;
 
-import javax.ejb.EJB;
-import javax.ejb.EJBException;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import jakarta.ejb.EJB;
+import jakarta.ejb.EJBException;
+import jakarta.ejb.Stateless;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
 
 import org.tedros.core.ai.model.TAiChatCompletion;
 import org.tedros.core.ai.model.completion.chat.TChatRequest;

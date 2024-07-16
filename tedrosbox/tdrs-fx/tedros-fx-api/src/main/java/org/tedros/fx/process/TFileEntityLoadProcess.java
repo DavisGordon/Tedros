@@ -10,6 +10,7 @@ import org.tedros.core.security.model.TUser;
 import org.tedros.core.service.remote.ServiceLocator;
 import org.tedros.fx.exception.TProcessException;
 import org.tedros.server.result.TResult;
+import org.tedros.util.TLoggerUtil;
 
 /**
  * A process to load a file from application server
@@ -51,7 +52,7 @@ public class TFileEntityLoadProcess extends TProcess<TResult<TFileEntity>>{
 	        		}
         		} catch (Exception e) {
 					setException(e);
-					e.printStackTrace();
+					TLoggerUtil.error(getClass(), e.getMessage(), e);
 				} finally {
 					loc.close();
 				}

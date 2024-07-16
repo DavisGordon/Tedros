@@ -23,6 +23,7 @@ import org.tedros.fx.util.TReflectionUtil;
 import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.model.ITFileModel;
 import org.tedros.server.model.ITModel;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
@@ -147,7 +148,7 @@ public final class TControlValidator<E extends ITModelView> {
 										.build((ITModel)object);
 						lst = Arrays.asList(detailModelView);
 					} catch (TException e) {
-						e.printStackTrace();
+						TLoggerUtil.error(getClass(), e.getMessage(), e);
 						throw new RuntimeException(e);
 					}
 				}

@@ -11,12 +11,10 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
-import javafx.scene.control.LabelBuilder;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.HBoxBuilder;
-import javafx.scene.layout.PaneBuilder;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -41,29 +39,31 @@ public abstract class TConversationView extends BorderPane {
         toolBar.setMaxSize(Double.MAX_VALUE, Control.USE_PREF_SIZE);
         toolBar.getItems().addAll(tBreadcrumbBar);
     	
-        Label titleLabel = LabelBuilder.create().text(title).id("t-title-label").build();
+        Label titleLabel = new Label();
+        titleLabel.setText(title);
+        titleLabel.setId("t-title-label");
         
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         HBox.setMargin(titleLabel, new Insets(0, 10, 0, 0));
         
-        HBox titleBox = HBoxBuilder.create()
-				.id("t-view-title-box")
-				.fillHeight(true)
-				.alignment(Pos.CENTER)
-				.padding(new Insets(0, 0, 0, 10))
-				.children(Arrays.asList(titleLabel,	
-										spacer,
-										PaneBuilder.create().id("t-view-title-box-space2-color").prefWidth(5).maxWidth(5).build(),
-										new Region()))
-				.build();
+        Pane p = new Pane();
+        p.setId("t-view-title-box-space2-color");
+        p.prefWidth(5);
+        p.maxWidth(5);
         
-        HBox tHeaderBox = HBoxBuilder.create()
-				.id("t-header-box")
-				.fillHeight(true)
-				.children(Arrays.asList(titleBox, toolBar))
-				.build();
-       
+        HBox titleBox = new HBox();
+        titleBox.setId("t-view-title-box");
+        titleBox.setFillHeight(true);
+        titleBox.setAlignment(Pos.CENTER);
+        titleBox.setPadding(new Insets(0, 0, 0, 10));
+        titleBox.getChildren().addAll(Arrays.asList(titleLabel,spacer,p,new Region()));				
+        
+        HBox tHeaderBox = new HBox();
+        tHeaderBox.setId("t-header-box");
+        tHeaderBox.setFillHeight(true);
+        tHeaderBox.getChildren().addAll(Arrays.asList(titleBox, toolBar));
+		
     	setTop(tHeaderBox);
     	setCenter(contentPane);
     }

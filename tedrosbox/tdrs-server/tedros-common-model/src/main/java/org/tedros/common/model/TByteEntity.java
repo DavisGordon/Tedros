@@ -1,10 +1,10 @@
 package org.tedros.common.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Lob;
-import javax.persistence.Table;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Lob;
+import jakarta.persistence.Table;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.tedros.common.domain.DomainSchema;
