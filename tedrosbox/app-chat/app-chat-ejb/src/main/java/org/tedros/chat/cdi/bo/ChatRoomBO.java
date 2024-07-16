@@ -5,7 +5,7 @@ package org.tedros.chat.cdi.bo;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.tedros.chat.cdi.eao.ChatRoomEao;
 import org.tedros.chat.entity.Chat;

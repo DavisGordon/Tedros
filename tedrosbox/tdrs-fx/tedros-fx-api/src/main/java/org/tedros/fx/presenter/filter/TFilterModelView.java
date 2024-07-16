@@ -6,9 +6,12 @@
  */
 package org.tedros.fx.presenter.filter;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.tedros.core.model.ITFilterModelView;
 import org.tedros.fx.model.TModelView;
 import org.tedros.server.model.ITModel;
+import org.tedros.util.TLoggerUtil;
 
 
 /**
@@ -27,9 +30,10 @@ public abstract class TFilterModelView<M extends ITModel> extends TModelView<M> 
 	@SuppressWarnings("unchecked")
 	public void cleanFields(){
 		try {
-			reload((M) model.getClass().newInstance());
-		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
+			reload((M) model.getClass().getDeclaredConstructor().newInstance());
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | 
+				InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 	}
 	

@@ -29,6 +29,7 @@ import org.tedros.fx.html.THtmlTableGenerator.TColumn;
 import org.tedros.fx.model.TModelView;
 import org.tedros.fx.reader.THtmlReader;
 import org.tedros.fx.util.TMaskUtil;
+import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TStripTagUtil;
 
 import javafx.beans.property.Property;
@@ -112,7 +113,7 @@ implements ITReaderHtmlBuilder<TTableReaderHtml, Object> {
 			} catch (InstantiationException | IllegalAccessException
 					| IllegalArgumentException | InvocationTargetException
 					| NoSuchMethodException | SecurityException e) {
-				e.printStackTrace();
+				TLoggerUtil.error(getClass(), e.getMessage(), e);
 				return null;
 			}
 			
@@ -135,7 +136,7 @@ implements ITReaderHtmlBuilder<TTableReaderHtml, Object> {
 				fillColumns(tAnnotation, tHtmlTableGenerator, object, rows);
 			} catch (NoSuchMethodException | IllegalAccessException
 					| InvocationTargetException e) {
-				e.printStackTrace();
+				TLoggerUtil.error(getClass(), e.getMessage(), e);
 			}
 			tHtmlTableGenerator.setRows(rows);
 		}else
@@ -147,7 +148,7 @@ implements ITReaderHtmlBuilder<TTableReaderHtml, Object> {
 					fillColumns(tAnnotation, tHtmlTableGenerator, object, rows);
 			} catch (NoSuchMethodException | IllegalAccessException
 					| InvocationTargetException e) {
-				e.printStackTrace();
+				TLoggerUtil.error(getClass(), e.getMessage(), e);
 			}
 			tHtmlTableGenerator.setRows(rows);
 		}
@@ -194,7 +195,7 @@ implements ITReaderHtmlBuilder<TTableReaderHtml, Object> {
 	}
 
 	private String replaceTags(String styleContent) {
-		if(tStripTagUtil.isTagPresent(styleContent)){
+		if(TStripTagUtil.isTagPresent(styleContent)){
 			String[] keys = tStripTagUtil.getTags(styleContent);
 			for (String key : keys) {
 				TStyleResourceValue tResourceValue = TStyleResourceValue.getByName(key);

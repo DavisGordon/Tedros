@@ -3,7 +3,7 @@
  */
 package org.tedros.core.controller;
 
-import javax.ejb.Remote;
+import jakarta.ejb.Remote;
 
 import org.tedros.common.model.TMimeType;
 import org.tedros.server.controller.ITEjbImportController;

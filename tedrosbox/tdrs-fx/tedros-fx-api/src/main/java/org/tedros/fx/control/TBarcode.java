@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 import javax.imageio.ImageIO;
@@ -39,6 +40,7 @@ import org.tedros.server.model.ITBarcode;
 import org.tedros.server.model.ITFileBaseModel;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
+import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TedrosFolder;
 
 import javafx.beans.binding.BooleanBinding;
@@ -309,7 +311,7 @@ public class TBarcode extends TRequiredStackedComponent {
 					try {
 						bf = TBarcodeGenerator.generateQRCodeImage(txt, sz, sz);
 					} catch (IOException e) {
-						e.printStackTrace();
+						TLoggerUtil.error(getClass(), e.getMessage(), e);
 					}
 					break;
 				case UPCA:
@@ -320,7 +322,7 @@ public class TBarcode extends TRequiredStackedComponent {
 					readBufferedImage(bf);
 				
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
+				TLoggerUtil.error(getClass(), e.getMessage(), e);
 				TLabel l = new TLabel(e.getMessage());
 				PopOver warn = new PopOver(l);
 				warn.setArrowLocation(ArrowLocation.TOP_CENTER);
@@ -362,7 +364,7 @@ public class TBarcode extends TRequiredStackedComponent {
 							try {
 								TedrosContext.openDocument(res.getMessage());
 							} catch (Exception e) {
-								e.printStackTrace();
+								TLoggerUtil.error(getClass(), e.getMessage(), e);
 							}
 						}
 					}
@@ -370,7 +372,7 @@ public class TBarcode extends TRequiredStackedComponent {
 				prc.exportPDF(rm, null);
 				prc.startProcess();
 			} catch (TProcessException e) {
-				e.printStackTrace();
+				TLoggerUtil.error(getClass(), e.getMessage(), e);
 			}
 		};
 		repo.add("printEvh", printEvh);
@@ -387,10 +389,11 @@ public class TBarcode extends TRequiredStackedComponent {
 		ITBarcode model = this.tValueProperty.getValue();
 		if(model==null) {
 			try {
-				model = this.tBarcodeModelType.newInstance();
+				model = this.tBarcodeModelType.getDeclaredConstructor().newInstance();
 				this.tValueProperty.setValue(model);
-			} catch (InstantiationException | IllegalAccessException e) {
-				e.printStackTrace();
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException 
+					| NoSuchMethodException | SecurityException e) {
+				TLoggerUtil.error(getClass(), e.getMessage(), e);
 				throw new RuntimeException(e);
 			}
 		}
@@ -407,7 +410,7 @@ public class TBarcode extends TRequiredStackedComponent {
 			try {
 				n.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				TLoggerUtil.error(getClass(), e.getMessage(), e);
 			}
 			ImageView iv = new ImageView();
 			iv.setImage(img);
@@ -429,7 +432,7 @@ public class TBarcode extends TRequiredStackedComponent {
 			os.close();
 			generateBarcodeImage();
 		} catch (IOException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -449,8 +452,8 @@ public class TBarcode extends TRequiredStackedComponent {
 				if(res.getState().equals(TState.SUCCESS)) {
 					model.getImage().getByte().setBytes(res.getValue().getByte().getBytes());
 				}
-			}catch(Exception ex) {
-				ex.printStackTrace();
+			}catch(Exception e) {
+				TLoggerUtil.error(getClass(), e.getMessage(), e);
 			}finally{
 				loc.close();
 			}
@@ -468,7 +471,7 @@ public class TBarcode extends TRequiredStackedComponent {
 						FileUtils.writeByteArrayToFile(file, model.getImage().getByte().getBytes());
 						TedrosContext.openDocument(path);
 					} catch (Exception e) {
-						e.printStackTrace();
+						TLoggerUtil.error(getClass(), e.getMessage(), e);
 					}
 				}
 			});
@@ -485,7 +488,7 @@ public class TBarcode extends TRequiredStackedComponent {
 			buildImageView(is);
 			this.tAlreadyProperty.setValue(false);
 		} catch (IOException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 	}
 	

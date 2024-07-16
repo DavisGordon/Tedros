@@ -1,6 +1,6 @@
 package org.tedros.core.controller;
 
-import javax.ejb.Remote;
+import jakarta.ejb.Remote;
 
 import org.tedros.core.notify.model.TNotify;
 import org.tedros.server.controller.ITSecureEjbController;

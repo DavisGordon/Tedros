@@ -9,6 +9,7 @@ import org.tedros.api.presenter.view.ITView;
 import org.tedros.api.presenter.view.TViewState;
 import org.tedros.core.control.TProgressIndicator;
 import org.tedros.fx.modal.TModalPane;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -52,7 +53,10 @@ extends StackPane implements ITView<P>{
 	
 	@Override
 	public void tLoad() {
-		gettPresenter().loadView();
+		TLoggerUtil.splitDebugLine(getClass(), '~');
+		TLoggerUtil.timeComplexity(getClass(), "Loading view: "+getClass().getSimpleName(), 
+				()->gettPresenter().loadView()
+		);
 	}
 	
 	public void tLoadFXML() {
@@ -65,8 +69,9 @@ extends StackPane implements ITView<P>{
 			fxmlLoader.setRoot(this);
 	        fxmlLoader.setController(this);
 	        fxmlLoader.load();
+	        TLoggerUtil.debug(getClass(), "FXML "+gettFxmlURL()+" loaded!");
 		}catch(IOException e){
-			e.printStackTrace();
+			TLoggerUtil.error(e.getMessage(), e);
 		}
 	}
 	

@@ -15,6 +15,7 @@ import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.security.model.TUser;
 import org.tedros.server.security.TAccessToken;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -63,7 +64,7 @@ public class ChatClient {
 			owner = util.findUser(u.getAccessToken(), u.getId(), null);
 			owner.setToken(u.getAccessToken());
 		} catch (Exception e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 	}
 	
@@ -84,12 +85,12 @@ public class ChatClient {
             if(host==null || port==null)
             	throw new Exception(TLanguage.getInstance().getString(CHATKey.ERROR_SERVER_PREFERENCE));
 
-            System.out.println("<-Chat:"+owner+"->: Connecting...\n");
+            TLoggerUtil.info(ChatClient.class, "<-Chat:"+owner+"->: Connecting...");
            
             //criar o socket
             socket = new Socket(host, port);
             //como não ocorreu uma excepção temos um socket aberto
-            System.out.println("<-Chat:"+owner+"->: Connected...\n");
+            TLoggerUtil.info(ChatClient.class, "<-Chat:"+owner+"->: Connected...");
 
             //Vamos obter as streams de comunicação fornecidas pelo socket
             din = new ObjectInputStream(socket.getInputStream());
@@ -109,7 +110,7 @@ public class ChatClient {
                 	});
                 }
             } catch (Exception ex) {
-            	System.out.println("<-Chat:"+owner+"->: " + ex.getMessage());
+            	TLoggerUtil.info(ChatClient.class, "<-Chat:"+owner+"->: " + ex.getMessage());
     			Platform.runLater(()->{
     				log.setValue(TLanguage.getInstance().getFormatedString(CHATKey.MSG_ERROR, ex.getMessage()));
     				connected.setValue(false); 
@@ -123,15 +124,15 @@ public class ChatClient {
         	String reason = TLanguage.getInstance().getString(CHATKey.ERROR_SERVER_OUT);
 			log.setValue(TLanguage.getInstance().getFormatedString(CHATKey.MSG_ERROR, reason));
 	        connected.setValue(false);
-        	System.out.println("<-client->: " + ex.getMessage());
+        	TLoggerUtil.warn(ChatClient.class, "<-client->: " + ex.getMessage());
         } catch (IOException e) {
 			log.setValue(TLanguage.getInstance().getFormatedString(CHATKey.MSG_ERROR, e.getMessage()));
 			connected.setValue(false);
-        	e.printStackTrace();
+			TLoggerUtil.warn(ChatClient.class, e.getMessage());
 		} catch (Exception e) {
 			log.setValue(TLanguage.getInstance().getFormatedString(CHATKey.MSG_ERROR, e.getMessage()));
 			connected.setValue(false);
-        	e.printStackTrace();
+			TLoggerUtil.error(ChatClient.class, e.getMessage(), e);
 		}
 	}
 	
@@ -151,8 +152,8 @@ public class ChatClient {
             try {
                 socket.close();
                 connected.setValue(false);
-            } catch (IOException ex) {
-            	ex.printStackTrace();;
+            } catch (IOException e) {
+            	TLoggerUtil.error(getClass(), e.getMessage(), e);;
             }
         }
 		owner = null;

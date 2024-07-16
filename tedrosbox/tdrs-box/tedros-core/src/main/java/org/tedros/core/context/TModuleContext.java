@@ -24,7 +24,6 @@ public final class TModuleContext implements Comparable<TModuleContext>{
 	
 	private TAppContext appContext;
 	private ITModule module;
-	//private ObservableList<TViewContext> viewContexts;
 	private List<TViewContext> viewContexts;
 	private TEntry<Object> tEntry;
 	private final TModuleDescriptor descriptor;
@@ -35,15 +34,15 @@ public final class TModuleContext implements Comparable<TModuleContext>{
 		this.appContext = appContext;
 		this.tEntry = new TEntry<>();
 		this.descriptor = descriptor;
-		this.viewContexts =  new ArrayList<>();//FXCollections.observableArrayList();
+		this.viewContexts =  new ArrayList<>();
 	}
 	
 	public TModuleDescriptor getModuleDescriptor() {
 		return descriptor;
 	}
 	
-	public void buildModule() throws InstantiationException, IllegalAccessException{
-		module = descriptor.getType().newInstance();
+	public void buildModule() throws Exception{
+		module = descriptor.getType().getDeclaredConstructor().newInstance();
 	}
 	
 	public ITModule getModule(){

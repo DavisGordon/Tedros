@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.core.model.ITModelView;
@@ -25,12 +26,16 @@ import org.tedros.fx.builder.ITViewBuilder;
 import org.tedros.fx.converter.TConverter;
 import org.tedros.fx.descriptor.TFieldDescriptor;
 import org.tedros.fx.model.TModelView;
+import org.tedros.util.TLoggerUtil;
 
 public final class TReflectionUtil {
 
-//	public static final String ANNOTATION_ROOT_PACKAGE = "org.tedros.fx.annotation";
 	public static final String ANNOTATION_EFFECT_PACKAGE = "org.tedros.fx.annotation.effect";
+	public static final String[] SKIPMETHODS = {"builder","parser","parse","equals", "getClass", "wait", "hashCode", "toString", "notify", "notifyAll", "annotationType", "proxyClassLookup"};
 	
+	private TReflectionUtil() {
+		
+	}
 	
 	public static boolean isIgnoreField(final ITFieldDescriptor tFieldDescriptor){
 		for (Annotation annotation : tFieldDescriptor.getAnnotations())
@@ -145,10 +150,9 @@ public final class TReflectionUtil {
 		try{
 			for (Method method : metodos) {
 				String name = method.getName();
-				if(name.equals("equals") || name.equals("getClass") || name.equals("wait")  || name.equals("hashCode")  
-						|| name.equals("toString") || name.equals("notify") || name.equals("notifyAll") || name.equals("annotationType"))
+				if(ArrayUtils.contains(TReflectionUtil.SKIPMETHODS, name))
 					continue;
-				
+					
 				Object obj = method.invoke(annotation);
 				
 				if(obj instanceof Annotation)
@@ -168,12 +172,10 @@ public final class TReflectionUtil {
 					values.put(name, obj);
 			}
 		}catch(Exception e){
-			e.printStackTrace();
+			TLoggerUtil.error(TReflectionUtil.class, e.getMessage(), e);
 		}
 		
-		
 		return values;
-		
 	}
 	
 	public static Method getConverterMethod(final Annotation annotation) {
@@ -193,14 +195,13 @@ public final class TReflectionUtil {
 		} catch (NoSuchMethodException e) {
 			return null;
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(TReflectionUtil.class, e.getMessage(), e);
 		}
 		return null;
 	}
 	
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public static TConverter getConverter(final Annotation annotation) {
-		
 		try {
 			Method method = getConverterMethod(annotation);
 			if(method!=null){
@@ -212,28 +213,11 @@ public final class TReflectionUtil {
 				
 			}
 		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(TReflectionUtil.class, e.getMessage(), e);
 		}
 		
 		return null;
 	}
-	
-	
-	/*
-	public static Object getIntanciaParametroGenerico(Class<? extends Object> classe, int indiceParametro) {
-		Object instancia = null;
-		try {
-			instancia = getGenericParamClass(classe, indiceParametro).newInstance();
-		}
-		catch (InstantiationException e) {
-			e.printStackTrace();
-		}
-		catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-
-		return instancia;
-	}*/
 	
 	public static List<Annotation> getEffectAnnotations(List<Annotation> list){
 		List<Annotation> ret = new ArrayList<>(0);
@@ -244,24 +228,6 @@ public final class TReflectionUtil {
 		}
 		return ret;
 	}
-	
-	/*public static TNode getNodeAnnotation(List<Annotation> list){
-		for (Annotation annotation : list) {
-			if(annotation instanceof TNode){
-				return (TNode) annotation;
-			}
-		}
-		return null;
-	}
-	
-	public static TControl getControlAnnotation(List<Annotation> list){
-		for (Annotation annotation : list) {
-			if(annotation instanceof TControl){
-				return (TControl) annotation;
-			}
-		}
-		return null;
-	}*/
 	
 	public static Object[] getViewBuilder(List<Annotation> list) {
 		return getBuilder(list, ITViewBuilder.class);
@@ -283,7 +249,7 @@ public final class TReflectionUtil {
 		return getBuilder(list, ITLayoutBuilder.class);
 	}
 	
-	@SuppressWarnings({"rawtypes"})
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	private static Object[] getBuilder(List<Annotation> list, Class... builderInterface) {
 		for (Annotation annotation : list) {
 			final Method method = getAnnotationBuilderMethod(annotation);
@@ -292,15 +258,14 @@ public final class TReflectionUtil {
 					Class clazz = (Class) method.invoke(annotation);
 					if(isImplemented(clazz, builderInterface)){
 						try{
-							return new Object[]{annotation, clazz.newInstance()};
-						}catch( InstantiationException e){
-							//System.err.println("ERROR: The class "+clazz.getSimpleName()+" must implement the 'public static "+clazz.getSimpleName()+" getInstance()'");
-							e.printStackTrace();
+							return new Object[]{annotation, clazz.getDeclaredConstructor().newInstance()};
+						}catch( InstantiationException | NoSuchMethodException | SecurityException e){
+							TLoggerUtil.error(TReflectionUtil.class, e.getMessage(), e);
 						}
 						
 					}
 				}catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException e){
-					e.printStackTrace();
+					TLoggerUtil.error(TReflectionUtil.class, e.getMessage(), e);
 				}
 			}
 		}
@@ -313,7 +278,6 @@ public final class TReflectionUtil {
 		}catch(NoSuchMethodException e){ 
 			return null;
 		}
-		
 	}
 	
 	public static Method getMethod(final Annotation annotation, String methodName) {
@@ -331,7 +295,7 @@ public final class TReflectionUtil {
 				return (T) m.invoke(obj);
 			} catch (IllegalAccessException | IllegalArgumentException
 					| InvocationTargetException e) {
-				e.printStackTrace();
+				TLoggerUtil.error(TReflectionUtil.class, e.getMessage(), e);
 			}
 		}
 		return null;
@@ -339,7 +303,6 @@ public final class TReflectionUtil {
 	
 	public static <T> T getValue(Annotation annotation, String methodName){
 		return getValue(annotation, getMethod(annotation, methodName));
-		
 	}
 	
 	public static Method getParserMethod(final Annotation annotation) {
@@ -365,7 +328,7 @@ public final class TReflectionUtil {
 			else
 				return annotation.getClass().getPackage().getName();
 		}catch(NullPointerException e){
-			e.printStackTrace();
+			TLoggerUtil.error(TReflectionUtil.class, e.getMessage(), e);
 			throw e;
 		}
 	}
@@ -410,7 +373,7 @@ public final class TReflectionUtil {
 							fieldsList.add(new TFieldDescriptor(f));
 							k.add(f.getName());
 						} catch (Throwable e) {
-							e.printStackTrace();
+							TLoggerUtil.error(TReflectionUtil.class, e.getMessage(), e);
 						}
 				});
 			}
@@ -418,7 +381,4 @@ public final class TReflectionUtil {
 		}
 		return fieldsList;
 	}
-	
-	
-	
 }

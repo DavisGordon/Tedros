@@ -3,6 +3,7 @@
  */
 package org.tedros.fx.builder;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -102,10 +103,11 @@ public final class TSelectQueryBuilder  {
 		Object value = !"".equals(c.value()) ? c.value() : null;
 		if(c.valueBuilder()!=TGenericBuilder.class) {
 			try {
-				TGenericBuilder b = c.valueBuilder().newInstance();
+				TGenericBuilder b = c.valueBuilder().getDeclaredConstructor().newInstance();
 				b.setComponentDescriptor(descriptor);
 				value = b.build();
-			} catch (InstantiationException | IllegalAccessException e) {
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException |
+					InvocationTargetException | NoSuchMethodException | SecurityException e) {
 				throw new RuntimeException(e);
 			}
 		}

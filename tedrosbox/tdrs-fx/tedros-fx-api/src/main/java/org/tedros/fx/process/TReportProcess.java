@@ -28,6 +28,7 @@ import org.tedros.server.controller.ITEjbReportController;
 import org.tedros.server.model.ITReportModel;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
+import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TedrosFolder;
 
 import net.sf.jasperreports.engine.JRException;
@@ -141,11 +142,11 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
         				} catch(NamingException e){
         	    			setException( new TProcessException(e, e.getMessage(), "The service is not available!"));
         	    			LOGGER.severe(e.toString());
-        	    			e.printStackTrace();
+        	    			TLoggerUtil.error(getClass(), e.getMessage(), e);
         	    		}catch (Exception e) {
         					setException(e);
         					LOGGER.severe(e.toString());
-        					e.printStackTrace();
+        					TLoggerUtil.error(getClass(), e.getMessage(), e);
         				}finally {
         					loc.close();
         				}
@@ -160,7 +161,7 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 	    		}catch (Exception e) {
 					setException(e);
 					LOGGER.severe(e.toString());
-					e.printStackTrace();
+					TLoggerUtil.error(getClass(), e.getMessage(), e);
 				} 
         	    return resultado;
         	}
@@ -244,7 +245,7 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 				try {
 					this.logoInputStream = new FileInputStream(new File(TedrosFolder.IMAGES_FOLDER.getFullPath()+"logo-tedros-medium.png"));
 				} catch (FileNotFoundException e) {
-					e.printStackTrace();
+					TLoggerUtil.error(getClass(), e.getMessage(), e);
 				}
 			}
 			params.put(PARAM_LOGO, this.logoInputStream);

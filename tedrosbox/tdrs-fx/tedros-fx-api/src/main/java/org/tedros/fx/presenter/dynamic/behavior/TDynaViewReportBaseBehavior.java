@@ -106,7 +106,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			
 			
 		}catch(Exception e){
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 		
 	}
@@ -327,7 +327,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				getView().tShowModal(new TMessageBox(e), true);
 			} catch (Throwable e) {
 				getView().tShowModal(new TMessageBox(e), true);
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}
 		}
 		
@@ -368,12 +368,12 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
     				try {
 						TBytesLoader.loadBytes(logotype);
 					} catch (TProcessException e) {
-						e.printStackTrace();
+						LOGGER.error(e.getMessage(), e);
 					}
     			}
     			
     		}catch (Exception e) {
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}finally {
 				loc.close();
 			}
@@ -403,7 +403,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 							}
 						}
 						if(result.getState().getValue() == TState.ERROR.getValue()){
-							System.out.println(result.getMessage());
+							LOGGER.error(result.getMessage());
 							String msg = iEngine.getFormatedString("#{tedros.fxapi.message.error}");
 							getView().tShowModal(new TMessageBox(msg), true);
 						}
@@ -413,8 +413,9 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				
 			});
 			runProcess(runningProcess);
-		} catch (InstantiationException | IllegalAccessException e1) {
-			e1.printStackTrace();
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException 
+				| SecurityException e1) {
+			LOGGER.error(e1.getMessage(), e1);
 			String msg = iEngine.getFormatedString("#{tedros.fxapi.message.error}");
 			getView().tShowModal(new TMessageBox(msg), true);
 		}
@@ -459,11 +460,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 							} catch (Exception e) 
 							{	
 								addMessage(new TMessage(TMessageType.ERROR, iEngine.getString("#{tedros.fxapi.message.error}")+"\n"+e.getMessage()));
-								e.printStackTrace();
+								LOGGER.error(e.getMessage(), e);
 							}
 						}
 						if(result.getState().getValue() == TState.ERROR.getValue()){
-							System.out.println(result.getMessage());
+							LOGGER.error(result.getMessage());
 							addMessage(new TMessage(TMessageType.ERROR, result.getMessage()));
 						}
 					}
@@ -485,12 +486,12 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			setDisableModelActionButtons(true);
 			try {
 				super.removeAllListenerFromModelView();
-				M model = (M) getModelViewClass().getConstructor(modelClass).newInstance(modelClass.newInstance());
+				M model = (M) getModelViewClass().getConstructor(modelClass).newInstance(modelClass.getDeclaredConstructor().newInstance());
 				setModelView(model);
 				showForm(TViewMode.EDIT);
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 					| NoSuchMethodException | SecurityException e) {
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}
 		}
 		actionHelper.runAfter(TActionType.CLEAN);
@@ -519,7 +520,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 					runningProcess.cancel();
 				
 			}catch(Exception e){
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}
 		}
 		actionHelper.runAfter(TActionType.CANCEL);
@@ -547,7 +548,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 						p.show(decorator.gettOpenExportFolderButton());
 					}
 				} catch (IOException e) {
-					e.printStackTrace();
+					LOGGER.error(e.getMessage(), e);
 					super.addMessage(new TMessage(TMessageType.ERROR, 
 							iEngine.getFormatedString("#{tedros.fxapi.message.cannot.open.file}", e.getMessage())));
 				}
@@ -589,11 +590,15 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * @return TReportProcess
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
 	 */
-	public TReportProcess createProcess() throws InstantiationException, IllegalAccessException  {
+	public TReportProcess createProcess() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException  {
 		
 		if(this.reportProcessClass != null && this.reportProcessClass != TReportProcess.class)
-			return reportProcessClass.newInstance();
+			return reportProcessClass.getDeclaredConstructor().newInstance();
 		
 		return null;
 	}

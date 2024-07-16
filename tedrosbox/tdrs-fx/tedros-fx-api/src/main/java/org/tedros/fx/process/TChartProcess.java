@@ -16,6 +16,7 @@ import org.tedros.server.controller.ITEjbChartController;
 import org.tedros.server.controller.TParam;
 import org.tedros.server.model.ITChartModel;
 import org.tedros.server.result.TResult;
+import org.tedros.util.TLoggerUtil;
 
 /**
  * The process to filter the chart data.
@@ -70,10 +71,10 @@ public class TChartProcess extends TProcess<TResult<? extends ITChartModel>> {
         				
 	    		} catch(NamingException e){
 	    			setException( new TProcessException(e, e.getMessage(), "The service is not available!"));
-	    			e.printStackTrace();
+	    			TLoggerUtil.error(getClass(), e.getMessage(), e);
 	    		}catch (Exception e) {
 					setException(e);
-					e.printStackTrace();
+					TLoggerUtil.error(getClass(), e.getMessage(), e);
 				} finally {
 					loc.close();
 				}

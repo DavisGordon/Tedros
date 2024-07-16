@@ -70,7 +70,7 @@ extends TDynaViewActionBaseBehavior<M, E> {
 		try {
 			loadEntity();
 		} catch (Throwable e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 	
@@ -99,7 +99,7 @@ extends TDynaViewActionBaseBehavior<M, E> {
 						setModelView(model);
 						showForm(TViewMode.EDIT);
 					} catch (Throwable e) {
-						e.printStackTrace();
+						LOGGER.error(e.getMessage(), e);
 					}
 				}
 			}
@@ -157,7 +157,7 @@ extends TDynaViewActionBaseBehavior<M, E> {
 									M model =  (M) modelViewClass.getConstructor(entityClass).newInstance(e);
 									getModels().add((M) model);
 								} catch (Throwable t) {
-									t.printStackTrace();
+									LOGGER.error(t.getMessage(), t);
 								}
 							}
 							setModelViewList(null);
@@ -176,7 +176,7 @@ extends TDynaViewActionBaseBehavior<M, E> {
 			runProcess(process);
 			
 		} catch (TProcessException e1) {
-			e1.printStackTrace();
+			LOGGER.error(e1.getMessage(), e1);
 		}
 	}
 }

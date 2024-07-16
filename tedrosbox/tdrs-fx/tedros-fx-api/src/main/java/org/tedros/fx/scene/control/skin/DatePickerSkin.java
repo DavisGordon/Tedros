@@ -23,6 +23,7 @@ import java.util.Locale;
 import org.tedros.fx.animation.BackInterpolator;
 import org.tedros.fx.control.CalendarView;
 import org.tedros.fx.control.DatePicker;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
@@ -258,7 +259,7 @@ public final class DatePickerSkin extends HBox implements Skin<DatePicker> {
 	        imageView.visibleProperty().bind(disabledProperty().not());
 			
 		} catch (IOException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
         
 

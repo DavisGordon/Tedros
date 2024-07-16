@@ -35,6 +35,7 @@ import org.tedros.server.entity.ITFileEntity;
 import org.tedros.server.model.ITFileBaseModel;
 import org.tedros.server.model.TFileModel;
 import org.tedros.server.result.TResult;
+import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TedrosFolder;
 
 import javafx.beans.property.SimpleBooleanProperty;
@@ -216,7 +217,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 									TFileModel fm = new TFileModel(f);
 									addLst.add(fm);
 								} catch (IOException e) {
-									e.printStackTrace();
+									TLoggerUtil.error(getClass(), e.getMessage(), e);
 								}
 							}
 						}
@@ -468,7 +469,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 									try {
 										FileUtils.copyInputStreamToFile(new ByteArrayInputStream(x.getByte().getBytes()), df);
 									} catch (IOException e1) {
-										e1.printStackTrace();
+										TLoggerUtil.error(getClass(), e1.getMessage(), e1);
 									}
 					            }
 					            	
@@ -502,7 +503,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 					
 					this.targetPane.getChildren().add(vbox);
 				} catch (IOException e) {
-					e.printStackTrace();
+					TLoggerUtil.error(getClass(), e.getMessage(), e);
 				}
 			}
 		}else {
@@ -580,7 +581,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 				defImgView.setUserData(null);
 				setting(defImgView);
 			} catch (IOException e) {
-				e.printStackTrace();
+				TLoggerUtil.error(getClass(), e.getMessage(), e);
 			}
 		}
 		scrollPane.setContent(defImgView);
@@ -625,7 +626,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 			
 			showImageView(imgView);
 		} catch (IOException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 	}
 
@@ -661,7 +662,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 					fe.getByteEntity().setBytes(n);
 					setImage(imgView, n);
 				} catch (IOException e1) {
-					e1.printStackTrace();
+					TLoggerUtil.error(getClass(), e1.getMessage(), e1);
 				}
 				bp.removeListener(this);
 			}
@@ -831,7 +832,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 		try {
 			TBytesLoader.loadBytesFromTFileEntity(m.getByteEntity().getId(), bp);
 		} catch (Throwable e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 	}
 	
@@ -855,7 +856,7 @@ public class TSelectImageField extends TRequiredSelectImage{
         		TResult<List<TFileEntity>> r = serv.find(user.getAccessToken(), owner, exts, maxSize, load);
         		return r;
     		}catch(Exception e) {
-    			e.printStackTrace();
+    			TLoggerUtil.error(getClass(), e.getMessage(), e);
     			return null;
     		}
 		}

@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Iterator;
 
 import javax.imageio.ImageIO;
@@ -31,13 +32,13 @@ public final class TFileUtil {
 	
 	public static double convertToMegaByte(double bytes) {
 		BigDecimal size = new BigDecimal(bytes / (1024*1024));
-		size = size.setScale(2, BigDecimal.ROUND_HALF_UP);
+		size = size.setScale(2, RoundingMode.HALF_UP);
 		return  size.doubleValue();
 	}
 	
 	public static double convertToKiloByte(double bytes) {
 		BigDecimal size = new BigDecimal(bytes / 1024);
-		size = size.setScale(2, BigDecimal.ROUND_HALF_UP);
+		size = size.setScale(2, RoundingMode.HALF_UP);
 		return  size.doubleValue();
 	}
 	
@@ -49,7 +50,7 @@ public final class TFileUtil {
             fileWriter.write(content);
             fileWriter.close();
         } catch (IOException ex) {
-            ex.printStackTrace();
+            TLoggerUtil.error(TFileUtil.class, ex.getMessage(), ex);
         }
          
     }
@@ -68,14 +69,14 @@ public final class TFileUtil {
 	            }
 	 
 	        } catch (FileNotFoundException ex) {
-	            ex.printStackTrace();
+	            TLoggerUtil.error(TFileUtil.class, ex.getMessage(), ex);
 	        } catch (IOException ex) {
-	        	ex.printStackTrace();
+	        	TLoggerUtil.error(TFileUtil.class, ex.getMessage(), ex);
 	        } finally {
 	            try {
 	                bufferedReader.close();
 	            } catch (IOException ex) {
-	            	ex.printStackTrace();
+	            	TLoggerUtil.error(TFileUtil.class, ex.getMessage(), ex);
 	            }
 	        } 
 	         
@@ -91,7 +92,7 @@ public final class TFileUtil {
 	    		if(file.list().length==0){
 	 
 	    		   file.delete();
-	    		   System.out.println("Directory is deleted : "+ file.getAbsolutePath());
+	    		   TLoggerUtil.debug(TFileUtil.class, "Folder deleted : "+ file.getAbsolutePath());
 	 
 	    		}else{
 	 
@@ -109,14 +110,14 @@ public final class TFileUtil {
 	        	   //check the directory again, if empty then delete it
 	        	   if(file.list().length==0){
 	           	     file.delete();
-	        	     System.out.println("Directory is deleted : " + file.getAbsolutePath());
+	           	     TLoggerUtil.debug(TFileUtil.class, "Folder deleted : "+ file.getAbsolutePath());
 	        	   }
 	    		}
 	 
 	    	}else{
 	    		//if file, then delete it
 	    		file.delete();
-	    		System.out.println("File is deleted : " + file.getAbsolutePath());
+	    		TLoggerUtil.debug(TFileUtil.class, "File deleted : "+ file.getAbsolutePath());
 	    	}
 	}
 

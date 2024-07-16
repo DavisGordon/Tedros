@@ -1,6 +1,6 @@
 package org.tedros.chat.ejb.controller;
 
-import javax.ejb.Remote;
+import jakarta.ejb.Remote;
 
 import org.tedros.core.security.model.TUser;
 import org.tedros.server.controller.ITSecureEjbController;

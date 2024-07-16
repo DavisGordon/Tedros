@@ -1,6 +1,6 @@
 package org.tedros.fx.collections;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import java.util.Objects;
 
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -45,12 +45,25 @@ public class TSimpleObservableList<E> extends SimpleListProperty<E> implements I
 	public Class gettGenericClass() {
 		return getClass();
 	}
-	
+
 	@Override
 	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode( get(),  false);
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(get(), t_hashCodeProperty);
+		return result;
 	}
 
-	
-	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof TSimpleObservableList))
+			return false;
+		TSimpleObservableList other = (TSimpleObservableList) obj;
+		return Objects.equals(get(), other.get()) && Objects.equals(t_hashCodeProperty, other.t_hashCodeProperty);
+	}	
 }

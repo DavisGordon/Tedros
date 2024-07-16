@@ -69,7 +69,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			
 		}catch(Throwable e){
 			getView().tShowModal(new TMessageBox(e), true);
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 	
@@ -114,12 +114,12 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		TBehavior tBehavior = getPresenter().getPresenterAnnotation().behavior();
 		try {
 			Callback<ListView<M>, ListCell<M>> callBack = (Callback<ListView<M>, ListCell<M>>) ((tBehavior!=null) 
-					? tBehavior.listViewCallBack().newInstance() 
+					? tBehavior.listViewCallBack().getDeclaredConstructor().newInstance() 
 							: new TEntityListViewCallback<M>());
 			final ListView<M> listView = this.decorator.gettListView();
 			listView.setCellFactory(callBack);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 	}	
 		

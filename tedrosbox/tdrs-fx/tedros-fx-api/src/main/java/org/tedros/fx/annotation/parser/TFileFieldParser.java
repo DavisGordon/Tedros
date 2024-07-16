@@ -6,6 +6,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.tedros.fx.annotation.control.TFileField;
 import org.tedros.fx.control.action.TEventHandler;
 import org.tedros.fx.domain.TFileExtension;
+import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TedrosFolder;
 
 public class TFileFieldParser extends TAnnotationParser<TFileField, org.tedros.fx.control.TFileField> {
@@ -43,15 +44,15 @@ public class TFileFieldParser extends TAnnotationParser<TFileField, org.tedros.f
 		
 		try {
 			if(tAnnotation.openAction() != TEventHandler.class)
-				control.setOpenAction(tAnnotation.openAction().newInstance());
+				control.setOpenAction(tAnnotation.openAction().getDeclaredConstructor().newInstance());
 			if(tAnnotation.cleanAction() != TEventHandler.class)
-				control.setCleanAction(tAnnotation.cleanAction().newInstance());
+				control.setCleanAction(tAnnotation.cleanAction().getDeclaredConstructor().newInstance());
 			if(tAnnotation.selectAction() != TEventHandler.class)
-				control.setSelectAction(tAnnotation.selectAction().newInstance());
+				control.setSelectAction(tAnnotation.selectAction().getDeclaredConstructor().newInstance());
 			if(tAnnotation.imageAction() != TEventHandler.class)
-				control.setImageAction(tAnnotation.imageAction().newInstance());
+				control.setImageAction(tAnnotation.imageAction().getDeclaredConstructor().newInstance());
 		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 		
 	}

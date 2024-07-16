@@ -24,7 +24,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.layout.StackPaneBuilder;
+import javafx.scene.layout.StackPane;
 
 
 /**
@@ -88,7 +88,9 @@ implements ITReaderBuilder<Node, Object> {
 			}
 			//flowPane.setId("t-reader");
 			callParser(tAnnotation, flowPane);
-			return StackPaneBuilder.create().children(flowPane).build();
+			StackPane sp = new StackPane();
+			sp.getChildren().add(flowPane);
+			return sp;
 		}
 		
 		return null;

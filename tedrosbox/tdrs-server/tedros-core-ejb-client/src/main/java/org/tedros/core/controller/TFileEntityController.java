@@ -2,7 +2,7 @@ package org.tedros.core.controller;
 
 import java.util.List;
 
-import javax.ejb.Remote;
+import jakarta.ejb.Remote;
 
 import org.tedros.common.model.TFileEntity;
 import org.tedros.server.controller.ITSecureEjbController;

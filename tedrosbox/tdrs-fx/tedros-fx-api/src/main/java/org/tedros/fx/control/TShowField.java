@@ -16,6 +16,7 @@ import org.tedros.fx.form.TFieldBox;
 import org.tedros.fx.form.TFieldBoxBuilder;
 import org.tedros.fx.util.TMaskUtil;
 import org.tedros.util.TDateUtil;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.Observable;
 import javafx.beans.property.ListProperty;
@@ -60,7 +61,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 		try {
 			init();
 		} catch (Exception e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 	}
 	@SuppressWarnings("rawtypes")
@@ -72,7 +73,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 		try {
 			init();
 		} catch (Exception e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 	}
 	/**
@@ -86,7 +87,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 		try {
 			init();
 		} catch (Exception e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 	}
 	
@@ -108,7 +109,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 					try {
 						addField(obj);
 					} catch (Exception e) {
-						e.printStackTrace();
+						TLoggerUtil.error(getClass(), e.getMessage(), e);
 					}
 				}
 			});
@@ -123,7 +124,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 					if(n!=null)
 						addField(n);
 				} catch (Exception e) {
-					e.printStackTrace();
+					TLoggerUtil.error(getClass(), e.getMessage(), e);
 				}
 			});
 			addField(value.getValue());
@@ -208,7 +209,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 			} catch (NoSuchFieldException | SecurityException e) {
 				target = target.getSuperclass();
 			} catch (IllegalArgumentException | IllegalAccessException e) {
-				e.printStackTrace();
+				TLoggerUtil.error(getClass(), e.getMessage(), e);
 				throw new RuntimeException(e);
 			} 
 		}while(o==null || target == Object.class);
@@ -231,7 +232,7 @@ public class TShowField extends StackPane implements ITField, ITComponent{
 				t = ((Property)t).getValue();
 			
 			if(f.getConverter()!=TConverter.class) {
-				TConverter c = f.getConverter().newInstance();
+				TConverter c = f.getConverter().getDeclaredConstructor().newInstance();
 				c.setComponentDescriptor(descriptor);
 				c.setIn(t);
 				return (String) c.getOut();

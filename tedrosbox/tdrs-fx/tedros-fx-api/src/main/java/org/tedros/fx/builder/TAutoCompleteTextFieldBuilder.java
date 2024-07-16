@@ -39,7 +39,7 @@ implements ITControlBuilder<org.tedros.fx.control.TAutoCompleteTextField, Proper
 			});
 			
 		}else if(eAnn.factory()!=NullStringListBuilder.class) {
-			ITGenericBuilder<List<String>> builder = eAnn.factory().newInstance();
+			ITGenericBuilder<List<String>> builder = eAnn.factory().getDeclaredConstructor().newInstance();
 			builder.setComponentDescriptor(super.getComponentDescriptor());
 			List<String> l = builder.build();
 			control.getEntries().addAll(l);

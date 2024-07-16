@@ -27,7 +27,7 @@ public class TEncriptUtil {
 	        } 
 	        catch (NoSuchAlgorithmException e) 
 	        {
-	            e.printStackTrace();
+	        	TLoggerUtil.error(TEncriptUtil.class, e.getMessage(), e);
 	        }
 	        return encriptedString;
 	    }

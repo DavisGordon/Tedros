@@ -46,7 +46,7 @@ public abstract class TAppResource {
 				try(InputStream is = this.getClass().getResourceAsStream(ref)){
 					FileUtils.copyInputStreamToFile(is, f);
 				} catch (IOException e1) {
-					e1.printStackTrace();
+					TLoggerUtil.error(getClass(), e1.getMessage(), e1);
 				}
 			}
 		}

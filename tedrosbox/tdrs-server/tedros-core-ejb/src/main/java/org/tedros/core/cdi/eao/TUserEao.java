@@ -3,9 +3,9 @@
  */
 package org.tedros.core.cdi.eao;
 
-import javax.enterprise.context.RequestScoped;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.Query;
 
 import org.tedros.core.security.model.TProfile;
 import org.tedros.core.security.model.TUser;

@@ -2,7 +2,7 @@ package org.tedros.server.cdi.eao;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
 import org.tedros.server.entity.ITEntity;
 import org.tedros.server.query.TSelect;

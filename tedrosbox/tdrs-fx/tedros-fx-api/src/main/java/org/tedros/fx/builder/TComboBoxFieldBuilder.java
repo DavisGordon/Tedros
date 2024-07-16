@@ -21,6 +21,7 @@ import org.tedros.fx.model.TModelView;
 import org.tedros.fx.process.TEntityProcess;
 import org.tedros.server.entity.ITEntity;
 import org.tedros.server.query.TSelect;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.Property;
 import javafx.event.ActionEvent;
@@ -74,7 +75,7 @@ implements ITControlBuilder<org.tedros.fx.control.TComboBoxField, Property<Objec
 					TComboBoxParser.parseFirstItemText(tAnnotation, control);
 					loadControl(attrProperty, tAnnotation, control);
 				} catch (Exception e) {
-					e.printStackTrace();
+					TLoggerUtil.error(getClass(),e.getMessage(), e);
 				}
 			};
 			String k = super.getComponentDescriptor().getFieldDescriptor()
@@ -108,7 +109,7 @@ implements ITControlBuilder<org.tedros.fx.control.TComboBoxField, Property<Objec
 	 */
 	@SuppressWarnings("unchecked")
 	private void loadControl(final Property<Object> attrProperty, final TComboBoxField tAnnotation,
-			final org.tedros.fx.control.TComboBoxField control) throws InstantiationException, IllegalAccessException {
+			final org.tedros.fx.control.TComboBoxField control) throws Exception {
 		TProcess ann = tAnnotation.process();
 		final Class<? extends TEntityProcess> pClass = ann.type();
 		final Class<? extends TModelView> mClass = ann.modelView();

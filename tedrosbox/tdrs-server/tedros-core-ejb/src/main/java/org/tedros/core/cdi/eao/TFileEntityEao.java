@@ -5,8 +5,8 @@ package org.tedros.core.cdi.eao;
 
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
-import javax.persistence.Query;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.persistence.Query;
 
 import org.tedros.common.model.TByteEntity;
 import org.tedros.common.model.TFileEntity;

@@ -15,6 +15,7 @@ import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.model.TModelViewBuilder;
 import org.tedros.server.entity.TEntity;
 import org.tedros.server.query.TSelect;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
@@ -43,7 +44,7 @@ implements ITControlBuilder<org.tedros.fx.control.TAutoCompleteEntity, Property>
 				tAnn.startSearchAt(), tAnn.showMaxItems(), tAnn.service());
 		
 		if(tAnn.converter()!=TFunctionEntityToStringBuilder.class) {
-			TFunctionEntityToStringBuilder b = tAnn.converter().newInstance();
+			TFunctionEntityToStringBuilder b = tAnn.converter().getDeclaredConstructor().newInstance();
 			control.settConverter(b.build());
 		}
 		
@@ -71,7 +72,7 @@ implements ITControlBuilder<org.tedros.fx.control.TAutoCompleteEntity, Property>
 								.build(n);
 						attrProperty.setValue(mv);
 					} catch (TException e) {
-						e.printStackTrace();
+						TLoggerUtil.error(getClass(),e.getMessage(), e);
 						throw new RuntimeException(e);
 					}
 				}

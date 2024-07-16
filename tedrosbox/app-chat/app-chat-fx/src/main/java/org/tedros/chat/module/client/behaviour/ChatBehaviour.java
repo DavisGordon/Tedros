@@ -245,7 +245,7 @@ public class ChatBehaviour extends TMasterCrudViewBehavior<ChatMV, Chat> {
 				try {
 					client.send(i);
 				} catch (IOException e) {
-					e.printStackTrace();
+					LOGGER.error(e.getMessage(), e);
 				}
 			}
 			
@@ -350,7 +350,7 @@ public class ChatBehaviour extends TMasterCrudViewBehavior<ChatMV, Chat> {
 			Chat c = util.saveChat(TedrosContext.getLoggedUser().getAccessToken(), model.getModel());
 			model.reload(c);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 		return super.processNewEntityBeforeBuildForm(model);
 	}

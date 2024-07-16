@@ -14,9 +14,7 @@ public class TAutoResizePane extends StackPane {
         
         List<Node> managed = getManagedChildren();
         double width = getWidth();
-        //System.out.println("width = " + width);
         double height = getHeight();
-        //System.out.println("height = " + height);
         double top = getInsets().getTop();
         double right = getInsets().getRight();
         double left = getInsets().getLeft();

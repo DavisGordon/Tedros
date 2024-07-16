@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TLanguage;
 import org.tedros.core.repository.TRepository;
 import org.tedros.fx.effect.TEffectUtil;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -70,7 +71,7 @@ public class TPickListField<E> extends StackPane implements ITTriggeredable {
 		        }
 		        
 	    	}catch(Exception e){
-	    		e.printStackTrace();
+	    		TLoggerUtil.error(getClass(), e.getMessage(), e);
 	    	}
 		}
 

@@ -2,8 +2,8 @@ package org.tedros.server.ejb.controller;
 
 import java.util.List;
 
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
 
 import org.tedros.server.controller.ITEjbImportController;
 import org.tedros.server.entity.ITEntity;

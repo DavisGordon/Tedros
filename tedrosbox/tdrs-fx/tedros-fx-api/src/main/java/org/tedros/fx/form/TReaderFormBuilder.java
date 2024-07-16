@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.form.ITModelForm;
 import org.tedros.core.model.ITModelView;
 import org.tedros.fx.annotation.form.TForm;
+import org.tedros.util.TLoggerUtil;
 
 /**
  * The {@link ITModelForm} builder for reader mode. 
@@ -64,7 +65,7 @@ public class TReaderFormBuilder<M extends ITModelView<?>> {
 		} catch (InstantiationException | IllegalAccessException
 				| IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 			return null;
 		}
 		

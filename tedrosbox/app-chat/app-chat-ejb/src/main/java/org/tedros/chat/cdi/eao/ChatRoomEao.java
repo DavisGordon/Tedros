@@ -5,8 +5,8 @@ package org.tedros.chat.cdi.eao;
 
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
-import javax.persistence.Query;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.persistence.Query;
 
 import org.tedros.chat.entity.Chat;
 import org.tedros.server.cdi.eao.TGenericEAO;

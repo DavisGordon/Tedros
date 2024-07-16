@@ -169,7 +169,7 @@ extends TBehavior<M, TDynaPresenter<M>> implements ITDynaViewSimpleBaseBehavior<
 					this.addAction(a);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 
@@ -298,7 +298,7 @@ extends TBehavior<M, TDynaPresenter<M>> implements ITDynaViewSimpleBaseBehavior<
 	@SuppressWarnings("unchecked")
 	public TModelProcess<E> createModelProcess() throws Throwable {
 		if(this.modelProcessClass != null && this.modelProcessClass != TModelProcess.class)
-			return modelProcessClass.newInstance();
+			return modelProcessClass.getDeclaredConstructor().newInstance();
 		
 		return null;
 	}
@@ -412,7 +412,7 @@ extends TBehavior<M, TDynaPresenter<M>> implements ITDynaViewSimpleBaseBehavior<
 			
 			
 			process.exceptionProperty().addListener((a,o,n) -> {
-				n.printStackTrace();		
+				LOGGER.error(n.getMessage(), n);		
 			});
 			
 			process.stateProperty().addListener((a,o,n) -> {	
@@ -442,9 +442,8 @@ extends TBehavior<M, TDynaPresenter<M>> implements ITDynaViewSimpleBaseBehavior<
 								}
 							break;
 							default:
-								System.out.println(result.getMessage());
 								String msg = result.getMessage();
-								
+								LOGGER.info(msg);
 								setActionState(new TActionState(action, n, TProcessResult.get(result.getState()), msg, model));
 								switch(result.getState()) {
 								case ERROR:
@@ -501,8 +500,9 @@ extends TBehavior<M, TDynaPresenter<M>> implements ITDynaViewSimpleBaseBehavior<
 	 * Run the given {@link ITProcess}
 	 * */
 	public void runProcess(final ITProcess<?> process) {
-		process.startProcess();
 		configProgressIndicator(process);
+		process.startProcess();
+		
 	}
 	
 	/**

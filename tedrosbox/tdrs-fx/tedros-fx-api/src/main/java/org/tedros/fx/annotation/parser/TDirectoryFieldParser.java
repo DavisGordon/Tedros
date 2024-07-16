@@ -2,6 +2,7 @@ package org.tedros.fx.annotation.parser;
 
 import org.tedros.fx.annotation.control.TDirectoryField;
 import org.tedros.fx.control.action.TEventHandler;
+import org.tedros.util.TLoggerUtil;
 
 public class TDirectoryFieldParser extends TAnnotationParser<TDirectoryField, org.tedros.fx.control.TDirectoryField> {
 		
@@ -19,11 +20,11 @@ public class TDirectoryFieldParser extends TAnnotationParser<TDirectoryField, or
 		
 		try {
 			if(tAnnotation.cleanAction() != TEventHandler.class)
-				control.settCleanAction(tAnnotation.cleanAction().newInstance());
+				control.settCleanAction(tAnnotation.cleanAction().getDeclaredConstructor().newInstance());
 			if(tAnnotation.selectAction() != TEventHandler.class)
-				control.settSelectAction(tAnnotation.selectAction().newInstance());
+				control.settSelectAction(tAnnotation.selectAction().getDeclaredConstructor().newInstance());
 		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 		
 	}

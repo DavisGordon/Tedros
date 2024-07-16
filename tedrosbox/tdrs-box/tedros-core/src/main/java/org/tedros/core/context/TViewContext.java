@@ -13,12 +13,9 @@ import org.tedros.api.presenter.view.ITView;
 public final class TViewContext {
 
 	private ITView view;
-	private TModuleContext moduleContext;
-	
-	private TSecurityDescriptor securityDescriptor;
-	
-	private TEntry<Object> tEntry;
-	
+	private TModuleContext moduleContext;	
+	private TSecurityDescriptor securityDescriptor;	
+	private TEntry<Object> tEntry;	
 	
 	public TViewContext(TModuleContext moduleContext, ITView view){
 		this.view = view;

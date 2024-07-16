@@ -19,9 +19,9 @@ import org.tedros.fx.annotation.reader.TByteArrayReader;
 import org.tedros.fx.annotation.reader.TDetailReader;
 import org.tedros.fx.annotation.reader.TReader;
 import org.tedros.fx.annotation.reader.TReaderDefaultSetting;
-import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.domain.TLabelPosition;
 import org.tedros.fx.util.TReflectionUtil;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -36,11 +36,11 @@ import javafx.scene.control.Labeled;
  */
 public final class TFieldBoxBuilder {
 	
-	public static TFieldBox build(final Node control, final TComponentDescriptor descriptor){
+	public static TFieldBox build(final Node control, final ITComponentDescriptor descriptor){
 		return generate(control, descriptor);
 	}	
 	
-	private static TFieldBox generate(final Node control, final TComponentDescriptor descriptor) {
+	private static TFieldBox generate(final Node control, final ITComponentDescriptor descriptor) {
 		
 		final TLabel fieldLabel = (TLabel) descriptor.getFieldAnnotation(TLabel.class);
 		final TLabelDefaultSetting tLabelDefaultSetting = (TLabelDefaultSetting) getDefaultSetting(fieldLabel, descriptor);
@@ -58,9 +58,9 @@ public final class TFieldBoxBuilder {
 			if(parser == null | parserClass != fieldLabel.parser()){
 				parserClass = fieldLabel.parser();
 				try {
-					parser = (TAnnotationParser<TLabel, Labeled>) parserClass.newInstance();
+					parser = (TAnnotationParser<TLabel, Labeled>) parserClass.getDeclaredConstructor().newInstance();
 				} catch (Exception e) {
-					e.printStackTrace();
+					TLoggerUtil.error(TFieldBoxBuilder.class, e.getMessage(), e);
 					return null;
 				}
 			}
@@ -78,7 +78,7 @@ public final class TFieldBoxBuilder {
 				parser.parse(fieldLabel, (Labeled) label);
 				
 			} catch (Exception e) {
-				e.printStackTrace();
+				TLoggerUtil.error(TFieldBoxBuilder.class, e.getMessage(), e);
 			}
 			
 		}
@@ -100,7 +100,7 @@ public final class TFieldBoxBuilder {
 			try {
 				TAnnotationParser.callParser(tAnnotation, fieldBox, descriptor);
 			} catch (Exception e) {
-				e.printStackTrace();
+				TLoggerUtil.error(TFieldBoxBuilder.class, e.getMessage(), e);
 			}
 		}
 	}

@@ -90,14 +90,14 @@ class TPropertyHelper<T extends TModelView> {
 					entityClass = this.genericType.model();
 					
 				if(entityClass!=null) {
-					value = type.getConstructor(ITFileBaseModel.class).newInstance(entityClass.newInstance());
+					value = type.getConstructor(ITFileBaseModel.class).newInstance(entityClass.getDeclaredConstructor().newInstance());
 					setValue(value);
 				}else {
-					value = type.newInstance();
+					value = type.getDeclaredConstructor().newInstance();
 					setValue(value);
 				}
 			}else{
-				value = type.newInstance();
+				value = type.getDeclaredConstructor().newInstance();
 				setValue(value);
 			}
 		}

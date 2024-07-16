@@ -14,6 +14,7 @@ import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.collections.TFXCollections;
 import org.tedros.fx.control.TSelectionModal;
 import org.tedros.fx.model.TModelView;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.Property;
 import javafx.collections.ListChangeListener;
@@ -74,7 +75,7 @@ implements ITControlBuilder<org.tedros.fx.control.TSelectionModal, Property> {
 			return tAnnotation.modelView().getConstructor(value.getClass()).newInstance(value);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 			return null;
 		}
 	}

@@ -16,6 +16,7 @@ import org.tedros.core.ITModule;
 import org.tedros.core.model.ITModelView;
 import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.model.TModelView;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -212,7 +213,7 @@ public class TViewItem implements ITGroupViewItem {
 					viewInitializedProperty.set(true);*/
 				
 			} catch (Exception e) {
-				e.printStackTrace();
+				TLoggerUtil.error(getClass(), e.getMessage(), e);
 			}
 			
 		}
@@ -280,6 +281,13 @@ public class TViewItem implements ITGroupViewItem {
 	@Override
 	public boolean isJoinHeader() {
 		return this.joinHeader;
+	}
+
+	@Override
+	public String toString() {
+		return String.format(
+				"TViewItem [buttonTitle=%s, joinHeader=%s, viewClass=%s, modelViewClass=%s]",
+				buttonTitle, joinHeader, viewClass.getSimpleName(), modelViewClass.getSimpleName());
 	}
 
 	

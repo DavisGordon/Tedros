@@ -6,6 +6,8 @@
  */
 package org.tedros.fx.reader;
 
+import org.tedros.util.TLoggerUtil;
+
 import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -43,15 +45,15 @@ public abstract class TNumberReader<N extends Number, P extends Property<N>> ext
 		try {
 			buildValueProperty();
 			return valueProperty;
-		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 		return null;
 	}
 
-	private void buildValueProperty() throws InstantiationException, IllegalAccessException {
+	private void buildValueProperty() throws Exception {
 		if(valueProperty==null)
-			valueProperty = (P) getPropertyClass().newInstance();
+			valueProperty = (P) getPropertyClass().getDeclaredConstructor().newInstance();
 		valueProperty.addListener(new ChangeListener<N>() {
 			@Override
 			public void changed(ObservableValue<? extends N> arg0, N arg1, N arg2) {

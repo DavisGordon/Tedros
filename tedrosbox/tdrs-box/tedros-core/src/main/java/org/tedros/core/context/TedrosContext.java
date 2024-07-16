@@ -11,14 +11,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.naming.NamingException;
 
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.slf4j.Logger;
 import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.ITViewBuilder;
 import org.tedros.core.ITedrosBox;
@@ -40,6 +39,7 @@ import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.util.TClassUtil;
 import org.tedros.util.TFileUtil;
+import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TedrosClassLoader;
 import org.tedros.util.TedrosFolder;
 
@@ -72,7 +72,7 @@ import javafx.stage.Stage;
 @SuppressWarnings({ "rawtypes"})
 public final class TedrosContext {
 	
-	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	private final static Logger LOGGER = TLoggerUtil.getLogger(TedrosContext.class);
 	
 	private static final String DEFAULT_COUNTRY_ISO2 = "BR";
 	private static final int DEFAULT_TOTAL_PAGE_HISTORY = 3;
@@ -119,8 +119,6 @@ public final class TedrosContext {
 	 * */
 	static{
 		
-		LOGGER.setLevel(Level.ALL);
-		
 		LOGGER.info("Start load properties files to classpath:");
 		addPropertiesFilesToClassPath();
 		LOGGER.info("Finish load Properties files.");
@@ -135,7 +133,7 @@ public final class TedrosContext {
 				locale = new Locale(languageProp.getProperty("language"));
 			}
 		}catch(IOException e){
-				LOGGER.severe(e.toString());
+				LOGGER.error(e.toString(), e);
 				locale = Locale.ENGLISH;
 		}
 		
@@ -235,7 +233,7 @@ public final class TedrosContext {
 				LOGGER.info("- Propertie "+TSystemPropertie.ORGANIZATION.getValue()+" not defined!");
 			}
 		} catch (NamingException e) {
-			LOGGER.severe("Error loading custom system properties: "+ e.toString());
+			LOGGER.error("Error loading custom system properties: "+ e.toString(), e);
 			e.printStackTrace();
 		}finally {
 			loc.close();
@@ -258,7 +256,7 @@ public final class TedrosContext {
 		} catch (Exception e1 ) {
 			e1.printStackTrace();
 			updateInitializationErrorMessage(e1.getMessage());
-			LOGGER.severe(e1.toString());
+			LOGGER.error(e1.toString(),e1);
 		}
 	}
 	
@@ -313,6 +311,7 @@ public final class TedrosContext {
 	 * */
 	public static void setLoggedUser(TUser loggedUser) {
 		TedrosContext.loggedUser = loggedUser;
+		LOGGER.info("User "+loggedUser.getName()+" signed in");
 	}
 	
 	/**
@@ -341,7 +340,7 @@ public final class TedrosContext {
 				file = listOfFiles[i].getName();
 				if (file.endsWith(".properties")){
 					file = TedrosFolder.CONF_FOLDER.getFullPath()+file;
-					LOGGER.config("Loading file: "+file);
+					LOGGER.info("Loading file: "+file);
 					try {
 						
 						if(tedrosClassLoader==null)
@@ -350,7 +349,7 @@ public final class TedrosContext {
 							TClassUtil.addFileAtClassPath(tedrosClassLoader, file);
 						
 					} catch (MalformedURLException e) {
-						LOGGER.severe(e.toString());
+						LOGGER.error(e.toString(), e);
 					}
 				}
 			}
@@ -369,7 +368,7 @@ public final class TedrosContext {
 			String path = TFileUtil.getTedrosFolderPath()+tedrosFolder.getFolder()+fileName;
 			return new File(path).toPath().toUri().toURL();//TUrlUtil.getURL(path);
 		} catch (MalformedURLException e) {
-			LOGGER.severe(e.toString());
+			LOGGER.error(e.toString(), e);
 			return null;
 		}
 	}
@@ -382,7 +381,7 @@ public final class TedrosContext {
 		try {
 			return TClassUtil.getFileInputStream(path);
 		} catch (FileNotFoundException e) {
-			LOGGER.severe(e.toString());
+			LOGGER.error(e.toString(), e);
 			return null;
 		}
 	}
@@ -395,7 +394,7 @@ public final class TedrosContext {
 		try {
 			return TClassUtil.getFileInputStream(path);
 		} catch (FileNotFoundException e) {
-			LOGGER.severe(e.toString());
+			LOGGER.error(e.toString(),e);
 			return null;
 		}
 	}
@@ -684,6 +683,7 @@ public final class TedrosContext {
 	public static void setLocale(Locale locale) {
 		TedrosContext.locale = locale;
 		TLanguage.reloadBundles();
+		LOGGER.info("Setting the language: "+locale);
 	}
 
 	public static void openDocument(String path) throws Exception {

@@ -18,6 +18,7 @@ import org.tedros.server.entity.ITEntity;
 import org.tedros.server.query.TSelect;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
+import org.tedros.util.TLoggerUtil;
 
 
 /**
@@ -158,7 +159,7 @@ public abstract class TPaginationProcess<E extends ITEntity> extends TProcess<TR
 	        		
         		} catch (Exception e) {
 					setException(e);
-					e.printStackTrace();
+					TLoggerUtil.error(getClass(), e.getMessage(), e);
 					result = new TResult<>(TState.ERROR,true, e.getCause().getMessage());
 				}finally {
 					loc.close();

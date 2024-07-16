@@ -47,7 +47,7 @@ implements ITChartBuilder<StackedBarChart>{
 		StackedBarChart chart = new StackedBarChart(xAxis, yAxis);
 		
 		if(ann.chartModelBuilder()!=TChartModelBuilder.class) {
-			TChartModelBuilder mb = ann.chartModelBuilder().newInstance();
+			TChartModelBuilder mb = ann.chartModelBuilder().getDeclaredConstructor().newInstance();
 			mb.setComponentDescriptor(super.getComponentDescriptor());
 			mb.setObservableList(observable);
 			TChartModel model = (TChartModel) mb.build();

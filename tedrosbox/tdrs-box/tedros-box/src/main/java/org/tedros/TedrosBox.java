@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Stack;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -48,6 +46,7 @@ import org.tedros.tools.ai.pane.TerosPane;
 import org.tedros.tools.logged.user.TMainSettingsPane;
 import org.tedros.tools.logged.user.TUserSettingsPane;
 import org.tedros.util.TFileUtil;
+import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TZipUtil;
 import org.tedros.util.TedrosFolder;
 
@@ -99,9 +98,7 @@ import javafx.util.Duration;
  * @author Davis Gordon
  * */
 public class TedrosBox extends Application implements ITedrosBox  {
-	
-	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-	
+		
 	private static TedrosBox tedros;
 	private Stage stage;
     private Scene scene;
@@ -154,7 +151,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     private ChangeListener<TViewState> chatViewStateChl;
     
     public TedrosBox(){
-    	LOGGER.setLevel(Level.ALL);
+    	
         history = new Stack<Page>();
         forwardHistory = new Stack<Page>();
         changingPage = false;
@@ -167,8 +164,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 			if(extract)
 				extractZip(outputFolder);
 		} catch (IOException e) {
-			e.printStackTrace();
-			LOGGER.severe(e.toString());
+			TLoggerUtil.error(TedrosBox.class, e.toString(), e);
 		}
     }
     
@@ -218,9 +214,9 @@ public class TedrosBox extends Application implements ITedrosBox  {
     	removeCss(customStyleCssUrl);
     	File basckGroundCss = new File(TThemeUtil.getBackgroundCssFilePath());
 		try {
-			System.out.println(FileUtils.readFileToString(basckGroundCss, Charset.defaultCharset()));
+			TLoggerUtil.info(TedrosBox.class, FileUtils.readFileToString(basckGroundCss, Charset.defaultCharset()));
 		} catch (IOException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(TedrosBox.class, e.getMessage(), e);
 		}
     	if(!basckGroundCss.exists()){
 			removeCss(backgroundCssUrl);
@@ -1117,17 +1113,19 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	}
 
 	private void printHistory() {
-	    System.out.print("   HISTORY = ");
+		StringBuilder builder = new StringBuilder();
+		builder.append("   HISTORY = ");
 	    for (Object o :history) {
 	    	Page page = (Page) o;
-	        System.out.print(page.getName()+"->");
+	    	builder.append(page.getName()+"->");
 	    }
-	    System.out.print("   ["+currentPage.getName()+"]");
+	    builder.append("   ["+currentPage.getName()+"]");
 	    for (Object o :forwardHistory) {
 	    	Page page = (Page) o;
-	        System.out.print(page.getName()+"->");
+	    	builder.append(page.getName()+"->");
 	    }
-	    System.out.print("\n");
+	    
+	    TLoggerUtil.debug(getClass(), builder.toString());
 	}
 
 	/**
@@ -1170,8 +1168,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     
     /**
      * ###################
-     * TedrosBox e start 
-     * metodos principais
+     * TedrosBox start
      * ###################
      * */    
     @Override 
@@ -1181,8 +1178,6 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		TLanguage.addResourceBundles(null, TFxKey.class.getClassLoader(), "TFx", "TUsual");
         init(primaryStage);
         primaryStage.show();
-        
-       // TedrosProcessManager.addProcess(TTomeeServerService.class);
     }
   
 }

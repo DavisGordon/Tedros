@@ -25,6 +25,7 @@ import org.tedros.server.model.ITModel;
 import org.tedros.server.model.TJsonModel;
 import org.tedros.server.result.TResult;
 import org.tedros.server.util.TModelInfoUtil;
+import org.tedros.util.TLoggerUtil;
 
 /**
  * @author Davis Gordon
@@ -56,7 +57,7 @@ public class TAiAssistantProcess extends TProcess<TResult<TChatResult>> {
 			if(StringUtils.isNotBlank(info))
 				info = iEng.getString(info);
 		} catch (Exception e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 		
 		String json = JsonHelper.write(model);
@@ -85,7 +86,7 @@ public class TAiAssistantProcess extends TProcess<TResult<TChatResult>> {
 			if(StringUtils.isNotBlank(info))
 				info = iEng.getString(info);
 		} catch (Exception e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 		
 		String json = JsonHelper.write(model);
@@ -115,7 +116,7 @@ public class TAiAssistantProcess extends TProcess<TResult<TChatResult>> {
 			if(StringUtils.isNotBlank(info))
 				info = iEng.getString(info);
 		} catch (Exception e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 		
 		String json = JsonHelper.write(model);
@@ -153,8 +154,8 @@ public class TAiAssistantProcess extends TProcess<TResult<TChatResult>> {
 	    			TAiChatCompletionController serv = loc.lookup(TAiChatCompletionController.JNDI_NAME);
 	    			res = serv.chat(TedrosContext.getLoggedUser().getAccessToken(), req);
 	    			
-	    		}catch(Exception ex) {
-	    			ex.printStackTrace();
+	    		}catch(Exception e) {
+	    			TLoggerUtil.error(getClass(), e.getMessage(), e);
 	    		}finally {
 	    			loc.close();
 	    		}

@@ -34,7 +34,7 @@ public class TEffectBuilder {
 			 * */
 			if(TReflectionUtil.isImplemented(parseClass, ITEffectParse.class)){
 				
-				ITEffectParse parser = (ITEffectParse) parseClass.newInstance();	
+				ITEffectParse parser = (ITEffectParse) parseClass.getDeclaredConstructor().newInstance();	
 					
 				return parser.parse(annotation);
 			}

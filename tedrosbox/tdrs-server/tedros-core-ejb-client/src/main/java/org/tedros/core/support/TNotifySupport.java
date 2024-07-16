@@ -2,9 +2,9 @@ package org.tedros.core.support;
 
 import java.util.Date;
 
-import javax.ejb.Remote;
-
 import org.tedros.core.notify.model.TState;
+
+import jakarta.ejb.Remote;
 
 @Remote
 public interface TNotifySupport {

@@ -7,10 +7,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.interceptor.AroundInvoke;
-import javax.interceptor.Interceptor;
-import javax.interceptor.InvocationContext;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.tedros.server.ejb.controller.ITSecurityController;
 import org.tedros.server.security.ITSecurity;
@@ -21,6 +17,10 @@ import org.tedros.server.security.TBeanPolicie;
 import org.tedros.server.security.TBeanSecurity;
 import org.tedros.server.security.TMethodPolicie;
 import org.tedros.server.security.TMethodSecurity;
+
+import jakarta.interceptor.AroundInvoke;
+import jakarta.interceptor.Interceptor;
+import jakarta.interceptor.InvocationContext;
 
 /**
  * @author Davis Gordon

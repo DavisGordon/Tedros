@@ -3,8 +3,8 @@
  */
 package org.tedros.chat.cdi.eao;
 
-import javax.enterprise.context.RequestScoped;
-import javax.persistence.Query;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.persistence.Query;
 
 import org.tedros.chat.entity.ChatMessage;
 import org.tedros.chat.entity.TStatus;

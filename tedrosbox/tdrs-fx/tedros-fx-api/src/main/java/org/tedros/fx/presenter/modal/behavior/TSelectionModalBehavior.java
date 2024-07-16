@@ -75,12 +75,12 @@ extends TDynaViewSelectionBaseBehavior<M, E> {
 		
 		M model;
 		try {
-			model = (M) getModelViewClass().getConstructor(entityClass).newInstance(entityClass.newInstance());
+			model = (M) getModelViewClass().getConstructor(entityClass).newInstance(entityClass.getDeclaredConstructor().newInstance());
 			setModelView(model);
 			showForm(TViewMode.EDIT);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 		
 		

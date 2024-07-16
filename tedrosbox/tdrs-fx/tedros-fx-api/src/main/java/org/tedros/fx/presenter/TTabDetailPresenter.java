@@ -11,13 +11,16 @@ import java.util.Arrays;
 
 import org.tedros.api.form.ITModelForm;
 import org.tedros.api.presenter.view.ITView;
+import org.tedros.core.TLanguage;
 import org.tedros.core.model.ITModelView;
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.exception.TException;
 import org.tedros.fx.form.TDefaultForm;
 import org.tedros.fx.modal.TConfirmMessageBox;
 import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.presenter.view.TTabDetailView;
 import org.tedros.server.entity.ITEntity;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -25,26 +28,20 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.control.ButtonBuilder;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.LabelBuilder;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.control.ScrollPaneBuilder;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.ToolBar;
-import javafx.scene.control.ToolBarBuilder;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderPaneBuilder;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.VBoxBuilder;
 import javafx.util.Callback;
 
 /**
@@ -93,50 +90,42 @@ public class TTabDetailPresenter<M extends TEntityModelView> {
 		Region spacer = new Region();
 		HBox.setHgrow(spacer, Priority.ALWAYS);
 		//menu bar
-		final ToolBar menuBar = ToolBarBuilder.create()
-				.id("t-view-toolbar")
-				.items(Arrays.asList(getView().getNewBtn(), getView().getRemoveBtn(), spacer))
-				.build();
-		
+		final ToolBar menuBar = new ToolBar();
+		menuBar.setId("t-view-toolbar");
+		menuBar.getItems().addAll(Arrays.asList(getView().getNewBtn(), getView().getRemoveBtn(), spacer));
 		
 		HBox.setHgrow(menuBar, Priority.ALWAYS);
 		// menu box
-		final HBox menuBox = HBoxBuilder.create()
-				.id("t-header-box")
-				.children(Arrays.asList(menuBar))
-				.maxWidth(Double.MAX_VALUE)
-				.alignment(Pos.CENTER_LEFT)
-				.build();
+		final HBox menuBox = new HBox();
+		menuBox.setId("t-header-box");
+		menuBox.getChildren().addAll(Arrays.asList(menuBar));
+		menuBox.setMaxWidth(Double.MAX_VALUE);
+		menuBox.setAlignment(Pos.CENTER_LEFT);
 		
 		//Layout
-		final BorderPane layout = BorderPaneBuilder.create()
-				.top(menuBox)
-				.build();
-		
-		
+		final BorderPane layout = new BorderPane();
+		layout.setTop(menuBox);
 		
 		final ListView<M> listView  = new ListView<M>();
 		getView().setListView(listView);
 		
 		
-		Label listName = LabelBuilder.create().id("t-title-label").text(this.listName).build(); 
+		Label listName = new Label();
+		listName.setId("t-title-label");
+		listName.setText(this.listName); 
 		Region spacer2 = new Region();
 		HBox.setHgrow(spacer, Priority.ALWAYS);
 		
-		HBox hBox = HBoxBuilder.create()
-				.id("t-header-box")
-				.fillHeight(true)
-				.children(Arrays.asList(listName, spacer2))
-				.build();
-		
+		HBox hBox = new HBox();
+		hBox.setId("t-header-box");
+		hBox.setFillHeight(true);
+		hBox.getChildren().addAll(Arrays.asList(listName, spacer2));
 		
 		VBox.setVgrow(listView, Priority.ALWAYS);
-		final VBox vBox = VBoxBuilder.create()
-				.fillWidth(true)
-				.id("t-pane")
-				.children(Arrays.asList(hBox, listView))
-				.build();
-		
+		final VBox vBox = new VBox();
+		vBox.setFillWidth(true);
+		vBox.setId("t-pane");
+		vBox.getChildren().addAll(Arrays.asList(hBox, listView));
 		
 		layout.setLeft(vBox);
 		
@@ -208,20 +197,23 @@ public class TTabDetailPresenter<M extends TEntityModelView> {
 	 * Adiciona a��o no bot�o Add Perfil
 	 * */
 	private void initializeNewBtn() {
-		getView().setNewBtn(ButtonBuilder.create().text("Novo").id("t-button").build());
+		Button b = new Button();
+		b.setText(TLanguage.getInstance().getString(TFxKey.BUTTON_NEW));
+		b.setId("t-button");
+		getView().setNewBtn(b);
 		getView().getNewBtn().setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
 			public void handle(ActionEvent event) {
 				try{
-					final M model = modelViewClass.getConstructor(entityClass).newInstance(entityClass.newInstance());
+					final M model = modelViewClass.getConstructor(entityClass).newInstance(entityClass.getDeclaredConstructor().newInstance());
 					final ListView<M> list = view.getListView();
 					list.getItems().add(model);
 					list.selectionModelProperty().get().select(list.getItems().size()-1);
 					setModel(model);
 					gerarForm();
 				}catch(Exception e){
-					e.printStackTrace();
+					TLoggerUtil.error(getClass(), e.getMessage(), e);
 				}
 			}
 		});
@@ -231,7 +223,10 @@ public class TTabDetailPresenter<M extends TEntityModelView> {
 	 * Adiciona a��o no bot�o excluir
 	 * */
 	private void initializeRemoveBtn(final TTabDetailView<M> view) {
-		getView().setRemoveBtn(ButtonBuilder.create().text("Excluir").id("t-last-button").build());
+		Button b = new Button();
+		b.setText(TLanguage.getInstance().getString(TFxKey.BUTTON_REMOVE));
+		b.setId("t-last-button");
+		getView().setRemoveBtn(b);
 		view.getRemoveBtn().setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
@@ -284,22 +279,22 @@ public class TTabDetailPresenter<M extends TEntityModelView> {
 			Region form = (Region) formClass.getConstructor(ITModelView.class).newInstance(getModel());
 			form.layout();
 			
-			ScrollPane scroll = ScrollPaneBuilder.create()
-					.content(form)
-					.fitToWidth(true)
-					.maxHeight(Double.MAX_VALUE)
-					.maxWidth(Double.MAX_VALUE)
-					.vbarPolicy(ScrollBarPolicy.AS_NEEDED)
-					.hbarPolicy(ScrollBarPolicy.AS_NEEDED)
-					.id("t-form-scroll")
-					.build();
+			ScrollPane scroll = new ScrollPane();
+			scroll.setContent(form);
+			scroll.setFitToWidth(true);
+			scroll.maxHeight(Double.MAX_VALUE);
+			scroll.maxWidth(Double.MAX_VALUE);
+			scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+			scroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+			scroll.setId("t-form-scroll");
+			
 			scroll.layout();
 			
 			getView().getLayout().setCenter(scroll);
 			
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 		
 		

@@ -3,6 +3,7 @@ package org.tedros.fx.form;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
 import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.api.form.ITFieldBox;
@@ -11,6 +12,7 @@ import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.model.ITModelView;
 import org.tedros.core.repository.TRepository;
 import org.tedros.fx.descriptor.TComponentDescriptor;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -21,6 +23,7 @@ import javafx.scene.Node;
 
 public abstract class TFieldLoader<M extends ITModelView<?>> {
 	
+	private final static Logger LOGGER = TLoggerUtil.getLogger(TFieldLoader.class);
 	
 	private SimpleBooleanProperty allLoaded = new SimpleBooleanProperty(false);
 	private SimpleIntegerProperty totalToLoad = new SimpleIntegerProperty();
@@ -80,12 +83,12 @@ public abstract class TFieldLoader<M extends ITModelView<?>> {
 		descriptor.setMode(TViewMode.EDIT);
 		descriptor.setFieldDescriptor(tFieldDescriptor);
 		
-		TControlLayoutBuilder builder = new TControlLayoutBuilder();
+		TComponentBuilder builder = new TComponentBuilder();
 		
 		if (bcontrol) 
-			builder.getControlField(descriptor);
+			builder.processControlField(descriptor);
 		else
-			builder.getLayoutField(descriptor);
+			builder.processLayoutField(descriptor);
 		
 		
 	}
@@ -94,10 +97,10 @@ public abstract class TFieldLoader<M extends ITModelView<?>> {
 		
 		descriptor.setMode(TViewMode.READER);
 		descriptor.setFieldDescriptor(tFieldDescriptor);
-		final Node reader = TControlLayoutReaderBuilder.getField(descriptor);
+		final Node reader = TComponentReaderBuilder.getField(descriptor);
 			
 		if(reader==null){
-			System.err.println("WARNING: Reader null to "+tFieldDescriptor.getFieldName());
+			LOGGER.warn("Reader null to "+tFieldDescriptor.getFieldName());
 			return;
 		}	
 		

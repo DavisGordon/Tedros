@@ -1,8 +1,8 @@
 
 package org.tedros.core.cdi.bo;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 
 import org.tedros.common.model.TMimeType;
 import org.tedros.common.model.TMimeTypeImport;

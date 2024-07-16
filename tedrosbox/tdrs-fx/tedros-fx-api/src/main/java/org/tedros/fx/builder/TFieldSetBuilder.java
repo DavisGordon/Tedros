@@ -9,10 +9,11 @@ package org.tedros.fx.builder;
 import java.lang.annotation.Annotation;
 
 import org.tedros.fx.descriptor.TComponentDescriptor;
-import org.tedros.fx.form.TControlLayoutReaderBuilder;
+import org.tedros.fx.form.TComponentReaderBuilder;
 import org.tedros.fx.html.THtmlFieldSetGenerator;
 import org.tedros.fx.layout.TFieldSet;
 import org.tedros.fx.reader.THtmlReader;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.scene.Node;
 
@@ -49,15 +50,14 @@ implements ITLayoutBuilder<TFieldSet> {
 				node = tHtmlReader;
 			}else{
 				final TComponentDescriptor descriptor = new TComponentDescriptor(getComponentDescriptor(), field);
-				node = TControlLayoutReaderBuilder.getField(descriptor);
+				node = TComponentReaderBuilder.getField(descriptor);
 			}
 			
 			if(node==null)
 				continue;
 			
 			if(!(node instanceof THtmlReader)){
-				System.err.println("TWarning from "+this.getClass().getSimpleName()
-						+": The field "+field+" in "+getComponentDescriptor().getModelView().getClass().getName()
+				TLoggerUtil.warn(getClass(), "The field "+field+" in "+getComponentDescriptor().getModelView().getClass().getName()
 						+"  must be annotated with @TReaderHtml()");
 			}else{
 				THtmlReader fieldHtmlReader = (THtmlReader) node;

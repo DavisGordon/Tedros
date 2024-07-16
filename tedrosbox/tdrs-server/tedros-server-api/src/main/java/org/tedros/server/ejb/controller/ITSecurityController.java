@@ -3,7 +3,7 @@
  */
 package org.tedros.server.ejb.controller;
 
-import javax.ejb.Remote;
+import jakarta.ejb.Remote;
 
 import org.tedros.server.entity.ITUser;
 import org.tedros.server.security.TAccessToken;

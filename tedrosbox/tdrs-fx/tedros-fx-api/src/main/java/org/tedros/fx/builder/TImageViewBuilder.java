@@ -18,6 +18,7 @@ import org.tedros.fx.annotation.scene.image.TImage;
 import org.tedros.fx.annotation.scene.image.TImageView;
 import org.tedros.fx.property.TSimpleFileProperty;
 import org.tedros.server.entity.ITFileEntity;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -68,7 +69,7 @@ implements ITControlBuilder<ImageView, TSimpleFileProperty<ITFileEntity>>, ITRea
 				try {
 					bis.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					TLoggerUtil.error(getClass(), e.getMessage(), e);
 				}
 			}else {
 				if("default-image.jpg".equals(a.url())) {
@@ -77,7 +78,7 @@ implements ITControlBuilder<ImageView, TSimpleFileProperty<ITFileEntity>>, ITRea
 					try {
 						is2.close();
 					} catch (IOException e) {
-						e.printStackTrace();
+						TLoggerUtil.error(getClass(), e.getMessage(), e);
 					}
 				}else{
 					img = new Image(a.url(), a.requestedWidth(), a.requestedHeight(), a.preserveRatio(), a.smooth(), a.backgroundLoading());

@@ -30,7 +30,7 @@ implements ITControlBuilder<N, P> {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public N build(final Annotation annotation, final P attrProperty) throws Exception {
 		Class clazz = TReflectionUtil.getGenericParamClass(this.getClass(), 0);
-		final N control = (N) clazz.newInstance();
+		final N control = (N) clazz.getDeclaredConstructor().newInstance();
 		callParser(annotation, control);
 		//TRequiredNumeberFieldParser.getInstance().parse(annotation, null, (TRequiredNumberField) control);
 		//TNumberFieldParser.getInstance().parse(annotation, null, (TNumberField) control);

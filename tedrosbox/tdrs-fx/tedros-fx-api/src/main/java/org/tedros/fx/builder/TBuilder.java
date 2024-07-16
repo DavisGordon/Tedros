@@ -8,6 +8,7 @@ import org.tedros.core.ITModule;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.fx.annotation.parser.TAnnotationParser;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.scene.Node;
 
@@ -34,7 +35,7 @@ public abstract class TBuilder implements ITBuilder {
 				}
 			}
 		}catch(Exception e){
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(),e.getMessage(), e);
 		}
 		
 	}

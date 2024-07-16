@@ -2,9 +2,9 @@ package org.tedros.server.entity;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Version;
 
 @MappedSuperclass
 public  class TVersionEntity extends TEntity implements ITVersionableEntity {

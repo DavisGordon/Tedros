@@ -5,13 +5,14 @@ package org.tedros.core.context;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 
+import org.slf4j.Logger;
 import org.tedros.app.process.ITProcess;
 import org.tedros.core.ITApplication;
 import org.tedros.core.ITModule;
 import org.tedros.core.TLanguage;
 import org.tedros.core.annotation.security.TAuthorizationType;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,7 +24,7 @@ import javafx.collections.ObservableList;
  */
 public final class TAppContext {
 	
-	private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	private static final Logger LOGGER = TLoggerUtil.getLogger(TAppContext.class);
 	
 	private TLanguage iEngine;
 	
@@ -32,7 +33,7 @@ public final class TAppContext {
 	
 	private ObservableList<TModuleContext> moduleContextList;
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public TAppContext(Class appStarterClass) {
 		
 		moduleContextList = FXCollections.observableArrayList(); 
@@ -63,7 +64,7 @@ public final class TAppContext {
 			
 			if(TedrosCoreUtil.isImplemented(appStarterClass, ITApplication.class)){
 				LOGGER.info("Calling start method:");
-				application = (ITApplication) appStarterClass.newInstance();
+				application = (ITApplication) appStarterClass.getDeclaredConstructor().newInstance();
 				application.start();
 				LOGGER.info("Finish start method.");
 			}
@@ -81,7 +82,7 @@ public final class TAppContext {
 			
 		}catch(Exception e){
 			TedrosContext.updateInitializationErrorMessage(e.getMessage());
-			LOGGER.severe(e.toString());
+			LOGGER.error(e.toString(), e);
 		}
 	}
 	

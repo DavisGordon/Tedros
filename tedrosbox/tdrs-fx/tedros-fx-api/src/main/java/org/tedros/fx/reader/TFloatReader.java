@@ -7,6 +7,7 @@
 package org.tedros.fx.reader;
 
 import org.tedros.fx.util.TMaskUtil;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.value.ChangeListener;
@@ -44,7 +45,7 @@ public class TFloatReader extends TTextReader<Float> {
 			buildValueProperty();
 			return valueProperty;
 		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 		return null;
 	}

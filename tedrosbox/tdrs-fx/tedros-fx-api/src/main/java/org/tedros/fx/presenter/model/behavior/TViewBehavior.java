@@ -38,7 +38,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			super.buildForm(TViewMode.EDIT);
 		}catch(Throwable e){
 			getView().tShowModal(new TMessageBox(e), true);
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 		
 	}

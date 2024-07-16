@@ -31,7 +31,7 @@ implements ITControlBuilder<TNotifyLink, Property<String>> {
 	
 	public TNotifyLink build(final Annotation ann, final Property<String> attrProperty) throws Exception {
 		org.tedros.tools.annotation.TNotifyLink tAnn = (org.tedros.tools.annotation.TNotifyLink) ann;
-		TGenericBuilder<TNotify> b = tAnn.entityBuilder().newInstance();
+		TGenericBuilder<TNotify> b = tAnn.entityBuilder().getDeclaredConstructor().newInstance();
 		b.setComponentDescriptor(super.getComponentDescriptor());
 		final TNotifyLink control = new TNotifyLink(b);
 		control.getStyleClass().add(TTextStyle.CUSTOM.getValue());

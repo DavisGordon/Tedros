@@ -6,12 +6,14 @@ import java.util.Set;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.tedros.api.form.ITModelForm;
 import org.tedros.core.model.ITModelView;
 import org.tedros.fx.annotation.control.TTrigger;
 import org.tedros.fx.control.ITTriggeredable;
 import org.tedros.fx.control.trigger.TTrigger.TEvent;
 import org.tedros.fx.exception.TErrorType;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.Observable;
 import javafx.beans.property.Property;
@@ -28,6 +30,7 @@ import javafx.scene.Node;
 
 public class TTriggerLoader<M extends ITModelView<?>, F extends ITModelForm<M>> {
 
+	private final static Logger LOGGER = TLoggerUtil.getLogger(TTriggerLoader.class);
 	
 	private final F form;
 	
@@ -59,10 +62,9 @@ public class TTriggerLoader<M extends ITModelView<?>, F extends ITModelForm<M>> 
 								: null;
 						
 				if(source==null){
-					System.err.println("\n\nT_ERROR "
-							+ "\nType: "+TErrorType.TRIGGER_BUILD
-							+ "\nFIELD: "+this.form.gettModelView().getClass().getSimpleName() + "."+fieldName
-							+ "\n\nThe source field not found, maybe the field are not visible for the selected mode\n\n");
+					LOGGER.warn("Type: "+TErrorType.TRIGGER_BUILD
+							+ " FIELD: "+this.form.gettModelView().getClass().getSimpleName() + "."+fieldName
+							+ "\n\t\tThe source field not found, maybe it are not visible for the selected mode");
 				}
 				
 				try {
@@ -135,7 +137,7 @@ public class TTriggerLoader<M extends ITModelView<?>, F extends ITModelForm<M>> 
 					}
 					
 				} catch (Exception e) {
-					e.printStackTrace();
+					LOGGER.error(e.getMessage(),e);
 				}
 			});
 		});

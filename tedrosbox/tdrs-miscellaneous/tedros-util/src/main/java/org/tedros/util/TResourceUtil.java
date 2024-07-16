@@ -18,7 +18,7 @@ public final class TResourceUtil {
 			prop = new Properties();
 			prop.load(is);
 		} catch (Exception  e1) {
-			e1.printStackTrace();
+			TLoggerUtil.error(TResourceUtil.class, e1.getMessage(), e1);
 		}
 		return prop;
 	}

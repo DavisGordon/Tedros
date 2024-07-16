@@ -14,6 +14,7 @@ import org.tedros.api.form.ITModelForm;
 import org.tedros.api.presenter.ITPresenter;
 import org.tedros.core.model.ITModelView;
 import org.tedros.fx.annotation.form.TForm;
+import org.tedros.util.TLoggerUtil;
 
 /**
  * A {@link ITModelForm} builder. 
@@ -35,7 +36,7 @@ public class TFormBuilder<M extends ITModelView<?>> {
 			this.form = null;
 			this.modelView = modelView;
 		}catch(Exception e){
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 	}
 	
@@ -101,10 +102,9 @@ public class TFormBuilder<M extends ITModelView<?>> {
 		} catch (InstantiationException | IllegalAccessException
 				| IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 			return null;
 		}
-	
 		
 		return this.form;
 		

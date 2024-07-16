@@ -19,6 +19,7 @@ import org.tedros.fx.model.TModelView;
 import org.tedros.fx.process.TEntityProcess;
 import org.tedros.server.entity.ITEntity;
 import org.tedros.server.query.TSelect;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -65,7 +66,7 @@ implements ITControlBuilder<org.tedros.fx.control.TPickListField, ObservableList
 			try {
 				loadControl(tAnnotation, control);
 			} catch (Exception e) {
-				e.printStackTrace();
+				TLoggerUtil.error(getClass(), e.getMessage(), e);
 			}
 		};
 		String k = super.getComponentDescriptor().getFieldDescriptor()
@@ -90,15 +91,14 @@ implements ITControlBuilder<org.tedros.fx.control.TPickListField, ObservableList
 	/**
 	 * @param tAnnotation
 	 * @param control
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
+	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
 	private void loadControl(TPickListField tAnnotation, final org.tedros.fx.control.TPickListField control)
-			throws InstantiationException, IllegalAccessException {
+			throws Exception {
 		
 		if(tAnnotation.items()!=NullObservableListBuilder.class) {
-			ITGenericBuilder<ObservableList> b = tAnnotation.items().newInstance();
+			ITGenericBuilder<ObservableList> b = tAnnotation.items().getDeclaredConstructor().newInstance();
 			b.setComponentDescriptor(getComponentDescriptor());
 			ObservableList source = b.build();
 			control.settSourceList(source);

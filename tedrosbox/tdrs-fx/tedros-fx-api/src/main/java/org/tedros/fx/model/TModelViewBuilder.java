@@ -68,8 +68,8 @@ public final class TModelViewBuilder<M extends ITModelView<?>, E extends ITModel
 		
 		try {
 			return (M) (entityClass!=null 
-					? this.modelViewClass.getConstructor(entityClass).newInstance(entityClass.newInstance())
-							: this.modelViewClass.newInstance());
+					? this.modelViewClass.getConstructor(entityClass).newInstance(entityClass.getDeclaredConstructor().newInstance())
+							: this.modelViewClass.getDeclaredConstructor().newInstance());
 						
 		} catch (InstantiationException | IllegalAccessException
 				| IllegalArgumentException | InvocationTargetException

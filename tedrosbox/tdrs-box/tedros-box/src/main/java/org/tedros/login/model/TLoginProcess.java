@@ -59,13 +59,13 @@ import org.tedros.tools.module.user.action.TAuthorizationLoadAction;
 				 break;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 			String msg = (e.getCause() instanceof ConnectException 
 					|| e.getCause() instanceof RemoteException)
 					? "SERVER_FAIL"
 					: e.getCause().getMessage();
 			TResult<TUser> res = new TResult<>(TState.ERROR, msg);
 			resultList.add(res);
+			LOGGER.error(msg, e);
 		}finally {
 			loc.close();
 		}

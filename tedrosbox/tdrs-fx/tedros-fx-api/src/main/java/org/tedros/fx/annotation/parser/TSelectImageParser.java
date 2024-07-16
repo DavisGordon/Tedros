@@ -12,7 +12,7 @@ public class TSelectImageParser extends TControlFieldParser<org.tedros.fx.annota
 		control.settScroll(ann.scroll());
 		if(!(ann.imageViewEvents().length==1 && ann.imageViewEvents()[0]==TEventHandler.class)) {
 			for(Class<? extends TEventHandler> c : ann.imageViewEvents()) {
-				TEventHandler ev = c.newInstance();
+				TEventHandler ev = c.getDeclaredConstructor().newInstance();
 				ev.setDescriptor(getComponentDescriptor());
 				control.addTEventHandler(ev);
 			}

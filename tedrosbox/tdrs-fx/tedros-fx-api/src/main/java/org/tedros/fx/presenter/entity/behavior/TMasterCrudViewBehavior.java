@@ -35,6 +35,7 @@ import org.tedros.server.query.TCompareOp;
 import org.tedros.server.query.TSelect;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
@@ -158,7 +159,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 								loadListView();
 							}else{
 								String msg = resultados.getMessage();
-								System.out.println(msg);
+								TLoggerUtil.debug(getClass(), msg);
 								switch(resultados.getState()) {
 									case ERROR:
 										addMessage(new TMessage(TMessageType.ERROR, msg));
@@ -207,7 +208,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 										}
 									}else{
 										String msg = result.getMessage();
-										System.out.println(msg);
+										TLoggerUtil.debug(getClass(), msg);
 										switch(result.getState()) {
 											case ERROR:
 												msgs.add(new TMessage(TMessageType.ERROR, msg));
@@ -233,7 +234,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 					process.stateProperty().addListener(new WeakChangeListener(prcl));
 					process.startProcess();
 				}else{
-					System.err.println("\nWARNING: Cannot create a process for the "+getModelViewClass().getSimpleName()+", check the @TCrudForm(processClass,serviceName) properties");
+					LOGGER.warn("Cannot create a process for the "+getModelViewClass().getSimpleName()+", the entity must be declared with @TEntityProcess or @TEjbService");
 					loadListView();
 				}
 			
@@ -241,7 +242,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			
 		}catch(Throwable e){
 			getView().tShowModal(new TMessageBox(e), true);
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 		
 	}
@@ -351,13 +352,13 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 								M model = (M) getModelViewClass().getConstructor(getEntityClass()).newInstance(e);
 								models.add(model);
 							} catch (Exception e1) {
-								e1.printStackTrace();
+								LOGGER.error(e1.getMessage(), e1);
 							}
 						}
 						processPagination((long)result.get("total"));
 					}else {
 						String msg = resultados.getMessage();
-						System.out.println(msg);
+						TLoggerUtil.debug(getClass(), msg);
 						switch(resultados.getState()) {
 							case ERROR:
 								addMessage(new TMessage(TMessageType.ERROR, msg));
@@ -401,7 +402,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 					this.loadModels();
 				}
 			} catch (TException e1) {
-				e1.printStackTrace();
+				LOGGER.error(e1.getMessage(), e1);
 			}
 				
 		});
@@ -416,13 +417,13 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		try {
 			Callback<ListView<M>, ListCell<M>> callBack = (Callback<ListView<M>, ListCell<M>>) 
 					((tBehavior!=null) 
-							? tBehavior.listViewCallBack().newInstance() 
+							? tBehavior.listViewCallBack().getDeclaredConstructor().newInstance() 
 									: new TEntityListViewCallback<M>());
 			
 			final ListView<M> listView = this.decorator.gettListView();
 			listView.setCellFactory(callBack);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 	}	
 	
@@ -447,7 +448,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 				try {
 					paginate(a2);
 				} catch (Throwable e) {
-					e.printStackTrace();
+					LOGGER.error(e.getMessage(), e);
 				}
 			};
 			super.getListenerRepository().add("listviewpaginatorCL", chl0);
@@ -492,7 +493,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 				try {
 					this.paginateLoadedModel(e, new TPagination(null, null, orderBy, alias, orderAsc, 0, totalRows));
 				} catch (TException e1) {
-					e1.printStackTrace();
+					LOGGER.error(e1.getMessage(), e1);
 				}
 			}else {
 				final ListView<M> list = this.decorator.gettListView();
@@ -539,7 +540,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 								M model = (M) getModelViewClass().getConstructor(getEntityClass()).newInstance(e);
 								models.add(model);
 							} catch (Exception e1) {
-								e1.printStackTrace();
+								LOGGER.error(e1.getMessage(), e1);
 							}
 						}
 						processPagination((long)result.get("total"));
@@ -551,7 +552,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 						}
 					}else {
 						String msg = resultados.getMessage();
-						System.out.println(msg);
+						TLoggerUtil.debug(getClass(), msg);
 						switch(resultados.getState()) {
 							case ERROR:
 								addMessage(new TMessage(TMessageType.ERROR, msg));

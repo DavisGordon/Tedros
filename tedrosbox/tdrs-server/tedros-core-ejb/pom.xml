@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.tedros</groupId>
 		<artifactId>tdrs-server</artifactId>
-		<version>8-5.2.1</version>
+		<version>17-0.0.1</version>
 	</parent>
 
 	<!-- MODULE INFO -->
@@ -16,10 +16,15 @@
 
 	<name>tedros-core-ejb</name>
 	<description>The EJB project with services to tedros-core</description>
+	
+	<!-- PROPERTIES -->
+	<properties>
+		<java.version>17</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
 	<!-- DEPENDENCIES -->
 	<dependencies>
-	
 	
 	  	<dependency>
 			<groupId>org.apache.tomee</groupId>
@@ -31,7 +36,7 @@
 	  	<dependency>
 	  		<groupId>org.tedros</groupId>
 	  		<artifactId>tedros-util</artifactId>
-	  		<version>8-5.2.1</version>
+	  		<version>17-0.0.1</version>
 	  		<scope>test</scope>
 	  	</dependency>
 	  	
@@ -52,21 +57,21 @@
 		<dependency>
 			<groupId>org.tedros</groupId>
 			<artifactId>tedros-server-api</artifactId>
-			<version>8-5.2.1</version>
+			<version>17-0.0.1</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.tedros</groupId>
 			<artifactId>tedros-core-ejb-client</artifactId>
-			<version>8-5.2.1</version>
+			<version>17-0.0.1</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.tedros</groupId>
 			<artifactId>tedros-common-model</artifactId>
-			<version>8-5.2.1</version>
+			<version>17-0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.theokanning.openai-gpt3-java</groupId>
@@ -97,7 +102,7 @@
 
 		<dependency>
 			<groupId>org.apache.tomee</groupId>
-			<artifactId>javaee-api</artifactId>
+			<artifactId>jakartaee-api</artifactId>
 			<version>${javaee.api.version}</version>
 			<scope>provided</scope>
 		</dependency>

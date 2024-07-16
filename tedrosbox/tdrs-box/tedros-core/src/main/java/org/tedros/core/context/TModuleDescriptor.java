@@ -1,7 +1,5 @@
 package org.tedros.core.context;
 
-import javax.persistence.Transient;
-
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TCoreKeys;
 import org.tedros.core.TLanguage;
@@ -10,6 +8,7 @@ import org.tedros.core.annotation.TItem;
 import org.tedros.core.annotation.TView;
 import org.tedros.core.annotation.security.TSecurity;
 
+import jakarta.persistence.Transient;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

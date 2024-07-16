@@ -9,15 +9,15 @@ package org.tedros.fx.form;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
 import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.api.form.ITModelForm;
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.core.model.ITModelView;
-import org.tedros.fx.annotation.TDebugConfig;
 import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.util.TReflectionUtil;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -35,6 +35,8 @@ import javafx.scene.Node;
  */
 class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 	
+	private final static Logger LOGGER = TLoggerUtil.getLogger(TModelViewLoader.class);
+	
 	private SimpleIntegerProperty count = new SimpleIntegerProperty(0);
 	private final Object lock = new Object();
 	public TModelViewLoader(M modelView, ITModelForm<M> form) {
@@ -48,10 +50,6 @@ class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 	}
 	
 	public void loadEditFields(final ObservableList<Node> nodesLoaded) throws Exception {
-		
-		Long startTime;
-		if(TDebugConfig.detailParseExecution) 
-			startTime = System.nanoTime();
 		
 		initialize();
 		
@@ -116,10 +114,10 @@ class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 						if(!fd.isLoaded()) {
 			            	try {
 								TComponentDescriptor cd = new TComponentDescriptor(descriptor, fd.getFieldName());
-			            		TControlLayoutBuilder builder = new TControlLayoutBuilder();
-			            		 builder.getLayoutField(cd);
+			            		TComponentBuilder builder = new TComponentBuilder();
+			            		 builder.processLayoutField(cd);
 							} catch (Exception e) {
-								e.printStackTrace();
+								LOGGER.error(e.getMessage(), e);
 							}  
 						}
 					});
@@ -138,12 +136,12 @@ class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 				            	try {
 									TComponentDescriptor cd = new TComponentDescriptor(descriptor, fd.getFieldName());
 				            		
-				            		TControlLayoutBuilder builder = new TControlLayoutBuilder();
+				            		TComponentBuilder builder = new TComponentBuilder();
 				            		
-				            		builder.getControlField(cd);
+				            		builder.processControlField(cd);
 									lessOne();
 								} catch (Exception e) {
-									e.printStackTrace();
+									LOGGER.error(e.getMessage(), e);
 								}
 								
 				            }
@@ -154,20 +152,9 @@ class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 				taskThread.start();
 			}
 		});
-		
-		
-		if(TDebugConfig.detailParseExecution){
-			long endTime = System.nanoTime();
-			long duration = (endTime - startTime);
-			System.out.println("[TModelViewLoader][ModelView: "+getModelViewClassName()+"][Form: "+getFormClassName()+"][Build duration: "+(duration/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration/1000000))+"s] ");
-		}
 	}
 	
 	public ObservableList<Node> getReaders() throws Exception {
-		
-		Long startTime;
-		if(TDebugConfig.detailParseExecution) 
-			startTime = System.nanoTime();
 		
 		final ObservableList<Node> nodesLoaded = FXCollections.observableArrayList();
 		
@@ -182,11 +169,7 @@ class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 			
 			loadReaderFieldBox(nodesLoaded, tFieldDescriptor);
 		}
-		if(TDebugConfig.detailParseExecution){
-			long endTime = System.nanoTime();
-			long duration = (endTime - startTime);
-			System.out.println("[TModelViewLoader][ModelView: "+getModelViewClassName()+"][Form: "+getFormClassName()+"][Build duration: "+(duration/1000000)+"ms, "+(TimeUnit.MILLISECONDS.toSeconds(duration/1000000))+"s]\n\n ");
-		}
+		
 		return nodesLoaded;
 	}
 }
