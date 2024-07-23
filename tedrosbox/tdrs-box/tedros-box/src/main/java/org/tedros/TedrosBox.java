@@ -892,8 +892,10 @@ public class TedrosBox extends Application implements ITedrosBox  {
         TitledPane t2 = new TitledPane();
         t2.setText(iEngine.getString("#{tedros.setting.main}"));
         t2.setContent(new TMainSettingsPane());
-        t.getStyleClass().add("t-settings-header");
-        t2.getStyleClass().add("t-settings-header");
+		/*
+		 * t.getStyleClass().add("t-settings-header");
+		 * t2.getStyleClass().add("t-settings-header");
+		 */
         settingsAcc.setExpandedPane(t);
         settingsAcc.getPanes().addAll(t, t2);
 	}

@@ -233,8 +233,7 @@ public final class TedrosContext {
 				LOGGER.info("- Propertie "+TSystemPropertie.ORGANIZATION.getValue()+" not defined!");
 			}
 		} catch (NamingException e) {
-			LOGGER.error("Error loading custom system properties: "+ e.toString(), e);
-			e.printStackTrace();
+			LOGGER.error("Error loading custom system properties: "+ e.getMessage(), e);
 		}finally {
 			loc.close();
 			LOGGER.info("Finish load custom system properties.");
@@ -254,9 +253,8 @@ public final class TedrosContext {
 			TReflections.getInstance().getClassesAnnotatedWith(TApplication.class)
 			.forEach(c -> TedrosAppManager.getInstance().addApplication(c));
 		} catch (Exception e1 ) {
-			e1.printStackTrace();
 			updateInitializationErrorMessage(e1.getMessage());
-			LOGGER.error(e1.toString(),e1);
+			LOGGER.error(e1.getMessage(),e1);
 		}
 	}
 	

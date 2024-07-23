@@ -1,191 +1,177 @@
-<project 	xmlns="http://maven.apache.org/POM/4.0.0" 
-			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  			xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
- >
- 	<modelVersion>4.0.0</modelVersion>
-	
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
+	<modelVersion>4.0.0</modelVersion>
+
 	<!-- PARENT INFO -->
 	<parent>
 		<groupId>org.tedros</groupId>
 		<artifactId>tdrs-box</artifactId>
 		<version>17-0.0.1</version>
 	</parent>
-	
-	<!-- MODULE INFO -->
-  	<artifactId>tedros-box</artifactId>
-  	<packaging>jar</packaging>
 
-  	<name>tedros-box</name>
-  	<description>The tedros box projects</description>
-  	
-  	<!-- DEPENDENCIES -->
-  	<dependencies>
-	  	
-	  	<!-- APPS -->
-	  	 
-	  	<dependency>
-	  		<groupId>org.tedros</groupId>
-	  		<artifactId>tedros-box-app-settings</artifactId>
-	  		<version>17-0.0.1</version>
-	  		<scope>compile</scope>
-	  	</dependency>
-	  	
-	  	<dependency>
-	  		<groupId>org.tedros</groupId>
-	  		<artifactId>app-chat-fx</artifactId>
-	  		<version>17-0.0.1</version>
-	  		<scope>compile</scope>
-	  	</dependency>
-	  	<!-- 
-	 <dependency>
-  		<groupId>org.tedros</groupId>
-  		<artifactId>app-services-fx</artifactId>
-  		<version>${app.services}</version>
-  		<scope>compile</scope>
-  	</dependency>
-	 
-	 <dependency>
-  		<groupId>org.tedros</groupId>
-  		<artifactId>app-location-fx</artifactId>
-  		<version>${app.location}</version>
-  		<scope>compile</scope>
-  	</dependency>
-  	
-  	 <dependency>
-  		<groupId>org.tedros</groupId>
-  		<artifactId>app-person-fx</artifactId>
-  		<version>${app.person}</version>
-  		<scope>compile</scope>
-  	</dependency>
-  	
-	 <dependency>
-  		<groupId>org.tedros</groupId>
-  		<artifactId>app-docs-fx</artifactId>
-  		<version>${app.docs}</version>
-  		<scope>compile</scope>
-  	</dependency>
-	  	-->
-	  	
-	  	<!-- END APPS -->
-	  	
-	  	<dependency>
-	  		<groupId>org.tedros</groupId>
-	  		<artifactId>tedros-fx-api</artifactId>
-	  		<version>17-0.0.1</version>
-	  		<scope>compile</scope>
-	  		<exclusions>
-	  			<exclusion>
-	  				<groupId>javax.activation</groupId>
-	  				<artifactId>activation</artifactId>
-	  			</exclusion>
-	  			<exclusion>
-	  				<groupId>org.eclipse.persistence</groupId>
-	  				<artifactId>eclipselink</artifactId>
-	  			</exclusion>
-	  			<exclusion>
-	  				<groupId>com.sun.mail</groupId>
-	  				<artifactId>javax.mail</artifactId>
-	  			</exclusion>
-	  			<exclusion>
-	  				<groupId>javax.mail</groupId>
-	  				<artifactId>javax.mail-api</artifactId>
-	  			</exclusion>
-	  			<exclusion>
-	  				<groupId>com.sun.mail</groupId>
-	  				<artifactId>smtp</artifactId>
-	  			</exclusion>
-	  		</exclusions>
-	  	</dependency>
-	  	
-	  	<dependency>
-	  		<groupId>org.apache.commons</groupId>
-	  		<artifactId>commons-lang3</artifactId>
-	  		<version>${commons.lang.version}</version>
-	  	</dependency>
-	  	
-	  	<dependency>
-		   	<groupId>commons-io</groupId>
-		   	<artifactId>commons-io</artifactId>
-		   	<version>${commons.io.version}</version>
+	<!-- MODULE INFO -->
+	<artifactId>tedros-box</artifactId>
+	<packaging>jar</packaging>
+
+	<name>tedros-box</name>
+	<description>The tedros box projects</description>
+
+	<!-- DEPENDENCIES -->
+	<dependencies>
+
+		<!-- APPS -->
+
+		<dependency>
+			<groupId>org.tedros</groupId>
+			<artifactId>tedros-box-app-settings</artifactId>
+			<version>17-0.0.1</version>
+			<scope>compile</scope>
 		</dependency>
-	  
-	    <dependency>
-	      	<groupId>junit</groupId>
-	      	<artifactId>junit</artifactId>
-	      	<version>${junit.version}</version>
-	      	<scope>test</scope>
-	    </dependency>
-	</dependencies>  
-	
-	 <build>
-	 	<plugins>
-	 		<plugin>
-        		<groupId>org.apache.maven.plugins</groupId>
-        		<artifactId>maven-compiler-plugin</artifactId>
-        		<version>3.3</version>
-        		<configuration>
-          			<source>${java.version}</source>
-          			<target>${java.version}</target>
-        		</configuration>
-      		</plugin>
-      		<plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-source-plugin</artifactId>
-		        <version>3.2.1</version>
-		        <executions>
-		          <execution>
-		            <id>attach-sources</id>
-		            <phase>verify</phase>
-		            <goals>
-		              <goal>jar-no-fork</goal>
-		            </goals>
-		          </execution>
-		        </executions>
-		      </plugin>
-		 	<plugin>
-			  <artifactId>maven-assembly-plugin</artifactId>
-			  <configuration>
-			  	<archive>
-			      <manifest>
-			        <mainClass>org.tedros.Main</mainClass>
-			      </manifest>
-			    </archive>
-			    <descriptorRefs>
-			      <descriptorRef>jar-with-dependencies</descriptorRef>
-			    </descriptorRefs>
-			  </configuration>
-			  <executions>
-			    <execution>
-			      <id>make-assembly</id> <!-- this is used for inheritance merges -->
-			      <phase>package</phase> <!-- bind to the packaging phase -->
-			      <goals>
-			        <goal>single</goal>
-			      </goals>
-			    </execution>
-			  </executions>
+
+		<dependency>
+			<groupId>org.tedros</groupId>
+			<artifactId>app-chat-fx</artifactId>
+			<version>17-0.0.1</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.tedros</groupId>
+			<artifactId>app-services-fx</artifactId>
+			<version>${app.services}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.tedros</groupId>
+			<artifactId>app-person-fx</artifactId>
+			<version>${app.person}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- END APPS -->
+
+		<dependency>
+			<groupId>org.tedros</groupId>
+			<artifactId>tedros-fx-api</artifactId>
+			<version>17-0.0.1</version>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.activation</groupId>
+					<artifactId>activation</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.eclipse.persistence</groupId>
+					<artifactId>eclipselink</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.mail</groupId>
+					<artifactId>javax.mail</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.mail</groupId>
+					<artifactId>javax.mail-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.mail</groupId>
+					<artifactId>smtp</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons.lang.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons.io.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${compiler.plugin}</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>${source.plugin}</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>org.tedros.Main</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id> <!-- this is used for inheritance
+						merges -->
+						<phase>package</phase> <!-- bind to the packaging phase -->
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
-	 	  
-    	<resources>
-        	<resource>
-            	<directory>src/main/resources</directory>
-        	</resource>
-        	<resource>
-            	<directory>src/main/java</directory>
-            	<excludes>
-            		<exclude>**/*.java</exclude>
-            	</excludes>
-        	</resource>
-    	</resources>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>src/main/java</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
 	</build>
-	
- 	<distributionManagement>
-	   <repository>
-	     <id>Tedros-Box</id>
-	     <name>GitHub Tedros Apache Maven Packages</name>
-	     <url>https://maven.pkg.github.com/tedros-box/package</url>
-		 <uniqueVersion>false</uniqueVersion>
-	   </repository>
+
+	<distributionManagement>
+		<repository>
+			<id>Tedros-Box</id>
+			<name>GitHub Tedros Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/tedros-box/package</url>
+			<uniqueVersion>false</uniqueVersion>
+		</repository>
 	</distributionManagement>
-	
+
 </project>

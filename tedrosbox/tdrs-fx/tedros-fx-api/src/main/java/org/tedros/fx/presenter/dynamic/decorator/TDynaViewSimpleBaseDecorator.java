@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 /***
@@ -179,6 +180,7 @@ implements ITDecorator<TDynaPresenter<M>>{
 	public void addItemInTHeaderToolBar(Node... item) {
 		final ITDynaView<M> view = getView();
 		view.gettHeaderToolBar().getItems().addAll(item);
+		HBox.setHgrow(view.gettHeaderToolBar(), Priority.ALWAYS);
 	}
 	
 	/**

@@ -76,7 +76,7 @@ public final class TComponentBuilder {
 	
 	public void processControlField(ITComponentDescriptor descriptor) throws Exception{
 		if(TLoggerUtil.isFormEngineEnabled()) {
-			Exception[] exArr = new Exception[]{};
+			Exception[] exArr = new Exception[]{null};
 			TLoggerUtil.timeComplexity(getClass(), "Build control of field: "+descriptor.getFieldDescriptor().getFieldName(), 
 					()->{
 						try {
@@ -85,7 +85,7 @@ public final class TComponentBuilder {
 							exArr[0] = e;
 						}
 					});
-			if(exArr.length>0)
+			if(exArr[0]!=null)
 				throw exArr[0];
 		}else
 			execControlField(descriptor);
@@ -100,7 +100,7 @@ public final class TComponentBuilder {
 	
 	public void processLayoutField(ITComponentDescriptor descriptor) throws Exception{
 		if(TLoggerUtil.isFormEngineEnabled()) {
-			Exception[] exArr = new Exception[]{};
+			Exception[] exArr = new Exception[]{null};
 			TLoggerUtil.timeComplexity(getClass(), "Build Layout of field: "+descriptor.getFieldDescriptor().getFieldName(), 
 					()->{
 						try {
@@ -109,7 +109,7 @@ public final class TComponentBuilder {
 							exArr[0] = e;
 						}
 					});
-			if(exArr.length>0)
+			if(exArr[0]!=null)
 				throw exArr[0];
 		}else
 			execLayoutField(descriptor);

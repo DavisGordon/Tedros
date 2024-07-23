@@ -13,9 +13,11 @@ import org.tedros.util.TAppResource;
 public class AppResource extends TAppResource{
 	
 	private static final String CSV ="mime_type.csv";
+	private static final String LOGO ="logo-tedros-small.png";
 	
 	public AppResource() {
 		super(TConstant.UUI);
 		super.addResource(CSV);
+		super.addResource(LOGO);
 	}
 }

@@ -26,6 +26,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 
 @SuppressWarnings("rawtypes")
@@ -80,7 +81,8 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 		final Menu menu = new Menu(iEngine.getString("#{tedros.fxapi.label.options}"));
 		menuBar.getMenus().add(menu);
     	boolean addFirst = true;
-    	final ToolBar tGroupToolbar = mainView.gettGroupToolbar(); 
+    	final ToolBar tGroupToolbar = mainView.gettGroupToolbar();
+    	HBox.setHgrow(tGroupToolbar, Priority.ALWAYS);
     	tGroupToolbar.getItems().add(menuBar);
     	for (final ITGroupViewItem item : groupViewItemList) {
     		

@@ -15,11 +15,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.naming.NamingException;
 
+import org.slf4j.Logger;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.security.model.TUser;
 import org.tedros.core.service.remote.ServiceLocator;
@@ -36,10 +35,11 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
+import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import net.sf.jasperreports.export.SimpleXlsReportConfiguration;
+import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 
 /**
  * @author Davis Gordon
@@ -54,7 +54,7 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 
 	protected static final String REPORT_ORG = "report_org";
 
-	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	private final static Logger LOGGER = TLoggerUtil.getLogger(TReportProcess.class);
 	
 	private M model;
 	private TReportProcessEnum action;
@@ -71,7 +71,6 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 		setAutoStart(true);
 		this.reportName = reportName;
 		this.serviceJndiName = serviceJndiName;
-		LOGGER.setLevel(Level.ALL);
 	}
 	
 	/**
@@ -141,11 +140,11 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 	        				resultado = service.process(user.getAccessToken(), model);
         				} catch(NamingException e){
         	    			setException( new TProcessException(e, e.getMessage(), "The service is not available!"));
-        	    			LOGGER.severe(e.toString());
+        	    			LOGGER.error(e.getMessage(), e);
         	    			TLoggerUtil.error(getClass(), e.getMessage(), e);
         	    		}catch (Exception e) {
         					setException(e);
-        					LOGGER.severe(e.toString());
+        					LOGGER.error(e.getMessage(), e);
         					TLoggerUtil.error(getClass(), e.getMessage(), e);
         				}finally {
         					loc.close();
@@ -160,7 +159,7 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
         			}
 	    		}catch (Exception e) {
 					setException(e);
-					LOGGER.severe(e.toString());
+					LOGGER.error(e.getMessage(), e);
 					TLoggerUtil.error(getClass(), e.getMessage(), e);
 				} 
         	    return resultado;
@@ -172,7 +171,7 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 		String pattern = "dd-MM-yyyy HH-mm-ss";
 		DateFormat df = new SimpleDateFormat(pattern);
 		String k = df.format(new Date());
-		return folderPath + reportName+" "+ k +(action.equals(TReportProcessEnum.EXPORT_PDF) ? ".pdf" : ".xls");
+		return folderPath + reportName+" "+ k +(action.equals(TReportProcessEnum.EXPORT_PDF) ? ".pdf" : ".xlsx");
 	}
 
 	protected TResult<M> runExportPdf() throws JRException {
@@ -192,7 +191,7 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 			runAfterExport(params);
 			return new TResult<>(TState.SUCCESS, f, model);
 		}catch(Exception e){
-			LOGGER.severe(e.toString());
+			LOGGER.error(e.getMessage(), e);
 			return new TResult<>(TState.ERROR, e.getMessage());
 		}
 	}
@@ -205,25 +204,49 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 			InputStream inputStream = getJasperInputStream();
 			String f = getDestFile();
 			List dataList = model.getResult();
+			
+			/*
+			 * JRBeanCollectionDataSource beanColDataSource = new
+			 * JRBeanCollectionDataSource(dataList); JasperPrint print =
+			 * JasperFillManager.fillReport(inputStream, params, beanColDataSource);
+			 * JRXlsExporter exporter = new JRXlsExporter(); exporter.setExporterInput(new
+			 * SimpleExporterInput(print)); exporter.setExporterOutput(new
+			 * SimpleOutputStreamExporterOutput(f)); SimpleXlsReportConfiguration
+			 * configuration = new SimpleXlsReportConfiguration();
+			 * configuration.setDetectCellType(true);
+			 * configuration.setCollapseRowSpan(false);
+			 * configuration.setRemoveEmptySpaceBetweenRows(true);
+			 * exporter.setConfiguration(configuration); exporter.exportReport();
+			 * inputStream.close();
+			 */
+			
 			JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(dataList);
-			JasperPrint print = JasperFillManager.fillReport(inputStream, params, beanColDataSource);
-			JRXlsExporter exporter = new JRXlsExporter();
-			exporter.setExporterInput(new SimpleExporterInput(print));
-			exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(f));
-			SimpleXlsReportConfiguration configuration = new SimpleXlsReportConfiguration();
-	//		configuration.setOnePagePerSheet(true);
+			
+			JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, params, beanColDataSource);
+
+			File destFile = new File(f);
+			
+			JRXlsxExporter exporter = new JRXlsxExporter();
+			
+			exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+			exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(destFile));
+			SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
+			configuration.setOnePagePerSheet(true);
 			configuration.setDetectCellType(true);
 			configuration.setCollapseRowSpan(false);
 			configuration.setRemoveEmptySpaceBetweenRows(true);
 			exporter.setConfiguration(configuration);
+			
 			exporter.exportReport();
+			
 			inputStream.close();
+			
 			if(this.logoInputStream!=null)
 				this.logoInputStream.close();
 			runAfterExport(params);
 			return new TResult<>(TState.SUCCESS, f, model);
 		}catch(Exception e){
-			LOGGER.severe(e.toString());
+			LOGGER.error(e.getMessage(), e);
 			return new TResult<>(TState.ERROR, e.getMessage());
 		}
 	}

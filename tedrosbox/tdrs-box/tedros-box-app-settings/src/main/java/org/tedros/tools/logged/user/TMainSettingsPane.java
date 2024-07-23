@@ -18,14 +18,13 @@ public class TMainSettingsPane extends StackPane {
 	/**
 	 * 
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public TMainSettingsPane() {
 		MainSettings usr = new MainSettings();
     	//usr.setCollapseMenu(TedrosContext.isCollapseMenu());
     	usr.setLogout("logout");
 		TMainSettingsModelView umv = new TMainSettingsModelView(usr);
 		//umv.getCollapseMenu().setValue(TedrosContext.isCollapseMenu());
-    	ObservableList l = FXCollections.observableArrayList(umv);
+    	ObservableList<TMainSettingsModelView> l = FXCollections.observableArrayList(umv);
     	TDynaView<TMainSettingsModelView> v = new TDynaView<>(TMainSettingsModelView.class, l, false);
     	v.tLoad();
     	v.setMinHeight(60);

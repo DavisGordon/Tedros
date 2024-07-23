@@ -70,9 +70,8 @@ public final class TAppContext {
 			}
 			
 			LOGGER.info("Start process manager");
-			for(Class<? extends ITProcess> c : appDescriptor.getProcessList()){
+			for(Class<? extends ITProcess> c : appDescriptor.getProcessList())
 				TedrosProcessManager.addProcess(c);
-			}	
 			
 			LOGGER.info("Start load app modules:");
 			for(TModuleDescriptor tModuleDescriptor: appDescriptor.getModulesDescriptor()){
@@ -86,16 +85,17 @@ public final class TAppContext {
 		}
 	}
 	
-	@SuppressWarnings("rawtypes")
+	
 	public void stop() {
-		application.stop();
-		for(Class<? extends ITProcess> c : appDescriptor.getProcessList()){
-			TedrosProcessManager.stopProcess(c);
+		if(application!=null)
+			application.stop();
+		if(appDescriptor!=null)
+			appDescriptor.getProcessList().forEach(TedrosProcessManager::stopProcess);
+		if(moduleContextList!=null) {
+			moduleContextList.forEach(c->c.stopModule());
+			moduleContextList.clear();
 		}
-		this.moduleContextList.forEach(c->{
-			c.stopModule();
-		});
-		this.moduleContextList.clear();
+		
 		this.moduleContextList = null;
 		this.application = null;
 		this.appDescriptor = null;
