@@ -46,52 +46,11 @@
   	<build>
     	<plugins>
     		 <plugin>
-	    		<groupId>org.apache.openejb.maven</groupId>
-	    		<artifactId>tomee-maven-plugin</artifactId>
-	    		<version>1.7.1</version>
-			    <configuration>
-			    	<tomeeVersion>${tomee.version}</tomeeVersion>
-			    	<tomeeClassifier>plume</tomeeClassifier>
-			    	<tomeeHost>localhost</tomeeHost>
-			    	<tomeeHttpPort>8080</tomeeHttpPort>
-			 		
-			 		<url>${tomee.ejb.url}</url>
-					<server>Tomee</server>
-					<path>${project.basedir}/target/${project.build.finalName}</path>
-					
-					<synchronization>
-				    	<extensions>
-				        	<extension>.class</extension><!--  if you want to update each time you build with mvn compile -->
-				      	</extensions>
-				    </synchronization>
-				    <reloadOnUpdate>true</reloadOnUpdate>
-			 		<libDir>lib</libDir>
-			    	<debug>false</debug>
-		      		<debugPort>5005</debugPort>
-		      		<args>-Dfoo=bar</args>
-		      		<config>${project.basedir}/src/test/tomee/conf</config>
-			        <libs>
-			        	<lib>com.h2database:h2:${h2.version}</lib>
-			        </libs> 
-		      		<apps>
-			        	<app>${project.groupId}:${project.artifactId}:${project.version}:ear</app>
-			      	</apps>
-			      	<libs>
-			        	<lib>com.h2database:h2:${h2.version}</lib>
-			          	<lib>remove:openjpa-</lib>
-			      	</libs>
-			   	</configuration>
-	  		</plugin> 
-	  
-	      	<plugin>
 	        	<groupId>org.apache.maven.plugins</groupId>
 	        	<artifactId>maven-ear-plugin</artifactId>
-	        	<version>3.3.0</version>
-	        	<!-- configuring the ear plugin -->
+	        	<version>${ear.plugin}</version>
 	        	<configuration>
-					<!--<version>7</version>-->
-	        		<defaultLibBundleDir>lib</defaultLibBundleDir>
-	        		<!--<outputDirectory>${project.basedir}/target/${project.build.finalName}</outputDirectory>-->
+					<defaultLibBundleDir>lib</defaultLibBundleDir>
 	          		<modules>
 	            		<ejbModule>
 	              			<groupId>org.tedros</groupId>
@@ -100,18 +59,15 @@
 	          		</modules>
 	        	</configuration>
 	      	</plugin>
-	      	
-	      	
       		<plugin>
         		<groupId>org.apache.maven.plugins</groupId>
         		<artifactId>maven-compiler-plugin</artifactId>
-        		<version>3.3</version>
+        		<version>${compiler.plugin}</version>
         		<configuration>
           			<source>${java.version}</source>
           			<target>${java.version}</target>
         		</configuration>
       		</plugin>
-	      	
     	</plugins>
   	</build>
   	

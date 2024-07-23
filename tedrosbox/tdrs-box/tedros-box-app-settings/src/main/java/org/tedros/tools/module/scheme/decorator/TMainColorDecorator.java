@@ -31,11 +31,17 @@ public class TMainColorDecorator extends TDynaViewCrudBaseDecorator<TMainColorMV
 			
 			themes = new TComboBoxField<>();
 			// add the buttons at the header tool bar
-			addItemInTHeaderToolBar(gettSaveButton());
-			Region space = new Region();
-			HBox.setHgrow(space, Priority.ALWAYS);
+			//final ITDynaView<TMainColorMV> view = getView();
 			TLabel l = new TLabel(TLanguage.getInstance(null).getString(TUsualKey.THEME+": "));
-			super.addItemInTHeaderHorizontalLayout(space,l, themes);
+			l.setPadding(new Insets(0,4,0,4));
+			
+			Region space = new Region();
+			double w = 10;
+			space.setMaxWidth(w);
+			space.setMinWidth(w);
+			space.setPrefWidth(w);
+			
+			addItemInTHeaderToolBar(l, themes, space, gettSaveButton());
 			
 			
 			this.template = new TemplatePane();

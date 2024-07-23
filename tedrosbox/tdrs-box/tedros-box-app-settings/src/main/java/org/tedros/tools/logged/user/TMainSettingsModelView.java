@@ -30,12 +30,12 @@ import javafx.scene.text.FontWeight;
 public class TMainSettingsModelView extends TModelView<MainSettings> {
 
 	@THyperlinkField(labeled=@TLabeled(text=TUsualKey.CLEAR_HISTORY, 
-			font=@TFont(size=4, weight=FontWeight.BOLD), parse = true),
+			/* font=@TFont(size=4, weight=FontWeight.BOLD), */ parse = true),
 			buttonBase=@TButtonBase(onAction=ClearHistoryEventBuilder.class))
 	private SimpleStringProperty clearHistory;
 	
 	@THyperlinkField(labeled=@TLabeled(text=TUsualKey.LOGOUT, 
-			font=@TFont(size=4, weight=FontWeight.BOLD), parse = true),
+			/* font=@TFont(size=4, weight=FontWeight.BOLD), */ parse = true),
 			buttonBase=@TButtonBase(onAction=LogoutEventBuilder.class))
 	private SimpleStringProperty logout;
 	

@@ -17,33 +17,13 @@
 	<name>tdrs-fx</name>
 	<description>The tedros javafx projects</description>
   	
-	<organization>
-		<name>Tedros</name>
-	</organization>
-  	
-  	<!-- PROPERTIES -->
-	<properties>
-		<java.version>17.0.1</java.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-  
-  	<!-- DEVELOPERS -->
-	<developers>
-		<developer>
-			<id>davis.dun</id>
-			<name>Davis Gordon Dun</name>
-			<email>tedrosbox@gmail.com</email>
-			<organization>Tedros</organization>
-		</developer>
-	</developers>
-  
   	<!-- BUILD -->
   	<build>
     	<plugins>
       		<plugin>
         		<groupId>org.apache.maven.plugins</groupId>
         		<artifactId>maven-compiler-plugin</artifactId>
-        		<version>3.3</version>
+        		<version>${compiler.plugin}</version>
         		<configuration>
           			<source>${java.version}</source>
           			<target>${java.version}</target>

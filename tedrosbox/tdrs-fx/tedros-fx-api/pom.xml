@@ -27,27 +27,27 @@
 			<exclusions>
 				<exclusion>
 					<groupId>xml-apis</groupId>
-  					<artifactId>xml-apis</artifactId>
+					<artifactId>xml-apis</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>org.openjfx</groupId>
-		    <artifactId>javafx-controls</artifactId>
-		    <version>${javafx.version}</version>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>${javafx.version}</version>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>org.openjfx</groupId>
-		    <artifactId>javafx-fxml</artifactId>
-		    <version>${javafx.version}</version>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-fxml</artifactId>
+			<version>${javafx.version}</version>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>org.openjfx</groupId>
-		    <artifactId>javafx-web</artifactId>
-		    <version>${javafx.version}</version>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-web</artifactId>
+			<version>${javafx.version}</version>
 		</dependency>
 
 		<dependency>
@@ -78,7 +78,7 @@
 			<groupId>net.sf.barcode4j</groupId>
 			<artifactId>barcode4j</artifactId>
 			<version>2.1</version>
-			
+
 		</dependency>
 		<dependency>
 			<groupId>com.github.kenglxn.qrgen</groupId>
@@ -87,7 +87,7 @@
 			<exclusions>
 				<exclusion>
 					<groupId>xml-apis</groupId>
-  					<artifactId>xml-apis</artifactId>
+					<artifactId>xml-apis</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -97,28 +97,50 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- <dependency> jsoup HTML parser library @ http://jsoup.org/ <groupId>org.jsoup</groupId> 
+		<!-- <dependency> jsoup HTML parser library @ http://jsoup.org/
+		<groupId>org.jsoup</groupId> 
 			<artifactId>jsoup</artifactId> <version>1.8.1</version> </dependency> -->
 
 	</dependencies>
 
 	<properties>
-    	<maven.compiler.release>17</maven.compiler.release>
-  	</properties>
+		<maven.compiler.release>17</maven.compiler.release>
+	</properties>
 
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.13.0</version>
+				<version>${compiler.plugin}</version>
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>${source.plugin}</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${resource.plugin}</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
 		</plugins>
-
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>

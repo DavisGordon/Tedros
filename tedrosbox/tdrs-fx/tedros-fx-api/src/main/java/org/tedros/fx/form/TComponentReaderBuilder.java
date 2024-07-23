@@ -32,8 +32,8 @@ public final class TComponentReaderBuilder {
 	
 	public static final Node getField(ITComponentDescriptor descriptor) throws Exception{
 		if(TLoggerUtil.isFormEngineEnabled()) {
-			Node[] node = new Node[]{};
-			Exception[] exArr = new Exception[]{};
+			Node[] node = new Node[]{null};
+			Exception[] exArr = new Exception[]{null};
 			TLoggerUtil.timeComplexity(TComponentReaderBuilder.class, "Build reader of field: "+descriptor.getFieldDescriptor().getFieldName(), 
 					()->{
 						try { 
@@ -42,7 +42,7 @@ public final class TComponentReaderBuilder {
 							exArr[0] = e;
 						}
 					});
-			if(exArr.length>0)
+			if(exArr[0]!=null)
 				throw exArr[0];
 			return node[0];
 		}else

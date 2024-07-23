@@ -1,6 +1,7 @@
 package org.tedros.fx.presenter.entity.decorator;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.tedros.api.presenter.view.ITDynaView;
 import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
@@ -8,6 +9,7 @@ import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewCrudBaseDecorator;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
 
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 
 /**
@@ -45,6 +47,9 @@ extends TDynaViewCrudBaseDecorator<M> {
 			buildSaveButton(null);
 			nodes = ArrayUtils.add(nodes, gettSaveButton());
 		}
+		
+		final ITDynaView<M> view = getView();
+		view.gettHeaderHorizontalLayout().setAlignment(Pos.CENTER_LEFT);
 		
 		if(nodes.length>0)
 			addItemInTHeaderToolBar(nodes);

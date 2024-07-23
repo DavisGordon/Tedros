@@ -17,27 +17,13 @@
   	<name>tdrs-box</name>
   	<description>The tedros box projects</description>
   	
-	<organization>
-		<name>Tedros</name>
-	</organization>
-	
-  	<!-- DEVELOPERS -->
-	<developers>
-		<developer>
-			<id>davis.dun</id>
-			<name>Davis Gordon Dun</name>
-			<email>tedrosbox@gmail.com</email>
-			<organization>Tedros</organization>
-		</developer>
-	</developers>
-  
   	<!-- BUILD -->
   	<build>
     	<plugins>
       		<plugin>
         		<groupId>org.apache.maven.plugins</groupId>
         		<artifactId>maven-compiler-plugin</artifactId>
-        		<version>3.3</version>
+        		<version>${compiler.plugin}</version>
         		<configuration>
           			<source>${java.version}</source>
           			<target>${java.version}</target>

@@ -24,7 +24,6 @@ import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.process.TEjbService;
 import org.tedros.fx.annotation.property.TReadOnlyBooleanProperty;
 import org.tedros.fx.annotation.scene.TNode;
-import org.tedros.fx.annotation.text.TFont;
 import org.tedros.fx.model.TEntityModelView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.tools.ToolsKey;
@@ -44,19 +43,16 @@ import javafx.beans.property.SimpleStringProperty;
 @TEjbService(model=TUser.class, serviceName = TUserController.JNDI_NAME)
 public class TUserSettingModelView extends TEntityModelView<TUser> {
 
-	@TLabel(text=TUsualKey.NAME,
-		node = @TNode(style = "-fx-font-size: 1em;", parse = true))
+	@TLabel(text = TUsualKey.NAME)
 	@TTextField(maxLength=100, required=true)
 	private SimpleStringProperty name;
 	
 	
-	@TLabel(text=TUsualKey.LOGIN, 
-		node = @TNode(style = "-fx-font-size: 1em;", parse = true))
+	@TLabel(text=TUsualKey.LOGIN)
 	@TTextField(maxLength=100, required=true)
 	private SimpleStringProperty login;
 	
-	@TLabel(text=TUsualKey.PASSWORD, 
-		node = @TNode(style = "-fx-font-size: 1em;", parse = true))
+	@TLabel(text=TUsualKey.PASSWORD)
 	@TPasswordField(required=true,
 		node=@TNode(
 			focusedProperty=@TReadOnlyBooleanProperty(
@@ -66,13 +62,11 @@ public class TUserSettingModelView extends TEntityModelView<TUser> {
 		parse = true))
 	private SimpleStringProperty password;
 	
-	@TLabel(text = "#{tedros.profile}", 
-		node = @TNode(style = "-fx-font-size: 1em;", parse = true))
+	@TLabel(text = "#{tedros.profile}")
 	@TShowField(fields=@TField(name="name"))
 	private SimpleObjectProperty<TProfile> activeProfile;
 
-	@TLabel(text = "#{tedros.language}",
-		node = @TNode(style = "-fx-font-size: 1em;", parse = true))
+	@TLabel(text = "#{tedros.language}")
 	@TVRadioGroup(radio= {@TRadio(text = "English", userData = "en"),
 			@TRadio(text = "Português", userData = "pt")})
 	private SimpleStringProperty language;

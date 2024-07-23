@@ -89,37 +89,41 @@
   	
   	<!-- BUILD -->
   	<build>
-    	<plugins>
-      		<plugin>
-        		<groupId>org.apache.maven.plugins</groupId>
-        		<artifactId>maven-ejb-plugin</artifactId>
-        		<version>2.5</version>
-        		<configuration>
-          			<ejbVersion>3.0</ejbVersion>
-        		</configuration>
-      		</plugin>
-      		<plugin>
-			 <groupId>org.apache.maven.plugins</groupId>
-			 <artifactId>maven-resources-plugin</artifactId>
-			 <version>2.5</version>
-			 <configuration>
-			   <!-- specify UTF-8, ISO-8859-1 or any other file encoding -->
-			   <encoding>UTF-8</encoding>
-			 </configuration>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-ejb-plugin</artifactId>
+				<version>${ejb.plugin}</version>
+				<configuration>
+					<ejbVersion>${ejb.version}</ejbVersion>
+				</configuration>
 			</plugin>
-			
-      		<plugin>
-        		<groupId>org.apache.maven.plugins</groupId>
-        		<artifactId>maven-compiler-plugin</artifactId>
-        		<version>3.3</version>
-        		<configuration>
-          			<source>${java.version}</source>
-          			<target>${java.version}</target>
-        		</configuration>
-      		</plugin>
-  		</plugins>
-  		
-  		<resources>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${compiler.plugin}</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>${source.plugin}</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<resources>
         	<resource>
             	<directory>src/main/resources</directory>
             	<filtering>true</filtering>
@@ -128,7 +132,15 @@
         		</includes>
         	</resource>
     	</resources>
-  		
- 	</build>
+	</build>
+	
+	<distributionManagement>
+	   <repository>
+	     <id>Tedros-Box</id>
+	     <name>GitHub Tedros Apache Maven Packages</name>
+	     <url>https://maven.pkg.github.com/tedros-box/package</url>
+		 <uniqueVersion>false</uniqueVersion>
+	   </repository>
+	</distributionManagement>
     
 </project>
