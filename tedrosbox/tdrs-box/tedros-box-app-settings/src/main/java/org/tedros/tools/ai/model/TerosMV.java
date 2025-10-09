@@ -13,6 +13,10 @@ import org.tedros.fx.annotation.control.TScrollPane;
 import org.tedros.fx.annotation.control.TTextAreaField;
 import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.form.TSetting;
+import org.tedros.fx.annotation.layout.THBox;
+import org.tedros.fx.annotation.layout.THGrow;
+import org.tedros.fx.annotation.layout.TPane;
+import org.tedros.fx.annotation.layout.TPriority;
 import org.tedros.fx.annotation.layout.TToolBar;
 import org.tedros.fx.annotation.layout.TVBox;
 import org.tedros.fx.annotation.presenter.TBehavior;
@@ -29,6 +33,7 @@ import org.tedros.tools.ai.setting.TerosSetting;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.layout.Priority;
 
 /**
  * @author Davis Gordon
@@ -54,6 +59,16 @@ public class TerosMV extends TModelView<Teros> {
 	@TTextAreaField(prefRowCount=4, wrapText=true, 
 			control= @TControl(maxHeight=70, parse = true))
 	private SimpleStringProperty prompt;
+	
+	@THBox(pane=@TPane(children = {"sendBtn", TPane.REGION, "resetBtn"}), 
+			hgrow = @THGrow(priority = {
+					@TPriority(field = "sendBtn", priority = Priority.NEVER),
+					@TPriority(field = TPane.REGION, priority = Priority.ALWAYS),
+					@TPriority(field = "resetBtn", priority = Priority.NEVER)
+	}))
+	@TButtonField(labeled = @TLabeled(parse = true, text=TFxKey.BUTTON_RESET),
+			node = @TNode(style = TStyle.FONT_SIZE_095em, parse = true))
+	private SimpleStringProperty resetBtn;
 	
 	@TToolBar(items = { "sendBtn", "clearBtn" })
 	@TButtonField(labeled = @TLabeled(parse = true, text=TFxKey.BUTTON_SEND),

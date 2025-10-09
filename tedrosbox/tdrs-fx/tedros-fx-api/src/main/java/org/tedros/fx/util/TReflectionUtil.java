@@ -30,6 +30,9 @@ import org.tedros.util.TLoggerUtil;
 
 public final class TReflectionUtil {
 
+	public final static String SET = "set";
+	public final static String GET = "get";
+	
 	public static final String ANNOTATION_EFFECT_PACKAGE = "org.tedros.fx.annotation.effect";
 	public static final String[] SKIPMETHODS = {"builder","parser","parse","equals", "getClass", "wait", "hashCode", "toString", "notify", "notifyAll", "annotationType", "proxyClassLookup"};
 	
@@ -110,7 +113,7 @@ public final class TReflectionUtil {
 	public static Method getSetterMethod(Class clazz, String fieldName, Class fieldType){
 		Method method = null;
 		try {
-			method = clazz.getMethod("set"+StringUtils.capitalize(fieldName), fieldType);
+			method = clazz.getMethod(SET+StringUtils.capitalize(fieldName), fieldType);
 		} catch (NoSuchMethodException e) {
 			if(clazz != Object.class)
 				method = getSetterMethod(clazz.getSuperclass(), fieldName, fieldType);
@@ -122,7 +125,7 @@ public final class TReflectionUtil {
 	public static Method getGetterMethod(Class clazz, String fieldName, Class fieldType){
 		Method method = null;
 		try {
-			method = clazz.getMethod("get"+StringUtils.capitalize(fieldName), fieldType);
+			method = clazz.getMethod(GET+StringUtils.capitalize(fieldName), fieldType);
 		} catch (NoSuchMethodException e) {
 			if(clazz != Object.class)
 				method = getGetterMethod(clazz.getSuperclass(), fieldName, fieldType);
@@ -134,7 +137,7 @@ public final class TReflectionUtil {
 	public static Method getGetterMethod(Class clazz, String fieldName){
 		Method method = null;
 		try {
-			method = clazz.getMethod("get"+StringUtils.capitalize(fieldName));
+			method = clazz.getMethod(GET+StringUtils.capitalize(fieldName));
 		} catch (NoSuchMethodException e) {
 			if(clazz != Object.class)
 				method = getGetterMethod(clazz.getSuperclass(), fieldName);

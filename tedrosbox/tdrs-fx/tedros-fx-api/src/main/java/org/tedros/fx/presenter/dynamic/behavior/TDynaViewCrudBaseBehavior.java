@@ -499,13 +499,16 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 						tBreadcrumbForm.tBuildBreadcrumbar(false);
 						tBreadcrumbForm.tAddEntryListChangeListener();
 						
+						TDynaViewCrudBaseBehavior behavior = null;
 						final TDynaPresenter presenter = getModulePresenter();
-						final TDynaViewCrudBaseBehavior behavior = (TDynaViewCrudBaseBehavior)presenter.getBehavior();
-						behavior.removeBreadcrumbFormChangeListener();
+						if(presenter.getBehavior() instanceof TDynaViewCrudBaseBehavior) {
+							behavior = (TDynaViewCrudBaseBehavior)presenter.getBehavior();
+							behavior.removeBreadcrumbFormChangeListener();
+						}
 						
 						setForm((ITModelForm) form);
-						
-						behavior.addBreadcrumbFormChangeListener();
+						if(behavior!=null)
+							behavior.addBreadcrumbFormChangeListener();
 					}
 				}
 			}
@@ -845,12 +848,15 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 				
 		ITModule module = getPresenter().getModule() ;
 		
+		if(module==null)
+			return getPresenter();
+		
 		ITPresenter presenter = 
 				TedrosAppManager.getInstance()
 				.getModuleContext(module).getCurrentViewContext().getPresenter();
 		
 		if(presenter==null)
-			throw new RuntimeException("The ITPresenter was not present in TViewContext while build the "+module.getClass().getSimpleName()+" module");
+			throw new IllegalStateException("The ITPresenter was not present in TViewContext while build the "+module.getClass().getSimpleName()+" module");
 		
 		presenter = presenter instanceof TGroupPresenter
 				? ((TGroupPresenter)presenter).getSelectedView().gettPresenter()

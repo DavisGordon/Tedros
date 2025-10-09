@@ -15,8 +15,8 @@ import org.tedros.api.form.ITFieldBox;
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.app.component.ITActionComponent;
 import org.tedros.fx.annotation.control.TLabel;
-import org.tedros.fx.annotation.parser.ITEffectParse;
-import org.tedros.fx.annotation.parser.TAnnotationParser;
+import org.tedros.fx.annotation.parser.engine.ITEffectParse;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 import org.tedros.fx.builder.ITBuilder;
 import org.tedros.fx.builder.ITChartBuilder;
 import org.tedros.fx.builder.ITControlBuilder;
@@ -439,7 +439,7 @@ public final class TComponentBuilder {
 			}catch(NoSuchMethodException e){ parserMethod = false;}
 			
 			if(parserMethod && !builderMethod){
-				TAnnotationParser.callParser(annotation, control, descriptor);
+				TAnnotationParser.callParser(annotation, control, descriptor, getClass().getSimpleName());
 			}
 		}
 		

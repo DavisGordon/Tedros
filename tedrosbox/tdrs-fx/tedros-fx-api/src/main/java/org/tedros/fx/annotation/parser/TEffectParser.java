@@ -19,6 +19,7 @@ import org.tedros.fx.annotation.effect.TLighting;
 import org.tedros.fx.annotation.effect.TLighting.TLightDistant;
 import org.tedros.fx.annotation.effect.TLighting.TLightPoint;
 import org.tedros.fx.annotation.effect.TLighting.TLightSpot;
+import org.tedros.fx.annotation.parser.engine.ITEffectParse;
 import org.tedros.fx.builder.TEffectBuilder;
 import org.tedros.fx.effect.ITEffectBuilder;
 import org.tedros.fx.util.TReflectionUtil;

@@ -68,7 +68,7 @@ import javafx.scene.layout.Priority;
 @TSetting(ChatFormSetting.class)
 @TForm(header = "", showBreadcrumBar=false, scroll=false)
 @TEjbService(serviceName = IChatController.JNDI_NAME, model=Chat.class)
-@TListViewPresenter(listViewMaxWidth=400, listViewMinWidth=400,
+@TListViewPresenter(listViewMaxWidth=400, listViewMinWidth=400, autoHideListView = true,
 	presenter=@TPresenter(
 		decorator = @TDecorator(type=ChatDecorator.class, 
 			viewTitle=CHATKey.VIEW_CLIENT_MESSAGES, cancelButtonText=TFxKey.BUTTON_BACK,

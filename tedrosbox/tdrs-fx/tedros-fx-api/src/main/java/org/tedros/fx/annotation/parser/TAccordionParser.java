@@ -3,6 +3,7 @@ package org.tedros.fx.annotation.parser;
 import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.fx.annotation.layout.TAccordion;
 import org.tedros.fx.annotation.layout.TTitledPane;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 import org.tedros.fx.domain.TLayoutType;
 
 import javafx.geometry.Insets;
@@ -30,7 +31,7 @@ public class TAccordionParser extends TAnnotationParser<TAccordion, Accordion> {
 				
 				TitledPane titledPane = new TitledPane();
 				titledPane.setContent(layout);
-				callParser(tTitledPane, titledPane, getComponentDescriptor());
+				callParser(tTitledPane, titledPane, getComponentDescriptor(), getClass().getSimpleName());
 				object.getPanes().add(titledPane);
 				if(titledPane.getId()!=null && annotation.expandedPane().equals(titledPane.getId()))
 					object.setExpandedPane(titledPane);

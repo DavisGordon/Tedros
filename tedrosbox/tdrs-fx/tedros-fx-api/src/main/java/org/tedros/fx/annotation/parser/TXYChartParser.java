@@ -6,6 +6,7 @@ import org.tedros.core.context.TedrosContext;
 import org.tedros.fx.annotation.chart.TData;
 import org.tedros.fx.annotation.chart.TSerie;
 import org.tedros.fx.annotation.chart.TXYChart;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 import org.tedros.fx.builder.TParamBuilder;
 import org.tedros.fx.domain.TAxisType;
 import org.tedros.fx.exception.TProcessException;

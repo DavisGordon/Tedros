@@ -6,6 +6,7 @@
  */
 package org.tedros.fx.annotation.parser;
 
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 import org.tedros.fx.annotation.reader.TDetailReader;
 
 /**

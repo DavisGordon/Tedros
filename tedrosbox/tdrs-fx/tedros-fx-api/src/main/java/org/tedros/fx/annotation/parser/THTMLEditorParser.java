@@ -1,6 +1,7 @@
 package org.tedros.fx.annotation.parser;
 
 import org.tedros.fx.annotation.control.THTMLEditor;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 
 public class THTMLEditorParser extends TAnnotationParser<THTMLEditor, org.tedros.fx.control.THTMLEditor> {
 

@@ -11,8 +11,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.tedros.fx.annotation.parser.ITEffectParse;
 import org.tedros.fx.annotation.parser.TEffectParser;
+import org.tedros.fx.annotation.parser.engine.ITEffectParse;
 import org.tedros.fx.effect.ITEffectBuilder;
 
 import javafx.scene.effect.Glow;

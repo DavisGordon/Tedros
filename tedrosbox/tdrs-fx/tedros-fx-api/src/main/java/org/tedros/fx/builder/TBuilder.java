@@ -7,7 +7,7 @@ import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.core.ITModule;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosAppManager;
-import org.tedros.fx.annotation.parser.TAnnotationParser;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 import org.tedros.util.TLoggerUtil;
 
 import javafx.scene.Node;
@@ -41,7 +41,7 @@ public abstract class TBuilder implements ITBuilder {
 	}
 	
 	public void callParser(final Annotation tAnnotation, final Object control) throws Exception {
-		TAnnotationParser.callParser(tAnnotation, control, componentDescriptor);
+		TAnnotationParser.callParser(tAnnotation, control, componentDescriptor, getClass().getSimpleName());
 	}
 	
 	protected Node getNode(String field) {

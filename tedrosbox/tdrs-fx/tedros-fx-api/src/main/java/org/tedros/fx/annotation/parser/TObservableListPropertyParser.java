@@ -2,6 +2,7 @@ package org.tedros.fx.annotation.parser;
 
 import java.util.Arrays;
 
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 import org.tedros.fx.annotation.property.TObservableListProperty;
 
 import javafx.collections.ObservableList;

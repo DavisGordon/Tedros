@@ -37,12 +37,19 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>org.tedros</groupId>
 			<artifactId>app-services-fx</artifactId>
 			<version>${app.services}</version>
 			<scope>compile</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.tedros</groupId>
+			<artifactId>app-stock-fx</artifactId>
+			<version>${app.stock}</version>
+			<scope>compile</scope>
+		</dependency>-->
 
 		<dependency>
 			<groupId>org.tedros</groupId>

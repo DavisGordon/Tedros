@@ -12,8 +12,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.tedros.fx.annotation.TObservableValue;
-import org.tedros.fx.annotation.parser.TAnnotationParser;
 import org.tedros.fx.annotation.parser.TObservableListPropertyParser;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 
 import javafx.beans.property.ObjectProperty;
 

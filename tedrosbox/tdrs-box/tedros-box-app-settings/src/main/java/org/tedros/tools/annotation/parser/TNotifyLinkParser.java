@@ -1,6 +1,6 @@
 package org.tedros.tools.annotation.parser;
 
-import org.tedros.fx.annotation.parser.TAnnotationParser;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 import org.tedros.tools.annotation.TNotifyLink;
 
 import javafx.scene.control.Hyperlink;

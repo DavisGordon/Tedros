@@ -9,7 +9,7 @@ package org.tedros.fx.control;
 import javafx.beans.property.SimpleIntegerProperty;
 
 /**
- * TextField MAX LENGHT Example 
+ * TextField with max length  
  *
  * @author Davis Gordon
  *

@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 
 import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.fx.annotation.layout.TToolBar;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 
 import javafx.scene.Node;
 

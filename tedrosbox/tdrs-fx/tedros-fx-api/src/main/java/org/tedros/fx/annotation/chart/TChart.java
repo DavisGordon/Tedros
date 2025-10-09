@@ -5,8 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.tedros.fx.annotation.parser.TAnnotationParser;
 import org.tedros.fx.annotation.parser.TChartParser;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 
 import javafx.geometry.Side;
 import javafx.scene.chart.Chart;

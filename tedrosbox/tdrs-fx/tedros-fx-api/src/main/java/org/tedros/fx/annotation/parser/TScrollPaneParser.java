@@ -2,6 +2,7 @@ package org.tedros.fx.annotation.parser;
 
 import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.fx.annotation.control.TScrollPane;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 import org.tedros.util.TLoggerUtil;
 
 import javafx.scene.Node;

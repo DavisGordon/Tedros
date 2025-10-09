@@ -2,6 +2,7 @@ package org.tedros.fx.annotation.parser;
 
 import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.fx.annotation.layout.TFieldSet;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 
 import javafx.scene.Node;
 

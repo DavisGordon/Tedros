@@ -85,6 +85,8 @@ public final class TedrosContext {
 	private static BooleanProperty showModalProperty;
 	private static BooleanProperty reloadStyleProperty;
 	private static BooleanProperty artificialIntelligenceEnabledProperty;
+	private static StringProperty aiModelProperty;
+	private static StringProperty aiSystemPromptProperty;
 	private static StringProperty contextStringProperty;
 	private static IntegerProperty totalPageHistoryProperty;
 	private static StringProperty countryIso2Property;
@@ -154,6 +156,8 @@ public final class TedrosContext {
 		totalPageHistoryProperty = new SimpleIntegerProperty(DEFAULT_TOTAL_PAGE_HISTORY);
 		countryIso2Property = new SimpleStringProperty(DEFAULT_COUNTRY_ISO2);
 		organizationNameProperty = new SimpleStringProperty("");
+		aiModelProperty = new SimpleStringProperty();
+		aiSystemPromptProperty = new SimpleStringProperty();
 		messageListProperty = FXCollections.observableArrayList();
 		infoListProperty = FXCollections.observableArrayList();
 		
@@ -232,6 +236,26 @@ public final class TedrosContext {
 			}else{
 				LOGGER.info("- Propertie "+TSystemPropertie.ORGANIZATION.getValue()+" not defined!");
 			}
+			
+			res = serv.getValue(TedrosContext.loggedUser.getAccessToken(), 
+					TSystemPropertie.OPENAI_MODEL.getValue());
+			if(res.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res.getValue())) {
+				setAiModel(res.getValue());
+				LOGGER.info("- Propertie "+TSystemPropertie.OPENAI_MODEL.getValue()+" loaded.");
+			}else{
+				LOGGER.info("- Propertie "+TSystemPropertie.OPENAI_MODEL.getValue()+" not defined!");
+			}
+			
+			res = serv.getValue(TedrosContext.loggedUser.getAccessToken(), 
+					TSystemPropertie.OPENAI_PROMPT.getValue());
+			if(res.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res.getValue())) {
+				setAiSystemPrompt(res.getValue());
+				LOGGER.info("- Propertie "+TSystemPropertie.OPENAI_PROMPT.getValue()+" loaded.");
+			}else{
+				LOGGER.info("- Propertie "+TSystemPropertie.OPENAI_PROMPT.getValue()+" not defined!");
+			}
+			
+			
 		} catch (NamingException e) {
 			LOGGER.error("Error loading custom system properties: "+ e.getMessage(), e);
 		}finally {
@@ -519,7 +543,44 @@ public final class TedrosContext {
 	public static void setOrganizationName(String organizationName) {
 		TedrosContext.organizationNameProperty.setValue(organizationName);
 	}
-
+	/**
+	 * @return the aiModel
+	 */
+	public static String getAiModel() {
+		return aiModelProperty.get();
+	}
+	/**
+	 * @param model the aiModel to set
+	 */
+	public static void setAiModel(String model) {
+		TedrosContext.aiModelProperty.setValue(model);
+	}
+	
+	/**
+	 * ai model property to listen.
+	 * */
+	public static ReadOnlyStringProperty aiModelProperty(){
+		return aiModelProperty;
+	}
+	/**
+	 * @return the aiSystemPrompt
+	 */
+	public static String getAiSystemPrompt() {
+		return aiSystemPromptProperty.get();
+	}
+	/**
+	 * @param model the aiSystemPrompt to set
+	 */
+	public static void setAiSystemPrompt(String prompt) {
+		TedrosContext.aiSystemPromptProperty.setValue(prompt);
+	}
+	
+	/**
+	 * ai system prompt property to listen.
+	 * */
+	public static ReadOnlyStringProperty aiSystemPromptProperty(){
+		return aiSystemPromptProperty;
+	}
 	/**
 	 * total page history property to listen.
 	 * */

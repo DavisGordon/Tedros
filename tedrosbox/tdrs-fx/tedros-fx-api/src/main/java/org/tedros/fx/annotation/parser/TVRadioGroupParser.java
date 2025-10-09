@@ -1,6 +1,7 @@
 package org.tedros.fx.annotation.parser;
 
 import org.tedros.fx.annotation.control.TVRadioGroup;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 
 public class TVRadioGroupParser extends TAnnotationParser<TVRadioGroup, org.tedros.fx.control.TVRadioGroup> {
 

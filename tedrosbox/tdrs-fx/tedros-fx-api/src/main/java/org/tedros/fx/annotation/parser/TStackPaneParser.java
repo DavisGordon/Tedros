@@ -2,6 +2,8 @@ package org.tedros.fx.annotation.parser;
 
 import java.lang.annotation.Annotation;
 
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
+
 public final class TStackPaneParser extends TAnnotationParser<Annotation, Object> {
 
 	@Override

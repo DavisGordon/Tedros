@@ -6,8 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.tedros.fx.annotation.listener.TChangeListener;
-import org.tedros.fx.annotation.parser.TAnnotationParser;
 import org.tedros.fx.annotation.parser.TObservableValueParser;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 
 import javafx.beans.value.ObservableValue;
 

@@ -1,4 +1,4 @@
-package org.tedros.fx.annotation.parser;
+package org.tedros.fx.annotation.parser.engine;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -23,7 +23,7 @@ import javafx.util.Callback;
 
 public class TTypeAnalyserParserDelegate {
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public final static Object parse(Object obj, ITComponentDescriptor descriptor) throws Exception{
 		
 		if(obj instanceof Annotation){

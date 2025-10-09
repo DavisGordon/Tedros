@@ -1,6 +1,7 @@
 package org.tedros.fx.annotation.parser;
 
 import org.tedros.fx.annotation.control.TTableView.TTableViewSelectionModel;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 
 import javafx.scene.control.MultipleSelectionModel;
 

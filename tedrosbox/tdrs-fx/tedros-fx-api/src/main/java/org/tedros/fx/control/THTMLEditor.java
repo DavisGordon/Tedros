@@ -59,7 +59,7 @@ public class THTMLEditor extends TRequiredHTMLEditor {
 		tHtmlProperty.addListener(listener);
 		this.getChildren().addAll(editor);
 		
-		this.sceneProperty().addListener((ob, o, n)->{
+		editor.sceneProperty().addListener((ob, o, n)->{
 			if(n!=null) {
 				WebView webView = (WebView) editor.lookup("WebView");
 				webPage = Accessor.getPageFor(webView.getEngine());

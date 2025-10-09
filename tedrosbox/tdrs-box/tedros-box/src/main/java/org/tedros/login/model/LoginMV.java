@@ -32,7 +32,6 @@ import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.login.behavior.LoginBehavior;
 import org.tedros.login.decorator.LoginDecorator;
-import org.tedros.tools.module.user.model.TProfileMV;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -69,7 +68,8 @@ public class LoginMV extends TModelView<Login> {
 	@TTextField(required=true, node=@TNode(requestFocus=true, parse = true))
 	@THBox(pane=@TPane(children= {"user", "password"}), spacing=10, fillHeight=true,
 			hgrow=@THGrow(priority={@TPriority(field="user", priority=Priority.ALWAYS), 
-				   		@TPriority(field="password", priority=Priority.ALWAYS) }))
+				   		@TPriority(field="password", priority=Priority.ALWAYS)
+				   		}))
 	private SimpleStringProperty user;
 	
 	@TLabel(text = "#{tedros.login.password}")

@@ -31,6 +31,7 @@ public interface TFxKey {
 	static final String BUTTON_RELOAD = "#{tedros.fxapi.button.reload}";
 	static final String BUTTON_REMOVE = "#{tedros.fxapi.button.remove}";
 	static final String BUTTON_REMOVEALL = "#{tedros.fxapi.button.removeAll}";
+	static final String BUTTON_RESET = "#{tedros.fxapi.button.reset}";
 	static final String BUTTON_SAVE = "#{tedros.fxapi.button.save}";
 	static final String BUTTON_SEARCH = "#{tedros.fxapi.button.search}";
 	static final String BUTTON_SELECT = "#{tedros.fxapi.button.select}";

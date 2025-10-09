@@ -102,7 +102,7 @@
 			<artifactId>jsoup</artifactId> <version>1.8.1</version> </dependency> -->
 
 	</dependencies>
-
+	
 	<properties>
 		<maven.compiler.release>17</maven.compiler.release>
 	</properties>

@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TResourceUtil;
 
 /**
@@ -31,7 +32,8 @@ public enum TStyleResourceValue {
 	TOPBAR_TEXT_COLOR,
 	
 	APP_TEXT_COLOR,
-	APP_TEXT_SIZE,
+	APP_TEXT_SIZE,	
+	APP_ICON_SIZE,
 	
 	MAIN_PAGE_COLOR,
 	ROOT_BACKGROUND, 
@@ -108,8 +110,8 @@ public enum TStyleResourceValue {
 			String propFilePath = TThemeUtil.getThemeFolder()+TStyleResourceName.PANEL_CUSTOM_STYLE;
 			try(InputStream is = new FileInputStream(propFilePath)) {
 				panelCustomProp.load(is);
-			} catch (Exception  e1) {
-				e1.printStackTrace();
+			} catch (Exception  e) {
+				TLoggerUtil.error(TStyleResourceValue.class, e.getMessage(), e);
 			}
 		}
 		if(null==backgroundProp || reload){
@@ -117,8 +119,8 @@ public enum TStyleResourceValue {
 			String propFilePath = TThemeUtil.getThemeFolder()+TStyleResourceName.BACKGROUND_STYLE;
 			try(InputStream is = new FileInputStream(propFilePath)) {
 				backgroundProp.load(is);
-			} catch (Exception  e1) {
-				e1.printStackTrace();
+			} catch (Exception  e) {
+				TLoggerUtil.error(TStyleResourceValue.class, e.getMessage(), e);
 			}
 		}
 		 
@@ -131,7 +133,7 @@ public enum TStyleResourceValue {
 			try(InputStream is = new FileInputStream(propFilePath)) {
 				defaultProp.load(is);
 			}catch (Exception e) {
-				e.printStackTrace();
+				TLoggerUtil.error(TStyleResourceValue.class, e.getMessage(), e);
 			}
 		}	
 		 

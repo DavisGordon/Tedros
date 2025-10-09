@@ -12,9 +12,7 @@ import javafx.scene.layout.Priority;
  * 
  * TPriority set the {@link Priority} param.
  * 
- * Oracle documentation:
- * 
- * Enumeration used to determine the grow (or shrink) priority of 
+ * Used to determine the grow (or shrink) priority of 
  * a given node's layout area when its region has more (or less) 
  * space available and multiple nodes are competing for that space.
  * </pre>
@@ -22,9 +20,9 @@ import javafx.scene.layout.Priority;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.ANNOTATION_TYPE})
 public @interface TPriority {
-
+	
 	/**
-	 * The field name to be setted. 
+	 * The name of the fields to be prioritised. 
 	 * */
 	public String field() default "";
 	

@@ -6,7 +6,7 @@ package org.tedros.fx.builder;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import org.tedros.fx.annotation.parser.ITEffectParse;
+import org.tedros.fx.annotation.parser.engine.ITEffectParse;
 import org.tedros.fx.util.TReflectionUtil;
 
 import javafx.scene.effect.Effect;

@@ -10,11 +10,6 @@ import org.tedros.fx.annotation.parser.THGrowParser;
 
 /**
  * <pre>
- * 
- * THGrow set the HBox hgrow priority. 
- * 
- * Oracle documentation:
- * 
  * Sets the horizontal grow priority for the child when contained by an hbox. 
  * If set, the hbox will use the priority to allocate additional space if the 
  * hbox is resized larger than it's preferred width. If multiple hbox children 

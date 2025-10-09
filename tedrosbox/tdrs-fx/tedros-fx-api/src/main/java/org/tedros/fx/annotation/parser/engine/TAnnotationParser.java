@@ -1,4 +1,4 @@
-package org.tedros.fx.annotation.parser;
+package org.tedros.fx.annotation.parser.engine;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -58,9 +58,6 @@ import javafx.scene.paint.Color;
 public abstract class TAnnotationParser<A extends Annotation, T> implements ITAnnotationParser<A, T> {
 	
 	private final static Logger LOGGER = TLoggerUtil.getLogger(TAnnotationParser.class);
-	
-	private final static String SET = "set";
-	private final static String GET = "get";
 	
 	private ITComponentDescriptor componentDescriptor;
 	protected TLanguage iEngine = TLanguage.getInstance(null);
@@ -127,8 +124,8 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 	 * */
 	public void parse(final A annotation, final T object, String...byPass) throws Exception{
 		if(TLoggerUtil.isParserDebugEnabled()) {
-			TLoggerUtil.splitDebugLine(TAnnotationParser.class, '.');
-			TLoggerUtil.timeComplexity(TAnnotationParser.class, "[Parse] "+annotation.annotationType().getName()+", Object: "+object.getClass().getName()+", byPass: "+Arrays.toString(byPass), 
+			TLoggerUtil.splitDebugLine(getClass(), '.');
+			TLoggerUtil.timeComplexity(getClass(), "[Parse] "+annotation.annotationType().getName()+", Object: "+object.getClass().getName()+", byPass: "+Arrays.toString(byPass), 
 			()->{
 				try {
 					exec(annotation, object, byPass);
@@ -169,7 +166,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 						boolean skip = false;
 						
 						if(TLoggerUtil.isParserDebugEnabled())
-							TLoggerUtil.debug(TAnnotationParser.class, key+" = "+value.toString());
+							TLoggerUtil.debug(getClass(), key+" = "+value.toString());
 						
 						if(value instanceof Annotation){
 							Method parseMethod = TReflectionUtil.getParseMethod((Annotation) value);
@@ -207,7 +204,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 										defaultParams.value = (defaultSetting.value!=null) ? TReflectionUtil.readAnnotation(defaultSetting.value) : null;
 									
 									if(TLoggerUtil.isParserDebugEnabled())
-										TLoggerUtil.timeComplexity(TAnnotationParser.class, 
+										TLoggerUtil.timeComplexity(getClass(), 
 											"run("+key+","+ annotation.annotationType().getName()+","+ 
 													(defaultSetting.value!=null ? defaultSetting.value : "null")+","+value+","+
 													(defaultParams.value!=null?defaultParams.value:"null")+","+object+")",
@@ -228,7 +225,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 							}
 						}else
 							if(TLoggerUtil.isParserDebugEnabled())
-								TLoggerUtil.debug(TAnnotationParser.class, key+" skipped");
+								TLoggerUtil.debug(getClass(), key+" skipped");
 						
 					} catch (Exception e) {
 						LOGGER.error(e.getMessage(), e);
@@ -250,7 +247,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 				  String key = (String) thisEntry.getKey();
 				  Object value = thisEntry.getValue();
 				  if(TLoggerUtil.isParserDebugEnabled())
-					  TLoggerUtil.timeComplexity(TAnnotationParser.class, 
+					  TLoggerUtil.timeComplexity(getClass(), 
 						"run("+key+","+ annotation.annotationType().getName()+","+ 
 								(defaultSetting.value!=null ? defaultSetting.value : "null")+","+value+","+
 								(defaultParams.value!=null?defaultParams.value:"null")+","+object+")",
@@ -276,77 +273,13 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 		
 	}
 	
-	
-	private static String INFO_HEADER = "\n\t[TAnnotationParser][callParser] Field: %s, Annotation(name: %s, proxy: %s), Control: %s";
-	
-	/**
-	 * <pre>
-	 * Execute the parser of the given annotation defined in the parser() property. 
-	 * </pre>
-	 * */
-	@SuppressWarnings("unchecked")
-	public static void callParser(final Annotation tAnnotation, final Object control, final ITComponentDescriptor descriptor) throws Exception {
-		
-		Method parserMethod = TReflectionUtil.getParserMethod(tAnnotation);
-		if(parserMethod!=null){
-			StringBuilder error = null;
-			try{
-				Object object = parserMethod.invoke(tAnnotation);
-				Class<? extends ITAnnotationParser>[] parsers = (object instanceof Class[]) 
-						? (Class<? extends ITAnnotationParser>[]) object 
-								: new Class[]{(Class<? extends ITAnnotationParser>)object};
-				
-				for (Class<? extends ITAnnotationParser> clazz : parsers) {
-					
-					ITAnnotationParser parser = (ITAnnotationParser) clazz.getDeclaredConstructor().newInstance();
-					parser.setComponentDescriptor(descriptor);
-					
-					try{
-					
-						parser.parse(tAnnotation, control);
-					
-					}catch(ClassCastException e){
-						
-						if(error==null)
-							error = new StringBuilder(String.format(INFO_HEADER, 
-									descriptor.getFieldDescriptor().getFieldName(), 
-									tAnnotation.annotationType().getSimpleName(), 
-									tAnnotation.getClass().getSimpleName(),
-									control.getClass().getSimpleName()));
-						
-						error.append("\n\t\tIssue found on the parser: "+ clazz.getSimpleName());
-						error.append("\n\t\tException: "+ e.getMessage());
-						try {
-							
-							Class genParamClass = getGenericParamClass(clazz,1);
-							final Method method = getSourceMethod(descriptor.getAnnotationPropertyInExecution(), control.getClass());
-							
-							error.append("\n\t\tMethod method = getSourceMethod("+descriptor.getAnnotationPropertyInExecution()+","+genParamClass.getSimpleName()+")");
-							error.append("\n\t\tWhere method is "+method.getName());
-							error.append("\n\t\tExecuting method.invoke("+control.getClass().getName()+") to get the parser param!");
-							Object obj = method.invoke(control);
-							error.append("\n\t\tObject returned: "+obj.getClass().getSimpleName());
-							if(obj !=null) {
-								error.append("\n\t\t\tTrying to parser again: parser.parse("+tAnnotation.annotationType().getSimpleName()+","+obj.getClass().getSimpleName()+")");
-								error.append("\n\t\t\tWhere parser is "+parser.getClass().getSimpleName());
-								parser.parse(tAnnotation, obj);
-								error.append("\n\t\t\tParser executed successfully!");
-							}
-						}catch (Exception ex) { 
-							error.append("\nFail message: "+ex.getMessage());
-						}
-					}
-				}
-			}catch(Exception e){
-				if(error==null)
-					error = new StringBuilder();
-				error.append("\nError: "+e.getMessage());
-			}	
-			if(error!=null)
-				LOGGER.error(error.toString());
-		}
+	protected void callParser(final Annotation tAnnotation, final Object control, final ITComponentDescriptor descriptor) throws Exception {
+		callParser(tAnnotation, control, descriptor, getClass().getSimpleName());
 	}
 	
+	public static void callParser(final Annotation tAnnotation, final Object control, final ITComponentDescriptor descriptor, String calledBy) throws Exception {
+		TParserCaller.call(tAnnotation, control, descriptor, calledBy);
+	}
 	
 	private void run(String key, final A annotation, final Annotation defaultSetting, final Object value, final Map<String, Object> defaultParams, final T object) throws Exception{
 		
@@ -421,7 +354,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 	@SuppressWarnings({"unchecked", "null"})
 	private void invokeTargetMethod(A annotation, String key, Object targetObject, Object value) {
 		
-		Class paramClass = getGenericParamClass();
+		Class paramClass = TReflectionUtil.getGenericParamClass(getClass(), 1);
 		Class targetClass = paramClass == Object.class ? targetObject.getClass() : paramClass;
 			
 		try {
@@ -482,14 +415,14 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 				if(m.getName().equals(key)){
 					prop = m;
 				}
-				if(m.getName().equals(SET+StringUtils.capitalize(key))){
+				if(m.getName().equals(TReflectionUtil.SET+StringUtils.capitalize(key))){
 					if(key.equals("alignment") && m.getParameterTypes().length>1)
 						continue;
 					set = m;
 					break;
 				}
 				
-				if(m.getName().equals(GET+StringUtils.capitalize(key)))
+				if(m.getName().equals(TReflectionUtil.GET+StringUtils.capitalize(key)))
 					set = m;
 			}
 			clazz = clazz.getSuperclass();
@@ -498,23 +431,7 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 		return (set!=null && prop!=null) ? set : ((set!=null) ? set : prop);
 	}
 	
-	private static Method getSourceMethod(String key, Class clazz){
-		
-		Method prop = null;
-		Method get = null;
-		do {
-			for(Method m : clazz.getDeclaredMethods()){
-				if(m.getName().equals(key))
-					prop = m;
-				
-				if(m.getName().equals(GET+StringUtils.capitalize(key)))
-					get = m;
-			}
-			clazz = clazz.getSuperclass();
-		}while(clazz!=Object.class && (prop==null && get==null));
-		
-		return (get!=null && prop!=null) ? get : ((get!=null) ? get : prop);
-	}
+	
 	
 	private Annotation getDefaultSetting(A annotation) {
 		List<Annotation> typeAnnotations = componentDescriptor.getModelViewAnnotationList();
@@ -528,16 +445,6 @@ public abstract class TAnnotationParser<A extends Annotation, T> implements ITAn
 	
 	private Object getAnnotation(String key, Annotation annotation) throws Exception {
 		return annotation.annotationType().getMethod(key).invoke(annotation);
-	}
-	
-	@SuppressWarnings("unchecked")
-	private static Class getGenericParamClass(Class clazz, int index) {
-		return (Class) TReflectionUtil.getGenericParamClass(clazz, index);
-	}
-	
-	@SuppressWarnings("unchecked")
-	private Class<T> getGenericParamClass() {
-		return getGenericParamClass(getClass(),1);
 	}
 	
 }

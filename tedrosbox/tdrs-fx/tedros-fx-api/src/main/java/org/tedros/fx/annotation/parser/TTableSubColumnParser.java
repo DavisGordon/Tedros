@@ -1,6 +1,7 @@
 package org.tedros.fx.annotation.parser;
 
 import org.tedros.fx.annotation.control.TTableSubColumn;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 
 import javafx.scene.control.TableColumn;
 

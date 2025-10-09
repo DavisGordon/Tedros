@@ -65,7 +65,14 @@ public class TerosSetting extends TSetting {
 		if(TedrosContext.getArtificialIntelligenceEnabled()) {
 			String key = util.getOpenAiKey();
 			if(!"".equals(key)) {
+				TerosService.setGptModel(TedrosContext.getAiModel());
+				TerosService.setPromptAssistant(TedrosContext.getAiSystemPrompt());
+				
+				TedrosContext.aiModelProperty().addListener((a,o,n)->TerosService.setGptModel(n));
+				TedrosContext.aiSystemPromptProperty().addListener((a,o,n)->TerosService.setPromptAssistant(n));
+				;
 				teros = TerosService.create(key);
+				
 				TFunction[] arr = new TFunction[] {
 						TFunctionHelper.listAllViewPathFunction(),
 						TFunctionHelper.listAllAppsFunction(),
@@ -94,6 +101,7 @@ public class TerosSetting extends TSetting {
 		
 		listenSendButton();
 		listenClearButton();
+		listenResetButton();
 		
 		TextArea text = super.getControl("prompt");
 		text.setPromptText("[Enter] + [Shift] = "+TLanguage.getInstance().getString(TUsualKey.SEND));
@@ -132,10 +140,17 @@ public class TerosSetting extends TSetting {
 		clearBtn.setOnAction(new WeakEventHandler<>(ev1));
 	}
 
-	/**
-	 * @param mv
-	 * @param msgs
-	 */
+	private void listenResetButton() {
+		// Send event
+		EventHandler<ActionEvent> ev0 = e -> {
+			resetAction();
+		};
+		repo.add("resetEvent", ev0);
+		TButton resetBtn = (TButton) super.getDescriptor()
+				.getFieldDescriptor("resetBtn").getComponent();
+		resetBtn.setOnAction(new WeakEventHandler<>(ev0));
+	}
+	
 	private void listenSendButton() {
 		// Send event
 		EventHandler<ActionEvent> ev0 = e -> {
@@ -170,6 +185,16 @@ public class TerosSetting extends TSetting {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	/**
+	 * @param m
+	 */
+	private void resetAction(){
+		scrollFlag = true;
+		VBox gp = super.getLayout("messages");
+		gp.getChildren().clear();
+		teros.clearMessages();
 	}
 
 	/**
