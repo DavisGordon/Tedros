@@ -5,8 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.tedros.fx.annotation.parser.TAnnotationParser;
 import org.tedros.fx.annotation.parser.TValueAxisParser;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 import org.tedros.fx.builder.TNumberAxisFormatterBuilder;
 
 import javafx.scene.chart.ValueAxis;

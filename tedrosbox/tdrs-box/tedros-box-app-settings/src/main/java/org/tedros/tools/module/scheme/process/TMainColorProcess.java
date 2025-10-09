@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.tedros.core.style.TStyleResourceName;
 import org.tedros.core.style.TStyleResourceValue;
 import org.tedros.core.style.TThemeUtil;
@@ -22,6 +20,7 @@ import org.tedros.tools.module.scheme.model.TMainColor;
 import org.tedros.tools.start.TConstant;
 import org.tedros.util.TColorUtil;
 import org.tedros.util.TFileUtil;
+import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TedrosFolder;
 
 import javafx.scene.paint.Color;
@@ -49,7 +48,7 @@ public class TMainColorProcess extends TModelProcess<TMainColor>{
 			saveValues(obj);
 			result.setState(TState.SUCCESS);
 		}catch(Exception e){
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 			result.setMessage(TFxKey.MESSAGE_ERROR);
 			result.setState(TState.ERROR);
 		}
@@ -78,11 +77,12 @@ public class TMainColorProcess extends TModelProcess<TMainColor>{
 			
 			prop.setProperty(TStyleResourceValue.APP_TEXT_COLOR.name(), getHexadecimalColorValue(model.getAppCorTexto()));	
 			prop.setProperty(TStyleResourceValue.APP_TEXT_SIZE.name(), getDoubleConvertedValue(model.getAppTamTexto()));
+			prop.setProperty(TStyleResourceValue.APP_ICON_SIZE.name(), getDoubleConvertedValue(model.getAppIconSize()));
 			
 			prop.store(fos, "main color styles");
 			
 		}catch (Exception e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 		
 		
@@ -102,21 +102,17 @@ public class TMainColorProcess extends TModelProcess<TMainColor>{
 						FileUtils.copyFile(file, target);
 						prop.setProperty(TStyleResourceValue.LOGO.name(), target.getAbsolutePath());
 					} catch (IOException e) {
-						e.printStackTrace();
+						TLoggerUtil.error(getClass(), e.getMessage(), e);
 					}
 				}else
 					prop.setProperty(TStyleResourceValue.LOGO.name(), target.getAbsolutePath());
-				
-				
 			}
 			
 			prop.store(fos, "header styles");
 			
 		}catch (Exception e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
-		
-		
 	}
 	
 	private String getDoubleConvertedValue(Double value){

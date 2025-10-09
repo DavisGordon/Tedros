@@ -46,12 +46,24 @@ import javafx.scene.layout.VBox;
  * 
  * Oracle documentation:
  * 
- * VBox lays out its children in a single vertical column. If the vbox has a border and/or padding set, then the contents will be layed out within those insets.
+ * VBox lays out its children in a single vertical column. 
+ * If the vbox has a border and/or padding set, then the contents will be layed out 
+ * within those insets.
  *
- * VBox will resize children (if resizable) to their preferred heights and uses its fillWidth property to determine whether to resize their widths to fill its own width or keep their widths to their preferred (fillWidth defaults to true). The alignment of the content is controlled by the alignment property, which defaults to Pos.TOP_LEFT.
- * If a vbox is resized larger than its preferred height, by default it will keep children to their preferred heights, leaving the extra space unused. If an application wishes to have one or more children be allocated that extra space it may optionally set a vgrow constraint on the child. See "Optional Layout Constraints" for details.
+ * VBox will resize children (if resizable) to their preferred heights and uses its 
+ * fillWidth property to determine whether to resize their widths to fill its own width 
+ * or keep their widths to their preferred (fillWidth defaults to true). 
  * 
- * VBox lays out each managed child regardless of the child's visible property value; unmanaged children are ignored.
+ * The alignment of the content is controlled by the alignment property, which defaults 
+ * to Pos.TOP_LEFT. If a vbox is resized larger than its preferred height, by default it 
+ * will keep children to their preferred heights, leaving the extra space unused. If an 
+ * application wishes to have one or more children be allocated that extra space it may 
+ * optionally set a vgrow constraint on the child. 
+ * 
+ * See "Optional Layout Constraints" for details.
+ * 
+ * VBox lays out each managed child regardless of the child's visible property value; 
+ * unmanaged children are ignored.
  * 
  * </pre>
  **/
@@ -112,7 +124,14 @@ public @interface TVBox {
 	* <pre>
 	* {@link VBox} Class
 	* 
-	*  Sets the vertical grow priority for the child when contained by an vbox. If set, the vbox will use the priority to allocate additional space if the vbox is resized larger than it's preferred height. If multiple vbox children have the same vertical grow priority, then the extra space will be split evenly between them. If no vertical grow priority is set on a child, the vbox will never allocate it additional vertical space if available. Setting the value to null will remove the constraint. Parameters: child - the child of a vbox value - the horizontal grow priority for the child
+	*  Sets the vertical grow priority for the child when contained by an vbox. 
+	*  
+	*  If set, the vbox will use the priority to allocate additional space if the 
+	*  vbox is resized larger than it's preferred height. If multiple vbox children 
+	*  have the same vertical grow priority, then the extra space will be split 
+	*  evenly between them. If no vertical grow priority is set on a child, the vbox 
+	*  will never allocate it additional vertical space if available.
+	*  
 	* </pre>
 	**/
 	public TVGrow vgrow() default @TVGrow;
@@ -121,7 +140,10 @@ public @interface TVBox {
 	* <pre>
 	* {@link VBox} Class
 	* 
-	*  Sets the margin for the child when contained by a vbox. If set, the vbox will layout the child so that it has the margin space around it. Setting the value to null will remove the constraint. Parameters: child - the child mode of a vbox value - the margin of space around the child
+	*  Sets the margin for the child when contained by a vbox. 
+	*  
+	*  If set, the vbox will layout the child so that it has the margin space around it. 
+	*  Setting the value to null will remove the constraint. 
 	* </pre>
 	**/
 	public TMargin margin() default @TMargin;
@@ -130,7 +152,10 @@ public @interface TVBox {
 	* <pre>
 	* {@link VBox} Class
 	* 
-	*  Sets the value of the property spacing. Property description: The amount of vertical space between each child in the vbox.
+	*  Sets the value of the property spacing. 
+	*  
+	*  Property description: 
+	*  The amount of vertical space between each child in the vbox.
 	* </pre>
 	**/
 	public double spacing() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
@@ -139,7 +164,10 @@ public @interface TVBox {
 	* <pre>
 	* {@link VBox} Class
 	* 
-	*  Sets the value of the property alignment. Property description: The overall alignment of children within the vbox's width and height.
+	*  Sets the value of the property alignment. 
+	*  
+	*  Property description: 
+	*  The overall alignment of children within the vbox's width and height.
 	* </pre>
 	**/
 	public Pos alignment() default Pos.CENTER;
@@ -148,7 +176,12 @@ public @interface TVBox {
 	* <pre>
 	* {@link VBox} Class
 	* 
-	*  Sets the value of the property fillWidth. Property description: Whether or not resizable children will be resized to fill the full width of the vbox or be kept to their preferred width and aligned according to the alignment hpos value.
+	*  Sets the value of the property fillWidth. 
+	*  
+	*  Property description: 
+	*  Whether or not resizable children will be resized to fill the full 
+	*  width of the vbox or be kept to their preferred width and aligned 
+	*  according to the alignment hpos value.
 	* </pre>
 	**/
 	public boolean fillWidth() default false;
@@ -157,7 +190,8 @@ public @interface TVBox {
 	* <pre>
 	* Specifies the view mode to use this compent.
 	* 
-	* Set to TMode.READER will build this component only when the user set the view to Reader mode.
+	* Set to TMode.READER will build this component only when the user 
+	* set the view to Reader mode.
 	* 
 	* Default value:
 	* {TMode.EDIT, TMode.READER}

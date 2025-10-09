@@ -29,8 +29,21 @@ public @interface TListViewPresenter {
 	
 	double listViewMaxWidth() default WIDTH;
 	double listViewMinWidth() default WIDTH;
-	boolean refreshListViewAfterActions() default false;
 	
+	/**
+	 * Autou reload the list view after save and delete action
+	 * @default false
+	 */
+	boolean reloadListViewAfterCrudActions() default false;
+	/**
+	 * Auto hides the list view menu after a selected action
+	 * @default false
+	 */
+	boolean autoHideListView() default false;
+	
+	/**
+	 * Setting the pagination
+	 */
 	TPage page() default @TPage(show = false, serviceName = "", 
 			query = @TQuery(entity = ITEntity.class));
 	

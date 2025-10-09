@@ -18,6 +18,7 @@ import org.reflections.Reflections;
 import org.reflections.util.ConfigurationBuilder;
 import org.tedros.core.annotation.TApplication;
 import org.tedros.core.model.ITModelView;
+import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TedrosFolder;
 
 /**
@@ -43,6 +44,7 @@ public final class TReflections {
 	public TReflections loadPackages()  {
 		try {
 			String propFilePath = TedrosFolder.CONF_FOLDER.getFullPath()+APP_PACKAGES_PROPERTIES;
+			TLoggerUtil.info(getClass(), "Searching for the application packages to load configured in the file: "+propFilePath);
 			if(!(new File(propFilePath).isFile()))
 				TReflections.createAppPackagesIndex();
 			
@@ -53,14 +55,22 @@ public final class TReflections {
 					if(p.containsKey("packages"))
 						packages = ((String)p.get("packages")).split(",");
 			}
+			if(packages!=null) {
+				TLoggerUtil.info(getClass(), "App packages to lookup: "+packages);
+				repo =  new Reflections(new ConfigurationBuilder()
+						.useParallelExecutor()
+						.forPackages(packages)); 
+			}else{
+				TLoggerUtil.warn(getClass(), "Application packages not configured, "
+						+ "for best performance list the name of the root packages of "
+						+ "each application separated by a comma in the 'packages' "
+						+ "property in the "+propFilePath
+						+ " file otherwise the lookup by applications will be performed on all system packages.");
+				repo = new Reflections();
+			}
 			
-			repo = (packages!=null) 
-					? new Reflections(new ConfigurationBuilder()
-							.useParallelExecutor()
-							.forPackages(packages))
-						: new Reflections();
 		} catch (IOException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 		}
 				
 		return this;
@@ -117,7 +127,7 @@ public final class TReflections {
 			prop.store(fos, "App packages");
 			fos.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			TLoggerUtil.error(TReflections.class, e.getMessage(), e);
 		}
 	}
 

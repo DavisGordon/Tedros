@@ -15,7 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.control.TextField;
 
 /**
- * DESCRIÇÃO DA CLASSE
+ * A TextField with required property
  *
  * @author Davis Gordon
  *

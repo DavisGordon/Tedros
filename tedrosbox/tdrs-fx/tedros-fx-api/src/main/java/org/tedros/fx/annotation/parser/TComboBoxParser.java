@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TLanguage;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 import org.tedros.fx.control.TItem;
 import org.tedros.fx.util.TReflectionUtil;
 

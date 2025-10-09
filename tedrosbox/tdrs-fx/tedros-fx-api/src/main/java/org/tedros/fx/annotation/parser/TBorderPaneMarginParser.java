@@ -3,6 +3,8 @@ package org.tedros.fx.annotation.parser;
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.fx.annotation.layout.TBorderPane.TMargin;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
+import org.tedros.fx.annotation.parser.engine.TTypeAnalyserParserDelegate;
 import org.tedros.fx.annotation.layout.TFieldInset;
 
 import javafx.geometry.Insets;

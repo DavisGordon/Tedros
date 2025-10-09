@@ -14,6 +14,7 @@ public interface TUsualKey {
 	static final String ALL = "#{label.all}";
 	static final String ALLOW_NEGATIVE_STOCK = "#{label.allow.negative.stock}";
 	static final String AMOUNT = "#{label.amount}";
+	static final String AND = "#{label.and}";
 	static final String APP = "#{label.app}";
 	static final String APP_TITLE = "#{label.app.title}";
 	static final String APPLY = "#{label.apply}";
@@ -46,6 +47,8 @@ public interface TUsualKey {
 	static final String CHOSE = "#{label.chose}";
 	static final String CITY = "#{label.city}";
 	static final String CIVIL_STATUS = "#{label.civil.status}";
+	static final String CLEAN = "#{label.clean}";
+	static final String CLEAN_PLURAL = "#{label.clean.plural}";
 	static final String CLEAR_HISTORY = "#{label.clear.history}";
 	static final String CLEVERNESS = "#{label.cleverness}";
 	static final String CLIENT_COMPANY = "#{label.client.company}";
@@ -272,6 +275,7 @@ public interface TUsualKey {
 	static final String TELEPHONE = "#{label.telephone}";
 	static final String TEXT = "#{label.text}";
 	static final String THE = "#{label.the}";
+	static final String THE_PLURAL = "#{label.the.plural}";
 	static final String THEME = "#{label.theme}";
 	static final String THIS = "#{label.this}";
 	static final String TITLE = "#{label.title}";

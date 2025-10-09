@@ -10,13 +10,11 @@ import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
 import org.tedros.fx.annotation.scene.control.TButtonBase;
 import org.tedros.fx.annotation.scene.control.TLabeled;
-import org.tedros.fx.annotation.text.TFont;
 import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.entity.decorator.TSaveViewDecorator;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.text.FontWeight;
 
 /**
  * @author Davis Gordon
@@ -29,13 +27,11 @@ import javafx.scene.text.FontWeight;
 			behavior=@TBehavior(type=TMainSettingsBehavior.class, saveOnlyChangedModels=false))
 public class TMainSettingsModelView extends TModelView<MainSettings> {
 
-	@THyperlinkField(labeled=@TLabeled(text=TUsualKey.CLEAR_HISTORY, 
-			/* font=@TFont(size=4, weight=FontWeight.BOLD), */ parse = true),
+	@THyperlinkField(labeled=@TLabeled(text=TUsualKey.CLEAR_HISTORY, parse = true),
 			buttonBase=@TButtonBase(onAction=ClearHistoryEventBuilder.class))
 	private SimpleStringProperty clearHistory;
 	
-	@THyperlinkField(labeled=@TLabeled(text=TUsualKey.LOGOUT, 
-			/* font=@TFont(size=4, weight=FontWeight.BOLD), */ parse = true),
+	@THyperlinkField(labeled=@TLabeled(text=TUsualKey.LOGOUT, parse = true),
 			buttonBase=@TButtonBase(onAction=LogoutEventBuilder.class))
 	private SimpleStringProperty logout;
 	

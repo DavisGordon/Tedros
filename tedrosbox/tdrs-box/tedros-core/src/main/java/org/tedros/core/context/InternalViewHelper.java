@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.tedros.util.TLoggerUtil;
+
 /**
  * InternalViewHelper
  *
@@ -58,7 +60,7 @@ class InternalViewHelper {
 	            CategoryPage parentCategoryPage = getCategoryPageForPath(parentPath, dirPage, categoryPageMap);
 	            parentCategoryPage.getChildren().add(internalViewPage);
         	}catch (Exception e) {
-				e.printStackTrace();
+        		TLoggerUtil.error(InternalViewHelper.class, e.getMessage(), e);
 			}
         }
     }

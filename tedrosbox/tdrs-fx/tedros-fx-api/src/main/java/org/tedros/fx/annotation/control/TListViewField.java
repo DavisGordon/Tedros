@@ -5,9 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.tedros.fx.annotation.parser.TAnnotationParser;
 import org.tedros.fx.annotation.parser.TListViewParser;
 import org.tedros.fx.annotation.parser.TRequiredListViewParser;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 import org.tedros.fx.annotation.query.TQuery;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TControl;

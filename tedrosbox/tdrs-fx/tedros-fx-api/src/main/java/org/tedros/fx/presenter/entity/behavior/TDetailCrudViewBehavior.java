@@ -190,7 +190,8 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 	@Override
 	public void setForm(ITModelForm form) {
 		final TDynaPresenter presenter = (TDynaPresenter) getModulePresenter();
-		if( ((TDynaViewCrudBaseDecorator) presenter.getDecorator()).gettBreadcrumbForm()!=null){
+		if( presenter.getDecorator() instanceof TDynaViewCrudBaseDecorator 
+				&& ((TDynaViewCrudBaseDecorator) presenter.getDecorator()).gettBreadcrumbForm()!=null){
 			removeBreadcrumbFormChangeListener();
 			super.setForm(form);
 			addBreadcrumbFormChangeListener();
@@ -237,15 +238,19 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 	@Override
 	public void removeBreadcrumbFormChangeListener() {
 		final TDynaPresenter presenter = getModulePresenter();
-		final TDynaViewCrudBaseBehavior behavior = (TDynaViewCrudBaseBehavior)presenter.getBehavior();
-		behavior.removeBreadcrumbFormChangeListener();
+		if(presenter.getBehavior() instanceof TDynaViewCrudBaseBehavior) {
+			final TDynaViewCrudBaseBehavior behavior = (TDynaViewCrudBaseBehavior)presenter.getBehavior();
+			behavior.removeBreadcrumbFormChangeListener();
+		}
 	}
 	
 	@Override
 	public void addBreadcrumbFormChangeListener() {
 		final TDynaPresenter presenter = getModulePresenter();
-		final TDynaViewCrudBaseBehavior behavior = (TDynaViewCrudBaseBehavior)presenter.getBehavior();
-		behavior.addBreadcrumbFormChangeListener();
+		if(presenter.getBehavior() instanceof TDynaViewCrudBaseBehavior) {
+			final TDynaViewCrudBaseBehavior behavior = (TDynaViewCrudBaseBehavior)presenter.getBehavior();
+			behavior.addBreadcrumbFormChangeListener();
+		}
 	}
 	
 	/**

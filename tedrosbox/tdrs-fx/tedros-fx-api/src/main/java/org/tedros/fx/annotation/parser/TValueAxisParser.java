@@ -3,6 +3,7 @@ package org.tedros.fx.annotation.parser;
 import java.lang.reflect.Modifier;
 
 import org.tedros.fx.annotation.chart.TValueAxis;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 import org.tedros.fx.builder.TNumberAxisFormatterBuilder;
 
 import javafx.scene.chart.NumberAxis;

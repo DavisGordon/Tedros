@@ -5,6 +5,7 @@ import java.lang.annotation.Annotation;
 import org.apache.commons.lang3.ArrayUtils;
 import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.fx.annotation.layout.TBorderPane;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;

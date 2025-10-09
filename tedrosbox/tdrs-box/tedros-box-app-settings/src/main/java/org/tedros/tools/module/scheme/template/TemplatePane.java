@@ -13,6 +13,7 @@ import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.style.TStyleResourceValue;
 import org.tedros.tools.module.scheme.SchemeModule;
 import org.tedros.util.TColorUtil;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -49,6 +50,7 @@ public class TemplatePane extends StackPane {
 	private Label appName;
 	private TopMenu topMenu;
 	private Button tile;
+	private ImageView icon;
 	private Pane pageArea;
 	
 	public TemplatePane() {
@@ -88,7 +90,7 @@ public class TemplatePane extends StackPane {
         topMenu.setPath(iEngine.getString("#{template.menu}"));
         pageToolBar.getItems().addAll(topMenu);
         // Fim breadcrumbar 
-     // create page area
+        // create page area
         pageArea = new Pane() {
             @Override protected void layoutChildren() {
                 for (Node child:pageArea.getChildren()) {
@@ -111,12 +113,9 @@ public class TemplatePane extends StackPane {
         root.setCenter(mainPane);
         root.setStyle("-fx-background-color: transparent;");
         
-        ImageView icon = TedrosAppManager.getInstance().getModuleContext(SchemeModule.class).getIcon();
+        icon = TedrosAppManager.getInstance().getModuleContext(SchemeModule.class).getIcon();
         
         tile = new Button(iEngine.getString("#{label.app.title}"), icon);
-        tile.setMinSize(140,145);
-        tile.setPrefSize(140,145);
-        tile.setMaxSize(140,145);
         tile.setContentDisplay(ContentDisplay.TOP);
         tile.getStyleClass().clear();
         tile.getStyleClass().add("t-app-tile");
@@ -180,7 +179,7 @@ public class TemplatePane extends StackPane {
         	Image logo = new Image(is);
         	imgLogo.setImage(logo);
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			TLoggerUtil.error(getClass(), e1.getMessage(), e1);
 		}
 	}
 
@@ -191,7 +190,7 @@ public class TemplatePane extends StackPane {
 		return nameLogoEffect;
 	}
 	
-	public void settIconStyle(Color c, String t) {
+	public void settIconStyle(Color c, String t, String x) {
 		String f = TColorUtil.toHexadecimal(c);
 		String s = "-fx-skin: \"com.sun.javafx.scene.control.skin.ButtonSkin\";\r\n" + 
 				"    -fx-text-fill: "+f+";\r\n" + 
@@ -201,6 +200,8 @@ public class TemplatePane extends StackPane {
 				"    -fx-padding: 4px 4px 3px 4px;\r\n" + 
 				"    -fx-font-size: "+t+"em;";
 		this.tile.setStyle(s);
+		this.icon.setFitWidth(Double.valueOf(x));
+		this.icon.setFitHeight(Double.valueOf(x));
 	}
 	
 	public void settTopMenuBarStyle(Color t, Color c, String o) {

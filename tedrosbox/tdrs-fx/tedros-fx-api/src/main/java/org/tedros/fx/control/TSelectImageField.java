@@ -171,7 +171,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 		actToolbar.setId("t-view-toolbar");
 		
 		text = new TText();
-		text.settTextStyle(TTextStyle.LARGE);
+		text.settTextStyle(TTextStyle.MEDIUM);
 		
 		hbox = new HBox();
 		hbox.setId("t-group-header-box");

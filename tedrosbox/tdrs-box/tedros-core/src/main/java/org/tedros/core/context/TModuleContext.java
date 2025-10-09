@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.ITModule;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -105,7 +106,7 @@ public final class TModuleContext implements Comparable<TModuleContext>{
     		{
     			icon =  new ImageView(new Image(is));
     		} catch (IOException e) {
-				e.printStackTrace();
+    			TLoggerUtil.error(getClass(), e.getMessage(), e);
 			}
     	}
     	return icon;

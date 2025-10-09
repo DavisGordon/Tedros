@@ -38,8 +38,7 @@ import org.tedros.tools.module.scheme.behaviour.TMainColorBehavior;
 import org.tedros.tools.module.scheme.decorator.TMainColorDecorator;
 import org.tedros.tools.module.scheme.process.TMainColorProcess;
 import org.tedros.tools.module.scheme.trigger.TMainColorTrigger;
-import org.tedros.tools.start.TConstant;
-import org.tedros.util.TedrosFolder;
+import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -57,6 +56,18 @@ decorator=@TDecorator(type=TMainColorDecorator.class, viewTitle=ToolsKey.VIEW_TH
 behavior=@TBehavior(type=TMainColorBehavior.class))
 public class TMainColorMV extends TEntityModelView<TMainColor> {
 
+	private static final String DEFAULT_SYSTEM_NAME = "Tedros";
+
+	private static final int DEFAULT_IDENTANTION = 55;
+
+	private static final double DEFAULT_MAIN_OPACIT = 0.35;
+
+	private static final double DEFAULT_NAV_OPACIT = 0.35;
+
+	private static final double DEFAULT_TEXT_SIZE = 1.4;
+
+	private static final int DEFAULT_ICON_SIZE = 57;
+
 	private SimpleStringProperty display;
 	
 	@TAccordion(node=@TNode(parse = true, 
@@ -65,7 +76,7 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 			@TTitledPane(text=TUsualKey.MAIN_TITLE, fields={"mainCorTexto", "mainCorFundo","mainOpacidade", 
 					"brand", "indentation", "fileLogo"}),
 			@TTitledPane(text=TUsualKey.NAV_TITLE, fields={"navCorTexto", "navCorFundo","navOpacidade"}),
-			@TTitledPane(text=TUsualKey.APP_TITLE, fields={ "appCorTexto", "appTamTexto"})
+			@TTitledPane(text=TUsualKey.APP_TITLE, fields={ "appCorTexto", "appTamTexto", "appIconSize"})
 	})
 	@TLabel(text=TUsualKey.TEXT, position=TLabelPosition.LEFT, control=@TControl(parse = true, prefWidth=80))
 	@TColorPickerField
@@ -140,6 +151,14 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 	@TTrigger(type=TMainColorTrigger.class, mode=TViewMode.EDIT)
 	private SimpleDoubleProperty appTamTexto;
 	
+	@TLabel(text="Icon size")
+	@TSliderField(max = 114, min = DEFAULT_ICON_SIZE,
+		majorTickUnit=57, blockIncrement=1,
+		minorTickCount=1, control=@TControl(parse = true, prefWidth=100), 
+		showTickMarks=true, showTickLabels=true)
+	@TTrigger(type=TMainColorTrigger.class, mode=TViewMode.EDIT, runAfterFormBuild = true)
+	private SimpleDoubleProperty appIconSize;
+	
 	public TMainColorMV(TMainColor entity) {
 		super(entity);
 		this.display.setValue("#{label.style}");
@@ -161,30 +180,32 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 		
 		String appCorTexto = TStyleResourceValue.APP_TEXT_COLOR.defaultStyle();
 		String appTamTexto = TStyleResourceValue.APP_TEXT_SIZE.defaultStyle();
+		String appIconSize = TStyleResourceValue.APP_ICON_SIZE.defaultStyle();
 		
-		this.brand.setValue(brand!=null? brand : "Tedros");
-		this.indentation.setValue(indentantion!=null ? Double.parseDouble(indentantion) : 55);
+		this.brand.setValue(brand!=null? brand : DEFAULT_SYSTEM_NAME);
+		this.indentation.setValue(indentantion!=null ? Double.parseDouble(indentantion) : DEFAULT_IDENTANTION);
 		
 		if(path!=null) {
 			try {
 				TFileModel fileModel = new TFileModel(new File(path));
 				this.fileLogo.setValue(fileModel);
 			} catch (IOException e) {
-				e.printStackTrace();
+				TLoggerUtil.error(getClass(), e.getMessage(), e);
 			}
 		}
 		this.mainCorTexto.setValue(mainCorTexto!=null ? Color.web(mainCorTexto) : Color.WHITE);
 		this.mainCorFundo.setValue(mainCorFundo!=null ? Color.web(mainCorFundo) : Color.BLACK);
-		this.mainOpacidade.setValue(mainOpacidade!=null ? Double.parseDouble(mainOpacidade) : 0.35);
+		this.mainOpacidade.setValue(mainOpacidade!=null ? Double.parseDouble(mainOpacidade) : DEFAULT_MAIN_OPACIT);
 		
 		
 		
 		this.navCorTexto.setValue(navCorTexto!=null ? Color.web(navCorTexto) : Color.WHITE);
 		this.navCorFundo.setValue(navCorFundo!=null ? Color.web(navCorFundo) : Color.BLACK);
-		this.navOpacidade.setValue(navOpacidade!=null ? Double.parseDouble(navOpacidade) : 0.35);
+		this.navOpacidade.setValue(navOpacidade!=null ? Double.parseDouble(navOpacidade) : DEFAULT_NAV_OPACIT);
 		
 		this.appCorTexto.setValue(appCorTexto!=null ? Color.web(appCorTexto) : Color.WHITE);
-		this.appTamTexto.setValue(appTamTexto!=null ? Double.parseDouble(appTamTexto) : 1.4);
+		this.appTamTexto.setValue(appTamTexto!=null ? Double.parseDouble(appTamTexto) : DEFAULT_TEXT_SIZE);
+		this.appIconSize.setValue(appIconSize!=null ? Double.parseDouble(appIconSize) : DEFAULT_ICON_SIZE);
 		
 	}
 
@@ -338,6 +359,14 @@ public class TMainColorMV extends TEntityModelView<TMainColor> {
 
 	public void setFileLogo(TSimpleFileProperty<TFileModel> fileLogo) {
 		this.fileLogo = fileLogo;
+	}
+
+	public SimpleDoubleProperty getAppIconSize() {
+		return appIconSize;
+	}
+
+	public void setAppIconSize(SimpleDoubleProperty appIconSize) {
+		this.appIconSize = appIconSize;
 	}
 
 }

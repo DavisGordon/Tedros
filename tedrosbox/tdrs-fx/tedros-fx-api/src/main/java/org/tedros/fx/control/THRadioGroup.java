@@ -44,7 +44,7 @@ public class THRadioGroup extends HBox implements ITField{
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Observable tValueProperty() {
+	public ReadOnlyObjectProperty<Toggle>  tValueProperty() {
 		return selectedToggleProperty();
 	}
 	

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.descriptor.ITFieldDescriptor;
 import org.tedros.fx.annotation.control.TTab;
 import org.tedros.fx.annotation.control.TTabPane;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -55,7 +56,7 @@ public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
 				tab.setContent(scroll);
 			}
 			
-			TAnnotationParser.callParser(tTab, tab, getComponentDescriptor());
+			TAnnotationParser.callParser(tTab, tab, getComponentDescriptor(), getClass().getSimpleName());
 			object.getTabs().add(tab);
 		}
 		

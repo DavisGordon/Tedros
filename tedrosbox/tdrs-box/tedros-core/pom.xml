@@ -44,6 +44,12 @@
 			<artifactId>javafx-fxml</artifactId>
 			<version>${javafx.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-web</artifactId>
+			<version>${javafx.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.tomee</groupId>
@@ -92,6 +98,7 @@
 
 	<build>
 		<plugins>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -99,6 +106,7 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
+					
 				</configuration>
 			</plugin>
 			<plugin>

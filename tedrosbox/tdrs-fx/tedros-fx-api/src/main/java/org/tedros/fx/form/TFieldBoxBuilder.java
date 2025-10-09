@@ -14,7 +14,7 @@ import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.fx.annotation.control.TLabel;
 import org.tedros.fx.annotation.control.TLabelDefaultSetting;
-import org.tedros.fx.annotation.parser.TAnnotationParser;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 import org.tedros.fx.annotation.reader.TByteArrayReader;
 import org.tedros.fx.annotation.reader.TDetailReader;
 import org.tedros.fx.annotation.reader.TReader;
@@ -98,7 +98,7 @@ public final class TFieldBoxBuilder {
 				descriptor.getFieldDescriptor().getField().getAnnotation(org.tedros.fx.annotation.control.TFieldBox.class);
 		if(tAnnotation!=null){
 			try {
-				TAnnotationParser.callParser(tAnnotation, fieldBox, descriptor);
+				TAnnotationParser.callParser(tAnnotation, fieldBox, descriptor, TFieldBoxBuilder.class.getSimpleName());
 			} catch (Exception e) {
 				TLoggerUtil.error(TFieldBoxBuilder.class, e.getMessage(), e);
 			}

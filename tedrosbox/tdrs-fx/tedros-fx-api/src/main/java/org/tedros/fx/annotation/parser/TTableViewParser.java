@@ -9,6 +9,7 @@ import org.tedros.fx.annotation.control.TTableColumn;
 import org.tedros.fx.annotation.control.TTableNestedColumn;
 import org.tedros.fx.annotation.control.TTableSubColumn;
 import org.tedros.fx.annotation.control.TTableView;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 import org.tedros.fx.descriptor.TComponentDescriptor;
 import org.tedros.fx.model.TModelView;
 import org.tedros.util.TLoggerUtil;

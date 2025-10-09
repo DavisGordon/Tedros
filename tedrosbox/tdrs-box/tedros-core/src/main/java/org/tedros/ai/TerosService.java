@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import org.slf4j.Logger;
 import org.tedros.ai.function.TFunction;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.security.model.TUser;
 import org.tedros.util.TDateUtil;
+import org.tedros.util.TLoggerUtil;
 
 import com.theokanning.openai.OpenAiHttpException;
 import com.theokanning.openai.Usage;
@@ -29,10 +29,14 @@ import com.theokanning.openai.service.OpenAiService;
 
 public class TerosService {
 
-	private static final String GPT_4_TURBO = "gpt-4-turbo";
-	private static final String GPT_3_TURBO = "gpt-3.5-turbo-16k";
-	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	private static String GPT_MODEL = null;
+	private final static Logger LOGGER = TLoggerUtil.getLogger(TerosService.class);
 	private static TerosService instance;
+	
+	private static String PROMPT_ASSISTANT = null;
+	private static String PROMPT_HEADER = "Today is %s. You are Teros, a smart and helpful assistant for the Tedros desktop system. "+
+									"Engage intelligently and efficiently with the user %s. ";
+	
 
 	private List<ChatMessage> messages = new ArrayList<>();
 	private FunctionExecutor functionExecutor;
@@ -43,17 +47,19 @@ public class TerosService {
 	 */
 	private TerosService(String token) {
 		super();
+		
 		service = new OpenAiService(token, Duration.ZERO);
-		String date = TDateUtil.formatFullgDate(new Date(), TLanguage.getLocale());
-		String msg = "Today is "+date+" and you are a helpful assistant for the Tedros desktop system and your name is Teros."
-				+ "\nBe smart with the user " + TedrosContext.getLoggedUser().getName() 
-				+ "\nImportant: Never generate random or fictitious data unless requested by the user, always try to use system data provided by the functions"
-				+ ", do this before helping the user."
-				/*+ "\nImportant: before  use the functions to help the user and call the list_system_views function to get system information, "
-				+ "do this before helping the user"*/;
-		ChatMessage systemMessage = new ChatMessage(ChatMessageRole.SYSTEM.value(), msg);
-		messages.add(systemMessage);
+		createSystemMessage();
 		LOGGER.info("Teros Ai Service created!");
+	}
+
+	private void createSystemMessage() {
+		String date = TDateUtil.formatFullgDate(new Date(), TLanguage.getLocale());
+		StringBuilder msg = new StringBuilder(PROMPT_HEADER.formatted(date, TedrosContext.getLoggedUser().getName()));
+		if(PROMPT_ASSISTANT!=null)
+			msg.append(PROMPT_ASSISTANT);
+		ChatMessage systemMessage = new ChatMessage(ChatMessageRole.SYSTEM.value(), msg.toString());
+		messages.add(systemMessage);
 	}
 
 	public static TerosService create(String token) {
@@ -113,7 +119,7 @@ public class TerosService {
 						ChatMessage message = functionExecutor.executeAndConvertToMessage(functionCall);
 						
 						if (message != null) {
-							LOGGER.info("Executed " + functionCall.getName() + ".");
+							LOGGER.debug("Executed " + functionCall.getName() + ".");
 							messages.add(message);
 							continue;
 						} else {
@@ -122,8 +128,7 @@ public class TerosService {
 							break;
 						}
 					} catch (Exception e) {
-						//e.printStackTrace();
-						LOGGER.log(Level.ALL, e.getMessage(), e);
+						LOGGER.error(e.getMessage(), e);
 						ChatMessage message = functionExecutor.convertExceptionToMessage(e);
 						messages.add(message);
 						resp = "Error: " + e.getMessage();
@@ -134,7 +139,7 @@ public class TerosService {
 				if(e instanceof OpenAiHttpException 
 						&& ((OpenAiHttpException)e).code.equals("context_length_exceeded")) {
 
-					LOGGER.log(Level.ALL, "Total Messages="+messages.size(), e);
+					LOGGER.warn("Total Messages="+messages.size(), e);
 					
 					do {
 						messages.remove(1);
@@ -143,7 +148,7 @@ public class TerosService {
 					continue;
 				}
 
-				LOGGER.log(Level.ALL, e.getMessage(), e);
+				LOGGER.error(e.getMessage(), e);
 				resp = "Error: " + e.getMessage();
 			}
 
@@ -156,7 +161,7 @@ public class TerosService {
 	public ChatCompletionRequest buildRequest() {
 		TUser u = TedrosContext.getLoggedUser();
 		return (this.functionExecutor != null)
-				? ChatCompletionRequest.builder().model(GPT_3_TURBO).messages(messages)
+				? ChatCompletionRequest.builder().model(GPT_MODEL).messages(messages)
 						.user(String.valueOf(u.getLogin().hashCode()))
 						.functions(functionExecutor.getFunctions())
 						.functionCall(ChatCompletionRequestFunctionCall.of("auto"))
@@ -164,12 +169,25 @@ public class TerosService {
 						.maxTokens(2000)
 						.logitBias(new HashMap<>())
 						.build()
-				: ChatCompletionRequest.builder().model(GPT_3_TURBO).messages(messages)
+				: ChatCompletionRequest.builder().model(GPT_MODEL).messages(messages)
 						.user(String.valueOf(u.getLogin().hashCode()))
 						.n(1).temperature(1.0)
 						.maxTokens(2000)
 						.logitBias(new HashMap<>())
 						.build();
+	}
+
+	public void clearMessages() {
+		messages.clear();
+		createSystemMessage();
+	}
+
+	public static void setGptModel(String model) {
+		GPT_MODEL = model;
+	}
+
+	public static void setPromptAssistant(String prompt) {
+		PROMPT_ASSISTANT = prompt;
 	}
 
 }

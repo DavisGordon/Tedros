@@ -122,7 +122,9 @@ public @interface THBox {
 	* <pre>
 	* {@link HBox} Class
 	* 
-	*  Sets the margin for the child when contained by an hbox. If set, the hbox will layout the child with the margin space around it. Setting the value to null will remove the constraint. Parameters: child - the child mode of the hbox value - the margin of space around the child
+	*  Sets the margin for the child when contained by an hbox. 
+	*  
+	*  If set, the hbox will layout the child with the margin space around it.  
 	* </pre>
 	**/
 	public TMargin margin() default @TMargin;
@@ -131,7 +133,10 @@ public @interface THBox {
 	* <pre>
 	* {@link HBox} Class
 	* 
-	*  Sets the value of the property spacing. Property description: The amount of horizontal space between each child in the hbox.
+	*  Sets the value of the property spacing. 
+	*  
+	*  Property description: 
+	*  The amount of horizontal space between each child in the hbox.
 	* </pre>
 	**/
 	public double spacing() default TDefaultValue.DEFAULT_DOUBLE_VALUE_IDENTIFICATION;
@@ -140,7 +145,12 @@ public @interface THBox {
 	* <pre>
 	* {@link HBox} Class
 	* 
-	*  Sets the value of the property alignment. Property description: The overall alignment of children within the hbox's width and height. If the vertical alignment value is BASELINE, then children will always be resized to their preferred heights and the fillHeight property will be ignored.
+	*  Sets the value of the property alignment. 
+	*  
+	*  Property description: 
+	*  The overall alignment of children within the hbox's width and height. 
+	*  If the vertical alignment value is BASELINE, then children will always 
+	*  be resized to their preferred heights and the fillHeight property will be ignored.
 	* </pre>
 	**/
 	public Pos alignment() default Pos.CENTER;
@@ -149,7 +159,15 @@ public @interface THBox {
 	* <pre>
 	* {@link HBox} Class
 	* 
-	*  Sets the value of the property fillHeight. Property description: Whether or not resizable children will be resized to fill the full height of the hbox or be kept to their preferred height and aligned according to the alignment vpos value. Note that if the hbox vertical alignment is set to BASELINE, then this property will be ignored and children will be resized to their preferred heights.
+	*  Sets the value of the property fillHeight. 
+	*  
+	*  Property description: 
+	*  Whether or not resizable children will be resized to fill the full height 
+	*  of the hbox or be kept to their preferred height and aligned according to 
+	*  the alignment vpos value. 
+	*  
+	*  Note that if the hbox vertical alignment is set to BASELINE, then this property 
+	*  will be ignored and children will be resized to their preferred heights.
 	* </pre>
 	**/
 	public boolean fillHeight() default false ;
@@ -158,7 +176,14 @@ public @interface THBox {
 	* <pre>
 	* {@link HBox} Class
 	* 
-	*  Sets the horizontal grow priority for the child when contained by an hbox. If set, the hbox will use the priority to allocate additional space if the hbox is resized larger than it's preferred width. If multiple hbox children have the same horizontal grow priority, then the extra space will be split evening between them. If no horizontal grow priority is set on a child, the hbox will never allocate it additional horizontal space if available. Setting the value to null will remove the constraint. Parameters: child - the child of an hbox value - the horizontal grow priority for the child
+	*  Sets the horizontal grow priority for the child when contained by an hbox. 
+	*  If set, the hbox will use the priority to allocate additional space if the 
+	*  hbox is resized larger than it's preferred width. 
+	*  
+	*  If multiple hbox children have the same horizontal grow priority, then the 
+	*  extra space will be split evening between them. If no horizontal grow priority 
+	*  is set on a child, the hbox will never allocate it additional horizontal space 
+	*  if available. 
 	* </pre>
 	**/
 	public THGrow hgrow() default @THGrow;

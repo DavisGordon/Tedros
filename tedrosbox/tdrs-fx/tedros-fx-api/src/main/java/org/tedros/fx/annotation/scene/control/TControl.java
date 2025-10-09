@@ -6,8 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.tedros.fx.annotation.TDefaultValue;
-import org.tedros.fx.annotation.parser.TAnnotationParser;
 import org.tedros.fx.annotation.parser.TControlParser;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 import org.tedros.fx.builder.ITBuilder;
 
 import javafx.scene.Node;

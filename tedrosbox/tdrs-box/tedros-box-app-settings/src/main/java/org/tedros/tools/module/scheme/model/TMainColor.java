@@ -28,6 +28,7 @@ public class TMainColor implements ITEntity {
 	
 	private Color appCorTexto;
 	private Double appTamTexto;
+	private Double appIconSize;
 
 	/**
 	 * 
@@ -232,6 +233,14 @@ public class TMainColor implements ITEntity {
 
 	public void setFileLogo(TFileModel fileLogo) {
 		this.fileLogo = fileLogo;
+	}
+
+	public Double getAppIconSize() {
+		return appIconSize;
+	}
+
+	public void setAppIconSize(Double appIconSize) {
+		this.appIconSize = appIconSize;
 	}
 
 	

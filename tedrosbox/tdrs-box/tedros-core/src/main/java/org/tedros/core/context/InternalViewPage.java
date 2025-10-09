@@ -1,12 +1,14 @@
 package org.tedros.core.context;
 
-import org.apache.commons.lang3.RandomUtils;
+import java.util.Random;
+
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.TLanguage;
 import org.tedros.core.TModule;
 import org.tedros.core.control.PopOver;
 import org.tedros.core.control.PopOver.ArrowLocation;
 import org.tedros.core.style.TStyleResourceValue;
+import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TedrosFolder;
 
 import javafx.event.Event;
@@ -64,7 +66,7 @@ class InternalViewPage extends Page{
     		context.buildModule();
             return getModule();
         } catch (Exception e) {
-            e.printStackTrace();
+        	TLoggerUtil.error(getClass(), e.getMessage(), e);
             return new Text("Failed to create view because of ["+e.getMessage()+"]");
         }
     }
@@ -80,22 +82,28 @@ class InternalViewPage extends Page{
     
     private Node getIcon() throws InstantiationException, IllegalAccessException {
     	
+    	double size = Double.valueOf(TStyleResourceValue.APP_ICON_SIZE.defaultStyle(true));
     	ImageView icon = context.getIcon();
     	if(icon!=null){
+    		icon.setFitHeight(size);
+    		icon.setFitWidth(size);
     		return icon;
     	}else{
             Integer r =  Integer.valueOf(TStyleResourceValue.PANEL_BACKGROUND_RED.customStyle(true));
             Integer g =  Integer.valueOf(TStyleResourceValue.PANEL_BACKGROUND_GREEN.customStyle());
             Integer b =  Integer.valueOf(TStyleResourceValue.PANEL_BACKGROUND_BLUE.customStyle());
+            Random random = new Random();
+            Integer r1 =  random.nextInt(0, 255);
+            Integer g1 =  random.nextInt(0, 255);
+            Integer b1 =  random.nextInt(0, 255);
             
-            Integer r1 =  RandomUtils.nextInt(0, 255);
-            Integer g1 =  RandomUtils.nextInt(0, 255);
-            Integer b1 =  RandomUtils.nextInt(0, 255);
+            double overlayDiff = 16; 
             
         	ImageView imageView = new ImageView(
         			new Image(TedrosContext.getExternalURLFile(TedrosFolder.IMAGES_FOLDER, "icon-overlay.png").toString()));
             imageView.setMouseTransparent(true);
-            Rectangle overlayHighlight = new Rectangle(-8,-8,130,130);
+            
+            Rectangle overlayHighlight = new Rectangle(-8,-8,size+overlayDiff,size+overlayDiff);
             overlayHighlight.setFill(
             		new LinearGradient(0,0.5,0,1,true, CycleMethod.NO_CYCLE, 
             				new Stop[]{ new Stop(0,Color.rgb(r, g, b)), 
@@ -110,18 +118,18 @@ class InternalViewPage extends Page{
             b =  Integer.valueOf(TStyleResourceValue.FORM_BACKGROUND_BLUE.customStyle());
             Double o = 0.1;
            
-            Rectangle background = new Rectangle(-8,-8,130,130);
+            Rectangle background = new Rectangle(-8,-8,size+overlayDiff,size+overlayDiff);
             background.setFill(Color.rgb(r, g, b, o));
             Group group = new Group(background);
-            Rectangle clipRect = new Rectangle(114,114);
+            Rectangle clipRect = new Rectangle(size,size);
             clipRect.setArcWidth(38);
             clipRect.setArcHeight(38);
             group.setClip(clipRect);
             Label content = new Label(getName().trim());
             content.setFont(Font.font("Bungee", FontWeight.BOLD, 30));
             if (content != null) {
-                content.setTranslateX((int)((114-content.getBoundsInParent().getWidth())/3)-(int)content.getBoundsInParent().getMinX());
-                content.setTranslateY((int)((114-content.getBoundsInParent().getHeight())/2)-(int)content.getBoundsInParent().getMinY());
+                content.setTranslateX((int)((size-content.getBoundsInParent().getWidth())/3)-(int)content.getBoundsInParent().getMinX());
+                content.setTranslateY((int)((size-content.getBoundsInParent().getHeight())/2)-(int)content.getBoundsInParent().getMinY());
                 group.getChildren().add(content);
             }
             group.getChildren().addAll(overlayHighlight,imageView);
@@ -129,21 +137,6 @@ class InternalViewPage extends Page{
             return new Group(group);
         }
     }
-
-    /*@SuppressWarnings("unchecked")
-	public Node createIconContent() {
-        try {
-            Method createIconContent = viewClass.getDeclaredMethod("createIconContent");
-            return (Node)createIconContent.invoke(viewClass);
-        } catch (NoSuchMethodException e) {
-            System.err.println("view ["+getName()+"] is missing a icon.");
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }*/
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public Node createTile() {
@@ -153,17 +146,19 @@ class InternalViewPage extends Page{
 		try {
 			icon = getIcon();
 		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
 			icon = null;
 		}
     	
     	if(icon==null){
+    		
+    		double size = Double.valueOf(TStyleResourceValue.APP_ICON_SIZE.defaultStyle(true));
     	
 	    	final BorderPane pane = new BorderPane();
 	        pane.setId("t-module-icon");
-	    	pane.setPrefSize(214, 114);
-	        pane.setMaxSize(214, 114);
-	        pane.setMinSize(214, 114);
+	    	pane.setPrefSize(214, size);
+	        pane.setMaxSize(214, size);
+	        pane.setMinSize(214, size);
 	        
 	        final Label moduleName = new Label(getName().trim());
 	        moduleName.setId("t-module-name");
@@ -213,8 +208,6 @@ class InternalViewPage extends Page{
         	tile.setWrapText(true);
         	tile.setTextAlignment(TextAlignment.CENTER);
         	tile.setTextOverrun(OverrunStyle.WORD_ELLIPSIS);
-          //  tile.setMinSize(140,145);
-           // tile.setPrefSize(140,145);
             tile.setMaxSize(140,165);
             tile.setContentDisplay(ContentDisplay.TOP);
             tile.getStyleClass().clear();

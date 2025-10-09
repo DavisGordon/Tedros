@@ -12,9 +12,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.tedros.fx.annotation.TDefaultValue;
-import org.tedros.fx.annotation.parser.TAnnotationParser;
 import org.tedros.fx.annotation.parser.TRequiredSliderParser;
 import org.tedros.fx.annotation.parser.TSliderParser;
+import org.tedros.fx.annotation.parser.engine.TAnnotationParser;
 import org.tedros.fx.annotation.scene.TNode;
 import org.tedros.fx.annotation.scene.control.TControl;
 import org.tedros.fx.builder.ITControlBuilder;

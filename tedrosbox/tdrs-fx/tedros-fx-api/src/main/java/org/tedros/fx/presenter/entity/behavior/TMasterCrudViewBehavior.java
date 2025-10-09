@@ -103,6 +103,40 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		configListViewContextMenu();
 		
 		TListViewPresenter tAnnotation = getPresenter().getModelViewClass().getAnnotation(TListViewPresenter.class);
+		
+		if(tAnnotation!=null && tAnnotation.reloadListViewAfterCrudActions()) {
+			super.actionHelper.add(
+				new TPresenterAction(TActionType.DELETE, TActionType.SAVE) {
+				
+					@Override
+					public boolean runBefore() {
+						return true;
+					}
+					
+					@Override
+					public void runAfter() {
+						reloadModels();						
+					}
+				});
+		}
+		
+		if(tAnnotation!=null && tAnnotation.autoHideListView()) {
+			super.actionHelper.add(
+				new TPresenterAction(TActionType.SELECTED_ITEM) {
+				
+					@Override
+					public boolean runBefore() {
+						return true;
+					}
+					
+					@Override
+					public void runAfter() {
+						hideListView();						
+					}
+				});
+		}
+		
+		
 		if(tAnnotation!=null && tAnnotation.page().show())
 			tPagAnn = tAnnotation.page();
 		
@@ -393,22 +427,25 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		ContextMenu ctx = new ContextMenu();
 		MenuItem reload = new MenuItem(iEngine.getString(TFxKey.BUTTON_RELOAD));
 		reload.setOnAction(e->{
-			try {
-				if(this.isPaginateEnabled()) {
-					TPagination p = this.decorator.gettPaginator().tPaginationProperty().getValue();
-					if(p!=null)
-						this.paginate(p);
-				}else {
-					this.loadModels();
-				}
-			} catch (TException e1) {
-				LOGGER.error(e1.getMessage(), e1);
-			}
-				
+			reloadModels();
 		});
 		
 		ctx.getItems().add(reload);
 		listView.setContextMenu(ctx);
+	}
+
+	private void reloadModels() {
+		try {
+			if(this.isPaginateEnabled()) {
+				TPagination p = this.decorator.gettPaginator().tPaginationProperty().getValue();
+				if(p!=null)
+					this.paginate(p);
+			}else {
+				this.loadModels();
+			}
+		} catch (TException e1) {
+			LOGGER.error(e1.getMessage(), e1);
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -468,7 +505,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			showListView();
 		}else{
 			selectedItemAction(new_);
-			hideListView();
+			//hideListView();
 		}
 	}
 	

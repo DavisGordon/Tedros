@@ -22,6 +22,8 @@ public enum TSystemPropertie {
 	SMTP_SOCKET_PORT ("sys.smtp.socket.port","Defines SMTP server socket port"),
 	NOTIFY_INTERVAL_TIMER ("sys.notify.interval","Defines the interval time in minutes for sending e-mails queued by the Notify module"),
 	OPENAI_KEY("sys.openai.key","Define the OpenAi Api key"),
+	OPENAI_MODEL("sys.openai.model","Define the OpenAi Model"),
+	OPENAI_PROMPT("sys.openai.prompt","Define the model system prompt instructions"),
 	AI_ENABLED("sys.ai.enabled","Enable Teros artificial intelligence. Set true or false");
 	
 	private String value;

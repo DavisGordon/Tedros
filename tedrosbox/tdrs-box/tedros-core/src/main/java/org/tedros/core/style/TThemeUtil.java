@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.Properties;
 
 import org.tedros.core.context.TedrosContext;
+import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TedrosFolder;
 
 /**
@@ -31,7 +32,7 @@ public final  class TThemeUtil {
 			return prop.getProperty("apply");
 				
 		}catch(Exception e) {
-			e.printStackTrace();
+			TLoggerUtil.error(TThemeUtil.class, e.getMessage(), e);
 			throw new RuntimeException(e);
 		}
 	}

@@ -62,7 +62,7 @@ import org.tedros.tools.module.user.action.TAuthorizationLoadAction;
 			String msg = (e.getCause() instanceof ConnectException 
 					|| e.getCause() instanceof RemoteException)
 					? "SERVER_FAIL"
-					: e.getCause().getMessage();
+					: e.getMessage();
 			TResult<TUser> res = new TResult<>(TState.ERROR, msg);
 			resultList.add(res);
 			LOGGER.error(msg, e);

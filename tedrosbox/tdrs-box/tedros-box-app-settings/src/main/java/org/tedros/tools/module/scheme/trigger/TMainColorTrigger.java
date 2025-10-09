@@ -89,11 +89,12 @@ public class TMainColorTrigger extends TTrigger<Object> {
 			t.settTopMenuStyle(c);
 		}
 		
-		list = Arrays.asList( "appCorTexto", "appTamTexto");
+		list = Arrays.asList( "appCorTexto", "appTamTexto", "appIconSize");
 		if(list.contains(fieldName)){
 			Color c = getColorValue(list.get(0));
 			String o = getSliderValue(list.get(1));
-			t.settIconStyle(c, o);;
+			String s = getSliderValue(list.get(2)); 
+			t.settIconStyle(c, o, s);;
 		}
 		
 	}
