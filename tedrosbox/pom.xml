@@ -32,7 +32,7 @@
     	<maven.compiler.source>17</maven.compiler.source>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
-		<java.home>D:\java\jdk\jdk-17.0.10\bin</java.home>
+		<java.home>C:\Program Files\Java\jdk-17\bin</java.home>
 		<commons-collections.version>4.4</commons-collections.version>
 		<commons.logging.version>1.3.3</commons.logging.version>
 		<commons.io.version>2.16.1</commons.io.version>
@@ -91,12 +91,17 @@
       		<plugin>
         		<groupId>org.apache.maven.plugins</groupId>
         		<artifactId>maven-compiler-plugin</artifactId>
-        		<version>3.3</version>
+        		<version>${compiler.plugin}</version>
         		<configuration>
           			<source>${java.version}</source>
           			<target>${java.version}</target>
         		</configuration>
       		</plugin>
+      		<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-clean-plugin</artifactId>
+			    <version>3.3.2</version> <!-- Versão mais recente e estável -->
+			</plugin>
   		</plugins>
  	</build>
  	
@@ -112,36 +117,57 @@
 	
 	<!-- REPOSITORIES -->
 	<repositories>
-		<repository>
-			<id>oss.sonatype.org</id>
-			<name>OSS Sonatype Staging</name>
-			<url>https://oss.sonatype.org/content/groups/staging</url>
-		</repository>
-		<repository>
-			<id>apache.releases.https</id>
-			<name>Apache</name>
-			<url>https://repository.apache.org/service/local/staging/deploy/maven2</url>
-		</repository>
-		<repository>
-			<id>Tedros-Box</id>
-			<name>Tedros</name>
-			<url>https://maven.pkg.github.com/tedros-box/package</url>
-		</repository>
-		<repository>
-			<id>jaspersoft-third-party</id>
-			<url>https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/</url>
-		</repository>
-		<repository>
-			<id>jr-ce-snapshots</id>
-			<name>JasperReports CE Snapshots</name>
-			<url>https://jaspersoft.jfrog.io/jaspersoft/jr-ce-snapshots</url>
-		</repository>
-		<repository>
-			<id>jr-ce-releases</id>
-			<name>JasperReports CE Releases</name>
-			<url>https://jaspersoft.jfrog.io/jaspersoft/jr-ce-releases</url>
-		</repository>
-  	</repositories>
+	    <!-- Maven Central Repository (principal repositório para dependências) -->
+	    <repository>
+	        <id>central</id>
+	        <name>Maven Central</name>
+	        <url>https://repo.maven.apache.org/maven2</url>
+	        <releases>
+	            <enabled>true</enabled>
+	        </releases>
+	        <snapshots>
+	            <enabled>false</enabled>
+	        </snapshots>
+	    </repository>
+	
+	    <!-- Repositório Sonatype OSS para dependências em staging -->
+	    <repository>
+	        <id>oss.sonatype.org</id>
+	        <name>OSS Sonatype Staging</name>
+	        <url>https://oss.sonatype.org/content/groups/staging</url>
+	    </repository>
+	
+	    <!-- Repositório Apache para artefatos específicos -->
+	    <repository>
+	        <id>apache.releases</id>
+	        <name>Apache Releases</name>
+	        <url>https://repository.apache.org/content/repositories/releases</url>
+	    </repository>
+	
+	    <!-- Repositório Tedros no GitHub Packages -->
+	    <repository>
+	        <id>Tedros-Box</id>
+	        <name>Tedros</name>
+	        <url>https://maven.pkg.github.com/tedros-box/package</url>
+	    </repository>
+	
+	    <!-- Repositórios JasperSoft para JasperReports -->
+	    <repository>
+	        <id>jaspersoft-third-party</id>
+	        <name>JasperSoft Third-Party CE Artifacts</name>
+	        <url>https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/</url>
+	    </repository>
+	    <repository>
+	        <id>jr-ce-snapshots</id>
+	        <name>JasperReports CE Snapshots</name>
+	        <url>https://jaspersoft.jfrog.io/jaspersoft/jr-ce-snapshots</url>
+	    </repository>
+	    <repository>
+	        <id>jr-ce-releases</id>
+	        <name>JasperReports CE Releases</name>
+	        <url>https://jaspersoft.jfrog.io/jaspersoft/jr-ce-releases</url>
+	    </repository>
+	</repositories>
   	
  	<distributionManagement>
 	   <repository>
