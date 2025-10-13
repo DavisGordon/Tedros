@@ -92,12 +92,12 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports-fonts</artifactId>
 			<version>4.0.0</version>
 			<scope>compile</scope>
-		</dependency>
+		</dependency>-->
 
 		<!--<dependency>
 	  		<groupId>org.tedros</groupId>

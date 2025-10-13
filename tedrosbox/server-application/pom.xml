@@ -149,10 +149,10 @@
 		  <version>${cargo.version}</version>
 		  <configuration>
 		    <container>
-		      <containerId>tomee7x</containerId>
-		      <timeout>180000</timeout>
+		      <containerId>${cargo.containerId}</containerId>
+		      <timeout>360000</timeout>
 		      <zipUrlInstaller>
-		        <url>https://repo.maven.apache.org/maven2/org/apache/tomee/apache-tomee/${tomee.version}/apache-tomee-${tomee.version}-webprofile.zip</url>
+		        <url>https://repo.maven.apache.org/maven2/org/apache/tomee/apache-tomee/${tomee.version}/apache-tomee-${tomee.version}-plume.zip</url>
 		      </zipUrlInstaller>
 		      <dependencies>
 	            <dependency>
