@@ -28,6 +28,13 @@
 	
 	<dependency>
 	    <groupId>org.tedros</groupId>
+	    <artifactId>app-extensions-ejb-ear</artifactId>
+	    <type>ear</type>
+	    <version>${app.ext}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.tedros</groupId>
 	    <artifactId>app-person-ejb-ear</artifactId>
 	    <type>ear</type>
 	    <version>${app.person}</version>
@@ -316,16 +323,24 @@
 		        <type>ear</type>
 		      </deployable>	
 		      
+		       <deployable>
+		        <groupId>org.tedros</groupId>
+		        <artifactId>app-extensions-ejb-ear</artifactId>
+		        <type>ear</type>
+		      </deployable>	
+		      
 		      <deployable>
 		        <groupId>org.tedros</groupId>
 		        <artifactId>tedros-core-ejb-ear</artifactId>
 		        <type>ear</type>
 		      </deployable>
+		      
 		       <deployable>
 		        <groupId>org.tedros</groupId>
 		        <artifactId>app-chat-ejb-ear</artifactId>
 		        <type>ear</type>
 		      </deployable>
+		      
 		    </deployables>
 		    <packager>
 		      <outputLocation>${project.build.directory}/tomcat-packaged</outputLocation>
