@@ -27,6 +27,27 @@
 	</dependency>
 	
 	<dependency>
+	    <groupId>org.tedros</groupId>
+	    <artifactId>app-person-ejb-ear</artifactId>
+	    <type>ear</type>
+	    <version>${app.person}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.tedros</groupId>
+	    <artifactId>app-services-ejb-ear</artifactId>
+	    <type>ear</type>
+	    <version>${app.services}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.tedros</groupId>
+	    <artifactId>app-stock-ejb-ear</artifactId>
+	    <type>ear</type>
+	    <version>${app.stock}</version>
+	</dependency>
+	
+	<dependency>
 	    <groupId>org.apache.poi</groupId>
 	    <artifactId>poi</artifactId>
 	    <version>${apache.poi}</version>
@@ -276,6 +297,25 @@
 	          </files>
 		    </configuration>
 		    <deployables>
+				
+			  <deployable>
+		        <groupId>org.tedros</groupId>
+		        <artifactId>app-services-ejb-ear</artifactId>
+		        <type>ear</type>
+		      </deployable>	
+		      
+			  <deployable>
+		        <groupId>org.tedros</groupId>
+		        <artifactId>app-stock-ejb-ear</artifactId>
+		        <type>ear</type>
+		      </deployable>	
+		      
+			  <deployable>
+		        <groupId>org.tedros</groupId>
+		        <artifactId>app-person-ejb-ear</artifactId>
+		        <type>ear</type>
+		      </deployable>	
+		      
 		      <deployable>
 		        <groupId>org.tedros</groupId>
 		        <artifactId>tedros-core-ejb-ear</artifactId>
