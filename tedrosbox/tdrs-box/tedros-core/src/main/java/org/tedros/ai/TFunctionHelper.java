@@ -16,6 +16,7 @@ import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.slf4j.Logger;
 import org.tedros.ai.function.TFunction;
 import org.tedros.ai.function.model.AppCatalog;
 import org.tedros.ai.function.model.CallView;
@@ -39,6 +40,7 @@ import org.tedros.core.service.remote.ServiceLocator;
 import org.tedros.core.setting.model.TPropertie;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
+import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TedrosFolder;
 
 import javafx.application.Platform;
@@ -48,6 +50,8 @@ import javafx.application.Platform;
  *
  */
 public class TFunctionHelper {
+	
+	private static final Logger LOGGER = TLoggerUtil.getLogger(TFunctionHelper.class);
 
 	/**
 	 * 
@@ -81,14 +85,12 @@ public class TFunctionHelper {
 					String path = dir+v.getName()+"."+v.getExtension();
 					File f = new File(path);
 					try(OutputStream out = new FileOutputStream(f)) {
-					IOUtils.write(v.getContent(), out, Charset.forName("UTF-8"));
-					return new Response("File created! return file path like this: '!{"+path+"}'");
+						IOUtils.write(v.getContent(), out, Charset.forName("UTF-8"));
+						return new Response("File created! return file path like this: '!{"+path+"}'");
 					} catch (Exception e) {
-						e.printStackTrace();
+						LOGGER.error(e.getMessage(), e);
 						return new Response("Error: "+e.getMessage());
 					}
-					
-					//return new Response("Cant create the file!");
 				});
 	}
 	
@@ -125,7 +127,7 @@ public class TFunctionHelper {
 							return new Response("use the name field to help the user", lst);
 						}
 					}catch(Exception e) {
-						
+						LOGGER.error(e.getMessage(), e);
 					}finally{
 						loc.close();
 					}
@@ -135,7 +137,7 @@ public class TFunctionHelper {
 	
 	@SuppressWarnings("rawtypes")
 	public static TFunction<Empty> getModelBeingEditedFunction() {
-		return new TFunction<Empty>("get_edited_model", "Returns the entity model being edited by the user, "
+		return new TFunction<>("get_edited_model", "Returns the entity model being edited by the user, "
 				+ "call this to help the user with entered data", 
 				Empty.class, 
 				v->{
@@ -152,7 +154,7 @@ public class TFunctionHelper {
 	}
 	
 	public static TFunction<CallView> getViewModelFunction() {
-		return new TFunction<CallView>("get_model", 
+		return new TFunction<>("get_model", 
 			"Returns the entity model used in the viewPath, call this to get information about the model. "
 			+ "Important: Before calling this, make sure that the viewPath exists, for that call the list_system_views function", 
 			CallView.class, 
@@ -219,59 +221,76 @@ public class TFunctionHelper {
 	}*/
 	
 	public static TFunction<Empty> listAllViewPathFunction() {
-		List<ViewPath> lst = new ArrayList<ViewPath>();
-		TedrosAppManager.getInstance().getAppContexts()
-		.forEach(actx->{
-			actx.getModulesContext().forEach(mctx->{
-				mctx.getModuleDescriptor().getViewDescriptors()
-				.forEach(vds->{
-					lst.add(new ViewPath(vds.getPath()));
-				});
-			});
-		});
-		return new TFunction<Empty>("list_all_view_path", 
+		
+		List<ViewPath> lst = TedrosAppManager.getInstance().getAppContexts()
+			.parallelStream()
+			.flatMap(actx -> actx.getModulesContext().parallelStream())
+			.flatMap(mctx -> mctx.getModuleDescriptor().getViewDescriptors().parallelStream())
+			.map(vds -> new ViewPath(vds.getPath()))
+			.sorted((v1, v2) -> v1.getViewPath().compareToIgnoreCase(v2.getViewPath()))
+			.toList();
+		
+		return new TFunction<>("list_all_view_path", 
 			"It lists all the view paths ('viewPath'), can be used to call up a view and to get more details about a specific view.", 
 			Empty.class, obj->lst);	
 	}
 	
 	public static TFunction<Empty> listAllAppsFunction() {
+		
 		AppCatalog log = new AppCatalog();
+		
+		// Paralelismo nos contextos de aplicativos
 		TedrosAppManager.getInstance().getAppContexts()
-		.forEach(actx->{
-			List<ModuleInfo> mods = new ArrayList<>();
-			Boolean appAccess = actx.getAppDescriptor().getSecurityDescriptor()!=null
-					? TedrosContext.isUserAuthorized(actx.getAppDescriptor().getSecurityDescriptor(), 
-							TAuthorizationType.APP_ACCESS)
-							: true;
-			actx.getModulesContext().forEach(mctx->{
-				List<ViewInfo> views = new ArrayList<>();
-				Boolean modAccess = mctx.getModuleDescriptor().getSecurityDescriptor() != null
-						? TedrosContext.isUserAuthorized(mctx.getModuleDescriptor().getSecurityDescriptor(), 
-								TAuthorizationType.MODULE_ACCESS)
-								: true;				
-				mctx.getModuleDescriptor().getViewDescriptors()
-				.forEach(vds->{
-					Boolean viewAccess = vds.getSecurityDescriptor()!=null
-							?TedrosContext.isUserAuthorized(vds.getSecurityDescriptor(), 
-									TAuthorizationType.VIEW_ACCESS)
-									: true;
-					
-					views.add(new ViewInfo(vds.getPath(), vds.getTitle(), vds.getDescription(), viewAccess.toString()));
-				});
-				mods.add(new ModuleInfo(mctx.getModuleDescriptor().getModuleName(), modAccess.toString(), views));
+			.parallelStream()
+			.forEach(actx -> {
+				// Paralelismo nos módulos
+				List<ModuleInfo> mods = actx.getModulesContext()
+					.parallelStream()
+					.map(mctx -> {
+						// Paralelismo nas views
+						List<ViewInfo> views = mctx.getModuleDescriptor().getViewDescriptors()
+							.parallelStream()
+							.map(vds -> {
+						
+								Boolean viewAccess = vds.getSecurityDescriptor() != null
+										? TedrosContext.isUserAuthorized(vds.getSecurityDescriptor(), 
+												TAuthorizationType.VIEW_ACCESS)
+										: true;
+								
+								return new ViewInfo(vds.getPath(), vds.getTitle(), vds.getDescription(), viewAccess.toString());
+							})
+							.toList();
+				
+						Boolean modAccess = mctx.getModuleDescriptor().getSecurityDescriptor() != null
+								? TedrosContext.isUserAuthorized(mctx.getModuleDescriptor().getSecurityDescriptor(), 
+										TAuthorizationType.MODULE_ACCESS)
+								: true;
+						
+						return new ModuleInfo(mctx.getModuleDescriptor().getModuleName(), modAccess.toString(), views);
+					})
+					.toList();
+				
+				Boolean appAccess = actx.getAppDescriptor().getSecurityDescriptor() != null
+						? TedrosContext.isUserAuthorized(actx.getAppDescriptor().getSecurityDescriptor(), 
+								TAuthorizationType.APP_ACCESS)
+						: true;
+				
+				log.add(actx.getAppDescriptor().getName(), appAccess.toString(), mods);
 			});
-			log.add(actx.getAppDescriptor().getName(), appAccess.toString(), mods);
-		});
+		
 		return new TFunction<Empty>("lists_all_applications", 
 			"It lists all the applications and can be used to discover all the system's functionalities.", 
 			Empty.class, obj->log);
 	}
 	
 	public static TFunction<ViewPath> callUpViewFunction() {
-		return new TFunction<ViewPath>("call_view", 
+		return new TFunction<>("call_view", 
 			"Calls and opens a view using a 'viewPath'", 
 			ViewPath.class, 
 				v->{	
+					
+					LOGGER.info("Calling view path: {}", v.getViewPath());
+					
 					StringBuilder sb = new StringBuilder(v.getViewPath());
 					TViewDescriptor vds = TedrosAppManager.getInstance()
 							.getViewDescriptor(v.getViewPath());
@@ -285,12 +304,15 @@ public class TFunctionHelper {
 					
 					if(sb.toString().equals(v.getViewPath()))
 						sb.append(" does not exist! Run the list_all_view_path function to find the correct 'viewPath'.");
+
+					LOGGER.info("Result calling view path: {}, {}", v.getViewPath(), sb.toString());
+					
 				return new Response(sb.toString());
 		});
 	}
 	
 	public static TFunction<ViewPath> getViewInfoFunction() {
-		return new TFunction<ViewPath>("get_view_info", 
+		return new TFunction<>("get_view_info", 
 			"Gets information from a specific view, must be used with a correct 'viewPath' returned from the list_all_view_path function", 
 			ViewPath.class, 
 				v->{	
@@ -303,8 +325,10 @@ public class TFunctionHelper {
 										: true;
 						return new ViewInfo(vds.getPath(), vds.getTitle(), vds.getDescription(), viewAccess.toString());
 					}
+					
 					StringBuilder sb = new StringBuilder(v.getViewPath());
 					sb.append(" does not exist! Run the list_all_view_path function to find the correct 'viewPath'");
+					
 				return new Response(sb.toString());
 		});
 	}

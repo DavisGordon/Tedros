@@ -172,6 +172,30 @@ public final class TedrosAppManager extends TedrosAppLoader {
 		}
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void goToModule(Class<? extends ITModule> moduleClass, Class<? extends ITModelView> modelViewClass, Consumer<ITModule> consumer) {
+		Node v = (Node) TedrosContext.viewProperty().getValue();
+		if(v instanceof ITModule && v.getClass()==moduleClass) {
+			ITModule m = (ITModule) v;
+			m.tLookupAndShow(modelViewClass);
+			consumer.accept(m);
+		}else {
+			ChangeListener<Node> chl = new ChangeListener<Node>() {
+				@Override
+				public void changed(ObservableValue<? extends Node> a, Node o, Node n) {
+					if(n instanceof ITModule && n.getClass()==moduleClass) {
+						ITModule m = (ITModule) n;
+						m.tLookupAndShow(modelViewClass);
+						TedrosContext.viewProperty().removeListener(this);
+						consumer.accept(m);
+					}
+				}
+			};
+			TedrosContext.viewProperty().addListener(chl);
+			goToModule(moduleClass);
+		}
+	}
+	
 	@SuppressWarnings({ "rawtypes" })
 	public void loadInModule(Class<? extends ITModule> moduleClass, ITModelView modelView) {
 		loadIn(moduleClass, m->{
@@ -246,7 +270,7 @@ public final class TedrosAppManager extends TedrosAppLoader {
 	 * @param path
 	 */
 	@SuppressWarnings({ "unchecked"})
-	private void listenView(Consumer<ITModule> f, String path) {
+	public void listenView(Consumer<ITModule> f, String path) {
 		ChangeListener<Node> chl = new ChangeListener<Node>() {
 			@Override
 			public void changed(ObservableValue<? extends Node> a, Node o, Node n) {
