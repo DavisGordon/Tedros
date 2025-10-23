@@ -93,75 +93,7 @@ public class TerosService {
 		}
 	}
 
-	/*public String call(String userPrompt, String sysPrompt) {
-
-		String resp = "";
-		if (sysPrompt != null)
-			messages.add(new ChatMessage(ChatMessageRole.SYSTEM.value(), sysPrompt));
-				
-		messages.add(new ChatMessage(ChatMessageRole.USER.value(), userPrompt));
-		
-		while (true) {
-			ChatCompletionRequest chatCompletionRequest = buildRequest();
-			try {
-				ChatCompletionResult result = service.createChatCompletion(chatCompletionRequest);
-				
-				ChatCompletionChoice choice = result.getChoices().get(0);
-				ChatMessage responseMessage = choice.getMessage();
-				messages.add(responseMessage); 
-				
-				Usage usage = result.getUsage();
-				LOGGER.info("Total messages: {}, Usage Tokens: prompt={}, completion={}, total={}", 
-					messages.size(), usage.getPromptTokens(), usage.getCompletionTokens(), usage.getTotalTokens());
-				
-				resp = responseMessage.getContent();
-				
-				ChatFunctionCall functionCall = responseMessage.getFunctionCall();
-				if (functionExecutor != null && functionCall != null) {
-					LOGGER.info("Trying to execute {} ...", functionCall.getName());
-					try {
-						Optional<ChatMessage> optional = functionExecutor.executeAndConvertToMessageSafely(functionCall);
-						
-						if (optional.isPresent()) {
-							LOGGER.debug("Executed {}.", functionCall.getName());
-							messages.add(optional.get());
-							continue;
-						} else {
-							LOGGER.info("Something went wrong with the execution of {} ...", functionCall.getName());
-							break;
-						}
-					} catch (Exception e) {
-						LOGGER.error(e.getMessage(), e);
-						ChatMessage message = functionExecutor.convertExceptionToMessage(e);
-						messages.add(message);
-						resp = "Error: " + e.getMessage();
-					}
-				}
-				
-			} catch (Exception e) {
-				
-				if(e instanceof OpenAiHttpException 
-						&& ((OpenAiHttpException)e).code.equals("context_length_exceeded")) {
-
-					LOGGER.warn("Total Messages="+messages.size(), e);
-					
-					do {
-						messages.remove(1);
-					}while(messages.size()>10);
-					
-					continue;
-				}
-
-				LOGGER.error(e.getMessage(), e);
-				resp = "Error: " + e.getMessage();
-			}
-
-			break;
-		}
-
-		return resp;
-	}
-	*/
+	
 	
 	public String call(String userPrompt, String sysPrompt) {
 		
