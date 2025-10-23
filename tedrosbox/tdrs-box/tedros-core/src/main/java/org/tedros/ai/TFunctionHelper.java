@@ -167,59 +167,6 @@ public class TFunctionHelper {
 				});
 	}
 	
-	/*public static TFunction<CallView> callViewFunction() {
-		return new TFunction<CallView>("call_view_path", 
-			"Opens a view. IMPORTANT: Before calling this make sure that the 'viewPath' exists, to do this call the list_system_views function.", 
-			CallView.class, 
-				v->{	
-					StringBuilder sb = new StringBuilder(v.getViewPath());
-					TViewDescriptor vds = TedrosAppManager.getInstance()
-							.getViewDescriptor(v.getViewPath());
-					if(vds!=null) {
-						Platform.runLater(()->{
-							TedrosAppManager.getInstance()
-							.goToModule(vds.getModuleDescriptor().getType(), vds.getModelView());
-						});
-						sb.append(" opened successfully!");
-					}
-					
-					if(sb.toString().equals(v.getViewPath()))
-						sb.append(" does not exist! Run the list_system_views function to find the correct path.");
-				return new Response(sb.toString());
-		});
-	}*/
-	
-	/*public static TFunction<Empty> listAllViewsFunction() {
-		AppCatalog log = new AppCatalog();
-		TedrosAppManager.getInstance().getAppContexts()
-		.forEach(actx->{
-			Boolean appAccess = actx.getAppDescriptor().getSecurityDescriptor()!=null
-					? TedrosContext.isUserAuthorized(actx.getAppDescriptor().getSecurityDescriptor(), 
-							TAuthorizationType.APP_ACCESS)
-							: true;
-			actx.getModulesContext().forEach(mctx->{
-				Boolean modAccess = mctx.getModuleDescriptor().getSecurityDescriptor() != null
-						? TedrosContext.isUserAuthorized(mctx.getModuleDescriptor().getSecurityDescriptor(), 
-								TAuthorizationType.MODULE_ACCESS)
-								: true;
-						
-				mctx.getModuleDescriptor().getViewDescriptors()
-				.forEach(vds->{
-					Boolean viwAccess = vds.getSecurityDescriptor()!=null
-							?TedrosContext.isUserAuthorized(vds.getSecurityDescriptor(), 
-									TAuthorizationType.VIEW_ACCESS)
-									: true;
-					log.add(mctx.getModuleDescriptor().getApplicationName(), mctx.getModuleDescriptor().getModuleName(), 
-							vds.getTitle(), vds.getDescription(), vds.getPath(), appAccess.toString(), modAccess.toString(), viwAccess.toString());
-				});
-			});
-		});
-		return new TFunction<Empty>("list_system_views", 
-			"Lists all system views, use this to see what the system can do and get a path to open a view", 
-			Empty.class, obj->log);
-		
-	}*/
-	
 	public static TFunction<Empty> listAllViewPathFunction() {
 		
 		List<ViewPath> lst = TedrosAppManager.getInstance().getAppContexts()

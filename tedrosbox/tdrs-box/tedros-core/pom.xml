@@ -69,6 +69,12 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>${commons.lang.version}</version>
 		</dependency>
+		
+		<dependency>
+		  <groupId>com.openai</groupId>
+		  <artifactId>openai-java</artifactId>
+		  <version>4.6.1</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.theokanning.openai-gpt3-java</groupId>
