@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.tedros.ai.function.TFunction;
@@ -29,8 +30,9 @@ import com.theokanning.openai.service.OpenAiService;
 
 public class TerosService {
 
-	private static String GPT_MODEL = null;
-	private final static Logger LOGGER = TLoggerUtil.getLogger(TerosService.class);
+	private static final Logger LOGGER = TLoggerUtil.getLogger(TerosService.class);
+	
+	private static String GPT_MODEL = null;	
 	private static TerosService instance;
 	
 	private static String PROMPT_ASSISTANT = null;
@@ -91,13 +93,17 @@ public class TerosService {
 		}
 	}
 
+	
+	
 	public String call(String userPrompt, String sysPrompt) {
-
-		String resp = "";
+		
 		if (sysPrompt != null)
 			messages.add(new ChatMessage(ChatMessageRole.SYSTEM.value(), sysPrompt));
-		ChatMessage msg = new ChatMessage(ChatMessageRole.USER.value(), userPrompt);
-		messages.add(msg);
+				
+		messages.add(new ChatMessage(ChatMessageRole.USER.value(), userPrompt));
+		
+		String resp = "";
+		Integer callFunctionAttempts = 0;
 		while (true) {
 			ChatCompletionRequest chatCompletionRequest = buildRequest();
 			try {
@@ -108,43 +114,29 @@ public class TerosService {
 				messages.add(responseMessage); 
 				
 				Usage usage = result.getUsage();
-				LOGGER.info(String.format("Total messages: %s, Usage Tokens: prompt=%s, completion=%s, total=%s", messages.size(), usage.getPromptTokens(), usage.getCompletionTokens(), usage.getTotalTokens()));
+				LOGGER.info("Total messages: {}, Usage Tokens: prompt={}, completion={}, total={}", 
+					messages.size(), usage.getPromptTokens(), usage.getCompletionTokens(), usage.getTotalTokens());
 				
 				resp = responseMessage.getContent();
-
-				ChatFunctionCall functionCall = responseMessage.getFunctionCall();
-				if (functionExecutor != null && functionCall != null) {
-					LOGGER.info("Trying to execute " + functionCall.getName() + "...");
-					try {
-						ChatMessage message = functionExecutor.executeAndConvertToMessage(functionCall);
-						
-						if (message != null) {
-							LOGGER.debug("Executed " + functionCall.getName() + ".");
-							messages.add(message);
-							continue;
-						} else {
-							LOGGER.info(
-								"Something went wrong with the execution of " + functionCall.getName() + "...");
-							break;
-						}
-					} catch (Exception e) {
-						LOGGER.error(e.getMessage(), e);
-						ChatMessage message = functionExecutor.convertExceptionToMessage(e);
-						messages.add(message);
-						resp = "Error: " + e.getMessage();
-					}
-				}
+				
+				if(callFunction(responseMessage, callFunctionAttempts))
+					continue;
+				
 			} catch (Exception e) {
 				
-				if(e instanceof OpenAiHttpException 
-						&& ((OpenAiHttpException)e).code.equals("context_length_exceeded")) {
-
+				if(e instanceof OpenAiHttpException openAiHttpException
+						&& openAiHttpException.code.equals("context_length_exceeded")) 
+				{
 					LOGGER.warn("Total Messages="+messages.size(), e);
 					
 					do {
 						messages.remove(1);
 					}while(messages.size()>10);
 					
+					continue;
+				}
+				
+				if(e instanceof CallAiFunctionException) {
 					continue;
 				}
 
@@ -156,6 +148,39 @@ public class TerosService {
 		}
 
 		return resp;
+	}
+	
+	private boolean callFunction(ChatMessage responseMessage, Integer attempt) throws CallAiFunctionMaxAttemptException, CallAiFunctionException {
+		
+		if(attempt==3)
+			throw new CallAiFunctionMaxAttemptException();
+		attempt++;
+		ChatFunctionCall functionCall = responseMessage.getFunctionCall();
+		if (functionExecutor != null && functionCall != null) {
+			LOGGER.info("Trying to execute {} ...", functionCall.getName());
+			try {
+				Optional<ChatMessage> optional = functionExecutor.executeAndConvertToMessageSafely(functionCall);
+				
+				if (optional.isPresent()) {
+					LOGGER.debug("Executed {}.", functionCall.getName());
+					messages.add(optional.get());
+					//continue;
+					attempt = 0;
+					return true;
+				} else {
+					LOGGER.info("Something went wrong with the execution of {} ...", functionCall.getName());
+					//break;
+					return false;
+				}
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				messages.add(functionExecutor.convertExceptionToMessage(e));
+				//resp = "Error: " + e.getMessage();
+				throw new CallAiFunctionException(e);
+			}
+		}
+		
+		return false;
 	}
 
 	public ChatCompletionRequest buildRequest() {
