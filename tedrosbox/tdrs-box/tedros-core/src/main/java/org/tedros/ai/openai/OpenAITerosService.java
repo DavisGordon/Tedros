@@ -176,7 +176,7 @@ public class OpenAITerosService {
     }
         
 	public static void main(String[] args) {
-    	OpenAITerosService service = OpenAITerosService.create("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");
+    	OpenAITerosService service = OpenAITerosService.create(System.getenv("OPENAI_API_KEY"));
     	service.createFunctionExecutor(new TFunction<Pessoa>("search_person", "Search for a person", Pessoa.class, 
     			v->{
     				Pessoa p = new Pessoa();

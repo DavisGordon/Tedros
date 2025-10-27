@@ -21,7 +21,7 @@ public final class CompletionsConversationExample {
         // Configures using one of:
         // - The `OPENAI_API_KEY` environment variable
         // - The `OPENAI_BASE_URL` and `AZURE_OPENAI_KEY` environment variables
-        OpenAIClient client = OpenAIClientFactory.getClient("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");
+        OpenAIClient client = OpenAIOkHttpClient.builder().fromEnv().build();
 
         
         List<ChatCompletionMessageParam> systemMessages = List.of(
