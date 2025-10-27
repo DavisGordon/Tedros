@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openai.core.JsonObject;
 import com.openai.core.JsonValue;
 import com.openai.models.chat.completions.ChatCompletionMessageFunctionToolCall;
+import com.openai.models.responses.ResponseFunctionToolCall;
 
 /**
  * Executor de funções para integração com o SDK oficial.
@@ -54,7 +55,7 @@ public class OpenAIFunctionExecutor {
         }
     }
     
-    public Optional<ToolCallResult> callFunction(ChatCompletionMessageFunctionToolCall.Function function) {
+    public Optional<ToolCallResult> callFunction(ResponseFunctionToolCall function) {
     	
     	TFunction<?> fn = functions.get(function.name());
         if (fn == null)

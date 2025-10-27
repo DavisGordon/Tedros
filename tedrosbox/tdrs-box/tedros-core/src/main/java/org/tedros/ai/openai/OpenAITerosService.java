@@ -15,13 +15,13 @@ import org.tedros.util.TLoggerUtil;
 
 import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openai.models.ChatModel;
-import com.openai.models.chat.completions.ChatCompletion;
-import com.openai.models.chat.completions.ChatCompletion.Choice;
-import com.openai.models.chat.completions.ChatCompletionMessageFunctionToolCall;
-import com.openai.models.chat.completions.ChatCompletionMessageParam;
-import com.openai.models.chat.completions.ChatCompletionMessageToolCall;
-import com.openai.models.chat.completions.ChatCompletionToolMessageParam;
+import com.openai.models.responses.ResponseFunctionToolCall;
+import com.openai.models.responses.ResponseInputItem;
+import com.openai.models.responses.ResponseOutputItem;
+import com.openai.models.responses.ResponseOutputMessage.Content;
+import com.openai.models.responses.ResponseOutputText;
 
 /**
  * Versão adaptada do TerosService usando o SDK oficial.
@@ -29,9 +29,10 @@ import com.openai.models.chat.completions.ChatCompletionToolMessageParam;
 public class OpenAITerosService {
 
     private static final Logger LOGGER = TLoggerUtil.getLogger(OpenAITerosService.class);
-
+    
     private final OpenAIServiceAdapter adapter;
-    private final List<ChatCompletionMessageParam> messages = new ArrayList<>();
+    private final ObjectMapper mapper = new ObjectMapper();
+    private final List<ResponseInputItem> messages = new ArrayList<>();
     private OpenAIFunctionExecutor functionExecutor;
     private static String GPT_MODEL;
     private static String PROMPT_ASSISTANT;
@@ -79,54 +80,63 @@ public class OpenAITerosService {
 
         messages.add(adapter.buildUserMessage(userPrompt));
 
-        ChatCompletion completion = adapter.sendChatRequest(GPT_MODEL, messages);
+        ResponseOutputItem response = adapter.sendChatRequest(GPT_MODEL, messages);
 
-        return processChatCompletion(completion);
+        return processChatCompletion(response);
     }
 
-	private String processChatCompletion(ChatCompletion completion) {
+	private String processChatCompletion(ResponseOutputItem response) {
 		// Obtem a primeira mensagem do modelo
         String content = null;
         try {
-            // SDK provides choices() or getChoices(); try both patterns defensively
-            List<Choice> choices = completion.choices();
-
-            if (choices != null && !choices.isEmpty()) {
-                Choice first = choices.get(0);
-                if(first.isValid()) {
-                	Optional<String> messageOpt = first.message().content();
-                	if(messageOpt.isPresent()) {
-						content = messageOpt.get();
-					}
-                	
-                	Optional<List<ChatCompletionMessageToolCall>> optMsgToolCall = first.message().toolCalls();
-                	if(optMsgToolCall.isPresent() && functionExecutor!=null) {
-						List<ChatCompletionMessageToolCall> toolCalls = optMsgToolCall.get();
-						
-						for(ChatCompletionMessageToolCall toolCall : toolCalls) {
-							Optional<ChatCompletionMessageFunctionToolCall> optFunction = toolCall.function();
-							if(optFunction.isEmpty())
-								continue;
-							
-							ChatCompletionMessageFunctionToolCall function = optFunction.get();
-														
-							Optional<ToolCallResult> resultOpt = functionExecutor.callFunction(function.function());
-							
-							if(resultOpt.isPresent()) {
-								ChatCompletion completion2 = adapter.sendToolCallResult(GPT_MODEL, messages, toolCall.asFunction().id(), resultOpt.get());
-								content = processChatCompletion(completion2);
-							}else {
-								LOGGER.warn("Função {} não encontrada!", function.function().name());
-							}
+        	
+            if (response.isValid()) {
+            	
+            	if(response.isMessage()) {
+            		 if(response.message().isEmpty()) {
+						 LOGGER.warn("Resposta do OpenAI sem mensagem.");
+						 return "[no response]";
+					 }
+            	
+	                Content responseContent = response.message().get().content().get(0);
+	                if(responseContent.isValid()) {
+	                	
+	                	Optional<ResponseOutputText> messageOpt = responseContent.outputText();
+	                	if(messageOpt.isPresent()) {
+							content = messageOpt.get().text();
 						}
-						
+					}else {
+						if(responseContent.isRefusal() && responseContent.refusal().isPresent()) {
+							String refusal = responseContent.refusal().get().refusal();
+							LOGGER.warn("OpenAI refusal: {}", refusal);
+							content = "Recusa do OpenAI: " + refusal;
+						}
 					}
-                	
-				}else {
-					//TODO: tratar resposta inválida
-					content = first.finishReason().toString();
-				}
-            }
+            	}
+            	
+            	if(response.isFunctionCall()) {
+            		
+            		ResponseFunctionToolCall functionCall = response.asFunctionCall();
+            		
+            		Optional<ToolCallResult> resultOpt = functionExecutor.callFunction(functionCall);
+            		
+            		if(resultOpt.isPresent()) {
+            			ToolCallResult result = resultOpt.get();
+						ResponseOutputItem responseOutputItem = adapter.sendToolCallResult(GPT_MODEL, messages, functionCall, result);
+						messages.add(ResponseInputItem.ofFunctionCall(functionCall));
+	            		messages.add(ResponseInputItem.ofFunctionCallOutput(ResponseInputItem.FunctionCallOutput.builder()
+	                            .callId(functionCall.callId())
+	                            .output(mapper.writeValueAsString(result))
+	                            .build()));
+						content = processChatCompletion(responseOutputItem);
+					}else {
+						LOGGER.warn("Função {} não encontrada!", functionCall.name());
+					}            		
+            	}
+            	
+            }else {
+				content = "Resposta inválida do OpenAI.";
+			}
         } catch (Exception e) {
             LOGGER.error("Erro ao processar resposta do OpenAI: {}", e.getMessage());
         }
@@ -176,7 +186,7 @@ public class OpenAITerosService {
     }
         
 	public static void main(String[] args) {
-    	OpenAITerosService service = OpenAITerosService.create(System.getenv("OPENAI_API_KEY"));
+    	OpenAITerosService service = OpenAITerosService.create("OPEN_AI_KEY");
     	service.createFunctionExecutor(new TFunction<Pessoa>("search_person", "Search for a person", Pessoa.class, 
     			v->{
     				Pessoa p = new Pessoa();
