@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.tedros.ai.function.TFunction;
 import org.tedros.ai.openai.model.ToolCallResult;
 import org.tedros.core.TLanguage;
+import org.tedros.core.context.TedrosContext;
 import org.tedros.util.TDateUtil;
 import org.tedros.util.TLoggerUtil;
 
@@ -58,8 +59,8 @@ public class OpenAITerosService {
 
     private void createSystemMessage() {
         String date = TDateUtil.formatFullgDate(new Date(), TLanguage.getLocale());
-        //String user = TedrosContext.getLoggedUser().getName();
-        String user = "Davis";
+        String user = TedrosContext.getLoggedUser().getName();
+        //String user = "Davis";
         String header = "Today is %s. You are Teros, a smart and helpful assistant for the Tedros desktop system. Engage intelligently with user %s."
                 .formatted(date, user);
         
@@ -160,6 +161,7 @@ public class OpenAITerosService {
     
     @JsonClassDescription("The person object containing the name.")
     static class Pessoa {
+    	
     	@JsonPropertyDescription("The person name")
     	private String param1;
     	

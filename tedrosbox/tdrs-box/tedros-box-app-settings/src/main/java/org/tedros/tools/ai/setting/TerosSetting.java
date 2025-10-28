@@ -8,8 +8,8 @@ import java.util.Date;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.ai.TFunctionHelper;
-import org.tedros.ai.TerosService;
 import org.tedros.ai.function.TFunction;
+import org.tedros.ai.openai.OpenAITerosService;
 import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
@@ -48,7 +48,7 @@ public class TerosSetting extends TSetting {
 	private AiChatUtil util;
     private TRepository repo;
     private boolean scrollFlag = false;
-    private TerosService teros;
+    private OpenAITerosService teros;
 
 	/**
 	 * @param descriptor
@@ -65,13 +65,13 @@ public class TerosSetting extends TSetting {
 		if(TedrosContext.getArtificialIntelligenceEnabled()) {
 			String key = util.getOpenAiKey();
 			if(!"".equals(key)) {
-				TerosService.setGptModel(TedrosContext.getAiModel());
-				TerosService.setPromptAssistant(TedrosContext.getAiSystemPrompt());
+				OpenAITerosService.setGptModel(TedrosContext.getAiModel());
+				OpenAITerosService.setPromptAssistant(TedrosContext.getAiSystemPrompt());
 				
-				TedrosContext.aiModelProperty().addListener((a,o,n)->TerosService.setGptModel(n));
-				TedrosContext.aiSystemPromptProperty().addListener((a,o,n)->TerosService.setPromptAssistant(n));
+				TedrosContext.aiModelProperty().addListener((a,o,n)->OpenAITerosService.setGptModel(n));
+				TedrosContext.aiSystemPromptProperty().addListener((a,o,n)->OpenAITerosService.setPromptAssistant(n));
 				;
-				teros = TerosService.create(key);
+				teros = OpenAITerosService.create(key);
 				
 				TFunction[] arr = new TFunction[] {
 						TFunctionHelper.listAllViewPathFunction(),
@@ -194,7 +194,8 @@ public class TerosSetting extends TSetting {
 		scrollFlag = true;
 		VBox gp = super.getLayout("messages");
 		gp.getChildren().clear();
-		teros.clearMessages();
+		//TODO:
+		//teros.clearMessages();
 	}
 
 	/**
