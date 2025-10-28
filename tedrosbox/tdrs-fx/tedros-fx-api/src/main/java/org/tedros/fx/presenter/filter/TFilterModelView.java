@@ -1,0 +1,40 @@
+/**
+ * TEDROS  
+ * 
+ * TODOS OS DIREITOS RESERVADOS
+ * 24/02/2014
+ */
+package org.tedros.fx.presenter.filter;
+
+import java.lang.reflect.InvocationTargetException;
+
+import org.tedros.core.model.ITFilterModelView;
+import org.tedros.fx.model.TModelView;
+import org.tedros.server.model.ITModel;
+import org.tedros.util.TLoggerUtil;
+
+
+/**
+ * DESCRIÇÃO DA CLASSE
+ *
+ * @author Davis Gordon
+ *
+ */
+@Deprecated
+public abstract class TFilterModelView<M extends ITModel> extends TModelView<M> implements ITFilterModelView<M>{
+	
+	public TFilterModelView(M modelView) {
+		super(modelView);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void cleanFields(){
+		try {
+			reload((M) model.getClass().getDeclaredConstructor().newInstance());
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | 
+				InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			TLoggerUtil.error(getClass(), e.getMessage(), e);
+		}
+	}
+	
+}

@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.tedros</groupId>
+    <groupId>org.tedros</groupId>
     <artifactId>tedrosbox</artifactId>
-    <version>8-1.0</version>
+    <version>17-0.0.1</version>
   </parent>
   
   <artifactId>server-application</artifactId>
@@ -11,158 +11,394 @@
   <description>The server application project configuration</description>
   
   <dependencies>
+  
   	<dependency>
+	    <groupId>org.tedros</groupId>
+	    <artifactId>app-redmine-tools-ejb-ear</artifactId>
+	    <type>ear</type>
+	    <version>1.0-SNAPSHOT</version>
+	</dependency>
+	
+  	<dependency>
+	    <groupId>org.tedros</groupId>
+	    <artifactId>app-chat-ejb-ear</artifactId>
+	    <type>ear</type>
+	    <version>17-0.0.1</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.tedros</groupId>
+	    <artifactId>tedros-core-ejb-ear</artifactId>
+	    <type>ear</type>
+	    <version>17-0.0.1</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.tedros</groupId>
+	    <artifactId>app-extensions-ejb-ear</artifactId>
+	    <type>ear</type>
+	    <version>${app.ext}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.tedros</groupId>
+	    <artifactId>app-person-ejb-ear</artifactId>
+	    <type>ear</type>
+	    <version>${app.person}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.tedros</groupId>
+	    <artifactId>app-services-ejb-ear</artifactId>
+	    <type>ear</type>
+	    <version>${app.services}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.tedros</groupId>
+	    <artifactId>app-stock-ejb-ear</artifactId>
+	    <type>ear</type>
+	    <version>${app.stock}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.apache.poi</groupId>
+	    <artifactId>poi</artifactId>
+	    <version>${apache.poi}</version>
+	</dependency>
+	<dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml-schemas</artifactId>
+      <version>4.1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.virtuald</groupId>
+      <artifactId>curvesapi</artifactId>
+      <version>1.06</version>
+    </dependency>
+  	<dependency>
+	    <groupId>org.apache.poi</groupId>
+	    <artifactId>poi-ooxml</artifactId>
+	    <version>${apache.poi}</version>
+	</dependency>
+	<dependency>
+      <groupId>org.apache.xmlbeans</groupId>
+      <artifactId>xmlbeans</artifactId>
+      <version>3.1.0</version>
+    </dependency>
+     <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.2</version>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.17</version>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.13</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-math3</artifactId>
+      <version>3.6.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>SparseBitSet</artifactId>
+      <version>1.2</version>
+    </dependency>
+  
+	<dependency>
 	    <groupId>com.h2database</groupId>
 	    <artifactId>h2</artifactId>
 	    <version>${h2.version}</version>
 	</dependency>
 	
 	<dependency>
-	   <groupId>com.tedros</groupId>
-  		<artifactId>app-solidarity-webapp</artifactId>
-	    <type>war</type>
-	    <version>8-1.0</version>
+	   	<groupId>commons-io</groupId>
+	   	<artifactId>commons-io</artifactId>
+	   	<version>${commons.io.version}</version>
 	</dependency>
 	
 	<dependency>
-	    <groupId>com.tedros</groupId>
-	    <artifactId>tedros-core-ejb-ear</artifactId>
-	    <type>ear</type>
-	    <version>8-1.0</version>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-text</artifactId>
+	    <version>${commons.text.version}</version>
+	</dependency>
+	
+  	<dependency>
+  		<groupId>org.apache.commons</groupId>
+  		<artifactId>commons-lang3</artifactId>
+  		<version>${commons.lang.version}</version>
+  	</dependency>
+  	
+  	<dependency>
+  		<groupId>org.apache.commons</groupId>
+  		<artifactId>commons-compress</artifactId>
+  		<version>${commons.compress.version}</version>
+  	</dependency>
+  	
+	<dependency>
+	  	<groupId>org.apache.commons</groupId>
+	  	<artifactId>commons-collections4</artifactId>
+	  	<version>${commons-collections.version}</version>
 	</dependency>
 	
 	<dependency>
-		<groupId>com.tedros</groupId>
-		 <artifactId>app-solidarity-ejb-ear</artifactId>
-		 <type>ear</type>
-		<version>8-2.2</version>
+	    <groupId>javax.mail</groupId>
+	    <artifactId>javax.mail-api</artifactId>
+	    <version>1.5.6</version>
+	</dependency>
+
+	<dependency>
+	    <groupId>com.sun.mail</groupId>
+	    <artifactId>javax.mail</artifactId>
+	    <version>1.5.1</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>com.sun.mail</groupId>
+	    <artifactId>smtp</artifactId>
+	    <version>1.5.6</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>javax.activation</groupId>
+		<artifactId>activation</artifactId>
+		<version>1.1</version>
 	</dependency>
   </dependencies>
-  
-	 <build>
-	   
-	 	<plugins>
-	 	
-			<plugin>
-			  <groupId>org.codehaus.cargo</groupId>
-			  <artifactId>cargo-maven2-plugin</artifactId>
-			  <version>${cargo.version}</version>
-			  <configuration>
-			    <container>
-			      <containerId>tomee7x</containerId>
-			      <timeout>180000</timeout>
-			      <zipUrlInstaller>
-			        <url>https://repo.maven.apache.org/maven2/org/apache/tomee/apache-tomee/${tomee.version}/apache-tomee-${tomee.version}-webprofile.zip</url>
-			      </zipUrlInstaller>
-			      <dependencies>
-		            <dependency>
-		              <groupId>com.h2database</groupId>
-	    			  <artifactId>h2</artifactId>
-		            </dependency>
-		          </dependencies>
-			    </container>
-			    <configuration>
-			      <home>${project.build.directory}/catalina-base</home>
-			      <properties>
-			       <cargo.servlet.port>8081</cargo.servlet.port>
-			       <cargo.rmi.port>8206</cargo.rmi.port>
-			       <cargo.tomcat.ajp.port>8009</cargo.tomcat.ajp.port>
-			        <cargo.start.jvmargs>
-			          -Xdebug
-			          -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8001
-			          -Xnoagent
-			          -Djava.compiler=NONE
-			        </cargo.start.jvmargs>
-			      </properties>
-			      <files>
-		            <copy>
-		              <file>${project.basedir}/files/tomee.xml</file>
-		              <tofile>conf/tomee.xml</tofile>
-		              <configfile>true</configfile>
-		              <overwrite>true</overwrite>
-		            </copy> 
-		            <copy>
-		              <file>${project.basedir}/files/server.xml</file>
-		              <tofile>conf/server.xml</tofile>
-		              <configfile>true</configfile>
-		              <overwrite>true</overwrite>
-		            </copy> 
-		            <copy>
-		              <file>${project.basedir}/files/system.properties</file>
-		              <tofile>conf/system.properties</tofile>
-		              <configfile>true</configfile>
-		              <overwrite>true</overwrite>
-		            </copy>
-		           <!--  <copy>
-		              <file>${project.basedir}/files/tomcat-users.xml</file>
-		              <tofile>conf/tomcat-users.xml</tofile>
-		              <configfile>true</configfile>
-		              <overwrite>true</overwrite>
-		            </copy> -->
-		          </files>
-			    </configuration>
-			    <deployables>
-			      
-			      <deployable>
-			        <groupId>com.tedros</groupId>
-			        <artifactId>app-solidarity-ejb-ear</artifactId>
-			      	<type>ear</type>
-			      </deployable>
-			      <deployable>
-			        <groupId>com.tedros</groupId>
-			        <artifactId>tedros-core-ejb-ear</artifactId>
-			        <type>ear</type>
-			      </deployable>
-			      <deployable>
-			      	<groupId>com.tedros</groupId>
-  					<artifactId>app-solidarity-webapp</artifactId>
-  					<type>war</type>
-  				</deployable>
-			      
-			    </deployables>
-			    <packager>
-			      <outputLocation>${project.build.directory}/tomcat-packaged</outputLocation>
-			    </packager>
-			  </configuration>
-			  <!--  -->
-			  <executions>
-			    <execution>
-			      <id>start</id>
-			      <phase>pre-integration-test</phase>
-			      <goals>
-			        <goal>start</goal>
-			      </goals>
-			    </execution>
-			    <execution>
-			      <id>stop</id>
-			      <phase>post-integration-test</phase>
-			      <goals>
-			        <goal>stop</goal>
-			      </goals>
-			    </execution>
-			    <execution>
-			      <id>package</id>
-			      <phase>post-integration-test</phase>
-			      <goals>
-			        <goal>package</goal>
-			      </goals>
-			    </execution>
-			  </executions>
-			  
-			</plugin>
-			
-			<plugin>
-        		<groupId>org.apache.maven.plugins</groupId>
-        		<artifactId>maven-compiler-plugin</artifactId>
-        		<version>3.3</version>
-        		<configuration>
-          			<source>${java.version}</source>
-          			<target>${java.version}</target>
-          			<!-- <compilerArgs>
-                       <arg>-Dhttps.protocols=TLSv1.2</arg>
-                    </compilerArgs>
- -->        		</configuration>
-      		</plugin>
+  	<build>
+  	  <plugins>
+		<plugin>
+		  <groupId>org.codehaus.cargo</groupId>
+		  <artifactId>cargo-maven3-plugin</artifactId>
+		  <version>${cargo.version}</version>
+		  <configuration>
+		    <container>
+		      <containerId>${cargo.containerId}</containerId>
+		      <timeout>360000</timeout>
+		      <zipUrlInstaller>
+		        <url>https://repo.maven.apache.org/maven2/org/apache/tomee/apache-tomee/${tomee.version}/apache-tomee-${tomee.version}-plume.zip</url>
+		      </zipUrlInstaller>
+		      <dependencies>
+	            <dependency>
+	              <groupId>com.h2database</groupId>
+	   			  <artifactId>h2</artifactId>
+	            </dependency>
+	            <dependency>
+				    <groupId>org.apache.poi</groupId>
+				    <artifactId>poi</artifactId>
+				</dependency>
+			  	<dependency>
+				    <groupId>org.apache.poi</groupId>
+				    <artifactId>poi-ooxml</artifactId>
+				</dependency>
+				 <dependency>
+			      <groupId>org.apache.poi</groupId>
+			      <artifactId>poi-ooxml-schemas</artifactId>
+			    </dependency> 
+			    <dependency>
+			      <groupId>commons-logging</groupId>
+			      <artifactId>commons-logging</artifactId>
+			    </dependency>
+			    <dependency>
+			      <groupId>commons-codec</groupId>
+			      <artifactId>commons-codec</artifactId>
+			    </dependency>
+			    <dependency>
+			      <groupId>org.apache.commons</groupId>
+			      <artifactId>commons-math3</artifactId>
+			    </dependency>
+			    <dependency>
+			      <groupId>com.zaxxer</groupId>
+			      <artifactId>SparseBitSet</artifactId>
+			    </dependency>
+				<dependency>
+			      <groupId>org.apache.xmlbeans</groupId>
+			      <artifactId>xmlbeans</artifactId>
+			    </dependency>
+			    <dependency>
+			      <groupId>org.apache.poi</groupId>
+			      <artifactId>poi-ooxml-schemas</artifactId>
+			    </dependency>
+			    <dependency>
+			      <groupId>org.apache.commons</groupId>
+			      <artifactId>commons-compress</artifactId>
+			    </dependency>
+			    <dependency>
+			      <groupId>com.github.virtuald</groupId>
+			      <artifactId>curvesapi</artifactId>
+			    </dependency>
+				<dependency>
+				   	<groupId>commons-io</groupId>
+				   	<artifactId>commons-io</artifactId>
+				</dependency>
+				<dependency>
+				    <groupId>org.apache.commons</groupId>
+				    <artifactId>commons-text</artifactId>
+				</dependency>
+			  	<dependency>
+			  		<groupId>org.apache.commons</groupId>
+			  		<artifactId>commons-lang3</artifactId>
+			  	</dependency>
+			  	<dependency>
+			  		<groupId>org.apache.commons</groupId>
+			  		<artifactId>commons-compress</artifactId>
+			  	</dependency>
+			  	<dependency>
+				  	<groupId>org.apache.commons</groupId>
+				  	<artifactId>commons-collections4</artifactId>
+				</dependency>
+				<dependency>
+				    <groupId>javax.mail</groupId>
+				    <artifactId>javax.mail-api</artifactId>
+				</dependency>
+				<dependency>
+				    <groupId>com.sun.mail</groupId>
+				    <artifactId>javax.mail</artifactId>
+				</dependency>
+				<dependency>
+				    <groupId>com.sun.mail</groupId>
+				    <artifactId>smtp</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>javax.activation</groupId>
+					<artifactId>activation</artifactId>
+				</dependency>
+	          </dependencies>
+		    </container>
+		    <configuration>
+		      <home>${project.build.directory}/catalina-base</home>
+		      <properties>
+		       <cargo.servlet.port>8081</cargo.servlet.port>
+		       <cargo.rmi.port>8206</cargo.rmi.port>
+		       <cargo.tomcat.ajp.port>8009</cargo.tomcat.ajp.port>
+		        <cargo.start.jvmargs>-Xdebug
+					-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8022
+					-Xnoagent -Djava.compiler=NONE
+					--add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+					--add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+					--add-opens=java.base/java.io=ALL-UNNAMED
+		        </cargo.start.jvmargs>
+		      </properties>
+		      <files>
+	            <copy>
+	              <file>${project.basedir}/files/tomee.xml</file>
+	              <tofile>conf/tomee.xml</tofile>
+	              <configfile>true</configfile>
+	              <overwrite>true</overwrite>
+	            </copy> 
+	            <copy>
+	              <file>${project.basedir}/files/server.xml</file>
+	              <tofile>conf/server.xml</tofile>
+	              <configfile>true</configfile>
+	              <overwrite>true</overwrite>
+	            </copy> 
+	            <copy>
+	              <file>${project.basedir}/files/system.properties</file>
+	              <tofile>conf/system.properties</tofile>
+	              <configfile>true</configfile>
+	              <overwrite>true</overwrite>
+	            </copy>
+	          </files>
+		    </configuration>
+		    <deployables>
+				
+			  <!--<deployable>
+		        <groupId>org.tedros</groupId>
+		        <artifactId>app-services-ejb-ear</artifactId>
+		        <type>ear</type>
+		      </deployable>	
+		      
+			  <deployable>
+		        <groupId>org.tedros</groupId>
+		        <artifactId>app-stock-ejb-ear</artifactId>
+		        <type>ear</type>
+		      </deployable>	-->
+		      
+		      <deployable>
+		        <groupId>org.tedros</groupId>
+		        <artifactId>app-redmine-tools-ejb-ear</artifactId>
+		        <type>ear</type>
+		      </deployable>
+		      
+			  <deployable>
+		        <groupId>org.tedros</groupId>
+		        <artifactId>app-person-ejb-ear</artifactId>
+		        <type>ear</type>
+		      </deployable>	
+		      
+		       <deployable>
+		        <groupId>org.tedros</groupId>
+		        <artifactId>app-extensions-ejb-ear</artifactId>
+		        <type>ear</type>
+		      </deployable>	
+		      
+		      <deployable>
+		        <groupId>org.tedros</groupId>
+		        <artifactId>tedros-core-ejb-ear</artifactId>
+		        <type>ear</type>
+		      </deployable>
+		      
+		       <deployable>
+		        <groupId>org.tedros</groupId>
+		        <artifactId>app-chat-ejb-ear</artifactId>
+		        <type>ear</type>
+		      </deployable>
+		      
+		    </deployables>
+		    <packager>
+		      <outputLocation>${project.build.directory}/tomcat-packaged</outputLocation>
+		    </packager>
+		  </configuration>
+		  <!--  -->
+		  <executions>
+		    <execution>
+		      <id>start</id>
+		      <phase>pre-integration-test</phase>
+		      <goals>
+		        <goal>start</goal>
+		      </goals>
+		    </execution>
+		    <execution>
+		      <id>stop</id>
+		      <phase>post-integration-test</phase>
+		      <goals>
+		        <goal>stop</goal>
+		      </goals>
+		    </execution>
+		    <execution>
+		      <id>package</id>
+		      <phase>post-integration-test</phase>
+		      <goals>
+		        <goal>package</goal>
+		      </goals>
+		    </execution>
+		  </executions>
+		  
+		</plugin>
+		
+		<plugin>
+	      		<groupId>org.apache.maven.plugins</groupId>
+	      		<artifactId>maven-compiler-plugin</artifactId>
+	      		<version>3.3</version>
+	      		<configuration>
+	        			<source>${java.version}</source>
+	        			<target>${java.version}</target>
+	        			<!-- <compilerArgs>
+	                     <arg>-Dhttps.protocols=TLSv1.2</arg>
+	                  </compilerArgs>
+	-->        		</configuration>
+	     		</plugin>
 			
 		</plugins>
 	   

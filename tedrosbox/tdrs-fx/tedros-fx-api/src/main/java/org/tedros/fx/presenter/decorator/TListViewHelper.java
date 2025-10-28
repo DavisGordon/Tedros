@@ -1,0 +1,280 @@
+/**
+ * 
+ */
+package org.tedros.fx.presenter.decorator;
+
+import java.util.Arrays;
+
+import org.tedros.core.TLanguage;
+import org.tedros.core.context.TedrosContext;
+import org.tedros.core.control.TProgressIndicator;
+import org.tedros.fx.TFxKey;
+import org.tedros.fx.annotation.TDefaultValue;
+import org.tedros.fx.annotation.page.TPage;
+import org.tedros.fx.annotation.presenter.TListViewPresenter;
+import org.tedros.fx.annotation.query.TCondition;
+import org.tedros.fx.annotation.query.TOrder;
+import org.tedros.fx.model.TEntityModelView;
+import org.tedros.fx.presenter.assistant.TAiAssistant;
+import org.tedros.fx.presenter.page.TPager;
+import org.tedros.server.entity.ITEntity;
+
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Accordion;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TitledPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+
+/**
+ * @author Davis Gordon
+ *
+ */
+public class TListViewHelper<M extends TEntityModelView<? extends ITEntity>>{
+
+	private VBox 		tListViewLayout;
+	private StackPane	tListViewPane;
+    private Label 		tListViewTitle;
+    private ListView<M> tListView;
+    private TProgressIndicator tListViewProgressIndicator;
+    
+    private Accordion tPaginatorAccordion;
+    private TPager tPaginator;
+    
+    private TAiAssistant<M> tAiAssistat;
+    
+    private SimpleDoubleProperty listViewMaxWidth = new SimpleDoubleProperty(TListViewPresenter.WIDTH);
+    private SimpleDoubleProperty listViewMinWidth = new SimpleDoubleProperty(TListViewPresenter.WIDTH);
+    
+
+	public TListViewHelper(String title, double maxWidth, double minWidth, 
+			TPage paginator ) {
+		this(title,maxWidth,minWidth, paginator, null );
+	}
+    
+	public TListViewHelper(String title, double maxWidth, double minWidth, 
+			TPage paginator, 
+			org.tedros.fx.annotation.assistant.TAiAssistant aiAssistant ) {
+		
+		// build the list view
+		tListView = new ListView<>();
+		tListView.setCache(false);
+		tListView.autosize();
+		tListView.maxWidthProperty().bind(listViewMaxWidth);
+		tListView.minWidthProperty().bind(listViewMinWidth);
+		tListView.setEditable(true);
+		tListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+		
+		// build the label for the list view
+		tListViewTitle = new Label(TLanguage.getInstance().getString(title==null ? TDefaultValue.TVIEW_listTitle : title));
+		tListViewTitle.setId("t-title-label");
+		tListViewTitle.maxWidthProperty().bind(listViewMaxWidth);
+		tListViewTitle.minWidthProperty().bind(listViewMinWidth);
+		
+		tListViewPane = new StackPane();
+		tListViewPane.getStyleClass().add("t-panel-background-color");
+		tListViewPane.setAlignment(Pos.CENTER);
+		//tListViewPane.maxWidthProperty().bind(listViewMaxWidth);
+		//tListViewPane.minWidthProperty().bind(listViewMinWidth);
+		
+		// build the list view box
+		tListViewLayout = new VBox(4);
+		StackPane.setMargin(tListViewLayout, new Insets(0, 2, 0, 0));
+		tListViewPane.getChildren().add(tListViewLayout);
+		VBox.setVgrow(tListView, Priority.ALWAYS);
+		tListViewLayout.setAlignment(Pos.CENTER);
+		tListViewProgressIndicator = new TProgressIndicator(tListViewPane);
+		tListViewProgressIndicator.setSmallLogo();
+		
+		if(paginator!=null && paginator.show()) {
+			tPaginator = new TPager(paginator.showSearch(), paginator.showOrderBy());
+			if(paginator.showSearch() && paginator.query().condition().length>0)
+				for(TCondition c : paginator.query().condition()) {
+					if(!c.prompted()) continue;
+					tPaginator.tAddSearchOption(c.label(), c.field(), c.alias(),
+							"".equals(c.promptMask())?null:c.promptMask(), 
+							"".equals(c.promptText())?null:c.promptText(), 
+							c.operator(), c.temporal(), c.converter());
+				}
+			if(paginator.showOrderBy() && paginator.query().orderBy().length>0) {
+				for(TOrder o : paginator.query().orderBy())
+					tPaginator.tAddOrderByOption(o.label(), o.field(), o.alias());
+			}
+			tPaginatorAccordion = new Accordion();
+			tPaginatorAccordion.autosize();
+			//tPaginatorAccordion.getStyleClass().add("t-accordion");
+			TitledPane tp = new TitledPane(TLanguage.getInstance().getString(TFxKey.PAGINATION), tPaginator);
+			tPaginatorAccordion.getPanes().add(tp);
+			tPaginator.maxWidthProperty().bind(listViewMaxWidth);
+			tPaginator.minWidthProperty().bind(listViewMinWidth);
+		}
+		
+		if(TedrosContext.getArtificialIntelligenceEnabled() 
+				&& aiAssistant!=null && aiAssistant.show()) {
+			this.tAiAssistat = new  TAiAssistant<M>(aiAssistant.modelViewClass(), aiAssistant.jsonModel());
+			if(tPaginatorAccordion==null) {
+				tPaginatorAccordion = new Accordion();
+				tPaginatorAccordion.autosize();
+			}
+			TitledPane tp = new TitledPane("Teros", this.tAiAssistat);
+			tPaginatorAccordion.getPanes().add(tp);
+			tAiAssistat.maxWidthProperty().bind(listViewMaxWidth);
+			tAiAssistat.minWidthProperty().bind(listViewMinWidth);
+		}
+		
+		if(tPaginatorAccordion==null) 
+			tListViewLayout.getChildren().addAll(Arrays.asList(tListViewTitle, tListView));
+		else
+			tListViewLayout.getChildren().addAll(Arrays.asList(tListViewTitle, tListView, tPaginatorAccordion));
+			
+		
+		listViewMaxWidth.setValue(maxWidth);
+		listViewMinWidth.setValue(minWidth);
+	}
+
+	/**
+	 * @return the tListViewLayout
+	 */
+	public VBox gettListViewLayout() {
+		return tListViewLayout;
+	}
+
+	/**
+	 * @param tListViewLayout the tListViewLayout to set
+	 */
+	public void settListViewLayout(VBox tListViewLayout) {
+		this.tListViewLayout = tListViewLayout;
+	}
+
+	/**
+	 * @return the tListViewPane
+	 */
+	public StackPane gettListViewPane() {
+		return tListViewPane;
+	}
+
+	/**
+	 * @param tListViewPane the tListViewPane to set
+	 */
+	public void settListViewPane(StackPane tListViewPane) {
+		this.tListViewPane = tListViewPane;
+	}
+
+	/**
+	 * @return the tListViewTitle
+	 */
+	public Label gettListViewTitle() {
+		return tListViewTitle;
+	}
+
+	/**
+	 * @param tListViewTitle the tListViewTitle to set
+	 */
+	public void settListViewTitle(Label tListViewTitle) {
+		this.tListViewTitle = tListViewTitle;
+	}
+
+	/**
+	 * @return the tListView
+	 */
+	public ListView<M> gettListView() {
+		return tListView;
+	}
+
+	/**
+	 * @param tListView the tListView to set
+	 */
+	public void settListView(ListView<M> tListView) {
+		this.tListView = tListView;
+	}
+
+	/**
+	 * @return the tListViewProgressIndicator
+	 */
+	public TProgressIndicator gettListViewProgressIndicator() {
+		return tListViewProgressIndicator;
+	}
+
+	/**
+	 * @param tListViewProgressIndicator the tListViewProgressIndicator to set
+	 */
+	public void settListViewProgressIndicator(TProgressIndicator tListViewProgressIndicator) {
+		this.tListViewProgressIndicator = tListViewProgressIndicator;
+	}
+
+	/**
+	 * @return the tPaginatorAccordion
+	 */
+	public Accordion gettPaginatorAccordion() {
+		return tPaginatorAccordion;
+	}
+
+	/**
+	 * @param tPaginatorAccordion the tPaginatorAccordion to set
+	 */
+	public void settPaginatorAccordion(Accordion tPaginatorAccordion) {
+		this.tPaginatorAccordion = tPaginatorAccordion;
+	}
+
+	/**
+	 * @return the tPaginator
+	 */
+	public TPager gettPaginator() {
+		return tPaginator;
+	}
+
+	/**
+	 * @param tPaginator the tPaginator to set
+	 */
+	public void settPaginator(TPager tPaginator) {
+		this.tPaginator = tPaginator;
+	}
+
+	/**
+	 * @return the listViewMaxWidth
+	 */
+	public SimpleDoubleProperty getListViewMaxWidth() {
+		return listViewMaxWidth;
+	}
+
+	/**
+	 * @param listViewMaxWidth the listViewMaxWidth to set
+	 */
+	public void setListViewMaxWidth(SimpleDoubleProperty listViewMaxWidth) {
+		this.listViewMaxWidth = listViewMaxWidth;
+	}
+
+	/**
+	 * @return the listViewMinWidth
+	 */
+	public SimpleDoubleProperty getListViewMinWidth() {
+		return listViewMinWidth;
+	}
+
+	/**
+	 * @param listViewMinWidth the listViewMinWidth to set
+	 */
+	public void setListViewMinWidth(SimpleDoubleProperty listViewMinWidth) {
+		this.listViewMinWidth = listViewMinWidth;
+	}
+
+	/**
+	 * @return the tAiAssistat
+	 */
+	public TAiAssistant<M> gettAiAssistat() {
+		return tAiAssistat;
+	}
+
+	/**
+	 * @param tAiAssistat the tAiAssistat to set
+	 */
+	public void settAiAssistat(TAiAssistant<M> tAiAssistat) {
+		this.tAiAssistat = tAiAssistat;
+	}
+
+}

@@ -1,0 +1,31 @@
+package org.tedros.util;
+
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Properties;
+import java.util.ResourceBundle;
+
+public final class TResourceUtil {
+
+	private TResourceUtil() {
+		
+	}
+	
+	public static Properties getPropertiesFromConfFolder(String propertieFileName){
+		Properties prop = null;
+		String propFilePath = TFileUtil.getTedrosFolderPath()+TedrosFolder.CONF_FOLDER.getFolder()+propertieFileName;
+		try(InputStream is = new FileInputStream(propFilePath)) {
+			prop = new Properties();
+			prop.load(is);
+		} catch (Exception  e1) {
+			TLoggerUtil.error(TResourceUtil.class, e1.getMessage(), e1);
+		}
+		return prop;
+	}
+	
+	public static ResourceBundle getResourceBundle(String propertieName){
+		return ResourceBundle.getBundle(propertieName);
+	}
+	
+	
+}

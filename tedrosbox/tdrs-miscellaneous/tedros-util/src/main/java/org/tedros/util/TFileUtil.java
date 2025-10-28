@@ -1,0 +1,161 @@
+package org.tedros.util;
+
+import java.awt.Desktop;
+import java.awt.Dimension;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Iterator;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+
+public final class TFileUtil {
+
+	private TFileUtil() {
+	}
+	
+	public static String convertAndFormat(double bytes) {
+		if(bytes>=(1024*1024))
+			return String.valueOf(convertToMegaByte(bytes))+"Mb";
+		else if(bytes>=110)
+			return String.valueOf(convertToKiloByte(bytes))+"Kb";
+		else 
+			return String.valueOf(bytes)+" bytes";
+	}
+	
+	public static double convertToMegaByte(double bytes) {
+		BigDecimal size = new BigDecimal(bytes / (1024*1024));
+		size = size.setScale(2, RoundingMode.HALF_UP);
+		return  size.doubleValue();
+	}
+	
+	public static double convertToKiloByte(double bytes) {
+		BigDecimal size = new BigDecimal(bytes / 1024);
+		size = size.setScale(2, RoundingMode.HALF_UP);
+		return  size.doubleValue();
+	}
+	
+	public static void saveFile(String content, File file){
+        try {
+            FileWriter fileWriter = null;
+             
+            fileWriter = new FileWriter(file);
+            fileWriter.write(content);
+            fileWriter.close();
+        } catch (IOException ex) {
+            TLoggerUtil.error(TFileUtil.class, ex.getMessage(), ex);
+        }
+         
+    }
+	
+	public static String readFile(File file){
+	        StringBuilder stringBuffer = new StringBuilder();
+	        BufferedReader bufferedReader = null;
+	         
+	        try {
+	 
+	            bufferedReader = new BufferedReader(new FileReader(file));
+	             
+	            String text;
+	            while ((text = bufferedReader.readLine()) != null) {
+	                stringBuffer.append(text+"\n");
+	            }
+	 
+	        } catch (FileNotFoundException ex) {
+	            TLoggerUtil.error(TFileUtil.class, ex.getMessage(), ex);
+	        } catch (IOException ex) {
+	        	TLoggerUtil.error(TFileUtil.class, ex.getMessage(), ex);
+	        } finally {
+	            try {
+	                bufferedReader.close();
+	            } catch (IOException ex) {
+	            	TLoggerUtil.error(TFileUtil.class, ex.getMessage(), ex);
+	            }
+	        } 
+	         
+	        return stringBuffer.toString();
+	}
+	
+	public static void delete(File file)
+	    	throws IOException{
+	 
+	    	if(file.isDirectory()){
+	 
+	    		//directory is empty, then delete it
+	    		if(file.list().length==0){
+	 
+	    		   file.delete();
+	    		   TLoggerUtil.debug(TFileUtil.class, "Folder deleted : "+ file.getAbsolutePath());
+	 
+	    		}else{
+	 
+	    		   //list all the directory contents
+	        	   String files[] = file.list();
+	 
+	        	   for (String temp : files) {
+	        	      //construct the file structure
+	        	      File fileDelete = new File(file, temp);
+	 
+	        	      //recursive delete
+	        	     delete(fileDelete);
+	        	   }
+	 
+	        	   //check the directory again, if empty then delete it
+	        	   if(file.list().length==0){
+	           	     file.delete();
+	           	     TLoggerUtil.debug(TFileUtil.class, "Folder deleted : "+ file.getAbsolutePath());
+	        	   }
+	    		}
+	 
+	    	}else{
+	    		//if file, then delete it
+	    		file.delete();
+	    		TLoggerUtil.debug(TFileUtil.class, "File deleted : "+ file.getAbsolutePath());
+	    	}
+	}
+
+	public static String getTedrosFolderPath(){
+		return TedrosFolder.ROOT_FOLDER.getFullPath();
+	}
+	
+	public static boolean open(File file) throws IOException{
+    	if (TOSDetector.isLinux() || TOSDetector.isMac()) {
+            Runtime.getRuntime().exec(new String[]{"/usr/bin/open", file.getAbsolutePath()});
+            return true;
+        } else {
+            // Unknown OS, try with desktop
+            if (Desktop.isDesktopSupported()){
+                Desktop.getDesktop().open(file);
+                return true;
+            }else{
+                return false;
+            }
+        }
+	}
+	
+	public static Dimension getImageDimension(File file) throws IOException {
+		try(ImageInputStream in = ImageIO.createImageInputStream(file)){
+		    final Iterator<ImageReader> readers = ImageIO.getImageReaders(in);
+		    if (readers.hasNext()) {
+		        ImageReader reader = readers.next();
+		        try {
+		            reader.setInput(in);
+		            return new Dimension(reader.getWidth(0), reader.getHeight(0));
+		        } finally {
+		            reader.dispose();
+		        }
+		    }
+		} 
+		
+		return null;
+		
+	}
+	
+}

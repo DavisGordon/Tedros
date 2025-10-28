@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+ 	<modelVersion>4.0.0</modelVersion>
+	
+	<!-- PARENT INFO -->
+	<parent>
+		<groupId>org.tedros</groupId>
+  		<artifactId>app-chat</artifactId>
+  		<version>17-0.0.1</version>
+	</parent>
+	
+	<!-- MODULE INFO -->
+  	<artifactId>app-chat-ejb-ear</artifactId>
+  	<packaging>ear</packaging>
+
+  	<name>app-chat-ejb-ear</name>
+  	<url>The ear project to deploy</url>
+  
+  	<!-- DEPENDENCIES -->
+	<dependencies>
+		<dependency>
+	  		<groupId>org.tedros</groupId>
+	  		<artifactId>app-chat-ejb</artifactId>
+	  		<version>17-0.0.1</version>
+	  		<scope>compile</scope>
+	  		<type>ejb</type>
+	  	</dependency>
+  	
+	  	<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${h2.version}</version>
+		</dependency>
+		
+	 	<dependency>
+	    	<groupId>junit</groupId>
+	    	<artifactId>junit</artifactId>
+	    	<version>${junit.version}</version>
+	    	<scope>test</scope>
+	  	</dependency>
+	</dependencies>
+	
+	<!-- BUILD -->
+	<build>
+    	<plugins>
+	      	<plugin>
+	        	<groupId>org.apache.maven.plugins</groupId>
+	        	<artifactId>maven-ear-plugin</artifactId>
+	        	<version>${ear.plugin}</version>
+	        	<configuration>
+	        		<defaultLibBundleDir>lib</defaultLibBundleDir>
+	          		<modules>
+	            		<ejbModule>
+	              			<groupId>org.tedros</groupId>
+	              			<artifactId>app-chat-ejb</artifactId>
+	            		</ejbModule>
+	          		</modules>
+	        	</configuration>
+	      	</plugin>
+      		<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-compiler-plugin</artifactId>
+        		<version>${compiler.plugin}</version>
+        		<configuration>
+          			<source>${java.version}</source>
+          			<target>${java.version}</target>
+        		</configuration>
+      		</plugin>
+    	</plugins>
+  	</build>
+  	
+  	<distributionManagement>
+	   <repository>
+	     <id>Tedros-Box</id>
+	     <name>GitHub Tedros Apache Maven Packages</name>
+	     <url>https://maven.pkg.github.com/tedros-box/package</url>
+		 <uniqueVersion>false</uniqueVersion>
+	   </repository>
+	</distributionManagement>
+	
+</project>

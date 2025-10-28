@@ -1,4 +1,4 @@
-package com.tedros.tedros_core_ejb_ear;
+package org.tedros.tedros_core_ejb_ear;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

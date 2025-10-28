@@ -1,0 +1,24 @@
+/**
+ * TEDROS  
+ * 
+ * TODOS OS DIREITOS RESERVADOS
+ * 10/01/2014
+ */
+package org.tedros.fx.builder;
+
+import java.math.BigInteger;
+
+import javafx.beans.property.Property;
+
+
+/**
+ * <pre>
+ * The field builder class for {@link BigInteger} types.
+ * 	
+ * @author davis.dun
+ * </pre>
+ * */
+public class TBigIntegerFieldBuilder extends TNumberFieldBuilder<org.tedros.fx.control.TBigIntegerField, Property<BigInteger>> {
+
+	
+}
