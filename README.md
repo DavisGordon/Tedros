@@ -1,5 +1,5 @@
 # Tedros
-|[Português](https://github.com/Tedros-Box/tedros-apps/blob/master/README-pt.md)|
+|[Português](https://github.com/DavisGordon/Tedros/blob/master/README-pt.md)|
 
 Tedros is a powerful application development framework for the Tedros system. With a wide range of features and advanced technologies, Tedros allows you to create robust, scalable, internationalized, rich and intelligent applications declaratively and quickly, without many complications. Focus on the business core to be developed, Tedros was designed to manage and integrate applications with each other and with artificial intelligence and aiming at this scenario, some base applications were developed to support that can be customized and integrated according to the customer's needs.
 
@@ -131,22 +131,22 @@ Below is a list of features provided by base applications that can be integrated
     - Manage customer situations
     - Manage categories of people
 
-[Go to the documentation on the Wiki for more information on setting up the development environment and exploring all available functionality.](https://github.com/Tedros-Box/tedros-apps/wiki)
+[Go to the documentation on the Wiki for more information on setting up the development environment and exploring all available functionality.](https://github.com/DavisGordon/Tedros/wiki)
 
 **Login**
-![Chatgpt](https://github.com/Tedros-Box/tedros-apps/blob/master/printscreen/tedrosbox.png)
+![Chatgpt](https://github.com/DavisGordon/Tedros/blob/master/printscreen/tedrosbox.png)
 
 **Main screen with open side menu**
-![Chatgpt](https://github.com/Tedros-Box/tedros-apps/blob/master/printscreen/menu.png)
+![Chatgpt](https://github.com/DavisGordon/Tedros/blob/master/printscreen/menu.png)
 
 **Teros**
-![Chatgpt](https://github.com/Tedros-Box/tedros-apps/blob/master/printscreen/teros3.png)
+![Chatgpt](https://github.com/DavisGordon/Tedros/blob/master/printscreen/teros3.png)
 
 **Example of a simple view with search and pagination**
-![Chatgpt](https://github.com/Tedros-Box/tedros-apps/blob/master/printscreen/producprice.png)
+![Chatgpt](https://github.com/DavisGordon/Tedros/blob/master/printscreen/producprice.png)
 
 **Example of generated report, logo can be changed in preferences**
-![Chatgpt](https://github.com/Tedros-Box/tedros-apps/blob/master/printscreen/pf_rel2.png)
+![Chatgpt](https://github.com/DavisGordon/Tedros/blob/master/printscreen/pf_rel2.png)
 
 
 # use case
@@ -160,15 +160,15 @@ The NGO's website is integrated with the services at the business layer of the T
 Here are some prints of Tedros and applications made for the NGO.
 
 NGO app screen:
-![Screen 1](https://github.com/Tedros-Box/tedros-apps/blob/master/printscreen/somos1.png)
+![Screen 1](https://github.com/DavisGordon/Tedros/blob/master/printscreen/somos1.png)
 
-![Screen 3](https://github.com/Tedros-Box/tedros-apps/blob/master/printscreen/somos3.png)
+![Screen 3](https://github.com/DavisGordon/Tedros/blob/master/printscreen/somos3.png)
 
-![Screen 4](https://github.com/Tedros-Box/tedros-apps/blob/master/printscreen/somos4.png)
+![Screen 4](https://github.com/DavisGordon/Tedros/blob/master/printscreen/somos4.png)
 
-![Screen 5](https://github.com/Tedros-Box/tedros-apps/blob/master/printscreen/somos5.png)
+![Screen 5](https://github.com/DavisGordon/Tedros/blob/master/printscreen/somos5.png)
 
-![Screen 6](https://github.com/Tedros-Box/tedros-apps/blob/master/printscreen/somos6.png)
+![Screen 6](https://github.com/DavisGordon/Tedros/blob/master/printscreen/somos6.png)
 
 
 # Contact:
