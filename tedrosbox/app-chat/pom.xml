@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>tedrosbox</artifactId>
+		<groupId>org.tedros</groupId>
+		<version>17-0.0.1</version>
+	</parent>
+
+	<artifactId>app-chat</artifactId>
+	<packaging>pom</packaging>
+
+	<name>App Chat Parent</name>
+	<description>Tedros Chat</description>
+
+	<!-- BUILD -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${compiler.plugin}</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>${source.plugin}</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-archetype-plugin</artifactId>
+				<version>3.0.0</version>
+			</plugin>
+		</plugins>
+
+
+	</build>
+
+	<!-- REPOSITORIES -->
+	<repositories>
+		<repository>
+			<id>oss.sonatype.org</id>
+			<name>OSS Sonatype Staging</name>
+			<url>https://oss.sonatype.org/content/groups/staging</url>
+		</repository>
+		<repository>
+			<id>apache.releases.https</id>
+			<name>Apache</name>
+			<url>
+				https://repository.apache.org/service/local/staging/deploy/maven2</url>
+		</repository>
+		<repository>
+			<id>Tedros-Box</id>
+			<name>Tedros</name>
+			<url>https://maven.pkg.github.com/tedros-box/package</url>
+		</repository>
+	</repositories>
+
+	<!-- MODULES -->
+	<modules>
+		<module>app-chat-ejb</module>
+		<module>app-chat-ejb-client</module>
+		<module>app-chat-ejb-ear</module>
+		<module>app-chat-model</module>
+		<module>app-chat-fx</module>
+		<module>app-chat-server</module>
+	</modules>
+</project>

@@ -1,0 +1,4 @@
+/* The main calendar pane */
+.date-picker {
+    -fx-skin: "org.tedros.fx.scene.control.skin.DatePickerSkin";
+}

@@ -1,0 +1,168 @@
+/**
+ * 
+ */
+package org.tedros.fx.control;
+
+import org.tedros.api.form.ITModelForm;
+import org.tedros.core.TLanguage;
+import org.tedros.core.context.TedrosContext;
+import org.tedros.core.model.TModelViewUtil;
+import org.tedros.core.repository.TRepository;
+import org.tedros.fx.TFxKey;
+import org.tedros.fx.collections.ITObservableList;
+import org.tedros.fx.form.TFormBuilder;
+import org.tedros.fx.model.TModelView;
+import org.tedros.server.model.ITModel;
+
+import javafx.beans.property.Property;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.WeakChangeListener;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.WeakEventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.ToolBar;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+
+/**<pre>
+ * The detail field component open a form to add or remove item.
+ * </pre>
+ * @author Davis Gordon
+ *
+ */
+@SuppressWarnings("rawtypes")
+public class TDetailField extends TRequiredDetailField {
+
+	private TButton tNewButton;
+	private TButton tClearButton;
+	private BorderPane pane;
+	private StackPane screenSaverPane;
+	
+	private ITModelForm form;
+	private Property<TModelView> tDetailProperty;
+	private TRepository repository = new TRepository();
+	private Class<? extends TModelView> tModelViewClass;
+	private Class<? extends ITModel> tModelClass;
+	
+	
+	public TDetailField(Class<? extends TModelView> tModelViewClass,
+			Class<? extends ITModel> tModelClass, Property<TModelView> detail, boolean showButtons) {
+		this.tModelClass=tModelClass;
+		this.tModelViewClass=tModelViewClass;
+		
+		this.pane = new BorderPane();
+		this.tDetailProperty = detail;
+		if(showButtons) {
+			TLanguage iEngine = TLanguage.getInstance(null);
+			ToolBar bar = new ToolBar();
+			bar.setId("t-view-toolbar");
+			this.tClearButton = new TButton();
+			this.tNewButton = new TButton();
+			tNewButton.setText(iEngine.getString(TFxKey.BUTTON_NEW));
+			tClearButton.setText(iEngine.getString(TFxKey.BUTTON_CLEAN));
+			bar.getItems().addAll(tNewButton, tClearButton);
+			pane.setTop(bar);
+			EventHandler<ActionEvent> nEv = e -> {
+				this.tNewAction();
+			};
+			this.repository.add("nEv", nEv);
+			this.tNewButton.setOnAction(new WeakEventHandler<>(nEv));
+			EventHandler<ActionEvent> cEv = e -> {
+				this.tClearAction();
+			};
+			this.repository.add("cEv", cEv);
+			this.tClearButton.setOnAction(new WeakEventHandler<>(cEv));
+		}
+		
+		ChangeListener<TModelView> chl = (a,b,n)->{
+			if(n==null)
+				clearForm();
+			else
+				showForm(n);
+		};
+		this.repository.add("chl", chl);
+		this.tDetailProperty.addListener(new WeakChangeListener<>(chl));
+		getChildren().add(pane);
+		if(this.tDetailProperty.getValue()!=null)
+			this.showForm(this.tDetailProperty.getValue());
+		else
+			this.tShowScreenSaver();
+		
+		super.tRequiredNodeProperty().setValue(this);
+	}
+
+	/**
+	 * @param n
+	 */
+	private void showForm(TModelView n) {
+		form = TFormBuilder.create(n).build();
+		this.pane.setCenter((Node) form);
+	}
+	
+	public void tNewAction(){
+		TModelView m = TModelViewUtil.buildModelView(this.tModelViewClass, this.tModelClass);
+		this.tDetailProperty.setValue(m);
+	}
+	
+	public void tClearAction() {
+		this.tDetailProperty.setValue(null);
+	}
+
+	private void clearForm() {
+		this.tShowScreenSaver();
+		if(form!=null) {
+			form.tDispose();
+			form.gettModelView().removeAllListener();
+			form = null;
+		}
+	}
+	
+	private StackPane getScreenSaverPane() {
+		if(screenSaverPane==null){
+			Image img = new Image(TedrosContext.getImageInputStream("logo-tedros-small.png"));
+			ImageView iv = new ImageView();
+			iv.setImage(img);
+			
+			Region veil = new Region();
+			veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4); " +
+					"-fx-background-radius: 0 0 10 10;" +
+					"-fx-border-color:lightslategrey; " + 
+					"-fx-border-width: 1 0 0 0; " + 
+					"-fx-border-radius: 0 0 10 10; " + 
+					"-fx-border-insets: 0;");
+			
+			screenSaverPane = new StackPane();
+			this.screenSaverPane.getChildren().addAll(veil, iv);
+			
+
+			StackPane.setMargin(iv, new Insets(20));
+			StackPane.setAlignment(iv, Pos.CENTER);
+		}
+		return screenSaverPane;
+	}
+	
+	
+	public void tShowScreenSaver() {
+		pane.setCenter(getScreenSaverPane());
+	}
+
+	@Override
+	public Node gettComponent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ITObservableList<TModelView> gettSelectedItems() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+}

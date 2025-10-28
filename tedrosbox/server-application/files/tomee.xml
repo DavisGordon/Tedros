@@ -7,8 +7,8 @@
   
   <Resource id="tedrosDataSource" type="DataSource">
   JdbcDriver org.h2.Driver
-  JdbcUrl jdbc:h2:tcp://localhost/~/.tedros/DB/DATA/db;INIT=RUNSCRIPT FROM '~/.tedros/CONF/init.sql';LOCK_TIMEOUT=50000
-  UserName dbUser
+  JdbcUrl jdbc:h2:tcp://localhost/~/.tedrosData/h2/db;INIT=RUNSCRIPT FROM '~/.tedrosData/init.sql';
+  UserName tdrs
   Password xpto
   JtaManaged true
   PoolPreparedStatements true

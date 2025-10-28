@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<fx:root id="StackPane" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" type="javafx.scene.layout.StackPane" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1">
+  <children>
+    <BorderPane id="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" style="" StackPane.alignment="TOP_LEFT">
+      <center>
+        <VBox id="buttonsVbox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" spacing="5.0">
+          <children>
+            <Button id="t-last-button" fx:id="tAddButton" mnemonicParsing="false" text="&gt;" />
+            <Button id="t-last-button" fx:id="tAddAllButton" mnemonicParsing="false" text="&gt;&gt;" />
+            <Button id="t-last-button" fx:id="tRemoveAllButton" mnemonicParsing="false" text="&lt;&lt;" />
+            <Button id="t-last-button" fx:id="tRemoveButton" mnemonicParsing="false" text="&lt;" />
+          </children>
+               <padding>
+                  <Insets left="15.0" right="15.0" />
+               </padding>
+        </VBox>
+      </center>
+      <left>
+        <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0">
+          <children>
+            <Label id="t-form-control-label" fx:id="tSourceLabel" text="Label" VBox.vgrow="ALWAYS">
+              <VBox.margin>
+                <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" fx:id="x1" />
+              </VBox.margin>
+            </Label>
+            <ListView fx:id="tSourceListView" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefWidth="-1.0" VBox.vgrow="SOMETIMES">
+              <VBox.margin>
+                <Insets />
+              </VBox.margin>
+            </ListView>
+          </children>
+        </VBox>
+      </left>
+      <right>
+        <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0">
+          <children>
+            <Label id="t-form-control-label" fx:id="tTargetLabel" text="Label" VBox.margin="$x1" VBox.vgrow="ALWAYS" />
+            <ListView fx:id="tTargetListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="-1.0" VBox.vgrow="ALWAYS" />
+          </children>
+        </VBox>
+      </right>
+    </BorderPane>
+  </children>
+</fx:root>

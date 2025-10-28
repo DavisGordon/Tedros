@@ -1,160 +1,176 @@
 # Tedros
-## API JavaFX para desenvolvimento de aplicativos desktop.
+|[Português](https://github.com/Tedros-Box/tedros-apps/blob/master/README-pt.md)|
 
-Tedros é um framework para desenvolvimento de aplicativos desktop em JavaFX, standalone ou clinte servidor.
-Sua arquitetura foi projetada visando maior produtividade no desenvolvimento de um aplicativo.
+Tedros is a powerful application development framework for the Tedros system. With a wide range of features and advanced technologies, Tedros allows you to create robust, scalable, internationalized, rich and intelligent applications declaratively and quickly, without many complications. Focus on the business core to be developed, Tedros was designed to manage and integrate applications with each other and with artificial intelligence and aiming at this scenario, some base applications were developed to support that can be customized and integrated according to the customer's needs.
 
-Por exemplo, para se criar a tela CRUD abaixo com listagem de uma entidade simples:
+**Declaratively**
+```java
+@TSelectionModalPresenter(allowsMultipleSelections = true, 
+	page = @TPage(modelView=ChatUserMV.class, 
+		serviceName = IChatUserController.JNDI_NAME, query = 
+		@TQuery(entity=ChatUser.class)),
+	tableView = @TTableView(columns = { 
+		@TTableColumn(text = TUsualKey.NAME, cellValue="name")}))
+public class ChatUserMV extends TEntityModelView<ChatUser> {
 
-![Tela Editar Cozinha](https://github.com/DavisGordon/Tedros/blob/master/img/ex_simpleview.png)
+	@TLabel(text=TUsualKey.NAME)
+	@TTextField
+	private SimpleStringProperty name;
+	
+	private SimpleStringProperty profiles;
+	
+	public ChatUserMV(ChatUser entity) {
+		super(entity);
+		super.formatToString("%s", name);
+	}
+}
+```
 
-São necessarias apenas 7 classes com pouquissimo codigo, são elas:
+One of the most impressive features of Tedros is its chat with the artificial intelligence called Teros. It is possible to create functions that give access to artificial intelligence, generating countless possibilities for interaction.
 
-**No backend**
-|Classe  |Descrição |
-|:---       |:---      |
-|Cozinha.java| A entidade de persistencia|
-|ICozinhaController.java|Interface de acesso remoto ao serviço EJB|
-|CozinhaController.java|Implementação da interface|
+1. Ask questions: You can ask questions to obtain information or clarify doubts about various subjects.
 
-**No frontend**
-|Classe  |Descrição |
-|:---       |:---      |
-|CozinhaModelView.java|Aqui é definido atravez de anotações java toda informação necessaria sobre a tela a ser construida para editar a entidade.|
-|CozinhaModule.java|Aqui declaramos um modulo para a tela. Um modulo pode conter uma ou mais telas. |
-|CozinhaIconImageView.java|Opcional, representa a imagem a ser usada como icone do modulo.|
-|AppStart.java|E por ultimo, declaramos o modulo no aplicativo.|
+2. Get answers: Teros will provide relevant and useful answers to your questions based on knowledge and capabilities of artificial intelligence.
 
-Abaixo alguns prints:
+3. Request creation of images: You can ask Teros to create specific images according to your needs.
 
-![Tela de login](https://github.com/DavisGordon/Tedros/blob/master/img/login.png)
+4. Explore features: Teros can provide you with information about features available in the Tedros system and how to use them.
 
-![Tela Principal](https://github.com/DavisGordon/Tedros/blob/master/img/tela_principal.png)
+5. Get technical support: Teros can help troubleshoot technical issues and provide step-by-step guidance to resolve system-related issues.
 
-![Tela de customização](https://github.com/DavisGordon/Tedros/blob/master/img/tela_configuracap.png)
+6. Perform automated tasks: Teros can perform automated tasks such as performing transactions, sending notifications or performing specific actions on the system.
 
-**Configuração:**
+These are just some of the actions you can perform on the Tedros system through chat with the Teros artificial intelligence. Teros is ready to help and provide support in several areas, making interaction with the system more efficient and intuitive.
 
-Requisitos:
-- JDK 1.8
-- Maven
-- Lib jfxrt versão 1.8.0_261 (encontra-se na pasta zips)
-- H2 Database (https://www.h2database.com/html/download.html) ou outro banco de dados.
+If the user has a specific question or needs help with a particular feature, just ask Teros the question and he's ready to help!
 
-1. Faça o clone/download do projeto
+**Create a function and that's it**
+```java
+/**
+ * This function provides data on product prices 
+ * to artificial intelligence
+ * 
+ * @author Davis Gordon
+ *
+ */
+public class ListProductPriceAiFunction extends TFunction<Empty> {
 
-2. Na pasta zips:
-- Faça o download do arquivo jfxrt-1.8.0_261.jar e execute o comando maven abaixo para adiciona-lo no repositorio local: 
-- `mvn install:install-file -Dfile=jfxrt-1.8.0_261.jar -DgroupId=com.oracle -DartifactId=jfxrt -Dversion= 1.8.0_261 -Dpackaging=jar`
+	public ListProductPriceAiFunction() {
+		super("list_products_price", "Lists all products price", Empty.class, 
+			v->{
+				ServiceLocator loc = ServiceLocator.getInstance();
+				try {
+					IProductPriceController serv = loc.lookup(IProductPriceController.JNDI_NAME);
+					TResult<List<ProductPrice>> res = serv
+						.listAll(TedrosContext.getLoggedUser().getAccessToken(), ProductPrice.class);
+					
+					if(res.getState().equals(TState.SUCCESS) && !res.getValue().isEmpty()) {
+						List<Price> lst = new ArrayList<>();
+						res.getValue().forEach(p-> lst.add(new Price(p)));
+						return new Response("The products price list", lst);
+					}
+				} catch (NamingException e) {
+					e.printStackTrace();
+				}finally {
+					loc.close();
+				}
+				
+				return new Response("No data found");
+		});
+	}
+}
+```
 
-3. Faça o download do banco de dados, execute o arquivo bin\h2.bat uma tela para conexão sera aberta no browser.
-4. Importe o projeto maven tedrosbox.
-5. Altere a propriedade abaixo no arquivo pom.xml com o local onde se encontra o jdk .
+Below is a list of features provided by base applications that can be integrated and customized.
 
-`<java.home>C:\Program Files\Java\jdk1.8.0_102\bin</java.home>`
+1. Theme Tools:
+    - Choose a theme for Tedros
+    - Change the colors of panels, texts, buttons and forms
+    - Change the background image
 
-5
-5. Com o botão direito do mouse sobre o projeto tedrosbox selecione a opção: `Run as >Maven build`, e execute no campo Goals: `clean install`
+2. Preferences:
+    - Manage key system properties
+    - Manage Mime types of files
 
-6. Com o botão direito do mouse sobre o projeto server-application selecione a opção: `Run as >Maven build`, e execute no campo Goals: `cargo:run`
+3. Users:
+    - Load all authorization policies
+    - Manage user profiles
+    - Manage system users
 
-7. Abra e execute o arquivo com.tedros.Main.java como java application.
+4. Notifications:
+    - Manage email notifications (Scheduled, Sent or Queued)
 
-Se tudo tiver sido configurado de forma correta o Tedros devera criar a pasta .tedros na pasta do seu usuario com as configurações de layout necessarias e em seguida será apresentada a tela de login.
+5. Teros (Artificial Intelligence):
+    - Describe an image to be created by artificial intelligence
+    - Ask questions to artificial intelligence
+    - Chat with artificial intelligence
 
-Utilize o super usuario **owner**. 
-A senha é **xxx**.
+6. Products and Inventory:
+    - Manage the product catalog
+    - Create product reports
+    - Configure product inventory
+    - Record entries and exits of products in stock
+    - Manage input and output types of products
+    - Create inventory reports
 
-## Entendendo a estrutura do projeto:
+7. Support:
+    - Manage documents
+    - Manage document types
+    - Manage document states
+    - Manage locations (places, administrative areas, cities and countries)
+    - Manage individuals and legal entities
+    - Manage types of natural and legal persons
+    - Manage situations of individuals and legal entities
+    - Manage members and member types
+    - Manage member statuses
+    - Manage philanthropists and types of philanthropists
+    - Manage philanthropist situations
+    - Manage volunteers and types of volunteers
+    - Manage volunteer situations
+    - Manage customers and customer types
+    - Manage customer situations
+    - Manage categories of people
 
-1. tedrosbox 
-   - tdrs-box 
-     - app-tedros-settings
-     - tedros-box
-     - tedros-box-app-base
-     - tedros-core
-   - tdrs-fx
-     - tedros-fx-component
-   - tdrs-global-brasil
-     - app-global-brasil
-     - tedros-global-brasil-ejb
-     - tedros-global-brasil-ejb-client
-     - tedros-global-brasil-ejb-ear
-     - tedros-global-brasil-model
-   - tdrs-miscellaneous
-     - tedros-util
-   - tdrs-server
-     - tedros-core-ejb
-     - tedros-core-ejb-client
-     - tedros-core-ejb-ear
-     - tedros-core-model
-     - tedros-ejb-model-base
-     - tedros-ejb-service-base
-     - tedros-global-model
-     
-|  Projeto  |Descrição |
-|:---       |:---      |
-|tedrosbox  |Projeto pai|
-|tdrs-box   |Modulo do gerenciador de aplicativos|
-|app-tedros-settings|Aplicativo para customização do tedros|
-|tedros-box|Projeto pricipal com a classe main Tedros.java|
-|tedros-box-app-base|API base para desenvolvimento de um novo aplicativo|
-|tedros-core|Projeto core gerenciador do contexto|
-|tdrs-fx|Modulo com as APIs JAVAFX customizadas|
-|tedros-fx-component|Projeto com as APIs JAVAFX customizadas|
-|tdrs-global-brasil|Modulo de exemplo de uma aplicação com backend em EJB.|
-|app-global-brasil|Projeto com a camada de visão JAVAFX da aplicação|
-|tedros-global-brasil-ejb|Projeto ejb com a camada de serviço, negocio e persistencia da aplicação.|
-|tedros-global-brasil-ejb-client|Projeto com as interfaces de serviços a serem utilizadas pela camada de visão|
-|tedros-global-brasil-ejb-ear|Projeto ear para ser usado no deploy do servido de aplicações|
-|tedros-global-brasil-model|Projeto com as entidades jpa do projeto|
-|tdrs-miscellaneous|Modulo de utilitarios|
-|tedros-util|Projeto com as classes utilitarias|
-|tdrs-server|Modulo base de backend|
-|tedros-core-ejb|Projeto com a camada de serviço, negocio e persistencia do tedros-core|
-|tedros-core-ejb-client|Projeto com as interfaces de serviços a serem utilizadas pelo tedros-core|
-|tedros-core-ejb-ear|Projeto ear para ser usado no deploy do servido de aplicações|
-|tedros-core-model|Projeto com as entidades jpa do tedros-core|
-|tedros-ejb-model-base|Projeto base a ser usado para implementação de novas entidades jpa.|
-|tedros-ejb-service-base|Projeto base a ser usado para implementação de novos serviços|
-|tedros-global-model|Projeto com as entidades globais/comuns que podem ser usadas em qualquer projeto.|
+[Go to the documentation on the Wiki for more information on setting up the development environment and exploring all available functionality.](https://github.com/Tedros-Box/tedros-apps/wiki)
 
-## Para desenvolver um novo aplicativo vamos usar o modulo tdrs-global-brasil como exemplo:
+**Login**
+![Chatgpt](https://github.com/Tedros-Box/tedros-apps/blob/master/printscreen/tedrosbox.png)
 
-Neste primeiro momento não vou entrar em muitos detalhes vou apenas detalhar os pacotes de referencia, prometo melhorar a documentação.
+**Main screen with open side menu**
+![Chatgpt](https://github.com/Tedros-Box/tedros-apps/blob/master/printscreen/menu.png)
 
-1. **Entendendo os pacotes da camada de visão do projeto app-global-brasil:**
+**Teros**
+![Chatgpt](https://github.com/Tedros-Box/tedros-apps/blob/master/printscreen/teros3.png)
 
-|  Pacote  |Descrição |
-|:---       |:---     |
-|com.tedros.global.brasil.module.pessoa|pacote com a classe que herda de TModule responsavel por inicializar a view|
-|com.tedros.global.brasil.module.pessoa.form|pacote com os forms customizados (não esta sendo usado nesta implementação é so um exemplo)|
-|com.tedros.global.brasil.module.pessoa.icon|pacote com os classes que irão exibir os icones da aplicação no menu do tedros box|
-|com.tedros.global.brasil.module.pessoa.model|pacote com os model a serem usados para geração dos formularios nas views|
-|com.tedros.global.brasil.module.pessoa.process|pacote com os processos a serem usados para comunicação com o backend|
-|com.tedros.global.brasil.module.pessoa.table|pacote com os componentes customizados a serem usadas nas TableViews (não esta sendo usado nesta implementação)|
-|com.tedros.global.brasil.module.pessoa.trigger|pacote com as triggers a serem executadas em alguns campos da tela|
-|com.tedros.global.brasil.module.pessoa.validator|pacote com validadores|
-|com.tedros.global.brasil.start|pacote com a classe AppStart.java com a configuração dos modulos e menus a serem apresentados na inicialização do tedros-box.|
+**Example of a simple view with search and pagination**
+![Chatgpt](https://github.com/Tedros-Box/tedros-apps/blob/master/printscreen/producprice.png)
 
-2. **Por onde começar:**
+**Example of generated report, logo can be changed in preferences**
+![Chatgpt](https://github.com/Tedros-Box/tedros-apps/blob/master/printscreen/pf_rel2.png)
 
-Antes dos passos abaixo crie um modulo parecido com o modulo tdrs-global-brasil porem com nomes diferentes.
-Obs. Não é preciso criar a camada de backend neste momento.
 
-- Monte uma entidade que implemente ITModel ou herde de TEntity, coloque seus atributos, exemplo classe Pessoa.java, mas nesse momento não precisa ser uma entidade jpa então não se preocupe em colocar as anotações jpa.
-- Monte sua classe model view exemplo PessoaModelView.java, esta classe deve conter os atributos da classe que criou acima (os mesmos nomes), com a diferença do tipo delas compare a classe Pessoa.java com a classe PessoaModelView.java. A classe PessoaModelView.class servirá de modelo para geração dos formulariose e para servir de bind entre os componetes de tela javafx, gerados pelas anotações, com os atributos da entidade.
+# use case
 
-- Monte o seu modulo para tal de uma olhada na classe CadastroDePessoaModule.java
+The Tedros system is in full use by the NGO [Social Movement](http://www.somossocial.org.br)
 
-- Monte a sua classe de inicialização, de uma olhada na classe AppStart.java
+This NGO started during the coronavirus pandemic Covid-19 that resulted in increased hunger, due to the lockdown, in many vulnerable people and homeless people who depended on food donations from restaurants and ordinary people, it was then that a group of friends started to prepare meals in home and distribute them on the streets. The initiative worked and they grew in volunteers, donations and distributed meals. With this growth came the need to follow a work process that would help them manage actions, donations, entry and exit of products in stock, recruitment and control of volunteers, mailing, terms of membership and information on the web site. With Tedros, a complete solution was developed that met all the needs of the then project called Covid Sem Fome and quickly and gradually the solution was developed without much effort, there were several iterations and changes in the applications and in the system, there were 27 versions in total , but they were all done quickly and without too many complications. When the project was officially registered as an NGO and with a new name, process and website the refactoring of the applications and the website was carried out without much effort and complication and today as I write this **the entire system is in functional and stable without interventions for +1.5 years**.
 
-- Altere o pom.xml do projeto tedros-box e adicione o projeto criado como dependencia.
+The NGO's website is integrated with the services at the business layer of the Tedros system applications, which are used by the various NGO employees, each with the appropriate profile and permissions for their role.
 
-- Execute o tedros.
+Here are some prints of Tedros and applications made for the NGO.
 
-PS. Tem muita coisa para documentar ainda por isso vão debugando e questionando, fiquem a vontade.
+NGO app screen:
+![Screen 1](https://github.com/Tedros-Box/tedros-apps/blob/master/printscreen/somos1.png)
 
-Qualquer problema ou duvida não exite em me contactar pelo e-mail davis.dun@gmail.com
+![Screen 3](https://github.com/Tedros-Box/tedros-apps/blob/master/printscreen/somos3.png)
 
-Boa diversão! :]
+![Screen 4](https://github.com/Tedros-Box/tedros-apps/blob/master/printscreen/somos4.png)
+
+![Screen 5](https://github.com/Tedros-Box/tedros-apps/blob/master/printscreen/somos5.png)
+
+![Screen 6](https://github.com/Tedros-Box/tedros-apps/blob/master/printscreen/somos6.png)
+
+
+# Contact:
+Email: tedrosbox@gmail.com
+[LinkedIn](https://www.linkedin.com/in/davis-gordon-dun/)

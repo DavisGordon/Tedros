@@ -1,0 +1,98 @@
+/**
+ * 
+ */
+package org.tedros.common.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+import org.tedros.common.domain.DomainSchema;
+import org.tedros.common.domain.DomainTables;
+import org.tedros.server.annotation.TCaseSensitive;
+import org.tedros.server.annotation.TImportInfo;
+import org.tedros.server.annotation.TField;
+import org.tedros.server.annotation.TFileType;
+import org.tedros.server.entity.TVersionEntity;
+
+/**
+ * @author Davis Gordon
+ *
+ */
+
+@Entity
+@Table(name=DomainTables.mimeType, schema=DomainSchema.tedros_common)
+@TImportInfo(description = "#{mimetype.import.rule.desc}", 
+fileType = { TFileType.CSV, TFileType.XLS })
+public class TMimeType extends TVersionEntity {
+
+	private static final long serialVersionUID = 5379094409048057058L;
+
+	@Column(length=10, nullable=false)
+	@TField(required = true, 
+	label = "#{label.mimetype.ext}", column = "extension", 
+	example=".png", caseSensitive=TCaseSensitive.LOWER, maxLength=10)
+	private String extension;
+
+	@Column(length=500)
+	@TField(required = true, 
+	label = "#{label.mimetype.desc}", column = "description", 
+	example="The png image file type",  maxLength=500)
+	private String description;
+
+	@Column(length=500)
+	@TField(required = true, 
+	label = "#{label.mimetype.type}", column = "type", 
+	example="image/png",  maxLength=500)
+	private String type;
+
+	/**
+	 * @return the extension
+	 */
+	public String getExtension() {
+		return extension;
+	}
+
+	/**
+	 * @param extension the extension to set
+	 */
+	public void setExtension(String extension) {
+		this.extension = extension;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public String getType() {
+		return type;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	/**
+	 * @return the serialversionuid
+	 */
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+}

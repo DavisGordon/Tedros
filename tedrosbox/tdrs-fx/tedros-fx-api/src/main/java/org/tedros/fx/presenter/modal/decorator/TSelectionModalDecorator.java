@@ -1,0 +1,102 @@
+package org.tedros.fx.presenter.modal.decorator;
+
+import org.tedros.api.presenter.view.ITDynaView;
+import org.tedros.fx.annotation.presenter.TSelectionModalPresenter;
+import org.tedros.fx.model.TModelView;
+import org.tedros.fx.presenter.dynamic.decorator.TDynaViewSelectionBaseDecorator;
+
+import javafx.geometry.Insets;
+import javafx.scene.control.Accordion;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TitledPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+
+/**
+ * The decorator of the open modal view 
+ * to select an entity.
+ * It can be set using the 
+ * {@link TSelectionModalPresenter} annotation on 
+ * the TEntityModelView. 
+ * @author Davis Gordon
+ *
+ * @param <M>
+ */
+@SuppressWarnings("rawtypes")
+public class TSelectionModalDecorator<M extends TModelView> 
+extends TDynaViewSelectionBaseDecorator<M> {
+	
+	private VBox box;
+	private Accordion tAccordion;
+	private TitledPane tFilterTiTlePane;
+	private TitledPane tResultTitlePane;
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public void decorate() {
+		
+		// get the view
+		final ITDynaView<M> view = getPresenter().getView();
+		
+		TSelectionModalPresenter ann = super.getPresenter().getModelViewClass().getAnnotation(TSelectionModalPresenter.class);
+		super.listViewMaxWidth = ann.listViewMaxWidth();
+		super.listViewMinWidth = ann.listViewMinWidth();
+		setViewTitle(null);
+		buildListView();
+		buildListViewTitle(null);
+		buildCleanButton(null);
+		buildSearchButton(null);
+		buildCancelButton(null);
+		buildCloseButton(null);
+		buildSelectAllButton(null);
+		buildAddButton(null);
+		buildPaginator();
+		// add the buttons at the header tool bar
+		addItemInTHeaderToolBar(gettSearchButton(), gettCleanButton(), 
+				gettCancelButton(), gettSelectAllButton(), 
+				gettAddButton(), gettCloseButton());
+		
+		box = new VBox();
+		
+		tAccordion = new Accordion();
+		tFilterTiTlePane = new TitledPane(iEngine.getString("#{tedros.fxapi.label.filter}"), view.gettFormSpace());
+		tResultTitlePane = new TitledPane(iEngine.getString("#{tedros.fxapi.label.result}"), box);
+		
+		tAccordion.getPanes().addAll(tFilterTiTlePane, tResultTitlePane);
+		
+		VBox listBox = new VBox(4);
+		listBox.getChildren().addAll(super.gettListViewTitle(), super.gettListView());
+		listBox.getStyleClass().add("t-panel-background-color");
+		VBox.setVgrow(super.gettListView(), Priority.ALWAYS);
+		
+		super.addPaddingInTLeftContent(5, 15, 5, 15);
+		super.addItemInTLeftContent(listBox);
+		super.addItemInTCenterContent(tAccordion);
+		StackPane.setMargin(tAccordion, new Insets(0,0,0,3));
+		expandFilterPane();
+	}
+	
+	/**
+	 * Expand the result title pane.
+	 */
+	public void expandResultPane() {
+		tAccordion.setExpandedPane(tResultTitlePane);
+	}
+	
+	/**
+	 * Expand the filter title pane.
+	 */
+	public void expandFilterPane() {
+		tAccordion.setExpandedPane(tFilterTiTlePane);
+	}
+	
+	/**
+	 * Set up the TableView
+	 */
+	public void setTableView(TableView tableView) {
+		super.setTableView(tableView);
+		box.getChildren().addAll(tableView, gettPaginator());
+	}
+
+}

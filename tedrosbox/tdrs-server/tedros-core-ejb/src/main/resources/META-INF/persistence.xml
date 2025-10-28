@@ -8,11 +8,22 @@
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<jta-data-source>tedrosDataSource</jta-data-source>
 		
-		<class>com.tedros.core.security.model.TUser</class>
-		<class>com.tedros.core.security.model.TProfile</class>
-		<class>com.tedros.core.security.model.TAuthorization</class>
-		<class>com.tedros.common.model.TByteEntity</class>	
-		<class>com.tedros.common.model.TFileEntity</class>
+		<class>org.tedros.core.security.model.TUser</class>
+		<class>org.tedros.core.security.model.TProfile</class>
+		<class>org.tedros.core.security.model.TAuthorization</class>
+		<class>org.tedros.core.setting.model.TPropertie</class>
+		<class>org.tedros.core.security.model.TAuditLog</class>
+		<class>org.tedros.common.model.TByteEntity</class>	
+		<class>org.tedros.common.model.TFileEntity</class>
+		<class>org.tedros.core.notify.model.TNotify</class>
+		<class>org.tedros.core.notify.model.TNotifyLog</class>
+		<class>org.tedros.common.model.TMimeType</class>
+		<class>org.tedros.core.ai.model.TAiCompletion</class>
+		<class>org.tedros.core.ai.model.TAiCreateImage</class>
+		<class>org.tedros.core.ai.model.TAiImage</class>
+		<class>org.tedros.core.ai.model.TRequestEvent</class>
+		<class>org.tedros.core.ai.model.TAiChatCompletion</class>
+		<class>org.tedros.core.ai.model.TAiChatMessage</class>
 		
 		
 		<properties>
@@ -21,10 +32,11 @@
 	      <property name="eclipselink.ddl-generation.output-mode" value="database"/>
 	      <property name="eclipselink.logging.level" value="OFF"/>
           <property name="eclipselink.logging.exceptions" value="true"/>
-          <property name="eclipselink.logging.timestamp" value="true"/>
-          <property name="eclipselink.logging.thread" value="true"/>
-          <property name="eclipselink.logging.session" value="true"/>
-          <property name="eclipselink.logging.level.sql" value="OFF"/>
+          <property name="eclipselink.logging.timestamp" value="false"/>
+          <property name="eclipselink.logging.thread" value="false"/>
+          <property name="eclipselink.logging.session" value="false"/>
+          <property name="eclipselink.logging.level.sql" value="FINEST"/>
+          <property name="eclipselink.deploy-on-startup" value="true"/>
 	    </properties>
 		
       </persistence-unit> 

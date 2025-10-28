@@ -5,9 +5,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<!-- PARENT INFO -->
 	<parent>
-		<groupId>com.tedros</groupId>
+		<groupId>org.tedros</groupId>
 		<artifactId>tedrosbox</artifactId>
-		<version>8-1.0</version>
+		<version>17-0.0.1</version>
 	</parent>
 	
 	<!-- PROJECT -->
@@ -17,33 +17,13 @@
 	<name>tdrs-fx</name>
 	<description>The tedros javafx projects</description>
   	
-	<organization>
-		<name>Tedros</name>
-	</organization>
-  	
-  	<!-- PROPERTIES -->
-	<properties>
-		<java.version>1.8</java.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-  
-  	<!-- DEVELOPERS -->
-	<developers>
-		<developer>
-			<id>davis.dun</id>
-			<name>Davis Gordon Dun</name>
-			<email>tedrosbox@gmail.com</email>
-			<organization>Tedros</organization>
-		</developer>
-	</developers>
-  
   	<!-- BUILD -->
   	<build>
     	<plugins>
       		<plugin>
         		<groupId>org.apache.maven.plugins</groupId>
         		<artifactId>maven-compiler-plugin</artifactId>
-        		<version>3.3</version>
+        		<version>${compiler.plugin}</version>
         		<configuration>
           			<source>${java.version}</source>
           			<target>${java.version}</target>
@@ -54,7 +34,7 @@
  
  	<!-- MODULES -->
 	<modules>
-		<module>tedros-fx-component</module>
+		<module>tedros-fx-api</module>
 	</modules>
   
 </project>
