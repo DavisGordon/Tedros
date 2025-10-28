@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
+import org.tedros.ai.TFunctionHelper;
 import org.tedros.ai.function.TFunction;
 import org.tedros.ai.openai.model.ToolCallResult;
 import org.tedros.core.TLanguage;
@@ -59,8 +60,8 @@ public class OpenAITerosService {
 
     private void createSystemMessage() {
         String date = TDateUtil.formatFullgDate(new Date(), TLanguage.getLocale());
-        String user = TedrosContext.getLoggedUser().getName();
-        //String user = "Davis";
+        //String user = TedrosContext.getLoggedUser().getName();
+        String user = "Davis";
         String header = "Today is %s. You are Teros, a smart and helpful assistant for the Tedros desktop system. Engage intelligently with user %s."
                 .formatted(date, user);
         
@@ -122,13 +123,17 @@ public class OpenAITerosService {
             		Optional<ToolCallResult> resultOpt = functionExecutor.callFunction(functionCall);
             		
             		if(resultOpt.isPresent()) {
+            			
             			ToolCallResult result = resultOpt.get();
-						ResponseOutputItem responseOutputItem = adapter.sendToolCallResult(GPT_MODEL, messages, functionCall, result);
-						messages.add(ResponseInputItem.ofFunctionCall(functionCall));
+            			
+            			messages.add(ResponseInputItem.ofFunctionCall(functionCall));
 	            		messages.add(ResponseInputItem.ofFunctionCallOutput(ResponseInputItem.FunctionCallOutput.builder()
 	                            .callId(functionCall.callId())
 	                            .output(mapper.writeValueAsString(result))
 	                            .build()));
+            			
+						ResponseOutputItem responseOutputItem = adapter.sendToolCallResult(GPT_MODEL, messages, functionCall, result);
+						
 						content = processChatCompletion(responseOutputItem);
 					}else {
 						LOGGER.warn("Função {} não encontrada!", functionCall.name());
@@ -158,46 +163,14 @@ public class OpenAITerosService {
     public static void setPromptAssistant(String prompt) {
         PROMPT_ASSISTANT = prompt;
     }
-    
-    @JsonClassDescription("The person object containing the name.")
-    static class Pessoa {
-    	
-    	@JsonPropertyDescription("The person name")
-    	private String param1;
-    	
-    	@JsonPropertyDescription("The person last name")
-    	private String param2;
-
-		public String getParam1() {
-			return param1;
-		}
-
-		public void setParam1(String param1) {
-			this.param1 = param1;
-		}
-
-		public String getParam2() {
-			return param2;
-		}
-
-		public void setParam2(String param2) {
-			this.param2 = param2;
-		}
-    	
-    	
-    }
+        
         
 	public static void main(String[] args) {
-    	OpenAITerosService service = OpenAITerosService.create("OPEN_AI_KEY");
-    	service.createFunctionExecutor(new TFunction<Pessoa>("search_person", "Search for a person", Pessoa.class, 
-    			v->{
-    				Pessoa p = new Pessoa();
-    				p.setParam2("Rodrigues");
-    				return p;
-    			}));
+    	OpenAITerosService service = OpenAITerosService.create("TOKEN_GITHUB_REMOVIDO");
+    	service.createFunctionExecutor(TFunctionHelper.listAllViewPathFunction());
     	
 		service.setGptModel(ChatModel.GPT_4_TURBO.toString());
-		String response = service.call("Qual o sobre nome do Nando?", "Never reply with another question, use the search_person function to find people.");
+		String response = service.call("Crie um arquivo texto com um poema sobre a vida.", "Never reply with another question, use the system functions to find out how to do!");
 		System.out.println(response);
 		/*
 		for (int i = 0; i < 4; i++) {            
