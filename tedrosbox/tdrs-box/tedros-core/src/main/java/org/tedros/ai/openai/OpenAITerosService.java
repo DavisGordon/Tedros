@@ -166,7 +166,7 @@ public class OpenAITerosService {
         
         
 	public static void main(String[] args) {
-    	OpenAITerosService service = OpenAITerosService.create("TOKEN_GITHUB_REMOVIDO");
+    	OpenAITerosService service = OpenAITerosService.create("KEY");
     	service.createFunctionExecutor(TFunctionHelper.listAllViewPathFunction());
     	
 		service.setGptModel(ChatModel.GPT_4_TURBO.toString());
