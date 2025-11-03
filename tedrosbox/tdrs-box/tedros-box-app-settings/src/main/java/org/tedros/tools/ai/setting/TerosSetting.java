@@ -70,7 +70,7 @@ public class TerosSetting extends TSetting {
 				
 				TedrosContext.aiModelProperty().addListener((a,o,n)->OpenAITerosService.setGptModel(n));
 				TedrosContext.aiSystemPromptProperty().addListener((a,o,n)->OpenAITerosService.setPromptAssistant(n));
-				;
+				
 				teros = OpenAITerosService.create(key);
 				
 				TFunction[] arr = new TFunction[] {

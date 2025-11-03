@@ -3,7 +3,8 @@
  */
 package org.tedros.ai.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.tedros.ai.function.TRequiredProperty;
+
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
@@ -12,16 +13,16 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
  */
 public class CreateFile {
 	
-	@JsonPropertyDescription("the file name")
-	@JsonProperty(required=true)
+	@TRequiredProperty
+	@JsonPropertyDescription("the file name")	
 	private String name;
 	
+	@TRequiredProperty
 	@JsonPropertyDescription("the file extension")
-	@JsonProperty(required=true)
 	private String extension;
 	
+	@TRequiredProperty
 	@JsonPropertyDescription("the file content")
-	@JsonProperty(required=true)
 	private String content;
 
 	/**
