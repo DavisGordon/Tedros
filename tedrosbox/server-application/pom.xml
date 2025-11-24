@@ -327,6 +327,12 @@
 		      
 		      <deployable>
 		        <groupId>org.tedros</groupId>
+		        <artifactId>tedros-core-ejb-ear</artifactId>
+		        <type>ear</type>
+		      </deployable>
+		      
+		      <deployable>
+		        <groupId>org.tedros</groupId>
 		        <artifactId>app-redmine-tools-ejb-ear</artifactId>
 		        <type>ear</type>
 		      </deployable>
@@ -340,12 +346,6 @@
 		       <deployable>
 		        <groupId>org.tedros</groupId>
 		        <artifactId>app-extensions-ejb-ear</artifactId>
-		        <type>ear</type>
-		      </deployable>	
-		      
-		      <deployable>
-		        <groupId>org.tedros</groupId>
-		        <artifactId>tedros-core-ejb-ear</artifactId>
 		        <type>ear</type>
 		      </deployable>
 		      

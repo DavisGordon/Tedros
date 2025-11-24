@@ -13,7 +13,7 @@ import org.tedros.core.ai.model.completion.TCompletionResult;
 import org.tedros.core.ai.util.TAiModelUtil;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.controller.TAiCompletionController;
-import org.tedros.core.service.remote.ServiceLocator;
+import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.fx.process.TEntityProcess;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
@@ -40,7 +40,7 @@ public class TAiCompletionProcess extends TEntityProcess<TAiCompletion> {
 		
 		if(e==null)
 			return true;
-		ServiceLocator loc = ServiceLocator.getInstance();
+		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
 		
 		try {
 

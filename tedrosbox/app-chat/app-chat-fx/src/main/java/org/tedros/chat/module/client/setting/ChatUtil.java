@@ -23,7 +23,7 @@ import org.tedros.chat.entity.ChatUser;
 import org.tedros.common.model.TFileEntity;
 import org.tedros.core.TLanguage;
 import org.tedros.core.controller.TPropertieController;
-import org.tedros.core.service.remote.ServiceLocator;
+import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.control.TText;
 import org.tedros.fx.control.TText.TTextStyle;
@@ -71,7 +71,7 @@ public class ChatUtil {
 	}
 	
 	public Chat saveChat(TAccessToken token, Chat chat) throws Exception {
-		ServiceLocator loc = ServiceLocator.getInstance();
+		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
 		try {
 			IChatController serv = loc.lookup(IChatController.JNDI_NAME);
 			TResult<Chat> res = serv.save(token, chat);
@@ -82,7 +82,7 @@ public class ChatUtil {
 	}
 	
 	public ChatMessage saveMessage(TAccessToken token, ChatMessage msg) throws Exception {
-		ServiceLocator loc = ServiceLocator.getInstance();
+		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
 		try {
 			IChatMessageController serv = loc.lookup(IChatMessageController.JNDI_NAME);
 			TResult<ChatMessage> res = serv.save(token, msg);
@@ -94,7 +94,7 @@ public class ChatUtil {
 
 
 	public List<ChatMessage> findMessages(TAccessToken token, Long chatId) throws Exception {
-		ServiceLocator loc = ServiceLocator.getInstance();
+		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
 		try {
 			Chat c = new Chat();
 			c.setId(chatId);
@@ -110,7 +110,7 @@ public class ChatUtil {
 	}
 	
 	public ChatUser findUser(TAccessToken token, Long id, String name) throws Exception {
-		ServiceLocator loc = ServiceLocator.getInstance();
+		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
 		try {
 			ChatUser c = new ChatUser();
 			c.setUserId(id);
@@ -124,7 +124,7 @@ public class ChatUtil {
 	}
 	
 	public Integer getServerPort(TAccessToken token) throws Exception {
-		ServiceLocator loc = ServiceLocator.getInstance();
+		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
 		try {
 			TPropertieController serv = loc.lookup(TPropertieController.JNDI_NAME);
 			TResult<String> res1 = serv.getValue(token, ChatPropertie.CHAT_SERVER_PORT.getValue());
@@ -139,7 +139,7 @@ public class ChatUtil {
 	}
 	
 	public String getServerIp(TAccessToken token) throws Exception {
-		ServiceLocator loc = ServiceLocator.getInstance();
+		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
 		try {
 			TPropertieController serv = loc.lookup(TPropertieController.JNDI_NAME);
 			TResult<String> res1 = serv.getValue(token, ChatPropertie.CHAT_SERVER_IP.getValue());

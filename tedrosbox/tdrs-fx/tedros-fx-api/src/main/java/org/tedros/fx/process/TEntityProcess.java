@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.security.model.TUser;
-import org.tedros.core.service.remote.ServiceLocator;
+import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.server.controller.ITBaseController;
 import org.tedros.server.controller.ITEjbController;
 import org.tedros.server.controller.ITSecureEjbController;
@@ -163,7 +163,7 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
         	
         	@SuppressWarnings({ "unchecked", "rawtypes" })
 			protected List<TResult<E>> call() throws IOException, MalformedURLException {
-        		ServiceLocator loc = ServiceLocator.getInstance();
+        		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
         		List<TResult<E>> resultList = new ArrayList<>();
         		try {
 	        		if(!runBefore(resultList)) {

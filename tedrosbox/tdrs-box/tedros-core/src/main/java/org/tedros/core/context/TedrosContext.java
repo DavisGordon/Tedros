@@ -18,6 +18,7 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
+import org.tedros.ai.service.AiServiceProvider;
 import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.ITViewBuilder;
 import org.tedros.core.ITedrosBox;
@@ -33,7 +34,7 @@ import org.tedros.core.message.TMessageType;
 import org.tedros.core.resource.TedrosCoreResource;
 import org.tedros.core.security.model.TAuthorization;
 import org.tedros.core.security.model.TUser;
-import org.tedros.core.service.remote.ServiceLocator;
+import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.core.style.TStyleResourceValue;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
@@ -72,6 +73,12 @@ import javafx.stage.Stage;
 @SuppressWarnings({ "rawtypes"})
 public final class TedrosContext {
 	
+	private static final String PROPERTIE_SET_TO_DEFAULT_VALUE = "- Propertie {} set to default value {}";
+
+	private static final String PROPERTIE_LOADED = "- Propertie {} loaded.";
+
+	private static final String PROPERTIE_NOT_DEFINED = "- Propertie {} not defined!";
+
 	private final static Logger LOGGER = TLoggerUtil.getLogger(TedrosContext.class);
 	
 	private static final String DEFAULT_COUNTRY_ISO2 = "BR";
@@ -85,6 +92,8 @@ public final class TedrosContext {
 	private static BooleanProperty showModalProperty;
 	private static BooleanProperty reloadStyleProperty;
 	private static BooleanProperty artificialIntelligenceEnabledProperty;
+	private static ObjectProperty<AiServiceProvider> aiServiceProviderProperty;
+	private static StringProperty aiApiKeyProperty;
 	private static StringProperty aiModelProperty;
 	private static StringProperty aiSystemPromptProperty;
 	private static StringProperty contextStringProperty;
@@ -157,6 +166,8 @@ public final class TedrosContext {
 		countryIso2Property = new SimpleStringProperty(DEFAULT_COUNTRY_ISO2);
 		organizationNameProperty = new SimpleStringProperty("");
 		aiModelProperty = new SimpleStringProperty();
+		aiApiKeyProperty = new SimpleStringProperty();
+		aiServiceProviderProperty = new SimpleObjectProperty<>();
 		aiSystemPromptProperty = new SimpleStringProperty();
 		messageListProperty = FXCollections.observableArrayList();
 		infoListProperty = FXCollections.observableArrayList();
@@ -192,69 +203,102 @@ public final class TedrosContext {
 		
 		LOGGER.info("Starting load custom system properties.");
 		
-		ServiceLocator loc = ServiceLocator.getInstance();
+		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
 		try {
 			TPropertieController serv = loc.lookup(TPropertieController.JNDI_NAME);
 			TResult<String> res = serv.getValue(TedrosContext.loggedUser.getAccessToken(), 
 					TSystemPropertie.DEFAULT_COUNTRY_ISO2.getValue());
 			if(res.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res.getValue())) {
 				setCountryIso2(res.getValue());
-				LOGGER.info("- Propertie "+TSystemPropertie.DEFAULT_COUNTRY_ISO2.getValue()+" loaded.");
+				LOGGER.info(PROPERTIE_LOADED, TSystemPropertie.DEFAULT_COUNTRY_ISO2.getValue());
 			}else{
 				setCountryIso2(DEFAULT_COUNTRY_ISO2);
-				LOGGER.info("- Propertie "+TSystemPropertie.DEFAULT_COUNTRY_ISO2.getValue()+" set to default value "+DEFAULT_COUNTRY_ISO2);
+				LOGGER.info(PROPERTIE_SET_TO_DEFAULT_VALUE, 
+						TSystemPropertie.DEFAULT_COUNTRY_ISO2.getValue(), DEFAULT_COUNTRY_ISO2);
 			}
 			res = serv.getValue(TedrosContext.loggedUser.getAccessToken(), 
 					TSystemPropertie.TOTAL_PAGE_HISTORY.getValue());
 			if(res.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res.getValue())) {
 				if(NumberUtils.isCreatable(res.getValue())) {
 					setTotalPageHistory(Integer.valueOf(res.getValue()));
-					LOGGER.info("- Propertie "+TSystemPropertie.TOTAL_PAGE_HISTORY.getValue()+" loaded.");
+					LOGGER.info(PROPERTIE_LOADED, TSystemPropertie.TOTAL_PAGE_HISTORY.getValue());
 				}else {
-					LOGGER.info("- The Propertie "+TSystemPropertie.DEFAULT_COUNTRY_ISO2.getValue()
-					+" not loaded because the value "+res.getValue()+" cant be converted to integer number.");
+					LOGGER.info("- The Propertie {} not loaded because the value {}", 
+							TSystemPropertie.DEFAULT_COUNTRY_ISO2.getValue() , res.getValue()
+							+" cant be converted to integer number.");
 				}
 			}else{
 				setTotalPageHistory(DEFAULT_TOTAL_PAGE_HISTORY);
-				LOGGER.info("- Propertie "+TSystemPropertie.TOTAL_PAGE_HISTORY.getValue()+" set to default value "+DEFAULT_TOTAL_PAGE_HISTORY);
+				LOGGER.info(PROPERTIE_SET_TO_DEFAULT_VALUE, 
+						TSystemPropertie.TOTAL_PAGE_HISTORY.getValue(), DEFAULT_TOTAL_PAGE_HISTORY);
 			}
 			res = serv.getValue(TedrosContext.loggedUser.getAccessToken(), 
 					TSystemPropertie.AI_ENABLED.getValue());
 			if(res.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res.getValue())) {
 				setArtificialIntelligenceEnabled(BooleanUtils.toBoolean(res.getValue()));
-				LOGGER.info("- Propertie "+TSystemPropertie.AI_ENABLED.getValue()+" loaded.");
+				LOGGER.info(PROPERTIE_LOADED, TSystemPropertie.AI_ENABLED.getValue());
 			}else{
 				setArtificialIntelligenceEnabled(false);
-				LOGGER.info("- Propertie "+TSystemPropertie.AI_ENABLED.getValue()+" set to default value false");
+				LOGGER.info("- Propertie {} set to default value false", TSystemPropertie.AI_ENABLED.getValue());
 			}
 			
 			res = serv.getValue(TedrosContext.loggedUser.getAccessToken(), 
 					TSystemPropertie.ORGANIZATION.getValue());
 			if(res.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res.getValue())) {
 				setOrganizationName(res.getValue());
-				LOGGER.info("- Propertie "+TSystemPropertie.ORGANIZATION.getValue()+" loaded.");
+				LOGGER.info(PROPERTIE_LOADED, TSystemPropertie.ORGANIZATION.getValue());
 			}else{
-				LOGGER.info("- Propertie "+TSystemPropertie.ORGANIZATION.getValue()+" not defined!");
+				LOGGER.info(PROPERTIE_NOT_DEFINED, TSystemPropertie.ORGANIZATION.getValue());
 			}
 			
 			res = serv.getValue(TedrosContext.loggedUser.getAccessToken(), 
-					TSystemPropertie.OPENAI_MODEL.getValue());
-			if(res.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res.getValue())) {
-				setAiModel(res.getValue());
-				LOGGER.info("- Propertie "+TSystemPropertie.OPENAI_MODEL.getValue()+" loaded.");
-			}else{
-				LOGGER.info("- Propertie "+TSystemPropertie.OPENAI_MODEL.getValue()+" not defined!");
-			}
+					TSystemPropertie.AI_SERVICE_PROVIDER.getValue());
 			
-			res = serv.getValue(TedrosContext.loggedUser.getAccessToken(), 
-					TSystemPropertie.OPENAI_PROMPT.getValue());
-			if(res.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res.getValue())) {
-				setAiSystemPrompt(res.getValue());
-				LOGGER.info("- Propertie "+TSystemPropertie.OPENAI_PROMPT.getValue()+" loaded.");
-			}else{
-				LOGGER.info("- Propertie "+TSystemPropertie.OPENAI_PROMPT.getValue()+" not defined!");
+			if(res.getState().equals(TState.SUCCESS)) {
+				
+				String val = StringUtils.isNotBlank(res.getValue()) ? 
+						res.getValue() : AiServiceProvider.OPENAI.name();				
+				
+				AiServiceProvider provider = AiServiceProvider.valueOf(val);
+				setAiServiceProvider(provider);
+				LOGGER.info("- Using {} as AI Service Provider.", provider.name());
+				
+				TSystemPropertie aiModelPropertie = provider==AiServiceProvider.GROK ? 
+						TSystemPropertie.GROK_MODEL : TSystemPropertie.OPENAI_MODEL;
+				
+				res = serv.getValue(TedrosContext.loggedUser.getAccessToken(), 
+						aiModelPropertie.getValue());
+				if(res.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res.getValue())) {
+					setAiModel(res.getValue());
+					LOGGER.info(PROPERTIE_LOADED, aiModelPropertie.getValue());
+				}else{
+					LOGGER.info(PROPERTIE_NOT_DEFINED, aiModelPropertie.getValue());
+				}
+				
+				TSystemPropertie aiPromptPropertie = provider==AiServiceProvider.GROK ? 
+						TSystemPropertie.GROK_PROMPT : TSystemPropertie.OPENAI_PROMPT; 
+				
+				res = serv.getValue(TedrosContext.loggedUser.getAccessToken(), 
+						aiPromptPropertie.getValue());
+				if(res.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res.getValue())) {
+					setAiSystemPrompt(res.getValue());
+					LOGGER.info(PROPERTIE_LOADED, aiPromptPropertie.getValue());
+				}else{
+					LOGGER.info(PROPERTIE_NOT_DEFINED, aiPromptPropertie.getValue());
+				}
+				
+				TSystemPropertie aiApiKeyPropertie = provider==AiServiceProvider.GROK ? 
+						TSystemPropertie.GROK_KEY : TSystemPropertie.OPENAI_KEY; 
+				
+				res = serv.getValue(TedrosContext.loggedUser.getAccessToken(), 
+						aiApiKeyPropertie.getValue());
+				if(res.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res.getValue())) {
+					setAiApiKey(res.getValue());
+					LOGGER.info(PROPERTIE_LOADED, aiApiKeyPropertie.getValue());
+				}else{
+					LOGGER.info(PROPERTIE_NOT_DEFINED, aiApiKeyPropertie.getValue());
+				}
 			}
-			
 			
 		} catch (NamingException e) {
 			LOGGER.error("Error loading custom system properties: "+ e.getMessage(), e);
@@ -333,7 +377,7 @@ public final class TedrosContext {
 	 * */
 	public static void setLoggedUser(TUser loggedUser) {
 		TedrosContext.loggedUser = loggedUser;
-		LOGGER.info("User "+loggedUser.getName()+" signed in");
+		LOGGER.info("User {} signed in", loggedUser.getName());
 	}
 	
 	/**
@@ -362,7 +406,7 @@ public final class TedrosContext {
 				file = listOfFiles[i].getName();
 				if (file.endsWith(".properties")){
 					file = TedrosFolder.CONF_FOLDER.getFullPath()+file;
-					LOGGER.info("Loading file: "+file);
+					LOGGER.info("Loading file: {}", file);
 					try {
 						
 						if(tedrosClassLoader==null)
@@ -388,7 +432,7 @@ public final class TedrosContext {
 	public static URL getExternalURLFile(TedrosFolder tedrosFolder, String fileName){
 		try {
 			String path = TFileUtil.getTedrosFolderPath()+tedrosFolder.getFolder()+fileName;
-			return new File(path).toPath().toUri().toURL();//TUrlUtil.getURL(path);
+			return new File(path).toPath().toUri().toURL();
 		} catch (MalformedURLException e) {
 			LOGGER.error(e.toString(), e);
 			return null;
@@ -456,10 +500,10 @@ public final class TedrosContext {
 	 * Hide the opened modal.
 	 * */
 	public static void hideModal(){
-		if(MODAL instanceof ITView)
-        	((ITView)MODAL).gettPresenter().invalidate();
-		else if(MODAL instanceof TModule)
-			((TModule)MODAL).tStop();
+		if(MODAL instanceof ITView view)
+			view.gettPresenter().invalidate();
+		else if(MODAL instanceof TModule module)
+			module.tStop();
 		MODAL = null;
 		showModalProperty.set(false);
 	}
@@ -484,8 +528,8 @@ public final class TedrosContext {
 	public static void setTotalPageHistory(int total){
 		if(total>=MAX_TOTAL_PAGE_HISTORY ) {
 			total = MAX_TOTAL_PAGE_HISTORY;
-			LOGGER.info("- Propertie "+TSystemPropertie.TOTAL_PAGE_HISTORY.getValue()
-			+" cant be greater than "+MAX_TOTAL_PAGE_HISTORY+" set to default value "+DEFAULT_TOTAL_PAGE_HISTORY);
+			LOGGER.info("- Propertie {} cant be greater than {} set to default value {}",
+					TSystemPropertie.TOTAL_PAGE_HISTORY.getValue(), MAX_TOTAL_PAGE_HISTORY, DEFAULT_TOTAL_PAGE_HISTORY);
 		}
 		totalPageHistoryProperty.setValue(total);;
 	}
@@ -543,6 +587,47 @@ public final class TedrosContext {
 	public static void setOrganizationName(String organizationName) {
 		TedrosContext.organizationNameProperty.setValue(organizationName);
 	}
+	
+	/**
+	 * @return the ai provider
+	 */
+	public static AiServiceProvider getAiServiceProvider() {
+		return aiServiceProviderProperty.get();
+	}
+	/**
+	 * @param ai provider to set
+	 */
+	public static void setAiServiceProvider(AiServiceProvider provider) {
+		TedrosContext.aiServiceProviderProperty.setValue(provider);
+	}
+	
+	/**
+	 * ai provider property to listen.
+	 * */
+	public static ReadOnlyObjectProperty<AiServiceProvider> aiServiceProviderProperty(){
+		return aiServiceProviderProperty;
+	}
+	
+	/**
+	 * @return the ai api key
+	 */
+	public static String getAiApiKey() {
+		return aiApiKeyProperty.get();
+	}
+	/**
+	 * @param key the ai api key to set
+	 */
+	public static void setAiApiKey(String key) {
+		TedrosContext.aiApiKeyProperty.setValue(key);
+	}
+	
+	/**
+	 * ai apy key property to listen.
+	 * */
+	public static ReadOnlyStringProperty aiApiKeyProperty(){
+		return aiApiKeyProperty;
+	}
+	
 	/**
 	 * @return the aiModel
 	 */
@@ -775,7 +860,7 @@ public final class TedrosContext {
 		TedrosAppManager.getInstance().stopAll();
 		infoListProperty.clear();
 		if(loggedUser!=null && loggedUser.getAccessToken()!=null) {
-			ServiceLocator loc = ServiceLocator.getInstance();
+			TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
 			try {
 				ITLoginController serv = loc.lookup("ITLoginControllerRemote");
 				serv.logout(loggedUser.getAccessToken());

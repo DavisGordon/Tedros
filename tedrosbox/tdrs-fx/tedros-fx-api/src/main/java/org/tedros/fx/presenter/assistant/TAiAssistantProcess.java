@@ -16,7 +16,7 @@ import org.tedros.core.ai.model.completion.chat.TChatResult;
 import org.tedros.core.ai.model.completion.chat.TChatRole;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.controller.TAiChatCompletionController;
-import org.tedros.core.service.remote.ServiceLocator;
+import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.process.TProcess;
 import org.tedros.fx.process.TTaskImpl;
@@ -147,7 +147,7 @@ public class TAiAssistantProcess extends TProcess<TResult<TChatResult>> {
 		return new TTaskImpl<TResult<TChatResult>>() {
 			
 			protected TResult<TChatResult> call() throws IOException, MalformedURLException {
-	    		ServiceLocator loc = ServiceLocator.getInstance();
+	    		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
 	    		TResult<TChatResult> res = null;
 	    		try {
 

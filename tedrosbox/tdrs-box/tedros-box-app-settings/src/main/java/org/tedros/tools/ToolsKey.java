@@ -18,6 +18,7 @@ public interface ToolsKey {
 	static final String MESSAGE_AI_CREATE_IMAGE_REQUIRED = "#{message.ai.create.image.required}";
 	static final String MESSAGE_AI_DISABLED = "#{message.ai.disabled}";
 	static final String MESSAGE_AI_KEY_REQUIRED = "#{message.ai.key.required}";
+	static final String MESSAGE_AI_MODEL_REQUIRED = "#{message.ai.model.required}";
 	static final String MESSAGE_AI_PROMPT_REQUIRED = "#{message.ai.prompt.required}";
 	static final String MESSAGE_AI_TIMEOUT = "#{message.ai.timeout}";
 	static final String MESSAGE_SELECT_IMAGE = "#{message.select.image}";
@@ -68,6 +69,8 @@ public interface ToolsKey {
 	static final String VIEW__MAIN_PROPERTIES_DESC = "#{view..main.properties.desc}";
 	static final String VIEW_AI_CHAT = "#{view.ai.chat}";
 	static final String VIEW_AI_CHAT_DESC = "#{view.ai.chat.desc}";
+	static final String VIEW_AI_CHAT_MESSAGE_VIEWER = "#{view.ai.chat.message.viewer}";
+	static final String VIEW_AI_CHAT_MESSAGE_VIEWER_DESC = "#{view.ai.chat.message.viewer.desc}";
 	static final String VIEW_AI_COMPLETION = "#{view.ai.completion}";
 	static final String VIEW_AI_COMPLETION_DESC = "#{view.ai.completion.desc}";
 	static final String VIEW_AI_CREATE_IMAGE = "#{view.ai.create.image}";

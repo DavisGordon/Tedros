@@ -4,7 +4,7 @@ import java.net.URL;
 import java.util.function.Consumer;
 
 import org.tedros.api.presenter.ITPresenter;
-import org.tedros.core.control.TProgressIndicator;
+import org.tedros.core.control.ITProgressIndicator;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -52,10 +52,17 @@ public interface ITView<P extends ITPresenter>{
 	 * */
 	public ReadOnlyBooleanProperty tModalVisibleProperty();
 	
+	
+	/**
+	 * Sets the progress indicator
+	 * @param progressIndicator
+	 */
+	public void settProgressIndicator(ITProgressIndicator progressIndicator);
+	
 	/**
 	 * Returns the progress indicator
 	 * */
-	public TProgressIndicator gettProgressIndicator();
+	public ITProgressIndicator gettProgressIndicator();
 	
 	/**
 	 * Returns the view id

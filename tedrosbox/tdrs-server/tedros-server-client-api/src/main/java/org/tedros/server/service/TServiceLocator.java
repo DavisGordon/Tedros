@@ -21,8 +21,8 @@ public class TServiceLocator {
 	
 	private InitialContext ctx;
 	
-	private String URL = "http://{0}:8081/tomee/ejb";
-	private String IP = "localhost";
+	public static String URL = "http://{0}:8081/tomee/ejb";
+	public static String IP = "127.0.0.1";
 	
 	private Properties getProp(){
 		
@@ -38,13 +38,17 @@ public class TServiceLocator {
 		
 	}
 	
+	public static TServiceLocator getInstance(){
+		return new TServiceLocator();
+	}
+	
 	public static TServiceLocator getInstance(String url, String ip){
 		if(locator ==null)
 			locator = new TServiceLocator();
 		if(StringUtils.isNotBlank(url))
-			locator.URL = url;
+			URL = url;
 		if(StringUtils.isNotBlank(ip))
-			locator.IP = ip;
+			IP = ip;
 		return locator;
 	}
 	
@@ -61,5 +65,23 @@ public class TServiceLocator {
 			e.printStackTrace();
 		}
 	}
+	
+	public <E> E lookupWithRetry(String jndi) {
+        
+		int attempt = 0;
+	    long delay = 1000;
+
+	    while (attempt < 60) { // máx 60s
+	        attempt++;
+	        try {
+	            return lookup(jndi);
+	        } catch (NamingException e) {
+	            System.out.println("Attempt " + attempt + " - "+jndi+" unavailable. Waiting " + delay + "ms...");
+	            try { Thread.sleep(delay); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); return null; }
+	            delay = Math.min(delay * 2, 5000); // max 5s
+	        }
+	    }
+	    throw new IllegalStateException("Timeout wainting "+jndi+" to be available.");
+    }
 
 }

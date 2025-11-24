@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import org.tedros.api.presenter.ITPresenter;
 import org.tedros.api.presenter.view.ITView;
 import org.tedros.api.presenter.view.TViewState;
+import org.tedros.core.control.ITProgressIndicator;
 import org.tedros.core.control.TProgressIndicator;
 import org.tedros.fx.modal.TModalPane;
 import org.tedros.util.TLoggerUtil;
@@ -27,7 +28,7 @@ extends StackPane implements ITView<P>{
 	private String tViewId;
 	private final P presenter;
 	private TModalPane modalPane;
-	private TProgressIndicator progressIndicator;
+	private ITProgressIndicator progressIndicator;
 	private SimpleObjectProperty<TViewState> stateProperty= new SimpleObjectProperty<>(TViewState.CREATED);
 	
 	public TView(P presenter) {
@@ -108,8 +109,14 @@ extends StackPane implements ITView<P>{
 			modalPane.hideModal();
 		}
 	}
+	
+	@Override
+	public void settProgressIndicator(ITProgressIndicator progressIndicator) {
+		this.progressIndicator = progressIndicator;
+		this.progressIndicator.initialize(this);
+	}
 
-	public TProgressIndicator gettProgressIndicator() {
+	public ITProgressIndicator gettProgressIndicator() {
 		initializeProgressIndicator();
 		return progressIndicator;
 	}

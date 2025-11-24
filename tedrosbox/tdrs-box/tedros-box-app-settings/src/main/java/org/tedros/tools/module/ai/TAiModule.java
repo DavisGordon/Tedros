@@ -16,6 +16,8 @@ import org.tedros.tools.ToolsKey;
 import org.tedros.tools.module.ai.model.AiChatMV;
 import org.tedros.tools.module.ai.model.CompletionMV;
 import org.tedros.tools.module.ai.model.CreateImageMV;
+import org.tedros.tools.module.ai.model.HtmlMessageViewerMV;
+import org.tedros.tools.module.ai.model.HtmlMessageViewerModel;
 
 /**
  * @author Davis Gordon
@@ -23,6 +25,8 @@ import org.tedros.tools.module.ai.model.CreateImageMV;
  */
 @TView(title=ToolsKey.MODULE_AI,
 items = {
+	@TItem(title=ToolsKey.VIEW_AI_CHAT_MESSAGE_VIEWER, description=ToolsKey.VIEW_AI_CHAT_MESSAGE_VIEWER_DESC,
+	model = HtmlMessageViewerModel.class, modelView=HtmlMessageViewerMV.class, groupHeaders=true),
 	@TItem(title=ToolsKey.VIEW_AI_CREATE_IMAGE, description=ToolsKey.VIEW_AI_CREATE_IMAGE_DESC,
 	model = TAiCreateImage.class, modelView=CreateImageMV.class, groupHeaders=true),
 	@TItem(title=ToolsKey.VIEW_AI_COMPLETION, description=ToolsKey.VIEW_AI_COMPLETION_DESC,

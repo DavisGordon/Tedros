@@ -19,9 +19,7 @@ import org.tedros.core.ai.model.completion.chat.TChatRole;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.controller.TAiChatCompletionController;
 import org.tedros.core.controller.TAiChatMessageController;
-import org.tedros.core.controller.TPropertieController;
-import org.tedros.core.domain.TSystemPropertie;
-import org.tedros.core.service.remote.ServiceLocator;
+import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.TUsualKey;
 import org.tedros.fx.control.THyperlink;
@@ -64,27 +62,8 @@ public class AiChatUtil {
 	
 	private TLanguage iEngine = TLanguage.getInstance();
 	
-	public String getOpenAiKey() {
-		String key = "";
-		ServiceLocator loc = ServiceLocator.getInstance();
-		try {
-			TPropertieController serv = loc.lookup(TPropertieController.JNDI_NAME);
-			TResult<String> res = serv.getValue(TedrosContext.getLoggedUser().getAccessToken(), 
-					TSystemPropertie.OPENAI_KEY.getValue());
-			if(res.getState().equals(TState.SUCCESS) && StringUtils.isNotBlank(res.getValue()))
-				key = res.getValue();
-		}catch(Exception ex) {
-			ex.printStackTrace();
-			LOGGER.severe(ex.toString());
-		}finally{
-			loc.close();
-		}
-		
-		return key;
-	}
-	
 	public TAiChatCompletion saveChat(TAccessToken token, TAiChatCompletion chat) throws Exception {
-		ServiceLocator loc = ServiceLocator.getInstance();
+		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
 		try {
 			TAiChatCompletionController serv = loc.lookup(TAiChatCompletionController.JNDI_NAME);
 			TResult<TAiChatCompletion> res = serv.save(token, chat);
@@ -95,7 +74,7 @@ public class AiChatUtil {
 	}
 	
 	public TAiChatMessage saveMessage(TAccessToken token, TAiChatMessage msg) throws Exception {
-		ServiceLocator loc = ServiceLocator.getInstance();
+		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
 		try {
 			TAiChatMessageController serv = loc.lookup(TAiChatMessageController.JNDI_NAME);
 			TResult<TAiChatMessage> res = serv.save(token, msg);
@@ -108,7 +87,7 @@ public class AiChatUtil {
 
 	@SuppressWarnings("rawtypes")
 	public boolean deleteMessage(TAccessToken token, TAiChatMessage msg) throws Exception {
-		ServiceLocator loc = ServiceLocator.getInstance();
+		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
 		try {
 			TAiChatMessageController serv = loc.lookup(TAiChatMessageController.JNDI_NAME);
 			TResult res = serv.remove(token, msg);
@@ -120,7 +99,7 @@ public class AiChatUtil {
 
 
 	public List<TAiChatMessage> findMessages(TAccessToken token, Long chatId) throws Exception {
-		ServiceLocator loc = ServiceLocator.getInstance();
+		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
 		try {
 			TAiChatCompletion c = new TAiChatCompletion();
 			c.setId(chatId);

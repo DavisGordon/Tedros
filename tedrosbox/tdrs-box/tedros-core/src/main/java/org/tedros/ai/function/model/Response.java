@@ -3,18 +3,20 @@
  */
 package org.tedros.ai.function.model;
 
+import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
  * @author Davis Gordon
  *
  */
+@JsonClassDescription("The function tool response model")
 public class Response {
 
-	@JsonPropertyDescription("The system response message")
+	@JsonPropertyDescription("The function tool return message")
 	private String message;
 	
-	@JsonPropertyDescription("The response object")
+	@JsonPropertyDescription("The function tool result object")
 	private Object object;
 
 	/**

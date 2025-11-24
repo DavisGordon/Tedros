@@ -1,4 +1,4 @@
-package org.tedros.ai.openai;
+package org.tedros.ai.openai.example;
 
 import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;

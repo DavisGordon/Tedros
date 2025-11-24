@@ -22,7 +22,7 @@ import org.tedros.core.control.PopOver;
 import org.tedros.core.control.PopOver.ArrowLocation;
 import org.tedros.core.controller.TFileEntityController;
 import org.tedros.core.repository.TRepository;
-import org.tedros.core.service.remote.ServiceLocator;
+import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.TUsualKey;
 import org.tedros.fx.control.model.TImagesReportModel;
@@ -445,7 +445,7 @@ public class TBarcode extends TRequiredStackedComponent {
 				&& model.getImage() instanceof ITFileEntity 
 				&& !((ITFileEntity)model.getImage()).isNew()) {
 			TFileEntity fe = (TFileEntity) model.getImage();
-			ServiceLocator loc = ServiceLocator.getInstance();
+			TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
 			try {
 				TFileEntityController serv = loc.lookup(TFileEntityController.JNDI_NAME);
 				TResult<TFileEntity> res = serv.loadBytes(TedrosContext.getLoggedUser().getAccessToken(), fe);

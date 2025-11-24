@@ -24,6 +24,11 @@ public enum TSystemPropertie {
 	OPENAI_KEY("sys.openai.key","Define the OpenAi Api key"),
 	OPENAI_MODEL("sys.openai.model","Define the OpenAi Model"),
 	OPENAI_PROMPT("sys.openai.prompt","Define the model system prompt instructions"),
+	
+	GROK_KEY("sys.grok.key","Define the Grok Api key"),
+	GROK_MODEL("sys.grok.model","Define the Grok Model"),
+	GROK_PROMPT("sys.grok.prompt","Define the model system prompt instructions"),
+	AI_SERVICE_PROVIDER("sys.ai.provider","Define the Ai Service Provider: OPENAI or GROK"),
 	AI_ENABLED("sys.ai.enabled","Enable Teros artificial intelligence. Set true or false");
 	
 	private String value;

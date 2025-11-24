@@ -40,7 +40,7 @@ import org.tedros.server.exception.TBusinessException;
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 public class TNotifyTimer {
 	
-	private final static String DEFAULT = "DEFAULT_TIMER";
+	private static final String DEFAULT = "DEFAULT_TIMER";
 	
 	private Timer defaultTimer;
 	

@@ -1,7 +1,5 @@
 package org.tedros.ai;
 
-import static java.util.stream.Collectors.toList;
-
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,8 +15,6 @@ import org.tedros.core.security.model.TUser;
 import org.tedros.util.TDateUtil;
 import org.tedros.util.TLoggerUtil;
 
-import com.openai.models.chat.completions.ChatCompletion;
-import com.openai.models.chat.completions.ChatCompletionMessage;
 import com.theokanning.openai.OpenAiHttpException;
 import com.theokanning.openai.Usage;
 import com.theokanning.openai.completion.chat.ChatCompletionChoice;
@@ -220,21 +216,4 @@ public class TerosService {
 	public static void setPromptAssistant(String prompt) {
 		PROMPT_ASSISTANT = prompt;
 	}
-	
-	public static void main(String[] args) {
-		TerosService service = TerosService.create("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");
-		service.setGptModel("gpt-4o-mini");
-		String response = service.call("Tell me a story about building the best SDK!", "Make sure you mention Stainless!");
-		System.out.println(response);
-		for (int i = 0; i < 4; i++) {            
-			
-            System.out.println("\n-----------------------------------\n");
-
-            response = service.call("But why?" + "?".repeat(i), "Be as snarky as possible when replying!" + "!".repeat(i));
-            System.out.println(response);
-        }
-		
-		
-	}
-
 }

@@ -10,7 +10,7 @@ import javax.naming.NamingException;
 
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.security.model.TUser;
-import org.tedros.core.service.remote.ServiceLocator;
+import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.fx.exception.TProcessException;
 import org.tedros.server.controller.ITEjbChartController;
 import org.tedros.server.controller.TParam;
@@ -62,7 +62,7 @@ public class TChartProcess extends TProcess<TResult<? extends ITChartModel>> {
 			};
         	
 			protected TResult<? extends ITChartModel> call() throws IOException, MalformedURLException {
-        		ServiceLocator loc = ServiceLocator.getInstance();
+        		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
         		TResult<? extends ITChartModel> resultado = null;
         		try {
         			TUser user = TedrosContext.getLoggedUser();

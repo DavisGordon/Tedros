@@ -8,7 +8,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.security.model.TUser;
-import org.tedros.core.service.remote.ServiceLocator;
+import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.fx.exception.TProcessException;
 import org.tedros.fx.presenter.page.TPagination;
 import org.tedros.server.controller.ITBaseController;
@@ -118,7 +118,7 @@ public abstract class TPaginationProcess<E extends ITEntity> extends TProcess<TR
         	@SuppressWarnings("unchecked")
 			protected TResult<Map<String, Object>> call() throws IOException, MalformedURLException {
         		
-        		ServiceLocator loc = ServiceLocator.getInstance();
+        		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
         		TResult<Map<String, Object>> result = null;
         		try {
         			TUser user = TedrosContext.getLoggedUser();

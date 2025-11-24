@@ -21,7 +21,7 @@ import javax.naming.NamingException;
 import org.slf4j.Logger;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.security.model.TUser;
-import org.tedros.core.service.remote.ServiceLocator;
+import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.fx.exception.TProcessException;
 import org.tedros.server.controller.ITEjbReportController;
 import org.tedros.server.model.ITReportModel;
@@ -131,7 +131,7 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
         		try {
         			switch(action) {
         			case SEARCH:
-        				ServiceLocator loc = ServiceLocator.getInstance();
+        				TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
         				try {
         					if(model.getResult()!=null)
         						model.getResult().clear();

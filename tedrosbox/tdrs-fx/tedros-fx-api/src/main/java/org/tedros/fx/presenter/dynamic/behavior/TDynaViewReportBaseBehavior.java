@@ -19,7 +19,7 @@ import org.tedros.core.domain.TSystemPropertie;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
 import org.tedros.core.security.model.TUser;
-import org.tedros.core.service.remote.ServiceLocator;
+import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.core.setting.model.TPropertie;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.exception.TException;
@@ -343,7 +343,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			String organization = null;
 			TFileEntity logotype = null;
 			
-			ServiceLocator loc = ServiceLocator.getInstance();
+			TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
     		try {
         		TUser user = TedrosContext.getLoggedUser();
         		TPropertieController serv = loc.lookup(TPropertieController.JNDI_NAME);

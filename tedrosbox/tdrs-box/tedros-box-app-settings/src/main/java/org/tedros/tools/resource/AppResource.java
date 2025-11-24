@@ -14,10 +14,12 @@ public class AppResource extends TAppResource{
 	
 	private static final String CSV ="mime_type.csv";
 	private static final String LOGO ="logo-tedros-small.png";
+	private static final String TEROS ="teros_ia_response.html";
 	
 	public AppResource() {
 		super(TConstant.UUI);
 		super.addResource(CSV);
 		super.addResource(LOGO);
+		super.addResource(TEROS);
 	}
 }

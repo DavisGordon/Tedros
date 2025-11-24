@@ -211,8 +211,8 @@ implements ITBehavior<M, P>{
 	@Override
 	@SuppressWarnings("unchecked")
 	public void setForm(ITModelForm form) {
-		TProgressIndicatorForm pif = (form instanceof TProgressIndicatorForm) 
-				? (TProgressIndicatorForm) form 
+		TProgressIndicatorForm pif = (form instanceof TProgressIndicatorForm progressIndicatorForm) 
+				? progressIndicatorForm
 						: new TProgressIndicatorForm(form);
     	this.formProperty.setValue(pif);
     }

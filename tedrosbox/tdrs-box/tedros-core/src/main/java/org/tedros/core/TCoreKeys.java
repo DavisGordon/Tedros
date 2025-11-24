@@ -9,6 +9,8 @@ package org.tedros.core;
  */
 public interface TCoreKeys {
 	
+	static final String AI_NO_RESPONSE = "#{tedros.ai.no.response}";
+	static final String AI_THINKING = "#{tedros.ai.thinking}";
 	static final String CLOSE = "#{tedros.close}";
 	static final String COLLAPSE = "#{tedros.collapse}";
 	static final String EXPAND = "#{tedros.expand}";
@@ -33,6 +35,7 @@ public interface TCoreKeys {
 	static final String SECURITY_SEARCH = "#{tedros.security.search}";
 	static final String SECURITY_VIEW_ACCESS = "#{tedros.security.view_access}";
 	static final String WARNING = "#{tedros.warning}";
+
 
 
 }

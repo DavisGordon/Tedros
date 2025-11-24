@@ -1,4 +1,4 @@
-package org.tedros.ai.openai;
+package org.tedros.ai.openai.example;
 
 import static java.util.stream.Collectors.toList;
 

@@ -1,4 +1,4 @@
-package org.tedros.ai.openai;
+package org.tedros.ai.openai.example;
 
 import java.util.ArrayList;
 import java.util.List;

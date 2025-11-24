@@ -1,0 +1,150 @@
+<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f9f9f9; padding: 20px; border-radius: 8px;">
+<h1 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">Plano de Mitigação de Riscos</h1>
+<h2 style="color: #34495e;">Migração e Padronização do WSO2 EI (v3) → WSO2 MI (v4)</h2>
+<p><strong>Autor:</strong> Davis Gordon Dun - Arquiteto de Software</p>
+<p><strong>Versão:</strong> 01 | <strong>Data:</strong> 12/11/2025 | <strong>Responsáveis:</strong> Davis Gordon Dun | <strong>Demanda:</strong> 186022 | <strong>Descrição:</strong> Proposta de Solução</p>
+
+<h2>1) Objetivo do Documento</h2>
+<p>Este documento apresenta o plano estratégico de mitigação de riscos para a migração completa das APIs do WSO2 API-M v3.2.0 (ambiente legado) para o WSO2 API-M v4.2.0, combinada com a padronização de Products, APIs e Resources.</p>
+<p>O objetivo principal é garantir continuidade dos serviços, minimização de impactos operacionais e rastreabilidade total dos consumidores durante e após o desligamento do ambiente legado, considerando o elevado número de sistemas legados (127) e a criticidade dos serviços oferecidos ao cidadão e a parceiros externos (SERPRO, empresas privadas e órgãos públicos).</p>
+
+<h2>2) Contexto da Demanda (#186022)</h2>
+<p>A migração abrange as seguintes entregas obrigatórias:</p>
+<ol>
+<li><strong>Importação e consolidação das APIs no WSO2 v4</strong>
+<ul>
+<li>Eliminação da duplicação de APIs idênticas publicadas com nomes distintos por cliente.</li>
+<li>Criação de uma única API por serviço, com controle de acesso via Subscriptions (chaves/assintaturas individuais).</li>
+<li>Ajuste de parâmetros específicos por cliente via políticas de rate-limiting, throttling ou scopes.</li>
+</ul>
+</li>
+<li><strong>Adequação dos sistemas consumidores</strong>
+<ul>
+<li>Atualização de URLs, headers de autenticação e payloads conforme novo contrato.</li>
+<li>Deploy coordenado nos 127 sistemas impactados.</li>
+</ul>
+</li>
+<li><strong>Comunicação com consumidores externos</strong>
+<ul>
+<li>Contato formal com todos os clientes externos.</li>
+<li>Orientação para subscrição na nova API e definição de prazo máximo de migração (cut-off date).</li>
+</ul>
+</li>
+<li><strong>Desativação controlada das APIs no WSO2 v3</strong>
+<ul>
+<li>Redirecionamento total do tráfego para o servidor v4.</li>
+<li>Desligamento definitivo das APIs legadas após validação de zero consumo.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Diagramas de integração</strong></p>
+<p>Integrações entre os sistemas da forma como se encontra atualmente</p>
+<p>Exemplo de integrações que devem ser evitadas e corrigidas.</p>
+<ul>
+<li>[ A ] Serviços externos que se integram diretamente com o backend sem passar pelo WSO2</li>
+<li>[ B ] Backend dos serviços internos que se integram diretamente com os serviços externos sem passar pelo WSO2</li>
+<li>[ C ] Backend dos serviços internos que se integram diretamente com outro backend de serviço interno sem passar pelo WSO2</li>
+</ul>
+<p>Integrações entre os sistemas da forma desejada</p>
+
+<h2>3) Análise de Riscos</h2>
+<p>Toda migração de middleware em ambiente com 127 sistemas legados heterogêneos representa risco elevado de indisponibilidade. Os principais fatores de risco identificados são:</p>
+<ul>
+<li>Diversidade tecnológica: sistemas em Java 7/8/, Spring, JSF, JSP e Angular</li>
+<li>Ausência histórica de padronização: APIs duplicadas, contratos não versionados, autenticação mista (Basic + API Key + OAuth).</li>
+<li>Consumidores externos críticos: SERPRO, cartórios, seguradoras, DETRANs de outros estados.</li>
+<li>Janela de manutenção restrita: serviços 24x7 com alta demanda em horários comerciais.</li>
+<li>Acoplamento forte com URL antiga: hard-coded em centenas de classes e propriedades.</li>
+</ul>
+<p>Nesse cenário, a abordagem ideal seria uma migração faseada, visando o controle máximo dos riscos.</p>
+<p>A seguir, apresenta-se um plano sugerido:</p>
+<ol>
+<li>Fase 1: Exportar todos os Applications, Products, APIs e Resources existentes no WSO2 legado para importação no novo WSO2, sem alterações funcionais.</li>
+<li>Fase 2: Atualizar todas as ocorrências do domínio (URL) do WSO2 legado para o domínio do novo WSO2 em todos os sistemas integrados.</li>
+<li>Fase 3: Realizar testes exaustivos e corrigir eventuais erros identificados no ambiente de homologação.</li>
+<li>Fase 4: Efetuar o deploy dos sistemas em produção somente após validação completa em homologação.</li>
+<li>Fase 5: Executar monitoramento assistido em produção, com correções imediatas de anomalias observadas.</li>
+<li>Fase 6: Iniciar a padronização de APIs e Resources, criando novos Products no WSO2 atualizado, apenas após a estabilização do ambiente produtivo.</li>
+<li>Fase 7: Adaptar os sistemas para consumir os novos Resources padronizados no WSO2 atualizado.</li>
+<li>Fase 8: Testar e corrigir erros no ambiente de homologação para as alterações introduzidas.</li>
+<li>Fase 9: Realizar o deploy em produção dos sistemas homologados.</li>
+<li>Fase 10: Monitorar de forma assistida os sistemas atualizados com os novos Resources padronizados, intervindo até a completa estabilização.</li>
+<li>Fase 11: Desativar gradualmente os Products e APIs do WSO2 legado em produção, de modo assistido, com possibilidade de reativação em caso de impactos, seguida de análise de causas raiz até a estabilização final.</li>
+</ol>
+<p>Essas fases promoveriam uma migração mais controlada, minimizando riscos e interrupções.</p>
+<p>Entretanto, considerando a solicitação de realizar a migração concomitantemente à padronização de Products, APIs e Resources, tornou-se imprescindível uma análise detalhada de riscos. Essa análise visa definir estratégias de mitigação para os impactos durante e após a migração, garantindo a continuidade operacional e a integridade dos serviços.</p>
+<p><strong>Estratégia Ideal (Baixo Risco) × Estratégia Solicitada (Alto Risco)</strong></p>
+<table style="border-collapse: collapse; width: 100%; margin: 20px 0;">
+<thead>
+<tr style="background-color: #3498db; color: white;">
+<th style="border: 1px solid #ddd; padding: 8px;">Fase</th>
+<th style="border: 1px solid #ddd; padding: 8px;">Estratégia Ideal (Faseada – Recomendada)</th>
+<th style="border: 1px solid #ddd; padding: 8px;">Estratégia Solicitada (Migração + Padronização Simultânea)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="border: 1px solid #ddd; padding: 8px;">1</td>
+<td style="border: 1px solid #ddd; padding: 8px;">Exportar tudo sem alteração</td>
+<td style="border: 1px solid #ddd; padding: 8px;">OK (será executada)</td>
+</tr>
+<tr>
+<td style="border: 1px solid #ddd; padding: 8px;">2</td>
+<td style="border: 1px solid #ddd; padding: 8px;">Troca apenas de URL (zero mudança funcional)</td>
+<td style="border: 1px solid #ddd; padding: 8px;">Parcial – mudança de URL + contrato + autenticação</td>
+</tr>
+<tr>
+<td style="border: 1px solid #ddd; padding: 8px;">3–5</td>
+<td style="border: 1px solid #ddd; padding: 8px;">Testes → Deploy → Execução assistida</td>
+<td style="border: 1px solid #ddd; padding: 8px;">OK (será executada)</td>
+</tr>
+<tr>
+<td style="border: 1px solid #ddd; padding: 8px;">6–10</td>
+<td style="border: 1px solid #ddd; padding: 8px;">Padronização somente após estabilização</td>
+<td style="border: 1px solid #ddd; padding: 8px;">Executada junto com a migração → maior superfície de erro</td>
+</tr>
+<tr>
+<td style="border: 1px solid #ddd; padding: 8px;">11</td>
+<td style="border: 1px solid #ddd; padding: 8px;">Desligamento gradual com fallback</td>
+<td style="border: 1px solid #ddd; padding: 8px;">OK (será executada com mitigadores)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Conclusão:</strong> a execução simultânea de migração + padronização aumenta significativamente a probabilidade de falhas em produção. Para compensar esse risco, foram definidas medidas técnicas obrigatórias de contenção (ver item 4).</p>
+
+<h2>4) Medidas Obrigatórias de Mitigação (Levantadas em 12/11/2025)</h2>
+<p>Conforme ata da reunião de análise de risco com a equipe de desenvolvimento, ficam estabelecidas as seguintes regras:</p>
+<ol>
+<li><strong>Preservação total das classes Resource legadas</strong><br>Nenhuma classe que atenda o WSO2 v3 poderá ser alterada (exceto inclusão de novo resource no legado).</li>
+<li><strong>Marcação explícita de descontinuação</strong><br>Todas as classes legadas devem conter Javadoc:<br><pre style="background-color: #ecf0f1; padding: 10px; border-radius: 4px;">/**
+ * LEGADO – DESCONTINUAR APÓS DESLIGAMENTO DO WSO2 EI v3
+ * Qualquer chamada pós-shutdown deve gerar demanda imediata de adaptação.
+ */</pre></li>
+<li><strong>Separação física stricta entre recursos antigos e novos</strong><br>Todo resource criado no WSO2 v4 deverá ter sua própria classe Resource nos sistemas impactados. Proibido reutilizar classes legadas para novos endpoints.</li>
+<li><strong>Filter obrigatório de log para recursos legados</strong><br>Todos os sistemas devem implantar o RequestLoggingFilter (exemplo anexo na demanda #213849) configurado para paths do WSO2 v3. Objetivo: identificar em tempo real qualquer consumidor que ainda aponte para o ambiente antigo após o desligamento.</li>
+<li><strong>Chamada a serviços internos e/ou externos pelo serviço de integração e/ou backend dos serviços</strong><br>Se o sistema precisar fazer chamadas a algum serviço, este deverá ser realizado via WSO2 v.4, para isso será necessário:<br>
+<ul>
+<li>Validar se as APIs do serviço a qual se deseja integrar já se encontra configurado no WSO2 v.4</li>
+<li>Validar se o sistema do serviço a qual se deseja integrar já se encontra preparado para receber chamadas via WSO2 v.4</li>
+<li>Caso os dois itens acima não tiverem sido atendidos deverá ser encaminhado ao GP a necessidade da migração do mesmo</li>
+<li>Caso os dois itens acima tiverem sido atendidos o desenvolvedor deverá garantir que os place holders do arquivo wso2.config do sistema esteja configurado com os dados para autenticação no WSO2 v.4<br>
+client_id=${wso2.cliente.id}<br>
+client_secret=${wso2.cliente.secret}<br>
+authentication_server_url=${wso2.autentication.server.url}</li>
+</ul>
+</li>
+<li><strong>Configuração e organização dos arquivos de properties e do pom.xml</strong><br>Os sistemas utilizam uma estratégia de resource filter para substituição de valores dos arquivos de properties através de place holders, para garantir que nada seja quebrado durante a migração, deverá ser observada os seguintes itens:<br>
+<ul>
+<li>As propriedades que fizerem referência aos Resources do WSO2 v.3 não devem ser alterados</li>
+<li>As propriedades que fizerem referência aos Resources do WSO2 v.3 devem ser agrupados no arquivo de properties e no pom.xml de forma a diferenciar os bloco de propriedades do WSO2 v.3 do WSO2 v.4.</li>
+<li>As novas propriedades a serem criadas para o WSO2 v.4 deverão ser diferenciados com a inclusão do identificador wso2_v4_&lt;nome da propriedade&gt; no nome.</li>
+</ul>
+</li>
+</ol>
+
+<h2>5) Considerações Finais</h2>
+<p>A migração combinada com padronização é tecnicamente viável, porém só será bem-sucedida com a disciplina rigorosa nas medidas de mitigação descritas.</p>
+<p>Qualquer desvio das regras 1 a 6 será considerado bloqueador de Go-Live.</p>
+
+<p style="text-align: center; font-style: italic; margin-top: 40px;">[Imagem do DETRAN - Logotipo e Assinatura]</p>
+</div>

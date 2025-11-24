@@ -6,10 +6,9 @@
  */
 package org.tedros.core.control;
 
-import javafx.animation.Animation.Status;
-
 import org.tedros.core.context.TedrosContext;
 
+import javafx.animation.Animation.Status;
 import javafx.animation.FadeTransition;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -28,16 +27,51 @@ import javafx.util.Duration;
  *
  * @author Davis Gordon
  */
-public class TProgressIndicator {
+public class TProgressIndicator implements ITProgressIndicator {
 
 	private Region veil;
 	private ImageView progressIndicator;
 	private FadeTransition ft;
 	private Pane pane;
+	
+	public TProgressIndicator() {
+		
+	}
+	
 	public TProgressIndicator(final Pane pane) {
+		initialize(pane);
+	}
+	
+	public void initialize(Pane pane) {
 		this.pane = pane;
-		initialize();
-		setMargin(50);
+		this.veil = new Region();
+		this.veil.setVisible(false);
+		
+		String name = pane.getClass().getSimpleName();
+		if(name.contains("Form") || name.contains("GroupView"))
+			veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4); -fx-background-radius: 0 0 20 20;");
+		else
+			veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4); -fx-background-radius: 20 20 20 20;");
+		
+		this.progressIndicator = new ImageView();
+		this.progressIndicator.setVisible(false);
+		
+        setLogo();
+        
+        this.ft = new FadeTransition(Duration.millis(2000), progressIndicator);
+        this.ft.setFromValue(1.0);
+        this.ft.setToValue(0.3);
+        this.ft.setCycleCount(FadeTransition.INDEFINITE);
+        this.ft.setAutoReverse(true);
+        
+        this.progressIndicator.visibleProperty().addListener((a,b,n)-> {
+        	if(n)
+				ft.play();
+			else
+				ft.stop();
+        });
+        
+        setMargin(50);
         this.pane.getChildren().addAll(veil, progressIndicator);
 	}
 
@@ -91,31 +125,5 @@ public class TProgressIndicator {
         progressIndicator.setImage(img);
 	}
 	
-	private void initialize() {
-		veil = new Region();
-		veil.setVisible(false);
-		String name = pane.getClass().getSimpleName();
-		if(name.contains("Form") || name.contains("GroupView"))
-			veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4); -fx-background-radius: 0 0 20 20;");
-		else
-			veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4); -fx-background-radius: 20 20 20 20;");
-		
-		progressIndicator = new ImageView();
-		progressIndicator.setVisible(false);
-		//progressIndicator.setMaxSize(50, 50);
-        setLogo();
-        
-        ft = new FadeTransition(Duration.millis(2000), progressIndicator);
-        ft.setFromValue(1.0);
-        ft.setToValue(0.3);
-        ft.setCycleCount(FadeTransition.INDEFINITE);
-        ft.setAutoReverse(true);
-        
-        progressIndicator.visibleProperty().addListener((a,b,n)-> {
-        	if(n)
-				ft.play();
-			else
-				ft.stop();
-        });
-	}
+	
 }

@@ -13,7 +13,7 @@ import org.tedros.core.ai.model.image.TImageResult;
 import org.tedros.core.ai.util.TAiModelUtil;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.controller.TAiCreateImageController;
-import org.tedros.core.service.remote.ServiceLocator;
+import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.fx.process.TEntityProcess;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
@@ -40,7 +40,7 @@ public class TAiCreateImageProcess extends TEntityProcess<TAiCreateImage> {
 		
 		if(e==null)
 			return true;
-		ServiceLocator loc = ServiceLocator.getInstance();
+		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
 		
 		try {
 

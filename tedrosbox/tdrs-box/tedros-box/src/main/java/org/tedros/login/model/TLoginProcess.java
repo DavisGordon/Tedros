@@ -12,7 +12,7 @@ import org.tedros.core.context.TReflections;
 import org.tedros.core.controller.ITLoginController;
 import org.tedros.core.security.model.TAuthorization;
 import org.tedros.core.security.model.TUser;
-import org.tedros.core.service.remote.ServiceLocator;
+import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.fx.exception.TProcessException;
 import org.tedros.fx.process.TEntityProcess;
 import org.tedros.server.result.TResult;
@@ -36,7 +36,7 @@ import org.tedros.tools.module.user.action.TAuthorizationLoadAction;
 
 	@Override
 	public boolean runBefore(List<TResult<TUser>> resultList) {
-		ServiceLocator loc = ServiceLocator.getInstance();
+		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
 		try {
 			ITLoginController service = (ITLoginController) loc.lookup(SERV_NAME);
 			switch (operation) {

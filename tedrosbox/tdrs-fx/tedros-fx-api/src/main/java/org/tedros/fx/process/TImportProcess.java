@@ -10,7 +10,7 @@ import javax.naming.NamingException;
 
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.security.model.TUser;
-import org.tedros.core.service.remote.ServiceLocator;
+import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.fx.exception.TProcessException;
 import org.tedros.server.controller.ITEjbImportController;
 import org.tedros.server.model.ITImportModel;
@@ -66,7 +66,7 @@ public abstract class TImportProcess<M extends ITImportModel> extends TProcess<T
         	
 			@SuppressWarnings("unchecked")
 			protected TResult<M> call() throws IOException, MalformedURLException {
-        		ServiceLocator loc = ServiceLocator.getInstance();
+        		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
         		TResult<M> resultado = null;
         		try {
         			TUser user = TedrosContext.getLoggedUser();

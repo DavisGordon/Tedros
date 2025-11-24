@@ -7,7 +7,7 @@ import org.tedros.common.model.TFileEntity;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.controller.TFileEntityController;
 import org.tedros.core.security.model.TUser;
-import org.tedros.core.service.remote.ServiceLocator;
+import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.fx.exception.TProcessException;
 import org.tedros.server.result.TResult;
 import org.tedros.util.TLoggerUtil;
@@ -42,7 +42,7 @@ public class TFileEntityLoadProcess extends TProcess<TResult<TFileEntity>>{
 			};
         	
 			protected TResult<TFileEntity> call() throws IOException, MalformedURLException {
-        		ServiceLocator loc = ServiceLocator.getInstance();
+        		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
         		TResult<TFileEntity> result = null;
         		try {
         			TUser user = TedrosContext.getLoggedUser();

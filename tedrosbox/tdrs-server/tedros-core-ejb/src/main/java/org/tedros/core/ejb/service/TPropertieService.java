@@ -39,5 +39,13 @@ public class TPropertieService extends TEjbService<TPropertie>	{
 		return bo.getFile(key);
 	}
 	
+	public boolean exists(String key) {
+		return bo.exists(key);
+	}
+	
+	@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
+	public boolean create(TPropertie propertie) throws Exception {
+		return bo.create(propertie);
+	}
 
 }

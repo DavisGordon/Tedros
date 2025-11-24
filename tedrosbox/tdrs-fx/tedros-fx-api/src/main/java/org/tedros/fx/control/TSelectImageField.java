@@ -21,7 +21,7 @@ import org.tedros.core.context.TedrosContext;
 import org.tedros.core.controller.TFileEntityController;
 import org.tedros.core.repository.TRepository;
 import org.tedros.core.security.model.TUser;
-import org.tedros.core.service.remote.ServiceLocator;
+import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.fx.control.TText.TTextStyle;
 import org.tedros.fx.control.action.TEventHandler;
 import org.tedros.fx.domain.TEnvironment;
@@ -849,7 +849,7 @@ public class TSelectImageField extends TRequiredSelectImage{
 			List<String> exts = (List<String>) m.get("e");
 			Long maxSize = (Long) m.get("s");
 			Boolean load = (Boolean) m.get("l");
-			ServiceLocator loc = ServiceLocator.getInstance();
+			TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
     		try {
         		TUser user = TedrosContext.getLoggedUser(); 
         		TFileEntityController serv =  loc.lookup(SERV);

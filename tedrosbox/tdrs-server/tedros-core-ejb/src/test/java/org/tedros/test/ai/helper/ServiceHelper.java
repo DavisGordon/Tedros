@@ -12,7 +12,7 @@ import org.tedros.server.controller.ITSecureEjbController;
 import org.tedros.server.entity.TEntity;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
-import org.tedros.test.serv.ServiceLocator;
+import org.tedros.server.service.TServiceLocator;
 import org.tedros.util.TEncriptUtil;
 
 /**
@@ -24,7 +24,7 @@ public class ServiceHelper {
 	public static TUser user;
 	
 	static {
-		ServiceLocator loc = ServiceLocator.getInstance();
+		TServiceLocator loc = TServiceLocator.getInstance();
 		try {
 			ITLoginController lServ = loc.lookup(ITLoginController.JNDI_NAME);
 			System.out.println("Logon at server... ");
@@ -47,10 +47,8 @@ public class ServiceHelper {
 		}
 	}
 	
-
-	@SuppressWarnings("unchecked")
 	public static <T extends TEntity> List<T> listAll(String jndi, Class<T> type) {
-		ServiceLocator loc = ServiceLocator.getInstance();
+		TServiceLocator loc = TServiceLocator.getInstance();
 		try {
 			ITSecureEjbController<T> serv = loc.lookup(jndi);
 			TResult<List<T>> res = serv.listAll(user.getAccessToken(), type);
@@ -66,9 +64,8 @@ public class ServiceHelper {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <T extends TEntity> T find(String jndi, T example) {
-		ServiceLocator loc = ServiceLocator.getInstance();
+		TServiceLocator loc = TServiceLocator.getInstance();
 		try {
 			ITSecureEjbController<T> serv = loc.lookup(jndi);
 			TResult<T> res = serv.find(user.getAccessToken(), example);

@@ -4,17 +4,19 @@
 package org.tedros.ai;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.FileInputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.tedros.ai.function.TFunction;
@@ -25,7 +27,8 @@ import org.tedros.ai.function.model.ModuleInfo;
 import org.tedros.ai.function.model.Response;
 import org.tedros.ai.function.model.ViewInfo;
 import org.tedros.ai.function.model.ViewPath;
-import org.tedros.ai.model.CreateFile;
+import org.tedros.ai.model.CreateBinaryFile;
+import org.tedros.ai.openai.model.ToolCallResult;
 import org.tedros.api.presenter.ITDynaPresenter;
 import org.tedros.api.presenter.behavior.ITBehavior;
 import org.tedros.api.presenter.view.ITView;
@@ -36,7 +39,7 @@ import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.controller.TPropertieController;
 import org.tedros.core.domain.TSystemPropertie;
-import org.tedros.core.service.remote.ServiceLocator;
+import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.core.setting.model.TPropertie;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
@@ -76,8 +79,56 @@ public class TFunctionHelper {
 		return arr;
 	}
 	
-	public static TFunction<CreateFile> getCreateFileFunction() {
-		return new TFunction<CreateFile>("create_file", "Creates a file.", 
+	public static TFunction<CreateBinaryFile> getCreateFileFunction() {
+        return new TFunction<>("create_file", """
+            Creates any file on the server (PDF, DOCX, XLSX, PNG, ZIP, CSV, etc.).
+            Use when user asks to:
+            • "Save as PDF"
+            • "Export report"
+            • "Generate Excel"
+            • "Download evidence as file"
+            • "Create a document with this analysis"
+            Input:
+              • name (string) – file name without extension
+              • extension (string) – e.g. pdf, docx, xlsx, png, zip
+              • base64Content (string) – full file encoded in Base64
+              • subfolder (optional) – e.g. "2025/04" or "issue-12345"
+            Output: Full file path on server (use !{path} to show in chat)
+            """,
+            CreateBinaryFile.class,
+            request -> {
+                try {
+                    String dirPath = TedrosFolder.EXPORT_FOLDER.getFullPath();
+                    if (request.getSubfolder() != null && !request.getSubfolder().trim().isEmpty()) {
+                        dirPath += File.separator + request.getSubfolder().replace("/", File.separator);
+                    }
+
+                    Path dir = Path.of(dirPath);
+                    Files.createDirectories(dir);
+
+                    String fileName = request.getName().replaceAll("[^a-zA-Z0-9_-]", "_");
+                    String fullName = fileName + "." + request.getExtension().toLowerCase().replaceAll("[^a-zA-Z0-9]", "");
+                    File file = dir.resolve(fullName).toFile();
+
+                    byte[] data = Base64.getMimeDecoder().decode(request.getBase64Content());
+                    FileUtils.writeByteArrayToFile(file, data);
+
+                    String fullPath = file.getAbsolutePath();
+                    LOGGER.info("File created successfully: {}", fullPath);
+
+                    return new ToolCallResult("create_file",
+                        "File created successfully!\nPath: `!" + fullPath.replace("\\", "\\\\") + "`");
+
+                } catch (Exception e) {
+                    LOGGER.error("Failed to create file {}.{}: {}", 
+                        request.getName(), request.getExtension(), e.getMessage(), e);
+                    return new Response("Error creating file: " + e.getMessage());
+                }
+            });
+    }
+	
+	/*public static TFunction<CreateFile> getCreateSimpleFileFunction() {
+		return new TFunction<CreateFile>("create_simple_file", "Creates simple file with text content.", 
 				CreateFile.class, 
 				v->{
 					
@@ -92,14 +143,14 @@ public class TFunctionHelper {
 						return new Response("Error: "+e.getMessage());
 					}
 				});
-	}
+	}*/
 	
 	public static TFunction<Empty> getPreferencesFunction() {
 		return new TFunction<Empty>("get_system_preferences", "Returns the system preferences for chat server, smtp server, "
 				+ "view history page, openai, teros status, reports, notify, currency/date format and others", 
 				Empty.class, 
 				v->{
-					ServiceLocator loc = ServiceLocator.getInstance();
+					TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
 					try {
 						TPropertieController serv = loc.lookup(TPropertieController.JNDI_NAME);
 						TResult<List<TPropertie>> res = serv
@@ -278,6 +329,48 @@ public class TFunctionHelper {
 					
 				return new Response(sb.toString());
 		});
+	}
+	
+	public static void main(String[] args) {
+		 try {
+			 
+			//String dirPath = "C:/tmp/";
+			 
+			 //String fileName = "teste_file";
+			 //String fullName = fileName + ".docx";
+			 //File file = new File(dirPath+fullName);
+			 
+			 String encode = null;
+			 try(FileInputStream is = new FileInputStream(new File("C:\\desenv\\tmp\\hosts.txt"))){
+				 byte[] bytes = is.readAllBytes();
+				 encode = Base64.getEncoder().encodeToString(bytes);
+			 }
+			 
+			 CreateBinaryFile cbf = new CreateBinaryFile();
+			 cbf.setBase64Content(encode);
+			 cbf.setExtension("txt");
+			 cbf.setName("teste_file");
+			 cbf.setSubfolder("teste");
+			 
+			 TFunction<CreateBinaryFile> fn = TFunctionHelper.getCreateFileFunction();
+			 
+			 Function<CreateBinaryFile, Object> cb = fn.getCallback();
+	         Object result = cb.apply(cbf);
+	         
+	         System.out.println(result);
+
+			 /*
+			 byte[] data = Base64.getDecoder().decode(encode);
+			 FileUtils.writeByteArrayToFile(file, data);
+
+			 String fullPath = file.getAbsolutePath();
+			 LOGGER.info("File created successfully: {}", fullPath);
+			 */
+			 
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

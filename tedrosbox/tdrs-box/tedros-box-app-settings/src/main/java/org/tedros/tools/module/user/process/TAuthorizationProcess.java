@@ -12,7 +12,7 @@ import org.tedros.core.context.TedrosContext;
 import org.tedros.core.controller.TAuthorizationController;
 import org.tedros.core.security.model.TAuthorization;
 import org.tedros.core.security.model.TUser;
-import org.tedros.core.service.remote.ServiceLocator;
+import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.fx.exception.TProcessException;
 import org.tedros.fx.process.TEntityProcess;
 import org.tedros.server.result.TResult;
@@ -49,7 +49,7 @@ public class TAuthorizationProcess extends TEntityProcess<TAuthorization> {
 					.loadPackages()
 					.getClassesAnnotatedWith(TSecurity.class));
 			
-			ServiceLocator loc = ServiceLocator.getInstance();
+			TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
 			try {
 				TUser user = TedrosContext.getLoggedUser();
 				TAuthorizationController serv = loc.lookup(TAuthorizationController.JNDI_NAME);

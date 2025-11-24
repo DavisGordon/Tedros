@@ -1,4 +1,4 @@
-package org.tedros.ai.openai;
+package org.tedros.ai.service.openai;
 
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;

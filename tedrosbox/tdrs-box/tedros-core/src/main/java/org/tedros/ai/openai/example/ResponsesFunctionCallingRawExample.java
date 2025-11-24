@@ -1,4 +1,4 @@
-package org.tedros.ai.openai;
+package org.tedros.ai.openai.example;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
