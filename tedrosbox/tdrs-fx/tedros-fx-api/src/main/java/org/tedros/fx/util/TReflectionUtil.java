@@ -275,7 +275,7 @@ public final class TReflectionUtil {
 		return null;
 	}
 	
-	private static Method getAnnotationBuilderMethod(Annotation annotation) {
+	public static Method getAnnotationBuilderMethod(Annotation annotation) {
 		try{
 			return annotation.getClass().getMethod("builder");
 		}catch(NoSuchMethodException e){ 

@@ -74,7 +74,14 @@ public final class TEffectParser implements ITEffectParse {
 			
 			Map<String, Object> params = TReflectionUtil.readAnnotation(annotation);
 			
-			Class builderClass = (Class) params.get(BUILDER_METHOD_NAME);
+			Method builderMethod = TReflectionUtil.getAnnotationBuilderMethod(annotation);
+			
+			if(builderMethod==null )
+				return null;
+			
+			Class builderClass = (Class) builderMethod.invoke(annotation);
+			
+			//Class builderClass = (Class) params.get(BUILDER_METHOD_NAME);
 			ITEffectBuilder<?> builder = (ITEffectBuilder<?>) builderClass.getDeclaredConstructor().newInstance();
 			Effect effect = builder.build();
 			if(effect!=null){

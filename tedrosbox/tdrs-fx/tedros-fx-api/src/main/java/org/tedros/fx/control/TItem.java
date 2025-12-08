@@ -14,6 +14,11 @@ public class TItem {
 	public boolean equals(Object obj) {
 		if(obj==null || value==null)
 			return false;
+		
+		if(obj instanceof TItem item) {
+			return value.equals(item.getValue());
+		}
+		
 		return value.equals(obj);
 	}
 	

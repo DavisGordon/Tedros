@@ -27,7 +27,6 @@ import javafx.beans.property.Property;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 
@@ -51,17 +50,27 @@ implements ITControlBuilder<org.tedros.fx.control.TComboBoxField, Property<Objec
 		
 		control.getSelectionModel().selectedItemProperty()
 		.addListener((a,o,n)-> {
-			if(n instanceof TItem)
-				attrProperty.setValue(((TItem)n).getValue());
-			else{
-				if(n instanceof TModelView)
-					attrProperty.setValue(((TModelView)n).getModel());
-				else
-					attrProperty.setValue(n);
+			
+			if (n==null) {
+				attrProperty.setValue(null);
+				return;
 			}
+			
+			if(n instanceof TItem i) {
+				attrProperty.setValue(i.getValue());
+				return;
+			}
+			
+			if(n instanceof TModelView mv) {
+				attrProperty.setValue(mv.getModel());
+				return;
+			} 
+			
+			attrProperty.setValue(n);
+			
 		});	
 		
-		callParser(tAnnotation, (ComboBox) control);
+		callParser(tAnnotation, control);
 		
 		if(tAnnotation.process().query().entity()!=ITEntity.class) {
 			
