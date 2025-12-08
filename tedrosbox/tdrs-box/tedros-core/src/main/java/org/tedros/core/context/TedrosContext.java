@@ -91,6 +91,7 @@ public final class TedrosContext {
 	private static StringProperty pagePathProperty;
 	private static BooleanProperty showModalProperty;
 	private static BooleanProperty reloadStyleProperty;
+	private static BooleanProperty exitSystemProperty;
 	private static BooleanProperty artificialIntelligenceEnabledProperty;
 	private static ObjectProperty<AiServiceProvider> aiServiceProviderProperty;
 	private static StringProperty aiApiKeyProperty;
@@ -103,6 +104,7 @@ public final class TedrosContext {
 	private static StringProperty initializationErrorMessageStringProperty;
 	private static ObservableList<TMessage> messageListProperty;
 	private static ObservableList<TMessage> infoListProperty;
+	
 	
 	//private static Stage stage;
 	private static SimpleObjectProperty<Node> currentViewProperty;
@@ -161,6 +163,7 @@ public final class TedrosContext {
 		showModalProperty = new SimpleBooleanProperty();	
 		initializationErrorMessageStringProperty = new SimpleStringProperty("");
 		reloadStyleProperty = new SimpleBooleanProperty(true);
+		exitSystemProperty = new SimpleBooleanProperty(false);
 		artificialIntelligenceEnabledProperty = new SimpleBooleanProperty(false);
 		totalPageHistoryProperty = new SimpleIntegerProperty(DEFAULT_TOTAL_PAGE_HISTORY);
 		countryIso2Property = new SimpleStringProperty(DEFAULT_COUNTRY_ISO2);
@@ -560,6 +563,14 @@ public final class TedrosContext {
 	public static ReadOnlyBooleanProperty artificialIntelligenceEnabledProperty(){
 		return artificialIntelligenceEnabledProperty;
 	}
+	
+	/**
+	 * Get the exit system property
+	 * */
+	public static ReadOnlyBooleanProperty exitSystemProperty(){
+		return exitSystemProperty;
+	}
+	
 	/**
 	 * Get the total page history.
 	 * */
@@ -845,6 +856,7 @@ public final class TedrosContext {
 		removeUserSession();
 		main.logout();
 		loggedUser = null;
+		exitSystemProperty.set(true);
 		TedrosContext.showModal(main.buildLogin());
 	}
 	
@@ -853,6 +865,7 @@ public final class TedrosContext {
 	 * */
 	public static void exit() {
 		removeUserSession();
+		exitSystemProperty.set(true);
         Platform.exit();
 	}
 	

@@ -44,9 +44,7 @@ abstract class TedrosAppLoader {
 	
 	void stopAll() {
 		appContexts
-		.forEach(c->{
-			c.stop();
-		});
+		.forEach(TAppContext::stop);
 		entrys.clear();
 		appContexts.clear();
 	}
