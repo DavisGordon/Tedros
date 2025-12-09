@@ -10,7 +10,7 @@ public abstract class TTrigger<T> {
 	
 	public enum TEvent {
 		BUILD, ADDED, REMOVED;
-	};
+	}
 
 	private TFieldBox source;
 	private TFieldBox target;

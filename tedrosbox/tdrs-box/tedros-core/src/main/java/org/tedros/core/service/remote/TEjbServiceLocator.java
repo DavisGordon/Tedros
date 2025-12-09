@@ -15,7 +15,7 @@ import org.tedros.util.TResourceUtil;
  * @author Davis Gordon
  *
  */
-public class TEjbServiceLocator {
+public class TEjbServiceLocator implements AutoCloseable{
 	
 	private static TEjbServiceLocator instance;
 	
@@ -45,11 +45,12 @@ public class TEjbServiceLocator {
 		return (E) ctx.lookup(jndi);
 	}
 	
-	public void close(){
+	@Override
+	public void close() throws RuntimeException{
 		try {
 			ctx.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException("Erro while tring to close the Ejb Context", e);
 		}
 	}
 	
