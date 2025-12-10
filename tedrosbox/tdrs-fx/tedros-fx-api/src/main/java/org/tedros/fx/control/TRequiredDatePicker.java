@@ -6,6 +6,9 @@
  */
 package org.tedros.fx.control;
 
+import java.util.Date;
+import java.util.Locale;
+
 import org.tedros.app.component.ITComponent;
 
 import javafx.beans.Observable;
@@ -25,9 +28,25 @@ public abstract class TRequiredDatePicker extends DatePicker implements ITRequir
 	private TRequiredFieldHelper helper;
 	private SimpleObjectProperty<Node> tRequiredNodeProperty = new SimpleObjectProperty<>();
     
-    public TRequiredDatePicker() {
+    protected TRequiredDatePicker() {
+    	super();
 		this.helper = new TRequiredFieldHelper("required-choice-box", this, true);
 	}
+    
+    protected TRequiredDatePicker(Locale locale) {
+		super(locale);
+		this.helper = new TRequiredFieldHelper("required-choice-box", this, true);
+    }
+    
+    /**
+     * Initializes the date picker with the given date.
+     *
+     * @param Date The date.
+     */
+    protected TRequiredDatePicker(final Date date) {
+    	super(date);
+    	this.helper = new TRequiredFieldHelper("required-choice-box", this, true);
+    }
     
     @Override
 	@SuppressWarnings({ "unchecked"})

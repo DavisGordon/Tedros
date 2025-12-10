@@ -9,6 +9,7 @@ package org.tedros.fx.builder;
 import java.lang.annotation.Annotation;
 import java.util.Date;
 
+import org.tedros.core.context.TedrosContext;
 import org.tedros.fx.annotation.control.TDatePickerField;
 
 import javafx.beans.property.Property;
@@ -28,6 +29,7 @@ implements ITControlBuilder<org.tedros.fx.control.TDatePickerField, Property<Dat
 	public org.tedros.fx.control.TDatePickerField build(final Annotation annotation, final Property<Date> attrProperty) throws Exception {
 		final TDatePickerField tAnnotation = (TDatePickerField) annotation;
 		final org.tedros.fx.control.TDatePickerField control = new org.tedros.fx.control.TDatePickerField();
+		control.setLocale(TedrosContext.getLocale());
 		callParser(tAnnotation, control);
 		control.valueProperty().bindBidirectional(attrProperty);
 		return control;

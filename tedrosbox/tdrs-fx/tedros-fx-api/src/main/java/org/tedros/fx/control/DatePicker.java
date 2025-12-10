@@ -75,6 +75,16 @@ public class DatePicker extends ComboBoxBase<Date> {
 
         setFocusTraversable(false);
     }
+    
+    /**
+     * Initializes the date picker with the given date.
+     *
+     * @param date The date.
+     */
+    public DatePicker(final Date date) {
+    	this(Locale.getDefault());
+    	setValue(date);
+    }
 
     /**
      * States whether the user input is invalid (is no valid date).

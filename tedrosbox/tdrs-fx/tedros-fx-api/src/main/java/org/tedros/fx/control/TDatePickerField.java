@@ -6,6 +6,8 @@
  */
 package org.tedros.fx.control;
 
+import java.util.Date;
+import java.util.Locale;
 
 /**
  *  
@@ -15,12 +17,19 @@ package org.tedros.fx.control;
  */
 public class TDatePickerField extends TRequiredDatePicker {
 
-	/**
-	 * 
-	 */
 	public TDatePickerField() {
 		super();
 		super.tRequiredNodeProperty().setValue(this);
 	}
+	
+	public TDatePickerField(Locale locale) {
+		super(locale);
+		super.tRequiredNodeProperty().setValue(this);
+    }
+	
+	public TDatePickerField(final Date date) {
+    	super(date);
+    	super.tRequiredNodeProperty().setValue(this);
+    }
 	
 }

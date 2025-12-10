@@ -43,9 +43,16 @@ public class TMaskField extends TRequiredTextField {
 	public TMaskField() {
 		init();
 	}
+	
 	public TMaskField(String mask) {
 		init();
 		setMask(mask);
+	}
+	
+	public TMaskField(String mask, String initialValue) {
+		init();
+		setMask(mask);
+		setText(initialValue);
 	}
 
 	private void init() {
