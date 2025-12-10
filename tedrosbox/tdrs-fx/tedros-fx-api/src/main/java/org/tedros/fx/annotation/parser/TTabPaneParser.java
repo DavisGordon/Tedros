@@ -16,6 +16,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
@@ -37,12 +38,20 @@ public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
 						addNode(pane, field);
 				
 				ScrollPane scroll = new ScrollPane() ;
+				
+				// Importante: Se for um VBox, diga para ele expandir
+				if (pane instanceof VBox) {
+				    VBox.setVgrow(pane, Priority.ALWAYS);
+				} else if (pane instanceof HBox) {
+				    HBox.setHgrow(pane, Priority.ALWAYS);
+				}
+				
 				scroll.autosize();
 				scroll.setPadding(new Insets(10));
 				scroll.setContent(pane);
 				scroll.setFitToWidth(true);
-				//scroll.maxHeight(Double.MAX_VALUE);
-				//scroll.maxWidth(Double.MAX_VALUE);
+				scroll.setFitToHeight(true); 
+				
 				if(!tTab.scroll()) {
 			    	scroll.setVbarPolicy(ScrollBarPolicy.NEVER);
 			    	scroll.setHbarPolicy(ScrollBarPolicy.NEVER);
@@ -51,7 +60,7 @@ public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
 			    	scroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 			    }
 				scroll.setId("t-tab-content");
-				//scroll.layout();
+				scroll.layout();
 				
 				tab.setContent(scroll);
 			}
@@ -86,16 +95,17 @@ public class TTabPaneParser extends TAnnotationParser<TTabPane, TabPane> {
 	
 
 	private VBox buildVBox() {
-		VBox b = new VBox();
-		b.setAlignment(Pos.CENTER_LEFT);
-		b.setFillWidth(true);
-		b.setSpacing(10);
-		return b;
+	    VBox b = new VBox();
+	    b.setAlignment(Pos.TOP_CENTER);
+	    b.setFillWidth(true); // Garante que os filhos ocupem a largura
+	    b.setSpacing(10);
+	    // VBox.setVgrow(b, Priority.ALWAYS); // Isso é definido no pai de 'b'
+	    return b;
 	}
 
 	private HBox buildHBox() {
 		HBox b = new HBox();
-		b.setAlignment(Pos.CENTER_LEFT);
+		b.setAlignment(Pos.TOP_CENTER);
 		b.setFillHeight(true);
 		b.setSpacing(10);
 		return b;

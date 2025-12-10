@@ -39,8 +39,8 @@ extends TBuilder
 implements ITLayoutBuilder<TabPane> {
 	
 	public TabPane build(final Annotation annotation) throws Exception {
-		final TabPane tabPane = new TabPane();
-	
+		
+		final TabPane tabPane = new TabPane();	
 		tabPane.sceneProperty().addListener(new ChangeListener<Scene> () {
 
 			@Override
