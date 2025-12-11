@@ -15,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author Davis Gordon
  *
  */
-public class TServiceLocator {
+public class TServiceLocator implements AutoCloseable {
 	
 	private static TServiceLocator locator;
 	
