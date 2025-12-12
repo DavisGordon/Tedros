@@ -55,7 +55,7 @@ abstract class TedrosAppLoader {
 	
 	protected List<TModuleContext> getModuleContexts(){
 		
-		List<TModuleContext> lst = new ArrayList<TModuleContext>();
+		List<TModuleContext> lst = new ArrayList<>();
 		
 		for (TAppContext tAppContext : appContexts)
 			lst.addAll(tAppContext.getModulesContext());

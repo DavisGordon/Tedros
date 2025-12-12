@@ -53,6 +53,10 @@ public enum TAuthorizationType {
 	/**
 	 * Define the allow for the print action 
 	 * */
+	EXECUTE ("#{tedros.security.execute}"),
+	/**
+	 * Define the allow for the print action 
+	 * */
 	PRINT ("#{tedros.security.print}");
 	
 	private String value;

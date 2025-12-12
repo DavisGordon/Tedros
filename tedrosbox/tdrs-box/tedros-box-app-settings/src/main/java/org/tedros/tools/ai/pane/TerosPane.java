@@ -3,6 +3,11 @@
  */
 package org.tedros.tools.ai.pane;
 
+import org.tedros.core.annotation.security.TAuthorizationType;
+import org.tedros.core.annotation.security.TSecurity;
+import org.tedros.core.context.TSecurityDescriptor;
+import org.tedros.core.context.TedrosContext;
+import org.tedros.fx.modal.TMessageBox;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
 import org.tedros.tools.ai.model.TerosMV;
 
@@ -18,10 +23,18 @@ public class TerosPane extends StackPane {
 	 * 
 	 */
 	public TerosPane() {
-		TDynaView<TerosMV> v = new TDynaView<>(TerosMV.class);
-    	v.tLoad();
-    	v.setMinHeight(400);
-		super.getChildren().add(v);
+		
+		TSecurity tSecurity = (TSecurity) TerosMV.class.getAnnotation(TSecurity.class);
+		TSecurityDescriptor descriptor = new TSecurityDescriptor(tSecurity);
+		if(TedrosContext.isUserAuthorized(descriptor, TAuthorizationType.VIEW_ACCESS)) {		
+			TDynaView<TerosMV> v = new TDynaView<>(TerosMV.class);
+	    	v.tLoad();
+	    	v.setMinHeight(400);
+			super.getChildren().add(v);
+		}else {
+			TMessageBox box = new TMessageBox("Usuario sem permissão!");
+			super.getChildren().add(box);
+		}
 				
 		
 	}

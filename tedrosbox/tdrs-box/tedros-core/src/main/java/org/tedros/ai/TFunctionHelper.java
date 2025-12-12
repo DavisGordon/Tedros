@@ -127,24 +127,6 @@ public class TFunctionHelper {
             });
     }
 	
-	/*public static TFunction<CreateFile> getCreateSimpleFileFunction() {
-		return new TFunction<CreateFile>("create_simple_file", "Creates simple file with text content.", 
-				CreateFile.class, 
-				v->{
-					
-					String dir = TedrosFolder.EXPORT_FOLDER.getFullPath();
-					String path = dir+v.getName()+"."+v.getExtension();
-					File f = new File(path);
-					try(OutputStream out = new FileOutputStream(f)) {
-						IOUtils.write(v.getContent(), out, Charset.forName("UTF-8"));
-						return new Response("File created! return file path like this: '!{"+path+"}'");
-					} catch (Exception e) {
-						LOGGER.error(e.getMessage(), e);
-						return new Response("Error: "+e.getMessage());
-					}
-				});
-	}*/
-	
 	public static TFunction<Empty> getPreferencesFunction() {
 		return new TFunction<Empty>("get_system_preferences", "Returns the system preferences for chat server, smtp server, "
 				+ "view history page, openai, teros status, reports, notify, currency/date format and others", 

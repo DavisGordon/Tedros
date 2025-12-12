@@ -96,6 +96,8 @@ public interface ToolsKey {
 	static final String VIEW_PROFILE_DESC = "#{view.profile.desc}";
 	static final String VIEW_SYSTEM_PROPERTIES = "#{view.system.properties}";
 	static final String VIEW_SYSTEM_PROPETIES_DESC = "#{view.system.propeties.desc}";
+	static final String VIEW_TEROS_CHAT = "#{view.teros.chat}";
+	static final String VIEW_TEROS_CHAT_DESC = "#{view.teros.chat.desc}";
 	static final String VIEW_THEMES = "#{view.themes}";
 	static final String VIEW_THEMES_DESC = "#{view.themes.desc}";
 	static final String VIEW_USER = "#{view.user}";

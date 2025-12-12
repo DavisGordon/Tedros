@@ -5,6 +5,9 @@ package org.tedros.tools.ai.model;
 
 import org.tedros.ai.model.Message;
 import org.tedros.ai.model.Teros;
+import org.tedros.core.annotation.security.TAuthorizationType;
+import org.tedros.core.annotation.security.TSecurity;
+import org.tedros.core.domain.DomainApp;
 import org.tedros.core.style.TStyle;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.annotation.control.TButtonField;
@@ -29,6 +32,7 @@ import org.tedros.fx.collections.ITObservableList;
 import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.model.behavior.TViewBehavior;
 import org.tedros.fx.presenter.model.decorator.TViewDecorator;
+import org.tedros.tools.ToolsKey;
 import org.tedros.tools.ai.setting.TerosSetting;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -44,6 +48,9 @@ import javafx.scene.layout.Priority;
 @TPresenter(model=Teros.class,
 	decorator=@TDecorator(type=TViewDecorator.class),
 	behavior=@TBehavior(type=TViewBehavior.class))
+@TSecurity(id = DomainApp.IA_VIEW_ID, 
+	appName = ToolsKey.APP_TOOLS, viewName = ToolsKey.VIEW_TEROS_CHAT, 
+	description = ToolsKey.VIEW_TEROS_CHAT_DESC, allowedAccesses = TAuthorizationType.VIEW_ACCESS)
 public class TerosMV extends TModelView<Teros> {
 	
 	@TScrollPane(content = "messages", 
