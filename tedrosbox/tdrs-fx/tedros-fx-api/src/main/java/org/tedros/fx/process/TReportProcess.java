@@ -85,6 +85,10 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 	public void setLogoInputStream(InputStream logoInputStream) {
 		this.logoInputStream = logoInputStream;
 	}
+	
+	public InputStream getLogoInputStream() {
+		return logoInputStream;
+	}
 
 	/**
 	 * @param subReportDir the subReportDir to set
