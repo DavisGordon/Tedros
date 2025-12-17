@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
+import org.apache.commons.lang3.StringUtils;
 import org.tedros.api.presenter.view.TViewMode;
-import org.tedros.common.model.TFileEntity;
 import org.tedros.core.ITModule;
 import org.tedros.core.TLanguage;
 import org.tedros.core.annotation.security.TAuthorizationType;
@@ -15,15 +15,12 @@ import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.control.PopOver;
 import org.tedros.core.controller.TPropertieController;
-import org.tedros.core.domain.TSystemPropertie;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
-import org.tedros.core.security.model.TUser;
 import org.tedros.core.service.remote.TEjbServiceLocator;
-import org.tedros.core.setting.model.TPropertie;
+import org.tedros.core.setting.model.TReportPropertie;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.exception.TException;
-import org.tedros.fx.exception.TProcessException;
 import org.tedros.fx.exception.TValidatorException;
 import org.tedros.fx.modal.TMessageBox;
 import org.tedros.fx.model.TModelView;
@@ -32,7 +29,6 @@ import org.tedros.fx.presenter.dynamic.TDynaPresenter;
 import org.tedros.fx.presenter.dynamic.decorator.TDynaViewReportBaseDecorator;
 import org.tedros.fx.process.TReportProcess;
 import org.tedros.fx.process.TReportProcessEnum;
-import org.tedros.fx.property.TBytesLoader;
 import org.tedros.server.model.ITReportModel;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
@@ -340,48 +336,15 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 		try {
 			runningProcess  = createProcess();
 			
-			String organization = null;
-			TFileEntity logotype = null;
+			TReportPropertie reportPropertie = getReportProperties();
 			
-			TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
-    		try {
-        		TUser user = TedrosContext.getLoggedUser();
-        		TPropertieController serv = loc.lookup(TPropertieController.JNDI_NAME);
-        		
-        		TPropertie ex = new TPropertie();
-    			ex.setKey(TSystemPropertie.ORGANIZATION.getValue());
-        		
-        		TResult<TPropertie> r = serv.find(user.getAccessToken(), ex);
-    			if(r.getState().equals(TState.SUCCESS)) {
-    				TPropertie p = r.getValue();
-    				if(p.getValue()!=null)
-    					organization = p.getValue();
-    			}
-    			
-    			ex = new TPropertie();
-    			ex.setKey(TSystemPropertie.REPORT_LOGOTYPE.getValue());
-    			r = serv.find(user.getAccessToken(), ex);
-    			if(r.getState().equals(TState.SUCCESS)) {
-    				TPropertie p = r.getValue();
-    				if(p.getFile()!=null)
-    					logotype = p.getFile();
-    				try {
-						TBytesLoader.loadBytes(logotype);
-					} catch (TProcessException e) {
-						LOGGER.error(e.getMessage(), e);
-					}
-    			}
-    			
-    		}catch (Exception e) {
-				LOGGER.error(e.getMessage(), e);
-			}finally {
-				loc.close();
-			}
+			if(reportPropertie!=null && StringUtils.isNotBlank(reportPropertie.organizationName()))
+				runningProcess.setOrganization(reportPropertie.organizationName());
+			else
+				runningProcess.setOrganization("Tedros");
 			
-			if(organization!=null)
-				runningProcess.setOrganization(organization);
-			if(logotype!=null && logotype.getByte()!=null && logotype.getByte().getBytes()!=null) 
-				runningProcess.setLogoInputStream(new ByteArrayInputStream(logotype.getByte().getBytes()));
+			if(reportPropertie!=null && reportPropertie.reportLogotype()!=null) 
+				runningProcess.setLogoInputStream(new ByteArrayInputStream(reportPropertie.reportLogotype()));
 			
 			if(type.equals(TReportProcessEnum.EXPORT_XLS))
 				runningProcess.exportXLS((ITReportModel) getModelView().getModel(), folderPath);
@@ -419,6 +382,25 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			String msg = iEngine.getFormatedString("#{tedros.fxapi.message.error}");
 			getView().tShowModal(new TMessageBox(msg), true);
 		}
+	}
+
+	private TReportPropertie getReportProperties() {
+		TReportPropertie reportPropertie = null;
+		
+		try (TEjbServiceLocator loc = TEjbServiceLocator.getInstance()) {
+			        		
+			TPropertieController serv = loc.lookup(TPropertieController.JNDI_NAME);
+			
+			TResult<TReportPropertie> r = serv.getReportProperties();
+			if(r.getState().equals(TState.SUCCESS)) {
+				reportPropertie = r.getValue();
+			}
+			
+		}catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+		}
+		
+		return reportPropertie;
 	}
 
 	@SuppressWarnings("unchecked")

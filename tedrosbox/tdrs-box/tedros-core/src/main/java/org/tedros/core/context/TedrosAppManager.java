@@ -37,13 +37,15 @@ public final class TedrosAppManager extends TedrosAppLoader {
 	}
 	
 	public ITModule getCurrentModule() {
+		
 		Node view = TedrosContext.getView();
-		ITModule m = null;
-    	if(view != null && view instanceof ITModule)
-    		m = (ITModule) view;
-    	else if(view != null && view instanceof ScrollPane && ((ScrollPane)view).getContent() instanceof ITModule)
-    		m = (ITModule) ((ScrollPane)view).getContent();
-    	return m;
+		
+    	if(view != null && view instanceof ITModule m)
+    		return m;
+    	else if(view != null && view instanceof ScrollPane sp && sp.getContent() instanceof ITModule m)
+    		return m;
+    	
+    	return null;
 	}
 	
 	@SuppressWarnings("rawtypes")

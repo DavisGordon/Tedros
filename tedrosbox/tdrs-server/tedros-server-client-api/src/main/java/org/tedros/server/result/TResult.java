@@ -20,10 +20,11 @@ public class TResult<E> implements Serializable {
 	 * WARNING(0);
 	 * */
 	public enum TState {
+		NO_RESULT(2),
 		SUCCESS(1),
+		WARNING(0),
 		ERROR(-1),
-		OUTDATED(-2),
-		WARNING(0);
+		OUTDATED(-2);
 		
 		private int value;
 		

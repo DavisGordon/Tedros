@@ -14,11 +14,11 @@ import org.tedros.server.security.TAccessToken;
  */
 @Remote
 public interface ITSecurityController{
-
-	public ITUser getUser(TAccessToken token);
+	
+	ITUser getUser(TAccessToken token);
 	
 	boolean isAccessGranted(TAccessToken clent);
 
-	public boolean isPolicieAllowed(TAccessToken token, String securityId, String... action);
+	boolean isPolicieAllowed(TAccessToken token, String securityId, String... action);
 	
 }

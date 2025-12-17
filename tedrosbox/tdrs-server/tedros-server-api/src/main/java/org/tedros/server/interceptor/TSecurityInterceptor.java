@@ -35,20 +35,20 @@ public class TSecurityInterceptor implements Serializable {
 	@AroundInvoke
     public Object methodEntry(InvocationContext ctx) throws Exception {
 		Object target = ctx.getTarget();
-        if(target instanceof ITSecurity ) {
+        if(target instanceof ITSecurity sec) {
         	TAccessToken token = null;
         	Object[] arr = ctx.getParameters();
             if(arr!=null)
             	for(Object o : arr)
-            		if(o instanceof TAccessToken) {
-            			token = (TAccessToken) o;
+            		if(o instanceof TAccessToken accessToken) {
+            			token = accessToken;
             			break;
             		}
             
             if(token!=null) {
             	String beanName = target.getClass().getSimpleName();
             	String methodName = ctx.getMethod().getName();
-	            ITSecurity sec = (ITSecurity) target;
+            	
 	        	ITSecurityController controller = sec.getSecurityController();
 	        	
 	        	if(!controller.isAccessGranted(token)) {

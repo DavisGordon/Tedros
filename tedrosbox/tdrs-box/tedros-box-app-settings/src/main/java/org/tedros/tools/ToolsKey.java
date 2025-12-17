@@ -21,6 +21,7 @@ public interface ToolsKey {
 	static final String MESSAGE_AI_MODEL_REQUIRED = "#{message.ai.model.required}";
 	static final String MESSAGE_AI_PROMPT_REQUIRED = "#{message.ai.prompt.required}";
 	static final String MESSAGE_AI_TIMEOUT = "#{message.ai.timeout}";
+	static final String MESSAGE_PERMISSION_DENIED = "#{message.permission.denied}";
 	static final String MESSAGE_SELECT_IMAGE = "#{message.select.image}";
 	static final String MIMETYPE_IMPORT_RULE_DESC = "#{mimetype.import.rule.desc}";
 	static final String MODULE_AI = "#{module.ai}";

@@ -39,5 +39,4 @@ public class TSecurityController implements ITSecurityController {
 	public ITUser getUser(TAccessToken token) {
 		return serv.getUser(token);
 	}
-
 }

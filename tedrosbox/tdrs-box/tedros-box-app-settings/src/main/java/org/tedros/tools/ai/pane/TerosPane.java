@@ -9,6 +9,7 @@ import org.tedros.core.context.TSecurityDescriptor;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.fx.modal.TMessageBox;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
+import org.tedros.tools.ToolsKey;
 import org.tedros.tools.ai.model.TerosMV;
 
 import javafx.scene.layout.StackPane;
@@ -32,7 +33,7 @@ public class TerosPane extends StackPane {
 	    	v.setMinHeight(400);
 			super.getChildren().add(v);
 		}else {
-			TMessageBox box = new TMessageBox("Usuario sem permissão!");
+			TMessageBox box = new TMessageBox(ToolsKey.MESSAGE_PERMISSION_DENIED);
 			super.getChildren().add(box);
 		}
 				
