@@ -45,6 +45,9 @@ public  class TEntity implements ITEntity {
 	@Column(name = "insert_date", nullable = true)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date insertDate;
+		  
+    @Column(name = "created_by_user_id")
+	private Long createdByUserId;
 	
 	@Transient
 	@JsonIgnore
@@ -90,6 +93,14 @@ public  class TEntity implements ITEntity {
 	public void setInsertDate(Date insertDate) {
 		this.insertDate = insertDate;
 	}
+	
+	public Long getCreatedByUserId() {
+		return createdByUserId;
+	}
+
+	public void setCreatedByUserId(Long createdByUserId) {
+		this.createdByUserId = createdByUserId;
+	}
 
 	@Override
 	public List<String> getOrderBy() {
@@ -117,6 +128,7 @@ public  class TEntity implements ITEntity {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((createdByUserId == null) ? 0 : createdByUserId.hashCode());
 		result = prime * result + ((insertDate == null) ? 0 : insertDate.hashCode());
 		result = prime * result + ((lastUpdate == null) ? 0 : lastUpdate.hashCode());
 		return result;
@@ -143,9 +155,6 @@ public  class TEntity implements ITEntity {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-	
-
-		
+	}		
 
 }

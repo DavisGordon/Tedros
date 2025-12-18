@@ -9,6 +9,9 @@ import org.tedros.server.query.TSelect;
 
 public interface ITGenericEAO<E extends ITEntity> {
 	
+	public static final String ID = "id";
+	public static final String CREATED_BY_USER_ID = "createdByUserId";
+	
 	/**
 	 * @return {@link EntityManager}
 	 */
@@ -83,4 +86,24 @@ public interface ITGenericEAO<E extends ITEntity> {
 	* Returns the number of registered records
 	* */
 	Long countAll(Class<? extends ITEntity> entity)throws Exception;
+
+	/**
+	 * Retorna uma lista com todas as entitys persistidas do usuario
+	 * */
+	List<E> listAll(Long userId, Class<? extends ITEntity> entity) throws Exception;
+
+	/**
+	 * Retorna uma lista com todas as entitys persistidas
+	 * */
+	List<E> listAll(Class<? extends ITEntity> entity, boolean asc) throws Exception;
+
+	/**
+	 * Retorna uma lista com todas as entitys persistidas
+	 * */
+	List<E> listAll(Long userId, Class<? extends ITEntity> entity, boolean asc) throws Exception;
+
+	/**
+	 * Retorna a quantidade de registros cadastrados
+	 * */
+	Long countAll(Long userId, Class<? extends ITEntity> entity) throws Exception;
 }

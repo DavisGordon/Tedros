@@ -8,24 +8,28 @@ import org.tedros.server.model.ITModel;
 
 public interface ITEntity extends ITModel, Serializable{
 
-	abstract public Long getId();
+	public abstract Long getId();
 	
-	abstract public void setId(Long id);
+	public abstract void setId(Long id);
 	
-	public boolean isNew();
+	boolean isNew();
 	
-	public Date getLastUpdate();
+	Date getLastUpdate();
 
-	public void setLastUpdate(Date lastUpdate);
+	void setLastUpdate(Date lastUpdate);
 
-	public Date getInsertDate();
+	Date getInsertDate();
 
-	public void setInsertDate(Date insertDate);
+	void setInsertDate(Date insertDate);
 	
-	public List<String> getOrderBy();
+	Long getCreatedByUserId();
+
+	void setCreatedByUserId(Long createdByUserId);
 	
-	public void addOrderBy(String fieldName);
+	List<String> getOrderBy();
 	
-	public void setOrderBy(List<String> orders);
+	void addOrderBy(String fieldName);
+	
+	void setOrderBy(List<String> orders);
 	
 }

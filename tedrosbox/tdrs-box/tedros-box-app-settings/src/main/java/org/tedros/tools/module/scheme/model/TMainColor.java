@@ -243,5 +243,17 @@ public class TMainColor implements ITEntity {
 		this.appIconSize = appIconSize;
 	}
 
+	@Override
+	public Long getCreatedByUserId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setCreatedByUserId(Long createdByUserId) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }

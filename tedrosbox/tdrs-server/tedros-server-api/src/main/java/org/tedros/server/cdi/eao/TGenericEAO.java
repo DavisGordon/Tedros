@@ -26,42 +26,14 @@ import org.tedros.server.query.TSelect;
 
 public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 	
+	private static final String ID = "id";
+	private static final String CREATED_BY_USER_ID = "createdByUserId";
 	@PersistenceContext(unitName = "tedros_core_pu", type=PersistenceContextType.TRANSACTION)
     private EntityManager em;
 	
 	public EntityManager getEntityManager() {
 		return em;
 	}
-	
-	@SuppressWarnings("unchecked")
-	public E findById(E entity)throws Exception{
-		E e = (E) em.find(entity.getClass(), entity.getId());
-		afterFind(e);
-		return e;
-	}
-
-	public E find(E entity)throws Exception{
-		
-		ReadAllQuery query = new ReadAllQuery(entity.getClass());
-		query.setExampleObject(entity);
-		List<E> results = executeAndGetList(query);
-		E e = (results!=null && results.size()>0) ? results.get(0) : null;
-		afterFind(e);
-		return e;
-	}
-	
-	public List<E> findAll(E entity)throws Exception{
-		
-		ReadAllQuery query = new ReadAllQuery(entity.getClass());
-		query.setExampleObject(entity);
-		// Query by example policy section adds like and greaterThan 
-		QueryByExamplePolicy policy = new QueryByExamplePolicy();
-		policy.addSpecialOperation(String.class, "like");
-		query.setQueryByExamplePolicy(policy);
-		
-		return executeAndGetList(query);
-	}
-	
 	
 	public void beforePersist(E entity)throws Exception{
 		
@@ -103,9 +75,42 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 		
 	}
 	
+	@Override
+	@SuppressWarnings("unchecked")
+	public E findById(E entity)throws Exception{
+		E e = (E) em.find(entity.getClass(), entity.getId());
+		afterFind(e);
+		return e;
+	}
+	
+	@Override
+	public E find(E entity)throws Exception{
+		ReadAllQuery query = new ReadAllQuery(entity.getClass());
+		query.setExampleObject(entity);
+		List<E> results = executeAndGetList(query);
+		E e = (results!=null && !results.isEmpty()) 
+				? results.get(0) 
+						: null;
+		afterFind(e);
+		return e;
+	}
+	
+	@Override
+	public List<E> findAll(E entity)throws Exception{
+		ReadAllQuery query = new ReadAllQuery(entity.getClass());
+		query.setExampleObject(entity);
+		// Query by example policy section adds like and greaterThan 
+		QueryByExamplePolicy policy = new QueryByExamplePolicy();
+		policy.addSpecialOperation(String.class, "like");
+		query.setQueryByExamplePolicy(policy);
+		
+		return executeAndGetList(query);
+	}
+	
 	/**
 	 * Persiste uma entity
 	 * */
+	@Override
 	public void persist(E entity)throws Exception{
 		beforePersist(entity);
 		if(entity.isNew())
@@ -116,6 +121,7 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 		afterPersist(entity);
 	}
 	
+	@Override
 	public E merge(E entity)throws Exception{
 		beforeMerge(entity);
 		if(entity.isNew())
@@ -130,6 +136,7 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 	/**
 	 * Remove uma entity
 	 * */
+	@Override
 	@SuppressWarnings("unchecked")
 	public void remove(E entity)throws Exception{
 		beforeRemove(entity);
@@ -142,12 +149,14 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 		}
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<E> search(TSelect<E> sel){
 		Query qry = createSearchQuery(sel, false);
 		return qry.getResultList();
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<E> search(TSelect<E> sel, int firstResult, int maxResult){
 		
@@ -158,13 +167,218 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 		
 	}
 	
+	@Override
 	public Long countSearch(TSelect<E> sel){
 		Query qry = createSearchQuery(sel, true);
 		return (Long) qry.getSingleResult();
 		
+	}	
+	
+	/**
+	 * Retorna uma lista com todas as entitys persistidas
+	 * */
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<E> listAll(Class<? extends ITEntity> entity)throws Exception{
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<E> cq = (CriteriaQuery<E>) cb.createQuery(entity);
+		Root<E> root = (Root<E>) cq.from(entity);
+		cq.select(root);		
+		List<E> lst = executeAndGetList(cq);
+		afterListAll(lst);
+		return lst;
 	}
 	
+	/**
+	 * Retorna uma lista com todas as entitys persistidas do usuario
+	 * */
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<E> listAll(Long userId, Class<? extends ITEntity> entity)throws Exception{
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<E> cq = (CriteriaQuery<E>) cb.createQuery(entity);
+		Root<E> root = (Root<E>) cq.from(entity);
+		cq.select(root);
+		cq.where(cb.equal(root.get(CREATED_BY_USER_ID), userId));
+		
+		List<E> lst = executeAndGetList(cq);
+		afterListAll(lst);
+		return lst;
+	}
+	
+	/**
+	 * Retorna uma lista com todas as entitys persistidas
+	 * */
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<E> listAll(Class<? extends ITEntity> entity, boolean asc )throws Exception{
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<E> cq = (CriteriaQuery<E>) cb.createQuery(entity);
+		Root<E> root = (Root<E>) cq.from(entity);
+		cq.select(root);
+		if(asc)
+			cq.orderBy(cb.asc(root.get(ID)));
+		else
+			cq.orderBy(cb.desc(root.get(ID)));
+		
+		List<E> lst = this.executeAndGetList(cq); 
+		afterListAll(lst);
+		return lst;
+	}
+	
+	/**
+	 * Retorna uma lista com todas as entitys persistidas
+	 * */
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<E> listAll(Long userId, Class<? extends ITEntity> entity, boolean asc )throws Exception{
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<E> cq = (CriteriaQuery<E>) cb.createQuery(entity);
+		Root<E> root = (Root<E>) cq.from(entity);
+		cq.select(root);
+		cq.where(cb.equal(root.get(CREATED_BY_USER_ID), userId));
+		
+		if(asc)
+			cq.orderBy(cb.asc(root.get(ID)));
+		else
+			cq.orderBy(cb.desc(root.get(ID)));
+		
+		List<E> lst = this.executeAndGetList(cq); 
+		afterListAll(lst);
+		return lst;
+	}	
+	
+	/**
+	 * Retorna uma lista paginada
+	 * */
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<E> pageAll(E entity, int firstResult, int maxResult, boolean orderByAsc)throws Exception{
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<E> cq = (CriteriaQuery<E>) cb.createQuery(entity.getClass());
+		Root<E> root = (Root<E>) cq.from(entity.getClass());
+		root.alias("e");
+		cq.select(root);
+		if(entity.getOrderBy()!=null && !entity.getOrderBy().isEmpty()) {
+			for(String f : entity.getOrderBy())
+				if(orderByAsc)
+					cq.orderBy(cb.asc(root.get(f)));
+				else
+					cq.orderBy(cb.desc(root.get(f)));
+		}
+		
+		TypedQuery<E> qry = em.createQuery(cq);
+		qry.setFirstResult(firstResult);
+		qry.setMaxResults(maxResult);
+		
+		List<E> lst = qry.getResultList();
+		afterPageAll(lst);
+		return lst;
+	}
 
+	@Override
+	public List<E> findAll(E entity, int firstResult, int maxResult, boolean orderByAsc, boolean containsAnyKeyWords)throws Exception{
+		
+		ReadAllQuery query = new ReadAllQuery(entity.getClass());
+		query.setExampleObject(entity);
+		// Query by example policy section adds like and greaterThan 
+		QueryByExamplePolicy policy = new QueryByExamplePolicy();
+		
+		policy.addSpecialOperation(String.class, (containsAnyKeyWords) ? "containsAnyKeyWords" : "like");
+		
+		if(entity.getOrderBy()!=null && !entity.getOrderBy().isEmpty()) {
+			for(String f : entity.getOrderBy())
+				if(orderByAsc)
+					query.addAscendingOrdering(f);
+				else
+					query.addDescendingOrdering(f);
+		}
+		query.setQueryByExamplePolicy(policy);
+		query.setFirstResult(firstResult);
+		query.setMaxRows(maxResult+firstResult);
+		
+		List<E> lst = this.executeAndGetList(query);
+		afterFindAll(lst);
+		return lst;
+	}
+	
+	@Override
+	@SuppressWarnings("rawtypes")
+	public Integer countFindAll(E entity, boolean containsAnyKeyWords)throws Exception{
+		ExpressionBuilder eb = new ExpressionBuilder();
+		ReportQuery query = new ReportQuery(entity.getClass(), eb);
+		query.setExampleObject(entity);
+		// Query by example policy section adds like and greaterThan 
+		QueryByExamplePolicy policy = new QueryByExamplePolicy();
+		policy.addSpecialOperation(String.class, (containsAnyKeyWords) ? "containsAnyKeyWords" : "like");
+		query.setQueryByExamplePolicy(policy);
+		
+		query.addCount();
+		
+		ReportQueryResult res = (ReportQueryResult) 
+				((Vector)((JpaEntityManager) em.getDelegate()).createQuery(query).getResultList()).get(0);
+		
+		return  (Integer) res.get("COUNT");
+	}
+		
+	/**
+	 * Retorna a quantidade de registros cadastrados
+	 * */
+	@Override
+	public Long countAll(Class<? extends ITEntity> entity)throws Exception{
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+		cq.select(cb.count(cq.from(entity)));
+		return this.executeAndGet(cq) ;
+	}
+		
+	/**
+	 * Retorna a quantidade de registros cadastrados
+	 * */
+	@Override
+	public Long countAll(Long userId, Class<? extends ITEntity> entity)throws Exception{
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+	    CriteriaQuery<Long> cq = cb.createQuery(Long.class);	    
+	    Root<?> root = cq.from(entity);  
+	    cq.select(cb.count(root));
+	    cq.where(cb.equal(root.get(CREATED_BY_USER_ID), userId));
+		return this.executeAndGet(cq);
+	}
+	
+	/**
+	 * @param query
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	protected List<E> executeAndGetList(ReadAllQuery query) {
+		return ((JpaEntityManager)em.getDelegate()).createQuery(query).getResultList();
+	}
+	
+	/**
+	 * @param cq
+	 * @return
+	 */
+	protected List<E> executeAndGetList(CriteriaQuery<E> cq) {
+		return ((JpaEntityManager)em.getDelegate()).createQuery(cq).getResultList();
+	}
+	
+	/**
+	 * @param query
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	protected <T> T executeAndGet(ReadAllQuery query) {
+		return (T) ((JpaEntityManager)em.getDelegate()).createQuery(query).getSingleResult();
+	}
+	
+	/**
+	 * @param cq
+	 * @return
+	 */
+	protected <T> T executeAndGet(CriteriaQuery<T> cq) {
+		return ((JpaEntityManager)em.getDelegate()).createQuery(cq).getSingleResult();
+	}
+	
 	private Query createSearchQuery(TSelect<E> sel, boolean count) {
 		StringBuilder sb = new StringBuilder("select ");
 		if(count)
@@ -245,163 +459,6 @@ public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>
 			});
 		}
 		return qry;
-	}
-	
-	/**
-	 * Retorna uma lista com todas as entitys persistidas
-	 * */
-	@SuppressWarnings("unchecked")
-	public List<E> listAll(Class<? extends ITEntity> entity)throws Exception{
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<E> cq = (CriteriaQuery<E>) cb.createQuery(entity);
-		Root<E> root = (Root<E>) cq.from(entity);
-		cq.select(root);
-		//List<E> lst = em.createQuery(cq).getResultList();
-		List<E> lst = executeAndGetList(cq);
-		afterListAll(lst);
-		return lst;
-	}
-	/**
-	 * Retorna uma lista com todas as entitys persistidas
-	 * */
-	@SuppressWarnings("unchecked")
-	public List<E> listAll(Class<? extends ITEntity> entity, boolean asc )throws Exception{
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<E> cq = (CriteriaQuery<E>) cb.createQuery(entity);
-		Root<E> root = (Root<E>) cq.from(entity);
-		cq.select(root);
-		if(asc)
-			cq.orderBy(cb.asc(root.get("id")));
-		else
-			cq.orderBy(cb.desc(root.get("id")));
-		
-		List<E> lst = this.executeAndGetList(cq); //em.createQuery(cq).getResultList();
-		afterListAll(lst);
-		return lst;
-	}
-	/**
-	 * Retorna uma lista paginada
-	 * */
-	@SuppressWarnings("unchecked")
-	public List<E> pageAll(E entity, int firstResult, int maxResult, boolean orderByAsc)throws Exception{
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<E> cq = (CriteriaQuery<E>) cb.createQuery(entity.getClass());
-		Root<E> root = (Root<E>) cq.from(entity.getClass());
-		root.alias("e");
-		cq.select(root);
-		if(entity.getOrderBy()!=null && !entity.getOrderBy().isEmpty()) {
-			for(String f : entity.getOrderBy())
-				if(orderByAsc)
-					cq.orderBy(cb.asc(root.get(f)));
-				else
-					cq.orderBy(cb.desc(root.get(f)));
-		}
-		
-		TypedQuery<E> qry = em.createQuery(cq);
-		qry.setFirstResult(firstResult);
-		qry.setMaxResults(maxResult);
-		
-		List<E> lst = qry.getResultList();
-		afterPageAll(lst);
-		return lst;
-	}
-
-
-	public List<E> findAll(E entity, int firstResult, int maxResult, boolean orderByAsc, boolean containsAnyKeyWords)throws Exception{
-		
-		ReadAllQuery query = new ReadAllQuery(entity.getClass());
-		query.setExampleObject(entity);
-		// Query by example policy section adds like and greaterThan 
-		QueryByExamplePolicy policy = new QueryByExamplePolicy();
-		
-		policy.addSpecialOperation(String.class, (containsAnyKeyWords) ? "containsAnyKeyWords" : "like");
-		
-		if(entity.getOrderBy()!=null && !entity.getOrderBy().isEmpty()) {
-			for(String f : entity.getOrderBy())
-				if(orderByAsc)
-					query.addAscendingOrdering(f);
-				else
-					query.addDescendingOrdering(f);
-		}
-		query.setQueryByExamplePolicy(policy);
-		query.setFirstResult(firstResult);
-		query.setMaxRows(maxResult+firstResult);
-		
-		List<E> lst = (List<E>) this.executeAndGetList(query); //((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
-		afterFindAll(lst);
-		return lst;
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public Integer countFindAll(E entity, boolean containsAnyKeyWords)throws Exception{
-		ExpressionBuilder eb = new ExpressionBuilder();
-		ReportQuery query = new ReportQuery(entity.getClass(), eb);
-		query.setExampleObject(entity);
-		// Query by example policy section adds like and greaterThan 
-		QueryByExamplePolicy policy = new QueryByExamplePolicy();
-		policy.addSpecialOperation(String.class, (containsAnyKeyWords) ? "containsAnyKeyWords" : "like");
-		query.setQueryByExamplePolicy(policy);
-		
-		query.addCount();
-		
-		//List<E> lst = (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
-		//ReportQueryResult res = (ReportQueryResult) ((Vector)((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query)).get(0);
-		ReportQueryResult res = (ReportQueryResult) 
-				((Vector)((JpaEntityManager) em.getDelegate()).createQuery(query).getResultList()).get(0);
-		Integer total = (Integer) res.get("COUNT");
-		return  total;
-	}
-	
-	/**
-	 * Retorna a quantidade de registros cadastrados
-	 * */
-	public Long countAll(Class<? extends ITEntity> entity)throws Exception{
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<Long> cq = (CriteriaQuery<Long>) cb.createQuery(Long.class);
-		cq.select(cb.count(cq.from(entity)));
-		return (Long) this.executeAndGet(cq) ;//em.createQuery(cq).getSingleResult();
-	}
-	
-	/**
-	 * @param query
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	protected List<E> executeAndGetList(ReadAllQuery query) {
-		List<E> results = (List<E>) ((JpaEntityManager)em.getDelegate()).createQuery(query).getResultList();
-		//List<E> results = (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
-		return results;
-	}
-	
-	/**
-	 * @param cq
-	 * @return
-	 */
-	protected List<E> executeAndGetList(CriteriaQuery<E> cq) {
-		List<E> results = (List<E>) ((JpaEntityManager)em.getDelegate()).createQuery(cq).getResultList();
-		//List<E> results = (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
-		return results;
-	}
-	
-	/**
-	 * @param query
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	protected <T> T executeAndGet(ReadAllQuery query) {
-		T results = (T) ((JpaEntityManager)em.getDelegate()).createQuery(query).getSingleResult();
-		//List<E> results = (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
-		return results;
-	}
-	
-	/**
-	 * @param cq
-	 * @return
-	 */
-	protected <T> T executeAndGet(CriteriaQuery<T> cq) {
-		T results = (T) ((JpaEntityManager)em.getDelegate()).createQuery(cq).getSingleResult();
-		//List<E> results = (List<E>) ((JpaEntityManager) em.getDelegate()).getActiveSession().executeQuery(query);
-		return results;
 	}
 	
 }

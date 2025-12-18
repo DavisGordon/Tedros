@@ -2,7 +2,6 @@ package org.tedros.core.ejb.controller;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.tedros.common.model.TFileEntity;
-import org.tedros.core.controller.TFileEntityController;
 import org.tedros.core.controller.TPropertieController;
 import org.tedros.core.domain.DomainApp;
 import org.tedros.core.domain.TSystemPropertie;

@@ -142,4 +142,18 @@ public class MainSettings implements ITEntity {
 	}
 
 
+	@Override
+	public Long getCreatedByUserId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void setCreatedByUserId(Long createdByUserId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 }
