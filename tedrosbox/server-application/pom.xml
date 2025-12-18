@@ -201,6 +201,10 @@
 		        <url>https://repo.maven.apache.org/maven2/org/apache/tomee/apache-tomee/${tomee.version}/apache-tomee-${tomee.version}-plume.zip</url>
 		      </zipUrlInstaller>
 		      <dependencies>
+				<dependency>
+					<groupId>org.apache.logging.log4j</groupId>
+  					<artifactId>log4j-api</artifactId>
+				</dependency>
 	            <dependency>
 	              <groupId>com.h2database</groupId>
 	   			  <artifactId>h2</artifactId>
@@ -284,10 +288,6 @@
 				<dependency>
 					<groupId>javax.activation</groupId>
 					<artifactId>activation</artifactId>
-				</dependency>
-				<dependency>
-					<groupId>org.apache.logging.log4j</groupId>
-  					<artifactId>log4j-api</artifactId>
 				</dependency>
 	          </dependencies>
 		    </container>
