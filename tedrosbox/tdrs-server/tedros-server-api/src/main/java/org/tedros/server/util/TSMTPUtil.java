@@ -26,17 +26,6 @@ public final class TSMTPUtil {
 	private final Properties props;
 	
 	private final Session session;
-	/*
-	public static void main(String[] args) {
-		try {
-			TSMTPUtil.getInstance("smtp.gmail.com", "587", "javax.net.ssl.SSLSocketFactory", 
-					"true", "587", "@gmail.com", "")
-			.sent(true, "@gmail.com", ".@gmail.com", "subject", "content", true);
-		} catch (TSentEmailException e) {
-			e.printStackTrace();
-		}
-	}
-	*/
 	
 	public static TSMTPUtil getInstance(String smtpHost, String smtpSocketPort, String smtpSocketClass, 
 			String smtpAuth, String smtpPort, String userName, String password){
@@ -52,13 +41,13 @@ public final class TSMTPUtil {
 		
 		props = new Properties();
 	    props.put("mail.smtp.host", smtpHost);
-	    props.put("mail.smtp.socketFactory.port", smtpSocketPort);
-	    props.put("mail.smtp.socketFactory.class", smtpSocketClass);
+	    //props.put("mail.smtp.socketFactory.port", smtpSocketPort);
+	    //props.put("mail.smtp.socketFactory.class", smtpSocketClass);
 	    props.put("mail.smtp.auth", smtpAuth);
 	    props.put("mail.smtp.port", smtpPort);
 	    props.put("mail.smtp.starttls.enable", "true");
 	    props.put("mail.transport.protocol", "smtp");
-	    props.put("mail.smtp.class", "com.sun.mail.smtp.SMTPTransport");
+	    // props.put("mail.smtp.class", "com.sun.mail.smtp.SMTPTransport");
 	    // props.put("mail.smtp.ssl.enable", "true");
 	    session = Session.getDefaultInstance(props,
 	  	      new jakarta.mail.Authenticator() {

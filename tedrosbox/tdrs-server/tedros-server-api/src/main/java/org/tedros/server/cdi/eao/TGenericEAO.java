@@ -26,8 +26,6 @@ import org.tedros.server.query.TSelect;
 
 public abstract class TGenericEAO<E extends ITEntity> implements ITGenericEAO<E>  {
 	
-	private static final String ID = "id";
-	private static final String CREATED_BY_USER_ID = "createdByUserId";
 	@PersistenceContext(unitName = "tedros_core_pu", type=PersistenceContextType.TRANSACTION)
     private EntityManager em;
 	
