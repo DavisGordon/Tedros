@@ -67,6 +67,9 @@ import javafx.util.Callback;
 public class TMasterCrudViewBehavior<M extends TEntityModelView<E>, E extends ITEntity>
 extends TDynaViewCrudBaseBehavior<M, E> {
 
+	private static final String PROCESSLOADLISTVIEW_KEY = "processloadlistviewCL";
+	private static final String TOTAL_KEY = "total";
+	private static final String LIST_KEY = "list";
 	private TPage tPagAnn = null;
 	protected ITListViewDecorator<M> decorator;
 		
@@ -103,7 +106,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		configListViewContextMenu();
 		
 		TListViewPresenter tAnnotation = getPresenter().getModelViewClass().getAnnotation(TListViewPresenter.class);
-		
+				
 		if(tAnnotation!=null && tAnnotation.reloadListViewAfterCrudActions()) {
 			super.actionHelper.add(
 				new TPresenterAction(TActionType.DELETE, TActionType.SAVE) {
@@ -135,7 +138,6 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 					}
 				});
 		}
-		
 		
 		if(tAnnotation!=null && tAnnotation.page().show())
 			tPagAnn = tAnnotation.page();
@@ -185,11 +187,11 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 								ObservableList<M> models = getModels();
 								models.clear();
 								TModelViewUtil<M,E> mvu = new TModelViewUtil<>(getModelViewClass(), getEntityClass());
-								for(E e : (List<E>) result.get("list")){
+								for(E e : (List<E>) result.get(LIST_KEY)){
 									M model = mvu.convertToModelView(e);
 									models.add(model);
 								}
-								processPagination((long)result.get("total"));
+								processPagination((long)result.get(TOTAL_KEY));
 								loadListView();
 							}else{
 								String msg = resultados.getMessage();
@@ -204,12 +206,12 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 								}
 								setViewStateAsReady();
 							}
-							getListenerRepository().remove("processloadlistviewCL");
+							getListenerRepository().remove(PROCESSLOADLISTVIEW_KEY);
 						}
 					}
 				};
 				//
-				super.getListenerRepository().add("processloadlistviewCL", prcl);
+				super.getListenerRepository().add(PROCESSLOADLISTVIEW_KEY, prcl);
 				
 				configPageProcess(process);
 				
@@ -218,7 +220,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 				process.startProcess();
 			} else {
 				// list model process
-				final TEntityProcess<E> process  = (TEntityProcess<E>) createEntityProcess();
+				final TEntityProcess<E> process  = createEntityProcess();
 				if(process!=null){
 					ChangeListener<State> prcl = (arg0, arg1, arg2) -> {
 						
@@ -231,7 +233,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 								for(Object obj : resultados) {
 									TResult result = (TResult<?>) obj;
 									if(result.getState().equals(TState.SUCCESS)) {
-										if(result.getValue()!=null && result.getValue() instanceof List){
+										if(result.getValue() instanceof List){
 											ObservableList<M> models = getModels();
 											models.clear();
 											TModelViewUtil<M,E> mvu = new TModelViewUtil<>(getModelViewClass(), getEntityClass());
@@ -257,18 +259,20 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 							}
 							
 							loadListView();
-							getListenerRepository().remove("processloadlistviewCL");
+							getListenerRepository().remove(PROCESSLOADLISTVIEW_KEY);
 						}
 					};
 					
-					super.getListenerRepository().add("processloadlistviewCL", prcl);
+					super.getListenerRepository().add(PROCESSLOADLISTVIEW_KEY, prcl);
 					
+					process.setFilterByLoggedUser(filterByLoggedUser);
 					process.list();
 					bindProgressIndicator(process);
 					process.stateProperty().addListener(new WeakChangeListener(prcl));
 					process.startProcess();
 				}else{
-					LOGGER.warn("Cannot create a process for the "+getModelViewClass().getSimpleName()+", the entity must be declared with @TEntityProcess or @TEjbService");
+					LOGGER.warn("Cannot create a process for the {}, the entity must be declared with @TEntityProcess or @TEjbService", 
+							getModelViewClass().getSimpleName());
 					loadListView();
 				}
 			
@@ -281,14 +285,23 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		
 	}
 	
-
+	/**
+	 * Config the pagination process
+	 * @param process
+	 */
 	private void configPageProcess(TPaginationProcess process) {
 		TPagination pag = this.decorator.gettPaginator().gettPagination();
 		this.configPageProcess(process, pag);
 	}
 
+	/**
+	 * Config the pagination process
+	 * @param process
+	 * @param pag
+	 */
 	@SuppressWarnings("unchecked")
 	private void configPageProcess(TPaginationProcess process, TPagination pag) {
+		process.setFilterByLoggedUser(tPagAnn.filterByLoggedUser());
 		TQuery qry = this.tPagAnn.query();
 		TSelect<E> sel = TSelectQueryBuilder.create(qry);
 		TSelectQueryBuilder.addJoins(qry, sel);
@@ -343,6 +356,10 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		});
 	}
 	
+	/**
+	 * Process the pagination control
+	 * @param totalRows
+	 */
 	private void processPagination(Long totalRows) {
 		this.decorator.gettPaginator().tReload(totalRows);
 	}
@@ -356,7 +373,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		final ObservableList<M> models = getModels();
 		final ListView<M> listView = this.decorator.gettListView();
 		listView.setItems((ObservableList<M>) (models==null ? FXCollections.observableArrayList() : models));
-		super.getListenerRepository().remove("processloadlistviewCL");
+		super.getListenerRepository().remove(PROCESSLOADLISTVIEW_KEY);
 		final M mv = super.getModelView(); 
 		processModelView(mv);
 	}
@@ -373,7 +390,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			
 			if(arg2.equals(State.SUCCEEDED)){
 				
-				TResult<Map<String, Object>> resultados = (TResult<Map<String, Object>>) process.getValue();
+				TResult<Map<String, Object>> resultados = process.getValue();
 				
 				if(resultados != null) {
 					if(resultados.getState().equals(TState.SUCCESS)) {
@@ -381,7 +398,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 						ObservableList<M> models = getModels();
 						models.clear();
 						
-						for(E e : (List<E>) result.get("list")){
+						for(E e : (List<E>) result.get(LIST_KEY)){
 							try {
 								M model = (M) getModelViewClass().getConstructor(getEntityClass()).newInstance(e);
 								models.add(model);
@@ -389,7 +406,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 								LOGGER.error(e1.getMessage(), e1);
 							}
 						}
-						processPagination((long)result.get("total"));
+						processPagination((long)result.get(TOTAL_KEY));
 					}else {
 						String msg = resultados.getMessage();
 						TLoggerUtil.debug(getClass(), msg);
@@ -416,12 +433,16 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 	}
 
 	/**
+	 * Bind the progress indicator to the process running property
 	 * @param process
 	 */
 	private void bindProgressIndicator(TProcess process) {
 		this.decorator.gettListViewProgressIndicator().bind(process.runningProperty());
 	}
 	
+	/**
+	 * Config the ListView context menu
+	 */
 	private void configListViewContextMenu()  {
 		final ListView<M> listView = this.decorator.gettListView();
 		ContextMenu ctx = new ContextMenu();
@@ -434,6 +455,9 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		listView.setContextMenu(ctx);
 	}
 
+	/**
+	 * Reload the models from the server
+	 */
 	private void reloadModels() {
 		try {
 			if(this.isPaginateEnabled()) {
@@ -448,12 +472,14 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		}
 	}
 	
+	/**
+	 * Config the ListView cell factory callback
+	 */
 	@SuppressWarnings("unchecked")
 	private void configListViewCallBack() {
 		TBehavior tBehavior = getPresenter().getPresenterAnnotation().behavior();
 		try {
-			Callback<ListView<M>, ListCell<M>> callBack = (Callback<ListView<M>, ListCell<M>>) 
-					((tBehavior!=null) 
+			Callback<ListView<M>, ListCell<M>> callBack = ((tBehavior!=null) 
 							? tBehavior.listViewCallBack().getDeclaredConstructor().newInstance() 
 									: new TEntityListViewCallback<M>());
 			
@@ -469,9 +495,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 	 */
 	protected void configListViewChangeListener() {
 		
-		ChangeListener<M> chl = (a0, old_, new_) -> {
-			processListViewSelectedItem(new_);
-		};
+		ChangeListener<M> chl = (a, o, n) -> processListViewSelectedItem(n);
 		
 		super.getListenerRepository().add("listviewselecteditemviewCL", chl);
 		
@@ -497,24 +521,29 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 
 	/**
 	 * Process the selected item on the ListView
-	 * @param new_
+	 * @param selectedItem
 	 */
-	protected void processListViewSelectedItem(M new_) {
-		if(new_==null) {
+	protected void processListViewSelectedItem(M selectedItem) {
+		if(selectedItem==null) {
 			setModelView(null);
 			showListView();
 		}else{
-			selectedItemAction(new_);
-			//hideListView();
+			selectedItemAction(selectedItem);
 		}
 	}
 	
+	/**
+	 * Load the model view list in the form.
+	 */
 	@Override
 	public void loadModelViewList(ObservableList<M> models) {
 		super.loadModelViewList(models);
 		this.processPagination((long) models.size());
 	}
 	
+	/**
+	 * Load the model view in the form.
+	 */
 	@Override
 	public void loadModelView(M m) {
 		E e = m.getModel();
@@ -564,7 +593,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 			
 			if(arg2.equals(State.SUCCEEDED)){
 				
-				TResult<Map<String, Object>> resultados = (TResult<Map<String, Object>>) process.getValue();
+				TResult<Map<String, Object>> resultados = process.getValue();
 				
 				if(resultados != null) {
 					if(resultados.getState().equals(TState.SUCCESS)) {
@@ -572,7 +601,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 						ObservableList<M> models = getModels();
 						models.clear();
 						
-						for(E e : (List<E>) result.get("list")){
+						for(E e : (List<E>) result.get(LIST_KEY)){
 							try {
 								M model = (M) getModelViewClass().getConstructor(getEntityClass()).newInstance(e);
 								models.add(model);
@@ -580,7 +609,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 								LOGGER.error(e1.getMessage(), e1);
 							}
 						}
-						processPagination((long)result.get("total"));
+						processPagination((long)result.get(TOTAL_KEY));
 						if(models.size()==1){
 							M mv = models.get(0);
 							final ListView<M> list = this.decorator.gettListView();
@@ -617,6 +646,7 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 	/**
 	 * Remove the selected model from the ListView
 	 */
+	@Override
 	public void remove() {
 		final ListView<M> listView = this.decorator.gettListView();
 		int index = getModels().indexOf(getModelView());
@@ -624,6 +654,9 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		super.remove(index);
 	}
 	
+	/**
+	 * Colapse action to show/hide the ListView panel
+	 */
 	@Override
 	public void colapseAction() {
 		if(!this.decorator.isListContentVisible())
@@ -645,23 +678,18 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 	public void showListView() {
 		this.decorator.showListContent();
 	}
-	/*
-	@Override
-	protected void runAfterBuildForm(ITModelForm<M> form) {
-		if(form==null)
-			this.showListView();
-		else
-			this.hideListView();
-		super.runAfterBuildForm(form);
-	}
-	*/
+	/**
+	 * Process a new entity before build the form
+	 */
 	@Override
 	public boolean processNewEntityBeforeBuildForm(M model) {
 		addInListView(model);
 		return false;
 	}
 
+	
 	/**
+	 * Add the model to the ListView
 	 * @param model
 	 */
 	private void addInListView(M model) {
@@ -670,6 +698,9 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 		list.selectionModelProperty().get().select(list.getItems().size()-1);
 	}
 	
+	/**
+	 * Invalidate the behavior
+	 */
 	@Override
 	public boolean invalidate() {
 		if(this.decorator!=null && this.decorator.gettPaginator()!=null)

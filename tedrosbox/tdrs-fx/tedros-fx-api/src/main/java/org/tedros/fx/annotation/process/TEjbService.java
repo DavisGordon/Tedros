@@ -23,14 +23,14 @@ public @interface TEjbService {
 	 * The {@link ITModel} to be process. 
 	 * </pre>
 	 * */
-	public Class<? extends ITModel> model();
+	Class<? extends ITModel> model();
 	
 	/**
 	 * The ejb jndi name to lookup the service, this must implement ITEjbController
 	 * 
 	 * @see ITEjbController
 	 * */
-	public String serviceName();
+	String serviceName();
 	
 	/**
 	 * <pre>
@@ -39,5 +39,15 @@ public @interface TEjbService {
 	 * Default value: true
 	 * </pre>
 	 * */
-	public boolean remoteMode() default true;
+	boolean remoteMode() default true;
+	
+	/**
+	 * <pre>
+	 * Filter by logged user, if the controller 
+	 * implements ITSecureEjbController.
+	 * 
+	 * Default value: false
+	 * </pre>
+	 * */
+	boolean filterByLoggedUser() default false;
 }

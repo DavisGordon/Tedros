@@ -40,6 +40,14 @@ public @interface TPage {
 	String serviceName();
 	
 	/**
+	 * Filter by logged user, if the controller 
+	 * implements ITSecureEjbController.
+	 * 
+	 * @default false
+	 * */
+	boolean filterByLoggedUser() default false;
+	
+	/**
 	 * The model view class
 	 * */
 	@SuppressWarnings("rawtypes")

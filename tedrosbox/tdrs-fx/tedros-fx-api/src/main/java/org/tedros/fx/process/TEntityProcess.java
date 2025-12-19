@@ -56,6 +56,7 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 	private int operation;
 	
 	private String serviceJndiName;
+	private Boolean filterByLoggedUser = Boolean.FALSE;
 	
 	/**
 	 * Constructor
@@ -184,10 +185,13 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 	        		if(service!=null || secure!=null){
 		        		switch (operation) {
 							case SAVE :
-								for (E entity : values)
+								for (E entity : values) {
+									if(entity.isNew())
+										entity.setCreatedByUserId(TedrosContext.getLoggedUser().getId());									
 									resultList.add(service!=null 
 										? service.save(entity) 
 											: secure.save(user.getAccessToken(), entity));
+								}
 								break;
 							case DELETE :
 								for (E entity : values)
@@ -199,18 +203,18 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 								for (E entity : values)
 									resultList.add(service!=null 
 											? service.findById(entity)
-													: secure.findById(user.getAccessToken(), entity));
+													: callFindById(user, secure, entity));
 								break;
 							case FIND :
 								for (E entity : values)
 									resultList.add(service!=null 
 											? service.find(entity)
-													: secure.find(user.getAccessToken(), entity));
+													: callFind(user, secure, entity));
 								break;
 							case LIST :
 								TResult res = service!=null 
 										? service.listAll(entityType)
-												: secure.listAll(user.getAccessToken(), entityType);
+												: callListAll(user, secure);
 								resultList.add(res);
 								break;
 							case SEARCH :
@@ -218,13 +222,13 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 									for (E entity : values){
 										TResult result = service!=null 
 												? service.findAll(entity)
-														: secure.findAll(user.getAccessToken(), entity);
+														: callSearch(user, secure, entity);
 										resultList.add(result);		
 									}
 								}else {
 									TResult result = service!=null 
 											? service.search(select)
-													: secure.search(user.getAccessToken(), select);
+													: callSelectableSearch(user, secure);
 									resultList.add(result);	
 								}
 								break;
@@ -242,6 +246,38 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
         		runAfter(resultList);
         	    return resultList;
         	}
+
+			private TResult<E> callFind(TUser user, ITSecureEjbController<E> secure, E entity) {
+				return filterByLoggedUser 
+						? secure.find(user.getAccessToken(), user.getId(), entity)
+								: secure.find(user.getAccessToken(), entity);
+			}
+
+			private TResult<List<E>> callListAll(TUser user, ITSecureEjbController<E> secure) {
+				return filterByLoggedUser 
+						? secure.listAll(user.getAccessToken(), user.getId(), entityType)
+								: secure.listAll(user.getAccessToken(), entityType);
+			}
+
+			private TResult<List<E>> callSelectableSearch(TUser user, ITSecureEjbController<E> secure) {
+				return filterByLoggedUser 
+						? secure.search(user.getAccessToken(), user.getId(), select)
+								: secure.search(user.getAccessToken(), select);
+			}
+
+			private TResult<List<E>> callSearch(TUser user, ITSecureEjbController<E> secure, E entity) {
+				return filterByLoggedUser 
+						? secure.findAll(user.getAccessToken(), user.getId(), entity)
+								: secure.findAll(user.getAccessToken(), entity);
+			}
+
+			private TResult<E> callFindById(TUser user, ITSecureEjbController<E> secure, E entity) throws Exception {
+				return filterByLoggedUser 
+						? secure.findById(user.getAccessToken(), user.getId(), entity)
+								: secure.findById(user.getAccessToken(), entity);
+			}
+        	
+        	
 		};
 	}
 
@@ -253,6 +289,14 @@ public abstract class TEntityProcess<E extends ITEntity> extends TProcess<List<T
 		LOGGER.error(e.getMessage(), e);
 		TResult<E> result = new TResult<>(TState.ERROR, true, e.getCause().getMessage());
 		resultList.add(result);
+	}
+
+	public Boolean getFilterByLoggedUser() {
+		return filterByLoggedUser;
+	}
+
+	public void setFilterByLoggedUser(Boolean filterByLoggedUser) {
+		this.filterByLoggedUser = filterByLoggedUser;
 	}
 
 }

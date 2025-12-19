@@ -54,6 +54,7 @@ public abstract class TPaginationProcess<E extends ITEntity> extends TProcess<TR
 	private TSelect<E> select;
 	
 	private String serviceJndiName;
+	private Boolean filterByLoggedUser = Boolean.FALSE;
 	
 	/**
 	 * Constructor
@@ -117,10 +118,9 @@ public abstract class TPaginationProcess<E extends ITEntity> extends TProcess<TR
         	
         	@SuppressWarnings("unchecked")
 			protected TResult<Map<String, Object>> call() throws IOException, MalformedURLException {
-        		
-        		TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
+        		        		
         		TResult<Map<String, Object>> result = null;
-        		try {
+        		try(TEjbServiceLocator loc = TEjbServiceLocator.getInstance()) {
         			TUser user = TedrosContext.getLoggedUser();
 	        		ITBaseController base = (ITBaseController) loc.lookup(serviceJndiName);
 	        		ITEjbController<E> service = null;
@@ -142,17 +142,17 @@ public abstract class TPaginationProcess<E extends ITEntity> extends TProcess<TR
 							case FINDALL :
 								result = service!=null
 									? service.findAll(value, pagination.getStart(), pagination.getTotalRows(), pagination.isOrderByAsc(), true)
-											: secure.findAll(user.getAccessToken(), value, pagination.getStart(), pagination.getTotalRows(), pagination.isOrderByAsc(), true);
+											: callFindAll(user, secure);
 								break;
 							case PAGEALL :
 								result = service!=null
 										? service.pageAll(value, pagination.getStart(), pagination.getTotalRows(), pagination.isOrderByAsc())
-												: secure.pageAll(user.getAccessToken(), value, pagination.getStart(), pagination.getTotalRows(), pagination.isOrderByAsc());
+												: callPageAll(user, secure);
 								break;
 							case SEARCHALL :
 								result = service!=null
 										? service.search(select, pagination.getStart(), pagination.getTotalRows())
-												: secure.search(user.getAccessToken(), select, pagination.getStart(), pagination.getTotalRows());
+												: callSearchAll(user, secure);
 								break;
 						}
 	        		}
@@ -161,13 +161,38 @@ public abstract class TPaginationProcess<E extends ITEntity> extends TProcess<TR
 					setException(e);
 					TLoggerUtil.error(getClass(), e.getMessage(), e);
 					result = new TResult<>(TState.ERROR,true, e.getCause().getMessage());
-				}finally {
-					loc.close();
 				}
         		
         	    return result;
         	}
+
+			private TResult<Map<String, Object>> callSearchAll(TUser user, ITSecureEjbController<E> secure) {
+				return filterByLoggedUser 
+						? secure.search(user.getAccessToken(), user.getId(), select, pagination.getStart(), pagination.getTotalRows())
+								: secure.search(user.getAccessToken(), select, pagination.getStart(), pagination.getTotalRows());
+			}
+
+			private TResult<Map<String, Object>> callPageAll(TUser user, ITSecureEjbController<E> secure) {
+				return filterByLoggedUser 
+						? secure.pageAll(user.getAccessToken(), user.getId(), value, pagination.getStart(), pagination.getTotalRows(), pagination.isOrderByAsc())
+								: secure.pageAll(user.getAccessToken(), value, pagination.getStart(), pagination.getTotalRows(), pagination.isOrderByAsc());
+			}
+
+			private TResult<Map<String, Object>> callFindAll(TUser user, ITSecureEjbController<E> secure)
+					throws Exception {
+				return filterByLoggedUser 
+						? secure.findAll(user.getAccessToken(), user.getId(), value, pagination.getStart(), pagination.getTotalRows(), pagination.isOrderByAsc(), true)
+								: secure.findAll(user.getAccessToken(), value, pagination.getStart(), pagination.getTotalRows(), pagination.isOrderByAsc(), true);
+			}
 		};
+	}
+
+	public Boolean getFilterByLoggedUser() {
+		return filterByLoggedUser;
+	}
+
+	public void setFilterByLoggedUser(Boolean filterByLoggedUser) {
+		this.filterByLoggedUser = filterByLoggedUser;
 	}
 
 }
