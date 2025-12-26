@@ -9,6 +9,8 @@ import jakarta.ejb.Remote;
 @Remote
 public interface TNotifySupport {
 	
+	static final String JNDI_NAME = "TNotifySupportRemote";
+	
 	/**
 	 * Gets the notification state.
 	 * 

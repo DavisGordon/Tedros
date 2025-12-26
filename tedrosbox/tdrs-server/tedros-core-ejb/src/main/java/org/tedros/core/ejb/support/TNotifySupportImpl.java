@@ -52,6 +52,8 @@ public class TNotifySupportImpl implements TNotifySupport {
 		n.setAction(TAction.SEND);
 		
 		n = serv.save(n);
+		serv.queue(n);
+		
 		return n.getRefCode();
 	}
 	
