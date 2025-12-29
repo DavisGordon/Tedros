@@ -105,6 +105,8 @@ public final class TedrosContext {
 	private static ObservableList<TMessage> messageListProperty;
 	private static ObservableList<TMessage> infoListProperty;
 	
+	private static ObjectProperty<Node> detachedView;
+	
 	
 	//private static Stage stage;
 	private static SimpleObjectProperty<Node> currentViewProperty;
@@ -158,7 +160,7 @@ public final class TedrosContext {
 		LOGGER.info("Starting context...");
 
 		currentViewProperty = new SimpleObjectProperty<>();
-		pageProperty = new SimpleObjectProperty<Page>();
+		pageProperty = new SimpleObjectProperty<>();
 		pagePathProperty = new SimpleStringProperty();
 		showModalProperty = new SimpleBooleanProperty();	
 		initializationErrorMessageStringProperty = new SimpleStringProperty("");
@@ -174,6 +176,7 @@ public final class TedrosContext {
 		aiSystemPromptProperty = new SimpleStringProperty();
 		messageListProperty = FXCollections.observableArrayList();
 		infoListProperty = FXCollections.observableArrayList();
+		detachedView = new SimpleObjectProperty<>();
 		
 		initializationErrorMessageStringProperty.addListener((a,o,n)->{
 			if(showContextInitializationErrorMessages){
@@ -841,8 +844,7 @@ public final class TedrosContext {
 		LOGGER.info("Setting the language: "+locale);
 	}
 
-	public static void openDocument(String path) throws Exception {
-		//((Application)main).getHostServices().showDocument(path);
+	public static void openDocument(String path) throws Exception {		
 		if(path==null)
 			throw new IllegalArgumentException("path cannot be null");
 		File f = new File(path);
@@ -910,6 +912,23 @@ public final class TedrosContext {
 	public static void setViewBuilder(ITViewBuilder viewBuilder) {
 		TedrosContext.viewBuilder = viewBuilder;
 	}
-
+	
+	/**
+	 * @return the detachedView
+	 */
+	public static ObjectProperty<Node> detachedViewProperty() {
+		return detachedView;
+	}
+	
+	public static Node getDetachedView() {
+		return detachedView.get();
+	}
+	
+	/**
+	 * @param detach a view from the main application
+	 */
+	public static void detachView(Node view) {
+		detachedView.set(view);
+	}
 	
 }

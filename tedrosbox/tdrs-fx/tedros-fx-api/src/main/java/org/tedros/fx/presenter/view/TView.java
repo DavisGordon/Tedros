@@ -8,9 +8,9 @@ import org.tedros.api.presenter.ITPresenter;
 import org.tedros.api.presenter.view.ITView;
 import org.tedros.api.presenter.view.TViewState;
 import org.tedros.core.TLanguage;
+import org.tedros.core.context.TedrosContext;
 import org.tedros.core.control.ITProgressIndicator;
 import org.tedros.core.control.TProgressIndicator;
-import org.tedros.core.ux.TWindowFactory;
 import org.tedros.fx.modal.TModalPane;
 import org.tedros.util.TLoggerUtil;
 
@@ -53,7 +53,7 @@ public abstract class TView<P extends ITPresenter>
 			if (e.getButton() == javafx.scene.input.MouseButton.SECONDARY) {
 				ContextMenu contextMenu = new ContextMenu();
 				MenuItem detachItem = new MenuItem(TLanguage.getInstance().getString("Detach"));
-				detachItem.setOnAction(ev -> TWindowFactory.detachView(this, this.gettViewId()));
+				detachItem.setOnAction(ev -> TedrosContext.detachView(this));
 				contextMenu.getItems().add(detachItem);
 				contextMenu.show(this, e.getScreenX(), e.getScreenY());
 			}

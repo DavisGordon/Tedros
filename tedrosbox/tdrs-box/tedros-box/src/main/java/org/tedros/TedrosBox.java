@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.Optional;
 import java.util.Stack;
 
 import org.apache.commons.io.FileUtils;
@@ -57,12 +58,15 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener.Change;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.DepthTest;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
@@ -130,6 +134,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     
     private Stack<Page> history;
     private Stack<Page> forwardHistory;
+    protected ObservableList<TWindow> windows;
     public boolean fromForwardOrBackButton;
     private boolean changingPage;
     private double mouseDragOffsetX;
@@ -152,8 +157,9 @@ public class TedrosBox extends Application implements ITedrosBox  {
     
     public TedrosBox(){
     	
-        history = new Stack<Page>();
-        forwardHistory = new Stack<Page>();
+        history = new Stack<>();
+        forwardHistory = new Stack<>();
+        windows = FXCollections.observableArrayList();
         changingPage = false;
         mouseDragOffsetX = 0.0D;
         mouseDragOffsetY = 0.0D;
@@ -303,7 +309,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
         toolBar.setMaxHeight(50);
         GridPane.setConstraints(toolBar, 0, 0);
         // add close min max
-        final TedroxBoxHeaderButton windowButtons = new TedroxBoxHeaderButton(getStage());
+        final TedroxBoxHeaderButton windowButtons = new TedroxBoxHeaderButton(getStage(), true);
         toolBar.getItems().add(windowButtons);
         // add window header double clicking
         toolBar.setOnMouseClicked(e -> {
@@ -417,9 +423,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
         
         terosButton = new Button();
         terosButton.getStyleClass().addAll("teros");
-        terosButton.setOnAction(e->{
-        	showTerosPopOver();
-        });
+        terosButton.setOnAction(e-> showTerosPopOver());
         terosPopOver = null;
         
         HBox chb = new HBox(5);
@@ -453,6 +457,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
         // Inicio breadcrumbar
         breadcrumbBar = new TedrosBoxBreadcrumbBar();
         pageToolBar.getItems().add(breadcrumbBar);
+        BorderPane.setMargin(pageToolBar, new Insets(0,0,0,32));
         // Fim breadcrumbar 
                 
         // create page area
@@ -467,8 +472,8 @@ public class TedrosBox extends Application implements ITedrosBox  {
         pageArea.setStyle("-fx-background-color: transparent;");
         // create main pane
         mainPane = new BorderPane();
-        BorderPane.setMargin(pageToolBar, new Insets(0,0,0,32));
-       // mainPane.setTop(pageToolBar);
+        
+       
         mainPane.setCenter(pageArea);
         mainPane.setMinWidth(300);
         mainPane.setStyle("-fx-effect: dropshadow( three-pass-box , #000000 , 9, 0.1 , 0 , 4); "
@@ -574,6 +579,22 @@ public class TedrosBox extends Application implements ITedrosBox  {
 				});
 			}
 		};
+		
+		windows.addListener((Change<? extends TWindow> c)->{
+			while(c.next()) {
+				if(c.wasRemoved()) {
+					for(TWindow w : c.getRemoved()) {
+						w.close();
+					}
+				}
+			}
+		});
+		
+		TedrosContext.detachedViewProperty().addListener((a,o,n)->{
+			if(n!=null) {
+				detachView(n);
+			}
+		});
         
         getStage().setScene(scene);
         getStage().show();
@@ -676,8 +697,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 			terosPopOver.setAutoFix(true);
 			terosPopOver.setCloseButtonEnabled(true);
 			terosPopOver.setArrowLocation(ArrowLocation.TOP_LEFT);
-			terosPopOver.setContentNode(new TerosPane());
-			//terosPopOver.setAutoHide(false);
+			terosPopOver.setContentNode(new TerosPane());			
 		}
 		if(terosPopOver.isShowing())
 			terosPopOver.hide();
@@ -838,8 +858,8 @@ public class TedrosBox extends Application implements ITedrosBox  {
     	pages.parseModules();
     	if(this.currentPage!=null) {
     		Node n = currentPage.getModule();
-    		if(n!=null && n instanceof ITModule)
-    			((ITModule)n).tStop();
+    		if(n!=null && n instanceof ITModule itModule)
+    			itModule.tStop();
     		this.currentPage = null;
     		this.currentPagePath = null;
     	}
@@ -881,8 +901,8 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		}else {
 			settingsAcc = new Accordion();
 			settingsAcc.autosize();
-			//settingsAcc.getStyleClass().add("t-accordion");
 		}
+		
 		TUserSettingsPane u = new TUserSettingsPane();
 		u.setMinWidth(350);
         TitledPane t = new TitledPane();
@@ -949,31 +969,68 @@ public class TedrosBox extends Application implements ITedrosBox  {
         if(!force && page == currentPage)
             return;
         
-    	Node view = TedrosContext.getView();
-    	ITModule m = null;
-    	if(view != null && view instanceof ITModule)
-    		m = (ITModule) view;
-    	else if(view != null && view instanceof ScrollPane && ((ScrollPane)view).getContent() instanceof ITModule)
-    		m = (ITModule) ((ScrollPane)view).getContent();
+    	Node currentView = TedrosContext.getView();
+    	ITModule itModule = null;
     	
-    	if(m!=null) {
-	    	String msg = m.tCanStop();
+    	//check if the selected module is already windowed
+    	final Node moduleSelected = page.getModule();
+        Optional<TWindow> optSelectedModuleWindowed = windows.stream()
+				.filter(p->{
+					
+					Node wView = p.getView();
+					if(wView instanceof ScrollPane sp)
+						wView = sp.getContent();
+					
+					return wView.equals(moduleSelected);// && wView.equals(currentNode);
+				})
+				.findFirst();
+        
+        //check if the current detached view is already windowed
+        Node detachedView = TedrosContext.getDetachedView();
+        Optional<TWindow> optCurrentDetachedView = detachedView != null 
+        		? windows.stream()
+					.filter(p->{
+						
+						Node wView = p.getView();
+						if(wView instanceof ScrollPane sp)
+							wView = sp.getContent();
+						Node moduleView = detachedView.getParent();
+						return wView.equals(moduleView);
+					})
+					.findFirst()
+					: Optional.empty();
+        
+        boolean isWindowed = optSelectedModuleWindowed.isPresent();
+        if(isWindowed) {
+			windows.remove(optSelectedModuleWindowed.get());
+		}
+        
+    	if(currentView != null && currentView instanceof ITModule m)
+    		itModule = m;
+    	else if(currentView != null && currentView instanceof ScrollPane scroll && scroll.getContent() instanceof ITModule m)
+    		itModule = m;
+    	
+    	if(itModule!=null) {
+	    	String msg = itModule.tCanStop();
 	    	if(msg==null) {
 	    		callPage(page, addHistory, force, swapViews);
 	    	}else {
-	    		
-	    		ChangeListener<Number> chl = (a0, a1, a2) -> {
-	    			TedrosContext.hideModal();
-	    			if(a2.equals(1)) {
-	    				callPage(page, addHistory, force, swapViews);
-	    			}else {
-	    				menuTree.getSelectionModel().select(currentPage);
-	    			}
-	    		};
-	    		
-	    		TConfirmMessageBox confirm = new TConfirmMessageBox(msg);
-	    		confirm.tConfirmProperty().addListener(chl);
-	    		TedrosContext.showModal(confirm);
+	    		if(!optCurrentDetachedView.isPresent()) {
+		    		ChangeListener<Number> chl = (a0, a1, a2) -> {
+		    			TedrosContext.hideModal();
+		    			if(a2.equals(1)) {
+		    				callPage(page, addHistory, force, swapViews);
+		    			}else {
+		    				menuTree.getSelectionModel().select(currentPage);
+		    			}
+		    		};
+		    		
+		    		TConfirmMessageBox confirm = new TConfirmMessageBox(msg);
+		    		confirm.tConfirmProperty().addListener(chl);
+		    		TedrosContext.showModal(confirm);
+	    		}else {
+	    			callPage(page, addHistory, force, swapViews);
+	    		}
 	    	}
     	}else
     		callPage(page, addHistory, force, swapViews);
@@ -999,13 +1056,14 @@ public class TedrosBox extends Application implements ITedrosBox  {
             
             if(view == null)
                 view = new Region();
+            
             if(force || view != TedrosContext.getView()){
                 	
                 Node content;
-                if(view instanceof ITModule){
+                if(view instanceof ITModule itModule){
                 	
                 	if(created)
-                		((ITModule)view).tStart();
+                		itModule.tStart();
                 	
                 	ScrollPane scrollPane = new ScrollPane();
                     scrollPane.setContent(view);
@@ -1018,10 +1076,10 @@ public class TedrosBox extends Application implements ITedrosBox  {
                 	content = view;
                 	content.setStyle("-fx-background-color: transparent;");
                 }
+                
                 pageArea.getChildren().setAll(content);
                 TedrosContext.setView(view);
                 addHistory(addHistory, page);
-                
             }
         }
         
@@ -1037,7 +1095,42 @@ public class TedrosBox extends Application implements ITedrosBox  {
         System.gc();
         Runtime.getRuntime().runFinalization();
     }
-
+    
+    @Override
+	public void detachView(Node view) {
+		
+		if(windows.stream().filter(p->p.getView().equals(view)).findFirst().isPresent()) {
+			return;
+		}
+		
+		Node currentNode = pageArea.getChildren().get(0);		
+		
+        if (view.getParent() != null) {       	
+            Parent parent = view.getParent();
+        	
+            if(parent instanceof ITModule itModule && currentNode instanceof ScrollPane scroll && scroll.getContent()==itModule) {
+            	pageArea.getChildren().clear();
+			}
+            
+        }
+        
+        if(!history.isEmpty()) {
+        	Page page = history.stream()
+    				.filter(p->p.getModule()==view)
+    				.findFirst()
+    				.orElse(null);
+            
+            history.removeIf(p->p==page);
+    	    historySize.setValue(String.valueOf(history.size()));
+        }
+	    
+        windows.add(new TWindow(this, currentNode));
+        
+        Object obj = menuTree.getTreeItem(0).getValue();
+	    TedrosContext.setPagePathProperty(obj.toString(), false, true, true);
+		TedrosContext.detachView(null);
+	}
+    
 	/**
 	 * @param addHistory
 	 */
@@ -1061,8 +1154,8 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		if(history.size()>=TedrosContext.getTotalPageHistory()) {
 			Page rem = history.remove(0);
 			Node n = rem.getModule();
-			if(n instanceof ITModule)
-				((ITModule)n).tStop();
+			if(n instanceof ITModule itModule)
+				itModule.tStop();
 		}
 	}
        
@@ -1137,8 +1230,8 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	public void clearPageHistory() {
 		history.stream().forEach(p->{
 			Node n = p.getModule();
-			if(n!=null && n instanceof ITModule) {
-				((ITModule)n).tStop();
+			if(n!=null && n instanceof ITModule itModule) {
+				itModule.tStop();
 			}
 		});
 		history.clear();
@@ -1152,9 +1245,9 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	private void clearForward(Page page) {
 		forwardHistory.stream().forEach(p->{
 			Node n = p.getModule();
-			if(n!=null && n instanceof ITModule 
+			if(n!=null && n instanceof ITModule itModule
 				&& (page==null || (page!=null && page!=p))) {
-				((ITModule)n).tStop();
+				itModule.tStop();
 			}
 		});
 		forwardHistory.clear();
@@ -1181,6 +1274,8 @@ public class TedrosBox extends Application implements ITedrosBox  {
         init(primaryStage);
         primaryStage.show();
     }
+
+	
   
 }
 

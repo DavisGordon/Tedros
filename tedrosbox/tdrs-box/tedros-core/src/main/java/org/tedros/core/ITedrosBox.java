@@ -27,5 +27,7 @@ public interface ITedrosBox {
 	void clearPageHistory();
     
     void logout();
+    
+    void detachView(Node view);
 	
 }

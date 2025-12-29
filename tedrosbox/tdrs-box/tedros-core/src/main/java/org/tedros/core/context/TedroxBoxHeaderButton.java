@@ -3,8 +3,6 @@ package org.tedros.core.context;
 import org.tedros.core.TLanguage;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -14,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * 
@@ -24,7 +23,7 @@ public class TedroxBoxHeaderButton extends HBox{
     private Rectangle2D backupWindowBounds;
     private boolean maximized;
 	    
-	public TedroxBoxHeaderButton(final Stage stage)
+	public TedroxBoxHeaderButton(final Stage stage, boolean exitProgram)
     {
 		super(4D);
 		TLanguage iEngine = TLanguage.getInstance(null);
@@ -37,21 +36,21 @@ public class TedroxBoxHeaderButton extends HBox{
         closeBtn.setId("t-window-close");
         closeBtn.setTooltip(new Tooltip(iEngine.getString("#{tedros.close}")));
         closeBtn.setOnAction(e -> {
-        	TedrosProcess.stopAllServices();
-        	Platform.exit();
+        	if(exitProgram) {
+        		TedrosProcess.stopAllServices();
+        		Platform.exit();
+        	}else {
+        		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+			}
         });
         Button minBtn = new Button();
         minBtn.setId("t-window-min");
         minBtn.setTooltip(new Tooltip(iEngine.getString("#{tedros.minimize}")));
-        minBtn.setOnAction(e ->{
-        	stage.setIconified(true);
-        });
+        minBtn.setOnAction(e -> stage.setIconified(true));
         Button maxBtn = new Button();
         maxBtn.setId("t-window-max");
         maxBtn.setTooltip(new Tooltip(iEngine.getString("#{tedros.maximize}")));
-        maxBtn.setOnAction(e ->{
-        	toogleMaximized();
-        });
+        maxBtn.setOnAction(e -> toogleMaximized());
         HBox.setHgrow(closeBtn, Priority.ALWAYS);
         HBox.setHgrow(minBtn, Priority.ALWAYS);
         HBox.setHgrow(maxBtn, Priority.ALWAYS);
@@ -65,7 +64,7 @@ public class TedroxBoxHeaderButton extends HBox{
 
     public void toogleMaximized()
     {
-        Screen screen = (Screen)Screen.getScreensForRectangle(stage.getX(), stage.getY(), 1.0D, 1.0D).get(0);
+        Screen screen = Screen.getScreensForRectangle(stage.getX(), stage.getY(), 1.0D, 1.0D).get(0);
         if(maximized){
             maximized = false;
             if(backupWindowBounds != null){
