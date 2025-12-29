@@ -7,8 +7,10 @@ import java.util.function.Consumer;
 import org.tedros.api.presenter.ITPresenter;
 import org.tedros.api.presenter.view.ITView;
 import org.tedros.api.presenter.view.TViewState;
+import org.tedros.core.TLanguage;
 import org.tedros.core.control.ITProgressIndicator;
 import org.tedros.core.control.TProgressIndicator;
+import org.tedros.core.ux.TWindowFactory;
 import org.tedros.fx.modal.TModalPane;
 import org.tedros.util.TLoggerUtil;
 
@@ -17,99 +19,113 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.StackPane;
 
-
 @SuppressWarnings("rawtypes")
-public abstract class TView<P extends ITPresenter> 
-extends StackPane implements ITView<P>{
+public abstract class TView<P extends ITPresenter>
+		extends StackPane implements ITView<P> {
 
 	private URL fxmlURL;
 	private String tViewId;
 	private final P presenter;
 	private TModalPane modalPane;
 	private ITProgressIndicator progressIndicator;
-	private SimpleObjectProperty<TViewState> stateProperty= new SimpleObjectProperty<>(TViewState.CREATED);
-	
+	private SimpleObjectProperty<TViewState> stateProperty = new SimpleObjectProperty<>(TViewState.CREATED);
+
 	public TView(P presenter) {
 		this.presenter = presenter;
 		tInitializePresenter();
+		initContextMenu();
 	}
-	
+
 	public TView(P presenter, URL fxmlURL) {
 		this.presenter = presenter;
 		this.fxmlURL = fxmlURL;
 		tLoadFXML();
 		tInitializePresenter();
+		initContextMenu();
 	}
-	
+
+	private void initContextMenu() {
+		this.setOnMouseClicked(e -> {
+			if (e.getButton() == javafx.scene.input.MouseButton.SECONDARY) {
+				ContextMenu contextMenu = new ContextMenu();
+				MenuItem detachItem = new MenuItem(TLanguage.getInstance().getString("Detach"));
+				detachItem.setOnAction(ev -> TWindowFactory.detachView(this, this.gettViewId()));
+				contextMenu.getItems().add(detachItem);
+				contextMenu.show(this, e.getScreenX(), e.getScreenY());
+			}
+		});
+	}
+
 	@SuppressWarnings("unchecked")
-	public void tInitializePresenter(){
-		if(this.presenter == null)
+	public void tInitializePresenter() {
+		if (this.presenter == null)
 			throw new IllegalStateException();
 
 		this.presenter.setView(this);
 		this.presenter.initialize();
 	}
-	
+
 	@Override
 	public void tLoad() {
 		TLoggerUtil.splitDebugLine(getClass(), '~');
-		TLoggerUtil.timeComplexity(getClass(), "Loading view: "+getClass().getSimpleName(), 
-				()->gettPresenter().loadView()
-		);
+		TLoggerUtil.timeComplexity(getClass(), "Loading view: " + getClass().getSimpleName(),
+				() -> gettPresenter().loadView());
 	}
-	
+
 	public void tLoadFXML() {
-		
-		if(gettFxmlURL()==null)
+
+		if (gettFxmlURL() == null)
 			throw new IllegalArgumentException("ERROR: FXML not defined!");
 
-		try{
+		try {
 			FXMLLoader fxmlLoader = new FXMLLoader(gettFxmlURL());
 			fxmlLoader.setRoot(this);
-	        fxmlLoader.setController(this);
-	        fxmlLoader.load();
-	        TLoggerUtil.debug(getClass(), "FXML "+gettFxmlURL()+" loaded!");
-		}catch(IOException e){
+			fxmlLoader.setController(this);
+			fxmlLoader.load();
+			TLoggerUtil.debug(getClass(), "FXML " + gettFxmlURL() + " loaded!");
+		} catch (IOException e) {
 			TLoggerUtil.error(e.getMessage(), e);
 		}
 	}
-	
-	public P gettPresenter(){
+
+	public P gettPresenter() {
 		return this.presenter;
 	}
-	
+
 	/**
 	 * Show the modal
-	 * */
+	 */
 	public void tShowModal(Node message, boolean closeModalOnMouseClick) {
 		initializeModalPane();
 		modalPane.showModal(message, closeModalOnMouseClick);
-	 }
-	
+	}
+
 	/**
 	 * Show the modal
-	 * */
+	 */
 	public void tShowModal(Node message, boolean closeModalOnMouseClick, Consumer<Node> closeCallback) {
 		initializeModalPane();
 		modalPane.showModal(message, closeModalOnMouseClick, closeCallback);
-	 }
-	
+	}
+
 	public ReadOnlyBooleanProperty tModalVisibleProperty() {
 		initializeModalPane();
-		return  modalPane.visibleProperty();
+		return modalPane.visibleProperty();
 	}
-	
+
 	/**
 	 * Close the modal
-	 * */
+	 */
 	public void tHideModal() {
-		if(modalPane!=null) {
+		if (modalPane != null) {
 			modalPane.hideModal();
 		}
 	}
-	
+
 	@Override
 	public void settProgressIndicator(ITProgressIndicator progressIndicator) {
 		this.progressIndicator = progressIndicator;
@@ -128,14 +144,13 @@ extends StackPane implements ITView<P>{
 
 	@Override
 	public void settFxmlURL(URL fxmlUrl) {
-		this.fxmlURL = fxmlUrl;	
+		this.fxmlURL = fxmlUrl;
 	}
-	
+
 	public String gettViewId() {
 		return tViewId;
 	}
-	
-	
+
 	public void settViewId(String id) {
 		this.tViewId = id;
 
@@ -148,22 +163,22 @@ extends StackPane implements ITView<P>{
 	public void setModalPane(TModalPane modalPane) {
 		this.modalPane = modalPane;
 	}
-	
+
 	private void initializeModalPane() {
-		if(modalPane==null) {
+		if (modalPane == null) {
 			modalPane = new TModalPane(this);
 		}
 	}
 
 	private void initializeProgressIndicator() {
-		if(progressIndicator==null)
+		if (progressIndicator == null)
 			progressIndicator = new TProgressIndicator(this);
 	}
-	
+
 	public void settState(TViewState state) {
 		this.stateProperty.setValue(state);
 	}
-	
+
 	public TViewState gettState() {
 		return this.stateProperty.getValue();
 	}
@@ -174,6 +189,5 @@ extends StackPane implements ITView<P>{
 	public ReadOnlyObjectProperty<TViewState> tStateProperty() {
 		return stateProperty;
 	}
-	
-	
+
 }

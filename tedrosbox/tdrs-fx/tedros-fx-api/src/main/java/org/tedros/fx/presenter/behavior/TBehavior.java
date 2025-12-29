@@ -67,8 +67,7 @@ implements ITBehavior<M, P>{
 		//form added listener
 		ChangeListener<ITModelForm<M>> formCL = (a0, oldForm, form) -> {
 			
-			if(form!=null) {
-				
+			if(form!=null) {				
 				this.buildFormStatusProperty.setValue(TBuildFormStatus.LOADING);
 				ChangeListener<Boolean> loadedListener = new ChangeListener<Boolean>() {
 					@Override

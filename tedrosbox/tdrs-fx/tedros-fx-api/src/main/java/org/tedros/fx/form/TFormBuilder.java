@@ -115,8 +115,9 @@ public class TFormBuilder<M extends ITModelView<?>> {
 	 * @param tForm
 	 */
 	private void applyStyles(TForm tForm) {
-		if(tForm==null)
+		if(tForm==null) {
 			return;
+		}
 		this.form.setId(StringUtils.isNotBlank(tForm.editCssId()) ? tForm.editCssId() : null);
 		if(StringUtils.isNotBlank(tForm.style()))
 			this.form.setStyle(tForm.style());

@@ -1,0 +1,130 @@
+# Visão Geral do Sistema Tedros Box
+
+## Introdução
+
+Olá! Meu nome é Davis Gordon Dun, e sou arquiteto de software especializado em Java. Nos últimos 12 anos, tenho trabalhado no desenvolvimento do sistema Tedros Box, uma solução cliente-servidor desktop construída em Java 17. O frontend utiliza JavaFX para uma interface moderna e responsiva, enquanto o backend é baseado no OpenEJB integrado ao servidor Apache TomEE Plume, oferecendo todos os recursos necessários para criar sistemas robustos e escaláveis para operações empresariais.
+
+Para facilitar o desenvolvimento de aplicativos no Tedros Box, criei o framework Tedros. Seu foco principal é reduzir os custos de desenvolvimento e melhorar a experiência do usuário final. Imagine uma empresa de TI contratada para criar soluções personalizadas para setores privados ou governamentais: ela precisaria de uma equipe multidisciplinar, incluindo analistas de requisitos, gerentes de projetos, desenvolvedores (júnior, pleno e sênior), testadores, especialistas em UI/UX e arquitetos de software. Esse processo é demorado e caro, envolvendo desafios como design de layout, gerenciamento de permissões no frontend e backend, integração com outros sistemas, desenvolvimento do core business, testes e mais.
+
+O framework Tedros abstrai muitos desses processos de forma clara, aberta e fácil de customizar ou corrigir. Ele utiliza uma gama de componentes pré-construídos para agilizar o trabalho. O desenvolvimento segue uma estrutura bem definida e organizada, acessível até para desenvolvedores júnior. Isso permite focar no core business do cliente, muitas vezes com apenas um desenvolvedor que domine conceitos de mapeamento de entidades com ORM (Object-Relational Mapping) e tenha criatividade para usar ou criar componentes que atendam às necessidades do negócio.
+
+O resultado é um sistema desktop totalmente personalizado, onde o cliente gerencia usuários, perfis e permissões de forma autônoma. Além disso, o design visual pode ser alterado facilmente para alinhar com a identidade da empresa, reduzindo custos e horas de trabalho.
+
+O Tedros Box é ideal para empresas que precisam de soluções de back-office, similar a sistemas como TOTVS ou SAP. Ele suporta módulos como CRM, ERP e outros, com o diferencial de ser nativamente integrado a modelos de IA. Isso significa que o sistema fornece dados e funções que auxiliam assistentes de IA em solicitações via chatbot, tornando as operações mais inteligentes e eficientes.
+
+## Arquitetura do Sistema Tedros Box
+
+O Tedros Box é um sistema desktop cliente-servidor que gerencia aplicativos de forma inteligente. Ao inicializar, ele detecta automaticamente todos os aplicativos instalados e concede acesso baseado nas permissões do usuário logado. As permissões abrangem desde o acesso ao aplicativo até módulos, telas e ações específicas.
+
+Cada aplicativo criado opera em um contexto isolado no servidor, garantindo que falhas em um não afetem os outros. Os aplicativos podem se comunicar tanto no frontend quanto no backend, promovendo integração seamless.
+
+No backend, cada aplicativo inclui:
+- **Camada de Persistência**: Abstrai operações CRUD (Create, Read, Update, Delete), paginação e consultas dinâmicas solicitadas pelo frontend.
+- **Camada de Negócios**: Implementa os processos centrais do negócio do cliente.
+- **Camada de Serviços**: Define o contexto transacional das operações, permitindo chamadas por outros aplicativos.
+- **Camada de Controle**: Gerencia chamadas e retornos para o frontend, com validação extra de permissões do usuário.
+
+## Componentes do Framework Tedros
+
+O framework oferece uma vasta gama de componentes para acelerar o desenvolvimento:
+- Importação de dados via planilhas Excel ou arquivos CSV, com guias para o usuário preparar os arquivos.
+- Filtros e geração de relatórios, com opção de incluir logotipo da empresa.
+- Agendamento e envio de e-mails.
+- Execução de tarefas CRON (agendadas).
+- Gerenciamento centralizado de arquivos e imagens.
+- Construção dinâmica de formulários, telas, tabelas e filtros, com interceptação em tempo de execução (pré e pós-construção) em níveis como aplicativo, módulo, tela ou campo.
+- Internacionalização: Suporte nativo a inglês e português, com facilidade para adicionar outras línguas.
+- Customização visual: Cores, opacidade, imagens de fundo e temas.
+- Criação de gráficos.
+- Desenvolvimento de módulos para aplicativos.
+- Gerenciamento de processos em background.
+- Integração entre aplicativos, incluindo rastreamento da origem de registros (ex.: identificar a tela de origem e exibi-la ao abrir um registro).
+- Criação de modais e mensagens para o usuário.
+- Validação de permissões do usuário logado.
+- Integração com chatbot de IA para acessar qualquer recurso do sistema.
+- Exibição e manipulação de mapas geográficos.
+- Navegação entre aplicativos, módulos e telas.
+
+E muitos outros, projetados para flexibilidade e eficiência.
+
+## Aplicativos Base do Tedros
+
+O sistema inclui aplicativos fundamentais que servem como base para novos desenvolvimentos, já integrados:
+1. **Ferramentas de Temas**:
+   - Escolha de temas para o Tedros.
+   - Alteração de cores em painéis, textos, botões e formulários.
+   - Definição de imagem de fundo.
+
+2. **Preferências**:
+   - Gerenciamento de propriedades principais do sistema.
+   - Configuração de tipos MIME para arquivos.
+
+3. **Usuários**:
+   - Carregamento de políticas de autorização.
+   - Gerenciamento de perfis e usuários.
+
+4. **Notificações**:
+   - Gerenciamento de e-mails (agendados, enviados ou na fila).
+
+5. **Chatbot Tedros (Assistente com Inteligência Artificial)**:
+   - Uso de IA para tarefas operacionais.
+   - Ajuda no uso do sistema.
+   - Execução de operações no Tedros.
+   - Análises de dados, como criação e envio de e-mails de marketing baseados em cruzamento de clientes e estoque; análise de consistência em demandas no Redmine ou Jira; code review de pull requests, e mais.
+
+6. **Produtos e Inventário**:
+   - Gerenciamento de catálogo de produtos.
+   - Relatórios de produtos e inventário.
+   - Configuração de estoque.
+   - Registro de entradas e saídas.
+   - Tipos de entradas/saídas.
+
+7. **Suporte**:
+   - Gerenciamento de documentos, tipos e estados.
+   - Locais (países, cidades, áreas).
+   - Pessoas físicas/jurídicas, tipos e situações.
+   - Clientes, categorias e situações.
+   - Outros tipos de pessoas físicas.
+
+## Situação Atual da Empresa Tedros
+
+A marca Tedros pertence à Dux XCode Engenharia e é mantida exclusivamente pelo cofundador Davis Gordon Dun desde 2013. Em 2013, o projeto foi semifinalista regional no concurso de startups "Desafio Brasil".
+
+- **Domínio**: tedros.io
+- **Website**: https://tedros.io
+- **GitHub**: https://github.com/Tedros-Box/tedros-apps/
+- **LinkedIn da Empresa**: https://www.linkedin.com/company/tedros
+- **LinkedIn do Cofundador**: https://www.linkedin.com/in/davis-gordon-dun/
+
+Atualmente, o ecossistema Tedros é um MVP (Minimum Viable Product) em busca de parceiros para expandir seu potencial. Apesar de ser um MVP, já possui casos de uso comprovados.
+
+## Casos de Uso
+
+### Empresa: GlobalWeb Corp
+- **Link**: https://www.globalweb.com.br/
+- **Tipo**: Fábrica de software.
+- **Clientes**: Detran GO e instituições públicas.
+
+**Problemas**:
+- Deploys sem code review para ganhar tempo.
+- Glosas contratuais: Pagamentos recusados por evidências de trabalho insuficientes ou inconsistências em demandas no Redmine.
+- Equipe perdendo tempo coletando evidências.
+
+**Solução com Tedros**:
+- Gerenciador de Evidências: Captura telas de trabalho do desenvolvedor para relatórios detalhados anexados ao Redmine.
+- Integração do chatbot com GitLab para code reviews em merge requests.
+- Integração com Redmine para análises de consistência em demandas, evitando glosas.
+
+### Empresa: Somos Social Movement
+- **Link**: http://www.somossocial.org.br/
+- **Tipo**: ONG.
+- **Clientes**: Pessoas em situação de vulnerabilidade de rua.
+
+**Problemas**:
+- Ausência de sistema para gerenciar ações, voluntários e patrocinadores.
+- Falta de website para divulgação, captação de voluntários e doações.
+
+**Solução com Tedros**:
+- Back-office para gerenciamento de conteúdo do website, ações futuras, espaço para voluntários, formulários de contato e doações.
+- Gerenciamento de ações, voluntários, estoque, e-mail marketing e relatórios.
+
