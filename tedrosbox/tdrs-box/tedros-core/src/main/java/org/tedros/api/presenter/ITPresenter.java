@@ -1,6 +1,7 @@
 package org.tedros.api.presenter;
 
 import org.tedros.api.presenter.view.ITView;
+import org.tedros.api.presenter.view.TDetachViewType;
 import org.tedros.core.ITModule;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -69,6 +70,10 @@ public interface ITPresenter<V extends ITView> {
 	public void setModule(ITModule module);
 
 	public String canInvalidate();
+	
+	public void setDetachViewType(TDetachViewType detachType);
+	
+	public TDetachViewType getDetachViewType();
 
 	
 }

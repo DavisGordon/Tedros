@@ -8,6 +8,7 @@ import org.tedros.api.presenter.ITGroupPresenter;
 import org.tedros.api.presenter.view.ITDynaView;
 import org.tedros.api.presenter.view.ITGroupViewItem;
 import org.tedros.api.presenter.view.ITView;
+import org.tedros.api.presenter.view.TDetachViewType;
 import org.tedros.core.ITModule;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosAppManager;
@@ -34,6 +35,8 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 
 	private SimpleBooleanProperty viewLoadedProperty = new SimpleBooleanProperty(false);
 	
+	private TDetachViewType detachViewType = TDetachViewType.MANUAL;
+	
 	private SimpleStringProperty tViewTitle;
 	private TGroupView<ITGroupPresenter> mainView;
 	private ObservableList<ITGroupViewItem> groupViewItemList;
@@ -59,6 +62,20 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 		setGroupViewItemList(groupViewItemList);
 	}
 	
+	// --
+	
+	public TGroupPresenter(String title, ObservableList<ITGroupViewItem> groupViewItemList, TDetachViewType detachType) {
+		setDetachViewType(detachType);
+		setViewTitle(iEngine.getString(title));
+		setGroupViewItemList(groupViewItemList);
+	}
+	
+	public TGroupPresenter(ITModule module, String title, ObservableList<ITGroupViewItem> groupViewItemList, TDetachViewType detachType) {
+		setDetachViewType(detachType);
+		setModule(module);
+		setViewTitle(iEngine.getString(title));
+		setGroupViewItemList(groupViewItemList);
+	}
 
 	@Override
 	public void initialize() {
@@ -101,6 +118,7 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 		
 	}
 	
+	@Override
 	public void loadView() {
 		
 	}
@@ -398,6 +416,14 @@ public class TGroupPresenter implements ITGroupPresenter<TGroupView<ITGroupPrese
 				? op.get()
 						: null;
 		return item;
+	}
+
+	public TDetachViewType getDetachViewType() {
+		return detachViewType;
+	}
+
+	public void setDetachViewType(TDetachViewType detachViewType) {
+		this.detachViewType = detachViewType;
 	}
 
 

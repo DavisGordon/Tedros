@@ -3,6 +3,7 @@ package org.tedros.fx.presenter.dynamic.view;
 import java.net.URL;
 
 import org.tedros.api.presenter.view.ITDynaView;
+import org.tedros.api.presenter.view.TDetachViewType;
 import org.tedros.core.ITModule;
 import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
@@ -11,6 +12,7 @@ import org.tedros.server.model.ITModel;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
@@ -91,7 +93,46 @@ implements ITDynaView<M> {
 	public TDynaView(ITModule module, Class<M> modelViewClass, URL fxmlURL) {
 		super(new TDynaPresenter<>(module, modelViewClass), fxmlURL);
 	}
-    
+	
+	// -- 
+	
+	public TDynaView(Class<M> modelViewClass, TDetachViewType detachType) {
+		super(new TDynaPresenter<>(modelViewClass, detachType), getURL());
+	}
+	
+	public TDynaView(Class<M> modelViewClass, ObservableList<M> models, TDetachViewType detachType){
+		super(new TDynaPresenter<>(modelViewClass, models, detachType), getURL());
+	}
+	
+	public TDynaView(Class<M> modelViewClass, ObservableList<M> models, boolean full, TDetachViewType detachType){
+		super(new TDynaPresenter<>(modelViewClass, models, detachType), getURL(full));
+	}
+	
+	public TDynaView(Class<M> modelViewClass, Class<? extends ITModel> modelClass, ObservableList<M> models, TDetachViewType detachType){
+		super(new TDynaPresenter<>(modelViewClass, modelClass, models, detachType), getURL());
+	}
+	
+	public TDynaView(Class<M> modelViewClass, URL fxmlURL, TDetachViewType detachType) {
+		super(new TDynaPresenter<>(modelViewClass, detachType), fxmlURL);
+	}
+	
+	//
+	
+	public TDynaView(ITModule module, Class<M> modelViewClass, TDetachViewType detachType) {
+		super(new TDynaPresenter<>(module, modelViewClass, detachType), getURL());
+	}
+	
+	public TDynaView(ITModule module, Class<M> modelViewClass, ObservableList<M> models, TDetachViewType detachType){
+		super(new TDynaPresenter<>(module, modelViewClass, models, detachType), getURL());
+	}
+	
+	public TDynaView(ITModule module, Class<M> modelViewClass, Class<? extends ITModel> modelClass, ObservableList<M> models, TDetachViewType detachType){
+		super(new TDynaPresenter<>(module, modelViewClass, modelClass, models, detachType), getURL());
+	}
+	
+	public TDynaView(ITModule module, Class<M> modelViewClass, URL fxmlURL, TDetachViewType detachType) {
+		super(new TDynaPresenter<>(module, modelViewClass, detachType), fxmlURL);
+	}
 	
 	private static URL getURL() {
 		return getURL(true);
@@ -99,6 +140,11 @@ implements ITDynaView<M> {
 	
 	private static URL getURL(boolean full) {
 		return TDynaView.class.getResource(full ? FXML : FXML2);
+	}
+	
+	@Override
+	public Node gettTargetNodeForDetachAction() {
+		return tViewTitleLayout;
 	}
 
 	@Override

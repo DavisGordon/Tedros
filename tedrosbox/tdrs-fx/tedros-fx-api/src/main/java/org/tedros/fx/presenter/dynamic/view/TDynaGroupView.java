@@ -2,6 +2,7 @@ package org.tedros.fx.presenter.dynamic.view;
 
 import java.net.URL;
 
+import org.tedros.api.presenter.view.TDetachViewType;
 import org.tedros.core.ITModule;
 import org.tedros.fx.model.TModelView;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
@@ -55,6 +56,42 @@ extends TDynaView<M> {
 	
 	public TDynaGroupView(ITModule module, Class<M> modelViewClass, URL fxmlURL) {
 		super(new TDynaPresenter<>(module, modelViewClass), fxmlURL);
+	}
+	
+	//--
+	
+	public TDynaGroupView(Class<M> modelViewClass, TDetachViewType detachType) {
+		super(new TDynaPresenter<>(modelViewClass, detachType), getURL());
+	}
+	
+	public TDynaGroupView(Class<M> modelViewClass, ObservableList<M> models, TDetachViewType detachType){
+		super(new TDynaPresenter<>(modelViewClass, models, detachType), getURL());
+	}
+	
+	public TDynaGroupView(Class<M> modelViewClass, Class<? extends ITModel> modelClass, ObservableList<M> models, TDetachViewType detachType){
+		super(new TDynaPresenter<>(modelViewClass, modelClass, models, detachType), getURL());
+	}
+	
+	public TDynaGroupView(Class<M> modelViewClass, URL fxmlURL, TDetachViewType detachType) {
+		super(new TDynaPresenter<>(modelViewClass, detachType), fxmlURL);
+	}
+	
+	//
+	
+	public TDynaGroupView(ITModule module, Class<M> modelViewClass, TDetachViewType detachType) {
+		super(new TDynaPresenter<>(module, modelViewClass, detachType), getURL());
+	}
+	
+	public TDynaGroupView(ITModule module, Class<M> modelViewClass, ObservableList<M> models, TDetachViewType detachType){
+		super(new TDynaPresenter<>(module, modelViewClass, models, detachType), getURL());
+	}
+	
+	public TDynaGroupView(ITModule module, Class<M> modelViewClass, Class<? extends ITModel> modelClass, ObservableList<M> models, TDetachViewType detachType){
+		super(new TDynaPresenter<>(module, modelViewClass, modelClass, models, detachType), getURL());
+	}
+	
+	public TDynaGroupView(ITModule module, Class<M> modelViewClass, URL fxmlURL, TDetachViewType detachType) {
+		super(new TDynaPresenter<>(module, modelViewClass, detachType), fxmlURL);
 	}
     
 	private static URL getURL() {

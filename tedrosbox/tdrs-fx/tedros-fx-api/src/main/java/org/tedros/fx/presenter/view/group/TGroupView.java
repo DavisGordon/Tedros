@@ -7,12 +7,14 @@ import java.util.List;
 import org.tedros.api.presenter.ITGroupPresenter;
 import org.tedros.api.presenter.view.ITGroupView;
 import org.tedros.api.presenter.view.ITGroupViewItem;
+import org.tedros.api.presenter.view.TDetachViewType;
 import org.tedros.core.ITModule;
 import org.tedros.fx.presenter.view.TView;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
@@ -28,8 +30,7 @@ public class TGroupView<P extends ITGroupPresenter> extends TView<P> implements 
     @FXML private ToolBar tGroupToolbar;
     
     private StackPane tFormSpace;
-    
-    
+        
 	@SuppressWarnings("unchecked")
 	public TGroupView(ITModule module, String groupTitle, ObservableList<ITGroupViewItem> itens) {
 		super((P) new TGroupPresenter(module, groupTitle, itens), getURL());
@@ -51,6 +52,29 @@ public class TGroupView<P extends ITGroupPresenter> extends TView<P> implements 
 		super((P) new TGroupPresenter(module, groupTitle, itens), fxmlURL);
 	}
 	
+	// --
+	
+	@SuppressWarnings("unchecked")
+	public TGroupView(ITModule module, String groupTitle, ObservableList<ITGroupViewItem> itens, TDetachViewType detachType) {
+		super((P) new TGroupPresenter(module, groupTitle, itens, detachType), getURL());
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public TGroupView(ITModule module, String groupTitle, TDetachViewType detachType, ITGroupViewItem... itens) {
+		super((P) new TGroupPresenter(module, groupTitle, FXCollections.observableArrayList(itens), detachType), getURL());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public TGroupView(ITModule module, String groupTitle, List<ITGroupViewItem> itens, TDetachViewType detachType) {
+		super((P) new TGroupPresenter(module, groupTitle, FXCollections.observableArrayList(itens), detachType), getURL());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public TGroupView(ITModule module, String groupTitle, ObservableList<ITGroupViewItem> itens, URL fxmlURL, TDetachViewType detachType) {
+		super((P) new TGroupPresenter(module, groupTitle, itens, detachType), fxmlURL);
+	}
+	
 	private static URL getURL() {
 		return TGroupView.class.getResource(FXML);
 	}
@@ -66,7 +90,10 @@ public class TGroupView<P extends ITGroupPresenter> extends TView<P> implements 
 		this.tContentPane = tContentPane;
 	}
 
-
+	@Override
+	public Node gettTargetNodeForDetachAction() {
+		return tGroupTitle.getParent();
+	}
 
 	/* (non-Javadoc)
 	 * @see org.tedros.fx.presenter.view.group.ITGroupView#gettGroupTitle()

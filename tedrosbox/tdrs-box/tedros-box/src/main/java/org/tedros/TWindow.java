@@ -92,7 +92,7 @@ public class TWindow implements ITWindow  {
     	mouseDragOffsetX = 0.0D;
         mouseDragOffsetY = 0.0D;
         stage = new Stage();
-        stage.setAlwaysOnTop(true);
+        //stage.setAlwaysOnTop(true);
         stage.focusedProperty().addListener((a,o,n)-> {
 			if(n) {
 				TedrosContext.setView(view);
@@ -187,6 +187,7 @@ public class TWindow implements ITWindow  {
         // create scene
         boolean is3dSupported = Platform.isSupported(ConditionalFeature.SCENE3D);
         scene = new Scene(layerPane, 1020, 600, is3dSupported);
+        scene.setUserData(SCENE_ID);
         scene.setFill(null);
         if(is3dSupported)
             scene.setCamera(new PerspectiveCamera());

@@ -12,6 +12,7 @@ import java.util.Stack;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
+import org.tedros.api.presenter.view.TDetachViewType;
 import org.tedros.api.presenter.view.TViewState;
 import org.tedros.chat.module.client.behaviour.ChatBehaviour;
 import org.tedros.chat.module.client.decorator.ChatDecorator;
@@ -53,6 +54,7 @@ import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TZipUtil;
 import org.tedros.util.TedrosFolder;
 
+import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.ConditionalFeature;
@@ -103,6 +105,8 @@ import javafx.util.Duration;
  * */
 public class TedrosBox extends Application implements ITedrosBox  {
 	
+	private static final String FX_BACKGROUND_COLOR_TRANSPARENT = "-fx-background-color: transparent;";
+
 	private static Logger LOGGER = TLoggerUtil.getLogger(TedrosBox.class);
 	
 	private static TedrosBox tedros;
@@ -329,7 +333,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
         
         menuTree = new TreeView();
         menuTree.setId("t-tedros-menu-tree");
-        menuTree.setStyle("-fx-background-color: transparent;");
+        menuTree.setStyle(FX_BACKGROUND_COLOR_TRANSPARENT);
         menuTree.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         menuTree.setShowRoot(false);
         menuTree.setEditable(false);
@@ -355,16 +359,12 @@ public class TedrosBox extends Application implements ITedrosBox  {
        
         userButton = new Button();
         userButton.getStyleClass().addAll("user");
-        userButton.setOnAction(e->{
-        	showUserPopOver();
-        });
+        userButton.setOnAction(e->showUserPopOver());
         
         forwardSize = new SimpleStringProperty(String.valueOf(this.forwardHistory.size()));
         final Button forwardButton = new Button("");
         forwardButton.getStyleClass().addAll("forward");
-        forwardButton.setOnAction(e->{
-        	this.forward();
-        });
+        forwardButton.setOnAction(e->this.forward());
         forwardButton.setOnMouseEntered(ev->{
         	PopOver pvr = new PopOver();
         	pvr.setHeaderAlwaysVisible(false);
@@ -430,9 +430,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
         
         chatButton = new Button();
         chatButton.getStyleClass().addAll("chat");
-        chatButton.setOnAction(e->{
-        	showChatPopOver();
-        });
+        chatButton.setOnAction(e->showChatPopOver());
         chatPopOver = null;
         
         chatUnreadMsgsLabel = new Label("0");
@@ -468,7 +466,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
             }
         };
         pageArea.setId("t-app-area");
-        pageArea.setStyle("-fx-background-color: transparent;");
+        pageArea.setStyle(FX_BACKGROUND_COLOR_TRANSPARENT);
         // create main pane
         mainPane = new BorderPane();
         
@@ -482,7 +480,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
         innerPane.settMenuVisible(false);
         root.setTop(toolBar);
         root.setCenter(this.innerPane);
-        root.setStyle("-fx-background-color: transparent;");
+        root.setStyle(FX_BACKGROUND_COLOR_TRANSPARENT);
         // add window resize button so its on top
         windowResizeButton.setManaged(false);
        
@@ -525,9 +523,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		});
         
         TedrosContext.infoListProperty()
-        .addListener((Change c)->{
-			this.showInfoPopOver();
-		});
+        .addListener((Change c)->this.showInfoPopOver());
         
         TedrosContext.showModalProperty()
         .addListener((a, o, newValue) -> {
@@ -566,9 +562,9 @@ public class TedrosBox extends Application implements ITedrosBox  {
 				dec.getHidePopOverButton().setOnAction(ev->{
 					chatPopOver.hide();
 				});
-				bhv.totalUnreadMessagesProperty().addListener((x,y,z)->{
-					this.chatUnreadMsgsLabel.setText(String.valueOf(z));
-				});
+				bhv.totalUnreadMessagesProperty()
+				.addListener((x,y,z)->this.chatUnreadMsgsLabel.setText(String.valueOf(z)));
+				
 				this.chatUnreadMsgsLabel.setText(String.valueOf(bhv.totalUnreadMessagesProperty().getValue()));
 				bhv.hidePopOverProperty().addListener((x,y,z)->{
 					if(z)
@@ -626,7 +622,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	        logoEffect = new FadeTransition(Duration.millis(2000), imgLogo);
 	        logoEffect.setFromValue(1.0);
 	        logoEffect.setToValue(0.3);
-	        logoEffect.setCycleCount(FadeTransition.INDEFINITE);
+	        logoEffect.setCycleCount(Animation.INDEFINITE);
 	        logoEffect.setAutoReverse(true);
 	        effectChl = (a,o,n)->{
 				if(n.intValue()==1)
@@ -739,7 +735,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		Platform.runLater(()->{
 			if(infoPopOver!=null) {
 				infoPopOver.show(infoButton);
-				if(TedrosContext.infoListProperty().size()>0) {
+				if(!TedrosContext.infoListProperty().isEmpty()) {
 					TedrosContext.infoListProperty().forEach(c->{
 						((TMessage) c).setLoaded(false);
 						vb.getChildren().add(TMessageBox.buildMessagePane((TMessage) c));
@@ -873,7 +869,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 			chatView = null;
 		}
 
-		chatView = new TDynaView<>(ChatMV.class);
+		chatView = new TDynaView<>(ChatMV.class, TDetachViewType.NONE);
 		chatView.tStateProperty().addListener(chatViewStateChl);
 		chatView.sceneProperty().addListener((ob,o,n)->{
 			if(n!=null)
@@ -914,7 +910,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     	TModule module = new TModule() {
     		@Override
 			public void tStart() {
-    			TDynaView<LoginMV> view = new TDynaView<LoginMV>(LoginMV.class);
+    			TDynaView<LoginMV> view = new TDynaView<>(LoginMV.class, TDetachViewType.NONE);
     			tShowView(view);
 			}
     		
@@ -1073,7 +1069,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
                     content = scrollPane;
                 }else {
                 	content = view;
-                	content.setStyle("-fx-background-color: transparent;");
+                	content.setStyle(FX_BACKGROUND_COLOR_TRANSPARENT);
                 }
                 
                 pageArea.getChildren().setAll(content);

@@ -7,6 +7,7 @@ import org.tedros.api.descriptor.ITComponentDescriptor;
 import org.tedros.api.presenter.ITDynaPresenter;
 import org.tedros.api.presenter.behavior.ITBehavior;
 import org.tedros.api.presenter.decorator.ITDecorator;
+import org.tedros.api.presenter.view.TDetachViewType;
 import org.tedros.api.presenter.view.TViewMode;
 import org.tedros.api.presenter.view.TViewState;
 import org.tedros.core.ITModule;
@@ -48,12 +49,13 @@ implements ITDynaPresenter<M> {
 	
 	private Class<? extends ITModel> modelClass;
 	
+	private TDetachViewType detachViewType = TDetachViewType.MANUAL;
+	
 	private TReportProcess tReportProcess;
 	private TModelProcess tModelProcess;
 	private TEntityProcess tEntityProcess;
 	private TEjbService tEjbService;
 	private TForm tForm;
-	//private TView tView;
 	
 	private org.tedros.fx.annotation.presenter.TPresenter tPresenter;
 	
@@ -78,7 +80,6 @@ implements ITDynaPresenter<M> {
 		this.modelViewClass = modelViewClass;
 		setModule(module);
 	}
-	
 	
 	public TDynaPresenter(Class<M> modelViewClass, ObservableList<M> modelViews){
 		this.modelViews = modelViews;
@@ -113,6 +114,79 @@ implements ITDynaPresenter<M> {
 	
 	@SuppressWarnings("unchecked")
 	public TDynaPresenter(ITModule module, M modelView, ObservableList<M> modelViews){
+		this.modelView = modelView;
+		this.modelViewClass = (Class<M>) modelView.getClass();
+		this.modelViews = modelViews;
+		setModule(module);
+	}
+	
+	//
+	
+	@SuppressWarnings("unchecked")
+	public TDynaPresenter(M modelView, TDetachViewType detachViewType){
+		this.detachViewType = detachViewType;
+		this.modelView = modelView;
+		this.modelViewClass = (Class<M>) modelView.getClass();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public TDynaPresenter(ITModule module, M modelView, TDetachViewType detachViewType){
+		this.detachViewType = detachViewType;
+		this.modelView = modelView;
+		this.modelViewClass = (Class<M>) modelView.getClass();
+		setModule(module);
+	}
+	
+	public TDynaPresenter(Class<M> modelViewClass, TDetachViewType detachViewType){
+		this.detachViewType = detachViewType;
+		this.modelViewClass = modelViewClass;
+	}
+	
+	public TDynaPresenter(ITModule module, Class<M> modelViewClass, TDetachViewType detachViewType){
+		this.detachViewType = detachViewType;
+		this.modelViewClass = modelViewClass;
+		setModule(module);
+	}
+	
+	public TDynaPresenter(Class<M> modelViewClass, ObservableList<M> modelViews, TDetachViewType detachViewType){
+		this.detachViewType = detachViewType;
+		this.modelViews = modelViews;
+		this.modelViewClass = modelViewClass;
+	}
+	
+	public TDynaPresenter(Class<M> modelViewClass, Class<? extends ITModel> modelClass, ObservableList<M> modelViews, TDetachViewType detachViewType){
+		this.detachViewType = detachViewType;
+		this.modelViews = modelViews;
+		this.modelViewClass = modelViewClass;
+		this.modelClass = modelClass;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public TDynaPresenter(M modelView, ObservableList<M> modelViews, TDetachViewType detachViewType){
+		this.detachViewType = detachViewType;
+		this.modelView = modelView;
+		this.modelViewClass = (Class<M>) modelView.getClass();
+		this.modelViews = modelViews;
+	}
+	
+	public TDynaPresenter(ITModule module, Class<M> modelViewClass, ObservableList<M> modelViews, TDetachViewType detachViewType){
+		this.detachViewType = detachViewType;
+		this.modelViews = modelViews;
+		this.modelViewClass = modelViewClass;
+		setModule(module);
+	}
+	
+	public TDynaPresenter(ITModule module, Class<M> modelViewClass, Class<? extends ITModel> modelClass, ObservableList<M> modelViews, TDetachViewType detachViewType){
+		this.detachViewType = detachViewType;
+		this.modelViews = modelViews;
+		this.modelViewClass = modelViewClass;
+		this.modelClass = modelClass;
+		setModule(module);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public TDynaPresenter(ITModule module, M modelView, ObservableList<M> modelViews, TDetachViewType detachViewType){
+		this.detachViewType = detachViewType;
 		this.modelView = modelView;
 		this.modelViewClass = (Class<M>) modelView.getClass();
 		this.modelViews = modelViews;
@@ -360,5 +434,13 @@ implements ITDynaPresenter<M> {
 			};
 			getView().tStateProperty().addListener(bchl);
 		}
+	}
+
+	public TDetachViewType getDetachViewType() {
+		return detachViewType;
+	}
+
+	public void setDetachViewType(TDetachViewType detachViewType) {
+		this.detachViewType = detachViewType;
 	}
 }

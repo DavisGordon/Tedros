@@ -114,6 +114,7 @@ public interface TFxKey {
 	static final String TOOLTIP_AI_CHANGE = "#{tedros.fxapi.tooltip.ai.change}";
 	static final String TOOLTIP_AI_CREATE = "#{tedros.fxapi.tooltip.ai.create}";
 	static final String TOOLTIP_AUTOCOMPLETE = "#{tedros.fxapi.tooltip.autocomplete}";
+	static final String TOOLTIP_DETACH_VIEW = "#{tedros.fxapi.tooltip.detach.view}";
 	static final String VALIDATOR_CHECKREQUIRED = "#{tedros.fxapi.validator.checkRequired}";
 	static final String VALIDATOR_FUTURE_DATE = "#{tedros.fxapi.validator.future.date}";
 	static final String VALIDATOR_GREATHERTHANZERO = "#{tedros.fxapi.validator.greatherThanZero}";

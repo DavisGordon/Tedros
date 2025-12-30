@@ -6,22 +6,29 @@ import java.util.function.Consumer;
 
 import org.tedros.api.presenter.ITPresenter;
 import org.tedros.api.presenter.view.ITView;
+import org.tedros.api.presenter.view.TDetachViewType;
 import org.tedros.api.presenter.view.TViewState;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.control.ITProgressIndicator;
 import org.tedros.core.control.TProgressIndicator;
+import org.tedros.core.ux.ITWindow;
+import org.tedros.fx.TFxKey;
 import org.tedros.fx.modal.TModalPane;
 import org.tedros.util.TLoggerUtil;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.util.Duration;
 
 @SuppressWarnings("rawtypes")
 public abstract class TView<P extends ITPresenter>
@@ -33,31 +40,72 @@ public abstract class TView<P extends ITPresenter>
 	private TModalPane modalPane;
 	private ITProgressIndicator progressIndicator;
 	private SimpleObjectProperty<TViewState> stateProperty = new SimpleObjectProperty<>(TViewState.CREATED);
-
-	public TView(P presenter) {
+	
+	// Tooltip for hover information
+	private Tooltip detachTooltip = new Tooltip(TLanguage.getInstance().getString(TFxKey.TOOLTIP_DETACH_VIEW));
+	
+	// Event handler for double-click to detach
+	private EventHandler<MouseEvent> doubleClickEvent = e -> {
+	    if (e.getClickCount() == 2) {
+	        TedrosContext.detachView(this);
+	    }
+	};
+	
+	protected TView(P presenter) {
 		this.presenter = presenter;
-		tInitializePresenter();
-		initContextMenu();
+		initListener();
+		tInitializePresenter();	
 	}
 
-	public TView(P presenter, URL fxmlURL) {
+	protected TView(P presenter, URL fxmlURL) {
 		this.presenter = presenter;
 		this.fxmlURL = fxmlURL;
 		tLoadFXML();
+		initListener();
 		tInitializePresenter();
-		initContextMenu();
+		
 	}
+	
+	public abstract Node gettTargetNodeForDetachAction();
 
-	private void initContextMenu() {
-		this.setOnMouseClicked(e -> {
-			if (e.getButton() == javafx.scene.input.MouseButton.SECONDARY) {
-				ContextMenu contextMenu = new ContextMenu();
-				MenuItem detachItem = new MenuItem(TLanguage.getInstance().getString("Detach"));
-				detachItem.setOnAction(ev -> TedrosContext.detachView(this));
-				contextMenu.getItems().add(detachItem);
-				contextMenu.show(this, e.getScreenX(), e.getScreenY());
+	private void initListener() {
+		this.stateProperty.addListener((a ,o, n) -> {
+			if (n == TViewState.READY) {
+				buildViewActions();
 			}
 		});
+		
+		this.sceneProperty().addListener((a ,o, n) -> {
+			if (n != null && n.getUserData() != null && n.getUserData().equals(ITWindow.SCENE_ID)) {
+				gettTargetNodeForDetachAction().setOnMouseClicked(null);
+				Tooltip.uninstall(gettTargetNodeForDetachAction(), detachTooltip);
+			}
+			
+			if (n != null && n.getUserData() == null) {
+				buildViewActions();
+			}
+		});
+	}
+
+	private void buildViewActions() {
+		if(this.presenter.getDetachViewType().equals(TDetachViewType.AUTO)) {
+			buildMouseClickedAction();
+			if(this.getScene()!=null && this.getScene().getUserData() == null) 
+			{
+				TedrosContext.detachView(this);
+			}
+		}
+			
+		if(this.presenter.getDetachViewType().equals(TDetachViewType.MANUAL))
+			buildMouseClickedAction();
+	}
+
+	private void buildMouseClickedAction() {
+		gettTargetNodeForDetachAction().setOnMouseClicked(doubleClickEvent);
+		detachTooltip.setFont(Font.font("Arial", FontWeight.NORMAL, 12));
+		detachTooltip.setShowDelay(Duration.millis(200)); // Optional: Delay before showing (200ms)
+	    detachTooltip.setHideDelay(Duration.millis(500)); // Optional: Delay before hiding (500ms)
+	    Tooltip.install(gettTargetNodeForDetachAction(), detachTooltip); // Install the tooltip on the component
 	}
 
 	@SuppressWarnings("unchecked")

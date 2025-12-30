@@ -3,6 +3,7 @@
  */
 package org.tedros.tools.logged.user;
 
+import org.tedros.api.presenter.view.TDetachViewType;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.security.model.TUser;
 import org.tedros.fx.presenter.dynamic.view.TDynaView;
@@ -25,7 +26,7 @@ public class TUserSettingsPane extends StackPane {
 		ObservableList<TUserSettingModelView> l = FXCollections.observableArrayList(umv);
 		// 3) The View, note: we instantiate it but who decorates and behaves it is the
 		// presenter in it.
-		TDynaView<TUserSettingModelView> v = new TDynaView<>(TUserSettingModelView.class, l, false);
+		TDynaView<TUserSettingModelView> v = new TDynaView<>(TUserSettingModelView.class, l, false, TDetachViewType.NONE);
 		v.tLoad();
 		v.setMinHeight(420);
 		super.getChildren().add(v);

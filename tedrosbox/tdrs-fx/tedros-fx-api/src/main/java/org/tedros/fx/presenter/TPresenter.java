@@ -29,16 +29,16 @@ public abstract class TPresenter<V extends ITView> implements ITPresenter<V> {
 	private V view;
 	private ITModule module;
 	
-	public TPresenter(){
+	protected TPresenter(){
 		
 	}
 	
-	public TPresenter(V view){
+	protected TPresenter(V view){
 		setView(view);
 		initialize();
 	}
 	
-	public TPresenter(V view, ITModule module){
+	protected TPresenter(V view, ITModule module){
 		setView(view);
 		initialize();
 		this.module = module;
