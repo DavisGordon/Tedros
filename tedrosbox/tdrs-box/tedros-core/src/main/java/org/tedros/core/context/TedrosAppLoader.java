@@ -28,17 +28,15 @@ abstract class TedrosAppLoader {
 	private ObservableList<TAppContext> appContexts;
 	
 	protected TedrosAppLoader(){
-		entrys = new HashMap<String, TEntry<TAppContext>>();
+		entrys = new HashMap<>();
 		appContexts = FXCollections.observableArrayList();
 	}
 	
 	@SuppressWarnings("rawtypes")
 	protected void addApplication(Class appStarterClass){
-		if(!appContexts.stream().anyMatch(p->{
-			return p.getAppDescriptor().getAppStarterClass() == appStarterClass;
-		})) {
+		if(appContexts.stream().noneMatch(p->p.getAppDescriptor().getAppStarterClass() == appStarterClass)) {
 			appContexts.add(new TAppContext(appStarterClass));
-			LOGGER.info("App "+appStarterClass.getCanonicalName()+" added!");
+			LOGGER.info("App {}  added!", appStarterClass.getCanonicalName());
 		}
 	}
 	

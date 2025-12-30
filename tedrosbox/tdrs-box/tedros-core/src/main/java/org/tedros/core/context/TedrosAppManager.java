@@ -51,22 +51,26 @@ public final class TedrosAppManager extends TedrosAppLoader {
 	@SuppressWarnings("rawtypes")
 	public ITPresenter getCurrentPresenter() {
 		ITModule m = getCurrentModule();
-		if(m!=null) 
-			return getModuleContext(m).getCurrentViewContext().getPresenter();
-			
-		return null;
+		if(m==null)
+			return null;
+				
+		TModuleContext mc = getModuleContext(m);
+		if(mc==null)
+			return null;
+		
+		TViewContext vc = mc.getCurrentViewContext();
+		return vc.getPresenter();
 	}
 	
 	@SuppressWarnings("rawtypes")
 	public ITView getCurrentView() {
 		ITPresenter p = getCurrentPresenter();
-		if(p instanceof ITGroupPresenter) {
-			return ((ITGroupPresenter) p).getSelectedView();
-		}
-		if(p instanceof ITDynaPresenter) {
-			ITDynaPresenter dp = (ITDynaPresenter) p;
-			return dp.getDecorator().getView();
-		}
+		if(p instanceof ITGroupPresenter itGroupPresenter) 
+			return itGroupPresenter.getSelectedView();
+		
+		if(p instanceof ITDynaPresenter itDynaPresenter) 
+			return itDynaPresenter.getDecorator().getView();
+		
 		return null;
 	}
 	
@@ -76,22 +80,30 @@ public final class TedrosAppManager extends TedrosAppLoader {
 		ITDynaViewSimpleBaseBehavior b = null;
 		Class<ITModel> model;
 		Class<ITModelView> modelView;
-		if(p instanceof ITGroupPresenter) {
-			ITView ov = ((ITGroupPresenter) p).getSelectedView();
+		if(p instanceof ITGroupPresenter itGroupPresenter) {
+			ITView ov = itGroupPresenter.getSelectedView();
 			if(ov!=null) {
 				ITDynaPresenter dp = (ITDynaPresenter) ov.gettPresenter();
 				b = (ITDynaViewSimpleBaseBehavior) dp.getBehavior();
 			}
 		}
-		if(p instanceof ITDynaPresenter) {
-			ITDynaPresenter dp = (ITDynaPresenter) p;
-			b = (ITDynaViewSimpleBaseBehavior) dp.getBehavior();
+		
+		if(p instanceof ITDynaPresenter itDynaPresenter) {
+			b = (ITDynaViewSimpleBaseBehavior) itDynaPresenter.getBehavior();
 		}
 		if(b!=null) {
 			model = b.getModelClass();
 			modelView = b.getModelViewClass();
 			ITModule m = getCurrentModule();
-			for(TViewDescriptor vds : getModuleContext(m).getModuleDescriptor().getViewDescriptors())
+			
+			if(m==null)
+				return null;
+			
+			TModuleContext mc = getModuleContext(m);
+			if(mc==null)
+				return null;			
+			
+			for(TViewDescriptor vds : mc.getModuleDescriptor().getViewDescriptors())
 				if(vds.getModel()==model && vds.getModelView()==modelView)
 					return vds;
 		}
@@ -148,23 +160,26 @@ public final class TedrosAppManager extends TedrosAppLoader {
 	}
 	
 	public void goToModule(Class<? extends ITModule> moduleClass) {
-		String path = getModuleContext(moduleClass).getModuleDescriptor().getPath();
+		
+		TModuleContext mc = getModuleContext(moduleClass);
+		if(mc==null)
+			return;
+		
+		String path = mc.getModuleDescriptor().getPath();
 		TedrosContext.setPagePathProperty(path, true, true, true);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void goToModule(Class<? extends ITModule> moduleClass, Class<? extends ITModelView> modelViewClass) {
 		Node v = (Node) TedrosContext.viewProperty().getValue();
-		if(v instanceof ITModule && v.getClass()==moduleClass) {
-			ITModule m = (ITModule) v;
-			m.tLookupAndShow(modelViewClass);
+		if(v instanceof ITModule itModule && v.getClass()==moduleClass) {
+			itModule.tLookupAndShow(modelViewClass);
 		}else {
 			ChangeListener<Node> chl = new ChangeListener<Node>() {
 				@Override
 				public void changed(ObservableValue<? extends Node> a, Node o, Node n) {
-					if(n instanceof ITModule && n.getClass()==moduleClass) {
-						ITModule m = (ITModule) n;
-						m.tLookupAndShow(modelViewClass);
+					if(n instanceof ITModule itModule && n.getClass()==moduleClass) {
+						itModule.tLookupAndShow(modelViewClass);
 						TedrosContext.viewProperty().removeListener(this);
 					}
 				}
@@ -177,19 +192,17 @@ public final class TedrosAppManager extends TedrosAppLoader {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void goToModule(Class<? extends ITModule> moduleClass, Class<? extends ITModelView> modelViewClass, Consumer<ITModule> consumer) {
 		Node v = (Node) TedrosContext.viewProperty().getValue();
-		if(v instanceof ITModule && v.getClass()==moduleClass) {
-			ITModule m = (ITModule) v;
-			m.tLookupAndShow(modelViewClass);
-			consumer.accept(m);
+		if(v instanceof ITModule itModule && v.getClass()==moduleClass) {
+			itModule.tLookupAndShow(modelViewClass);
+			consumer.accept(itModule);
 		}else {
 			ChangeListener<Node> chl = new ChangeListener<Node>() {
 				@Override
 				public void changed(ObservableValue<? extends Node> a, Node o, Node n) {
-					if(n instanceof ITModule && n.getClass()==moduleClass) {
-						ITModule m = (ITModule) n;
-						m.tLookupAndShow(modelViewClass);
+					if(n instanceof ITModule itModule && n.getClass()==moduleClass) {
+						itModule.tLookupAndShow(modelViewClass);
 						TedrosContext.viewProperty().removeListener(this);
-						consumer.accept(m);
+						consumer.accept(itModule);
 					}
 				}
 			};
@@ -215,18 +228,14 @@ public final class TedrosAppManager extends TedrosAppLoader {
 	@SuppressWarnings({ "unchecked"})
 	private void loadIn(Class<? extends ITModule> moduleClass, Consumer<ITModule> f) {
 		Node v = (Node) TedrosContext.viewProperty().getValue();
-		if(v instanceof ITModule && v.getClass()==moduleClass) {
-			ITModule m = (ITModule) v;
-			f.accept(m);
-			//m.tLookupAndShow(modelsView);
+		if(v instanceof ITModule itModule && v.getClass()==moduleClass) {
+			f.accept(itModule);
 		}else {
 			ChangeListener<Node> chl = new ChangeListener<Node>() {
 				@Override
 				public void changed(ObservableValue<? extends Node> a, Node o, Node n) {
-					if(n instanceof ITModule && n.getClass()==moduleClass) {
-						ITModule m = (ITModule) n;
-						f.accept(m);
-						//m.tLookupAndShow(modelView);
+					if(n instanceof ITModule itModule && n.getClass()==moduleClass) {
+						f.accept(itModule);
 						TedrosContext.viewProperty().removeListener(this);
 					}
 				}
@@ -253,10 +262,10 @@ public final class TedrosAppManager extends TedrosAppLoader {
 	private void loadIn(String modulePath, Consumer<ITModule> f) {
 		String path = TLanguage.getInstance().getString(modulePath);
 		Node v = (Node) TedrosContext.viewProperty().getValue();
-		if(v instanceof ITModule) {
-			ITModule m = (ITModule) v;
-			if(this.getModuleContext(m).getModuleDescriptor().getPath().equals(path))
-				f.accept(m);
+		if(v instanceof ITModule itModule) {			
+			TModuleContext mc = this.getModuleContext(itModule);
+			if(mc!=null && mc.getModuleDescriptor().getPath().equals(path))
+				f.accept(itModule);
 			else {
 				listenView(f, path);
 				TedrosContext.setPagePathProperty(path, true, true, true);
@@ -276,10 +285,10 @@ public final class TedrosAppManager extends TedrosAppLoader {
 		ChangeListener<Node> chl = new ChangeListener<Node>() {
 			@Override
 			public void changed(ObservableValue<? extends Node> a, Node o, Node n) {
-				if(n instanceof ITModule m) {
-					TModuleContext mc = getModuleContext(m); 
+				if(n instanceof ITModule itModule) {
+					TModuleContext mc = getModuleContext(itModule); 
 					if(mc!=null && mc.getModuleDescriptor().getPath().equals(path)) {
-						f.accept(m);
+						f.accept(itModule);
 						TedrosContext.viewProperty().removeListener(this);
 					}
 				}

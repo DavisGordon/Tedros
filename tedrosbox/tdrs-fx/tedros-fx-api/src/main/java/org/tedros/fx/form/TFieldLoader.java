@@ -23,14 +23,14 @@ import javafx.scene.Node;
 
 public abstract class TFieldLoader<M extends ITModelView<?>> {
 	
-	private final static Logger LOGGER = TLoggerUtil.getLogger(TFieldLoader.class);
+	private static final Logger LOGGER = TLoggerUtil.getLogger(TFieldLoader.class);
 	
 	private SimpleBooleanProperty allLoaded = new SimpleBooleanProperty(false);
 	private SimpleIntegerProperty totalToLoad = new SimpleIntegerProperty();
 	protected TRepository repo = new TRepository();
 	protected final TComponentDescriptor descriptor;
 	
-	public TFieldLoader(M modelView, ITModelForm<M> form) {
+	protected TFieldLoader(M modelView, ITModelForm<M> form) {
 		descriptor = new TComponentDescriptor(form, modelView, TViewMode.EDIT);
 	}
 	
@@ -74,11 +74,17 @@ public abstract class TFieldLoader<M extends ITModelView<?>> {
 		return null;
 	}
 	
+	/**
+	 * Load edit field box.
+	 * 
+	 * Example how to catch a field for debug: 
+	 * int x=0; if(tFieldDescriptor.getFieldName().equals("painelCorTexto")) x=1;
+	 * 
+	 * @param tFieldDescriptor
+	 * @param bcontrol true to load control field, false to load layout field
+	 * @throws Exception
+	 */
 	protected void loadEditFieldBox(final ITFieldDescriptor tFieldDescriptor, boolean bcontrol) throws Exception{
-		
-		/*int x=0;
-		if(tFieldDescriptor.getFieldName().equals("painelCorTexto"))
-			x=1;*/
 		
 		descriptor.setMode(TViewMode.EDIT);
 		descriptor.setFieldDescriptor(tFieldDescriptor);
@@ -89,8 +95,6 @@ public abstract class TFieldLoader<M extends ITModelView<?>> {
 			builder.processControlField(descriptor);
 		else
 			builder.processLayoutField(descriptor);
-		
-		
 	}
 	
 	protected void loadReaderFieldBox(final ObservableList<Node> nodesLoaded, final ITFieldDescriptor tFieldDescriptor) throws Exception{
@@ -100,7 +104,7 @@ public abstract class TFieldLoader<M extends ITModelView<?>> {
 		final Node reader = TComponentReaderBuilder.getField(descriptor);
 			
 		if(reader==null){
-			LOGGER.warn("Reader null to "+tFieldDescriptor.getFieldName());
+			LOGGER.warn("Reader null to {}", tFieldDescriptor.getFieldName());
 			return;
 		}	
 		

@@ -15,13 +15,16 @@ import org.tedros.core.context.TedrosContext;
 import org.tedros.core.context.TedroxBoxHeaderButton;
 import org.tedros.core.control.PopOver;
 import org.tedros.core.control.TedrosBoxResizeBar;
+import org.tedros.core.style.TStyleResourceValue;
 import org.tedros.core.style.TThemeUtil;
+import org.tedros.core.ux.ITWindow;
 import org.tedros.fx.control.TLabel;
 import org.tedros.fx.modal.TConfirmMessageBox;
 import org.tedros.fx.modal.TModalPane;
 import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TedrosFolder;
 
+import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.application.ConditionalFeature;
 import javafx.application.Platform;
@@ -59,13 +62,12 @@ import javafx.util.Duration;
  * 
  * @author Davis Gordon
  * */
-public class TWindow  {
+public class TWindow implements ITWindow  {
 	
 	private static final String FX_BACKGROUND_COLOR_TRANSPARENT = "-fx-background-color: transparent;";
 	private Stage stage;
     private Scene scene;
     private BorderPane root;
-    private TedrosBox system;
     
 	private Pane pageArea;
     protected Pages pages;
@@ -86,38 +88,49 @@ public class TWindow  {
     private FadeTransition logoEffect;
     private ChangeListener<Number> effectChl;
     
-    public TWindow(TedrosBox system, Node view){
-    	this.system = system;
+    public TWindow(Node view){
     	mouseDragOffsetX = 0.0D;
         mouseDragOffsetY = 0.0D;
         stage = new Stage();
+        stage.setAlwaysOnTop(true);
+        stage.focusedProperty().addListener((a,o,n)-> {
+			if(n) {
+				TedrosContext.setView(view);
+			}
+		});
         init(view);
         showView(view);
     }
     
-    public Node getView(){
+    @Override
+	public Node getView(){
 		return pageArea.getChildren().isEmpty() ? null : pageArea.getChildren().get(0);
 	}
 	
-    public Stage getStage(){
+    @Override
+	public Stage getStage(){
     	return stage;
     }    
     
-    public double getXStage(){
+    @Override
+	public double getXStage(){
     	return getStage().getX();
     }
     
-    public double getYStage(){
+    @Override
+	public double getYStage(){
     	return getStage().getY();
     }
     
+	@Override
 	public void close() {
         pageArea.getChildren().clear();
     	mainPane.setTop(null);
 		stage.close();
     }
     
-    public void reloadStyle(){
+    @Override
+	public void reloadStyle(){
     	
     	final String customStyleCssUrl = TThemeUtil.getStyleURL().toExternalForm();
     	final String backgroundCssUrl = TThemeUtil.getBackgroundURL().toExternalForm();
@@ -138,6 +151,8 @@ public class TWindow  {
 		scene.getStylesheets().add(customStyleCssUrl);
     	com.sun.javafx.css.StyleManager.getInstance().addUserAgentStylesheet(scene, customStyleCssUrl);
     	root.setId("t-tedros-color");
+    	
+    	showLogo();
     }
 
     
@@ -149,7 +164,7 @@ public class TWindow  {
 	private void init(Node view) {
     	
     	getStage().setTitle("Tedros");
-    	getStage().initStyle(StageStyle.UNDECORATED);
+    	getStage().initStyle(StageStyle.TRANSPARENT);
     	getStage().getIcons().add(new Image(TedrosContext.getImageInputStream("icon-tedros.png")));
     	// create root stack pane that we use to be able to overlay proxy dialog
         layerPane = new StackPane();
@@ -168,9 +183,11 @@ public class TWindow  {
        
         layerPane.setDepthTest(DepthTest.DISABLE);
         layerPane.getChildren().add(root);
+        StackPane.setMargin(root, new Insets(4));
         // create scene
         boolean is3dSupported = Platform.isSupported(ConditionalFeature.SCENE3D);
         scene = new Scene(layerPane, 1020, 600, is3dSupported);
+        scene.setFill(null);
         if(is3dSupported)
             scene.setCamera(new PerspectiveCamera());
         
@@ -198,7 +215,7 @@ public class TWindow  {
         toolBar.setId("t-main-toolbar");        
         toolBar.getItems().add(logoPane);
         
-        showDefaultLogo();
+        showLogo();
         
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -238,7 +255,7 @@ public class TWindow  {
         
         pageArea.getChildren().addListener((Change<? extends Node> c)->{
         	if(c.getList().isEmpty()) {
-				system.windows.remove(this);
+        		TedrosContext.getWindows().remove(this);
 			}
         });
         
@@ -250,10 +267,22 @@ public class TWindow  {
         mainPane.setMinWidth(300);
         mainPane.setStyle("-fx-effect: dropshadow( three-pass-box , #000000 , 9, 0.1 , 0 , 4); "
         		+ "-fx-text-fill: #FFFFFF; -fx-background-color: transparent;");
+        BorderPane.setAlignment(pageArea, Pos.TOP_CENTER);
+        BorderPane.setMargin(mainPane, new Insets(10));
+        
+        // Configuração de cores para um efeito tênue
+        // rgba(R, G, B, Opacidade) -> Opacidade 0.5 = 50% visível
+        String linhaSuave = "rgba(0, 255, 255, 0.4)";  // Linha física semi-transparente
+        String brilhoSuave = "rgba(0, 255, 255, 0.25)"; // O brilho (glow) bem fraquinho
         
         root.setTop(toolBar);
         root.setCenter(mainPane);
-        root.setStyle(FX_BACKGROUND_COLOR_TRANSPARENT);
+        root.setStyle("-fx-background-color: transparent;" + 
+        	    "-fx-border-color: " + linhaSuave + ";" +    
+        	    "-fx-border-width: 1;" +                    // Linha bem fina
+        	    // Radius 10 (suave) e Spread 0.0 (névoa, sem dureza)
+        	    "-fx-effect: dropshadow(three-pass-box, " + brilhoSuave + ", 12, 0.0, 0, 0);"
+        	);
         // add window resize button so its on top
         windowResizeButton.setManaged(false);
        
@@ -294,12 +323,12 @@ public class TWindow  {
 		e.consume();
 		String msg = itModule.tCanStop();
 		if(msg==null) {
-			system.windows.remove(this);
+			TedrosContext.getWindows().remove(this);
 		}else {
 			TConfirmMessageBox confirm = new TConfirmMessageBox(msg);
 			confirm.tConfirmProperty().addListener((a, o, n) -> {    	    			
 				if(n.intValue()==1) {
-					system.windows.remove(this);
+					TedrosContext.getWindows().remove(this);
 				}else {
 					modalMessage.hideModal();
 				}
@@ -309,11 +338,12 @@ public class TWindow  {
 		}
 	}
 
-	private void showDefaultLogo() {
-		String logoFileName =  TedrosFolder.IMAGES_FOLDER.getFullPath()+File.separator+"logo-tedros-small.png";
-        String brand = "Tedros";
-        double brandLeftMargin = 55;
-        showLogo(logoFileName, brand, brandLeftMargin);
+	private void showLogo() {
+		String brand = TStyleResourceValue.BRAND.headerStyle(true);
+		String indentantion = TStyleResourceValue.INDENTANTION.headerStyle();
+		String pathLogo = TStyleResourceValue.LOGO.headerStyle();
+		Double indent = indentantion!=null ? Double.parseDouble(indentantion) : null;
+        showLogo(pathLogo, brand, indent);
 	}
 
 	private void showLogo(String imagePath, String brand, Double brandLeftMargin) {
@@ -344,7 +374,7 @@ public class TWindow  {
 	        logoEffect = new FadeTransition(Duration.millis(2000), imgLogo);
 	        logoEffect.setFromValue(1.0);
 	        logoEffect.setToValue(0.3);
-	        logoEffect.setCycleCount(FadeTransition.INDEFINITE);
+	        logoEffect.setCycleCount(Animation.INDEFINITE);
 	        logoEffect.setAutoReverse(true);
 	        effectChl = (a,o,n)->{
 				if(n.intValue()==1)

@@ -43,7 +43,7 @@ extends VBox implements ITModelForm<M> {
 	
 	
 	public TVBoxForm(M modelView) {
-		this.formEngine = new TFormEngine<M, TVBoxForm<M>>(this, modelView);
+		this.formEngine = new TFormEngine<>(this, modelView);
 		this.formEngine.setEditMode();
 	}
 	
@@ -58,7 +58,7 @@ extends VBox implements ITModelForm<M> {
 	@SuppressWarnings("rawtypes")
 	public TVBoxForm(ITPresenter presenter, M modelView) {
 		this.presenter = presenter;
-		this.formEngine = new TFormEngine<M, TVBoxForm<M>>(this, modelView);
+		this.formEngine = new TFormEngine<>(this, modelView);
 		this.formEngine.setEditMode();
 	}
 	
@@ -207,9 +207,6 @@ extends VBox implements ITModelForm<M> {
 		autosize();
 		setSpacing(8);
 		setPadding(new Insets(10, 10, 10, 10));
-		//setMaxHeight(Double.MAX_VALUE);
-		//setMaxWidth(Double.MAX_VALUE);
-		//addEndSpacer();
 	}
 
 }

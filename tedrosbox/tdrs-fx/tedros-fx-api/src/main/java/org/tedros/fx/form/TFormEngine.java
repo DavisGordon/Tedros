@@ -46,7 +46,7 @@ import javafx.scene.web.WebView;
  */
 public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M>>  {
 	
-	private final static Logger LOGGER = TLoggerUtil.getLogger(TFormEngine.class); 
+	private static final Logger LOGGER = TLoggerUtil.getLogger(TFormEngine.class); 
 	
 	private TViewMode mode;
 	private ITSetting setting;
@@ -64,14 +64,15 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	
 	private ChangeListener<Boolean> chl = (ob, o, n) -> {
 		if(n && mode!=null) { 
-			if(TLoggerUtil.isFormEngineEnabled())
+			if(TLoggerUtil.isFormEngineEnabled()) {
 				TLoggerUtil.timeComplexity(TFormEngine.class, getLogTitle()+": Reading @TTrigger and @TSetting", ()->{
 					buildTriggers();
 					runSetting();
 				});
-			else
+			} else {
 				buildTriggers();
 				runSetting();
+			}
 		}
 	};
 	
@@ -97,7 +98,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 			this.form.setId("t-form");
 		this.modelView = modelView;
 		this.associatedObjectsMap = new HashMap<>(0);
-		triggerLoader = new TTriggerLoader<M, ITModelForm<M>>(form);
+		triggerLoader = new TTriggerLoader<>(form);
 		loadedProperty().addListener(new WeakChangeListener<>(chl));
 		disposeProperty().addListener(new WeakChangeListener<>(chl2));
 		logInit();
@@ -107,7 +108,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 		this.form = form;
 		this.modelView = modelView;
 		this.associatedObjectsMap = new HashMap<>(0);
-		triggerLoader = new TTriggerLoader<M, ITModelForm<M>>(form);
+		triggerLoader = new TTriggerLoader<>(form);
 		loadedProperty().addListener(new WeakChangeListener<>(chl));
 		disposeProperty().addListener(new WeakChangeListener<>(chl2));
 		logInit();
@@ -118,9 +119,10 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	}
 	
 	private void logInit() {
-		if(TLoggerUtil.isFormEngineEnabled())
+		if(TLoggerUtil.isFormEngineEnabled()) {
 			TLoggerUtil.splitDebugLine(TFormEngine.class, '-');
 			TLoggerUtil.debug(TFormEngine.class, getLogTitle()+": Created.");
+		}
 	}
 	
 	
@@ -130,7 +132,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 		
 		if(TLoggerUtil.isFormEngineEnabled()) {
 			TLoggerUtil.splitDebugLine(TFormEngine.class, '^');
-			TLoggerUtil.timeComplexity(TFormEngine.class, getLogTitle()+": Loading fields.", ()->execReadMode());
+			TLoggerUtil.timeComplexity(TFormEngine.class, getLogTitle()+": Loading fields.", this::execReadMode);
 		}else
 			execReadMode();
 	}
@@ -143,65 +145,66 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 		try {
 			if(StringUtils.isBlank(this.form.getId()))
 				form.setId("t-reader");
-				int totalHtmlReaders = 0;
-				fields = this.modelViewLoader.getReaders();
+			
+			fields = this.modelViewLoader.getReaders();
+			
+			int totalHtmlReaders = 0;
+			for (Node node : fields) {
+				if(node instanceof THtmlReader)
+					totalHtmlReaders++;		
+			}
+			
+			if(fields.size() == totalHtmlReaders){
 				
-				for (Node node : fields) {
-					if(node instanceof THtmlReader)
-						totalHtmlReaders++;		
+				StringBuilder sbf = new StringBuilder();
+				for (Node node : fields){
+					THtmlReader htmlReader = (THtmlReader) node;
+					sbf.append(htmlReader.getText()).append("\n");
 				}
+				StringBuilder op = new StringBuilder("<html><body>");
+				StringBuilder cl = new StringBuilder("</body></html>");
+				sbf = new StringBuilder(op.toString()+sbf.toString()+cl.toString());
 				
-				if(fields.size() == totalHtmlReaders){
-					
-					StringBuffer sbf = new StringBuffer();
-					for (Node node : fields){
-						THtmlReader htmlReader = (THtmlReader) node;
-						sbf.append(htmlReader.getText()).append("\n");
-					}
-					StringBuffer op = new StringBuffer("<html><body>");
-					StringBuffer cl = new StringBuffer("</body></html>");
-					sbf = new StringBuffer(op.toString()+sbf.toString()+cl.toString());
-					
-					TLoggerUtil.debug(getClass(), sbf.toString());
-					
-					webView = new WebView();
-					form.tAddFormItem(webView);
-					webView.setDisable(false);
-					
-					ChangeListener<Number> hListener = (arg0, arg1, arg2) -> webView.setPrefHeight((double) arg2);
-					this.tObjectRepository.add("webviewformchl", hListener);
-					
-					((Pane)this.form).heightProperty().addListener(new WeakChangeListener(hListener));
-										
-					if(modelView.getClass().getAnnotations()!=null){
-						Object[] arrReaderHtml = TReflectionUtil.getReaderHtmlBuilder(Arrays.asList(modelView.getClass().getAnnotations()));	
-						if(arrReaderHtml !=null ){
-							Annotation readerAnnotation = (Annotation) arrReaderHtml[0];
-							ITReaderHtmlBuilder readerBuilder = (ITReaderHtmlBuilder) arrReaderHtml[1];
-							webView.getEngine().loadContent(readerBuilder.build(readerAnnotation, sbf).getText());
-						}else
-							webView.getEngine().loadContent(sbf.toString());
+				TLoggerUtil.debug(getClass(), sbf.toString());
+				
+				webView = new WebView();
+				form.tAddFormItem(webView);
+				webView.setDisable(false);
+				
+				ChangeListener<Number> hListener = (arg0, arg1, arg2) -> webView.setPrefHeight((double) arg2);
+				this.tObjectRepository.add("webviewformchl", hListener);
+				
+				((Pane)this.form).heightProperty().addListener(new WeakChangeListener(hListener));
+									
+				if(modelView.getClass().getAnnotations()!=null){
+					Object[] arrReaderHtml = TReflectionUtil.getReaderHtmlBuilder(Arrays.asList(modelView.getClass().getAnnotations()));	
+					if(arrReaderHtml !=null ){
+						Annotation readerAnnotation = (Annotation) arrReaderHtml[0];
+						ITReaderHtmlBuilder readerBuilder = (ITReaderHtmlBuilder) arrReaderHtml[1];
+						webView.getEngine().loadContent(readerBuilder.build(readerAnnotation, sbf).getText());
 					}else
 						webView.getEngine().loadContent(sbf.toString());
-					
-				}else{
-					StringBuffer sbf = null;
-					for (Node node : fields){
-						if(node instanceof THtmlReader){
-							if(webView==null){
-								sbf = new StringBuffer();
-								webView = new WebView();
-								form.tAddFormItem(webView);
-							}
-							THtmlReader htmlReader = (THtmlReader) node;
+				}else
+					webView.getEngine().loadContent(sbf.toString());
+				
+			}else{
+				StringBuilder sbf = null;
+				for (Node node : fields){
+					if(node instanceof THtmlReader htmlReader){
+						if(webView==null){
+							sbf = new StringBuilder();
+							webView = new WebView();
+							form.tAddFormItem(webView);
+						}
+						if(sbf!=null)
 							sbf.append(htmlReader.getText()).append("\n");
-						}else						
-							form.tAddFormItem(node);
-					}
-					
-					if(sbf!=null)
-						webView.getEngine().loadContent(sbf.toString());
+					}else						
+						form.tAddFormItem(node);
 				}
+				
+				if(sbf!=null)
+					webView.getEngine().loadContent(sbf.toString());
+			}
 			loaded.setValue(true);
 			initializeReader();
 		} catch (Exception e) {
@@ -210,7 +213,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	}
 
 	private void buildModelViewLoader() {
-		this.modelViewLoader = new TModelViewLoader<M>(modelView, this.form);
+		this.modelViewLoader = new TModelViewLoader<>(modelView, this.form);
 	}
 
 	public void setEditMode(){		
@@ -288,7 +291,7 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	
 	public void initializeForm(){
 		form.tInitializeForm();
-	}; 
+	}
 	
 	public void initializeReader(){
 		form.tInitializeReader();

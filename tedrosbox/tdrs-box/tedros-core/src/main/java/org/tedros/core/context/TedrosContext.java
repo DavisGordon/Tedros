@@ -36,6 +36,7 @@ import org.tedros.core.security.model.TAuthorization;
 import org.tedros.core.security.model.TUser;
 import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.core.style.TStyleResourceValue;
+import org.tedros.core.ux.ITWindow;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.util.TClassUtil;
@@ -58,6 +59,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.stage.Stage;
@@ -106,9 +108,9 @@ public final class TedrosContext {
 	private static ObservableList<TMessage> infoListProperty;
 	
 	private static ObjectProperty<Node> detachedView;
+
+    private static ObservableList<ITWindow> windows;
 	
-	
-	//private static Stage stage;
 	private static SimpleObjectProperty<Node> currentViewProperty;
 	
 	private static ITViewBuilder viewBuilder;
@@ -117,7 +119,6 @@ public final class TedrosContext {
 	
 	private static Node MODAL;
 	
-	//private static boolean collapseMenu;
 	private static boolean PAGE_FORCE;
 	private static boolean PAGE_ADDHISTORY; 
 	private static boolean PAGE_SWAPVIEWS;
@@ -177,6 +178,18 @@ public final class TedrosContext {
 		messageListProperty = FXCollections.observableArrayList();
 		infoListProperty = FXCollections.observableArrayList();
 		detachedView = new SimpleObjectProperty<>();
+		windows = FXCollections.observableArrayList();
+		
+		//Close the windowed view when removed from the list
+		windows.addListener((Change<? extends ITWindow> c)->{
+			while(c.next()) {
+				if(c.wasRemoved()) {
+					for(ITWindow w : c.getRemoved()) {
+						w.close();
+					}
+				}
+			}
+		});
 		
 		initializationErrorMessageStringProperty.addListener((a,o,n)->{
 			if(showContextInitializationErrorMessages){
@@ -184,9 +197,7 @@ public final class TedrosContext {
 			}
 		});
 		
-		contextStringProperty.addListener((a,o,n)->{
-			messageListProperty.add(new TMessage(TMessageType.INFO, n));
-		});
+		contextStringProperty.addListener((a,o,n)-> messageListProperty.add(new TMessage(TMessageType.INFO, n)));
 		
 		TedrosCoreResource.createResource();
 		
@@ -795,13 +806,6 @@ public final class TedrosContext {
 	}
 	
 	/**
-	 * Set the app main Stage
-	 * *//*
-	public static void setStage(Stage s){
-		stage = s;
-	}*/
-	
-	/**
 	 * Get the app main Stage
 	 * */
 	public static Stage getStage(){
@@ -825,8 +829,6 @@ public final class TedrosContext {
 	public static final ReadOnlyObjectProperty viewProperty() {
 		return currentViewProperty;
 	}
-	
-	
 	
 	/**
 	 * Get the {@link Locale}
@@ -855,6 +857,7 @@ public final class TedrosContext {
 	}
 
 	public static void logOut() {
+		windows.clear();
 		removeUserSession();
 		main.logout();
 		loggedUser = null;
@@ -866,6 +869,7 @@ public final class TedrosContext {
 	 * Stop all services and exit program
 	 * */
 	public static void exit() {
+		windows.clear();
 		removeUserSession();
 		exitSystemProperty.set(true);
         Platform.exit();
@@ -929,6 +933,10 @@ public final class TedrosContext {
 	 */
 	public static void detachView(Node view) {
 		detachedView.set(view);
+	}
+	
+	public static ObservableList<ITWindow> getWindows() {
+		return windows;
 	}
 	
 }

@@ -11,6 +11,7 @@ import java.util.Stack;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.tedros.api.presenter.view.TViewState;
 import org.tedros.chat.module.client.behaviour.ChatBehaviour;
 import org.tedros.chat.module.client.decorator.ChatDecorator;
@@ -34,6 +35,7 @@ import org.tedros.core.logging.TLoggerManager;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
 import org.tedros.core.style.TThemeUtil;
+import org.tedros.core.ux.ITWindow;
 import org.tedros.fx.TFxKey;
 import org.tedros.fx.control.TLabel;
 import org.tedros.fx.layout.TSliderMenu;
@@ -58,9 +60,7 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener.Change;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -102,7 +102,9 @@ import javafx.util.Duration;
  * @author Davis Gordon
  * */
 public class TedrosBox extends Application implements ITedrosBox  {
-		
+	
+	private static Logger LOGGER = TLoggerUtil.getLogger(TedrosBox.class);
+	
 	private static TedrosBox tedros;
 	private Stage stage;
     private Scene scene;
@@ -134,7 +136,6 @@ public class TedrosBox extends Application implements ITedrosBox  {
     
     private Stack<Page> history;
     private Stack<Page> forwardHistory;
-    protected ObservableList<TWindow> windows;
     public boolean fromForwardOrBackButton;
     private boolean changingPage;
     private double mouseDragOffsetX;
@@ -155,11 +156,9 @@ public class TedrosBox extends Application implements ITedrosBox  {
     private ChangeListener<Number> effectChl;
     private ChangeListener<TViewState> chatViewStateChl;
     
-    public TedrosBox(){
-    	
+    public TedrosBox(){    	
         history = new Stack<>();
         forwardHistory = new Stack<>();
-        windows = FXCollections.observableArrayList();
         changingPage = false;
         mouseDragOffsetX = 0.0D;
         mouseDragOffsetY = 0.0D;
@@ -580,16 +579,6 @@ public class TedrosBox extends Application implements ITedrosBox  {
 			}
 		};
 		
-		windows.addListener((Change<? extends TWindow> c)->{
-			while(c.next()) {
-				if(c.wasRemoved()) {
-					for(TWindow w : c.getRemoved()) {
-						w.close();
-					}
-				}
-			}
-		});
-		
 		TedrosContext.detachedViewProperty().addListener((a,o,n)->{
 			if(n!=null) {
 				detachView(n);
@@ -971,38 +960,15 @@ public class TedrosBox extends Application implements ITedrosBox  {
         
     	Node currentView = TedrosContext.getView();
     	ITModule itModule = null;
-    	
     	//check if the selected module is already windowed
-    	final Node moduleSelected = page.getModule();
-        Optional<TWindow> optSelectedModuleWindowed = windows.stream()
-				.filter(p->{
-					
-					Node wView = p.getView();
-					if(wView instanceof ScrollPane sp)
-						wView = sp.getContent();
-					
-					return wView.equals(moduleSelected);// && wView.equals(currentNode);
-				})
-				.findFirst();
+    	Optional<ITWindow> optSelectedModuleWindowed = getPageWindowed(page);
         
         //check if the current detached view is already windowed
-        Node detachedView = TedrosContext.getDetachedView();
-        Optional<TWindow> optCurrentDetachedView = detachedView != null 
-        		? windows.stream()
-					.filter(p->{
-						
-						Node wView = p.getView();
-						if(wView instanceof ScrollPane sp)
-							wView = sp.getContent();
-						Node moduleView = detachedView.getParent();
-						return wView.equals(moduleView);
-					})
-					.findFirst()
-					: Optional.empty();
-        
+        Optional<ITWindow> optCurrentDetachedView = getCurrentDetachedView();
         boolean isWindowed = optSelectedModuleWindowed.isPresent();
         if(isWindowed) {
-			windows.remove(optSelectedModuleWindowed.get());
+        	ITWindow window = optSelectedModuleWindowed.get();
+			TedrosContext.getWindows().remove(window);
 		}
         
     	if(currentView != null && currentView instanceof ITModule m)
@@ -1035,9 +1001,42 @@ public class TedrosBox extends Application implements ITedrosBox  {
     	}else
     		callPage(page, addHistory, force, swapViews);
     }
+
+	private Optional<ITWindow> getPageWindowed(Page page) {
+		Node moduleSelected = page.getModule();
+        Optional<ITWindow> optSelectedModuleWindowed = TedrosContext.getWindows().stream()
+				.filter(p->{
+					
+					Node wView = p.getView();
+					if(wView instanceof ScrollPane sp)
+						wView = sp.getContent();
+					
+					return wView.equals(moduleSelected);// && wView.equals(currentNode);
+				})
+				.findFirst();
+		return optSelectedModuleWindowed;
+	}
+
+	private Optional<ITWindow> getCurrentDetachedView() {
+		Node detachedView = TedrosContext.getDetachedView();
+        Optional<ITWindow> optCurrentDetachedView = detachedView != null 
+        		? TedrosContext.getWindows().stream()
+					.filter(p->{
+						
+						Node wView = p.getView();
+						if(wView instanceof ScrollPane sp)
+							wView = sp.getContent();
+						Node moduleView = detachedView.getParent();
+						return wView.equals(moduleView);
+					})
+					.findFirst()
+					: Optional.empty();
+		return optCurrentDetachedView;
+	}
     
     @SuppressWarnings({ "unchecked" })
 	private void callPage(Page page, boolean addHistory, boolean force, boolean swapViews){
+    	LOGGER.info("Call page: {}", page);        
         if(page == null)
             return;
         if(!force && page == currentPage)
@@ -1078,7 +1077,8 @@ public class TedrosBox extends Application implements ITedrosBox  {
                 }
                 
                 pageArea.getChildren().setAll(content);
-                TedrosContext.setView(view);
+                TedrosContext.setView(view);                	
+                
                 addHistory(addHistory, page);
             }
         }
@@ -1092,22 +1092,17 @@ public class TedrosBox extends Application implements ITedrosBox  {
         menuTree.getSelectionModel().select(page);
         breadcrumbBar.setPath(currentPagePath);
         changingPage = false;
-        System.gc();
-        Runtime.getRuntime().runFinalization();
     }
     
     @Override
 	public void detachView(Node view) {
-		
-		if(windows.stream().filter(p->p.getView().equals(view)).findFirst().isPresent()) {
+    	if(TedrosContext.getWindows().stream().anyMatch(p->p.getView().equals(view))) {
 			return;
 		}
 		
 		Node currentNode = pageArea.getChildren().get(0);		
-		
-        if (view.getParent() != null) {       	
+		if (view.getParent() != null) {       	
             Parent parent = view.getParent();
-        	
             if(parent instanceof ITModule itModule && currentNode instanceof ScrollPane scroll && scroll.getContent()==itModule) {
             	pageArea.getChildren().clear();
 			}
@@ -1116,19 +1111,22 @@ public class TedrosBox extends Application implements ITedrosBox  {
         
         if(!history.isEmpty()) {
         	Page page = history.stream()
-    				.filter(p->p.getModule()==view)
+    				.filter(p->p.getModule()==view.getParent())
     				.findFirst()
     				.orElse(null);
             
             history.removeIf(p->p==page);
-    	    historySize.setValue(String.valueOf(history.size()));
+            clearForward(page);
+		    historySize.setValue(String.valueOf(history.size()));
+		    forwardSize.setValue(String.valueOf(forwardHistory.size()));
         }
 	    
-        windows.add(new TWindow(this, currentNode));
+        ITWindow window = new TWindow(currentNode);
+        TedrosContext.getWindows().add(window);
         
         Object obj = menuTree.getTreeItem(0).getValue();
 	    TedrosContext.setPagePathProperty(obj.toString(), false, true, true);
-		TedrosContext.detachView(null);
+		TedrosContext.detachView(null);		
 	}
     
 	/**
@@ -1138,12 +1136,14 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		if(addHistory && currentPage!=null 
 				&& currentPage.getModule() instanceof ITModule){
 			Page p =  currentPage;
-		    history.push(p);
-		    resizeHistory();
-		    if(page.getModule() instanceof ITModule)
-		    	clearForward(page);
-		    historySize.setValue(String.valueOf(history.size()));
-		    forwardSize.setValue(String.valueOf(forwardHistory.size()));
+			if(!history.contains(p)){
+			    history.push(p);
+			    resizeHistory();
+			    if(page.getModule() instanceof ITModule)
+			    	clearForward(page);
+			    historySize.setValue(String.valueOf(history.size()));
+			    forwardSize.setValue(String.valueOf(forwardHistory.size()));
+			}
 		}
 	}
 
@@ -1154,7 +1154,8 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		if(history.size()>=TedrosContext.getTotalPageHistory()) {
 			Page rem = history.remove(0);
 			Node n = rem.getModule();
-			if(n instanceof ITModule itModule)
+			Optional<ITWindow> pageWindowed = getPageWindowed(rem);
+			if(n instanceof ITModule itModule && !pageWindowed.isPresent())
 				itModule.tStop();
 		}
 	}
@@ -1174,13 +1175,12 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	public void back() {
 	    fromForwardOrBackButton = true;
 	    if (!history.isEmpty()) {      
-	        Page prevPage = (Page) history.pop();
-	        if(currentPage!=null 
-	        		&& currentPage.getModule() instanceof ITModule)
-	        	forwardHistory.push(currentPage);
-
-		    historySize.setValue(String.valueOf(history.size()));
-		    forwardSize.setValue(String.valueOf(forwardHistory.size()));
+	        Page prevPage = history.pop();
+	        if(currentPage!=null && currentPage.getModule() instanceof ITModule && !forwardHistory.contains(currentPage)) {
+	        	forwardHistory.push(currentPage);	        	
+	        }
+	        historySize.setValue(String.valueOf(history.size()));
+        	forwardSize.setValue(String.valueOf(forwardHistory.size()));
 	        TedrosContext.setPageProperty(prevPage,false, false, true);
 	    }
 	    fromForwardOrBackButton = false;
@@ -1193,9 +1193,8 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	public void forward() {
 	    fromForwardOrBackButton = true;
 	    if (!forwardHistory.isEmpty()) {
-	        Page prevPage = (Page) forwardHistory.pop();
-	        if(currentPage!=null 
-	        		&& currentPage.getModule() instanceof ITModule) {
+	        Page prevPage = forwardHistory.pop();
+	        if(currentPage!=null && currentPage.getModule() instanceof ITModule && !history.contains(currentPage)) {
 	        	history.push(currentPage);
 	        	resizeHistory();
 	        }
@@ -1210,17 +1209,14 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	private void printHistory() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("   HISTORY = ");
-	    for (Object o :history) {
-	    	Page page = (Page) o;
+	    for (Page page : history) {
 	    	builder.append(page.getName()+"->");
 	    }
 	    builder.append("   ["+currentPage.getName()+"]");
-	    for (Object o :forwardHistory) {
-	    	Page page = (Page) o;
+	    for (Page page :forwardHistory) {
 	    	builder.append(page.getName()+"->");
 	    }
-	    
-	    TLoggerUtil.debug(getClass(), builder.toString());
+	    TLoggerUtil.info(getClass(), builder.toString());
 	}
 
 	/**
@@ -1230,7 +1226,8 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	public void clearPageHistory() {
 		history.stream().forEach(p->{
 			Node n = p.getModule();
-			if(n!=null && n instanceof ITModule itModule) {
+			Optional<ITWindow> pageWindowed = getPageWindowed(p);
+			if(n!=null && n instanceof ITModule itModule && !pageWindowed.isPresent()) {
 				itModule.tStop();
 			}
 		});
@@ -1245,8 +1242,11 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	private void clearForward(Page page) {
 		forwardHistory.stream().forEach(p->{
 			Node n = p.getModule();
-			if(n!=null && n instanceof ITModule itModule
-				&& (page==null || (page!=null && page!=p))) {
+			Optional<ITWindow> pageWindowed = getPageWindowed(p);
+			if(n!=null && n instanceof ITModule itModule 
+					&& !pageWindowed.isPresent()
+					&& (page==null || (page!=null && page!=p))) 
+			{
 				itModule.tStop();
 			}
 		});
@@ -1273,9 +1273,6 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		TLanguage.addResourceBundles(null, TFxKey.class.getClassLoader(), "TFx", "TUsual");
         init(primaryStage);
         primaryStage.show();
-    }
-
-	
-  
+    }  
 }
 

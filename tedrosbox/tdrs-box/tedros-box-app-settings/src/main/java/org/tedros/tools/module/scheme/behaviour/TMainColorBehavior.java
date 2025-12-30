@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.util.Properties;
 
 import org.tedros.api.form.ITModelForm;
-import org.tedros.core.TModule;
+import org.tedros.core.ITModule;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.style.TStyleResourceName;
@@ -26,6 +26,8 @@ import org.tedros.tools.module.scheme.template.TemplatePane;
 import org.tedros.util.TedrosFolder;
 
 import javafx.application.Platform;
+import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
 
 public class TMainColorBehavior extends TDynaViewCrudBaseBehavior<TMainColorMV, TMainColor> {
 
@@ -36,6 +38,7 @@ public class TMainColorBehavior extends TDynaViewCrudBaseBehavior<TMainColorMV, 
 		return true;
 	}
 	
+	@Override
 	public void load(){
 		super.load();
 		configSaveButton();
@@ -46,14 +49,11 @@ public class TMainColorBehavior extends TDynaViewCrudBaseBehavior<TMainColorMV, 
 		newAction();
 	}
 	
-
-	@SuppressWarnings({ "rawtypes", "unchecked"})
 	@Override
+	@SuppressWarnings({ "rawtypes", "unchecked"})
 	protected void runAfterBuildForm(ITModelForm form) {
 		
-		
-		
-		((TMainColorMV)getModelView()).loadSavedValues();
+		getModelView().loadSavedValues();
 		
 		TMainColorDecorator decorator =  (TMainColorDecorator) getPresenter().getDecorator();
 		form.tAddAssociatedObject(TemplatePane.class.getSimpleName(), decorator.getTemplate());
@@ -79,11 +79,17 @@ public class TMainColorBehavior extends TDynaViewCrudBaseBehavior<TMainColorMV, 
 				fos.close();
 				Platform.runLater(() ->{
 					TedrosContext.reloadStyle();
-					((TMainColorMV)getModelView()).loadSavedValues();
+					getModelView().loadSavedValues();
+					
+					Node currentModule = TedrosContext.getView();
+					if(currentModule instanceof ScrollPane sp) {
+						currentModule = sp.getContent();
+					}
+					
 					TGroupPresenter gp = (TGroupPresenter) TedrosAppManager.getInstance()
-					.getModuleContext((TModule)TedrosContext.getView()).getCurrentViewContext()
+					.getModuleContext((ITModule)currentModule).getCurrentViewContext()
 					.getPresenter();
-					//(TGroupPresenter) ((ITModule)TedrosContext.getView()).gettPresenter();
+					
 					gp.getGroupViewItemList().forEach(i -> {
 						if(i.getModelViewClass()==TBackgroundImageMV.class && i.isViewInitialized()) {
 							((TDynaPresenter)i.getViewInstance(null).gettPresenter())
@@ -103,8 +109,6 @@ public class TMainColorBehavior extends TDynaViewCrudBaseBehavior<TMainColorMV, 
 		});
 		
 	}
-	
-	
 	
 	@Override
 	public void colapseAction() {

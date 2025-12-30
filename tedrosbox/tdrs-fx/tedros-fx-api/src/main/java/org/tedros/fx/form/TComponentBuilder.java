@@ -1,7 +1,6 @@
 package org.tedros.fx.form;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
@@ -38,13 +37,9 @@ import javafx.scene.effect.Effect;
 
 public final class TComponentBuilder {
 	
-	private final static Logger LOGGER = TLoggerUtil.getLogger(TComponentBuilder.class);
+	private static final Logger LOGGER = TLoggerUtil.getLogger(TComponentBuilder.class);
 	
 	private final Map<String, Object> parserMap = new HashMap<>();
-	
-	public TComponentBuilder() {
-		
-	}
 	
 	public Effect getEffect(Annotation annotation) throws Exception{
 		
@@ -141,8 +136,8 @@ public final class TComponentBuilder {
 				layoutAnnotation = null;
 				layoutBuilder = null;
 			}else			
-			if(layoutBuilder instanceof ITBuilder){
-				((ITBuilder) layoutBuilder).setComponentDescriptor(descriptor);
+			if(layoutBuilder instanceof ITBuilder itBuilder){
+				itBuilder.setComponentDescriptor(descriptor);
 			}
 		}
 		
@@ -153,8 +148,8 @@ public final class TComponentBuilder {
 		Node control = fd.getComponent();
 		Node layout = ((ITLayoutBuilder) layoutBuilder).build(layoutAnnotation);
 		descriptor.getComponents().put(fd.getFieldName(), layout);
-		if(control instanceof ITFieldBox)
-			descriptor.getFieldBoxMap().put(fd.getFieldName(), (ITFieldBox) control);
+		if(control instanceof ITFieldBox itFieldBox)
+			descriptor.getFieldBoxMap().put(fd.getFieldName(), itFieldBox);
 		fd.setLayout(layout);
 	}
 	
@@ -176,8 +171,8 @@ public final class TComponentBuilder {
 				controlAnnotation = null;
 				controlBuilder = null;
 			}else
-			if(controlBuilder instanceof ITBuilder){
-				((ITBuilder) controlBuilder).setComponentDescriptor(descriptor);
+			if(controlBuilder instanceof ITBuilder itBuilder){
+				itBuilder.setComponentDescriptor(descriptor);
 			}
 		}
 		
@@ -219,8 +214,8 @@ public final class TComponentBuilder {
 				readerAnnotation = null;
 				readerBuilder = null;
 			}else			
-			if(readerBuilder instanceof ITBuilder){
-				((ITBuilder) readerBuilder).setComponentDescriptor(descriptor);
+			if(readerBuilder instanceof ITBuilder itBuilder){
+				itBuilder.setComponentDescriptor(descriptor);
 			}
 			
 		}else 
@@ -233,8 +228,8 @@ public final class TComponentBuilder {
 				readerAnnotation = null;
 				readerBuilder = null;
 			}else			
-			if(readerBuilder instanceof ITBuilder){
-				((ITBuilder) readerBuilder).setComponentDescriptor(descriptor);
+			if(readerBuilder instanceof ITBuilder itBuilder){
+				itBuilder.setComponentDescriptor(descriptor);
 			}
 		}
 		
@@ -274,8 +269,8 @@ public final class TComponentBuilder {
 				layoutAnnotation = null;
 				layoutBuilder = null;
 			}else			
-			if(layoutBuilder!=null && layoutBuilder instanceof ITBuilder){
-				((ITBuilder) layoutBuilder).setComponentDescriptor(descriptor);
+			if(layoutBuilder!=null && layoutBuilder instanceof ITBuilder itBuilder){
+				itBuilder.setComponentDescriptor(descriptor);
 			}
 		}
 		
@@ -326,7 +321,7 @@ public final class TComponentBuilder {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private <T> T buildReader(final ITComponentDescriptor descriptor, Annotation annotation, ITFieldBuilder builder) throws IllegalAccessException, InvocationTargetException {
+	private <T> T buildReader(final ITComponentDescriptor descriptor, Annotation annotation, ITFieldBuilder builder) throws Exception {
 		
 		if(builder instanceof ITReaderHtmlBuilder){
 			
@@ -361,26 +356,26 @@ public final class TComponentBuilder {
 		return null;
 	}
 	
-	@SuppressWarnings({"unchecked", "rawtypes"})
+	@SuppressWarnings({"unchecked"})
 	private Node buildControl(ITComponentDescriptor descriptor, ITFieldBuilder controlBuilder, Annotation controlAnnotation)
-			throws IllegalAccessException, InvocationTargetException, Exception, NoSuchMethodException {
+			throws Exception {
 		
 		Node node = null;
-		if(controlBuilder instanceof ITControlBuilder){
-			final Object attrProperty = descriptor.getFieldValue();// modelViewGetMethod.invoke(modelView);
-			node = ((ITControlBuilder) controlBuilder).build(controlAnnotation, attrProperty);
+		if(controlBuilder instanceof ITControlBuilder itControlBuilder){
+			final Object attrProperty = descriptor.getFieldValue();
+			node = itControlBuilder.build(controlAnnotation, attrProperty);
 		}else
-		if(controlBuilder instanceof ITChartBuilder){
-			final Node chart = (Node) descriptor.getFieldValue();//modelViewGetMethod.invoke(modelView);
-			node =  ((ITChartBuilder) controlBuilder).build(controlAnnotation, chart);
+		if(controlBuilder instanceof ITChartBuilder itChartBuilder){
+			final Node chart = (Node) descriptor.getFieldValue();
+			node = itChartBuilder.build(controlAnnotation, chart);
 		}else
-		if(controlBuilder instanceof ITFileBuilder){
+		if(controlBuilder instanceof ITFileBuilder itFileBuilder){
 						
-			final Object obj = (Object) descriptor.getFieldValue();//modelViewGetMethod.invoke(modelView);
+			final Object obj = descriptor.getFieldValue();
 			
 			if(obj instanceof TSimpleFileProperty){
 				TSimpleFileProperty<?> attrProperty = (TSimpleFileProperty<?>) obj;
-				node =  ((ITFileBuilder) controlBuilder).build(controlAnnotation, attrProperty);
+				node =  itFileBuilder.build(controlAnnotation, attrProperty);
 			}else{
 				
 				Method fileNameFieldMethod = null;
@@ -399,7 +394,7 @@ public final class TComponentBuilder {
 				Property<?> attrProperty = (Property<?>) obj;
 				final Method fileNameFieldGetMethod = descriptor.getModelView().getClass().getMethod("get"+StringUtils.capitalize(fileName));
 				final SimpleStringProperty fileNameProperty = (SimpleStringProperty) fileNameFieldGetMethod.invoke(descriptor.getModelView());
-				node =  ((ITFileBuilder) controlBuilder).build(controlAnnotation, fileNameProperty, (Property<byte[]>) attrProperty);
+				node =  itFileBuilder.build(controlAnnotation, fileNameProperty, attrProperty);
 				
 			}
 			
@@ -412,7 +407,7 @@ public final class TComponentBuilder {
 	
 	private void applyEffects(ITComponentDescriptor descriptor, Node control) throws Exception {
 		if(control==null){
-			LOGGER.warn("WARNING: Control null to "+descriptor.getFieldDescriptor().getFieldName());
+			LOGGER.warn("WARNING: Control null to {}", descriptor.getFieldDescriptor().getFieldName());
 			return;
 		}
 		

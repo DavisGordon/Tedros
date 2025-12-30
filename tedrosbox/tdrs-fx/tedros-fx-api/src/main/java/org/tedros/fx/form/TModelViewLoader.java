@@ -7,7 +7,6 @@
 package org.tedros.fx.form;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -35,7 +34,7 @@ import javafx.scene.Node;
  */
 class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 	
-	private final static Logger LOGGER = TLoggerUtil.getLogger(TModelViewLoader.class);
+	private static final Logger LOGGER = TLoggerUtil.getLogger(TModelViewLoader.class);
 	
 	private SimpleIntegerProperty count = new SimpleIntegerProperty(0);
 	private final Object lock = new Object();
@@ -58,12 +57,7 @@ class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 		
 		ChangeListener<Boolean> chl = (ob, o, n) ->{
 			if(n) {
-				super.getFieldDescriptorList().sort(new Comparator<ITFieldDescriptor>() {
-					@Override
-					public int compare(ITFieldDescriptor o1, ITFieldDescriptor o2) {
-						return Integer.compare(o1.getOrder(), o2.getOrder());
-					}
-				});
+				super.getFieldDescriptorList().sort((o1, o2) -> Integer.compare(o1.getOrder(), o2.getOrder()));
 				super.getFieldDescriptorList().stream().forEach(fd->{
 					if(!(!fd.isLoaded() || (fd.isLoaded() && fd.hasParent()))) {
 						
@@ -103,12 +97,7 @@ class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 		if(!layoutFd.isEmpty())
 			count.addListener((obj, o, n) ->{
 				if(n.intValue()==0) {
-					layoutFd.sort(new Comparator<ITFieldDescriptor>() {
-						@Override
-						public int compare(ITFieldDescriptor o1, ITFieldDescriptor o2) {
-							return Integer.compare(o2.getOrder(), o1.getOrder());
-						}
-					});
+					layoutFd.sort((o1, o2) -> Integer.compare(o2.getOrder(), o1.getOrder()));
 					descriptor.setMode(TViewMode.EDIT);
 					layoutFd.stream().forEach(fd->{
 						if(!fd.isLoaded()) {
@@ -126,28 +115,19 @@ class TModelViewLoader<M extends ITModelView<?>> extends TFieldLoader<M> {
 		
 		controlsFd.parallelStream().forEach(fd->{
 			if(!fd.isLoaded()) {
-				
-				Thread taskThread = new Thread(new Runnable() {
-				      @Override
-				      public void run() {
-						Platform.runLater(new Runnable() {
-				            @Override
-				            public void run() {
-				            	try {
-									TComponentDescriptor cd = new TComponentDescriptor(descriptor, fd.getFieldName());
-				            		
-				            		TComponentBuilder builder = new TComponentBuilder();
-				            		
-				            		builder.processControlField(cd);
-									lessOne();
-								} catch (Exception e) {
-									LOGGER.error(e.getMessage(), e);
-								}
-								
-				            }
-				          });
-				      	}
-					});
+				Thread taskThread = new Thread(() -> 
+					Platform.runLater(() -> {
+			            	try {
+								TComponentDescriptor cd = new TComponentDescriptor(descriptor, fd.getFieldName());
+			            		
+			            		TComponentBuilder builder = new TComponentBuilder();
+			            		
+			            		builder.processControlField(cd);
+								lessOne();
+							} catch (Exception e) {
+								LOGGER.error(e.getMessage(), e);
+							}
+					}));
 				taskThread.setDaemon(true);
 				taskThread.start();
 			}
