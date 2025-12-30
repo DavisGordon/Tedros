@@ -75,13 +75,13 @@ import javafx.stage.Stage;
 @SuppressWarnings({ "rawtypes"})
 public final class TedrosContext {
 	
+	private static final Logger LOGGER = TLoggerUtil.getLogger(TedrosContext.class);
+	
 	private static final String PROPERTIE_SET_TO_DEFAULT_VALUE = "- Propertie {} set to default value {}";
 
 	private static final String PROPERTIE_LOADED = "- Propertie {} loaded.";
 
 	private static final String PROPERTIE_NOT_DEFINED = "- Propertie {} not defined!";
-
-	private final static Logger LOGGER = TLoggerUtil.getLogger(TedrosContext.class);
 	
 	private static final String DEFAULT_COUNTRY_ISO2 = "BR";
 	private static final int DEFAULT_TOTAL_PAGE_HISTORY = 3;
