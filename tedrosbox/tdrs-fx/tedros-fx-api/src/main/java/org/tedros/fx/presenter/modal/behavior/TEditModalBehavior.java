@@ -2,7 +2,7 @@ package org.tedros.fx.presenter.modal.behavior;
 
 import java.util.Arrays;
 
-import org.tedros.core.TModule;
+import org.tedros.core.ITModule;
 import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
@@ -164,8 +164,11 @@ extends TDynaViewCrudBaseBehavior<M, E> {
 	
 	private void closeModal() {
 		super.invalidate();
+		
+		ITModule module = TedrosContext.getCurrentModule();
+		
 		TedrosAppManager.getInstance()
-		.getModuleContext((TModule)TedrosContext.getView()).getCurrentViewContext()
+		.getModuleContext(module).getCurrentViewContext()
 		.getPresenter().getView().tHideModal();
 	}
 	/**

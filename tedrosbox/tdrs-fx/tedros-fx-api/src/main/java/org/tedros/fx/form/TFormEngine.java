@@ -219,20 +219,16 @@ public final class TFormEngine<M extends ITModelView<?>, F extends ITModelForm<M
 	public void setEditMode(){		
 		resetForm();
 		mode = TViewMode.EDIT;
-		/*
-		 * TODO: COMMENTED TO PUT INSIDE THE THREAD 
-		 * buildModelViewLoader();
-		 * this.loaded.bind(this.modelViewLoader.allLoadedProperty());
-		 */
-		Thread taskThread = new Thread(()-> {
+		
+		Thread taskThread = new Thread(()-> 
 			Platform.runLater(()-> {
 				if(TLoggerUtil.isFormEngineEnabled()) {
 					TLoggerUtil.splitDebugLine(TFormEngine.class, '^');
-					TLoggerUtil.timeComplexity(TFormEngine.class, getLogTitle()+": Loading fields.", ()->loadEditFields());
+					TLoggerUtil.timeComplexity(TFormEngine.class, getLogTitle()+": Loading fields.", this::loadEditFields);
 				}else
 					loadEditFields();
-			});
-		});
+			}));
+		
 		taskThread.setDaemon(true);
 		taskThread.start();
 	}

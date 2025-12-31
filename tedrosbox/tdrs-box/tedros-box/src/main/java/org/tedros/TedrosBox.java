@@ -848,7 +848,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     		this.currentPage = null;
     		this.currentPagePath = null;
     	}
-    		
+    	TedrosContext.getWindows().clear();
         TedrosContext.setView(null);
         // goto initial page
         goToPage(pages.getModules());

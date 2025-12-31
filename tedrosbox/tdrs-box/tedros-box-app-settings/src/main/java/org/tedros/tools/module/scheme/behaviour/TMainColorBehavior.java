@@ -112,8 +112,7 @@ public class TMainColorBehavior extends TDynaViewCrudBaseBehavior<TMainColorMV, 
 	
 	@Override
 	public void colapseAction() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
@@ -124,8 +123,7 @@ public class TMainColorBehavior extends TDynaViewCrudBaseBehavior<TMainColorMV, 
 
 	@Override
 	public void remove() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 }

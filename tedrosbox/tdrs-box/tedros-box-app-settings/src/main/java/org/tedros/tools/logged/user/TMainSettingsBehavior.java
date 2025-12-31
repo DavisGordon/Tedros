@@ -12,15 +12,11 @@ import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 
 public class TMainSettingsBehavior extends TSaveViewBehavior<TMainSettingsModelView, MainSettings> {
-
-	//private TLanguage iEngine;
 	
 	@Override
 	public void load() {
 		
 		super.load();
-		
-		//iEngine = TLanguage.getInstance(null);
 		
 		addAction(new TPresenterAction(TActionType.SAVE) {
 
@@ -29,10 +25,11 @@ public class TMainSettingsBehavior extends TSaveViewBehavior<TMainSettingsModelV
 				
 				Node view = TedrosContext.getView();
 		    	ITModule m = null;
-		    	if(view != null && view instanceof ITModule)
-		    		m = (ITModule) view;
-		    	else if(view != null && view instanceof ScrollPane && ((ScrollPane)view).getContent() instanceof ITModule)
-		    		m = (ITModule) ((ScrollPane)view).getContent();
+		    	if(view != null && view instanceof ITModule itModule)
+		    		m = itModule;
+		    	else if(view != null && view instanceof ScrollPane sp 
+		    			&& sp.getContent() instanceof ITModule itModule)
+		    		m = itModule;
 		    	
 		    	if(m!=null) {
 			    	String msg = m.tCanStop();

@@ -146,7 +146,8 @@ public final class TedrosAppManager extends TedrosAppLoader {
 		return null;
 	}
 	
-	public TModuleContext getModuleContext(@SuppressWarnings("rawtypes") Class<? extends ITModelView> modelViewClass, Class<? extends ITModel> modelClass) {
+	@SuppressWarnings("rawtypes") 
+	public TModuleContext getModuleContext(Class<? extends ITModelView> modelViewClass, Class<? extends ITModel> modelClass) {
 		for(TAppContext a : this.getAppContexts()){
 			for(TModuleContext mctx : a.getModulesContext()) {
 				for(TViewDescriptor vds : mctx.getModuleDescriptor().getViewDescriptors()) {
@@ -213,16 +214,12 @@ public final class TedrosAppManager extends TedrosAppLoader {
 	
 	@SuppressWarnings({ "rawtypes" })
 	public void loadInModule(Class<? extends ITModule> moduleClass, ITModelView modelView) {
-		loadIn(moduleClass, m->{
-			m.tLookupAndShow(modelView);
-		});
+		loadIn(moduleClass, m-> m.tLookupAndShow(modelView));
 	}
 	
 	@SuppressWarnings({ "rawtypes" })
 	public void loadInModule(Class<? extends ITModule> moduleClass, ObservableList<? extends ITModelView> modelsView) {
-		loadIn(moduleClass, m->{
-			m.tLookupAndShow(modelsView);
-		});
+		loadIn(moduleClass, m-> m.tLookupAndShow(modelsView));
 	}
 	
 	@SuppressWarnings({ "unchecked"})
@@ -247,16 +244,12 @@ public final class TedrosAppManager extends TedrosAppLoader {
 	
 	@SuppressWarnings({"rawtypes"})
 	public void loadInModule(String modulePath, ITModelView modelView) {
-		loadIn(modulePath, m->{
-			m.tLookupAndShow(modelView);
-		});
+		loadIn(modulePath, m-> m.tLookupAndShow(modelView));
 	}
 	
 	@SuppressWarnings({"rawtypes"})
 	public void loadInModule(String modulePath, ObservableList<? extends ITModelView> modelsView) {
-		loadIn(modulePath, m->{
-			m.tLookupAndShow(modelsView);
-		});
+		loadIn(modulePath, m-> m.tLookupAndShow(modelsView));
 	}
 	
 	private void loadIn(String modulePath, Consumer<ITModule> f) {

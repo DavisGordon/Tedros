@@ -83,10 +83,11 @@ public class TUserSettingBehavior extends TSaveViewBehavior<TUserSettingModelVie
 	
 	private void saveLanguage(String language) throws IOException{
 		String propFilePath = TFileUtil.getTedrosFolderPath()+TedrosFolder.CONF_FOLDER.getFolder()+TStyleResourceName.LANGUAGE;
-		FileOutputStream fos = new FileOutputStream(propFilePath);
-		Properties prop = new Properties();
-		prop.setProperty("language", language);
-		prop.store(fos, "custom styles");
+		try(FileOutputStream fos = new FileOutputStream(propFilePath)){
+			Properties prop = new Properties();
+			prop.setProperty("language", language);
+			prop.store(fos, "custom styles");
+		}
 	}
 
 }

@@ -3,6 +3,8 @@
  */
 package org.tedros.fx.control;
 
+import org.tedros.api.presenter.view.TDetachViewType;
+import org.tedros.core.ITModule;
 import org.tedros.core.TLanguage;
 import org.tedros.core.TModule;
 import org.tedros.core.context.TedrosAppManager;
@@ -31,9 +33,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
@@ -140,11 +144,10 @@ public class TEditEntityModal extends TRequiredModal {
 		//Open modal event
 		EventHandler<ActionEvent> fev = e -> {
 			StackPane pane = new StackPane();
-			view = new TDynaGroupView(tModelViewClass, tModelClass, tSelectedItems);
+			view = new TDynaGroupView(tModelViewClass, tModelClass, tSelectedItems, TDetachViewType.NONE);
 			pane.setMaxSize(modalWidth, modalHeight);
 			pane.getChildren().add(view);
 			pane.setId("t-tedros-color");
-			//pane.getStyleClass().add("t-panel-color");
 			pane.setStyle("-fx-background-radius: 20 20 20 20;");
 			view.tLoad();
 			
@@ -156,8 +159,10 @@ public class TEditEntityModal extends TRequiredModal {
 				bh.setSingleMode();
 			}
 			
+			ITModule itModule = TedrosContext.getCurrentModule();
+			
 			TedrosAppManager.getInstance()
-			.getModuleContext((TModule)TedrosContext.getView()).getCurrentViewContext()
+			.getModuleContext(itModule).getCurrentViewContext()
 			.getPresenter().getView().tShowModal(pane, false);
 		};
 		repo.add("fev", fev);
@@ -217,21 +222,19 @@ public class TEditEntityModal extends TRequiredModal {
 		tListView.setItems(tSelectedItems);
 		tListView.setEditable(true);
 		tListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		Callback<ListView<TModelView>, ListCell<TModelView>> callBack = (Callback<ListView<TModelView>, ListCell<TModelView>>) 
-				 new TEntityListViewCallback();
+		Callback<ListView<TModelView>, ListCell<TModelView>> callBack = new TEntityListViewCallback();
 		
 		tListView.setCellFactory(callBack);
 		
-		ListChangeListener<TModelView> icl = (o) -> {
+		ListChangeListener<TModelView> icl = o -> {
 			boolean disable = o.getList().isEmpty();
 			tClearButton.setDisable(disable);
 		};
 		repo.add("icl", icl);
 		tListView.getItems().addListener(new WeakListChangeListener(icl));
 		
-		ChangeListener<TModelView> selchl = (o, old, n) -> {
-			tRemoveButton.setDisable(n==null);
-		};
+		ChangeListener<TModelView> selchl = (o, old, n) -> tRemoveButton.setDisable(n==null);
+		
 		repo.add("selchl", selchl);
 		tListView.getSelectionModel().selectedItemProperty().addListener(new WeakChangeListener(selchl));
 	}

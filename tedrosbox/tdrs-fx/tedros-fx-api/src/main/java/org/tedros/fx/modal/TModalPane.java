@@ -2,7 +2,6 @@ package org.tedros.fx.modal;
 
 import java.util.function.Consumer;
 
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -22,12 +21,10 @@ public class TModalPane extends StackPane {
 	private void initialize() {
 		setId("t-modal-dimmer");
 		setAlignment(Pos.CENTER);
-		setOnMouseClicked(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent t) {
-                t.consume();
+		setOnMouseClicked(e -> {
+                e.consume();
                 hideModal();
-            }
-        });
+            });
 		setVisible(false);
 	}
 	
@@ -74,29 +71,13 @@ public class TModalPane extends StackPane {
 	public void showModal(Node node, Consumer<MouseEvent> closeAction) {
 		
 		if(closeAction!=null)
-			setOnMouseClicked(ev->{
-				closeAction.accept(ev);
-	        });
+			setOnMouseClicked(closeAction::accept);
 		else
 			setOnMouseClicked(null);
 		getChildren().clear();
 		getChildren().add(node);
 		StackPane.setMargin(node, new Insets(20));
 		StackPane.setAlignment(node, Pos.CENTER);
-        /*setOpacity(0);
-        setVisible(true);
-        setCache(true);
-        Timeline tl = new Timeline();
-        tl.getKeyFrames().add(
-            new KeyFrame(Duration.millis(400), 
-                new EventHandler<ActionEvent>() {
-                    public void handle(ActionEvent t) {
-                        setCache(false);
-                    }
-                },
-                new KeyValue(opacityProperty(),1, Interpolator.LINEAR)
-        ));
-        tl.play();*/
         setVisible(true);
 	 }
 	
@@ -108,23 +89,7 @@ public class TModalPane extends StackPane {
 
     	if(closeCallback!=null)
     		closeCallback.accept(getChildren().get(0));
-    	getChildren().clear();
-       /* setCache(true);
-        Timeline tl = new Timeline();
-        tl.getKeyFrames().add(
-            new KeyFrame(Duration.millis(400), 
-                new EventHandler<ActionEvent>() {
-                    public void handle(ActionEvent t) {
-                    	if(closeCallback!=null)
-                    		closeCallback.accept(getChildren().get(0));
-                        getChildren().clear();
-                        setCache(false);
-                        setVisible(false);
-                    }
-                },
-                new KeyValue(opacityProperty(),0, Interpolator.LINEAR)
-        ));
-        tl.play();*/
+    	getChildren().clear();       
 	}
 	
 	

@@ -13,6 +13,7 @@ import java.lang.annotation.Target;
 
 import org.tedros.api.parser.ITAnnotationParser;
 import org.tedros.api.presenter.view.TViewMode;
+import org.tedros.core.ITModule;
 import org.tedros.fx.annotation.TDefaultValue;
 import org.tedros.fx.annotation.layout.TPane;
 import org.tedros.fx.annotation.layout.TVBox.TMargin;

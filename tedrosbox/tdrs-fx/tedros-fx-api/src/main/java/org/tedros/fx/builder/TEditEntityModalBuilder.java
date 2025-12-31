@@ -30,8 +30,8 @@ implements ITControlBuilder<org.tedros.fx.control.TEditEntityModal, Observable> 
 	public org.tedros.fx.control.TEditEntityModal build(final Annotation annotation, final Observable attrProperty) throws Exception {
 		TEditEntityModal tAnnotation = (TEditEntityModal) annotation;
 		org.tedros.fx.control.TEditEntityModal control =
-				(attrProperty instanceof ITObservableList) 
-					? new org.tedros.fx.control.TEditEntityModal( (ITObservableList) attrProperty, tAnnotation.width(), tAnnotation.height(), tAnnotation.modalWidth(), tAnnotation.modalHeight())
+				(attrProperty instanceof ITObservableList itObsList) 
+					? new org.tedros.fx.control.TEditEntityModal( itObsList, tAnnotation.width(), tAnnotation.height(), tAnnotation.modalWidth(), tAnnotation.modalHeight())
 		: new org.tedros.fx.control.TEditEntityModal( (SimpleObjectProperty) attrProperty, tAnnotation.width(), tAnnotation.height(), tAnnotation.modalWidth(), tAnnotation.modalHeight());
 		
 		control.settModelViewClass(tAnnotation.modelView());
