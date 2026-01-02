@@ -35,10 +35,10 @@ import javafx.beans.property.SimpleStringProperty;
  * @author Davis Gordon
  *
  */
-@TForm(header=ToolsKey.SECURITY_USER_FORM_NAME)
+@TForm(editCssId = "t-rounded-form", header=ToolsKey.SECURITY_USER_FORM_NAME)
 @TPresenter(type=TDynaPresenter.class, 
 			decorator=@TDecorator(type = TUserSettingDecorator.class, 
-			buildModesRadioButton=false, saveButtonText=TFxKey.BUTTON_APPLY ),
+			buildModesRadioButton=false, saveButtonText=TFxKey.BUTTON_APPLY),
 			behavior=@TBehavior(type=TUserSettingBehavior.class, saveOnlyChangedModels=false))
 @TEjbService(model=TUser.class, serviceName = TUserController.JNDI_NAME)
 public class TUserSettingModelView extends TEntityModelView<TUser> {

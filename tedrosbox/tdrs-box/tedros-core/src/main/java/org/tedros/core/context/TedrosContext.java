@@ -881,9 +881,17 @@ public final class TedrosContext {
 			itModule = module;
 		}else if(node instanceof ITModule module) 
 			itModule = module;
-		else 
+		else {
+			
+			String className = node!=null ? node.getClass().getName() : "null";
+			if(node instanceof ScrollPane sp2) {
+				Node content = sp2.getContent();
+				className = content!=null ? content.getClass().getName() : "null";
+			}
+			
+			LOGGER.error("Cannot find ITModule from current view {}", className);
 			throw new IllegalStateException("Cannot find ITModule from current view.");
-		
+		}
 		return itModule;
 	}
 	

@@ -28,7 +28,8 @@ public class TUserSettingsPane extends StackPane {
 		// presenter in it.
 		TDynaView<TUserSettingModelView> v = new TDynaView<>(TUserSettingModelView.class, l, false, TDetachViewType.NONE);
 		v.tLoad();
-		v.setMinHeight(420);
+		//v.setMinHeight(420);
+		this.getStyleClass().add("custom-popup");
 		super.getChildren().add(v);
 	}
 }

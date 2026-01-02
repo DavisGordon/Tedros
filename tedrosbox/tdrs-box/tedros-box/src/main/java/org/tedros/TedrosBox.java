@@ -64,6 +64,7 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.DepthTest;
@@ -94,6 +95,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -110,6 +112,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	private static Logger LOGGER = TLoggerUtil.getLogger(TedrosBox.class);
 	
 	private static TedrosBox tedros;
+	private static final double gap = 15;
 	private Stage stage;
     private Scene scene;
     private BorderPane root;
@@ -122,7 +125,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     private String currentPagePath;
     private ToolBar pageToolBar;
     private ToolBar toolBar;
-    private PopOver userPopOver;
+    private Popup userPopOver;
     private PopOver infoPopOver;
     private PopOver chatPopOver;
     private PopOver terosPopOver;
@@ -678,6 +681,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	private void showTerosPopOver() {
 		if(terosPopOver==null) {
 			terosPopOver = new PopOver();
+			terosPopOver.setTitle("Teros");
 			terosPopOver.setHeaderAlwaysVisible(false);
 			terosPopOver.setAutoFix(true);
 			terosPopOver.setCloseButtonEnabled(true);
@@ -686,23 +690,49 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		}
 		if(terosPopOver.isShowing())
 			terosPopOver.hide();
-		else
-			terosPopOver.show(terosButton);
+		else {
+			// Pega a posição exata do canto inferior esquerdo do botão na tela
+			Point2D point = terosButton.localToScreen(0, terosButton.getHeight());
+			terosPopOver.show(terosButton, point.getX() + gap, 
+		               point.getY() + gap);
+		}
 	}
     
 	private void showUserPopOver() {
+		
 		if(userPopOver==null) {
-			userPopOver = new PopOver();
-			userPopOver.setHeaderAlwaysVisible(false);
+			
+			// Configuração de cores para um efeito tênue
+	        // rgba(R, G, B, Opacidade) -> Opacidade 0.5 = 50% visível
+	        String linhaSuave = "rgba(0, 255, 255, 0.4)";  // Linha física semi-transparente
+	        String brilhoSuave = "rgba(0, 255, 255, 0.25)"; // O brilho (glow) bem fraquinho
+			
+			StackPane sp = new StackPane();
+			sp.setStyle("-fx-background-color: transparent;" + 
+	        	    "-fx-border-color: " + linhaSuave + ";" + 
+					"-fx-border-radius: 8px 8px 8px 8px;" +    
+	        	    "-fx-border-width: 1;" +                    // Linha bem fina
+	        	    // Radius 10 (suave) e Spread 0.0 (névoa, sem dureza)
+	        	    "-fx-effect: dropshadow(three-pass-box, " + brilhoSuave + ", 12, 0.0, 0, 0);"
+	        	);
+			sp.getChildren().add(this.settingsAcc);
+	        StackPane.setMargin(sp, new Insets(4));
+	        
+			userPopOver = new Popup();
 			userPopOver.setAutoFix(true);
-			userPopOver.setCloseButtonEnabled(true);
-			userPopOver.setArrowLocation(ArrowLocation.TOP_LEFT);
-			userPopOver.setContentNode(this.settingsAcc);
+			userPopOver.setAutoHide(true);
+			userPopOver.getContent().add(sp);
+			
 		}
+		
 		if(userPopOver.isShowing())
 			userPopOver.hide();
-		else
-			userPopOver.show(userButton);
+		else {
+			// Pega a posição exata do canto inferior esquerdo do botão na tela
+			Point2D point = userButton.localToScreen(0, userButton.getHeight());
+			userPopOver.show(userButton, point.getX(), 
+		               point.getY() + gap);
+		}
 	}
 	/**
 	 * @param infoButton
@@ -734,7 +764,10 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		infoPopOver.setContentNode(infoPane);
 		Platform.runLater(()->{
 			if(infoPopOver!=null) {
-				infoPopOver.show(infoButton);
+				Point2D point = infoButton.localToScreen(0, infoButton.getHeight());
+				infoPopOver.show(infoButton, point.getX() + gap, 
+		               point.getY() + gap);
+				
 				if(!TedrosContext.infoListProperty().isEmpty()) {
 					TedrosContext.infoListProperty().forEach(c->{
 						((TMessage) c).setLoaded(false);
@@ -774,8 +807,11 @@ public class TedrosBox extends Application implements ITedrosBox  {
 		
 		if(chatPopOver.isShowing())
 			chatPopOver.hide();
-		else
-			chatPopOver.show(chatButton);
+		else {
+			Point2D point = chatButton.localToScreen(0, chatButton.getHeight());
+			chatPopOver.show(chatButton, point.getX() + gap, 
+	               point.getY() + gap);
+		}
 	}
 	
 	
@@ -876,26 +912,30 @@ public class TedrosBox extends Application implements ITedrosBox  {
 				chatView.tLoad();
 		});
 		
-		if(settingsAcc!=null) {
+		if(settingsAcc==null) {
+			settingsAcc = new Accordion();
+			settingsAcc.autosize();
+			settingsAcc.getStyleClass().add("t-accordion-menu-action");
+		} else {
 			for(TitledPane t : settingsAcc.getPanes())
 				((TDynaPresenter)((TDynaView)((StackPane)t.getContent())
 						.getChildren().get(0))
 						.gettPresenter()).invalidate();
 			
 			settingsAcc.getPanes().clear();
-		}else {
-			settingsAcc = new Accordion();
-			settingsAcc.autosize();
-		}
+			
+		}	
 		
 		TUserSettingsPane u = new TUserSettingsPane();
 		u.setMinWidth(350);
-        TitledPane t = new TitledPane();
+        TitledPane t = new TitledPane();        
         t.setText(iEngine.getString("#{tedros.setting.user}"));
+        t.getStyleClass().add("first-titled-pane");
         t.setContent(u);
         
         TitledPane t2 = new TitledPane();
         t2.setText(iEngine.getString("#{tedros.setting.main}"));
+        t2.getStyleClass().add("last-titled-pane");
         t2.setContent(new TMainSettingsPane());
 		/*
 		 * t.getStyleClass().add("t-settings-header");

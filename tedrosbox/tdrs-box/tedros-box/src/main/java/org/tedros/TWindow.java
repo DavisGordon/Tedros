@@ -91,8 +91,7 @@ public class TWindow implements ITWindow  {
     public TWindow(Node view){
     	mouseDragOffsetX = 0.0D;
         mouseDragOffsetY = 0.0D;
-        stage = new Stage();
-        //stage.setAlwaysOnTop(true);
+        stage = new Stage();        
         stage.focusedProperty().addListener((a,o,n)-> {
 			if(n) {
 				TedrosContext.setView(view);
@@ -100,6 +99,7 @@ public class TWindow implements ITWindow  {
 		});
         init(view);
         showView(view);
+        Platform.runLater(()-> TedrosContext.setView(view));
     }
     
     @Override

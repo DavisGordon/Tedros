@@ -5,6 +5,7 @@ package org.tedros.tools.logged.user;
 
 import org.tedros.fx.TUsualKey;
 import org.tedros.fx.annotation.control.THyperlinkField;
+import org.tedros.fx.annotation.form.TForm;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
@@ -20,7 +21,7 @@ import javafx.beans.property.SimpleStringProperty;
  * @author Davis Gordon
  *
  */
-
+@TForm(editCssId = "t-rounded-form")
 @TPresenter(type=TDynaPresenter.class, 
 			decorator=@TDecorator(type = TSaveViewDecorator.class, 
 			buildModesRadioButton=false, saveButtonText=TUsualKey.EXIT ),
