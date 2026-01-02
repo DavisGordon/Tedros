@@ -198,6 +198,8 @@ buildNumber.properties
 .idea
 # End of https://www.toptal.com/developers/gitignore/api/macos,maven,intellij,java
 settings.xml
+Tedros.code-workspace
 .factorypath
+/.factorypath
 coverage/
 /.tgitconfig
