@@ -26,7 +26,6 @@ public class TMainSettingsPane extends StackPane {
 		ObservableList<TMainSettingsModelView> l = FXCollections.observableArrayList(umv);
     	TDynaView<TMainSettingsModelView> v = new TDynaView<>(TMainSettingsModelView.class, l, false, TDetachViewType.NONE);
     	v.tLoad();
-    	//v.setMinHeight(60);
     	this.getStyleClass().add("custom-popup");
 		super.getChildren().add(v);
 				

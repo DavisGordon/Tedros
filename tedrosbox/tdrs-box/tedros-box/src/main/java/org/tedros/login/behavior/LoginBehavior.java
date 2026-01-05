@@ -14,7 +14,6 @@ import org.tedros.TedrosBox;
 import org.tedros.api.form.ITFieldBox;
 import org.tedros.api.form.ITForm;
 import org.tedros.api.presenter.view.TViewMode;
-import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.message.TMessage;
 import org.tedros.core.message.TMessageType;
@@ -59,12 +58,22 @@ import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Toggle;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 
 public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 
-	private final static Logger LOGGER = TLoggerUtil.getLogger(LoginBehavior.class);
+	private static final String TEDROS_NO_USER_FOUND = "#{tedros.noUserFound}";
+
+	private static final String TEDROS_SERVER_OUT_TEXT = "#{tedros.server.out.text}";
+
+	private static final String TEDROS_SYS_WITHOUT_USER = "#{tedros.sys.without.user}";
+
+	private static final String TEDROS_PROFILE_TEXT = "#{tedros.profileText}";
+
+	private static final Logger LOGGER = TLoggerUtil.getLogger(LoginBehavior.class);
 	
 	private SimpleObjectProperty<TUser> loggedUserProperty;
 	private SimpleBooleanProperty serverOkProperty;
@@ -76,8 +85,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 	private TTextField nameField;
 	private TVRadioGroup languageField;
 	private TComboBoxField<ProfileMV> profileComboBox;
-	private Text profileText;
-	private TLanguage iEngine;
+	private Text profileText;	
 	private TTextField ipTextField;
 	private TTextField urlTextField;
 
@@ -85,8 +93,10 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 	
 	@Override
 	public void load() {
+		
+		
 		super.load();
-		iEngine = TLanguage.getInstance(null);
+		
 		loginDecorator = ((LoginDecorator) getPresenter().getDecorator());
 		saveButton = loginDecorator.gettSaveButton();
 		loggedUserProperty = new SimpleObjectProperty<>();
@@ -94,20 +104,28 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 		serverOkProperty = new SimpleBooleanProperty(true);
 		
 		ChangeListener<Boolean> sOkChl = (a,o,n)->{
-			//nameField.setDisable(!n);
 			userTextField.setDisable(!n);
 			passwordField.setDisable(!n);
 			profileComboBox.setDisable(!n);
 			loginDecorator.gettSaveButton().setDisable(!n);
-			String msg = (!n) 
-					? iEngine.getString("#{tedros.server.out.text}") 
-							: (this.sysWithoutUserProperty.getValue()) 
-							? iEngine.getString("#{tedros.sys.without.user}")
-								: iEngine.getString("#{tedros.profileText}");
+			
+			String msg;
+			
+			if(!n) {
+				msg = iEngine.getString(TEDROS_SERVER_OUT_TEXT);
+			} else {
+				if(this.sysWithoutUserProperty.getValue()) {
+					msg = iEngine.getString(TEDROS_SYS_WITHOUT_USER);
+				} else {
+					msg = iEngine.getString(TEDROS_PROFILE_TEXT);
+				}
+			}
+			
 			this.profileText.setText(msg);
 			Region f = (Region) super.getForm();
 			f.layout();
 		};
+		
 		super.getListenerRepository().add("sOkChl", sOkChl);
 		this.serverOkProperty.addListener(new WeakChangeListener<>(sOkChl));
 		
@@ -115,8 +133,8 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 		ChangeListener<Boolean> swouChl = (a,o,n)->{
 			nameField.setDisable(!n);
 			String msg = (n) 
-							? iEngine.getString("#{tedros.sys.without.user}")
-								: iEngine.getString("#{tedros.profileText}");
+							? iEngine.getString(TEDROS_SYS_WITHOUT_USER)
+								: iEngine.getString(TEDROS_PROFILE_TEXT);
 			this.profileText.setText(msg);
 			Region f = (Region) super.getForm();
 			f.layout();
@@ -140,12 +158,12 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 					urlTextField.setDisable(true);
 					profileComboBox.setDisable(false);
 					
-					
 					List<ProfileMV> profiles  = new TModelViewUtil<ProfileMV, TProfile>
 					(ProfileMV.class, TProfile.class, new ArrayList<>(newVal.getProfiles()))
 					.convertToModelViewList();
 					
 					profileComboBox.getItems().addAll(profiles);
+					profileComboBox.requestFocus();
 					profileText.setText(iEngine.getFormatedString("#{tedros.selectProfile}", newVal.getName()));
 					Region f = (Region) super.getForm();
 					f.layout();
@@ -156,7 +174,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 					ipTextField.setDisable(false);
 					urlTextField.setDisable(false);
 					profileComboBox.setDisable(true);
-					profileText.setText(iEngine.getString("#{tedros.profileText}"));
+					profileText.setText(iEngine.getString(TEDROS_PROFILE_TEXT));
 					saveButton.setText(iEngine.getString("#{tedros.validateUser}"));
 					Region f = (Region) super.getForm();
 					f.layout();
@@ -180,7 +198,10 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 
 			@Override
 			public void runAfter() {
+				
 			}
+
+			
 		});
 		
 		addAction(new TPresenterAction(TActionType.SAVE) {
@@ -200,7 +221,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 					try {
 						validateModels(modelsViewsList);
 						
-						Login model = (Login) getModelView().getModel();
+						Login model = getModelView().getModel();
 						final String name = model.getName();
 						final String userLogin = model.getUser();
 						final String password = model.getPassword();
@@ -220,7 +241,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 							@Override
 							public void changed(ObservableValue<? extends State> arg0, State arg1, State arg2) {
 								if(arg2.equals(State.SUCCEEDED)){
-									List<TResult<TUser>> resultados = (List<TResult<TUser>>) process.getValue();
+									List<TResult<TUser>> resultados = process.getValue();
 									if(resultados.isEmpty())
 										return;
 									TResult<TUser> result = resultados.get(0);
@@ -232,7 +253,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 										if(entity!=null){
 											loggedUserProperty.setValue(entity);
 										}else{
-											profileText.setText(iEngine.getString("#{tedros.noUserFound}"));
+											profileText.setText(iEngine.getString(TEDROS_NO_USER_FOUND));
 										}
 									}
 									
@@ -263,7 +284,7 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 								@Override
 								public void changed(ObservableValue<? extends State> arg0, State arg1, State arg2) {
 									if(arg2.equals(State.SUCCEEDED)){
-										List<TResult<TUser>> resultados = (List<TResult<TUser>>) process.getValue();
+										List<TResult<TUser>> resultados = process.getValue();
 										if(resultados.isEmpty())
 											return;
 										
@@ -378,9 +399,8 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 		nameField = (TTextField) nameFieldBox.gettControl();
 		nameField.setDisable(true);
 		
-		EventHandler<ActionEvent> ev1 = e ->{
-			super.saveAction();
-		};
+		EventHandler<ActionEvent> ev1 = e -> super.saveAction();
+		
 		super.getListenerRepository().add("valUserPassEvh", ev1);
 		
 		ITFieldBox userFieldBox = form.gettFieldBox("user");//  user
@@ -396,6 +416,16 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 		
 		ITFieldBox profileFieldBox = form.gettFieldBox("profile");//  language
 		profileComboBox = (TComboBoxField<ProfileMV>) profileFieldBox.gettControl();
+		// Supondo que 'comboBox' é o seu ComboBox
+		//profileComboBox.setEditable(true); // Se não for editável, ative isso
+
+		profileComboBox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+		    if (event.getCode() == KeyCode.ENTER) {
+		        // Aqui vai a sua lógica de salvamento
+		        super.saveAction(); // Ou chame o método que você quer
+		        event.consume(); // Consome o evento para evitar comportamentos padrão indesejados
+		    }
+		});
 		
 		ITFieldBox profileTextFieldBox = form.gettFieldBox("profileText");//  language
 		profileText = (Text) profileTextFieldBox.gettControl();
@@ -426,18 +456,17 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 			}
 			
 		};
+		
 		super.getListenerRepository().add("lanChl", lanChl);
 		languageField.selectedToggleProperty().addListener(new WeakChangeListener<>(lanChl));
 		
-		EventHandler<ActionEvent> ev = e ->{
-			saveRemoteConfig();
-		};
+		EventHandler<ActionEvent> ev = e -> saveRemoteConfig();
+		
 		super.getListenerRepository().add("ipevh", ev);
 		ipTextField.setOnAction(new WeakEventHandler<>(ev));
 		
-		EventHandler<ActionEvent> ev1 = e ->{
-			saveRemoteConfig();
-		};
+		EventHandler<ActionEvent> ev1 = e -> saveRemoteConfig();
+		
 		super.getListenerRepository().add("urlevh", ev1);
 		urlTextField.setOnAction(new WeakEventHandler<>(ev1));
 		
@@ -449,19 +478,18 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 				}
 			}
 		}
+		
 		String ct = TThemeUtil.getCurrentTheme();
 		themeComboBox.getSelectionModel().select(ct);
 		themeComboBox.getSelectionModel().selectedItemProperty().addListener((a,o,n)->{
-			try {
-				String propFilePath = TedrosFolder.CONF_FOLDER.getFullPath()+TStyleResourceName.THEME;
-				FileOutputStream fos = new FileOutputStream(propFilePath);
+			String propFilePath = TedrosFolder.CONF_FOLDER.getFullPath()+TStyleResourceName.THEME;
+			try(FileOutputStream fos = new FileOutputStream(propFilePath)) {
 				Properties prop = new Properties();
 				prop.setProperty("apply", n);
 				prop.store(fos, "current theme");
-				fos.close();
-				Platform.runLater(() ->{
-					TedrosContext.reloadStyle();
-				});
+				
+				Platform.runLater(TedrosContext::reloadStyle);
+				
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
 			}
@@ -472,20 +500,15 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 	/**
 	 * 
 	 */
-	protected void saveRemoteConfig() {
-		try {
-			
-			Login m = (Login) super.getModelView().getModel();
-			String propFilePath = TedrosFolder.CONF_FOLDER.getFullPath()+"remote-config.properties";
-			FileOutputStream fos = new FileOutputStream(propFilePath);
+	protected void saveRemoteConfig() {		
+		String propFilePath = TedrosFolder.CONF_FOLDER.getFullPath()+"remote-config.properties";
+		try(FileOutputStream fos = new FileOutputStream(propFilePath)) {
+			Login m = super.getModelView().getModel();
 			Properties prop = new Properties();
 			prop.setProperty("url", m.getUrl());
 			prop.setProperty("server_ip", m.getServerIp());
 			prop.store(fos, "Url for lookup jndi");
-			fos.close();
-			
 			this.verifySysUsers();
-			
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
 		}
@@ -520,10 +543,11 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 	
 	private void saveLanguage(String language) throws IOException{
 		String propFilePath = TFileUtil.getTedrosFolderPath()+TedrosFolder.CONF_FOLDER.getFolder()+TStyleResourceName.LANGUAGE;
-		FileOutputStream fos = new FileOutputStream(propFilePath);
-		Properties prop = new Properties();
-		prop.setProperty("language", language);
-		prop.store(fos, "custom styles");
+		try(FileOutputStream fos = new FileOutputStream(propFilePath)){
+			Properties prop = new Properties();
+			prop.setProperty("language", language);
+			prop.store(fos, "custom styles");
+		}
 	}
 
 }

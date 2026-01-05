@@ -66,7 +66,6 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
@@ -95,8 +94,6 @@ public final class TedrosContext {
 	private static final int MAX_TOTAL_PAGE_HISTORY = 10;
 	
 	private static TedrosClassLoader tedrosClassLoader;
-	
-	private static ObservableMap<String, Object> propertiesProperty;
 	
 	private static ObjectProperty<Page> pageProperty;
 	private static StringProperty pagePathProperty;
@@ -188,7 +185,6 @@ public final class TedrosContext {
 		infoListProperty = FXCollections.observableArrayList();
 		detachedView = new SimpleObjectProperty<>();
 		windows = FXCollections.observableArrayList();
-		propertiesProperty = FXCollections.observableHashMap();
 		
 		//Close the windowed view when removed from the list
 		windows.addListener((Change<? extends ITWindow> c)->{
@@ -894,9 +890,6 @@ public final class TedrosContext {
 		}
 		return itModule;
 	}
-	
-	
-	
 	
 	/**
 	 * Get the {@link Locale}
