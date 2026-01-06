@@ -4,11 +4,9 @@ import org.tedros.core.annotation.security.TAuthorizationType;
 import org.tedros.core.annotation.security.TSecurity;
 import org.tedros.core.domain.DomainApp;
 import org.tedros.fx.annotation.form.TForm;
-import org.tedros.fx.annotation.form.TSetting;
 import org.tedros.fx.annotation.presenter.TBehavior;
 import org.tedros.fx.annotation.presenter.TDecorator;
 import org.tedros.fx.annotation.presenter.TPresenter;
-import org.tedros.fx.annotation.scene.layout.TRegion;
 import org.tedros.fx.annotation.scene.web.TWebEngine;
 import org.tedros.fx.annotation.scene.web.TWebView;
 import org.tedros.fx.model.TModelView;
@@ -30,11 +28,10 @@ appName=ToolsKey.APP_TOOLS, moduleName=ToolsKey.MODULE_AI, viewName=ToolsKey.VIE
 allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,  
 	   				TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
 public class HtmlMessageViewerMV extends TModelView<HtmlMessageViewerModel> {
-	
-	//private final static double HEIGHT = 500;
 		
-	@TWebView(engine = @TWebEngine(load = TWebEngine.MODULE_FOLDER+"/"+TConstant.UUI+"/teros_ia_response.html"),
-			/*maxWidth = 1040, maxHeight=550,*/ zoom = 0.8)
+	@TWebView(engine = @TWebEngine(
+			load = TWebEngine.MODULE_FOLDER+"/"+TConstant.UUI+"/teros_ia_response.html"),
+			zoom = 0.8)
 	private SimpleStringProperty webContent;
 
 	public HtmlMessageViewerMV(HtmlMessageViewerModel model) {
