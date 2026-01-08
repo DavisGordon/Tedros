@@ -513,7 +513,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 	 * */
 	public void openExportFolderAction() {
 		
-		Thread thread = new Thread(() ->{
+		Thread thread = new Thread(() ->
 			Platform.runLater(() ->{
                 try {
 					if(!TFileUtil.open(new File(TedrosFolder.EXPORT_FOLDER.getFullPath()))) {
@@ -534,8 +534,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 					super.addMessage(new TMessage(TMessageType.ERROR, 
 							iEngine.getFormatedString("#{tedros.fxapi.message.cannot.open.file}", e.getMessage())));
 				}
-	          });
-			});
+	          }));
 		thread.setDaemon(true);
 		thread.start();
 		
