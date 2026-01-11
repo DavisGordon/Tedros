@@ -405,13 +405,11 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 
 	@SuppressWarnings("unchecked")
 	private void runSearchReportProcess()
-			throws Exception, TValidatorException, Throwable {
-		//recupera a lista de models views
-		//final ObservableList<M> modelsViewsList = this.decorator.gettListView().getItems(); 
-		
-		final ObservableList modelsViewsList =  (ObservableList) (getModelView()!=null 
+			throws TValidatorException, Exception {
+	
+		final ObservableList modelsViewsList =  getModelView()!=null 
 						? FXCollections.observableList(Arrays.asList(getModelView()))
-								: null);
+								: null;
 						
 		if(modelsViewsList == null)
 			throw new Exception("No value was find to be saved!");
@@ -424,16 +422,14 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			final M model = (M) modelsViewsList.get(x);
 			
 			runningProcess  = createProcess();
-			runningProcess.search((ITReportModel) model.getModel());
-			runningProcess.stateProperty().addListener(new ChangeListener<State>() {
-				@Override
-				public void changed(ObservableValue<? extends State> arg0, State arg1, State arg2) {
-					if(arg2.equals(State.SUCCEEDED)){
+			runningProcess.search(model.getModel());
+			runningProcess.stateProperty().addListener((a, o, n) -> {
+					if(n.equals(State.SUCCEEDED)){
 						TResult<E> result = (TResult<E>) runningProcess.getValue();
 						if(result==null)
 							return;
 						
-						E entity = (E) result.getValue();
+						E entity = result.getValue();
 						if(entity!=null){
 							try {
 								model.reload(entity);
@@ -451,10 +447,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 						}
 					}
 					actionHelper.runAfter(TActionType.SEARCH);
-				}
-
-				
-			});
+				});
 			runProcess(runningProcess);
 		}
 	}
@@ -468,7 +461,7 @@ extends TDynaViewSimpleBaseBehavior<M, E> {
 			setDisableModelActionButtons(true);
 			try {
 				super.removeAllListenerFromModelView();
-				M model = (M) getModelViewClass().getConstructor(modelClass).newInstance(modelClass.getDeclaredConstructor().newInstance());
+				M model = getModelViewClass().getConstructor(modelClass).newInstance(modelClass.getDeclaredConstructor().newInstance());
 				setModelView(model);
 				showForm(TViewMode.EDIT);
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException

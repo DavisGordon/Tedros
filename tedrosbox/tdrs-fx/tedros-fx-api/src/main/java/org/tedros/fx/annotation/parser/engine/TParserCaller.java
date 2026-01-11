@@ -20,6 +20,10 @@ public class TParserCaller {
 	
 	private static final Logger LOGGER = TLoggerUtil.getLogger(TParserCaller.class);
 	private static String INFO_HEADER = "\n\t[%s][callParser] Field: %s, Annotation(name: %s, proxy: %s), Control: %s";
+	
+	private TParserCaller() {
+	}
+	
 	/**
 	 * <pre>
 	 * Execute the parser of the given annotation defined in the parser() property. 
@@ -30,7 +34,7 @@ public class TParserCaller {
 		
 		Method parserMethod = TReflectionUtil.getParserMethod(tAnnotation);
 		if(parserMethod!=null){
-			StringBuilder error = null;
+			StringBuilder logMsg = null;
 			try{
 				Object object = parserMethod.invoke(tAnnotation);
 				Class<? extends ITAnnotationParser>[] parsers = (object instanceof Class[]) 
@@ -39,56 +43,59 @@ public class TParserCaller {
 				
 				for (Class<? extends ITAnnotationParser> clazz : parsers) {
 					
-					ITAnnotationParser parser = (ITAnnotationParser) clazz.getDeclaredConstructor().newInstance();
+					ITAnnotationParser parser = clazz.getDeclaredConstructor().newInstance();
 					parser.setComponentDescriptor(descriptor);
 					
 					try{
-					
 						parser.parse(tAnnotation, control);
-					
 					}catch(ClassCastException e){
 						
-						if(error==null)
-							error = new StringBuilder(String.format(INFO_HEADER, calledBy,
+						if(logMsg==null)
+							logMsg = new StringBuilder(String.format(INFO_HEADER, calledBy,
 									descriptor.getFieldDescriptor().getFieldName(), 
 									tAnnotation.annotationType().getSimpleName(), 
 									tAnnotation.getClass().getSimpleName(),
 									control.getClass().getSimpleName()));
 						
-						error.append("\n\t\tIssue found on the parser: "+ clazz.getSimpleName());
-						error.append("\n\t\tException: "+ e.getMessage());
+						logMsg.append("\n\t\tIssue found on the parser: "+ clazz.getSimpleName());
+						logMsg.append("\n\t\tException: "+ e.getMessage());
 						try {
-							
-							//Class genParamClass = TReflectionUtil.getGenericParamClass(clazz,1);
 							final Method method = getSourceMethod(descriptor.getAnnotationPropertyInExecution(), control.getClass());
 							if(method!=null) {
-								error.append("\n\t\tMethod method = getSourceMethod("+descriptor.getAnnotationPropertyInExecution()+","+control.getClass().getSimpleName()+")");
-								error.append("\n\t\tWhere method is "+method.getName());
-								error.append("\n\t\tExecuting method.invoke("+control.getClass().getName()+") to get the parser param!");
+								logMsg.append("\n\t\tMethod method = getSourceMethod("+descriptor.getAnnotationPropertyInExecution()+","+control.getClass().getSimpleName()+")");
+								logMsg.append("\n\t\tWhere method is "+method.getName());
+								logMsg.append("\n\t\tExecuting method.invoke("+control.getClass().getName()+") to get the parser param!");
 								Object obj = method.invoke(control);
-								error.append("\n\t\tObject returned: "+obj.getClass().getSimpleName());
+								logMsg.append("\n\t\tObject returned: "+obj.getClass().getSimpleName());
 								if(obj !=null) {
-									error.append("\n\t\t\tTrying to parser again: parser.parse("+tAnnotation.annotationType().getSimpleName()+","+obj.getClass().getSimpleName()+")");
-									error.append("\n\t\t\tWhere parser is "+parser.getClass().getSimpleName());
+									logMsg.append("\n\t\t\tTrying to parser again: parser.parse("+tAnnotation.annotationType().getSimpleName()+","+obj.getClass().getSimpleName()+")");
+									logMsg.append("\n\t\t\tWhere parser is "+parser.getClass().getSimpleName());
 									parser.parse(tAnnotation, obj);
-									error.append("\n\t\t\tParser executed successfully!");
+									logMsg.append("\n\t\t\tParser executed successfully!");
 								}
 							}else{
-								error.append("\n\t\tMethod method = getSourceMethod("+descriptor.getAnnotationPropertyInExecution()+","+control.getClass().getSimpleName()+")");
-								error.append("\n\t\tCan't find the get method to the property");
+								logMsg.append("\n\t\tMethod method = getSourceMethod("+descriptor.getAnnotationPropertyInExecution()+","+control.getClass().getSimpleName()+")");
+								logMsg.append("\n\t\tCan't find the get method to the property");
 							}
 						}catch (Exception ex) { 
-							error.append("\n\t\tFail message: "+ex.getMessage());
+							logMsg.append("\n\t\tFail message: "+ex.getMessage());
 						}
 					}
 				}
 			}catch(Exception e){
-				if(error==null)
-					error = new StringBuilder();
-				error.append("\nError: "+e.getMessage());
+				if(logMsg==null)
+					logMsg = new StringBuilder();
+				logMsg.append("\nTError: "+e.getMessage());
 			}	
-			if(error!=null)
-				LOGGER.error(error.toString());
+			
+			String logStr = (logMsg!=null) ? logMsg.toString() : null;
+			
+			if(logStr!=null) {
+				if(logStr.contains("TError:"))
+					LOGGER.error(logStr);
+				else
+					LOGGER.warn(logStr);
+			}
 		}
 	}
 	

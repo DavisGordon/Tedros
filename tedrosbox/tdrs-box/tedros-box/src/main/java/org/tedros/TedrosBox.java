@@ -5,11 +5,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.util.Optional;
 import java.util.Stack;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.tedros.api.presenter.view.TDetachViewType;
@@ -49,9 +47,7 @@ import org.tedros.login.model.LoginMV;
 import org.tedros.tools.ai.pane.TerosPane;
 import org.tedros.tools.logged.user.TMainSettingsPane;
 import org.tedros.tools.logged.user.TUserSettingsPane;
-import org.tedros.util.TFileUtil;
 import org.tedros.util.TLoggerUtil;
-import org.tedros.util.TZipUtil;
 import org.tedros.util.TedrosFolder;
 
 import javafx.animation.Animation;
@@ -74,7 +70,6 @@ import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
-import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
@@ -170,83 +165,9 @@ public class TedrosBox extends Application implements ITedrosBox  {
         mouseDragOffsetX = 0.0D;
         mouseDragOffsetY = 0.0D;
         fromForwardOrBackButton = false;
-        try {
-        	String outputFolder = System.getProperty("user.home");
-        	boolean extract = checkAndBuildTedrosBoxFolder(outputFolder);
-			if(extract)
-				extractZip(outputFolder);
-		} catch (IOException e) {
-			TLoggerUtil.error(TedrosBox.class, e.toString(), e);
-		}
+        TedrosBoxFolderHelper.checkTedrosFolder();
     }
     
-    private boolean checkAndBuildTedrosBoxFolder(String outputFolder) throws IOException{
-		
-		//create tedros directory if is not exists
-    	File folder = new File(outputFolder+"/.tedros");
-    	if(folder.exists()){ 
-    		if(new File(outputFolder+"/.tedros"+"/tedrosbox__V"+TedrosRelease.version+".txt").exists())
-    			return false;
-    		TFileUtil.delete(folder);
-    	}
-    	folder.mkdir();
-    	new File(outputFolder+"/.tedros/LOG").mkdir();
-    	return true;
-	}
-
-	private void extractZip(String outputFolder) {
-		try(InputStream zipFile = TedrosRelease.class.getResourceAsStream("TedrosBox.zip")){
-			TZipUtil.unZip(zipFile, outputFolder);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-    
-    public Stage getStage(){
-    	return stage;
-    }
-
-    public static TedrosBox getTedros(){
-        return tedros;
-    }
-    
-    public double getXStage(){
-    	return getStage().getX();
-    }
-    
-    public double getYStage(){
-    	return getStage().getY();
-    }
-    
-    public void reloadStyle(){
-    	
-    	final String customStyleCssUrl = TThemeUtil.getStyleURL().toExternalForm();
-    	final String backgroundCssUrl = TThemeUtil.getBackgroundURL().toExternalForm();
-    	
-    	removeCss(customStyleCssUrl);
-    	File basckGroundCss = new File(TThemeUtil.getBackgroundCssFilePath());
-		try {
-			TLoggerUtil.info(TedrosBox.class, FileUtils.readFileToString(basckGroundCss, Charset.defaultCharset()));
-		} catch (IOException e) {
-			TLoggerUtil.error(TedrosBox.class, e.getMessage(), e);
-		}
-    	if(!basckGroundCss.exists()){
-			removeCss(backgroundCssUrl);
-		}else{
-			removeCss(backgroundCssUrl);
-			scene.getStylesheets().add(backgroundCssUrl);
-		}
-		scene.getStylesheets().add(customStyleCssUrl);
-    	com.sun.javafx.css.StyleManager.getInstance().addUserAgentStylesheet(scene, customStyleCssUrl);//reloadStylesheets(scene);
-    	root.setId("t-tedros-color");
-    }
-
-    
-	private void removeCss(String url) {
-		if(scene.getStylesheets().contains(url))
-			scene.getStylesheets().remove(url);
-	}
-
     @SuppressWarnings({"rawtypes", "unchecked"})
 	private void init(Stage primaryStage) {
     	TLoggerManager.setup();
@@ -254,7 +175,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
     	stage = primaryStage;
     	TedrosContext.setApplication(this);
     	TedrosContext.setViewBuilder(new TViewBuilder());
-    	tedros = this;
+    	setInstance(this);
     	getStage().setTitle("Tedros");
     	getStage().initStyle(StageStyle.UNDECORATED);
     	getStage().getIcons().add(new Image(TedrosContext.getImageInputStream("icon-tedros.png")));
@@ -358,7 +279,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
         // create page toolbar
         pageToolBar = new ToolBar();
         pageToolBar.setId("t-tedros-toolbar");
-        pageToolBar.setMaxSize(Double.MAX_VALUE, Control.USE_PREF_SIZE);
+        pageToolBar.setMaxSize(Double.MAX_VALUE, Region.USE_PREF_SIZE);
        
         userButton = new Button();
         userButton.getStyleClass().addAll("user");
@@ -391,9 +312,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
         historySize = new SimpleStringProperty(String.valueOf(this.history.size()));
         final Button backButton = new Button();
         backButton.getStyleClass().addAll("back");
-        backButton.setOnAction(e->{
-        	this.back();
-        });
+        backButton.setOnAction(e-> this.back());
         backButton.setOnMouseEntered(ev->{
         	PopOver pvr = new PopOver();
         	pvr.setAutoHide(true);
@@ -418,9 +337,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
         
         infoButton = new Button();
         infoButton.getStyleClass().addAll("info");
-        infoButton.setOnAction(e->{
-        	showInfoPopOver();
-        });
+        infoButton.setOnAction(e-> showInfoPopOver());
         infoPopOver = null;
         
         terosButton = new Button();
@@ -495,11 +412,10 @@ public class TedrosBox extends Application implements ITedrosBox  {
         
         // configura listener para exibir view
         TedrosContext.pageProperty()
-        .addListener((a, o, n)-> {
-			goToPage(n, TedrosContext.isPageAddHistory(), 
-					TedrosContext.isPageForce(), 
-					TedrosContext.isPageSwapViews());
-		});
+        .addListener((a, o, n) -> goToPage(n, TedrosContext.isPageAddHistory(), 
+        		TedrosContext.isPageForce(), 
+				TedrosContext.isPageSwapViews()));
+        
         TedrosContext.pagePathProperty()
         .addListener((a,o,n)->{
 			if(StringUtils.isNotBlank(n))
@@ -513,9 +429,10 @@ public class TedrosBox extends Application implements ITedrosBox  {
 					imgLogo.opacityProperty().removeListener(effectChl);
 					logoEffect.play();
 				}
-				modalMessage.showModal(new TMessageBox(c.getList()), ev->{
-					TedrosContext.messageListProperty().clear();
-				});
+				
+				modalMessage.showModal(new TMessageBox(c.getList()), 
+						ev-> TedrosContext.messageListProperty().clear());
+				
 			}else {
 				if(modalMessage!=null) {
 					modalMessage.hideModal();
@@ -551,7 +468,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	        	imgLogo.opacityProperty().removeListener(effectChl);
 	 			logoEffect.play();
         	}
-	 		reloadStyle();
+        	TedrosBoxStyleHelper.reloadStyle(scene, root);
 	 		if(imgLogo!=null && effectChl!=null) {	
 	 			imgLogo.opacityProperty().addListener(effectChl);
         	}
@@ -562,9 +479,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 				TDynaPresenter<ChatMV> p = chatView.gettPresenter();
 				ChatBehaviour bhv = (ChatBehaviour) p.getBehavior();
 				ChatDecorator dec = (ChatDecorator) p.getDecorator();
-				dec.getHidePopOverButton().setOnAction(ev->{
-					chatPopOver.hide();
-				});
+				dec.getHidePopOverButton().setOnAction(ev->chatPopOver.hide());
 				bhv.totalUnreadMessagesProperty()
 				.addListener((x,y,z)->this.chatUnreadMsgsLabel.setText(String.valueOf(z)));
 				
@@ -937,10 +852,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
         t2.setText(iEngine.getString("#{tedros.setting.main}"));
         t2.getStyleClass().add("last-titled-pane");
         t2.setContent(new TMainSettingsPane());
-		/*
-		 * t.getStyleClass().add("t-settings-header");
-		 * t2.getStyleClass().add("t-settings-header");
-		 */
+		
         settingsAcc.setExpandedPane(t);
         settingsAcc.getPanes().addAll(t, t2);
 	}
@@ -1047,7 +959,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 					if(wView instanceof ScrollPane sp)
 						wView = sp.getContent();
 					
-					return wView.equals(moduleSelected);// && wView.equals(currentNode);
+					return wView.equals(moduleSelected);
 				})
 				.findFirst();
 		return optSelectedModuleWindowed;
@@ -1072,8 +984,8 @@ public class TedrosBox extends Application implements ITedrosBox  {
     
     @SuppressWarnings({ "unchecked" })
 	private void callPage(Page page, boolean addHistory, boolean force, boolean swapViews){
-    	LOGGER.info("Call page: {}", page);        
-        if(page == null)
+    	
+    	if(page == null)
             return;
         if(!force && page == currentPage)
             return;
@@ -1241,20 +1153,7 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	    fromForwardOrBackButton = false;
 	    this.printHistory();
 	}
-
-	private void printHistory() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("   HISTORY = ");
-	    for (Page page : history) {
-	    	builder.append(page.getName()+"->");
-	    }
-	    builder.append("   ["+currentPage.getName()+"]");
-	    for (Page page :forwardHistory) {
-	    	builder.append(page.getName()+"->");
-	    }
-	    TLoggerUtil.info(getClass(), builder.toString());
-	}
-
+	
 	/**
 	 * 
 	 */
@@ -1271,6 +1170,25 @@ public class TedrosBox extends Application implements ITedrosBox  {
 	    historySize.setValue(String.valueOf(history.size()));
 		clearForward(null);
 	}
+
+	private void printHistory() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("   HISTORY = ");
+	    for (Page page : history) {
+	    	builder.append(page.getName()+"->");
+	    }
+	    builder.append("   ["+currentPage.getName()+"]");
+	    for (Page page :forwardHistory) {
+	    	builder.append(page.getName()+"->");
+	    }
+	    TLoggerUtil.info(getClass(), builder.toString());
+	}
+
+	private static void setInstance(TedrosBox tedrosBox) {
+		TedrosBox.tedros = tedrosBox;
+	}
+
+	
 
 	/**
 	 * 
@@ -1304,11 +1222,28 @@ public class TedrosBox extends Application implements ITedrosBox  {
      * */    
     @Override 
     public void start(Stage primaryStage) throws Exception {
+    	LOGGER.info("Starting TedrosBox Application...");
     	TLanguage.addResourceBundle(null, "TedrosLoginLabels", TedrosRelease.class.getClassLoader());
     	TLanguage.addResourceBundle(null, "TCoreLabels", TCoreKeys.class.getClassLoader());
 		TLanguage.addResourceBundles(null, TFxKey.class.getClassLoader(), "TFx", "TUsual");
         init(primaryStage);
         primaryStage.show();
-    }  
+    }
+    
+    public Stage getStage(){
+    	return stage;
+    }
+
+    public static TedrosBox getTedros(){
+        return tedros;
+    }
+    
+    public double getXStage(){
+    	return getStage().getX();
+    }
+    
+    public double getYStage(){
+    	return getStage().getY();
+    }
 }
 

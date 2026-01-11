@@ -13,6 +13,7 @@ import org.tedros.chat.CHATKey;
 import org.tedros.chat.entity.ChatUser;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TedrosContext;
+import org.tedros.core.exception.TCustomException;
 import org.tedros.core.security.model.TUser;
 import org.tedros.server.security.TAccessToken;
 import org.tedros.util.TLoggerUtil;
@@ -77,13 +78,13 @@ public class ChatClient {
 			if(owner==null) 
 				findOwner();
 			if(owner==null) 
-				throw new Exception(TLanguage.getInstance().getString(CHATKey.ERROR_USER_NOT_FOUND));
+				throw new TCustomException(TLanguage.getInstance().getString(CHATKey.ERROR_USER_NOT_FOUND));
 			
             TAccessToken token = TedrosContext.getLoggedUser().getAccessToken();
             String host = util.getServerIp(token);
             Integer port = util.getServerPort(token);
             if(host==null || port==null)
-            	throw new Exception(TLanguage.getInstance().getString(CHATKey.ERROR_SERVER_PREFERENCE));
+            	throw new TCustomException(TLanguage.getInstance().getString(CHATKey.ERROR_SERVER_PREFERENCE));
 
             TLoggerUtil.info(ChatClient.class, "<-Chat:"+owner+"->: Connecting...");
            
@@ -125,11 +126,11 @@ public class ChatClient {
 			log.setValue(TLanguage.getInstance().getFormatedString(CHATKey.MSG_ERROR, reason));
 	        connected.setValue(false);
         	TLoggerUtil.warn(ChatClient.class, "<-client->: " + ex.getMessage());
-        } catch (IOException e) {
+        } catch (IOException | TCustomException e) {
 			log.setValue(TLanguage.getInstance().getFormatedString(CHATKey.MSG_ERROR, e.getMessage()));
 			connected.setValue(false);
 			TLoggerUtil.warn(ChatClient.class, e.getMessage());
-		} catch (Exception e) {
+        } catch (Exception e) {
 			log.setValue(TLanguage.getInstance().getFormatedString(CHATKey.MSG_ERROR, e.getMessage()));
 			connected.setValue(false);
 			TLoggerUtil.error(ChatClient.class, e.getMessage(), e);

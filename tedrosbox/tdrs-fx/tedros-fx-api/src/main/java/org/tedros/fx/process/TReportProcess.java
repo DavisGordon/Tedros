@@ -8,7 +8,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,14 +45,12 @@ import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
  */
 @SuppressWarnings("rawtypes")
 public abstract class TReportProcess<M extends ITReportModel> extends TProcess<TResult<M>> {
+	
+	private static final Logger LOGGER = TLoggerUtil.getLogger(TReportProcess.class);
 
 	protected static final String PARAM_SUBREPORT_DIR = "SUBREPORT_DIR";
-
 	protected static final String PARAM_LOGO = "logo";
-
-	protected static final String REPORT_ORG = "report_org";
-
-	private final static Logger LOGGER = TLoggerUtil.getLogger(TReportProcess.class);
+	protected static final String REPORT_ORG = "report_org";	
 	
 	private M model;
 	private TReportProcessEnum action;
@@ -66,7 +63,7 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 	private InputStream logoInputStream;
 	
 	
-	public TReportProcess(String serviceJndiName, String reportName) throws TProcessException {
+	protected TReportProcess(String serviceJndiName, String reportName) throws TProcessException {
 		setAutoStart(true);
 		this.reportName = reportName;
 		this.serviceJndiName = serviceJndiName;
@@ -127,31 +124,13 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 				return getProcessName();
 			}
         	
-			@SuppressWarnings("unchecked")
-			protected TResult<M> call() throws IOException, MalformedURLException {
+			protected TResult<M> call() throws IOException {
         		
         		TResult<M> resultado = null;
         		try {
         			switch(action) {
         			case SEARCH:
-        				TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
-        				try {
-        					if(model.getResult()!=null)
-        						model.getResult().clear();
-        					TUser user = TedrosContext.getLoggedUser();
-	        				ITEjbReportController<M> service = (ITEjbReportController<M>) loc.lookup(serviceJndiName);
-	        				resultado = service.process(user.getAccessToken(), model);
-        				} catch(NamingException e){
-        	    			setException( new TProcessException(e, e.getMessage(), "The service is not available!"));
-        	    			LOGGER.error(e.getMessage(), e);
-        	    			TLoggerUtil.error(getClass(), e.getMessage(), e);
-        	    		}catch (Exception e) {
-        					setException(e);
-        					LOGGER.error(e.getMessage(), e);
-        					TLoggerUtil.error(getClass(), e.getMessage(), e);
-        				}finally {
-        					loc.close();
-        				}
+        				resultado = runSearch(resultado);
         				break;
         			case EXPORT_PDF:
         				resultado = runExportPdf();
@@ -167,6 +146,25 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 				} 
         	    return resultado;
         	}
+
+			private TResult<M> runSearch(TResult<M> resultado) {
+				try(TEjbServiceLocator loc = TEjbServiceLocator.getInstance()) {
+					if(model.getResult()!=null)
+						model.getResult().clear();
+					TUser user = TedrosContext.getLoggedUser();
+					ITEjbReportController<M> service = loc.lookup(serviceJndiName);
+					resultado = service.process(user.getAccessToken(), model);
+				} catch(NamingException e){
+					setException( new TProcessException(e, e.getMessage(), "The service is not available!"));
+					LOGGER.error(e.getMessage(), e);
+					TLoggerUtil.error(getClass(), e.getMessage(), e);
+				}catch (Exception e) {
+					setException(e);
+					LOGGER.error(e.getMessage(), e);
+					TLoggerUtil.error(getClass(), e.getMessage(), e);
+				}
+				return resultado;
+			}
 		};
 	}
 	
@@ -208,21 +206,6 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 			String f = getDestFile();
 			List dataList = model.getResult();
 			
-			/*
-			 * JRBeanCollectionDataSource beanColDataSource = new
-			 * JRBeanCollectionDataSource(dataList); JasperPrint print =
-			 * JasperFillManager.fillReport(inputStream, params, beanColDataSource);
-			 * JRXlsExporter exporter = new JRXlsExporter(); exporter.setExporterInput(new
-			 * SimpleExporterInput(print)); exporter.setExporterOutput(new
-			 * SimpleOutputStreamExporterOutput(f)); SimpleXlsReportConfiguration
-			 * configuration = new SimpleXlsReportConfiguration();
-			 * configuration.setDetectCellType(true);
-			 * configuration.setCollapseRowSpan(false);
-			 * configuration.setRemoveEmptySpaceBetweenRows(true);
-			 * exporter.setConfiguration(configuration); exporter.exportReport();
-			 * inputStream.close();
-			 */
-			
 			JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(dataList);
 			
 			JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, params, beanColDataSource);
@@ -258,8 +241,9 @@ public abstract class TReportProcess<M extends ITReportModel> extends TProcess<T
 	 * @param params
 	 */
 	protected void addSubReportDirParam(Map<String, Object> params) {
-		if(this.subReportDir!=null && !params.containsKey(PARAM_SUBREPORT_DIR))
-			params.put(PARAM_SUBREPORT_DIR, this.subReportDir);
+		if (this.subReportDir != null) {
+		    params.putIfAbsent(PARAM_SUBREPORT_DIR, this.subReportDir);
+		}
 	}
 	
 	/**
