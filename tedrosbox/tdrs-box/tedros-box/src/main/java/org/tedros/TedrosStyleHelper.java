@@ -11,9 +11,9 @@ import org.tedros.util.TLoggerUtil;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
-class TedrosBoxStyleHelper {
+class TedrosStyleHelper {
 	
-	private TedrosBoxStyleHelper() {
+	private TedrosStyleHelper() {
 	}
 	
 	public static void reloadStyle(Scene scene, BorderPane root){

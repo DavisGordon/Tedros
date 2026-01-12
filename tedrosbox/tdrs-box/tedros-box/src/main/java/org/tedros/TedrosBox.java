@@ -114,7 +114,7 @@ public class TedrosBox extends Application implements ITedrosBox {
 	public TedrosBox() {
 		mouseDragOffsetX = 0.0D;
 		mouseDragOffsetY = 0.0D;
-		TedrosBoxFolderHelper.checkTedrosFolder();
+		TedrosFolderHelper.checkTedrosFolder();
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -125,118 +125,22 @@ public class TedrosBox extends Application implements ITedrosBox {
 		TedrosContext.setApplication(this);
 		TedrosContext.setViewBuilder(new TViewBuilder());
 		setInstance(this);
-		getStage().setTitle("Tedros");
-		getStage().initStyle(StageStyle.UNDECORATED);
-		getStage().getIcons().add(new Image(TedrosContext.getImageInputStream("icon-tedros.png")));
-		// create root stack pane that we use to be able to overlay proxy dialog
-		layerPane = new StackPane();
-
+		configStage();		
 		// create window resize button
-		windowResizeButton = new TedrosBoxResizeBar(getStage(), 1020, 600);
-		// create root
-		root = new BorderPane() {
-			@Override
-			protected void layoutChildren() {
-				super.layoutChildren();
-				windowResizeButton.autosize();
-				windowResizeButton.setLayoutX(getWidth() - windowResizeButton.getLayoutBounds().getWidth());
-				windowResizeButton.setLayoutY(getHeight() - windowResizeButton.getLayoutBounds().getHeight());
-			}
-		};
-
-		layerPane.setDepthTest(DepthTest.DISABLE);
-		layerPane.getChildren().add(root);
-		// create scene
-		boolean is3dSupported = Platform.isSupported(ConditionalFeature.SCENE3D);
-		scene = new Scene(layerPane, 1020, 600, is3dSupported);
-		if (is3dSupported)
-			scene.setCamera(new PerspectiveCamera());
-
-		final String defaultStyleCssUrl = TedrosContext
-				.getExternalURLFile(TedrosFolder.CSS_CASPIAN_FOLDER, "caspian.css").toExternalForm();
-		final String defaultStyleCssUrl2 = TedrosContext
-				.getExternalURLFile(TedrosFolder.CSS_CASPIAN_FOLDER, "caspian-no-transparency.css").toExternalForm();
-		final String defaultStyleCssUrl3 = TedrosContext
-				.getExternalURLFile(TedrosFolder.CSS_CASPIAN_FOLDER, "highcontrast.css").toExternalForm();
-
-		final String customStyleCssUrl = TThemeUtil.getStyleURL().toExternalForm();
-		final String immutableStylesCssUrl = TedrosContext
-				.getExternalURLFile(TedrosFolder.CONF_FOLDER, "immutable-styles.css").toExternalForm();
-
-		scene.getStylesheets().addAll(immutableStylesCssUrl, customStyleCssUrl, defaultStyleCssUrl2,
-				defaultStyleCssUrl3);
-		scene.setUserAgentStylesheet(defaultStyleCssUrl);
-
-		File backgroundCss = new File(TThemeUtil.getBackgroundCssFilePath());
-		if (backgroundCss.exists())
-			scene.getStylesheets().addAll(TThemeUtil.getBackgroundURL().toExternalForm());
-
-		root.getStyleClass().add("application");
-		root.setId("t-tedros-color");
-
-		// create logo pane
-		logoPane = new StackPane();
-		logoManager = new TedrosLogoManager(logoPane);
-
-		// create main toolbar
-		toolBar = new ToolBar();
-		toolBar.setId("t-main-toolbar");
-		toolBar.getItems().add(logoPane);
-
-		logoManager.showDefaultLogo();
-
-		Region spacer = new Region();
-		HBox.setHgrow(spacer, Priority.ALWAYS);
-		toolBar.getItems().add(spacer);
-		toolBar.setPrefHeight(50);
-		toolBar.setMinHeight(50);
-		toolBar.setMaxHeight(50);
-		GridPane.setConstraints(toolBar, 0, 0);
-		// add close min max
-		final TedroxBoxHeaderButton windowButtons = new TedroxBoxHeaderButton(getStage(), true);
-		toolBar.getItems().add(windowButtons);
-		// add window header double clicking
-		toolBar.setOnMouseClicked(e -> {
-			if (e.getClickCount() == 2)
-				windowButtons.toogleMaximized();
-		});
-		// add window dragging
-		toolBar.setOnMousePressed(e -> {
-			mouseDragOffsetX = e.getSceneX();
-			mouseDragOffsetY = e.getSceneY();
-		});
-		toolBar.setOnMouseDragged(e -> {
-			if (!windowButtons.isMaximized()) {
-				getStage().setX(e.getScreenX() - mouseDragOffsetX);
-				getStage().setY(e.getScreenY() - mouseDragOffsetY);
-			}
-		});
-
-		menuTree = new TreeView();
-		menuTree.setId("t-tedros-menu-tree");
-		menuTree.setStyle(FX_BACKGROUND_COLOR_TRANSPARENT);
-		menuTree.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		menuTree.setShowRoot(false);
-		menuTree.setEditable(false);
-		menuTree.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
-		// Listener delegated to Navigation Manager later, but need manager instance
-		// first
-		// It's circular if manager needs menuTree, so manager ctor takes menuTree.
-
-		leftMenuPane = new VBox();
-		leftMenuPane.setStyle("-fx-effect: dropshadow( three-pass-box , #000000 , 9, 0.1 , 0 , 4); "
-				+ "-fx-text-fill: #FFFFFF; -fx-background-color: transparent;");
-		leftMenuPane.getChildren().add(menuTree);
-		VBox.setVgrow(menuTree, Priority.ALWAYS);
+		createWindowResizeBar();
+		// create root stack pane that we use to be able to overlay proxy dialog
+		createLayerPane();
+		// create scene		
+		createScene();
+		applyCssStyle();
+		createLogoPane();
+		final TedroxBoxHeaderButton windowButtons = createMainToolBar();
+		createLeftMenu();
+		createLeftMenuPane();
 		// create page toolbar
 		pageToolBar = new ToolBar();
 		pageToolBar.setId("t-tedros-toolbar");
 		pageToolBar.setMaxSize(Double.MAX_VALUE, Region.USE_PREF_SIZE);
-
-		userButton = new Button();
-		userButton.getStyleClass().addAll("user");
-		userButton.setOnAction(e -> popOverManager.showUserPopOver());
 
 		forwardSize = new SimpleStringProperty("0");
 		final Button forwardButton = new Button("");
@@ -287,6 +191,10 @@ public class TedrosBox extends Application implements ITedrosBox {
 				pvr.hide();
 			backButton.setUserData(null);
 		});
+		
+		userButton = new Button();
+		userButton.getStyleClass().addAll("user");
+		userButton.setOnAction(e -> popOverManager.showUserPopOver());
 
 		infoButton = new Button();
 		infoButton.getStyleClass().addAll("info");
@@ -411,7 +319,7 @@ public class TedrosBox extends Application implements ITedrosBox {
 		TedrosContext.reloadStyleProperty()
 				.addListener((a, o, n) -> {
 					logoManager.playEffect(); // Use manager
-					TedrosBoxStyleHelper.reloadStyle(scene, root);
+					TedrosStyleHelper.reloadStyle(scene, root);
 					logoManager.stopEffect(); // Use manager
 				});
 
@@ -419,6 +327,122 @@ public class TedrosBox extends Application implements ITedrosBox {
 		getStage().show();
 		windowButtons.toogleMaximized();
 		TedrosContext.showModal(buildLogin());
+	}
+
+	private void createLeftMenuPane() {
+		leftMenuPane = new VBox();
+		leftMenuPane.setStyle("-fx-effect: dropshadow( three-pass-box , #000000 , 9, 0.1 , 0 , 4); "
+				+ "-fx-text-fill: #FFFFFF; -fx-background-color: transparent;");
+		leftMenuPane.getChildren().add(menuTree);
+		VBox.setVgrow(menuTree, Priority.ALWAYS);
+	}
+
+	private void createLeftMenu() {
+		menuTree = new TreeView();
+		menuTree.setId("t-tedros-menu-tree");
+		menuTree.setStyle(FX_BACKGROUND_COLOR_TRANSPARENT);
+		menuTree.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		menuTree.setShowRoot(false);
+		menuTree.setEditable(false);
+		menuTree.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+	}
+
+	private TedroxBoxHeaderButton createMainToolBar() {
+		Region spacer = new Region();
+		HBox.setHgrow(spacer, Priority.ALWAYS);
+		// create main toolbar
+		toolBar = new ToolBar();
+		toolBar.setId("t-main-toolbar");
+		toolBar.getItems().add(logoPane);		
+		toolBar.getItems().add(spacer);
+		toolBar.setPrefHeight(50);
+		toolBar.setMinHeight(50);
+		toolBar.setMaxHeight(50);
+		GridPane.setConstraints(toolBar, 0, 0);
+		// add close min max
+		final TedroxBoxHeaderButton windowButtons = new TedroxBoxHeaderButton(getStage(), true);
+		toolBar.getItems().add(windowButtons);
+		// add window header double clicking
+		toolBar.setOnMouseClicked(e -> {
+			if (e.getClickCount() == 2)
+				windowButtons.toogleMaximized();
+		});
+		// add window dragging
+		toolBar.setOnMousePressed(e -> {
+			mouseDragOffsetX = e.getSceneX();
+			mouseDragOffsetY = e.getSceneY();
+		});
+		toolBar.setOnMouseDragged(e -> {
+			if (!windowButtons.isMaximized()) {
+				getStage().setX(e.getScreenX() - mouseDragOffsetX);
+				getStage().setY(e.getScreenY() - mouseDragOffsetY);
+			}
+		});
+		return windowButtons;
+	}
+
+	private void createScene() {
+		boolean is3dSupported = Platform.isSupported(ConditionalFeature.SCENE3D);
+		scene = new Scene(layerPane, 1020, 600, is3dSupported);
+		if (is3dSupported)
+			scene.setCamera(new PerspectiveCamera());
+	}
+
+	private void createLayerPane() {
+		layerPane = new StackPane();
+		layerPane.setDepthTest(DepthTest.DISABLE);
+		layerPane.getChildren().add(root);
+	}
+
+	private void createWindowResizeBar() {
+		windowResizeButton = new TedrosBoxResizeBar(getStage(), 1020, 600);
+		// create root
+		root = new BorderPane() {
+			@Override
+			protected void layoutChildren() {
+				super.layoutChildren();
+				windowResizeButton.autosize();
+				windowResizeButton.setLayoutX(getWidth() - windowResizeButton.getLayoutBounds().getWidth());
+				windowResizeButton.setLayoutY(getHeight() - windowResizeButton.getLayoutBounds().getHeight());
+			}
+		};
+	}
+
+	private void configStage() {
+		getStage().setTitle("Tedros");
+		getStage().initStyle(StageStyle.UNDECORATED);
+		getStage().getIcons().add(new Image(TedrosContext.getImageInputStream("icon-tedros.png")));
+	}
+
+	private void createLogoPane() {
+		// create logo pane
+		logoPane = new StackPane();
+		logoManager = new TedrosLogoManager(logoPane);	
+		logoManager.showDefaultLogo();
+	}
+
+	private void applyCssStyle() {
+		final String defaultStyleCssUrl = TedrosContext
+				.getExternalURLFile(TedrosFolder.CSS_CASPIAN_FOLDER, "caspian.css").toExternalForm();
+		final String defaultStyleCssUrl2 = TedrosContext
+				.getExternalURLFile(TedrosFolder.CSS_CASPIAN_FOLDER, "caspian-no-transparency.css").toExternalForm();
+		final String defaultStyleCssUrl3 = TedrosContext
+				.getExternalURLFile(TedrosFolder.CSS_CASPIAN_FOLDER, "highcontrast.css").toExternalForm();
+
+		final String customStyleCssUrl = TThemeUtil.getStyleURL().toExternalForm();
+		final String immutableStylesCssUrl = TedrosContext
+				.getExternalURLFile(TedrosFolder.CONF_FOLDER, "immutable-styles.css").toExternalForm();
+
+		scene.getStylesheets().addAll(immutableStylesCssUrl, customStyleCssUrl, defaultStyleCssUrl2,
+				defaultStyleCssUrl3);
+		scene.setUserAgentStylesheet(defaultStyleCssUrl);
+
+		File backgroundCss = new File(TThemeUtil.getBackgroundCssFilePath());
+		if (backgroundCss.exists())
+			scene.getStylesheets().addAll(TThemeUtil.getBackgroundURL().toExternalForm());
+
+		root.getStyleClass().add("application");
+		root.setId("t-tedros-color");
 	}
 
 	public void showDefaultLogo() {

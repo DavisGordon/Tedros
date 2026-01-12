@@ -8,17 +8,17 @@ import org.tedros.util.TFileUtil;
 import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TZipUtil;
 
-class TedrosBoxFolderHelper {
+class TedrosFolderHelper {
 	
-	private TedrosBoxFolderHelper() {
+	private TedrosFolderHelper() {
 	}
 	
 	static void checkTedrosFolder() {
 		try {
         	String outputFolder = System.getProperty("user.home");
-        	boolean extract = TedrosBoxFolderHelper.checkAndBuildTedrosBoxFolder(outputFolder);
+        	boolean extract = TedrosFolderHelper.checkAndBuildTedrosBoxFolder(outputFolder);
 			if(extract)
-				TedrosBoxFolderHelper.extractZip(outputFolder);
+				TedrosFolderHelper.extractZip(outputFolder);
 		} catch (IOException e) {
 			TLoggerUtil.error(TedrosBox.class, e.toString(), e);
 		}
