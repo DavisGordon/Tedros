@@ -35,7 +35,7 @@ public class GrokAiTerosService extends AiServiceBase implements IAiTerosService
 
     private static final Logger log = TLoggerUtil.getLogger(GrokAiTerosService.class);
     
-    private static GrokAiTerosService instance;
+    private static IAiTerosService instance;
     private final GrokAiServiceAdapter adapter;
     
     private final List<ChatCompletionMessageParam> messages = new ArrayList<>();
@@ -47,13 +47,17 @@ public class GrokAiTerosService extends AiServiceBase implements IAiTerosService
         setPromptAssistant(assistantPrompt);
         createSystemMessage();
     }
+    
+    public static IAiTerosService newInstance(String apiKey, String aiModel, String assistantPrompt) {
+        return new GrokAiTerosService(apiKey, aiModel, assistantPrompt);
+    }
 
-    public static GrokAiTerosService create(String apiKey, String aiModel, String assistantPrompt) {
+    public static IAiTerosService create(String apiKey, String aiModel, String assistantPrompt) {
         if (instance == null) instance = new GrokAiTerosService(apiKey, aiModel, assistantPrompt);
         return instance;
     }
 
-    public static GrokAiTerosService getInstance() {
+    public static IAiTerosService getInstance() {
         if (instance == null) throw new IllegalStateException("Instância não criada!");
         return instance;
     }
@@ -291,17 +295,13 @@ public class GrokAiTerosService extends AiServiceBase implements IAiTerosService
         		.content(systemPrompt)
         		.build()));
     }
-    
-    public static void main(String[] args) {
-				GrokAiTerosService service = GrokAiTerosService.create(
-						"key-here", 
-						"grok-4-fast-reasoning", "Voce é um assistente útil.");
-				
-				service.setPromptAssistant("Responda de forma clara e objetiva.");
-				
-		String response = service.call("Qual a capital da França?", null);
-		log.info("Response: {}", response);
-	} 
-    
-    
+
+	@Override
+	public void cleanMessageHistory() {
+		this.messages.clear();
+		this.uploadedFileIds.clear();
+		setPromptAssistant(assistantPrompt);
+        createSystemMessage();
+	}
+        
 }

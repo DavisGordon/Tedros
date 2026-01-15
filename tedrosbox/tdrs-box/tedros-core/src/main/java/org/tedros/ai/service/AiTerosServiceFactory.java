@@ -19,5 +19,16 @@ public class AiTerosServiceFactory {
 			throw new IllegalArgumentException("Provider not supported: " + provider);
 		}
 	}
+	
+	public static IAiTerosService newInstance(String apiKey, String aiModel, String assistantPrompt, AiServiceProvider provider) {
+		switch (provider) {
+		case GROK:
+			return GrokAiTerosService.newInstance(apiKey, aiModel, assistantPrompt);
+		case OPENAI:
+			return OpenAITerosService.newInstance(apiKey, aiModel, assistantPrompt);
+		default:
+			throw new IllegalArgumentException("Provider not supported: " + provider);
+		}
+	}
 
 }

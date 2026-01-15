@@ -7,6 +7,8 @@ public interface IAiTerosService extends IAiServiceBase {
 	String call(String userPrompt, String sysPrompt);
 
 	void setAiModel(String model);
+	
+	void cleanMessageHistory();
 
 	String getAiModel();
 

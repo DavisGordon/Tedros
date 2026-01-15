@@ -71,6 +71,15 @@ public class OpenAITerosService extends AiServiceBase implements IAiTerosService
             instance = new OpenAITerosService(token, aiModel, assistantPrompt);
         return instance;
     }
+    
+    public static IAiTerosService newInstance(String token, String aiModel, String assistantPrompt) {
+    	return new OpenAITerosService(token, aiModel, assistantPrompt);
+    }
+    
+    public static IAiTerosService getInstance() {
+        if (instance == null) throw new IllegalStateException("Instância não criada!");
+        return instance;
+    }
 
     @Override
 	public void createFunctionExecutor(TFunction<?>... functions) {
@@ -427,4 +436,13 @@ public class OpenAITerosService extends AiServiceBase implements IAiTerosService
         messages.add(adapter.buildSysMessage(header));
         log.info("Mensagem de sistema inicial criada para usuário '{}'", user);
     }
+
+	@Override
+	public void cleanMessageHistory() {
+		this.messages.clear();
+		
+		setPromptAssistant(assistantPrompt);
+        createSystemMessage();
+		
+	}
 }

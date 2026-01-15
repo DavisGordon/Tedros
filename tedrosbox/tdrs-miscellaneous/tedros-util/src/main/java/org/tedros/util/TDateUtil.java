@@ -6,6 +6,9 @@ package org.tedros.util;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Locale;
 
@@ -58,6 +61,15 @@ public class TDateUtil {
 			return formatDateTime(date, dateStyle, timeStyle, locale);
 		else
 			return formatDate(date, locale);
+	}
+	
+	public static LocalDate convertToLocalDate(Date date) {
+		// 1. Convert the Date to an Instant
+        Instant instant = date.toInstant();
+        // 2. Get the system's default time zone
+        ZoneId defaultZone = ZoneId.systemDefault();
+        // 3. Convert the Instant to a LocalDate using the time zone
+        return instant.atZone(defaultZone).toLocalDate();
 	}
 
 	public static synchronized String formatShortDateTime(Date data, Locale locale){
