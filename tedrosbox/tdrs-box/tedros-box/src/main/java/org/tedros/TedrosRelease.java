@@ -8,5 +8,5 @@ package org.tedros;
  *
  */
 public interface TedrosRelease {
-	static final String version = "17.1";
+	static final String version = "18.0";
 }

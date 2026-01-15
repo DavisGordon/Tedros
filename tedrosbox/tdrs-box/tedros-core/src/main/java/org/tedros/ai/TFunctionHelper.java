@@ -116,8 +116,8 @@ public class TFunctionHelper {
                     String fullPath = file.getAbsolutePath();
                     LOGGER.info("File created successfully: {}", fullPath);
 
-                    return new ToolCallResult("create_file",
-                        "File created successfully!\nPath: `!" + fullPath.replace("\\", "\\\\") + "`", true);
+                    return new ToolCallResult("File created successfully! " + TFunction.PROCEED_WITH_TEXT_RESPONSE,
+                        "Path: `!" + fullPath.replace("\\", "\\\\") + "`", true);
 
                 } catch (Exception e) {
                     LOGGER.error("Failed to create file {}.{}: {}", 
@@ -128,7 +128,7 @@ public class TFunctionHelper {
     }
 	
 	public static TFunction<Empty> getPreferencesFunction() {
-		return new TFunction<Empty>("get_system_preferences", "Returns the system preferences for chat server, smtp server, "
+		return new TFunction<>("get_system_preferences", "Returns the system preferences for chat server, smtp server, "
 				+ "view history page, openai, teros status, reports, notify, currency/date format and others", 
 				Empty.class, 
 				v->{

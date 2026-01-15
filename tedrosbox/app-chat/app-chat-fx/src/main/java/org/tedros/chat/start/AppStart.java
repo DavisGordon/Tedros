@@ -33,15 +33,19 @@ public class AppStart implements ITApplication {
 	};
 	@Override
 	public void start() {
-		ChatClient c = ChatClient.getInstance();
-		c.logProperty().addListener(chl);
-		c.connect();
+		if(TedrosContext.isChatEnabled()) {
+			ChatClient c = ChatClient.getInstance();
+			c.logProperty().addListener(chl);
+			c.connect();
+		}
 	}
 
 	@Override
 	public void stop() {
-		ChatClient c = ChatClient.getInstance();
-		c.logProperty().removeListener(chl);
-		c.close();
+		if(TedrosContext.isChatEnabled()) {
+			ChatClient c = ChatClient.getInstance();
+			c.logProperty().removeListener(chl);
+			c.close();
+		}
 	}
 }

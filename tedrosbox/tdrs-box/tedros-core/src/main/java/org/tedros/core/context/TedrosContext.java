@@ -124,7 +124,7 @@ public final class TedrosContext {
 	private static TUser loggedUser;
 	
 	private static Node MODAL;
-	
+	private static boolean chatEnabled;
 	private static boolean PAGE_FORCE;
 	private static boolean PAGE_ADDHISTORY; 
 	private static boolean PAGE_SWAPVIEWS;
@@ -146,9 +146,10 @@ public final class TedrosContext {
 		LOGGER.info("Finish load Properties files.");
 		
 		LOGGER.info("Start load language definition.");
-		Properties languageProp = new Properties();
+		
 		
 		try {
+			Properties languageProp = new Properties();
 			try(FileInputStream input = new FileInputStream(TFileUtil.getTedrosFolderPath()
 					+TedrosFolder.CONF_FOLDER.getFolder()+"language.properties")){
 				languageProp.load(input);
@@ -157,6 +158,18 @@ public final class TedrosContext {
 		}catch(IOException e){
 				LOGGER.error(e.toString(), e);
 				locale = Locale.ENGLISH;
+		}
+		
+		try {
+			Properties chatProp = new Properties();
+			try(FileInputStream input = new FileInputStream(TFileUtil.getTedrosFolderPath()
+					+TedrosFolder.CONF_FOLDER.getFolder()+"chat.properties")){
+				chatProp.load(input);
+				chatEnabled = chatProp.getProperty("enabled").equalsIgnoreCase("true");
+			}
+		}catch(IOException e){
+				LOGGER.error(e.toString(), e);
+				chatEnabled = false;
 		}
 		
 		LOGGER.info("Finish load language definition.");
@@ -998,6 +1011,10 @@ public final class TedrosContext {
 	
 	public static ObservableList<ITWindow> getWindows() {
 		return windows;
+	}
+
+	public static boolean isChatEnabled() {
+		return chatEnabled;
 	}
 	
 }

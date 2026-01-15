@@ -68,7 +68,8 @@ public class TerosSetting extends TSetting {
 	 * @param descriptor
 	 */
 	public TerosSetting(ITComponentDescriptor descriptor) {
-		super(descriptor);
+		super(descriptor);		
+		openHtmlMessageViewer();
 		util = new AiChatUtil();
 		repo = new TRepository();
 		
@@ -118,8 +119,6 @@ public class TerosSetting extends TSetting {
 				resetAction();
 			}
 		});
-		
-		openHtmlMessageViewer();
 	}
 
 	private void openHtmlMessageViewer() {

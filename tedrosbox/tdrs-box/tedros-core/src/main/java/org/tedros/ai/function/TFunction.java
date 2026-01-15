@@ -10,7 +10,11 @@ import java.util.function.Function;
  *
  */
 public class TFunction<T> {
-
+	public static final String SUSCESS_MESSAGE = "Function executed successfully! ";
+	public static final String DO_NOT_CALL_AGAIN = "DO NOT call this function again for this content. ";
+	public static final String PROCEED_WITH_TEXT_RESPONSE = "Proceed with text response or stop. "; 
+	public static final String PROCEED_WITH_HTML_RESPONSE = "Proceed by displaying your response in HTML; to do this, call the corresponding function. ";
+	
 	private String name;
 	private String description;
 	private Function<T, Object> callback;

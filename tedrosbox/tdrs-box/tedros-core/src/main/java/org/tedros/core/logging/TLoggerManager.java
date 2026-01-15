@@ -16,11 +16,15 @@ import org.tedros.util.TedrosFolder;
  * */
 public class TLoggerManager {
 
-	static private ConsoleHandler consoleHandler;
-	static private FileHandler fileHandler;
-    static private Formatter formatterTxt;
+	private static ConsoleHandler consoleHandler;
+	private static FileHandler fileHandler;
+	private static Formatter formatterTxt;
+	
+	private TLoggerManager() {
+		
+	}
 
-    static public void setup()  {
+    public static void setup()  {
             
             try {
 				Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -33,17 +37,16 @@ public class TLoggerManager {
 				}
 				
 				formatterTxt = new TLoggerFormatter();
-				//formatterTxt = new SimpleFormatter();
 				
 				consoleHandler = new ConsoleHandler();
-				fileHandler = new FileHandler(TFileUtil.getTedrosFolderPath()+TedrosFolder.LOG_FOLDER.getFolder() + "Logging.txt");
+				//fileHandler = new FileHandler(TFileUtil.getTedrosFolderPath()+TedrosFolder.LOG_FOLDER.getFolder() + "system.log");
 				
-				fileHandler.setFormatter(formatterTxt);
+				//fileHandler.setFormatter(formatterTxt);
 				consoleHandler.setFormatter(formatterTxt);
 				
-				logger.addHandler(fileHandler);
+				//logger.addHandler(fileHandler);
 				logger.addHandler(consoleHandler);
-			} catch (SecurityException | IOException e) {
+			} catch (SecurityException e) {
 				e.printStackTrace();
 			}
     }

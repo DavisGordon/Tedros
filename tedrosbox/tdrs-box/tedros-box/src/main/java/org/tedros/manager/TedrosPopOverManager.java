@@ -60,8 +60,9 @@ public class TedrosPopOverManager {
         this.chatButton = chatButton;
         this.terosButton = terosButton;
         this.chatUnreadMsgsLabel = chatUnreadMsgsLabel;
-
-        initChatListener();
+        if(chatButton!=null) {
+        	initChatListener();
+        }
     }
 
     private void initChatListener() {
@@ -136,7 +137,8 @@ public class TedrosPopOverManager {
         }
     }
 
-    public void showInfoPopOver(Scene scene) {
+    @SuppressWarnings("unchecked")
+	public void showInfoPopOver(Scene scene) {
         hideInfoPopOver();
         infoPopOver = null;
         double h = scene.getHeight() - 200;
@@ -219,7 +221,7 @@ public class TedrosPopOverManager {
     }
 
     public void hideChatPopOver() {
-        if (chatPopOver != null)
+        if (chatButton!=null && chatPopOver!=null)
             chatPopOver.hide();
     }
 
@@ -242,19 +244,21 @@ public class TedrosPopOverManager {
     public void buildSettingsPane() {
         TLanguage iEngine = TLanguage.getInstance(null);
         hideInfoPopOver();
-        hideChatPopOver();
-        if (chatView != null) {
-            chatView.tStateProperty().removeListener(chatViewStateChl);
-            chatView.gettPresenter().invalidate();
-            chatView = null;
+        if(chatButton!=null) {
+	        hideChatPopOver();
+	        if (chatView != null) {
+	            chatView.tStateProperty().removeListener(chatViewStateChl);
+	            chatView.gettPresenter().invalidate();
+	            chatView = null;
+	        }
+	
+	        chatView = new TDynaView<>(ChatMV.class, TDetachViewType.NONE);
+	        chatView.tStateProperty().addListener(chatViewStateChl);
+	        chatView.sceneProperty().addListener((ob, o, n) -> {
+	            if (n != null)
+	                chatView.tLoad();
+	        });
         }
-
-        chatView = new TDynaView<>(ChatMV.class, TDetachViewType.NONE);
-        chatView.tStateProperty().addListener(chatViewStateChl);
-        chatView.sceneProperty().addListener((ob, o, n) -> {
-            if (n != null)
-                chatView.tLoad();
-        });
 
         if (settingsAcc == null) {
             settingsAcc = new Accordion();
@@ -287,7 +291,7 @@ public class TedrosPopOverManager {
     }
 
     public void disposeChatView() {
-        if (chatView != null) {
+        if (chatButton!=null && chatView != null) {
             chatView.gettPresenter().invalidate();
             chatView = null;
         }

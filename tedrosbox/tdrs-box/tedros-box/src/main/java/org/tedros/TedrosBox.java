@@ -64,7 +64,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
- * Tedros main class (Refactored)
+ * Tedros main class 
  * 
  * @author Davis Gordon
  */
@@ -98,6 +98,8 @@ public class TedrosBox extends Application implements ITedrosBox {
 	private double mouseDragOffsetY;
 	private TModalPane modalMessage;
 	private TModalPane tModalPane;
+	private Button forwardButton;
+	private Button backButton;
 	private Button userButton;
 	private Button infoButton;
 	private Button chatButton;
@@ -115,334 +117,6 @@ public class TedrosBox extends Application implements ITedrosBox {
 		mouseDragOffsetX = 0.0D;
 		mouseDragOffsetY = 0.0D;
 		TedrosFolderHelper.checkTedrosFolder();
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void init(Stage primaryStage) {
-		TLoggerManager.setup();
-
-		stage = primaryStage;
-		TedrosContext.setApplication(this);
-		TedrosContext.setViewBuilder(new TViewBuilder());
-		setInstance(this);
-		configStage();		
-		// create window resize button
-		createWindowResizeBar();
-		// create root stack pane that we use to be able to overlay proxy dialog
-		createLayerPane();
-		// create scene		
-		createScene();
-		applyCssStyle();
-		createLogoPane();
-		final TedroxBoxHeaderButton windowButtons = createMainToolBar();
-		createLeftMenu();
-		createLeftMenuPane();
-		// create page toolbar
-		pageToolBar = new ToolBar();
-		pageToolBar.setId("t-tedros-toolbar");
-		pageToolBar.setMaxSize(Double.MAX_VALUE, Region.USE_PREF_SIZE);
-
-		forwardSize = new SimpleStringProperty("0");
-		final Button forwardButton = new Button("");
-		forwardButton.getStyleClass().addAll("forward");
-		forwardButton.setOnAction(e -> this.forward());
-		forwardButton.setOnMouseEntered(ev -> {
-			PopOver pvr = new PopOver();
-			pvr.setHeaderAlwaysVisible(false);
-			pvr.setAutoFix(true);
-			pvr.setCloseButtonEnabled(false);
-			pvr.setArrowLocation(ArrowLocation.TOP_LEFT);
-			pvr.show(forwardButton);
-			TLabel l = new TLabel();
-			l.textProperty().bind(forwardSize);
-			pvr.setContentNode(l);
-			forwardButton.setUserData(pvr);
-		});
-		forwardButton.setOnMouseExited(ev -> {
-			PopOver pvr = (PopOver) forwardButton.getUserData();
-			TLabel l = (TLabel) pvr.getContentNode();
-			l.textProperty().unbind();
-			if (pvr != null)
-				pvr.hide();
-			forwardButton.setUserData(null);
-		});
-		historySize = new SimpleStringProperty("0");
-		final Button backButton = new Button();
-		backButton.getStyleClass().addAll("back");
-		backButton.setOnAction(e -> this.back());
-		backButton.setOnMouseEntered(ev -> {
-			PopOver pvr = new PopOver();
-			pvr.setAutoHide(true);
-			pvr.setHeaderAlwaysVisible(false);
-			pvr.setAutoFix(true);
-			pvr.setCloseButtonEnabled(false);
-			pvr.setArrowLocation(ArrowLocation.TOP_LEFT);
-			pvr.show(backButton);
-			TLabel l = new TLabel();
-			l.textProperty().bind(historySize);
-			pvr.setContentNode(l);
-			backButton.setUserData(pvr);
-		});
-		backButton.setOnMouseExited(ev -> {
-			PopOver pvr = (PopOver) backButton.getUserData();
-			TLabel l = (TLabel) pvr.getContentNode();
-			l.textProperty().unbind();
-			if (pvr != null)
-				pvr.hide();
-			backButton.setUserData(null);
-		});
-		
-		userButton = new Button();
-		userButton.getStyleClass().addAll("user");
-		userButton.setOnAction(e -> popOverManager.showUserPopOver());
-
-		infoButton = new Button();
-		infoButton.getStyleClass().addAll("info");
-		infoButton.setOnAction(e -> popOverManager.showInfoPopOver(scene));
-
-		terosButton = new Button();
-		terosButton.getStyleClass().addAll("teros");
-		terosButton.setOnAction(e -> popOverManager.showTerosPopOver());
-
-		HBox chb = new HBox(5);
-		chb.getStyleClass().addAll("box");
-
-		chatButton = new Button();
-		chatButton.getStyleClass().addAll("chat");
-		chatButton.setOnAction(e -> popOverManager.showChatPopOver(scene));
-
-		chatUnreadMsgsLabel = new Label("0");
-		chatUnreadMsgsLabel.getStyleClass().addAll("boxTxt");
-		chb.getChildren().addAll(chatButton, chatUnreadMsgsLabel);
-		HBox.setMargin(chatButton, new Insets(2, 4, 2, 8));
-		HBox.setMargin(chatUnreadMsgsLabel, new Insets(2, 8, 2, 4));
-
-		// Init PopOver Manager
-		popOverManager = new TedrosPopOverManager(userButton, infoButton, chatButton, terosButton, chatUnreadMsgsLabel);
-
-		HBox btnBox = new HBox();
-		btnBox.setAlignment(Pos.CENTER);
-		btnBox.getChildren().addAll(userButton, infoButton, chb, terosButton, backButton, forwardButton);
-		HBox.setMargin(userButton, new Insets(0, 10, 0, 0));
-		HBox.setMargin(terosButton, new Insets(0, 10, 0, 0));
-		HBox.setMargin(backButton, new Insets(0, 10, 0, 0));
-		HBox.setMargin(forwardButton, new Insets(0, 10, 0, 0));
-		HBox.setMargin(infoButton, new Insets(0, 10, 0, 0));
-		HBox.setMargin(chb, new Insets(0, 10, 0, 0));
-
-		pageToolBar.getItems().add(btnBox);
-
-		// Inicio breadcrumbar
-		breadcrumbBar = new TedrosBoxBreadcrumbBar();
-		pageToolBar.getItems().add(breadcrumbBar);
-		BorderPane.setMargin(pageToolBar, new Insets(0, 0, 0, 32));
-		// Fim breadcrumbar
-
-		// create page area
-		pageArea = new Pane() {
-			@Override
-			protected void layoutChildren() {
-				for (Node child : pageArea.getChildren()) {
-					child.resizeRelocate(0, 0, pageArea.getWidth(), pageArea.getHeight());
-				}
-			}
-		};
-		pageArea.setId("t-app-area");
-		pageArea.setStyle(FX_BACKGROUND_COLOR_TRANSPARENT);
-		// create main pane
-		mainPane = new BorderPane();
-
-		mainPane.setCenter(pageArea);
-		mainPane.setMinWidth(300);
-		mainPane.setStyle("-fx-effect: dropshadow( three-pass-box , #000000 , 9, 0.1 , 0 , 4); "
-				+ "-fx-text-fill: #FFFFFF; -fx-background-color: transparent;");
-
-		this.innerPane = new TSliderMenu(mainPane);
-		innerPane.settMenuVisible(false);
-		root.setTop(toolBar);
-		root.setCenter(this.innerPane);
-		root.setStyle(FX_BACKGROUND_COLOR_TRANSPARENT);
-		// add window resize button so its on top
-		windowResizeButton.setManaged(false);
-
-		root.getChildren().addAll(windowResizeButton);
-
-		// sets a modal pane for messages and nodes
-		modalMessage = new TModalPane(layerPane);
-		tModalPane = new TModalPane(innerPane);
-
-		// Init Navigation Manager
-		navManager = new TedrosNavigationManager(menuTree, pageArea, breadcrumbBar, historySize, forwardSize);
-
-		menuTree.getSelectionModel().selectedItemProperty()
-				.addListener((observable, oldValue, newValue) -> {
-					if (!navManager.isChangingPage()) {
-						Page selectedPage = (Page) menuTree.getSelectionModel().getSelectedItem();
-						if (selectedPage != navManager.getPages().getRoot())
-							navManager.goToPage(selectedPage);
-					}
-				});
-
-		// configura listener para exibir mensagens
-		TedrosContext.messageListProperty()
-				.addListener((Change c) -> {
-					if (!c.getList().isEmpty()) {
-						logoManager.playEffect(); // Use manager
-
-						modalMessage.showModal(new TMessageBox(c.getList()),
-								ev -> TedrosContext.messageListProperty().clear());
-
-					} else {
-						if (modalMessage != null) {
-							modalMessage.hideModal();
-							logoManager.stopEffect(); // Use manager
-						}
-					}
-				});
-
-		TedrosContext.infoListProperty()
-				.addListener((Change c) -> popOverManager.showInfoPopOver(scene));
-
-		TedrosContext.showModalProperty()
-				.addListener((a, o, newValue) -> {
-					if (newValue && TedrosContext.getModal() != null) {
-						logoManager.playEffect(); // Use manager
-						tModalPane.showModal(TedrosContext.getModal());
-					} else {
-						if (tModalPane != null) {
-							tModalPane.hideModal();
-							logoManager.stopEffect(); // Use manager
-						}
-					}
-				});
-
-		TedrosContext.reloadStyleProperty()
-				.addListener((a, o, n) -> {
-					logoManager.playEffect(); // Use manager
-					TedrosStyleHelper.reloadStyle(scene, root);
-					logoManager.stopEffect(); // Use manager
-				});
-
-		getStage().setScene(scene);
-		getStage().show();
-		windowButtons.toogleMaximized();
-		TedrosContext.showModal(buildLogin());
-	}
-
-	private void createLeftMenuPane() {
-		leftMenuPane = new VBox();
-		leftMenuPane.setStyle("-fx-effect: dropshadow( three-pass-box , #000000 , 9, 0.1 , 0 , 4); "
-				+ "-fx-text-fill: #FFFFFF; -fx-background-color: transparent;");
-		leftMenuPane.getChildren().add(menuTree);
-		VBox.setVgrow(menuTree, Priority.ALWAYS);
-	}
-
-	private void createLeftMenu() {
-		menuTree = new TreeView();
-		menuTree.setId("t-tedros-menu-tree");
-		menuTree.setStyle(FX_BACKGROUND_COLOR_TRANSPARENT);
-		menuTree.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		menuTree.setShowRoot(false);
-		menuTree.setEditable(false);
-		menuTree.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-	}
-
-	private TedroxBoxHeaderButton createMainToolBar() {
-		Region spacer = new Region();
-		HBox.setHgrow(spacer, Priority.ALWAYS);
-		// create main toolbar
-		toolBar = new ToolBar();
-		toolBar.setId("t-main-toolbar");
-		toolBar.getItems().add(logoPane);		
-		toolBar.getItems().add(spacer);
-		toolBar.setPrefHeight(50);
-		toolBar.setMinHeight(50);
-		toolBar.setMaxHeight(50);
-		GridPane.setConstraints(toolBar, 0, 0);
-		// add close min max
-		final TedroxBoxHeaderButton windowButtons = new TedroxBoxHeaderButton(getStage(), true);
-		toolBar.getItems().add(windowButtons);
-		// add window header double clicking
-		toolBar.setOnMouseClicked(e -> {
-			if (e.getClickCount() == 2)
-				windowButtons.toogleMaximized();
-		});
-		// add window dragging
-		toolBar.setOnMousePressed(e -> {
-			mouseDragOffsetX = e.getSceneX();
-			mouseDragOffsetY = e.getSceneY();
-		});
-		toolBar.setOnMouseDragged(e -> {
-			if (!windowButtons.isMaximized()) {
-				getStage().setX(e.getScreenX() - mouseDragOffsetX);
-				getStage().setY(e.getScreenY() - mouseDragOffsetY);
-			}
-		});
-		return windowButtons;
-	}
-
-	private void createScene() {
-		boolean is3dSupported = Platform.isSupported(ConditionalFeature.SCENE3D);
-		scene = new Scene(layerPane, 1020, 600, is3dSupported);
-		if (is3dSupported)
-			scene.setCamera(new PerspectiveCamera());
-	}
-
-	private void createLayerPane() {
-		layerPane = new StackPane();
-		layerPane.setDepthTest(DepthTest.DISABLE);
-		layerPane.getChildren().add(root);
-	}
-
-	private void createWindowResizeBar() {
-		windowResizeButton = new TedrosBoxResizeBar(getStage(), 1020, 600);
-		// create root
-		root = new BorderPane() {
-			@Override
-			protected void layoutChildren() {
-				super.layoutChildren();
-				windowResizeButton.autosize();
-				windowResizeButton.setLayoutX(getWidth() - windowResizeButton.getLayoutBounds().getWidth());
-				windowResizeButton.setLayoutY(getHeight() - windowResizeButton.getLayoutBounds().getHeight());
-			}
-		};
-	}
-
-	private void configStage() {
-		getStage().setTitle("Tedros");
-		getStage().initStyle(StageStyle.UNDECORATED);
-		getStage().getIcons().add(new Image(TedrosContext.getImageInputStream("icon-tedros.png")));
-	}
-
-	private void createLogoPane() {
-		// create logo pane
-		logoPane = new StackPane();
-		logoManager = new TedrosLogoManager(logoPane);	
-		logoManager.showDefaultLogo();
-	}
-
-	private void applyCssStyle() {
-		final String defaultStyleCssUrl = TedrosContext
-				.getExternalURLFile(TedrosFolder.CSS_CASPIAN_FOLDER, "caspian.css").toExternalForm();
-		final String defaultStyleCssUrl2 = TedrosContext
-				.getExternalURLFile(TedrosFolder.CSS_CASPIAN_FOLDER, "caspian-no-transparency.css").toExternalForm();
-		final String defaultStyleCssUrl3 = TedrosContext
-				.getExternalURLFile(TedrosFolder.CSS_CASPIAN_FOLDER, "highcontrast.css").toExternalForm();
-
-		final String customStyleCssUrl = TThemeUtil.getStyleURL().toExternalForm();
-		final String immutableStylesCssUrl = TedrosContext
-				.getExternalURLFile(TedrosFolder.CONF_FOLDER, "immutable-styles.css").toExternalForm();
-
-		scene.getStylesheets().addAll(immutableStylesCssUrl, customStyleCssUrl, defaultStyleCssUrl2,
-				defaultStyleCssUrl3);
-		scene.setUserAgentStylesheet(defaultStyleCssUrl);
-
-		File backgroundCss = new File(TThemeUtil.getBackgroundCssFilePath());
-		if (backgroundCss.exists())
-			scene.getStylesheets().addAll(TThemeUtil.getBackgroundURL().toExternalForm());
-
-		root.getStyleClass().add("application");
-		root.setId("t-tedros-color");
 	}
 
 	public void showDefaultLogo() {
@@ -577,30 +251,11 @@ public class TedrosBox extends Application implements ITedrosBox {
 		navManager.clearPageHistory();
 	}
 
-	private static void setInstance(TedrosBox tedrosBox) {
-		TedrosBox.tedros = tedrosBox;
-	}
-
 	/**
 	 * Reload the current page
 	 */
 	public void reload() {
 		navManager.reload();
-	}
-
-	/**
-	 * ###################
-	 * TedrosBox start
-	 * ###################
-	 */
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		LOGGER.info("Starting TedrosBox Application...");
-		TLanguage.addResourceBundle(null, "TedrosLoginLabels", TedrosRelease.class.getClassLoader());
-		TLanguage.addResourceBundle(null, "TCoreLabels", TCoreKeys.class.getClassLoader());
-		TLanguage.addResourceBundles(null, TFxKey.class.getClassLoader(), "TFx", "TUsual");
-		init(primaryStage);
-		primaryStage.show();
 	}
 
 	public Stage getStage() {
@@ -618,4 +273,389 @@ public class TedrosBox extends Application implements ITedrosBox {
 	public double getYStage() {
 		return getStage().getY();
 	}	
+
+	/**
+	 * ###################
+	 * TedrosBox start
+	 * ###################
+	 */
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		LOGGER.info("Starting TedrosBox Application...");
+		TLanguage.addResourceBundle(null, "TedrosLoginLabels", TedrosRelease.class.getClassLoader());
+		TLanguage.addResourceBundle(null, "TCoreLabels", TCoreKeys.class.getClassLoader());
+		TLanguage.addResourceBundles(null, TFxKey.class.getClassLoader(), "TFx", "TUsual");
+		init(primaryStage);
+		primaryStage.show();
+	}
+	
+	private void init(Stage primaryStage) {
+		TLoggerManager.setup();
+		stage = primaryStage;
+		TedrosContext.setApplication(this);
+		TedrosContext.setViewBuilder(new TViewBuilder());
+		setInstance(this);
+		configStage();
+		// create window resize button
+		createWindowResizeBar();
+		// create root stack pane that we use to be able to overlay proxy dialog
+		createLayerPane();
+		// create scene
+		createScene();
+		applyCssStyle();
+		createLogoPane();
+		final TedroxBoxHeaderButton windowButtons = createHeaderButtons();
+		createLeftMenu();
+		createLeftMenuPane();
+		// create page toolbar
+		createHeaderPageToolBar();
+		createNavigationButtons();
+		createPopOverButtons();
+		createBreadcrumbar();
+		// create page area
+		createPageArea();
+		// create main pane
+		createMainPane();
+		createLeftSliderMenu();		
+		setupSystem();
+		setupListeners();
+
+		getStage().setScene(scene);
+		getStage().show();
+		windowButtons.toogleMaximized();
+		TedrosContext.showModal(buildLogin());
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void setupListeners() {
+		// configura listener para exibir mensagens
+		TedrosContext.messageListProperty()
+				.addListener((Change c) -> {
+					if (!c.getList().isEmpty()) {
+						logoManager.playEffect(); // Use manager
+
+						modalMessage.showModal(new TMessageBox(c.getList()),
+								ev -> TedrosContext.messageListProperty().clear());
+
+					} else {
+						if (modalMessage != null) {
+							modalMessage.hideModal();
+							logoManager.stopEffect(); // Use manager
+						}
+					}
+				});
+
+		TedrosContext.infoListProperty()
+				.addListener((Change c) -> popOverManager.showInfoPopOver(scene));
+
+		TedrosContext.showModalProperty()
+				.addListener((a, o, newValue) -> {
+					if (newValue && TedrosContext.getModal() != null) {
+						logoManager.playEffect(); // Use manager
+						tModalPane.showModal(TedrosContext.getModal());
+					} else {
+						if (tModalPane != null) {
+							tModalPane.hideModal();
+							logoManager.stopEffect(); // Use manager
+						}
+					}
+				});
+
+		TedrosContext.reloadStyleProperty()
+				.addListener((a, o, n) -> {
+					logoManager.playEffect(); // Use manager
+					TedrosStyleHelper.reloadStyle(scene, root);
+					logoManager.stopEffect(); // Use manager
+				});
+	}
+
+	@SuppressWarnings("unchecked")
+	private void setupSystem() {
+		root.setTop(toolBar);
+		root.setCenter(this.innerPane);
+		root.setStyle(FX_BACKGROUND_COLOR_TRANSPARENT);
+		// add window resize button so its on top
+		root.getChildren().addAll(windowResizeButton);
+
+		// sets a modal pane for messages and nodes
+		modalMessage = new TModalPane(layerPane);
+		tModalPane = new TModalPane(innerPane);
+
+		// Init Navigation Manager
+		navManager = new TedrosNavigationManager(menuTree, pageArea, breadcrumbBar, historySize, forwardSize);
+
+		menuTree.getSelectionModel().selectedItemProperty()
+				.addListener((observable, oldValue, newValue) -> {
+					if (!navManager.isChangingPage()) {
+						Page selectedPage = (Page) menuTree.getSelectionModel().getSelectedItem();
+						if (selectedPage != navManager.getPages().getRoot())
+							navManager.goToPage(selectedPage);
+					}
+				});
+	}
+
+	private void createLeftSliderMenu() {
+		this.innerPane = new TSliderMenu(mainPane);
+		innerPane.settMenuVisible(false);
+	}
+
+	private void createMainPane() {
+		mainPane = new BorderPane();
+
+		mainPane.setCenter(pageArea);
+		mainPane.setMinWidth(300);
+		mainPane.setStyle("-fx-effect: dropshadow( three-pass-box , #000000 , 9, 0.1 , 0 , 4); "
+				+ "-fx-text-fill: #FFFFFF; -fx-background-color: transparent;");
+	}
+
+	private void createPageArea() {
+		pageArea = new Pane() {
+			@Override
+			protected void layoutChildren() {
+				for (Node child : pageArea.getChildren()) {
+					child.resizeRelocate(0, 0, pageArea.getWidth(), pageArea.getHeight());
+				}
+			}
+		};
+		pageArea.setId("t-app-area");
+		pageArea.setStyle(FX_BACKGROUND_COLOR_TRANSPARENT);
+	}
+
+	private void createBreadcrumbar() {
+		breadcrumbBar = new TedrosBoxBreadcrumbBar();
+		pageToolBar.getItems().add(breadcrumbBar);
+	}
+
+	private void createPopOverButtons() {
+		userButton = new Button();
+		userButton.getStyleClass().addAll("user");
+		userButton.setOnAction(e -> popOverManager.showUserPopOver());
+
+		infoButton = new Button();
+		infoButton.getStyleClass().addAll("info");
+		infoButton.setOnAction(e -> popOverManager.showInfoPopOver(scene));
+
+		terosButton = new Button();
+		terosButton.getStyleClass().addAll("teros");
+		terosButton.setOnAction(e -> popOverManager.showTerosPopOver());
+
+		HBox chb = null;
+		chatButton = null;
+		
+		if(TedrosContext.isChatEnabled()) {
+			chb = new HBox(5);
+			chb.getStyleClass().addAll("box");
+			HBox.setMargin(chb, new Insets(0, 10, 0, 0));
+			chatButton = new Button();
+			chatButton.getStyleClass().addAll("chat");
+			chatButton.setOnAction(e -> popOverManager.showChatPopOver(scene));
+	
+			chatUnreadMsgsLabel = new Label("0");
+			chatUnreadMsgsLabel.getStyleClass().addAll("boxTxt");
+			chb.getChildren().addAll(chatButton, chatUnreadMsgsLabel);
+			HBox.setMargin(chatButton, new Insets(2, 4, 2, 8));
+			HBox.setMargin(chatUnreadMsgsLabel, new Insets(2, 8, 2, 4));
+		}
+
+		// Init PopOver Manager
+		popOverManager = new TedrosPopOverManager(userButton, infoButton, chatButton, terosButton, chatUnreadMsgsLabel);
+
+		HBox btnBox = new HBox();
+		btnBox.setAlignment(Pos.CENTER);
+		
+		if(chb==null)
+			btnBox.getChildren().addAll(userButton, infoButton, terosButton, backButton, forwardButton);
+		else
+			btnBox.getChildren().addAll(userButton, infoButton, chb, terosButton, backButton, forwardButton);
+		
+		HBox.setMargin(userButton, new Insets(0, 10, 0, 0));
+		HBox.setMargin(terosButton, new Insets(0, 10, 0, 0));
+		HBox.setMargin(backButton, new Insets(0, 10, 0, 0));
+		HBox.setMargin(forwardButton, new Insets(0, 10, 0, 0));
+		HBox.setMargin(infoButton, new Insets(0, 10, 0, 0));
+		
+		pageToolBar.getItems().add(btnBox);
+	}
+
+	private void createNavigationButtons() {
+		forwardSize = new SimpleStringProperty("0");
+		forwardButton = new Button("");
+		forwardButton.getStyleClass().addAll("forward");
+		forwardButton.setOnAction(e -> this.forward());
+		forwardButton.setOnMouseEntered(ev -> {
+			PopOver pvr = new PopOver();
+			pvr.setHeaderAlwaysVisible(false);
+			pvr.setAutoFix(true);
+			pvr.setCloseButtonEnabled(false);
+			pvr.setArrowLocation(ArrowLocation.TOP_LEFT);
+			pvr.show(forwardButton);
+			TLabel l = new TLabel();
+			l.textProperty().bind(forwardSize);
+			pvr.setContentNode(l);
+			forwardButton.setUserData(pvr);
+		});
+		forwardButton.setOnMouseExited(ev -> {
+			PopOver pvr = (PopOver) forwardButton.getUserData();
+			TLabel l = (TLabel) pvr.getContentNode();
+			l.textProperty().unbind();
+			if (pvr != null)
+				pvr.hide();
+			forwardButton.setUserData(null);
+		});
+		historySize = new SimpleStringProperty("0");
+		backButton = new Button();
+		backButton.getStyleClass().addAll("back");
+		backButton.setOnAction(e -> this.back());
+		backButton.setOnMouseEntered(ev -> {
+			PopOver pvr = new PopOver();
+			pvr.setAutoHide(true);
+			pvr.setHeaderAlwaysVisible(false);
+			pvr.setAutoFix(true);
+			pvr.setCloseButtonEnabled(false);
+			pvr.setArrowLocation(ArrowLocation.TOP_LEFT);
+			pvr.show(backButton);
+			TLabel l = new TLabel();
+			l.textProperty().bind(historySize);
+			pvr.setContentNode(l);
+			backButton.setUserData(pvr);
+		});
+		backButton.setOnMouseExited(ev -> {
+			PopOver pvr = (PopOver) backButton.getUserData();
+			TLabel l = (TLabel) pvr.getContentNode();
+			l.textProperty().unbind();
+			if (pvr != null)
+				pvr.hide();
+			backButton.setUserData(null);
+		});
+	}
+
+	private void createHeaderPageToolBar() {
+		pageToolBar = new ToolBar();
+		pageToolBar.setId("t-tedros-toolbar");
+		pageToolBar.setMaxSize(Double.MAX_VALUE, Region.USE_PREF_SIZE);
+		BorderPane.setMargin(pageToolBar, new Insets(0, 0, 0, 32));
+	}
+
+	private void createLeftMenuPane() {
+		leftMenuPane = new VBox();
+		leftMenuPane.setStyle("-fx-effect: dropshadow( three-pass-box , #000000 , 9, 0.1 , 0 , 4); "
+				+ "-fx-text-fill: #FFFFFF; -fx-background-color: transparent;");
+		leftMenuPane.getChildren().add(menuTree);
+		VBox.setVgrow(menuTree, Priority.ALWAYS);
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void createLeftMenu() {
+		menuTree = new TreeView();
+		menuTree.setId("t-tedros-menu-tree");
+		menuTree.setStyle(FX_BACKGROUND_COLOR_TRANSPARENT);
+		menuTree.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		menuTree.setShowRoot(false);
+		menuTree.setEditable(false);
+		menuTree.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+	}
+
+	private TedroxBoxHeaderButton createHeaderButtons() {
+		Region spacer = new Region();
+		HBox.setHgrow(spacer, Priority.ALWAYS);
+		// create main toolbar
+		toolBar = new ToolBar();
+		toolBar.setId("t-main-toolbar");
+		toolBar.getItems().add(logoPane);		
+		toolBar.getItems().add(spacer);
+		toolBar.setPrefHeight(50);
+		toolBar.setMinHeight(50);
+		toolBar.setMaxHeight(50);
+		GridPane.setConstraints(toolBar, 0, 0);
+		// add close min max
+		final TedroxBoxHeaderButton windowButtons = new TedroxBoxHeaderButton(getStage(), true);
+		toolBar.getItems().add(windowButtons);
+		// add window header double clicking
+		toolBar.setOnMouseClicked(e -> {
+			if (e.getClickCount() == 2)
+				windowButtons.toogleMaximized();
+		});
+		// add window dragging
+		toolBar.setOnMousePressed(e -> {
+			mouseDragOffsetX = e.getSceneX();
+			mouseDragOffsetY = e.getSceneY();
+		});
+		toolBar.setOnMouseDragged(e -> {
+			if (!windowButtons.isMaximized()) {
+				getStage().setX(e.getScreenX() - mouseDragOffsetX);
+				getStage().setY(e.getScreenY() - mouseDragOffsetY);
+			}
+		});
+		return windowButtons;
+	}
+
+	private void createScene() {
+		boolean is3dSupported = Platform.isSupported(ConditionalFeature.SCENE3D);
+		scene = new Scene(layerPane, 1020, 600, is3dSupported);
+		if (is3dSupported)
+			scene.setCamera(new PerspectiveCamera());
+	}
+
+	private void createLayerPane() {
+		layerPane = new StackPane();
+		layerPane.setDepthTest(DepthTest.DISABLE);
+		layerPane.getChildren().add(root);
+	}
+
+	private void createWindowResizeBar() {
+		windowResizeButton = new TedrosBoxResizeBar(getStage(), 1020, 600);
+		windowResizeButton.setManaged(false);
+		// create root
+		root = new BorderPane() {
+			@Override
+			protected void layoutChildren() {
+				super.layoutChildren();
+				windowResizeButton.autosize();
+				windowResizeButton.setLayoutX(getWidth() - windowResizeButton.getLayoutBounds().getWidth());
+				windowResizeButton.setLayoutY(getHeight() - windowResizeButton.getLayoutBounds().getHeight());
+			}
+		};
+	}
+
+	private void configStage() {
+		getStage().setTitle("Tedros");
+		getStage().initStyle(StageStyle.UNDECORATED);
+		getStage().getIcons().add(new Image(TedrosContext.getImageInputStream("icon-tedros.png")));
+	}
+
+	private void createLogoPane() {
+		// create logo pane
+		logoPane = new StackPane();
+		logoManager = new TedrosLogoManager(logoPane);	
+		logoManager.showDefaultLogo();
+	}
+
+	private void applyCssStyle() {
+		final String defaultStyleCssUrl = TedrosContext
+				.getExternalURLFile(TedrosFolder.CSS_CASPIAN_FOLDER, "caspian.css").toExternalForm();
+		final String defaultStyleCssUrl2 = TedrosContext
+				.getExternalURLFile(TedrosFolder.CSS_CASPIAN_FOLDER, "caspian-no-transparency.css").toExternalForm();
+		final String defaultStyleCssUrl3 = TedrosContext
+				.getExternalURLFile(TedrosFolder.CSS_CASPIAN_FOLDER, "highcontrast.css").toExternalForm();
+
+		final String customStyleCssUrl = TThemeUtil.getStyleURL().toExternalForm();
+		final String immutableStylesCssUrl = TedrosContext
+				.getExternalURLFile(TedrosFolder.CONF_FOLDER, "immutable-styles.css").toExternalForm();
+
+		scene.getStylesheets().addAll(immutableStylesCssUrl, customStyleCssUrl, defaultStyleCssUrl2,
+				defaultStyleCssUrl3);
+		scene.setUserAgentStylesheet(defaultStyleCssUrl);
+
+		File backgroundCss = new File(TThemeUtil.getBackgroundCssFilePath());
+		if (backgroundCss.exists())
+			scene.getStylesheets().addAll(TThemeUtil.getBackgroundURL().toExternalForm());
+
+		root.getStyleClass().add("application");
+		root.setId("t-tedros-color");
+	}
+	
+	private static void setInstance(TedrosBox tedrosBox) {
+		TedrosBox.tedros = tedrosBox;
+	}
+
 }

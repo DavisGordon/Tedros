@@ -17,23 +17,23 @@ class TLoggerFormatter extends Formatter{
 	 * Formats the log record
 	 * */
 	@Override
-	public String format(LogRecord record) {
+	public String format(LogRecord logRecord) {
 		
 		StringBuffer sbf = new StringBuffer();
 		
-		sbf.append(calcDate(record.getMillis()) + SEPARATOR);
-		sbf.append(record.getLevel().getName() + SEPARATOR);
-		sbf.append(record.getSourceClassName() + SEPARATOR);
-		sbf.append(record.getSourceMethodName() + SEPARATOR);
-		sbf.append(SEPARATOR + PIPE + SEPARATOR + record.getMessage()+"\n");
+		sbf.append(calcDate(logRecord.getMillis()) + SEPARATOR);
+		sbf.append(logRecord.getLevel().getName() + SEPARATOR);
+		sbf.append(logRecord.getSourceClassName() + SEPARATOR);
+		sbf.append(logRecord.getSourceMethodName() + SEPARATOR);
+		sbf.append(SEPARATOR + PIPE + SEPARATOR + logRecord.getMessage()+"\n");
 		
 		return sbf.toString();
 	}
 	
 	private String calcDate(long millisecs) {
-        SimpleDateFormat date_format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date resultdate = new Date(millisecs);
-        return date_format.format(resultdate);
+        return dateFormat.format(resultdate);
 	}
 	
 }

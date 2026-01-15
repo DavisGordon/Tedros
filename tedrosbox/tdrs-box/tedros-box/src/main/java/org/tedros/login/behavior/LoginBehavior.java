@@ -94,7 +94,6 @@ public class LoginBehavior extends TDynaViewCrudBaseBehavior<LoginMV, Login> {
 	@Override
 	public void load() {
 		
-		
 		super.load();
 		
 		loginDecorator = ((LoginDecorator) getPresenter().getDecorator());
