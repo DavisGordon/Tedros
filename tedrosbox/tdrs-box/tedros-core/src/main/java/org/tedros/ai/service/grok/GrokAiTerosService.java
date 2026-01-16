@@ -300,7 +300,6 @@ public class GrokAiTerosService extends AiServiceBase implements IAiTerosService
 	public void cleanMessageHistory() {
 		this.messages.clear();
 		this.uploadedFileIds.clear();
-		setPromptAssistant(assistantPrompt);
         createSystemMessage();
 	}
         

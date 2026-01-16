@@ -440,7 +440,7 @@ public class OpenAITerosService extends AiServiceBase implements IAiTerosService
 	@Override
 	public void cleanMessageHistory() {
 		this.messages.clear();
-		
+		this.adapter.resetBuilder();
 		setPromptAssistant(assistantPrompt);
         createSystemMessage();
 		

@@ -1,4 +1,4 @@
-package org.tedros.tools.module.ai.function;
+package org.tedros.ai.web;
 
 import java.awt.Desktop;
 import java.net.URI;
@@ -7,11 +7,11 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
-public class WebViewBridge {
+public class TerosWebViewBridge {
 
 	private final WebView webview;
 	
-	public WebViewBridge(WebView webview) {
+	public TerosWebViewBridge(WebView webview) {
 		this.webview = webview;
 		WebEngine we = this.webview.getEngine(); 
 		we.setJavaScriptEnabled(true);
@@ -20,7 +20,8 @@ public class WebViewBridge {
 	}
 	
 	public void run(String content) {
-		getWebEngine().executeScript("appendAIResponse(" + toJSString(content) + ")");
+		String cleanContent = sanitizeAiOutput(content);
+		getWebEngine().executeScript("appendAIResponse(" + toJSString(cleanContent) + ")");
 	}
 
 	private String toJSString(String content) {
@@ -46,4 +47,32 @@ public class WebViewBridge {
             e.printStackTrace();
         }
     }
+	
+	// Método auxiliar para limpar "sujeiras" comuns do modelo
+	public static String sanitizeAiOutput(String input) {
+	    if (input == null) return "";
+	    
+	    String result = input;
+
+	    // 1. Remove blocos de código Markdown (```html ou ```)
+	    if (result.startsWith("```html")) {
+	        result = result.substring(7);
+	    } else if (result.startsWith("```")) {
+	        result = result.substring(3);
+	    }
+	    if (result.endsWith("```")) {
+	        result = result.substring(0, result.length() - 3);
+	    }
+
+	    // 2. Desfaz o escape de tags HTML básicas se o modelo tiver escapado tudo
+	    // Isso verifica se o inicio parece um html escapado (ex: &lt;div)
+	    if (result.trim().startsWith("&lt;") && result.contains("&gt;")) {
+	        result = result.replace("&lt;", "<")
+	                       .replace("&gt;", ">")
+	                       .replace("&quot;", "\"")
+	                       .replace("&amp;", "&");
+	    }
+	    
+	    return result.trim();
+	}
 }

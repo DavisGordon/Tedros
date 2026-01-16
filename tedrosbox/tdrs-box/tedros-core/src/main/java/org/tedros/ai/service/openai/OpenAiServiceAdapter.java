@@ -232,5 +232,9 @@ public class OpenAiServiceAdapter {
 		}
 	}
     
+    public void resetBuilder() {
+		this.builder = null;
+	}
+    
     
 }

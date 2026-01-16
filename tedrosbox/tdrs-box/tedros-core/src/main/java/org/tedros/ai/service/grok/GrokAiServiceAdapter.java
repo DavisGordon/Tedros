@@ -127,7 +127,6 @@ public class GrokAiServiceAdapter {
 
             if (!tools.isEmpty()) {
                 builder.tools(tools);
-                //.toolChoice(ChatCompletionToolChoiceOption.Auto.AUTO);
             }
 
             ChatCompletion response = client.chat().completions().create(builder.build());

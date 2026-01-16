@@ -5,6 +5,7 @@ import org.tedros.ai.TFunctionHelper;
 import org.tedros.ai.function.TFunction;
 import org.tedros.ai.function.model.Response;
 import org.tedros.ai.function.model.ViewPath;
+import org.tedros.ai.web.TerosWebViewBridge;
 import org.tedros.api.form.ITFieldBox;
 import org.tedros.api.form.ITModelForm;
 import org.tedros.api.presenter.view.ITView;
@@ -94,19 +95,16 @@ public class ShowHtmlAiResponse extends TFunction<HtmlContent> {
 				
 				ITModelForm form = ((TViewBehavior) p.getBehavior()).getForm();
 				
-				WebViewBridge webViewBridge = form.gettObjectRepository().get("webviewbridge");
+				TerosWebViewBridge webViewBridge = form.gettObjectRepository().get("webviewbridge");
 				
 				if(webViewBridge==null) {							
 					ITFieldBox fdbox = form.gettFieldBox("webContent");
 					WebView wv = (WebView) fdbox.gettControl();
-					webViewBridge = new WebViewBridge(wv);
+					webViewBridge = new TerosWebViewBridge(wv);
 					form.gettObjectRepository().add("webviewbridge", webViewBridge);
 				}
 				
-				// 1. Limpeza defensiva antes de processar
-                String cleanContent = sanitizeAiOutput(v.htmlContent());
-				
-				webViewBridge.run(cleanContent);
+				webViewBridge.run(v.htmlContent());
 				
 			});
 			
@@ -114,32 +112,6 @@ public class ShowHtmlAiResponse extends TFunction<HtmlContent> {
 		}
 	}	
 	
-	// Método auxiliar para limpar "sujeiras" comuns do modelo
-	private static String sanitizeAiOutput(String input) {
-	    if (input == null) return "";
-	    
-	    String result = input;
-
-	    // 1. Remove blocos de código Markdown (```html ou ```)
-	    if (result.startsWith("```html")) {
-	        result = result.substring(7);
-	    } else if (result.startsWith("```")) {
-	        result = result.substring(3);
-	    }
-	    if (result.endsWith("```")) {
-	        result = result.substring(0, result.length() - 3);
-	    }
-
-	    // 2. Desfaz o escape de tags HTML básicas se o modelo tiver escapado tudo
-	    // Isso verifica se o inicio parece um html escapado (ex: &lt;div)
-	    if (result.trim().startsWith("&lt;") && result.contains("&gt;")) {
-	        result = result.replace("&lt;", "<")
-	                       .replace("&gt;", ">")
-	                       .replace("&quot;", "\"")
-	                       .replace("&amp;", "&");
-	    }
-	    
-	    return result.trim();
-	}
+	
 
 }
