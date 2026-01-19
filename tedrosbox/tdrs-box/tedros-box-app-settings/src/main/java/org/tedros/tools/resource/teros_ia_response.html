@@ -20,7 +20,6 @@
         min-height: 0;
       }
 
-      /* Substituímos o h4 por uma div com a classe .title */
       .title {
         flex-shrink: 0;
         position: relative;
@@ -32,7 +31,6 @@
         font-size: 1.4em;
         text-shadow: 0 2px 8px rgba(0,0,0,0.18);
         height: 40px;
-        /* Garante que o texto fique alinhado verticalmente como no h4 original */
         display: flex;
         align-items: center;
       }
@@ -93,7 +91,6 @@
   </head>
   <body>
     <div id="main-content">
-      <!-- h4 substituído por div com classe .title -->
       <div class="title">Visualizador de mensagens</div>
       <div id="chat-container"></div>
     </div>
@@ -121,11 +118,13 @@
       }
       function sanitizeForCopy(node) {
         const clone = node.cloneNode(true);
+        // Remove a barra de ações do clone para não copiar o texto dos botões junto
         const actions = clone.querySelector('.msg-actions');
         if (actions) actions.remove();
         return clone.innerText.trim();
       }
       function copyMessage(msgDiv) {
+        // Busca o conteúdo real da mensagem
         const textToCopy = sanitizeForCopy(msgDiv.querySelector('.msg-content') || msgDiv);
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(textToCopy).then(() => flashFeedback(msgDiv,'Copiado')).catch(() => legacyCopy(textToCopy,msgDiv));
@@ -145,12 +144,44 @@
         tag.style.fontSize = '11px'; tag.style.borderRadius = '4px'; tag.style.boxShadow = '0 2px 6px rgba(0,0,0,0.25)'; tag.style.zIndex = '10';
         msgDiv.appendChild(tag); setTimeout(() => tag.remove(), 1400);
       }
+      
+      // --- FUNÇÃO ATUALIZADA ---
       function createActionsBar(msgDiv) {
-        const actionsDiv = document.createElement('div'); actionsDiv.className = 'msg-actions';
-        const copyBtn = document.createElement('button'); copyBtn.type='button'; copyBtn.title='Copiar conteúdo'; copyBtn.innerHTML='Copiar'; copyBtn.addEventListener('click', () => copyMessage(msgDiv));
+        const actionsDiv = document.createElement('div'); 
+        actionsDiv.className = 'msg-actions';
+        
+        // Botão PDF
+        const pdfBtn = document.createElement('button');
+        pdfBtn.type = 'button';
+        pdfBtn.title = 'Exportar mensagem para PDF';
+        pdfBtn.innerHTML = 'PDF';
+        pdfBtn.addEventListener('click', () => {
+            // Pega apenas o conteúdo HTML da mensagem, ignorando a barra de ações
+            const contentDiv = msgDiv.querySelector('.msg-content');
+            const htmlContent = contentDiv ? contentDiv.innerHTML : '';
+            
+            if (window.app && window.app.exportPdf) {
+                window.app.exportPdf(htmlContent);
+            } else {
+                console.warn('Função window.app.exportPdf não encontrada.');
+            }
+        });
+
+        // Botão Copiar (existente)
+        const copyBtn = document.createElement('button'); 
+        copyBtn.type='button'; 
+        copyBtn.title='Copiar conteúdo'; 
+        copyBtn.innerHTML='Copiar'; 
+        copyBtn.addEventListener('click', () => copyMessage(msgDiv));
+        
+        // Adiciona os botões à barra de ações
+        actionsDiv.appendChild(pdfBtn);
         actionsDiv.appendChild(copyBtn);
+        
         msgDiv.appendChild(actionsDiv);
       }
+      // -------------------------
+
       function appendAIResponse(text, isAI = true) {
         const container = document.getElementById('chat-container');
         const msgDiv = document.createElement('div');
@@ -163,7 +194,10 @@
        
         contentDiv.addEventListener('click', handleLinkClick);
         msgDiv.appendChild(contentDiv);
+        
+        // A barra agora é criada após o conteúdo ser anexado
         createActionsBar(msgDiv);
+        
         container.appendChild(msgDiv);
         container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
         const mermaidDivs = msgDiv.querySelectorAll('.mermaid'); mermaidDivs.forEach(el => { try { mermaid.init(undefined, el); } catch(e) {} });

@@ -55,5 +55,22 @@ public final class TPdfUtil {
 		// Should reuse W3CDom instance if converting multiple documents.
 		return new W3CDom().fromJsoup(doc);
 	}
+	
+	public static void main(String[] args) {
+		
+		String html = "<html><body><h1>Hello, World!</h1><p>This is a test PDF document generated from HTML.</p></body></html>";
+		String output = "c:/tmp/output.pdf";
+		try {
+			TPdfUtil.convert(html, output);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("PDF generated successfully: " + output);
+		
+	}
 
 }
