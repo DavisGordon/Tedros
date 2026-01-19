@@ -8,8 +8,9 @@ import java.io.InputStream;
 import org.tedros.TedrosRelease;
 import org.tedros.core.TLanguage;
 import org.tedros.core.control.PopOver;
-import org.tedros.util.TedrosFolder;
 import org.tedros.fx.control.TLabel;
+import org.tedros.tools.start.TConstant;
+import org.tedros.util.TedrosFolder;
 
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
@@ -17,10 +18,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -40,7 +41,7 @@ public class TedrosLogoManager {
     }
 
     public void showDefaultLogo() {
-        String logoFileName = TedrosFolder.IMAGES_FOLDER.getFullPath() + File.separator + "logo-tedros-small.png";
+        String logoFileName = "logo-tedros-small.png";
         String brand = "Tedros";
         double brandLeftMargin = 55;
         showLogo(logoFileName, brand, brandLeftMargin);
@@ -110,7 +111,8 @@ public class TedrosLogoManager {
     private void createLogoImageView(String path) {
         if (path != null) {
             imgLogo = new ImageView();
-            try (InputStream is = new FileInputStream(new File(path))) {
+            String logoPath = TedrosFolder.MODULE_FOLDER.getFullPath()+TConstant.UUI+File.separator+path;
+            try (InputStream is = new FileInputStream(new File(logoPath))) {
                 Image logo = new Image(is);
                 imgLogo.setImage(logo);
             } catch (IOException e1) {

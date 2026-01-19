@@ -100,12 +100,12 @@ public class TMainColorProcess extends TModelProcess<TMainColor>{
 				if(!target.exists()) {
 					try {
 						FileUtils.copyFile(file, target);
-						prop.setProperty(TStyleResourceValue.LOGO.name(), target.getAbsolutePath());
+						prop.setProperty(TStyleResourceValue.LOGO.name(), file.getName());
 					} catch (IOException e) {
 						TLoggerUtil.error(getClass(), e.getMessage(), e);
 					}
 				}else
-					prop.setProperty(TStyleResourceValue.LOGO.name(), target.getAbsolutePath());
+					prop.setProperty(TStyleResourceValue.LOGO.name(), file.getName());
 			}
 			
 			prop.store(fos, "header styles");

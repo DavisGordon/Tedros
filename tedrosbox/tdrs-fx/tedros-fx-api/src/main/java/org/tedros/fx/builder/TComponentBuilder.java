@@ -8,6 +8,10 @@ package org.tedros.fx.builder;
 
 import java.lang.annotation.Annotation;
 
+import org.tedros.fx.component.ITComponent;
+import org.tedros.fx.component.TComponent;
+
+import javafx.beans.property.Property;
 import javafx.scene.Node;
 
 
@@ -17,29 +21,14 @@ import javafx.scene.Node;
  * @author Davis Gordon
  *
  */
-public final class TComponentBuilder
+@SuppressWarnings("rawtypes")
+public final class TComponentBuilder 
 extends TBuilder
-implements ITComponentBuilder<Object> {
-
-	private static TComponentBuilder instance;
-	
-	private TComponentBuilder(){
-		
+implements ITControlBuilder<Node, Property> {	
+	public Node build(final Annotation annotation, final Property attrProperty) throws Exception {
+		final TComponent ann = (TComponent) annotation;
+		ITComponent control = ann.type().getDeclaredConstructor().newInstance();
+		control.tInitializeComponent(getComponentDescriptor());
+		return (Node) control;
 	}
-	
-	public static  TComponentBuilder getInstance(){
-		if(instance==null)
-			instance = new TComponentBuilder();
-		return instance;	
-	}
-
-	public Node build(Annotation tComponent, Object fieldObject ) {
-		//final TNumberSpinnerField tAnnotation = (TNumberSpinnerField) annotation;
-		final org.tedros.fx.control.TNumberSpinnerField control = new org.tedros.fx.control.TNumberSpinnerField();
-		/*callParser(tAnnotation, control);
-		control.valueProperty().bindBidirectional(attrProperty);*/
-		return control;
-	}
-	
-	
 }

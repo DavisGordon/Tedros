@@ -23,12 +23,12 @@
 
 		<!-- APPS -->
 		
-		<dependency>
+		<!--<dependency>
 			<groupId>org.tedros</groupId>
 			<artifactId>app-itsupport-tools-fx</artifactId>
 			<version>1.0-SNAPSHOT</version>
 			<scope>compile</scope>
-		</dependency>
+		</dependency>-->
 
 		<dependency>
 			<groupId>org.tedros</groupId>
@@ -58,12 +58,12 @@
 			<scope>compile</scope>
 		</dependency>-->
 
-		<dependency>
+		<!--<dependency>
 			<groupId>org.tedros</groupId>
 			<artifactId>app-person-fx</artifactId>
 			<version>${app.person}</version>
 			<scope>compile</scope>
-		</dependency>
+		</dependency>-->
 
 		<!-- END APPS -->
 

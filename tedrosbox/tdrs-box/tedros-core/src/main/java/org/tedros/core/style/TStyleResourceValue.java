@@ -94,10 +94,10 @@ public enum TStyleResourceValue {
 		
 	}
 	
-	static private Properties headerProp;
-	static private Properties panelCustomProp;
-	static private Properties defaultProp;
-	static private Properties backgroundProp;
+	private static Properties headerProp;
+	private static Properties panelCustomProp;
+	private static Properties defaultProp;
+	private static Properties backgroundProp;
 	
 	public static void loadHeaderValues(boolean reload){
 		if(null==headerProp || reload)
