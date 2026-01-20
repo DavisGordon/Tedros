@@ -8,12 +8,12 @@ import org.tedros.common.model.TFileContentInfo;
  * Resultado de uma execução de função/tool.
  */
 public class ToolCallResult {
-
+	
     private final String message;
     private Object result;
     private List<TFileContentInfo> filesContentInfo;
     private boolean revertToTheAIModelInCaseOfSuccess;
-
+    
     public ToolCallResult(String message, Object result, boolean revertToTheAIModelInCaseOfSuccess) {
         this.message = message;
         this.result = result;

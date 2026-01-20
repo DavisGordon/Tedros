@@ -7,30 +7,21 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * @author Davis Gordon
  *
  */
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Contents {
 
 	@JsonPropertyDescription("A list of email drafts to be generated.")
 	private List<Content> list;
-	/**
-	 * 
-	 */
-	public Contents() {
-	}
-	/**
-	 * @return the list
-	 */
-	public List<Content> getList() {
-		return list;
-	}
-	/**
-	 * @param list the list to set
-	 */
-	public void setList(List<Content> list) {
-		this.list = list;
-	}
-
 }

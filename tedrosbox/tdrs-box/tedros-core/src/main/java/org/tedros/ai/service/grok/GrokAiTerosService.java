@@ -126,7 +126,7 @@ public class GrokAiTerosService extends AiServiceBase implements IAiTerosService
 
     private void processToolCall(ChatCompletionMessageToolCall messageToolCall, StringBuilder output, int currentDepth) {
     	
-    	// TRAVA DE SEGURANÇA AQUI
+    	// TRAVA DE SEGURANÇA
         if (currentDepth >= MAX_RECURSION_DEPTH) {
             log.warn("Limite de recursão de Tool Calls atingido ({})", MAX_RECURSION_DEPTH);
             return; 
@@ -135,7 +135,7 @@ public class GrokAiTerosService extends AiServiceBase implements IAiTerosService
     	
     	Optional<ChatCompletionMessageFunctionToolCall> functionToolCallOpt = messageToolCall.function();
     	ChatCompletionMessageFunctionToolCall toolCall = functionToolCallOpt.get();
-        log.info("Tool call detectada: {} (id={})", toolCall.function().name(), toolCall.id());
+        log.info("Tool call detectada: {} ", toolCall);
 
         Optional<ToolCallResult> resultOpt = functionExecutor.callFunction(toolCall);
         if (resultOpt.isEmpty()) {
@@ -159,13 +159,17 @@ public class GrokAiTerosService extends AiServiceBase implements IAiTerosService
 	            		.toolCallId(toolCall.id())
 	            		.contentAsJson(resultJson)
 	            		.build()));
-	            log.info("Resultado da função {} adicionado no historico de mensagens", toolCall.function().name());
+	            log.info("Resultado da função {} adicionado no historico de mensagens: {}", toolCall.function().name(), resultJson);
+            }else if(result.getMessage() != null && !result.getMessage().isBlank()) {
+				messages.add(ChatCompletionMessageParam.ofTool(ChatCompletionToolMessageParam.builder()
+	            		.toolCallId(toolCall.id())
+	            		.content(result.getMessage())
+	            		.build()));
+	            log.info("Mensagem da função {} adicionado no historico de mensagens: {}", toolCall.function().name(), result.getMessage());
             }
-
+        	
             // Upload de arquivos retornados
-            if ((result.getFilesContentInfo() != null && !result.getFilesContentInfo().isEmpty())
-            		
-            		) {
+            if ((result.getFilesContentInfo() != null && !result.getFilesContentInfo().isEmpty())){
                 
             	// Lista para montar a mensagem multimodal do USUÁRIO
                 List<ChatCompletionContentPart> contentParts = new ArrayList<>();
