@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
  */
 public class Contents {
 
-	@JsonPropertyDescription("An list of email content")
+	@JsonPropertyDescription("A list of email drafts to be generated.")
 	private List<Content> list;
 	/**
 	 * 

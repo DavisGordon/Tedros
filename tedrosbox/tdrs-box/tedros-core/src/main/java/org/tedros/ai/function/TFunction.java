@@ -10,6 +10,8 @@ import java.util.function.Function;
  *
  */
 public class TFunction<T> {
+	public static final String NO_DATA_FOUND_MESSAGE = "No data found. ";
+	public static final String FAILURE_MESSAGE = "Function execution failed! ";
 	public static final String SUSCESS_MESSAGE = "Function executed successfully! ";
 	public static final String DO_NOT_CALL_AGAIN = "DO NOT call this function again for this content. ";
 	public static final String PROCEED_WITH_TEXT_RESPONSE = "Proceed with text response or stop. "; 

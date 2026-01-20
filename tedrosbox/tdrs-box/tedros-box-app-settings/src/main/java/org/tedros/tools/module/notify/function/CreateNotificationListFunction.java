@@ -6,6 +6,7 @@ package org.tedros.tools.module.notify.function;
 import org.tedros.ai.function.TFunction;
 import org.tedros.ai.function.model.Response;
 import org.tedros.api.presenter.view.ITView;
+import org.tedros.core.TLanguage;
 import org.tedros.core.context.TViewDescriptor;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.notify.model.TNotify;
@@ -23,10 +24,16 @@ import javafx.collections.ObservableList;
  *
  */
 public class CreateNotificationListFunction extends TFunction<Contents> {
+	
+	public static final String NAME = "create_list_of_email";
+	public static final String PROMPT = "Drafts and prepares email notifications for user review. " +
+            "This tool does NOT send emails immediately. It opens a validation screen (view '" 
+			+ TLanguage.getInstance().getString(ToolsKey.VIEW_NOTIFY) + "') " +
+            "listing the generated content so the user can check and manually send them.";
 
 	@SuppressWarnings("unchecked")
 	public CreateNotificationListFunction() {
-		super("create_list_of_email", "Creates a list of notifications to send in the view '"+ToolsKey.VIEW_NOTIFY+"'", 
+		super(NAME, PROMPT, 
 			Contents.class, 
 			v->{
 				//Gets the view descriptor of the currently open view, if any.
@@ -51,7 +58,7 @@ public class CreateNotificationListFunction extends TFunction<Contents> {
 					
 				}
 
-				return new Response("Successful");
+				return new Response(SUSCESS_MESSAGE);
 			});
 	}
 
