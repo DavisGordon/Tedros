@@ -144,9 +144,10 @@ public class GrokAiTerosService extends AiServiceBase implements IAiTerosService
             return;
         }
 
-        ToolCallResult result = resultOpt.get();
+        ToolCallResult result = resultOpt.get();        
+        log.info("Resultado da função {} : {}", toolCall.function().name(), result);
         
-        if(!result.itShouldRevertToTheAIModelInCaseOfSuccess()) {
+        if(!result.isRevertToTheAIModelInCaseOfSuccess()) {
         	if(output.isEmpty())
         		output.append(EMPTY_TOOL_CALL_RESPONSE);
         	return;
@@ -160,12 +161,6 @@ public class GrokAiTerosService extends AiServiceBase implements IAiTerosService
 	            		.contentAsJson(resultJson)
 	            		.build()));
 	            log.info("Resultado da função {} adicionado no historico de mensagens: {}", toolCall.function().name(), resultJson);
-            }else if(result.getMessage() != null && !result.getMessage().isBlank()) {
-				messages.add(ChatCompletionMessageParam.ofTool(ChatCompletionToolMessageParam.builder()
-	            		.toolCallId(toolCall.id())
-	            		.content(result.getMessage())
-	            		.build()));
-	            log.info("Mensagem da função {} adicionado no historico de mensagens: {}", toolCall.function().name(), result.getMessage());
             }
         	
             // Upload de arquivos retornados

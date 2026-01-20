@@ -75,14 +75,15 @@ public class CreateNotificationListFunction extends TFunction<Contents> {
 					
 				}
 				
-				Map<String, Object> resultData = Map.of(
-	                    "status", "success",
-	                    "drafts_created_count", v.getList().size(),
-	                    "action", "user_validation_screen_opened",
-	                    "message", "Content loaded in view for user review. Do not retry."
-	                );
-
-				return new ToolCallResult(SUSCESS_MESSAGE, resultData, true);
+				return ToolCallResult.builder()
+						.message("Drafts created successfully")
+						.result(Map.of(
+			                    STATUS, SUCCESS,
+			                    "drafts_created_count", v.getList().size(),
+			                    ACTION, "user_validation_screen_opened",
+			                    INFO_MESSAGE, CONTENT_LOADED_IN_VIEW_FOR_USER_REVIEW_DO_NOT_RETRY
+			                ))
+						.build();
 			});
 	}
 

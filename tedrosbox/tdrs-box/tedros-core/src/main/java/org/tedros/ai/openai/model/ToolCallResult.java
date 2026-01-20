@@ -4,49 +4,29 @@ import java.util.List;
 
 import org.tedros.common.model.TFileContentInfo;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Singular;
+import lombok.ToString;
+
 /**
  * Resultado de uma execução de função/tool.
+ * Refatorado para usar Builder pattern e reduzir boilerplate.
  */
+
+@Getter
+@Builder
+@ToString
 public class ToolCallResult {
-	
+
     private final String message;
-    private Object result;
-    private List<TFileContentInfo> filesContentInfo;
-    private boolean revertToTheAIModelInCaseOfSuccess;
-    
-    public ToolCallResult(String message, Object result, boolean revertToTheAIModelInCaseOfSuccess) {
-        this.message = message;
-        this.result = result;
-        this.revertToTheAIModelInCaseOfSuccess = revertToTheAIModelInCaseOfSuccess;
-    }
-    
-    public ToolCallResult(String message, List<TFileContentInfo> filesContentInfo, boolean revertToTheAIModelInCaseOfSuccess) {
-        this.message = message;
-        this.filesContentInfo = filesContentInfo;
-        this.revertToTheAIModelInCaseOfSuccess = revertToTheAIModelInCaseOfSuccess;
-    }
-    
-    public ToolCallResult(String message, Object result, List<TFileContentInfo> filesContentInfo, boolean revertToTheAIModelInCaseOfSuccess) {
-        this.message = message;
-        this.result = result;
-        this.filesContentInfo = filesContentInfo;
-        this.revertToTheAIModelInCaseOfSuccess = revertToTheAIModelInCaseOfSuccess;
-    }
 
-    public String getMessage() {
-        return message;
-    }
+    private final Object result; 
 
-    public Object getResult() {
-        return result;
-    }
+    @Singular("filesContentInfo")
+    private final List<TFileContentInfo> filesContentInfo;
 
-	public List<TFileContentInfo> getFilesContentInfo() {
-		return filesContentInfo;
-	}
-	
-	public boolean itShouldRevertToTheAIModelInCaseOfSuccess() {
-		return revertToTheAIModelInCaseOfSuccess;
-	}
+    @Builder.Default 
+    private final boolean revertToTheAIModelInCaseOfSuccess = true;
 
 }
