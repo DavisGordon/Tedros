@@ -1,6 +1,7 @@
-package org.tedros.ai.service.openai;
+package org.tedros.ai.service.openai.reasoning;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -15,6 +16,7 @@ import org.tedros.ai.function.TFunction;
 import org.tedros.ai.openai.model.ToolCallResult;
 import org.tedros.ai.service.AiServiceBase;
 import org.tedros.ai.service.IAiTerosService;
+import org.tedros.ai.service.openai.OpenAIFunctionExecutor;
 import org.tedros.common.model.TFileContentInfo;
 import org.tedros.core.TCoreKeys;
 import org.tedros.core.TLanguage;
@@ -22,14 +24,15 @@ import org.tedros.core.context.TedrosContext;
 import org.tedros.util.TDateUtil;
 import org.tedros.util.TLoggerUtil;
 
+import com.openai.core.MultipartField;
 import com.openai.models.files.FileCreateParams;
 import com.openai.models.files.FileObject;
 import com.openai.models.files.FilePurpose;
 import com.openai.models.responses.EasyInputMessage;
 import com.openai.models.responses.ResponseFunctionToolCall;
-import com.openai.models.responses.ResponseInputContent;
 import com.openai.models.responses.ResponseInputFile;
 import com.openai.models.responses.ResponseInputItem;
+import com.openai.models.responses.ResponseInputText;
 import com.openai.models.responses.ResponseOutputItem;
 import com.openai.models.responses.ResponseOutputMessage;
 import com.openai.models.responses.ResponseOutputMessage.Content;
@@ -43,9 +46,9 @@ import javafx.application.Platform;
 /**
  * Versão adaptada do TerosService usando o SDK oficial da openai
  */
-public class OpenAITerosService extends AiServiceBase implements IAiTerosService {
+public class OpenAIReasoningTerosService extends AiServiceBase implements IAiTerosService {
     
-	static final Logger log = TLoggerUtil.getLogger(OpenAITerosService.class);
+	static final Logger log = TLoggerUtil.getLogger(OpenAIReasoningTerosService.class);
     
 	private static IAiTerosService instance;
 	
@@ -53,13 +56,13 @@ public class OpenAITerosService extends AiServiceBase implements IAiTerosService
     	(item.isMessage() && item.asMessage().role() == ResponseInputItem.Message.Role.USER) ||
     	(item.isEasyInputMessage() && item.asEasyInputMessage().role() == EasyInputMessage.Role.USER);
     
-    private final OpenAiServiceAdapter adapter;
+    private final OpenAiReasoningServiceAdapter adapter;
     private final List<ResponseInputItem> messages = new ArrayList<>();
     
     private OpenAIFunctionExecutor functionExecutor;
     
-    private OpenAITerosService(String token, String aiModel, String assistantPrompt) {
-		this.adapter = new OpenAiServiceAdapter(token, aiModel);
+    private OpenAIReasoningTerosService(String token, String aiModel, String assistantPrompt) {
+		this.adapter = new OpenAiReasoningServiceAdapter(token, aiModel);
 		setPromptAssistant(assistantPrompt);
         createSystemMessage();
         log.info("OpenAI Teros Service iniciado com sucesso. "
@@ -68,12 +71,12 @@ public class OpenAITerosService extends AiServiceBase implements IAiTerosService
 
     public static IAiTerosService create(String token, String aiModel, String assistantPrompt) {
     	if (instance == null)
-            instance = new OpenAITerosService(token, aiModel, assistantPrompt);
+            instance = new OpenAIReasoningTerosService(token, aiModel, assistantPrompt);
         return instance;
     }
     
     public static IAiTerosService newInstance(String token, String aiModel, String assistantPrompt) {
-    	return new OpenAITerosService(token, aiModel, assistantPrompt);
+    	return new OpenAIReasoningTerosService(token, aiModel, assistantPrompt);
     }
     
     public static IAiTerosService getInstance() {
@@ -294,21 +297,10 @@ public class OpenAITerosService extends AiServiceBase implements IAiTerosService
             // 2. Processa arquivos retornados pela função (upload + file_id)
             if (result.getFilesContentInfo() != null && !result.getFilesContentInfo().isEmpty()) {
             	log.info("Tool call retornou {} arquivo(s). Fazendo upload temporário...", result.getFilesContentInfo().size());
-                StringBuilder fileInfoText = new StringBuilder();
-                fileInfoText.append("The function call (id: ").append(toolCall.callId())
-                            .append(") returned the following file(s) for analysis:\n");
-
+                
                 for (TFileContentInfo fileContentInfo : result.getFilesContentInfo()) {
-                    uploadFile(uploadedFileIds, toolRequest, fileInfoText, fileContentInfo);
-                }
-
-                // Adiciona uma mensagem de resumo dos arquivos anexados
-                toolRequest.add(ResponseInputItem.ofMessage(
-                    ResponseInputItem.Message.builder()
-                        .role(ResponseInputItem.Message.Role.SYSTEM)
-                        .addInputTextContent(fileInfoText.toString().trim())
-                        .build()
-                ));
+                    uploadFile(uploadedFileIds, toolRequest, fileContentInfo);
+                }                
             }
 
             // 3. Envia tudo de volta ao modelo
@@ -337,35 +329,38 @@ public class OpenAITerosService extends AiServiceBase implements IAiTerosService
             });
         }
     }
-
+        
 	private void uploadFile(List<String> uploadedFileIds, List<ResponseInputItem> toolRequest,
-			StringBuilder fileInfoText, TFileContentInfo fileContentInfo) {
+			TFileContentInfo fileContentInfo) {
 		try {
 		    // Upload do arquivo		    
 			try(ByteArrayInputStream bais = new ByteArrayInputStream(fileContentInfo.bytes())){
 				FileCreateParams uploadParams = FileCreateParams.builder()
-				        .file(bais)
-				        .purpose(FilePurpose.ASSISTANTS) // ou VISION se for imagem
+				        //.file(bais)
+						.file(MultipartField.<InputStream>builder()
+						        .value(bais)
+						        .filename(fileContentInfo.fileName())
+						        .build())
+				        .purpose(FilePurpose.USER_DATA)
 				        .build();
 
 				    FileObject uploadedFile = adapter.getClient().files().create(uploadParams);
 				    String fileId = uploadedFile.id();
+				    
 				    uploadedFileIds.add(fileId); // Marca para deleção
-
-				    fileInfoText.append("- ").append(fileContentInfo.fileName())
-				                .append(" (file_id: ").append(fileId).append(")\n");
-
+				    
 				    // Adiciona referência ao arquivo como content (suportado no Responses API)
 				    ResponseInputItem fileRefItem = ResponseInputItem.ofMessage(
 				        ResponseInputItem.Message.builder()
-				            .role(ResponseInputItem.Message.Role.SYSTEM)
-				            .addInputTextContent("Attached file: " + fileContentInfo.fileName() + " (file_id: " + fileId + ")")
-				            .addContent(ResponseInputContent.ofInputFile(
-				            				ResponseInputFile.builder()
+				            .role(ResponseInputItem.Message.Role.USER)
+				            //.addContent(ResponseInputText.builder().text("Attached file: " + fileContentInfo.fileName() + " (file_id: " + fileId + ")").build())
+				            .addContent(ResponseInputFile.builder()
 				            				.fileId(fileId)
-				            				.build()))
+				            				.build())
+				            
 				            .build()
 				    );
+				    
 				    toolRequest.add(fileRefItem);
 			}
 			
@@ -373,7 +368,6 @@ public class OpenAITerosService extends AiServiceBase implements IAiTerosService
 
 		} catch (Exception e) {
 			log.error("Falha no upload do arquivo retornado pela função: {}", fileContentInfo.fileName(), e);
-		    fileInfoText.append("- [ERRO] Falha ao anexar: ").append(fileContentInfo.fileName()).append("\n");
 		}
 	}
 

@@ -1,6 +1,7 @@
 package org.tedros.tools.module.ai.function;
 
 import java.util.Map;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.tedros.ai.TFunctionHelper;
@@ -54,6 +55,10 @@ public class ShowHtmlAiResponse extends TFunction<HtmlContent> {
 
 		    Example of WRONG call (Do NOT do this):
 		    show_html_content(htmlContent="```html\n&lt;div&gt;...&lt;/div&gt;\n```")
+		    
+		    IMPORTANT:
+            - This is a STATEFUL VISUAL ACTION. Calling it twice with the same content causes screen flickering.
+            - Once executed, assume the user is seeing the content.
 		    """;
 	
 	public ShowHtmlAiResponse() {
@@ -62,11 +67,14 @@ public class ShowHtmlAiResponse extends TFunction<HtmlContent> {
 					LOGGER.info("Html content received: {}",v.htmlContent());
 					return run(v); 
 				});
-		setRevertToTheAIModelInCaseOfSuccess(false);
+		//setRevertToTheAIModelInCaseOfSuccess(false);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static ToolCallResult run(HtmlContent v) {
+		
+		String renderId = UUID.randomUUID().toString().substring(0, 8);
+		
 		TedrosAppManager manager = TedrosAppManager.getInstance();
 		
 		ITView<TDynaPresenter> vw = manager.getCurrentView();
@@ -88,6 +96,7 @@ public class ShowHtmlAiResponse extends TFunction<HtmlContent> {
 					.message("HTML content rendered successfully.")
 					.result(Map.of(
 		                    STATUS, SUCCESS,
+		                    "render_batch_id", renderId,
 		                    ACTION, "html_rendered",
 		                    SYSTEM_INSTRUCTION, "### Html content rendered successfully. \n"
 		                    		+ "VERY IMPORTANT: Do not retry again. Inform the user to check the opened view."
@@ -118,9 +127,12 @@ public class ShowHtmlAiResponse extends TFunction<HtmlContent> {
 					.message("HTML content rendered successfully.")
 					.result(Map.of(
 		                    STATUS, SUCCESS,
+		                    "render_batch_id", renderId,
 		                    ACTION, "html_rendered",
-		                    SYSTEM_INSTRUCTION, "### Html content rendered successfully. \n"
-		                    		+ "VERY IMPORTANT: Do not retry again. Inform the user to check the opened view."
+		                    SYSTEM_INSTRUCTION, String.format(
+		                            "RENDER COMPLETE (Batch ID: %s). The HTML is now visible to the user. " +
+		                            "WARNING: Do NOT call 'show_html_content' again with this content, as it causes severe screen flickering. " +
+		                            "Proceed immediately to the next task or wait for user input.", renderId)
 		                ))
 					.build();
 		}

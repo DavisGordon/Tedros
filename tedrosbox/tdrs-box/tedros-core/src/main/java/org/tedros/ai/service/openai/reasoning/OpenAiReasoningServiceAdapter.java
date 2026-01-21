@@ -1,4 +1,4 @@
-package org.tedros.ai.service.openai;
+package org.tedros.ai.service.openai.reasoning;
 
 import java.util.List;
 import java.util.Map;
@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.tedros.ai.function.TFunction;
 import org.tedros.ai.service.AiHelper;
+import org.tedros.ai.service.openai.OpenAIClientFactory;
 import org.tedros.util.TLoggerUtil;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -34,9 +35,9 @@ import javafx.beans.property.SimpleLongProperty;
 /**
  * Adaptador genérico para criar requisições de chat.
  */
-public class OpenAiServiceAdapter {
+public class OpenAiReasoningServiceAdapter {
 
-    private static final Logger LOGGER = TLoggerUtil.getLogger(OpenAiServiceAdapter.class);
+    private static final Logger LOGGER = TLoggerUtil.getLogger(OpenAiReasoningServiceAdapter.class);
 
     private static ObjectMapper mapper = new ObjectMapper();
     private static JsonSchemaGenerator schemaGen = new JsonSchemaGenerator(mapper);
@@ -53,7 +54,7 @@ public class OpenAiServiceAdapter {
     
     private String aiModel;
 
-    public OpenAiServiceAdapter(String apiKey, String aiModel) {
+    public OpenAiReasoningServiceAdapter(String apiKey, String aiModel) {
         this.client = OpenAIClientFactory.getClient(apiKey);
         this.aiModel = aiModel;
     }

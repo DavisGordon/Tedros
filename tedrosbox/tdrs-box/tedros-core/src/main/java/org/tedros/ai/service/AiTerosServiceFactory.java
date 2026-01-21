@@ -1,7 +1,7 @@
 package org.tedros.ai.service;
 
 import org.tedros.ai.service.grok.GrokAiTerosService;
-import org.tedros.ai.service.openai.OpenAITerosService;
+import org.tedros.ai.service.openai.reasoning.OpenAIReasoningTerosService;
 
 public class AiTerosServiceFactory {
 	
@@ -14,7 +14,7 @@ public class AiTerosServiceFactory {
 		case GROK:
 			return GrokAiTerosService.create(apiKey, aiModel, assistantPrompt);
 		case OPENAI:
-			return OpenAITerosService.create(apiKey, aiModel, assistantPrompt);
+			return OpenAIReasoningTerosService.create(apiKey, aiModel, assistantPrompt);
 		default:
 			throw new IllegalArgumentException("Provider not supported: " + provider);
 		}
@@ -25,7 +25,7 @@ public class AiTerosServiceFactory {
 		case GROK:
 			return GrokAiTerosService.newInstance(apiKey, aiModel, assistantPrompt);
 		case OPENAI:
-			return OpenAITerosService.newInstance(apiKey, aiModel, assistantPrompt);
+			return OpenAIReasoningTerosService.newInstance(apiKey, aiModel, assistantPrompt);
 		default:
 			throw new IllegalArgumentException("Provider not supported: " + provider);
 		}
