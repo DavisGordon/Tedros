@@ -3,6 +3,13 @@
  */
 package org.tedros.ai;
 
+import static org.tedros.ai.function.TFunction.ACTION;
+import static org.tedros.ai.function.TFunction.ERROR;
+import static org.tedros.ai.function.TFunction.ERROR_MESSAGE;
+import static org.tedros.ai.function.TFunction.STATUS;
+import static org.tedros.ai.function.TFunction.SUCCESS;
+import static org.tedros.ai.function.TFunction.SYSTEM_INSTRUCTION;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -18,13 +25,13 @@ import java.util.function.Function;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.tedros.ai.function.TFunction;
 import org.tedros.ai.function.model.AppCatalog;
 import org.tedros.ai.function.model.CallView;
 import org.tedros.ai.function.model.Empty;
 import org.tedros.ai.function.model.ModuleInfo;
-import org.tedros.ai.function.model.Response;
 import org.tedros.ai.function.model.ViewInfo;
 import org.tedros.ai.function.model.ViewPath;
 import org.tedros.ai.model.CreateBinaryFile;
@@ -38,7 +45,6 @@ import org.tedros.core.context.TViewDescriptor;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.core.context.TedrosContext;
 import org.tedros.core.controller.TPropertieController;
-import org.tedros.core.domain.TSystemPropertie;
 import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.core.setting.model.TPropertie;
 import org.tedros.server.result.TResult;
@@ -115,14 +121,29 @@ public class TFunctionHelper {
 
                     String fullPath = file.getAbsolutePath();
                     LOGGER.info("File created successfully: {}", fullPath);
-
-                    return new ToolCallResult("File created successfully! " + TFunction.PROCEED_WITH_TEXT_RESPONSE,
-                        "Path: `!" + fullPath.replace("\\", "\\\\") + "`", true);
-
+                    
+                    return ToolCallResult.builder()
+							.message("File created successfully.")
+							.result(Map.of(
+			                    STATUS, SUCCESS,
+			                    ACTION, "file_created",
+			                    SYSTEM_INSTRUCTION, "File created successfully! "
+			                    		+ "Do not retry again. Inform the user to check the created file.",
+			                    "path", "!"+ fullPath.replace("\\", "\\\\")
+			                ))
+							.build();
+                    
                 } catch (Exception e) {
                     LOGGER.error("Failed to create file {}.{}: {}", 
                         request.getName(), request.getExtension(), e.getMessage(), e);
-                    return new Response("Error creating file: " + e.getMessage());
+                    return ToolCallResult.builder()
+							.message("Error creating file: " + e.getMessage())
+							.result(Map.of(
+			                    STATUS, ERROR,
+			                    ACTION, "file_creation_failed",
+			                    ERROR_MESSAGE, "Error creating file: " + e.getMessage()
+			                ))
+							.build();
                 }
             });
     }
@@ -132,8 +153,7 @@ public class TFunctionHelper {
 				+ "view history page, openai, teros status, reports, notify, currency/date format and others", 
 				Empty.class, 
 				v->{
-					TEjbServiceLocator loc = TEjbServiceLocator.getInstance();
-					try {
+					try(TEjbServiceLocator loc = TEjbServiceLocator.getInstance()) {
 						TPropertieController serv = loc.lookup(TPropertieController.JNDI_NAME);
 						TResult<List<TPropertie>> res = serv
 								.listAll(TedrosContext.getLoggedUser().getAccessToken(), TPropertie.class);
@@ -141,10 +161,7 @@ public class TFunctionHelper {
 							List<TPropertie> l = res.getValue();
 							List<Map<String, String>> lst = new ArrayList<>();
 							l.forEach(c->{
-								if( (c.getKey().equals(TSystemPropertie.SMTP_PASS.getValue()) && c.getValue()!=null)
-										|| (c.getKey().equals(TSystemPropertie.OPENAI_KEY.getValue()) && c.getValue()!=null)
-										|| (c.getKey().equals(TSystemPropertie.TOKEN.getValue()) && c.getValue()!=null)
-										)
+								if(StringUtils.containsAny(c.getKey(), "KEY", "PASS", "TOKEN") && c.getValue()!=null)
 									c.setValue("*******");
 								
 								Map<String,String> m = new HashMap<>();
@@ -157,14 +174,38 @@ public class TFunctionHelper {
 									m.put("file", "Property with file defined");
 								lst.add(m);
 							});
-							return new Response("use the name field to help the user", lst);
+							
+							return ToolCallResult.builder()
+									.message("Preferences retrieved successfully.")
+									.result(Map.of(
+						                    STATUS, SUCCESS,
+						                    ACTION, "preferences_retrieved",
+						                    SYSTEM_INSTRUCTION, "Preferences retrieved successfully. "
+						                    		+ "Do not retry again. Proceed with the user's request.",
+						                    "preferences", lst
+						                ))
+									.build();
 						}
 					}catch(Exception e) {
 						LOGGER.error(e.getMessage(), e);
-					}finally{
-						loc.close();
+						return ToolCallResult.builder()
+								.message("Error retrieving preferences: " + e.getMessage())
+								.result(Map.of(
+					                    STATUS, ERROR,
+					                    ACTION, "preferences_retrieval_failed",
+					                    ERROR_MESSAGE, e.getMessage()
+					                ))
+								.build();
 					}
-					return new Response("Cant retrieve the preference list!");
+					
+					return ToolCallResult.builder()
+							.message("No preferences found.")
+							.result(Map.of(
+				                    STATUS, ERROR,
+				                    ACTION, "no_preferences_found",
+				                    ERROR_MESSAGE, "No preferences available in the system."
+				                ))
+							.build();
 				});
 	}
 	
@@ -179,24 +220,61 @@ public class TFunctionHelper {
 					if(ov!=null) {
 						ITDynaPresenter dp = (ITDynaPresenter) ov.gettPresenter();
 						ITBehavior b = dp.getBehavior();
-						if(b.getModelView()!=null)
-							return new Response("Entity model from the view "+vds.getTitle(), b.getModelView().getModel());
+						if(b.getModelView()!=null) {
+							return ToolCallResult.builder()
+									.message("Entity model being edited retrieved successfully.")
+									.result(Map.of(
+						                    STATUS, SUCCESS,
+						                    ACTION, "edited_model_retrieved",
+						                    SYSTEM_INSTRUCTION, "Edited model retrieved successfully. "
+						                    		+ "Do not retry again. Proceed with the user's request.",
+						                    "model", b.getModelView().getModel()
+						                ))
+									.build();
+						}	
 					}
-					return new Response("No model entities are being edited by the user!");
+					return ToolCallResult.builder()
+							.message("No model being edited found.")
+							.result(Map.of(
+				                    STATUS, ERROR,
+				                    ACTION, "no_edited_model_found",
+				                    ERROR_MESSAGE, "No model being edited found in the current view: " 
+				                    		+ (vds!=null?vds.getPath(): "No view descriptor"))
+				                )
+							.build();
 				});
 	}
 	
 	public static TFunction<CallView> getViewModelFunction() {
 		return new TFunction<>("get_model", 
 			"Returns the entity model used in the viewPath, call this to get information about the model. "
-			+ "Important: Before calling this, make sure that the viewPath exists, for that call the list_system_views function", 
+			+ "Important: Before calling this, make sure that the viewPath exists, for that call the list_all_view_path function", 
 			CallView.class, 
 				v->{
 					TViewDescriptor vds = TedrosAppManager.getInstance()
 							.getViewDescriptor(v.getViewPath());
-					if(vds!=null)
-						return vds.getModel();
-					return new Response("Entity model not found!");
+					if(vds!=null) {
+						return ToolCallResult.builder()
+								.message("Entity model retrieved successfully.")
+								.result(Map.of(
+					                    STATUS, SUCCESS,
+					                    ACTION, "entity_model_retrieved",
+					                    SYSTEM_INSTRUCTION, "Entity model retrieved successfully. "
+					                    		+ "Do not retry again. Proceed with the user's request.",
+					                    "model", vds.getModel()
+					                ))
+								.build();
+					}
+						
+					return ToolCallResult.builder()
+							.message("View path does not exist.")
+							.result(Map.of(
+				                    STATUS, ERROR,
+				                    ACTION, "view_path_not_found",
+				                    ERROR_MESSAGE, "The view path " + v.getViewPath() + " does not exist. "
+				                    		+ "Run the list_all_view_path function to find the correct viewPath.")
+				                )
+							.build();
 				});
 	}
 	
@@ -212,7 +290,16 @@ public class TFunctionHelper {
 		
 		return new TFunction<>("list_all_view_path", 
 			"It lists all the view paths ('viewPath'), can be used to call up a view and to get more details about a specific view.", 
-			Empty.class, obj->lst);	
+			Empty.class, obj->ToolCallResult.builder()
+					.message("View paths listed successfully.")
+					.result(Map.of(
+		                    STATUS, SUCCESS,
+		                    ACTION, "view_paths_listed",
+		                    SYSTEM_INSTRUCTION, "View paths listed successfully. "
+		                    		+ "Do not retry again. Proceed with the user's request.",
+		                    "view_paths", lst
+		                ))
+					.build());	
 	}
 	
 	public static TFunction<Empty> listAllAppsFunction() {
@@ -258,9 +345,18 @@ public class TFunctionHelper {
 				log.add(actx.getAppDescriptor().getName(), appAccess.toString(), mods);
 			});
 		
-		return new TFunction<Empty>("lists_all_applications", 
+		return new TFunction<>("lists_all_applications", 
 			"It lists all the applications and can be used to discover all the system's functionalities.", 
-			Empty.class, obj->log);
+			Empty.class, obj->ToolCallResult.builder()
+					.message("Applications listed successfully.")
+					.result(Map.of(
+		                    STATUS, SUCCESS,
+		                    ACTION, "applications_listed",
+		                    SYSTEM_INSTRUCTION, "Applications listed successfully. "
+		                    		+ "Do not retry again. Proceed with the user's request.",
+		                    "applications", log
+		                ))
+					.build());
 	}
 	
 	public static TFunction<ViewPath> callUpViewFunction() {
@@ -271,7 +367,6 @@ public class TFunctionHelper {
 					
 					LOGGER.info("Calling view path: {}", v.getViewPath());
 					
-					StringBuilder sb = new StringBuilder(v.getViewPath());
 					TViewDescriptor vds = TedrosAppManager.getInstance()
 							.getViewDescriptor(v.getViewPath());
 					
@@ -280,15 +375,27 @@ public class TFunctionHelper {
 							TedrosAppManager.getInstance()
 							.goToModule(vds.getModuleDescriptor().getType(), vds.getModelView())
 						);
-						sb.append(" opened successfully!");
+						
+						return ToolCallResult.builder()
+								.message("View called successfully.")
+								.result(Map.of(
+					                    STATUS, SUCCESS,
+					                    ACTION, "view_called",
+					                    SYSTEM_INSTRUCTION, "View called successfully. "
+					                    		+ "Do not retry again. Inform the user to check the opened view."
+					                ))
+								.build();
 					}
 					
-					if(sb.toString().equals(v.getViewPath()))
-						sb.append(" does not exist! Run the list_all_view_path function to find the correct 'viewPath'.");
-
-					LOGGER.info("Result calling view path: {}, {}", v.getViewPath(), sb.toString());
-					
-				return new Response(sb.toString());
+				return ToolCallResult.builder()
+						.message("View path does not exist.")
+						.result(Map.of(
+			                    STATUS, ERROR,
+			                    ACTION, "view_path_not_found",
+			                    ERROR_MESSAGE, "The view path " + v.getViewPath() + " does not exist. "
+			                    		+ "Run the list_all_view_path function to find the correct viewPath.")
+			                )
+						.build();
 		});
 	}
 	
@@ -301,16 +408,32 @@ public class TFunctionHelper {
 							.getViewDescriptor(v.getViewPath());
 					if(vds!=null) {
 						Boolean viewAccess = vds.getSecurityDescriptor()!=null
-								?TedrosContext.isUserAuthorized(vds.getSecurityDescriptor(), 
+								? TedrosContext.isUserAuthorized(vds.getSecurityDescriptor(), 
 										TAuthorizationType.VIEW_ACCESS)
 										: true;
-						return new ViewInfo(vds.getPath(), vds.getTitle(), vds.getDescription(), viewAccess.toString());
+						
+						ViewInfo viewInfo = new ViewInfo(vds.getPath(), vds.getTitle(), vds.getDescription(), viewAccess.toString());
+						return ToolCallResult.builder()
+								.message("View information retrieved successfully.")
+								.result(Map.of(
+					                    STATUS, SUCCESS,
+					                    ACTION, "view_info_retrieved",
+					                    SYSTEM_INSTRUCTION, "View information retrieved successfully. "
+					                    		+ "Do not retry again. Proceed with the user's request.",
+					                    "view_info", viewInfo
+					                ))
+								.build();
 					}
 					
-					StringBuilder sb = new StringBuilder(v.getViewPath());
-					sb.append(" does not exist! Run the list_all_view_path function to find the correct 'viewPath'");
-					
-				return new Response(sb.toString());
+				return ToolCallResult.builder()
+						.message("View path does not exist.")
+						.result(Map.of(
+			                    STATUS, ERROR,
+			                    ACTION, "view_path_not_found",
+			                    ERROR_MESSAGE, "The view path " + v.getViewPath() + " does not exist. "
+			                    		+ "Run the list_all_view_path function to find the correct viewPath.")
+			                )
+						.build();
 		});
 	}
 	

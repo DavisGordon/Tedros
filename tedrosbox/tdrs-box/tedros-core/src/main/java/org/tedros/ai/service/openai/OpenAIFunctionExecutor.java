@@ -9,7 +9,6 @@ import java.util.function.Function;
 import org.slf4j.Logger;
 import org.tedros.ai.function.TFunction;
 import org.tedros.ai.openai.model.ToolCallResult;
-import org.tedros.ai.openai.model.ToolError;
 import org.tedros.util.TLoggerUtil;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,10 +44,20 @@ public class OpenAIFunctionExecutor {
             Object arg = mapper.readValue(argumentsJson, fn.getModel());
             Function cb = fn.getCallback();
             Object result = cb.apply(arg);
-            return Optional.of(new ToolCallResult(name, result, fn.itShouldRevertToTheAIModelInCaseOfSuccess()));
+            return result instanceof ToolCallResult tollCallResult
+            		? Optional.of(tollCallResult) 
+            				: Optional.of(ToolCallResult.builder()
+            				 .result(Map.of("data", result))
+            				 .revertToTheAIModelInCaseOfSuccess(fn.itShouldRevertToTheAIModelInCaseOfSuccess())
+            				 .build());
         } catch (Exception e) {
             LOGGER.error("Erro executando função {}: {}", name, e.getMessage());
-            return Optional.of(new ToolCallResult(name, new ToolError(name, e.getMessage()), fn.itShouldRevertToTheAIModelInCaseOfSuccess()));
+            return Optional.of(ToolCallResult.builder()
+      				 .result(Map.of(
+      						 "status", "error",
+      						 "error_message", e.getMessage()))
+      				 .revertToTheAIModelInCaseOfSuccess(fn.itShouldRevertToTheAIModelInCaseOfSuccess())
+      				 .build());
         }
     }
     

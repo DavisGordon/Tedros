@@ -16,15 +16,12 @@ public class TFunction<T> {
 	public static final String STATUS = "status";
 	public static final String ACTION = "action";
 	public static final String INFO_MESSAGE = "info_message";
-	public static final String CONTENT_LOADED_IN_VIEW_FOR_USER_REVIEW_DO_NOT_RETRY = "Content loaded in view for user review. Do not retry.";
+	public static final String ERROR_MESSAGE = "error_message";
+	public static final String SYSTEM_INSTRUCTION = "system_instruction";
 	
 	public static final String NO_DATA_FOUND_MESSAGE = "No data found. ";
-	public static final String FAILURE_MESSAGE = "Function execution failed! ";
-	public static final String EXCEPTION_MESSAGE = FAILURE_MESSAGE + "An exception occurred: ";
-	public static final String SUSCESS_MESSAGE = "Function executed successfully! ";
-	public static final String DO_NOT_CALL_AGAIN = "DO NOT call this function again for this content. ";
-	public static final String PROCEED_WITH_TEXT_RESPONSE = "Proceed with text response or stop. "; 
-	public static final String PROCEED_WITH_HTML_RESPONSE = "Proceed by displaying your response in HTML; to do this, call the corresponding function. ";
+	public static final String FILE_DOWNLOADED_SUCCESSFULLY_DO_NOT_RETRY = "File downloaded successfully. Do not retry.";
+	public static final String CONTENT_LOADED_IN_VIEW_FOR_USER_REVIEW_DO_NOT_RETRY = "Content loaded in view for user review. Do not retry.";
 	
 	private String name;
 	private String description;

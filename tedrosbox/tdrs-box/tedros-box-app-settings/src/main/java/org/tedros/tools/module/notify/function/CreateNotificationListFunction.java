@@ -81,7 +81,8 @@ public class CreateNotificationListFunction extends TFunction<Contents> {
 			                    STATUS, SUCCESS,
 			                    "drafts_created_count", v.getList().size(),
 			                    ACTION, "user_validation_screen_opened",
-			                    INFO_MESSAGE, CONTENT_LOADED_IN_VIEW_FOR_USER_REVIEW_DO_NOT_RETRY
+			                    SYSTEM_INSTRUCTION, "The drafts were created and loaded in the notification module for user review. "
+			                    		+ "Do not retry again. Inform the user to check and send manually."
 			                ))
 						.build();
 			});

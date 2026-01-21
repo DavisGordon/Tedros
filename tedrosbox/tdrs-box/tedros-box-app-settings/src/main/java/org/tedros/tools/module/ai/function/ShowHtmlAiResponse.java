@@ -1,10 +1,12 @@
 package org.tedros.tools.module.ai.function;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.tedros.ai.TFunctionHelper;
 import org.tedros.ai.function.TFunction;
-import org.tedros.ai.function.model.Response;
 import org.tedros.ai.function.model.ViewPath;
+import org.tedros.ai.openai.model.ToolCallResult;
 import org.tedros.ai.web.TerosWebViewBridge;
 import org.tedros.api.form.ITFieldBox;
 import org.tedros.api.form.ITModelForm;
@@ -23,9 +25,6 @@ import javafx.scene.web.WebView;
 public class ShowHtmlAiResponse extends TFunction<HtmlContent> {
 	
 	private static final Logger LOGGER = TLoggerUtil.getLogger(ShowHtmlAiResponse.class);
-	
-	private static final String HTML_RENDERED_SUCCESSFULLY = "HTML Rendered Successfully. "
-	+ DO_NOT_CALL_AGAIN + PROCEED_WITH_TEXT_RESPONSE;
 	
 	public static final String NAME = "show_html_content";
 	public static final String DESCRIPTION = """
@@ -67,7 +66,7 @@ public class ShowHtmlAiResponse extends TFunction<HtmlContent> {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static Response run(HtmlContent v) {
+	private static ToolCallResult run(HtmlContent v) {
 		TedrosAppManager manager = TedrosAppManager.getInstance();
 		
 		ITView<TDynaPresenter> vw = manager.getCurrentView();
@@ -85,7 +84,15 @@ public class ShowHtmlAiResponse extends TFunction<HtmlContent> {
 			
 			TFunctionHelper.callUpViewFunction().getCallback().apply(path);
 			
-			return new Response(HTML_RENDERED_SUCCESSFULLY);
+			return ToolCallResult.builder()
+					.message("HTML content rendered successfully.")
+					.result(Map.of(
+		                    STATUS, SUCCESS,
+		                    ACTION, "html_rendered",
+		                    SYSTEM_INSTRUCTION, "### Html content rendered successfully. \n"
+		                    		+ "VERY IMPORTANT: Do not retry again. Inform the user to check the opened view."
+		                ))
+					.build();
 		} else {
 		
 			TDynaPresenter p = vw.gettPresenter();
@@ -107,7 +114,15 @@ public class ShowHtmlAiResponse extends TFunction<HtmlContent> {
 				
 			});
 			
-			return new Response(HTML_RENDERED_SUCCESSFULLY);
+			return ToolCallResult.builder()
+					.message("HTML content rendered successfully.")
+					.result(Map.of(
+		                    STATUS, SUCCESS,
+		                    ACTION, "html_rendered",
+		                    SYSTEM_INSTRUCTION, "### Html content rendered successfully. \n"
+		                    		+ "VERY IMPORTANT: Do not retry again. Inform the user to check the opened view."
+		                ))
+					.build();
 		}
 	}	
 

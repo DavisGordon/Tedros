@@ -56,7 +56,7 @@ public class GrokAiFunctionExecutor {
             return Optional.of(ToolCallResult.builder()
    				 .result(Map.of(
    						 "status", "error",
-   						 "message", e.getMessage()))
+   						 "error_message", e.getMessage()))
    				 .revertToTheAIModelInCaseOfSuccess(fn.itShouldRevertToTheAIModelInCaseOfSuccess())
    				 .build());
         }
