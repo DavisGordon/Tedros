@@ -294,15 +294,15 @@ public final class TedrosAppManager extends TedrosAppLoader {
 	 * @param modelView
 	 * @param path
 	 */
-	@SuppressWarnings({ "unchecked"})
-	public void listenWhenViewIsLoaded(Consumer<ITModule> f, String path) {
+	@SuppressWarnings({ "unchecked", "rawtypes"})
+	public void listenWhenViewIsLoaded(Consumer<ITView> f, String path) {
 		ChangeListener<Node> chl = new ChangeListener<Node>() {
 			@Override
 			public void changed(ObservableValue<? extends Node> a, Node o, Node n) {
-				if(n instanceof ITModule itModule) {
-					TModuleContext mc = getModuleContext(itModule); 
-					if(mc!=null && mc.getModuleDescriptor().getPath().equals(path)) {
-						f.accept(itModule);
+				if(n instanceof ITModule) {
+					TViewDescriptor vd = getCurrentViewDescriptor();
+					if(vd!=null && vd.getPath().equals(path)) {
+						f.accept(getCurrentView());
 						TedrosContext.viewProperty().removeListener(this);
 					}
 				}

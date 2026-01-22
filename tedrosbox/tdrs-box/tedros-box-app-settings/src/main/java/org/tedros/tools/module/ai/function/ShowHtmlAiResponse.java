@@ -13,7 +13,6 @@ import org.tedros.ai.web.TerosWebViewBridge;
 import org.tedros.api.form.ITFieldBox;
 import org.tedros.api.form.ITModelForm;
 import org.tedros.api.presenter.view.ITView;
-import org.tedros.core.ITModule;
 import org.tedros.core.context.TViewDescriptor;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
@@ -23,6 +22,8 @@ import org.tedros.tools.module.ai.model.HtmlMessageViewerModel;
 import org.tedros.util.TLoggerUtil;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.WeakChangeListener;
 import javafx.scene.web.WebView;
 
 public class ShowHtmlAiResponse extends TFunction<HtmlContent> {
@@ -90,11 +91,11 @@ public class ShowHtmlAiResponse extends TFunction<HtmlContent> {
 			
 			LOGGER.info("Trying to open the view: {}", path.getViewPath());
 			
-			Consumer<ITModule> c = m->{
+			Consumer<ITView> c = m->{
 				run(v);
 			};
 			
-			manager.listenWhenModuleIsLoaded(c, path.getViewPath());
+			manager.listenWhenViewIsLoaded(c, path.getViewPath());
 			
 			TFunctionHelper.callUpViewFunction().getCallback().apply(path);
 			
@@ -112,21 +113,17 @@ public class ShowHtmlAiResponse extends TFunction<HtmlContent> {
 		
 			TDynaPresenter p = vw.gettPresenter();
 			 
-			Platform.runLater(()->{						
-				
+			Platform.runLater(()->{				
 				ITModelForm form = ((TViewBehavior) p.getBehavior()).getForm();
-				
-				TerosWebViewBridge webViewBridge = form.gettObjectRepository().get("webviewbridge");
-				
-				if(webViewBridge==null) {							
-					ITFieldBox fdbox = form.gettFieldBox("webContent");
-					WebView wv = (WebView) fdbox.gettControl();
-					webViewBridge = new TerosWebViewBridge(wv);
-					form.gettObjectRepository().add("webviewbridge", webViewBridge);
+				if(form.isLoaded()) {
+					callTerosWebViewBridge(v, form);
+				} else {
+					ChangeListener<Boolean> loadListener = (a, ov, nv)->{
+						callTerosWebViewBridge(v, form);
+					};					
+					form.gettObjectRepository().add("show_html_load_listener", loadListener);				
+					form.tLoadedProperty().addListener(new WeakChangeListener<>(loadListener));
 				}
-				
-				webViewBridge.run(v.htmlContent());
-				
 			});
 			
 			return ToolCallResult.builder()
@@ -142,6 +139,19 @@ public class ShowHtmlAiResponse extends TFunction<HtmlContent> {
 		                ))
 					.build();
 		}
-	}	
+	}
 
+	@SuppressWarnings("rawtypes")
+	private static void callTerosWebViewBridge(HtmlContent v, ITModelForm form) {
+		TerosWebViewBridge webViewBridge = form.gettObjectRepository().get("webviewbridge");
+		
+		if(webViewBridge==null) {	
+			ITFieldBox fdbox = form.gettFieldBox("webContent");
+			WebView wv = (WebView) fdbox.gettControl();
+			webViewBridge = new TerosWebViewBridge(wv);
+			form.gettObjectRepository().add("webviewbridge", webViewBridge);
+		}
+		
+		webViewBridge.run(v.htmlContent());
+	}
 }
