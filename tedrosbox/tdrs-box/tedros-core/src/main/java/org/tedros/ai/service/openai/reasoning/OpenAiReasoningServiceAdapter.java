@@ -53,10 +53,12 @@ public class OpenAiReasoningServiceAdapter {
     private ResponseUsage lastUsage;
     
     private String aiModel;
+    private String assistantPrompt; 
 
-    public OpenAiReasoningServiceAdapter(String apiKey, String aiModel) {
+    public OpenAiReasoningServiceAdapter(String apiKey, String aiModel, String assistantPrompt) {
         this.client = OpenAIClientFactory.getClient(apiKey);
         this.aiModel = aiModel;
+        this.assistantPrompt = assistantPrompt;
     }
 
     public OpenAIClient getClient() {
@@ -130,6 +132,7 @@ public class OpenAiReasoningServiceAdapter {
                     .tools(chatCompletionTools)
                     .toolChoice(ToolChoiceOptions.AUTO)
                     .parallelToolCalls(true)
+                    .instructions(assistantPrompt)
                     .reasoning(Reasoning.builder()
                     		.effort(ReasoningEffort.MEDIUM)
                     		.summary(Summary.AUTO)
@@ -144,7 +147,7 @@ public class OpenAiReasoningServiceAdapter {
             return response.output();
 
         } catch (Exception e) {
-            LOGGER.error("Erro ao chamar OpenAI: {}", e.getMessage());
+            LOGGER.error("Erro ao chamar OpenAI: {}", e.getMessage(), e);
             throw new RuntimeException("Erro ao chamar OpenAI", e);
         }
     }
@@ -159,7 +162,8 @@ public class OpenAiReasoningServiceAdapter {
                         .temperature(1.0)
                         .tools(chatCompletionTools)
                         .toolChoice(ToolChoiceOptions.AUTO)
-                        .parallelToolCalls(true)  // ← ATIVADO
+                        .parallelToolCalls(true) 
+                        .instructions(assistantPrompt)
                         .reasoning(Reasoning.builder()
                         		.effort(ReasoningEffort.MEDIUM)
                         		.summary(Summary.AUTO)
@@ -167,7 +171,8 @@ public class OpenAiReasoningServiceAdapter {
                     : ResponseCreateParams.builder()
                         .model(aiModel)
                         .input(ResponseCreateParams.Input.ofResponse(messages))
-                        .temperature(1.0)
+                        .temperature(1.0) 
+                        .instructions(assistantPrompt)
                         .reasoning(Reasoning.builder()
                         		.effort(ReasoningEffort.MEDIUM)
                         		.summary(Summary.AUTO)
@@ -184,7 +189,7 @@ public class OpenAiReasoningServiceAdapter {
             return response.output();
 
         } catch (Exception e) {
-            LOGGER.error("Erro ao chamar OpenAI: {}", e.getMessage());
+            LOGGER.error("Erro ao chamar OpenAI: {}", e.getMessage(), e);
             throw new RuntimeException("Erro ao chamar OpenAI", e);
         }
     }

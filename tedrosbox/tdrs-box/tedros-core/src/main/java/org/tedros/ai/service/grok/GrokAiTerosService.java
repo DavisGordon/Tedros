@@ -216,7 +216,6 @@ public class GrokAiTerosService extends AiServiceBase implements IAiTerosService
                     }
                 }
             	
-                
                 // Envia tudo como uma mensagem de User (pois contém imagens)
                 messages.add(ChatCompletionMessageParam.ofUser(
                     ChatCompletionUserMessageParam.builder()
@@ -225,21 +224,6 @@ public class GrokAiTerosService extends AiServiceBase implements IAiTerosService
                 ));
                 
                 log.info("Contexto multimodal injetado.");
-                
-            	/*for (TFileContentInfo fileInfo : result.getFilesContentInfo()) {
-            		
-            		FileObject uploaded = adapter.uploadFile(fileInfo.bytes(), fileInfo.fileName());
-                    log.info("Upload do arquivo {} realizado para na função: {} (id={})", 
-                    		fileInfo.fileName(), toolCall.function().name(), toolCall.id());
-                    
-                    uploadedFileIds.add(uploaded.id());
-                    
-                    messages.add(ChatCompletionMessageParam.ofSystem(ChatCompletionSystemMessageParam.builder()
-                    		.content("Arquivo anexado: " + fileInfo.fileName() + " (file_id: " + uploaded.id() + ")")
-                    		.build()));
-                    log.info("Dados do arquivo {} adicionado no historico da mensagem para na função: {} (id={})", 
-                    		fileInfo.fileName(), toolCall.function().name(), toolCall.id());
-                }*/
             }
 
             // Nova chamada recursiva

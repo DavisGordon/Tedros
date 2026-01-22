@@ -48,7 +48,7 @@ import javafx.application.Platform;
  */
 public class OpenAIReasoningTerosService extends AiServiceBase implements IAiTerosService {
     
-	static final Logger log = TLoggerUtil.getLogger(OpenAIReasoningTerosService.class);
+	private static final Logger log = TLoggerUtil.getLogger(OpenAIReasoningTerosService.class);
     
 	private static IAiTerosService instance;
 	
@@ -59,14 +59,31 @@ public class OpenAIReasoningTerosService extends AiServiceBase implements IAiTer
     private final OpenAiReasoningServiceAdapter adapter;
     private final List<ResponseInputItem> messages = new ArrayList<>();
     
+    private String lastUserMessage;
     private OpenAIFunctionExecutor functionExecutor;
     
     private OpenAIReasoningTerosService(String token, String aiModel, String assistantPrompt) {
-		this.adapter = new OpenAiReasoningServiceAdapter(token, aiModel);
-		setPromptAssistant(assistantPrompt);
-        createSystemMessage();
-        log.info("OpenAI Teros Service iniciado com sucesso. "
-        		+ "Modelo padrão: {}", aiModel != null ? aiModel : "não definido");
+    	
+    	String date = TDateUtil.formatFullgDate(new Date(), TLanguage.getLocale());
+        String promptComplement = """
+        		\n        		
+        		==================================================
+        		SYSTEM METADATA
+        		==================================================
+        		- Current date: %s
+        		""".formatted(date);
+    	
+        setPromptAssistant(assistantPrompt + promptComplement);
+        
+    	this.adapter = new OpenAiReasoningServiceAdapter(token, aiModel, super.assistantPrompt);
+    	
+    	String userNamePrompt = "The logged-in user is named %s".formatted(TedrosContext.getLoggedUser().getName());
+    	
+    	messages.add(ResponseInputItem.ofEasyInputMessage(EasyInputMessage.builder()
+    			.role(EasyInputMessage.Role.SYSTEM)
+    			.content(userNamePrompt).build()));
+		
+        log.info("OpenAI Teros Service iniciado com sucesso. Modelo padrão: {}", aiModel != null ? aiModel : "não definido");
     }
 
     public static IAiTerosService create(String token, String aiModel, String assistantPrompt) {
@@ -94,11 +111,13 @@ public class OpenAIReasoningTerosService extends AiServiceBase implements IAiTer
     @Override
 	public String call(String userPrompt, String sysPrompt) {
     	
-    	log.debug(">>> Iniciando nova interação com Teros");
-        log.trace("Prompt do usuário: {}", userPrompt);
+    	log.info(">>> Iniciando nova interação com Teros");
+        log.info("Prompt do usuário: {}", userPrompt);
+        
+        lastUserMessage = userPrompt;
         
         if (sysPrompt != null && !sysPrompt.isBlank()) {
-            log.trace("Prompt de sistema adicional: {}", sysPrompt);
+            log.info("Prompt de sistema adicional: {}", sysPrompt);
             messages.add(adapter.buildSysMessage(sysPrompt));
         }
 
@@ -114,7 +133,7 @@ public class OpenAIReasoningTerosService extends AiServiceBase implements IAiTer
                 adapter.totalInputTokenProperty().get(),
                 adapter.getLastUsage()!=null ? adapter.getLastUsage().totalTokens() : "?");
 
-        String output = processAiResponseMessage(response);
+        String output = processAiResponseMessage(response, 0);
         
         // Verifica se precisa resumir com base no modelo atual
         long currentTokens = adapter.totalInputTokenProperty().longValue();
@@ -127,11 +146,17 @@ public class OpenAIReasoningTerosService extends AiServiceBase implements IAiTer
                 threshold);
 
         if (currentTokens > threshold) {
-        	log.warn("Threshold de tokens excedido ({} > {}). Iniciando sumarização automática...", currentTokens, threshold);
+        	log.info("Threshold de tokens excedido ({} > {}). Iniciando sumarização automática...", currentTokens, threshold);
             summarizeMessages();
         }
+        
+        if(!output.isEmpty() && output.contains(EMPTY_TOOL_CALL_RESPONSE)) {
+        	output = output.replaceAll(EMPTY_TOOL_CALL_RESPONSE, "");
+        	log.info("<<< Interação concluída. Resposta final tem {} caracteres.", output.length());
+        	return output;
+        }
 
-        log.debug("<<< Interação concluída. Resposta final tem {} caracteres.", output.length());
+        log.info("<<< Interação concluída. Resposta final tem {} caracteres.", output.length());
         return output.isEmpty() ? NO_RESPONSE : output;
     }
     
@@ -146,7 +171,7 @@ public class OpenAIReasoningTerosService extends AiServiceBase implements IAiTer
     	return adapter.getAiModel();
     }
 
-    private String processAiResponseMessage(List<ResponseOutputItem> responseItems) {
+    private String processAiResponseMessage(List<ResponseOutputItem> responseItems, int currentDepth) {
 
     	if (responseItems == null || responseItems.isEmpty()) {
             log.warn("Resposta da OpenAI veio vazia ou nula.");
@@ -176,7 +201,7 @@ public class OpenAIReasoningTerosService extends AiServiceBase implements IAiTer
             else if (item.isFunctionCall()) {
             	// Process function call message
             	log.info("Detectado tool call: {} (id={})", item.asFunctionCall().name(), item.asFunctionCall().callId());
-            	processFunctionCallResponse(finalContent, lastResponseReasoningItem, item);
+            	processFunctionCallResponse(finalContent, lastResponseReasoningItem, item, currentDepth);
             }
         }
 
@@ -220,20 +245,16 @@ public class OpenAIReasoningTerosService extends AiServiceBase implements IAiTer
             log.info("Sumarização gerada com {} caracteres.", summary.length());
 
             // 3. Manter apenas:
-            // - Mensagem SYSTEM original
             // - Resumo
             // - Última mensagem USER (para manter continuidade)
-            ResponseInputItem originalSystemMessage = messages.get(0);
 
             ResponseInputItem lastUserMessage = Stream.iterate(messages.size() - 1, i -> i >= 0, i -> i - 1)
-                .map(messages::get)
-                .filter(IS_USER_MESSAGE)
-                .findFirst()
-                .orElse(null);
-
+        		    .map(messages::get)
+        		    .filter(IS_USER_MESSAGE)
+        		    .findFirst()
+        		    .orElse(null);
+            
             List<ResponseInputItem> newMessages = new ArrayList<>();
-            newMessages.add(originalSystemMessage);
-
             // inserir o resumo como SYSTEM
             newMessages.add(adapter.buildSysMessage("Summary of earlier conversation:\n" + summary));
 
@@ -255,7 +276,13 @@ public class OpenAIReasoningTerosService extends AiServiceBase implements IAiTer
     private void processFunctionCallResponse(
             StringBuilder finalContent,
             ResponseReasoningItem lastResponseReasoningItem,
-            ResponseOutputItem item) {
+            ResponseOutputItem item, int currentDepth) {
+    	
+    	// TRAVA DE SEGURANÇA
+        if (currentDepth >= MAX_RECURSION_DEPTH) {
+            log.warn("Limite de recursão de Tool Calls atingido ({})", MAX_RECURSION_DEPTH);
+            return; 
+        }
 
         ResponseFunctionToolCall toolCall = item.asFunctionCall();
         String callId = toolCall.callId();
@@ -272,6 +299,14 @@ public class OpenAIReasoningTerosService extends AiServiceBase implements IAiTer
         }
 
         ToolCallResult result = resultOpt.get();
+        log.info("Resultado da função {} : {}", funcName, result);
+        
+        if(!result.isRevertToTheAIModelInCaseOfSuccess()) {
+        	if(finalContent.isEmpty())
+        		finalContent.append(EMPTY_TOOL_CALL_RESPONSE);
+        	return;
+        }
+        
         List<String> uploadedFileIds = new ArrayList<>(); // Para deletar depois
 
         try {
@@ -307,7 +342,7 @@ public class OpenAIReasoningTerosService extends AiServiceBase implements IAiTer
             List<ResponseOutputItem> nextResponse = adapter.sendToolCallResult(toolRequest);
 
             // Processa resposta recursivamente
-            String recursiveContent = processAiResponseMessage(nextResponse);
+            String recursiveContent = processAiResponseMessage(nextResponse, currentDepth + 1);
             if (recursiveContent != null && !recursiveContent.equals(NO_RESPONSE)) {
                 finalContent.append(recursiveContent);
             }
@@ -349,15 +384,18 @@ public class OpenAIReasoningTerosService extends AiServiceBase implements IAiTer
 				    
 				    uploadedFileIds.add(fileId); // Marca para deleção
 				    
+				    log.info("Arquivo '{}' carregado com sucesso → file_id={}", 
+				    	fileContentInfo.fileName(), fileId);
+				    
 				    // Adiciona referência ao arquivo como content (suportado no Responses API)
 				    ResponseInputItem fileRefItem = ResponseInputItem.ofMessage(
 				        ResponseInputItem.Message.builder()
 				            .role(ResponseInputItem.Message.Role.USER)
-				            //.addContent(ResponseInputText.builder().text("Attached file: " + fileContentInfo.fileName() + " (file_id: " + fileId + ")").build())
+				            .addContent(ResponseInputText.builder().text(lastUserMessage)
+				            		.build())
 				            .addContent(ResponseInputFile.builder()
 				            				.fileId(fileId)
-				            				.build())
-				            
+				            				.build())				            
 				            .build()
 				    );
 				    
@@ -370,7 +408,6 @@ public class OpenAIReasoningTerosService extends AiServiceBase implements IAiTer
 			log.error("Falha no upload do arquivo retornado pela função: {}", fileContentInfo.fileName(), e);
 		}
 	}
-
 	
 	private ResponseReasoningItem processReasoningResponse(ResponseOutputItem item) {
 		ResponseReasoningItem lastResponseReasoningItem;
@@ -418,25 +455,9 @@ public class OpenAIReasoningTerosService extends AiServiceBase implements IAiTer
 		}
 	}
 
-	private void createSystemMessage() {    	
-        String date = TDateUtil.formatFullgDate(new Date(), TLanguage.getLocale());
-        String user = TedrosContext.getLoggedUser().getName();        
-        String header = "Today is %s. You are Teros, a smart and helpful assistant for the "
-        		+ "Tedros desktop system. Engage intelligently with user %s.".formatted(date, user);
-        
-        if (assistantPrompt != null)
-            header += " " + assistantPrompt;
-
-        messages.add(adapter.buildSysMessage(header));
-        log.info("Mensagem de sistema inicial criada para usuário '{}'", user);
-    }
-
 	@Override
 	public void cleanMessageHistory() {
 		this.messages.clear();
 		this.adapter.resetBuilder();
-		setPromptAssistant(assistantPrompt);
-        createSystemMessage();
-		
 	}
 }

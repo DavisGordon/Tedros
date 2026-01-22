@@ -33,7 +33,7 @@ public abstract class AiServiceBase implements IAiServiceBase {
 	@Override
 	public void setPromptAssistant(String prompt) {
 	    assistantPrompt = prompt;
-	    log.info("Assistant prompt em uso: {}", prompt);
+	    log.info("Assistant prompt em uso: \n {}", prompt);
 	}
 
 	@Override
