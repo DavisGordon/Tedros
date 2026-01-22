@@ -23,7 +23,6 @@ import com.openai.models.responses.FunctionTool;
 import com.openai.models.responses.Response;
 import com.openai.models.responses.ResponseCreateParams;
 import com.openai.models.responses.ResponseInputItem;
-import com.openai.models.responses.ResponseOutputItem;
 import com.openai.models.responses.ResponseReasoningItem;
 import com.openai.models.responses.ResponseUsage;
 import com.openai.models.responses.Tool;
@@ -47,13 +46,13 @@ public class OpenAiReasoningServiceAdapter {
     private ResponseCreateParams.Builder builder;
 
     private List<Tool> chatCompletionTools;
-    
+
     private SimpleLongProperty totalInputTokenProperty = new SimpleLongProperty(0);
-    
+
     private ResponseUsage lastUsage;
-    
+
     private String aiModel;
-    private String assistantPrompt; 
+    private String assistantPrompt;
 
     public OpenAiReasoningServiceAdapter(String apiKey, String aiModel, String assistantPrompt) {
         this.client = OpenAIClientFactory.getClient(apiKey);
@@ -62,89 +61,97 @@ public class OpenAiReasoningServiceAdapter {
     }
 
     public OpenAIClient getClient() {
-		return client;
-	}
-    
+        return client;
+    }
+
     public void setAiModel(String model) {
-		this.aiModel = model;
-	}
-    
+        this.aiModel = model;
+    }
+
     public String getAiModel() {
-		return aiModel;
-	}
-    
+        return aiModel;
+    }
+
     public ResponseUsage getLastUsage() {
-		return lastUsage;
-	}
-    
+        return lastUsage;
+    }
+
     @SuppressWarnings("rawtypes")
     public void functions(List<TFunction> functions) {
         this.chatCompletionTools = functions.stream()
-            .map(f -> {
-                try {
-                	
-                	FunctionTool.Builder builder = FunctionTool.builder()
-							.name(f.getName())
-						    .description(f.getDescription())
-						    .strict(false);
-                	
-                    // Generate JSON Schema from the model class
-                    JsonSchema jsonSchema = schemaGen.generateSchema(f.getModel());
+                .map(f -> {
+                    try {
 
-                    // Convert schema to Map<String, Object>
-                    Map<String, Object> schemaMap = mapper.convertValue(jsonSchema, new TypeReference<Map<String, Object>>() {});
+                        FunctionTool.Builder builder = FunctionTool.builder()
+                                .name(f.getName())
+                                .description(f.getDescription())
+                                .strict(false);
 
-                    // Recursively add 'required' arrays to the schema and all nested objects
-                    AiHelper.addRequiredFieldsRecursively(schemaMap, f.getModel());
+                        // Generate JSON Schema from the model class
+                        JsonSchema jsonSchema = schemaGen.generateSchema(f.getModel());
 
-                    // Manually adjust to match original constraints
-                    schemaMap.put("additionalProperties", false);
+                        // Convert schema to Map<String, Object>
+                        Map<String, Object> schemaMap = mapper.convertValue(jsonSchema,
+                                new TypeReference<Map<String, Object>>() {
+                                });
 
-                    // Build FunctionParameters from the schema map
-                    FunctionTool.Parameters.Builder paramsBuilder = FunctionTool.Parameters.builder();
-                    schemaMap.forEach((key, value) -> paramsBuilder.putAdditionalProperty(key, AiHelper.toJsonValue(value)));
+                        // Recursively add 'required' arrays to the schema and all nested objects
+                        AiHelper.addRequiredFieldsRecursively(schemaMap, f.getModel());
 
-                    builder.parameters(paramsBuilder.build());
-                    
-                    FunctionTool functionTool = builder.build();
-                    
-                    //System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(functionTool));
-					
-					return Tool.ofFunction(functionTool);
+                        // Manually adjust to match original constraints
+                        schemaMap.put("additionalProperties", false);
 
-                } catch (Exception e) {
-                    throw new RuntimeException("Erro ao gerar schema para função: " + f.getName(), e);
-                }
-            })
-            .toList();
+                        // Build FunctionParameters from the schema map
+                        FunctionTool.Parameters.Builder paramsBuilder = FunctionTool.Parameters.builder();
+                        schemaMap.forEach(
+                                (key, value) -> paramsBuilder.putAdditionalProperty(key, AiHelper.toJsonValue(value)));
+
+                        builder.parameters(paramsBuilder.build());
+
+                        FunctionTool functionTool = builder.build();
+
+                        // System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(functionTool));
+
+                        return Tool.ofFunction(functionTool);
+
+                    } catch (Exception e) {
+                        throw new RuntimeException("Erro ao gerar schema para função: " + f.getName(), e);
+                    }
+                })
+                .toList();
     }
 
-        
-
-    public List<ResponseOutputItem> sendToolCallResult(List<ResponseInputItem> messages) {
+    public Response sendToolCallResult(List<ResponseInputItem> messages, String previousResponseId) {
         try {
-        	
+            ResponseCreateParams.Input input = ResponseCreateParams.Input.ofResponse(messages);
+
             builder = (builder == null)
-                ? ResponseCreateParams.builder()
-                    .model(aiModel)
-                    .input(ResponseCreateParams.Input.ofResponse(messages))
-                    .temperature(1.0)
-                    .tools(chatCompletionTools)
-                    .toolChoice(ToolChoiceOptions.AUTO)
-                    .parallelToolCalls(true)
-                    .instructions(assistantPrompt)
-                    .reasoning(Reasoning.builder()
-                    		.effort(ReasoningEffort.MEDIUM)
-                    		.summary(Summary.AUTO)
-                    		.build())
-                    
-                : builder.input(ResponseCreateParams.Input.ofResponse(messages)); 
+                    ? ResponseCreateParams.builder()
+                            .model(aiModel)
+                            .input(input)
+                            .store(true)
+                            .temperature(1.0)
+                            .tools(chatCompletionTools)
+                            .toolChoice(ToolChoiceOptions.AUTO)
+                            .parallelToolCalls(true)
+                            .instructions(assistantPrompt)
+                            .reasoning(Reasoning.builder()
+                                    .effort(ReasoningEffort.MEDIUM)
+                                    .summary(Summary.AUTO)
+                                    .build())
+
+                    : builder.input(input);
+
+            if (previousResponseId != null) {
+                // Assuming standard builder pattern for ID or equivalent
+                builder.previousResponseId(previousResponseId);
+            }
 
             Response response = client.responses().create(builder.build());
-            
+
             verifyUsageTokens(messages, response);
 
-            return response.output();
+            return response;
 
         } catch (Exception e) {
             LOGGER.error("Erro ao chamar OpenAI: {}", e.getMessage(), e);
@@ -152,95 +159,102 @@ public class OpenAiReasoningServiceAdapter {
         }
     }
 
-    public List<ResponseOutputItem> sendChatRequest(List<ResponseInputItem> messages) {
+    public Response sendChatRequest(List<ResponseInputItem> messages, String previousResponseId) {
         try {
+            ResponseCreateParams.Input input = ResponseCreateParams.Input.ofResponse(messages);
+
             if (builder == null) {
                 builder = chatCompletionTools != null
-                    ? ResponseCreateParams.builder()
-                        .model(aiModel)
-                        .input(ResponseCreateParams.Input.ofResponse(messages))  // Corrigido: inputOfResponse -> Input.ofResponse
-                        .temperature(1.0)
-                        .tools(chatCompletionTools)
-                        .toolChoice(ToolChoiceOptions.AUTO)
-                        .parallelToolCalls(true) 
-                        .instructions(assistantPrompt)
-                        .reasoning(Reasoning.builder()
-                        		.effort(ReasoningEffort.MEDIUM)
-                        		.summary(Summary.AUTO)
-                        		.build())
-                    : ResponseCreateParams.builder()
-                        .model(aiModel)
-                        .input(ResponseCreateParams.Input.ofResponse(messages))
-                        .temperature(1.0) 
-                        .instructions(assistantPrompt)
-                        .reasoning(Reasoning.builder()
-                        		.effort(ReasoningEffort.MEDIUM)
-                        		.summary(Summary.AUTO)
-                        		.build());
+                        ? ResponseCreateParams.builder()
+                                .model(aiModel)
+                                .input(input) // Corrigido: inputOfResponse -> Input.ofResponse
+                                .store(true)
+                                .temperature(1.0)
+                                .tools(chatCompletionTools)
+                                .toolChoice(ToolChoiceOptions.AUTO)
+                                .parallelToolCalls(true)
+                                .instructions(assistantPrompt)
+                                .reasoning(Reasoning.builder()
+                                        .effort(ReasoningEffort.MEDIUM)
+                                        .summary(Summary.AUTO)
+                                        .build())
+                        : ResponseCreateParams.builder()
+                                .model(aiModel)
+                                .input(input)
+                                .store(true)
+                                .temperature(1.0)
+                                .instructions(assistantPrompt)
+                                .reasoning(Reasoning.builder()
+                                        .effort(ReasoningEffort.MEDIUM)
+                                        .summary(Summary.AUTO)
+                                        .build());
             } else {
-            
-            	builder.input(ResponseCreateParams.Input.ofResponse(messages));
+
+                builder.input(input);
             }
-            
+
+            if (previousResponseId != null) {
+                builder.previousResponseId(previousResponseId);
+            }
+
             Response response = client.responses().create(builder.build());
-            
+
             verifyUsageTokens(messages, response);
-            
-            return response.output();
+
+            return response;
 
         } catch (Exception e) {
             LOGGER.error("Erro ao chamar OpenAI: {}", e.getMessage(), e);
             throw new RuntimeException("Erro ao chamar OpenAI", e);
         }
     }
-    
+
     public ResponseInputItem buildReasoningMessage(ResponseReasoningItem reasoning) {
         return ResponseInputItem.ofReasoning(reasoning);
     }
 
     public ResponseInputItem buildAssistantMessage(String content) {
         return ResponseInputItem.ofEasyInputMessage(EasyInputMessage.builder()
-            .role(EasyInputMessage.Role.ASSISTANT)
-            .content(content)
-            .build());
+                .role(EasyInputMessage.Role.ASSISTANT)
+                .content(content)
+                .build());
     }
 
     public ResponseInputItem buildUserMessage(String content) {
         return ResponseInputItem.ofEasyInputMessage(EasyInputMessage.builder()
-            .role(EasyInputMessage.Role.USER)
-            .content(content)
-            .build());
+                .role(EasyInputMessage.Role.USER)
+                .content(content)
+                .build());
     }
 
     public ResponseInputItem buildSysMessage(String content) {
         return ResponseInputItem.ofEasyInputMessage(EasyInputMessage.builder()
-            .role(EasyInputMessage.Role.SYSTEM)
-            .content(content)
-            .build());
+                .role(EasyInputMessage.Role.SYSTEM)
+                .content(content)
+                .build());
     }
-    
+
     public ReadOnlyLongProperty totalInputTokenProperty() {
-    	return totalInputTokenProperty;
+        return totalInputTokenProperty;
     }
-    
+
     private void verifyUsageTokens(List<ResponseInputItem> messages, Response response) {
-		Optional<ResponseUsage> optRespUsage = response.usage();
-		if(optRespUsage.isPresent()) {
-			lastUsage = optRespUsage.get();
-			 
-			totalInputTokenProperty.setValue(lastUsage.inputTokens());
-			// Log token usage
-		    LOGGER.info("Total messages: {}, Usage Tokens: inputTokens={}, outputTokens={}, totalTokens={}", 
-					messages.size(),
-					lastUsage.inputTokens(),
-					lastUsage.outputTokens(),
-					lastUsage.totalTokens());
-		}
-	}
-    
+        Optional<ResponseUsage> optRespUsage = response.usage();
+        if (optRespUsage.isPresent()) {
+            lastUsage = optRespUsage.get();
+
+            totalInputTokenProperty.setValue(lastUsage.inputTokens());
+            // Log token usage
+            LOGGER.info("Total messages: {}, Usage Tokens: inputTokens={}, outputTokens={}, totalTokens={}",
+                    messages.size(),
+                    lastUsage.inputTokens(),
+                    lastUsage.outputTokens(),
+                    lastUsage.totalTokens());
+        }
+    }
+
     public void resetBuilder() {
-		this.builder = null;
-	}
-    
-    
+        this.builder = null;
+    }
+
 }
