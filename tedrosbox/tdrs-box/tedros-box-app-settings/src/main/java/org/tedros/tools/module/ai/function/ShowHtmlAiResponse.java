@@ -2,6 +2,7 @@ package org.tedros.tools.module.ai.function;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.tedros.ai.TFunctionHelper;
@@ -12,6 +13,7 @@ import org.tedros.ai.web.TerosWebViewBridge;
 import org.tedros.api.form.ITFieldBox;
 import org.tedros.api.form.ITModelForm;
 import org.tedros.api.presenter.view.ITView;
+import org.tedros.core.ITModule;
 import org.tedros.core.context.TViewDescriptor;
 import org.tedros.core.context.TedrosAppManager;
 import org.tedros.fx.presenter.dynamic.TDynaPresenter;
@@ -88,7 +90,11 @@ public class ShowHtmlAiResponse extends TFunction<HtmlContent> {
 			
 			LOGGER.info("Trying to open the view: {}", path.getViewPath());
 			
-			manager.listenView(c-> run(v), path.getViewPath());
+			Consumer<ITModule> c = m->{
+				run(v);
+			};
+			
+			manager.listenWhenModuleIsLoaded(c, path.getViewPath());
 			
 			TFunctionHelper.callUpViewFunction().getCallback().apply(path);
 			

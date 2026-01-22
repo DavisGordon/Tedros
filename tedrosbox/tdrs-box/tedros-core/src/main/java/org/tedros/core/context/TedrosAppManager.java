@@ -260,11 +260,11 @@ public final class TedrosAppManager extends TedrosAppLoader {
 			if(mc!=null && mc.getModuleDescriptor().getPath().equals(path))
 				f.accept(itModule);
 			else {
-				listenView(f, path);
+				listenWhenModuleIsLoaded(f, path);
 				TedrosContext.setPagePathProperty(path, true, true, true);
 			}
 		}else {
-			listenView(f, path);
+			listenWhenModuleIsLoaded(f, path);
 			TedrosContext.setPagePathProperty(path, true, true, true);
 		}
 	}
@@ -274,7 +274,28 @@ public final class TedrosAppManager extends TedrosAppLoader {
 	 * @param path
 	 */
 	@SuppressWarnings({ "unchecked"})
-	public void listenView(Consumer<ITModule> f, String path) {
+	public void listenWhenModuleIsLoaded(Consumer<ITModule> f, String path) {
+		ChangeListener<Node> chl = new ChangeListener<Node>() {
+			@Override
+			public void changed(ObservableValue<? extends Node> a, Node o, Node n) {
+				if(n instanceof ITModule itModule) {
+					TModuleContext mc = getModuleContext(itModule); 
+					if(mc!=null && mc.getModuleDescriptor().getPath().equals(path)) {
+						f.accept(itModule);
+						TedrosContext.viewProperty().removeListener(this);
+					}
+				}
+			}
+		};
+		TedrosContext.viewProperty().addListener(chl);
+	}
+	
+	/**
+	 * @param modelView
+	 * @param path
+	 */
+	@SuppressWarnings({ "unchecked"})
+	public void listenWhenViewIsLoaded(Consumer<ITModule> f, String path) {
 		ChangeListener<Node> chl = new ChangeListener<Node>() {
 			@Override
 			public void changed(ObservableValue<? extends Node> a, Node o, Node n) {
