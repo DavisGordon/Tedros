@@ -53,6 +53,7 @@ public class GrokAiServiceAdapter {
     private String aiModel;
 
     public GrokAiServiceAdapter(String apiKey, String aiModel) {
+    	
         this.aiModel = aiModel;
         this.client = new OpenAIClientImpl(ClientOptions.builder()
                 .baseUrl("https://api.x.ai/v1")
@@ -144,9 +145,9 @@ public class GrokAiServiceAdapter {
                     .n(1);
 
             // Change: Added support for store_messages and previous_response_id
-            if (storeMessages) {
-                builder.putAdditionalBodyProperty("store_messages", JsonValue.from("true"));
-            }
+            //if (storeMessages) {
+            builder.putAdditionalBodyProperty("store_messages", JsonValue.from(true));
+            //}
             if (previousResponseId != null && !previousResponseId.isEmpty()) {
                 builder.putAdditionalBodyProperty("previous_response_id", JsonValue.from(previousResponseId));
             }
