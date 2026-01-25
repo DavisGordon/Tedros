@@ -1,4 +1,4 @@
-package org.tedros.ai.openai.model;
+package org.tedros.ai.function;
 
 /**
  * Representa um erro na execução de função/tool.

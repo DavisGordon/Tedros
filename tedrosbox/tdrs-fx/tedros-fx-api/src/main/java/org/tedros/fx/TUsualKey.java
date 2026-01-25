@@ -49,10 +49,12 @@ public interface TUsualKey {
 	static final String CIVIL_STATUS = "#{label.civil.status}";
 	static final String CLEAN = "#{label.clean}";
 	static final String CLEAN_PLURAL = "#{label.clean.plural}";
+	static final String CLEAR = "#{label.clear}";
 	static final String CLEAR_HISTORY = "#{label.clear.history}";
 	static final String CLEVERNESS = "#{label.cleverness}";
 	static final String CLIENT_COMPANY = "#{label.client.company}";
 	static final String CLOSE = "#{label.close}";
+	static final String CLOSE_BACKGROUND_SCREENS = "#{label.close.background.screens}";
 	static final String CLOSING_DATE = "#{label.closing.date}";
 	static final String CNPJ = "#{label.cnpj}";
 	static final String CODE = "#{label.code}";

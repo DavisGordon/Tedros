@@ -21,6 +21,7 @@ import org.tedros.core.ux.ITWindow;
 import org.tedros.fx.control.TLabel;
 import org.tedros.fx.modal.TConfirmMessageBox;
 import org.tedros.fx.modal.TModalPane;
+import org.tedros.tools.start.TConstant;
 import org.tedros.util.TLoggerUtil;
 import org.tedros.util.TedrosFolder;
 
@@ -409,16 +410,17 @@ public class TWindow implements ITWindow  {
 	}
 
 	private void createLogoImageView(String path) {
-		if(path!=null) {
-			imgLogo = new ImageView();
-	        try(InputStream is = new FileInputStream(new File(path))) {
-	        	Image logo = new Image(is);
-	        	imgLogo.setImage(logo);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
-	}
+        if (path != null) {
+            imgLogo = new ImageView();
+            String logoPath = TedrosFolder.MODULE_FOLDER.getFullPath()+TConstant.UUI+File.separator+path;
+            try (InputStream is = new FileInputStream(new File(logoPath))) {
+                Image logo = new Image(is);
+                imgLogo.setImage(logo);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
 
 	private DropShadow buildLogoEffect() {
 		DropShadow nameLogoEffect = new DropShadow();

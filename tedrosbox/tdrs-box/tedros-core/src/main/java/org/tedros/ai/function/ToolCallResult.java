@@ -1,4 +1,4 @@
-package org.tedros.ai.openai.model;
+package org.tedros.ai.function;
 
 import java.util.List;
 

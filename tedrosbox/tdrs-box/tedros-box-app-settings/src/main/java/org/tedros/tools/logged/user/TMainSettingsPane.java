@@ -15,10 +15,6 @@ import javafx.scene.layout.StackPane;
  *
  */
 public class TMainSettingsPane extends StackPane {
-
-	/**
-	 * 
-	 */
 	public TMainSettingsPane() {
 		MainSettings usr = new MainSettings();
     	usr.setLogout("logout");
@@ -28,10 +24,5 @@ public class TMainSettingsPane extends StackPane {
     	v.tLoad();
     	this.getStyleClass().add("custom-popup");
 		super.getChildren().add(v);
-				
-		
 	}
-
-	
-
 }

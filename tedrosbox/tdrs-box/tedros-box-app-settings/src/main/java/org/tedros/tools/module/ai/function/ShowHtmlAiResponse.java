@@ -5,10 +5,10 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import org.slf4j.Logger;
-import org.tedros.ai.TFunctionHelper;
 import org.tedros.ai.function.TFunction;
+import org.tedros.ai.function.TFunctionHelper;
+import org.tedros.ai.function.ToolCallResult;
 import org.tedros.ai.function.model.ViewPath;
-import org.tedros.ai.openai.model.ToolCallResult;
 import org.tedros.ai.web.TerosWebViewBridge;
 import org.tedros.api.form.ITFieldBox;
 import org.tedros.api.form.ITModelForm;
@@ -70,7 +70,6 @@ public class ShowHtmlAiResponse extends TFunction<HtmlContent> {
 					LOGGER.info("Html content received: {}",v.htmlContent());
 					return run(v); 
 				});
-		//setRevertToTheAIModelInCaseOfSuccess(false);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

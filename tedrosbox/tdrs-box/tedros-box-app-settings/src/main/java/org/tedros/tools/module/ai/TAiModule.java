@@ -29,10 +29,8 @@ import org.tedros.tools.module.ai.model.HtmlMessageViewerModel;
 items = {
 	@TItem(title=ToolsKey.VIEW_AI_CHAT_MESSAGE_VIEWER, description=ToolsKey.VIEW_AI_CHAT_MESSAGE_VIEWER_DESC,
 	model = HtmlMessageViewerModel.class, modelView=HtmlMessageViewerMV.class, groupHeaders=true),
-	
-	@TItem(title="Compare Provedores de IA", //description=ToolsKey.VIEW_AI_CHAT_MESSAGE_VIEWER_DESC,
+	@TItem(title=ToolsKey.VIEW_AI_COMPARE_MODELS, description=ToolsKey.VIEW_AI_COMPARE_MODELS_DESC,
 	model = AiProviderComparisonModel.class, modelView=AiProviderComparisonMV.class, groupHeaders=true),
-	
 	@TItem(title=ToolsKey.VIEW_AI_CREATE_IMAGE, description=ToolsKey.VIEW_AI_CREATE_IMAGE_DESC,
 	model = TAiCreateImage.class, modelView=CreateImageMV.class, groupHeaders=true),
 	@TItem(title=ToolsKey.VIEW_AI_COMPLETION, description=ToolsKey.VIEW_AI_COMPLETION_DESC,

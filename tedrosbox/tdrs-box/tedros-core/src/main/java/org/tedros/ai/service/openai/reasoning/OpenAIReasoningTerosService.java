@@ -10,7 +10,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.tedros.ai.function.TFunction;
-import org.tedros.ai.openai.model.ToolCallResult;
+import org.tedros.ai.function.ToolCallResult;
 import org.tedros.ai.service.AiServiceBase;
 import org.tedros.ai.service.IAiTerosService;
 import org.tedros.ai.service.openai.OpenAIFunctionExecutor;

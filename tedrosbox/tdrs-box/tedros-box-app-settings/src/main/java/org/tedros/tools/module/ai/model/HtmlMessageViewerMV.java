@@ -18,15 +18,12 @@ import org.tedros.tools.start.TConstant;
 import javafx.beans.property.SimpleStringProperty;
 
 @TForm(scroll=false)
-//@TSetting(TmpSettings.class)
 @TPresenter(model=HtmlMessageViewerModel.class,
-decorator=@TDecorator(type=TViewDecorator.class, viewTitle=ToolsKey.VIEW_AI_CHAT_MESSAGE_VIEWER/*, 
-	region = @TRegion(parse = true, maxWidth = 1080, maxHeight=620)*/),
-behavior=@TBehavior(type=TViewBehavior.class))
+	decorator=@TDecorator(type=TViewDecorator.class, viewTitle=ToolsKey.VIEW_AI_CHAT_MESSAGE_VIEWER),
+	behavior=@TBehavior(type=TViewBehavior.class))
 @TSecurity(id=DomainApp.MESSAGE_VIEWER_FORM_ID,
 appName=ToolsKey.APP_TOOLS, moduleName=ToolsKey.MODULE_AI, viewName=ToolsKey.VIEW_AI_CHAT_MESSAGE_VIEWER,
-allowedAccesses={	TAuthorizationType.VIEW_ACCESS, TAuthorizationType.EDIT,  
-	   				TAuthorizationType.NEW, TAuthorizationType.SAVE, TAuthorizationType.DELETE})
+allowedAccesses={	TAuthorizationType.VIEW_ACCESS})
 public class HtmlMessageViewerMV extends TModelView<HtmlMessageViewerModel> {
 		
 	@TWebView(engine = @TWebEngine(

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.tedros.ai;
+package org.tedros.ai.function;
 
 import static org.tedros.ai.function.TFunction.ACTION;
 import static org.tedros.ai.function.TFunction.ERROR;
@@ -11,7 +11,6 @@ import static org.tedros.ai.function.TFunction.SUCCESS;
 import static org.tedros.ai.function.TFunction.SYSTEM_INSTRUCTION;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,13 +20,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
-import org.tedros.ai.function.TFunction;
 import org.tedros.ai.function.model.AppCatalog;
 import org.tedros.ai.function.model.CallView;
 import org.tedros.ai.function.model.Empty;
@@ -35,7 +32,6 @@ import org.tedros.ai.function.model.ModuleInfo;
 import org.tedros.ai.function.model.ViewInfo;
 import org.tedros.ai.function.model.ViewPath;
 import org.tedros.ai.model.CreateBinaryFile;
-import org.tedros.ai.openai.model.ToolCallResult;
 import org.tedros.api.presenter.ITDynaPresenter;
 import org.tedros.api.presenter.behavior.ITBehavior;
 import org.tedros.api.presenter.view.ITView;
@@ -62,9 +58,6 @@ public class TFunctionHelper {
 	
 	private static final Logger LOGGER = TLoggerUtil.getLogger(TFunctionHelper.class);
 
-	/**
-	 * 
-	 */
 	private TFunctionHelper() {
 	}
 	
@@ -436,47 +429,4 @@ public class TFunctionHelper {
 						.build();
 		});
 	}
-	
-	public static void main(String[] args) {
-		 try {
-			 
-			//String dirPath = "C:/tmp/";
-			 
-			 //String fileName = "teste_file";
-			 //String fullName = fileName + ".docx";
-			 //File file = new File(dirPath+fullName);
-			 
-			 String encode = null;
-			 try(FileInputStream is = new FileInputStream(new File("C:\\desenv\\tmp\\hosts.txt"))){
-				 byte[] bytes = is.readAllBytes();
-				 encode = Base64.getEncoder().encodeToString(bytes);
-			 }
-			 
-			 CreateBinaryFile cbf = new CreateBinaryFile();
-			 cbf.setBase64Content(encode);
-			 cbf.setExtension("txt");
-			 cbf.setName("teste_file");
-			 cbf.setSubfolder("teste");
-			 
-			 TFunction<CreateBinaryFile> fn = TFunctionHelper.getCreateFileFunction();
-			 
-			 Function<CreateBinaryFile, Object> cb = fn.getCallback();
-	         Object result = cb.apply(cbf);
-	         
-	         System.out.println(result);
-
-			 /*
-			 byte[] data = Base64.getDecoder().decode(encode);
-			 FileUtils.writeByteArrayToFile(file, data);
-
-			 String fullPath = file.getAbsolutePath();
-			 LOGGER.info("File created successfully: {}", fullPath);
-			 */
-			 
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 }

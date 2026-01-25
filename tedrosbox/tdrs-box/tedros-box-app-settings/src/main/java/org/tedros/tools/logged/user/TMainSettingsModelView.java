@@ -28,7 +28,7 @@ import javafx.beans.property.SimpleStringProperty;
 			behavior=@TBehavior(type=TMainSettingsBehavior.class, saveOnlyChangedModels=false))
 public class TMainSettingsModelView extends TModelView<MainSettings> {
 
-	@THyperlinkField(labeled=@TLabeled(text=TUsualKey.CLEAR_HISTORY, parse = true),
+	@THyperlinkField(labeled=@TLabeled(text=TUsualKey.CLOSE_BACKGROUND_SCREENS, parse = true),
 			buttonBase=@TButtonBase(onAction=ClearHistoryEventBuilder.class))
 	private SimpleStringProperty clearHistory;
 	

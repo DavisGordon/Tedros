@@ -1,5 +1,7 @@
 package org.tedros.ai.service.langchain;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -14,12 +16,10 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.tedros.ai.function.TFunction;
-import org.tedros.ai.openai.model.ToolCallResult;
+import org.tedros.ai.function.ToolCallResult;
 import org.tedros.util.TLoggerUtil;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 
 import dev.langchain4j.agent.tool.ToolExecutionRequest;
 import dev.langchain4j.agent.tool.ToolSpecification;
@@ -41,7 +41,6 @@ public class LangChainFunctionExecutor {
     private static final Logger LOGGER = TLoggerUtil.getLogger(LangChainFunctionExecutor.class);
     private final Map<String, TFunction<?>> functions = new HashMap<>();
     private final ObjectMapper mapper = new ObjectMapper();
-    private final JsonSchemaGenerator schemaGen = new JsonSchemaGenerator(mapper);
 
     public LangChainFunctionExecutor(List<TFunction<?>> fns) {
         if (fns != null) {
@@ -76,9 +75,7 @@ public class LangChainFunctionExecutor {
         }
 
         try {
-            // Usa o gerador do Jackson para pegar a estrutura básica
-            JsonSchema jsonSchema = schemaGen.generateSchema(modelClass);
-
+            
             // Converte para mapa para facilitar introspecção se necessário,
             // mas aqui vamos construir manual based on reflection para garantir
             // compatibilidade
@@ -149,9 +146,8 @@ public class LangChainFunctionExecutor {
             JsonSchemaElement itemSchema = JsonObjectSchema.builder().build(); // Default fallback
 
             // Try to extract generic type for List
-            if (type instanceof java.lang.reflect.ParameterizedType) {
-                java.lang.reflect.Type[] typeArguments = ((java.lang.reflect.ParameterizedType) type)
-                        .getActualTypeArguments();
+            if (type instanceof ParameterizedType pType) {
+                Type[] typeArguments = pType.getActualTypeArguments();
                 if (typeArguments != null && typeArguments.length > 0) {
                     itemSchema = mapTypeToJsonSchemaElement(typeArguments[0]);
                 }

@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.tedros.ai.function.TFunction;
-import org.tedros.ai.openai.model.ToolCallResult;
+import org.tedros.ai.function.ToolCallResult;
 import org.tedros.api.presenter.view.ITView;
 import org.tedros.core.TLanguage;
 import org.tedros.core.context.TViewDescriptor;

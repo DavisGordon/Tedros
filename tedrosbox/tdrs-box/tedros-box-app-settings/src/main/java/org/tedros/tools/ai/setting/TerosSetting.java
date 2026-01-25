@@ -9,8 +9,8 @@ import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.tedros.ai.TFunctionHelper;
 import org.tedros.ai.function.TFunction;
+import org.tedros.ai.function.TFunctionHelper;
 import org.tedros.ai.function.model.ViewPath;
 import org.tedros.ai.service.AiServiceProvider;
 import org.tedros.ai.service.AiTerosServiceFactory;
@@ -81,7 +81,7 @@ public class TerosSetting extends TSetting {
 		if(StringUtils.isNotBlank(apiKey) && StringUtils.isNotBlank(aiModel) 
 				&& StringUtils.isNotBlank(aiSystemPrompt) && aiProvider!=null) 
 		{
-			TEROS = AiTerosServiceFactory.create(apiKey, aiModel, aiSystemPrompt, aiProvider);
+			TEROS = AiTerosServiceFactory.createWithLangChain4jAdapters(apiKey, aiModel, aiSystemPrompt, aiProvider);
 		}
 		
 		TedrosContext.aiServiceProviderProperty().addListener((a,o,n)->{
@@ -89,7 +89,7 @@ public class TerosSetting extends TSetting {
 				String model = TedrosContext.getAiModel();	
 				String systemPrompt = TedrosContext.getAiSystemPrompt();
 				if(StringUtils.isNotBlank(key) && StringUtils.isNotBlank(model) && n!=null) {
-					TEROS = AiTerosServiceFactory.create(key, model, systemPrompt, n);
+					TEROS = AiTerosServiceFactory.createWithLangChain4jAdapters(key, model, systemPrompt, n);
 					resetAction();
 				}
 				
@@ -100,7 +100,7 @@ public class TerosSetting extends TSetting {
 				String model = TedrosContext.getAiModel();		
 				String systemPrompt = TedrosContext.getAiSystemPrompt();		
 				if(provider!=null && StringUtils.isNotBlank(model) && StringUtils.isNotBlank(n)) {
-					TEROS = AiTerosServiceFactory.create(n, model, systemPrompt, provider);
+					TEROS = AiTerosServiceFactory.createWithLangChain4jAdapters(n, model, systemPrompt, provider);
 					resetAction();
 				}
 			});
@@ -115,7 +115,7 @@ public class TerosSetting extends TSetting {
 			String model = TedrosContext.getAiModel();	
 			AiServiceProvider provider = TedrosContext.getAiServiceProvider();
 			if(StringUtils.isNotBlank(key) && StringUtils.isNotBlank(model) && StringUtils.isNotBlank(n) && provider!=null) {
-				TEROS = AiTerosServiceFactory.create(key, model, n, provider);
+				TEROS = AiTerosServiceFactory.createWithLangChain4jAdapters(key, model, n, provider);
 				resetAction();
 			}
 		});
@@ -289,7 +289,7 @@ public class TerosSetting extends TSetting {
 		scrollFlag = true;
 		VBox gp = super.getLayout("messages");
 		gp.getChildren().clear();
-		//TEROS.clearMessages();
+		TEROS.cleanMessageHistory();
 	}
 
 	/**

@@ -74,15 +74,8 @@
 		  <groupId>com.openai</groupId>
 		  <artifactId>openai-java</artifactId>
 		  <version>4.15.0</version>
-		  <!--<version>4.6.1</version>-->
 		</dependency>
 		
-		<dependency>
-			<groupId>com.theokanning.openai-gpt3-java</groupId>
-			<artifactId>service</artifactId>
-			<version>${openai.client}</version>
-		</dependency>
-
 		<dependency>
 			<groupId>dev.langchain4j</groupId>
 			<artifactId>langchain4j-open-ai</artifactId>

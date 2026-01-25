@@ -27,6 +27,7 @@ public interface DomainApp {
 	static final String CHAT_TEROS = "CHAT_TEROS";
 	static final String CR_IMAGE_TEROS = "CR_IMAGE_TEROS";
 	static final String MESSAGE_VIEWER = "MESSAGE_VIEWER";
+	static final String COMPARE_AI_MODELS = "COMPARE_AI_MODELS";
 	static final String IA = "IA";
 	
 	static final String SEP = SEPARATOR;
@@ -41,8 +42,12 @@ public interface DomainApp {
 	static final String CHAT_TEROS_VIEW_ID = MNEMONIC + SEP + CHAT_TEROS + SEP + VIEW;
 	static final String CR_IMAGE_TEROS_FORM_ID = MNEMONIC + SEP + CR_IMAGE_TEROS + SEP + FORM;
 	static final String CR_IMAGE_TEROS_VIEW_ID = MNEMONIC + SEP + CR_IMAGE_TEROS + SEP + VIEW;
+	
 	static final String MESSAGE_VIEWER_FORM_ID = MNEMONIC + SEP + MESSAGE_VIEWER + SEP + FORM;
 	static final String MESSAGE_VIEWER_VIEW_ID = MNEMONIC + SEP + MESSAGE_VIEWER + SEP + VIEW;
+	
+	static final String COMPARE_AI_MODELS_FORM_ID = MNEMONIC + SEP + COMPARE_AI_MODELS + SEP + FORM;
+	static final String COMPARE_AI_MODELS_VIEW_ID = MNEMONIC + SEP + COMPARE_AI_MODELS + SEP + VIEW;
 
 	static final String SETTINGS_MODULE_ID = MNEMONIC + SEP + SETTINGS + SEP + MODULE;
 
