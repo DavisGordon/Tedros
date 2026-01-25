@@ -19,7 +19,6 @@ import com.openai.client.OpenAIClient;
 import com.openai.client.OpenAIClientImpl;
 import com.openai.client.okhttp.OkHttpClient;
 import com.openai.core.ClientOptions;
-import com.openai.core.JsonValue;
 import com.openai.models.FunctionDefinition;
 import com.openai.models.FunctionParameters;
 import com.openai.models.chat.completions.ChatCompletion;
@@ -49,12 +48,11 @@ public class GrokAiServiceAdapter {
     private SimpleLongProperty totalInputTokenProperty = new SimpleLongProperty(0);
     private long lastInputTokens = 0;
     private long lastOutputTokens = 0;
-
+    
     private String aiModel;
 
     public GrokAiServiceAdapter(String apiKey, String aiModel) {
-    	
-        this.aiModel = aiModel;
+    	this.aiModel = aiModel;
         this.client = new OpenAIClientImpl(ClientOptions.builder()
                 .baseUrl("https://api.x.ai/v1")
                 .httpClient(OkHttpClient.builder().build())
@@ -65,77 +63,60 @@ public class GrokAiServiceAdapter {
     public OpenAIClient getClient() {
         return client;
     }
-
+    
     public void setAiModel(String model) {
-        this.aiModel = model;
-    }
-
+		this.aiModel = model;
+	}
+    
     public String getAiModel() {
-        return aiModel;
-    }
+		return aiModel;
+	}
 
     public ReadOnlyLongProperty totalInputTokenProperty() {
         return totalInputTokenProperty;
     }
 
-    public long getLastInputTokens() {
-        return lastInputTokens;
-    }
-
-    public long getLastOutputTokens() {
-        return lastOutputTokens;
-    }
+    public long getLastInputTokens() { return lastInputTokens; }
+    public long getLastOutputTokens() { return lastOutputTokens; }
 
     @SuppressWarnings("rawtypes")
     public void functions(List<TFunction> functions) {
-        List<String> names = new ArrayList<>();
-        this.tools = functions.stream()
+    	List<String> names = new ArrayList<>();
+    	this.tools = functions.stream()
                 .map(f -> {
                     try {
-
-                        if (names.contains(f.getName())) {
-                            throw new RuntimeException("The function " + f.getName() + " already exists!");
-                        }
-
-                        names.add(f.getName());
-
-                        JsonSchema jsonSchema = schemaGen.generateSchema(f.getModel());
-                        Map<String, Object> schemaMap = mapper.convertValue(jsonSchema, new TypeReference<>() {
-                        });
+                    	
+                    	if(names.contains(f.getName())) {
+                    		throw new RuntimeException("The function "+f.getName()+" already exists!");
+                    	}
+                    	
+                    	names.add(f.getName());
+                    	
+                    	JsonSchema jsonSchema = schemaGen.generateSchema(f.getModel());
+                        Map<String, Object> schemaMap = mapper.convertValue(jsonSchema, new TypeReference<>() {});
 
                         AiHelper.addRequiredFieldsRecursively(schemaMap, f.getModel());
 
                         FunctionParameters.Builder paramsBuilder = FunctionParameters.builder();
                         schemaMap.forEach((k, v) -> paramsBuilder.putAdditionalProperty(k, AiHelper.toJsonValue(v)));
-
+                    	
                         return ChatCompletionTool.ofFunction(ChatCompletionFunctionTool.builder()
                                 .function(FunctionDefinition.builder()
-                                        .name(f.getName())
-                                        .description(f.getDescription())
-                                        .parameters(paramsBuilder.build())
-                                        .build())
+                                		.name(f.getName())
+                                		.description(f.getDescription())
+                                		.parameters(paramsBuilder.build())
+                                		.build())                            
                                 .build());
-
+                        
                     } catch (Exception e) {
                         throw new RuntimeException("Erro ao gerar schema para função: " + f.getName(), e);
                     }
                 })
                 .toList();
-
+    	
     }
 
-    /**
-     * Sends a chat request to the Grok API with server-side storage support.
-     * 
-     * @param messages           The messages to send (current turn).
-     * @param previousResponseId The ID of the previous response for continuity
-     *                           (optional).
-     * @param storeMessages      Whether to store messages on the server (usually
-     *                           true for the first request).
-     * @return The chat completion response.
-     */
-    public ChatCompletion sendChatRequest(List<ChatCompletionMessageParam> messages, String previousResponseId,
-            boolean storeMessages) {
+    public ChatCompletion sendChatRequest(List<ChatCompletionMessageParam> messages) {
         try {
             var builder = ChatCompletionCreateParams.builder()
                     .model(aiModel)
@@ -143,14 +124,6 @@ public class GrokAiServiceAdapter {
                     .temperature(0.3)
                     .topP(1.0)
                     .n(1);
-
-            // Change: Added support for store_messages and previous_response_id
-            //if (storeMessages) {
-            builder.putAdditionalBodyProperty("store_messages", JsonValue.from(true));
-            //}
-            if (previousResponseId != null && !previousResponseId.isEmpty()) {
-                builder.putAdditionalBodyProperty("previous_response_id", JsonValue.from(previousResponseId));
-            }
 
             if (!tools.isEmpty()) {
                 builder.tools(tools);
@@ -163,8 +136,7 @@ public class GrokAiServiceAdapter {
                 lastInputTokens = usage.get().promptTokens();
                 lastOutputTokens = usage.get().completionTokens();
                 totalInputTokenProperty.set(lastInputTokens);
-                LOGGER.info("Tokens → input: {}, output: {}, total: {}", lastInputTokens, lastOutputTokens,
-                        usage.get().totalTokens());
+                LOGGER.info("Tokens → input: {}, output: {}, total: {}", lastInputTokens, lastOutputTokens, usage.get().totalTokens());
             }
 
             return response;
@@ -176,13 +148,13 @@ public class GrokAiServiceAdapter {
     }
 
     public FileObject uploadFile(byte[] bytes, String filename) {
-        Path tempFile = null;
+    	Path tempFile = null;
         try {
             // 1. Cria um arquivo temporário com a extensão correta
             String prefix = "grok_upload_";
             String suffix = filename.contains(".") ? filename.substring(filename.lastIndexOf(".")) : ".tmp";
             tempFile = Files.createTempFile(prefix, suffix);
-
+            
             // 2. Escreve os bytes no arquivo
             Files.write(tempFile, bytes);
 
@@ -191,7 +163,7 @@ public class GrokAiServiceAdapter {
                     .file(tempFile) // Passa o Path, não o InputStream
                     .purpose(FilePurpose.ASSISTANTS) // 'assistants' é o padrão para Code Interpreter/Analysis
                     .build();
-
+            
             return client.files().create(params);
 
         } catch (Exception e) {
@@ -201,10 +173,9 @@ public class GrokAiServiceAdapter {
             if (tempFile != null) {
                 try {
                     java.nio.file.Files.deleteIfExists(tempFile);
-                } catch (Exception ignored) {
-                }
+                } catch (Exception ignored) {}
             }
         }
     }
-
+    
 }

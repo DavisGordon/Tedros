@@ -21,13 +21,19 @@ public enum TSystemPropertie {
 	SMTP_PORT ("sys.smtp.port","Defines SMTP server port"),
 	SMTP_SOCKET_PORT ("sys.smtp.socket.port","Defines SMTP server socket port"),
 	NOTIFY_INTERVAL_TIMER ("sys.notify.interval","Defines the interval time in minutes for sending e-mails queued by the Notify module"),
+	
 	OPENAI_KEY("sys.openai.key","Define the OpenAi Api key"),
 	OPENAI_MODEL("sys.openai.model","Define the OpenAi Model"),
 	OPENAI_PROMPT("sys.openai.prompt","Define the model system prompt instructions"),
 	
-	GROK_KEY("sys.grok.key","Define the Grok Api key"),
+	GEMINI_KEY("sys.gemini.key","Define the Gemini Api key"),
+	GEMINI_MODEL("sys.gemini.model","Define the Gemini Model"),
+	GEMINI_PROMPT("sys.gemini.prompt","Define the model system prompt instructions"),
+	
+	GROK_KEY("sys.grok.key","Define the Grok Api key"),	
 	GROK_MODEL("sys.grok.model","Define the Grok Model"),
 	GROK_PROMPT("sys.grok.prompt","Define the model system prompt instructions"),
+	
 	AI_SERVICE_PROVIDER("sys.ai.provider","Define the Ai Service Provider: OPENAI or GROK"),
 	AI_ENABLED("sys.ai.enabled","Enable Teros artificial intelligence. Set true or false");
 	

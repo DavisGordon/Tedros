@@ -95,12 +95,10 @@ public class LangChainFunctionExecutor {
             java.lang.reflect.Field[] fields = modelClass.getDeclaredFields();
             for (java.lang.reflect.Field field : fields) {
                 String name = field.getName();
-                Class<?> type = field.getType();
+                java.lang.reflect.Type type = field.getGenericType(); // Use GenericType
 
                 builder.addProperty(name, mapTypeToJsonSchemaElement(type));
 
-                // Verifica @TRequiredProperty ou lógica similar se existir
-                // No original AiHelper.isPropertyRequired usa TRequiredProperty
                 if (isReq(field)) {
                     builder.required(name);
                 }
@@ -122,25 +120,82 @@ public class LangChainFunctionExecutor {
         }
     }
 
-    private JsonSchemaElement mapTypeToJsonSchemaElement(Class<?> type) {
-        if (String.class.isAssignableFrom(type) || type.isEnum()
-                || Date.class.isAssignableFrom(type) || LocalDate.class.isAssignableFrom(type)
-                || LocalDateTime.class.isAssignableFrom(type) || LocalTime.class.isAssignableFrom(type)) {
-            return JsonStringSchema.builder().build();
-        } else if (Integer.class.isAssignableFrom(type) || int.class.isAssignableFrom(type)
-                || Long.class.isAssignableFrom(type) || long.class.isAssignableFrom(type)) {
-            return JsonIntegerSchema.builder().build();
-        } else if (Double.class.isAssignableFrom(type) || double.class.isAssignableFrom(type)
-                || Float.class.isAssignableFrom(type) || float.class.isAssignableFrom(type)) {
-            return JsonNumberSchema.builder().build();
-        } else if (Boolean.class.isAssignableFrom(type) || boolean.class.isAssignableFrom(type)) {
-            return JsonBooleanSchema.builder().build();
-        } else if (List.class.isAssignableFrom(type) || type.isArray()) {
-            // Simplificação para array, idealmente precisaria do tipo genérico
-            return  JsonArraySchema.builder().build();
-        } else {
-            // Fallback para object ou string
+    private JsonSchemaElement mapTypeToJsonSchemaElement(java.lang.reflect.Type type) {
+        Class<?> rawClass = null;
+
+        if (type instanceof Class<?>) {
+            rawClass = (Class<?>) type;
+        } else if (type instanceof java.lang.reflect.ParameterizedType) {
+            rawClass = (Class<?>) ((java.lang.reflect.ParameterizedType) type).getRawType();
+        }
+
+        if (rawClass == null) {
             return JsonObjectSchema.builder().build();
+        }
+
+        if (String.class.isAssignableFrom(rawClass) || rawClass.isEnum()
+                || Date.class.isAssignableFrom(rawClass) || LocalDate.class.isAssignableFrom(rawClass)
+                || LocalDateTime.class.isAssignableFrom(rawClass) || LocalTime.class.isAssignableFrom(rawClass)) {
+            return JsonStringSchema.builder().build();
+        } else if (Integer.class.isAssignableFrom(rawClass) || int.class.isAssignableFrom(rawClass)
+                || Long.class.isAssignableFrom(rawClass) || long.class.isAssignableFrom(rawClass)) {
+            return JsonIntegerSchema.builder().build();
+        } else if (Double.class.isAssignableFrom(rawClass) || double.class.isAssignableFrom(rawClass)
+                || Float.class.isAssignableFrom(rawClass) || float.class.isAssignableFrom(rawClass)) {
+            return JsonNumberSchema.builder().build();
+        } else if (Boolean.class.isAssignableFrom(rawClass) || boolean.class.isAssignableFrom(rawClass)) {
+            return JsonBooleanSchema.builder().build();
+        } else if (List.class.isAssignableFrom(rawClass) || rawClass.isArray()) {
+            JsonSchemaElement itemSchema = JsonObjectSchema.builder().build(); // Default fallback
+
+            // Try to extract generic type for List
+            if (type instanceof java.lang.reflect.ParameterizedType) {
+                java.lang.reflect.Type[] typeArguments = ((java.lang.reflect.ParameterizedType) type)
+                        .getActualTypeArguments();
+                if (typeArguments != null && typeArguments.length > 0) {
+                    itemSchema = mapTypeToJsonSchemaElement(typeArguments[0]);
+                }
+            } else if (rawClass.isArray()) {
+                itemSchema = mapTypeToJsonSchemaElement(rawClass.getComponentType());
+            }
+
+            return JsonArraySchema.builder().items(itemSchema).build();
+        } else {
+            // It's a complex object, we must recurse to define properties
+            JsonObjectSchema.Builder builder = JsonObjectSchema.builder();
+            // Basic recursion protection/limit could be added here if needed,
+            // but for simple DTOs just inspecting declared fields is usually enough.
+
+            try {
+                // Determine the class to inspect
+                Class<?> targetClass = rawClass;
+                // Avoid recursing into java internal classes (except List/Map handled above)
+                if (targetClass.getName().startsWith("java.")) {
+                    return JsonObjectSchema.builder().build();
+                }
+
+                java.lang.reflect.Field[] fields = targetClass.getDeclaredFields();
+                for (java.lang.reflect.Field field : fields) {
+                    // Skip static or transient if desired, but here we include everything basically
+                    if (java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
+                        continue;
+                    }
+
+                    String name = field.getName();
+                    java.lang.reflect.Type fieldType = field.getGenericType();
+
+                    builder.addProperty(name, mapTypeToJsonSchemaElement(fieldType));
+
+                    if (isReq(field)) {
+                        builder.required(name);
+                    }
+                }
+            } catch (Exception e) {
+                // If reflection fails, return empty object
+                return JsonObjectSchema.builder().build();
+            }
+
+            return builder.build();
         }
     }
 

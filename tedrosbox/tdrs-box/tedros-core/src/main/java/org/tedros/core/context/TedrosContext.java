@@ -42,6 +42,8 @@ import org.tedros.core.service.remote.TEjbServiceLocator;
 import org.tedros.core.setting.model.TPropertie;
 import org.tedros.core.style.TStyleResourceValue;
 import org.tedros.core.ux.ITWindow;
+import org.tedros.server.query.TCompareOp;
+import org.tedros.server.query.TSelect;
 import org.tedros.server.result.TResult;
 import org.tedros.server.result.TResult.TState;
 import org.tedros.util.TClassUtil;
@@ -235,6 +237,47 @@ public final class TedrosContext {
 		initializationErrorMessageStringProperty.set(initializationErrorMessageStringProperty.get() + sdf.format(Calendar.getInstance().getTime()) + " " + message+"\n");
 	}
 	
+	public static void test() {
+		
+		try (TEjbServiceLocator loc = TEjbServiceLocator.getInstance()) {
+			TPropertieController serv = loc.lookup(TPropertieController.JNDI_NAME);
+			
+			TSelect<TPropertie> select = new TSelect<>(TPropertie.class);
+			select.addAndCondition("key", TCompareOp.LIKE, "sys.grok");
+			select.addAndCondition("key", TCompareOp.LIKE, "sys.openai");
+			select.addAndCondition("key", TCompareOp.LIKE, "sys.gemini");
+			
+			TResult<List<TPropertie>> res = serv.search(TedrosContext.loggedUser.getAccessToken(), select);
+			
+			if(res.getState().equals(TState.SUCCESS) && CollectionUtils.isNotEmpty(res.getValue())) {
+				
+				String openaiKey = res.getValue().stream().filter(p -> p.getKey().equals(TSystemPropertie.OPENAI_KEY.getValue()))
+						.findFirst().map(TPropertie::getValue).orElse(null);
+				String openaiModel = res.getValue().stream().filter(p -> p.getKey().equals(TSystemPropertie.OPENAI_MODEL.getValue()))
+						.findFirst().map(TPropertie::getValue).orElse(null);
+				String openaiPrompt = res.getValue().stream().filter(p -> p.getKey().equals(TSystemPropertie.OPENAI_PROMPT.getValue()))
+						.findFirst().map(TPropertie::getValue).orElse(null);
+				
+				String grokKey = res.getValue().stream().filter(p -> p.getKey().equals(TSystemPropertie.GROK_KEY.getValue()))
+						.findFirst().map(TPropertie::getValue).orElse(null);				
+				String grokModel = res.getValue().stream().filter(p -> p.getKey().equals(TSystemPropertie.GROK_MODEL.getValue()))
+						.findFirst().map(TPropertie::getValue).orElse(null);
+				String grokPrompt = res.getValue().stream().filter(p -> p.getKey().equals(TSystemPropertie.GROK_PROMPT.getValue()))
+						.findFirst().map(TPropertie::getValue).orElse(null);
+				
+				String geminiKey = res.getValue().stream().filter(p -> p.getKey().equals(TSystemPropertie.GEMINI_KEY.getValue()))
+						.findFirst().map(TPropertie::getValue).orElse(null);
+				String geminiModel = res.getValue().stream().filter(p -> p.getKey().equals(TSystemPropertie.GEMINI_MODEL.getValue()))
+						.findFirst().map(TPropertie::getValue).orElse(null);
+				String geminiPrompt = res.getValue().stream().filter(p -> p.getKey().equals(TSystemPropertie.GEMINI_PROMPT.getValue()))
+						.findFirst().map(TPropertie::getValue).orElse(null);
+			}
+		} catch (Exception e) {
+			LOGGER.error(e.toString(), e);
+		}
+		
+	}
+	
 	public static void loadCustomProperties() {
 		
 		LOGGER.info("Starting load custom system properties.");
@@ -329,8 +372,11 @@ public final class TedrosContext {
 				setAiServiceProvider(provider);
 				LOGGER.info("- Using {} as AI Service Provider.", provider.name());
 				
-				TSystemPropertie aiModelPropertie = provider==AiServiceProvider.GROK ? 
-						TSystemPropertie.GROK_MODEL : TSystemPropertie.OPENAI_MODEL;
+				TSystemPropertie aiModelPropertie = switch (provider) {
+						case GROK -> TSystemPropertie.GROK_MODEL;
+						case OPENAI -> TSystemPropertie.OPENAI_MODEL;
+						case GEMINI -> TSystemPropertie.GEMINI_MODEL;
+					};
 				
 				properties.stream()
 				.filter(p -> p.getKey().equals(aiModelPropertie.getValue()))
@@ -344,8 +390,11 @@ public final class TedrosContext {
 					}
 				}, () -> LOGGER.info(PROPERTIE_NOT_DEFINED, aiModelPropertie.getValue()));
 				
-				TSystemPropertie aiPromptPropertie = provider==AiServiceProvider.GROK ? 
-						TSystemPropertie.GROK_PROMPT : TSystemPropertie.OPENAI_PROMPT;
+				TSystemPropertie aiPromptPropertie = switch (provider) {
+						case GROK -> TSystemPropertie.GROK_PROMPT;
+						case OPENAI -> TSystemPropertie.OPENAI_PROMPT;
+						case GEMINI -> TSystemPropertie.GEMINI_PROMPT;
+					};
 				
 				properties.stream()
 				.filter(p -> p.getKey().equals(aiPromptPropertie.getValue()))
@@ -359,8 +408,11 @@ public final class TedrosContext {
 					}
 				}, () -> LOGGER.info(PROPERTIE_NOT_DEFINED, aiPromptPropertie.getValue()));
 				
-				TSystemPropertie aiApiKeyPropertie = provider==AiServiceProvider.GROK ? 
-						TSystemPropertie.GROK_KEY : TSystemPropertie.OPENAI_KEY; 
+				TSystemPropertie aiApiKeyPropertie = switch (provider) {
+						case GROK -> TSystemPropertie.GROK_KEY;
+						case OPENAI -> TSystemPropertie.OPENAI_KEY;
+						case GEMINI -> TSystemPropertie.GEMINI_KEY;
+					}; 
 				
 				properties.stream()
 				.filter(p -> p.getKey().equals(aiApiKeyPropertie.getValue()))

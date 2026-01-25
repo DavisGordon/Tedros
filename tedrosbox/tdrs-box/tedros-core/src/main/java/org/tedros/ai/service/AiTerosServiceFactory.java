@@ -1,5 +1,6 @@
 package org.tedros.ai.service;
 
+import org.tedros.ai.service.langchain.LangChainGeminiTerosService;
 import org.tedros.ai.service.langchain.LangChainGrokTerosService;
 import org.tedros.ai.service.langchain.LangChainOpenAITerosService;
 
@@ -15,6 +16,8 @@ public class AiTerosServiceFactory {
 			return LangChainGrokTerosService.create(apiKey, aiModel, assistantPrompt);
 		case OPENAI:
 			return LangChainOpenAITerosService.create(apiKey, aiModel, assistantPrompt);
+		case GEMINI:
+			return LangChainGeminiTerosService.create(apiKey, aiModel, assistantPrompt);
 		default:
 			throw new IllegalArgumentException("Provider not supported: " + provider);
 		}
@@ -26,6 +29,8 @@ public class AiTerosServiceFactory {
 			return LangChainGrokTerosService.newInstance(apiKey, aiModel, assistantPrompt);
 		case OPENAI:
 			return LangChainOpenAITerosService.newInstance(apiKey, aiModel, assistantPrompt);
+		case GEMINI:
+			return LangChainGeminiTerosService.newInstance(apiKey, aiModel, assistantPrompt);
 		default:
 			throw new IllegalArgumentException("Provider not supported: " + provider);
 		}
